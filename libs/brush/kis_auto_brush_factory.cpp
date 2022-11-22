@@ -18,20 +18,20 @@
 
 KoResourceLoadResult KisAutoBrushFactory::createBrush(const QDomElement &brushDefinition, KisResourcesInterfaceSP resourcesInterface)
 {
-    Q_UNUSED(resourcesInterface);
+    std::optional<KisBrushModel::BrushData> data =
+        createBrushModel(brushDefinition, resourcesInterface);
 
-    KisMaskGenerator* mask = KisMaskGenerator::fromXML(brushDefinition.firstChildElement("MaskGenerator"));
-    double angle = KisDomUtils::toDouble(brushDefinition.attribute("angle", "0.0"));
-    double randomness = KisDomUtils::toDouble(brushDefinition.attribute("randomness", "0.0"));
-    qreal density = KisDomUtils::toDouble(brushDefinition.attribute("density", "1.0"));
-    double spacing = KisDomUtils::toDouble(brushDefinition.attribute("spacing", "1.0"));
-    bool useAutoSpacing = KisDomUtils::toInt(brushDefinition.attribute("useAutoSpacing", "0"));
-    qreal autoSpacingCoeff = KisDomUtils::toDouble(brushDefinition.attribute("autoSpacingCoeff", "1.0"));
+    if (data) {
+        return createBrush(*data, resourcesInterface);
+    }
 
-    KisBrushSP brush = KisBrushSP(new KisAutoBrush(mask, angle, randomness, density));
-    brush->setSpacing(spacing);
-    brush->setAutoSpacing(useAutoSpacing, autoSpacingCoeff);
-    return brush;
+    // fallback, should never reach!
+    return KoResourceSignature(ResourceType::Brushes, "", "", "");
+}
+
+KoResourceLoadResult KisAutoBrushFactory::createBrush(const KisBrushModel::BrushData &data, KisResourcesInterfaceSP resourcesInterface)
+{
+    return createBrush(data.common, data.autoBrush, resourcesInterface);
 }
 
 std::optional<KisBrushModel::BrushData>

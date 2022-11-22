@@ -28,11 +28,11 @@ QString KisPredefinedBrushFactory::id() const
     return m_id;
 }
 
-KoResourceLoadResult KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface)
+KoResourceLoadResult KisPredefinedBrushFactory::createBrush(const KisBrushModel::BrushData &brushData, KisResourcesInterfaceSP resourcesInterface)
 {
     auto resourceSourceAdapter = resourcesInterface->source<KisBrush>(ResourceType::Brushes);
-    const QString brushFileName = brushDefinition.attribute("filename", "");
-    const QString brushMD5Sum = brushDefinition.attribute("md5sum", "");
+    const QString brushFileName = brushData.predefinedBrush.resourceSignature.filename;
+    const QString brushMD5Sum = brushData.predefinedBrush.resourceSignature.md5sum;
     KisBrushSP brush = resourceSourceAdapter.bestMatch(brushMD5Sum, brushFileName, "");
     if (!brush) {
         return KoResourceSignature(ResourceType::Brushes, brushMD5Sum, brushFileName, "");
@@ -41,103 +41,47 @@ KoResourceLoadResult KisPredefinedBrushFactory::createBrush(const QDomElement& b
     // we always return a copy of the brush!
     brush = brush->clone().dynamicCast<KisBrush>();
 
-    double spacing = KisDomUtils::toDouble(brushDefinition.attribute("spacing", "0.25"));
-    brush->setSpacing(spacing);
-
-    bool useAutoSpacing = KisDomUtils::toInt(brushDefinition.attribute("useAutoSpacing", "0"));
-    qreal autoSpacingCoeff = KisDomUtils::toDouble(brushDefinition.attribute("autoSpacingCoeff", "1.0"));
-    brush->setAutoSpacing(useAutoSpacing, autoSpacingCoeff);
-
-    double angle = KisDomUtils::toDouble(brushDefinition.attribute("angle", "0.0"));
-    brush->setAngle(angle);
-
-    double scale = KisDomUtils::toDouble(brushDefinition.attribute("scale", "1.0"));
-    brush->setScale(scale);
+    brush->setSpacing(brushData.common.spacing);
+    brush->setAutoSpacing(brushData.common.useAutoSpacing, brushData.common.autoSpacingCoeff);
+    brush->setAngle(brushData.common.angle);
+    brush->setScale(brushData.predefinedBrush.scale);
 
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(brush.data());
     if (colorfulBrush) {
-        quint8 adjustmentMidPoint = brushDefinition.attribute("AdjustmentMidPoint", "127").toInt();
-        qreal brightnessAdjustment = brushDefinition.attribute("BrightnessAdjustment").toDouble();
-        qreal contrastAdjustment = brushDefinition.attribute("ContrastAdjustment").toDouble();
-
-        const int adjustmentVersion = brushDefinition.attribute("AdjustmentVersion", "1").toInt();
-        const bool autoAdjustMidPoint = brushDefinition.attribute("AutoAdjustMidPoint", "0").toInt();
-        const bool hasAutoAdjustMidPoint = brushDefinition.hasAttribute("AutoAdjustMidPoint");
-
-        /**
-         * In Krita 4.x releases there was a bug that caused lightness
-         * adjustments to be applied to the brush **twice**. It happened
-         * due to the fact that copy-ctor called brushTipImage() virtual
-         * method instead of just copying the image itself.
-         *
-         * In Krita 5 we should open these brushes in somewhat the same way.
-         * The problem is that we cannot convert the numbers precisely, because
-         * after applying a piecewice-linear function twice we get a
-         * quadratic function. So we fall-back to a blunt parameters scaling,
-         * which gives result that is just "good enough".
-         *
-         * NOTE: AutoAdjustMidPoint option appeared only in Krita 5, so it
-         * automatically means the adjustments should be applied in the new way.
-         */
-        if (adjustmentVersion < 2 && !hasAutoAdjustMidPoint) {
-            adjustmentMidPoint = qBound(0, 127 + (int(adjustmentMidPoint) - 127) * 2, 255);
-            brightnessAdjustment *= 2.0;
-            contrastAdjustment *= 2.0;
-
-            /**
-             * In Krita we also changed formula for contrast calculation in
-             * negative part, so we need to convert that as well.
-             */
-            if (contrastAdjustment < 0) {
-                contrastAdjustment = 1.0 / (1.0 - contrastAdjustment) - 1.0;
-            }
-        }
-
-        colorfulBrush->setAdjustmentMidPoint(adjustmentMidPoint);
-        colorfulBrush->setBrightnessAdjustment(brightnessAdjustment);
-        colorfulBrush->setContrastAdjustment(contrastAdjustment);
-        colorfulBrush->setAutoAdjustMidPoint(autoAdjustMidPoint);
+        colorfulBrush->setAdjustmentMidPoint(brushData.predefinedBrush.adjustmentMidPoint);
+        colorfulBrush->setBrightnessAdjustment(brushData.predefinedBrush.brightnessAdjustment);
+        colorfulBrush->setContrastAdjustment(brushData.predefinedBrush.contrastAdjustment);
+        colorfulBrush->setAutoAdjustMidPoint(brushData.predefinedBrush.autoAdjustMidPoint);
     }
 
-    auto legacyBrushApplication = [] (KisColorfulBrush *colorfulBrush, bool forceColorToAlpha) {
-        /**
-         * In Krita versions before 4.4 series "ColorAsMask" could
-         * be overridden to false when the brush had no **color**
-         * inside. That changed in Krita 4.4.x series, when
-         * "brushApplication" replaced all the automatic heuristics
-         */
-        return (colorfulBrush && colorfulBrush->hasColorAndTransparency() && !forceColorToAlpha) ? IMAGESTAMP : ALPHAMASK;
-    };
-
-
-    if (brushDefinition.hasAttribute("preserveLightness")) {
-        const int preserveLightness = KisDomUtils::toInt(brushDefinition.attribute("preserveLightness", "0"));
-        const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
-        brush->setBrushApplication(preserveLightness ? LIGHTNESSMAP : legacyBrushApplication(colorfulBrush, useColorAsMask));
-    }
-    else if (brushDefinition.hasAttribute("brushApplication")) {
-        enumBrushApplication brushApplication = static_cast<enumBrushApplication>(KisDomUtils::toInt(brushDefinition.attribute("brushApplication", "0")));
-        brush->setBrushApplication(brushApplication);
-    }
-    else if (brushDefinition.hasAttribute("ColorAsMask")) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(colorfulBrush);
-
-        const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
-        brush->setBrushApplication(legacyBrushApplication(colorfulBrush, useColorAsMask));
-    }
-    else {
-        /**
-         * In Krita versions before 4.4 series we used to automatrically select
-         * the brush application depending on the presence of the color in the
-         * brush, even when there was no "ColorAsMask" field.
-         */
-        brush->setBrushApplication(legacyBrushApplication(colorfulBrush, false));
-    }
+    brush->setBrushApplication(brushData.predefinedBrush.application);
 
     return brush;
 }
 
+KoResourceLoadResult KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface)
+{
+    auto data = createBrushModelImpl(brushDefinition, resourcesInterface);
+
+    if (std::holds_alternative<KisBrushModel::BrushData>(data)) {
+        return createBrush(std::get<KisBrushModel::BrushData>(data), resourcesInterface);
+    } else if (std::holds_alternative<KoResourceSignature>(data)) {
+        return std::get<KoResourceSignature>(data);
+    }
+
+    // fallback, should never reach!
+    return KoResourceSignature(ResourceType::Brushes, "", "", "");
+}
+
 std::optional<KisBrushModel::BrushData> KisPredefinedBrushFactory::createBrushModel(const QDomElement &element, KisResourcesInterfaceSP resourcesInterface)
+{
+    auto data = createBrushModelImpl(element, resourcesInterface);
+    return std::holds_alternative<KisBrushModel::BrushData>(data) ?
+        std::make_optional(std::get<KisBrushModel::BrushData>(data)) :
+        std::nullopt;
+}
+
+std::variant<KisBrushModel::BrushData, KoResourceSignature> KisPredefinedBrushFactory::createBrushModelImpl(const QDomElement &element, KisResourcesInterfaceSP resourcesInterface)
 {
     KisBrushModel::BrushData brush;
 
@@ -146,7 +90,7 @@ std::optional<KisBrushModel::BrushData> KisPredefinedBrushFactory::createBrushMo
     const QString brushMD5Sum = element.attribute("md5sum", "");
     KisBrushSP brushResource = resourceSourceAdapter.bestMatch(brushMD5Sum, brushFileName, "");
     if (!brushResource) {
-        return std::nullopt;
+        return KoResourceSignature(ResourceType::Brushes, brushMD5Sum, brushFileName, "");
     }
 
     brush.type = KisBrushModel::Predefined;

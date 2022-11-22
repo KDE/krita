@@ -14,25 +14,32 @@
 
 KoResourceLoadResult KisTextBrushFactory::createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface)
 {
-    Q_UNUSED(resourcesInterface);
+    std::optional<KisBrushModel::BrushData> data =
+        createBrushModel(brushDefinition, resourcesInterface);
 
-    QString text = brushDefinition.attribute("text", "The quick brown fox ate your text");
-    QFont font;
-    font.fromString(brushDefinition.attribute("font"));
-    double spacing = KisDomUtils::toDouble(brushDefinition.attribute("spacing", "1.0"));
-    QString pipeMode = brushDefinition.attribute("pipe", "false");
-    bool pipe = (pipeMode == "true") ? true : false;
+    if (data) {
+        return createBrush(*data, resourcesInterface);
+    }
+
+    // fallback, should never reach!
+    return KoResourceSignature(ResourceType::Brushes, "", "", "");
+}
+
+KoResourceLoadResult KisTextBrushFactory::createBrush(const KisBrushModel::BrushData& data, KisResourcesInterfaceSP resourcesInterface)
+{
+    Q_UNUSED(resourcesInterface);
 
     KisTextBrushSP brush = KisTextBrushSP(new KisTextBrush());
 
-    brush->setText(text);
-    brush->setFont(font);
-    brush->setPipeMode(pipe);
-    brush->setSpacing(spacing);
+    brush->setText(data.textBrush.text);
+    brush->setFont(data.textBrush.font);
+    brush->setPipeMode(data.textBrush.usePipeMode);
+    brush->setSpacing(data.common.spacing);
     brush->updateBrush();
 
     return brush;
 }
+
 
 std::optional<KisBrushModel::BrushData> KisTextBrushFactory::createBrushModel(const QDomElement &element, KisResourcesInterfaceSP resourcesInterface)
 {

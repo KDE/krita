@@ -37,6 +37,7 @@ public:
      * added to the resource provider, too.
      */
     virtual KoResourceLoadResult createBrush(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface) = 0;
+    virtual KoResourceLoadResult createBrush(const KisBrushModel::BrushData &data, KisResourcesInterfaceSP resourcesInterface) = 0;
     virtual std::optional<KisBrushModel::BrushData> createBrushModel(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface) = 0;
     virtual void toXML(QDomDocument &doc, QDomElement &element, const KisBrushModel::BrushData &model) = 0;
 };

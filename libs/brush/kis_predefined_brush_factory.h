@@ -21,10 +21,15 @@ public:
     KisPredefinedBrushFactory(const QString &brushType);
 
     QString id() const override;
+    KoResourceLoadResult createBrush(const KisBrushModel::BrushData &brushData, KisResourcesInterfaceSP resourcesInterface) override;
     KoResourceLoadResult createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface) override;
     std::optional<KisBrushModel::BrushData> createBrushModel(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface) override;
     static void loadFromBrushResource(KisBrushModel::CommonData &commonData, KisBrushModel::PredefinedBrushData &predefinedBrushData, KisBrushSP brushResource);
     void toXML(QDomDocument &doc, QDomElement &element, const KisBrushModel::BrushData &model) override;
+
+private:
+    std::variant<KisBrushModel::BrushData, KoResourceSignature> createBrushModelImpl(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface);
+
 private:
     const QString m_id;
 };

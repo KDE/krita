@@ -11,7 +11,7 @@
 
 namespace Planar
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
 template<typename Arch,
          LinearizePolicy linearizePolicy,
          bool applyOOTF,
@@ -131,7 +131,7 @@ constexpr int bufferSize()
     return 4;
 }
 
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
 template<typename Arch,
          typename std::enable_if_t<!std::is_same<Arch, xsimd::generic>::value,
                                    int> = 0>
@@ -371,7 +371,7 @@ readLayerImpl::create<xsimd::current_arch>(const int luma,
 
 namespace HDR
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
 template<typename Arch,
          LinearizePolicy linearizePolicy,
          bool applyOOTF,
@@ -493,7 +493,7 @@ constexpr int bufferSize()
     return channels;
 }
 
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
 template<typename Arch,
          int channels,
          typename std::enable_if_t<!std::is_same<Arch, xsimd::generic>::value,
@@ -700,7 +700,7 @@ readLayerImpl::create<xsimd::current_arch>(const int luma,
 
 namespace SDR
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
 template<typename Arch,
          LinearizePolicy linearizePolicy,
          bool applyOOTF,
@@ -795,7 +795,7 @@ constexpr int bufferSize()
     return channels;
 }
 
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
 template<typename Arch,
          int channels,
          typename std::enable_if_t<!std::is_same<Arch, xsimd::generic>::value,

@@ -143,7 +143,7 @@ ALWAYS_INLINE float removeSMPTE_ST_428Curve(float x) noexcept
 
 #include <KoMultiArchBuildSupport.h>
 
-#ifdef HAVE_XSIMD
+#if defined(HAVE_XSIMD) && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
 
 #include <KoStreamedMath.h>
 

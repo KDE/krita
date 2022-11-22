@@ -5,48 +5,61 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-// Get Windows Vista API
-#if defined(WINVER) && WINVER < 0x0600
-#undef WINVER
-#endif
-#if defined(_WIN32_WINNT) && _WIN32_WINNT < 0x0600
-#undef _WIN32_WINNT
-#endif
-#ifndef WINVER
-#define WINVER 0x0600
-#endif
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0600
-#endif
-
 #include "KisWindowsPackageUtils.h"
 
 #include <array>
 
-#include <Shlobj.h>
+// XXX: needs to go first because under MinGW
+// clangd gets really confused and errors on missing
+// definition of WINAPI_FAMILY_PARTITION
 #include <windows.h>
 
-#include <QDebug>
-#include <QLibrary>
-#include <QString>
+#if defined __has_include
+#if __has_include(<appmodel.h>)
+#include <appmodel.h>
+#define HAS_APPMODEL_H
+#endif
+#endif
 
-constexpr int appmodel_PACKAGE_FULL_NAME_MAX_LENGTH = 127;
-
-constexpr LONG winerror_APPMODEL_ERROR_NO_PACKAGE = 15700;
-
+#if defined HAS_APPMODEL_H
 // ---
 // GetCurrentPackageFamilyName
 // appmodel.h / Kernel32.dll / Windows 8
 // ---
-using pGetCurrentPackageFamilyName_t =
-    LONG(WINAPI *)(UINT32 *packageFamilyNameLength, PWSTR packageFamilyName);
+using pGetCurrentPackageFamilyName_t = decltype(&GetCurrentPackageFamilyName);
 
 // ---
 // GetCurrentPackageFullName
 // appmodel.h / Kernel32.dll / Windows 8
 // ---
-using pGetCurrentPackageFullName_t =
-    LONG(WINAPI *)(UINT32 *packageFullNameLength, PWSTR packageFullName);
+using pGetCurrentPackageFullName_t = decltype(&GetCurrentPackageFullName);
+#else
+// ---
+// GetCurrentPackageFamilyName
+// appmodel.h / Kernel32.dll / Windows 8
+// ---
+using pGetCurrentPackageFamilyName_t = LONG(WINAPI *)(UINT32 *packageFamilyNameLength, PWSTR packageFamilyName);
+
+// ---
+// GetCurrentPackageFullName
+// appmodel.h / Kernel32.dll / Windows 8
+// ---
+using pGetCurrentPackageFullName_t = LONG(WINAPI *)(UINT32 *packageFullNameLength, PWSTR packageFullName);
+#endif
+
+#include <shlobj.h>
+
+#include <QDebug>
+#include <QLibrary>
+#include <QString>
+
+#ifndef PACKAGE_FULL_NAME_MAX_LENGTH
+constexpr int PACKAGE_FULL_NAME_MAX_LENGTH = 127;
+#endif
+
+#ifndef APPMODEL_ERROR_NO_PACKAGE
+constexpr LONG APPMODEL_ERROR_NO_PACKAGE = 15700;
+#endif
 
 // Flag for `KNOWN_FOLDER_FLAG`, introduced in Win 10 ver 1703, which when
 // used within a Desktop Bridge process, will cause the API to return the
@@ -56,6 +69,7 @@ using pGetCurrentPackageFullName_t =
 // KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET
 // shlobj_core.h / Windows 10 v1703
 // ---
+// TODO: remove this once MinGW adds the flag -- see shlobj.h KNOWN_FOLDER_FLAG
 constexpr int shlobj_KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET = 0x00040000;
 
 struct AppmodelFunctions {
@@ -102,13 +116,10 @@ bool tryGetCurrentPackageFamilyName(QString *outName)
         return false;
     }
 
-    std::array<WCHAR, appmodel_PACKAGE_FULL_NAME_MAX_LENGTH + 1>
-        name{}; // includes null terminator
+    std::array<WCHAR, PACKAGE_FULL_NAME_MAX_LENGTH + 1> name{}; // includes null terminator
     UINT32 nameLength = name.size();
-    LONG result =
-        AppmodelFunctions::instance().getCurrentPackageFamilyName(&nameLength,
-                                                                  name.data());
-    if (result == winerror_APPMODEL_ERROR_NO_PACKAGE) {
+    const LONG result = AppmodelFunctions::instance().getCurrentPackageFamilyName(&nameLength, name.data());
+    if (result == APPMODEL_ERROR_NO_PACKAGE) {
         // Process not running from a package.
         return false;
     }
@@ -123,9 +134,7 @@ bool tryGetCurrentPackageFamilyName(QString *outName)
         return true;
     }
     if (result != ERROR_SUCCESS) {
-        qWarning()
-            << "GetCurrentPackageFamilyName returned unexpected error code:"
-            << result;
+        qWarning() << "GetCurrentPackageFamilyName returned unexpected error code:" << result;
         return false;
     }
 
@@ -141,8 +150,7 @@ bool tryGetCurrentPackageFamilyName(QString *outName)
         if (nameLength > 0 && name.at(nameLength - 1) == L'\0') {
             nameLength -= 1;
         }
-        *outName =
-            QString::fromWCharArray(name.data(), static_cast<int>(nameLength));
+        *outName = QString::fromWCharArray(name.data(), static_cast<int>(nameLength));
     }
     return true;
 }
@@ -154,13 +162,10 @@ bool tryGetCurrentPackageFullName(QString *outName)
         return false;
     }
 
-    std::array<WCHAR, appmodel_PACKAGE_FULL_NAME_MAX_LENGTH + 1>
-        name{}; // includes null terminator
+    std::array<WCHAR, PACKAGE_FULL_NAME_MAX_LENGTH + 1> name{}; // includes null terminator
     UINT32 nameLength = name.size();
-    const LONG result =
-        AppmodelFunctions::instance().getCurrentPackageFullName(&nameLength,
-                                                                name.data());
-    if (result == winerror_APPMODEL_ERROR_NO_PACKAGE) {
+    const LONG result = AppmodelFunctions::instance().getCurrentPackageFullName(&nameLength, name.data());
+    if (result == APPMODEL_ERROR_NO_PACKAGE) {
         // Process not running from a package.
         return false;
     }
@@ -175,9 +180,7 @@ bool tryGetCurrentPackageFullName(QString *outName)
         return true;
     }
     if (result != ERROR_SUCCESS) {
-        qWarning()
-            << "GetCurrentPackageFullName returned unexpected error code:"
-            << result;
+        qWarning() << "GetCurrentPackageFullName returned unexpected error code:" << result;
         return false;
     }
 
@@ -193,8 +196,7 @@ bool tryGetCurrentPackageFullName(QString *outName)
         if (nameLength > 0 && name.at(nameLength - 1) == L'\0') {
             nameLength -= 1;
         }
-        *outName =
-            QString::fromWCharArray(name.data(), static_cast<int>(nameLength));
+        *outName = QString::fromWCharArray(name.data(), static_cast<int>(nameLength));
     }
     return true;
 }
@@ -203,10 +205,7 @@ QString getPackageRoamingAppDataLocation()
 {
     PWSTR path = nullptr;
     HRESULT result =
-        SHGetKnownFolderPath(FOLDERID_RoamingAppData,
-                             shlobj_KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET,
-                             nullptr,
-                             &path);
+        SHGetKnownFolderPath(FOLDERID_RoamingAppData, shlobj_KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET, nullptr, &path);
     if (result != S_OK) {
         qWarning() << "SHGetKnownFolderPath returned error HRESULT:" << result;
         return {};

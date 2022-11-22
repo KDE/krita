@@ -10,6 +10,7 @@ ExternalProject_Add(
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}
+        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
         ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
             --prefix=${EXTPREFIX_raqm}
             --libdir=lib

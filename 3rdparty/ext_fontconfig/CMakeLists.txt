@@ -10,6 +10,7 @@ ExternalProject_Add( ext_fontconfig
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}
+        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
         ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
             --prefix=${PREFIX_ext_fontconfig}
             --libdir=lib -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>

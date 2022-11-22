@@ -291,7 +291,7 @@ inline Exiv2::Value *kmdValueToExivXmpValue(const KisMetaData::Value &value)
     case KisMetaData::Value::LangArray: {
         Exiv2::Value *arrV = new Exiv2::LangAltValue;
         QMap<QString, KisMetaData::Value> langArray = value.asLangArray();
-        for (QMap<QString, KisMetaData::Value>::iterator it = langArray.begin(); it != langArray.end(); ++it) {
+        for (auto it = langArray.begin(); it != langArray.end(); ++it) {
             QString exivVal;
             if (it.key() != "x-default") {
                 exivVal = "lang=" + it.key() + ' ';

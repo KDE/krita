@@ -50,7 +50,7 @@ struct KoAlphaMaskApplicator : public KoAlphaMaskApplicatorBase
     }
 };
 
-#ifdef HAVE_XSIMD
+#if defined(HAVE_XSIMD) && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
 
 #include "KoStreamedMath.h"
 

@@ -10,7 +10,7 @@
 
 #include <xsimd_extensions/xsimd.hpp>
 
-#if defined HAVE_XSIMD
+#if defined(HAVE_XSIMD) && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
 
 class VcExtraMath
 {

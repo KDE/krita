@@ -10,7 +10,7 @@
 // xsimd detection and architecture setup.
 #include "config/xsimd_arch.hpp"
 
-#ifdef HAVE_XSIMD
+#if defined(HAVE_XSIMD) && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
 // xsimd extensions.
 #include "arch/xsimd_isa.hpp"
 #endif // HAVE_XSIMD

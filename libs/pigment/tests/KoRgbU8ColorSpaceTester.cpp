@@ -362,7 +362,7 @@ void KoRgbU8ColorSpaceTester::testCompositeCopyDivisionByZero()
             qDebug() << "oriD" << badDst[0] << badDst[1] << badDst[2] << badDst[3];
             qDebug() << "expD" << expectedDst[0] << expectedDst[1] << expectedDst[2] << expectedDst[3];
             qDebug() << "dst1" << badPixelDstPtr[0] << badPixelDstPtr[1] << badPixelDstPtr[2] << badPixelDstPtr[3];
-#if HAVE_XSIMD
+#if defined HAVE_XSIMD && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
             QFAIL("Failed to compose pixels");
 #else
             qWarning() << "Skipping failed test when xsimd library is not used";

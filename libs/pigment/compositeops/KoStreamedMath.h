@@ -9,6 +9,10 @@
 #ifndef __KOSTREAMED_MATH_H
 #define __KOSTREAMED_MATH_H
 
+#if defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
+#error "Trying to use SIMD with an unknown architecture!"
+#endif
+
 #include <cstdint>
 #include <iostream>
 #include <KoRgbaInterleavers.h>

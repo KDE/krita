@@ -586,7 +586,7 @@ void KisWelcomePageWidget::setupNewsLangSelection(QMenu *newsOptionsMenu)
         // We can copy `code` into the lambda because its backing string is a
         // static string literal.
         const QString code = lang.siteCode;
-        connect(langItem, &QAction::toggled, [=](bool checked) {
+        connect(langItem, &QAction::toggled, newsWidget, [=](bool checked) {
             newsWidget->toggleNewsLanguage(code, checked);
         });
 

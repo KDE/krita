@@ -170,7 +170,7 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioVolumeChanged()), SLOT(slotAudioVolumeChanged()));
 
     // Grow to new playback range when new frames added (configurable)...
-    connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigKeyframeAdded, [this](const KisKeyframeChannel*, int time){
+    connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigKeyframeAdded, m_d->canvas, [this](const KisKeyframeChannel*, int time){
         if (m_d->canvas && m_d->canvas->image()) {
             KisImageAnimationInterface* animInterface = m_d->canvas->image()->animationInterface();
             KisConfig cfg(true);

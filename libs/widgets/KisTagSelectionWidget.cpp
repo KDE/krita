@@ -62,7 +62,7 @@ WdgCloseableLabel::WdgCloseableLabel(KoID tag, bool editable, bool semiSelected,
         m_closeIconLabel->setEnabled(m_editble);
         m_closeIconLabel->setMaximumSize(QSize(1, 1) * m_size);
 
-        connect(m_closeIconLabel, &QAbstractButton::clicked, [&]() {
+        connect(m_closeIconLabel, &QAbstractButton::clicked, this, [&]() {
             emit sigRemoveTagFromSelection(m_tag);
         });
         layout->addWidget(m_closeIconLabel);

@@ -83,7 +83,7 @@ KisUniformPaintOpPropertyIntSlider::KisUniformPaintOpPropertyIntSlider(KisUnifor
         slider->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
 
         slider->setAngle(static_cast<qreal>(sliderProperty->value().toInt()));
-        connect(slider, &KisAngleSelector::angleChanged, [this](qreal angle) { slotSliderChanged(static_cast<int>(angle)); });
+        connect(slider, &KisAngleSelector::angleChanged, this, [this](qreal angle) { slotSliderChanged(static_cast<int>(angle)); });
 
         m_slider = slider;
     } else {

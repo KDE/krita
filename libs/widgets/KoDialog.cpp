@@ -148,7 +148,7 @@ void KoDialogPrivate::appendButton(KoDialog::ButtonCode key, const KGuiItem &ite
 
     mButtonList.insert(key, button);
 
-    QObject::connect(button, &QPushButton::clicked, [=] { q->slotButtonClicked(key); });
+    QObject::connect(button, &QPushButton::clicked, q, [=] { q->slotButtonClicked(key); });
 
     if (key == mDefaultButton) {
         // Now that it exists, set it as default

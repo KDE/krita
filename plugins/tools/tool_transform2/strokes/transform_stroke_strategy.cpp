@@ -43,6 +43,7 @@
 #include "commands_new/KisHoldUIUpdatesCommand.h"
 #include "KisDecoratedNodeInterface.h"
 #include "kis_paint_device_debug_utils.h"
+#include "kis_raster_keyframe_channel.h"
 #include "kis_layer_utils.h"
 
 
@@ -457,6 +458,17 @@ void TransformStrokeStrategy::initStrokeCallback()
             if (KisTransformMask* transformMask = dynamic_cast<KisTransformMask*>(node.data())) {
                 QSharedPointer<KisInitializeTransformMaskKeyframesCommand> addKeyCommand(new KisInitializeTransformMaskKeyframesCommand(transformMask, transformMask->transformParams()));
                 runAndSaveCommand( addKeyCommand, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+            } else if (node->hasEditablePaintDevice()){
+                // Try to create a copy keyframe if available.
+                KisPaintDeviceSP device = node->paintDevice();
+                KIS_ASSERT(device);
+                if (device->keyframeChannel()) {
+                    KUndo2CommandSP undo(new KUndo2Command);
+                    const int activeKeyframe = device->keyframeChannel()->activeKeyframeTime();
+                    const int targetKeyframe = node->image()->animationInterface()->currentTime();
+                    device->keyframeChannel()->copyKeyframe(activeKeyframe, targetKeyframe, undo.data());
+                    runAndSaveCommand(undo, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+                }
             }
         }
     });

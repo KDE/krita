@@ -33,6 +33,7 @@
 #include "kis_node_manager.h"
 #include "kis_selection_manager.h"
 #include "kis_signals_blocker.h"
+#include "KisAnimAutoKey.h"
 #include <boost/operators.hpp>
 #include "KisMoveBoundsCalculationJob.h"
 #include <KisOptimizedBrushOutline.h>
@@ -149,6 +150,8 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
 
     KisPaintLayerSP paintLayer =
         dynamic_cast<KisPaintLayer*>(this->currentNode().data());
+
+
 
     const bool canUseSelectionMode =
             paintLayer && selection &&

@@ -139,7 +139,7 @@ inline Exiv2::Value *variantToExivValue(const QVariant &variant, Exiv2::TypeId t
     default:
         dbgMetaData << "Unhandled type:" << type;
         // Q_ASSERT(false);
-        return 0;
+        return nullptr;
     }
 }
 
@@ -306,10 +306,10 @@ inline Exiv2::Value *kmdValueToExivXmpValue(const KisMetaData::Value &value)
     case KisMetaData::Value::Structure:
     default: {
         warnKrita << "KisExiv2: Unhandled value type";
-        return 0;
+        return nullptr;
     }
     }
     warnKrita << "KisExiv2: Unhandled value type";
-    return 0;
+    return nullptr;
 }
 #endif

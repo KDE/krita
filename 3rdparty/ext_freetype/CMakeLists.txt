@@ -33,8 +33,10 @@ ExternalProject_Add(ext_freetype_bootstrap
 ExternalProject_Add(
     ext_harfbuzz
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/harfbuzz/harfbuzz/releases/download/4.1.0/harfbuzz-4.1.0.tar.xz
-    URL_HASH SHA256=f7984ff4241d4d135f318a93aa902d910a170a8265b7eaf93b5d9a504eed40c8
+    URL https://github.com/harfbuzz/harfbuzz/releases/download/5.3.1/harfbuzz-5.3.1.tar.xz
+    URL_HASH SHA256=4a6ce097b75a8121facc4ba83b5b083bfec657f45b003cd5a3424f2ae6b4434d
+
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-patch-msvc.patch
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}

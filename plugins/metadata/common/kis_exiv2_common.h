@@ -11,6 +11,7 @@
 #include <exiv2/exiv2.hpp>
 
 #include <QDateTime>
+#include <QScopedPointer>
 
 #include <kis_debug.h>
 #include <kis_meta_data_value.h>
@@ -278,11 +279,10 @@ inline Exiv2::Value *kmdValueToExivXmpValue(const KisMetaData::Value &value)
             // Cannot happen
             ;
         }
-        Q_FOREACH (const KisMetaData::Value &v, value.asArray()) {
-            Exiv2::Value *ev = kmdValueToExivXmpValue(v);
-            if (ev) {
-                arrV->read(ev->toString());
-                delete ev;
+        Q_FOREACH (const KisMetaData::Value &value, value.asArray()) {
+            QScopedPointer<Exiv2::Value> exivValue(kmdValueToExivXmpValue(value));
+            if (exivValue) {
+                arrV->read(exivValue->toString());
             }
         }
         return arrV;

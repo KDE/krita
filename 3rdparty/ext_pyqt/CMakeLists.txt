@@ -1,12 +1,6 @@
 SET(PREFIX_ext_pyqt "${EXTPREFIX}" )
 
 if(UNIX)
-    SET(Python_EXECUTABLE ${PREFIX_ext_pyqt}/bin/python3)
-    if(NOT EXISTS ${Python_EXECUTABLE})
-      message("WARNING: using system python3!")
-      SET(Python_EXECUTABLE python3)
-    endif()
-
     if (QT_ENABLE_ASAN)
        set(_extra_pyqt_config --qmake-setting QMAKE_LFLAGS+=-fsanitize=address --qmake-setting QMAKE_CFLAGS+=-fsanitize=address --qmake-setting QMAKE_CXXFLAGS+=-fsanitize=address)
     else ()

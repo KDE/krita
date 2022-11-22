@@ -405,6 +405,19 @@ find_program(MESON_BINARY_PATH meson ${CROSSCOMPILING})
 find_program(NINJA_BINARY_PATH ninja ${CROSSCOMPILING})
 find_package(PkgConfig QUIET ${CROSSCOMPILING})
 
+if (NOT Python_EXECUTABLE)
+    set(Python_EXECUTABLE ${EXTPREFIX}/bin/python3)
+    if(NOT EXISTS "${Python_EXECUTABLE}")
+        message("WARNING: using system python3!")
+        SET(Python_EXECUTABLE python3)
+    endif()
+
+    set(PYTHON_DEP ext_python)
+endif()
+
+# Meson needs the sitecustomize.py to set the site-packages root
+add_subdirectory( ext_python )
+
 if (NOT MESON_BINARY_PATH)
     set(MESON_DEP ext_meson)
     set(MESON_BINARY_PATH ${EXTPREFIX}/bin/meson)
@@ -445,9 +458,6 @@ if (NOT WIN32 OR OPENSSL_DEP)
     add_subdirectory( ext_openssl )
 endif()
 
-if (ENABLE_PYTHON_DEPS OR NOT MINGW)
-	add_subdirectory( ext_python )
-endif ()
 if (WIN32)
     add_subdirectory( ext_patch )
 endif ()

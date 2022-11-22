@@ -1,12 +1,6 @@
 SET(PREFIX_ext_sip "${EXTPREFIX}" )
 
 if(UNIX)
-    set(Python_EXECUTABLE ${PREFIX_ext_sip}/bin/python3)
-    if(NOT EXISTS ${Python_EXECUTABLE})
-      message("WARNING: using system python3!")
-      set(Python_EXECUTABLE python3)
-    endif()
-
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://pypi.python.org/packages/source/s/sip/sip-6.6.2.tar.gz

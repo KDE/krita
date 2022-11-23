@@ -40,6 +40,7 @@ private Q_SLOTS:
     void testGetClosestSwatchInfo();
     void testGetGroup();
     void testAllRows();
+    void testRowNumberInGroup();
 
 private:
 

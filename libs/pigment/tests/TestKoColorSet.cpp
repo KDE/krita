@@ -542,8 +542,8 @@ void TestKoColorSet::testIsGroupNameRow()
     cs->getGlobalGroup()->setRowCount(7);
     cs->addGroup("group1", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 6);
     cs->addGroup("group2", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 5);
+
     for (int i = 0; i < cs->rowCountWithTitles(); ++i) {
-        // qDebug() << "row" << i << "is grouptitle" << cs->isGroupTitleRow(i);
         if (i == 7 || i == 14) {
             QVERIFY(cs->isGroupTitleRow(i));
         }
@@ -649,6 +649,29 @@ void TestKoColorSet::testAllRows()
         }
     }
 
+}
+
+void TestKoColorSet::testRowNumberInGroup()
+{
+    KoColorSetSP cs = createColorSet();
+    cs->getGlobalGroup()->setRowCount(7);
+    cs->addGroup("group1", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 6);
+    cs->addGroup("group2", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 5);
+    cs->addGroup("group3", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 4);
+
+    QCOMPARE(cs->rowCountWithTitles(), 25);
+
+    QVector<int> rowCountsInGroup {    0, 1, 2, 3, 4, 5, 6,
+                                   -1, 0, 1, 2, 3, 4, 5,
+                                   -1, 0, 1, 2, 3, 4,
+                                   -1, 0, 1, 2, 3};
+
+
+    QCOMPARE(cs->rowCountWithTitles(), rowCountsInGroup.size());
+
+    for (int i = 0; i < cs->rowCountWithTitles(); ++i) {
+        QCOMPARE(cs->rowNumberInGroup(i), rowCountsInGroup[i]);
+    }
 }
 
 KoColorSetSP TestKoColorSet::createColorSet()

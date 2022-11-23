@@ -138,20 +138,20 @@ public:
      * @return the group with the name given; global group if no parameter is given
      * null pointer if not found.
      */
-    KisSwatchGroupSP getGroup(const QString &name);
+    KisSwatchGroupSP getGroup(const QString &name) const;
 
     /**
      * @brief getGroup get the group that covers this row
      * @param row
      * @return a swatch group
      */
-    KisSwatchGroupSP getGroup(int row);
+    KisSwatchGroupSP getGroup(int row) const;
 
     /**
      * @brief getGlobalGroup
      * @return
      */
-    KisSwatchGroupSP getGlobalGroup();
+    KisSwatchGroupSP getGlobalGroup() const;
 
     /**
      * @brief changeGroupName
@@ -200,7 +200,7 @@ public:
      * when the two colors' colorspaces don't match. Else it'll use the entry's colorspace.
      * @return returns the int of the closest match.
      */
-    KisSwatchGroup::SwatchInfo getClosestSwatchInfo(KoColor compare, bool useGivenColorSpace = true);
+    KisSwatchGroup::SwatchInfo getClosestSwatchInfo(KoColor compare, bool useGivenColorSpace = true) const;
 
     /**
      * @brief getColorGlobal
@@ -219,7 +219,7 @@ public:
      * @param groupName the name of the group, will give unsorted when not defined.
      * @return the entry
      */
-    KisSwatch getSwatchFromGroup(quint32 column, quint32 row, QString groupName = KoColorSet::GLOBAL_GROUP_NAME);
+    KisSwatch getSwatchFromGroup(quint32 column, quint32 row, QString groupName = KoColorSet::GLOBAL_GROUP_NAME) const;
 
     /**
      * @brief getGroupNames
@@ -240,6 +240,8 @@ public:
      * @return
      */
     int startRowForGroup(const QString &groupName) const;
+
+    int rowNumberInGroup(int rowNumber) const;
 
 Q_SIGNALS:
 

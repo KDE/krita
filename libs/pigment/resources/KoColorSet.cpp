@@ -645,7 +645,7 @@ KisSwatch KoColorSet::getColorGlobal(quint32 column, quint32 row) const
     return KisSwatch();
 }
 
-KisSwatch KoColorSet::getSwatchFromGroup(quint32 column, quint32 row, QString groupName)
+KisSwatch KoColorSet::getSwatchFromGroup(quint32 column, quint32 row, QString groupName) const
 {
     KisSwatch swatch;
     for (const KisSwatchGroupSP &group: d->swatchGroups) {
@@ -698,6 +698,25 @@ int KoColorSet::startRowForGroup(const QString &groupName) const
         }
     }
     return row;
+}
+
+int KoColorSet::rowNumberInGroup(int rowNumber) const
+{
+    if (isGroupTitleRow(rowNumber)) {
+        return -1;
+    }
+
+    int rowInGroup = -1;
+    for (int i = rowNumber; i > -1; i--) {
+        if (isGroupTitleRow(i)) {
+            return rowInGroup;
+        }
+        else {
+            rowInGroup++;
+        }
+    }
+
+    return rowInGroup;
 }
 
 void KoColorSet::setModified(bool _modified)
@@ -842,7 +861,7 @@ quint32 KoColorSet::colorCount() const
     return colorCount;
 }
 
-KisSwatchGroupSP KoColorSet::getGroup(const QString &name)
+KisSwatchGroupSP KoColorSet::getGroup(const QString &name) const
 {
     for (KisSwatchGroupSP &group : d->swatchGroups) {
         if (group->name() == name) {
@@ -852,7 +871,7 @@ KisSwatchGroupSP KoColorSet::getGroup(const QString &name)
     return 0;
 }
 
-KisSwatchGroupSP KoColorSet::getGroup(int row)
+KisSwatchGroupSP KoColorSet::getGroup(int row) const
 {
 //    qDebug() << "------------";
 
@@ -890,14 +909,14 @@ KisSwatchGroupSP KoColorSet::getGroup(int row)
 
 }
 
-KisSwatchGroupSP KoColorSet::getGlobalGroup()
+KisSwatchGroupSP KoColorSet::getGlobalGroup() const
 {
     Q_ASSERT(d->swatchGroups.size() > 0);
     Q_ASSERT(d->swatchGroups.first()->name() == GLOBAL_GROUP_NAME);
     return d->swatchGroups.first();
 }
 
-KisSwatchGroup::SwatchInfo KoColorSet::getClosestSwatchInfo(KoColor compare, bool useGivenColorSpace)
+KisSwatchGroup::SwatchInfo KoColorSet::getClosestSwatchInfo(KoColor compare, bool useGivenColorSpace) const
 {
     KisSwatchGroup::SwatchInfo closestSwatch;
 

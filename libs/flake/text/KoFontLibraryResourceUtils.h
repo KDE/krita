@@ -20,31 +20,38 @@
 
 #include <QSharedPointer>
 
+// Helper to clean up only if the pointer is non-null.
+template<typename T, void (*d)(T *)>
+inline void deleter(T *ptr)
+{
+    if (ptr) {
+        d(ptr);
+    }
+}
+
 /**
  * Shared pointer that holds a standard allocated resource.
+ * We use a wrapper because by C++ standards it calls the deleter
+ * unconditionally. This leads to crashes on FontConfig:
+ * https://invent.kde.org/graphics/krita/-/merge_requests/1607#note_567848
  */
 template<typename T, void (*P)(T *)>
 struct KisLibraryResourcePointer : private QSharedPointer<T> {
 public:
     KisLibraryResourcePointer()
-        : QSharedPointer<T>(nullptr, P)
+        : QSharedPointer<T>(nullptr, deleter<T, P>)
     {
     }
 
     KisLibraryResourcePointer(T *ptr)
-        : QSharedPointer<T>(ptr, P)
+        : QSharedPointer<T>(ptr, deleter<T, P>)
     {
     }
 
     using QSharedPointer<T>::operator->;
     using QSharedPointer<T>::reset;
 
-    void reset(T *ptr)
-    {
-        QSharedPointer<T>::reset(ptr, P);
-    }
-
-    auto data()
+    auto data() const
     {
         return this->get();
     }
@@ -69,11 +76,6 @@ public:
 
     using QSharedPointer<T>::operator->;
     using QSharedPointer<T>::reset;
-
-    void reset(T *ptr)
-    {
-        QSharedPointer<T>::reset(ptr, P);
-    }
 
     auto data() const
     {

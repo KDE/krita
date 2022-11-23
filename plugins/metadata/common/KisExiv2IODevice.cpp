@@ -154,7 +154,11 @@ void KisExiv2IODevice::transfer(Exiv2::BasicIo &src)
     }
 }
 
+#if defined(_MSC_VER)
+int KisExiv2IODevice::seek(int64_t offset, Exiv2::BasicIo::Position position)
+#else
 int KisExiv2IODevice::seek(long offset, Exiv2::BasicIo::Position position)
+#endif
 {
     qint64 pos = 0;
     switch (position) {

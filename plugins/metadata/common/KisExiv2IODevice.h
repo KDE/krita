@@ -21,7 +21,7 @@ public:
     using ptr_type = Exiv2::BasicIo::AutoPtr;
 
     KisExiv2IODevice(QString path);
-    ~KisExiv2IODevice();
+    ~KisExiv2IODevice() override;
 
     int open() override;
     int close() override;
@@ -32,7 +32,11 @@ public:
     long read(Exiv2::byte *buf, long rcount) override;
     int getb() override;
     void transfer(BasicIo &src) override;
+#if defined(_MSC_VER)
+    int seek(int64_t offset, Position pos) override;
+#else
     int seek(long offset, Position pos) override;
+#endif
 
     Exiv2::byte *mmap(bool isWriteable = false) override;
     int munmap() override;
@@ -48,7 +52,6 @@ private:
     bool renameToCurrent(const QString srcPath);
     QString filePathQString() const;
 
-private:
     mutable QFile m_file;
 
     Exiv2::byte *m_mappedArea;

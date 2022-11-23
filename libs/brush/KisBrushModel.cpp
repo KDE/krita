@@ -141,17 +141,4 @@ qreal effectiveSizeForBrush(const BrushData &brush)
     return effectiveSizeForBrush(brush.type, brush.autoBrush, brush.predefinedBrush, brush.textBrush);
 }
 
-PredefinedBrushData::PredefinedBrushData()
-{
-    auto source = KisGlobalResourcesInterface::instance()->source<KisBrush>(ResourceType::Brushes);
-
-    KisBrushSP fallbackResource = source.fallbackResource();
-    KIS_SAFE_ASSERT_RECOVER_RETURN(fallbackResource);
-
-    // FIXME: we drop embedded spacing settings here :(
-    CommonData common;
-    KisPredefinedBrushFactory::loadFromBrushResource(common, *this, fallbackResource);
-}
-
-
 }

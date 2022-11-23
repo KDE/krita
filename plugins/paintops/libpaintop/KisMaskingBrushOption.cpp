@@ -143,7 +143,8 @@ public:
     MaskingBrushData bakedOptionData() const {
         MaskingBrushData data = m_maskingData.get();
         data.brush.autoBrush = autoBrushModel.bakedOptionData();
-        data.brush.predefinedBrush = predefinedBrushModel.bakedOptionData();
+        std::tie(data.brush.common, data.brush.predefinedBrush) =
+            predefinedBrushModel.bakedOptionData();
         return data;
     }
 

@@ -5,6 +5,10 @@
  */
 #include "KisPredefinedBrushModel.h"
 
+#include <KisGlobalResourcesInterface.h>
+#include <kis_predefined_brush_factory.h>
+#include <lager/lenses/tuple.hpp>
+
 namespace {
 
 auto brushSizeLens = lager::lenses::getset(
@@ -63,7 +67,33 @@ QString calcBrushDetails(PredefinedBrushData data)
     return brushDetailsText;
 }
 
-}
+auto effectiveResourceData = lager::lenses::getset(
+    [](const std::tuple<CommonData, PredefinedBrushData> &packedData) {
+        if (std::get<1>(packedData).resourceSignature != KoResourceSignature()) {
+            return packedData;
+        }
+
+        CommonData commonData;
+        PredefinedBrushData predefinedData;
+        std::tie(commonData, predefinedData) = packedData;
+
+        auto source = KisGlobalResourcesInterface::instance()->source<KisBrush>(ResourceType::Brushes);
+
+        KisBrushSP fallbackResource = source.fallbackResource();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(fallbackResource, packedData);
+
+        KisPredefinedBrushFactory::loadFromBrushResource(commonData, predefinedData, fallbackResource);
+
+        return std::make_tuple(commonData, predefinedData);
+    },
+    [](const std::tuple<CommonData, PredefinedBrushData>&,
+       const std::tuple<CommonData, PredefinedBrushData> &y) {
+
+        return y;
+    });
+
+} // namespace
+
 
 KisPredefinedBrushModel::KisPredefinedBrushModel(lager::cursor<CommonData> commonData,
                                                  lager::cursor<PredefinedBrushData> predefinedBrushData,
@@ -73,40 +103,44 @@ KisPredefinedBrushModel::KisPredefinedBrushModel(lager::cursor<CommonData> commo
       m_predefinedBrushData(predefinedBrushData),
       m_supportsHSLBrushTips(supportsHSLBrushTips),
       m_commonBrushSizeData(commonBrushSizeData),
-      LAGER_QT(resourceSignature) {m_predefinedBrushData[&PredefinedBrushData::resourceSignature]},
-      LAGER_QT(baseSize) {m_predefinedBrushData[&PredefinedBrushData::baseSize]},
+      m_effectiveBrushData(lager::with(m_commonData, m_predefinedBrushData)
+                           .zoom(effectiveResourceData)),
+      m_effectiveCommonData(m_effectiveBrushData.zoom(lager::lenses::first)),
+      m_effectivePredefinedData(m_effectiveBrushData.zoom(lager::lenses::second)),
+      LAGER_QT(resourceSignature) {m_effectivePredefinedData[&PredefinedBrushData::resourceSignature]},
+      LAGER_QT(baseSize) {m_effectivePredefinedData[&PredefinedBrushData::baseSize]},
       LAGER_QT(brushSize) {m_commonBrushSizeData},
-      LAGER_QT(application) {m_predefinedBrushData[&PredefinedBrushData::application]
+      LAGER_QT(application) {m_effectivePredefinedData[&PredefinedBrushData::application]
                   .zoom(kiszug::lenses::do_static_cast<enumBrushApplication, int>)},
-      LAGER_QT(hasColorAndTransparency) {m_predefinedBrushData[&PredefinedBrushData::hasColorAndTransparency]},
-      LAGER_QT(autoAdjustMidPoint) {m_predefinedBrushData[&PredefinedBrushData::autoAdjustMidPoint]},
-      LAGER_QT(adjustmentMidPoint) {m_predefinedBrushData[&PredefinedBrushData::adjustmentMidPoint]
+      LAGER_QT(hasColorAndTransparency) {m_effectivePredefinedData[&PredefinedBrushData::hasColorAndTransparency]},
+      LAGER_QT(autoAdjustMidPoint) {m_effectivePredefinedData[&PredefinedBrushData::autoAdjustMidPoint]},
+      LAGER_QT(adjustmentMidPoint) {m_effectivePredefinedData[&PredefinedBrushData::adjustmentMidPoint]
                   .zoom(kiszug::lenses::do_static_cast<quint8, int>)},
-      LAGER_QT(brightnessAdjustment) {m_predefinedBrushData[&PredefinedBrushData::brightnessAdjustment]
+      LAGER_QT(brightnessAdjustment) {m_effectivePredefinedData[&PredefinedBrushData::brightnessAdjustment]
                   .xform(kiszug::map_mupliply<qreal>(100.0) | kiszug::map_round,
                          kiszug::map_static_cast<qreal> | kiszug::map_mupliply<qreal>(0.01))},
-      LAGER_QT(contrastAdjustment) {m_predefinedBrushData[&PredefinedBrushData::contrastAdjustment]
+      LAGER_QT(contrastAdjustment) {m_effectivePredefinedData[&PredefinedBrushData::contrastAdjustment]
                   .xform(kiszug::map_mupliply<qreal>(100.0) | kiszug::map_round,
                          kiszug::map_static_cast<qreal> | kiszug::map_mupliply<qreal>(0.01))},
-      LAGER_QT(angle) {m_commonData[&CommonData::angle]
+      LAGER_QT(angle) {m_effectiveCommonData[&CommonData::angle]
                   .zoom(kiszug::lenses::scale<qreal>(180.0 / M_PI))},
-      LAGER_QT(spacing) {m_commonData[&CommonData::spacing]},
-      LAGER_QT(useAutoSpacing) {m_commonData[&CommonData::useAutoSpacing]},
-      LAGER_QT(autoSpacingCoeff) {m_commonData[&CommonData::autoSpacingCoeff]},
+      LAGER_QT(spacing) {m_effectiveCommonData[&CommonData::spacing]},
+      LAGER_QT(useAutoSpacing) {m_effectiveCommonData[&CommonData::useAutoSpacing]},
+      LAGER_QT(autoSpacingCoeff) {m_effectiveCommonData[&CommonData::autoSpacingCoeff]},
       LAGER_QT(aggregatedSpacing) {lager::with(LAGER_QT(spacing),
                                                LAGER_QT(useAutoSpacing),
                                                LAGER_QT(autoSpacingCoeff))
                   .xform(zug::map(ToSpacingState{}),
                          zug::map(FromSpacingState{}))},
       LAGER_QT(applicationSwitchState){lager::with(
-                  m_predefinedBrushData[&PredefinedBrushData::brushType],
+                  m_effectivePredefinedData[&PredefinedBrushData::brushType],
                   m_supportsHSLBrushTips,
-                  m_predefinedBrushData[&PredefinedBrushData::application])
+                  m_effectivePredefinedData[&PredefinedBrushData::application])
                   .xform(zug::map(&calcApplicationSwitchState))},
       LAGER_QT(adjustmentsEnabled){LAGER_QT(applicationSwitchState)[&ComboBoxState::currentIndex]
                   .xform(kiszug::map_greater<int>(1))},
       LAGER_QT(brushName) {LAGER_QT(resourceSignature)[&KoResourceSignature::name]},
-      LAGER_QT(brushDetails) {m_predefinedBrushData.map(&calcBrushDetails)},
+      LAGER_QT(brushDetails) {m_effectivePredefinedData.map(&calcBrushDetails)},
       LAGER_QT(lightnessModeEnabled)
           {LAGER_QT(applicationSwitchState)
                 [&ComboBoxState::currentIndex].
@@ -115,15 +149,15 @@ KisPredefinedBrushModel::KisPredefinedBrushModel(lager::cursor<CommonData> commo
 }
 
 
-PredefinedBrushData KisPredefinedBrushModel::bakedOptionData() const
+std::tuple<CommonData, PredefinedBrushData> KisPredefinedBrushModel::bakedOptionData() const
 {
-    PredefinedBrushData data = m_predefinedBrushData.get();
+    PredefinedBrushData data = m_effectivePredefinedData.get();
     data.application =
         static_cast<enumBrushApplication>(
             LAGER_QT(applicationSwitchState)->currentIndex);
     data.scale = m_commonBrushSizeData.get() / data.baseSize.width();
 
-    return data;
+    return std::make_tuple(m_effectiveCommonData.get(), data);
 
 }
 

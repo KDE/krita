@@ -108,11 +108,6 @@ struct BRUSH_EXPORT PredefinedBrushData : public boost::equality_comparable<Pred
                 lhs.parasiteSelection == rhs.parasiteSelection;
     }
 
-    PredefinedBrushData();
-    PredefinedBrushData(const PredefinedBrushData &rhs) = default;
-    PredefinedBrushData(PredefinedBrushData &&rhs) = default;
-    PredefinedBrushData& operator=(const PredefinedBrushData &rhs) = default;
-
     KoResourceSignature resourceSignature;
 
     QString subtype;

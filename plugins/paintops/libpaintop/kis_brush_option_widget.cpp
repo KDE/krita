@@ -91,7 +91,9 @@ void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setti
 
     BrushData data = m_d->brushData.get();
     data.autoBrush = m_d->autoBrushModel.bakedOptionData();
-    data.predefinedBrush = m_d->predefinedBrushModel.bakedOptionData();
+    std::tie(data.common, data.predefinedBrush) =
+        m_d->predefinedBrushModel.bakedOptionData();
+
     data.write(settings.data());
 
     if (m_d->flags & KisBrushOptionWidgetFlag::SupportsPrecision) {
@@ -135,7 +137,8 @@ lager::reader<BrushData> KisBrushOptionWidget::bakedBrushData() const
 
         Q_UNUSED(commonBrushSize); // we keep it as a dep only for updates!
         data.autoBrush = m_d->autoBrushModel.bakedOptionData();
-        data.predefinedBrush = m_d->predefinedBrushModel.bakedOptionData();
+        std::tie(data.common, data.predefinedBrush) =
+            m_d->predefinedBrushModel.bakedOptionData();
         return data;
     });
 }

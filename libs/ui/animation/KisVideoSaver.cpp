@@ -88,9 +88,10 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
         QStringList complexFilterArgs;
         QStringList args;
         
-        args << "-r" << QString::number(options.frameRate)
-             << "-start_number" << QString::number(clipRange.start())
-             << "-i" << savedFilesMask;        
+        args << "-y" // Auto Confirm...
+             << "-r" << QString::number(options.frameRate) // Frame rate for video...
+             //<< "-start_number" << QString::number(clipRange.start() // Starting number for first frame for batch of frames. **TODO** Not working???
+             << "-i" << savedFilesMask; // Input frame(s) file mask..
 
         const int lavfiOptionsIndex = additionalOptionsList.indexOf("-lavfi");
 
@@ -122,10 +123,8 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
                  
             paletteArgs << "-y" << palettePath;
 
-
             QStringList ffmpegArgs;
             ffmpegArgs << "-v" << "debug"
-                         << "-nostdin"
                          << paletteArgs;
 
             KisFFMpegWrapperSettings ffmpegSettings;

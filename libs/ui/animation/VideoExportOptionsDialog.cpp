@@ -149,6 +149,10 @@ KisVideoExportOptionsDialog::KisVideoExportOptionsDialog(ContainerType container
 {
     ui->setupUi(this);
 
+    ui->intOpenH264bitrate->setRange(100, 10000);
+    ui->intOpenH264bitrate->setValue(5000);
+    ui->intOpenH264bitrate->setSuffix(i18nc("kilo-bits-per-second, video bitrate suffix", "kbps"));
+
     ui->intCRFH264->setRange(0, 51);
     ui->intCRFH264->setValue(28);
 
@@ -246,6 +250,9 @@ KisPropertiesConfigurationSP KisVideoExportOptionsDialog::configuration() const
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
 
     cfg->setProperty("CodecId", currentCodecId());
+
+    cfg->setProperty("Openh264Bitrate", ui->intOpenH264bitrate->value());
+
     cfg->setProperty("h264PresetIndex", ui->cmbPresetH264->currentIndex());
     cfg->setProperty("h264ConstantRateFactor", ui->intCRFH264->value());
     cfg->setProperty("h264ProfileIndex", ui->cmbProfileH264->currentIndex());
@@ -310,8 +317,9 @@ void KisVideoExportOptionsDialog::slotResetCustomLine()
 void KisVideoExportOptionsDialog::slotCodecSelected(int index)
 {
     const QString codec = m_d->codecs[index].id();
-
-    if (codec == "libx264") {
+    if (codec == "libopenh264") {
+        ui->stackedWidget->setCurrentIndex(CODEC_OPENH264);
+    } else if (codec == "libx264") {
         ui->stackedWidget->setCurrentIndex(CODEC_H264);
     } else if (codec == "libx265") {
         ui->stackedWidget->setCurrentIndex(CODEC_H265);
@@ -380,6 +388,8 @@ int findIndexById(const QString &id, const QVector<KoID> &ids)
 
 void KisVideoExportOptionsDialog::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
+    ui->intOpenH264bitrate->setValue(cfg->getInt("Openh264Bitrate", 5000));
+
     ui->cmbPresetH264->setCurrentIndex(cfg->getInt("h264PresetIndex", 5));
     ui->intCRFH264->setValue(cfg->getInt("h264ConstantRateFactor", 23));
     ui->cmbProfileH264->setCurrentIndex(cfg->getInt("h264ProfileIndex", 0));
@@ -414,7 +424,10 @@ QStringList KisVideoExportOptionsDialog::generateCustomLine() const
 {
     QStringList options;
 
-    if (currentCodecId() == "libx264") {
+    if (currentCodecId() == "libopenh264") {
+        options << "-c" << "libopenh264";
+        options << "-b:v" << QString::number(ui->intOpenH264bitrate->value()) + "k";
+    } else if (currentCodecId() == "libx264") {
         options << "-crf" << QString::number(ui->intCRFH264->value());
 
         const int presetIndex = ui->cmbPresetH264->currentIndex();

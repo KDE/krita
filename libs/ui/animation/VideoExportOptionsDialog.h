@@ -33,14 +33,14 @@ public:
     };
 
     enum CodecPageIndex {
-        CODEC_H264 = 0,
+        CODEC_OPENH264,
+        CODEC_H264,
         CODEC_H265,
         CODEC_THEORA,
         CODEC_VP9,
         CODEC_GIF,
         CODEC_APNG,
         CODEC_WEBP
-        
     };
 
 public:

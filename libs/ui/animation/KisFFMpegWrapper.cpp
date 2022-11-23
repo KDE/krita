@@ -53,6 +53,8 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
     m_processSTDERR.clear();
 
     m_process.reset(new QProcess(this));
+    QStringList env(m_process->systemEnvironment());
+
     m_processSettings = settings;
 
     const QString renderLogPath = m_processSettings.outputFile + ".log";
@@ -67,9 +69,10 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
 
     // Log ffmpeg command info..
     if (renderLog.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        QString command = m_processSettings.processPath + m_processSettings.args.join(" ");
+        QString command = m_processSettings.processPath + " " + settings.defaultPrependArgs.join(" ") + " " + m_processSettings.args.join(" ") + " " + m_processSettings.outputFile;
         renderLog.write(command.toUtf8());
-        renderLog.write("=====================================================");
+        renderLog.write("\n");
+        renderLog.write("=====================================================\n");
 
         // Handle logged errors..
         // Due to various reasons (including image preview), ffmpeg uses STDERR and not STDOUT for general output logging.
@@ -136,10 +139,10 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
     connect(m_process.data(), SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotFinished(int)));
 
     QStringList args;
-  
+
     if ( !settings.defaultPrependArgs.isEmpty() ) {
         args << settings.defaultPrependArgs;
-    }    
+    }
     
     args << settings.args;
     

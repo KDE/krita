@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>274</width>
-    <height>340</height>
+    <width>364</width>
+    <height>435</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,1">
@@ -21,18 +21,39 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
+     <widget class="QWidget" name="pgOpenH264">
+      <layout class="QFormLayout" name="formLayout_0">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblOpenH264bitrate">
+         <property name="text">
+          <string>Bitrate:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="KisSliderSpinBox" name="intOpenH264bitrate" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="pgH264">
       <layout class="QFormLayout" name="formLayout_0">
-       <item column="0" row="0">
+       <item row="0" column="0">
         <widget class="QLabel" name="lblCRFH264">
          <property name="text">
           <string>Constant Rate Factor:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="0">
+       <item row="0" column="1">
         <widget class="KisSliderSpinBox" name="intCRFH264" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -42,48 +63,48 @@
          </property>
         </widget>
        </item>
-       <item column="0" row="1">
+       <item row="1" column="0">
         <widget class="QLabel" name="lblPresetH264">
          <property name="text">
           <string>Preset:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="1">
+       <item row="1" column="1">
         <widget class="QComboBox" name="cmbPresetH264"/>
        </item>
-       <item column="0" row="2">
+       <item row="2" column="0">
         <widget class="QLabel" name="lblProfileH264">
          <property name="text">
           <string comment="Label of H.264 encoder profiles">Profile:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="2">
+       <item row="2" column="1">
         <widget class="QComboBox" name="cmbProfileH264"/>
        </item>
-       <item column="0" row="3">
+       <item row="3" column="0">
         <widget class="QLabel" name="lblTuneH264">
          <property name="text">
           <string>Tune:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="3">
+       <item row="3" column="1">
         <widget class="QComboBox" name="cmbTuneH264"/>
        </item>
       </layout>
      </widget>
      <widget class="QWidget" name="pgH265">
       <layout class="QFormLayout" name="formLayout_1">
-       <item column="0" row="0">
+       <item row="0" column="0">
         <widget class="QLabel" name="lblCRFH265">
          <property name="text">
           <string>Constant Rate Factor:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="0">
+       <item row="0" column="1">
         <widget class="KisSliderSpinBox" name="intCRFH265" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -93,44 +114,44 @@
          </property>
         </widget>
        </item>
-       <item column="0" row="1">
+       <item row="1" column="0">
         <widget class="QLabel" name="lblPresetH265">
          <property name="text">
           <string>Preset:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="1">
+       <item row="1" column="1">
         <widget class="QComboBox" name="cmbPresetH265"/>
        </item>
-       <item column="0" row="2">
+       <item row="2" column="0">
         <widget class="QLabel" name="lblProfileH265">
          <property name="text">
           <string comment="Label of H.265 encoder profiles">Profile:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="2">
+       <item row="2" column="1">
         <widget class="QComboBox" name="cmbProfileH265"/>
        </item>
-       <item column="0" row="3">
+       <item row="3" column="0">
         <widget class="QLabel" name="lblTuneH265">
          <property name="text">
           <string>Tune:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="3">
+       <item row="3" column="1">
         <widget class="QComboBox" name="cmbTuneH265"/>
        </item>
-       <item column="0" row="4">
+       <item row="4" column="0">
         <widget class="QCheckBox" name="chkUseHDRMetadata">
          <property name="text">
           <string>HDR Mode</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="4">
+       <item row="4" column="1">
         <widget class="QPushButton" name="btnHdrMetadata">
          <property name="text">
           <string>HDR Metadata...</string>
@@ -141,14 +162,14 @@
      </widget>
      <widget class="QWidget" name="pgTheora">
       <layout class="QFormLayout" name="formLayout_2">
-       <item column="0" row="0">
+       <item row="0" column="0">
         <widget class="QLabel" name="label_3">
          <property name="text">
           <string>Bitrate:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="0">
+       <item row="0" column="1">
         <widget class="KisSliderSpinBox" name="intBitrate" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -162,21 +183,21 @@
      </widget>
      <widget class="QWidget" name="pgVP9">
       <layout class="QFormLayout" name="formLayout_3">
-       <item column="0" row="0">
+       <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Bitrate (MBit/s)</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="0">
+       <item row="0" column="1">
         <widget class="QSpinBox" name="vp9Mbits">
          <property name="value">
           <number>2</number>
          </property>
         </widget>
        </item>
-       <item column="0" row="1">
+       <item row="1" column="0">
         <widget class="QCheckBox" name="vp9Lossless">
          <property name="text">
           <string>Lossless</string>
@@ -187,48 +208,48 @@
      </widget>
      <widget class="QWidget" name="pgGIF">
       <layout class="QFormLayout" name="formLayout_4">
-       <item column="0" row="0">
+       <item row="0" column="0">
         <widget class="QCheckBox" name="gifLoop">
          <property name="text">
           <string>Loop Animation</string>
          </property>
         </widget>
        </item>
-       <item column="0" row="1">
+       <item row="1" column="0">
         <widget class="QCheckBox" name="gifTransDiff">
          <property name="text">
           <string>Transparency Difference</string>
          </property>
         </widget>
        </item>
-       <item column="0" row="2">
+       <item row="2" column="0">
         <widget class="QRadioButton" name="gifAutoPalette">
          <property name="text">
           <string>Auto-generate 8bit Palette</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="2">
+       <item row="2" column="1">
         <widget class="QComboBox" name="cmbPalettegenStatsModeGIF"/>
        </item>
-       <item column="0" row="3">
+       <item row="3" column="0">
         <widget class="QLabel" name="lblPaletteuseDitherGIF">
          <property name="text">
           <string>Dithering:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="3">
+       <item row="3" column="1">
         <widget class="QComboBox" name="cmbPaletteuseDitherGIF"/>
        </item>
-       <item column="0" row="4">
+       <item row="4" column="0">
         <widget class="QLabel" name="lblPaletteuseBayerScaleGIF">
          <property name="text">
           <string>Bayer Scale:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="4">
+       <item row="4" column="1">
         <widget class="KisSliderSpinBox" name="intPaletteuseBayerScaleGIF" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -238,66 +259,66 @@
          </property>
         </widget>
        </item>
-       <item column="0" row="5">
+       <item row="5" column="0">
         <widget class="QLabel" name="lblPaletteuseDiffModeGIF">
          <property name="text">
           <string>Difference Mode:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="5">
+       <item row="5" column="1">
         <widget class="QComboBox" name="cmbPaletteuseDiffModeGIF"/>
        </item>
-       <item column="0" row="6">
+       <item row="6" column="0">
         <widget class="QCheckBox" name="gifReserveTransparent">
-         <property name="text">
-          <string>Preserve Transparency</string>
-         </property>
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;GIF format supports up to 256 colors per frame/image. This option enables transparency at the cost of 1 color, thus only 255 colors will be used for GIFs with this option enabled. Disabling this option gives you the entire 256 colors for your GIF for better quality output.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Note 1: For transparency to work properly, you need to make sure that the image sequence is exporting with transparency enabled, and that FFMpeg version is at least 4.2+. If your GIF output shows signs of screen tearing, FFMpeg version 4.4+ is highly recommended.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Note 2: GIF format only supports 100% transparency, or 0% transparency. Partial transparency is &lt;/span&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline;&quot;&gt;not&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt; supported. If you need partial transparency, consider APNG or WEBP.&lt;/span&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
+         <property name="text">
+          <string>Preserve Transparency</string>
+         </property>
         </widget>
        </item>
-       </layout>
+      </layout>
      </widget>
      <widget class="QWidget" name="pgAPNG">
       <layout class="QFormLayout" name="formLayout_5">
-       <item column="0" row="0">
+       <item row="0" column="0">
         <widget class="QCheckBox" name="apngLoop">
          <property name="text">
           <string>Loop Animation</string>
          </property>
         </widget>
        </item>
-       <item column="0" row="1">
+       <item row="1" column="0">
         <widget class="QLabel" name="lblPredAPNG">
          <property name="text">
           <string>Prediction Mode:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="1">
+       <item row="1" column="1">
         <widget class="QComboBox" name="cmbPredAPNG"/>
        </item>
-       </layout>
+      </layout>
      </widget>
      <widget class="QWidget" name="pgWEBP">
       <layout class="QFormLayout" name="formLayout_6">
-       <item column="0" row="0">
+       <item row="0" column="0">
         <widget class="QCheckBox" name="webpLossless">
          <property name="text">
           <string>Lossless</string>
          </property>
         </widget>
        </item>
-       <item column="0" row="1">
+       <item row="1" column="0">
         <widget class="QLabel" name="lblCompressWEBP">
          <property name="text">
           <string>Compression Level:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="1">
+       <item row="1" column="1">
         <widget class="KisSliderSpinBox" name="intCompressWEBP" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -307,14 +328,14 @@
          </property>
         </widget>
        </item>
-       <item column="0" row="2">
+       <item row="2" column="0">
         <widget class="QLabel" name="lblQscaleWEBP">
          <property name="text">
           <string>Image Quality:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="2">
+       <item row="2" column="1">
         <widget class="KisSliderSpinBox" name="intQscaleWEBP" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -324,17 +345,17 @@
          </property>
         </widget>
        </item>
-       <item column="0" row="3">
+       <item row="3" column="0">
         <widget class="QLabel" name="lblPresetWEBP">
          <property name="text">
           <string>Preset:</string>
          </property>
         </widget>
        </item>
-       <item column="1" row="3">
+       <item row="3" column="1">
         <widget class="QComboBox" name="cmbPresetWEBP"/>
        </item>
-       <item column="0" row="4">
+       <item row="4" column="0">
         <widget class="QCheckBox" name="webpLoop">
          <property name="text">
           <string>Loop Animation</string>

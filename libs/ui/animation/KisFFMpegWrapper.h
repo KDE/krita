@@ -25,7 +25,7 @@ struct KRITAUI_EXPORT KisFFMpegWrapperSettings
     QString outputFile;
     bool storeOutput = false;
     QString logPath = "";
-    QStringList defaultPrependArgs = {"-hide_banner", "-nostdin", "-y"};
+    QStringList defaultPrependArgs = {"-hide_banner", "-y"};
     bool batchMode = false;
     bool binaryOutput = false;
     int totalFrames = 0;

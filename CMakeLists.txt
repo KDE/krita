@@ -1130,13 +1130,9 @@ list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
 
 
 
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po )
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
     find_package(KF5I18n CONFIG REQUIRED)
     ki18n_install(po)
-    if (TRANSLATIONS)
-        add_dependencies(pofiles-${pathmd5} fetch-${pathmd5})
-        add_dependencies(tsfiles-${pathmd5} fetch-${pathmd5})
-    endif()
 endif()
 
 ##

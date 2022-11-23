@@ -635,14 +635,24 @@ void KoColorSet::clear()
 
 KisSwatch KoColorSet::getColorGlobal(quint32 column, quint32 row) const
 {
-    for (const KisSwatchGroupSP &group : d->swatchGroups) {
-        if ((int)row < group->rowCount()) {
-            return group->getSwatch(column, row);
-        } else {
-            row -= group->rowCount();
-        }
+    KisSwatchGroupSP group = getGroup(row);
+    Q_ASSERT(group);
+
+    int titleRow = startRowForGroup(group->name());
+    int rowInGroup = -1;
+
+    if (group->name().isEmpty()) {
+        rowInGroup = (int)row - titleRow;
     }
-    return KisSwatch();
+    else {
+        rowInGroup = (int)row - (titleRow + 1);
+    }
+
+    Q_ASSERT((isGroupTitleRow(titleRow) && titleRow > 0) || titleRow == 0);
+    Q_ASSERT(rowInGroup < group->rowCount());
+
+    return group->getSwatch(column, rowInGroup);
+
 }
 
 KisSwatch KoColorSet::getSwatchFromGroup(quint32 column, quint32 row, QString groupName) const

@@ -93,6 +93,7 @@ private:
     friend class ClearCommand;
     friend class SetColumnCountCommand;
     friend class TestKisSwatchGroup;
+    friend class TestKoColorSet;
 
     // Hidden, you're supposed to go through KoColorSet or KisPaletteModel
     KisSwatchGroup();

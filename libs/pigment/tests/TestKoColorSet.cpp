@@ -556,11 +556,18 @@ void TestKoColorSet::testIsGroupNameRow()
 void TestKoColorSet::testStartRowForNamedGroup()
 {
     KoColorSetSP cs = createColorSet();
-    cs->addGroup("group1");
-    cs->addGroup("group2");
+    cs->getGlobalGroup()->setRowCount(7);
+    cs->addGroup("group1", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 6);
+    cs->addGroup("group2", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 5);
+    cs->addGroup("group3", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 4);
+
+    QCOMPARE(cs->rowCountWithTitles(), 25);
+
+
     QCOMPARE(cs->startRowForGroup(""), 0);
-    QCOMPARE(cs->startRowForGroup("group1"), KisSwatchGroup::DEFAULT_ROW_COUNT);
-    QCOMPARE(cs->startRowForGroup("group2"), (KisSwatchGroup::DEFAULT_ROW_COUNT * 2) + 1);
+    QCOMPARE(cs->startRowForGroup("group1"), 7);
+    QCOMPARE(cs->startRowForGroup("group2"), 14);
+    QCOMPARE(cs->startRowForGroup("group3"), 20);
 }
 
 void TestKoColorSet::testGetClosestSwatchInfo()
@@ -672,6 +679,53 @@ void TestKoColorSet::testRowNumberInGroup()
     for (int i = 0; i < cs->rowCountWithTitles(); ++i) {
         QCOMPARE(cs->rowNumberInGroup(i), rowCountsInGroup[i]);
     }
+}
+
+void TestKoColorSet::testGetColorGlobal()
+{
+    KoColorSetSP cs = createColorSet();
+    cs->getGlobalGroup()->setRowCount(7);
+    cs->setColumnCount(3);
+    cs->addGroup("group1", 3, 6);
+    cs->addGroup("group2", 3, 5);
+    cs->addGroup("group3", 3, 4);
+
+    KisSwatch sw(red(), "red");
+
+    Q_FOREACH(const QString &groupName, cs->swatchGroupNames()) {
+        KisSwatchGroupSP group = cs->getGroup(groupName);
+        //qDebug() << group->name();
+        for (int row = 0; row < group->rowCount(); row++) {
+            for (int col = 0; col < group->columnCount(); col++) {
+                QColor c(row, col, 0);
+                sw.setColor(KoColor(c, KoColorSpaceRegistry::instance()->rgb8()));
+                //qDebug() << "rgb" << c.red() << c.green() << c.blue() << "row/col" << row << "," << col;
+                cs->addSwatch(sw, groupName, col, row);
+            }
+        }
+    }
+
+
+    //qDebug() << "==================";
+
+    for (int row = 0; row < cs->rowCountWithTitles(); row++) {
+        if (row == 7 || row == 14 || row == 20) {
+            QVERIFY(cs->isGroupTitleRow(row));
+            qDebug() << cs->getGroup(row)->name();
+        }
+
+        for (int col = 0; col < cs->columnCount(); col++) {
+            if (row != 7 && row != 14 && row != 20) {
+                QVERIFY(!cs->isGroupTitleRow(row));
+                KisSwatch sw2 = cs->getColorGlobal(col, row);
+                QColor c = sw2.color().toQColor();
+                //qDebug() << "rgb" << c.red() << c.green() << c.blue() << "row/col" << cs->rowNumberInGroup(row) << "," << col;
+                QCOMPARE(c.red(), cs->rowNumberInGroup(row));
+                QCOMPARE(c.green(), col);
+            }
+        }
+    }
+
 }
 
 KoColorSetSP TestKoColorSet::createColorSet()

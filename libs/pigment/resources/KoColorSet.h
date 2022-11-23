@@ -124,6 +124,8 @@ public:
      * @brief Add a color to the palette.
      * @param c the swatch
      * @param groupName color to add the group to. If empty, it will be added to the unsorted.
+     * @param column. The column in the group
+     * @param row. The row in the group
      */
     void addSwatch(const KisSwatch &swatch, const QString &groupName = GLOBAL_GROUP_NAME, int column = -1, int row = -1);
 
@@ -241,6 +243,11 @@ public:
      */
     int startRowForGroup(const QString &groupName) const;
 
+    /**
+     * @brief rowNumberInGroup calculates the row number in the group from the global rownumber
+     * @param rowNumber this is a row in rowCountWithTitles
+     * @return -1 if the row is a group title row.
+     */
     int rowNumberInGroup(int rowNumber) const;
 
 Q_SIGNALS:

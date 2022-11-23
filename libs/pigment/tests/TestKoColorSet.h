@@ -41,6 +41,7 @@ private Q_SLOTS:
     void testGetGroup();
     void testAllRows();
     void testRowNumberInGroup();
+    void testGetColorGlobal();
 
 private:
 

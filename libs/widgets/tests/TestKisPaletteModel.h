@@ -44,9 +44,6 @@ private Q_SLOTS:
 
 private:
 
-
-
-
     KoColorSetSP createColorSet();
     KoColor blue();
     KoColor red();

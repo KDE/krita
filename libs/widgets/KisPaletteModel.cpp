@@ -94,7 +94,10 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
         return QModelIndex();
     }
     //KIS_ASSERT_RECOVER_RETURN_VALUE(group, QModelIndex());
-    return createIndex(row, column, group.data());
+    QModelIndex idx = createIndex(row, column);
+    Q_ASSERT(idx.column() < columnCount());
+    Q_ASSERT(idx.row() < rowCount());
+    return idx;
 }
 
 void KisPaletteModel::setColorSet(KoColorSetSP colorSet)
@@ -115,17 +118,7 @@ KoColorSetSP KisPaletteModel::colorSet() const
 
 int KisPaletteModel::rowNumberInGroup(int rowInModel) const
 {
-    int globalRowCount = 0; // To account for there being no title for the global group
-    int previousGlobalRowCount = 0;
-    for (const QString &groupName : m_colorSet->swatchGroupNames()) {
-        KisSwatchGroupSP group = m_colorSet->getGroup(groupName);
-        globalRowCount += group->rowCount();
-        if (globalRowCount > rowInModel) {
-            return rowInModel - previousGlobalRowCount;
-        }
-        previousGlobalRowCount += group->rowCount() + (groupName.isEmpty() ? 0 : 1);
-    }
-    return rowInModel;
+    return m_colorSet->rowNumberInGroup(rowInModel);
 }
 
 
@@ -271,9 +264,16 @@ Qt::DropActions KisPaletteModel::supportedDropActions() const
 
 void KisPaletteModel::setSwatch(const KisSwatch &entry, const QModelIndex &index)
 {
+    if (m_colorSet->isGroupTitleRow(index.row())) return;
+
+    Q_ASSERT(index.column() < m_colorSet->columnCount());
+    Q_ASSERT(index.column() < columnCount());
+
     KisSwatchGroupSP group = m_colorSet->getGroup(index.row());
     Q_ASSERT(group);
+
     m_colorSet->addSwatch(entry, group->name(), index.column(), rowNumberInGroup(index.row()));
+
     emit dataChanged(index, index);
 }
 
@@ -434,15 +434,13 @@ QModelIndex KisPaletteModel::indexForClosest(const KoColor &compare)
 int KisPaletteModel::indexRowForInfo(const KisSwatchGroup::SwatchInfo &info)
 {
     int groupRow = m_colorSet->startRowForGroup(info.group);
-    return groupRow + info.row;
+    if (info.group.isEmpty()) {
+        return groupRow + info.row;
+    }
+    return groupRow + info.row + 1;
 }
 
 KisSwatch KisPaletteModel::getSwatch(const QModelIndex &index) const
 {
     return m_colorSet->getColorGlobal(index.column(), index.row());
-}
-
-int KisPaletteModel::groupNameRowForRow(int rowInModel) const
-{
-    return rowInModel - rowNumberInGroup(rowInModel) - 1;
 }

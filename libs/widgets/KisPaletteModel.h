@@ -111,7 +111,6 @@ public:
 
     QModelIndex indexForClosest(const KoColor &compare);
 
-    int indexRowForInfo(const KisSwatchGroup::SwatchInfo &info);
 
     void slotExternalPaletteModified(QSharedPointer<KoColorSet> resource);
 
@@ -126,9 +125,9 @@ private:
     friend class TestKisPaletteModel;
 
     int rowNumberInGroup(int rowInModel) const;
+    int indexRowForInfo(const KisSwatchGroup::SwatchInfo &info);
 
     QVariant dataForGroupNameRow(const QModelIndex &idx, int role) const;
-    int groupNameRowForRow(int rowInModel) const;
     QVariant dataForSwatch(const QModelIndex &idx, int role) const;
 
 private /* member variables */:

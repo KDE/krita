@@ -31,6 +31,9 @@ struct PAINTOP_EXPORT MaskingBrushData :  public boost::equality_comparable<Mask
     static MaskingBrushData read(const KisPropertiesConfiguration *config, qreal masterBrushSize, KisResourcesInterfaceSP resourcesInterface);
     void write(KisPropertiesConfiguration *config) const;
 };
+
+bool PAINTOP_EXPORT operator==(const MaskingBrushData &lhs, const MaskingBrushData &rhs);
+
 }
 
 #endif // KISMASKINGBRUSHOPTIONPROPERTIES_H

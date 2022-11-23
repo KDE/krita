@@ -43,6 +43,8 @@ KoResourceLoadResult KisTextBrushFactory::createBrush(const KisBrushModel::Brush
 
 std::optional<KisBrushModel::BrushData> KisTextBrushFactory::createBrushModel(const QDomElement &element, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     KisBrushModel::BrushData brush;
 
     brush.type = KisBrushModel::Text;

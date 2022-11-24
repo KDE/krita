@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-23 00:45+0000\n"
+"POT-Creation-Date: 2022-11-24 00:43+0000\n"
 "PO-Revision-Date: 2022-11-22 17:27+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -34570,7 +34570,7 @@ msgstr "%1 palet dosyasına yazılamıyor. Salt-okunur olabilir. "
 
 #. i18n: ectx: property (text), widget (QLabel, paletteLabel)
 #: libs/widgets/KoEditColorSetDialog.cpp:202
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:58
 #: plugins/filters/palettize/palettize.ui:39
 #, kde-format
 msgid "Palette"
@@ -38780,44 +38780,51 @@ msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Dolaşım denetimlerini sabitle"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:67
 #, kde-format
 msgid "Add a new color swatch"
 msgstr "Yeni bir renk örneği ekle"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRemove)
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:67
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:121
 #, kde-format
 msgid "Remove swatch or group"
 msgstr "Grubu veya örneği sil"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
 #, kde-format
 msgid "Edit swatch or group"
 msgstr "Grubu veya örneği düzenle"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:70
 #, kde-format
 msgid "Edit current palette"
 msgstr "Geçerli paleti düzenle"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:70
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:71
 #, kde-format
 msgid "Save current palette"
 msgstr "Geçerli paleti kaydet"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:123
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:124
 #, kde-format
 msgid "Load a palette"
 msgstr "Palet yükle"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:216
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:217
 #, kde-format
 msgid "Export Palette"
 msgstr "Palet Dışa Aktar"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:362
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:230
+#, fuzzy, kde-format
+#| msgid "Export Successful"
+msgctxt "Floating message about exporting successful"
+msgid "Palette exported successfully"
+msgstr "Dışa Aktarma Başarılı"
+
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:372
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -38825,7 +38832,7 @@ msgid ""
 msgstr ""
 "Paleti ayrıca kaydet; Krita'dan çıkarken de otomatik olarak gerçekleştirilir."
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:364
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:374
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."

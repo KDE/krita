@@ -101,7 +101,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-23 00:45+0000\n"
+"POT-Creation-Date: 2022-11-24 00:43+0000\n"
 "PO-Revision-Date: 2022-11-19 09:33+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -34942,7 +34942,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, paletteLabel)
 #: libs/widgets/KoEditColorSetDialog.cpp:202
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:58
 #: plugins/filters/palettize/palettize.ui:39
 #, kde-format
 msgid "Palette"
@@ -39188,44 +39188,50 @@ msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Épingler les contrôles de navigation"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:67
 #, kde-format
 msgid "Add a new color swatch"
 msgstr "Ajouter un nouveau nuancier de couleurs"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRemove)
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:67
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:121
 #, kde-format
 msgid "Remove swatch or group"
 msgstr "Supprimer un nuancier ou un groupe de nuanciers"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
 #, kde-format
 msgid "Edit swatch or group"
 msgstr "Modifier un nuancier ou un groupe de nuanciers"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:70
 #, kde-format
 msgid "Edit current palette"
 msgstr "Modifier la palette courante"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:70
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:71
 #, kde-format
 msgid "Save current palette"
 msgstr "Enregistrer la palette courante"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:123
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:124
 #, kde-format
 msgid "Load a palette"
 msgstr "Charger une palette"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:216
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:217
 #, kde-format
 msgid "Export Palette"
 msgstr "Importer une palette"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:362
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:230
+#, fuzzy, kde-format
+msgctxt "Floating message about exporting successful"
+msgid "Palette exported successfully"
+msgstr "Exporter le noeud"
+
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:372
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -39234,7 +39240,7 @@ msgstr ""
 "L'enregistrement explicite de la palette se produira aussi automatiquement à "
 "la fermeture de Krita."
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:364
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:374
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."
@@ -62108,10 +62114,6 @@ msgstr "Images de référence"
 
 #~ msgid "Macros"
 #~ msgstr "Macros"
-
-#, fuzzy
-#~ msgid "Import successful"
-#~ msgstr "Exporter le noeud"
 
 #, fuzzy
 #~| msgid "Action Name"

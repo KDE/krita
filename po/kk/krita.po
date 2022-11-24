@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-23 00:45+0000\n"
+"POT-Creation-Date: 2022-11-24 00:43+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -35240,7 +35240,7 @@ msgstr "%1 палитра файлы жазылмады. Бәлкім, ол те
 
 #. i18n: ectx: property (text), widget (QLabel, paletteLabel)
 #: libs/widgets/KoEditColorSetDialog.cpp:202
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:58
 #: plugins/filters/palettize/palettize.ui:39
 #, kde-format
 msgid "Palette"
@@ -39490,53 +39490,59 @@ msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr ""
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:67
 #, fuzzy, kde-format
 msgid "Add a new color swatch"
 msgstr "Түс профилін ашу"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRemove)
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:67
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:121
 #, fuzzy, kde-format
 msgid "Remove swatch or group"
 msgstr "<< Өшіру"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
 #, fuzzy, kde-format
 #| msgid "Edit presets"
 msgid "Edit swatch or group"
 msgstr "Орнатылғандарын өзгерту"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:70
 #, fuzzy, kde-format
 msgid "Edit current palette"
 msgstr "Назардағы қабатты өшіру"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:70
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:71
 #, fuzzy, kde-format
 msgid "Save current palette"
 msgstr "Назардағы қабатты өшіру"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:123
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:124
 #, fuzzy, kde-format
 #| msgid "Add New Palette"
 msgid "Load a palette"
 msgstr "Жаңа палитраны қосу"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:216
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:217
 #, fuzzy, kde-format
 msgid "Export Palette"
 msgstr "Импорттайтын жолдар:"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:362
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:230
+#, fuzzy, kde-format
+msgctxt "Floating message about exporting successful"
+msgid "Palette exported successfully"
+msgstr "Түйінді экспорттау"
+
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:372
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Save palette explicitly, will also happen automatically on exiting Krita."
 msgstr ""
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:364
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:374
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."
@@ -62945,10 +62951,6 @@ msgstr "Эталон кескіндері"
 
 #~ msgid "Macros"
 #~ msgstr "Макростар"
-
-#, fuzzy
-#~ msgid "Import successful"
-#~ msgstr "Түйінді экспорттау"
 
 #, fuzzy
 #~| msgid "Action Name"

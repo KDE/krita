@@ -91,15 +91,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-23 00:45+0000\n"
-"PO-Revision-Date: 2022-09-23 10:44+0200\n"
+"POT-Creation-Date: 2022-11-24 00:43+0000\n"
+"PO-Revision-Date: 2022-11-23 20:38+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.04.1\n"
+"X-Generator: Lokalize 22.08.2\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
@@ -18093,11 +18093,10 @@ msgid "JPEG-XL Image"
 msgstr "Obraz JPEG-XL"
 
 #: libs/koplugin/KisMimeDatabase.cpp:349
-#, fuzzy, kde-format
-#| msgid "Document"
+#, kde-format
 msgctxt "description of a file type"
 msgid "CSV Document"
-msgstr "Dokument"
+msgstr "Dokument CSV"
 
 #: libs/libkis/Document.cpp:960 libs/ui/KisMainWindow.cpp:2044
 #: libs/ui/KisMainWindow.cpp:2127
@@ -33479,10 +33478,9 @@ msgid "No configuration options"
 msgstr "Brak możliwości ustawiania"
 
 #: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
-#, fuzzy, kde-format
-#| msgid "The layer does not have an image associated with it."
+#, kde-format
 msgid "The clipboard is empty or does not have an image in it."
-msgstr "Ta warstwa nie posiada skojarzonego z nią obrazu."
+msgstr "Schowek jest pusty lub nie zawiera obrazu."
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:42
 #, kde-format
@@ -34738,7 +34736,7 @@ msgstr "Nie można zapisać do pliku palety %1. Może jest wyłącznie do odczyt
 
 #. i18n: ectx: property (text), widget (QLabel, paletteLabel)
 #: libs/widgets/KoEditColorSetDialog.cpp:202
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:58
 #: plugins/filters/palettize/palettize.ui:39
 #, kde-format
 msgid "Palette"
@@ -38975,44 +38973,51 @@ msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Przypnij przyciski poruszania się"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:67
 #, kde-format
 msgid "Add a new color swatch"
 msgstr "Dodaj nową łatkę barwną"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRemove)
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:67
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:121
 #, kde-format
 msgid "Remove swatch or group"
 msgstr "Usuń łatkę lub grupę"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
 #, kde-format
 msgid "Edit swatch or group"
 msgstr "Edytuj łatę lub grupę"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:70
 #, kde-format
 msgid "Edit current palette"
 msgstr "Edytuj bieżącą paletę"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:70
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:71
 #, kde-format
 msgid "Save current palette"
 msgstr "Zapisz bieżącą paletę"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:123
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:124
 #, kde-format
 msgid "Load a palette"
 msgstr "Wczytaj paletę"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:216
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:217
 #, kde-format
 msgid "Export Palette"
 msgstr "Wyeksportuj paletę"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:362
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:230
+#, fuzzy, kde-format
+#| msgid "Import successful"
+msgctxt "Floating message about exporting successful"
+msgid "Palette exported successfully"
+msgstr "Pomyślnie zaimportowano"
+
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:372
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -39021,7 +39026,7 @@ msgstr ""
 "Zapisz paletę ręcznie, stanie się to także samoczynnie tuż przed wyjściem z "
 "Krity."
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:364
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:374
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."
@@ -46903,11 +46908,10 @@ msgid "Use all predictors"
 msgstr "Użyj wszystkich przewidywań"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:170
-#, fuzzy, kde-format
-#| msgid "Save as %1"
+#, kde-format
 msgctxt "Color space option"
 msgid "Save as is"
-msgstr "Zapisz jako %1"
+msgstr "Zapisz tak jak teraz"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:172
 #, kde-format
@@ -46916,6 +46920,8 @@ msgid ""
 "The image will be stored without conversion, the ICC profile will be "
 "converted to CICP or embedded if it was not possible."
 msgstr ""
+"Obraz zostanie zapisany bez jego przekształcania, profil ICC zostanie "
+"przekształcony na CICP lub osadzony, jeśli będzie to niemożliwe."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:37
@@ -47059,6 +47065,9 @@ msgid ""
 "Applications like Google Chrome expect HDR images to store their color "
 "profile as CICP values. You can adjust the ICC profile conversion below."
 msgstr ""
+"Aplikacje takie jak Google Chrome oczekują od obrazów HDR, że będą "
+"przechowywać swoje profile barw jako wartości CICP. Poniżej możesz "
+"dostosować profile przekształcania ICC."
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:370
@@ -61776,9 +61785,6 @@ msgstr "Narzędzie obrazów wzorcowych"
 #~ msgstr ""
 #~ "Wyłącz Kritę i włącz wtyczki w <em>Ustawienia -> Ustawienia Krtiy -> "
 #~ "Zarządzanie wtyczkami Pythona</em>."
-
-#~ msgid "Import successful"
-#~ msgstr "Pomyślnie zaimportowano"
 
 #~ msgid "Action file"
 #~ msgstr "Plik działań"

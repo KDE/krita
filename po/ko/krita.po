@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-23 00:45+0000\n"
+"POT-Creation-Date: 2022-11-24 00:43+0000\n"
 "PO-Revision-Date: 2022-05-15 22:38+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -35581,7 +35581,7 @@ msgstr "팔레트 파일 %1에 쓸 수 없습니다. 읽기 전용인 것 같습
 
 #. i18n: ectx: property (text), widget (QLabel, paletteLabel)
 #: libs/widgets/KoEditColorSetDialog.cpp:202
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:57
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:58
 #: plugins/filters/palettize/palettize.ui:39
 #, kde-format
 msgid "Palette"
@@ -39772,7 +39772,7 @@ msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "탐색 컨트롤 고정"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:66
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:67
 #, fuzzy, kde-format
 #| msgctxt "@title:dialog"
 #| msgid "Add a new Colorset Entry"
@@ -39780,7 +39780,7 @@ msgid "Add a new color swatch"
 msgstr "새 색상 세트 항목 추가"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRemove)
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:67
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:121
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu"
@@ -39788,44 +39788,51 @@ msgstr "새 색상 세트 항목 추가"
 msgid "Remove swatch or group"
 msgstr "오디오 지우기"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
 #, fuzzy, kde-format
 #| msgctxt "Button to edit the selected stop color in the stop gradient editor"
 #| msgid "Edit stop"
 msgid "Edit swatch or group"
 msgstr "정지점 편집"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:70
 #, fuzzy, kde-format
 #| msgid "Remove current palette"
 msgid "Edit current palette"
 msgstr "현재 팔레트 삭제"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:70
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:71
 #, fuzzy, kde-format
 #| msgid "Remove current palette"
 msgid "Save current palette"
 msgstr "현재 팔레트 삭제"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:123
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:124
 #, fuzzy, kde-format
 #| msgid "Add a new palette"
 msgid "Load a palette"
 msgstr "새 팔레트 추가"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:216
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:217
 #, kde-format
 msgid "Export Palette"
 msgstr "팔레트 내보내기"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:362
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:230
+#, fuzzy, kde-format
+#| msgid "Import successful"
+msgctxt "Floating message about exporting successful"
+msgid "Palette exported successfully"
+msgstr "가져오기 성공"
+
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:372
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Save palette explicitly, will also happen automatically on exiting Krita."
 msgstr "팔레트를 명시적으로 저장합니다. Krita를 끝낼 때에도 수행합니다."
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:364
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:374
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."
@@ -62597,9 +62604,6 @@ msgstr "참조 이미지 도구"
 #~ msgstr ""
 #~ "Krita를 다시 시작한 후 <em>설정 -> Krita 설정 -> Python 플러그인 관리자</"
 #~ "em>에서 플러그인을 활성화하십시오."
-
-#~ msgid "Import successful"
-#~ msgstr "가져오기 성공"
 
 #~ msgid "Action file"
 #~ msgstr "동작 파일"

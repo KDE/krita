@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-19 00:43+0000\n"
+"POT-Creation-Date: 2022-11-23 00:45+0000\n"
 "PO-Revision-Date: 2007-05-13 00:25+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -16684,7 +16684,7 @@ msgid "Set Image Resolution"
 msgstr ""
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:221
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:224
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr ""
@@ -17647,7 +17647,7 @@ msgstr ""
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:379
-#: plugins/impex/tiff/kis_tiff_import.cc:551
+#: plugins/impex/tiff/kis_tiff_import.cc:552
 #: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
@@ -47549,7 +47549,7 @@ msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
 msgstr ""
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1027
+#: plugins/impex/tiff/kis_tiff_import.cc:1028
 #, kde-format
 msgctxt "TIFF errors"
 msgid ""
@@ -47558,8 +47558,8 @@ msgid ""
 "version of libjpeg-turbo and try again."
 msgstr ""
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1130
-#: plugins/impex/tiff/kis_tiff_import.cc:1313
+#: plugins/impex/tiff/kis_tiff_import.cc:1131
+#: plugins/impex/tiff/kis_tiff_import.cc:1314
 #, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
@@ -54346,13 +54346,13 @@ msgstr ""
 msgid "Measure Tool"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_move.cc:281
+#: plugins/tools/basictools/kis_tool_move.cc:284
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "X: %1 px, Y: %2 px"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_move.cc:329
+#: plugins/tools/basictools/kis_tool_move.cc:332
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
@@ -54466,7 +54466,7 @@ msgctxt "action"
 msgid "Freehand Path Tool"
 msgstr ""
 
-#: plugins/tools/basictools/strokes/move_selection_stroke_strategy.cpp:24
+#: plugins/tools/basictools/strokes/move_selection_stroke_strategy.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Move Selection"
 msgstr ""
@@ -57149,8 +57149,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr ""
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:140
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:56
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:143
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr ""

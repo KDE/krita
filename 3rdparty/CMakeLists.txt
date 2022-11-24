@@ -479,6 +479,36 @@ configure_file(
     ${CMAKE_CURRENT_BINARY_DIR}/meson-host.ini
 )
 
+LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake/modules/avcodecs")
+
+include(FeatureSummary)
+
+# ======================== AUDIO ===========================
+
+find_package(FLAC)
+set_package_properties(FLAC PROPERTIES
+    DESCRIPTION "libFLAC flac audio codec"
+    URL "https://xiph.org/flac/"
+)
+# if (NOT FLAC_FOUND)
+#     message(STATUS "FLAC not available, building 3rdparty version.")
+#     set(FLAC_DEP ext_flac)
+# endif()
+
+# ======================== VIDEO ===========================
+
+find_package(VPX)
+set_package_properties(VPX PROPERTIES
+    DESCRIPTION "libvpx vp8/vp9 video encoder."
+    URL "https://www.webmproject.org/"
+)
+# if (NOT VPX_FOUND)
+#     message(STATUS "libvpx not available, building 3rdparty version.")
+#     set(VPX_DEP ext_vpx) # uncomment when we've implemented it in 3rdparty
+# endif()
+
+# ================== END OF FFMPEG DEPS =====================
+
 # this list must be dependency-ordered
 if (NOT WIN32 OR OPENSSL_DEP)
     add_subdirectory( ext_openssl )

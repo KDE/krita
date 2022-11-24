@@ -1,16 +1,7 @@
 SET(PREFIX_ext_ffmpeg "${EXTPREFIX}")
 
-include(FeatureSummary)
-
-LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake/modules/avcodecs")
-
 # ======================== AUDIO ===========================
 
-find_package(FLAC)
-set_package_properties(FLAC PROPERTIES
-    DESCRIPTION "libFLAC flac audio codec"
-    URL "https://xiph.org/flac/"
-)
 
 ExternalProject_Add(
     ext_libogg
@@ -33,12 +24,6 @@ ExternalProject_Add(
 )
 
 # ======================== VIDEO ===========================
-
-find_package(VPX)
-set_package_properties(VPX PROPERTIES
-    DESCRIPTION "libvpx vp8/vp9 video encoder."
-    URL "https://www.webmproject.org/"
-)
 
 ExternalProject_Add(
     ext_libopenh264
@@ -153,5 +138,5 @@ ExternalProject_Add(
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} install -C <BINARY_DIR>
 
-    DEPENDS ext_libvorbis ext_libopenh264 ext_libmp3lame ext_libaom ext_webp ext_png ext_jpeg ${MESON_DEP} ${PKG_CONFIG_DEP}
+    DEPENDS ${FLAC_DEP} ${VPX_DEP} ext_libvorbis ext_libopenh264 ext_libmp3lame ext_libaom ext_webp ext_png ext_jpeg ${MESON_DEP} ${PKG_CONFIG_DEP}
 )

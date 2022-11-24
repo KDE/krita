@@ -28,7 +28,9 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_libopenh264
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    GIT_REPOSITORY git@github.com:cisco/openh264.git
+    URL https://github.com/cisco/openh264/archive/v2.3.1.tar.gz
+    URL_HASH SHA256=453afa66dacb560bc5fd0468aabee90c483741571bca820a39a1c07f0362dc32
+
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         CC="${CMAKE_C_COMPILER}"
         CXX="${CMAKE_CXX_COMPILER}"
@@ -42,6 +44,7 @@ ExternalProject_Add(
     INSTALL_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} install -C <BINARY_DIR>
+
     DEPENDS ext_nasm ${MESON_DEP} ${PKG_CONFIG_DEP}
 )
 

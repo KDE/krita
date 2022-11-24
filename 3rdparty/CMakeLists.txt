@@ -485,7 +485,7 @@ include(FeatureSummary)
 
 # ======================== AUDIO ===========================
 
-find_package(FLAC)
+find_package(FLAC 1.3.3 QUIET)
 set_package_properties(FLAC PROPERTIES
     DESCRIPTION "libFLAC flac audio codec"
     URL "https://xiph.org/flac/"

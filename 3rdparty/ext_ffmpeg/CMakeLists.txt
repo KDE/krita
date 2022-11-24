@@ -2,6 +2,21 @@ SET(PREFIX_ext_ffmpeg "${EXTPREFIX}")
 
 # ======================== AUDIO ===========================
 
+ExternalProject_Add(
+    ext_flac
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/xiph/flac/releases/download/1.4.2/flac-1.4.2.tar.xz
+    URL_HASH SHA256=e322d58a1f48d23d9dd38f432672865f6f79e73a6f9cc5a5f57fcaa83eb5a8e4
+
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ffmpeg}
+        -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
+        -DBUILD_SHARED_LIBS=TRUE
+        -DBUILD_EXAMPLES=FALSE
+        -DBUILD_TESTING=FALSE
+        -DBUILD_DOCS=FALSE
+        -DINSTALL_MANPAGES=FALSE
+        ${GLOBAL_PROFILE}
+)
 
 ExternalProject_Add(
     ext_libogg

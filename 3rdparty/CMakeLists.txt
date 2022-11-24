@@ -490,10 +490,10 @@ set_package_properties(FLAC PROPERTIES
     DESCRIPTION "libFLAC flac audio codec"
     URL "https://xiph.org/flac/"
 )
-# if (NOT FLAC_FOUND)
-#     message(STATUS "FLAC not available, building 3rdparty version.")
-#     set(FLAC_DEP ext_flac)
-# endif()
+if (NOT FLAC_FOUND)
+    message(STATUS "FLAC not available, building 3rdparty version.")
+    set(FLAC_DEP ext_flac)
+endif()
 
 # ======================== VIDEO ===========================
 

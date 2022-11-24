@@ -505,6 +505,16 @@ if (NOT Ogg_FOUND)
     set(OGG_DEP ext_libogg)
 endif()
 
+find_package(Opus 1.3.1 QUIET)
+set_package_properties(Opus PROPERTIES
+    DESCRIPTION "Opus IETF audio codec"
+    URL "https://opus-codec.org/"
+)
+if (NOT Opus_FOUND)
+    message(STATUS "Opus not available, building 3rdparty version.")
+    set(OPUS_DEP ext_opus)
+endif()
+
 # ======================== VIDEO ===========================
 
 find_package(VPX 1.7.0 QUIET)

@@ -40,6 +40,20 @@ ExternalProject_Add(
     DEPENDS ${OGG_DEP}
 )
 
+ExternalProject_Add(
+    ext_opus
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    # Official tarball has a missing opus_buildtype.cmake
+    # The Git tag is complete
+    GIT_REPOSITORY https://gitlab.xiph.org/xiph/opus.git
+    GIT_TAG v1.3.1
+
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ffmpeg}
+        -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
+        -DBUILD_SHARED_LIBS=TRUE
+        ${GLOBAL_PROFILE}
+)
+
 # ======================== VIDEO ===========================
 
 ExternalProject_Add(
@@ -187,5 +201,5 @@ ExternalProject_Add(
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} install -C <BINARY_DIR>
 
-    DEPENDS ${FLAC_DEP} ${VPX_DEP} ext_libvorbis ext_libopenh264 ext_libmp3lame ext_libaom ext_webp ext_png ext_jpeg ${MESON_DEP} ${PKG_CONFIG_DEP}
+    DEPENDS ${FLAC_DEP} ${VPX_DEP} ${OPUS_DEP} ext_libvorbis ext_libopenh264 ext_libmp3lame ext_libaom ext_webp ext_png ext_jpeg ${MESON_DEP} ${PKG_CONFIG_DEP}
 )

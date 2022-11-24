@@ -49,12 +49,14 @@ ExternalProject_Add(
     URL_HASH SHA256=453afa66dacb560bc5fd0468aabee90c483741571bca820a39a1c07f0362dc32
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
-        CC="${CMAKE_C_COMPILER}"
-        CXX="${CMAKE_CXX_COMPILER}"
         PYTHONPATH=${_krita_pythonpath}
-        PKG_CONFIG=${PKG_CONFIG_EXECUTABLE}
-        ${MESON_BINARY_PATH} <BINARY_DIR> <SOURCE_DIR>
-        --prefix=${PREFIX_ext_ffmpeg}
+        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+        ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
+            --prefix=${PREFIX_ext_ffmpeg}
+            --libdir=lib
+            -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
+            -Dtests=disabled
+            ${EXTRA_MESON_FLAGS}
     BUILD_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} compile -C <BINARY_DIR> -j${SUBMAKE_JOBS}

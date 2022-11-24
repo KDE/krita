@@ -179,10 +179,11 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
 
 void KisPaletteView::selectClosestColor(const KoColor &color)
 {
-    KoColorSetSP color_set = d->model->colorSet();
-    if (!color_set) {
+    KoColorSetSP colorSet = d->model->colorSet();
+    if (!colorSet || !colorSet->valid() || currentIndex().row() < 0) {
         return;
     }
+
     //also don't select if the color is the same as the current selection
     if (d->model->getSwatch(currentIndex()).color() == color) {
         return;

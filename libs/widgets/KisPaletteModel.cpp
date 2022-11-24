@@ -442,5 +442,8 @@ int KisPaletteModel::indexRowForInfo(const KisSwatchGroup::SwatchInfo &info)
 
 KisSwatch KisPaletteModel::getSwatch(const QModelIndex &index) const
 {
+    if (index.row() >= rowCount()) return KisSwatch();
+    if (index.row() < 0) return KisSwatch();
+
     return m_colorSet->getColorGlobal(index.column(), index.row());
 }

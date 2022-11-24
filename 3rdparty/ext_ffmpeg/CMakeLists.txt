@@ -17,6 +17,8 @@ ExternalProject_Add(
     URL http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.tar.xz
     URL_HASH SHA256=b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f72954b
 
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-vorbis-Fix-library-definition-files-lacking-a-library.patch
+
     CMAKE_ARGS ${LIBVORBIS_EXTRA_CMAKE_ARGS} -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ffmpeg} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
     DEPENDS ${OGG_DEP}

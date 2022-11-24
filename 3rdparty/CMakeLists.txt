@@ -527,6 +527,16 @@ set_package_properties(VPX PROPERTIES
 #     set(VPX_DEP ext_vpx) # uncomment when we've implemented it in 3rdparty
 # endif()
 
+find_package(SDL 2.24.0 QUIET)
+set_package_properties(SDL PROPERTIES
+    DESCRIPTION "Low-level access to audio, keyboard, mouse, joystick, and graphics"
+    URL "https://www.libsdl.org/"
+)
+if (NOT SDL_FOUND)
+    message(STATUS "SDL not available, building 3rdparty version.")
+    set(SDL_DEP ext_sdl2)
+endif()
+
 # ================== END OF FFMPEG DEPS =====================
 
 # this list must be dependency-ordered

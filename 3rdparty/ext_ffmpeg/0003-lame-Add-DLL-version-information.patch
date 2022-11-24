@@ -1,0 +1,44 @@
+From 8edd22ec7e5d4080e2897f7eda24b36848cb87c8 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 23 Nov 2022 23:14:27 -0300
+Subject: [PATCH 3/3] lame: Add DLL version information
+
+---
+ libmp3lame/meson.build | 7 +++++++
+ meson.build            | 2 ++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/libmp3lame/meson.build b/libmp3lame/meson.build
+index ffd40e0..ba70004 100644
+--- a/libmp3lame/meson.build
++++ b/libmp3lame/meson.build
+@@ -21,6 +21,13 @@ lame_sources = [
+   'version.c',
+ ]
+ 
++if host_machine.system() == 'windows'
++  lame_sources += windows.compile_resources(
++    'lame.rc',
++    include_directories: [lameinc, confinc]
++  )
++endif
++
+ vector_sources = []
+ if cdata.has('HAVE_XMMINTRIN_H')
+   vector_sources += ['vector/xmm_quantize_sub.c']
+diff --git a/meson.build b/meson.build
+index 798048f..0871c6b 100644
+--- a/meson.build
++++ b/meson.build
+@@ -157,6 +157,8 @@ confinc = include_directories('.')
+ 
+ m_dep = cc.find_library('m', required : false)
+ 
++windows = import('windows')
++
+ if build_decoder
+   subdir('mpglib')
+ endif
+-- 
+2.37.1.windows.1
+

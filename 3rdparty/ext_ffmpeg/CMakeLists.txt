@@ -48,29 +48,56 @@ ExternalProject_Add(
     DEPENDS ext_nasm ${MESON_DEP} ${PKG_CONFIG_DEP}
 )
 
-if (WIN32)
-    #TODO Proper windows build. See readme in lame.tar.gz sources.
-    #ExternalProject_Add(
-    #    ext_libmp3lame
-    #    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    #    URL https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz
-    #)
-else()
-    # *NIX
-    ExternalProject_Add(
-        ext_libmp3lame
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz
+ExternalProject_Add(
+    ext_libmp3lame_meson
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://wrapdb.mesonbuild.com/v2/lame_3.100-5/get_patch
+    URL_HASH SHA256=ed9d897e8ce69e521551812b232de0a651da710d6b0f91606cad4e3afdfd137f
 
-        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env <SOURCE_DIR>/configure --prefix=${PREFIX_ext_ffmpeg}
+    DOWNLOAD_NAME "lame_3.100-5_patch.zip"
 
-        BUILD_COMMAND ${CMAKE_COMMAND} -E env
-            make
-        
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E env
-            make install
-    )
-endif()
+    BUILD_COMMAND ""
+    CONFIGURE_COMMAND ""
+    INSTALL_COMMAND ""
+    UPDATE_COMMAND ""
+
+    SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/meson"
+)
+
+ExternalProject_Add(
+    ext_libmp3lame
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz
+    URL_HASH SHA256=ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
+
+    PATCH_COMMAND ${CMAKE_COMMAND} -E echo Deploying Meson wrap
+        COMMAND ${CMAKE_COMMAND} -E copy_directory 
+            ${CMAKE_CURRENT_BINARY_DIR}/meson
+            <SOURCE_DIR>
+        COMMAND ${CMAKE_COMMAND} -E echo Deploying patches
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-lame-Add-SOVERSION-to-the-library-for-disambiguation.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-lame-Install-pkg-config-file.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-lame-Add-DLL-version-information.patch
+
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
+        PYTHONPATH=${_krita_pythonpath}
+        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+        ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
+            --prefix=${PREFIX_ext_ffmpeg}
+            --libdir=lib
+            -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
+            ${EXTRA_MESON_FLAGS}
+
+    BUILD_COMMAND ${CMAKE_COMMAND} -E env
+        PYTHONPATH=${_krita_pythonpath}
+        ${MESON_BINARY_PATH} compile -C <BINARY_DIR> -j${SUBMAKE_JOBS}
+
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E env
+        PYTHONPATH=${_krita_pythonpath}
+        ${MESON_BINARY_PATH} install -C <BINARY_DIR>
+
+    DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ext_libmp3lame_meson
+)
 
 # IMPORTANT:
 # OpenSUSE's list of whitelisted encoders: https://build.opensuse.org/package/view_file/openSUSE:Factory/ffmpeg-5/enable_encoders

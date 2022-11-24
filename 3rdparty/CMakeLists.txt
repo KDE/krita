@@ -495,6 +495,16 @@ if (NOT FLAC_FOUND)
     set(FLAC_DEP ext_flac)
 endif()
 
+find_package(Ogg 1.3.2 QUIET)
+set_package_properties(Ogg PROPERTIES
+    DESCRIPTION "ogg is a library for manipulating ogg bitstreams"
+    URL "https://xiph.org/vorbis/"
+)
+if (NOT Ogg_FOUND)
+    message(STATUS "libogg not available, building 3rdparty version.")
+    set(OGG_DEP ext_libogg)
+endif()
+
 # ======================== VIDEO ===========================
 
 find_package(VPX 1.7.0 QUIET)

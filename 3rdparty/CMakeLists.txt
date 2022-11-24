@@ -497,7 +497,7 @@ endif()
 
 # ======================== VIDEO ===========================
 
-find_package(VPX)
+find_package(VPX 1.7.0 QUIET)
 set_package_properties(VPX PROPERTIES
     DESCRIPTION "libvpx vp8/vp9 video encoder."
     URL "https://www.webmproject.org/"

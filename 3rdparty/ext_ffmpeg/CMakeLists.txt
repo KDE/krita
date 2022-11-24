@@ -118,7 +118,7 @@ ExternalProject_Add(
             -Dpostproc=disabled
             -Dsdl2=enabled
             -Dlibaom=enabled
-            -Dimage2_demuxer=disabled
+            -Dimage2_demuxer=enabled
             -Dimage2_alias_pix_demuxer=enabled
             -Dimage2_brender_pix_demuxer=enabled
             # ===================== Container Formats
@@ -137,7 +137,6 @@ ExternalProject_Add(
             -Dlibvpx_vp8_encoder=enabled
             -Dlibopenh264=enabled
             -Dlibtheora=enabled
-            # -Ddirac=enabled
             # ===================== Audio Codecs
             -Dflac_encoder=enabled
             -Daac_encoder=enabled

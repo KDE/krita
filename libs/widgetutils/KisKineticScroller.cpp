@@ -73,8 +73,8 @@ QScroller* KisKineticScroller::createPreconfiguredScroller(QAbstractScrollArea *
 
     if (enabled && scrollArea) {
         if (hideScrollBars) {
-            scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
             scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
+            scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
         } else if (gestureType != QScroller::TouchGesture) {
             auto *filter = new KisKineticScrollerEventFilter(gestureType, scrollArea);
             scrollArea->horizontalScrollBar()->installEventFilter(filter);
@@ -83,6 +83,7 @@ QScroller* KisKineticScroller::createPreconfiguredScroller(QAbstractScrollArea *
 
         QAbstractItemView *itemView = qobject_cast<QAbstractItemView *>(scrollArea);
         if (itemView) {
+            itemView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
             itemView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
         }
 

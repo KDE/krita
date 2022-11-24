@@ -17,10 +17,12 @@
 #include <QWidget>
 
 #include <QModelIndex>
+#include <QListView>
 
 #include <KoResource.h>
 #include <KisKineticScroller.h>
 #include "KisPopupButton.h"
+#include "ResourceListViewModes.h"
 
 class QAbstractProxyModel;
 class QAbstractItemDelegate;
@@ -55,10 +57,19 @@ public:
     explicit KisResourceItemChooser(const QString &resourceType, bool usePreview = false, QWidget *parent = 0);
     ~KisResourceItemChooser() override;
 
+    /// Set's the desired view mode for the resource list.
+    void setListViewMode(ListViewMode viewMode);
+
+    /// sets the visibility of tagging KlineEdits.
+    void showTaggingBar(bool show);
+
     KisTagFilterResourceProxyModel *tagFilterModel() const;
 
-    /// return the number of rows in the view
-    int rowCount() const;
+    void setViewModeButtonVisible(bool visible);
+
+    KisPopupButton *viewModeButton() const;
+
+    void setStoragePopupButtonVisible(bool visible);
 
     /// Sets the height of the view rows
     void setRowHeight(int rowHeight);
@@ -88,7 +99,7 @@ public:
     void setCurrentItem(int row);
 
     /// Shows the import and export buttons for the resource.
-    /// No one actually shows them.
+    /// No one actually shows them, should delete.
     void showButtons(bool show);
 
     /// determines whether the preview right or below the splitter
@@ -98,23 +109,19 @@ public:
     void setPreviewTiled(bool tiled);
 
     /// shows the preview converted to grayscale
-    void setGrayscalePreview(bool grayscale);
-
-    /// sets the visibility of tagging KlineEdits.
-    void showTaggingBar(bool show);
+    void setGrayscalePreview(bool grayscale); 
 
     /// View size for the resources view.
     QSize viewSize() const;
 
+    /// Do not use this to change the view mode and flow directly.
+    /// Use the requestViewMode() and requestFlow() methods so as to not
+    /// intervene in the responsive design layout.
     KisResourceItemListView *itemView() const;
-
-    void setStoragePopupButtonVisible(bool visible);
-    
-    void setViewModeButtonVisible(bool visible);
-    KisPopupButton *viewModeButton() const;
 
     void setSynced(bool sync);
 
+    /// Allows zooming with Ctrl + Mouse Wheel
     bool eventFilter(QObject *object, QEvent *event) override;
 
 Q_SIGNALS:
@@ -132,6 +139,8 @@ public Q_SLOTS:
     void updateView();
 
 private Q_SLOTS:
+    void scrollBackwards();
+    void scrollForwards();
     void activate(const QModelIndex &index);
     void clicked(const QModelIndex &index);
     void contextMenuRequested(const QPoint &pos);
@@ -154,8 +163,6 @@ private:
 
     class Private;
     Private *const d;
-
-
 };
 
 #endif // KO_RESOURCE_ITEM_CHOOSER

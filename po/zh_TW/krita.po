@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-24 00:43+0000\n"
-"PO-Revision-Date: 2022-10-24 11:32+0000\n"
+"PO-Revision-Date: 2022-11-24 09:58+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
 "krita/zh_Hant/>\n"
@@ -12605,7 +12605,7 @@ msgstr "連續環繞模式方向"
 #: krita/krita5.xmlgui:96
 #, kde-format
 msgid "&Zoom, Rotate, and Mirror"
-msgstr ""
+msgstr "縮放、旋轉、鏡像(&Z)"
 
 #: krita/krita5.xmlgui:128
 #, kde-format
@@ -13630,9 +13630,7 @@ msgstr "全螢幕模式"
 #. i18n: context: text @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:640 krita/kritamenu.action:643
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Detach canvas"
+#, kde-format
 msgctxt "action"
 msgid "Detach Canvas"
 msgstr "在獨立視窗顯示畫布"
@@ -13794,19 +13792,17 @@ msgstr "以畫布為中心鏡像顯示"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "縮放至 100%"
+msgstr "縮放至 100%(&Z)"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:764 krita/kritamenu.action:765
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
 msgstr "縮放至 100%"
@@ -13844,57 +13840,51 @@ msgstr "縮小"
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:798 krita/kritamenu.action:801
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View"
-msgstr "適合頁面大小"
+msgstr "適合檢視大小"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
-#, fuzzy, kde-format
-#| msgid "Canvas Size"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View"
-msgstr "畫布大小"
+msgstr "縮放畫布至符合檢視"
 
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:808 krita/kritamenu.action:811
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr "適合寬度"
+msgstr "適合檢視寬度"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Width"
-msgstr "適合寬度"
+msgstr "縮放畫布至符合檢視寬度"
 
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:818 krita/kritamenu.action:821
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
-msgstr "適合高度"
+msgstr "適合檢視高度"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Height"
-msgstr "適合高度"
+msgstr "縮放畫布至符合檢視高度"
 
 #. i18n: context: text @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -13904,12 +13894,10 @@ msgstr "適合高度"
 #. i18n: context: iconText @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:828 krita/kritamenu.action:830
 #: krita/kritamenu.action:831
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle Zoom Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Fit to View"
-msgstr "切換縮放適合頁面大小"
+msgstr "切換適合檢視大小"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:838
@@ -13963,37 +13951,34 @@ msgstr "重設畫布旋轉"
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:874 krita/kritamenu.action:877
-#, fuzzy, kde-format
-#| msgid "Master Display:"
+#, kde-format
 msgctxt "action"
 msgid "Reset Display"
-msgstr "主顯示器："
+msgstr "重設顯示"
 
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
-#, fuzzy, kde-format
-#| msgid "Reset the options to their default values"
+#, kde-format
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
-msgstr "重設選項到其預設值"
+msgstr "重設縮放、旋轉和鏡像設定至預設值。"
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:884 krita/kritamenu.action:887
-#, fuzzy, kde-format
-#| msgid "Print Size"
+#, kde-format
 msgctxt "action"
 msgid "View Print Size"
-msgstr "列印尺寸"
+msgstr "檢視列印尺寸"
 
 #. i18n: context: toolTip @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:886
 #, kde-format
 msgctxt "action"
 msgid "Map the canvas display to print size, based on the image resolution."
-msgstr ""
+msgstr "根據影像的解析度，將畫布顯示對應列印尺寸。"
 
 #. i18n: context: text @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:894
@@ -17952,11 +17937,10 @@ msgid "JPEG-XL Image"
 msgstr "JPEG-XL 影像"
 
 #: libs/koplugin/KisMimeDatabase.cpp:349
-#, fuzzy, kde-format
-#| msgid "Document"
+#, kde-format
 msgctxt "description of a file type"
 msgid "CSV Document"
-msgstr "檔案"
+msgstr "CSV 檔案"
 
 #: libs/libkis/Document.cpp:960 libs/ui/KisMainWindow.cpp:2044
 #: libs/ui/KisMainWindow.cpp:2127
@@ -27405,7 +27389,7 @@ msgstr "輸入設定"
 #: libs/ui/input/config/kis_input_configuration_page.ui:83
 #, kde-format
 msgid "Manage canvas input profiles"
-msgstr ""
+msgstr "管理畫布輸入設定"
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:38
 #, kde-format
@@ -28097,22 +28081,19 @@ msgid "Zoom to 100%"
 msgstr "縮放至 100%"
 
 #: libs/ui/input/kis_zoom_action.cpp:117
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgid "Fit to View"
-msgstr "適合頁面大小"
+msgstr "適合檢視大小"
 
 #: libs/ui/input/kis_zoom_action.cpp:118
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgid "Fit to View Width"
-msgstr "適合寬度"
+msgstr "適合檢視寬度"
 
 #: libs/ui/input/kis_zoom_action.cpp:119
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgid "Fit to View Height"
-msgstr "適合高度"
+msgstr "適合檢視高度"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:37
 #, kde-format
@@ -28163,10 +28144,9 @@ msgid "Toggle Eraser"
 msgstr "切換橡皮刷"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgid "Master Display:"
+#, kde-format
 msgid "Reset Display"
-msgstr "主顯示器："
+msgstr "重設顯示"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, TabletTest)
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:18
@@ -28879,10 +28859,9 @@ msgid "100%"
 msgstr "100%"
 
 #: libs/ui/kis_popup_palette.cpp:198
-#, fuzzy, kde-format
-#| msgid "Canvas Size"
+#, kde-format
 msgid "Fit Canvas to View"
-msgstr "畫布大小"
+msgstr "縮放畫布至符合檢視"
 
 #: libs/ui/kis_popup_palette.cpp:867
 #, kde-format
@@ -33031,10 +33010,9 @@ msgid "No configuration options"
 msgstr "無設定選項"
 
 #: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
-#, fuzzy, kde-format
-#| msgid "The file does not contain an image."
+#, kde-format
 msgid "The clipboard is empty or does not have an image in it."
-msgstr "檔案不包含影像。"
+msgstr "剪貼簿為空白或不含影像。"
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:42
 #, kde-format
@@ -34337,17 +34315,14 @@ msgid "Tool Options"
 msgstr "工具選項"
 
 #: libs/widgets/KoZoomMode.cpp:14
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "View"
+#, kde-format
 msgid "Fit View"
-msgstr "檢視"
+msgstr "適合檢視"
 
 #: libs/widgets/KoZoomMode.cpp:15
-#, fuzzy, kde-format
-#| msgid "Fit Page Width"
+#, kde-format
 msgid "Fit View Width"
-msgstr "適合頁面寬度"
+msgstr "適合檢視寬度"
 
 #: libs/widgets/KoZoomMode.cpp:17
 #, kde-format
@@ -34360,10 +34335,9 @@ msgid "Fit Text Width"
 msgstr "適合文字寬度"
 
 #: libs/widgets/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit Page Height"
+#, kde-format
 msgid "Fit View Height"
-msgstr "適合頁面高度"
+msgstr "適合檢視高度"
 
 #: libs/widgets/KoZoomWidget.cpp:124
 #, kde-format
@@ -37990,11 +37964,10 @@ msgid "Tree Indentation"
 msgstr "樹狀層級縮排"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:368
-#, fuzzy, kde-format
-#| msgid "Blending Mode"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
-msgstr "混色模式"
+msgstr "混色資料樣式"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:370
 #, kde-format
@@ -38011,42 +37984,34 @@ msgstr ""
 "詳細：一律顯示不透明度值和混色模式。"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:375
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "無"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:376
-#, fuzzy, kde-format
-#| msgid "Simple"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "簡單"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:377
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Layer Docker subtitle style"
-#| msgid "Balanced"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "平衡"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:378
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Layer Docker subtitle style"
-#| msgid "Detailed"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "詳細"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:391
-#, fuzzy, kde-format
-#| msgctxt "@item:tooltip"
-#| msgid "Subtitle text opacity"
+#, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "副標題不透明度"
+msgstr "混色資料不透明度"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:409
 #, kde-format
@@ -38055,18 +38020,14 @@ msgid "Inline"
 msgstr "單行顯示"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:411
-#, fuzzy, kde-format
-#| msgctxt "@item:tooltip"
-#| msgid ""
-#| "If enabled, show subtitles beside layer names.\n"
-#| "If disabled, show below layer names (when enough space)."
+#, kde-format
 msgctxt "@item:tooltip"
 msgid ""
 "If enabled, show blending info beside layer names.\n"
 "If disabled, show below layer names (when enough space)."
 msgstr ""
-"啟用時，副標題將與圖層名稱同行顯示。\n"
-"停用時，副標題將顯示於圖層名稱之下 (如空間充足)。"
+"啟用時，混色資料將與圖層名稱同行顯示。\n"
+"停用時，混色資料將顯示於圖層名稱之下 (如空間充足)。"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:980
 msgctxt "(qtundo-format)"
@@ -38474,11 +38435,10 @@ msgid "Export Palette"
 msgstr "匯出調色板"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:230
-#, fuzzy, kde-format
-#| msgid "Export Successful"
+#, kde-format
 msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
-msgstr "匯出成功"
+msgstr "調色板匯出成功"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:372
 #, kde-format
@@ -46267,11 +46227,10 @@ msgid "Use all predictors"
 msgstr "使用全部預測機制"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:170
-#, fuzzy, kde-format
-#| msgid "Save as %1"
+#, kde-format
 msgctxt "Color space option"
 msgid "Save as is"
-msgstr "另存為 %1"
+msgstr "按現狀儲存"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:172
 #, kde-format
@@ -46280,6 +46239,8 @@ msgid ""
 "The image will be stored without conversion, the ICC profile will be "
 "converted to CICP or embedded if it was not possible."
 msgstr ""
+"影像會不作色彩轉換而保存。ICC 色彩特性會轉換為 CICP，或者在不可能這樣做的時候"
+"將其嵌入。"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:37
@@ -46303,10 +46264,9 @@ msgstr "編碼選項"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:69
-#, fuzzy, kde-format
-#| msgid "Lossless encoding"
+#, kde-format
 msgid "Lossy encoding"
-msgstr "無損壓縮編碼"
+msgstr "有損壓縮編碼"
 
 #. i18n: ectx: property (text), widget (QLabel, lblHighQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:87
@@ -46323,6 +46283,8 @@ msgid ""
 "Set the lossy quality of JPEG-XL export.\n"
 "Default: 100 (visually lossless)."
 msgstr ""
+"設定匯出 JPEG-XL 的有損壓縮品質。\n"
+"預設為 100 (視覺上無失真)。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:117
@@ -46340,12 +46302,15 @@ msgid ""
 "(e.g. for non-photographic images).\n"
 "Default: disabled."
 msgstr ""
+"使用模組化編碼取代預設的 VarDCT 來進行有損壓縮\n"
+"(例如不是相片的影像適用)。\n"
+"預設為停用。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceModular)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131
 #, kde-format
 msgid "Use modular mode"
-msgstr ""
+msgstr "使用模組化編碼模式"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:141
@@ -46423,6 +46388,8 @@ msgid ""
 "Applications like Google Chrome expect HDR images to store their color "
 "profile as CICP values. You can adjust the ICC profile conversion below."
 msgstr ""
+"某些應用程式，例如 Google Chrome，預期 HDR 影像將色彩特性儲存作 CICP 數值。您"
+"可以在下方調整 ICC 色彩特性的轉換方式。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:370
@@ -58893,18 +58860,6 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "參考圖工具"
 
-#~ msgctxt "@item:inmenu Layers Docker settings, combobox"
-#~ msgid "Subtitle Style"
-#~ msgstr "副標題樣式"
-
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "None"
-#~ msgstr "無"
-
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "Simple"
-#~ msgstr "簡單"
-
 #~ msgid "&Canvas"
 #~ msgstr "畫布(&C)"
 
@@ -58944,6 +58899,18 @@ msgstr "參考圖工具"
 
 #~ msgid "Fit Page"
 #~ msgstr "適合頁面大小"
+
+#~ msgctxt "@item:inmenu Layers Docker settings, combobox"
+#~ msgid "Subtitle Style"
+#~ msgstr "副標題樣式"
+
+#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
+#~ msgid "None"
+#~ msgstr "無"
+
+#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
+#~ msgid "Simple"
+#~ msgstr "簡單"
 
 #~ msgctxt "JPEG-XL errors"
 #~ msgid "JPEG-XL encoded profile not implemented"

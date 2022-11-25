@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-24 00:43+0000\n"
-"PO-Revision-Date: 2022-11-22 17:27+0300\n"
+"PO-Revision-Date: 2022-11-24 17:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -13184,7 +13184,7 @@ msgstr "Son geri alınan eylemi yinele"
 #, kde-format
 msgctxt "action"
 msgid "Cu&t"
-msgstr "Ke&s"
+msgstr "&Kes"
 
 #. i18n: context: toolTip @ Action (edit_cut), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:291
@@ -13205,7 +13205,7 @@ msgstr "Kes"
 #, kde-format
 msgctxt "action"
 msgid "&Copy"
-msgstr "&Kopyala"
+msgstr "Ko&pyala"
 
 #. i18n: context: toolTip @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:303
@@ -13226,7 +13226,7 @@ msgstr "Kopyala"
 #, kde-format
 msgctxt "action"
 msgid "C&opy (sharp)"
-msgstr "K&opyala (Keskin)"
+msgstr "Ko&pyala (Keskin)"
 
 #. i18n: context: toolTip @ Action (copy_sharp), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (copy_sharp), Actions (Edit), ActionCollection (Menu)
@@ -13294,7 +13294,7 @@ msgstr "Geçerli Düğümden Katman Biçemini Kopyala"
 #, kde-format
 msgctxt "action"
 msgid "&Paste"
-msgstr "Ya&pıştır"
+msgstr "&Yapıştır"
 
 #. i18n: context: toolTip @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:363
@@ -34876,7 +34876,7 @@ msgstr "Son geri alınan eylemi yinele"
 #: libs/widgetutils/config/kstandardaction_p.h:43
 #, kde-format
 msgid "Cu&t"
-msgstr "Ke&s"
+msgstr "&Kes"
 
 #: libs/widgetutils/config/kstandardaction_p.h:43
 #, kde-format
@@ -34886,7 +34886,7 @@ msgstr "Seçimi panoya kes"
 #: libs/widgetutils/config/kstandardaction_p.h:44
 #, kde-format
 msgid "&Copy"
-msgstr "&Kopyala"
+msgstr "Ko&pyala"
 
 #: libs/widgetutils/config/kstandardaction_p.h:44
 #, kde-format
@@ -38818,11 +38818,10 @@ msgid "Export Palette"
 msgstr "Palet Dışa Aktar"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:230
-#, fuzzy, kde-format
-#| msgid "Export Successful"
+#, kde-format
 msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
-msgstr "Dışa Aktarma Başarılı"
+msgstr "Palet başarıya dışa aktarıldı"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:372
 #, kde-format

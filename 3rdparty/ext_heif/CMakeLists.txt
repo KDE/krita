@@ -44,30 +44,13 @@ endif(WIN32)
 
 set(EXTRA_AVIF_DEPS "")
 
-find_package(Perl)
-if(NOT PERL_FOUND AND WIN32)
-    ExternalProject_Add(
-        ext_strawberryperl
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        # From https://strawberryperl.com/download/5.32.1.1/strawberry-perl-5.32.1.1-32bit-portable.zip
-        URL https://files.kde.org/krita/build/dependencies/strawberry-perl-5.32.1.1-32bit-portable.zip
-        URL_HASH SHA1=28bca91cadd6651c2b2463db8587c170bf17f2fa
-
-        BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying Strawberry Perl portable
-        CONFIGURE_COMMAND ""
-        INSTALL_COMMAND ""
-        UPDATE_COMMAND ""
-
-        SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/Strawberry"
-    )
-    set(USE_STRAWBERRYPERL 1)
-    set(LIBAOM_EXTRA_CMAKE_ARGS -DPERL_EXECUTABLE=${CMAKE_CURRENT_BINARY_DIR}/Strawberry/perl/bin/perl.exe)
+if (USE_STRAWBERRYPERL)
     set(LIBAOM_STRAWBERRYPERL_DEP ext_strawberryperl)
-elseif(PERL_FOUND AND WIN32)
-    set(LIBAOM_EXTRA_CMAKE_ARGS -DPERL_EXECUTABLE=${PERL_EXECUTABLE})
 endif()
 
-if(NOT WIN32)
+if(WIN32 AND KRITA_PERL_EXECUTABLE)
+    set(LIBAOM_EXTRA_CMAKE_ARGS -DPERL_EXECUTABLE=${KRITA_PERL_EXECUTABLE})
+else()
     set(LIBAOM_EXTRA_CMAKE_ARGS -DCONFIG_PIC=1)
 endif()
 

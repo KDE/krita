@@ -22,7 +22,6 @@ if (WIN32)
       else()
         set(QT_CONFIG_PLATFORM win32-g++)
       endif()
-      set(QT_EXTRA_DEPS "")
     elseif(MSVC)
       ExternalProject_Add(ext_jom
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -37,7 +36,7 @@ if (WIN32)
       )
 
       set(QT_CONFIG_PLATFORM win32-msvc)
-      set(QT_EXTRA_DEPS ext_jom)
+      list(APPEND QT_EXTRA_DEPS ext_jom)
     endif(MINGW)
 
     list(APPEND _QT_conf -skip qt3d -skip qtactiveqt -skip qtcanvas3d
@@ -122,8 +121,15 @@ if (WIN32)
     endif ()
     list(APPEND _QT_conf -opengl dynamic)
 
-    # Custom ANGLE
-    set(QT_EXTRA_DEPS ${QT_EXTRA_DEPS} ext_googleangle)
+    if (USE_STRAWBERRYPERL)
+      list(APPEND QT_EXTRA_DEPS ext_strawberryperl)
+    endif()
+
+    if (KRITA_PERL_PATH) 
+      list(APPEND QT_ENV_ARGS --modify PATH=path_list_append:${KRITA_PERL_PATH})
+    else()
+      message(WARNING "KRITA_PERL_PATH is not set. Most probably, Qt will fail to configure!")
+    endif()
 
   ExternalProject_Add(
       ext_qt
@@ -137,16 +143,16 @@ if (WIN32)
       GIT_REMOTE_UPDATE_STRATEGY REBASE
 
       INSTALL_DIR ${EXTPREFIX_qt}
-      CONFIGURE_COMMAND <SOURCE_DIR>/configure.bat ${_QT_conf}
+      CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env ${QT_ENV_ARGS} <SOURCE_DIR>/configure.bat ${_QT_conf}
 
-      BUILD_COMMAND ${QT_BUILD_COMMAND}
+      BUILD_COMMAND ${CMAKE_COMMAND} -E env ${QT_ENV_ARGS} ${QT_BUILD_COMMAND}
 
-      INSTALL_COMMAND ${QT_INSTALL_COMMAND}
+      INSTALL_COMMAND ${CMAKE_COMMAND} -E env ${QT_ENV_ARGS} ${QT_INSTALL_COMMAND}
       UPDATE_COMMAND ""
       # Use a short name to reduce the chance of exceeding path length limit
       SOURCE_DIR s
       BINARY_DIR b
-      DEPENDS ext_patch ${OPENSSL_DEP} ${QT_EXTRA_DEPS} ${ZLIB_DEP}
+      DEPENDS ext_patch ext_googleangle ${OPENSSL_DEP} ${QT_EXTRA_DEPS} ${ZLIB_DEP} 
   )
 elseif (ANDROID)
   ExternalProject_Add(

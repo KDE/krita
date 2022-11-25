@@ -20,6 +20,10 @@ else(APPLE)
 	cmake_minimum_required(VERSION 3.7.0 FATAL_ERROR)
 endif()
 
+if(POLICY CMP0135)
+  cmake_policy(SET CMP0135 NEW)
+endif()
+
 #
 # If you add a new dependency into 3rdparty folder, do **not** overide
 # BUILD_COMMAND and INSTALL_COMMAND with their '-j${SUBMAKE_JOBS}' equivalents,
@@ -92,6 +96,8 @@ if (WIN32 OR LINUX)
 option(QT_ENABLE_DEBUG_INFO "Build Qt with full debug info included" OFF)
 option(QT_ENABLE_ASAN "Build Qt with ASAN" OFF)
 endif()
+
+find_package(Perl)
 
 if (WIN32)
     option(ENABLE_MSYS2_FIXES "Enable patches that are needed for MSYS2+Clang Krita build" OFF)
@@ -382,6 +388,8 @@ if(WIN32)
     add_subdirectory(ext_googleangle)
 endif()
 
+# perl is required by Qt built from source
+add_subdirectory( ext_perl )
 add_subdirectory( ext_qt )
 add_subdirectory( ext_libraw )
 if (ANDROID)

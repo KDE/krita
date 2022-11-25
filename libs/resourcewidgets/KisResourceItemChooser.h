@@ -46,7 +46,8 @@ public:
     enum class Layout {
         NotSet,
         Vertical,
-        Horizontal
+        Horizontal2Rows,
+        Horizontal1Row
     };
 
     /**

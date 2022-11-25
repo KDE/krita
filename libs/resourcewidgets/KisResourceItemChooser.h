@@ -17,10 +17,12 @@
 #include <QWidget>
 
 #include <QModelIndex>
+#include <QListView>
 
 #include <KoResource.h>
 #include <KisKineticScroller.h>
 #include "KisPopupButton.h"
+#include "ResourceListViewModes.h"
 
 class QAbstractProxyModel;
 class QAbstractItemDelegate;
@@ -34,24 +36,41 @@ class KisTagFilterResourceProxyModel;
 
 
 /**
- * A widget that contains a KoResourceChooser as well
- * as an import/export button
+ * A widget that contains a KisResourceItemListView with filters for resource and tags.
  */
 class KRITARESOURCEWIDGETS_EXPORT KisResourceItemChooser : public QWidget
 {
     Q_OBJECT
 public:
     enum Buttons { Button_Import, Button_Remove };
+    enum class Layout {
+        NotSet,
+        Vertical,
+        Horizontal2Rows,
+        Horizontal1Row
+    };
 
-    /// \p usePreview shows the aside preview with the resource's image
-    /// \p extraFilterProxy is an extra filter proxy model for additional filtering. KisResourceItemChooser will take over ownership
+    /**
+     * @param resourceType Type of resource to choose from.
+     * @param usePreview Displays the selected resource icon to the right side of the resources view.
+     *        It looks bad, should be deleted.
+     */
     explicit KisResourceItemChooser(const QString &resourceType, bool usePreview = false, QWidget *parent = 0);
     ~KisResourceItemChooser() override;
 
+    /// Set's the desired view mode for the resource list.
+    void setListViewMode(ListViewMode viewMode);
+
+    /// sets the visibility of tagging KlineEdits.
+    void showTaggingBar(bool show);
+
     KisTagFilterResourceProxyModel *tagFilterModel() const;
 
-    /// return the number of rows in the view
-    int rowCount() const;
+    void setViewModeButtonVisible(bool visible);
+
+    KisPopupButton *viewModeButton() const;
+
+    void setStoragePopupButtonVisible(bool visible);
 
     /// Sets the height of the view rows
     void setRowHeight(int rowHeight);
@@ -80,9 +99,9 @@ public:
      */
     void setCurrentItem(int row);
 
+    /// Shows the import and export buttons for the resource.
+    /// No one actually shows them, should delete.
     void showButtons(bool show);
-
-    void addCustomButton(QAbstractButton *button, int cell);
 
     /// determines whether the preview right or below the splitter
     void setPreviewOrientation(Qt::Orientation orientation);
@@ -93,25 +112,26 @@ public:
     /// shows the preview converted to grayscale
     void setGrayscalePreview(bool grayscale);
 
-    /// sets the visibility of tagging KlineEdits.
-    void showTaggingBar(bool show);
-
+    /// View size for the resources view.
     QSize viewSize() const;
 
+    /// Do not use this to change the view mode and flow directly.
+    /// Use the requestViewMode() and requestFlow() methods so as to not
+    /// intervene in the responsive design layout.
     KisResourceItemListView *itemView() const;
-
-    void setStoragePopupButtonVisible(bool visible);
-    
-    void setViewModeButtonVisible(bool visible);
-    KisPopupButton *viewModeButton() const;
 
     void setSynced(bool sync);
 
+    /// Allows zooming with Ctrl + Mouse Wheel
     bool eventFilter(QObject *object, QEvent *event) override;
 
 Q_SIGNALS:
+    /// Emitted when the view mode for the internal KisResourceItemListView changes
+    void listViewModeChanged(ListViewMode newViewMode);
+
     /// Emitted when a resource was selected
     void resourceSelected(KoResourceSP resource);
+
     /// Emitted when an *already selected* resource is clicked
     /// again
     void resourceClicked(KoResourceSP resource);
@@ -123,6 +143,8 @@ public Q_SLOTS:
     void updateView();
 
 private Q_SLOTS:
+    void scrollBackwards();
+    void scrollForwards();
     void activate(const QModelIndex &index);
     void clicked(const QModelIndex &index);
     void contextMenuRequested(const QPoint &pos);
@@ -137,14 +159,14 @@ private:
     void updateButtonState();
     void updatePreview(const QModelIndex &idx);
 
+    void changeLayoutBasedOnSize();
+
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid
     KoResourceSP resourceFromModelIndex(const QModelIndex &index) const;
 
     class Private;
     Private *const d;
-
-
 };
 
 #endif // KO_RESOURCE_ITEM_CHOOSER

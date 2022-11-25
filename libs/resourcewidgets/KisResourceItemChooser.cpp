@@ -18,6 +18,7 @@
 #include <QAbstractProxyModel>
 #include <QLabel>
 #include <QScrollArea>
+#include <QScrollBar>
 #include <QImage>
 #include <QPixmap>
 #include <QPainter>
@@ -48,9 +49,7 @@
 #include "KisResourceTaggingManager.h"
 #include <KisResourceUserOperations.h>
 
-
 #include "KisStorageChooserWidget.h"
-#include "kis_assert.h"
 
 
 class Q_DECL_HIDDEN KisResourceItemChooser::Private
@@ -62,21 +61,27 @@ public:
 
     QString resourceType;
 
+    // Top/Bottom bar
     KisTagFilterResourceProxyModel *tagFilterProxyModel {0};
-
     KisResourceTaggingManager *tagManager {0};
-    KisResourceItemListView *view {0};
-    QButtonGroup *buttonGroup {0};
     KisPopupButton *viewModeButton {0};
     KisStorageChooserWidget *storagePopupButton {0};
 
+    // Resources view
+    KisResourceItemListView *view {0};
+    QSplitter *resourcesSplitter {0};
+
     QScrollArea *previewScroller {0};
     QLabel *previewLabel {0};
-    QSplitter *splitter {0};
-    QGridLayout *buttonLayout {0};
 
+    // Import and Export buttons
+    QFrame* importExportBtns {0};
     QToolButton *importButton {0};
     QToolButton *deleteButton {0};
+    QButtonGroup *buttonGroup {0};  // does not seem to do much, maybe replace with std::array
+
+    // Custom Buttons
+    QList<QAbstractButton*> customButtons;
 
     bool usePreview {false};
     bool tiledPreview {false};
@@ -84,19 +89,45 @@ public:
     bool synced {false};
     bool updatesBlocked {false};
 
-    QModelIndex savedResourceWhileReset; // Indexes on the proxyModel, not the source resource model
-
-    QList<QAbstractButton*> customButtons;
-
     KoResourceSP currentResource;
+    Layout layout = Layout::NotSet;
+    ListViewMode requestedViewMode = ListViewMode::IconGrid;
+
+    // Horizontal Layout Widgets
+    QSplitter* horzSplitter {0};
+    QFrame* left {0};
+    QFrame* right {0};
+
+    QFrame* right2Rows {0};
+    QHBoxLayout* top {0};
+    QHBoxLayout* bot {0};
+
+    QToolButton* scroll_left {0};
+    QToolButton* scroll_right {0};
 };
 
 KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool usePreview, QWidget *parent)
     : QWidget(parent)
     , d(new Private(resourceType))
 {
-    d->splitter = new QSplitter(this);
+    // Tag manager
+    d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(resourceType, this);
+    d->tagFilterProxyModel->sort(Qt::DisplayRole);
+    d->tagManager = new KisResourceTaggingManager(resourceType, d->tagFilterProxyModel, this);
 
+    // Viewmode button
+    d->viewModeButton = new KisPopupButton(this);
+    d->viewModeButton->setVisible(false);
+    d->viewModeButton->setArrowVisible(false);
+    d->viewModeButton->setAutoRaise(true);
+
+    // Storage button
+    d->storagePopupButton = new KisStorageChooserWidget(resourceType, this);
+    d->storagePopupButton->setToolTip(i18n("Storage Resources"));
+    d->storagePopupButton->setAutoRaise(true);
+    d->storagePopupButton->setArrowVisible(false);
+
+    // Resource List View
     d->view = new KisResourceItemListView(this);
     d->view->setObjectName("ResourceItemview");
     d->view->setStrictSelectionMode(true);
@@ -107,7 +138,8 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     }
     else if (d->resourceType == ResourceType::PaintOpPresets) {
         d->view->setFixedToolTipThumbnailSize(QSize(128, 128));
-    } else if (d->resourceType == ResourceType::Patterns || d->resourceType == ResourceType::Palettes) {
+    }
+    else if (d->resourceType == ResourceType::Patterns || d->resourceType == ResourceType::Palettes) {
         d->view->setToolTipShouldRenderCheckers(false);
         d->view->setFixedToolTipThumbnailSize(QSize(256, 256));
     }
@@ -115,10 +147,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->view->setItemDelegate(new KisResourceItemDelegate(this));
     d->view->setSelectionMode(QAbstractItemView::SingleSelection);
     d->view->viewport()->installEventFilter(this);
-
-    d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(resourceType, this);
     d->view->setModel(d->tagFilterProxyModel);
-    d->tagFilterProxyModel->sort(Qt::DisplayRole);
 
     connect(d->tagFilterProxyModel, SIGNAL(afterFilterChanged()), this, SLOT(afterFilterChanged()));
 
@@ -127,8 +156,10 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     connect(d->view, SIGNAL(contextMenuRequested(QPoint)), this, SLOT(contextMenuRequested(QPoint)));
     connect(d->view, SIGNAL(sigSizeChanged()), this, SLOT(updateView()));
 
-    d->splitter->addWidget(d->view);
-    d->splitter->setStretchFactor(0, 2);
+    // Splitter with resource views and preview scroller
+    d->resourcesSplitter = new QSplitter(this);
+    d->resourcesSplitter->addWidget(d->view);
+    d->resourcesSplitter->setStretchFactor(0, 1);
 
     d->usePreview = usePreview;
     if (d->usePreview) {
@@ -139,10 +170,10 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
         d->previewScroller->setAlignment(Qt::AlignCenter);
         d->previewLabel = new QLabel(this);
         d->previewScroller->setWidget(d->previewLabel);
-        d->splitter->addWidget(d->previewScroller);
+        d->resourcesSplitter->addWidget(d->previewScroller);
 
-        if (d->splitter->count() == 2) {
-            d->splitter->setSizes(QList<int>() << 280 << 160);
+        if (d->resourcesSplitter->count() == 2) {
+            d->resourcesSplitter->setSizes(QList<int>() << 280 << 160);
         }
 
         QScroller* scroller = KisKineticScroller::createPreconfiguredScroller(d->previewScroller);
@@ -151,58 +182,89 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
         }
     }
 
-    d->splitter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    connect(d->splitter, SIGNAL(splitterMoved(int,int)), SIGNAL(splitterMoved()));
-
-    d->buttonGroup = new QButtonGroup(this);
-    d->buttonGroup->setExclusive(false);
-
-    QGridLayout *layout = new QGridLayout(this);
-
-    d->buttonLayout = new QGridLayout();
-
+    // Import and Export buttons
     d->importButton = new QToolButton(this);
     d->importButton->setToolTip(i18nc("@info:tooltip", "Import resource"));
     d->importButton->setAutoRaise(true);
     d->importButton->setEnabled(true);
-    d->buttonGroup->addButton(d->importButton, Button_Import);
-    d->buttonLayout->addWidget(d->importButton, 0, 0);
 
     d->deleteButton = new QToolButton(this);
     d->deleteButton->setToolTip(i18nc("@info:tooltip", "Delete resource"));
     d->deleteButton->setEnabled(false);
     d->deleteButton->setAutoRaise(true);
-    d->buttonGroup->addButton(d->deleteButton, Button_Remove);
-    d->buttonLayout->addWidget(d->deleteButton, 0, 1);
 
+    d->buttonGroup = new QButtonGroup(this);
+    d->buttonGroup->setExclusive(false);
+    d->buttonGroup->addButton(d->importButton, Button_Import);
+    d->buttonGroup->addButton(d->deleteButton, Button_Remove);
     connect(d->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
-    d->buttonLayout->setColumnStretch(0, 1);
-    d->buttonLayout->setColumnStretch(1, 1);
-    d->buttonLayout->setColumnStretch(2, 2);
-    d->buttonLayout->setSpacing(0);
-    d->buttonLayout->setMargin(0);
+    d->importExportBtns = new QFrame(this);
+    QHBoxLayout* importExportLayout = new QHBoxLayout(d->importExportBtns);
+    importExportLayout->addWidget(d->importButton);
+    importExportLayout->addWidget(d->deleteButton);
 
-    d->viewModeButton = new KisPopupButton(this);
-    d->viewModeButton->setVisible(false);
-    d->viewModeButton->setArrowVisible(false);
-    d->viewModeButton->setAutoRaise(true);
-    d->tagManager = new KisResourceTaggingManager(resourceType, d->tagFilterProxyModel, this);
+    auto removePadding = [](QLayout* layout) {
+        layout->setMargin(0);
+        layout->setSpacing(0);
+    };
 
-    d->storagePopupButton = new KisStorageChooserWidget(resourceType, this);
-    d->storagePopupButton->setToolTip(i18n("Storage Resources"));
-    d->storagePopupButton->setAutoRaise(true);
-    d->storagePopupButton->setArrowVisible(false);
+    // Layout
+    QGridLayout* thisLayout = new QGridLayout(this);
+    thisLayout->setObjectName("ResourceChooser this");
+    removePadding(thisLayout);
 
-    layout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);
-    layout->addWidget(d->viewModeButton, 0, 1);
-    layout->addWidget(d->storagePopupButton, 0, 2);
-    layout->addWidget(d->splitter, 1, 0, 1, 3);
-    layout->addWidget(d->tagManager->tagFilterWidget(), 2, 0, 1, 3);
-    layout->addLayout(d->buttonLayout, 3, 0, 1, 3);
-    layout->setMargin(0);
-    layout->setSpacing(0);
+    // Horizontal Layout
+    {
+        // Splitter
+        d->horzSplitter = new QSplitter(this);
+        d->horzSplitter->setOrientation(Qt::Orientation::Horizontal);
 
+        // Horizontal 1 row
+        d->left = new QFrame(this);
+        QHBoxLayout* leftLayout = new QHBoxLayout(d->left);
+        leftLayout->setObjectName("ResourceChooser left");
+
+        d->right = new QFrame(this);
+        QHBoxLayout* rightLayout = new QHBoxLayout(d->right);
+        rightLayout->setObjectName("ResourceChooser right");
+
+        // Horizontal 2 rows
+        d->right2Rows = new QFrame(this);
+        QVBoxLayout* rightLayout2 = new QVBoxLayout(d->right2Rows);
+        rightLayout2->setObjectName("ResourceChooser right 2 rows");
+
+        d->top = new QHBoxLayout();
+        d->bot = new QHBoxLayout();
+        rightLayout2->addLayout(d->top);
+        rightLayout2->addLayout(d->bot);
+
+        // Common style
+        removePadding(leftLayout);
+        removePadding(rightLayout);
+        removePadding(rightLayout2);
+        removePadding(d->top);
+        removePadding(d->bot);
+
+        // Scroll buttons
+        d->scroll_left = new QToolButton(this);
+        d->scroll_left->setIcon(KisIconUtils::loadIcon("draw-arrow-back"));
+        connect(d->scroll_left, &QToolButton::clicked, this, &KisResourceItemChooser::scrollBackwards);
+        d->scroll_right = new QToolButton(this);
+        d->scroll_right->setIcon(KisIconUtils::loadIcon("draw-arrow-forward"));
+        connect(d->scroll_right, &QToolButton::clicked, this, &KisResourceItemChooser::scrollForwards);
+
+        // Hide
+        d->scroll_left->hide();
+        d->scroll_right->hide();
+        d->left->hide();
+        d->right->hide();
+        d->right2Rows->hide();
+        d->horzSplitter->hide();
+    }
+
+    // Other
+    changeLayoutBasedOnSize();
     updateView();
 
     updateButtonState();
@@ -213,6 +275,14 @@ KisResourceItemChooser::~KisResourceItemChooser()
 {
     disconnect();
     delete d;
+}
+
+void KisResourceItemChooser::setListViewMode(ListViewMode newViewMode)
+{
+    d->requestedViewMode = newViewMode;
+    if (d->layout != Layout::Horizontal1Row) {
+        d->view->setListViewMode(newViewMode);
+    }
 }
 
 KisTagFilterResourceProxyModel *KisResourceItemChooser::tagFilterModel() const
@@ -266,30 +336,18 @@ void KisResourceItemChooser::slotButtonClicked(int button)
 
 void KisResourceItemChooser::showButtons(bool show)
 {
-    foreach (QAbstractButton * button, d->buttonGroup->buttons()) {
-        show ? button->show() : button->hide();
+    // assert(show == false);
+    if (show) {
+        d->importExportBtns->show();
     }
-
-    Q_FOREACH (QAbstractButton *button, d->customButtons) {
-        show ? button->show() : button->hide();
+    else {
+        d->importExportBtns->hide();
     }
-}
-
-void KisResourceItemChooser::addCustomButton(QAbstractButton *button, int cell)
-{
-    d->buttonLayout->addWidget(button, 0, cell);
-    d->buttonLayout->setColumnStretch(2, 1);
-    d->buttonLayout->setColumnStretch(3, 1);
 }
 
 void KisResourceItemChooser::showTaggingBar(bool show)
 {
     d->tagManager->showTaggingBar(show);
-}
-
-int KisResourceItemChooser::rowCount() const
-{
-    return d->view->model()->rowCount();
 }
 
 void KisResourceItemChooser::setRowHeight(int rowHeight)
@@ -336,7 +394,7 @@ void KisResourceItemChooser::setCurrentResource(KoResourceSP resource)
 
 void KisResourceItemChooser::setPreviewOrientation(Qt::Orientation orientation)
 {
-    d->splitter->setOrientation(orientation);
+    d->resourcesSplitter->setOrientation(orientation);
 }
 
 void KisResourceItemChooser::setPreviewTiled(bool tiled)
@@ -359,6 +417,18 @@ void KisResourceItemChooser::setCurrentItem(int row)
     if (index.isValid()) {
         updatePreview(index);
     }
+}
+
+void KisResourceItemChooser::scrollBackwards()
+{
+    QScrollBar* bar = d->view->horizontalScrollBar();
+    bar->setValue(bar->value() - d->view->gridSize().width());
+}
+
+void KisResourceItemChooser::scrollForwards()
+{
+    QScrollBar* bar = d->view->horizontalScrollBar();
+    bar->setValue(bar->value() + d->view->gridSize().width());
 }
 
 void KisResourceItemChooser::activate(const QModelIndex &index)
@@ -548,22 +618,145 @@ bool KisResourceItemChooser::eventFilter(QObject *object, QEvent *event)
 void KisResourceItemChooser::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
+    changeLayoutBasedOnSize();
     updateView();
 }
 
 void KisResourceItemChooser::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
+    changeLayoutBasedOnSize();
     updateView();
+}
+
+void KisResourceItemChooser::changeLayoutBasedOnSize()
+{
+    qDebug("height = %d", height());
+
+    auto hideEverything = [this]() {
+        d->horzSplitter->hide();
+        d->left->hide();
+        d->right->hide();
+        d->right2Rows->hide();
+        d->scroll_left->hide();
+        d->scroll_right->hide();
+
+        d->viewModeButton->hide();
+    };
+
+    // Vertical
+    if (height() > 100) {
+
+        if (d->layout == Layout::Vertical) {
+            return;
+        }
+
+        hideEverything();
+
+        d->view->setListViewMode(d->requestedViewMode);
+        emit listViewModeChanged(d->requestedViewMode);
+
+        QGridLayout* thisLayout = dynamic_cast<QGridLayout*>(layout());
+        thisLayout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);
+        thisLayout->addWidget(d->viewModeButton, 0, 1);
+        thisLayout->addWidget(d->storagePopupButton, 0, 2);
+        thisLayout->addWidget(d->resourcesSplitter, 1, 0, 1, 3);
+        thisLayout->setRowStretch(1, 1);
+        thisLayout->addWidget(d->tagManager->tagFilterWidget(), 2, 0, 1, 3);
+        thisLayout->addWidget(d->importExportBtns, 3, 0, 1, 3);
+
+        d->viewModeButton->show();
+
+        d->layout = Layout::Vertical;
+    }
+    // Horizontal 2 rows
+    else if (height() > 60) {
+
+        if (d->layout == Layout::Horizontal2Rows) {
+            return;
+        }
+
+        hideEverything();
+
+        d->view->setListViewMode(ListViewMode::IconStripHorizontal);
+        emit listViewModeChanged(ListViewMode::IconStripHorizontal);
+
+        // Left
+        QLayout* leftLayout = d->left->layout();
+        leftLayout->addWidget(d->resourcesSplitter);
+
+        // Right Top
+        d->top->addWidget(d->scroll_left);
+        d->top->addWidget(d->scroll_right);
+        d->top->addWidget(d->tagManager->tagChooserWidget());
+        d->top->addWidget(d->importExportBtns);
+
+        // Right Bot
+        d->bot->addWidget(d->viewModeButton);
+        d->bot->addWidget(d->storagePopupButton);
+        d->bot->addWidget(d->tagManager->tagFilterWidget());
+
+        d->horzSplitter->addWidget(d->left);
+        d->horzSplitter->setStretchFactor(0, 2);
+        d->horzSplitter->addWidget(d->right2Rows);
+        d->horzSplitter->setStretchFactor(1, 0);
+
+        QGridLayout* thisLayout = dynamic_cast<QGridLayout*>(layout());
+        thisLayout->setRowStretch(1, 0);
+        thisLayout->addWidget(d->horzSplitter);
+
+        d->horzSplitter->show();
+        d->left->show();
+        d->scroll_left->show();
+        d->scroll_right->show();
+        d->right2Rows->show();
+
+        d->layout = Layout::Horizontal2Rows;
+    }
+    // Horizontal 1 row
+    else {
+        if (d->layout == Layout::Horizontal1Row) {
+            return;
+        }
+
+        hideEverything();
+
+        d->view->setListViewMode(ListViewMode::IconStripHorizontal);
+        emit listViewModeChanged(ListViewMode::IconStripHorizontal);
+
+        QLayout* leftLayout = d->left->layout();
+        leftLayout->addWidget(d->resourcesSplitter);
+        leftLayout->addWidget(d->scroll_left);
+        leftLayout->addWidget(d->scroll_right);
+
+        QLayout* rightLayout = d->right->layout();
+        rightLayout->addWidget(d->tagManager->tagChooserWidget());
+        rightLayout->addWidget(d->viewModeButton);
+        rightLayout->addWidget(d->storagePopupButton);
+        rightLayout->addWidget(d->tagManager->tagFilterWidget());
+        rightLayout->addWidget(d->importExportBtns);
+
+        d->horzSplitter->addWidget(d->left);
+        d->horzSplitter->setStretchFactor(0, 2);
+        d->horzSplitter->addWidget(d->right);
+        d->horzSplitter->setStretchFactor(1, 0);
+
+        QGridLayout* thisLayout = dynamic_cast<QGridLayout*>(layout());
+        thisLayout->setRowStretch(1, 0);
+        thisLayout->addWidget(d->horzSplitter);
+
+        d->horzSplitter->show();
+        d->left->show();
+        d->scroll_left->show();
+        d->scroll_right->show();
+        d->right->show();
+
+        d->layout = Layout::Horizontal1Row;
+    }
 }
 
 void KisResourceItemChooser::updateView()
 {
-    if (d->synced) {
-        KisResourceItemChooserSync *chooserSync = KisResourceItemChooserSync::instance();
-        baseLengthChanged(chooserSync->baseLength());
-    }
-
     /// helps to set icons here in case the theme is changed
     d->viewModeButton->setIcon(KisIconUtils::loadIcon("view-choose"));
     d->importButton->setIcon(koIcon("document-import-16"));

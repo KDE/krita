@@ -197,8 +197,12 @@ void KisResourceItemListView::resizeEvent(QResizeEvent *event)
 {
     if (m_d->viewMode == ListViewMode::IconStripHorizontal) {
         const int height = event->size().height();
-        qDebug("resizeEvent height = %d", height);
         setGridSize(QSize(height, height));
         setIconSize(QSize(height, height));
+    }
+    // trigger relaying the items, internally here not externally
+    // by calling setItemSize
+    else {
+        setGridSize(gridSize());
     }
 }

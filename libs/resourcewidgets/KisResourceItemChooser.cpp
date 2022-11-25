@@ -250,10 +250,11 @@ KisResourceItemChooser::~KisResourceItemChooser()
     delete d;
 }
 
-void KisResourceItemChooser::setListViewMode(ListViewMode viewMode)
+void KisResourceItemChooser::setListViewMode(ListViewMode newViewMode)
 {
+    d->requestedViewMode = newViewMode;
     if (d->layout != Layout::Horizontal) {
-        d->view->setListViewMode(viewMode);
+        d->view->setListViewMode(newViewMode);
     }
 }
 
@@ -611,6 +612,7 @@ void KisResourceItemChooser::changeLayoutBasedOnSize()
         }
 
         d->view->setListViewMode(d->requestedViewMode);
+        emit listViewModeChanged(d->requestedViewMode);
 
         QGridLayout* thisLayout = dynamic_cast<QGridLayout*>(layout());
         thisLayout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);
@@ -634,6 +636,7 @@ void KisResourceItemChooser::changeLayoutBasedOnSize()
         }
 
         d->view->setListViewMode(ListViewMode::IconStripHorizontal);
+        emit listViewModeChanged(ListViewMode::IconStripHorizontal);
 
         QLayout* leftLayout = d->left->layout();
         leftLayout->addWidget(d->resourcesSplitter);

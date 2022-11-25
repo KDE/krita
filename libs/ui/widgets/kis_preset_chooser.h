@@ -15,6 +15,7 @@
 #include <KoResource.h>
 #include <KoID.h>
 #include "kis_signal_auto_connection.h"
+#include "ResourceListViewModes.h"
 
 class KoAbstractResourceServerAdapter;
 class KisPresetDelegate;
@@ -74,13 +75,16 @@ public Q_SLOTS:
     /// saves the icon size for the presets. called by the horizontal slider release event.
     void saveIconSize();
 
+    /// Shows/hides brush names when KisResourceItemListView used by KisResourceItemChooser
+    /// changes it's ListViewMode.
+    /// If this method is removed then the Details view brush names will still be displayed when
+    /// KisResourceItemChooser is in horizontal layout.
+    void showHideBrushNames(ListViewMode newViewMode);
+
 private Q_SLOTS:
     void notifyConfigChanged();
     void slotResourceWasSelected(KoResourceSP resource);
     void slotCurrentPresetChanged();
-
-protected:
-    void resizeEvent(QResizeEvent* event) override;
 
 private:
     KisResourceItemChooser *m_chooser {0};

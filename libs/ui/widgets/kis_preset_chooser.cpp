@@ -193,6 +193,8 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     connect(m_chooser, SIGNAL(resourceClicked(KoResourceSP )),
             this, SIGNAL(resourceClicked(KoResourceSP )));
 
+    connect(m_chooser, &KisResourceItemChooser::listViewModeChanged, this, &KisPresetChooser::showHideBrushNames);
+
     m_mode = ViewMode::THUMBNAIL;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
@@ -217,19 +219,11 @@ void KisPresetChooser::setViewMode(KisPresetChooser::ViewMode mode)
     updateViewSettings();
 }
 
-void KisPresetChooser::resizeEvent(QResizeEvent* event)
-{
-    QWidget::resizeEvent(event);
-    updateViewSettings();
-}
-
 void KisPresetChooser::notifyConfigChanged()
 {
     KisConfig cfg(true);
     m_delegate->setUseDirtyPresets(cfg.useDirtyPresets());
     setIconSize(cfg.presetIconSize());
-
-    updateViewSettings();
 }
 
 void KisPresetChooser::slotResourceWasSelected(KoResourceSP resource)
@@ -306,7 +300,6 @@ void KisPresetChooser::setIconSize(int newSize)
 {
     KisResourceItemChooserSync* chooserSync = KisResourceItemChooserSync::instance();
     chooserSync->setBaseLength(newSize);
-    updateViewSettings();
 }
 
 int KisPresetChooser::iconSize()
@@ -320,5 +313,18 @@ void KisPresetChooser::saveIconSize()
     // save icon size
     if (KisConfig(true).presetIconSize() != iconSize()) {
         KisConfig(false).setPresetIconSize(iconSize());
+    }
+}
+
+void KisPresetChooser::showHideBrushNames(ListViewMode newViewMode)
+{
+    switch (newViewMode) {
+    case ListViewMode::Detail: {
+        m_delegate->setShowText(true);
+        break;
+    }
+    default: {
+        m_delegate->setShowText(false);
+    }
     }
 }

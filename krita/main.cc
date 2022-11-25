@@ -283,6 +283,11 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     KisAndroidCrashHandler::handler_init();
     qputenv("QT_ANDROID_ENABLE_RIGHT_MOUSE_FROM_LONG_PRESS", "1");
+
+    qputenv("FONTCONFIG_PATH",
+            QFile::encodeName(KoResourcePaths::getApplicationRoot()) + "/share/etc/fonts/");
+    qputenv("XDG_CACHE_HOME",
+            QFile::encodeName(QStandardPaths::writableLocation(QStandardPaths::CacheLocation)));
 #endif
 
     const QDir configPath(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation));
@@ -362,6 +367,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
             // We don't want to completely override the default
             originalXdgDataDirs = "/usr/local/share/:/usr/share/";
         }
+
+        // NOTE: This line helps also fontconfig have a user-accessible location on Android (see the commit).
         qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share") + ":" + originalXdgDataDirs);
 
         // APPIMAGE SOUND ADDITIONS

@@ -122,6 +122,7 @@ ExternalProject_Add(
     URL https://download.kde.org/stable/frameworks/5.64/kcompletion-5.64.0.zip
     URL_MD5 21fef280c2580da83df289707326d42a
     INSTALL_DIR ${EXTPREFIX_frameworks}
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-compilation-with-Qt-5.15.7.patch
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
@@ -139,6 +140,7 @@ ExternalProject_Add(
     URL_MD5 670a74cda110da89d1a7b0fd832fca42
     INSTALL_DIR ${EXTPREFIX_frameworks}
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/desktoptojson.diff
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-compilation-of-KCoreAddons-with-Qt-5.15.7.patch
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
@@ -235,6 +237,7 @@ ExternalProject_Add(
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://download.kde.org/stable/frameworks/5.64/kitemviews-5.64.0.zip
     URL_MD5 bbd20e563e3f3cbc80252ba89d27962c
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-compilation-of-KItemViews-with-Qt-5.15.7.patch
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 

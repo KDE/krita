@@ -1,0 +1,25 @@
+From 7b3fcbeede94be6892a87877527ffbe39c1ef20a Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Fri, 25 Nov 2022 13:10:06 +0000
+Subject: [PATCH 3/3] Add default fonts path for Android
+
+---
+ meson.build | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index 081cd7e..9e0264b 100644
+--- a/meson.build
++++ b/meson.build
+@@ -230,6 +230,8 @@ if host_machine.system() == 'windows'
+ else
+   if host_machine.system() == 'darwin'
+     fc_fonts_path = ['/System/Library/Fonts', '/Library/Fonts', '~/Library/Fonts', '/System/Library/Assets/com_apple_MobileAsset_Font3', '/System/Library/Assets/com_apple_MobileAsset_Font4']
++  elif host_machine.system() == 'android'
++    fc_fonts_path = ['/system/fonts']
+   else
+     fc_fonts_path = ['/usr/share/fonts', '/usr/local/share/fonts']
+   endif
+-- 
+2.38.1
+

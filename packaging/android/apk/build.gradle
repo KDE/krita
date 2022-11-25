@@ -62,7 +62,7 @@ task copyLibs(type: Copy) {
 task copyFonts(type: Copy) {
     def etcDir = "../i/"
     from "$etcDir/etc"
-    into 'etc/'
+    into 'assets/etc/'
     include '**'
 }
 

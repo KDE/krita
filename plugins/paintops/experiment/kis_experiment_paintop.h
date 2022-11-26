@@ -14,7 +14,7 @@
 #include <kis_types.h>
 
 #include "kis_experiment_paintop_settings.h"
-#include "kis_experimentop_option.h"
+#include "KisExperimentOpOptionData.h"
 
 #include <kis_painter.h>
 
@@ -73,7 +73,7 @@ private:
     QPointF m_center;
 
     QPainterPath m_path;
-    ExperimentOption m_experimentOption;
+    KisExperimentOpOptionData m_experimentOption;
 
     bool m_useMirroring {false};
     KisPainter *m_originalPainter {0};

@@ -1,0 +1,61 @@
+From d3588bd103eef20dcc5ae52f0d0a0640b33f9d92 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sat, 26 Nov 2022 00:39:20 +0000
+Subject: [PATCH 5/8] theora: Add telemetry support
+
+---
+ lib/meson.build   |  2 +-
+ meson.build       | 12 ++++++++++++
+ meson_options.txt |  1 +
+ 3 files changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/lib/meson.build b/lib/meson.build
+index 7a7b947..7f85491 100644
+--- a/lib/meson.build
++++ b/lib/meson.build
+@@ -212,7 +212,7 @@ endif
+ libtheoradec = library(
+     'theoradec',
+     decoder_sources + decoder_res,
+-    dependencies: [m_dep, ogg_dep, config_dep],
++    dependencies: [m_dep, ogg_dep, cairo_dep, config_dep],
+     include_directories: incdir,
+     vs_module_defs: '../win32/xmingw32/libtheoradec-all.def',
+     link_args: cc.get_supported_link_arguments([
+diff --git a/meson.build b/meson.build
+index ba1c2ee..bf87944 100644
+--- a/meson.build
++++ b/meson.build
+@@ -86,6 +86,18 @@ if tiff_dep.found() and not cc.has_header_symbol(
+     tiff_dep = disabler()
+ endif
+ 
++telemetry = get_option('telemetry')
++
++cairo_dep = dependency('cairo', required: false)
++
++if telemetry.allowed() 
++    if cairo_dep.found()
++        conf.set('HAVE_CAIRO', true)
++    else
++        warning('libcairo not found -- not compiling telemetry output support ')
++    endif
++endif
++
+ asm = get_option('asm').allowed()
+ enable_asflag_probe = get_option('asflag-probe').allowed()
+ if asm 
+diff --git a/meson_options.txt b/meson_options.txt
+index fbe95c0..8e2a221 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -1,5 +1,6 @@
+ option('valgrind-testing', type: 'feature', value: 'disabled', description: 'Enable running of tests inside Valgrind')
+ option('asm', type: 'feature', value: 'enabled', description: 'Enable assembly optimizations')
+ option('asflag-probe', type: 'feature', value: 'enabled', description: 'Enable instructions not supported by the default assembler flags (Arm only).')
++option('telemetry', type: 'feature', value: 'disabled', description: 'Enable debugging output controls')
+ option('examples', type: 'feature', value: 'disabled', description: 'Enable examples')
+ option('collect-metrics', type: 'feature', value: 'disabled', description: 'Enable metrics collection for mode training')
+-- 
+2.37.1.windows.1
+

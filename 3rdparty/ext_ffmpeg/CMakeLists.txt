@@ -25,6 +25,41 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add(
+    ext_libtheora
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    GIT_REPOSITORY https://gitlab.xiph.org/xiph/theora.git
+    # gitlab-ci: Add scons build. Latest commit as of Nov 26, 2022
+    GIT_TAG 7180717276af1ebc7da15c83162d6c5d6203aabf
+
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-theora-Add-Meson-build-system.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-theora-Add-Arm-support.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-theora-Add-tests.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-theora-Add-examples.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-theora-Add-telemetry-support.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-theora-Add-memory-constraint-fuzzer.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-theora-Add-specification-building.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-theora-Add-doxygen-support.patch
+
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
+        PYTHONPATH=${_krita_pythonpath}
+        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+        ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
+            --prefix=${PREFIX_ext_ffmpeg}
+            --libdir=lib
+            -Ddoc=disabled
+            -Dspec=disabled
+            ${EXTRA_MESON_FLAGS}
+    BUILD_COMMAND ${CMAKE_COMMAND} -E env
+        PYTHONPATH=${_krita_pythonpath}
+        ${MESON_BINARY_PATH} compile -C <BINARY_DIR> -j${SUBMAKE_JOBS}
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E env
+        PYTHONPATH=${_krita_pythonpath}
+        ${MESON_BINARY_PATH} install -C <BINARY_DIR>
+
+    DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ${OGG_DEP}
+)
+
+ExternalProject_Add(
     ext_flac
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://github.com/xiph/flac/releases/download/1.4.2/flac-1.4.2.tar.xz
@@ -215,5 +250,5 @@ ExternalProject_Add(
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} install -C <BINARY_DIR>
 
-    DEPENDS ${FLAC_DEP} ${VPX_DEP} ${OPUS_DEP} ${SDL_DEP} ext_libvorbis ext_libopenh264 ext_libmp3lame ext_libaom ext_webp ext_png ext_jpeg ${MESON_DEP} ${PKG_CONFIG_DEP}
+    DEPENDS ${FLAC_DEP} ${VPX_DEP} ${OPUS_DEP} ${SDL_DEP} ext_libvorbis ext_libtheora ext_libopenh264 ext_libmp3lame ext_libaom ext_webp ext_png ext_jpeg ${MESON_DEP} ${PKG_CONFIG_DEP}
 )

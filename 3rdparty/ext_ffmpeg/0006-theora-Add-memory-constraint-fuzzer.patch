@@ -1,0 +1,41 @@
+From 07fc4cb7d876c0ec77c3f7de40e8e1274c87e85e Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sat, 26 Nov 2022 00:39:43 +0000
+Subject: [PATCH 6/8] theora: Add memory constraint fuzzer
+
+---
+ meson.build       | 6 ++++++
+ meson_options.txt | 1 +
+ 2 files changed, 7 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index bf87944..640756a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -98,6 +98,12 @@ if telemetry.allowed()
+     endif
+ endif
+ 
++mem_constraint = get_option('mem-constraint')
++
++if mem_constraint.enabled()
++    conf.set('HAVE_MEMORY_CONSTRAINT', language: 'c')
++endif
++
+ asm = get_option('asm').allowed()
+ enable_asflag_probe = get_option('asflag-probe').allowed()
+ if asm 
+diff --git a/meson_options.txt b/meson_options.txt
+index 8e2a221..7e3133b 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -2,5 +2,6 @@ option('valgrind-testing', type: 'feature', value: 'disabled', description: 'Ena
+ option('asm', type: 'feature', value: 'enabled', description: 'Enable assembly optimizations')
+ option('asflag-probe', type: 'feature', value: 'enabled', description: 'Enable instructions not supported by the default assembler flags (Arm only).')
+ option('telemetry', type: 'feature', value: 'disabled', description: 'Enable debugging output controls')
++option('mem-constraint', type: 'feature', value: 'disabled', description: 'Abort if size exceeds 16384x16384 (for fuzzing only)')
+ option('examples', type: 'feature', value: 'disabled', description: 'Enable examples')
+ option('collect-metrics', type: 'feature', value: 'disabled', description: 'Enable metrics collection for mode training')
+-- 
+2.37.1.windows.1
+

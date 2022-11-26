@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-24 00:43+0000\n"
-"PO-Revision-Date: 2022-11-19 08:27+0100\n"
+"PO-Revision-Date: 2022-11-25 10:33+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -38864,11 +38864,10 @@ msgid "Export Palette"
 msgstr "Izvozi paleto"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:230
-#, fuzzy, kde-format
-#| msgid "Export Successful"
+#, kde-format
 msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
-msgstr "Izvoz je uspel"
+msgstr "Izvoz palete je uspel"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:372
 #, kde-format

@@ -131,7 +131,8 @@ QString getInstallationPrefix() {
 #elif defined(Q_OS_ANDROID)
     // qApp->applicationDirPath() isn't writable and android system won't allow
     // any files other than libraries
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/";
+    // NOTE the subscript [1]. It points to the internal location.
+    return QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)[1] + "/";
 #else
     return qApp->applicationDirPath() + "/../";
 #endif

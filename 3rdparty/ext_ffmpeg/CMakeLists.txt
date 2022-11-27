@@ -181,6 +181,18 @@ ExternalProject_Add(
         ${GLOBAL_PROFILE}
 )
 
+# TODO: migrate to a proper cross-platform wrap.
+ExternalProject_Add(
+    ext_vpx
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/webmproject/libvpx/archive/v1.12.0.tar.gz
+    URL_HASH SHA256=f1acc15d0fd0cb431f4bf6eac32d5e932e40ea1186fe78e074254d6d003957bb
+
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-MacOS-13-is-darwin22.patch
+
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_ffmpeg}  ${GLOBAL_AUTOMAKE_PROFILE}
+)
+
 # IMPORTANT:
 # OpenSUSE's list of whitelisted encoders: https://build.opensuse.org/package/view_file/openSUSE:Factory/ffmpeg-5/enable_encoders
 # OpenSUSE's list of whitelisted decoders: https://build.opensuse.org/package/view_file/openSUSE:Factory/ffmpeg-5/enable_decoders
@@ -230,8 +242,8 @@ ExternalProject_Add(
             -Dapng_decoder=enabled
             # ===================== Video Codecs
             -Dlibaom_av1_encoder=enabled
-            -Dlibvpx_vp9_encoder=enabled
-            -Dlibvpx_vp8_encoder=enabled
+            -Dlibvpx_vp9_encoder=auto
+            -Dlibvpx_vp8_encoder=auto
             -Dlibopenh264=enabled
             -Dlibtheora=enabled
             # ===================== Audio Codecs
@@ -250,5 +262,5 @@ ExternalProject_Add(
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} install -C <BINARY_DIR>
 
-    DEPENDS ${FLAC_DEP} ${VPX_DEP} ${OPUS_DEP} ${SDL_DEP} ext_libvorbis ext_libtheora ext_libopenh264 ext_libmp3lame ext_libaom ext_webp ext_png ext_jpeg ${MESON_DEP} ${PKG_CONFIG_DEP}
+    DEPENDS ${FLAC_DEP} ${VPX_DEP} ${OPUS_DEP} ${SDL_DEP} ${VPX_DEP} ext_libvorbis ext_libtheora ext_libopenh264 ext_libmp3lame ext_libaom ext_webp ext_png ext_jpeg ${MESON_DEP} ${PKG_CONFIG_DEP}
 )

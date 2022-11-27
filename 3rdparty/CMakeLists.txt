@@ -522,10 +522,10 @@ set_package_properties(VPX PROPERTIES
     DESCRIPTION "libvpx vp8/vp9 video encoder."
     URL "https://www.webmproject.org/"
 )
-# if (NOT VPX_FOUND)
-#     message(STATUS "libvpx not available, building 3rdparty version.")
-#     set(VPX_DEP ext_vpx) # uncomment when we've implemented it in 3rdparty
-# endif()
+if (NOT VPX_FOUND AND NOT WIN32)
+    message(STATUS "libvpx not available, building 3rdparty version.")
+    set(VPX_DEP ext_vpx)
+endif()
 
 find_package(SDL 2.24.0 QUIET)
 set_package_properties(SDL PROPERTIES

@@ -176,11 +176,7 @@ class ConfigsManager {
     }
 
     private String getStorageDir() {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            return mActivity.getExternalFilesDir(null).getAbsolutePath();
-        } else {
-            return mActivity.getFilesDir().getAbsolutePath();
-        }
+        return mActivity.getFilesDir().getAbsolutePath();
     }
 }
 

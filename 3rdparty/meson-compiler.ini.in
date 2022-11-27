@@ -1,3 +1,7 @@
+[constants]
+common_args = ['-I@CMAKE_PREFIX_PATH@/include']
+common_link_args = ['-L@CMAKE_PREFIX_PATH@/lib']
+
 [binaries]
 c = '@CMAKE_C_COMPILER@'
 cpp = '@CMAKE_CXX_COMPILER@'
@@ -6,10 +10,10 @@ strip = '@CMAKE_STRIP@'
 pkgconfig = '@PKG_CONFIG_EXECUTABLE@'
 
 [properties]
-c_args = @_security_c_flags@
-cpp_args = @_security_cxx_flags@
-c_link_args = @_security_exe_linker_flags@
-cpp_link_args = @_security_exe_linker_flags@
+c_args = common_args + @_security_c_flags@
+cpp_args = common_args +  @_security_cxx_flags@
+c_link_args = common_link_args + @_security_exe_linker_flags@
+cpp_link_args = common_link_args + @_security_exe_linker_flags@
 
 [built-in options]
 pkg_config_path = '@EXTPREFIX@/share/pkgconfig,@EXTPREFIX@/lib/pkgconfig'

@@ -66,14 +66,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-22 02:42+0000\n"
-"PO-Revision-Date: 2022-11-10 03:16+0100\n"
+"PO-Revision-Date: 2022-11-26 18:08+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.08.2\n"
+"X-Generator: Lokalize 22.11.80\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -29701,7 +29701,7 @@ msgstr "Ha ocurrido un error sin especificar."
 #: libs/ui/KisImportExportErrorCode.cpp:185
 #, kde-format
 msgid "The action has been completed successfully."
-msgstr "La acción se ha completado con éxito."
+msgstr "La acción se ha completado correctamente."
 
 #: libs/ui/KisImportExportErrorCode.cpp:26
 #, kde-format
@@ -36330,7 +36330,7 @@ msgstr "Seleccione un asistente"
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr ""
-"Se han encontrado errores. No ha sido posible cargar con éxito todos los "
+"Se han encontrado errores. No se han podido cargar correctamente todos los "
 "asistentes."
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1396
@@ -54241,7 +54241,7 @@ msgstr "¿Qué imagen debe ser la base para la nueva página?"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
 msgid "Export success"
-msgstr "Exportado con éxito"
+msgstr "Exportado correctamente"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:806
 msgid "The files have been written to the export folder."
@@ -54272,7 +54272,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
 msgid "Scraping success"
-msgstr "Información reunida con éxito"
+msgstr "Información reunida correctamente"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:957
 #, python-brace-format
@@ -55093,7 +55093,7 @@ msgstr "Datos de la paleta"
 #: plugins/python/palette_docker/palette_exporter_gimppalette.py:26
 #: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:31
 msgid "Export Successful"
-msgstr "Exportado con éxito"
+msgstr "Exportado correctamente"
 
 #: plugins/python/palette_docker/palette_exporter_gimppalette.py:28
 #: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:33

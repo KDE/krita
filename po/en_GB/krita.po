@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-22 02:42+0000\n"
-"PO-Revision-Date: 2022-09-18 12:32+0100\n"
+"PO-Revision-Date: 2022-11-26 15:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
 "Language: en_GB\n"
@@ -71,7 +71,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -17869,11 +17869,10 @@ msgid "JPEG-XL Image"
 msgstr "JPEG-XL Image"
 
 #: libs/koplugin/KisMimeDatabase.cpp:349
-#, fuzzy, kde-format
-#| msgid "Document"
+#, kde-format
 msgctxt "description of a file type"
 msgid "CSV Document"
-msgstr "Document"
+msgstr "CSV Document"
 
 #: libs/libkis/Document.cpp:935 libs/ui/KisMainWindow.cpp:2044
 #: libs/ui/KisMainWindow.cpp:2127
@@ -33161,10 +33160,9 @@ msgid "No configuration options"
 msgstr "No configuration options"
 
 #: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
-#, fuzzy, kde-format
-#| msgid "The layer does not have an image associated with it."
+#, kde-format
 msgid "The clipboard is empty or does not have an image in it."
-msgstr "The layer does not have an image associated with it."
+msgstr "The clipboard is empty or does not have an image in it."
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:42
 #, kde-format
@@ -46400,11 +46398,10 @@ msgid "Use all predictors"
 msgstr "Use all predictors"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:168
-#, fuzzy, kde-format
-#| msgid "Save as %1"
+#, kde-format
 msgctxt "Color space option"
 msgid "Save as is"
-msgstr "Save as %1"
+msgstr "Save as is"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:170
 #, kde-format
@@ -46413,6 +46410,8 @@ msgid ""
 "The image will be stored without conversion, the ICC profile will be "
 "converted to CICP or embedded if it was not possible."
 msgstr ""
+"The image will be stored without conversion, the ICC profile will be "
+"converted to CICP or embedded if it was not possible."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:37
@@ -46512,6 +46511,8 @@ msgid ""
 "Applications like Google Chrome expect HDR images to store their color "
 "profile as CICP values. You can adjust the ICC profile conversion below."
 msgstr ""
+"Applications like Google Chrome expect HDR images to store their colour "
+"profile as CICP values. You can adjust the ICC profile conversion below."
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:291
@@ -47605,10 +47606,9 @@ msgstr "Sign with author data"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDownsample)
 #: plugins/impex/png/kis_wdg_options_png.ui:214
-#, fuzzy, kde-format
-#| msgid "Force convert to sRGB"
+#, kde-format
 msgid "Force convert to 8 bits/channel"
-msgstr "Force convert to sRGB"
+msgstr "Force convert to 8 bits/channel"
 
 #: plugins/impex/psd/psd_export.cc:56
 #, kde-format

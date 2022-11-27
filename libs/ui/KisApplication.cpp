@@ -361,8 +361,13 @@ bool KisApplication::registerResources()
                                                      QStringList() << "application/x-photoshop-style"));
 
     reg->registerFixup(10, new KisBrushTypeMetaDataFixup());
-    QString databaseLocation = KoResourcePaths::getAppDataLocation();
 
+#ifndef Q_OS_ANDROID
+    QString databaseLocation = KoResourcePaths::getAppDataLocation();
+#else
+    // Sqlite doesn't support content URIs (obviously). So, we make database location unconfigurable on android.
+    QString databaseLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+#endif
 
     if (!KisResourceCacheDb::initialize(databaseLocation)) {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita: Fatal error"), i18n("%1\n\nKrita will quit now.", KisResourceCacheDb::lastError()));

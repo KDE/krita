@@ -239,7 +239,6 @@ public:
     KisAction *exportFileAdvance {nullptr};
     KisAction *undo {nullptr};
     KisAction *redo {nullptr};
-    KisAction *newWindow {nullptr};
     KisAction *close {nullptr};
     KisAction *mdiCascade {nullptr};
     KisAction *mdiTile {nullptr};
@@ -250,6 +249,7 @@ public:
     KisAction *toggleDockerTitleBars {nullptr};
 #ifndef Q_OS_ANDROID
     KisAction *toggleDetachCanvas {nullptr};
+    KisAction *newWindow {nullptr};
 #endif
     KisAction *fullScreenMode {nullptr};
     KisAction *showSessionManager {nullptr};
@@ -2495,7 +2495,9 @@ void KisMainWindow::updateWindowMenu()
     QMenu *menu = d->windowMenu->menu();
     menu->clear();
 
+#ifndef Q_OS_ANDROID
     menu->addAction(d->newWindow);
+#endif
     menu->addAction(d->documentMenu);
 
     QMenu *docMenu = d->documentMenu->menu();
@@ -2748,6 +2750,14 @@ KisView* KisMainWindow::newView(QObject *document, QMdiSubWindow *subWindow)
 
 void KisMainWindow::newWindow()
 {
+#ifdef Q_OS_ANDROID
+    // Check if current mainwindow exists, just to be sure.
+    if (KisPart::instance()->currentMainwindow()) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"),
+                             "Creating a New Main Window is unsupported on Android");
+        return;
+    }
+#endif
     KisMainWindow *mainWindow = KisPart::instance()->createMainWindow();
     mainWindow->initializeGeometry();
     mainWindow->show();
@@ -2933,8 +2943,10 @@ void KisMainWindow::createActions()
     d->mdiPreviousWindow = actionManager->createAction("windows_previous");
     connect(d->mdiPreviousWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activatePreviousSubWindow()));
 
+#ifndef Q_OS_ANDROID
     d->newWindow = actionManager->createAction("view_newwindow");
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
+#endif
 
     d->close = actionManager->createStandardAction(KStandardAction::Close, this, SLOT(closeCurrentWindow()));
 

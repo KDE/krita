@@ -217,7 +217,12 @@ ExternalProject_Add(
     ext_ffmpeg
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     GIT_REPOSITORY https://gitlab.freedesktop.org/gstreamer/meson-ports/ffmpeg.git
-    GIT_TAG meson-4.4.3
+    GIT_TAG meson-4.4
+
+    # Workaround https://github.com/mesonbuild/meson/issues/11113
+    # See https://gitlab.freedesktop.org/gstreamer/meson-ports/ffmpeg/-/issues/31
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-meson-Fix-library-detection-in-prefixed-builds.patch
+
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}
         PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1

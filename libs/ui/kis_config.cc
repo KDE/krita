@@ -21,6 +21,7 @@
 #include <kconfig.h>
 
 #include <KisDocument.h>
+#include <KisResourceLocator.h>
 
 #include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
@@ -97,6 +98,7 @@ void KisConfig::logImportantSettings() const
     }
     KisUsageLogger::writeSysInfo(QString("  Backup Location: %1").arg(backupDir));
     KisUsageLogger::writeSysInfo(QString("  Backup Location writable: %1").arg(QFileInfo(backupDir).isWritable() ? "true" : "false"));
+    KisUsageLogger::writeSysInfo(QString("  Resource Location: %1").arg(m_cfg.readEntry(KisResourceLocator::resourceLocationKey)));
 
     KisUsageLogger::writeSysInfo(QString("  Use Win8 Pointer Input: %1").arg(useWin8PointerInput() ? "true" : "false"));
     KisUsageLogger::writeSysInfo(QString("  Use RightMiddleTabletButton Workaround: %1").arg(useRightMiddleTabletButtonWorkaround() ? "true" : "false"));

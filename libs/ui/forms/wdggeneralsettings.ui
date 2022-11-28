@@ -42,7 +42,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -1037,8 +1037,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>818</width>
-            <height>853</height>
+            <width>654</width>
+            <height>744</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -1475,7 +1475,18 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="KisFileNameRequester" name="m_urlResourceFolder" native="true"/>
+        <layout class="QHBoxLayout" name="horizontalLayout_1">
+         <item>
+          <widget class="KisFileNameRequester" name="m_urlResourceFolder" native="true"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_resourceFolderResetButton">
+           <property name="text">
+            <string>Default</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item row="2" column="1">
         <widget class="QGroupBox" name="grpWindowsAppData">

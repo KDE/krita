@@ -413,6 +413,15 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     connect(m_urlResourceFolder, SIGNAL(textChanged(QString)), SLOT(checkResourcePath()));
     checkResourcePath();
 
+#ifdef Q_OS_ANDROID
+    m_resourceFolderResetButton->setVisible(true);
+#else
+    m_resourceFolderResetButton->setVisible(false);
+#endif
+
+    connect(m_resourceFolderResetButton, &QPushButton::clicked, [this]() {
+        m_urlResourceFolder->setFileName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    });
 
     grpWindowsAppData->setVisible(false);
 #ifdef Q_OS_WIN

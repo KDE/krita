@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-24 00:43+0000\n"
-"PO-Revision-Date: 2022-11-24 17:10+0300\n"
+"PO-Revision-Date: 2022-11-27 11:42+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -12356,7 +12356,7 @@ msgstr "Dizileri Çoklar"
 #, kde-format
 msgctxt "action"
 msgid "&Edit metadata..."
-msgstr "Üst veriyi dü&zenle..."
+msgstr "Üst Veriyi Dü&zenle..."
 
 #. i18n: context: toolTip @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
@@ -12441,7 +12441,7 @@ msgstr "Katman Düzleştir"
 #, kde-format
 msgctxt "action"
 msgid "Flatten ima&ge"
-msgstr "&Görseli düzleştir"
+msgstr "Gö&rseli Düzleştir"
 
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)

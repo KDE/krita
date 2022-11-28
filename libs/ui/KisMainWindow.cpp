@@ -248,7 +248,9 @@ public:
     KisAction *toggleDockers {nullptr};
     KisAction *resetConfigurations {nullptr};
     KisAction *toggleDockerTitleBars {nullptr};
+#ifndef Q_OS_ANDROID
     KisAction *toggleDetachCanvas {nullptr};
+#endif
     KisAction *fullScreenMode {nullptr};
     KisAction *showSessionManager {nullptr};
     KisAction *commandBarAction {nullptr};
@@ -964,6 +966,12 @@ bool KisMainWindow::canvasDetached() const
 
 void KisMainWindow::setCanvasDetached(bool detach)
 {
+#ifdef Q_OS_ANDROID
+    if (detach) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"),
+                             "Detach Canvas is unsupported on Android");
+    }
+#else
     if (detach == canvasDetached()) return;
 
     QWidget *outgoingWidget = centralWidget() ? takeCentralWidget() : nullptr;
@@ -979,6 +987,7 @@ void KisMainWindow::setCanvasDetached(bool detach)
         d->canvasWindow->hide();
     }
     d->toggleDetachCanvas->setChecked(detach);
+#endif
 }
 
 QWidget * KisMainWindow::canvasWindow() const
@@ -2896,9 +2905,11 @@ void KisMainWindow::createActions()
     d->resetConfigurations  = actionManager->createAction("reset_configurations");
     connect(d->resetConfigurations, SIGNAL(triggered()), this, SLOT(slotResetConfigurations()));
 
+#ifndef Q_OS_ANDROID
     d->toggleDetachCanvas = actionManager->createAction("view_detached_canvas");
     d->toggleDetachCanvas->setChecked(false);
     connect(d->toggleDetachCanvas, SIGNAL(toggled(bool)), SLOT(setCanvasDetached(bool)));
+#endif
     setCanvasDetached(false);
 
     d->toggleDockerTitleBars = actionManager->createAction("view_toggledockertitlebars");

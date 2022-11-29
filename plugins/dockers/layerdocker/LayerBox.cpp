@@ -222,7 +222,7 @@ LayerBox::LayerBox()
     m_wdgLayerBox->bnProperties->setMenu(m_opLayerMenu);
     m_wdgLayerBox->bnProperties->setPopupMode(QToolButton::MenuButtonPopup);
 
-    m_nodeModel = new KisNodeModel(this, 1);
+    m_nodeModel = new KisNodeModel(this, 2);
     m_filteringModel = new KisNodeFilterProxyModel(this);
     m_filteringModel->setNodeModel(m_nodeModel);
 

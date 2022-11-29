@@ -104,7 +104,7 @@ NodeDelegate::~NodeDelegate()
 QSize NodeDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     KisNodeViewColorScheme scm;
-    if (index.column() == 1) {
+    if (index.column() == NodeView::VISIBILITY_COL) {
         return QSize(scm.visibilityColumnWidth(), d->rowHeight);
     }
     return QSize(option.rect.width(), d->rowHeight);
@@ -126,7 +126,9 @@ void NodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QMode
 
         drawFrame(p, option, index);
 
-        if (index.column() == 1) {
+        if (index.column() == NodeView::SELECTED_COL) {
+            drawSelectedButton(p, o, index, style);
+        } else if (index.column() == NodeView::VISIBILITY_COL) {
             drawVisibilityIcon(p, option, index); // TODO hide when dragging
         } else {
             p->setFont(option.font);
@@ -801,7 +803,7 @@ void NodeDelegate::drawVisibilityIcon(QPainter *p, const QStyleOptionViewItem &o
 
     QRect fitRect = visibilityClickRect(option, index);
     // Shrink to icon rect
-    fitRect = kisGrowRect(fitRect, -(scm.visibilityMargin()+scm.border()));
+    fitRect = kisGrowRect(fitRect, -(scm.visibilityMargin() + scm.border()));
 
     QIcon icon = prop->state.toBool() ? prop->onIcon : prop->offIcon;
 
@@ -916,6 +918,26 @@ void NodeDelegate::drawAnimatedDecoration(QPainter *p, const QStyleOptionViewIte
     p->setOpacity(oldOpacity);
 }
 
+void NodeDelegate::drawSelectedButton(QPainter *p, const QStyleOptionViewItem &option,
+                                      const QModelIndex &index, QStyle *style) const
+{
+    QStyleOptionButton buttonOption;
+
+    KisNodeViewColorScheme scm;
+    QRect rect = option.rect;
+
+    // adjust the icon to not touch the borders
+    rect = kisGrowRect(rect, -(scm.thumbnailMargin() + scm.border()));
+
+    buttonOption.rect = rect;
+
+    // check if the current index exists in the selected rows.
+    buttonOption.state.setFlag((d->view->selectionModel()->isRowSelected(index.row(), index.parent())
+                                    ? QStyle::State_On
+                                    : QStyle::State_NoChange));
+    style->drawControl(QStyle::CE_CheckBox, &buttonOption, p);
+}
+
 boost::optional<KisBaseNode::Property>
 NodeDelegate::Private::propForMousePos(const QModelIndex &index, const QPoint &mousePos, const QStyleOptionViewItem &option)
 {
@@ -962,7 +984,7 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
         const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
         const bool altButton = mouseEvent->modifiers() & Qt::AltModifier;
 
-        if (index.column() == 1) {
+        if (index.column() == NodeView::VISIBILITY_COL) {
 
             const QRect visibilityRect = visibilityClickRect(option, index);
             const bool visibilityClicked = visibilityRect.isValid() && visibilityRect.contains(mouseEvent->pos());
@@ -976,6 +998,22 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
                 return true;
             }
             return false;
+        } else if (index.column() == NodeView::SELECTED_COL) {
+            if (leftButton && option.rect.contains(mouseEvent->pos())) {
+                QItemSelectionModel *selectionModel = d->view->selectionModel();
+
+                // if only one item is selected and that too is us then in that case we don't do anything to
+                // the selection.
+                if (selectionModel->selectedIndexes().size() == 1
+                    && selectionModel->isRowSelected(index.row(), index.parent())) {
+                    selectionModel->select(index,
+                                           QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+                } else {
+                    selectionModel->select(index,
+                                           QItemSelectionModel::Toggle | QItemSelectionModel::Rows);
+                }
+                return true;
+            }
         }
 
         const QRect thumbnailRect = thumbnailClickRect(option, index);
@@ -1276,3 +1314,4 @@ void NodeDelegate::slotResetState(){
         }
     }
 }
+

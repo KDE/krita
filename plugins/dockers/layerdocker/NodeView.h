@@ -40,6 +40,12 @@ Q_SIGNALS:
     void selectionChanged(const QModelIndexList &);
 public:
 
+    enum ColumnIndex {
+        DEFAULT_COL = 0,
+        VISIBILITY_COL = 1,
+        SELECTED_COL = 2,
+    };
+
     /**
      * Create a new NodeView.
      */

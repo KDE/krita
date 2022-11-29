@@ -74,6 +74,9 @@ private:
     void drawExpandButton(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawAnimatedDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
+    void drawSelectedButton(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index,
+                            QStyle *style) const;
+
 public Q_SLOTS:
     void slotConfigChanged();
 private Q_SLOTS:

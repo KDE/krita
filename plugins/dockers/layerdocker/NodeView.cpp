@@ -112,12 +112,13 @@ void NodeView::setModel(QAbstractItemModel *model)
     if (!this->model()->inherits("KisNodeModel") && !this->model()->inherits("KisNodeFilterProxyModel")) {
         qWarning() << "NodeView may not work with" << model->metaObject()->className();
     }
-    if (this->model()->columnCount() != 2) {
+    if (this->model()->columnCount() != 3) {
         qWarning() << "NodeView: expected 2 model columns, got " << this->model()->columnCount();
     }
 
-    if (header()->sectionPosition(1) != 0) {
-        header()->moveSection(1, 0);
+    if (header()->sectionPosition(VISIBILITY_COL) != 0 || header()->sectionPosition(SELECTED_COL) != 1) {
+        header()->moveSection(VISIBILITY_COL, 0);
+        header()->moveSection(SELECTED_COL, 1);
     }
     // the default may be too large for our visibility icon
     header()->setMinimumSectionSize(KisNodeViewColorScheme::instance()->visibilityColumnWidth());
@@ -197,7 +198,9 @@ QItemSelectionModel::SelectionFlags NodeView::selectionCommand(const QModelIndex
         if (event->type() == QEvent::MouseButtonRelease &&
             (mevent->modifiers() & Qt::ControlModifier)) {
 
-            return QItemSelectionModel::Toggle;
+            // Select the entire row, otherwise we only get updates for DEFAULT_COL and then we have to
+            // manually sync its state with SELECTED_COL.
+            return QItemSelectionModel::Toggle | QItemSelectionModel::Rows;
         }
     }
 
@@ -446,8 +449,10 @@ void NodeView::resizeEvent(QResizeEvent * event)
 {
     KisNodeViewColorScheme scm;
     header()->setStretchLastSection(false);
-    header()->resizeSection(0, event->size().width() - scm.visibilityColumnWidth()/* + offset*/);
-    header()->resizeSection(1, scm.visibilityColumnWidth());
+    header()->resizeSection(DEFAULT_COL, event->size().width() - scm.visibilityColumnWidth()
+                                             - scm.selectedButtonColumnWidth());
+    header()->resizeSection(VISIBILITY_COL, scm.visibilityColumnWidth());
+    header()->resizeSection(SELECTED_COL, scm.selectedButtonColumnWidth());
 
     setIndentation(scm.indentation());
     QTreeView::resizeEvent(event);

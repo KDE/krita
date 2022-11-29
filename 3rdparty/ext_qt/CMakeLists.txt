@@ -136,7 +136,7 @@ if (WIN32)
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
       GIT_TAG krita/5.15
-      GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtwinextras
+      GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtwinextras qttranslations
       GIT_SUBMODULES_RECURSE false
       GIT_SHALLOW true
       GIT_PROGRESS true
@@ -271,7 +271,7 @@ elseif (NOT APPLE)
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
       GIT_TAG krita/5.15
-      GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtx11extras
+      GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtx11extras qttranslations
       GIT_SUBMODULES_RECURSE false
       GIT_SHALLOW true
       GIT_PROGRESS true

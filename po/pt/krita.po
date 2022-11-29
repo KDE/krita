@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-24 00:43+0000\n"
-"PO-Revision-Date: 2022-11-18 09:57+0000\n"
+"PO-Revision-Date: 2022-11-28 18:01+0000\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -39247,11 +39247,10 @@ msgid "Export Palette"
 msgstr "Exportar a Paleta"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:230
-#, fuzzy, kde-format
-#| msgid "Export Successful"
+#, kde-format
 msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
-msgstr "Exportação com Sucesso"
+msgstr "Paleta exportada com sucesso"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:372
 #, kde-format

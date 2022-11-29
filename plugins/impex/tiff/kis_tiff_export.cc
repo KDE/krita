@@ -171,6 +171,10 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
         return ImportExportCodes::ErrorWhileWriting;
     }
 
+    if (!TIFFSetField(image.get(), TIFFTAG_RESOLUTIONUNIT, RESUNIT_INCH)) {
+        return ImportExportCodes::ErrorWhileWriting;
+    }
+
     KisGroupLayer *root =
         dynamic_cast<KisGroupLayer *>(kisimage->rootLayer().data());
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(root,

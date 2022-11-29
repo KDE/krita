@@ -55,6 +55,12 @@
 #include "kis_tiff_reader.h"
 #include "kis_tiff_ycbcr_reader.h"
 
+enum class TiffResolution : quint8 {
+    NONE = RESUNIT_NONE,
+    INCH = RESUNIT_INCH,
+    CM = RESUNIT_CENTIMETER,
+};
+
 struct KisTiffBasicInfo {
     uint32_t width{};
     uint32_t height{};
@@ -72,6 +78,7 @@ struct KisTiffBasicInfo {
     QPair<QString, QString> colorSpaceIdTag;
     KoColorTransformation *transform = nullptr;
     uint8_t dstDepth{};
+    TiffResolution resolution = TiffResolution::NONE;
 };
 
 K_PLUGIN_FACTORY_WITH_JSON(TIFFImportFactory,
@@ -697,11 +704,13 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(
             m_image,
             ImportExportCodes::InsufficientMemory);
-        m_image->setResolution(
-            POINT_TO_INCH(static_cast<qreal>(xres)),
-            POINT_TO_INCH(static_cast<qreal>(
-                yres))); // It is the "invert" macro because we convert from
-                         // pointer-per-inchs to points
+        // It is the "invert" macro because we
+        // convert from pointer-per-unit to points
+        if (basicInfo.resolution == TiffResolution::INCH) {
+            m_image->setResolution(POINT_TO_INCH(static_cast<qreal>(xres)), POINT_TO_INCH(static_cast<qreal>(yres)));
+        } else {
+            m_image->setResolution(POINT_TO_CM(static_cast<qreal>(xres)), POINT_TO_CM(static_cast<qreal>(yres)));
+        }
     } else {
         if (m_image->width() < static_cast<qint32>(width)
             || m_image->height() < static_cast<qint32>(height)) {
@@ -1516,6 +1525,12 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
         dbgFile << "Image does not define y resolution";
         // but we don't stop
         basicInfo.yres = 100;
+    }
+
+    if (TIFFGetField(image, TIFFTAG_RESOLUTIONUNIT, &basicInfo.resolution) == 0) {
+        dbgFile << "Image does not define resolution unit";
+        // but we don't stop
+        basicInfo.resolution = TiffResolution::INCH;
     }
 
     if (TIFFGetField(image, TIFFTAG_XPOSITION, &basicInfo.x) == 0) {

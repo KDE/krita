@@ -358,6 +358,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                                                       JXL_COLOR_PROFILE_TARGET_DATA,
                                                       &colorEncoding)) {
                 const TransferCharacteristics transferFunction = [&]() {
+                    double estGamma;
                     switch (colorEncoding.transfer_function) {
                     case JXL_TRANSFER_FUNCTION_PQ: {
                         dbgFile << "linearizing from PQ";
@@ -386,16 +387,18 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     case JXL_TRANSFER_FUNCTION_SRGB:
                         return TRC_IEC_61966_2_1;
                     case JXL_TRANSFER_FUNCTION_GAMMA:
-                        if (colorEncoding.gamma == 1.8) {
+                        // Rounding gamma to 1 decimal point for better detection
+                        estGamma = (std::round((1 / colorEncoding.gamma) * 10) / 10);
+                        if (estGamma == 1.8) {
                             return TRC_GAMMA_1_8;
-                        } else if (colorEncoding.gamma == 2.2) {
+                        } else if (estGamma == 2.2) {
                             return TRC_ITU_R_BT_470_6_SYSTEM_M;
-                        } else if (colorEncoding.gamma == 2.4) {
+                        } else if (estGamma == 2.4) {
                             return TRC_GAMMA_2_4;
-                        } else if (colorEncoding.gamma == 2.8) {
+                        } else if (estGamma == 2.8) {
                             return TRC_ITU_R_BT_470_6_SYSTEM_B_G;
                         } else {
-                            warnFile << "Found custom gamma value for JXL color space" << colorEncoding.gamma;
+                            warnFile << "Found custom estimated gamma value for JXL color space" << estGamma;
                             return TRC_UNSPECIFIED;
                         }
                     case JXL_TRANSFER_FUNCTION_LINEAR:

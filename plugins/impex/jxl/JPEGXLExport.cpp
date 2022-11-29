@@ -338,6 +338,9 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
     const float hlgNominalPeak = cfg->getFloat("HLGnominalPeak", 1000.0f);
     const bool removeHGLOOTF = cfg->getBool("removeHGLOOTF", true);
 
+    const bool hasPrimaries = cs->profile()->hasColorants();
+    const bool isIdentityElle = (cs->profile()->name().contains("-elle-") && cs->profile()->name().contains("Identity"));
+
     const JxlPixelFormat pixelFormat = [&]() {
         JxlPixelFormat pixelFormat{};
         if (cs->colorDepthId() == Integer8BitsColorDepthID) {
@@ -402,7 +405,15 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             info->num_color_channels = 1;
             info->num_extra_channels = 1;
         }
-        info->uses_original_profile = JXL_TRUE;
+        // Use original profile on non-matrix profile, as they didn't have colorants set...
+        // also prevent crashing with Elle's identity profiles.
+        if(cfg->getBool("lossless") || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID)) || isIdentityElle){
+            info->uses_original_profile = JXL_TRUE;
+            dbgFile << "JXL use original profile";
+        } else {
+            info->uses_original_profile = JXL_FALSE;
+            dbgFile << "JXL use internal XYB profile";
+        }
         if (image->animationInterface()->hasAnimation() && cfg->getBool("haveAnimation", true)) {
             info->have_animation = JXL_TRUE;
             info->animation.have_timecodes = JXL_FALSE;
@@ -447,11 +458,11 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 break;
             case TRC_ITU_R_BT_470_6_SYSTEM_M:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_GAMMA;
-                cicpDescription.gamma = 2.2;
+                cicpDescription.gamma = 1 / 2.2;
                 break;
             case TRC_ITU_R_BT_470_6_SYSTEM_B_G:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_GAMMA;
-                cicpDescription.gamma = 2.8;
+                cicpDescription.gamma = 1 / 2.8;
                 break;
             case TRC_IEC_61966_2_1:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_SRGB;
@@ -467,15 +478,15 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 break;
             case TRC_GAMMA_1_8:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_GAMMA;
-                cicpDescription.gamma = 1.8;
+                cicpDescription.gamma = 1 / 1.8;
                 break;
             case TRC_GAMMA_2_4:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_GAMMA;
-                cicpDescription.gamma = 2.4;
+                cicpDescription.gamma = 1 / 2.4;
                 break;
             case TRC_PROPHOTO:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_GAMMA;
-                cicpDescription.gamma = 1.8;
+                cicpDescription.gamma = 1 / 1.8;
                 break;
             case TRC_A98:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_GAMMA;
@@ -492,7 +503,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                     cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_LINEAR;
                 } else {
                     dbgFile << "JXL CICP cannot describe the current transfer function" << gamma
-                            << ", falling back to ICC";
+                            << ", falling back to ICC or TRC estimation";
                     cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_UNKNOWN;
                 }
                 break;
@@ -504,8 +515,10 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
 
         const bool arePrimariesSupported =
             (primaries == PRIMARIES_ITU_R_BT_709_5 || primaries == PRIMARIES_ITU_R_BT_2020_2_AND_2100_0 || primaries == PRIMARIES_SMPTE_RP_431_2);
+        Q_UNUSED(arePrimariesSupported);
 
-        if (cicpDescription.transfer_function == JXL_TRANSFER_FUNCTION_UNKNOWN || !arePrimariesSupported) {
+        if ((cfg->getBool("lossless") && conversionPolicy == ConversionPolicy::KeepTheSame)
+            || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID)) || isIdentityElle) {
             const QByteArray profile = cs->profile()->rawData();
 
             if (JXL_ENC_SUCCESS
@@ -514,34 +527,62 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 return ImportExportCodes::InternalError;
             }
         } else {
-            switch (primaries) {
-            case PRIMARIES_ITU_R_BT_709_5:
-                cicpDescription.primaries = JXL_PRIMARIES_SRGB;
-                break;
-            case PRIMARIES_ITU_R_BT_2020_2_AND_2100_0:
-                cicpDescription.primaries = JXL_PRIMARIES_2100;
-                break;
-            case PRIMARIES_SMPTE_RP_431_2:
-                cicpDescription.primaries = JXL_PRIMARIES_P3;
-                break;
-            default:
-                KIS_SAFE_ASSERT_RECOVER_NOOP(false && "Writing possibly non-roundtrip primaries!");
-                const QVector<qreal> colorants = cs->profile()->getColorantsxyY();
-                cicpDescription.primaries = JXL_PRIMARIES_CUSTOM;
-                cicpDescription.primaries_red_xy[0] = colorants[0];
-                cicpDescription.primaries_red_xy[1] = colorants[1];
-                cicpDescription.primaries_green_xy[0] = colorants[3];
-                cicpDescription.primaries_green_xy[1] = colorants[4];
-                cicpDescription.primaries_blue_xy[0] = colorants[6];
-                cicpDescription.primaries_blue_xy[1] = colorants[7];
-                break;
+            if (cicpDescription.transfer_function == JXL_TRANSFER_FUNCTION_UNKNOWN) {
+                // Use estimatedTRC instead to get custom gamma from the profile
+                QVector<double> estimatedTRC(3);
+                estimatedTRC = cs->profile()->getEstimatedTRC();
+
+                dbgFile << "Estimated TRC: " << estimatedTRC[0];
+
+                if (estimatedTRC[0] == -1) {
+                    // and assume sRGB or Rec.709 for other unidentified TRC
+                    if (cs->profile()->name().contains("-elle-") && cs->profile()->name().contains("-rec709")) {
+                        cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_709;
+                    } else {
+                        cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_SRGB;
+                    }
+                } else {
+                    // JXL use inverted gamma as an input (1 / gamma)
+                    cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_GAMMA;
+                    cicpDescription.gamma = (1 / estimatedTRC[0]);
+                }
             }
 
-            // Unfortunately, Wolthera never wrote an enum for white points...
-            const QVector<qreal> whitePoint = image->colorSpace()->profile()->getWhitePointxyY();
-            cicpDescription.white_point = JXL_WHITE_POINT_CUSTOM;
-            cicpDescription.white_point_xy[0] = whitePoint[0];
-            cicpDescription.white_point_xy[1] = whitePoint[1];
+            if (cs->colorModelId() == GrayAColorModelID) {
+                // JXL can't parse custom white point for grayscale (yet) and returned as linear on roundtrip
+                // so let's use default D65 as whitepoint instead...
+                cicpDescription.white_point = JXL_WHITE_POINT_D65;
+                cicpDescription.color_space = JXL_COLOR_SPACE_GRAY;
+            } else {
+                switch (primaries) {
+                case PRIMARIES_ITU_R_BT_709_5:
+                    cicpDescription.primaries = JXL_PRIMARIES_SRGB;
+                    break;
+                case PRIMARIES_ITU_R_BT_2020_2_AND_2100_0:
+                    cicpDescription.primaries = JXL_PRIMARIES_2100;
+                    break;
+                case PRIMARIES_SMPTE_RP_431_2:
+                    cicpDescription.primaries = JXL_PRIMARIES_P3;
+                    break;
+                default:
+                    KIS_SAFE_ASSERT_RECOVER_NOOP(false && "Writing possibly non-roundtrip primaries!");
+                    const QVector<qreal> colorants = cs->profile()->getColorantsxyY();
+                    cicpDescription.primaries = JXL_PRIMARIES_CUSTOM;
+                    cicpDescription.primaries_red_xy[0] = colorants[0];
+                    cicpDescription.primaries_red_xy[1] = colorants[1];
+                    cicpDescription.primaries_green_xy[0] = colorants[3];
+                    cicpDescription.primaries_green_xy[1] = colorants[4];
+                    cicpDescription.primaries_blue_xy[0] = colorants[6];
+                    cicpDescription.primaries_blue_xy[1] = colorants[7];
+                    break;
+                }
+
+                // Unfortunately, Wolthera never wrote an enum for white points...
+                const QVector<qreal> whitePoint = image->colorSpace()->profile()->getWhitePointxyY();
+                cicpDescription.white_point = JXL_WHITE_POINT_CUSTOM;
+                cicpDescription.white_point_xy[0] = whitePoint[0];
+                cicpDescription.white_point_xy[1] = whitePoint[1];
+            }
 
             if (JXL_ENC_SUCCESS != JxlEncoderSetColorEncoding(enc.get(), &cicpDescription)) {
                 errFile << "JxlEncoderSetColorEncoding failed";
@@ -649,8 +690,9 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         // Hardcoded a map function that translates from arbitrary quality value to JPEG-XL distance
         const auto setDistance = [&](float v) {
             // Using a gamma curve to map the quality -> distance a bit better
-            float y = pow(v / 100.0f, 1.0f / 2.2f) * 100.0f;
-            float dist = cfg->getBool("lossless") ? 0.0f : ((y * (1.0f - 25.0f)) / 100.0f) + 25.0f;
+            double gamma = 5.1098039724597; // Derived so that Q 90 equals distance 1.0 (roughly match libjxl)
+            double y = pow(v / 100.0, 1.0 / gamma) * 100.0;
+            double dist = cfg->getBool("lossless") ? 0.0 : ((y * (0.5 - 25.0)) / 100.0) + 25.0;
             dbgFile << "libjxl distance equivalent: " << dist;
             return JxlEncoderSetFrameDistance(frameSettings, dist) == JXL_ENC_SUCCESS;
         };

@@ -98,7 +98,7 @@
                  </property>
                  <property name="toolTip">
                   <string>Set the lossy quality of JPEG-XL export.
-Default: 100 (visually lossless).</string>
+Default: 90 (visually lossless).</string>
                  </property>
                  <property name="minimum">
                   <number>0</number>
@@ -107,7 +107,7 @@ Default: 100 (visually lossless).</string>
                   <number>100</number>
                  </property>
                  <property name="value">
-                  <number>100</number>
+                  <number>90</number>
                  </property>
                 </widget>
                </item>

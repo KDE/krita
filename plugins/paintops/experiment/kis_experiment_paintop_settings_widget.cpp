@@ -5,7 +5,6 @@
  */
 #include "kis_experiment_paintop_settings_widget.h"
 
-#include "kis_experimentop_option.h"
 #include "kis_experiment_paintop_settings.h"
 
 #include <kis_color_option.h>
@@ -16,15 +15,16 @@
 #include <kis_curve_option_widget.h>
 #include <KisPaintOpOptionWidgetUtils.h>
 #include <KisCompositeOpOptionWidget.h>
+#include <KisExperimentOpOptionWidget.h>
+
 
 KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
     namespace kpowu = KisPaintOpOptionWidgetUtils;
 
-    addPaintOpOption(new KisExperimentOpOption());
+    addPaintOpOption(kpowu::createOptionWidget<KisExperimentOpOptionWidget>());
     addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
-    //addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
 }
 
 KisExperimentPaintOpSettingsWidget::~ KisExperimentPaintOpSettingsWidget()

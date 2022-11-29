@@ -307,9 +307,9 @@ void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
     KisImageSP image = viewManager->image();
     if (!image) return;
 
-    const KisPaintDevice *clipdev = KisClipboard::instance()->clipFromKritaLayers(image->bounds(),
-                                                                            image->colorSpace()).data();
-    KisPaintDeviceSP clip = new KisPaintDevice(*clipdev);
+    KisPaintDeviceSP clipdev = KisClipboard::instance()
+        -> clipFromKritaLayers(image->bounds(), image->colorSpace());
+    KisPaintDeviceSP clip = new KisPaintDevice(*clipdev.constData());
 
     if (clip) {
         QRect clipBounds = clip->exactBounds();

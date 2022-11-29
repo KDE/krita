@@ -38,6 +38,10 @@ ExternalProject_Add(
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXTPREFIX_heif} ${GLOBAL_AUTOMAKE_PROFILE}
 
     UPDATE_COMMAND ""
+    
+    # automake has an issue when tryin gto build outside of the course tree
+    # 'sh: 0: Can't open autogen.sh'
+    BUILD_IN_SOURCE ON
 )
 endif(WIN32)
 

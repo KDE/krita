@@ -288,7 +288,7 @@ elseif (NOT APPLE)
 
 
       UPDATE_COMMAND ""
-      BUILD_IN_SOURCE 1
+      BUILD_IN_SOURCE OFF
       DEPENDS ${ZLIB_DEP}
   )
 else( APPLE )

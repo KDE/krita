@@ -14,16 +14,6 @@
 
 class KisPropertiesConfiguration;
 
-const QString EXPERIMENT_DISPLACEMENT_ENABLED = "Experiment/displacementEnabled";
-const QString EXPERIMENT_DISPLACEMENT_VALUE = "Experiment/displacement";
-const QString EXPERIMENT_SMOOTHING_ENABLED = "Experiment/smoothing";
-const QString EXPERIMENT_SMOOTHING_VALUE = "Experiment/smoothingValue";
-const QString EXPERIMENT_SPEED_ENABLED = "Experiment/speedEnabled";
-const QString EXPERIMENT_SPEED_VALUE = "Experiment/speed";
-const QString EXPERIMENT_WINDING_FILL = "Experiment/windingFill";
-const QString EXPERIMENT_HARD_EDGE = "Experiment/hardEdge";
-const QString EXPERIMENT_FILL_TYPE = "Experiment/fillType";
-
 enum ExperimentFillType {
     SolidColor,
     Pattern

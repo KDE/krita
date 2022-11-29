@@ -14,6 +14,9 @@
 
 #include <exiv2/exiv2.hpp>
 #include <kpluginfactory.h>
+#ifdef Q_OS_WIN
+#include <io.h>
+#endif
 #include <tiffio.h>
 
 #include <KisDocument.h>
@@ -110,8 +113,15 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
 
     // Open file for writing
     const QByteArray encodedFilename = QFile::encodeName(filename());
-    std::unique_ptr<TIFF, decltype(&TIFFCleanup)> image(TIFFFdOpen(file.handle(), encodedFilename.data(), "w"),
-                                                        &TIFFCleanup);
+
+    // https://gitlab.com/libtiff/libtiff/-/issues/173
+#ifdef Q_OS_WIN
+    const intptr_t handle = _get_osfhandle(file.handle());
+#else
+    const int handle = file.handle();
+#endif
+
+    std::unique_ptr<TIFF, decltype(&TIFFCleanup)> image(TIFFFdOpen(handle, encodedFilename.data(), "w"), &TIFFCleanup);
 
     if (!image) {
         dbgFile << "Could not open the file for writing" << filename();

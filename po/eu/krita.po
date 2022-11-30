@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-24 00:43+0000\n"
+"POT-Creation-Date: 2022-11-30 00:45+0000\n"
 "PO-Revision-Date: 2022-10-30 06:06+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -17977,7 +17977,7 @@ msgstr "Eraldatze maskara"
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:379
-#: plugins/impex/tiff/kis_tiff_import.cc:552
+#: plugins/impex/tiff/kis_tiff_import.cc:562
 #: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
@@ -20075,24 +20075,24 @@ msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
 msgstr "&Baliabideak"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:165
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:126
+#, kde-format
+msgid "Storage Resources"
+msgstr "Biltegiratze baliabideak"
+
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:187
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
 msgstr "Inportatu baliabidea"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:172
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:192
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Ezabatu baliabidea"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:193
-#, kde-format
-msgid "Storage Resources"
-msgstr "Biltegiratze baliabideak"
-
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:230
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:300
 #: libs/ui/KisMainWindow.cpp:2544
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:609
 #, kde-format
@@ -49168,7 +49168,7 @@ msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
 msgstr "Koma mugikorraren diferentziazio horizontala"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1028
+#: plugins/impex/tiff/kis_tiff_import.cc:1040
 #, kde-format
 msgctxt "TIFF errors"
 msgid ""
@@ -49177,8 +49177,8 @@ msgid ""
 "version of libjpeg-turbo and try again."
 msgstr ""
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1131
-#: plugins/impex/tiff/kis_tiff_import.cc:1314
+#: plugins/impex/tiff/kis_tiff_import.cc:1143
+#: plugins/impex/tiff/kis_tiff_import.cc:1326
 #, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."

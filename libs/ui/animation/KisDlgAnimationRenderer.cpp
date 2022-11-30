@@ -294,7 +294,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     m_page->ffmpegLocation->setFileName(ffmpegPath);
     m_page->ffmpegLocation->setReadOnlyText(true);
     cfg.setFFMpegLocation(ffmpegPath);
-    m_page->lblFFMpegVersion->setText("FFMpeg Version: " + ffmpegVersion + (!ffmpegJsonObj["enabled"].toBool() || ffmpegJsonObj["codecs"].toObject()["h264"].toObject()["encoding"].toBool() ? "":" (MP4/MKV UNSUPPORTED)"));
+    m_page->lblFFMpegVersion->setText(i18n("FFMpeg Version:") + " " + ffmpegVersion;
     
     ffmpegWarningCheck();
 
@@ -328,7 +328,6 @@ void KisDlgAnimationRenderer::slotFFMpegChanged(const QString& path) {
     ffmpegVersion = ffmpegChangeJsonObj["enabled"].toBool() ? ffmpegChangeJsonObj["version"].toString():"None";
 
     cfg.setFFMpegLocation(ffmpegChangeJsonObj["path"].toString());
-    m_page->lblFFMpegVersion->setText("FFMpeg Version: " + ffmpegVersion + (!ffmpegChangeJsonObj["enabled"].toBool() || ffmpegChangeJsonObj["codecs"].toObject()["h264"].toObject()["encoding"].toBool() ? "":" (MP4/MKV UNSUPPORTED)"));
 
     ffmpegWarningCheck();
     ffmpegValidate();

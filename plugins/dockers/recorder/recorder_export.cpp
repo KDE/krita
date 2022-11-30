@@ -98,7 +98,7 @@ public:
             ffmpegPath = ffmpegJson["path"].toString();
             ui->editFfmpegPath->setText(ffmpegPath);
             action->setToolTip("Version: "+ffmpegJson["version"].toString()
-                                +(ffmpegJson["encoder"].toObject()["h264"].toBool() ? "":" (MP4/MKV UNSUPPORTED)")
+                                +(ffmpegJson["codecs"].toObject()["h264"].toObject()["encoding"].toBool() ? "":" (MP4/MKV UNSUPPORTED)")
             );
         } else {
             ui->editFfmpegPath->setText(i18nc("This text is displayed instead of path to external tool in case of external tool is not found", "[NOT FOUND]"));

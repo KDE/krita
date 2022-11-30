@@ -468,28 +468,67 @@ QJsonObject KisFFMpegWrapper::findProcessInfo(const QString &processName, const 
         
         QString processCodecs = KisFFMpegWrapper::runProcessAndReturn(processPath, QStringList() << "-codecs", FFMPEG_TIMEOUT);
 
-        QRegularExpression ffmpegCodecsRX("(D|\\.)(E|\\.)....\\s+(.+?)\\s+");
-        QRegularExpressionMatchIterator codecsMatchList = ffmpegCodecsRX.globalMatch(processCodecs);
+        QJsonObject codecsJson {};
         
-        QJsonObject encoderJsonObj;
-        QJsonObject decoderJsonObj;
+        {
+            // For regular expression advice, check out https://regexr.com/.
+            // Beware: We need double backslashes here for C++, in regular regex it would be a single backslash instead.
+            QRegularExpression ffmpegCodecsRX("(D|\\.)(E|\\.)....\\s+(.+?)\\s+([^\\r\\n]*)");
+            QRegularExpressionMatchIterator codecsMatchList = ffmpegCodecsRX.globalMatch(processCodecs);
             
-        while (codecsMatchList.hasNext()) {
-            QRegularExpressionMatch codecsMatch = codecsMatchList.next();
+            // Find out codec types.. (e.g. H264, VP9, etc)
+            while (codecsMatchList.hasNext()) {
+                QRegularExpressionMatch codecsMatch = codecsMatchList.next();
 
-            if (codecsMatch.hasMatch()) {
-                QString codecName = codecsMatch.captured(3);
-                decoderJsonObj[codecName] = codecsMatch.captured(1) == "D" ? true:false;
-                encoderJsonObj[codecName] = codecsMatch.captured(2) == "E" ? true:false;
+                if (codecsMatch.hasMatch()) {
+                    QJsonObject codecInfoJson {};
+                    
+                    bool encodingSupported = codecsMatch.captured(2) == "E" ? true:false;
+                    bool decodingSupported = codecsMatch.captured(1) == "D" ? true:false;
+                    QString codecName = codecsMatch.captured(3);
+                    QString codecRemainder = codecsMatch.captured(4); 
+
+                    codecInfoJson.insert("encoding", encodingSupported);
+                    codecInfoJson.insert("decoding", decodingSupported);
+
+
+                    // Regular expression for grouping specific encoders and decoders..
+                    QRegularExpression ffmpegSpecificCodecRX("\\(decoders:(.+?)\\)|\\(encoders:(.+?)\\)");
+                    QRegularExpressionMatchIterator specificCodecMatchList = ffmpegSpecificCodecRX.globalMatch(codecRemainder);
+
+                    QJsonArray encodersList;
+                    QJsonArray decodersList;
+
+                    while (specificCodecMatchList.hasNext()) {
+                        QRegularExpressionMatch specificCodecMatch = specificCodecMatchList.next();
+                        if (specificCodecMatch.hasMatch()) {
+                            // Add specific decoders..
+                            QStringList decoders = specificCodecMatch.captured(1).split(" ");
+                            Q_FOREACH(const QString& string, decoders) {
+                                if (!string.isEmpty()) {
+                                    decodersList.push_back(string);
+                                }
+                            }
+
+                            // Add specific encoders.. (e.g. for h264: h264_vaapi, libopenh264, etc )
+                            QStringList encoders = specificCodecMatch.captured(2).split(" ");
+                            Q_FOREACH(const QString& string, encoders) {
+                                if (!string.isEmpty()) {
+                                    encodersList.push_back(string);
+                                }
+                            }
+                        }
+                    }
+                    
+                    codecInfoJson.insert("encoders", encodersList);
+                    codecInfoJson.insert("decoders", decodersList);
+                    codecsJson.insert(codecName, codecInfoJson);
+                }
             }
         }
-        
-        if (processVersion.contains("--disable-libx264") || processVersion.contains("--disable-encoder=h264")) {
-            encoderJsonObj["h264"]=false;
-        }
 
-        ffmpegInfo.insert("encoder",encoderJsonObj);
-        ffmpegInfo.insert("decoder",decoderJsonObj);
+        ffmpegInfo.insert("codecs", codecsJson);
+        
             
         dbgFile << "codec support:" << ffmpegInfo; 
     } else {

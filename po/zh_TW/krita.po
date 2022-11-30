@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-22 02:42+0000\n"
+"POT-Creation-Date: 2022-11-30 02:28+0000\n"
 "PO-Revision-Date: 2022-10-23 17:55+0800\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -17511,7 +17511,7 @@ msgstr "變形遮罩"
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:379
-#: plugins/impex/tiff/kis_tiff_import.cc:552
+#: plugins/impex/tiff/kis_tiff_import.cc:562
 #: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
@@ -48090,7 +48090,7 @@ msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
 msgstr "浮點水平差分法"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1028
+#: plugins/impex/tiff/kis_tiff_import.cc:1040
 #, kde-format
 msgctxt "TIFF errors"
 msgid ""
@@ -48102,8 +48102,8 @@ msgstr ""
 "quantization 及/或 Huffman coding 查找表。請先更新 libjpeg-turbo 程式庫的版"
 "本，然後再重試。"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1131
-#: plugins/impex/tiff/kis_tiff_import.cc:1314
+#: plugins/impex/tiff/kis_tiff_import.cc:1143
+#: plugins/impex/tiff/kis_tiff_import.cc:1326
 #, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."

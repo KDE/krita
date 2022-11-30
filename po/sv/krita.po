@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-22 02:42+0000\n"
+"POT-Creation-Date: 2022-11-30 02:28+0000\n"
 "PO-Revision-Date: 2022-11-27 11:37+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -17594,7 +17594,7 @@ msgstr "Transformeringsmask"
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:379
-#: plugins/impex/tiff/kis_tiff_import.cc:552
+#: plugins/impex/tiff/kis_tiff_import.cc:562
 #: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
@@ -48678,7 +48678,7 @@ msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
 msgstr "Horisontell skillnad med flyttal"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1028
+#: plugins/impex/tiff/kis_tiff_import.cc:1040
 #, kde-format
 msgctxt "TIFF errors"
 msgid ""
@@ -48690,8 +48690,8 @@ msgstr ""
 "dess tabeller över koefficientkvantisering och/eller Huffman-kodning. "
 "Uppgradera version av libjpeg-turbo och försök igen."
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1131
-#: plugins/impex/tiff/kis_tiff_import.cc:1314
+#: plugins/impex/tiff/kis_tiff_import.cc:1143
+#: plugins/impex/tiff/kis_tiff_import.cc:1326
 #, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."

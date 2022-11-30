@@ -139,6 +139,8 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
             connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
         }
     }
+    recentDocumentsListView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(recentDocumentsListView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRecentDocContextMenuRequest(QPoint)));
 
     // News widget...
     QMenu *newsOptionsMenu = new QMenu(this);
@@ -637,6 +639,21 @@ void KisWelcomePageWidget::recentDocumentClicked(QModelIndex index)
     m_mainWindow->openDocument(fileUrl, KisMainWindow::None );
 }
 
+void KisWelcomePageWidget::slotRecentDocContextMenuRequest(const QPoint &pos)
+{
+    QMenu contextMenu;
+    QModelIndex index = recentDocumentsListView->indexAt(pos);
+    QAction *actionForget = 0;
+    if (index.isValid()) {
+        actionForget = new QAction(i18n("Forget \"%1\"", index.data(Qt::DisplayRole).toString()), &contextMenu);
+        contextMenu.addAction(actionForget);
+    }
+    QAction *triggered = contextMenu.exec(recentDocumentsListView->mapToGlobal(pos));
+
+    if (index.isValid() && triggered == actionForget) {
+        m_mainWindow->removeRecentFile(index.data(Qt::ToolTipRole).toString());
+    }
+}
 
 bool KisWelcomePageWidget::isDevelopmentBuild()
 {

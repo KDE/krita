@@ -1007,6 +1007,11 @@ void KisMainWindow::clearRecentFiles()
     KisRecentFilesManager::instance()->clear();
 }
 
+void KisMainWindow::removeRecentFile(QString url)
+{
+    KisRecentFilesManager::instance()->remove(QUrl::fromLocalFile(url));
+}
+
 void KisMainWindow::updateCaption()
 {
     if (!d->mdiArea->activeSubWindow()) {

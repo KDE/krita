@@ -113,6 +113,7 @@ private Q_SLOTS:
     void slotOpenFileClicked();
 
     void recentDocumentClicked(QModelIndex index);
+    void slotRecentDocContextMenuRequest(const QPoint &pos);
 
     /**
      * Once all files in the recent documents model are checked, cleanup the UI if the model is empty

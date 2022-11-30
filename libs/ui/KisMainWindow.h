@@ -221,6 +221,11 @@ public Q_SLOTS:
      */
     void clearRecentFiles();
 
+    /**
+     * remove one file from the list of the recent files
+     */
+    void removeRecentFile(QString url);
+
 
     /**
      *  Slot for opening a new document.

@@ -289,6 +289,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
     ffmpegPath = ffmpegJsonObj["path"].toString();
     ffmpegVersion = ffmpegJsonObj["enabled"].toBool() ? ffmpegJsonObj["version"].toString():"None";
+    ffmpegEncoders = KisFFMpegWrapper::getSupportedEncoders(ffmpegJsonObj);
 
     m_page->ffmpegLocation->setFileName(ffmpegPath);
     m_page->ffmpegLocation->setReadOnlyText(true);

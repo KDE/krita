@@ -99,6 +99,7 @@ private:
 
     QString m_customFFMpegOptionsString;
     QString ffmpegVersion = "None";
+    QStringList ffmpegEncoders = QStringList();
     bool m_wantsRenderWithHDR = false;
 };
 

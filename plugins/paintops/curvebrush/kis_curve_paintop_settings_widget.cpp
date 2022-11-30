@@ -8,23 +8,24 @@
 #include <kis_curve_paintop_settings.h>
 
 #include <KisPaintingModeOptionWidget.h>
+#include <KisCurveOpOptionWidget.h>
 #include <KisPaintOpOptionWidgetUtils.h>
-#include "kis_curve_line_option.h"
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_opacity_option.h>
-#include <kis_linewidth_option.h>
-#include "kis_curves_opacity_option.h"
+#include <KisLineWidthOption.h>
+#include <KisCurvesOpacityOption.h>
 #include <KisCompositeOpOptionWidget.h>
+#include <KisStandardOptionData.h>
 
 KisCurvePaintOpSettingsWidget:: KisCurvePaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
     namespace kpowu = KisPaintOpOptionWidgetUtils;
 
-    addPaintOpOption(new KisCurveOpOption());
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
-    addPaintOpOption(new KisCurveOptionWidget(new KisLineWidthOption(), i18n("0%"), i18n("100%")));
-    addPaintOpOption(new KisCurveOptionWidget(new KisCurvesOpacityOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(kpowu::createOptionWidget<KisCurveOpOptionWidget>());
+    addPaintOpOption(kpowu::createOpacityOptionWidget());
+    addPaintOpOption(kpowu::createCurveOptionWidget(KisLineWidthOptionData(), KisPaintOpOption::GENERAL, i18n("0%"), i18n("100%")));
+    addPaintOpOption(kpowu::createCurveOptionWidget(KisCurvesOpacityOptionData(), KisPaintOpOption::GENERAL, i18n("0%"), i18n("100%")));
     addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
     addPaintOpOption(kpowu::createOptionWidget<KisPaintingModeOptionWidget>());
 }

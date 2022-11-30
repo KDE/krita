@@ -11,9 +11,9 @@
 #include <KisExperimentOpOptionData.h>
 #include <lager/cursor.hpp>
 
-class KisExperimentOpOptionData;
+struct KisExperimentOpOptionData;
 
-class PAINTOP_EXPORT KisExperimentOpOptionWidget : public KisPaintOpOption
+class KisExperimentOpOptionWidget : public KisPaintOpOption
 {
 public:
     using data_type = KisExperimentOpOptionData;

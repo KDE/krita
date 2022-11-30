@@ -19,7 +19,7 @@ enum ExperimentFillType {
     Pattern
 };
 
-struct PAINTOP_EXPORT KisExperimentOpOptionData : boost::equality_comparable<KisExperimentOpOptionData>
+struct KisExperimentOpOptionData : boost::equality_comparable<KisExperimentOpOptionData>
 {
     inline friend bool operator==(const KisExperimentOpOptionData &lhs, const KisExperimentOpOptionData &rhs) {
         return lhs.isDisplacementEnabled == rhs.isDisplacementEnabled

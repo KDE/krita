@@ -294,7 +294,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     m_page->ffmpegLocation->setFileName(ffmpegPath);
     m_page->ffmpegLocation->setReadOnlyText(true);
     cfg.setFFMpegLocation(ffmpegPath);
-    m_page->lblFFMpegVersion->setText(i18n("FFMpeg Version:") + " " + ffmpegVersion;
+    m_page->lblFFMpegVersion->setText(i18n("FFmpeg Version:") + " " + ffmpegVersion;
     
     ffmpegWarningCheck();
 

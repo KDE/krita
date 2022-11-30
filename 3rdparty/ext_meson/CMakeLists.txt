@@ -31,7 +31,7 @@ else()
         URL https://github.com/mesonbuild/meson/releases/download/0.63.0rc1/meson-0.63.0rc1.tar.gz
         URL_HASH SHA256=4980031c700bd3dfbdda1b69ed6d568b2312690a26998ea145be3b36451df8bc
 
-        CONFIGURE_COMMAND ""
+        CONFIGURE_COMMAND chmod u+x <SOURCE_DIR>/setup.py
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
             PYTHONPATH=${_krita_pythonpath}
@@ -41,7 +41,7 @@ else()
         INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
             PYTHONPATH=${_krita_pythonpath}
             SETUPTOOLS_USE_DISTUTILS=local
-            ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix=${_meson_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
+            ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix=${_meson_prefix} --optimize=1 --install-scripts=${PREFIX_ext_meson}/bin
 
         BUILD_IN_SOURCE 1
 

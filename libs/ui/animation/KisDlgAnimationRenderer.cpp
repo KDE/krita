@@ -288,7 +288,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg(ffmpegPath.isEmpty() ? lastUsedOptions.ffmpegPath:ffmpegPath);
 
     ffmpegPath = ffmpegJsonObj["path"].toString();
-    ffmpegVersion = ffmpegJsonObj["enabled"].toBool() ? ffmpegJsonObj["version"].toString():"None";
+    ffmpegVersion = ffmpegJsonObj["enabled"].toBool() ? ffmpegJsonObj["version"].toString() : i18n("No valid FFmpeg binary supplied...");
     ffmpegEncoders = KisFFMpegWrapper::getSupportedEncoders(ffmpegJsonObj);
 
     m_page->ffmpegLocation->setFileName(ffmpegPath);
@@ -325,7 +325,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 void KisDlgAnimationRenderer::slotFFMpegChanged(const QString& path) {
     KisConfig cfg(false);
     QJsonObject ffmpegChangeJsonObj = KisFFMpegWrapper::findFFMpeg(path);
-    ffmpegVersion = ffmpegChangeJsonObj["enabled"].toBool() ? ffmpegChangeJsonObj["version"].toString():"None";
+    ffmpegVersion = ffmpegChangeJsonObj["enabled"].toBool() ? ffmpegChangeJsonObj["version"].toString() : i18n("No valid FFmpeg binary supplied...");
 
     cfg.setFFMpegLocation(ffmpegChangeJsonObj["path"].toString());
 

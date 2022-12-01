@@ -87,16 +87,6 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
             m_page->cmbMimetype->setCurrentIndex(m_page->cmbMimetype->count() - 1);
         }
     }
-
-    QStringList supportedMimeType = makeVideoMimeTypesList();
-    Q_FOREACH (const QString &mime, supportedMimeType) {
-        QString description = KisMimeDatabase::descriptionForMimeType(mime);
-        if (description.isEmpty()) {
-            description = mime;
-        }
-        m_page->cmbRenderType->addItem(description, mime);
-    }
-    
     
     m_page->cmbScaleFilter->addItem(i18nc("bicubic filtering", "bicubic"), "bicubic");
     m_page->cmbScaleFilter->addItem(i18nc("bilinear filtering", "bilinear"), "bilinear");
@@ -122,7 +112,6 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
 
     // connect and cold init
     connect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), this, SLOT(selectRenderType(int)));
-    selectRenderType(m_page->cmbRenderType->currentIndex());
 
     // try to lock the width and height being updated
     KisAcyclicSignalConnector *constrainsConnector = new KisAcyclicSignalConnector(this);
@@ -177,14 +166,74 @@ QStringList KisDlgAnimationRenderer::makeVideoMimeTypesList()
 {
     QStringList supportedMimeTypes = QStringList();
     supportedMimeTypes << "video/x-matroska";
+    supportedMimeTypes << "video/mp4";
+    supportedMimeTypes << "video/webm";
     supportedMimeTypes << "image/gif";
     supportedMimeTypes << "image/apng";    
     supportedMimeTypes << "image/webp";       
     supportedMimeTypes << "video/ogg";
-    supportedMimeTypes << "video/mp4";
-    supportedMimeTypes << "video/webm";
 
     return supportedMimeTypes;
+}
+
+bool meetsEncoderRequirementsForContainer(KisVideoExportOptionsDialog::ContainerType encoderType, const QStringList& encodersPresent) {
+    QVector<KoID> encodersExpected = KisVideoExportOptionsDialog::encoderIdentifiers(encoderType);
+    Q_FOREACH(const KoID &encoder, encodersExpected ) {
+        if (encodersPresent.contains(encoder.id())) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// For dependencies, see here:
+// https://en.wikipedia.org/wiki/Comparison_of_video_container_formats
+QStringList KisDlgAnimationRenderer::filterMimeTypeListByAvailableEncoders(const QStringList& input) 
+{
+    QStringList retValue;
+
+    Q_FOREACH(const QString& mime, input) {
+        if ( mime == "video/x-matroska" ) {
+            if ( ffmpegCodecs.contains("h264") || ffmpegCodecs.contains("vp9") ) {
+                QList<QString> encodersPresent;
+                encodersPresent << ffmpegEncoderTypes["h264"] << ffmpegEncoderTypes["vp9"];
+                if (meetsEncoderRequirementsForContainer(KisVideoExportOptionsDialog::MKV, encodersPresent))
+                    retValue << mime;
+            }
+        } else if (mime == "video/mp4") {
+            if ( ffmpegCodecs.contains("h264") || ffmpegCodecs.contains("vp9") ) {
+                QList<QString> encodersPresent;
+                encodersPresent << ffmpegEncoderTypes["h264"] << ffmpegEncoderTypes["vp9"];
+                if (meetsEncoderRequirementsForContainer(KisVideoExportOptionsDialog::MP4, encodersPresent))
+                    retValue << mime;
+            }
+        } else if (mime == "video/webm") {
+            if ( ffmpegCodecs.contains("vp9") ) {
+                QList<QString> encodersPresent;
+                encodersPresent << ffmpegEncoderTypes["vp9"];
+                if (meetsEncoderRequirementsForContainer(KisVideoExportOptionsDialog::WEBM, encodersPresent))
+                    retValue << mime;
+            }
+        } else if (mime == "image/gif") {
+            if ( ffmpegCodecs.contains("gif") ) {
+                retValue << mime;
+            }
+        } else if (mime == "image/apng") {
+            if ( ffmpegCodecs.contains("apng") ) {
+                retValue << mime;
+            }
+        } else if (mime == "image/webp") {
+            if ( ffmpegCodecs.contains("webp") ) {
+                retValue << mime;
+            }
+        } else if (mime == "video/ogg") {
+            if ( ffmpegCodecs.contains("dirac") ) {
+                retValue << mime;
+            }
+        }
+    }
+
+    return retValue;
 }
 
 bool KisDlgAnimationRenderer::imageMimeSupportsHDR(QString &mime)
@@ -293,6 +342,20 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     
     connect(m_page->ffmpegLocation, SIGNAL(fileSelected(QString)), SLOT(slotFFmpegChangeAndValidate(QString)));
 
+
+    QStringList supportedMimeType = makeVideoMimeTypesList();
+    supportedMimeType = filterMimeTypeListByAvailableEncoders(supportedMimeType);
+    Q_FOREACH (const QString &mime, supportedMimeType) {
+        QString description = KisMimeDatabase::descriptionForMimeType(mime);
+        if (description.isEmpty()) {
+            description = mime;
+        }
+
+        m_page->cmbRenderType->addItem(description, mime);
+    }
+    selectRenderType(m_page->cmbRenderType->currentIndex());
+    
+
     // Initialize these settings based on the current document context..
     m_page->intStart->setValue(doc.image()->animationInterface()->playbackRange().start());
     m_page->intEnd->setValue(doc.image()->animationInterface()->playbackRange().end());
@@ -319,7 +382,23 @@ void KisDlgAnimationRenderer::slotFFMpegChanged(const QString& path) {
     KisConfig cfg(false);
     QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg(path);
     ffmpegVersion = ffmpegJsonObj["enabled"].toBool() ? ffmpegJsonObj["version"].toString() : i18n("No valid FFmpeg binary supplied...");
-    ffmpegEncoders = KisFFMpegWrapper::getSupportedEncoders(ffmpegJsonObj);
+    ffmpegCodecs = KisFFMpegWrapper::getSupportedCodecs(ffmpegJsonObj);
+    
+    // Build map of encoding types to their specific encoder support (e.g. h264 => libopenh264, h264, h264_vaapi or whatever) 
+    ffmpegEncoderTypes.clear();
+    Q_FOREACH(const QString& codec, ffmpegCodecs) {
+        QJsonObject codecjson = ffmpegJsonObj["codecs"].toObject()[codec].toObject();
+        if ( codecjson["encoding"].toBool() ) {
+            QJsonArray codecEncoders = codecjson["encoders"].toArray();
+            Q_FOREACH(const QJsonValue& value, codecEncoders) {
+                if (ffmpegEncoderTypes.contains(codec)) {
+                    ffmpegEncoderTypes[codec].push_back(value.toString());
+                } else {
+                    ffmpegEncoderTypes.insert(codec, {value.toString()} );
+                }
+            }
+        }
+    }
 
     m_page->lblFFMpegVersion->setText(i18n("FFmpeg Version:") + " " + ffmpegVersion);
 

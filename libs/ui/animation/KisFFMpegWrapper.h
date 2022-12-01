@@ -57,7 +57,7 @@ public:
 
     static QJsonObject findProcessPath(const QString &processName, const QString &customLocation, bool processInfo);
     static QJsonObject findProcessInfo(const QString &processName, const QString &processPath, bool includeProcessInfo);
-    static QStringList getSupportedEncoders(const QJsonObject& ffmpegJsonProcessInput);
+    static QStringList getSupportedCodecs(const QJsonObject& ffmpegJsonProcessInput);
     static QJsonObject findFFMpeg(const QString &customLocation);
     static QJsonObject findFFProbe(const QString &customLocation);
     static QByteArray runProcessAndReturn(const QString &processPath, const QStringList &args, int msecs = FFMPEG_TIMEOUT);

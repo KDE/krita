@@ -539,7 +539,7 @@ QJsonObject KisFFMpegWrapper::findProcessInfo(const QString &processName, const 
     
 }
 
-QStringList KisFFMpegWrapper::getSupportedEncoders(const QJsonObject& ffmpegProcessInfo) {
+QStringList KisFFMpegWrapper::getSupportedCodecs(const QJsonObject& ffmpegProcessInfo) {
     // TODO: I really don't like having to deal with JSON in C++ code as fequently as we are here.
     // We should make a proper datatype for FFMPEG Process Information!
     
@@ -548,9 +548,9 @@ QStringList KisFFMpegWrapper::getSupportedEncoders(const QJsonObject& ffmpegProc
     // For now, I'm just treating this as strictly typed using KIS_SAFE_ASSERT_RECOVER_RETURN
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(ffmpegProcessInfo["enabled"].toBool(), encodersToReturn);
 
-    QJsonObject encoders = ffmpegProcessInfo["encoder"].toObject();
+    QJsonObject encoders = ffmpegProcessInfo["codecs"].toObject();
     Q_FOREACH( const QString& key, encoders.keys()) {
-        if (encoders[key].toBool()) {
+        if (encoders[key].toObject()["encoding"].toBool()) {
             encodersToReturn << key;
         }
     }

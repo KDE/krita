@@ -20,28 +20,7 @@ struct KisVideoExportOptionsDialog::Private
     Private(ContainerType _containerType)
         : containerType(_containerType)
     {
-        switch (containerType) {
-            case ContainerType::OGV:
-                codecs << KoID("libtheora", i18nc("theora codec name, check simplescreenrecorder for standard translations", "Theora"));
-                break;
-            case ContainerType::WEBM:
-                codecs << KoID("libvpx", i18nc("VP9 codec name", "VP9"));
-                break;
-            case ContainerType::GIF:
-                codecs << KoID("gif", i18nc("GIF codec name", "GIF"));
-                break;
-            case ContainerType::APNG:
-                codecs << KoID("apng", i18nc("APNG codec name", "APNG"));
-                break;
-            case ContainerType::WEBP:
-                codecs << KoID("libwebp", i18nc("WEBP codec name", "WEBP"));
-                break;
-            default:
-                codecs << KoID("libopenh264", i18nc("openh264 codec name", "OpenH264"));
-                codecs << KoID("libx264", i18nc("h264 codec name, check simplescreenrecorder for standard translations", "H.264, MPEG-4 Part 10"));
-                codecs << KoID("libx265", i18nc("h265 codec name, check simplescreenrecorder for standard translations", "H.265, MPEG-H Part 2 (HEVC)"));
-                break;
-        }
+        encoders = KisVideoExportOptionsDialog::encoderIdentifiers(containerType);
 
         presetsH264 << KoID("ultrafast", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "ultrafast"));
         presetsH264 << KoID("superfast", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "superfast"));
@@ -112,7 +91,7 @@ struct KisVideoExportOptionsDialog::Private
         paletteuseDiffMode << KoID("rectangle", i18nc("paleteuse diff mode option name", "rectangle"));
     }
 
-    QVector<KoID> codecs;
+    QVector<KoID> encoders;
     QVector<KoID> presetsH264;
     QVector<KoID> profilesH264;
     QVector<KoID> profilesH265;
@@ -198,7 +177,7 @@ KisVideoExportOptionsDialog::KisVideoExportOptionsDialog(ContainerType container
     
     ui->webpLoop->setChecked(true);
     
-    populateComboWithKoIds(ui->cmbCodec, m_d->codecs, 0);
+    populateComboWithKoIds(ui->cmbCodec, m_d->encoders, 0);
     connect(ui->cmbCodec, SIGNAL(currentIndexChanged(int)), SLOT(slotCodecSelected(int)));
     slotCodecSelected(0);
 
@@ -243,6 +222,10 @@ void KisVideoExportOptionsDialog::setSupportsHDR(bool value)
 {
     m_d->supportsHDR = value;
     slotH265ProfileChanged(ui->cmbProfileH265->currentIndex());
+}
+
+void KisVideoExportOptionsDialog::setSupportedCodecs(QStringList &codecList) {
+
 }
 
 KisPropertiesConfigurationSP KisVideoExportOptionsDialog::configuration() const
@@ -290,6 +273,46 @@ KisVideoExportOptionsDialog::ContainerType KisVideoExportOptionsDialog::mimeToCo
     return ContainerType::DEFAULT;
 }
 
+QVector<KoID> KisVideoExportOptionsDialog::encoderIdentifiers(ContainerType type)
+{
+    KIS_ASSERT(type < ContainerType::NUM_CONTAINER_TYPE && type >= ContainerType::DEFAULT);
+    QVector<KoID> encoders;
+    QVector<KoID> h264Encoders = {
+                                KoID("libopenh264", i18nc("openh264 codec name", "OpenH264")),
+                                KoID("libx264", i18nc("h264 codec name, check simplescreenrecorder for standard translations", "H.264, MPEG-4 Part 10")),
+                                KoID("libx265", i18nc("h265 codec name, check simplescreenrecorder for standard translations", "H.265, MPEG-H Part 2 (HEVC)"))
+                                };
+    
+    KoID vp9Encoder =  KoID("libvpx-vp9", i18nc("VP9 codec name", "VP9"));
+    
+
+    switch (type) {
+        case ContainerType::OGV:
+            encoders << KoID("libtheora", i18nc("theora codec name, check simplescreenrecorder for standard translations", "Theora"));
+            break;
+        case ContainerType::WEBP:
+            encoders << KoID("libwebp", i18nc("WEBP codec name", "WEBP"));
+            break;
+        case ContainerType::APNG:
+            encoders << KoID("apng", i18nc("APNG codec name", "APNG"));
+            break;
+        case ContainerType::GIF:
+            encoders << KoID("gif", i18nc("GIF codec name", "GIF"));
+            break;
+        case ContainerType::WEBM:
+            encoders << vp9Encoder;
+            break;
+        case ContainerType::MKV:
+        case ContainerType::MP4:
+        default:
+            encoders << h264Encoders;
+            encoders << vp9Encoder;
+            break;
+    }
+    
+    return encoders;
+}
+
 void KisVideoExportOptionsDialog::slotCustomLineToggled(bool value)
 {
     QString customLine = m_d->currentCustomLine;
@@ -316,7 +339,7 @@ void KisVideoExportOptionsDialog::slotResetCustomLine()
 
 void KisVideoExportOptionsDialog::slotCodecSelected(int index)
 {
-    const QString codec = m_d->codecs[index].id();
+    const QString codec = m_d->encoders[index].id();
     if (codec == "libopenh264") {
         ui->stackedWidget->setCurrentIndex(CODEC_OPENH264);
     } else if (codec == "libx264") {
@@ -325,7 +348,7 @@ void KisVideoExportOptionsDialog::slotCodecSelected(int index)
         ui->stackedWidget->setCurrentIndex(CODEC_H265);
     } else if (codec == "libtheora") {
         ui->stackedWidget->setCurrentIndex(CODEC_THEORA);
-    } else if (codec == "libvpx") {
+    } else if (codec == "libvpx-vp9") {
         ui->stackedWidget->setCurrentIndex(CODEC_VP9);
     } else if (codec == "gif") {
         ui->stackedWidget->setCurrentIndex(CODEC_GIF);
@@ -362,7 +385,7 @@ bool KisVideoExportOptionsDialog::videoConfiguredForHDR() const
 
 void KisVideoExportOptionsDialog::setHDRConfiguration(bool value) {
     if (value && currentCodecId() != "libx265") {
-        ui->cmbCodec->setCurrentIndex(m_d->codecs.indexOf(KoID("libx265")));
+        ui->cmbCodec->setCurrentIndex(m_d->encoders.indexOf(KoID("libx265")));
         ui->chkUseHDRMetadata->setEnabled(true);
     }
 
@@ -409,7 +432,7 @@ void KisVideoExportOptionsDialog::setConfiguration(const KisPropertiesConfigurat
 
     const QString codecId = cfg->getString("CodecId", "");
 
-    const int index = qMax(0, findIndexById(codecId, m_d->codecs));
+    const int index = qMax(0, findIndexById(codecId, m_d->encoders));
     ui->cmbCodec->setCurrentIndex(index);
     slotCodecSelected(index);
 
@@ -483,8 +506,8 @@ QStringList KisVideoExportOptionsDialog::generateCustomLine() const
 
     } else if (currentCodecId() == "libtheora") {
         options << "-b" << QString::number(ui->intBitrate->value()) + "k";
-    } else if (currentCodecId() == "libvpx") {
-        options << "-vcodec" << "libvpx-vp9";
+    } else if (currentCodecId() == "libvpx-vp9") {
+        options << "-vcodec" << currentCodecId();
         if (ui->vp9Lossless->isChecked()) {
             options << "-lossless" <<  "1";
         } else {
@@ -528,7 +551,7 @@ QStringList KisVideoExportOptionsDialog::generateCustomLine() const
 
 QString KisVideoExportOptionsDialog::currentCodecId() const
 {
-    return m_d->codecs[ui->cmbCodec->currentIndex()].id();
+    return m_d->encoders[ui->cmbCodec->currentIndex()].id();
 }
 
 void KisVideoExportOptionsDialog::slotH265ProfileChanged(int index)

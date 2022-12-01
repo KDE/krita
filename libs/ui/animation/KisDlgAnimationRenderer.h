@@ -88,6 +88,7 @@ private:
 
     static void filterSequenceMimeTypes(QStringList &mimeTypes);
     static QStringList makeVideoMimeTypesList();
+    QStringList filterMimeTypeListByAvailableEncoders(const QStringList &mimeTypes);
     static bool imageMimeSupportsHDR(QString &hdr);
 
     static KisPropertiesConfigurationSP loadLastConfiguration(QString configurationID);
@@ -100,7 +101,10 @@ private:
 
     QString m_customFFMpegOptionsString;
     QString ffmpegVersion = "None";
-    QStringList ffmpegEncoders = QStringList();
+    // List of all supported output formats.
+    QStringList ffmpegCodecs = QStringList();
+    // Maps supported output format to available list of encoder(s)
+    QMap<QString, QStringList> ffmpegEncoderTypes;
     bool m_wantsRenderWithHDR = false;
 };
 

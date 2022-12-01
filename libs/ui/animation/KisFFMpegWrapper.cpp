@@ -473,7 +473,7 @@ QJsonObject KisFFMpegWrapper::findProcessInfo(const QString &processName, const 
         {
             // For regular expression advice, check out https://regexr.com/.
             // Beware: We need double backslashes here for C++, in regular regex it would be a single backslash instead.
-            QRegularExpression ffmpegCodecsRX(R"(D|\.)(E|\.)....\s+(.+?)\s+([^\r\n]*)");
+            QRegularExpression ffmpegCodecsRX("(D|\\.)(E|\\.)....\\s+(.+?)\\s+([^\\r\\n]*)");
             QRegularExpressionMatchIterator codecsMatchList = ffmpegCodecsRX.globalMatch(processCodecs);
             
             // Find out codec types.. (e.g. H264, VP9, etc)

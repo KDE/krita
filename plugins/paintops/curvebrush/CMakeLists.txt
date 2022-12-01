@@ -2,8 +2,6 @@ set(kritacurvepaintop_SOURCES
       curve_paintop_plugin.cpp
       kis_curve_paintop.cpp
       kis_curve_paintop_settings.cpp
-      KisLineWidthOption.cpp
-      KisCurvesOpacityOption.cpp
       kis_curve_paintop_settings_widget.cpp
       KisCurveOpOptionData.cpp
       KisCurveOpOptionModel.cpp

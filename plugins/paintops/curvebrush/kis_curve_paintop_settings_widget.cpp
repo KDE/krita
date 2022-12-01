@@ -12,10 +12,9 @@
 #include <KisPaintOpOptionWidgetUtils.h>
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_opacity_option.h>
-#include <KisLineWidthOption.h>
-#include <KisCurvesOpacityOption.h>
 #include <KisCompositeOpOptionWidget.h>
 #include <KisStandardOptionData.h>
+#include <KisCurveStandardOptionData.h>
 
 KisCurvePaintOpSettingsWidget:: KisCurvePaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)

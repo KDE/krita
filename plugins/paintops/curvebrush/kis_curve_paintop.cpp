@@ -89,7 +89,7 @@ void KisCurvePaintOp::paintLine(KisPaintDeviceSP dab, const KisPaintInformation 
     }
 
     const qreal additionalScale = KisLodTransform::lodToScale(painter()->device());
-    const qreal lineWidth = additionalScale * m_lineWidthOption.apply(pi2, m_curveOpOption.curve_line_width);
+    const qreal lineWidth = additionalScale * m_lineWidthOption.apply(pi2) * m_curveOpOption.curve_line_width;
 
     QPen pen(QBrush(Qt::white), lineWidth);
     QPainterPath path;
@@ -114,7 +114,7 @@ void KisCurvePaintOp::paintLine(KisPaintDeviceSP dab, const KisPaintInformation 
             path.cubicTo(m_points.at(step), m_points.at(step + step), m_points.last());
         }
 
-        qreal curveOpacity = m_curvesOpacityOption.apply(pi2, m_curveOpOption.curve_curves_opacity);
+        qreal curveOpacity = m_curvesOpacityOption.apply(pi2) * m_curveOpOption.curve_curves_opacity;
         m_painter->setOpacity(qRound(255.0 * curveOpacity));
         m_painter->drawPainterPath(path, pen);
         m_painter->setOpacity(255); // full

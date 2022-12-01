@@ -11,8 +11,7 @@
 #include <kis_types.h>
 #include "kis_curve_paintop_settings.h"
 #include <kis_pressure_opacity_option.h>
-#include <KisLineWidthOption.h>
-#include <KisCurvesOpacityOption.h>
+#include <KisCurveStandardOptions.h>
 #include <KisCurveOpOptionData.h>
 
 class KisPainter;

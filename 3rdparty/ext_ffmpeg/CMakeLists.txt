@@ -59,7 +59,7 @@ ExternalProject_Add(
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} install -C <BINARY_DIR>
 
-    DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ${OGG_DEP}
+    DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ${OGG_DEP} ext_libvorbis
 )
 
 ExternalProject_Add(

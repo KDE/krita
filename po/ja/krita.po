@@ -30222,7 +30222,7 @@ msgstr "ワークスペースをインポート(&I)..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
-msgstr "ワークスペースをインポート(&N)..."
+msgstr "新しいワークスペース(&N)..."
 
 #: libs/ui/KisMainWindow.cpp:2554
 #, kde-format

@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-30 02:28+0000\n"
-"PO-Revision-Date: 2022-11-06 11:34+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2022-11-30 21:46+0100\n"
+"Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
@@ -968,7 +968,7 @@ msgstr "c) Llapis 2b (mypaint)"
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/d)_Ink_pen_(mypaint).myb"
 msgid "d) Ink pen (mypaint)"
-msgstr "d) Llapis en tinta (mypaint)"
+msgstr "d) Ploma de tinta (mypaint)"
 
 # skip-rule: t-e_sola
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
@@ -2676,7 +2676,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Splat_mix_cells.kpp"
 msgid "Splat mix cells"
-msgstr "Esguitades en mescla a les cel·les"
+msgstr "Esguitades en mescla en les cel·les"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2700,7 +2700,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Splat_wet_cells.kpp"
 msgid "Splat wet cells"
-msgstr "Esguitades humides a les cel·les"
+msgstr "Esguitades humides en les cel·les"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4434,7 +4434,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Multiply.kpp"
 msgid "l) Adjust Multiply"
-msgstr "l) Ajusta de la multiplicació"
+msgstr "l) Ajusta la multiplicació"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4785,7 +4785,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Bokeh.kpp"
 msgid "z) Stamp Bokeh"
-msgstr "z) Segell «bokeh»"
+msgstr "z) Segell amb efecte Bokeh"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4803,7 +4803,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Grass.kpp"
 msgid "z) Stamp Grass"
-msgstr "z) Segell d'herba"
+msgstr "z) Segell de gespa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4812,7 +4812,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Grass_Patch.kpp"
 msgid "z) Stamp Grass Patch"
-msgstr "z) Segell de pedaç d'herba"
+msgstr "z) Segell amb patró de gespa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5682,7 +5682,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Moiré_Pattern.kse"
 msgid "Wolthera's Moiré Pattern"
-msgstr "Patró de moaré de Wolthera"
+msgstr "Patró de moaré d'en Wolthera"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -6839,7 +6839,7 @@ msgstr "Gespa"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/grass_patch.gih"
 msgid "Grass Patch"
-msgstr "Pedaç de gespa"
+msgstr "Patró de gespa"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/hearts.gih:1
@@ -8875,7 +8875,7 @@ msgstr "Intercanvia els colors de primer pla i de fons"
 #, kde-format
 msgctxt "action"
 msgid "Toggle Brush Outline"
-msgstr "Canvia el pinzell de contorn"
+msgstr "Canvia el contorn del pinzell"
 
 #. i18n: context: toolTip @ Action (toggle_brush_outline), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:701
@@ -8885,8 +8885,8 @@ msgid ""
 "Disable the brush outline, or enable the previously used brush outline shape "
 "if already disabled"
 msgstr ""
-"Desactiva el pinzell de contorn, o activa el pinzell de forma de contorn "
-"utilitzat prèviament si ja està desactivat."
+"Desactiva el contorn del pinzell, o activa la forma del contorn del pinzell "
+"utilitzada prèviament si ja està desactivat."
 
 #. i18n: context: text @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
@@ -13827,7 +13827,7 @@ msgstr "Reduïx"
 #, kde-format
 msgctxt "action"
 msgid "Toggle Zoom Fit to Page"
-msgstr "Canvia el zoom per ajustar a la pàgina"
+msgstr "Canvia el zoom fins ajustar a la pàgina"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
@@ -16047,7 +16047,7 @@ msgid ""
 "document, the text object will be converted into Krita 5 format that will no "
 "longer be compatible with Krita 4.x"
 msgstr ""
-"El document té el text del vector creat amb Krita 4.x. Quan guardeu el "
+"El document té el text de vectors creat amb Krita 4.x. Quan guardeu el "
 "document, l'objecte de text es convertirà al format de Krita 5, el qual ja "
 "no serà admés per Krita 4.x"
 
@@ -17035,7 +17035,7 @@ msgstr "Activa"
 #: libs/image/kis_layer_properties_icons.cpp:28
 #, kde-format
 msgid "Color Label"
-msgstr "Rètol de color"
+msgstr "Etiqueta de color"
 
 #: libs/image/kis_layer_properties_icons.cpp:29
 #, kde-format
@@ -23120,7 +23120,7 @@ msgstr "Desplaçament Y:"
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:82
 #, kde-format
 msgid "Add a swatch group"
-msgstr "Afig un grup de mostra"
+msgstr "Afig un grup de mostres"
 
 # skip-rule: kct-snapshot
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
@@ -23165,7 +23165,7 @@ msgstr "Nom de la paleta:"
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:92
 #, kde-format
 msgid "Swatch Group options"
-msgstr "Opcions del grup de mostra"
+msgstr "Opcions del grup de mostres"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColCount)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
@@ -24648,7 +24648,8 @@ msgstr "Mida del marge del zoom:"
 #: libs/ui/forms/wdggeneralsettings.ui:371
 #, kde-format
 msgid "Spacing between the image and the page when zoomed to fit, in pixels"
-msgstr "Espaiat entre la imatge i la pàgina en fer zoom per ajustar, en píxels"
+msgstr ""
+"Espaiat entre la imatge i la pàgina en fer zoom per a ajustar, en píxels"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkHiDPI)
 #: libs/ui/forms/wdggeneralsettings.ui:392
@@ -25538,7 +25539,7 @@ msgstr "Perfil:"
 #: libs/ui/forms/wdglayerproperties.ui:167
 #, kde-format
 msgid "Color label:"
-msgstr "Rètol de color:"
+msgstr "Etiqueta de color:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDimensionsTitle)
 #: libs/ui/forms/wdglayerproperties.ui:196
@@ -25692,7 +25693,7 @@ msgid ""
 "If you know a bit about color management and want to use your monitor to "
 "determine the color profile."
 msgstr ""
-"Si coneixeu una mica sobre la gestió de color i voleu utilitzar el vostre "
+"Si coneixeu una mica sobre la gestió del color i voleu utilitzar el vostre "
 "monitor per a determinar el perfil de color."
 
 #. i18n: ectx: property (text), widget (QCheckBox, dontPrompt)
@@ -31817,7 +31818,7 @@ msgstr ""
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
-"El motor de pinzell del MyPaint no està disponible per a este espai de color"
+"El motor de pinzells del MyPaint no està disponible per a este espai de color"
 
 #: libs/ui/tool/kis_tool_paint.cc:569
 #, kde-format
@@ -31938,8 +31939,8 @@ msgid ""
 "New AppImage was downloaded to %1. To complete the update, close Krita and "
 "run the new AppImage."
 msgstr ""
-"S'ha baixat una AppImage nova a %1. Per a completar l'actualització, tanqueu "
-"Krita i executeu AppImage nova."
+"S'ha baixat una «appimage» nova a %1. Per a completar l'actualització, "
+"tanqueu Krita i executeu l'«appimage» nova."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLinks)
 #: libs/ui/wdgsplash.ui:439
@@ -39271,7 +39272,7 @@ msgid ""
 "Depending on timelapse speed, this may cause flickering in the resulting "
 "video."
 msgstr ""
-"Grava els fotogrames quan està actiu el mode Capa Aïllada o Grup aïllat.\n"
+"Grava els fotogrames quan està actiu el mode Capa aïllada o Grup aïllat.\n"
 "Depenent de la velocitat de la filmació a intervals, açò pot provocar "
 "parpelleig en el vídeo final."
 
@@ -45802,7 +45803,7 @@ msgstr ""
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
-msgstr "Sense canvis, retalla"
+msgstr "Sense canvis, escurça"
 
 #: plugins/impex/heif/HeifExport.cpp:645
 #, kde-format
@@ -46614,7 +46615,7 @@ msgstr ""
 "Els valors vàlids són, de velocitat més ràpida a velocitat més lenta: 1: "
 "llamp 2:tro 3:falcó 4:guepard 5:llebre 6:wombat 7:esquirol 8:gatet 9:"
 "tortuga.\n"
-"Predeterminat: esquirol (7)."
+"De manera predeterminada: esquirol (7)."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:106
@@ -46738,13 +46739,13 @@ msgstr "Activa o desactiva la generació de punts."
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Generate patches"
-msgstr "Genera pedaços"
+msgstr "Genera patrons"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patches)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:365
 #, kde-format
 msgid "Enables or disables patches generation."
-msgstr "Activa o desactiva la generació de pedaços."
+msgstr "Activa o desactiva la generació de patrons."
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:372
@@ -51721,7 +51722,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Brightness correction for the brush"
-msgstr "Correcció de la lluminositat per al pinzell"
+msgstr "Correcció de la brillantor per al pinzell"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:467
 #, kde-format
@@ -51746,7 +51747,7 @@ msgid ""
 "The selected brush engine does not support \"Color\" or \"Lightness\" modes. "
 "The brush will work in \"Mask\" mode."
 msgstr ""
-"La punta del pinzell seleccionada admet els modes «Color» o «Claredat». El "
+"El motor de pinzell seleccionat admet els modes «Color» o «Claredat». El "
 "pinzell funcionarà en mode «Màscara»."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:524
@@ -52104,7 +52105,7 @@ msgid ""
 "value has been cropped to %2 pixels."
 msgstr ""
 "AVÍS: La mida depén del pinzell emmascarat i s'ha fet massa gran (%1 "
-"píxels). El seu valor serà retallat a %2 píxels."
+"píxels). El seu valor serà escapçat a %2 píxels."
 
 #: plugins/paintops/libpaintop/sensors/kis_dynamic_sensor_drawing_angle.cpp:61
 #, kde-format
@@ -53135,7 +53136,7 @@ msgstr ""
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:263
 #, kde-format
 msgid "Direction/Tilt Mix"
-msgstr "Mescla direcció/inclinació"
+msgstr "Direcció/inclinació de la mescla"
 
 #. i18n: ectx: property (text), widget (QLabel, L_elevation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:274
@@ -53147,7 +53148,7 @@ msgstr "Sensibilitat de l'elevació"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:291
 #, kde-format
 msgid "Direction/Tilt Mix Value"
-msgstr "valor de la mescla direcció/inclinació"
+msgstr "Valor de la direcció/inclinació de la mescla"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:19
 msgid "Assign Profile"
@@ -55155,7 +55156,7 @@ msgstr "Arxius «zip»"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:29
 msgid "Quick Settings Docker"
-msgstr "Acoblador Configuració ràpid"
+msgstr "Acoblador Configuració ràpida"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"
@@ -58427,7 +58428,7 @@ msgstr ""
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:117
 #, kde-format
 msgid "Gap close hint: "
-msgstr "Consell del tancament de les separacions:"
+msgstr "Consell en el tancament de les separacions:"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:120
 #, kde-format
@@ -58437,7 +58438,7 @@ msgid ""
 "\"Gap close hint\" value"
 msgstr ""
 "La màscara intentarà tancar els contorns sense tancar si la separació és més "
-"xicoteta que el valor en «Consell per al tancament de les separacions»"
+"xicoteta que el valor en «Consell en el tancament de les separacions»"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
 #, kde-format

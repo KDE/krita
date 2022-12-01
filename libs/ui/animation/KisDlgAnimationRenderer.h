@@ -64,6 +64,7 @@ private Q_SLOTS:
 
     void slotExportTypeChanged();
     void slotFFMpegChanged(const QString& path);
+    void slotFFmpegChangeAndValidate(const QString& path);
 
     void frameRateChanged(int framerate);
 

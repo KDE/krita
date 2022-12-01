@@ -285,20 +285,13 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     m_page->ffmpegLocation->setStartDir(QFileInfo(m_doc->localFilePath()).path());
     KisConfig cfg(false);
     QString ffmpegPath = cfg.ffmpegLocation();
-    QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg(ffmpegPath.isEmpty() ? lastUsedOptions.ffmpegPath:ffmpegPath);
-
-    ffmpegPath = ffmpegJsonObj["path"].toString();
-    ffmpegVersion = ffmpegJsonObj["enabled"].toBool() ? ffmpegJsonObj["version"].toString() : i18n("No valid FFmpeg binary supplied...");
-    ffmpegEncoders = KisFFMpegWrapper::getSupportedEncoders(ffmpegJsonObj);
+    slotFFMpegChanged(ffmpegPath.isEmpty() ? lastUsedOptions.ffmpegPath : ffmpegPath);  
 
     m_page->ffmpegLocation->setFileName(ffmpegPath);
     m_page->ffmpegLocation->setReadOnlyText(true);
     cfg.setFFMpegLocation(ffmpegPath);
-    m_page->lblFFMpegVersion->setText(i18n("FFmpeg Version:") + " " + ffmpegVersion);
     
-    ffmpegWarningCheck();
-
-    connect(m_page->ffmpegLocation, SIGNAL(fileSelected(QString)), SLOT(slotFFMpegChanged(QString)));
+    connect(m_page->ffmpegLocation, SIGNAL(fileSelected(QString)), SLOT(slotFFmpegChangeAndValidate(QString)));
 
     // Initialize these settings based on the current document context..
     m_page->intStart->setValue(doc.image()->animationInterface()->playbackRange().start());
@@ -324,12 +317,19 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
 void KisDlgAnimationRenderer::slotFFMpegChanged(const QString& path) {
     KisConfig cfg(false);
-    QJsonObject ffmpegChangeJsonObj = KisFFMpegWrapper::findFFMpeg(path);
-    ffmpegVersion = ffmpegChangeJsonObj["enabled"].toBool() ? ffmpegChangeJsonObj["version"].toString() : i18n("No valid FFmpeg binary supplied...");
+    QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg(path);
+    ffmpegVersion = ffmpegJsonObj["enabled"].toBool() ? ffmpegJsonObj["version"].toString() : i18n("No valid FFmpeg binary supplied...");
+    ffmpegEncoders = KisFFMpegWrapper::getSupportedEncoders(ffmpegJsonObj);
 
-    cfg.setFFMpegLocation(ffmpegChangeJsonObj["path"].toString());
+    m_page->lblFFMpegVersion->setText(i18n("FFmpeg Version:") + " " + ffmpegVersion);
+
+    cfg.setFFMpegLocation(ffmpegJsonObj["path"].toString());
 
     ffmpegWarningCheck();
+}
+
+void KisDlgAnimationRenderer::slotFFmpegChangeAndValidate(const QString& path) {
+    slotFFMpegChanged(path);
     ffmpegValidate();
 }
 

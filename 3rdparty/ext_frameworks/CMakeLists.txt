@@ -19,8 +19,8 @@ if (ANDROID)
 ExternalProject_Add(
     ext_extra_cmake_modules
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://download.kde.org/stable/frameworks/5.76/extra-cmake-modules-5.76.0.tar.xz
-    URL_MD5 a64a6393a66ea17a37f9bc9876554ac9
+    URL https://download.kde.org/stable/frameworks/5.82/extra-cmake-modules-5.82.0.tar.xz
+    URL_HASH SHA256=5972ec6d78c3e95ab9cbecdb0661c158570e868466357c5cec2b63a4251ecce4
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
                -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}

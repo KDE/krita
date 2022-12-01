@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-30 00:45+0000\n"
-"PO-Revision-Date: 2022-11-12 12:58+0100\n"
+"PO-Revision-Date: 2022-11-27 13:21+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.04.0\n"
+"X-Generator: Lokalize 22.11.80\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -38521,11 +38521,10 @@ msgid "Tree Indentation"
 msgstr "Rientro albero"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:368
-#, fuzzy, kde-format
-#| msgid "Blending Mode"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
-msgstr "Metodo di fusione"
+msgstr "Stile informazioni sul metodo di fusione"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:370
 #, kde-format
@@ -38544,42 +38543,34 @@ msgstr ""
 "non modificati."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:375
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Nessuno"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:376
-#, fuzzy, kde-format
-#| msgid "Simple"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Semplice"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:377
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Layer Docker subtitle style"
-#| msgid "Balanced"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Bilanciato"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:378
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Layer Docker subtitle style"
-#| msgid "Detailed"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Dettagliato"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:391
-#, fuzzy, kde-format
-#| msgctxt "@item:tooltip"
-#| msgid "Subtitle text opacity"
+#, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "Opacità testo dei sottotitoli"
+msgstr "Opacità del testo informativo del metodo di fusione"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:409
 #, kde-format
@@ -38588,17 +38579,14 @@ msgid "Inline"
 msgstr "In linea"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:411
-#, fuzzy, kde-format
-#| msgctxt "@item:tooltip"
-#| msgid ""
-#| "If enabled, show subtitles beside layer names.\n"
-#| "If disabled, show below layer names (when enough space)."
+#, kde-format
 msgctxt "@item:tooltip"
 msgid ""
 "If enabled, show blending info beside layer names.\n"
 "If disabled, show below layer names (when enough space)."
 msgstr ""
-"Se abilitata, mostra i sottotitoli di fianco ai nomi dei livelli.\n"
+"Se abilitata, mostra le informazioni sul metodo di fusione accanto ai nomi "
+"dei livelli.\n"
 "Se disabilitata, mostra sotto i nomi dei livelli (se c'è spazio sufficiente)."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:980
@@ -39013,11 +39001,10 @@ msgid "Export Palette"
 msgstr "Esporta tavolozza"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:230
-#, fuzzy, kde-format
-#| msgid "Import successful"
+#, kde-format
 msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
-msgstr "Importazione completata correttamente"
+msgstr "Tavolozza esportata correttamente"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:372
 #, kde-format

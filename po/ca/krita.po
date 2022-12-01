@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-30 00:45+0000\n"
-"PO-Revision-Date: 2022-11-28 14:03+0100\n"
+"PO-Revision-Date: 2022-11-30 21:39+0100\n"
 "Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -2220,7 +2220,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Hatch_moire.kpp"
 msgid "Hatch moire"
-msgstr "Tramat moiré"
+msgstr "Tramat moaré"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4641,7 +4641,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "y)_Screentone_Moire.kpp"
 msgid "y) Screentone Moire"
-msgstr "y) Trama de moiré"
+msgstr "y) Trama de moaré"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5682,7 +5682,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Moiré_Pattern.kse"
 msgid "Wolthera's Moiré Pattern"
-msgstr "Patró de moiré de Wolthera"
+msgstr "Patró de moaré d'en Wolthera"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -50929,24 +50929,24 @@ msgstr "Estil de la corba d'esgotament de la tinta:"
 #: plugins/paintops/hatching/hatching_paintop_plugin.cpp:29
 #, kde-format
 msgid "Hatching"
-msgstr "Patró de moiré"
+msgstr "Patró de moaré"
 
 #: plugins/paintops/hatching/kis_hatching_options.cpp:50
 #, kde-format
 msgid "Hatching options"
-msgstr "Opcions del patró de moiré"
+msgstr "Opcions del patró de moaré"
 
 #: plugins/paintops/hatching/kis_hatching_options.cpp:121
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Hatching Brush (heavy aliasing in preview mode)"
 msgstr ""
-"Pinzell amb un patró de moiré (pixelat notable en el mode de vista prèvia)"
+"Pinzell amb un patró de moaré (pixelat notable en el mode de vista prèvia)"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:115
 #, kde-format
 msgid "Hatching Angle"
-msgstr "Angle del patró de moiré"
+msgstr "Angle del patró de moaré"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:146
 #: plugins/paintops/hatching/kis_hatching_pressure_separation_option.cpp:16
@@ -50963,12 +50963,12 @@ msgstr "Gruix"
 #: plugins/paintops/hatching/kis_hatching_preferences.cpp:22
 #, kde-format
 msgid "Hatching preferences"
-msgstr "Preferències del patró de moiré"
+msgstr "Preferències del patró de moaré"
 
 #: plugins/paintops/hatching/kis_hatching_pressure_crosshatching_option.cpp:15
 #, kde-format
 msgid "Crosshatching"
-msgstr "Encreuament del patró de moiré"
+msgstr "Encreuament del patró de moaré"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:72
@@ -50992,7 +50992,7 @@ msgstr "Origen Y:"
 #: plugins/paintops/hatching/wdghatchingoptions.ui:262
 #, kde-format
 msgid "Crosshatching style"
-msgstr "Estil de l'encreuament del patró de moiré"
+msgstr "Estil de l'encreuament del patró de moaré"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noCrosshatchingRadioButton)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:286
@@ -51022,7 +51022,7 @@ msgstr "+45° pla &llavors -45° pla"
 #: plugins/paintops/hatching/wdghatchingoptions.ui:368
 #, kde-format
 msgid "&Moiré pattern"
-msgstr "Patró de &moiré"
+msgstr "Patró de &moaré"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:384

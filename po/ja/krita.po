@@ -24396,16 +24396,15 @@ msgstr "定義済みパターンに追加(&A)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdgdisplaysettings.ui:46
-#, fuzzy, kde-format
-#| msgid "Channel Operations"
+#, kde-format
 msgid "Canvas Acceleration"
-msgstr "チャンネル演算"
+msgstr "キャンバスのアクセラレーション"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpOpenGL)
 #: libs/ui/forms/wdgdisplaysettings.ui:58
 #, kde-format
 msgid "Canvas &Graphics Acceleration"
-msgstr ""
+msgstr "キャンバスのグラフィックアクセラレーション(&G)"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:73
@@ -24415,58 +24414,51 @@ msgid ""
 "Driver combinations (like Intel) or broken on some others (like AMD/Radeon)."
 "</p></body></html>"
 msgstr ""
+"<html><head/><body><p>テクスチャバッファリングを使用します。GPU とドライバの"
+"組み合わせによっては、速くなったり (Intel など)、壊れてしまったり (AMD/"
+"Radeon など) する可能性があります。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:76
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Pastel_texture_large.kpp"
-#| msgid "Pastel texture large"
+#, kde-format
 msgid "Use texture buffer"
-msgstr "パステルテクスチャ (大)"
+msgstr "テクスチャバッファを使用する"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:146
-#, fuzzy, kde-format
-#| msgid "Bilinear interpolation"
+#, kde-format
 msgid "Bilinear Filtering"
-msgstr "バイリニア補間"
+msgstr "バイリニアフィルタリング"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:151
-#, fuzzy, kde-format
-#| msgid "Trilinear sensor"
+#, kde-format
 msgid "Trilinear Filtering"
-msgstr "三線リニアセンサー"
+msgstr "トリリニアフィルタリング"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:156
-#, fuzzy, kde-format
-#| msgid "High Pass Filter"
+#, kde-format
 msgid "High Quality Filtering"
-msgstr "ハイパスフィルタ"
+msgstr "高品質フィルタリング"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:170
-#, fuzzy, kde-format
-#| msgid "Blending Mode:"
+#, kde-format
 msgid "Scaling Mode:"
-msgstr "合成モード:"
+msgstr "拡大縮小モード:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:186
-#, fuzzy, kde-format
-#| msgid "Brush Flow Mode (needs restart):"
+#, kde-format
 msgid "Preferred Renderer (needs restart):"
-msgstr "ブラシフローモード (再起動が必要):"
+msgstr "優先するレンダラ (再起動が必要):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
-#, fuzzy, kde-format
-#| msgid "Current properties:"
+#, kde-format
 msgid "Current Renderer:"
-msgstr "現在表示しているプロパティ:"
+msgstr "現在のレンダラ:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLargePixmapCache)
 #: libs/ui/forms/wdgdisplaysettings.ui:232
@@ -24485,53 +24477,49 @@ msgstr ""
 #: libs/ui/forms/wdgdisplaysettings.ui:235
 #, kde-format
 msgid "Use large pixmap cache"
-msgstr ""
+msgstr "巨大な pixmap キャッシュを使用"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
 #: libs/ui/forms/wdgdisplaysettings.ui:249
-#, fuzzy, kde-format
-#| msgid "Settings"
+#, kde-format
 msgid "HDR Settings"
-msgstr "設定"
+msgstr "HDR 設定"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentDisplayFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:255
-#, fuzzy, kde-format
-#| msgid "Current layer"
+#, kde-format
 msgid "Current Display Format"
-msgstr "現在のレイヤー"
+msgstr "現在のディスプレイ形式"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/forms/wdgdisplaysettings.ui:262
-#, fuzzy, kde-format
-#| msgid "Display Name"
+#, kde-format
 msgid "Display Format:"
-msgstr "表示名"
+msgstr "ディスプレイ形式:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRootSurfaceFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:269
 #, kde-format
 msgid "Current Surface Value"
-msgstr ""
+msgstr "現在の表面値"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdgdisplaysettings.ui:276
-#, fuzzy, kde-format
-#| msgid "Current properties:"
+#, kde-format
 msgid "Current Output Format:"
-msgstr "現在表示しているプロパティ:"
+msgstr "現在の出力形式:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdgdisplaysettings.ui:286
 #, kde-format
 msgid "Preferred Output Format:"
-msgstr ""
+msgstr "優先出力形式:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblHDRWarning)
 #: libs/ui/forms/wdgdisplaysettings.ui:315
 #, kde-format
 msgid "HDR Warning.................................."
-msgstr ""
+msgstr "HDR Warning.................................."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:339
@@ -24542,10 +24530,9 @@ msgstr "装飾:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:351
-#, fuzzy, kde-format
-#| msgid "Transparent color: "
+#, kde-format
 msgid "Transparency Checkerboard:"
-msgstr "透過色:"
+msgstr "透過を表す市松模様:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCheckSize)
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
@@ -24562,18 +24549,15 @@ msgstr "サイズ:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCanvasBorderColor)
 #: libs/ui/forms/wdgdisplaysettings.ui:418
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Darker Color"
-#| msgid "Darker Color"
+#, kde-format
 msgid "Canvas Border Color:"
-msgstr "明度を下げる"
+msgstr "キャンバスの枠の色:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:475
-#, fuzzy, kde-format
-#| msgid "Selection mode:"
+#, kde-format
 msgid "Selection Overlay:"
-msgstr "選択モード:"
+msgstr "選択範囲オーバーレイ:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, opacityLbl)
@@ -24591,18 +24575,15 @@ msgstr "不透明度:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCanvasBorderColor_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:551
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Pixel Grid"
+#, kde-format
 msgid "Pixel Grid:"
-msgstr "ピクセルグリッドを表示"
+msgstr "ピクセル グリッド:"
 
 #. i18n: ectx: property (text), widget (QLabel, gridThresholdLabel)
 #: libs/ui/forms/wdgdisplaysettings.ui:598
-#, fuzzy, kde-format
-#| msgid "Start numbering at:"
+#, kde-format
 msgid "Start showing at:"
-msgstr "連番画像の開始番号:"
+msgstr "表示を開始するズームレベル:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -24614,28 +24595,25 @@ msgstr "その他"
 
 #. i18n: ectx: property (text), widget (QCheckBox, hideScrollbars)
 #: libs/ui/forms/wdgdisplaysettings.ui:667
-#, fuzzy, kde-format
-#| msgid "Scrollbars"
+#, kde-format
 msgid "Hide Canvas Scrollbars"
-msgstr "スクロールバー"
+msgstr "キャンバスのスクロールバーを非表示"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCurveAntialiasing)
 #: libs/ui/forms/wdgdisplaysettings.ui:677
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Enable curve anti-aliasing"
-msgstr "タッチによる描画を有効化"
+msgstr "カーブのアンチエイリアスを有効化"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHidePopups)
 #: libs/ui/forms/wdgdisplaysettings.ui:684
 #, kde-format
 msgid "Hide layer thumbnail popup"
-msgstr ""
+msgstr "レイヤーのサムネイルポップアップを表示しない"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannelsAsColor)
 #: libs/ui/forms/wdgdisplaysettings.ui:691
-#, fuzzy, kde-format
-#| msgid "Color channels in color"
+#, kde-format
 msgid "Color channels in color"
 msgstr "色チャンネル"
 
@@ -24643,13 +24621,14 @@ msgstr "色チャンネル"
 #: libs/ui/forms/wdgdisplaysettings.ui:701
 #, kde-format
 msgid "Enable selection outline anti-aliasing"
-msgstr ""
+msgstr "選択範囲の境界線のアンチエイリアスを有効化"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoving)
 #: libs/ui/forms/wdgdisplaysettings.ui:708
 #, kde-format
 msgid "If checked, the checkers will move when scrolling the canvas."
 msgstr ""
+"チェックすると、キャンバスをスクロールしたときにチェッカーも同時に動きます"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, chkMoving)
 #: libs/ui/forms/wdgdisplaysettings.ui:711
@@ -24658,12 +24637,14 @@ msgid ""
 "Determines whether the checks will stay put or whether they will scroll "
 "together with the canvas"
 msgstr ""
+"チェッカーを固定するか、キャンバスと一緒にスクロールさせるかどうかを指定しま"
+"す。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoving)
 #: libs/ui/forms/wdgdisplaysettings.ui:714
 #, kde-format
 msgid "&Move checkers when scrolling"
-msgstr ""
+msgstr "スクロール時にチェッカーを移動する(&M)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlgfilelayer.ui:35
@@ -30454,7 +30435,7 @@ msgstr "ワークスペースをインポート(&I)..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
-msgstr "ワークスペースをインポート(&N)..."
+msgstr "新しいワークスペース(&N)..."
 
 #: libs/ui/KisMainWindow.cpp:2554
 #, kde-format
@@ -59996,73 +59977,3 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
-
-#, fuzzy
-#~| msgid "Line Opacity"
-#~ msgctxt "@item:inmenu Layers Docker settings, combobox"
-#~ msgid "Subtitle Style"
-#~ msgstr "カーブ線の不透明度"
-
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "None"
-#~ msgstr "なし"
-
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "Simple"
-#~ msgstr "シンプル"
-
-#~ msgid "&Canvas"
-#~ msgstr "キャンバス(&C)"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "&Reset zoom"
-#~ msgctxt "action"
-#~ msgid "&Reset Zoom"
-#~ msgstr "表示倍率をリセット(&R)"
-
-#, fuzzy
-#~| msgctxt "action"
-#~| msgid "Reset zoom"
-#~ msgctxt "action"
-#~ msgid "Reset Zoom"
-#~ msgstr "表示倍率をリセット"
-
-#, fuzzy
-#~| msgid "Fit to Page"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page"
-#~ msgstr "ページに合わせる"
-
-#, fuzzy
-#~| msgid "Fit to Width"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Width"
-#~ msgstr "幅に合わせる"
-
-#, fuzzy
-#~| msgid "Fit to Page &Width"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Width"
-#~ msgstr "ページの幅に合わせる(&W)"
-
-#, fuzzy
-#~| msgid "Fit to Height"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Height"
-#~ msgstr "高さに合わせる"
-
-#, fuzzy
-#~| msgid "Fit to Page &Height"
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Height"
-#~ msgstr "ページの高さに合わせる(&H)"
-
-#~ msgid "Duplicate current profile"
-#~ msgstr "現在のプロファイルを複製"
-
-#~ msgid "Reset Zoom to 100%"
-#~ msgstr "倍率を100%にリセット"
-
-#~ msgid "Fit Page"
-#~ msgstr "ページに合わせる"

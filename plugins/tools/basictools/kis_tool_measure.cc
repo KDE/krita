@@ -65,7 +65,7 @@ KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double
 
 void KisToolMeasureOptionsWidget::slotSetDistance(double distance)
 {
-    m_distance = distance / m_resolution;
+    m_distance = distance;
     updateDistance();
 }
 
@@ -82,7 +82,8 @@ void KisToolMeasureOptionsWidget::slotUnitChanged(int index)
 
 void KisToolMeasureOptionsWidget::updateDistance()
 {
-    m_distanceLabel->setText(KritaUtils::prettyFormatReal(m_unit.toUserValue(m_distance)));
+    double distance = m_distance / m_resolution;
+    m_distanceLabel->setText(KritaUtils::prettyFormatReal(m_unit.toUserValue(distance)));
 }
 
 
@@ -132,6 +133,9 @@ void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
     QTransform transf;
     transf.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
     paintToolOutline(&gc, transf.map(elbowPath));
+
+    // Update the resolution (in case the resolution has changed)
+    m_optionsWidget->m_resolution = currentImage()->xRes();
 
     gc.setPen(old);
 }

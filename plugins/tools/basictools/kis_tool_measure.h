@@ -40,12 +40,12 @@ public Q_SLOTS:
 private:
     void updateDistance();
 
-    double m_resolution {0.0};
     QLabel* m_angleLabel {nullptr};
     double m_distance {0.0};
 public:
     QLabel* m_distanceLabel {nullptr};
     KoUnit m_unit;
+    double m_resolution {0.0};
 };
 
 class KisToolMeasure : public KisTool

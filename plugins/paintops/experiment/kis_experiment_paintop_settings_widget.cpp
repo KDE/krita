@@ -7,7 +7,6 @@
 
 #include "kis_experiment_paintop_settings.h"
 
-#include <kis_color_option.h>
 #include <kis_paintop_settings_widget.h>
 
 #include <kis_pressure_opacity_option.h>

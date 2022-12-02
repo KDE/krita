@@ -9,9 +9,10 @@
 #include "kis_grid_paintop_settings.h"
 #include "kis_grid_paintop_settings_widget.h"
 
-#include "kis_gridop_option.h"
-#include "kis_grid_shape_option.h"
-#include <kis_color_option.h>
+#include "KisGridShapeOptionData.h"
+#include "KisGridOpOptionData.h"
+
+#include <KisColorOptionData.h>
 #include <KisOptimizedBrushOutline.h>
 
 struct KisGridPaintOpSettings::Private
@@ -29,16 +30,16 @@ KisGridPaintOpSettings::KisGridPaintOpSettings(KisResourcesInterfaceSP resources
 
 void KisGridPaintOpSettings::setPaintOpSize(qreal value)
 {
-    KisGridOpProperties option;
-    option.readOptionSetting(this);
+    KisGridOpOptionData option;
+    option.read(this);
     option.diameter = value;
-    option.writeOptionSetting(this);
+    option.write(this);
 }
 
 qreal KisGridPaintOpSettings::paintOpSize() const
 {
-    KisGridOpProperties option;
-    option.readOptionSetting(this);
+    KisGridOpOptionData option;
+    option.read(this);
     return option.diameter;
 }
 
@@ -57,8 +58,8 @@ bool KisGridPaintOpSettings::mousePressEvent(const KisPaintInformation& info, Qt
 {
     Q_UNUSED(currentNode);
 
-    KisGridOpProperties option;
-    option.readOptionSetting(this);
+    KisGridOpOptionData option;
+    option.read(this);
     bool eventIgnored = true;
     qreal newHorizontalOffset = std::fmod(info.pos().x() + option.grid_width/2.0, (float)option.grid_width);
     qreal newVerticalOffset = std::fmod(info.pos().y() + option.grid_height/2.0, (float)option.grid_height);
@@ -77,7 +78,7 @@ bool KisGridPaintOpSettings::mousePressEvent(const KisPaintInformation& info, Qt
         }
         option.horizontal_offset = newHorizontalOffset * option.grid_width;
         option.vertical_offset = newVerticalOffset * option.grid_height;
-        option.writeOptionSetting(this);
+        option.write(this);
         eventIgnored = false;
     }
     return eventIgnored;
@@ -92,8 +93,10 @@ bool KisGridPaintOpSettings::mouseReleaseEvent()
 KisOptimizedBrushOutline KisGridPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     KisOptimizedBrushOutline path;
-    KisGridOpProperties option;
-    option.readOptionSetting(this);
+    KisGridOpOptionData option;
+    option.read(this);
+    KisGridShapeOptionData shapeOption;
+    shapeOption.read(this);
     if (mode.isVisible) {
         qreal sizex = option.diameter * option.grid_scale;
         qreal sizey = option.diameter * option.grid_scale;
@@ -146,7 +149,7 @@ KisOptimizedBrushOutline KisGridPaintOpSettings::brushOutline(const KisPaintInfo
         for (int y = 0; y < (gridHeight)/yStep; y++) {
             for (int x = 0; x < (gridWidth)/xStep; x++) {
                 tile = QRectF(dabRect.x() + x * xStep, dabRect.y() + y * yStep, xStep, yStep);
-                switch (option.grid_shape) {
+                switch (shapeOption.shape) {
                 case 0: {
                     cellPath.addEllipse(tile);
                     break;
@@ -204,17 +207,17 @@ QList<KisUniformPaintOpPropertySP> KisGridPaintOpSettings::uniformProperties(Kis
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    KisGridOpProperties option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisGridOpOptionData option;
+                    option.read(prop->settings().data());
 
                     prop->setValue(int(option.grid_division_level));
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    KisGridOpProperties option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisGridOpOptionData option;
+                    option.read(prop->settings().data());
                     option.grid_division_level = prop->value().toInt();
-                    option.writeOptionSetting(prop->settings().data());
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));

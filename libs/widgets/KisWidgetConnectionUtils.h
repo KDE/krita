@@ -22,6 +22,7 @@ class KisSpacingSelectionWidget;
 class KisAngleSelector;
 class QLineEdit;
 class KisMultipliersDoubleSliderSpinBox;
+class KisFileNameRequester;
 
 namespace KisWidgetConnectionUtils {
 
@@ -99,6 +100,9 @@ void KRITAWIDGETS_EXPORT connectControlState(QComboBox *button, QObject *source,
 void KRITAWIDGETS_EXPORT connectControl(KisSpacingSelectionWidget *widget, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(KisAngleSelector *widget, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QLineEdit *widget, QObject *source, const char *property);
+void KRITAWIDGETS_EXPORT connectControl(KisFileNameRequester *widget, QObject *source, const char *property);
+void KRITAWIDGETS_EXPORT connectWidgetVisibleToProperty(QWidget* widget, QObject* source, const char* property);
+
 
 } // namespace KisWidgetConnectionUtils
 

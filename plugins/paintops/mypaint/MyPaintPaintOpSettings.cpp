@@ -7,7 +7,6 @@
 #include "MyPaintPaintOpSettings.h"
 
 #include <cmath>
-#include <kis_color_option.h>
 #include <KisOptimizedBrushOutline.h>
 #include <MyPaintStandardOptionData.h>
 

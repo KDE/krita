@@ -18,6 +18,7 @@
 #include "kis_spacing_selection_widget.h"
 #include "kis_multipliers_double_slider_spinbox.h"
 #include "KisAngleSelector.h"
+#include "kis_file_name_requester.h"
 
 class ConnectButtonStateHelper : public QObject
 {
@@ -579,6 +580,48 @@ void connectControl(QLineEdit *widget, QObject *source, const char *property)
         QObject::connect(widget, &QLineEdit::textChanged,
                          source, [prop, source] (const QString &value) { prop.write(source, value); });
     }
+}
+
+void connectControl(KisFileNameRequester *widget, QObject *source, const char *property)
+{
+    const QMetaObject* meta = source->metaObject();
+    QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
+
+    QMetaMethod signal = prop.notifySignal();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterCount() >= 1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterType(0) == QMetaType::type("QString"));
+    
+    const QMetaObject* dstMeta = widget->metaObject();
+
+    QMetaMethod updateSlot = dstMeta->method(
+                dstMeta->indexOfSlot("setFileName(QString)"));
+    QObject::connect(source, signal, widget, updateSlot);
+    
+    widget->setFileName(prop.read(source).toString());
+
+    if (prop.isWritable()) {
+        QObject::connect(widget, &KisFileNameRequester::textChanged,
+                         source, [prop, source] (const QString &value) {
+							 prop.write(source, value); });
+    }
+}
+
+void connectWidgetVisibleToProperty(QWidget* widget, QObject* source, const char* property)
+{
+	const QMetaObject* meta = source->metaObject();
+    QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+	QMetaMethod signal = prop.notifySignal();
+	
+    const QMetaObject* dstMeta = widget->metaObject();
+	
+    QMetaMethod updateSlot = dstMeta->method(
+        dstMeta->indexOfSlot("setVisible(bool)"));
+	
+    QObject::connect(source, signal, widget, updateSlot);
+    widget->setVisible(prop.read(source).toBool());
 }
 
 }

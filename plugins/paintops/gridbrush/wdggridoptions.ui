@@ -80,7 +80,7 @@
      </widget>
     </item>
     <item row="5" column="1" colspan="2">
-     <widget class="KisDoubleSliderSpinBox" name="divisionLevelSPBox" native="true"/>
+     <widget class="KisSliderSpinBox" name="divisionLevelSPBox" native="true"/>
     </item>
     <item row="0" column="0">
      <widget class="QLabel" name="label_7">
@@ -113,7 +113,7 @@
      </widget>
     </item>
     <item row="1" column="1" colspan="2">
-     <widget class="KisDoubleSliderSpinBox" name="gridWidthSPBox" native="true"/>
+     <widget class="KisSliderSpinBox" name="gridWidthSPBox" native="true"/>
     </item>
     <item row="5" column="0">
      <widget class="QLabel" name="label_3">
@@ -133,13 +133,13 @@
      </widget>
     </item>
     <item row="2" column="1" colspan="2">
-     <widget class="KisDoubleSliderSpinBox" name="gridHeightSPBox" native="true"/>
+     <widget class="KisSliderSpinBox" name="gridHeightSPBox" native="true"/>
     </item>
     <item row="8" column="2">
      <widget class="KisDoubleSliderSpinBox" name="vertBorderDSPBox" native="true"/>
     </item>
     <item row="0" column="1" colspan="2">
-     <widget class="KisDoubleSliderSpinBox" name="diameterSPBox" native="true"/>
+     <widget class="KisSliderSpinBox" name="diameterSPBox" native="true"/>
     </item>
     <item row="3" column="0">
      <widget class="QLabel" name="label_8">
@@ -173,6 +173,12 @@
  <customwidgets>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>

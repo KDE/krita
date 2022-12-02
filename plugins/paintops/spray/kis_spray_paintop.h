@@ -18,6 +18,10 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rate_option.h>
+#include <KisSprayShapeDynamicsOptionData.h>
+#include "KisSprayOpOption.h"
+#include "KisSprayShapeOptionData.h"
+
 
 class KisPainter;
 
@@ -44,10 +48,10 @@ private:
     KisSpacingInformation computeSpacing(const KisPaintInformation &info, qreal lodScale) const;
 
 private:
-    KisShapeProperties m_shapeProperties;
-    KisSprayOptionProperties m_properties;
-    KisShapeDynamicsProperties m_shapeDynamicsProperties;
-    KisColorProperties m_colorProperties;
+    KisSprayShapeOptionData m_shapeProperties;
+    KisSprayOpOption m_sprayOpOption;
+    KisSprayShapeDynamicsOptionData m_shapeDynamicsProperties;
+    KisColorOptionData m_colorProperties;
     KisBrushOptionProperties m_brushOption;
 
     KisPaintDeviceSP m_dab;

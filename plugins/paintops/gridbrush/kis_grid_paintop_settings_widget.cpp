@@ -5,11 +5,12 @@
  */
 #include "kis_grid_paintop_settings_widget.h"
 
-#include "kis_gridop_option.h"
 #include "kis_grid_paintop_settings.h"
-#include "kis_grid_shape_option.h"
+#include "KisGridShapeOptionWidget.h"
+#include "KisGridOpOptionWidget.h"
 
-#include <kis_color_option.h>
+
+#include <KisColorOptionWidget.h>
 
 #include <kis_paintop_settings_widget.h>
 #include <KisPaintingModeOptionWidget.h>
@@ -21,10 +22,10 @@ KisGridPaintOpSettingsWidget:: KisGridPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
     namespace kpowu = KisPaintOpOptionWidgetUtils;
-    addPaintOpOption(new KisGridOpOption());
-    addPaintOpOption(new KisGridShapeOption());
+    addPaintOpOption(kpowu::createOptionWidget<KisGridOpOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisGridShapeOptionWidget>());
     addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
-    addPaintOpOption(new KisColorOption());
+    addPaintOpOption(kpowu::createOptionWidget<KisColorOptionWidget>());
     addPaintOpOption(kpowu::createOptionWidget<KisPaintingModeOptionWidget>());
 }
 

@@ -89,11 +89,6 @@ KisAutoBrushWidget::KisAutoBrushWidget(int maxBrushSize,
                 m_d->model->setverticalFade(inputVFade->value());
             });
 
-    connect(inputHFade, qOverload<qreal>(&KisDoubleSliderSpinBox::valueChanged),
-            m_d->model, &KisAutoBrushModel::sethorizontalFade);
-    connect(inputVFade, qOverload<qreal>(&KisDoubleSliderSpinBox::valueChanged),
-            m_d->model, &KisAutoBrushModel::setverticalFade);
-
     m_d->model->LAGER_QT(horizontalFade).bind([this] (qreal value) {
         KisSignalsBlocker b(inputHFade);
         inputHFade->setValue(value);

@@ -181,7 +181,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisFileNameRequester" name="imageUrl">
+      <widget class="KisFileNameRequester" name="imageUrlRequester">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>0</horstretch>

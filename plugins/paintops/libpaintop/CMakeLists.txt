@@ -8,7 +8,9 @@ set(kritalibpaintop_LIB_SRCS
     kis_brush_option_widget.cpp
     kis_brush_option.cpp
     kis_brush_selection_widget.cpp
-    kis_color_option.cpp
+    KisColorOptionData.cpp
+    KisColorOptionModel.cpp
+    KisColorOptionWidget.cpp
     kis_color_source.cpp
     kis_color_source_option.cpp
     kis_curve_option.cpp

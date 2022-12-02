@@ -21,11 +21,11 @@ KisPaintopLodLimitations KisSizeOptionData::lodLimitations() const
 
     if (!isCheckable || isChecked) {
         // HINT: FUZZY_PER_STROKE doesn't affect instant preview
-        if (sensorFuzzyPerDab.isActive) {
+        if (sensorStruct().sensorFuzzyPerDab.isActive) {
             l.limitations << KoID("size-fade", i18nc("PaintOp instant preview limitation", "Size -> Fuzzy (sensor)"));
         }
 
-        if (sensorFade.isActive) {
+        if (sensorStruct().sensorFade.isActive) {
             l.blockers << KoID("size-fuzzy", i18nc("PaintOp instant preview limitation", "Size -> Fade (sensor)"));
         }
     }

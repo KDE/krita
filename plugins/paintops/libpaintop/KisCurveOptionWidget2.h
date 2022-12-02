@@ -21,27 +21,27 @@ class PAINTOP_EXPORT KisCurveOptionWidget2 : public KisPaintOpOption
 {
     Q_OBJECT
 public:
-    using data_type = KisCurveOptionData;
+    using data_type = KisCurveOptionDataCommon;
 
-    KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+    KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                           KisPaintOpOption::PaintopCategory category,
                           lager::reader<bool> enabledLink = lager::make_constant(true),
                           std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt);
 
-    KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+    KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                           KisPaintOpOption::PaintopCategory category,
                           const QString &curveMinLabel, const QString &curveMaxLabel,
                           lager::reader<bool> enabledLink = lager::make_constant(true),
                           std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt);
 
-    KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+    KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                           KisPaintOpOption::PaintopCategory category,
                           const QString &curveMinLabel, const QString &curveMaxLabel,
                           int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
                           lager::reader<bool> enabledLink = lager::make_constant(true),
                           std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt);
 
-    KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+    KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                           KisPaintOpOption::PaintopCategory category,
                           const QString &curveMinLabel, const QString &curveMaxLabel,
                           int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,

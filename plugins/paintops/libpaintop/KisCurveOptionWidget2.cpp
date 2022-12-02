@@ -24,7 +24,7 @@
 
 struct KisCurveOptionWidget2::Private
 {
-    Private(lager::cursor<KisCurveOptionData> optionData,
+    Private(lager::cursor<KisCurveOptionDataCommon> optionData,
             lager::reader<bool> enabledLink,
             std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader)
         : model(optionData, enabledLink, rangeReader)
@@ -37,7 +37,7 @@ struct KisCurveOptionWidget2::Private
     QString curveValueSuffix;
 };
 
-KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                                              PaintopCategory category,
                                              lager::reader<bool> enabledLink,
                                              std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader)
@@ -49,7 +49,7 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> o
 {
 }
 
-KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                                              PaintopCategory category,
                                              const QString &curveMinLabel, const QString &curveMaxLabel,
                                              lager::reader<bool> enabledLink,
@@ -65,7 +65,7 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> o
 
 }
 
-KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                                              PaintopCategory category,
                                              const QString &curveMinLabel, const QString &curveMaxLabel,
                                              int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
@@ -81,14 +81,14 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> o
 {
 }
 
-KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                                              PaintopCategory category,
                                              const QString &curveMinLabel, const QString &curveMaxLabel,
                                              int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
                                              const QString &strengthPrefix, const QString &strengthSuffix,
                                              lager::reader<bool> enabledLink,
                                              std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader)
-    : KisPaintOpOption(optionData->id.name(), category, optionData[&KisCurveOptionData::isChecked], enabledLink)
+    : KisPaintOpOption(optionData->id.name(), category, optionData[&KisCurveOptionDataCommon::isChecked], enabledLink)
     , m_widget(new QWidget)
     , m_curveOptionWidget(new Ui_WdgCurveOption2())
     , m_d(new Private(optionData, enabledLink, rangeReader))
@@ -176,7 +176,7 @@ void KisCurveOptionWidget2::writeOptionSetting(KisPropertiesConfigurationSP sett
 
 void KisCurveOptionWidget2::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    KisCurveOptionData data(*m_d->model.optionData);
+    KisCurveOptionDataCommon data(*m_d->model.optionData);
     data.read(setting.data());
     m_d->model.optionData.set(data);
 }

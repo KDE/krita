@@ -31,7 +31,7 @@ void KisSharpnessOptionMixInImpl::write(KisPropertiesConfiguration *setting) con
 KisSharpnessOptionData::KisSharpnessOptionData(const QString &prefix)
     : KisOptionTuple<KisCurveOptionData, KisSharpnessOptionMixIn>(prefix, KoID("Sharpness", i18n("Sharpness")))
 {
-    valueFixUpReadCallback = [] (KisCurveOptionData *data, const KisPropertiesConfiguration *setting) {
+    valueFixUpReadCallback = [] (KisCurveOptionDataCommon *data, const KisPropertiesConfiguration *setting) {
 
         if (setting->hasProperty(SHARPNESS_FACTOR) && !setting->hasProperty("SharpnessValue")) {
             data->strengthValue = setting->getDouble(SHARPNESS_FACTOR);

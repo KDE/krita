@@ -22,7 +22,7 @@ public:
     QString minimumLabel() override;
     QString maximumLabel(int length) override;
     QString valueSuffix() override;
-    QWidget* createConfigWidget(lager::cursor<KisCurveOptionData>, QWidget*) override;
+    QWidget* createConfigWidget(lager::cursor<KisCurveOptionDataCommon>, QWidget*) override;
 
     int m_minimumValue;
     int m_maximumValue;

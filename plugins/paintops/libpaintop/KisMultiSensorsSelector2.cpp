@@ -6,13 +6,15 @@
  */
 #include "KisMultiSensorsSelector2.h"
 
+#include "KisCurveOptionData.h"
+#include "kis_dynamic_sensor.h"
 #include "ui_wdgmultisensorsselector.h"
 #include "KisMultiSensorsModel2.h"
 #include <KisDynamicSensorFactoryRegistry.h>
 
 
 struct KisMultiSensorsSelector2::Private {
-    lager::cursor<KisCurveOptionData> optionData;
+    lager::cursor<KisCurveOptionDataCommon> optionData;
 
     Ui_WdgMultiSensorsSelector form;
     KisMultiSensorsModel2* model;
@@ -21,7 +23,7 @@ struct KisMultiSensorsSelector2::Private {
 };
 
 auto sensorsLens = lager::lenses::getset(
-    [](const KisCurveOptionData &data) -> KisMultiSensorsModel2::MultiSensorData {
+    [](const KisCurveOptionDataCommon &data) -> KisMultiSensorsModel2::MultiSensorData {
         std::vector<const KisSensorData*> srcSensors = data.sensors();
 
         KisMultiSensorsModel2::MultiSensorData sensors;
@@ -32,7 +34,7 @@ auto sensorsLens = lager::lenses::getset(
         }
         return sensors;
     },
-    [](KisCurveOptionData data, KisMultiSensorsModel2::MultiSensorData sensors) -> KisCurveOptionData {
+    [](KisCurveOptionDataCommon data, KisMultiSensorsModel2::MultiSensorData sensors) -> KisCurveOptionDataCommon {
         std::vector<KisSensorData*> parentSensors = data.sensors();
 
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(parentSensors.size() == sensors.size(), data);
@@ -73,7 +75,7 @@ KisMultiSensorsSelector2::~KisMultiSensorsSelector2()
     delete d;
 }
 
-void KisMultiSensorsSelector2::setOptionDataCursor(lager::cursor<KisCurveOptionData> optionData)
+void KisMultiSensorsSelector2::setOptionDataCursor(lager::cursor<KisCurveOptionDataCommon> optionData)
 {
     d->optionData = optionData;
     d->model = new KisMultiSensorsModel2(optionData.zoom(sensorsLens), this);

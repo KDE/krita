@@ -4,9 +4,9 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "KisCurveOptionData.h"
+#include "MyPaintCurveOptionData.h"
 
-KisCurveOptionData::KisCurveOptionData(const QString &prefix,
+MyPaintCurveOptionData::MyPaintCurveOptionData(const QString &prefix,
                                        const KoID &id,
                                        bool isCheckable,
                                        bool isChecked,
@@ -20,26 +20,26 @@ KisCurveOptionData::KisCurveOptionData(const QString &prefix,
                                separateCurveValue,
                                minValue,
                                maxValue,
-                               new KisKritaSensorPack())
+                               new MyPaintSensorPack())
 {
 }
 
-KisCurveOptionData::KisCurveOptionData(const KoID &id,
+MyPaintCurveOptionData::MyPaintCurveOptionData(const KoID &id,
                                        bool isCheckable,
                                        bool isChecked,
                                        bool separateCurveValue,
                                        qreal minValue,
                                        qreal maxValue)
-    : KisCurveOptionData("", id, isCheckable, isChecked, separateCurveValue, minValue, maxValue)
+    : MyPaintCurveOptionData("", id, isCheckable, isChecked, separateCurveValue, minValue, maxValue)
 {
 }
 
-KisKritaSensorData &KisCurveOptionData::sensorStruct()
+MyPaintSensorData &MyPaintCurveOptionData::sensorStruct()
 {
-    return dynamic_cast<KisKritaSensorPack *>(sensorData.data())->sensorsStruct();
+    return dynamic_cast<MyPaintSensorPack *>(sensorData.data())->sensorsStruct();
 }
 
-const KisKritaSensorData &KisCurveOptionData::sensorStruct() const
+const MyPaintSensorData &MyPaintCurveOptionData::sensorStruct() const
 {
-    return dynamic_cast<const KisKritaSensorPack*>(sensorData.constData())->constSensorsStruct();
+    return dynamic_cast<const MyPaintSensorPack*>(sensorData.constData())->constSensorsStruct();
 }

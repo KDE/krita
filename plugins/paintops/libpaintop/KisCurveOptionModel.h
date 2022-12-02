@@ -23,13 +23,13 @@ class PAINTOP_EXPORT KisCurveOptionModel : public QObject
 {
     Q_OBJECT
 public:
-    KisCurveOptionModel(lager::cursor<KisCurveOptionData> optionData,
+    KisCurveOptionModel(lager::cursor<KisCurveOptionDataCommon> optionData,
                         lager::reader<bool> externallyEnabled,
                         std::optional<lager::reader<RangeState>> rangeOverride);
     ~KisCurveOptionModel();
 
     // the state must be declared **before** any cursors or readers
-    lager::cursor<KisCurveOptionData> optionData;
+    lager::cursor<KisCurveOptionDataCommon> optionData;
     lager::reader<RangeState> rangeNorm;
     lager::state<QString, lager::automatic_tag> activeSensorIdData;
     LAGER_QT_READER(bool, isCheckable);
@@ -46,7 +46,7 @@ public:
     LAGER_QT_READER(LabelsState, labelsState);
     LAGER_QT_CURSOR(QString, activeCurve);
 
-    KisCurveOptionData bakedOptionData() const;
+    KisCurveOptionDataCommon bakedOptionData() const;
 };
 
 #endif // KISCURVEOPTIONMODEL_H

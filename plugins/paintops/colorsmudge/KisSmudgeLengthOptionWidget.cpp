@@ -39,7 +39,7 @@ struct KisSmudgeLengthOptionWidget::Private
 KisSmudgeLengthOptionWidget::KisSmudgeLengthOptionWidget(lager::cursor<KisSmudgeLengthOptionData> optionData,
                                                          lager::reader<bool> isBrushPierced,
                                                          lager::reader<bool> forceNewEngine)
-    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionData>), KisPaintOpOption::GENERAL)
+    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL)
     , m_d(new Private(optionData, isBrushPierced, forceNewEngine))
 {
     using namespace KisWidgetConnectionUtils;

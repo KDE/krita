@@ -9,6 +9,29 @@
 
 #include <KisWidgetConnectionUtils.h>
 #include <KisSensorWithLengthModel.h>
+#include <KisKritaSensorPack.h>
+
+namespace {
+    auto safeDereferenceDistanceSensor = lager::lenses::getset(
+    [](const KisCurveOptionDataCommon &data) -> KisSensorWithLengthData {
+        const KisKritaSensorPack *pack = dynamic_cast<const KisKritaSensorPack*>(data.sensorData.constData());
+        if (pack) {
+            return pack->constSensorsStruct().sensorDistance;
+        } else {
+            qWarning() << "safeDereferenceDistanceSensor(get): failed to get a Krita sensor data";
+            return KisSensorWithLengthData(DistanceId);
+        }
+    },
+    [](KisCurveOptionDataCommon data, KisSensorWithLengthData sensor) -> KisCurveOptionDataCommon {
+        KisKritaSensorPack *pack = dynamic_cast<KisKritaSensorPack*>(data.sensorData.data());
+        if (pack) {
+            pack->sensorsStruct().sensorDistance = sensor;
+        } else {
+            qWarning() << "safeDereferenceDistanceSensor(set): failed to get a Krita sensor data";
+        }
+        return data;
+    });
+}
 
 KisDynamicSensorFactoryDistance::KisDynamicSensorFactoryDistance()
     : KisSimpleDynamicSensorFactory(
@@ -19,14 +42,14 @@ KisDynamicSensorFactoryDistance::KisDynamicSensorFactoryDistance()
 
 }
 
-QWidget *KisDynamicSensorFactoryDistance::createConfigWidget(lager::cursor<KisCurveOptionData> data, QWidget *parent)
+QWidget *KisDynamicSensorFactoryDistance::createConfigWidget(lager::cursor<KisCurveOptionDataCommon> data, QWidget *parent)
 {
     QWidget* wdg = new QWidget(parent);
     Ui_SensorDistanceConfiguration stc;
     stc.setupUi(wdg);
 
     KisSensorWithLengthModel *model =
-        new KisSensorWithLengthModel(data[&KisCurveOptionData::sensorDistance], wdg);
+        new KisSensorWithLengthModel(data.zoom(safeDereferenceDistanceSensor), wdg);
 
     using namespace KisWidgetConnectionUtils;
 

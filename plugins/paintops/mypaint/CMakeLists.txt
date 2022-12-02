@@ -5,6 +5,8 @@ include_directories(${LIBMYPAINT_INCLUDE_DIR})
 link_directories(${LIBMYPAINT_LIBRARIES})
 
 set(kritamypaintop_SOURCES
+    MyPaintSensorPack.cpp
+    MyPaintCurveOptionData.cpp
     MyPaintPaintOp.cpp
     MyPaintPaintOpOption.cpp
     MyPaintPaintOpSettings.cpp

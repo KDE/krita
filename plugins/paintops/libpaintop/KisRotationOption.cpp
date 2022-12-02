@@ -23,11 +23,11 @@ KisRotationOption::KisRotationOption(const KisPropertiesConfiguration *setting)
 KisRotationOption::KisRotationOption(const KisRotationOptionData &data)
     : KisCurveOption2(data)
 {
-    if (data.sensorDrawingAngle.isActive) {
+    if (data.sensorStruct().sensorDrawingAngle.isActive) {
         m_fanCornersEnabled =
-             data.sensorDrawingAngle.fanCornersEnabled &&
-             !data.sensorDrawingAngle.lockedAngleMode;
-        m_fanCornersStep = qreal(data.sensorDrawingAngle.fanCornersStep);
+             data.sensorStruct().sensorDrawingAngle.fanCornersEnabled &&
+             !data.sensorStruct().sensorDrawingAngle.lockedAngleMode;
+        m_fanCornersStep = qreal(data.sensorStruct().sensorDrawingAngle.fanCornersStep);
     }
 }
 

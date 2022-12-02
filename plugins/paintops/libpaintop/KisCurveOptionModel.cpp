@@ -10,7 +10,7 @@
 #include <KisZug.h>
 
 auto activeCurveLens = lager::lenses::getset(
-    [](const std::tuple<KisCurveOptionData, QString> &data) -> QString {
+    [](const std::tuple<KisCurveOptionDataCommon, QString> &data) -> QString {
         QString activeCurve;
         const bool useSameCurve = std::get<0>(data).useSameCurve;
 
@@ -35,7 +35,7 @@ auto activeCurveLens = lager::lenses::getset(
 
         return activeCurve;
     },
-    [](std::tuple<KisCurveOptionData, QString> data, QString curve) {
+    [](std::tuple<KisCurveOptionDataCommon, QString> data, QString curve) {
         const bool useSameCurve = std::get<0>(data).useSameCurve;
 
         if (useSameCurve) {
@@ -60,48 +60,38 @@ auto activeCurveLens = lager::lenses::getset(
         return data;
     });
 
-int calcActiveSensorLength(const KisCurveOptionData &data, const QString &activeSensorId) {
-    int length = -1;
-
-    if (activeSensorId == FadeId.id()) {
-        return data.sensorFade.length;
-    } else if (activeSensorId == DistanceId.id()) {
-        return data.sensorDistance.length;
-    } else if (activeSensorId == TimeId.id()) {
-        return data.sensorTime.length;
-    }
-
-    return length;
+int calcActiveSensorLength(const KisCurveOptionDataCommon &data, const QString &activeSensorId) {
+    return data.sensorData->calcActiveSensorLength(activeSensorId);
 }
 
 
-KisCurveOptionModel::KisCurveOptionModel(lager::cursor<KisCurveOptionData> _optionData,
+KisCurveOptionModel::KisCurveOptionModel(lager::cursor<KisCurveOptionDataCommon> _optionData,
                                          lager::reader<bool> externallyEnabled,
                                          std::optional<lager::reader<RangeState>> rangeOverride)
     : optionData(_optionData)
     , rangeNorm(rangeOverride ? *rangeOverride :
-                      lager::with(optionData[&KisCurveOptionData::strengthMinValue],
-                                  optionData[&KisCurveOptionData::strengthMaxValue]))
+                      lager::with(optionData[&KisCurveOptionDataCommon::strengthMinValue],
+                                  optionData[&KisCurveOptionDataCommon::strengthMaxValue]))
     , activeSensorIdData(PressureId.id())
-    , LAGER_QT(isCheckable) {optionData[&KisCurveOptionData::isCheckable]}
-    , LAGER_QT(isChecked) {optionData[&KisCurveOptionData::isChecked]}
+    , LAGER_QT(isCheckable) {optionData[&KisCurveOptionDataCommon::isCheckable]}
+    , LAGER_QT(isChecked) {optionData[&KisCurveOptionDataCommon::isChecked]}
     , LAGER_QT(effectiveIsChecked) {lager::with(LAGER_QT(isChecked), externallyEnabled).map(std::logical_and{})}
     , LAGER_QT(effectiveStrengthValueNorm) {
           lager::with(rangeNorm.zoom(lager::lenses::first),
-                      optionData[&KisCurveOptionData::strengthValue],
+                      optionData[&KisCurveOptionDataCommon::strengthValue],
                       rangeNorm.zoom(lager::lenses::second))
                   .map(&qBound<qreal>)}
     , LAGER_QT(strengthValueDenorm) {
-          optionData[&KisCurveOptionData::strengthValue]
+          optionData[&KisCurveOptionDataCommon::strengthValue]
                   .zoom(kiszug::lenses::scale<qreal>(100.0))}
     , LAGER_QT(effectiveStrengthStateDenorm) {
           lager::with(LAGER_QT(effectiveStrengthValueNorm),
                       rangeNorm.zoom(lager::lenses::first),
                       rangeNorm.zoom(lager::lenses::second))
             .xform(kiszug::foreach_arg(kiszug::map_mupliply<qreal>(100.0)))}
-    , LAGER_QT(useCurve) {optionData[&KisCurveOptionData::useCurve]}
-    , LAGER_QT(useSameCurve) {optionData[&KisCurveOptionData::useSameCurve]}
-    , LAGER_QT(curveMode) {optionData[&KisCurveOptionData::curveMode]}
+    , LAGER_QT(useCurve) {optionData[&KisCurveOptionDataCommon::useCurve]}
+    , LAGER_QT(useSameCurve) {optionData[&KisCurveOptionDataCommon::useSameCurve]}
+    , LAGER_QT(curveMode) {optionData[&KisCurveOptionDataCommon::curveMode]}
     , LAGER_QT(activeSensorId) {activeSensorIdData}
     , LAGER_QT(activeSensorLength) {lager::with(optionData, activeSensorIdData).map(&calcActiveSensorLength)}
     , LAGER_QT(labelsState) {lager::with(LAGER_QT(activeSensorId), LAGER_QT(activeSensorLength))}
@@ -115,9 +105,9 @@ KisCurveOptionModel::~KisCurveOptionModel()
 {
 }
 
-KisCurveOptionData KisCurveOptionModel::bakedOptionData() const
+KisCurveOptionDataCommon KisCurveOptionModel::bakedOptionData() const
 {
-    KisCurveOptionData data = optionData.get();
+    KisCurveOptionDataCommon data = optionData.get();
     data.isChecked = effectiveIsChecked();
     std::tie(data.strengthMinValue, data.strengthMaxValue) =
         rangeNorm.get();

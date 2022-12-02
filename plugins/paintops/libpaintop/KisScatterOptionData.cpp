@@ -30,7 +30,7 @@ KisScatterOptionData::KisScatterOptionData(const QString &prefix)
                                                                 KoID("Scatter", i18n("Scatter")),
                                                                 true, false, false, 0.0, 5.0)
 {
-    valueFixUpReadCallback = [] (KisCurveOptionData *data, const KisPropertiesConfiguration *setting) {
+    valueFixUpReadCallback = [] (KisCurveOptionDataCommon *data, const KisPropertiesConfiguration *setting) {
 
         if (setting->hasProperty(SCATTER_AMOUNT) && !setting->hasProperty("ScatterValue")) {
             data->strengthValue = setting->getDouble(SCATTER_AMOUNT);

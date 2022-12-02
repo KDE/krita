@@ -17,7 +17,7 @@
 #include "kis_curve_option.h"
 #include <brushengine/kis_paint_information.h>
 #include "kritapaintop_export.h"
-#include "MyPaintBrushOption.h"
+#include "MyPaintDynamicSensor.h"
 #include "libmypaint/mypaint-brush.h"
 
 class KisMyPaintCurveOption: public KisCurveOption

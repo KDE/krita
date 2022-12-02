@@ -63,12 +63,12 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
 
     Q_FOREACH(KisDynamicSensorSP val, m_sensorMap.values()) {
 
-        KisMyPaintBrushOption *option = dynamic_cast<KisMyPaintBrushOption*>(val.data());
+        MyPaintDynamicSensor *sensor = dynamic_cast<MyPaintDynamicSensor*>(val.data());
         QVariantList pointsList;
-        QList<QPointF> curve_points = option->getControlPoints();
+        QList<QPointF> curve_points = sensor->getControlPoints();
 
-        if(!option->isActive()){
-            inputs_map.remove(option->id(option->sensorType()));
+        if(!sensor->isActive()){
+            inputs_map.remove(sensor->id(sensor->sensorType()));
             continue;
         }
 
@@ -78,7 +78,7 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
             pointsList.push_back(point);
         }
 
-        inputs_map[option->id(option->sensorType())] = pointsList;
+        inputs_map[sensor->id(sensor->sensorType())] = pointsList;
     }
 
     if(!m_useCurve || activeSensors().size()==0)
@@ -133,27 +133,27 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
             points << QPointF(x, y);
         }
 
-        KisMyPaintBrushOption *option = new KisMyPaintBrushOption(KisMyPaintBrushOption::typeForInput(inp));
+        MyPaintDynamicSensor *sensor = new MyPaintDynamicSensor(MyPaintDynamicSensor::typeForInput(inp));
 
         if(points.size()) {
 
-            option->setCurveFromPoints(points);
+            sensor->setCurveFromPoints(points);
         }
 
-        if (!setting->getProperty(m_id.id() + option->identifier() + "XMIN").isNull())
-            option->setXRangeMin(setting->getProperty(m_id.id() + option->identifier() + "XMIN").toReal());
+        if (!setting->getProperty(m_id.id() + sensor->identifier() + "XMIN").isNull())
+            sensor->setXRangeMin(setting->getProperty(m_id.id() + sensor->identifier() + "XMIN").toReal());
 
-        if (!setting->getProperty(m_id.id() + option->identifier() + "XMAX").isNull())
-            option->setXRangeMax(setting->getProperty(m_id.id() + option->identifier() + "XMAX").toReal());
+        if (!setting->getProperty(m_id.id() + sensor->identifier() + "XMAX").isNull())
+            sensor->setXRangeMax(setting->getProperty(m_id.id() + sensor->identifier() + "XMAX").toReal());
 
-        if (!setting->getProperty(m_id.id() + option->identifier() + "YMIN").isNull())
-            option->setYRangeMin(setting->getProperty(m_id.id() + option->identifier() + "YMIN").toReal());
+        if (!setting->getProperty(m_id.id() + sensor->identifier() + "YMIN").isNull())
+            sensor->setYRangeMin(setting->getProperty(m_id.id() + sensor->identifier() + "YMIN").toReal());
 
-        if (!setting->getProperty(m_id.id() + option->identifier() + "YMAX").isNull())
-            option->setYRangeMax(setting->getProperty(m_id.id() + option->identifier() + "YMAX").toReal());
+        if (!setting->getProperty(m_id.id() + sensor->identifier() + "YMAX").isNull())
+            sensor->setYRangeMax(setting->getProperty(m_id.id() + sensor->identifier() + "YMAX").toReal());
 
-        replaceSensor(option);
-        option->setActive(points.size()>0);
+        replaceSensor(sensor);
+        sensor->setActive(points.size()>0);
     }
 
     m_useSameCurve = setting->getBool(m_id.id() + "UseSameCurve", false);
@@ -359,23 +359,23 @@ KisDynamicSensorSP KisMyPaintCurveOption::id2Sensor(const KoID& id, const QStrin
 {
     Q_UNUSED(parentOptionName);
     if(id.id()==Pressure.id())
-        return new KisMyPaintBrushOption(MYPAINT_PRESSURE);
+        return new MyPaintDynamicSensor(MYPAINT_PRESSURE);
     else if(id.id()==FineSpeed.id())
-        return new KisMyPaintBrushOption(MYPAINT_FINE_SPEED);
+        return new MyPaintDynamicSensor(MYPAINT_FINE_SPEED);
     else if(id.id()==GrossSpeed.id())
-        return new KisMyPaintBrushOption(MYPAINT_GROSS_SPEED);
+        return new MyPaintDynamicSensor(MYPAINT_GROSS_SPEED);
     else if(id.id()==Random.id())
-        return new KisMyPaintBrushOption(MYPAINT_RANDOM);
+        return new MyPaintDynamicSensor(MYPAINT_RANDOM);
     else if(id.id()==Stroke.id())
-        return new KisMyPaintBrushOption(MYPAINT_STROKE);
+        return new MyPaintDynamicSensor(MYPAINT_STROKE);
     else if(id.id()==Direction.id())
-        return new KisMyPaintBrushOption(MYPAINT_DIRECTION);
+        return new MyPaintDynamicSensor(MYPAINT_DIRECTION);
     else if(id.id()==Ascension.id())
-        return new KisMyPaintBrushOption(MYPAINT_ASCENSION);
+        return new MyPaintDynamicSensor(MYPAINT_ASCENSION);
     else if(id.id()==Declination.id())
-        return new KisMyPaintBrushOption(MYPAINT_DECLINATION);
+        return new MyPaintDynamicSensor(MYPAINT_DECLINATION);
     else if(id.id()==Custom.id())
-        return new KisMyPaintBrushOption(MYPAINT_CUSTOM);
+        return new MyPaintDynamicSensor(MYPAINT_CUSTOM);
     else {
         return 0;
     }
@@ -401,5 +401,5 @@ QList<DynamicSensorType> KisMyPaintCurveOption::sensorsTypes()
 KisDynamicSensorSP KisMyPaintCurveOption::type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName)
 {
     Q_UNUSED(parentOptionName);
-    return new KisMyPaintBrushOption(sensorType);
+    return new MyPaintDynamicSensor(sensorType);
 }

@@ -16,7 +16,7 @@
 #include <kis_signals_blocker.h>
 #include <widgets/kis_curve_widget.h>
 
-#include "MyPaintBrushOption.h"
+#include "MyPaintDynamicSensor.h"
 #include "MyPaintCurveOption.h"
 #include "MyPaintPaintOpOption.h"
 #include "MyPaintPaintOpSettingsWidget.h"
@@ -58,7 +58,7 @@ void KisMyPaintCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationS
 {
     checkRanges();
     KisDynamicSensorSP dynamicSensor = m_curveOptionWidget->sensorSelector->currentHighlighted();
-    KisMyPaintBrushOption* currentSensor = dynamic_cast<KisMyPaintBrushOption*>(m_curveOptionWidget->sensorSelector->currentHighlighted().data());
+    MyPaintDynamicSensor* currentSensor = dynamic_cast<MyPaintDynamicSensor*>(m_curveOptionWidget->sensorSelector->currentHighlighted().data());
     KIS_SAFE_ASSERT_RECOVER(dynamicSensor && currentSensor) { }
     if (dynamicSensor) {
         setting->setProperty(m_curveOption->id().id() + dynamicSensor->identifier() + "XMIN", m_curveOptionWidget->xMinBox->value());
@@ -99,7 +99,7 @@ void KisMyPaintCurveOptionWidget::slotUnCheckUseCurve() {
 void KisMyPaintCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor) const
 {
     KisCurveOptionWidget::updateSensorCurveLabels(sensor);
-    KisMyPaintBrushOption* mySensor = dynamic_cast<KisMyPaintBrushOption*>(sensor.data());
+    MyPaintDynamicSensor* mySensor = dynamic_cast<MyPaintDynamicSensor*>(sensor.data());
     if (mySensor) {
 
         m_curveOptionWidget->label_xmin->setText(mySensor->minimumXLabel());
@@ -111,7 +111,7 @@ void KisMyPaintCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sen
 
 void KisMyPaintCurveOptionWidget::updateRangeSpinBoxes(KisDynamicSensorSP sensor) const {
 
-    KisMyPaintBrushOption* mySensor = dynamic_cast<KisMyPaintBrushOption*>(sensor.data());
+    MyPaintDynamicSensor* mySensor = dynamic_cast<MyPaintDynamicSensor*>(sensor.data());
     m_curveOptionWidget->xMinBox->blockSignals(true);
     m_curveOptionWidget->xMaxBox->blockSignals(true);
     m_curveOptionWidget->yMinBox->blockSignals(true);

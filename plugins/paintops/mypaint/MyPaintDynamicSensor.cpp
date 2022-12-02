@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "MyPaintBrushOption.h"
+#include "MyPaintDynamicSensor.h"
 
 #include <qmath.h>
 #include <QDomElement>
@@ -16,21 +16,21 @@
 
 using namespace std;
 
-KisMyPaintBrushOption::KisMyPaintBrushOption(DynamicSensorType type)
+MyPaintDynamicSensor::MyPaintDynamicSensor(DynamicSensorType type)
     : KisDynamicSensor (type)
 {
     m_type = type;
     m_customCurve = false;
     m_active = false;
     m_length = -1;
-    m_id = KisMyPaintBrushOption::id(type);
+    m_id = MyPaintDynamicSensor::id(type);
 }
 
-KisMyPaintBrushOption::~KisMyPaintBrushOption()
+MyPaintDynamicSensor::~MyPaintDynamicSensor()
 {
 }
 
-qreal KisMyPaintBrushOption::value(const KisPaintInformation &info)
+qreal MyPaintDynamicSensor::value(const KisPaintInformation &info)
 {
     if (info.isHoveringMode()) return 1.0;
 
@@ -40,7 +40,7 @@ qreal KisMyPaintBrushOption::value(const KisPaintInformation &info)
     return qreal(currentValue) / m_length;
 }
 
-QString KisMyPaintBrushOption::minimumLabel(DynamicSensorType sensorType)
+QString MyPaintDynamicSensor::minimumLabel(DynamicSensorType sensorType)
 {
     switch (sensorType) {
     default:
@@ -48,7 +48,7 @@ QString KisMyPaintBrushOption::minimumLabel(DynamicSensorType sensorType)
     }
 }
 
-QString KisMyPaintBrushOption::maximumLabel(DynamicSensorType sensorType, int max)
+QString MyPaintDynamicSensor::maximumLabel(DynamicSensorType sensorType, int max)
 {
     Q_UNUSED(max);
     switch (sensorType) {
@@ -57,27 +57,27 @@ QString KisMyPaintBrushOption::maximumLabel(DynamicSensorType sensorType, int ma
     };
 }
 
-QString KisMyPaintBrushOption::minimumXLabel() {
+QString MyPaintDynamicSensor::minimumXLabel() {
 
     return QString::number(curveXMin);
 }
 
-QString KisMyPaintBrushOption::minimumYLabel() {
+QString MyPaintDynamicSensor::minimumYLabel() {
 
     return QString::number(curveYMin);
 }
 
-QString KisMyPaintBrushOption::maximumXLabel() {
+QString MyPaintDynamicSensor::maximumXLabel() {
 
     return QString::number(curveXMax);
 }
 
-QString KisMyPaintBrushOption::maximumYLabel() {
+QString MyPaintDynamicSensor::maximumYLabel() {
 
     return QString::number(curveYMax);
 }
 
-int KisMyPaintBrushOption::minimumValue(DynamicSensorType sensorType)
+int MyPaintDynamicSensor::minimumValue(DynamicSensorType sensorType)
 {
     switch (sensorType) {
 
@@ -87,7 +87,7 @@ int KisMyPaintBrushOption::minimumValue(DynamicSensorType sensorType)
 
 }
 
-int KisMyPaintBrushOption::maximumValue(DynamicSensorType sensorType, int max)
+int MyPaintDynamicSensor::maximumValue(DynamicSensorType sensorType, int max)
 {
     Q_UNUSED(max);
     switch (sensorType) {
@@ -96,7 +96,7 @@ int KisMyPaintBrushOption::maximumValue(DynamicSensorType sensorType, int max)
     };
 }
 
-QString KisMyPaintBrushOption::valueSuffix(DynamicSensorType sensorType)
+QString MyPaintDynamicSensor::valueSuffix(DynamicSensorType sensorType)
 {
     switch (sensorType) {
 
@@ -105,7 +105,7 @@ QString KisMyPaintBrushOption::valueSuffix(DynamicSensorType sensorType)
     };
 }
 
-DynamicSensorType KisMyPaintBrushOption::typeForInput(MyPaintBrushInput input)
+DynamicSensorType MyPaintDynamicSensor::typeForInput(MyPaintBrushInput input)
 {
     switch(input) {
 
@@ -133,7 +133,7 @@ DynamicSensorType KisMyPaintBrushOption::typeForInput(MyPaintBrushInput input)
     }
 }
 
-MyPaintBrushInput KisMyPaintBrushOption::input()
+MyPaintBrushInput MyPaintDynamicSensor::input()
 {
     switch(m_type) {
 
@@ -161,48 +161,48 @@ MyPaintBrushInput KisMyPaintBrushOption::input()
     }
 }
 
-qreal KisMyPaintBrushOption::getXRangeMin() {
+qreal MyPaintDynamicSensor::getXRangeMin() {
 
     return curveXMin;
 }
 
-qreal KisMyPaintBrushOption::getXRangeMax() {
+qreal MyPaintDynamicSensor::getXRangeMax() {
 
     return curveXMax;
 }
 
-qreal KisMyPaintBrushOption::getYRangeMin() {
+qreal MyPaintDynamicSensor::getYRangeMin() {
 
     return curveYMin;
 }
 
-qreal KisMyPaintBrushOption::getYRangeMax() {
+qreal MyPaintDynamicSensor::getYRangeMax() {
 
     return curveYMax;
 }
 
-void KisMyPaintBrushOption::setXRangeMin(qreal value) {
+void MyPaintDynamicSensor::setXRangeMin(qreal value) {
 
     curveXMin = value;
 }
 
-void KisMyPaintBrushOption::setXRangeMax(qreal value) {
+void MyPaintDynamicSensor::setXRangeMax(qreal value) {
 
     curveXMax = value;
 }
 
-void KisMyPaintBrushOption::setYRangeMin(qreal value) {
+void MyPaintDynamicSensor::setYRangeMin(qreal value) {
 
     curveYMin = value;
 }
 
-void KisMyPaintBrushOption::setYRangeMax(qreal value) {
+void MyPaintDynamicSensor::setYRangeMax(qreal value) {
 
     curveYMax = value;
 }
 
 
-QString KisMyPaintBrushOption::id(DynamicSensorType sensorType)
+QString MyPaintDynamicSensor::id(DynamicSensorType sensorType)
 {
     switch (sensorType) {
 
@@ -230,7 +230,7 @@ QString KisMyPaintBrushOption::id(DynamicSensorType sensorType)
     };
 }
 
-void KisMyPaintBrushOption::setCurveFromPoints(QList<QPointF> points) {
+void MyPaintDynamicSensor::setCurveFromPoints(QList<QPointF> points) {
 
     setRangeFromPoints(points);
 
@@ -243,7 +243,7 @@ void KisMyPaintBrushOption::setCurveFromPoints(QList<QPointF> points) {
     setCurve(curve);
 }
 
-QList<QPointF> KisMyPaintBrushOption::getControlPoints() {
+QList<QPointF> MyPaintDynamicSensor::getControlPoints() {
 
     QList<QPointF> curvePoints = curve().points();
     for(int i=0; i<curvePoints.size(); i++) {
@@ -254,7 +254,7 @@ QList<QPointF> KisMyPaintBrushOption::getControlPoints() {
     return curvePoints;
 }
 
-QPointF KisMyPaintBrushOption::scaleTo0_1(QPointF point) {
+QPointF MyPaintDynamicSensor::scaleTo0_1(QPointF point) {
 
     QPointF scaledPoint;
     scaledPoint.setX(scaleToRange(curveXMin, curveXMax, 0, 1, point.x()));
@@ -263,7 +263,7 @@ QPointF KisMyPaintBrushOption::scaleTo0_1(QPointF point) {
     return scaledPoint;
 }
 
-QPointF KisMyPaintBrushOption::scaleFrom0_1(QPointF point) {
+QPointF MyPaintDynamicSensor::scaleFrom0_1(QPointF point) {
 
     QPointF scaledPoint;
     scaledPoint.setX(scaleToRange(0, 1, curveXMin, curveXMax, point.x()));
@@ -272,7 +272,7 @@ QPointF KisMyPaintBrushOption::scaleFrom0_1(QPointF point) {
     return scaledPoint;
 }
 
-qreal KisMyPaintBrushOption::scaleToRange(qreal inMin, qreal inMax, qreal outMin, qreal outMax, qreal inValue) {
+qreal MyPaintDynamicSensor::scaleToRange(qreal inMin, qreal inMax, qreal outMin, qreal outMax, qreal inValue) {
 
     qreal inRange = (inMax - inMin);
     qreal outRange = (outMax - outMin);
@@ -281,7 +281,7 @@ qreal KisMyPaintBrushOption::scaleToRange(qreal inMin, qreal inMax, qreal outMin
     return value;
 }
 
-void KisMyPaintBrushOption::setRangeFromPoints(QList<QPointF> points) {
+void MyPaintDynamicSensor::setRangeFromPoints(QList<QPointF> points) {
 
     curveXMin = points[0].x();
     curveXMax = points[0].x();

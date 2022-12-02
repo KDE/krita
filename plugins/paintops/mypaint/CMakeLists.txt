@@ -15,7 +15,7 @@ set(kritamypaintop_SOURCES
     MyPaintPaintOpPreset.cpp
     MyPaintPaintOpFactory.cpp
     MyPaintCurveOptionWidget.cpp
-    MyPaintBrushOption.cpp
+    MyPaintDynamicSensor.cpp
     MyPaintCurveOption.cpp
     ../libpaintop/kis_multi_sensors_selector.cpp
     ../libpaintop/kis_multi_sensors_model_p.cpp

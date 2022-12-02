@@ -36,13 +36,13 @@ const KoID Declination("tilt_declination", ki18nc("Pen tilt declination", "Decli
 const KoID Ascension("tilt_ascension", ki18nc("Pen tilt ascension", "Ascension"));
 const KoID Custom("custom", ki18n("Custom"));
 
-class KisMyPaintBrushOption : public KisDynamicSensor
+class MyPaintDynamicSensor : public KisDynamicSensor
 {
 
 public:
 
-    KisMyPaintBrushOption(DynamicSensorType type);
-    ~KisMyPaintBrushOption() override;
+    MyPaintDynamicSensor(DynamicSensorType type);
+    ~MyPaintDynamicSensor() override;
 
     qreal value(const KisPaintInformation &info) override;
 
@@ -102,7 +102,7 @@ protected:
     qreal curveYMax = 1;
 
 private:
-    Q_DISABLE_COPY(KisMyPaintBrushOption)
+    Q_DISABLE_COPY(MyPaintDynamicSensor)
 
 };
 

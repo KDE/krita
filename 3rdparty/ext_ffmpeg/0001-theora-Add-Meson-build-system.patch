@@ -1,15 +1,15 @@
-From 672c1cfc3ab3c08406e954e10ec19a0b0e0657b4 Mon Sep 17 00:00:00 2001
+From 6febf6a8661b7f098c1d5809f745c2cfedd40827 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Fri, 25 Nov 2022 14:59:14 -0300
-Subject: [PATCH 1/8] theora: Add Meson build system
+Subject: [PATCH 01/11] theora: Add Meson build system
 
 ---
- include/meson.build                   |  13 ++
- lib/meson.build                       | 215 ++++++++++++++++++++++++++
- meson.build                           |  87 +++++++++++
+ include/meson.build                   |  10 ++
+ lib/meson.build                       | 241 ++++++++++++++++++++++++++
+ meson.build                           |  57 ++++++
  meson_options.txt                     |   2 +
- win32/xmingw32/generate_windows_rc.py |  28 ++++
- 5 files changed, 345 insertions(+)
+ win32/xmingw32/generate_windows_rc.py |  30 ++++
+ 5 files changed, 340 insertions(+)
  create mode 100644 include/meson.build
  create mode 100644 lib/meson.build
  create mode 100644 meson.build
@@ -18,256 +18,281 @@ Subject: [PATCH 1/8] theora: Add Meson build system
 
 diff --git a/include/meson.build b/include/meson.build
 new file mode 100644
-index 0000000..21aeb5b
+index 0000000..8db4ab7
 --- /dev/null
 +++ b/include/meson.build
-@@ -0,0 +1,13 @@
+@@ -0,0 +1,10 @@
 +theorainclude_headers = files(
-+    'theora/theora.h',
-+    'theora/theoradec.h',
-+    'theora/theoraenc.h',
-+    'theora/codec.h',
++  'theora/codec.h',
++  'theora/theora.h',
++  'theora/theoradec.h',
++  'theora/theoraenc.h',
 +)
 +
-+install_headers(
-+    theorainclude_headers,
-+    preserve_path: true
-+)
++install_headers(theorainclude_headers, subdir: 'theora')
 +
 +incdir = include_directories('.')
 diff --git a/lib/meson.build b/lib/meson.build
 new file mode 100644
-index 0000000..6cc02a3
+index 0000000..12e6823
 --- /dev/null
 +++ b/lib/meson.build
-@@ -0,0 +1,215 @@
+@@ -0,0 +1,241 @@
 +encoder_sources = files(
-+    'apiwrapper.c',
-+    'bitpack.c',
-+    'dequant.c',
-+    'fragment.c',
-+    'idct.c',
-+    'internal.c',
-+    'state.c',
-+    'quant.c',
-+    'analyze.c',
-+    'fdct.c',
-+    'encfrag.c',
-+    'encapiwrapper.c',
-+    'encinfo.c',
-+    'info.c', # not in SConstruct or Makefile.am
-+    'encode.c',
-+    'enquant.c',
-+    'huffenc.c',
-+    'mathops.c',
-+    'mcenc.c',
-+    'rate.c',
-+    'tokenize.c',
++  'analyze.c',
++  'apiwrapper.c',
++  'bitpack.c',
++  'dequant.c',
++  'encapiwrapper.c',
++  'encfrag.c',
++  'encinfo.c',
++  'encode.c',
++  'enquant.c',
++  'fdct.c',
++  'fragment.c',
++  'huffenc.c',
++  'idct.c',
++  'info.c', # not in SConstruct or Makefile.am
++  'internal.c',
++  'mathops.c',
++  'mcenc.c',
++  'quant.c',
++  'rate.c',
++  'state.c',
++  'tokenize.c',
 +)
 +
 +decoder_sources = files(
-+    'apiwrapper.c',
-+    'bitpack.c',
-+    'decapiwrapper.c',
-+    'decinfo.c',
-+    'decode.c',
-+    'dequant.c',
-+    'fragment.c',
-+    'huffdec.c',
-+    'idct.c',
-+    'info.c',
-+    'internal.c',
-+    'quant.c',
-+    'state.c',
++  'apiwrapper.c',
++  'bitpack.c',
++  'decapiwrapper.c',
++  'decinfo.c',
++  'decode.c',
++  'dequant.c',
++  'fragment.c',
++  'huffdec.c',
++  'idct.c',
++  'info.c',
++  'internal.c',
++  'quant.c',
++  'state.c',
 +)
 +
 +if asm
-+    if conf.get('CPU_x86_64', false)
-+        if cc.get_id() != 'msvc'
-+            encoder_sources += files(
-+                'x86/mmxencfrag.c',
-+                'x86/mmxfdct.c',
-+                'x86/sse2encfrag.c',
-+                'x86/x86enquant.c',
-+                'x86/x86enc.c',
-+
-+                'x86/sse2fdct.c',
-+
-+                'x86/x86cpu.c',
-+                'x86/mmxfrag.c',
-+                'x86/mmxidct.c',
-+                'x86/mmxstate.c',
-+                'x86/sse2idct.c',
-+                'x86/x86state.c',
-+            )
-+            decoder_sources += files(
-+                'x86/x86cpu.c',
-+                'x86/mmxidct.c',
-+                'x86/mmxfrag.c',
-+                'x86/mmxstate.c',
-+                'x86/sse2idct.c',
-+                'x86/x86state.c',
-+            )
-+        endif
-+    elif conf.get('CPU_x86_32', false)
-+        if cc.get_id() != 'msvc'
-+            decoder_sources += files(
-+                'x86/x86cpu.c',
-+                'x86/mmxidct.c',
-+                'x86/mmxfrag.c',
-+                'x86/mmxstate.c',
-+                'x86/sse2idct.c',
-+                'x86/x86state.c',
-+            )
-+            encoder_sources += files(
-+                'x86/mmxencfrag.c',
-+                'x86/mmxfdct.c',
-+                'x86/sse2encfrag.c',
-+                'x86/x86enquant.c',
-+                'x86/x86enc.c',
-+
-+                'x86/x86cpu.c',
-+                'x86/mmxfrag.c',
-+                'x86/mmxidct.c',
-+                'x86/mmxstate.c',
-+                'x86/sse2idct.c',
-+                'x86/x86state.c',
-+            )
-+        else
-+            encoder_sources += files(
-+                'x86_vc/x86cpu.c',
-+                'x86_vc/mmxencfrag.c',
-+                'x86_vc/mmxfdct.c',
-+                'x86_vc/x86enc.c',
-+                'x86_vc/mmxfrag.c',
-+                'x86_vc/mmxidct.c',
-+                'x86_vc/mmxstate.c',
-+                'x86_vc/x86state.c',
-+            )
-+            decoder_sources += files(
-+                'x86_vc/x86cpu.c',
-+                'x86_vc/mmxidct.c',
-+                'x86_vc/mmxfrag.c',
-+                'x86_vc/mmxstate.c',
-+                'x86_vc/x86state.c',
-+            )
-+        endif
++  if conf.get('CPU_x86_64', false)
++    if cc.get_id() != 'msvc'
++      encoder_sources += files(
++        'x86/mmxencfrag.c',
++        'x86/mmxfdct.c',
++        'x86/mmxfrag.c',
++        'x86/mmxidct.c',
++        'x86/mmxstate.c',
++        'x86/sse2fdct.c',
++        'x86/x86enc.c',
++        'x86/x86state.c',
++      )
++      decoder_sources += files(
++        'x86/mmxfrag.c',
++        'x86/mmxidct.c',
++        'x86/mmxstate.c',
++        'x86/x86state.c',
++      )
 +    endif
++  elif conf.get('CPU_x86_32', false)
++    if cc.get_id() != 'msvc'
++      decoder_sources += files(
++        'x86/mmxfrag.c',
++        'x86/mmxidct.c',
++        'x86/mmxstate.c',
++        'x86/sse2idct.c',
++        'x86/x86cpu.c',
++        'x86/x86state.c',
++      )
++      encoder_sources += files(
++        'x86/mmxencfrag.c',
++        'x86/mmxfdct.c',
++        'x86/mmxfrag.c',
++        'x86/mmxidct.c',
++        'x86/mmxstate.c',
++        'x86/x86cpu.c',
++        'x86/x86enc.c',
++        'x86/x86state.c',
++      )
++    else
++      encoder_sources += files(
++        'x86_vc/mmxencfrag.c',
++        'x86_vc/mmxfdct.c',
++        'x86_vc/mmxfrag.c',
++        'x86_vc/mmxidct.c',
++        'x86_vc/mmxstate.c',
++        'x86_vc/x86enc.c',
++        'x86_vc/x86state.c',
++      )
++      decoder_sources += files(
++        'x86_vc/mmxfrag.c',
++        'x86_vc/mmxidct.c',
++        'x86_vc/mmxstate.c',
++        'x86_vc/x86state.c',
++      )
++    endif
++  endif
 +endif
 +
 +decoder_res = files()
 +encoder_res = files()
 +
 +if host_machine.system() == 'windows'
-+    if get_option('buildtype') == 'debug'
-+        decoder_rc = '../win32/xmingw32/libtheoradecd.rc'
-+        encoder_rc = '../win32/xmingw32/libtheoraencd.rc'
-+    else
-+        decoder_rc = '../win32/xmingw32/libtheoradec.rc'
-+        encoder_rc = '../win32/xmingw32/libtheoraenc.rc'
-+    endif
++  if get_option('buildtype') == 'debug'
++    decoder_rc = '../win32/xmingw32/libtheoradecd.rc'
++    encoder_rc = '../win32/xmingw32/libtheoraencd.rc'
++  else
++    decoder_rc = '../win32/xmingw32/libtheoradec.rc'
++    encoder_rc = '../win32/xmingw32/libtheoraenc.rc'
++  endif
 +
-+    patcher_py = find_program(
-+        '../win32/xmingw32/generate_windows_rc.py',
-+        required: true, native: true
-+    )
++  patcher_py = find_program(
++    '../win32/xmingw32/generate_windows_rc.py',
++    required: true,
++    native: true,
++  )
 +
-+    libtheoradec_rc = custom_target(
-+        'libtheoradec.rc',
-+        command: [patcher_py, '@INPUT@', '@OUTPUT@', meson.project_version()],
-+        input: [decoder_rc, '../win32/xmingw32/libtheoradec-all.rc'],
-+        output: ['libtheoradec.rc']
-+    )
++  libtheoradec_rc = custom_target(
++    'libtheoradec.rc',
++    command: [patcher_py, '@INPUT@', '@OUTPUT@', meson.project_version()],
++    input: [decoder_rc, '../win32/xmingw32/libtheoradec-all.rc'],
++    output: ['libtheoradec.rc'],
++  )
 +
-+    decoder_res += windows.compile_resources(libtheoradec_rc)
++  decoder_res += windows.compile_resources(libtheoradec_rc)
 +
-+    libtheoraenc_rc = custom_target(
-+        'libtheoraenc.rc',
-+        command: [patcher_py, '@INPUT@', '@OUTPUT@', meson.project_version()],
-+        input: [encoder_rc, '../win32/xmingw32/libtheoraenc-all.rc'],
-+        output: ['libtheoraenc.rc']
-+    )
++  libtheoraenc_rc = custom_target(
++    'libtheoraenc.rc',
++    command: [patcher_py, '@INPUT@', '@OUTPUT@', meson.project_version()],
++    input: [encoder_rc, '../win32/xmingw32/libtheoraenc-all.rc'],
++    output: ['libtheoraenc.rc'],
++  )
 +
-+    encoder_res += windows.compile_resources(libtheoraenc_rc)
++  encoder_res += windows.compile_resources(libtheoraenc_rc)
 +endif
 +
 +if host_machine.system() == 'darwin'
-+    version_flag = '-Wl,-exported_symbols_list,@0@'
-+    theoradec_version_arg = join_paths(meson.current_source_dir(), 'theoradec.exp')
-+    theoraenc_version_arg = join_paths(meson.current_source_dir(), 'theoraenc.exp')
-+    theora_version_arg = join_paths(meson.current_source_dir(), 'theora.exp')
++  version_flag = '-Wl,-exported_symbols_list,@0@'
++  theoradec_version_arg = meson.current_source_dir() / 'theoradec.exp'
++  theoraenc_version_arg = meson.current_source_dir() / 'theoraenc.exp'
++  theora_version_arg = meson.current_source_dir() / 'theora.exp'
++
++  # macOS Clang requires exported_symbols_list to have all symbols already
++  # compiled, so the test will fail. We will use it directly.
++  theoradec_version_flag = version_flag.format(theoradec_version_arg)
++  theoraenc_version_flag = version_flag.format(theoraenc_version_arg)
++  theora_version_flag = version_flag.format(theora_version_arg)
 +else
-+    version_flag = '-Wl,--version-script,@0@'
-+    theoradec_version_arg = '@0@/Version_script-dec'.format(meson.current_source_dir())
-+    theoraenc_version_arg = '@0@/Version_script-enc'.format(meson.current_source_dir())
-+    theora_version_arg = '@0@/Version_script'.format(meson.current_source_dir())
++  version_flag = '-Wl,--version-script,@0@'
++  theoradec_version_arg = meson.current_source_dir() / 'Version_script-dec'
++  theoraenc_version_arg = meson.current_source_dir() / 'Version_script-enc'
++  theora_version_arg = meson.current_source_dir() / 'Version_script'
++
++  theoradec_version_flag = cc.get_supported_link_arguments(
++    version_flag.format(theoradec_version_arg),
++  )
++
++  theoraenc_version_flag = cc.get_supported_link_arguments(
++    version_flag.format(theoraenc_version_arg),
++  )
++
++  theora_version_flag = cc.get_supported_link_arguments(
++    version_flag.format(theora_version_arg),
++  )
 +endif
 +
 +libtheoradec = library(
-+    'theoradec',
-+    decoder_sources + decoder_res,
-+    dependencies: [m_dep, ogg_dep, config_dep],
-+    include_directories: incdir,
-+    vs_module_defs: '../win32/xmingw32/libtheoradec-all.def',
-+    link_args: cc.get_supported_link_arguments([
-+        version_flag.format(theoradec_version_arg)
-+    ]),
-+    install: true,
++  'theoradec',
++  decoder_sources + decoder_res,
++  dependencies: [m_dep, libpng_dep, ogg_dep, config_dep],
++  include_directories: incdir,
++  vs_module_defs: '../win32/xmingw32/libtheoradec-all.def',
++  c_args: compile_args,
++  link_args: theoradec_version_flag,
++  install: true,
 +)
 +
 +pkg.generate(
-+    libtheoradec,
-+    description: 'Theora video codec (decoder)',
-+    version: meson.project_version()
++  libtheoradec,
++  description: 'Theora video codec (decoder)',
++  version: meson.project_version(),
++)
++
++theoradec_dep = declare_dependency(
++  link_with: libtheoradec,
++  dependencies: [m_dep, libpng_dep, ogg_dep, cairo_dep, config_dep],
++  include_directories: incdir,
 +)
 +
 +libtheoraenc = library(
-+    'theoraenc',
-+    encoder_sources + encoder_res,
-+    dependencies: [m_dep, ogg_dep, config_dep],
-+    include_directories: incdir,
-+    vs_module_defs: '../win32/xmingw32/libtheoraenc-all.def',
-+    link_args: cc.get_supported_link_arguments([
-+        version_flag.format(theoraenc_version_arg)
-+    ]),
-+    install: true,
++  'theoraenc',
++  encoder_sources + encoder_res,
++  dependencies: [m_dep, libpng_dep, ogg_dep, config_dep],
++  include_directories: incdir,
++  vs_module_defs: '../win32/xmingw32/libtheoraenc-all.def',
++  c_args: compile_args,
++  link_args: theoraenc_version_flag,
++  install: true,
 +)
 +
 +pkg.generate(
-+    libtheoraenc,
-+    description: 'Theora video codec (encoder)',
-+    version: meson.project_version()
++  libtheoraenc,
++  description: 'Theora video codec (encoder)',
++  version: meson.project_version(),
++)
++
++theoraenc_dep = declare_dependency(
++  link_with: libtheoraenc,
++  dependencies: [m_dep, libpng_dep, ogg_dep, config_dep],
++  include_directories: incdir,
 +)
 +
 +libtheora = library(
-+    'theora',
-+    encoder_sources + decoder_sources,
-+    dependencies: [m_dep, ogg_dep, config_dep],
-+    include_directories: incdir,
-+    link_args: cc.get_supported_link_arguments([
-+        version_flag.format(theora_version_arg)
-+    ]),
-+    vs_module_defs: 'theora.def',
-+    install: true, 
++  'theora',
++  encoder_sources + decoder_sources,
++  dependencies: [m_dep, ogg_dep, config_dep],
++  include_directories: incdir,
++  c_args: compile_args,
++  link_args: theora_version_flag,
++  # vs_module_defs: 'theora.def', # Missing in the official tarballs
++  install: true,
 +)
 +
 +pkg.generate(
-+    libtheora,
-+    description: 'Theora video codec',
-+    version: meson.project_version()
++  libtheora,
++  description: 'Theora video codec',
++  version: meson.project_version(),
 +)
++
++theora_dep = declare_dependency(
++  link_with: libtheora,
++  dependencies: [m_dep, libpng_dep, ogg_dep, config_dep],
++  include_directories: incdir,
++)
++
++if meson.version().version_compare('>=0.54.0')
++  meson.override_dependency('theora', theora_dep)
++  meson.override_dependency('theoradec', theoradec_dep)
++  meson.override_dependency('theoraenc', theoraenc_dep)
++endif
 diff --git a/meson.build b/meson.build
 new file mode 100644
-index 0000000..6c87890
+index 0000000..c5ba8ca
 --- /dev/null
 +++ b/meson.build
-@@ -0,0 +1,87 @@
+@@ -0,0 +1,57 @@
 +project(
-+    'theora',
-+    'c', 'cpp',
-+    version: '1.2.0',
-+    license: 'BSD-3-Clause',
-+    default_options: ['c_std=c11']
++  'theora',
++  'c',
++  'cpp',
++  version: '1.1.1',
++  meson_version: '>= 0.49.0',
++  license: 'BSD-3-Clause',
++  default_options: ['c_std=c11'],
 +)
 +
 +conf = configuration_data()
@@ -277,48 +302,37 @@ index 0000000..6c87890
 +cc = meson.get_compiler('c')
 +
 +if cc.get_argument_syntax() != 'msvc'
-+    compile_args += cc.get_supported_arguments(['-Wall', '-Wno-parentheses'])
++  compile_args += cc.get_supported_arguments(
++    '-Wno-parentheses',
++    '-Wno-shift-op-parentheses',
++    '-Wno-shift-negative-value',
++  )
 +endif
 +
 +m_dep = cc.find_library('m', required: false)
 +
-+if get_option('collect-metrics').enabled()
-+    add_project_arguments('-DOC_COLLECT_METRICS', language: 'c')
++if get_option('collect-metrics')
++  add_project_arguments('-DOC_COLLECT_METRICS', language: 'c')
 +endif
 +
-+ogg_dep = dependency('ogg',
-+    version: '>= 1.1',
-+    required: true,
-+    not_found_message: '''
-+        libogg is required to build this package!
-+        please see http://www.xiph.org/ for how to
-+        obtain a copy.
-+    '''
-+)
++ogg_dep = dependency('ogg', version: '>= 1.1', required: true)
 +
-+vorbis_dep = dependency('vorbis', version: '>= 1.0.1', required: false)
-+
-+asm = get_option('asm').allowed()
-+if asm 
-+    if host_machine.cpu_family() == 'x86_64'
-+        conf.set('CPU_x86_64', true)
-+        if cc.get_id() != 'msvc'
-+            conf.set('OC_X86_ASM', true)
-+            conf.set('OC_X86_64_ASM', true)
-+        endif
-+    elif host_machine.cpu_family() == 'x86'
-+        conf.set('OC_X86_ASM', true)
++asm = not get_option('asm').disabled()
++if asm
++  if host_machine.cpu_family() == 'x86_64'
++    conf.set('CPU_x86_64', true)
++    if cc.get_id() != 'msvc'
++      conf.set('OC_X86_ASM', true)
++      conf.set('OC_X86_64_ASM', true)
 +    endif
++  elif host_machine.cpu_family() == 'x86'
++    conf.set('OC_X86_ASM', true)
++  endif
 +endif
 +
-+config_h = configure_file(
-+    configuration: conf,
-+    output: 'config.h'
-+)
++config_h = configure_file(configuration: conf, output: 'config.h')
 +
-+config_dep = declare_dependency(
-+    sources: config_h
-+)
++config_dep = declare_dependency(sources: config_h)
 +
 +add_project_arguments('-DHAVE_CONFIG_H', language: 'c')
 +
@@ -328,52 +342,33 @@ index 0000000..6c87890
 +subdir('include')
 +
 +subdir('lib')
-+
-+theora_dep = declare_dependency(
-+    link_with : libtheora,
-+    include_directories : incdir,
-+)
-+
-+theoradec_dep = declare_dependency(
-+    link_with : libtheoradec,
-+    include_directories : incdir,
-+)
-+
-+theoraenc_dep = declare_dependency(
-+    link_with : libtheoradec,
-+    include_directories : incdir,
-+)
-+
-+if meson.version().version_compare('>=0.54.0')
-+    meson.override_dependency('theora', theora_dep)
-+    meson.override_dependency('theoradec', theoradec_dep)
-+    meson.override_dependency('theoraenc', theoraenc_dep)
-+endif
 diff --git a/meson_options.txt b/meson_options.txt
 new file mode 100644
-index 0000000..c214799
+index 0000000..8df708d
 --- /dev/null
 +++ b/meson_options.txt
 @@ -0,0 +1,2 @@
 +option('asm', type: 'feature', value: 'enabled', description: 'Enable assembly optimizations')
-+option('collect-metrics', type: 'feature', value: 'disabled', description: 'Enable metrics collection for mode training')
++option('collect-metrics', type: 'boolean', value: 'false', description: 'Enable metrics collection for mode training')
 diff --git a/win32/xmingw32/generate_windows_rc.py b/win32/xmingw32/generate_windows_rc.py
 new file mode 100644
-index 0000000..cf3a84f
+index 0000000..068bc57
 --- /dev/null
 +++ b/win32/xmingw32/generate_windows_rc.py
-@@ -0,0 +1,28 @@
+@@ -0,0 +1,30 @@
 +#!/usr/bin/env python3
 +
 +from argparse import ArgumentParser
 +from pathlib import Path
 +
 +if __name__ == '__main__':
-+    parser = ArgumentParser(description='Patches the BLOCK "0x040904B0" instruction in .rc files to be Windows compliant')
++    parser = ArgumentParser(
++        description='Patches the BLOCK "0x040904B0" instruction in .rc files to be Windows compliant')
 +    parser.add_argument('src_rc', type=Path, help='Source file')
 +    parser.add_argument('all_rc', type=Path, help='"All" metadata file')
 +    parser.add_argument('dst_rc', type=Path, help='Destination file')
-+    parser.add_argument('version', help='Version string in the format major.minor.patch')
++    parser.add_argument(
++        'version', help='Version string in the format major.minor.patch')
 +
 +    args = parser.parse_args()
 +

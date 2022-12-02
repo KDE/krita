@@ -32,13 +32,16 @@ ExternalProject_Add(
     GIT_TAG 7180717276af1ebc7da15c83162d6c5d6203aabf
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-theora-Add-Meson-build-system.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-theora-Add-Arm-support.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-theora-Add-tests.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-theora-Add-examples.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-theora-Add-telemetry-support.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-theora-Add-memory-constraint-fuzzer.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-theora-Add-specification-building.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-theora-Add-doxygen-support.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-theora-Add-support-for-hidden-frame-dumping-flag.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-theora-Add-missing-libtheora-module-definition-file.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-theora-Add-tests.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-theora-Add-examples.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-theora-Add-telemetry-support.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-theora-Add-memory-constraint-fuzzer.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-theora-Add-specification-building.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0009-theora-Add-doxygen-support.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0010-theora-Update-to-1.2.0.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0011-theora-Add-Arm-support.patch
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}

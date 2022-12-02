@@ -1,0 +1,179 @@
+From 54a7f5ba3bbf254a9ef6eb6aaf4288cd31c6cf60 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sat, 26 Nov 2022 00:36:07 +0000
+Subject: [PATCH 05/11] theora: Add examples
+
+---
+ examples/meson.build | 81 ++++++++++++++++++++++++++++++++++++++++++++
+ meson.build          | 50 +++++++++++++++++++++++++++
+ meson_options.txt    |  1 +
+ 3 files changed, 132 insertions(+)
+ create mode 100644 examples/meson.build
+
+diff --git a/examples/meson.build b/examples/meson.build
+new file mode 100644
+index 0000000..170fa1f
+--- /dev/null
++++ b/examples/meson.build
+@@ -0,0 +1,81 @@
++theora_libs = [theora_dep]
++theoradec_libs = [theoradec_dep]
++theoraenc_libs = [theoraenc_dep, theoradec_dep]
++
++compat_dep = dependency('compat', required: host_machine.system() == 'openbsd')
++
++if cc.has_header_symbol('unistd.h', 'getopt_long')
++  getopt_dep = declare_dependency(
++    dependencies: config_dep,
++  )
++else
++  if cc.get_id() == 'msvc'
++    getopt_sources = files(
++      '../win32/getopt.c',
++      '../win32/getopt1.c',
++    )
++    getopt_incdir = include_directories('../win32/')
++  else
++    getopt_sources = files(
++      'getopt.c',
++      'getopt1.c',
++    )
++    getopt_incdir = include_directories('.')
++  endif
++
++  getopt_dep = declare_dependency(
++    sources: getopt_sources,
++    dependencies: config_dep,
++    include_directories: [getopt_incdir, incdir],
++  )
++endif
++
++dump_video_sources = files('dump_video.c')
++
++dump_video = executable(
++  'dump_video',
++  dump_video_sources,
++  c_args: compile_args,
++  dependencies: [compat_dep, getopt_dep] + theoradec_libs,
++)
++
++dump_psnr_sources = files('dump_psnr.c')
++
++dump_psnr = executable(
++  'dump_psnr',
++  dump_psnr_sources,
++  c_args: compile_args,
++  dependencies: [m_dep, getopt_dep] + theoradec_libs,
++)
++
++player_example_sources = files('player_example.c')
++
++player_example = executable(
++  'player_example',
++  player_example_sources,
++  c_args: compile_args,
++  dependencies: [sdl_dep, vorbis_dep, oss_dep, m_dep, getopt_dep, config_dep] + theoradec_libs,
++)
++
++
++# Upstream defines a rint substitute
++if host_machine.system() == 'windows' and not cc.has_header_symbol('math.h', 'rint')
++  encoder_example_sources = files('encoder_example.c')
++
++  encoder_example = executable(
++    'encoder_example',
++    encoder_example_sources,
++    c_args: compile_args,
++    dependencies: [ogg_dep, vorbis_dep, vorbisenc_dep, m_dep, getopt_dep] + theoraenc_libs,
++  )
++endif
++
++png2theora_sources = files('png2theora.c')
++
++png2theora = executable(
++  'png2theora',
++  png2theora_sources,
++  c_args: compile_args,
++  dependencies: [ogg_dep, libpng_dep, unistd_dep, m_dep, getopt_dep, config_dep] +
++  theoraenc_libs,
++)
+diff --git a/meson.build b/meson.build
+index c53c1b8..a2f61f1 100644
+--- a/meson.build
++++ b/meson.build
+@@ -47,8 +47,52 @@ endif
+ 
+ ogg_dep = dependency('ogg', version: '>= 1.1', required: true)
+ 
++vorbis_dep = dependency(
++  'vorbis',
++  version: '>= 1.0.1',
++  required: false,
++  disabler: true,
++)
++
++vorbisenc_dep = dependency(
++  'vorbisenc',
++  version: '>= 1.0.1',
++  required: false,
++  disabler: true,
++)
++
++sdl_dep = dependency('sdl', required: false, disabler: true)
++
++if not sdl_dep.found()
++  message('*** Unable to find SDL -- Not compiling example players ***')
++endif
++
++if (
++  cc.has_header('sys/soundcard.h')
++  or cc.has_header('soundcard.h')
++  or cc.has_header('machine/soundcard.h')
++)
++  if host_machine.system() == 'openbsd'
++    oss_dep = dependency('ossaudio', required: false, disabler: true)
++  else
++    oss_dep = declare_dependency()
++  endif
++else
++  oss_dep = disabler()
++endif
++
++if not oss_dep.found()
++  message('OSS audio support not found -- not compiling player_example')
++endif
++
+ libpng_dep = dependency('libpng', required: false)
+ 
++if cc.has_header('unistd.h')
++  unistd_dep = declare_dependency()
++else
++  unistd_dep = disabler()
++endif
++
+ asm = not get_option('asm').disabled()
+ if asm
+   if host_machine.cpu_family() == 'x86_64'
+@@ -75,4 +119,10 @@ subdir('include')
+ 
+ subdir('lib')
+ 
++examples = get_option('examples')
++
++if examples.auto() or examples.enabled()
++  subdir('examples')
++endif
++
+ subdir('tests')
+diff --git a/meson_options.txt b/meson_options.txt
+index 25dbc88..73a0c8d 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -1,3 +1,4 @@
+ option('valgrind-testing', type: 'feature', value: 'disabled', description: 'Enable running of tests inside Valgrind')
+ option('asm', type: 'feature', value: 'enabled', description: 'Enable assembly optimizations')
++option('examples', type: 'feature', value: 'disabled', description: 'Enable examples')
+ option('collect-metrics', type: 'boolean', value: 'false', description: 'Enable metrics collection for mode training')
+-- 
+2.37.1.windows.1
+

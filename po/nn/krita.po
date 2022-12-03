@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-22 02:42+0000\n"
+"POT-Creation-Date: 2022-11-30 02:28+0000\n"
 "PO-Revision-Date: 2022-08-20 11:02+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -17607,7 +17607,7 @@ msgstr "Transformeringsmaske"
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:379
-#: plugins/impex/tiff/kis_tiff_import.cc:552
+#: plugins/impex/tiff/kis_tiff_import.cc:562
 #: plugins/impex/xcf/kis_xcf_import.cpp:273
 #, kde-format
 msgid "Transparency Mask"
@@ -48793,7 +48793,7 @@ msgctxt "TIFF options"
 msgid "Floating Point Horizontal Differencing"
 msgstr "Vassrett flyttals­differensiering"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1028
+#: plugins/impex/tiff/kis_tiff_import.cc:1040
 #, kde-format
 msgctxt "TIFF errors"
 msgid ""
@@ -48806,8 +48806,8 @@ msgstr ""
 "koding. Oppgrader libjpeg-turbo-versjonen du har installert, og prøv så på "
 "nytt."
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1131
-#: plugins/impex/tiff/kis_tiff_import.cc:1314
+#: plugins/impex/tiff/kis_tiff_import.cc:1143
+#: plugins/impex/tiff/kis_tiff_import.cc:1326
 #, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."

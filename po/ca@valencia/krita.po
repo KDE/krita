@@ -55143,7 +55143,7 @@ msgid ""
 msgstr ""
 "<p><strong>Introduïu l'URL de baixada</strong></p><p>Per exemple:"
 "<ul><li>Enllaç de la baixada del ZIP (https://exemple.org/connector.zip)</"
-"li><li>Repositori de Github (https://github.com/prova/connector)</li>"
+"li><li>Repositori de GitHub (https://github.com/prova/connector)</li>"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:102
 #: plugins/python/plugin_importer/plugin_importer_extension.py:116

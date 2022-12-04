@@ -640,8 +640,6 @@ void KisDlgImportVideoAnimation::slotVideoSliderChanged()
 
 }
 
-
-
 void KisDlgImportVideoAnimation::CurrentFrameChanged(int frame)
 {
     float currentSeconds = 0;

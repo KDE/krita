@@ -110,9 +110,6 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
 
     connect(m_page->intFramesPerSecond, SIGNAL(valueChanged(int)), SLOT(frameRateChanged(int)));
 
-    // connect and cold init
-    connect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), this, SLOT(selectRenderType(int)));
-
     // try to lock the width and height being updated
     KisAcyclicSignalConnector *constrainsConnector = new KisAcyclicSignalConnector(this);
     constrainsConnector->createCoordinatedConnector()->connectBackwardInt(m_page->intWidth, SIGNAL(valueChanged(int)), this, SLOT(slotLockAspectRatioDimensionsWidth(int)));
@@ -342,19 +339,6 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     cfg.setFFMpegLocation(ffmpegPath);
     
     connect(m_page->ffmpegLocation, SIGNAL(fileSelected(QString)), SLOT(slotFFmpegChangeAndValidate(QString)));
-
-
-    QStringList supportedMimeType = makeVideoMimeTypesList();
-    supportedMimeType = filterMimeTypeListByAvailableEncoders(supportedMimeType);
-    Q_FOREACH (const QString &mime, supportedMimeType) {
-        QString description = KisMimeDatabase::descriptionForMimeType(mime);
-        if (description.isEmpty()) {
-            description = mime;
-        }
-
-        m_page->cmbRenderType->addItem(description, mime);
-    }
-    selectRenderType(m_page->cmbRenderType->currentIndex());
     
 
     // Initialize these settings based on the current document context..
@@ -408,6 +392,29 @@ void KisDlgAnimationRenderer::slotFFMpegChanged(const QString& path) {
                 }
             }
         }
+    }
+
+    {   // Build list of supported container types and repopulate cmbRenderType.
+        // Select a default option. ... What do we do if there's no container types? 
+
+
+        //Wrap in disconnect / connect so that we don't misfire signals during list rebuild.
+        disconnect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), this, SLOT(selectRenderType(int)));
+
+        QStringList supportedMimeType = makeVideoMimeTypesList();
+        supportedMimeType = filterMimeTypeListByAvailableEncoders(supportedMimeType);
+        m_page->cmbRenderType->clear();
+        Q_FOREACH (const QString &mime, supportedMimeType) {
+            QString description = KisMimeDatabase::descriptionForMimeType(mime);
+            if (description.isEmpty()) {
+                description = mime;
+            }
+
+            m_page->cmbRenderType->addItem(description, mime);
+        }
+        selectRenderType(m_page->cmbRenderType->currentIndex());
+
+        connect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), this, SLOT(selectRenderType(int)));
     }
 
     m_page->lblFFMpegVersion->setText(i18n("FFmpeg Version:") + " " + ffmpegVersion);

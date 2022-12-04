@@ -47,12 +47,11 @@ public:
     };
 
 public:
-    explicit KisVideoExportOptionsDialog(ContainerType containerType, QWidget *parent = 0);
+    explicit KisVideoExportOptionsDialog(ContainerType containerType, const QStringList& validEncoders, QWidget *parent = 0);
     ~KisVideoExportOptionsDialog() override;
 
     void setSupportsHDR(bool value);
-    void setSupportedCodecs(QStringList& codecs);
-
+    
     QStringList customUserOptions() const;
     QString customUserOptionsString() const;
     bool videoConfiguredForHDR() const;

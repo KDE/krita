@@ -143,8 +143,9 @@ void KisDlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeT
     const KisVideoExportOptionsDialog::ContainerType containerType =
             KisVideoExportOptionsDialog::mimeToContainer(mimeType);
 
+
     QScopedPointer<KisVideoExportOptionsDialog> encoderConfigWidget(
-        new KisVideoExportOptionsDialog(containerType, 0));
+        new KisVideoExportOptionsDialog(containerType, {},   0));
 
     // we always enable HDR, letting the user to force it
     encoderConfigWidget->setSupportsHDR(true);
@@ -390,6 +391,15 @@ void KisDlgAnimationRenderer::slotFFMpegChanged(const QString& path) {
         QJsonObject codecjson = ffmpegJsonObj["codecs"].toObject()[codec].toObject();
         if ( codecjson["encoding"].toBool() ) {
             QJsonArray codecEncoders = codecjson["encoders"].toArray();
+            
+            // In the case where no specific codec "library" is specified but we do support
+            // encoding, we simply push the type onto the list regardless. This basically
+            // means that there's no "specific" requirements that we need to meet and 
+            // encoding should be possible. 
+            if (codecEncoders.size() == 0) {
+                codecEncoders.push_back(QJsonValue(codec));
+            }
+
             Q_FOREACH(const QJsonValue& value, codecEncoders) {
                 if (ffmpegEncoderTypes.contains(codec)) {
                     ffmpegEncoderTypes[codec].push_back(value.toString());
@@ -475,8 +485,13 @@ void KisDlgAnimationRenderer::selectRenderOptions()
     const KisVideoExportOptionsDialog::ContainerType containerType =
         KisVideoExportOptionsDialog::mimeToContainer(mimetype);
 
+    QStringList encodersPresent;
+    Q_FOREACH(const QString& key, ffmpegEncoderTypes.keys()) {
+        encodersPresent << ffmpegEncoderTypes[key];
+    }
+
     KisVideoExportOptionsDialog *encoderConfigWidget =
-        new KisVideoExportOptionsDialog(containerType, this);
+        new KisVideoExportOptionsDialog(containerType, encodersPresent, this);
 
     // we always enable HDR, letting the user to force it
     encoderConfigWidget->setSupportsHDR(true);

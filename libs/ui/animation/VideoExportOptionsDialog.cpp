@@ -17,10 +17,24 @@
 
 struct KisVideoExportOptionsDialog::Private
 {
-    Private(ContainerType _containerType)
+    Private(ContainerType _containerType, const QStringList& validEncoders)
         : containerType(_containerType)
     {
         encoders = KisVideoExportOptionsDialog::encoderIdentifiers(containerType);
+
+        // Cross check w/ arbitrary ffmpeg's list of present encoders if list is populated.
+        if (validEncoders.size() > 0) {
+            encoders = [validEncoders](const QVector<KoID>& input) -> QVector<KoID> {
+                QVector<KoID> filtered;
+                Q_FOREACH(const KoID& encoder, input) {
+                    if (validEncoders.contains(encoder.id())) { 
+                        filtered << encoder;
+                    }
+                }
+
+                return filtered;
+            }(encoders);
+        }
 
         presetsXH264 << KoID("ultrafast", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "ultrafast"));
         presetsXH264 << KoID("superfast", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "superfast"));
@@ -121,10 +135,10 @@ void populateComboWithKoIds(QComboBox *combo, const QVector<KoID> &ids, int defa
     combo->setCurrentIndex(defaultIndex);
 }
 
-KisVideoExportOptionsDialog::KisVideoExportOptionsDialog(ContainerType containerType, QWidget *parent)
+KisVideoExportOptionsDialog::KisVideoExportOptionsDialog(ContainerType containerType, const QStringList& validEncoders, QWidget *parent)
     : KisConfigWidget(parent),
       ui(new Ui::VideoExportOptionsDialog),
-      m_d(new Private(containerType))
+      m_d(new Private(containerType, validEncoders))
 {
     ui->setupUi(this);
 
@@ -222,10 +236,6 @@ void KisVideoExportOptionsDialog::setSupportsHDR(bool value)
 {
     m_d->supportsHDR = value;
     slotH265ProfileChanged(ui->cmbProfileH265->currentIndex());
-}
-
-void KisVideoExportOptionsDialog::setSupportedCodecs(QStringList &codecList) {
-
 }
 
 KisPropertiesConfigurationSP KisVideoExportOptionsDialog::configuration() const

@@ -113,11 +113,11 @@ inline void imageOutCallback(void *that, size_t x, size_t y, size_t numPixels, c
 
             for (size_t ch = 0; ch < channels; ch++) {
                 if (ch == alphaPos) {
-                    tmp[ch] = value<policy, channelsType>(src, ch);
-                } else {
                     tmp[ch] =
                         value<LinearizePolicy::KeepTheSame, channelsType>(src,
                                                                           ch);
+                } else {
+                    tmp[ch] = value<policy, channelsType>(src, ch);
                 }
             }
 

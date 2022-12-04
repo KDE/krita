@@ -339,7 +339,6 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
     const bool removeHGLOOTF = cfg->getBool("removeHGLOOTF", true);
 
     const bool hasPrimaries = cs->profile()->hasColorants();
-    const bool isIdentityElle = (cs->profile()->name().contains("-elle-") && cs->profile()->name().contains("Identity"));
 
     const JxlPixelFormat pixelFormat = [&]() {
         JxlPixelFormat pixelFormat{};
@@ -407,7 +406,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         }
         // Use original profile on non-matrix profile, as they didn't have colorants set...
         // also prevent crashing with Elle's identity profiles.
-        if(cfg->getBool("lossless") || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID)) || isIdentityElle){
+        if (cfg->getBool("lossless") || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID))) {
             info->uses_original_profile = JXL_TRUE;
             dbgFile << "JXL use original profile";
         } else {
@@ -518,7 +517,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         Q_UNUSED(arePrimariesSupported);
 
         if ((cfg->getBool("lossless") && conversionPolicy == ConversionPolicy::KeepTheSame)
-            || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID)) || isIdentityElle) {
+            || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID))) {
             const QByteArray profile = cs->profile()->rawData();
 
             if (JXL_ENC_SUCCESS
@@ -565,7 +564,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                     cicpDescription.primaries = JXL_PRIMARIES_P3;
                     break;
                 default:
-                    KIS_SAFE_ASSERT_RECOVER_NOOP(false && "Writing possibly non-roundtrip primaries!");
+                    warnFile << "Writing possibly non-roundtrip primaries!";
                     const QVector<qreal> colorants = cs->profile()->getColorantsxyY();
                     cicpDescription.primaries = JXL_PRIMARIES_CUSTOM;
                     cicpDescription.primaries_red_xy[0] = colorants[0];

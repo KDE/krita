@@ -62,6 +62,7 @@ public:
         virtual QVector <double> getWhitePointXYZ() const = 0;
         virtual QVector <double> getWhitePointxyY() const = 0;
         virtual QVector <double> getEstimatedTRC() const = 0;
+        virtual bool compareTRC(TransferCharacteristics characteristics, float error) const = 0;
         virtual QByteArray getProfileUniqueId() const = 0;
     };
 public:
@@ -101,6 +102,7 @@ public:
     QVector <qreal> getWhitePointXYZ() const override;
     QVector <qreal> getWhitePointxyY() const override;
     QVector <qreal> getEstimatedTRC() const override;
+    bool compareTRC(TransferCharacteristics characteristics, float error) const override;
     void linearizeFloatValue(QVector <qreal> & Value) const override;
     void delinearizeFloatValue(QVector <qreal> & Value) const override;
     void linearizeFloatValueFast(QVector <qreal> & Value) const override;

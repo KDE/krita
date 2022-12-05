@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
+#include <algorithm>
+#include <array>
 #include <cmath>
 
 #include "KoColorProfile.h"
@@ -255,6 +257,52 @@ void KoColorProfile::colorantsForType(ColorPrimaries primaries, QVector<double> 
 
 TransferCharacteristics KoColorProfile::getTransferCharacteristics() const
 {
+    // Parse from an estimated gamma
+    const QVector<double> estimatedTRC = getEstimatedTRC();
+    const double error = 0.0001;
+    // Make sure the TRC is uniform across all channels
+    const bool isUniformTRC = (estimatedTRC[0] == estimatedTRC[1] && estimatedTRC[0] == estimatedTRC[2]);
+    if (d->characteristics == TRC_UNSPECIFIED && isUniformTRC && hasTRC()) {
+        if (isLinear()) {
+            d->characteristics = TRC_LINEAR;
+        } else if (std::fabs(estimatedTRC[0] - (461.0 / 256.0)) < error) {
+            // ICC v2 u8Fixed8Number calculation
+            // Or can be prequantized as 1.80078125, courtesy of Elle Stone
+            d->characteristics = TRC_GAMMA_1_8;
+        } else if (std::fabs(estimatedTRC[0] - (563.0 / 256.0)) < error) {
+            // Or can be prequantized as 2.19921875, courtesy of Elle Stone
+            d->characteristics = TRC_A98;
+        } else if (std::fabs(estimatedTRC[0] - 1.8) < error) {
+            d->characteristics = TRC_GAMMA_1_8;
+        } else if (std::fabs(estimatedTRC[0] - 2.2) < error) {
+            d->characteristics = TRC_ITU_R_BT_470_6_SYSTEM_M;
+        } else if (std::fabs(estimatedTRC[0] - 2.4) < error) {
+            d->characteristics = TRC_GAMMA_2_4;
+        } else if (std::fabs(estimatedTRC[0] - 2.8) < error) {
+            d->characteristics = TRC_ITU_R_BT_470_6_SYSTEM_B_G;
+        } else {
+            // Escort to curve matching if no gamma is matched
+            static constexpr std::array<TransferCharacteristics, 12> trcList = {{TRC_ITU_R_BT_709_5,
+                                                                                 TRC_ITU_R_BT_470_6_SYSTEM_M,
+                                                                                 TRC_ITU_R_BT_470_6_SYSTEM_B_G,
+                                                                                 TRC_SMPTE_240M,
+                                                                                 TRC_IEC_61966_2_1,
+                                                                                 TRC_LOGARITHMIC_100,
+                                                                                 TRC_LOGARITHMIC_100_sqrt10,
+                                                                                 TRC_PROPHOTO,
+                                                                                 TRC_GAMMA_1_8,
+                                                                                 TRC_GAMMA_2_4,
+                                                                                 TRC_A98,
+                                                                                 TRC_LAB_L}};
+            const auto characteristic =
+                std::find_if(trcList.begin(), trcList.end(), [&](const TransferCharacteristics &check) -> bool {
+                    return compareTRC(check, static_cast<float>(error));
+                });
+            if (characteristic != trcList.end()) {
+                d->characteristics = *characteristic;
+            }
+        }
+    }
     return d->characteristics;
 }
 
@@ -304,6 +352,8 @@ QString KoColorProfile::getTransferCharacteristicName(TransferCharacteristics cu
         return QString("Gamma A98");
     case TRC_PROPHOTO:
         return QString("ProPhoto trc");
+    case TRC_LAB_L:
+        return QString("Lab L* trc");
     case TRC_UNSPECIFIED:
         break;
     }

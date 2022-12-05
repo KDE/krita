@@ -358,8 +358,6 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                                                       JXL_COLOR_PROFILE_TARGET_DATA,
                                                       &colorEncoding)) {
                 const TransferCharacteristics transferFunction = [&]() {
-                    float estGamma;
-                    const float error = 0.0001;
                     switch (colorEncoding.transfer_function) {
                     case JXL_TRANSFER_FUNCTION_PQ: {
                         dbgFile << "linearizing from PQ";
@@ -387,9 +385,10 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                         return TRC_ITU_R_BT_709_5;
                     case JXL_TRANSFER_FUNCTION_SRGB:
                         return TRC_IEC_61966_2_1;
-                    case JXL_TRANSFER_FUNCTION_GAMMA:
+                    case JXL_TRANSFER_FUNCTION_GAMMA: {
                         // Using roughly the same logic in KoColorProfile.
-                        estGamma = 1.0 / colorEncoding.gamma;
+                        const float estGamma = 1.0 / colorEncoding.gamma;
+                        const float error = 0.0001;
                         // ICC v2 u8Fixed8Number calculation
                         // Or can be prequantized as 1.80078125, courtesy of Elle Stone
                         if ((std::fabs(estGamma - 1.8) < error) || (std::fabs(estGamma - (461.0 / 256.0)) < error)) {
@@ -406,6 +405,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                             warnFile << "Found custom estimated gamma value for JXL color space" << estGamma;
                             return TRC_UNSPECIFIED;
                         }
+                    }
                     case JXL_TRANSFER_FUNCTION_LINEAR:
                         return TRC_LINEAR;
                     case JXL_TRANSFER_FUNCTION_UNKNOWN:

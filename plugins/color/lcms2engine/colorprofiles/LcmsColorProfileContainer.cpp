@@ -594,7 +594,7 @@ bool LcmsColorProfileContainer::compareTRC(TransferCharacteristics characteristi
         const float step = float(i) / 31.0f;
         calcValues[0] = cmsEvalToneCurveFloat(mainCurve, step);
         calcValues[1] = cmsEvalToneCurveFloat(compareCurve, step);
-        if (std::fabsf(calcValues[0] - calcValues[1]) >= error) {
+        if (std::fabs(calcValues[0] - calcValues[1]) >= error) {
             return false;
         }
     }

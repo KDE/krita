@@ -548,8 +548,11 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             }
 
             if (cs->colorModelId() == GrayAColorModelID) {
-                // JXL can't parse custom white point for grayscale (yet) and returned as linear on roundtrip
-                // so let's use default D65 as whitepoint instead...
+                // XXX: JXL can't parse custom white point for grayscale (yet) and returned as linear on roundtrip so
+                // let's use default D65 as whitepoint instead...
+                //
+                // See: https://github.com/libjxl/libjxl/issues/1933
+                warnFile << "Using workaround for libjxl grayscale whitepoint";
                 cicpDescription.white_point = JXL_WHITE_POINT_D65;
                 cicpDescription.color_space = JXL_COLOR_SPACE_GRAY;
             } else {

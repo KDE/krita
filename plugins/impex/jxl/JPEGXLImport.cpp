@@ -387,8 +387,8 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                         return TRC_IEC_61966_2_1;
                     case JXL_TRANSFER_FUNCTION_GAMMA: {
                         // Using roughly the same logic in KoColorProfile.
-                        const float estGamma = 1.0 / colorEncoding.gamma;
-                        const float error = 0.0001;
+                        const double estGamma = 1.0 / colorEncoding.gamma;
+                        const double error = 0.0001;
                         // ICC v2 u8Fixed8Number calculation
                         // Or can be prequantized as 1.80078125, courtesy of Elle Stone
                         if ((std::fabs(estGamma - 1.8) < error) || (std::fabs(estGamma - (461.0 / 256.0)) < error)) {

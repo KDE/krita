@@ -342,13 +342,20 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
 
     const bool hasPrimaries = cs->profile()->hasColorants();
     const TransferCharacteristics gamma = cs->profile()->getTransferCharacteristics();
-    static constexpr std::array<TransferCharacteristics, 14> supportedTRC = {TRC_LINEAR, TRC_ITU_R_BT_709_5,
-                                                                            TRC_ITU_R_BT_601_6, TRC_ITU_R_BT_2020_2_10bit,
-                                                                            TRC_ITU_R_BT_470_6_SYSTEM_M, TRC_ITU_R_BT_470_6_SYSTEM_B_G,
-                                                                            TRC_IEC_61966_2_1, TRC_ITU_R_BT_2100_0_PQ,
-                                                                            TRC_SMPTE_ST_428_1, TRC_ITU_R_BT_2100_0_HLG,
-                                                                            TRC_GAMMA_1_8, TRC_GAMMA_2_4,
-                                                                            TRC_PROPHOTO, TRC_A98};
+    static constexpr std::array<TransferCharacteristics, 14> supportedTRC = {TRC_LINEAR,
+                                                                             TRC_ITU_R_BT_709_5,
+                                                                             TRC_ITU_R_BT_601_6,
+                                                                             TRC_ITU_R_BT_2020_2_10bit,
+                                                                             TRC_ITU_R_BT_470_6_SYSTEM_M,
+                                                                             TRC_ITU_R_BT_470_6_SYSTEM_B_G,
+                                                                             TRC_IEC_61966_2_1,
+                                                                             TRC_ITU_R_BT_2100_0_PQ,
+                                                                             TRC_SMPTE_ST_428_1,
+                                                                             TRC_ITU_R_BT_2100_0_HLG,
+                                                                             TRC_GAMMA_1_8,
+                                                                             TRC_GAMMA_2_4,
+                                                                             TRC_PROPHOTO,
+                                                                             TRC_A98};
     const bool isSupportedTRC = std::find(supportedTRC.begin(), supportedTRC.end(), gamma) != supportedTRC.end();
 
     const JxlPixelFormat pixelFormat = [&]() {
@@ -416,8 +423,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             info->num_extra_channels = 1;
         }
         // Use original profile on lossless, non-matrix profile or unsupported transfer curve.
-        if(cfg->getBool("lossless")
-            || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID))
+        if (cfg->getBool("lossless") || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID))
             || !isSupportedTRC) {
             info->uses_original_profile = JXL_TRUE;
             dbgFile << "JXL use original profile";
@@ -468,11 +474,11 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 break;
             case TRC_ITU_R_BT_470_6_SYSTEM_M:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_GAMMA;
-                cicpDescription.gamma = 1 / 2.2;
+                cicpDescription.gamma = 1.0 / 2.2;
                 break;
             case TRC_ITU_R_BT_470_6_SYSTEM_B_G:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_GAMMA;
-                cicpDescription.gamma = 1 / 2.8;
+                cicpDescription.gamma = 1.0 / 2.8;
                 break;
             case TRC_IEC_61966_2_1:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_SRGB;
@@ -488,15 +494,15 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 break;
             case TRC_GAMMA_1_8:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_GAMMA;
-                cicpDescription.gamma = 1 / 1.8;
+                cicpDescription.gamma = 1.0 / 1.8;
                 break;
             case TRC_GAMMA_2_4:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_GAMMA;
-                cicpDescription.gamma = 1 / 2.4;
+                cicpDescription.gamma = 1.0 / 2.4;
                 break;
             case TRC_PROPHOTO:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_GAMMA;
-                cicpDescription.gamma = 1 / 1.8;
+                cicpDescription.gamma = 1.0 / 1.8;
                 break;
             case TRC_A98:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_GAMMA;
@@ -525,8 +531,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         const ColorPrimaries primaries = cs->profile()->getColorPrimaries();
 
         if ((cfg->getBool("lossless") && conversionPolicy == ConversionPolicy::KeepTheSame)
-            || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID))
-            || !isSupportedTRC) {
+            || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID)) || !isSupportedTRC) {
             const QByteArray profile = cs->profile()->rawData();
 
             if (JXL_ENC_SUCCESS
@@ -681,7 +686,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         const auto setDistance = [&](float v) {
             // Using a gamma curve to map the quality -> distance a bit better
             const float gamma = 5.1098039724597f; // Derived so that Q 90 equals distance 1.0 (roughly match libjxl)
-            const float y = powf(v / 100.0f, 1.0f / gamma) * 100.0f;
+            const float y = std::pow(v / 100.0f, 1.0f / gamma) * 100.0f;
             const float dist = cfg->getBool("lossless") ? 0.0f : ((y * (0.5f - 25.0f)) / 100.0f) + 25.0f;
             dbgFile << "libjxl distance equivalent: " << dist;
             return JxlEncoderSetFrameDistance(frameSettings, dist) == JXL_ENC_SUCCESS;

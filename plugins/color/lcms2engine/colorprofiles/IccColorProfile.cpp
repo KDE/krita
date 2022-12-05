@@ -348,6 +348,14 @@ QVector <qreal> IccColorProfile::getEstimatedTRC() const
     return dummy;
 }
 
+bool IccColorProfile::compareTRC(TransferCharacteristics characteristics, float error) const
+{
+    if (d->shared->lcmsProfile) {
+        return d->shared->lcmsProfile->compareTRC(characteristics, error);
+    }
+    return false;
+}
+
 void IccColorProfile::linearizeFloatValue(QVector <qreal> & Value) const
 {
     if (d->shared->lcmsProfile)

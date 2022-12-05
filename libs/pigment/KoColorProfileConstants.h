@@ -67,7 +67,8 @@ enum TransferCharacteristics {
     TRC_GAMMA_1_8 = 256, //Gamma 1.8
     TRC_GAMMA_2_4, //Gamma 2.4
     TRC_PROPHOTO, //Gamma 1.8 unless under 16/512
-    TRC_A98 //Gamma of 256/563
+    TRC_A98, // Gamma of 256/563
+    TRC_LAB_L // L* transfer curve
 };
 
 #endif // KOCOLORPROFILECONSTANTS_H

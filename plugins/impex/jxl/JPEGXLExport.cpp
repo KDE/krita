@@ -14,6 +14,8 @@
 #include <kpluginfactory.h>
 
 #include <QBuffer>
+#include <algorithm>
+#include <array>
 #include <cstdint>
 
 #include <KisDocument.h>
@@ -339,6 +341,15 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
     const bool removeHGLOOTF = cfg->getBool("removeHGLOOTF", true);
 
     const bool hasPrimaries = cs->profile()->hasColorants();
+    const TransferCharacteristics gamma = cs->profile()->getTransferCharacteristics();
+    static constexpr std::array<TransferCharacteristics, 14> supportedTRC = {TRC_LINEAR, TRC_ITU_R_BT_709_5,
+                                                                            TRC_ITU_R_BT_601_6, TRC_ITU_R_BT_2020_2_10bit,
+                                                                            TRC_ITU_R_BT_470_6_SYSTEM_M, TRC_ITU_R_BT_470_6_SYSTEM_B_G,
+                                                                            TRC_IEC_61966_2_1, TRC_ITU_R_BT_2100_0_PQ,
+                                                                            TRC_SMPTE_ST_428_1, TRC_ITU_R_BT_2100_0_HLG,
+                                                                            TRC_GAMMA_1_8, TRC_GAMMA_2_4,
+                                                                            TRC_PROPHOTO, TRC_A98};
+    const bool isSupportedTRC = std::find(supportedTRC.begin(), supportedTRC.end(), gamma) != supportedTRC.end();
 
     const JxlPixelFormat pixelFormat = [&]() {
         JxlPixelFormat pixelFormat{};
@@ -404,9 +415,10 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             info->num_color_channels = 1;
             info->num_extra_channels = 1;
         }
-        // Use original profile on non-matrix profile, as they didn't have colorants set...
-        // also prevent crashing with Elle's identity profiles.
-        if (cfg->getBool("lossless") || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID))) {
+        // Use original profile on lossless, non-matrix profile or unsupported transfer curve.
+        if(cfg->getBool("lossless")
+            || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID))
+            || !isSupportedTRC) {
             info->uses_original_profile = JXL_TRUE;
             dbgFile << "JXL use original profile";
         } else {
@@ -445,7 +457,6 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             break;
         case ConversionPolicy::KeepTheSame:
         default: {
-            const TransferCharacteristics gamma = cs->profile()->getTransferCharacteristics();
             switch (gamma) {
             case TRC_LINEAR:
                 cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_LINEAR;
@@ -497,12 +508,13 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             case TRC_LOGARITHMIC_100:
             case TRC_LOGARITHMIC_100_sqrt10:
             case TRC_IEC_61966_2_4:
+            case TRC_LAB_L:
             case TRC_UNSPECIFIED:
                 if (cs->profile()->isLinear()) {
                     cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_LINEAR;
                 } else {
                     dbgFile << "JXL CICP cannot describe the current transfer function" << gamma
-                            << ", falling back to ICC or TRC estimation";
+                            << ", falling back to ICC";
                     cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_UNKNOWN;
                 }
                 break;
@@ -512,12 +524,9 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
 
         const ColorPrimaries primaries = cs->profile()->getColorPrimaries();
 
-        const bool arePrimariesSupported =
-            (primaries == PRIMARIES_ITU_R_BT_709_5 || primaries == PRIMARIES_ITU_R_BT_2020_2_AND_2100_0 || primaries == PRIMARIES_SMPTE_RP_431_2);
-        Q_UNUSED(arePrimariesSupported);
-
         if ((cfg->getBool("lossless") && conversionPolicy == ConversionPolicy::KeepTheSame)
-            || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID))) {
+            || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID))
+            || !isSupportedTRC) {
             const QByteArray profile = cs->profile()->rawData();
 
             if (JXL_ENC_SUCCESS
@@ -526,27 +535,6 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 return ImportExportCodes::InternalError;
             }
         } else {
-            if (cicpDescription.transfer_function == JXL_TRANSFER_FUNCTION_UNKNOWN) {
-                // Use estimatedTRC instead to get custom gamma from the profile
-                QVector<double> estimatedTRC(3);
-                estimatedTRC = cs->profile()->getEstimatedTRC();
-
-                dbgFile << "Estimated TRC: " << estimatedTRC[0];
-
-                if (estimatedTRC[0] == -1) {
-                    // and assume sRGB or Rec.709 for other unidentified TRC
-                    if (cs->profile()->name().contains("-elle-") && cs->profile()->name().contains("-rec709")) {
-                        cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_709;
-                    } else {
-                        cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_SRGB;
-                    }
-                } else {
-                    // JXL use inverted gamma as an input (1 / gamma)
-                    cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_GAMMA;
-                    cicpDescription.gamma = (1 / estimatedTRC[0]);
-                }
-            }
-
             if (cs->colorModelId() == GrayAColorModelID) {
                 // XXX: JXL can't parse custom white point for grayscale (yet) and returned as linear on roundtrip so
                 // let's use default D65 as whitepoint instead...
@@ -692,9 +680,9 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         // Hardcoded a map function that translates from arbitrary quality value to JPEG-XL distance
         const auto setDistance = [&](float v) {
             // Using a gamma curve to map the quality -> distance a bit better
-            double gamma = 5.1098039724597; // Derived so that Q 90 equals distance 1.0 (roughly match libjxl)
-            double y = pow(v / 100.0, 1.0 / gamma) * 100.0;
-            double dist = cfg->getBool("lossless") ? 0.0 : ((y * (0.5 - 25.0)) / 100.0) + 25.0;
+            const float gamma = 5.1098039724597f; // Derived so that Q 90 equals distance 1.0 (roughly match libjxl)
+            const float y = powf(v / 100.0f, 1.0f / gamma) * 100.0f;
+            const float dist = cfg->getBool("lossless") ? 0.0f : ((y * (0.5f - 25.0f)) / 100.0f) + 25.0f;
             dbgFile << "libjxl distance equivalent: " << dist;
             return JxlEncoderSetFrameDistance(frameSettings, dist) == JXL_ENC_SUCCESS;
         };

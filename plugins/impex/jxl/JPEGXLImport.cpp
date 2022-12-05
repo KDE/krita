@@ -358,7 +358,8 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                                                       JXL_COLOR_PROFILE_TARGET_DATA,
                                                       &colorEncoding)) {
                 const TransferCharacteristics transferFunction = [&]() {
-                    double estGamma;
+                    float estGamma;
+                    const float error = 0.0001;
                     switch (colorEncoding.transfer_function) {
                     case JXL_TRANSFER_FUNCTION_PQ: {
                         dbgFile << "linearizing from PQ";
@@ -387,15 +388,19 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     case JXL_TRANSFER_FUNCTION_SRGB:
                         return TRC_IEC_61966_2_1;
                     case JXL_TRANSFER_FUNCTION_GAMMA:
-                        // Rounding gamma to 1 decimal point for better detection
-                        estGamma = (std::round((1 / colorEncoding.gamma) * 10) / 10);
-                        if (estGamma == 1.8) {
+                        // Using roughly the same logic in KoColorProfile.
+                        estGamma = 1.0 / colorEncoding.gamma;
+                        // ICC v2 u8Fixed8Number calculation
+                        // Or can be prequantized as 1.80078125, courtesy of Elle Stone
+                        if ((std::fabs(estGamma - 1.8) < error) || (std::fabs(estGamma - (461.0 / 256.0)) < error)) {
                             return TRC_GAMMA_1_8;
-                        } else if (estGamma == 2.2) {
+                        } else if (std::fabs(estGamma - 2.2) < error) {
                             return TRC_ITU_R_BT_470_6_SYSTEM_M;
-                        } else if (estGamma == 2.4) {
+                        } else if (std::fabs(estGamma - (563.0 / 256.0)) < error) {
+                            return TRC_A98;
+                        } else if (std::fabs(estGamma - 2.4) < error) {
                             return TRC_GAMMA_2_4;
-                        } else if (estGamma == 2.8) {
+                        } else if (std::fabs(estGamma - 2.8) < error) {
                             return TRC_ITU_R_BT_470_6_SYSTEM_B_G;
                         } else {
                             warnFile << "Found custom estimated gamma value for JXL color space" << estGamma;
@@ -424,8 +429,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 }();
 
                 const QVector<double> colorants = [&]() -> QVector<double> {
-                    if (colorEncoding.primaries != JXL_PRIMARIES_CUSTOM
-                        || colorEncoding.white_point != JXL_WHITE_POINT_CUSTOM) {
+                    if (colorEncoding.primaries != JXL_PRIMARIES_CUSTOM) {
                         return {};
                     } else {
                         return {colorEncoding.white_point_xy[0],

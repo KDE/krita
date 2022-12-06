@@ -33,20 +33,18 @@
 
 KisRoundMarkerOp::KisRoundMarkerOp(KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP /*image*/)
     : KisPaintOp(painter)
-    , m_firstRun(true)
-    , m_lastRadius(1.0)
+    , m_sizeOption(settings.data())
+    , m_spacingOption(settings.data())
 {
     Q_UNUSED(node);
 
     Q_ASSERT(settings);
     Q_ASSERT(painter);
 
-    m_markerOption.readOptionSetting(*settings);
-    m_sizeOption.readOptionSetting(settings);
-    m_spacingOption.readOptionSetting(settings);
+    m_firstRun = true;
+    m_lastRadius = 1.0;
 
-    m_sizeOption.resetAllSensors();
-    m_spacingOption.resetAllSensors();
+    m_markerOption.read(settings.data());
 }
 
 KisRoundMarkerOp::~KisRoundMarkerOp()

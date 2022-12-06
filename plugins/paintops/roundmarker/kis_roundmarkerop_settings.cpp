@@ -5,13 +5,14 @@
  */
 
 #include "kis_roundmarkerop_settings.h"
-#include "kis_roundmarker_option.h"
+#include "KisRoundMarkerOpOptionData.h"
 #include <KisOptimizedBrushOutline.h>
 #include <QPointer>
 
 
 struct KisRoundMarkerOpSettings::Private
 {
+    QList<KisUniformPaintOpPropertyWSP> uniformProperties;
 };
 
 KisRoundMarkerOpSettings::KisRoundMarkerOpSettings(KisResourcesInterfaceSP resourcesInterface)
@@ -33,17 +34,17 @@ bool KisRoundMarkerOpSettings::paintIncremental() {
 
 void KisRoundMarkerOpSettings::setPaintOpSize(qreal value)
 {
-    RoundMarkerOption op;
-    op.readOptionSetting(*this);
-    op.diameter = value;
-    op.writeOptionSetting(this);
+    KisRoundMarkerOpOptionData option;
+    option.read(this);
+    option.diameter = value;
+    option.write(this);
 }
 
 qreal KisRoundMarkerOpSettings::paintOpSize() const
 {
-    RoundMarkerOption op;
-    op.readOptionSetting(*this);
-    return op.diameter;
+    KisRoundMarkerOpOptionData option;
+    option.read(this);
+    return option.diameter;
 }
 
 KisOptimizedBrushOutline KisRoundMarkerOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
@@ -53,10 +54,10 @@ KisOptimizedBrushOutline KisRoundMarkerOpSettings::brushOutline(const KisPaintIn
     if (mode.isVisible) {
         qreal finalScale = 1.0;
 
-        RoundMarkerOption op;
-        op.readOptionSetting(*this);
+        KisRoundMarkerOpOptionData option;
+        option.read(this);
         // Adding 1 for the antialiasing/fade.
-        const qreal radius = (0.5 * op.diameter) + 1;
+        const qreal radius = (0.5 * option.diameter) + 1;
 
         QPainterPath realOutline;
         realOutline.addEllipse(QPointF(), radius, radius);
@@ -76,20 +77,70 @@ KisOptimizedBrushOutline KisRoundMarkerOpSettings::brushOutline(const KisPaintIn
 }
 
 #include "kis_standard_uniform_properties_factory.h"
+#include <brushengine/kis_slider_based_paintop_property.h>
+#include "KisPaintOpPresetUpdateProxy.h"
 
 QList<KisUniformPaintOpPropertySP> KisRoundMarkerOpSettings::uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy)
 {
-    QList<KisUniformPaintOpPropertySP> props;
+    QList<KisUniformPaintOpPropertySP> props =
+        listWeakToStrong(m_d->uniformProperties);
 
-    {
-        using namespace KisStandardUniformPropertiesFactory;
+    if (props.isEmpty()) {
+        {
+            KisUniformPaintOpPropertyCallback *prop =
+                new KisUniformPaintOpPropertyCallback(KisUniformPaintOpPropertyCallback::Bool, KoID("auto_spacing", i18n("Auto Spacing")), settings, 0);
 
-        Q_FOREACH (KisUniformPaintOpPropertySP prop, KisPaintOpSettings::uniformProperties(settings, updateProxy)) {
-            if (prop->id() != flow.id()) {
-                props.prepend(prop);
-            }
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisRoundMarkerOpOptionData data;
+                    data.read(prop->settings().data());
+
+                    prop->setValue(data.use_auto_spacing);
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisRoundMarkerOpOptionData data;
+                    data.read(prop->settings().data());
+                    data.use_auto_spacing = prop->value().toBool();
+                    data.write(prop->settings().data());
+                });
+
+            QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
+        }
+
+        {
+            KisDoubleSliderBasedPaintOpPropertyCallback *prop =
+                new KisDoubleSliderBasedPaintOpPropertyCallback(KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                                                                KoID("spacing", i18n("Spacing")),
+                                                                settings,
+                                                                0);
+
+            prop->setRange(0.01, 10);
+            prop->setSingleStep(0.01);
+            prop->setExponentRatio(3.0);
+
+            prop->setReadCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisRoundMarkerOpOptionData data;
+                    data.read(prop->settings().data());
+
+                    prop->setValue(data.auto_spacing_coeff);
+                });
+            prop->setWriteCallback(
+                [](KisUniformPaintOpProperty *prop) {
+                    KisRoundMarkerOpOptionData data;
+                    data.read(prop->settings().data());
+                    data.auto_spacing_coeff = prop->value().toBool();
+                    data.write(prop->settings().data());
+                });
+
+            QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            prop->requestReadValue();
+            props << toQShared(prop);
         }
     }
 
-    return props;
+    return KisPaintOpSettings::uniformProperties(settings, updateProxy) + props;
 }

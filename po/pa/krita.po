@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-30 00:45+0000\n"
+"POT-Creation-Date: 2022-12-06 00:43+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -49782,8 +49782,8 @@ msgstr ""
 msgid "Sign with Author Profile Data"
 msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:462
-#: plugins/impex/jxl/JPEGXLImport.cpp:473
+#: plugins/impex/jxl/JPEGXLImport.cpp:469
+#: plugins/impex/jxl/JPEGXLImport.cpp:480
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -49794,13 +49794,13 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:507
+#: plugins/impex/jxl/JPEGXLImport.cpp:514
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "JPEG-XL image is animated, but cannot retrieve animation frame header."
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:535
+#: plugins/impex/jxl/JPEGXLImport.cpp:542
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."
@@ -50129,7 +50129,7 @@ msgstr ""
 #, kde-format
 msgid ""
 "Set the lossy quality of JPEG-XL export.\n"
-"Default: 100 (visually lossless)."
+"Default: 90 (visually lossless)."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowQual)

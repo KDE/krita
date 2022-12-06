@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-30 00:45+0000\n"
+"POT-Creation-Date: 2022-12-06 00:43+0000\n"
 "PO-Revision-Date: 2022-12-01 06:51\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -45970,20 +45970,20 @@ msgstr ""
 msgid "Sign with Author Profile Data"
 msgstr "写入作者档案信息"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:462
-#: plugins/impex/jxl/JPEGXLImport.cpp:473
+#: plugins/impex/jxl/JPEGXLImport.cpp:469
+#: plugins/impex/jxl/JPEGXLImport.cpp:480
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "无法读取图像配置文件。"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:507
+#: plugins/impex/jxl/JPEGXLImport.cpp:514
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "JPEG-XL image is animated, but cannot retrieve animation frame header."
 msgstr "此 JPEG-XL 图像是动图，但无法获取动画帧数据头。"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:535
+#: plugins/impex/jxl/JPEGXLImport.cpp:542
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."
@@ -46288,10 +46288,13 @@ msgstr "最大"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, lossyQuality)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:101
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Set the lossy quality of JPEG-XL export.\n"
+#| "Default: 100 (visually lossless)."
 msgid ""
 "Set the lossy quality of JPEG-XL export.\n"
-"Default: 100 (visually lossless)."
+"Default: 90 (visually lossless)."
 msgstr ""
 "设置 JPEG-XL 导出的有损画质。\n"
 "默认：100 (视觉无损)。"

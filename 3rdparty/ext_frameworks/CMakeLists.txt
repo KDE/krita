@@ -22,6 +22,7 @@ ExternalProject_Add(
     URL https://download.kde.org/stable/frameworks/5.82/extra-cmake-modules-5.82.0.tar.xz
     URL_HASH SHA256=5972ec6d78c3e95ab9cbecdb0661c158570e868466357c5cec2b63a4251ecce4
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Android-Skip-setting-up-fastlane.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Android-Recursively-find-dependency-of-dependencies.patch
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
                -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}

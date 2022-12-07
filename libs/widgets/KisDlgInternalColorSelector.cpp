@@ -274,6 +274,7 @@ void KisDlgInternalColorSelector::updateAllElements(QObject *source)
     if (source != m_ui->spinboxselector) {
         m_ui->spinboxselector->slotSetColor(m_d->currentColor);
     }
+
     if (source != m_ui->visualSelector) {
         m_ui->visualSelector->slotSetColor(m_d->currentColor);
     }

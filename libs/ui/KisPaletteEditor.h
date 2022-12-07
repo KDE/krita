@@ -21,7 +21,7 @@ class KisViewManager;
 
 /**
  * @brief The PaletteEditor class
- * this class manipulates a KisPaletteModel using GUI elements and communicate
+ * this class manipulates a KisPaletteModel using GUI elements and communicates
  * with KisDocument
  *
  * Changes made in this class won't be done to the palette if the palette is
@@ -46,7 +46,7 @@ public:
 
     /**
      * @brief rowNumberOfGroup
-     * @param oriName the original name of a group at the creation of the instance
+     * @param originalName the original name of a group at the creation of the instance
      * @return newest row number of the group
      */
     int rowNumberOfGroup(const QString &originalName) const;

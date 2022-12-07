@@ -711,7 +711,7 @@ void TestKoColorSet::testGetColorGlobal()
     for (int row = 0; row < cs->rowCountWithTitles(); row++) {
         if (row == 7 || row == 14 || row == 20) {
             QVERIFY(cs->isGroupTitleRow(row));
-            qDebug() << cs->getGroup(row)->name();
+            //qDebug() << cs->getGroup(row)->name();
         }
 
         for (int col = 0; col < cs->columnCount(); col++) {

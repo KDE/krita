@@ -209,8 +209,6 @@ void KisPaletteView::slotFGColorChanged(const KoColor &color)
 
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 {
-    qDebug() << d->model << model;
-
     if (d->model) {
         disconnect(d->model, 0, this, 0);
     }
@@ -246,7 +244,6 @@ void KisPaletteView::resizeRows(int newSize)
 
 void KisPaletteView::saveModification()
 {
-    //qDebug() << "saving modification in palette view" << m_d->model->colorSet()->filename() << m_d->model->colorSet()->storageLocation();
     KisResourceUserOperations::updateResourceWithUserInput(this, d->model->colorSet());
 }
 

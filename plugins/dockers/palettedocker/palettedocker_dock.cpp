@@ -270,8 +270,6 @@ void PaletteDockerDock::unsetCanvas()
 
 void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
 {
-    qDebug() << m_currentColorSet << colorSet << m_paletteEditor->isModified();
-
     if (m_currentColorSet == colorSet) {
         slotUpdateLblPaletteName();
         m_paletteEditor->updatePalette();
@@ -424,8 +422,6 @@ void PaletteDockerDock::slotUpdateLblPaletteName()
 void PaletteDockerDock::slotLockPalette(bool locked)
 {
     m_currentColorSet->setLocked(locked);
-    qDebug() << "locked" << locked;
-
     QIcon icon = locked ? KisIconUtils::loadIcon(koIconName("object-locked"))
                         : KisIconUtils::loadIcon(koIconName("object-unlocked"));
     m_ui->bnLock->setIcon(icon);

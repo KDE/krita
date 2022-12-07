@@ -32,9 +32,9 @@
 
 #define INNER_RADIUS 50
 
-KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double resolution)
+KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, KisImageWSP image)
         : QWidget(parent),
-        m_resolution(resolution),
+        m_resolution(image->xRes()),
         m_unit(KoUnit::Pixel)
 {
     m_distance = 0.0;
@@ -61,6 +61,8 @@ KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double
 
     optionLayout->addWidget(unitBox, 0, 2);
     optionLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding), 2, 0, 1, 2);
+
+    connect(image, SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotResolutionChanged(double, double)));
 }
 
 void KisToolMeasureOptionsWidget::slotSetDistance(double distance)
@@ -78,6 +80,11 @@ void KisToolMeasureOptionsWidget::slotUnitChanged(int index)
 {
     m_unit = KoUnit::fromListForUi(index, KoUnit::ListAll, m_resolution);
     updateDistance();
+}
+
+void KisToolMeasureOptionsWidget::slotResolutionChanged(double xRes, double /*yRes*/)
+{
+    m_resolution = xRes;
 }
 
 void KisToolMeasureOptionsWidget::updateDistance()
@@ -133,9 +140,6 @@ void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
     QTransform transf;
     transf.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
     paintToolOutline(&gc, transf.map(elbowPath));
-
-    // Update the resolution (in case the resolution has changed)
-    m_optionsWidget->m_resolution = currentImage()->xRes();
 
     gc.setPen(old);
 }
@@ -197,7 +201,7 @@ QWidget* KisToolMeasure::createOptionWidget()
 {
     if (!currentImage())
         return nullptr;
-    m_optionsWidget = new KisToolMeasureOptionsWidget(nullptr, currentImage()->xRes());
+    m_optionsWidget = new KisToolMeasureOptionsWidget(nullptr, currentImage());
 
     // See https://bugs.kde.org/show_bug.cgi?id=316896
     QWidget *specialSpacer = new QWidget(m_optionsWidget);

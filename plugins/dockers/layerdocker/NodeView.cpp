@@ -341,7 +341,13 @@ void NodeView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottom
             QModelIndex index = topLeft.sibling(x, y);
             if (index.data(KisNodeModel::ActiveRole).toBool()) {
                 if (currentIndex() != index) {
-                    setCurrentIndex(index);
+                    // Means, we only have to make a selection if there wasn't one already (which happens when
+                    // you open a new document).
+                    if (selectionModel()->hasSelection()) {
+                        selectionModel()->setCurrentIndex(index, QItemSelectionModel::NoUpdate);
+                    } else {
+                        setCurrentIndex(index);
+                    }
                 }
 
                 return;

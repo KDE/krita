@@ -1019,18 +1019,7 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
             return false;
         } else if (index.column() == NodeView::SELECTED_COL) {
             if (leftButton && option.rect.contains(mouseEvent->pos())) {
-                QItemSelectionModel *selectionModel = d->view->selectionModel();
-
-                // if only one item is selected and that too is us then in that case we don't do anything to
-                // the selection.
-                if (selectionModel->selectedIndexes().size() == 1
-                    && selectionModel->isRowSelected(index.row(), index.parent())) {
-                    selectionModel->select(index,
-                                           QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
-                } else {
-                    selectionModel->select(index,
-                                           QItemSelectionModel::Toggle | QItemSelectionModel::Rows);
-                }
+                changeSelectionAndCurrentIndex(index);
                 return true;
             }
         }
@@ -1087,6 +1076,11 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
                         model->setData(index, true, KisNodeModel::AlternateActiveRole);
 
                         return true;
+                    } else if (mouseEvent->modifiers() == Qt::ControlModifier) {
+                        // the control modifier shifts the current index as well (even when deselected), so we
+                        // handle it manually.
+                        changeSelectionAndCurrentIndex(index);
+                        return true;
                     }
                     return false;
                 }
@@ -1114,6 +1108,30 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
     }
 
     return false;
+}
+
+void NodeDelegate::changeSelectionAndCurrentIndex(const QModelIndex &index)
+{
+    QItemSelectionModel *selectionModel = d->view->selectionModel();
+    const bool wasSelected = selectionModel->isRowSelected(index.row(), index.parent());
+
+    // if only one item is selected and that too is us then in that case we don't do anything to
+    // the selection.
+    if (selectionModel->selectedIndexes().size() == 1
+        && selectionModel->isRowSelected(index.row(), index.parent())) {
+        selectionModel->select(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+    } else {
+        selectionModel->select(index, QItemSelectionModel::Toggle | QItemSelectionModel::Rows);
+    }
+
+    const auto belongToSameRow = [](const QModelIndex &a, const QModelIndex &b) {
+        return a.row() == b.row() && a.parent() == b.parent();
+    };
+
+    // in this condition we move the current index to the best guessed previous one.
+    if (wasSelected && belongToSameRow(selectionModel->currentIndex(), index)) {
+        selectionModel->setCurrentIndex(selectionModel->selectedRows().last(), QItemSelectionModel::NoUpdate);
+    }
 }
 
 QWidget *NodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex &index) const

@@ -13,11 +13,11 @@ KisRoundMarkerOpOptionModel::KisRoundMarkerOpOptionModel(lager::cursor<KisRoundM
     : optionData(_optionData)    
     , LAGER_QT(diameter) {_optionData[&KisRoundMarkerOpOptionData::diameter]}
     , LAGER_QT(spacing) {_optionData[&KisRoundMarkerOpOptionData::spacing]}
-    , LAGER_QT(use_auto_spacing) {_optionData[&KisRoundMarkerOpOptionData::use_auto_spacing]}
-    , LAGER_QT(auto_spacing_coeff) {_optionData[&KisRoundMarkerOpOptionData::auto_spacing_coeff]}
+    , LAGER_QT(useAutoSpacing) {_optionData[&KisRoundMarkerOpOptionData::useAutoSpacing]}
+    , LAGER_QT(autoSpacingCoeff) {_optionData[&KisRoundMarkerOpOptionData::autoSpacingCoeff]}
     , LAGER_QT(aggregatedSpacing) {lager::with(LAGER_QT(spacing),
-                                          LAGER_QT(use_auto_spacing),
-                                          LAGER_QT(auto_spacing_coeff))
+                                          LAGER_QT(useAutoSpacing),
+                                          LAGER_QT(autoSpacingCoeff))
              .xform(zug::map(ToSpacingState{}),
                     zug::map(FromSpacingState{}))}
 {

@@ -95,13 +95,13 @@ QList<KisUniformPaintOpPropertySP> KisRoundMarkerOpSettings::uniformProperties(K
                     KisRoundMarkerOpOptionData data;
                     data.read(prop->settings().data());
 
-                    prop->setValue(data.use_auto_spacing);
+                    prop->setValue(data.useAutoSpacing);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
                     KisRoundMarkerOpOptionData data;
                     data.read(prop->settings().data());
-                    data.use_auto_spacing = prop->value().toBool();
+                    data.useAutoSpacing = prop->value().toBool();
                     data.write(prop->settings().data());
                 });
 
@@ -126,13 +126,13 @@ QList<KisUniformPaintOpPropertySP> KisRoundMarkerOpSettings::uniformProperties(K
                     KisRoundMarkerOpOptionData data;
                     data.read(prop->settings().data());
 
-                    prop->setValue(data.auto_spacing_coeff);
+                    prop->setValue(data.autoSpacingCoeff);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
                     KisRoundMarkerOpOptionData data;
                     data.read(prop->settings().data());
-                    data.auto_spacing_coeff = prop->value().toBool();
+                    data.autoSpacingCoeff = prop->value().toBool();
                     data.write(prop->settings().data());
                 });
 

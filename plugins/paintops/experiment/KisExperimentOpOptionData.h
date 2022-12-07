@@ -23,11 +23,11 @@ struct KisExperimentOpOptionData : boost::equality_comparable<KisExperimentOpOpt
 {
     inline friend bool operator==(const KisExperimentOpOptionData &lhs, const KisExperimentOpOptionData &rhs) {
         return lhs.isDisplacementEnabled == rhs.isDisplacementEnabled
-			&& lhs.displacement == rhs.displacement
+			&& qFuzzyCompare(lhs.displacement, rhs.displacement)
 			&& lhs.isSpeedEnabled == rhs.isSpeedEnabled
-			&& lhs.speed == rhs.speed
+			&& qFuzzyCompare(lhs.speed, rhs.speed)
 			&& lhs.isSmoothingEnabled == rhs.isSmoothingEnabled
-			&& lhs.smoothing == rhs.smoothing
+			&& qFuzzyCompare(lhs.smoothing, rhs.smoothing)
 			&& lhs.windingFill == rhs.windingFill
 			&& lhs.hardEdge == rhs.hardEdge
 			&& lhs.fillType == rhs.fillType;

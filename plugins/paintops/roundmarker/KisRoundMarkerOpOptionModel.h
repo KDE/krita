@@ -22,8 +22,8 @@ public:
 
     LAGER_QT_CURSOR(qreal, diameter);
     LAGER_QT_CURSOR(qreal, spacing);
-    LAGER_QT_CURSOR(bool, use_auto_spacing);
-    LAGER_QT_CURSOR(qreal, auto_spacing_coeff);
+    LAGER_QT_CURSOR(bool, useAutoSpacing);
+    LAGER_QT_CURSOR(qreal, autoSpacingCoeff);
     LAGER_QT_CURSOR(SpacingState, aggregatedSpacing);
 };
 

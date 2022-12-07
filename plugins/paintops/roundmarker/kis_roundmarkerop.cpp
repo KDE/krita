@@ -165,7 +165,7 @@ KisSpacingInformation KisRoundMarkerOp::computeSpacing(const KisPaintInformation
     return KisPaintOpUtils::effectiveSpacing(diameter, diameter,
                                              extraSpacingScale, true, true, rotation, axesFlipped,
                                              m_markerOption.spacing,
-                                             m_markerOption.use_auto_spacing,
-                                             m_markerOption.auto_spacing_coeff,
+                                             m_markerOption.useAutoSpacing,
+                                             m_markerOption.autoSpacingCoeff,
                                              KisLodTransform::lodToScale(painter()->device()));
 }

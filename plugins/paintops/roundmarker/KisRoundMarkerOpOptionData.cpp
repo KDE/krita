@@ -18,8 +18,8 @@ bool KisRoundMarkerOpOptionData::read(const KisPropertiesConfiguration *setting)
 {
     diameter = setting->getDouble(ROUNDMARKER_DIAMETER, 30.0);
     spacing = setting->getDouble(ROUNDMARKER_SPACING, 0.02);
-    use_auto_spacing = setting->getBool(ROUNDMARKER_USE_AUTO_SPACING, false);
-    auto_spacing_coeff = setting->getDouble(ROUNDMARKER_AUTO_SPACING_COEFF, 1.0);
+    useAutoSpacing = setting->getBool(ROUNDMARKER_USE_AUTO_SPACING, false);
+    autoSpacingCoeff = setting->getDouble(ROUNDMARKER_AUTO_SPACING_COEFF, 1.0);
 
     return true;
 }
@@ -28,6 +28,6 @@ void KisRoundMarkerOpOptionData::write(KisPropertiesConfiguration *setting) cons
 {
     setting->setProperty(ROUNDMARKER_DIAMETER, diameter);
     setting->setProperty(ROUNDMARKER_SPACING, spacing);
-    setting->setProperty(ROUNDMARKER_USE_AUTO_SPACING, use_auto_spacing);
-    setting->setProperty(ROUNDMARKER_AUTO_SPACING_COEFF, auto_spacing_coeff);
+    setting->setProperty(ROUNDMARKER_USE_AUTO_SPACING, useAutoSpacing);
+    setting->setProperty(ROUNDMARKER_AUTO_SPACING_COEFF, autoSpacingCoeff);
 }

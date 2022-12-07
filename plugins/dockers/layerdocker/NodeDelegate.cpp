@@ -928,14 +928,33 @@ void NodeDelegate::drawSelectedButton(QPainter *p, const QStyleOptionViewItem &o
 
     // adjust the icon to not touch the borders
     rect = kisGrowRect(rect, -(scm.thumbnailMargin() + scm.border()));
+    // Make the rect a square so the check mark is not distorted. also center
+    // it horizontally and vertically with respect to the whole area rect
+    constexpr qint32 maximumAllowedSideLength = 48;
+    const qint32 minimumSideLength = qMin(rect.width(), rect.height());
+    const qint32 sideLength = qMin(minimumSideLength, maximumAllowedSideLength);
+    rect =
+        QRect(rect.left() + static_cast<qint32>(qRound(static_cast<qreal>(rect.width() - sideLength) / 2.0)),
+              rect.top() + static_cast<qint32>(qRound(static_cast<qreal>(rect.height() - sideLength) / 2.0)),
+              sideLength, sideLength);
 
     buttonOption.rect = rect;
+
+    // Update palette colors to make the check box more readable over the base
+    // color
+    const QColor prevBaseColor = buttonOption.palette.base().color();
+    const qint32 windowLightness = buttonOption.palette.window().color().lightness();
+    const qint32 baseLightness = prevBaseColor.lightness();
+    const QColor newBaseColor =
+        baseLightness > windowLightness ? prevBaseColor.lighter(120) : prevBaseColor.darker(120);
+    buttonOption.palette.setColor(QPalette::Window, prevBaseColor);
+    buttonOption.palette.setColor(QPalette::Base, newBaseColor);
 
     // check if the current index exists in the selected rows.
     buttonOption.state.setFlag((d->view->selectionModel()->isRowSelected(index.row(), index.parent())
                                     ? QStyle::State_On
-                                    : QStyle::State_NoChange));
-    style->drawControl(QStyle::CE_CheckBox, &buttonOption, p);
+                                    : QStyle::State_Off));
+    style->drawPrimitive(QStyle::PE_IndicatorCheckBox, &buttonOption, p);
 }
 
 boost::optional<KisBaseNode::Property>

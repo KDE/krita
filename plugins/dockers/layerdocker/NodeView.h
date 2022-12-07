@@ -169,6 +169,8 @@ private:
      */
     void setDraggingFlag(bool flag = true);
 
+    void updateSelectedCheckboxColumn();
+
     bool m_draggingFlag;
 
     QStyleOptionViewItem optionForIndex(const QModelIndex &index) const;

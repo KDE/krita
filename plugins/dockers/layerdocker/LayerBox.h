@@ -132,6 +132,7 @@ private Q_SLOTS:
     void slotUpdateLayerInfoTextStyle();
     void slotUpdateLayerInfoTextOpacity();
     void slotUpdateUseInlineLayerInfoText();
+    void slotUpdateUseLayerSelectionCheckbox();
 
     void slotImageTimeChanged(int time);
     void slotForgetAboutSavedNodeBeforeEditSelectionMode();
@@ -182,6 +183,7 @@ private:
     QComboBox *infoTextCombobox;
     KisSliderSpinBox *infoTextOpacitySlider;
     QCheckBox *infoTextInlineChkbox;
+    QCheckBox *layerSelectionCheckBox {nullptr};
 
     KisNodeSP m_activeNode;
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;

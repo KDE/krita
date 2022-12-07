@@ -675,6 +675,9 @@ public:
     bool useInlineLayerInfoText(bool defaultValue = false) const;
     void setUseInlineLayerInfoText(bool value);
 
+    bool useLayerSelectionCheckbox(bool defaultValue = false) const;
+    void setUseLayerSelectionCheckbox(bool value);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

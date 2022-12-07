@@ -2441,6 +2441,16 @@ void KisConfig::setUseInlineLayerInfoText(bool value)
     m_cfg.writeEntry("useInlineLayerInfoText", value);
 }
 
+bool KisConfig::useLayerSelectionCheckbox(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("useLayerSelectionCheckbox", true);
+}
+
+void KisConfig::setUseLayerSelectionCheckbox(bool value)
+{
+    m_cfg.writeEntry("useLayerSelectionCheckbox", value);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

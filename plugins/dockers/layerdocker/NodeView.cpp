@@ -13,6 +13,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kis_config.h>
 #include <kis_icon.h>
 #include <ksharedconfig.h>
 #include <KisKineticScroller.h>
@@ -120,6 +121,12 @@ void NodeView::setModel(QAbstractItemModel *model)
         header()->moveSection(VISIBILITY_COL, 0);
         header()->moveSection(SELECTED_COL, 1);
     }
+
+    KisConfig cfg(true);
+    if (!cfg.useLayerSelectionCheckbox()) {
+        header()->hideSection(SELECTED_COL);
+    }
+
     // the default may be too large for our visibility icon
     header()->setMinimumSectionSize(KisNodeViewColorScheme::instance()->visibilityColumnWidth());
 }
@@ -449,10 +456,16 @@ void NodeView::resizeEvent(QResizeEvent * event)
 {
     KisNodeViewColorScheme scm;
     header()->setStretchLastSection(false);
-    header()->resizeSection(DEFAULT_COL, event->size().width() - scm.visibilityColumnWidth()
-                                             - scm.selectedButtonColumnWidth());
-    header()->resizeSection(VISIBILITY_COL, scm.visibilityColumnWidth());
+
+    int otherColumnsWidth = scm.visibilityColumnWidth();
+
+    // if layer box is enabled subtract its width from the "Default col".
+    if (KisConfig(false).useLayerSelectionCheckbox()) {
+        otherColumnsWidth += scm.selectedButtonColumnWidth();
+    }
+    header()->resizeSection(DEFAULT_COL, event->size().width() - otherColumnsWidth);
     header()->resizeSection(SELECTED_COL, scm.selectedButtonColumnWidth());
+    header()->resizeSection(VISIBILITY_COL, scm.visibilityColumnWidth());
 
     setIndentation(scm.indentation());
     QTreeView::resizeEvent(event);
@@ -594,5 +607,20 @@ void NodeView::slotScrollerStateChanged(QScroller::State state){
 void NodeView::slotConfigurationChanged()
 {
     setIndentation(KisNodeViewColorScheme::instance()->indentation());
+    updateSelectedCheckboxColumn();
     d->delegate.slotConfigChanged();
+}
+
+void NodeView::updateSelectedCheckboxColumn()
+{
+    KisConfig cfg(false);
+    if (cfg.useLayerSelectionCheckbox() == !header()->isSectionHidden(SELECTED_COL)) {
+        return;
+    }
+    header()->setSectionHidden(SELECTED_COL, !cfg.useLayerSelectionCheckbox());
+    // add/subtract width based on SELECTED_COL section's visibility
+    header()->resizeSection(DEFAULT_COL,
+                            size().width()
+                                + (cfg.useLayerSelectionCheckbox() ? header()->sectionSize(SELECTED_COL)
+                                                                   : -header()->sectionSize(SELECTED_COL)));
 }

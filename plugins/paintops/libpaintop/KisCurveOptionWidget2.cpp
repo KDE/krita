@@ -21,6 +21,7 @@
 
 #include <KisMultiSensorsSelector2.h>
 #include <KisDynamicSensorFactoryRegistry.h>
+#include <KisCurveWidgetControlsManagerInt.h>
 
 struct KisCurveOptionWidget2::Private
 {
@@ -244,8 +245,11 @@ void KisCurveOptionWidget2::updateSensorCurveLabels(const QString &sensorId, con
     m_curveOptionWidget->intIn->setSuffix(inSuffix);
     m_curveOptionWidget->intOut->setSuffix(outSuffix);
 
-    m_curveOptionWidget->curveWidget->setupInOutControls(m_curveOptionWidget->intIn,m_curveOptionWidget->intOut,
-                                                         inMinValue,inMaxValue,outMinValue,outMaxValue);
+    m_curveControlsManager.reset(
+        new KisCurveWidgetControlsManagerInt(
+            m_curveOptionWidget->curveWidget,
+            m_curveOptionWidget->intIn,m_curveOptionWidget->intOut,
+            inMinValue,inMaxValue,outMinValue,outMaxValue));
 }
 
 void KisCurveOptionWidget2::changeCurveLinear()

@@ -17,6 +17,9 @@ class QComboBox;
 #include <lager/cursor.hpp>
 #include <lager/constant.hpp>
 
+class KisCurveWidgetControlsManagerInt;
+
+
 class PAINTOP_EXPORT KisCurveOptionWidget2 : public KisPaintOpOption
 {
     Q_OBJECT
@@ -82,6 +85,7 @@ protected Q_SLOTS:
 protected:
     QWidget* m_widget {nullptr};
     Ui_WdgCurveOption2* m_curveOptionWidget {nullptr};
+    QScopedPointer<KisCurveWidgetControlsManagerInt> m_curveControlsManager;
     QComboBox* m_curveMode {nullptr};
     struct Private;
     const QScopedPointer<Private> m_d;

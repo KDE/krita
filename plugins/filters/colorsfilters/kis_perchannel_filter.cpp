@@ -39,6 +39,7 @@
 #include "kis_painter.h"
 #include "widgets/kis_curve_widget.h"
 #include <KisGlobalResourcesInterface.h>
+#include <KisCurveWidgetControlsManagerInt.h>
 
 #include "kis_multichannel_utils.h"
 
@@ -70,7 +71,7 @@ void KisPerChannelConfigWidget::updateChannelControls()
     int min;
     int max;
 
-    m_page->curveWidget->dropInOutControls();
+    m_curveControlsManager.reset();
 
     switch (valueType) {
     case KoChannelInfo::UINT8:
@@ -107,7 +108,8 @@ void KisPerChannelConfigWidget::updateChannelControls()
         break;
     }
 
-    m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, min, max, min, max);
+    m_curveControlsManager.reset(new KisCurveWidgetControlsManagerInt(m_page->curveWidget,
+                                                                      m_page->intIn, m_page->intOut, min, max, min, max));
 }
 
 

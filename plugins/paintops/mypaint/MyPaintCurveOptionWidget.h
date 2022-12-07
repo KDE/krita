@@ -40,7 +40,7 @@ protected Q_SLOTS:
 
     void slotUnCheckUseCurve();
 
-    void updateSensorCurveLabels(KisDynamicSensorSP sensor) const override;
+    void updateSensorCurveLabels(KisDynamicSensorSP sensor) override;
     void updateRangeSpinBoxes(KisDynamicSensorSP sensor) const;
 
 public Q_SLOTS:

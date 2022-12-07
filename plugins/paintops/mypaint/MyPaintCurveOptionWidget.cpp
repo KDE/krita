@@ -75,7 +75,7 @@ void KisMyPaintCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationS
     }
     if (dynamicSensor) {
         // don't use currentSensor here, because it would get converted to shared pointer
-        updateSensorCurveLabels(dynamicSensor);
+        const_cast<KisMyPaintCurveOptionWidget*>(this)->updateSensorCurveLabels(dynamicSensor);
     }
     setBaseValue(setting, m_curveOptionWidget->strengthSlider->value());
     m_curveOption->writeOptionSetting(setting);
@@ -96,7 +96,7 @@ void KisMyPaintCurveOptionWidget::slotUnCheckUseCurve() {
     updateValues();
 }
 
-void KisMyPaintCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor) const
+void KisMyPaintCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor)
 {
     KisCurveOptionWidget::updateSensorCurveLabels(sensor);
     MyPaintDynamicSensor* mySensor = dynamic_cast<MyPaintDynamicSensor*>(sensor.data());

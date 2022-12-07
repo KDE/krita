@@ -21,6 +21,8 @@
 
 #include "kis_multichannel_filter_base.h"
 
+class KisCurveWidgetControlsManagerInt;
+
 class KisPerChannelFilterConfiguration
         : public KisMultiChannelFilterConfiguration
 {
@@ -67,6 +69,9 @@ protected:
     void updateChannelControls() override;
 
     virtual KisPropertiesConfigurationSP getDefaultConfiguration() override;
+
+private:
+    QScopedPointer<KisCurveWidgetControlsManagerInt> m_curveControlsManager;
 };
 
 #endif

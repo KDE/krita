@@ -1890,26 +1890,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="paintops">
-      <icon></icon>
-      <text>&amp;Painter's Tools</text>
-      <whatsThis></whatsThis>
-      <toolTip>Painter's Tools</toolTip>
-      <iconText>Painter's Tools</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="composite_actions">
-      <icon></icon>
-      <text>Brush composite</text>
-      <whatsThis></whatsThis>
-      <toolTip>Brush composite</toolTip>
-      <iconText>Brush composite</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="brushslider1">
       <icon></icon>
       <text>Brush option slider 1</text>

@@ -32,6 +32,7 @@ if (WIN32)
     add_dependencies(ext_gettext ext_gettext_bin ext_gettext_lib)
 else ()
 ExternalProject_Add( ext_gettext
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://files.kde.org/krita/build/dependencies/gettext-0.21.tar.xz
     URL_MD5 40996bbaf7d1356d3c22e33a8b255b31

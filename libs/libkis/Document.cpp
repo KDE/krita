@@ -581,6 +581,7 @@ bool Document::saveAs(const QString &filename)
 {
     if (!d->document) return false;
 
+    setFileName(filename);
     const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename, false);
     const QByteArray outputFormat = outputFormatString.toLatin1();
     QString oldPath = d->document->path();

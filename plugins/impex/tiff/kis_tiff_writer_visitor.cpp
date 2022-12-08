@@ -381,6 +381,5 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
     }
     buff.reset();
 
-    TIFFWriteDirectory(image());
-    return true;
+    return TIFFWriteDirectory(image());
 }

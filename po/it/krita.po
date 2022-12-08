@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-30 02:28+0000\n"
+"POT-Creation-Date: 2022-12-08 02:46+0000\n"
 "PO-Revision-Date: 2022-11-12 12:58+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -15469,44 +15469,14 @@ msgctxt "action"
 msgid "Choose Background Color"
 msgstr "Scegli colore di sfondo"
 
-#. i18n: context: text @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1895
-#, kde-format
-msgctxt "action"
-msgid "&Painter's Tools"
-msgstr "Strumenti da &disegno"
-
-#. i18n: context: toolTip @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1897 krita/kritamenu.action:1898
-#, kde-format
-msgctxt "action"
-msgid "Painter's Tools"
-msgstr "Strumenti da disegno"
-
-#. i18n: context: text @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: text @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1905 krita/kritamenu.action:1907
-#: krita/kritamenu.action:1908
-#, kde-format
-msgctxt "action"
-msgid "Brush composite"
-msgstr "Composizione del pennello"
-
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1915 krita/kritamenu.action:1917
-#: krita/kritamenu.action:1918
+#: krita/kritamenu.action:1895 krita/kritamenu.action:1897
+#: krita/kritamenu.action:1898
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
@@ -15518,8 +15488,8 @@ msgstr "Cursore delle opzioni del pennello 1"
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1925 krita/kritamenu.action:1927
-#: krita/kritamenu.action:1928
+#: krita/kritamenu.action:1905 krita/kritamenu.action:1907
+#: krita/kritamenu.action:1908
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
@@ -15531,8 +15501,8 @@ msgstr "Cursore delle opzioni del pennello 2"
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1935 krita/kritamenu.action:1937
-#: krita/kritamenu.action:1938
+#: krita/kritamenu.action:1915 krita/kritamenu.action:1917
+#: krita/kritamenu.action:1918
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
@@ -15544,8 +15514,8 @@ msgstr "Cursore delle opzioni del pennello 3"
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1945 krita/kritamenu.action:1947
-#: krita/kritamenu.action:1948
+#: krita/kritamenu.action:1925 krita/kritamenu.action:1927
+#: krita/kritamenu.action:1928
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
@@ -15557,22 +15527,22 @@ msgstr "Cursore delle opzioni del pennello 4"
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1955 krita/kritamenu.action:1957
-#: krita/kritamenu.action:1958
+#: krita/kritamenu.action:1935 krita/kritamenu.action:1937
+#: krita/kritamenu.action:1938
 #, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "Rispecchia"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1965
+#: krita/kritamenu.action:1945
 #, kde-format
 msgctxt "action"
 msgid "Layouts"
 msgstr "Disposizioni"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1967
+#: krita/kritamenu.action:1947
 #, kde-format
 msgctxt "action"
 msgid "Select layout"
@@ -15584,8 +15554,8 @@ msgstr "Seleziona disposizione"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1974 krita/kritamenu.action:1976
-#: krita/kritamenu.action:1977
+#: krita/kritamenu.action:1954 krita/kritamenu.action:1956
+#: krita/kritamenu.action:1957
 #, kde-format
 msgctxt "action"
 msgid "Workspaces"
@@ -17160,8 +17130,8 @@ msgid "Processing"
 msgstr "Elaborazione"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1400
-#: libs/ui/KisMainWindow.cpp:1680 libs/ui/KisMainWindow.cpp:1693
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1409
+#: libs/ui/KisMainWindow.cpp:1689 libs/ui/KisMainWindow.cpp:1702
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -17880,8 +17850,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Documento CSV"
 
-#: libs/libkis/Document.cpp:935 libs/ui/KisMainWindow.cpp:2044
-#: libs/ui/KisMainWindow.cpp:2127
+#: libs/libkis/Document.cpp:935 libs/ui/KisMainWindow.cpp:2053
+#: libs/ui/KisMainWindow.cpp:2136
 #, kde-format
 msgid "Import frames"
 msgstr "Importa fotogrammi"
@@ -19183,16 +19153,17 @@ msgstr "Risorse locali"
 #: libs/ui/KisApplication.cpp:1062 libs/ui/KisDocument.cpp:925
 #: libs/ui/KisDocument.cpp:933 libs/ui/KisDocument.cpp:1837
 #: libs/ui/KisDocument.cpp:1880 libs/ui/KisDocument.cpp:1888
-#: libs/ui/KisMainWindow.cpp:1073 libs/ui/KisMainWindow.cpp:1199
-#: libs/ui/KisMainWindow.cpp:1298 libs/ui/KisMainWindow.cpp:1904
-#: libs/ui/KisMainWindow.cpp:1913 libs/ui/KisMainWindow.cpp:2052
-#: libs/ui/KisMainWindow.cpp:2113 libs/ui/KisMainWindow.cpp:2134
+#: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1082
+#: libs/ui/KisMainWindow.cpp:1208 libs/ui/KisMainWindow.cpp:1307
+#: libs/ui/KisMainWindow.cpp:1913 libs/ui/KisMainWindow.cpp:1922
+#: libs/ui/KisMainWindow.cpp:2061 libs/ui/KisMainWindow.cpp:2122
+#: libs/ui/KisMainWindow.cpp:2143 libs/ui/KisMainWindow.cpp:2756
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:35
 #: libs/ui/KisRemoteFileFetcher.cpp:56 libs/ui/KisRemoteFileFetcher.cpp:86
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:680 libs/ui/KisView.cpp:962
-#: libs/ui/KisWelcomePageWidget.cpp:709
+#: libs/ui/KisWelcomePageWidget.cpp:709 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:320
 #: libs/ui/widgets/kis_custom_image_widget.cc:292
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1305
@@ -19712,7 +19683,7 @@ msgid "Storage Resources"
 msgstr "Risorse di memorizzazione"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:230
-#: libs/ui/KisMainWindow.cpp:2544
+#: libs/ui/KisMainWindow.cpp:2555
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:609
 #, kde-format
 msgctxt "@title:window"
@@ -20168,7 +20139,7 @@ msgstr ""
 "incompleti."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:52
-#: libs/ui/KisMainWindow.cpp:2154
+#: libs/ui/KisMainWindow.cpp:2163
 #, kde-format
 msgid "Render Animation"
 msgstr "Resa animazione"
@@ -22323,7 +22294,7 @@ msgid "Numerical"
 msgstr "Numerico"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:137
-#: libs/ui/KisMainWindow.cpp:1167
+#: libs/ui/KisMainWindow.cpp:1176
 #, kde-format
 msgid "Import Images"
 msgstr "Importa immagini"
@@ -22460,7 +22431,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Inserisci il nuovo nome dello stile"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2555
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2566
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -25970,7 +25941,7 @@ msgstr "Preimpostazione del pennello attuale"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:188 libs/ui/KisMainWindow.cpp:1052
+#: libs/ui/forms/wdgpaintopsettings.ui:188 libs/ui/KisMainWindow.cpp:1061
 #: libs/ui/widgets/kis_workspace_chooser.cpp:111
 #: libs/ui/widgets/kis_workspace_chooser.cpp:190
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -30063,44 +30034,44 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Spa&zio di lavoro"
 
-#: libs/ui/KisMainWindow.cpp:582
+#: libs/ui/KisMainWindow.cpp:584
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Mostra la barra degli strumenti %1"
 
-#: libs/ui/KisMainWindow.cpp:584
+#: libs/ui/KisMainWindow.cpp:586
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Nascondi la barra degli strumenti %1"
 
-#: libs/ui/KisMainWindow.cpp:1015
+#: libs/ui/KisMainWindow.cpp:1024
 #, kde-format
 msgid "Write Protected"
 msgstr "Protetto da scrittura"
 
-#: libs/ui/KisMainWindow.cpp:1019
+#: libs/ui/KisMainWindow.cpp:1028
 #, kde-format
 msgid "Recovered"
 msgstr "Recuperato"
 
-#: libs/ui/KisMainWindow.cpp:1049
+#: libs/ui/KisMainWindow.cpp:1058
 #, kde-format
 msgid "Save as %1"
 msgstr "Salva come %1"
 
-#: libs/ui/KisMainWindow.cpp:1073
+#: libs/ui/KisMainWindow.cpp:1082
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Il file %1 non esiste."
 
-#: libs/ui/KisMainWindow.cpp:1167
+#: libs/ui/KisMainWindow.cpp:1176
 #, kde-format
 msgid "Open Images"
 msgstr "Apri immagini"
 
-#: libs/ui/KisMainWindow.cpp:1299
+#: libs/ui/KisMainWindow.cpp:1308
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30113,45 +30084,45 @@ msgstr ""
 "\n"
 "Seleziona una posizione in cui il file originale non venga sovrascritto."
 
-#: libs/ui/KisMainWindow.cpp:1355
+#: libs/ui/KisMainWindow.cpp:1364
 #, kde-format
 msgid "Exporting"
 msgstr "Esportazione"
 
-#: libs/ui/KisMainWindow.cpp:1355
+#: libs/ui/KisMainWindow.cpp:1364
 #, kde-format
 msgid "Saving As"
 msgstr "Salvataggio come"
 
-#: libs/ui/KisMainWindow.cpp:1659
+#: libs/ui/KisMainWindow.cpp:1668
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Crea un nuovo documento"
 
-#: libs/ui/KisMainWindow.cpp:1683
+#: libs/ui/KisMainWindow.cpp:1692
 #, kde-format
 msgid "Custom Document"
 msgstr "Documento personalizzato"
 
-#: libs/ui/KisMainWindow.cpp:1695
+#: libs/ui/KisMainWindow.cpp:1704
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Crea dagli appunti"
 
-#: libs/ui/KisMainWindow.cpp:1873
+#: libs/ui/KisMainWindow.cpp:1882
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Livelli/maschere"
 
-#: libs/ui/KisMainWindow.cpp:1899
+#: libs/ui/KisMainWindow.cpp:1908
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:181
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:286
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Non ci sono gruppi di risorse abilitati."
 
-#: libs/ui/KisMainWindow.cpp:1903
+#: libs/ui/KisMainWindow.cpp:1912
 #, kde-format
 msgid ""
 "\n"
@@ -30162,7 +30133,7 @@ msgstr ""
 "Non sono disponibili preimpostazioni dei pennelli. Prima di continuare, "
 "abilita un gruppo che contenga preimpostazioni.\n"
 
-#: libs/ui/KisMainWindow.cpp:1913
+#: libs/ui/KisMainWindow.cpp:1922
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
 #, kde-format
@@ -30173,7 +30144,7 @@ msgstr ""
 "\n"
 "Sono disponibili solo le tue risorse locali."
 
-#: libs/ui/KisMainWindow.cpp:2052 libs/ui/KisMainWindow.cpp:2134
+#: libs/ui/KisMainWindow.cpp:2061 libs/ui/KisMainWindow.cpp:2143
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30182,42 +30153,42 @@ msgstr ""
 "Impossibile terminare l'importazione dell'animazione:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2113
+#: libs/ui/KisMainWindow.cpp:2122
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "Creazione del nuovo documento non riuscita. L'importazione dell'animazione è "
 "stata interrotta."
 
-#: libs/ui/KisMainWindow.cpp:2535
+#: libs/ui/KisMainWindow.cpp:2546
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importa spazio di lavoro..."
 
-#: libs/ui/KisMainWindow.cpp:2550
+#: libs/ui/KisMainWindow.cpp:2561
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nuovo spazio di lavoro..."
 
-#: libs/ui/KisMainWindow.cpp:2554
+#: libs/ui/KisMainWindow.cpp:2565
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nuovo spazio di lavoro..."
 
-#: libs/ui/KisMainWindow.cpp:2598
+#: libs/ui/KisMainWindow.cpp:2609
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2601
+#: libs/ui/KisMainWindow.cpp:2612
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2760
+#: libs/ui/KisMainWindow.cpp:2779
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -30226,19 +30197,19 @@ msgstr ""
 "L'estensione di gestione del colore LittleCMS di Krita non è installata. "
 "Krita ora verrà chiuso."
 
-#: libs/ui/KisMainWindow.cpp:2776
+#: libs/ui/KisMainWindow.cpp:2795
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Errore di installazione"
 
-#: libs/ui/KisMainWindow.cpp:2885
+#: libs/ui/KisMainWindow.cpp:2904
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temi"
 
-#: libs/ui/KisMainWindow.cpp:2939
+#: libs/ui/KisMainWindow.cpp:2962
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Spaziatore di espansione"
@@ -59549,6 +59520,18 @@ msgstr "Strumento Ingrandimento"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Strumento Immagini di riferimento"
+
+#~ msgctxt "action"
+#~ msgid "&Painter's Tools"
+#~ msgstr "Strumenti da &disegno"
+
+#~ msgctxt "action"
+#~ msgid "Painter's Tools"
+#~ msgstr "Strumenti da disegno"
+
+#~ msgctxt "action"
+#~ msgid "Brush composite"
+#~ msgstr "Composizione del pennello"
 
 #~ msgctxt "JPEG-XL errors"
 #~ msgid "JPEG-XL encoded profile not implemented"

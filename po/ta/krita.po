@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-30 02:28+0000\n"
+"POT-Creation-Date: 2022-12-08 02:46+0000\n"
 "PO-Revision-Date: 2021-01-18 19:24+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -15467,44 +15467,14 @@ msgctxt "action"
 msgid "Choose Background Color"
 msgstr "நொடி"
 
-#. i18n: context: text @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1895
-#, fuzzy, kde-format
-msgctxt "action"
-msgid "&Painter's Tools"
-msgstr "வண்ணம்தீட்டல் கருவிகள்"
-
-#. i18n: context: toolTip @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1897 krita/kritamenu.action:1898
-#, fuzzy, kde-format
-msgctxt "action"
-msgid "Painter's Tools"
-msgstr "வண்ணம்தீட்டல் கருவிகள்"
-
-#. i18n: context: text @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: text @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1905 krita/kritamenu.action:1907
-#: krita/kritamenu.action:1908
-#, fuzzy, kde-format
-msgctxt "action"
-msgid "Brush composite"
-msgstr "தூரிகை வடிவங்கள்"
-
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1915 krita/kritamenu.action:1917
-#: krita/kritamenu.action:1918
+#: krita/kritamenu.action:1895 krita/kritamenu.action:1897
+#: krita/kritamenu.action:1898
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
@@ -15516,8 +15486,8 @@ msgstr "வெளிச்சம்:"
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1925 krita/kritamenu.action:1927
-#: krita/kritamenu.action:1928
+#: krita/kritamenu.action:1905 krita/kritamenu.action:1907
+#: krita/kritamenu.action:1908
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
@@ -15529,8 +15499,8 @@ msgstr "வெளிச்சம்:"
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1935 krita/kritamenu.action:1937
-#: krita/kritamenu.action:1938
+#: krita/kritamenu.action:1915 krita/kritamenu.action:1917
+#: krita/kritamenu.action:1918
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
@@ -15542,8 +15512,8 @@ msgstr "வெளிச்சம்:"
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1945 krita/kritamenu.action:1947
-#: krita/kritamenu.action:1948
+#: krita/kritamenu.action:1925 krita/kritamenu.action:1927
+#: krita/kritamenu.action:1928
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
@@ -15555,22 +15525,22 @@ msgstr "வெளிச்சம்:"
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1955 krita/kritamenu.action:1957
-#: krita/kritamenu.action:1958
+#: krita/kritamenu.action:1935 krita/kritamenu.action:1937
+#: krita/kritamenu.action:1938
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "அடுக்கிலிருந்து உருவம் வரை"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1965
+#: krita/kritamenu.action:1945
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Layouts"
 msgstr "பக்க இடஅமைவு"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1967
+#: krita/kritamenu.action:1947
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select layout"
@@ -15582,8 +15552,8 @@ msgstr "எழுத்துருவை தேர்"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1974 krita/kritamenu.action:1976
-#: krita/kritamenu.action:1977
+#: krita/kritamenu.action:1954 krita/kritamenu.action:1956
+#: krita/kritamenu.action:1957
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Workspaces"
@@ -17221,8 +17191,8 @@ msgid "Processing"
 msgstr "&படத்துணுக்கு அளவுகள்"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1400
-#: libs/ui/KisMainWindow.cpp:1680 libs/ui/KisMainWindow.cpp:1693
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1409
+#: libs/ui/KisMainWindow.cpp:1689 libs/ui/KisMainWindow.cpp:1702
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, fuzzy, kde-format
 msgid "Unnamed"
@@ -17939,8 +17909,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "புதிய ஆவணங்களில் திற"
 
-#: libs/libkis/Document.cpp:935 libs/ui/KisMainWindow.cpp:2044
-#: libs/ui/KisMainWindow.cpp:2127
+#: libs/libkis/Document.cpp:935 libs/ui/KisMainWindow.cpp:2053
+#: libs/ui/KisMainWindow.cpp:2136
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "உருவத்தை இறக்குமதிசெய்"
@@ -19257,16 +19227,17 @@ msgstr "&அடுக்கை நீக்கு"
 #: libs/ui/KisApplication.cpp:1062 libs/ui/KisDocument.cpp:925
 #: libs/ui/KisDocument.cpp:933 libs/ui/KisDocument.cpp:1837
 #: libs/ui/KisDocument.cpp:1880 libs/ui/KisDocument.cpp:1888
-#: libs/ui/KisMainWindow.cpp:1073 libs/ui/KisMainWindow.cpp:1199
-#: libs/ui/KisMainWindow.cpp:1298 libs/ui/KisMainWindow.cpp:1904
-#: libs/ui/KisMainWindow.cpp:1913 libs/ui/KisMainWindow.cpp:2052
-#: libs/ui/KisMainWindow.cpp:2113 libs/ui/KisMainWindow.cpp:2134
+#: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1082
+#: libs/ui/KisMainWindow.cpp:1208 libs/ui/KisMainWindow.cpp:1307
+#: libs/ui/KisMainWindow.cpp:1913 libs/ui/KisMainWindow.cpp:1922
+#: libs/ui/KisMainWindow.cpp:2061 libs/ui/KisMainWindow.cpp:2122
+#: libs/ui/KisMainWindow.cpp:2143 libs/ui/KisMainWindow.cpp:2756
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:35
 #: libs/ui/KisRemoteFileFetcher.cpp:56 libs/ui/KisRemoteFileFetcher.cpp:86
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:680 libs/ui/KisView.cpp:962
-#: libs/ui/KisWelcomePageWidget.cpp:709
+#: libs/ui/KisWelcomePageWidget.cpp:709 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:320
 #: libs/ui/widgets/kis_custom_image_widget.cc:292
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1305
@@ -19791,7 +19762,7 @@ msgid "Storage Resources"
 msgstr "சதுரம்"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:230
-#: libs/ui/KisMainWindow.cpp:2544
+#: libs/ui/KisMainWindow.cpp:2555
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:609
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -20238,7 +20209,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "%1 புதிதாக உருவாக்கு"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:52
-#: libs/ui/KisMainWindow.cpp:2154
+#: libs/ui/KisMainWindow.cpp:2163
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "நிறமாற்றம்:"
@@ -22284,7 +22255,7 @@ msgid "Numerical"
 msgstr "மேல்கீழ் மங்கல்:"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:137
-#: libs/ui/KisMainWindow.cpp:1167
+#: libs/ui/KisMainWindow.cpp:1176
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "உருவத்தை இறக்குமதிசெய்"
@@ -22423,7 +22394,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "குழு பெரை உள்ளிடு:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2555
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2566
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -25766,7 +25737,7 @@ msgstr "நிகழ்விலுள்ள அடுக்கை மாற்�
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:188 libs/ui/KisMainWindow.cpp:1052
+#: libs/ui/forms/wdgpaintopsettings.ui:188 libs/ui/KisMainWindow.cpp:1061
 #: libs/ui/widgets/kis_workspace_chooser.cpp:111
 #: libs/ui/widgets/kis_workspace_chooser.cpp:190
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -29675,44 +29646,44 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "நிறம் எடுக்கும் கருவி"
 
-#: libs/ui/KisMainWindow.cpp:582
+#: libs/ui/KisMainWindow.cpp:584
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "&அடுக்கை வெட்டு..."
 
-#: libs/ui/KisMainWindow.cpp:584
+#: libs/ui/KisMainWindow.cpp:586
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "ஒட்டும் கருவி"
 
-#: libs/ui/KisMainWindow.cpp:1015
+#: libs/ui/KisMainWindow.cpp:1024
 #, fuzzy, kde-format
 msgid "Write Protected"
 msgstr "திருத்தப் பாதுகாப்பு"
 
-#: libs/ui/KisMainWindow.cpp:1019
+#: libs/ui/KisMainWindow.cpp:1028
 #, fuzzy, kde-format
 msgid "Recovered"
 msgstr "மொழிப்பெயர்த்தல்"
 
-#: libs/ui/KisMainWindow.cpp:1049
+#: libs/ui/KisMainWindow.cpp:1058
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "கூட்டு"
 
-#: libs/ui/KisMainWindow.cpp:1073
+#: libs/ui/KisMainWindow.cpp:1082
 #, fuzzy, kde-format
 msgid "The file %1 does not exist."
 msgstr "கோப்பு %1 இல்லை."
 
-#: libs/ui/KisMainWindow.cpp:1167
+#: libs/ui/KisMainWindow.cpp:1176
 #, fuzzy, kde-format
 msgid "Open Images"
 msgstr "உருவம்"
 
-#: libs/ui/KisMainWindow.cpp:1299
+#: libs/ui/KisMainWindow.cpp:1308
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -29721,45 +29692,45 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1355
+#: libs/ui/KisMainWindow.cpp:1364
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "அடுக்கை ஏற்றுமதிசெய்"
 
-#: libs/ui/KisMainWindow.cpp:1355
+#: libs/ui/KisMainWindow.cpp:1364
 #, fuzzy, kde-format
 msgid "Saving As"
 msgstr "நேர வடிவம்"
 
-#: libs/ui/KisMainWindow.cpp:1659
+#: libs/ui/KisMainWindow.cpp:1668
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "காலியான ஆவணத்தை உருவாக்கு"
 
-#: libs/ui/KisMainWindow.cpp:1683
+#: libs/ui/KisMainWindow.cpp:1692
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "தானியங்கிநிறமாற்றம்"
 
-#: libs/ui/KisMainWindow.cpp:1695
+#: libs/ui/KisMainWindow.cpp:1704
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "உருவகைகள்"
 
-#: libs/ui/KisMainWindow.cpp:1873
+#: libs/ui/KisMainWindow.cpp:1882
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "அடுக்கை உருவமாக சேமி..."
 
-#: libs/ui/KisMainWindow.cpp:1899
+#: libs/ui/KisMainWindow.cpp:1908
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:181
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:286
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "சேமிப்பதற்கு கோப்பினை உருவாக்க முடியவில்லை"
 
-#: libs/ui/KisMainWindow.cpp:1903
+#: libs/ui/KisMainWindow.cpp:1912
 #, kde-format
 msgid ""
 "\n"
@@ -29767,7 +29738,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1913
+#: libs/ui/KisMainWindow.cpp:1922
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
 #, kde-format
@@ -29776,7 +29747,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2052 libs/ui/KisMainWindow.cpp:2134
+#: libs/ui/KisMainWindow.cpp:2061 libs/ui/KisMainWindow.cpp:2143
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -29785,59 +29756,59 @@ msgstr ""
 "திறக்க முடியவில்லை\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2113
+#: libs/ui/KisMainWindow.cpp:2122
 #, fuzzy, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "%1 புதிதாக உருவாக்கு"
 
-#: libs/ui/KisMainWindow.cpp:2535
+#: libs/ui/KisMainWindow.cpp:2546
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "நிறம் எடுக்கும் கருவி"
 
-#: libs/ui/KisMainWindow.cpp:2550
+#: libs/ui/KisMainWindow.cpp:2561
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "நிறம் எடுக்கும் கருவி"
 
-#: libs/ui/KisMainWindow.cpp:2554
+#: libs/ui/KisMainWindow.cpp:2565
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "நிறம் எடுக்கும் கருவி"
 
-#: libs/ui/KisMainWindow.cpp:2598
+#: libs/ui/KisMainWindow.cpp:2609
 #, fuzzy, kde-format
 msgid "&%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2601
+#: libs/ui/KisMainWindow.cpp:2612
 #, fuzzy, kde-format
 msgid "%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2760
+#: libs/ui/KisMainWindow.cpp:2779
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2776
+#: libs/ui/KisMainWindow.cpp:2795
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "அடுக்கு பிழை"
 
-#: libs/ui/KisMainWindow.cpp:2885
+#: libs/ui/KisMainWindow.cpp:2904
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2939
+#: libs/ui/KisMainWindow.cpp:2962
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -58266,6 +58237,21 @@ msgstr "பெரிதாக்க கருவி"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "உருவத்திற்கு மறுபெயரிடு"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "&Painter's Tools"
+#~ msgstr "வண்ணம்தீட்டல் கருவிகள்"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "Painter's Tools"
+#~ msgstr "வண்ணம்தீட்டல் கருவிகள்"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "Brush composite"
+#~ msgstr "தூரிகை வடிவங்கள்"
 
 #, fuzzy
 #~ msgid "Cache Location:"

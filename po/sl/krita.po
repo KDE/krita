@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-07 00:45+0000\n"
-"PO-Revision-Date: 2022-11-25 10:33+0100\n"
+"POT-Creation-Date: 2022-12-08 00:43+0000\n"
+"PO-Revision-Date: 2022-12-07 16:39+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -15568,44 +15568,14 @@ msgctxt "action"
 msgid "Choose Background Color"
 msgstr "Izberi barvo ozadja"
 
-#. i18n: context: text @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1991
-#, kde-format
-msgctxt "action"
-msgid "&Painter's Tools"
-msgstr "Sli&karska orodja"
-
-#. i18n: context: toolTip @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1993 krita/kritamenu.action:1994
-#, kde-format
-msgctxt "action"
-msgid "Painter's Tools"
-msgstr "Slikarska orodja"
-
-#. i18n: context: text @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: text @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2001 krita/kritamenu.action:2003
-#: krita/kritamenu.action:2004
-#, kde-format
-msgctxt "action"
-msgid "Brush composite"
-msgstr "Sestavljen čopič"
-
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2011 krita/kritamenu.action:2013
-#: krita/kritamenu.action:2014
+#: krita/kritamenu.action:1991 krita/kritamenu.action:1993
+#: krita/kritamenu.action:1994
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
@@ -15617,8 +15587,8 @@ msgstr "Drsnik možnosti čopiča 1"
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2021 krita/kritamenu.action:2023
-#: krita/kritamenu.action:2024
+#: krita/kritamenu.action:2001 krita/kritamenu.action:2003
+#: krita/kritamenu.action:2004
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
@@ -15630,8 +15600,8 @@ msgstr "Drsnik možnosti čopiča 2"
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2031 krita/kritamenu.action:2033
-#: krita/kritamenu.action:2034
+#: krita/kritamenu.action:2011 krita/kritamenu.action:2013
+#: krita/kritamenu.action:2014
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
@@ -15643,8 +15613,8 @@ msgstr "Drsnik možnosti čopiča 3"
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2041 krita/kritamenu.action:2043
-#: krita/kritamenu.action:2044
+#: krita/kritamenu.action:2021 krita/kritamenu.action:2023
+#: krita/kritamenu.action:2024
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
@@ -15656,22 +15626,22 @@ msgstr "Drsnik možnosti čopiča 4"
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2051 krita/kritamenu.action:2053
-#: krita/kritamenu.action:2054
+#: krita/kritamenu.action:2031 krita/kritamenu.action:2033
+#: krita/kritamenu.action:2034
 #, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "Zrcali"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2061
+#: krita/kritamenu.action:2041
 #, kde-format
 msgctxt "action"
 msgid "Layouts"
 msgstr "Postavitve"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2063
+#: krita/kritamenu.action:2043
 #, kde-format
 msgctxt "action"
 msgid "Select layout"
@@ -15683,8 +15653,8 @@ msgstr "Izberite postavitev"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2070 krita/kritamenu.action:2072
-#: krita/kritamenu.action:2073
+#: krita/kritamenu.action:2050 krita/kritamenu.action:2052
+#: krita/kritamenu.action:2053
 #, kde-format
 msgctxt "action"
 msgid "Workspaces"
@@ -46803,16 +46773,13 @@ msgstr "Visoko"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, lossyQuality)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:101
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set the lossy quality of JPEG-XL export.\n"
-#| "Default: 100 (visually lossless)."
+#, kde-format
 msgid ""
 "Set the lossy quality of JPEG-XL export.\n"
 "Default: 90 (visually lossless)."
 msgstr ""
 "Nastavite kakovost z izgubami za izvoz JPEG-XL.\n"
-"Privzeto: 100 (vizualno brez izgube)."
+"Privzeto: 90 (vizualno brez izgube)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:117
@@ -59637,3 +59604,15 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
+
+#~ msgctxt "action"
+#~ msgid "&Painter's Tools"
+#~ msgstr "Sli&karska orodja"
+
+#~ msgctxt "action"
+#~ msgid "Painter's Tools"
+#~ msgstr "Slikarska orodja"
+
+#~ msgctxt "action"
+#~ msgid "Brush composite"
+#~ msgstr "Sestavljen čopič"

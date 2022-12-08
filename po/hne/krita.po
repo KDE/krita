@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-07 00:45+0000\n"
+"POT-Creation-Date: 2022-12-08 00:43+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -15787,44 +15787,14 @@ msgctxt "action"
 msgid "Choose Background Color"
 msgstr "पिछोत अंगना सेट करव"
 
-#. i18n: context: text @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1991
-#, fuzzy, kde-format
-msgctxt "action"
-msgid "&Painter's Tools"
-msgstr "पेंटर के औजार (&P)"
-
-#. i18n: context: toolTip @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1993 krita/kritamenu.action:1994
-#, fuzzy, kde-format
-msgctxt "action"
-msgid "Painter's Tools"
-msgstr "पेंटर के औजार (&P)"
-
-#. i18n: context: text @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: text @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2001 krita/kritamenu.action:2003
-#: krita/kritamenu.action:2004
-#, fuzzy, kde-format
-msgctxt "action"
-msgid "Brush composite"
-msgstr "ब्रुस आकार"
-
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2011 krita/kritamenu.action:2013
-#: krita/kritamenu.action:2014
+#: krita/kritamenu.action:1991 krita/kritamenu.action:1993
+#: krita/kritamenu.action:1994
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
@@ -15836,8 +15806,8 @@ msgstr "ब्रिसल्स"
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2021 krita/kritamenu.action:2023
-#: krita/kritamenu.action:2024
+#: krita/kritamenu.action:2001 krita/kritamenu.action:2003
+#: krita/kritamenu.action:2004
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
@@ -15849,8 +15819,8 @@ msgstr "ब्रिसल्स"
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2031 krita/kritamenu.action:2033
-#: krita/kritamenu.action:2034
+#: krita/kritamenu.action:2011 krita/kritamenu.action:2013
+#: krita/kritamenu.action:2014
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
@@ -15862,8 +15832,8 @@ msgstr "ब्रिसल्स"
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2041 krita/kritamenu.action:2043
-#: krita/kritamenu.action:2044
+#: krita/kritamenu.action:2021 krita/kritamenu.action:2023
+#: krita/kritamenu.action:2024
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
@@ -15875,15 +15845,15 @@ msgstr "ब्रिसल्स"
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2051 krita/kritamenu.action:2053
-#: krita/kritamenu.action:2054
+#: krita/kritamenu.action:2031 krita/kritamenu.action:2033
+#: krita/kritamenu.action:2034
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "फोटू मं कांट-छांट करव"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2061
+#: krita/kritamenu.action:2041
 #, fuzzy, kde-format
 #| msgid "Page Layout"
 msgctxt "action"
@@ -15891,7 +15861,7 @@ msgid "Layouts"
 msgstr "पेज ले-आउट"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2063
+#: krita/kritamenu.action:2043
 #, fuzzy, kde-format
 #| msgid "Select Font"
 msgctxt "action"
@@ -15904,8 +15874,8 @@ msgstr "फोंट चुनव"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2070 krita/kritamenu.action:2072
-#: krita/kritamenu.action:2073
+#: krita/kritamenu.action:2050 krita/kritamenu.action:2052
+#: krita/kritamenu.action:2053
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Workspaces"
@@ -59657,6 +59627,21 @@ msgstr "सब्बो जूम करव"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "संदर्भ फोटू:"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "&Painter's Tools"
+#~ msgstr "पेंटर के औजार (&P)"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "Painter's Tools"
+#~ msgstr "पेंटर के औजार (&P)"
+
+#, fuzzy
+#~ msgctxt "action"
+#~ msgid "Brush composite"
+#~ msgstr "ब्रुस आकार"
 
 #, fuzzy
 #~| msgid "Layer Opacity"

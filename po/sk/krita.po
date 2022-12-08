@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-07 00:45+0000\n"
+"POT-Creation-Date: 2022-12-08 00:43+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -15595,44 +15595,14 @@ msgctxt "action"
 msgid "Choose Background Color"
 msgstr "Vybrať farbu pozadia"
 
-#. i18n: context: text @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1991
-#, kde-format
-msgctxt "action"
-msgid "&Painter's Tools"
-msgstr "Maliarske nástroje"
-
-#. i18n: context: toolTip @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1993 krita/kritamenu.action:1994
-#, kde-format
-msgctxt "action"
-msgid "Painter's Tools"
-msgstr "Maliarske nástroje"
-
-#. i18n: context: text @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: text @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2001 krita/kritamenu.action:2003
-#: krita/kritamenu.action:2004
-#, kde-format
-msgctxt "action"
-msgid "Brush composite"
-msgstr "Kompozitný štetec"
-
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2011 krita/kritamenu.action:2013
-#: krita/kritamenu.action:2014
+#: krita/kritamenu.action:1991 krita/kritamenu.action:1993
+#: krita/kritamenu.action:1994
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
@@ -15644,8 +15614,8 @@ msgstr "Posuvník možností štetca 1"
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2021 krita/kritamenu.action:2023
-#: krita/kritamenu.action:2024
+#: krita/kritamenu.action:2001 krita/kritamenu.action:2003
+#: krita/kritamenu.action:2004
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
@@ -15657,8 +15627,8 @@ msgstr "Posuvník možností štetca 2"
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2031 krita/kritamenu.action:2033
-#: krita/kritamenu.action:2034
+#: krita/kritamenu.action:2011 krita/kritamenu.action:2013
+#: krita/kritamenu.action:2014
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
@@ -15670,8 +15640,8 @@ msgstr "Posuvník možností štetca 3"
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2041 krita/kritamenu.action:2043
-#: krita/kritamenu.action:2044
+#: krita/kritamenu.action:2021 krita/kritamenu.action:2023
+#: krita/kritamenu.action:2024
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
@@ -15683,22 +15653,22 @@ msgstr "Posuvník možností štetca 4"
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2051 krita/kritamenu.action:2053
-#: krita/kritamenu.action:2054
+#: krita/kritamenu.action:2031 krita/kritamenu.action:2033
+#: krita/kritamenu.action:2034
 #, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "Zrkadliť"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2061
+#: krita/kritamenu.action:2041
 #, kde-format
 msgctxt "action"
 msgid "Layouts"
 msgstr "Rozloženia"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2063
+#: krita/kritamenu.action:2043
 #, kde-format
 msgctxt "action"
 msgid "Select layout"
@@ -15710,8 +15680,8 @@ msgstr "Vybrať rozloženie"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:2070 krita/kritamenu.action:2072
-#: krita/kritamenu.action:2073
+#: krita/kritamenu.action:2050 krita/kritamenu.action:2052
+#: krita/kritamenu.action:2053
 #, kde-format
 msgctxt "action"
 msgid "Workspaces"
@@ -59628,6 +59598,18 @@ msgstr "Nástroj priblíženia"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Nástroj referenčných obrázkov"
+
+#~ msgctxt "action"
+#~ msgid "&Painter's Tools"
+#~ msgstr "Maliarske nástroje"
+
+#~ msgctxt "action"
+#~ msgid "Painter's Tools"
+#~ msgstr "Maliarske nástroje"
+
+#~ msgctxt "action"
+#~ msgid "Brush composite"
+#~ msgstr "Kompozitný štetec"
 
 #~ msgctxt "@item:inmenu Layers Docker settings, combobox"
 #~ msgid "Subtitle Style"

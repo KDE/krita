@@ -1161,6 +1161,10 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
 {
     ui.setupUi(this);
 
+    if (mode == OuterGlowMode) {
+        ui.groupBox->setTitle(i18n("Outer Glow"));
+    }
+
     ui.intOpacity->setRange(0, 100);
     ui.intOpacity->setSuffix(i18n(" %"));
 

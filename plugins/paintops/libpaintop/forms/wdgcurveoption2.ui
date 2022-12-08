@@ -285,22 +285,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_5">
              <item>
-              <widget class="QSpinBox" name="intOut">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="font">
-                <font>
-                 <pointsize>9</pointsize>
-                </font>
-               </property>
-               <property name="wrapping">
-                <bool>false</bool>
-               </property>
-              </widget>
+              <widget class="QWidget" name="intOutPlaceholder" native="true"/>
              </item>
              <item>
               <spacer name="horizontalSpacer_5">
@@ -374,28 +359,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QSpinBox" name="intIn">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>9</pointsize>
-              </font>
-             </property>
-             <property name="frame">
-              <bool>true</bool>
-             </property>
-            </widget>
+            <widget class="QWidget" name="intInPlaceholder" native="true"/>
            </item>
            <item>
             <spacer name="horizontalSpacer">

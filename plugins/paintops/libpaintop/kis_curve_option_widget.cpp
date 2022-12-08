@@ -15,7 +15,7 @@
 #include "kis_curve_option.h"
 #include "kis_signals_blocker.h"
 #include "kis_icon_utils.h"
-#include "KisCurveWidgetControlsManagerInt.h"
+#include "KisCurveWidgetControlsManager.h"
 
 KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption *curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider)
     : KisPaintOpOption(curveOption->id().name(), curveOption->category(), curveOption->isChecked())

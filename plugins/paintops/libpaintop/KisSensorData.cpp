@@ -22,6 +22,17 @@ KisSensorData::~KisSensorData()
 {
 }
 
+void KisSensorData::setBaseCurveRange(const QRectF &rect)
+{
+    Q_UNUSED(rect);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "setBaseCurveRange is not implemented for standard Krita sensors");
+}
+
+QRectF KisSensorData::baseCurveRange() const
+{
+    return QRectF(0.0,0.0,1.0,1.0);
+}
+
 void KisSensorData::write(QDomDocument& doc, QDomElement &e) const
 {
     e.setAttribute("id", id.id());

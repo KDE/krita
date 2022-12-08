@@ -23,6 +23,8 @@ struct PAINTOP_EXPORT KisSensorData : public boost::equality_comparable<KisSenso
                 lhs.isActive == rhs.isActive;
     }
 
+    virtual QRectF baseCurveRange() const;
+    virtual void setBaseCurveRange(const QRectF &rect);
     virtual void write(QDomDocument& doc, QDomElement &e) const;
     virtual void read(const QDomElement &e);
     virtual void reset();

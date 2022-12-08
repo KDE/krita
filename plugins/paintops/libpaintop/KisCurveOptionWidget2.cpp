@@ -18,17 +18,19 @@
 #include <KisWidgetConnectionUtils.h>
 
 #include <KisZug.h>
+#include <kis_algebra_2d.h>
 
 #include <KisMultiSensorsSelector2.h>
-#include <KisDynamicSensorFactoryRegistry.h>
-#include <KisCurveWidgetControlsManagerInt.h>
+#include <KisCurveRangeModel.h>
+#include <KisCurveOptionInputControlsStrategy.h>
 
 struct KisCurveOptionWidget2::Private
 {
     Private(lager::cursor<KisCurveOptionDataCommon> optionData,
             lager::reader<bool> enabledLink,
-            std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader)
-        : model(optionData, enabledLink, rangeReader)
+            std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader,
+            KisCurveRangeModelFactory curveRangeFactory)
+        : model(optionData, enabledLink, rangeReader, curveRangeFactory)
     {}
 
     KisCurveOptionModel model;
@@ -41,12 +43,16 @@ struct KisCurveOptionWidget2::Private
 KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                                              PaintopCategory category,
                                              lager::reader<bool> enabledLink,
-                                             std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader)
+                                             std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader,
+                                             KisCurveRangeModelFactory curveRangeFactory,
+                                             KisCurveOptionInputControlsStrategyFactory inputControlsFactory)
     : KisCurveOptionWidget2(optionData,
                             category,
                             i18n("0%"), i18n("100%"),
                             enabledLink,
-                            rangeReader)
+                            rangeReader,
+                            curveRangeFactory,
+                            inputControlsFactory)
 {
 }
 
@@ -54,14 +60,18 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
                                              PaintopCategory category,
                                              const QString &curveMinLabel, const QString &curveMaxLabel,
                                              lager::reader<bool> enabledLink,
-                                             std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader)
+                                             std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader,
+                                             KisCurveRangeModelFactory curveRangeFactory,
+                                             KisCurveOptionInputControlsStrategyFactory inputControlsFactory)
     : KisCurveOptionWidget2(optionData,
                             category,
                             curveMinLabel, curveMaxLabel,
                             0, 100, i18n("%"),
                             i18n("Strength: "), i18n("%"),
                             enabledLink,
-                            rangeReader)
+                            rangeReader,
+                            curveRangeFactory,
+                            inputControlsFactory)
 {
 
 }
@@ -71,14 +81,18 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
                                              const QString &curveMinLabel, const QString &curveMaxLabel,
                                              int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
                                              lager::reader<bool> enabledLink,
-                                             std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader)
+                                             std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader,
+                                             KisCurveRangeModelFactory curveRangeFactory,
+                                             KisCurveOptionInputControlsStrategyFactory inputControlsFactory)
     : KisCurveOptionWidget2(optionData,
                             category,
                             curveMinLabel, curveMaxLabel,
                             curveMinValue, curveMaxValue, curveValueSuffix,
                             i18n("Strength: "), i18n("%"),
                             enabledLink,
-                            rangeReader)
+                            rangeReader,
+                            curveRangeFactory,
+                            inputControlsFactory)
 {
 }
 
@@ -88,11 +102,20 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
                                              int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
                                              const QString &strengthPrefix, const QString &strengthSuffix,
                                              lager::reader<bool> enabledLink,
-                                             std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader)
+                                             std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader,
+                                             KisCurveRangeModelFactory curveRangeFactory,
+                                             KisCurveOptionInputControlsStrategyFactory inputControlsFactory)
     : KisPaintOpOption(optionData->id.name(), category, optionData[&KisCurveOptionDataCommon::isChecked], enabledLink)
     , m_widget(new QWidget)
     , m_curveOptionWidget(new Ui_WdgCurveOption2())
-    , m_d(new Private(optionData, enabledLink, rangeReader))
+    , m_d(new Private(optionData, enabledLink, rangeReader, 
+                      curveRangeFactory ?
+                          curveRangeFactory :
+                          KisCurveRangeModel::factory(curveMinLabel,
+                                                      curveMaxLabel,
+                                                      curveMinValue,
+                                                      curveMaxValue,
+                                                      curveValueSuffix)))
 {
     using namespace KisWidgetConnectionUtils;
 
@@ -100,14 +123,39 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
 
     m_curveOptionWidget->setupUi(m_widget);
     m_curveOptionWidget->sensorSelector->setOptionDataCursor(m_d->model.optionData);
+
+    if (!inputControlsFactory) {
+        inputControlsFactory = KisCurveOptionInputControlsStrategyInt::factory();
+    }
+
+    m_curveInputControlsStrategy.reset(
+        inputControlsFactory(m_d->model.rangeModel.get(),
+                             m_curveOptionWidget->curveWidget,
+                             m_curveOptionWidget->intInPlaceholder,
+                             m_curveOptionWidget->intOutPlaceholder));
+
     setConfigurationPage(m_widget);
     hideRangeLabelsAndBoxes(true);
 
     m_d->curveMinValue = curveMinValue;
     m_d->curveMaxValue = curveMaxValue;
     m_d->curveValueSuffix = curveValueSuffix;
-    m_curveOptionWidget->label_ymin->setText(curveMinLabel);
-    m_curveOptionWidget->label_ymax->setText(curveMaxLabel);
+
+    connect(&m_d->model, &KisCurveOptionModel::curveXMinLabelChanged,
+            m_curveOptionWidget->label_xmin, &QLabel::setText);
+    m_curveOptionWidget->label_xmin->setText(m_d->model.curveXMinLabel());
+
+    connect(&m_d->model, &KisCurveOptionModel::curveXMaxLabelChanged,
+            m_curveOptionWidget->label_xmax, &QLabel::setText);
+    m_curveOptionWidget->label_xmax->setText(m_d->model.curveXMaxLabel());
+
+    connect(&m_d->model, &KisCurveOptionModel::curveYMinLabelChanged,
+            m_curveOptionWidget->label_ymin, &QLabel::setText);
+    m_curveOptionWidget->label_ymin->setText(m_d->model.curveYMinLabel());
+
+    connect(&m_d->model, &KisCurveOptionModel::curveYMaxLabelChanged,
+            m_curveOptionWidget->label_ymax, &QLabel::setText);
+    m_curveOptionWidget->label_ymax->setText(m_d->model.curveYMaxLabel());
 
     m_d->model.activeSensorIdData.bind(
         std::bind(qOverload<const QString&>(&KisMultiSensorsSelector2::setCurrent),
@@ -116,10 +164,6 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
     connect(m_curveOptionWidget->sensorSelector,
             &KisMultiSensorsSelector2::highlightedSensorChanged,
             std::bind(&KisCurveOptionModel::setactiveSensorId, &m_d->model, std::placeholders::_1));
-
-    m_d->model.LAGER_QT(labelsState).bind(
-        kismpl::unzip_wrapper(
-            std::bind(&KisCurveOptionWidget2::updateSensorCurveLabels, this, std::placeholders::_1, std::placeholders::_2)));
 
     // set all the icons for the curve preset shapes
     updateThemedIcons();
@@ -147,7 +191,7 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
                     m_curveOptionWidget->strengthSlider->setValue(value);
                 }));
 
-    m_d->model.LAGER_QT(activeCurve).bind(
+    m_d->model.LAGER_QT(displayedCurve).bind(
                 std::bind(&KisCurveWidget::setCurve,
                                     m_curveOptionWidget->curveWidget,
                                     std::placeholders::_1));
@@ -196,8 +240,8 @@ void KisCurveOptionWidget2::setCurveWidgetsEnabled(bool value)
     m_curveOptionWidget->label_xmin->setEnabled(value);
     m_curveOptionWidget->label_ymax->setEnabled(value);
     m_curveOptionWidget->label_ymin->setEnabled(value);
-    m_curveOptionWidget->intIn->setEnabled(value);
-    m_curveOptionWidget->intOut->setEnabled(value);
+    m_curveOptionWidget->intInPlaceholder->setEnabled(value);
+    m_curveOptionWidget->intOutPlaceholder->setEnabled(value);
 
     m_curveOptionWidget->linearCurveButton->setEnabled(value);
     m_curveOptionWidget->revLinearButton->setEnabled(value);
@@ -221,35 +265,7 @@ QWidget* KisCurveOptionWidget2::curveWidget()
 void KisCurveOptionWidget2::slotCurveChanged(const KisCubicCurve &curve)
 {
     const QString string = curve.toString();
-    m_d->model.setactiveCurve(string);
-}
-
-void KisCurveOptionWidget2::updateSensorCurveLabels(const QString &sensorId, const int length)
-{
-    KisDynamicSensorFactory *factory =
-            KisDynamicSensorFactoryRegistry::instance()->get(sensorId);
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN(factory);
-
-    m_curveOptionWidget->label_xmin->setText(factory->minimumLabel());
-    m_curveOptionWidget->label_xmax->setText(factory->maximumLabel(length));
-
-    const int inMinValue = factory->minimumValue();
-    const int inMaxValue = factory->maximumValue(length);
-    const QString inSuffix = factory->valueSuffix();
-
-    const int outMinValue = m_d->curveMinValue;
-    const int outMaxValue = m_d->curveMaxValue;
-    const QString outSuffix = m_d->curveValueSuffix;
-
-    m_curveOptionWidget->intIn->setSuffix(inSuffix);
-    m_curveOptionWidget->intOut->setSuffix(outSuffix);
-
-    m_curveControlsManager.reset(
-        new KisCurveWidgetControlsManagerInt(
-            m_curveOptionWidget->curveWidget,
-            m_curveOptionWidget->intIn,m_curveOptionWidget->intOut,
-            inMinValue,inMaxValue,outMinValue,outMaxValue));
+    m_d->model.setdisplayedCurve(string);
 }
 
 void KisCurveOptionWidget2::changeCurveLinear()
@@ -257,7 +273,7 @@ void KisCurveOptionWidget2::changeCurveLinear()
     QList<QPointF> points;
     points.push_back(QPointF(0,0));
     points.push_back(QPointF(1,1));
-    m_d->model.setactiveCurve(KisCubicCurve(points).toString());
+    m_d->model.setdisplayedCurve(KisCubicCurve(points).toString());
 }
 
 void KisCurveOptionWidget2::changeCurveReverseLinear()
@@ -265,7 +281,7 @@ void KisCurveOptionWidget2::changeCurveReverseLinear()
     QList<QPointF> points;
     points.push_back(QPointF(0,1));
     points.push_back(QPointF(1,0));
-    m_d->model.setactiveCurve(KisCubicCurve(points).toString());
+    m_d->model.setdisplayedCurve(KisCubicCurve(points).toString());
 }
 
 void KisCurveOptionWidget2::changeCurveSShape()
@@ -275,7 +291,7 @@ void KisCurveOptionWidget2::changeCurveSShape()
     points.push_back(QPointF(0.25,0.1));
     points.push_back(QPointF(0.75,0.9));
     points.push_back(QPointF(1, 1));
-    m_d->model.setactiveCurve(KisCubicCurve(points).toString());
+    m_d->model.setdisplayedCurve(KisCubicCurve(points).toString());
 }
 
 
@@ -286,7 +302,7 @@ void KisCurveOptionWidget2::changeCurveReverseSShape()
     points.push_back(QPointF(0.25,0.9));
     points.push_back(QPointF(0.75,0.1));
     points.push_back(QPointF(1,0));
-    m_d->model.setactiveCurve(KisCubicCurve(points).toString());
+    m_d->model.setdisplayedCurve(KisCubicCurve(points).toString());
 }
 
 void KisCurveOptionWidget2::changeCurveJShape()
@@ -295,7 +311,7 @@ void KisCurveOptionWidget2::changeCurveJShape()
     points.push_back(QPointF(0,0));
     points.push_back(QPointF(0.35,0.1));
     points.push_back(QPointF(1,1));
-    m_d->model.setactiveCurve(KisCubicCurve(points).toString());
+    m_d->model.setdisplayedCurve(KisCubicCurve(points).toString());
 }
 
 void KisCurveOptionWidget2::changeCurveLShape()
@@ -304,7 +320,7 @@ void KisCurveOptionWidget2::changeCurveLShape()
     points.push_back(QPointF(0,1));
     points.push_back(QPointF(0.25,0.48));
     points.push_back(QPointF(1,0));
-    m_d->model.setactiveCurve(KisCubicCurve(points).toString());
+    m_d->model.setdisplayedCurve(KisCubicCurve(points).toString());
 }
 
 void KisCurveOptionWidget2::changeCurveUShape()
@@ -313,7 +329,7 @@ void KisCurveOptionWidget2::changeCurveUShape()
     points.push_back(QPointF(0,1));
     points.push_back(QPointF(0.5,0));
     points.push_back(QPointF(1,1));
-    m_d->model.setactiveCurve(KisCubicCurve(points).toString());
+    m_d->model.setdisplayedCurve(KisCubicCurve(points).toString());
 }
 
 void KisCurveOptionWidget2::changeCurveArchShape()
@@ -322,7 +338,7 @@ void KisCurveOptionWidget2::changeCurveArchShape()
     points.push_back(QPointF(0,0));
     points.push_back(QPointF(0.5,1));
     points.push_back(QPointF(1,0));
-    m_d->model.setactiveCurve(KisCubicCurve(points).toString());
+    m_d->model.setdisplayedCurve(KisCubicCurve(points).toString());
 }
 
 void KisCurveOptionWidget2::updateThemedIcons()

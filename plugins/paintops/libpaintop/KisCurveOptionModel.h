@@ -9,6 +9,7 @@
 
 #include "kritapaintop_export.h"
 #include "KisCurveOptionData.h"
+#include "KisCurveRangeModelInterface.h"
 
 #include <lager/state.hpp>
 #include <lager/constant.hpp>
@@ -25,7 +26,8 @@ class PAINTOP_EXPORT KisCurveOptionModel : public QObject
 public:
     KisCurveOptionModel(lager::cursor<KisCurveOptionDataCommon> optionData,
                         lager::reader<bool> externallyEnabled,
-                        std::optional<lager::reader<RangeState>> rangeOverride);
+                        std::optional<lager::reader<RangeState>> rangeOverride,
+                        KisCurveRangeModelFactory rangeModelFactory);
     ~KisCurveOptionModel();
 
     // the state must be declared **before** any cursors or readers
@@ -45,6 +47,12 @@ public:
     LAGER_QT_READER(int, activeSensorLength);
     LAGER_QT_READER(LabelsState, labelsState);
     LAGER_QT_CURSOR(QString, activeCurve);
+    std::unique_ptr<KisCurveRangeModelInterface> rangeModel;
+    LAGER_QT_CURSOR(QString, displayedCurve);
+    LAGER_QT_READER(QString, curveXMinLabel);
+    LAGER_QT_READER(QString, curveXMaxLabel);
+    LAGER_QT_READER(QString, curveYMinLabel);
+    LAGER_QT_READER(QString, curveYMaxLabel);
 
     KisCurveOptionDataCommon bakedOptionData() const;
 };

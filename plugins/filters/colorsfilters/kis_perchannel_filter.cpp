@@ -39,7 +39,7 @@
 #include "kis_painter.h"
 #include "widgets/kis_curve_widget.h"
 #include <KisGlobalResourcesInterface.h>
-#include <KisCurveWidgetControlsManagerInt.h>
+#include <KisCurveWidgetControlsManager.h>
 
 #include "kis_multichannel_utils.h"
 

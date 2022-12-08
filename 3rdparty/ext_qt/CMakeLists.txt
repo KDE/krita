@@ -152,7 +152,7 @@ if (WIN32)
       # Use a short name to reduce the chance of exceeding path length limit
       SOURCE_DIR s
       BINARY_DIR b
-      DEPENDS ext_patch ext_googleangle ${OPENSSL_DEP} ${QT_EXTRA_DEPS} ${ZLIB_DEP} 
+      DEPENDS ext_googleangle ${OPENSSL_DEP} ${QT_EXTRA_DEPS} ${ZLIB_DEP}
   )
 elseif (ANDROID)
   ExternalProject_Add(

@@ -441,6 +441,11 @@ if (NOT Python_EXECUTABLE)
     set(PYTHON_DEP ext_python)
 endif()
 
+# python needs openssl
+if (NOT WIN32 OR OPENSSL_DEP)
+    add_subdirectory( ext_openssl )
+endif()
+
 # Meson needs the sitecustomize.py to set the site-packages root
 add_subdirectory( ext_python )
 
@@ -540,10 +545,6 @@ endif()
 # ================== END OF FFMPEG DEPS =====================
 
 # this list must be dependency-ordered
-if (NOT WIN32 OR OPENSSL_DEP)
-    add_subdirectory( ext_openssl )
-endif()
-
 if (WIN32)
     add_subdirectory( ext_patch )
 endif ()

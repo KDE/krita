@@ -17,6 +17,19 @@
 #include <KisAirbrushOptionWidget.h>
 #include <KisPaintOpOptionWidgetUtils.h>
 
+#include <MyPaintCurveOptionData.h>
+#include <MyPaintCurveOptionWidget2.h>
+
+struct MyPaintEllipticDabAngle : MyPaintCurveOptionData
+{
+    MyPaintEllipticDabAngle()
+        : MyPaintCurveOptionData(KoID("elliptical_dab_angle",
+                                      i18n("Elliptical Dab Angle")),
+                                 false, true, false, 0.0, 180.0)
+    {
+    }
+};
+
 KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
@@ -54,11 +67,11 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
                                         "0",
                                         "100"),
         KisMyPaintOpOption::BASIC);
-    addPaintOpOption(new KisMyPaintCurveOptionWidget(
-                         new KisMyPaintCurveOption(KoID("elliptical_dab_angle", i18n("Elliptical Dab Angle")), KisPaintOpOption::GENERAL, false, 0.0, 0, 180),
-                         "0",
-                         "100"),
+
+    // TODO: move category into the widget!
+    addPaintOpOption(kpowu::createOptionWidget<MyPaintCurveOptionWidget2>(MyPaintEllipticDabAngle(), 180.0, "°"),
                      KisMyPaintOpOption::BASIC);
+
     addPaintOpOption(new KisMyPaintCurveOptionWidget(
                          new KisMyPaintCurveOption(KoID("elliptical_dab_ratio", i18n("Elliptical Dab Ratio")), KisPaintOpOption::GENERAL, false, 1, 1, 10),
                          "0",

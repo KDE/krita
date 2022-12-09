@@ -45,14 +45,16 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
                                              lager::reader<bool> enabledLink,
                                              std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader,
                                              KisCurveRangeModelFactory curveRangeFactory,
-                                             KisCurveOptionInputControlsStrategyFactory inputControlsFactory)
+                                             KisCurveOptionInputControlsStrategyFactory inputControlsFactory,
+                                             KisCurveOptionRangeControlsStrategyFactory rangeControlsFactory)
     : KisCurveOptionWidget2(optionData,
                             category,
                             i18n("0%"), i18n("100%"),
                             enabledLink,
                             rangeReader,
                             curveRangeFactory,
-                            inputControlsFactory)
+                            inputControlsFactory,
+                            rangeControlsFactory)
 {
 }
 
@@ -62,7 +64,8 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
                                              lager::reader<bool> enabledLink,
                                              std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader,
                                              KisCurveRangeModelFactory curveRangeFactory,
-                                             KisCurveOptionInputControlsStrategyFactory inputControlsFactory)
+                                             KisCurveOptionInputControlsStrategyFactory inputControlsFactory,
+                                             KisCurveOptionRangeControlsStrategyFactory rangeControlsFactory)
     : KisCurveOptionWidget2(optionData,
                             category,
                             curveMinLabel, curveMaxLabel,
@@ -71,7 +74,8 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
                             enabledLink,
                             rangeReader,
                             curveRangeFactory,
-                            inputControlsFactory)
+                            inputControlsFactory,
+                            rangeControlsFactory)
 {
 
 }
@@ -83,7 +87,8 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
                                              lager::reader<bool> enabledLink,
                                              std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader,
                                              KisCurveRangeModelFactory curveRangeFactory,
-                                             KisCurveOptionInputControlsStrategyFactory inputControlsFactory)
+                                             KisCurveOptionInputControlsStrategyFactory inputControlsFactory,
+                                             KisCurveOptionRangeControlsStrategyFactory rangeControlsFactory)
     : KisCurveOptionWidget2(optionData,
                             category,
                             curveMinLabel, curveMaxLabel,
@@ -92,7 +97,8 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
                             enabledLink,
                             rangeReader,
                             curveRangeFactory,
-                            inputControlsFactory)
+                            inputControlsFactory,
+                            rangeControlsFactory)
 {
 }
 
@@ -104,7 +110,8 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
                                              lager::reader<bool> enabledLink,
                                              std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader,
                                              KisCurveRangeModelFactory curveRangeFactory,
-                                             KisCurveOptionInputControlsStrategyFactory inputControlsFactory)
+                                             KisCurveOptionInputControlsStrategyFactory inputControlsFactory,
+                                             KisCurveOptionRangeControlsStrategyFactory rangeControlsFactory)
     : KisPaintOpOption(optionData->id.name(), category, optionData[&KisCurveOptionDataCommon::isChecked], enabledLink)
     , m_widget(new QWidget)
     , m_curveOptionWidget(new Ui_WdgCurveOption2())
@@ -133,6 +140,14 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
                              m_curveOptionWidget->curveWidget,
                              m_curveOptionWidget->intInPlaceholder,
                              m_curveOptionWidget->intOutPlaceholder));
+
+    if (rangeControlsFactory) {
+        m_curveRangeControlsStrategy.reset(
+            rangeControlsFactory(m_d->model.rangeModel.get(),
+                                 m_curveOptionWidget->wdgRangeControlsPlaceholder));
+    } else {
+        m_curveOptionWidget->wdgRangeControlsPlaceholder->setVisible(false);
+    }
 
     setConfigurationPage(m_widget);
     hideRangeLabelsAndBoxes(true);

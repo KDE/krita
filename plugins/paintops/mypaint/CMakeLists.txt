@@ -7,6 +7,9 @@ link_directories(${LIBMYPAINT_LIBRARIES})
 set(kritamypaintop_SOURCES
     MyPaintSensorPack.cpp
     MyPaintCurveOptionData.cpp
+    MyPaintCurveOptionWidget2.cpp
+    MyPaintCurveRangeModel.cpp
+    MyPaintCurveOptionRangeControlsStrategy.cpp
     MyPaintPaintOp.cpp
     MyPaintPaintOpOption.cpp
     MyPaintPaintOpSettings.cpp

@@ -325,6 +325,11 @@ KisCubicCurve::KisCubicCurve(const QList<QPointF>& points) : d(new Private)
     d->data->keepSorted();
 }
 
+KisCubicCurve::KisCubicCurve(const QVector<QPointF> &points)
+    : KisCubicCurve(points.toList())
+{
+}
+
 KisCubicCurve::KisCubicCurve(const KisCubicCurve& curve)
     : d(new Private(*curve.d))
 {

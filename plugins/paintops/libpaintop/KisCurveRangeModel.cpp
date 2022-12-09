@@ -31,26 +31,6 @@ QString calcMaxLabelWithFactory(const QString &activeSensorId, const int length)
     return factory->maximumLabel(length);
 }
 
-qreal calcMinValueWithFactory(const QString &sensorId)
-{
-    KisDynamicSensorFactory *factory =
-            KisDynamicSensorFactoryRegistry::instance()->get(sensorId);
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(factory, 0.0);
-
-    return qreal(factory->minimumValue());
-}
-
-qreal calcMaxValueWithFactory(const QString &activeSensorId, const int length)
-{
-    KisDynamicSensorFactory *factory =
-            KisDynamicSensorFactoryRegistry::instance()->get(activeSensorId);
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(factory, 1.0);
-
-    return factory->maximumValue(length);
-}
-
 QString calcValueSuffixWithFactory(const QString &activeSensorId)
 {
     KisDynamicSensorFactory *factory =
@@ -101,6 +81,26 @@ KisCurveRangeModelFactory KisCurveRangeModel::factory(const QString &yMinLabel,
     };
 }
 
+qreal KisCurveRangeModel::calcXMinValueWithFactory(const QString &sensorId)
+{
+    KisDynamicSensorFactory *factory =
+        KisDynamicSensorFactoryRegistry::instance()->get(sensorId);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(factory, 0.0);
+
+    return qreal(factory->minimumValue());
+}
+
+qreal KisCurveRangeModel::calcXMaxValueWithFactory(const QString &activeSensorId, const int length)
+{
+    KisDynamicSensorFactory *factory =
+        KisDynamicSensorFactoryRegistry::instance()->get(activeSensorId);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(factory, 1.0);
+
+    return factory->maximumValue(length);
+}
+
 KisCurveRangeModel::~KisCurveRangeModel()
 {
 }
@@ -147,12 +147,12 @@ lager::reader<QString> KisCurveRangeModel::yValueSuffix()
 
 lager::reader<qreal> KisCurveRangeModel::xMinValue()
 {
-    return m_activeSensorId.map(&calcMinValueWithFactory);
+    return m_activeSensorId.map(&calcXMinValueWithFactory);
 }
 
 lager::reader<qreal> KisCurveRangeModel::xMaxValue()
 {
-    return lager::with(m_activeSensorId, m_activeSensorLength).map(&calcMaxValueWithFactory);
+    return lager::with(m_activeSensorId, m_activeSensorLength).map(&calcXMaxValueWithFactory);
 }
 
 lager::reader<QString> KisCurveRangeModel::xValueSuffix()

@@ -22,6 +22,7 @@ set(kritalibpaintop_LIB_SRCS
     KisCurveOptionData.cpp
     KisCurveOptionInputControlsStrategyInterface.cpp
     KisCurveOptionInputControlsStrategy.cpp
+    KisCurveOptionRangeControlsStrategyInterface.cpp
     KisCurveRangeModelInterface.cpp
     KisCurveRangeModel.cpp
     KisCurveOptionModel.cpp

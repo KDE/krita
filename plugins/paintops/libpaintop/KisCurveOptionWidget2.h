@@ -16,6 +16,7 @@ class QComboBox;
 #include <KisCurveOptionData.h>
 #include <KisCurveRangeModelInterface.h>
 #include <KisCurveOptionInputControlsStrategyInterface.h>
+#include <KisCurveOptionRangeControlsStrategyInterface.h>
 #include <lager/cursor.hpp>
 #include <lager/constant.hpp>
 
@@ -31,7 +32,8 @@ public:
                           lager::reader<bool> enabledLink = lager::make_constant(true),
                           std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt,
                           KisCurveRangeModelFactory curveRangeFactory = {},
-                          KisCurveOptionInputControlsStrategyFactory inputControlsFactory = {});
+                          KisCurveOptionInputControlsStrategyFactory inputControlsFactory = {},
+                          KisCurveOptionRangeControlsStrategyFactory rangeControlsFactory = {});
 
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                           KisPaintOpOption::PaintopCategory category,
@@ -39,7 +41,8 @@ public:
                           lager::reader<bool> enabledLink = lager::make_constant(true),
                           std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt,
                           KisCurveRangeModelFactory curveRangeFactory = {},
-                          KisCurveOptionInputControlsStrategyFactory inputControlsFactory = {});
+                          KisCurveOptionInputControlsStrategyFactory inputControlsFactory = {},
+                          KisCurveOptionRangeControlsStrategyFactory rangeControlsFactory = {});
 
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                           KisPaintOpOption::PaintopCategory category,
@@ -48,7 +51,8 @@ public:
                           lager::reader<bool> enabledLink = lager::make_constant(true),
                           std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt,
                           KisCurveRangeModelFactory curveRangeFactory = {},
-                          KisCurveOptionInputControlsStrategyFactory inputControlsFactory = {});
+                          KisCurveOptionInputControlsStrategyFactory inputControlsFactory = {},
+                          KisCurveOptionRangeControlsStrategyFactory rangeControlsFactory = {});
 private:
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                           KisPaintOpOption::PaintopCategory category,
@@ -58,7 +62,8 @@ private:
                           lager::reader<bool> enabledLink = lager::make_constant(true),
                           std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt,
                           KisCurveRangeModelFactory curveRangeFactory = {},
-                          KisCurveOptionInputControlsStrategyFactory inputControlsFactory = {});
+                          KisCurveOptionInputControlsStrategyFactory inputControlsFactory = {},
+                          KisCurveOptionRangeControlsStrategyFactory rangeControlsFactory = {});
 
 public:
     ~KisCurveOptionWidget2() override;
@@ -95,6 +100,7 @@ protected:
     QWidget* m_widget {nullptr};
     Ui_WdgCurveOption2* m_curveOptionWidget {nullptr};
     QScopedPointer<KisCurveOptionInputControlsStrategyInterface> m_curveInputControlsStrategy;
+    QScopedPointer<KisCurveOptionRangeControlsStrategyInterface> m_curveRangeControlsStrategy;
     QComboBox* m_curveMode {nullptr};
     struct Private;
     const QScopedPointer<Private> m_d;

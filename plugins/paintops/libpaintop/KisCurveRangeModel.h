@@ -10,7 +10,7 @@
 #include <KisCurveRangeModelInterface.h>
 #include <lager/constant.hpp>
 
-class KisCurveRangeModel : public KisCurveRangeModelInterface
+class PAINTOP_EXPORT KisCurveRangeModel : public KisCurveRangeModelInterface
 {
 public:
     KisCurveRangeModel(lager::cursor<QString> curve,
@@ -37,6 +37,9 @@ public:
     lager::reader<QString> xValueSuffix() override;
 
     static KisCurveRangeModelFactory factory(const QString &yMinLabel, const QString &yMaxLabel, int curveMinValue, int curveMaxValue, const QString &curveValueSuffix);
+
+    static qreal calcXMinValueWithFactory(const QString &sensorId);
+    static qreal calcXMaxValueWithFactory(const QString &activeSensorId, const int length);
 
 private:
     lager::cursor<QString> m_curve;

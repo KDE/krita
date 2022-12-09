@@ -12,15 +12,33 @@
 #include <KisSensorData.h>
 #include <KisSensorPackInterface.h>
 
-const KoID MyPaintPressureId("pressure", ki18n("Pressure"));
-const KoID MyPaintFineSpeedId("speed1", ki18n("Fine Speed"));
-const KoID MyPaintGrossSpeedId("speed2", ki18n("Gross Speed"));
-const KoID MyPaintRandomId("random", ki18n("Random"));
-const KoID MyPaintStrokeId("stroke", ki18nc("The duration of a brush stroke", "Stroke"));
-const KoID MyPaintDirectionId("direction", ki18nc("Drawing Angle", "Direction"));
-const KoID MyPaintDeclinationId("tilt_declination", ki18nc("Pen tilt declination", "Declination"));
-const KoID MyPaintAscensionId("tilt_ascension", ki18nc("Pen tilt ascension", "Ascension"));
-const KoID MyPaintCustomId("custom", ki18n("Custom"));
+const KoID MyPaintPressureId("mypaint_pressure", ki18n("Pressure"));
+const KoID MyPaintFineSpeedId("mypaint_speed1", ki18n("Fine Speed"));
+const KoID MyPaintGrossSpeedId("mypaint_speed2", ki18n("Gross Speed"));
+const KoID MyPaintRandomId("mypaint_random", ki18n("Random"));
+const KoID MyPaintStrokeId("mypaint_stroke", ki18nc("The duration of a brush stroke", "Stroke"));
+const KoID MyPaintDirectionId("mypaint_direction", ki18nc("Drawing Angle", "Direction"));
+const KoID MyPaintDeclinationId("mypaint_tilt_declination", ki18nc("Pen tilt declination", "Declination"));
+const KoID MyPaintAscensionId("mypaint_tilt_ascension", ki18nc("Pen tilt ascension", "Ascension"));
+const KoID MyPaintCustomId("mypaint_custom", ki18n("Custom"));
+
+struct MyPaintSensorDataWithRange : KisSensorData, boost::equality_comparable<MyPaintSensorDataWithRange>
+{
+    MyPaintSensorDataWithRange(const KoID &id);
+
+    inline friend bool operator==(const MyPaintSensorDataWithRange &lhs, const MyPaintSensorDataWithRange &rhs) {
+        return lhs.curveRange == rhs.curveRange &&
+            static_cast<const KisSensorData&>(lhs) == static_cast<const KisSensorData&>(rhs);
+    }
+
+    QRectF baseCurveRange() const override;
+    void setBaseCurveRange(const QRectF &rect) override;
+    void reset() override;
+
+    void reshapeCurve();
+
+    QRectF curveRange {0,-1,1,2};
+};
 
 struct MyPaintSensorData : boost::equality_comparable<MyPaintSensorData>
 {
@@ -38,15 +56,15 @@ struct MyPaintSensorData : boost::equality_comparable<MyPaintSensorData>
             lhs.sensorCustom == rhs.sensorCustom;
     }
 
-    KisSensorData sensorPressure;
-    KisSensorData sensorFineSpeed;
-    KisSensorData sensorGrossSpeed;
-    KisSensorData sensorRandom;
-    KisSensorData sensorStroke;
-    KisSensorData sensorDirection;
-    KisSensorData sensorDeclination;
-    KisSensorData sensorAscension;
-    KisSensorData sensorCustom;
+    MyPaintSensorDataWithRange sensorPressure;
+    MyPaintSensorDataWithRange sensorFineSpeed;
+    MyPaintSensorDataWithRange sensorGrossSpeed;
+    MyPaintSensorDataWithRange sensorRandom;
+    MyPaintSensorDataWithRange sensorStroke;
+    MyPaintSensorDataWithRange sensorDirection;
+    MyPaintSensorDataWithRange sensorDeclination;
+    MyPaintSensorDataWithRange sensorAscension;
+    MyPaintSensorDataWithRange sensorCustom;
 };
 
 class MyPaintSensorPack : public KisSensorPackInterface

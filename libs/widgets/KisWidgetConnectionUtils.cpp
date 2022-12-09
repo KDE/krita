@@ -152,6 +152,113 @@ void connectControl(QDoubleSpinBox *spinBox, QObject *source, const char *proper
     }
 }
 
+class ConnectIntSpinBoxStateHelper : public QObject
+{
+    Q_OBJECT
+public:
+
+    ConnectIntSpinBoxStateHelper(QSpinBox *parent)
+        : QObject(parent),
+        m_spinBox(parent)
+    {
+    }
+public Q_SLOTS:
+    void setState(IntSpinBoxState state) {
+        QSignalBlocker b(m_spinBox);
+
+        m_spinBox->setEnabled(state.enabled);
+        m_spinBox->setRange(state.min, state.max);
+        m_spinBox->setValue(state.value);
+    }
+
+private:
+    QSpinBox *m_spinBox;
+};
+
+
+void connectControlState(QSpinBox *spinBox, QObject *source, const char *readStateProperty, const char *writeProperty)
+{
+    const QMetaObject* meta = source->metaObject();
+    QMetaProperty readStateProp = meta->property(meta->indexOfProperty(readStateProperty));
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(readStateProp.hasNotifySignal());
+
+    QMetaMethod signal = readStateProp.notifySignal();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterCount() >= 1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterType(0) == QMetaType::type("IntSpinBoxState"));
+
+    ConnectIntSpinBoxStateHelper *helper = new ConnectIntSpinBoxStateHelper(spinBox);
+
+    const QMetaObject* dstMeta = helper->metaObject();
+
+    QMetaMethod updateSlot = dstMeta->method(
+        dstMeta->indexOfSlot("setState(IntSpinBoxState)"));
+    QObject::connect(source, signal, helper, updateSlot);
+
+    helper->setState(readStateProp.read(source).value<IntSpinBoxState>());
+
+    QMetaProperty writeProp = meta->property(meta->indexOfProperty(writeProperty));
+    if (writeProp.isWritable()) {
+        QObject::connect(spinBox, qOverload<int>(&QSpinBox::valueChanged),
+                         source, [writeProp, source] (int value) { writeProp.write(source, value); });
+    }
+}
+
+class ConnectDoubleSpinBoxStateHelper : public QObject
+{
+    Q_OBJECT
+public:
+
+    ConnectDoubleSpinBoxStateHelper(QDoubleSpinBox *parent)
+        : QObject(parent),
+        m_spinBox(parent)
+    {
+    }
+public Q_SLOTS:
+    void setState(DoubleSpinBoxState state) {
+        QSignalBlocker b(m_spinBox);
+
+        m_spinBox->setEnabled(state.enabled);
+        m_spinBox->setRange(state.min, state.max);
+        m_spinBox->setValue(state.value);
+    }
+
+private:
+    QDoubleSpinBox *m_spinBox;
+};
+
+
+void connectControlState(QDoubleSpinBox *spinBox, QObject *source, const char *readStateProperty, const char *writeProperty)
+{
+    const QMetaObject* meta = source->metaObject();
+    QMetaProperty readStateProp = meta->property(meta->indexOfProperty(readStateProperty));
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(readStateProp.hasNotifySignal());
+
+    QMetaMethod signal = readStateProp.notifySignal();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterCount() >= 1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterType(0) == QMetaType::type("DoubleSpinBoxState"));
+
+    ConnectDoubleSpinBoxStateHelper *helper = new ConnectDoubleSpinBoxStateHelper(spinBox);
+
+    const QMetaObject* dstMeta = helper->metaObject();
+
+    QMetaMethod updateSlot = dstMeta->method(
+        dstMeta->indexOfSlot("setState(DoubleSpinBoxState)"));
+    QObject::connect(source, signal, helper, updateSlot);
+
+    helper->setState(readStateProp.read(source).value<DoubleSpinBoxState>());
+
+    QMetaProperty writeProp = meta->property(meta->indexOfProperty(writeProperty));
+    if (writeProp.isWritable()) {
+        QObject::connect(spinBox, qOverload<qreal>(&QDoubleSpinBox::valueChanged),
+                         source, [writeProp, source] (qreal value) { writeProp.write(source, value); });
+    }
+}
+
+
 void connectControl(KisMultipliersDoubleSliderSpinBox *spinBox, QObject *source, const char *property)
 {
     const QMetaObject* meta = source->metaObject();

@@ -37,25 +37,21 @@ public:
     KisPresetChooser(QWidget *parent = 0, const char *name = 0);
     ~KisPresetChooser() override;
 
-    enum ViewMode {
+    enum ViewMode{
         THUMBNAIL, /// Shows thumbnails
-        DETAIL  /// Shows thumbsnails with text next to it
+        DETAIL,  /// Shows thumbsnails with text next to it
+        STRIP  /// Shows thumbnails arranged in a single row
     };
 
     /// Sets a list of resources in the paintop list, when ever user press enter in the linedit of paintop_presets_popup Class
     void setViewMode(ViewMode mode);
-
     void showButtons(bool show);
 
     void setCurrentResource(KoResourceSP resource);
-
     KoResourceSP currentResource() const;
-
     /// Sets the visibility of tagging klineEdits
     void showTaggingBar(bool show);
-
     KisResourceItemChooser *itemChooser();
-
     void setPresetFilter(const QString& paintOpId);
 
     /// get the base size for the icons. Used by the slider in the view options
@@ -73,6 +69,8 @@ public Q_SLOTS:
 
     /// saves the icon size for the presets. called by the horizontal slider release event.
     void saveIconSize();
+
+    void slotScrollerStateChanged(QScroller::State state);
 
 private Q_SLOTS:
     void notifyConfigChanged();

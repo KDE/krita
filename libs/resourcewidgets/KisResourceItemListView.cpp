@@ -9,27 +9,19 @@
 #include <QEvent>
 #include <QHeaderView>
 #include <QScroller>
-#include <QScrollBar>
 #include <QHelpEvent>
 #include <QDebug>
 
-#include "KisIconToolTip.h"
-
-
 struct  Q_DECL_HIDDEN KisResourceItemListView::Private
 {
-    ListViewMode viewMode = ListViewMode::IconGrid;
     bool strictSelectionMode {false};
     KisIconToolTip tip;
-
-    QScroller* scroller {0};
-    QString prev_scrollbar_style;
 };
 
 KisResourceItemListView::KisResourceItemListView(QWidget *parent)
     : QListView(parent)
     , m_d(new Private)
-{ 
+{
     setSelectionMode(QAbstractItemView::SingleSelection);
     setContextMenuPolicy(Qt::DefaultContextMenu);
     setViewMode(QListView::IconMode);
@@ -38,76 +30,22 @@ KisResourceItemListView::KisResourceItemListView(QWidget *parent)
     setResizeMode(QListView::Adjust);
     setUniformItemSizes(true);
 
-    m_d->scroller = KisKineticScroller::createPreconfiguredScroller(this);
-    if (m_d->scroller) {
-        connect(m_d->scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChange(QScroller::State)));
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChange(QScroller::State)));
     }
 
     connect(this, SIGNAL(clicked(QModelIndex)), SIGNAL(currentResourceClicked(const QModelIndex &)));
-
-     m_d->prev_scrollbar_style = horizontalScrollBar()->styleSheet();
 }
 
 KisResourceItemListView::~KisResourceItemListView()
 {
 }
 
-void KisResourceItemListView::setListViewMode(ListViewMode viewMode)
-{
-    m_d->viewMode = viewMode;
-
-    switch (viewMode) {
-    case ListViewMode::IconGrid: {
-        setViewMode(ViewMode::IconMode);
-        setFlow(Flow::LeftToRight);
-        setWrapping(true);
-        horizontalScrollBar()->setStyleSheet(m_d->prev_scrollbar_style);        
-        setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
-        break;
-    }
-    case ListViewMode::IconStripHorizontal: {
-        setViewMode(ViewMode::IconMode);
-        setFlow(Flow::LeftToRight);
-        setWrapping(false);
-
-        // this is the only way to hide it and not have it ocupy space
-        horizontalScrollBar()->setStyleSheet("QScrollBar::horizontal {height: 0px;}");
-        setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
-        break;
-    }
-    case ListViewMode::Detail: {
-        setViewMode(ViewMode::ListMode);
-        setFlow(Flow::TopToBottom);
-        setWrapping(false);
-        horizontalScrollBar()->setStyleSheet(m_d->prev_scrollbar_style);
-        setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
-        break;
-    }
-    }
-
-    setItemSize(iconSize());
-}
-
 void KisResourceItemListView::setItemSize(QSize size)
 {
-    switch (m_d->viewMode) {
-    case ListViewMode::IconGrid: {
-        setGridSize(size);
-        setIconSize(size);
-        break;
-    }
-    case ListViewMode::IconStripHorizontal: {
-        // you can not set the item size in strip mode
-        // it is configured automatically based on size
-        break;
-    }
-    case ListViewMode::Detail: {
-        const int w = width();
-        setGridSize(QSize(w, size.height()));
-        setIconSize(QSize(size));
-        break;
-    }
-    }
+    setGridSize(size);
+    setIconSize(size);
 }
 
 void KisResourceItemListView::setStrictSelectionMode(bool enable)
@@ -191,14 +129,4 @@ bool KisResourceItemListView::viewportEvent(QEvent *event)
     }
 
     return QListView::viewportEvent(event);
-}
-
-void KisResourceItemListView::resizeEvent(QResizeEvent *event)
-{
-    if (m_d->viewMode == ListViewMode::IconStripHorizontal) {
-        const int height = event->size().height();
-        qDebug("resizeEvent height = %d", height);
-        setGridSize(QSize(height, height));
-        setIconSize(QSize(height, height));
-    }
 }

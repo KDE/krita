@@ -18,7 +18,6 @@
 #include <QAbstractProxyModel>
 #include <QLabel>
 #include <QScrollArea>
-#include <QScrollBar>
 #include <QImage>
 #include <QPixmap>
 #include <QPainter>
@@ -91,14 +90,11 @@ public:
 
     KoResourceSP currentResource;
     Layout layout = Layout::NotSet;
-    ListViewMode requestedViewMode = ListViewMode::IconGrid;
 
     // Horizontal Layout Widgets
     QSplitter* horzSplitter {0};
     QFrame* left {0};
     QFrame* right {0};
-    QToolButton* scroll_left {0};
-    QToolButton* scroll_right {0};
 };
 
 KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool usePreview, QWidget *parent)
@@ -154,7 +150,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     // Splitter with resource views and preview scroller
     d->resourcesSplitter = new QSplitter(this);
     d->resourcesSplitter->addWidget(d->view);
-    d->resourcesSplitter->setStretchFactor(0, 1);
+    d->resourcesSplitter->setStretchFactor(0, 2);
 
     d->usePreview = usePreview;
     if (d->usePreview) {
@@ -176,6 +172,9 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
             connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
         }
     }
+
+    d->resourcesSplitter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    connect(d->resourcesSplitter, SIGNAL(splitterMoved(int,int)), SIGNAL(splitterMoved()));
 
     // Import and Export buttons
     d->importButton = new QToolButton(this);
@@ -207,13 +206,6 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     // Horizontal Layout
     {
-        d->scroll_left = new QToolButton(this);
-        d->scroll_left->setIcon(KisIconUtils::loadIcon("draw-arrow-back"));
-        connect(d->scroll_left, &QToolButton::clicked, this, &KisResourceItemChooser::scrollBackwards);
-        d->scroll_right = new QToolButton(this);
-        d->scroll_right->setIcon(KisIconUtils::loadIcon("draw-arrow-forward"));
-        connect(d->scroll_right, &QToolButton::clicked, this, &KisResourceItemChooser::scrollForwards);
-
         d->left = new QFrame(this);
         QHBoxLayout* leftLayout = new QHBoxLayout(d->left);
         leftLayout->setObjectName("ResourceChooser left");
@@ -229,8 +221,6 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
         d->horzSplitter = new QSplitter(this);
         d->horzSplitter->setOrientation(Qt::Orientation::Horizontal);
 
-        d->scroll_left->hide();
-        d->scroll_right->hide();
         d->left->hide();
         d->right->hide();
         d->horzSplitter->hide();
@@ -248,13 +238,6 @@ KisResourceItemChooser::~KisResourceItemChooser()
 {
     disconnect();
     delete d;
-}
-
-void KisResourceItemChooser::setListViewMode(ListViewMode viewMode)
-{
-    if (d->layout != Layout::Horizontal) {
-        d->view->setListViewMode(viewMode);
-    }
 }
 
 KisTagFilterResourceProxyModel *KisResourceItemChooser::tagFilterModel() const
@@ -308,7 +291,6 @@ void KisResourceItemChooser::slotButtonClicked(int button)
 
 void KisResourceItemChooser::showButtons(bool show)
 {
-    // assert(show == false);
     if (show) {
         d->importExportBtns->show();
     }
@@ -320,6 +302,11 @@ void KisResourceItemChooser::showButtons(bool show)
 void KisResourceItemChooser::showTaggingBar(bool show)
 {
     d->tagManager->showTaggingBar(show);
+}
+
+int KisResourceItemChooser::rowCount() const
+{
+    return d->view->model()->rowCount();
 }
 
 void KisResourceItemChooser::setRowHeight(int rowHeight)
@@ -389,18 +376,6 @@ void KisResourceItemChooser::setCurrentItem(int row)
     if (index.isValid()) {
         updatePreview(index);
     }
-}
-
-void KisResourceItemChooser::scrollBackwards()
-{
-    QScrollBar* bar = d->view->horizontalScrollBar();
-    bar->setValue(bar->value() - d->view->gridSize().width());
-}
-
-void KisResourceItemChooser::scrollForwards()
-{
-    QScrollBar* bar = d->view->horizontalScrollBar();
-    bar->setValue(bar->value() + d->view->gridSize().width());
 }
 
 void KisResourceItemChooser::activate(const QModelIndex &index)
@@ -604,20 +579,17 @@ void KisResourceItemChooser::showEvent(QShowEvent *event)
 void KisResourceItemChooser::changeLayoutBasedOnSize()
 {
     // Vertical
-    if (height() > 80) {
+    if (height() > 100) {
 
         if (d->layout == Layout::Vertical) {
             return;
         }
-
-        d->view->setListViewMode(d->requestedViewMode);
 
         QGridLayout* thisLayout = dynamic_cast<QGridLayout*>(layout());
         thisLayout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);
         thisLayout->addWidget(d->viewModeButton, 0, 1);
         thisLayout->addWidget(d->storagePopupButton, 0, 2);
         thisLayout->addWidget(d->resourcesSplitter, 1, 0, 1, 3);
-        thisLayout->setRowStretch(1, 1);
         thisLayout->addWidget(d->tagManager->tagFilterWidget(), 2, 0, 1, 3);
         thisLayout->addWidget(d->importExportBtns, 3, 0, 1, 3);
 
@@ -633,33 +605,23 @@ void KisResourceItemChooser::changeLayoutBasedOnSize()
             return;
         }
 
-        d->view->setListViewMode(ListViewMode::IconStripHorizontal);
-
         QLayout* leftLayout = d->left->layout();
-        leftLayout->addWidget(d->resourcesSplitter);
-        leftLayout->addWidget(d->scroll_left);
-        leftLayout->addWidget(d->scroll_right);
+        leftLayout->addWidget(d->tagManager->tagChooserWidget());
+        leftLayout->addWidget(d->viewModeButton);
+        leftLayout->addWidget(d->storagePopupButton);
 
         QLayout* rightLayout = d->right->layout();
-        rightLayout->addWidget(d->tagManager->tagChooserWidget());
-        rightLayout->addWidget(d->viewModeButton);
-        rightLayout->addWidget(d->storagePopupButton);
         rightLayout->addWidget(d->tagManager->tagFilterWidget());
-        rightLayout->addWidget(d->importExportBtns);        
+        rightLayout->addWidget(d->importExportBtns);
 
         d->horzSplitter->addWidget(d->left);
-        d->horzSplitter->setStretchFactor(0, 2);
+        d->horzSplitter->addWidget(d->resourcesSplitter);
+        d->horzSplitter->setStretchFactor(1, 1);
         d->horzSplitter->addWidget(d->right);
-        d->horzSplitter->setStretchFactor(1, 0);
-
-        QGridLayout* thisLayout = dynamic_cast<QGridLayout*>(layout());
-        thisLayout->setRowStretch(1, 0);
-        thisLayout->addWidget(d->horzSplitter);
+        layout()->addWidget(d->horzSplitter);
 
         d->horzSplitter->show();
         d->left->show();
-        d->scroll_left->show();
-        d->scroll_right->show();
         d->right->show();
 
         d->layout = Layout::Horizontal;
@@ -668,6 +630,11 @@ void KisResourceItemChooser::changeLayoutBasedOnSize()
 
 void KisResourceItemChooser::updateView()
 {
+    if (d->synced) {
+        KisResourceItemChooserSync *chooserSync = KisResourceItemChooserSync::instance();
+        baseLengthChanged(chooserSync->baseLength());
+    }
+
     /// helps to set icons here in case the theme is changed
     d->viewModeButton->setIcon(KisIconUtils::loadIcon("view-choose"));
     d->importButton->setIcon(koIcon("document-import-16"));

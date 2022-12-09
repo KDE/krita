@@ -13,9 +13,9 @@
 
 #include <KisKineticScroller.h>
 
-#include "kritaresourcewidgets_export.h"
-#include "ResourceListViewModes.h"
+#include "KisIconToolTip.h"
 
+#include "kritaresourcewidgets_export.h"
 
 class KRITARESOURCEWIDGETS_EXPORT KisResourceItemListView : public QListView
 {
@@ -25,8 +25,6 @@ public:
     KisResourceItemListView(QWidget *parent = nullptr);
     ~KisResourceItemListView() override;
 
-    void setListViewMode(ListViewMode layout);
-
     /**
      * @brief setItemSize
      * convenience function which sets both the icon and the grid size
@@ -34,7 +32,6 @@ public:
      * @param size - the size you wish either to be.
      */
     void setItemSize(QSize size);
-
     /**
      * @brief setStrictSelectionMode sets additional restrictions on the selection.
      *
@@ -71,9 +68,6 @@ protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
 
     bool viewportEvent(QEvent *event) override;
-
-private:
-    void resizeEvent(QResizeEvent *event) override;
 
 private:
     struct Private;

@@ -63,6 +63,13 @@ bool KisMyPaintOpSettings::paintIncremental()
     return true;
 }
 
+void KisMyPaintOpSettings::resetSettings(const QStringList &preserveProperties)
+{
+    QStringList allKeys = preserveProperties;
+    allKeys << MYPAINT_JSON;
+    KisOutlineGenerationPolicy<KisPaintOpSettings>::resetSettings(allKeys);
+}
+
 KisOptimizedBrushOutline KisMyPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     KisOptimizedBrushOutline path;

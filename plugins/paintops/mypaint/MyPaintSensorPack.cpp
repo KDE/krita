@@ -365,10 +365,12 @@ bool MyPaintSensorPack::read(KisCurveOptionDataCommon &data, const KisProperties
                      std::mem_fn(&KisSensorData::isActive)) == sensors.end()) {
 
         sensors.front()->isActive = true;
+        data.useCurve = false;
+    } else {
+        data.useCurve = true;
     }
 
     data.strengthValue = qreal(mypaint_brush_get_base_value(brush.get(), brushSetting));
-    data.useCurve = setting->getBool(data.id.id() + "UseCurve", true);
 
     data.useSameCurve = false; // not used in mypaint engine
     data.commonCurve = DEFAULT_CURVE_STRING; // not used in mypaint engine
@@ -389,6 +391,7 @@ void MyPaintSensorPack::write(const KisCurveOptionDataCommon &data, KisPropertie
     }
 
     QJsonDocument doc = QJsonDocument::fromJson(setting->getProperty(MYPAINT_JSON).toByteArray());
+
     QJsonObject brush_json = doc.object();
     QVariantMap map = brush_json.toVariantMap();
     QVariantMap settings_map = map["settings"].toMap();
@@ -401,7 +404,7 @@ void MyPaintSensorPack::write(const KisCurveOptionDataCommon &data, KisPropertie
         const KisSensorData *sensor = *it;
         const QString sensorJsonId = sensorIdToMyPaintBrushInputJsonKey(sensor->id);
 
-        if (!sensor->isActive) {
+        if (!sensor->isActive || !data.useCurve) {
             inputs_map.remove(sensorJsonId);
         } else {
             KisCubicCurve curve(sensor->curve);
@@ -424,8 +427,6 @@ void MyPaintSensorPack::write(const KisCurveOptionDataCommon &data, KisPropertie
 
     doc = QJsonDocument(QJsonObject::fromVariantMap(map));
     setting->setProperty(MYPAINT_JSON, doc.toJson());
-
-    setting->setProperty(data.id.id() + "UseCurve", data.useCurve);
 
     // not used in mypaint engine
     setting->setProperty(data.id.id() + "UseSameCurve", false);

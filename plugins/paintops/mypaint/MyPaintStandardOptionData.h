@@ -31,7 +31,7 @@ struct MyPaintOpacityData : MyPaintCurveOptionData
 {
     MyPaintOpacityData()
         : MyPaintCurveOptionData(KoID("opaque", i18n("Opaque")),
-                                 false, true, 0.0, 1.0)
+                                 false, true, 0.0, 2.0)
     {
     }
 };

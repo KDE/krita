@@ -2,8 +2,11 @@ set(kritatangentnormalpaintop_SOURCES
     kis_tangent_normal_paintop_plugin.cpp
     kis_tangent_normal_paintop.cpp
     kis_tangent_normal_paintop_settings_widget.cpp
-    kis_tangent_tilt_option.cpp
     kis_normal_preview_widget.cpp
+    KisTangentTiltOption.cpp
+    KisTangentTiltOptionData.cpp
+    KisTangentTiltOptionModel.cpp
+    KisTangentTiltOptionWidget.cpp
 
 )
 

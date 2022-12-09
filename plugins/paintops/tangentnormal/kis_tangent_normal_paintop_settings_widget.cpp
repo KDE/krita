@@ -6,30 +6,21 @@
 
 #include "kis_tangent_normal_paintop_settings_widget.h"
 #include "kis_brush_based_paintop_settings.h"
-#include "kis_tangent_tilt_option.h"
+#include "KisTangentTiltOptionWidget.h"
 
 #include <kis_properties_configuration.h>
-#include <kis_paintop_settings_widget.h>
-#include <kis_curve_option_widget.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_scatter_option_widget.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_flow_option.h>
-#include <KisPaintingModeOptionWidget.h>
-#include <kis_pressure_size_option.h>
-#include <kis_pressure_softness_option.h>
-#include <kis_pressure_sharpness_option_widget.h>
-#include <kis_pressure_flow_opacity_option_widget.h>
-#include <kis_pressure_spacing_option_widget.h>
-#include <kis_pressure_rate_option.h>
-#include "kis_texture_option.h"
-#include <kis_pressure_mirror_option_widget.h>
-#include "kis_pressure_texture_strength_option.h"
-#include <KisAirbrushOptionWidget.h>
+#include <KisStandardOptionData.h>
 #include <KisPaintOpOptionWidgetUtils.h>
-#include <KisTextureOptionWidget.h>
-#include <KisCompositeOpOptionWidget.h>
 
+#include <KisCompositeOpOptionWidget.h>
+#include "KisSizeOptionWidget.h"
+#include "KisSpacingOptionWidget.h"
+#include "KisMirrorOptionWidget.h"
+#include "KisSharpnessOptionWidget.h"
+#include "KisScatterOptionWidget.h"
+#include "KisAirbrushOptionWidget.h"
+#include "KisPaintingModeOptionWidget.h"
+#include <KisTextureOptionWidget.h>
 
 KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface):
     KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision |
@@ -41,25 +32,25 @@ KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWi
     setObjectName("brush option widget");
 
     addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureFlowOption(), i18n("0%"), i18n("100%")));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(kpowu::createOpacityOptionWidget());
+    addPaintOpOption(kpowu::createFlowOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisSizeOptionWidget>());
 
-    addPaintOpOption(new KisTangentTiltOption());
+    addPaintOpOption(kpowu::createOptionWidget<KisTangentTiltOptionWidget>());
 
-    addPaintOpOption(new KisPressureSpacingOptionWidget());
-    addPaintOpOption(new KisPressureMirrorOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisSpacingOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisMirrorOptionWidget>());
 
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSoftnessOption(), i18n("Soft"), i18n("Hard")));
-    addPaintOpOption(new KisPressureSharpnessOptionWidget());
-    addPaintOpOption(new KisPressureScatterOptionWidget());
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));
+    addPaintOpOption(kpowu::createSoftnessOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisSharpnessOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisScatterOptionWidget>());
+    addPaintOpOption(kpowu::createRotationOptionWidget());
     addPaintOpOption(kpowu::createOptionWidget<KisAirbrushOptionWidget>());
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(kpowu::createRateOptionWidget());
     addPaintOpOption(kpowu::createOptionWidget<KisPaintingModeOptionWidget>());
 
     addPaintOpOption(kpowu::createOptionWidget<KisTextureOptionWidget>(KisTextureOptionData(), resourcesInterface));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")));
+    addPaintOpOption(kpowu::createStrengthOptionWidget());
 }
 
 KisTangentNormalPaintOpSettingsWidget::~KisTangentNormalPaintOpSettingsWidget() { }

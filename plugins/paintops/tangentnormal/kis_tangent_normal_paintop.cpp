@@ -22,34 +22,25 @@
 #include <kis_paintop_plugin_utils.h>
 
 
-KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image):
-    KisBrushBasedPaintOp(settings, painter),
-    m_opacityOption(node),
-    m_sharpnessOption(settings.data()),
-    m_tempDev(painter->device()->createCompositionSourceDevice())
+KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
+    : KisBrushBasedPaintOp(settings, painter)
+    , m_tangentTiltOption(settings.data())
+    , m_opacityOption(settings.data(), node)
+    , m_flowOption(settings.data())
+    , m_sizeOption(settings.data())
+    , m_spacingOption(settings.data())
+    , m_softnessOption(settings.data())
+    , m_sharpnessOption(settings.data())
+    , m_scatterOption(settings.data())
+    , m_rotationOption(settings.data())
+    , m_rateOption(settings.data())
+    , m_tempDev(painter->device()->createCompositionSourceDevice())
 
 {
     Q_UNUSED(image);
     //Init, read settings, etc//
-    m_tangentTiltOption.readOptionSetting(settings);
-    m_airbrushOption.readOptionSetting(settings);
-    m_sizeOption.readOptionSetting(settings);
-    m_opacityOption.readOptionSetting(settings);
-    m_flowOption.readOptionSetting(settings);
-    m_spacingOption.readOptionSetting(settings);
-    m_rateOption.readOptionSetting(settings);
-    m_softnessOption.readOptionSetting(settings);
-    m_rotationOption.readOptionSetting(settings);
-    m_scatterOption.readOptionSetting(settings);
-
-    m_sizeOption.resetAllSensors();
-    m_opacityOption.resetAllSensors();
-    m_flowOption.resetAllSensors();
-    m_spacingOption.resetAllSensors();
-    m_rateOption.resetAllSensors();
-    m_softnessOption.resetAllSensors();
-    m_rotationOption.resetAllSensors();
-    m_scatterOption.resetAllSensors();
+    m_tangentTiltOptionData.read(settings.data());
+    m_airbrushData.read(settings.data());
 
     m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);
     m_rotationOption.applyFanCornersInfo(this);
@@ -143,7 +134,6 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     QString oldCompositeOpId = painter()->compositeOpId();
 
 
-    m_opacityOption.setFlow(m_flowOption.apply(info));
     m_opacityOption.apply(painter(), info);
     //paint with the default color? Copied this from color smudge.//
     //painter()->setCompositeOp(COMPOSITE_COPY);
@@ -167,13 +157,13 @@ KisSpacingInformation KisTangentNormalPaintOp::updateSpacingImpl(const KisPaintI
 
 KisTimingInformation KisTangentNormalPaintOp::updateTimingImpl(const KisPaintInformation &info) const
 {
-    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushData, &m_rateOption, info);
 }
 
 KisSpacingInformation KisTangentNormalPaintOp::computeSpacing(const KisPaintInformation &info,
                                                               qreal scale, qreal rotation) const
 {
-    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
+    return effectiveSpacing(scale, rotation, &m_airbrushData, &m_spacingOption, info);
 }
 
 void KisTangentNormalPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)

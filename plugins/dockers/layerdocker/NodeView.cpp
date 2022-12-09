@@ -52,17 +52,12 @@ class Q_DECL_HIDDEN NodeView::Private
 public:
     Private(NodeView* _q)
         : delegate(_q, _q)
-        , mode(DetailedMode)
 #ifdef DRAG_WHILE_DRAG_WORKAROUND
         , isDragging(false)
 #endif
     {
-        KSharedConfigPtr config =  KSharedConfig::openConfig();
-        KConfigGroup group = config->group("NodeView");
-        mode = (DisplayMode) group.readEntry("NodeViewMode", (int)MinimalMode);
     }
     NodeDelegate delegate;
-    DisplayMode mode;
     QPersistentModelIndex hovered;
     QPoint lastPos;
 
@@ -129,22 +124,6 @@ void NodeView::setModel(QAbstractItemModel *model)
 
     // the default may be too large for our visibility icon
     header()->setMinimumSectionSize(KisNodeViewColorScheme::instance()->visibilityColumnWidth());
-}
-
-void NodeView::setDisplayMode(DisplayMode mode)
-{
-    if (d->mode != mode) {
-        d->mode = mode;
-        KSharedConfigPtr config =  KSharedConfig::openConfig();
-        KConfigGroup group = config->group("NodeView");
-        group.writeEntry("NodeViewMode", (int)mode);
-        scheduleDelayedItemsLayout();
-    }
-}
-
-NodeView::DisplayMode NodeView::displayMode() const
-{
-    return d->mode;
 }
 
 void NodeView::addPropertyActions(QMenu *menu, const QModelIndex &index)
@@ -382,24 +361,7 @@ QStyleOptionViewItem NodeView::optionForIndex(const QModelIndex &index) const
 void NodeView::startDrag(Qt::DropActions supportedActions)
 {
     DRAG_WHILE_DRAG_WORKAROUND_START();
-
-    if (displayMode() == NodeView::ThumbnailMode) {
-        const QModelIndexList indexes = selectionModel()->selectedRows();
-        if (!indexes.isEmpty()) {
-            QMimeData *data = model()->mimeData(indexes);
-            if (!data) {
-                return;
-            }
-            QDrag *drag = new QDrag(this);
-            drag->setPixmap(createDragPixmap());
-            drag->setMimeData(data);
-            //m_dragSource = this;
-            drag->exec(supportedActions);
-        }
-    }
-    else {
-        QTreeView::startDrag(supportedActions);
-    }
+    QTreeView::startDrag(supportedActions);
 }
 
 QPixmap NodeView::createDragPixmap() const
@@ -481,24 +443,6 @@ void NodeView::paintEvent(QPaintEvent *event)
 {
     event->accept();
     QTreeView::paintEvent(event);
-
-    // Paint the line where the slide should go
-    if (isDragging() && (displayMode() == NodeView::ThumbnailMode)) {
-        QSize size(visualRect(model()->index(0, 0, QModelIndex())).width(), visualRect(model()->index(0, 0, QModelIndex())).height());
-        int numberRow = cursorPageIndex();
-        int scrollBarValue = verticalScrollBar()->value();
-
-        QPoint point1(0, numberRow * size.height() - scrollBarValue);
-        QPoint point2(size.width(), numberRow * size.height() - scrollBarValue);
-        QLineF line(point1, point2);
-
-        QPainter painter(this->viewport());
-        QPen pen = QPen(palette().brush(QPalette::Highlight), 8);
-        pen.setCapStyle(Qt::RoundCap);
-        painter.setPen(pen);
-        painter.setOpacity(0.8);
-        painter.drawLine(line);
-    }
 }
 
 void NodeView::drawBranches(QPainter *painter, const QRect &rect,
@@ -512,21 +456,7 @@ void NodeView::drawBranches(QPainter *painter, const QRect &rect,
 
 void NodeView::dropEvent(QDropEvent *ev)
 {
-    if (displayMode() == NodeView::ThumbnailMode) {
-        setDraggingFlag(false);
-        ev->accept();
-        clearSelection();
-
-        if (!model()) {
-            return;
-        }
-
-        int newIndex = cursorPageIndex();
-        model()->dropMimeData(ev->mimeData(), ev->dropAction(), newIndex, -1, QModelIndex());
-        return;
-    }
     QTreeView::dropEvent(ev);
-
     DRAG_WHILE_DRAG_WORKAROUND_STOP();
 }
 
@@ -566,28 +496,12 @@ void NodeView::dragEnterEvent(QDragEnterEvent *ev)
 void NodeView::dragMoveEvent(QDragMoveEvent *ev)
 {
     DRAG_WHILE_DRAG_WORKAROUND_START();
-
-    if (displayMode() == NodeView::ThumbnailMode) {
-        ev->accept();
-        if (!model()) {
-            return;
-        }
-        QTreeView::dragMoveEvent(ev);
-        setDraggingFlag();
-        viewport()->update();
-        return;
-    }
     QTreeView::dragMoveEvent(ev);
 }
 
 void NodeView::dragLeaveEvent(QDragLeaveEvent *e)
 {
-    if (displayMode() == NodeView::ThumbnailMode) {
-        setDraggingFlag(false);
-    } else {
-        QTreeView::dragLeaveEvent(e);
-    }
-
+    QTreeView::dragLeaveEvent(e);
     DRAG_WHILE_DRAG_WORKAROUND_STOP();
 }
 

@@ -16,10 +16,6 @@ class KisNodeModel;
 /**
  * A widget displaying the Krita nodes (layers, masks, local selections, etc.)
  * 
- * The widget can show the document sections as big thumbnails, 
- * in a listview with two rows of informative text and icons,
- * or as single rows of text and property icons.
- *
  * This class is designed as a Qt model-view widget.
  * 
  * The Qt documentation explains the design and terminology for these classes:
@@ -52,18 +48,6 @@ public:
     explicit NodeView(QWidget *parent = 0);
     ~NodeView() override;
 
-    /// how items should be displayed
-    enum DisplayMode {
-        /// large fit-to-width thumbnails, with only titles or page numbers
-        ThumbnailMode,
-
-        /// smaller thumbnails, with titles and property icons in two rows
-        DetailedMode,
-
-        /// no thumbnails, with titles and property icons in a single row
-        MinimalMode
-    };
-
     void setModel(QAbstractItemModel *model) override;
     void resizeEvent(QResizeEvent * event) override;
     void paintEvent (QPaintEvent *event) override;
@@ -77,18 +61,6 @@ public:
     void dragMoveEvent(QDragMoveEvent *ev) override;
 
     void dragLeaveEvent(QDragLeaveEvent *e) override;
-
-    /**
-     * Set the display mode of the view to one of the options.
-     *
-     * @param mode The NodeView::DisplayMode mode
-     */
-    void setDisplayMode(DisplayMode mode);
-
-    /**
-     * @return the currently active display mode
-     */
-    DisplayMode displayMode() const;
 
     /**
      * Add toggle actions for all the properties associated with the

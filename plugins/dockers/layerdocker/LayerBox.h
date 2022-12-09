@@ -80,10 +80,6 @@ private Q_SLOTS:
 
     void slotContextMenuRequested(const QPoint &pos, const QModelIndex &index);
 
-    void slotMinimalView();
-    void slotDetailedView();
-    void slotThumbnailView();
-
     // From the node manager to the layerbox
     void slotSetCompositeOp(const KoCompositeOp* compositeOp);
     void slotSetOpacity(double opacity);

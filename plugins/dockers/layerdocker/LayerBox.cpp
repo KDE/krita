@@ -781,21 +781,6 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
     }
 }
 
-void LayerBox::slotMinimalView()
-{
-    m_wdgLayerBox->listLayers->setDisplayMode(NodeView::MinimalMode);
-}
-
-void LayerBox::slotDetailedView()
-{
-    m_wdgLayerBox->listLayers->setDisplayMode(NodeView::DetailedMode);
-}
-
-void LayerBox::slotThumbnailView()
-{
-    m_wdgLayerBox->listLayers->setDisplayMode(NodeView::ThumbnailMode);
-}
-
 void LayerBox::slotRmClicked()
 {
     if (!m_canvas) return;

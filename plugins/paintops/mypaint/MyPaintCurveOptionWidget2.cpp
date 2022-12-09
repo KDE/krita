@@ -16,11 +16,13 @@ MyPaintCurveOptionWidget2::MyPaintCurveOptionWidget2(lager::cursor<MyPaintCurveO
                                                      const QString &yValueSuffix)
     : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>),
                             KisPaintOpOption::GENERAL,
+                            i18n("Base Value: "), yValueSuffix, 1.0,
                             lager::make_constant(true),
                             std::nullopt,
                             MyPaintCurveRangeModel::factory(maxYRange, yValueSuffix),
                             KisCurveOptionInputControlsStrategyDouble::factory(),
-                            MyPaintCurveOptionRangeControlsStrategy::factory())
+                            MyPaintCurveOptionRangeControlsStrategy::factory(),
+                            None)
 {
 }
 

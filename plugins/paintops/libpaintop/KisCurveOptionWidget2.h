@@ -25,47 +25,57 @@ class PAINTOP_EXPORT KisCurveOptionWidget2 : public KisPaintOpOption
 {
     Q_OBJECT
 public:
+    enum Flag {
+        None = 0x0,
+        SupportsCommonCurve = 0x1,
+        SupportsCurveMode = 0x2
+    };
+
+    Q_DECLARE_FLAGS(Flags, Flag)
+
+public:
     using data_type = KisCurveOptionDataCommon;
 
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                           KisPaintOpOption::PaintopCategory category,
                           lager::reader<bool> enabledLink = lager::make_constant(true),
-                          std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt,
-                          KisCurveRangeModelFactory curveRangeFactory = {},
-                          KisCurveOptionInputControlsStrategyFactory inputControlsFactory = {},
-                          KisCurveOptionRangeControlsStrategyFactory rangeControlsFactory = {});
+                          std::optional<lager::reader<std::tuple<qreal, qreal>>> strengthRangeReader = std::nullopt);
 
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                           KisPaintOpOption::PaintopCategory category,
                           const QString &curveMinLabel, const QString &curveMaxLabel,
                           lager::reader<bool> enabledLink = lager::make_constant(true),
-                          std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt,
-                          KisCurveRangeModelFactory curveRangeFactory = {},
-                          KisCurveOptionInputControlsStrategyFactory inputControlsFactory = {},
-                          KisCurveOptionRangeControlsStrategyFactory rangeControlsFactory = {});
+                          std::optional<lager::reader<std::tuple<qreal, qreal>>> strengthRangeReader = std::nullopt);
 
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
                           KisPaintOpOption::PaintopCategory category,
                           const QString &curveMinLabel, const QString &curveMaxLabel,
                           int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
                           lager::reader<bool> enabledLink = lager::make_constant(true),
-                          std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt,
-                          KisCurveRangeModelFactory curveRangeFactory = {},
-                          KisCurveOptionInputControlsStrategyFactory inputControlsFactory = {},
-                          KisCurveOptionRangeControlsStrategyFactory rangeControlsFactory = {});
-private:
+                          std::optional<lager::reader<std::tuple<qreal, qreal>>> strengthRangeReader = std::nullopt);
+
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
-                          KisPaintOpOption::PaintopCategory category,
+                          PaintopCategory category,
                           const QString &curveMinLabel, const QString &curveMaxLabel,
                           int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
                           const QString &strengthPrefix, const QString &strengthSuffix,
+                          qreal strengthDisplayMultiplier,
                           lager::reader<bool> enabledLink = lager::make_constant(true),
-                          std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt,
-                          KisCurveRangeModelFactory curveRangeFactory = {},
-                          KisCurveOptionInputControlsStrategyFactory inputControlsFactory = {},
-                          KisCurveOptionRangeControlsStrategyFactory rangeControlsFactory = {});
+                          std::optional<lager::reader<std::tuple<qreal, qreal>>> strengthRangeReader = std::nullopt);
 
+protected:
+    KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCommon> optionData,
+                          KisPaintOpOption::PaintopCategory category,
+                          const QString &strengthPrefix, const QString &strengthSuffix,
+                          qreal strengthDisplayMultiplier,
+                          lager::reader<bool> enabledLink,
+                          std::optional<lager::reader<std::tuple<qreal, qreal>>> strengthRangeReader,
+                          KisCurveRangeModelFactory curveRangeModelFactory,
+                          KisCurveOptionInputControlsStrategyFactory inputControlsFactory,
+                          KisCurveOptionRangeControlsStrategyFactory rangeControlsFactory,
+                          Flags flags);
 public:
+
     ~KisCurveOptionWidget2() override;
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
@@ -105,5 +115,7 @@ protected:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisCurveOptionWidget2::Flags)
 
 #endif // KISCURVEOPTIONWIDGET2_H

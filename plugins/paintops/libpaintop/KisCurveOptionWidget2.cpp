@@ -150,7 +150,6 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
     }
 
     setConfigurationPage(m_widget);
-    hideRangeLabelsAndBoxes(true);
 
     m_d->curveMinValue = curveMinValue;
     m_d->curveMaxValue = curveMaxValue;
@@ -373,19 +372,5 @@ void KisCurveOptionWidget2::updateThemedIcons()
     QPalette newPalette = pal;
     newPalette.setColor(QPalette::Active, QPalette::Background, pal.text().color() );
     m_curveOptionWidget->sensorSelector->setPalette(newPalette);
-
-}
-
-void KisCurveOptionWidget2::hideRangeLabelsAndBoxes(bool isHidden) {
-
-    m_curveOptionWidget->xMaxBox->setHidden(isHidden);
-    m_curveOptionWidget->xMinBox->setHidden(isHidden);
-    m_curveOptionWidget->yMaxBox->setHidden(isHidden);
-    m_curveOptionWidget->yMinBox->setHidden(isHidden);
-
-    m_curveOptionWidget->xRangeLabel->setHidden(isHidden);
-    m_curveOptionWidget->yRangeLabel->setHidden(isHidden);
-    m_curveOptionWidget->toLabel1->setHidden(isHidden);
-    m_curveOptionWidget->toLabel2->setHidden(isHidden);
 
 }

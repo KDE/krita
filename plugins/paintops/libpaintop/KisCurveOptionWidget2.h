@@ -104,7 +104,6 @@ protected:
     QComboBox* m_curveMode {nullptr};
     struct Private;
     const QScopedPointer<Private> m_d;
-    void hideRangeLabelsAndBoxes(bool isHidden);
 };
 
 #endif // KISCURVEOPTIONWIDGET2_H

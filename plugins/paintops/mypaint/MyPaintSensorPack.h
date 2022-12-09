@@ -12,6 +12,8 @@
 #include <KisSensorData.h>
 #include <KisSensorPackInterface.h>
 
+const QString MYPAINT_JSON = "MyPaint/json";
+
 const KoID MyPaintPressureId("mypaint_pressure", ki18n("Pressure"));
 const KoID MyPaintFineSpeedId("mypaint_speed1", ki18n("Fine Speed"));
 const KoID MyPaintGrossSpeedId("mypaint_speed2", ki18n("Gross Speed"));

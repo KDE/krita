@@ -22,8 +22,6 @@
 #include <kis_spacing_information.h>
 #include <libmypaint/mypaint-brush.h>
 
-#include "MyPaintPaintOpOption.h"
-
 KisMyPaintPaintOp::KisMyPaintPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP /*node*/, KisImageSP image)
     : KisPaintOp (painter) {
 
@@ -51,7 +49,7 @@ KisMyPaintPaintOp::KisMyPaintPaintOp(const KisPaintOpSettingsSP settings, KisPai
 
     m_dtime = -1;
     m_isStrokeStarted = false;
-    m_radius = settings->getFloat(MYPAINT_DIAMETER)/2;
+    m_radius = exp(mypaint_brush_get_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC));
 }
 
 KisMyPaintPaintOp::~KisMyPaintPaintOp() {
@@ -64,8 +62,9 @@ KisSpacingInformation KisMyPaintPaintOp::paintAt(const KisPaintInformation& info
     }
 
     const qreal lodScale = KisLodTransform::lodToScale(painter()->device());
-    qreal radius = m_radius * lodScale;
 
+    qreal radius = m_radius;
+    radius *= lodScale;
     mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(radius));
 
     m_isStrokeStarted = mypaint_brush_get_state(m_brush->brush(), MYPAINT_BRUSH_STATE_STROKE_STARTED);

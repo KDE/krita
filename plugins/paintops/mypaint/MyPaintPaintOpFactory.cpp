@@ -19,7 +19,6 @@
 
 #include "MyPaintPaintOp.h"
 #include "MyPaintPaintOpPreset.h"
-#include "MyPaintPaintOpOption.h"
 #include "MyPaintPaintOpSettings.h"
 #include "MyPaintPaintOpSettingsWidget.h"
 

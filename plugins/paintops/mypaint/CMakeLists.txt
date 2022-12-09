@@ -14,17 +14,11 @@ set(kritamypaintop_SOURCES
     MyPaintBasicOptionData.cpp
     MyPaintBasicOptionModel.cpp
     MyPaintBasicOptionWidget.cpp
-    MyPaintPaintOpOption.cpp
     MyPaintPaintOpSettings.cpp
     MyPaintPaintOpSettingsWidget.cpp
     MyPaintSurface.cpp
     MyPaintPaintOpPreset.cpp
     MyPaintPaintOpFactory.cpp
-    MyPaintCurveOptionWidget.cpp
-    MyPaintDynamicSensor.cpp
-    MyPaintCurveOption.cpp
-    ../libpaintop/kis_multi_sensors_selector.cpp
-    ../libpaintop/kis_multi_sensors_model_p.cpp
 )
 
 ki18n_wrap_ui(kritamypaintop_SOURCES wdgmypaintoptions.ui wdgmypaintcurveoption.ui)

@@ -19,8 +19,6 @@
 #include <kis_algebra_2d.h>
 #include <MyPaintCurveRangeModel.h>
 
-const QString MYPAINT_JSON = "MyPaint/json";
-
 namespace detail {
 
 struct MyPaintSensorFactoriesRegistrar {

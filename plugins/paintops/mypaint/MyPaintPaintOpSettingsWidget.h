@@ -9,15 +9,14 @@
 #define KIS_MYPAINTOP_SETTINGS_WIDGET_H_
 
 #include <kis_paintop_settings_widget.h>
-#include <MyPaintPaintOpOption.h>
-#include <MyPaintCurveOptionWidget.h>
 
 class MyPaintCurveOptionWidget2;
 
 class KisMyPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
     Q_OBJECT
-
+public:
+    enum MyPaintPaintopCategory { BASIC, AIRBRUSH, COLOR, SPEED, DABS, OPACITY, TRACKING, STROKE, SMUDGE, CUSTOM };
 public:
     KisMyPaintOpSettingsWidget(QWidget* parent = 0);
     ~KisMyPaintOpSettingsWidget() override;
@@ -25,7 +24,7 @@ public:
     KisPropertiesConfigurationSP configuration() const override;
 
 protected:
-    void addPaintOpOption(KisPaintOpOption *option, KisMyPaintOpOption::PaintopCategory id);
+    void addPaintOpOption(KisPaintOpOption *option, MyPaintPaintopCategory id);
 };
 
 #endif

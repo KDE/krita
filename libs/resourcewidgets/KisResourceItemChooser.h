@@ -125,9 +125,6 @@ public:
     bool eventFilter(QObject *object, QEvent *event) override;
 
 Q_SIGNALS:
-    /// Emitted when the view mode for the internal KisResourceItemListView changes
-    void listViewModeChanged(ListViewMode newViewMode);
-
     /// Emitted when a resource was selected
     void resourceSelected(KoResourceSP resource);
 

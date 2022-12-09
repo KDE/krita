@@ -183,6 +183,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     m_delegate = new KisPresetDelegate(this);
     m_chooser->setItemDelegate(m_delegate);
     m_chooser->setSynced(true);
+    m_chooser->setResponsiveness(true);
     layout->addWidget(m_chooser);
 
     connect(m_chooser, SIGNAL(resourceSelected(KoResourceSP )),

@@ -100,7 +100,7 @@ TasksetDockerDock::TasksetDockerDock( )
     itemChooser->setItemDelegate(new KisTasksetResourceDelegate(this));
     itemChooser->setFixedSize(500, 250);
     itemChooser->setRowHeight(30);
-    itemChooser->itemView()->setViewMode(QListView::ListMode);
+    itemChooser->setListViewMode(ListViewMode::Detail);
     itemChooser->showTaggingBar(true);
     chooserButton->setPopupWidget(itemChooser);
 

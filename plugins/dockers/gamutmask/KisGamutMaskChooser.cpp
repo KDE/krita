@@ -215,16 +215,14 @@ void KisGamutMaskChooser::updateViewSettings()
     cfg.writeEntry("GamutMasks.viewMode", qint32(m_mode));
 
     if (m_mode == KisGamutMaskChooser::THUMBNAIL) {
-        m_itemChooser->setSynced(true);
-        m_itemChooser->itemView()->setViewMode(QListView::IconMode);
-        m_itemChooser->setRowHeight(this->fontMetrics().lineSpacing()*4);
-        m_itemChooser->setColumnWidth(this->fontMetrics().lineSpacing()*4);
+        m_itemChooser->setListViewMode(ListViewMode::IconGrid);
+        m_itemChooser->setRowHeight(this->fontMetrics().lineSpacing() * 4);
+        m_itemChooser->setColumnWidth(this->fontMetrics().lineSpacing() * 4);
         m_delegate->setViewMode(m_mode);
-    } else if (m_mode == KisGamutMaskChooser::DETAIL) {
-        m_itemChooser->setSynced(false);
-        m_itemChooser->itemView()->setViewMode(QListView::ListMode);
+    }
+    else if (m_mode == KisGamutMaskChooser::DETAIL) {
+        m_itemChooser->setListViewMode(ListViewMode::Detail);
         m_itemChooser->setRowHeight(this->fontMetrics().lineSpacing()*4);
-        m_itemChooser->setColumnWidth(m_itemChooser->width());
         m_delegate->setViewMode(m_mode);
     }
 }

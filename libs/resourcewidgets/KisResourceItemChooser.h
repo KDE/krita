@@ -58,14 +58,22 @@ public:
     explicit KisResourceItemChooser(const QString &resourceType, bool usePreview = false, QWidget *parent = 0);
     ~KisResourceItemChooser() override;
 
+    /// Enable or disable changing the layout based on size.
+    /// Default is false no responsiveness, layout is vertical.
+    void setResponsiveness(bool isResponsive);
+
     /// Set's the desired view mode for the resource list.
+    /// Caller should use this instead of directly tampering with the KisResourceItemListView.
     void setListViewMode(ListViewMode viewMode);
 
-    /// sets the visibility of tagging KlineEdits.
+    /// Sets the visibility of tagging KlineEdits.
+    /// Default is true.
     void showTaggingBar(bool show);
 
     KisTagFilterResourceProxyModel *tagFilterModel() const;
 
+    /// Show the button for changing the view mode.
+    /// Default is true.
     void setViewModeButtonVisible(bool visible);
 
     KisPopupButton *viewModeButton() const;
@@ -159,6 +167,8 @@ private:
     void updateButtonState();
     void updatePreview(const QModelIndex &idx);
 
+    void hideEverything();
+    void applyVerticalLayout();
     void changeLayoutBasedOnSize();
 
     /// Resource for a given model index

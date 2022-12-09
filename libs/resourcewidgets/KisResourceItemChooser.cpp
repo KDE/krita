@@ -92,6 +92,9 @@ public:
     KoResourceSP currentResource;
     Layout layout = Layout::NotSet;
     ListViewMode requestedViewMode = ListViewMode::IconGrid;
+    bool isResponsive = false;
+    bool showViewModeBtn = true;
+    bool showStoragePopupBtn = true;
 
     // Horizontal Layout Widgets
     QSplitter* horzSplitter {0};
@@ -222,15 +225,24 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
         // Horizontal 1 row
         d->left = new QFrame(this);
+        QSizePolicy newPolicy = d->left->sizePolicy();
+        newPolicy.setHorizontalStretch(2);
+        d->left->setSizePolicy(newPolicy);
         QHBoxLayout* leftLayout = new QHBoxLayout(d->left);
         leftLayout->setObjectName("ResourceChooser left");
 
         d->right = new QFrame(this);
+        newPolicy = d->right->sizePolicy();
+        newPolicy.setHorizontalStretch(0);
+        d->right->setSizePolicy(newPolicy);
         QHBoxLayout* rightLayout = new QHBoxLayout(d->right);
         rightLayout->setObjectName("ResourceChooser right");
 
         // Horizontal 2 rows
         d->right2Rows = new QFrame(this);
+        newPolicy = d->right2Rows->sizePolicy();
+        newPolicy.setHorizontalStretch(0);
+        d->right2Rows->setSizePolicy(newPolicy);
         QVBoxLayout* rightLayout2 = new QVBoxLayout(d->right2Rows);
         rightLayout2->setObjectName("ResourceChooser right 2 rows");
 
@@ -264,7 +276,6 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     }
 
     // Other
-    changeLayoutBasedOnSize();
     updateView();
 
     updateButtonState();
@@ -275,6 +286,23 @@ KisResourceItemChooser::~KisResourceItemChooser()
 {
     disconnect();
     delete d;
+}
+
+void KisResourceItemChooser::setResponsiveness(bool isResponsive)
+{
+    if (isResponsive) {
+
+        if (d->isResponsive == false) {
+            d->isResponsive = true;
+            changeLayoutBasedOnSize();
+        }
+        else {
+            d->isResponsive = true;
+        }
+    }
+    else {
+        d->isResponsive = false;
+    }
 }
 
 void KisResourceItemChooser::setListViewMode(ListViewMode newViewMode)
@@ -551,11 +579,13 @@ void KisResourceItemChooser::contextMenuRequested(const QPoint &pos)
 void KisResourceItemChooser::setStoragePopupButtonVisible(bool visible)
 {
     d->storagePopupButton->setVisible(visible);
+    d->showStoragePopupBtn = visible;
 }
 
 void KisResourceItemChooser::setViewModeButtonVisible(bool visible)
 {
     d->viewModeButton->setVisible(visible);
+    d->showViewModeBtn = visible;
 }
 
 KisPopupButton *KisResourceItemChooser::viewModeButton() const
@@ -629,129 +659,151 @@ void KisResourceItemChooser::showEvent(QShowEvent *event)
     updateView();
 }
 
+void KisResourceItemChooser::hideEverything()
+{
+    d->horzSplitter->hide();
+    d->left->hide();
+    d->right->hide();
+    d->right2Rows->hide();
+    d->scroll_left->hide();
+    d->scroll_right->hide();
+
+    d->viewModeButton->hide();
+}
+
+void KisResourceItemChooser::applyVerticalLayout()
+{
+    if (d->layout == Layout::Vertical) {
+        return;
+    }
+
+    hideEverything();
+
+    d->view->setListViewMode(d->requestedViewMode);
+    emit listViewModeChanged(d->requestedViewMode);
+
+    // The horizontal layouts size the items based widget height not user configured base length
+    // so it needs to be restored when switching back to vertical layout
+    KisResourceItemChooserSync *chooserSync = KisResourceItemChooserSync::instance();
+    d->view->setItemSize(QSize(chooserSync->baseLength(), chooserSync->baseLength()));
+
+    QGridLayout* thisLayout = dynamic_cast<QGridLayout*>(layout());
+    thisLayout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);
+    thisLayout->addWidget(d->viewModeButton, 0, 1);
+    thisLayout->addWidget(d->storagePopupButton, 0, 2);
+    thisLayout->addWidget(d->resourcesSplitter, 1, 0, 1, 3);
+    thisLayout->setRowStretch(1, 1);
+    thisLayout->addWidget(d->tagManager->tagFilterWidget(), 2, 0, 1, 3);
+    thisLayout->addWidget(d->importExportBtns, 3, 0, 1, 3);
+
+    d->viewModeButton->setVisible(d->showViewModeBtn);
+    d->storagePopupButton->setVisible(d->showStoragePopupBtn);
+
+    d->layout = Layout::Vertical;
+}
+
 void KisResourceItemChooser::changeLayoutBasedOnSize()
 {
-    qDebug("height = %d", height());
-
-    auto hideEverything = [this]() {
-        d->horzSplitter->hide();
-        d->left->hide();
-        d->right->hide();
-        d->right2Rows->hide();
-        d->scroll_left->hide();
-        d->scroll_right->hide();
-
-        d->viewModeButton->hide();
-    };
-
-    // Vertical
-    if (height() > 100) {
-
-        if (d->layout == Layout::Vertical) {
-            return;
-        }
-
-        hideEverything();
-
-        d->view->setListViewMode(d->requestedViewMode);
-        emit listViewModeChanged(d->requestedViewMode);
-
-        QGridLayout* thisLayout = dynamic_cast<QGridLayout*>(layout());
-        thisLayout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);
-        thisLayout->addWidget(d->viewModeButton, 0, 1);
-        thisLayout->addWidget(d->storagePopupButton, 0, 2);
-        thisLayout->addWidget(d->resourcesSplitter, 1, 0, 1, 3);
-        thisLayout->setRowStretch(1, 1);
-        thisLayout->addWidget(d->tagManager->tagFilterWidget(), 2, 0, 1, 3);
-        thisLayout->addWidget(d->importExportBtns, 3, 0, 1, 3);
-
-        d->viewModeButton->show();
-
-        d->layout = Layout::Vertical;
+    // Default Vertical Layout
+    if (d->isResponsive == false) {
+        applyVerticalLayout();
     }
-    // Horizontal 2 rows
-    else if (height() > 60) {
-
-        if (d->layout == Layout::Horizontal2Rows) {
-            return;
-        }
-
-        hideEverything();
-
-        d->view->setListViewMode(ListViewMode::IconStripHorizontal);
-        emit listViewModeChanged(ListViewMode::IconStripHorizontal);
-
-        // Left
-        QLayout* leftLayout = d->left->layout();
-        leftLayout->addWidget(d->resourcesSplitter);
-
-        // Right Top
-        d->top->addWidget(d->scroll_left);
-        d->top->addWidget(d->scroll_right);
-        d->top->addWidget(d->tagManager->tagChooserWidget());
-        d->top->addWidget(d->importExportBtns);
-
-        // Right Bot
-        d->bot->addWidget(d->viewModeButton);
-        d->bot->addWidget(d->storagePopupButton);
-        d->bot->addWidget(d->tagManager->tagFilterWidget());
-
-        d->horzSplitter->addWidget(d->left);
-        d->horzSplitter->setStretchFactor(0, 2);
-        d->horzSplitter->addWidget(d->right2Rows);
-        d->horzSplitter->setStretchFactor(1, 0);
-
-        QGridLayout* thisLayout = dynamic_cast<QGridLayout*>(layout());
-        thisLayout->setRowStretch(1, 0);
-        thisLayout->addWidget(d->horzSplitter);
-
-        d->horzSplitter->show();
-        d->left->show();
-        d->scroll_left->show();
-        d->scroll_right->show();
-        d->right2Rows->show();
-
-        d->layout = Layout::Horizontal2Rows;
-    }
-    // Horizontal 1 row
+    // Responsive Layout
     else {
-        if (d->layout == Layout::Horizontal1Row) {
-            return;
+        // Vertical
+        if (height() > 100) {
+            applyVerticalLayout();
         }
+        // Horizontal 2 rows
+        else if (height() > 60) {
 
-        hideEverything();
+            if (d->layout == Layout::Horizontal2Rows) {
+                return;
+            }
 
-        d->view->setListViewMode(ListViewMode::IconStripHorizontal);
-        emit listViewModeChanged(ListViewMode::IconStripHorizontal);
+            hideEverything();
 
-        QLayout* leftLayout = d->left->layout();
-        leftLayout->addWidget(d->resourcesSplitter);
-        leftLayout->addWidget(d->scroll_left);
-        leftLayout->addWidget(d->scroll_right);
+            d->view->setListViewMode(ListViewMode::IconStripHorizontal);
+            emit listViewModeChanged(ListViewMode::IconStripHorizontal);
 
-        QLayout* rightLayout = d->right->layout();
-        rightLayout->addWidget(d->tagManager->tagChooserWidget());
-        rightLayout->addWidget(d->viewModeButton);
-        rightLayout->addWidget(d->storagePopupButton);
-        rightLayout->addWidget(d->tagManager->tagFilterWidget());
-        rightLayout->addWidget(d->importExportBtns);
+            // Left
+            QLayout* leftLayout = d->left->layout();
+            leftLayout->addWidget(d->resourcesSplitter);
 
-        d->horzSplitter->addWidget(d->left);
-        d->horzSplitter->setStretchFactor(0, 2);
-        d->horzSplitter->addWidget(d->right);
-        d->horzSplitter->setStretchFactor(1, 0);
+            // Right Top
+            d->top->addWidget(d->scroll_left);
+            d->top->addWidget(d->scroll_right);
+            d->top->addWidget(d->tagManager->tagChooserWidget());
+            d->top->addWidget(d->importExportBtns);
 
-        QGridLayout* thisLayout = dynamic_cast<QGridLayout*>(layout());
-        thisLayout->setRowStretch(1, 0);
-        thisLayout->addWidget(d->horzSplitter);
+            // Right Bot
+            d->bot->addWidget(d->viewModeButton);
+            d->bot->addWidget(d->storagePopupButton);
+            d->bot->addWidget(d->tagManager->tagFilterWidget());
 
-        d->horzSplitter->show();
-        d->left->show();
-        d->scroll_left->show();
-        d->scroll_right->show();
-        d->right->show();
+            d->horzSplitter->addWidget(d->left);
+            d->horzSplitter->addWidget(d->right2Rows);
 
-        d->layout = Layout::Horizontal1Row;
+            QGridLayout* thisLayout = dynamic_cast<QGridLayout*>(layout());
+            thisLayout->addWidget(d->horzSplitter, 0, 0);
+            thisLayout->setRowStretch(0, 2);
+            thisLayout->setColumnStretch(0, 2);
+            thisLayout->setRowStretch(1, 0);
+
+            d->viewModeButton->setVisible(d->showViewModeBtn);
+            d->storagePopupButton->setVisible(d->showStoragePopupBtn);
+
+            d->horzSplitter->show();
+            d->left->show();
+            d->scroll_left->show();
+            d->scroll_right->show();
+            d->right2Rows->show();
+
+            d->layout = Layout::Horizontal2Rows;
+        }
+        // Horizontal 1 row
+        else {
+            if (d->layout == Layout::Horizontal1Row) {
+                return;
+            }
+
+            hideEverything();
+
+            d->view->setListViewMode(ListViewMode::IconStripHorizontal);
+            emit listViewModeChanged(ListViewMode::IconStripHorizontal);
+
+            QLayout* leftLayout = d->left->layout();
+            leftLayout->addWidget(d->resourcesSplitter);
+            leftLayout->addWidget(d->scroll_left);
+            leftLayout->addWidget(d->scroll_right);
+
+            QLayout* rightLayout = d->right->layout();
+            rightLayout->addWidget(d->tagManager->tagChooserWidget());
+            rightLayout->addWidget(d->viewModeButton);
+            rightLayout->addWidget(d->storagePopupButton);
+            rightLayout->addWidget(d->tagManager->tagFilterWidget());
+            rightLayout->addWidget(d->importExportBtns);
+
+            d->horzSplitter->addWidget(d->left);
+            d->horzSplitter->addWidget(d->right);
+
+            QGridLayout* thisLayout = dynamic_cast<QGridLayout*>(layout());
+            thisLayout->addWidget(d->horzSplitter, 0, 0);
+            thisLayout->setRowStretch(0, 2);
+            thisLayout->setColumnStretch(0, 2);
+            thisLayout->setRowStretch(1, 0);
+
+            d->viewModeButton->setVisible(d->showViewModeBtn);
+            d->storagePopupButton->setVisible(d->showStoragePopupBtn);
+
+            d->horzSplitter->show();
+            d->left->show();
+            d->scroll_left->show();
+            d->scroll_right->show();
+            d->right->show();
+
+            d->layout = Layout::Horizontal1Row;
+        }
     }
 }
 

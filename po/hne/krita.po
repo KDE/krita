@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-08 00:43+0000\n"
+"POT-Creation-Date: 2022-12-09 00:44+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -12886,7 +12886,7 @@ msgstr "फोटू आयात करव"
 msgid "Import"
 msgstr "फोटू आयात करव"
 
-#: krita/krita5.xmlgui:219 plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: krita/krita5.xmlgui:219 plugins/dockers/layerdocker/LayerBox.cpp:1251
 #, fuzzy, kde-format
 msgid "&Convert"
 msgstr "उलटव (&I)"
@@ -12894,14 +12894,14 @@ msgstr "उलटव (&I)"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:230 krita/krita5.xmlgui:301
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1216
+#: plugins/dockers/layerdocker/LayerBox.cpp:1225
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "चुनव (&S)"
 
-#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1231
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -12923,7 +12923,7 @@ msgstr "रूपांतरन"
 msgid "S&plit"
 msgstr "रंग मं अल्फा"
 
-#: krita/krita5.xmlgui:278 plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: krita/krita5.xmlgui:278 plugins/dockers/layerdocker/LayerBox.cpp:1258
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "रंग मं अल्फा"
@@ -16768,10 +16768,10 @@ msgstr "आकार"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:753
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:956
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:963
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1174
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1343
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1346
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1410
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1178
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1347
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1350
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1306
 #: libs/ui/forms/wdgdisplaysettings.ui:389
 #: libs/ui/forms/wdggeneralsettings.ui:374
@@ -18288,7 +18288,7 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "कागद"
 
-#: libs/libkis/Document.cpp:960 libs/ui/KisMainWindow.cpp:2053
+#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2053
 #: libs/ui/KisMainWindow.cpp:2136
 #, fuzzy, kde-format
 msgid "Import frames"
@@ -22909,17 +22909,17 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:967
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1096
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1099
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1165
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1168
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1171
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1178
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1181
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1298
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1301
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1340
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1417
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1169
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1172
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1175
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1182
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1185
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1302
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1305
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1344
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1418
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1421
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1221
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1225
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1229
@@ -22951,7 +22951,14 @@ msgstr "ड्राप छइंहा"
 msgid "Choke:"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1207
+#. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1165
+#: libs/ui/layerstyles/wdglayerstyles.ui:60
+#, fuzzy, kde-format
+msgid "Outer Glow"
+msgstr "जल स्तर: (&W)"
+
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1211
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
@@ -31718,12 +31725,6 @@ msgstr "परत प्रभाव"
 msgid "Styles"
 msgstr "सैली"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/layerstyles/wdglayerstyles.ui:60
-#, fuzzy, kde-format
-msgid "Outer Glow"
-msgstr "जल स्तर: (&W)"
-
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #. i18n: ectx: attribute (title), widget (QWidget, textureTab)
@@ -38300,30 +38301,42 @@ msgid ""
 "If disabled, show below layer names (when enough space)."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:980
+#: plugins/dockers/layerdocker/LayerBox.cpp:423
+#, fuzzy, kde-format
+msgctxt "@item:inmenu Layers Docker settings, checkbox"
+msgid "Checkbox for Selecting Layers"
+msgstr "परत के आकार बदलव"
+
+#: plugins/dockers/layerdocker/LayerBox.cpp:424
+#, kde-format
+msgctxt "@item:tooltip"
+msgid "Show checkbox to select/unselect layers."
+msgstr ""
+
+#: plugins/dockers/layerdocker/LayerBox.cpp:989
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "चयन मास्क..."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1002
+#: plugins/dockers/layerdocker/LayerBox.cpp:1011
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "चयन मास्क..."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: plugins/dockers/layerdocker/LayerBox.cpp:1235
 #, fuzzy, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "क्लिपबोर्ड से पहिली परत"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1233
-#: plugins/dockers/layerdocker/LayerBox.cpp:1254
+#: plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: plugins/dockers/layerdocker/LayerBox.cpp:1263
 #, kde-format
 msgid "&Add"
 msgstr ""
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1224
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1299
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -75001,11 +75014,6 @@ msgstr "संदर्भ फोटू:"
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "&Merge Selected Layers"
-#~ msgstr "परत के आकार बदलव"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "Merge Selected Layers"
 #~ msgstr "परत के आकार बदलव"
 
 #, fuzzy

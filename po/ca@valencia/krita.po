@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-08 00:43+0000\n"
+"POT-Creation-Date: 2022-12-09 00:44+0000\n"
 "PO-Revision-Date: 2022-12-06 10:14+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -12690,7 +12690,7 @@ msgstr "&Importa/exporta"
 msgid "Import"
 msgstr "Importa"
 
-#: krita/krita5.xmlgui:219 plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: krita/krita5.xmlgui:219 plugins/dockers/layerdocker/LayerBox.cpp:1251
 #, kde-format
 msgid "&Convert"
 msgstr "Con&vertix"
@@ -12698,14 +12698,14 @@ msgstr "Con&vertix"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:230 krita/krita5.xmlgui:301
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1216
+#: plugins/dockers/layerdocker/LayerBox.cpp:1225
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Selecciona"
 
-#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1231
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12726,7 +12726,7 @@ msgstr "Transforma &totes les capes"
 msgid "S&plit"
 msgstr "&Dividix"
 
-#: krita/krita5.xmlgui:278 plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: krita/krita5.xmlgui:278 plugins/dockers/layerdocker/LayerBox.cpp:1258
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "&Dividix l'alfa"
@@ -16545,10 +16545,10 @@ msgstr "Mida"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:753
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:956
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:963
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1174
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1343
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1346
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1410
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1178
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1347
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1350
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1306
 #: libs/ui/forms/wdgdisplaysettings.ui:389
 #: libs/ui/forms/wdggeneralsettings.ui:374
@@ -18000,7 +18000,7 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Document CSV"
 
-#: libs/libkis/Document.cpp:960 libs/ui/KisMainWindow.cpp:2053
+#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2053
 #: libs/ui/KisMainWindow.cpp:2136
 #, kde-format
 msgid "Import frames"
@@ -22638,17 +22638,17 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:967
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1096
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1099
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1165
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1168
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1171
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1178
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1181
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1298
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1301
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1340
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1417
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1169
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1172
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1175
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1182
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1185
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1302
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1305
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1344
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1418
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1421
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1221
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1225
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1229
@@ -22680,7 +22680,14 @@ msgstr "Ombra interna"
 msgid "Choke:"
 msgstr "Obturar:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1207
+#. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1165
+#: libs/ui/layerstyles/wdglayerstyles.ui:60
+#, kde-format
+msgid "Outer Glow"
+msgstr "Lluïssor exterior"
+
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1211
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
@@ -31685,12 +31692,6 @@ msgstr "Activa els efectes"
 msgid "Styles"
 msgstr "Estils"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/layerstyles/wdglayerstyles.ui:60
-#, kde-format
-msgid "Outer Glow"
-msgstr "Lluïssor exterior"
-
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #. i18n: ectx: attribute (title), widget (QWidget, textureTab)
@@ -38520,28 +38521,42 @@ msgstr ""
 "Si està desactivada, mostra davall els noms de les capes (si hi ha prou "
 "espai)."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:980
+#: plugins/dockers/layerdocker/LayerBox.cpp:423
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Copy Selection to New Layer"
+msgctxt "@item:inmenu Layers Docker settings, checkbox"
+msgid "Checkbox for Selecting Layers"
+msgstr "Copia la selecció a una capa nova"
+
+#: plugins/dockers/layerdocker/LayerBox.cpp:424
+#, kde-format
+msgctxt "@item:tooltip"
+msgid "Show checkbox to select/unselect layers."
+msgstr ""
+
+#: plugins/dockers/layerdocker/LayerBox.cpp:989
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Màscara de selecció ràpida"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1002
+#: plugins/dockers/layerdocker/LayerBox.cpp:1011
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Cancel·la la màscara de selecció ràpida"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: plugins/dockers/layerdocker/LayerBox.cpp:1235
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Can&via els bloquejos i la visibilitat"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1233
-#: plugins/dockers/layerdocker/LayerBox.cpp:1254
+#: plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: plugins/dockers/layerdocker/LayerBox.cpp:1263
 #, kde-format
 msgid "&Add"
 msgstr "Afi&g"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1224
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1299
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"

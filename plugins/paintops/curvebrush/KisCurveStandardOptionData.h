@@ -13,7 +13,7 @@ struct KisLineWidthOptionData : KisCurveOptionData
     KisLineWidthOptionData()
         : KisCurveOptionData(
               KoID("Line width", i18n("Line width")),
-              true, false, false,
+              true, false,
               0.1, 1.0)
     {}
 };
@@ -23,7 +23,7 @@ struct KisCurvesOpacityOptionData : KisCurveOptionData
     KisCurvesOpacityOptionData()
         : KisCurveOptionData(
               KoID("Curves opacity", i18n("Curves opacity")),
-              true, false, false,
+              true, false,
               0.1, 1.0)
     {}
 };

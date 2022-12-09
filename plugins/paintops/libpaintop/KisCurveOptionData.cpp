@@ -10,14 +10,12 @@ KisCurveOptionData::KisCurveOptionData(const QString &prefix,
                                        const KoID &id,
                                        bool isCheckable,
                                        bool isChecked,
-                                       bool separateCurveValue,
                                        qreal minValue,
                                        qreal maxValue)
     : KisCurveOptionDataCommon(prefix,
                                id,
                                isCheckable,
                                isChecked,
-                               separateCurveValue,
                                minValue,
                                maxValue,
                                new KisKritaSensorPack())
@@ -27,10 +25,9 @@ KisCurveOptionData::KisCurveOptionData(const QString &prefix,
 KisCurveOptionData::KisCurveOptionData(const KoID &id,
                                        bool isCheckable,
                                        bool isChecked,
-                                       bool separateCurveValue,
                                        qreal minValue,
                                        qreal maxValue)
-    : KisCurveOptionData("", id, isCheckable, isChecked, separateCurveValue, minValue, maxValue)
+    : KisCurveOptionData("", id, isCheckable, isChecked, minValue, maxValue)
 {
 }
 

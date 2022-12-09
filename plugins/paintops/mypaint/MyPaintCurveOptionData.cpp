@@ -10,14 +10,12 @@ MyPaintCurveOptionData::MyPaintCurveOptionData(const QString &prefix,
                                        const KoID &id,
                                        bool isCheckable,
                                        bool isChecked,
-                                       bool separateCurveValue,
                                        qreal minValue,
                                        qreal maxValue)
     : KisCurveOptionDataCommon(prefix,
                                id,
                                isCheckable,
                                isChecked,
-                               separateCurveValue,
                                minValue,
                                maxValue,
                                new MyPaintSensorPack())
@@ -27,10 +25,9 @@ MyPaintCurveOptionData::MyPaintCurveOptionData(const QString &prefix,
 MyPaintCurveOptionData::MyPaintCurveOptionData(const KoID &id,
                                        bool isCheckable,
                                        bool isChecked,
-                                       bool separateCurveValue,
                                        qreal minValue,
                                        qreal maxValue)
-    : MyPaintCurveOptionData("", id, isCheckable, isChecked, separateCurveValue, minValue, maxValue)
+    : MyPaintCurveOptionData("", id, isCheckable, isChecked, minValue, maxValue)
 {
 }
 

@@ -17,14 +17,12 @@ struct MyPaintCurveOptionData : KisCurveOptionDataCommon
                               const KoID &id,
                               bool isCheckable = true,
                               bool isChecked = false,
-                              bool separateCurveValue = false,
                               qreal minValue = 0.0,
                               qreal maxValue = 1.0);
         
     MyPaintCurveOptionData(const KoID &id,
                               bool isCheckable = true,
                               bool isChecked = false,
-                              bool separateCurveValue = false,
                               qreal minValue = 0.0,
                               qreal maxValue = 1.0);
         

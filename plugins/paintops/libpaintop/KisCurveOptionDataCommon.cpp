@@ -6,11 +6,10 @@
 #include "KisCurveOptionDataCommon.h"
 #include "KisSensorPackInterface.h"
 
-KisCurveOptionDataCommon::KisCurveOptionDataCommon(const QString &_prefix, const KoID &_id, bool _isCheckable, bool _isChecked, bool _separateCurveValue, qreal _minValue, qreal _maxValue, KisSensorPackInterface *sensorInterface)
+KisCurveOptionDataCommon::KisCurveOptionDataCommon(const QString &_prefix, const KoID &_id, bool _isCheckable, bool _isChecked, qreal _minValue, qreal _maxValue, KisSensorPackInterface *sensorInterface)
     : id(_id),
       prefix(_prefix),
       isCheckable(_isCheckable),
-      separateCurveValue(_separateCurveValue),
       strengthMinValue(_minValue),
       strengthMaxValue(_maxValue),
       isChecked(_isChecked),
@@ -19,8 +18,8 @@ KisCurveOptionDataCommon::KisCurveOptionDataCommon(const QString &_prefix, const
 {
 }
 
-KisCurveOptionDataCommon::KisCurveOptionDataCommon(const KoID &_id, bool _isCheckable, bool _isChecked, bool _separateCurveValue, qreal _minValue, qreal _maxValue, KisSensorPackInterface *sensorInterface)
-    : KisCurveOptionDataCommon("", _id, _isCheckable, _isChecked, _separateCurveValue, _minValue, _maxValue, sensorInterface)
+KisCurveOptionDataCommon::KisCurveOptionDataCommon(const KoID &_id, bool _isCheckable, bool _isChecked, qreal _minValue, qreal _maxValue, KisSensorPackInterface *sensorInterface)
+    : KisCurveOptionDataCommon("", _id, _isCheckable, _isChecked, _minValue, _maxValue, sensorInterface)
 {
 }
 

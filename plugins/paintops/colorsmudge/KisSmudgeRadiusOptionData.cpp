@@ -9,7 +9,7 @@
 KisSmudgeRadiusOptionData::KisSmudgeRadiusOptionData()
     : KisCurveOptionData(
           KoID("SmudgeRadius", i18n("Smudge Radius")),
-          true, false, false,
+          true, false,
           0.0, 3.0)
 {
     valueFixUpReadCallback = [] (KisCurveOptionDataCommon *data, const KisPropertiesConfiguration *setting) {

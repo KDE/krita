@@ -24,7 +24,6 @@ struct PAINTOP_EXPORT KisCurveOptionDataCommon : boost::equality_comparable<KisC
                             const KoID &id,
                             bool isCheckable,
                             bool isChecked,
-                            bool separateCurveValue,
                             qreal minValue,
                             qreal maxValue,
                             KisSensorPackInterface *sensorInterface);
@@ -32,7 +31,6 @@ struct PAINTOP_EXPORT KisCurveOptionDataCommon : boost::equality_comparable<KisC
     KisCurveOptionDataCommon(const KoID &id,
                             bool isCheckable,
                             bool isChecked,
-                            bool separateCurveValue,
                             qreal minValue,
                             qreal maxValue,
                             KisSensorPackInterface *sensorInterface);
@@ -44,7 +42,6 @@ struct PAINTOP_EXPORT KisCurveOptionDataCommon : boost::equality_comparable<KisC
                 lhs.isChecked == rhs.isChecked &&
                 lhs.useCurve == rhs.useCurve &&
                 lhs.useSameCurve == rhs.useSameCurve &&
-                lhs.separateCurveValue == rhs.separateCurveValue &&
                 lhs.curveMode == rhs.curveMode &&
                 lhs.commonCurve == rhs.commonCurve &&
                 lhs.strengthValue == rhs.strengthValue &&
@@ -56,7 +53,6 @@ struct PAINTOP_EXPORT KisCurveOptionDataCommon : boost::equality_comparable<KisC
     KoID id;
     QString prefix;
     bool isCheckable = true;
-    bool separateCurveValue = false;
     qreal strengthMinValue = 0.0;
     qreal strengthMaxValue = 1.0;
 

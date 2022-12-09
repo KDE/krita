@@ -25,7 +25,7 @@ struct MyPaintEllipticDabAngle : MyPaintCurveOptionData
     MyPaintEllipticDabAngle()
         : MyPaintCurveOptionData(KoID("elliptical_dab_angle",
                                       i18n("Elliptical Dab Angle")),
-                                 false, true, false, 0.0, 180.0)
+                                 false, true, 0.0, 180.0)
     {
     }
 };

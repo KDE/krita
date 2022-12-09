@@ -17,14 +17,12 @@ struct PAINTOP_EXPORT KisCurveOptionData : KisCurveOptionDataCommon
                        const KoID &id,
                        bool isCheckable = true,
                        bool isChecked = false,
-                       bool separateCurveValue = false,
                        qreal minValue = 0.0,
                        qreal maxValue = 1.0);
 
     KisCurveOptionData(const KoID &id,
                        bool isCheckable = true,
                        bool isChecked = false,
-                       bool separateCurveValue = false,
                        qreal minValue = 0.0,
                        qreal maxValue = 1.0);
         

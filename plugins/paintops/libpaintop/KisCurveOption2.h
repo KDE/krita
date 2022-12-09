@@ -62,7 +62,6 @@ private:
     bool m_isChecked;
     bool m_useCurve;
     int m_curveMode;
-    bool m_separateCurveValue;
     qreal m_strengthValue;
     qreal m_strengthMinValue;
     qreal m_strengthMaxValue;

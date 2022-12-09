@@ -32,7 +32,7 @@ struct PAINTOP_EXPORT MaskingBrushData :  public boost::equality_comparable<Mask
     void write(KisPropertiesConfiguration *config) const;
 };
 
-bool PAINTOP_EXPORT operator==(const MaskingBrushData &lhs, const MaskingBrushData &rhs);
+bool operator==(const MaskingBrushData &lhs, const MaskingBrushData &rhs);
 
 }
 

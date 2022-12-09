@@ -30,7 +30,7 @@ public:
 
     QList<KoResourceLoadResult> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override;
     QList<KoResourceLoadResult> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override;
-    bool lodSizeThresholdSupported() const;
+    bool lodSizeThresholdSupported() const override;
 
 private:
 

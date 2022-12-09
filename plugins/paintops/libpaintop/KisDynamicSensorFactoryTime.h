@@ -14,8 +14,8 @@ public:
     KisDynamicSensorFactoryTime();
     QWidget* createConfigWidget(lager::cursor<KisCurveOptionDataCommon> data, QWidget*parent) override;
 
-    int maximumValue(int length);
-    QString maximumLabel(int length);
+    int maximumValue(int length) override;
+    QString maximumLabel(int length)override;
 };
 
 #endif // KISDYNAMICSENSORFACTORYTIME_H

@@ -1,4 +1,4 @@
-From c64c1710cfd9173842da496446e2eb4dfb6b30c0 Mon Sep 17 00:00:00 2001
+From b4a535a3b511f22a6cb2aaeea4cf787806ecfa66 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <shzam@sdf.org>
 Date: Thu, 6 Oct 2022 08:14:33 +0000
 Subject: [PATCH] Android: Introducing QtInputEventDispatcher
@@ -18,23 +18,23 @@ for event handling). Everything is ported almost like the way it was
 before, because the previous version of event handling worked correctly
 on all devices (I remember, display tablets being the odd ones).
 ---
- .../qt5/android/QtInputEventDispatcher.java   | 119 ++++++++
+ .../qt5/android/QtInputEventDispatcher.java   | 125 +++++++++
  .../org/qtproject/qt5/android/QtLayout.java   |  12 +-
  .../org/qtproject/qt5/android/QtNative.java   | 187 +------------
  .../platforms/android/MotionEventWrapper.h    | 157 +++++++++++
- .../platforms/android/androidjniinput.cpp     | 255 +++++++++++++-----
+ .../platforms/android/androidjniinput.cpp     | 254 +++++++++++++-----
  .../platforms/android/androidjnimain.cpp      |  18 ++
  .../platforms/android/androidjnimain.h        |   2 +
- 7 files changed, 503 insertions(+), 247 deletions(-)
+ 7 files changed, 508 insertions(+), 247 deletions(-)
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/QtInputEventDispatcher.java
  create mode 100644 src/plugins/platforms/android/MotionEventWrapper.h
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtInputEventDispatcher.java b/src/android/jar/src/org/qtproject/qt5/android/QtInputEventDispatcher.java
 new file mode 100644
-index 0000000000..15e1c322fe
+index 0000000000..2cf19b7e8e
 --- /dev/null
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtInputEventDispatcher.java
-@@ -0,0 +1,119 @@
+@@ -0,0 +1,125 @@
 +package org.qtproject.qt5.android;
 +
 +import android.os.Handler;
@@ -94,9 +94,15 @@ index 0000000000..15e1c322fe
 +            return;
 +        }
 +
++        // The Qt's definition of Touch Event
++        int isTouchEvent = 1;
++        if (event.getToolType(0) == MotionEvent.TOOL_TYPE_MOUSE) {
++            isTouchEvent = 0;
++        }
++
 +        MotionEvent clonedEvent = MotionEvent.obtain(event);
 +        // here we set touch to true
-+        Message.obtain(mEventHandler, /*what = */ 0, id, /* arg2 = */ 1, clonedEvent)
++        Message.obtain(mEventHandler, /*what = */ 0, id, isTouchEvent, clonedEvent)
 +                .sendToTarget();
 +    }
 +
@@ -617,7 +623,7 @@ index 0000000000..f493d1a2a4
 +
 +#endif // __MOTIONEVENTWRAPPER_H_
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index a4bb8ae1a7..5c1d050dba 100644
+index a4bb8ae1a7..74b68e435b 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
 @@ -47,6 +47,7 @@
@@ -794,7 +800,7 @@ index a4bb8ae1a7..5c1d050dba 100644
          Qt::MouseButtons buttons = Qt::NoButton;
          switch (action) {
          case AMOTION_EVENT_ACTION_UP:
-@@ -451,6 +429,155 @@ namespace QtAndroidInput
+@@ -451,6 +429,154 @@ namespace QtAndroidInput
  #endif // QT_CONFIG(tabletevent)
      }
  
@@ -837,9 +843,8 @@ index a4bb8ae1a7..5c1d050dba 100644
 +            if (m_lastTouchPointsPos.contains(id)) {
 +                lastNormalPosition = m_lastTouchPointsPos[id];
 +            }
-+            const QPointF currentNormalPosition =
-+                QPointF(double(event.getX()) / dw, double(event.getX()) / dh);
-+
++            const QPointF currentNormalPosition = QPointF(double(event.getX(pointerIndex)) / dw,
++                                                          double(event.getX(pointerIndex)) / dh);
 +            m_lastTouchPointsPos[id] = currentNormalPosition;
 +
 +            return (currentNormalPosition == lastNormalPosition) ? Qt::TouchPointStationary
@@ -950,7 +955,7 @@ index a4bb8ae1a7..5c1d050dba 100644
      static int mapAndroidKey(int key)
      {
          // 0--9        0x00000007 -- 0x00000010
-@@ -942,35 +1069,37 @@ namespace QtAndroidInput
+@@ -942,35 +1068,37 @@ namespace QtAndroidInput
  
      }
  
@@ -1061,5 +1066,5 @@ index 08f1d50fe3..c04e903ff7 100644
      jobject service();
  
 -- 
-2.37.3
+2.38.1
 

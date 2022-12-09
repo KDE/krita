@@ -28,7 +28,8 @@ public:
     enum Flag {
         None = 0x0,
         SupportsCommonCurve = 0x1,
-        SupportsCurveMode = 0x2
+        SupportsCurveMode = 0x2,
+        UseFloatingPointStrength = 0x4,
     };
 
     Q_DECLARE_FLAGS(Flags, Flag)
@@ -85,6 +86,7 @@ public:
     void show();
 
 protected:
+    lager::cursor<qreal> strengthValueDenorm();
 
     void setCurveWidgetsEnabled(bool value);
     QWidget* curveWidget();

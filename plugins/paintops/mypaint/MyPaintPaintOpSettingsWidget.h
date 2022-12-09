@@ -12,6 +12,8 @@
 #include <MyPaintPaintOpOption.h>
 #include <MyPaintCurveOptionWidget.h>
 
+class MyPaintCurveOptionWidget2;
+
 class KisMyPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
     Q_OBJECT
@@ -21,27 +23,9 @@ public:
     ~KisMyPaintOpSettingsWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;
-    void refreshBaseOption();
 
 protected:
-    void showEvent(QShowEvent *event) override;
-
     void addPaintOpOption(KisPaintOpOption *option, KisMyPaintOpOption::PaintopCategory id);
-
-private:
-    KisMyPaintOpOption *m_baseOption;
-    KisMyPaintCurveOptionWidget *m_radiusWidget;
-    KisMyPaintCurveOptionWidget *m_hardnessWidget;
-    KisMyPaintCurveOptionWidget *m_opacityWidget;
-
-public Q_SLOTS:
-    void updateBaseOptionRadius(qreal);
-    void updateBaseOptionHardness(qreal);
-    void updateBaseOptionOpacity(qreal);
-
-    void updateRadiusOptionOpacity(qreal);
-    void updateHardnessOptionOpacity(qreal);
-    void updateOpacityOptionOpacity(qreal);
 };
 
 #endif

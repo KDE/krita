@@ -11,6 +11,9 @@ set(kritamypaintop_SOURCES
     MyPaintCurveRangeModel.cpp
     MyPaintCurveOptionRangeControlsStrategy.cpp
     MyPaintPaintOp.cpp
+    MyPaintBasicOptionData.cpp
+    MyPaintBasicOptionModel.cpp
+    MyPaintBasicOptionWidget.cpp
     MyPaintPaintOpOption.cpp
     MyPaintPaintOpSettings.cpp
     MyPaintPaintOpSettingsWidget.cpp

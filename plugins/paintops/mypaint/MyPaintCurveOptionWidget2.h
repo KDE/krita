@@ -20,6 +20,8 @@ public:
                               qreal maxYRange, const QString &yValueSuffix);
     ~MyPaintCurveOptionWidget2();
 
+    using KisCurveOptionWidget2::strengthValueDenorm;
+
 private:
 };
 

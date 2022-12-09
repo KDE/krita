@@ -191,10 +191,16 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionDataCom
     connect(m_curveOptionWidget->strengthSlider, qOverload<qreal>(&KisDoubleSliderSpinBox::valueChanged),
             &m_d->model, &KisCurveOptionModel::setstrengthValueDenorm);
 
+    const bool useFloatingPointStrength = flags & UseFloatingPointStrength;
+
+    if (useFloatingPointStrength) {
+        m_curveOptionWidget->strengthSlider->setSingleStep(0.01);
+    }
+
     m_d->model.LAGER_QT(effectiveStrengthStateDenorm).bind(
-                kismpl::unzip_wrapper([this] (qreal value, qreal min, qreal max) {
+                kismpl::unzip_wrapper([this, useFloatingPointStrength] (qreal value, qreal min, qreal max) {
                     KisSignalsBlocker b(m_curveOptionWidget->strengthSlider);
-                    m_curveOptionWidget->strengthSlider->setRange(min, max);
+                    m_curveOptionWidget->strengthSlider->setRange(min, max, useFloatingPointStrength ? 2 : 0);
                     m_curveOptionWidget->strengthSlider->setValue(value);
                 }));
 
@@ -247,6 +253,11 @@ void KisCurveOptionWidget2::readOptionSetting(const KisPropertiesConfigurationSP
 bool KisCurveOptionWidget2::isCheckable() const
 {
     return m_d->model.isCheckable();
+}
+
+lager::cursor<qreal> KisCurveOptionWidget2::strengthValueDenorm()
+{
+    return m_d->model.LAGER_QT(strengthValueDenorm);
 }
 
 void KisCurveOptionWidget2::setCurveWidgetsEnabled(bool value)

@@ -22,7 +22,7 @@ MyPaintCurveOptionWidget2::MyPaintCurveOptionWidget2(lager::cursor<MyPaintCurveO
                             MyPaintCurveRangeModel::factory(maxYRange, yValueSuffix),
                             KisCurveOptionInputControlsStrategyDouble::factory(),
                             MyPaintCurveOptionRangeControlsStrategy::factory(),
-                            None)
+                            UseFloatingPointStrength)
 {
 }
 

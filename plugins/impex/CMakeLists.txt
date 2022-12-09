@@ -6,7 +6,7 @@ if(JPEG_FOUND AND HAVE_LCMS2)
 	add_subdirectory(jpeg)
 endif()
 
-if(TIFF_FOUND)
+if(TIFF_FOUND AND JPEG_FOUND)
 	add_subdirectory(tiff)
 endif()
 

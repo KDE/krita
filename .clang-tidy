@@ -40,6 +40,8 @@ CheckOptions:
     value:           '0'
   - key:             cppcoreguidelines-explicit-virtual-functions.IgnoreDestructors
     value:           '0'
+  - key:             cppcoreguidelines-special-member-functions.AllowMissingMoveFunctionsWhenCopyIsDeleted
+    value:           true
   - key:             cppcoreguidelines-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
     value:           '1'
   - key:             modernize-loop-convert.MaxCopySize
@@ -63,5 +65,9 @@ CheckOptions:
   - key:             modernize-use-auto.MinTypeNameLength
     value:           10
   - key:             readability-identifier-length.IgnoredVariableNames
-    value:           '^(t|gc|rc|p[0-9])$'
+    value:           '^(gc|rc|p[0-9]|i[dot])$'
+  - key:             readability-identifier-length.IgnoredParameterNames
+    value:           '^(cs|it)$'
+  - key:             readability-identifier-length.IgnoredLoopCounterNames
+    value:           '^[ijktuvxyz_]$' 
 ...

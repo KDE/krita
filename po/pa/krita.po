@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-08 02:46+0000\n"
+"POT-Creation-Date: 2022-12-09 02:22+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -17621,10 +17621,10 @@ msgstr "ਸਾਈਜ਼"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:753
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:956
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:963
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1174
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1343
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1346
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1410
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1178
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1347
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1350
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1244
 #: libs/ui/forms/wdgdisplaysettings.ui:386
 #: libs/ui/forms/wdggeneralsettings.ui:374
@@ -17840,7 +17840,7 @@ msgid "Set Image Resolution"
 msgstr "ਸਫ਼ਾ ਲੇਆਉਟ ਸੈੱਟ ਕਰੋ"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:221
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:224
 #, fuzzy
 #| msgid "Move points"
 msgctxt "(qtundo-format)"
@@ -19258,7 +19258,7 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
-#: libs/libkis/Document.cpp:935 libs/ui/KisMainWindow.cpp:2053
+#: libs/libkis/Document.cpp:936 libs/ui/KisMainWindow.cpp:2053
 #: libs/ui/KisMainWindow.cpp:2136
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
@@ -24173,17 +24173,17 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:967
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1096
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1099
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1165
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1168
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1171
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1178
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1181
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1298
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1301
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1340
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1417
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1169
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1172
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1175
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1182
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1185
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1302
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1305
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1344
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1418
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1421
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1159
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1163
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1167
@@ -24219,7 +24219,14 @@ msgstr "ਸ਼ਕਲ"
 msgid "Choke:"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1207
+#. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1165
+#: libs/ui/layerstyles/wdglayerstyles.ui:60
+#, kde-format
+msgid "Outer Glow"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1211
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
@@ -33732,12 +33739,6 @@ msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 #| msgid "Line Style"
 msgid "Styles"
 msgstr "ਰੇਖਾ ਸਟਾਈਲ"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/layerstyles/wdglayerstyles.ui:60
-#, kde-format
-msgid "Outer Glow"
-msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
@@ -59787,13 +59788,13 @@ msgstr ""
 msgid "Measure Tool"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
-#: plugins/tools/basictools/kis_tool_move.cc:281
+#: plugins/tools/basictools/kis_tool_move.cc:284
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "X: %1 px, Y: %2 px"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_move.cc:329
+#: plugins/tools/basictools/kis_tool_move.cc:332
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
@@ -59926,7 +59927,7 @@ msgctxt "action"
 msgid "Freehand Path Tool"
 msgstr "ਸਥਿਤੀ"
 
-#: plugins/tools/basictools/strokes/move_selection_stroke_strategy.cpp:24
+#: plugins/tools/basictools/strokes/move_selection_stroke_strategy.cpp:29
 #, fuzzy
 #| msgid "Change Connection"
 msgctxt "(qtundo-format)"
@@ -62916,8 +62917,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr ""
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:140
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:56
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:143
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:58
 #, fuzzy
 #| msgid "Line Color"
 msgctxt "(qtundo-format)"

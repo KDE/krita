@@ -97,11 +97,6 @@ public:
     QSplitter* horzSplitter {0};
     QFrame* left {0};
     QFrame* right {0};
-
-    QFrame* right2Rows {0};
-    QHBoxLayout* top {0};
-    QHBoxLayout* bot {0};
-
     QToolButton* scroll_left {0};
     QToolButton* scroll_right {0};
 };
@@ -204,49 +199,14 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     importExportLayout->addWidget(d->importButton);
     importExportLayout->addWidget(d->deleteButton);
 
-    auto removePadding = [](QLayout* layout) {
-        layout->setMargin(0);
-        layout->setSpacing(0);
-    };
-
     // Layout
     QGridLayout* thisLayout = new QGridLayout(this);
     thisLayout->setObjectName("ResourceChooser this");
-    removePadding(thisLayout);
+    thisLayout->setMargin(0);
+    thisLayout->setSpacing(0);
 
     // Horizontal Layout
     {
-        // Splitter
-        d->horzSplitter = new QSplitter(this);
-        d->horzSplitter->setOrientation(Qt::Orientation::Horizontal);
-
-        // Horizontal 1 row
-        d->left = new QFrame(this);
-        QHBoxLayout* leftLayout = new QHBoxLayout(d->left);
-        leftLayout->setObjectName("ResourceChooser left");
-
-        d->right = new QFrame(this);
-        QHBoxLayout* rightLayout = new QHBoxLayout(d->right);
-        rightLayout->setObjectName("ResourceChooser right");
-
-        // Horizontal 2 rows
-        d->right2Rows = new QFrame(this);
-        QVBoxLayout* rightLayout2 = new QVBoxLayout(d->right2Rows);
-        rightLayout2->setObjectName("ResourceChooser right 2 rows");
-
-        d->top = new QHBoxLayout();
-        d->bot = new QHBoxLayout();
-        rightLayout2->addLayout(d->top);
-        rightLayout2->addLayout(d->bot);
-
-        // Common style
-        removePadding(leftLayout);
-        removePadding(rightLayout);
-        removePadding(rightLayout2);
-        removePadding(d->top);
-        removePadding(d->bot);
-
-        // Scroll buttons
         d->scroll_left = new QToolButton(this);
         d->scroll_left->setIcon(KisIconUtils::loadIcon("draw-arrow-back"));
         connect(d->scroll_left, &QToolButton::clicked, this, &KisResourceItemChooser::scrollBackwards);
@@ -254,12 +214,25 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
         d->scroll_right->setIcon(KisIconUtils::loadIcon("draw-arrow-forward"));
         connect(d->scroll_right, &QToolButton::clicked, this, &KisResourceItemChooser::scrollForwards);
 
-        // Hide
+        d->left = new QFrame(this);
+        QHBoxLayout* leftLayout = new QHBoxLayout(d->left);
+        leftLayout->setObjectName("ResourceChooser left");
+        leftLayout->setMargin(0);
+        leftLayout->setSpacing(0);
+
+        d->right = new QFrame(this);
+        QHBoxLayout* rightLayout = new QHBoxLayout(d->right);
+        rightLayout->setObjectName("ResourceChooser right");
+        rightLayout->setMargin(0);
+        rightLayout->setSpacing(0);
+
+        d->horzSplitter = new QSplitter(this);
+        d->horzSplitter->setOrientation(Qt::Orientation::Horizontal);
+
         d->scroll_left->hide();
         d->scroll_right->hide();
         d->left->hide();
         d->right->hide();
-        d->right2Rows->hide();
         d->horzSplitter->hide();
     }
 
@@ -280,7 +253,7 @@ KisResourceItemChooser::~KisResourceItemChooser()
 void KisResourceItemChooser::setListViewMode(ListViewMode newViewMode)
 {
     d->requestedViewMode = newViewMode;
-    if (d->layout != Layout::Horizontal1Row) {
+    if (d->layout != Layout::Horizontal) {
         d->view->setListViewMode(newViewMode);
     }
 }
@@ -631,25 +604,12 @@ void KisResourceItemChooser::showEvent(QShowEvent *event)
 
 void KisResourceItemChooser::changeLayoutBasedOnSize()
 {
-    auto hideEverything = [this]() {
-        d->horzSplitter->hide();
-        d->left->hide();
-        d->right->hide();
-        d->right2Rows->hide();
-        d->scroll_left->hide();
-        d->scroll_right->hide();
-
-        d->viewModeButton->hide();
-    };
-
     // Vertical
-    if (height() > 100) {
+    if (height() > 80) {
 
         if (d->layout == Layout::Vertical) {
             return;
         }
-
-        hideEverything();
 
         d->view->setListViewMode(d->requestedViewMode);
         emit listViewModeChanged(d->requestedViewMode);
@@ -663,61 +623,17 @@ void KisResourceItemChooser::changeLayoutBasedOnSize()
         thisLayout->addWidget(d->tagManager->tagFilterWidget(), 2, 0, 1, 3);
         thisLayout->addWidget(d->importExportBtns, 3, 0, 1, 3);
 
-        d->viewModeButton->show();
+        d->horzSplitter->hide();
+        d->left->hide();
+        d->right->hide();
 
         d->layout = Layout::Vertical;
     }
-    // Horizontal 2 rows
-    else if (height() > 60) {
-
-        if (d->layout == Layout::Horizontal2Rows) {
-            return;
-        }
-
-        hideEverything();
-
-        d->view->setListViewMode(ListViewMode::IconStripHorizontal);
-        emit listViewModeChanged(ListViewMode::IconStripHorizontal);
-
-        // Left
-        QLayout* leftLayout = d->left->layout();
-        leftLayout->addWidget(d->resourcesSplitter);
-
-        // Right Top
-        d->top->addWidget(d->scroll_left);
-        d->top->addWidget(d->scroll_right);
-        d->top->addWidget(d->tagManager->tagChooserWidget());
-        d->top->addWidget(d->importExportBtns);
-
-        // Right Bot
-        d->bot->addWidget(d->viewModeButton);
-        d->bot->addWidget(d->storagePopupButton);
-        d->bot->addWidget(d->tagManager->tagFilterWidget());
-
-        d->horzSplitter->addWidget(d->left);
-        d->horzSplitter->setStretchFactor(0, 2);
-        d->horzSplitter->addWidget(d->right2Rows);
-        d->horzSplitter->setStretchFactor(1, 0);
-
-        QGridLayout* thisLayout = dynamic_cast<QGridLayout*>(layout());
-        thisLayout->setRowStretch(1, 0);
-        thisLayout->addWidget(d->horzSplitter);
-
-        d->horzSplitter->show();
-        d->left->show();
-        d->scroll_left->show();
-        d->scroll_right->show();
-        d->right2Rows->show();
-
-        d->layout = Layout::Horizontal2Rows;
-    }
-    // Horizontal 1 row
+    // Horizontal
     else {
-        if (d->layout == Layout::Horizontal1Row) {
+        if (d->layout == Layout::Horizontal) {
             return;
         }
-
-        hideEverything();
 
         d->view->setListViewMode(ListViewMode::IconStripHorizontal);
         emit listViewModeChanged(ListViewMode::IconStripHorizontal);
@@ -749,7 +665,7 @@ void KisResourceItemChooser::changeLayoutBasedOnSize()
         d->scroll_right->show();
         d->right->show();
 
-        d->layout = Layout::Horizontal1Row;
+        d->layout = Layout::Horizontal;
     }
 }
 

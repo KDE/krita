@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-09 00:44+0000\n"
+"POT-Creation-Date: 2022-12-10 00:43+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -15709,8 +15709,8 @@ msgid ""
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:627 libs/ui/KisApplication.cpp:405
-#: libs/ui/KisApplication.cpp:670
+#: krita/main.cc:627 libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:675
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -16578,7 +16578,7 @@ msgstr "ลิงค์"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1347
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1350
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1306
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1315
 #: libs/ui/forms/wdgdisplaysettings.ui:389
 #: libs/ui/forms/wdggeneralsettings.ui:374
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -16879,7 +16879,9 @@ msgctxt "Auto-generated layer style name for embedded styles (style itself)"
 msgid "<%1> (embedded)"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QPushButton, m_resourceFolderResetButton)
 #: libs/image/kis_base_mask_generator.h:22
+#: libs/ui/forms/wdggeneralsettings.ui:1485
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -19330,7 +19332,7 @@ msgstr "กำหนดเอง"
 #: libs/pigment/resources/KoColorSet.cpp:832
 #: libs/pigment/resources/KoColorSet.cpp:909
 #: libs/pigment/resources/KoColorSet.cpp:1121
-#: libs/ui/actions/KisPasteActionFactories.cpp:348
+#: libs/ui/actions/KisPasteActionFactories.cpp:350
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:348 libs/ui/KisView.cpp:1134
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
@@ -19384,15 +19386,15 @@ msgstr "รูปภาพ"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:716
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:776
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
-#: libs/ui/dialogs/kis_dlg_preferences.cc:762
+#: libs/ui/dialogs/kis_dlg_preferences.cc:771
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:708
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
 #: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:969
-#: libs/ui/KisApplication.cpp:972 libs/ui/KisApplication.cpp:988
-#: libs/ui/KisApplication.cpp:1020 libs/ui/KisApplication.cpp:1034
-#: libs/ui/KisApplication.cpp:1062 libs/ui/KisDocument.cpp:931
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
+#: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
+#: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
+#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:931
 #: libs/ui/KisDocument.cpp:939 libs/ui/KisDocument.cpp:1841
 #: libs/ui/KisDocument.cpp:1884 libs/ui/KisDocument.cpp:1892
 #: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1082
@@ -19595,8 +19597,8 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1648
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1652
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1657
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1661
 #: libs/ui/forms/wdgdisplaysettings.ui:196 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:322
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -20335,17 +20337,17 @@ msgid "Paste shapes"
 msgstr "พอดีกับหน้า"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:355 libs/ui/KisView.cpp:597
+#: libs/ui/actions/KisPasteActionFactories.cpp:357 libs/ui/KisView.cpp:597
 #, fuzzy, kde-format
 msgid "(pasted)"
 msgstr "เครื่องมือ&วาง"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:353
+#: libs/ui/actions/KisPasteActionFactories.cpp:355
 #, fuzzy, kde-format
 msgid "Pasted"
 msgstr "เครื่องมือ&วาง"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:408
+#: libs/ui/actions/KisPasteActionFactories.cpp:410
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
@@ -21356,8 +21358,8 @@ msgstr "ละลาย"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:38
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1940
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1942
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1949
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1951
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:598
 #, fuzzy, kde-format
@@ -21457,8 +21459,8 @@ msgstr "ลบเลเยอร์"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1910
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1912
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1921
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22625,10 +22627,10 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1418
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1421
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1221
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1225
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1229
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1311
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1230
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1234
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1238
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1320
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:45
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:52
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:124
@@ -22793,7 +22795,7 @@ msgstr "ลบเลเยอร์แล้ว"
 msgid "Show session manager"
 msgstr "รีเฟรชพื้นที่วาดภาพ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:441
+#: libs/ui/dialogs/kis_dlg_preferences.cc:450
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -22808,20 +22810,20 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:750
+#: libs/ui/dialogs/kis_dlg_preferences.cc:759
 #, fuzzy, kde-format
 msgid "Select a Background Image"
 msgstr "พื้นหลัง"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:762
+#: libs/ui/dialogs/kis_dlg_preferences.cc:771
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, fuzzy, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "รูปภาพ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:882
-#: libs/ui/dialogs/kis_dlg_preferences.cc:991
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1073
+#: libs/ui/dialogs/kis_dlg_preferences.cc:891
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1000
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1082
 #, fuzzy, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -22829,220 +22831,220 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "จอภาพ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:950
+#: libs/ui/dialogs/kis_dlg_preferences.cc:959
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:791
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, fuzzy, kde-format
 msgid "Install Color Profiles"
 msgstr "คุณสมบัติเลเยอร์..."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1165
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1174
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1167
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1176
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr ""
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1275
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1284
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1296
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1305
 #, fuzzy, kde-format
 msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr "วินาที"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1300
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1309
 #, kde-format
 msgid " fps"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1510
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1519
 #, fuzzy, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "อยู่เหนือ %1 ตัวปัจจุบัน"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1511
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1520
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1513
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1522
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1515
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1524
 #, fuzzy, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "อยู่เหนือ %1 ตัวปัจจุบัน"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1522
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1531
 #, fuzzy, kde-format
 #| msgid "Unknown"
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "ไม่ทราบ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1542
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1551
 #, fuzzy, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "แปรงทาสี"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1634
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1643
 #, fuzzy, kde-format
 msgid "Display Id: %1"
 msgstr "ละลาย"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1635
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1644
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1636
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1645
 #, fuzzy, kde-format
 msgid "Min Luminance: %1"
 msgstr "ละลาย"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1637
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1646
 #, fuzzy, kde-format
 msgid "Max Luminance: %1"
 msgstr "ละลาย"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1638
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1647
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1639
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1648
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1640
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1649
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1641
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1650
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1642
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1651
 #, fuzzy, kde-format
 msgid "White Point: %1, %2"
 msgstr "ตัวเลือกสี"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1676
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1685
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Warning(s):"
 msgstr "คำเตือน"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1818
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1827
 #, kde-format
 msgid "WARNING: current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1903
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1912
 #, fuzzy, kde-format
 msgid "Configure Krita"
 msgstr "มุม:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1920
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1929
 #, fuzzy, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "ส่งออกเอกสารเป็น"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1922
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1931
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, fuzzy, kde-format
 msgid "Shortcuts"
 msgstr "ยืนยันการบันทึก"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1932
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1941
 #, fuzzy, kde-format
 msgid "Canvas Input Settings"
 msgstr "ตั้งค่า"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1933
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1942
 #, fuzzy, kde-format
 msgid "Canvas Input"
 msgstr "พื้นที่วาดภาพ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1950
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1959
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #, kde-format
 msgid "Color Management"
 msgstr "การจัดการสี"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1952
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1961
 #, fuzzy, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "สี"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1960
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1962
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1969
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1971
 #, kde-format
 msgid "Performance"
 msgstr "ประสิทธิภาพ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1970
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1979
 #, fuzzy, kde-format
 msgid "Tablet settings"
 msgstr "ตั้งค่า"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1972
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1981
 #, fuzzy, kde-format
 msgid "Tablet"
 msgstr "น้ำเงิน"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1980
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1989
 #, fuzzy, kde-format
 msgid "Canvas-only settings"
 msgstr "ตั้งค่า"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1982
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1991
 #, fuzzy, kde-format
 msgid "Canvas-only"
 msgstr "สี"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1990
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1992
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1999
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2001
 #, fuzzy, kde-format
 msgid "Pop-up Palette"
 msgstr "จานสี"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2000
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2009
 #, fuzzy, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "ผู้เขียน"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2002
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2011
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "ผู้เขียน"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2009
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2018
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -25207,7 +25209,7 @@ msgid "Resource Folder:"
 msgstr "รูปภาพ"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblWritableWarning)
-#: libs/ui/forms/wdggeneralsettings.ui:1540
+#: libs/ui/forms/wdggeneralsettings.ui:1551
 #, kde-format
 msgid "Warning: this location is not writable."
 msgstr ""
@@ -29101,7 +29103,7 @@ msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "รูปภาพ"
 
-#: libs/ui/KisApplication.cpp:368
+#: libs/ui/KisApplication.cpp:373
 #, kde-format
 msgid ""
 "%1\n"
@@ -29109,13 +29111,13 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:368 libs/ui/KisApplication.cpp:374
+#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "มุม:"
 
-#: libs/ui/KisApplication.cpp:374
+#: libs/ui/KisApplication.cpp:379
 #, kde-format
 msgid ""
 "\n"
@@ -29123,7 +29125,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:406
+#: libs/ui/KisApplication.cpp:411
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -29131,50 +29133,50 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:423
+#: libs/ui/KisApplication.cpp:428
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "รูปภาพ"
 
-#: libs/ui/KisApplication.cpp:454
+#: libs/ui/KisApplication.cpp:459
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "รูปภาพ"
 
-#: libs/ui/KisApplication.cpp:469
+#: libs/ui/KisApplication.cpp:474
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "ไล่ระดับสี"
 
-#: libs/ui/KisApplication.cpp:568
+#: libs/ui/KisApplication.cpp:573
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:624
+#: libs/ui/KisApplication.cpp:629
 #, fuzzy, kde-format
 msgid "Failed to render animation frames!"
 msgstr "สร้างเลเยอร์ใหม่"
 
-#: libs/ui/KisApplication.cpp:651 libs/ui/KisApplication.cpp:841
+#: libs/ui/KisApplication.cpp:656 libs/ui/KisApplication.cpp:846
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "&ขาว"
 
-#: libs/ui/KisApplication.cpp:659 libs/ui/KisApplication.cpp:664
-#: libs/ui/KisApplication.cpp:835 libs/ui/KisApplication.cpp:849
-#: libs/ui/KisApplication.cpp:854
+#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:669
+#: libs/ui/KisApplication.cpp:840 libs/ui/KisApplication.cpp:854
+#: libs/ui/KisApplication.cpp:859
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Sander Koning"
 
-#: libs/ui/KisApplication.cpp:660 libs/ui/KisApplication.cpp:850
+#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:855
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:665
+#: libs/ui/KisApplication.cpp:670
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29187,7 +29189,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:671
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29195,32 +29197,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:836
+#: libs/ui/KisApplication.cpp:841
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
 msgstr "ลบการเลือก"
 
-#: libs/ui/KisApplication.cpp:855
+#: libs/ui/KisApplication.cpp:860
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:970
+#: libs/ui/KisApplication.cpp:975
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "ไม่พบเอกสารต้นแบบสำหรับ %1"
 
-#: libs/ui/KisApplication.cpp:973
+#: libs/ui/KisApplication.cpp:978
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "พบว่ามีเอกสารต้นแบบมากเกินไปสำหรับ %1"
 
-#: libs/ui/KisApplication.cpp:989
+#: libs/ui/KisApplication.cpp:994
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "เลือกทั้งหมด"
 
-#: libs/ui/KisApplication.cpp:1021
+#: libs/ui/KisApplication.cpp:1026
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29230,7 +29232,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1035
+#: libs/ui/KisApplication.cpp:1040
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29238,7 +29240,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1063
+#: libs/ui/KisApplication.cpp:1068
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to clear the settings file?"

@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-09 02:22+0000\n"
+"POT-Creation-Date: 2022-12-10 02:24+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -19469,7 +19469,7 @@ msgstr "Amach"
 #: libs/pigment/resources/KoColorSet.cpp:839
 #: libs/pigment/resources/KoColorSet.cpp:916
 #: libs/pigment/resources/KoColorSet.cpp:1128
-#: libs/ui/actions/KisPasteActionFactories.cpp:345
+#: libs/ui/actions/KisPasteActionFactories.cpp:347
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:348 libs/ui/KisView.cpp:959
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
@@ -20480,17 +20480,17 @@ msgid "Paste shapes"
 msgstr "Greamaigh Giuirléidí"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:352 libs/ui/KisView.cpp:596
+#: libs/ui/actions/KisPasteActionFactories.cpp:354 libs/ui/KisView.cpp:596
 #, kde-format
 msgid "(pasted)"
 msgstr "(greamaithe)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:350
+#: libs/ui/actions/KisPasteActionFactories.cpp:352
 #, fuzzy, kde-format
 msgid "Pasted"
 msgstr "Pastail"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:402
+#: libs/ui/actions/KisPasteActionFactories.cpp:404
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste Style"

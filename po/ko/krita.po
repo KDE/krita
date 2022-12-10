@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-09 02:22+0000\n"
+"POT-Creation-Date: 2022-12-10 02:24+0000\n"
 "PO-Revision-Date: 2022-05-15 22:38+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -19899,7 +19899,7 @@ msgstr "종점"
 #: libs/pigment/resources/KoColorSet.cpp:839
 #: libs/pigment/resources/KoColorSet.cpp:916
 #: libs/pigment/resources/KoColorSet.cpp:1128
-#: libs/ui/actions/KisPasteActionFactories.cpp:345
+#: libs/ui/actions/KisPasteActionFactories.cpp:347
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:348 libs/ui/KisView.cpp:959
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20916,17 +20916,17 @@ msgid "Paste shapes"
 msgstr "모양 붙여넣기"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:352 libs/ui/KisView.cpp:596
+#: libs/ui/actions/KisPasteActionFactories.cpp:354 libs/ui/KisView.cpp:596
 #, kde-format
 msgid "(pasted)"
 msgstr "(붙여넣기)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:350
+#: libs/ui/actions/KisPasteActionFactories.cpp:352
 #, kde-format
 msgid "Pasted"
 msgstr "붙여넣기"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:402
+#: libs/ui/actions/KisPasteActionFactories.cpp:404
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "스타일 붙여넣기"

@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-09 02:22+0000\n"
+"POT-Creation-Date: 2022-12-10 02:24+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -19437,7 +19437,7 @@ msgstr "Oanpast"
 #: libs/pigment/resources/KoColorSet.cpp:839
 #: libs/pigment/resources/KoColorSet.cpp:916
 #: libs/pigment/resources/KoColorSet.cpp:1128
-#: libs/ui/actions/KisPasteActionFactories.cpp:345
+#: libs/ui/actions/KisPasteActionFactories.cpp:347
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:348 libs/ui/KisView.cpp:959
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
@@ -20447,17 +20447,17 @@ msgid "Paste shapes"
 msgstr "Foarmen plakke"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:352 libs/ui/KisView.cpp:596
+#: libs/ui/actions/KisPasteActionFactories.cpp:354 libs/ui/KisView.cpp:596
 #, kde-format
 msgid "(pasted)"
 msgstr "(plakt)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:350
+#: libs/ui/actions/KisPasteActionFactories.cpp:352
 #, fuzzy, kde-format
 msgid "Pasted"
 msgstr "Pastels"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:402
+#: libs/ui/actions/KisPasteActionFactories.cpp:404
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste Style"

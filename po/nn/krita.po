@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-30 02:28+0000\n"
+"POT-Creation-Date: 2022-12-09 02:22+0000\n"
 "PO-Revision-Date: 2022-08-20 11:02+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -15460,44 +15460,14 @@ msgctxt "action"
 msgid "Choose Background Color"
 msgstr "Vel bakgrunnsfarge"
 
-#. i18n: context: text @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1895
-#, kde-format
-msgctxt "action"
-msgid "&Painter's Tools"
-msgstr "&Målarverktøy"
-
-#. i18n: context: toolTip @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paintops), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1897 krita/kritamenu.action:1898
-#, kde-format
-msgctxt "action"
-msgid "Painter's Tools"
-msgstr "Målarverktøy"
-
-#. i18n: context: text @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: text @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: toolTip @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (composite_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1905 krita/kritamenu.action:1907
-#: krita/kritamenu.action:1908
-#, kde-format
-msgctxt "action"
-msgid "Brush composite"
-msgstr "Penselsamansetjing"
-
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1915 krita/kritamenu.action:1917
-#: krita/kritamenu.action:1918
+#: krita/kritamenu.action:1895 krita/kritamenu.action:1897
+#: krita/kritamenu.action:1898
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
@@ -15509,8 +15479,8 @@ msgstr "Penselval glidebrytar 1"
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1925 krita/kritamenu.action:1927
-#: krita/kritamenu.action:1928
+#: krita/kritamenu.action:1905 krita/kritamenu.action:1907
+#: krita/kritamenu.action:1908
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
@@ -15522,8 +15492,8 @@ msgstr "Penselval glidebrytar 2"
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1935 krita/kritamenu.action:1937
-#: krita/kritamenu.action:1938
+#: krita/kritamenu.action:1915 krita/kritamenu.action:1917
+#: krita/kritamenu.action:1918
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
@@ -15535,8 +15505,8 @@ msgstr "Penselval glidebrytar 3"
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1945 krita/kritamenu.action:1947
-#: krita/kritamenu.action:1948
+#: krita/kritamenu.action:1925 krita/kritamenu.action:1927
+#: krita/kritamenu.action:1928
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
@@ -15548,22 +15518,22 @@ msgstr "Penselval glidebrytar 4"
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1955 krita/kritamenu.action:1957
-#: krita/kritamenu.action:1958
+#: krita/kritamenu.action:1935 krita/kritamenu.action:1937
+#: krita/kritamenu.action:1938
 #, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "Spegelvend"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1965
+#: krita/kritamenu.action:1945
 #, kde-format
 msgctxt "action"
 msgid "Layouts"
 msgstr "Utformingar"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1967
+#: krita/kritamenu.action:1947
 #, kde-format
 msgctxt "action"
 msgid "Select layout"
@@ -15576,8 +15546,8 @@ msgstr "Vel utforming"
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
-#: krita/kritamenu.action:1974 krita/kritamenu.action:1976
-#: krita/kritamenu.action:1977
+#: krita/kritamenu.action:1954 krita/kritamenu.action:1956
+#: krita/kritamenu.action:1957
 #, kde-format
 msgctxt "action"
 msgid "Workspaces"
@@ -16429,10 +16399,10 @@ msgstr "Storleik"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:753
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:956
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:963
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1174
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1343
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1346
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1410
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1178
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1347
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1350
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1244
 #: libs/ui/forms/wdgdisplaysettings.ui:386
 #: libs/ui/forms/wdggeneralsettings.ui:374
@@ -16621,7 +16591,7 @@ msgid "Set Image Resolution"
 msgstr "Vel biletoppløysing"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:221
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:224
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr "Flytt"
@@ -17158,8 +17128,8 @@ msgid "Processing"
 msgstr "Handsamar"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1400
-#: libs/ui/KisMainWindow.cpp:1680 libs/ui/KisMainWindow.cpp:1693
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1409
+#: libs/ui/KisMainWindow.cpp:1689 libs/ui/KisMainWindow.cpp:1702
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -17878,8 +17848,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr ""
 
-#: libs/libkis/Document.cpp:935 libs/ui/KisMainWindow.cpp:2044
-#: libs/ui/KisMainWindow.cpp:2127
+#: libs/libkis/Document.cpp:936 libs/ui/KisMainWindow.cpp:2053
+#: libs/ui/KisMainWindow.cpp:2136
 #, kde-format
 msgid "Import frames"
 msgstr "Importer bilete"
@@ -19190,16 +19160,17 @@ msgstr "Lokale ressursar"
 #: libs/ui/KisApplication.cpp:1062 libs/ui/KisDocument.cpp:925
 #: libs/ui/KisDocument.cpp:933 libs/ui/KisDocument.cpp:1837
 #: libs/ui/KisDocument.cpp:1880 libs/ui/KisDocument.cpp:1888
-#: libs/ui/KisMainWindow.cpp:1073 libs/ui/KisMainWindow.cpp:1199
-#: libs/ui/KisMainWindow.cpp:1298 libs/ui/KisMainWindow.cpp:1904
-#: libs/ui/KisMainWindow.cpp:1913 libs/ui/KisMainWindow.cpp:2052
-#: libs/ui/KisMainWindow.cpp:2113 libs/ui/KisMainWindow.cpp:2134
+#: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1082
+#: libs/ui/KisMainWindow.cpp:1208 libs/ui/KisMainWindow.cpp:1307
+#: libs/ui/KisMainWindow.cpp:1913 libs/ui/KisMainWindow.cpp:1922
+#: libs/ui/KisMainWindow.cpp:2061 libs/ui/KisMainWindow.cpp:2122
+#: libs/ui/KisMainWindow.cpp:2143 libs/ui/KisMainWindow.cpp:2756
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:35
 #: libs/ui/KisRemoteFileFetcher.cpp:56 libs/ui/KisRemoteFileFetcher.cpp:86
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:680 libs/ui/KisView.cpp:962
-#: libs/ui/KisWelcomePageWidget.cpp:709
+#: libs/ui/KisWelcomePageWidget.cpp:709 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:320
 #: libs/ui/widgets/kis_custom_image_widget.cc:292
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1305
@@ -19720,7 +19691,7 @@ msgid "Storage Resources"
 msgstr "Lagringsressursar"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:230
-#: libs/ui/KisMainWindow.cpp:2544
+#: libs/ui/KisMainWindow.cpp:2555
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:609
 #, kde-format
 msgctxt "@title:window"
@@ -20175,7 +20146,7 @@ msgstr ""
 "Klarte ikkje teikna opp animasjonsbilete. Utdatafilene er ufullstendige."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:52
-#: libs/ui/KisMainWindow.cpp:2154
+#: libs/ui/KisMainWindow.cpp:2163
 #, kde-format
 msgid "Render Animation"
 msgstr "Teikn opp animasjon"
@@ -22337,7 +22308,7 @@ msgid "Numerical"
 msgstr "Numerisk"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:137
-#: libs/ui/KisMainWindow.cpp:1167
+#: libs/ui/KisMainWindow.cpp:1176
 #, kde-format
 msgid "Import Images"
 msgstr "Importer bilete"
@@ -22474,7 +22445,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Skriv inn nytt namn på stil"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2555
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2566
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -22529,17 +22500,17 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:967
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1096
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1099
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1165
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1168
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1171
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1178
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1181
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1298
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1301
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1340
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1417
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1169
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1172
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1175
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1182
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1185
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1302
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1305
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1344
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1418
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1421
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1159
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1163
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1167
@@ -22574,8 +22545,15 @@ msgstr "Indre skugge"
 msgid "Choke:"
 msgstr "Krymping:"
 
+#. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1165
+#: libs/ui/layerstyles/wdglayerstyles.ui:60
+#, kde-format
+msgid "Outer Glow"
+msgstr "Ytre glød"
+
 # Sjå forklaring her https://helpx.adobe.com/no/acrobat/using/trapping-color-acrobat-pro.html.
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1207
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1211
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
@@ -25977,7 +25955,7 @@ msgstr "Gjeldande ferdigpensel"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:188 libs/ui/KisMainWindow.cpp:1052
+#: libs/ui/forms/wdgpaintopsettings.ui:188 libs/ui/KisMainWindow.cpp:1061
 #: libs/ui/widgets/kis_workspace_chooser.cpp:111
 #: libs/ui/widgets/kis_workspace_chooser.cpp:190
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -30056,45 +30034,45 @@ msgid "Wor&kspace"
 msgstr "&Arbeidsflate"
 
 # Namnet på verktøylinja har stor forbokstav, så bør vera hermeteikn her.
-#: libs/ui/KisMainWindow.cpp:582
+#: libs/ui/KisMainWindow.cpp:584
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Vis «%1»-verktøylinje"
 
 # Namnet på verktøylinja har stor forbokstav, så bør vera hermeteikn her.
-#: libs/ui/KisMainWindow.cpp:584
+#: libs/ui/KisMainWindow.cpp:586
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Gøym «%1»-verktøylinje"
 
-#: libs/ui/KisMainWindow.cpp:1015
+#: libs/ui/KisMainWindow.cpp:1024
 #, kde-format
 msgid "Write Protected"
 msgstr "Skriveverna"
 
-#: libs/ui/KisMainWindow.cpp:1019
+#: libs/ui/KisMainWindow.cpp:1028
 #, kde-format
 msgid "Recovered"
 msgstr "Gjenoppretta"
 
-#: libs/ui/KisMainWindow.cpp:1049
+#: libs/ui/KisMainWindow.cpp:1058
 #, kde-format
 msgid "Save as %1"
 msgstr "Lagra som %1"
 
-#: libs/ui/KisMainWindow.cpp:1073
+#: libs/ui/KisMainWindow.cpp:1082
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Fila %1 finst ikkje."
 
-#: libs/ui/KisMainWindow.cpp:1167
+#: libs/ui/KisMainWindow.cpp:1176
 #, kde-format
 msgid "Open Images"
 msgstr "Opna bilete"
 
-#: libs/ui/KisMainWindow.cpp:1299
+#: libs/ui/KisMainWindow.cpp:1308
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30108,46 +30086,46 @@ msgstr ""
 "Du bør lagra til ein annan stad, slik at originalbiletet ikkje vert "
 "overskrive."
 
-#: libs/ui/KisMainWindow.cpp:1355
+#: libs/ui/KisMainWindow.cpp:1364
 #, kde-format
 msgid "Exporting"
 msgstr "Eksporterer"
 
 # Namna på dialogvindauget når ein vel «Lagra som». Bør ha same form som sjølve kommandoen, derfor ikkje «Lagrar som».
-#: libs/ui/KisMainWindow.cpp:1355
+#: libs/ui/KisMainWindow.cpp:1364
 #, kde-format
 msgid "Saving As"
 msgstr "Lagra som"
 
-#: libs/ui/KisMainWindow.cpp:1659
+#: libs/ui/KisMainWindow.cpp:1668
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Lag nytt dokument"
 
-#: libs/ui/KisMainWindow.cpp:1683
+#: libs/ui/KisMainWindow.cpp:1692
 #, kde-format
 msgid "Custom Document"
 msgstr "Tilpassa dokument"
 
-#: libs/ui/KisMainWindow.cpp:1695
+#: libs/ui/KisMainWindow.cpp:1704
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Basert på utklippstavla"
 
-#: libs/ui/KisMainWindow.cpp:1873
+#: libs/ui/KisMainWindow.cpp:1882
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Lag/masker"
 
-#: libs/ui/KisMainWindow.cpp:1899
+#: libs/ui/KisMainWindow.cpp:1908
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:181
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:286
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Du har ikkje teke i bruk nokon ressurs­samlingar."
 
-#: libs/ui/KisMainWindow.cpp:1903
+#: libs/ui/KisMainWindow.cpp:1912
 #, kde-format
 msgid ""
 "\n"
@@ -30158,7 +30136,7 @@ msgstr ""
 "Det finst ingen tilgjengelege ferdigpenslar. Ta i bruk ei ressurssamling som "
 "inneheld ferdigpenslar før du held fram.\n"
 
-#: libs/ui/KisMainWindow.cpp:1913
+#: libs/ui/KisMainWindow.cpp:1922
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
 #, kde-format
@@ -30169,7 +30147,7 @@ msgstr ""
 "\n"
 "Berre dei lokale ressursane er tilgjengelege."
 
-#: libs/ui/KisMainWindow.cpp:2052 libs/ui/KisMainWindow.cpp:2134
+#: libs/ui/KisMainWindow.cpp:2061 libs/ui/KisMainWindow.cpp:2143
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30178,41 +30156,41 @@ msgstr ""
 "Klarte ikkje fullføra import av animasjon:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2113
+#: libs/ui/KisMainWindow.cpp:2122
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "Klarte ikkje oppretta nytt dokument. Animasjonsimporteringa vart avbroten."
 
-#: libs/ui/KisMainWindow.cpp:2535
+#: libs/ui/KisMainWindow.cpp:2546
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importer arbeidsflate …"
 
-#: libs/ui/KisMainWindow.cpp:2550
+#: libs/ui/KisMainWindow.cpp:2561
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Ny arbeidsflate …"
 
-#: libs/ui/KisMainWindow.cpp:2554
+#: libs/ui/KisMainWindow.cpp:2565
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Ny arbeidsflate …"
 
-#: libs/ui/KisMainWindow.cpp:2598
+#: libs/ui/KisMainWindow.cpp:2609
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2601
+#: libs/ui/KisMainWindow.cpp:2612
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2760
+#: libs/ui/KisMainWindow.cpp:2779
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -30221,19 +30199,19 @@ msgstr ""
 "LittleCMS-programtillegget for fargestyring i Krita er ikkje installert. "
 "Programmet vert derfor avslutta."
 
-#: libs/ui/KisMainWindow.cpp:2776
+#: libs/ui/KisMainWindow.cpp:2795
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Installasjonsfeil"
 
-#: libs/ui/KisMainWindow.cpp:2885
+#: libs/ui/KisMainWindow.cpp:2904
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Tema"
 
-#: libs/ui/KisMainWindow.cpp:2939
+#: libs/ui/KisMainWindow.cpp:2962
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Utvidande mellomrom"
@@ -31535,12 +31513,6 @@ msgstr "Bruk effektar"
 #, kde-format
 msgid "Styles"
 msgstr "Stilar"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/layerstyles/wdglayerstyles.ui:60
-#, kde-format
-msgid "Outer Glow"
-msgstr "Ytre glød"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
@@ -55933,13 +55905,13 @@ msgstr ""
 msgid "Measure Tool"
 msgstr "Mål avstandar og vinklar"
 
-#: plugins/tools/basictools/kis_tool_move.cc:281
+#: plugins/tools/basictools/kis_tool_move.cc:284
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "X: %1 px, Y: %2 px"
 msgstr "X: %1 pikslar, Y: %2 pikslar"
 
-#: plugins/tools/basictools/kis_tool_move.cc:329
+#: plugins/tools/basictools/kis_tool_move.cc:332
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
@@ -56053,7 +56025,7 @@ msgctxt "action"
 msgid "Freehand Path Tool"
 msgstr "Frihandsbane"
 
-#: plugins/tools/basictools/strokes/move_selection_stroke_strategy.cpp:24
+#: plugins/tools/basictools/strokes/move_selection_stroke_strategy.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Move Selection"
 msgstr "Flytt utval"
@@ -58805,8 +58777,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Transformer eit lag eller utval"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:140
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:56
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:143
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Transformer"

@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-09 02:22+0000\n"
+"POT-Creation-Date: 2022-12-10 02:24+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -19644,7 +19644,7 @@ msgstr "سىرتى"
 #: libs/pigment/resources/KoColorSet.cpp:839
 #: libs/pigment/resources/KoColorSet.cpp:916
 #: libs/pigment/resources/KoColorSet.cpp:1128
-#: libs/ui/actions/KisPasteActionFactories.cpp:345
+#: libs/ui/actions/KisPasteActionFactories.cpp:347
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:348 libs/ui/KisView.cpp:959
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20679,21 +20679,21 @@ msgid "Paste shapes"
 msgstr "بەتلەرنى چاپلا"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:352 libs/ui/KisView.cpp:596
+#: libs/ui/actions/KisPasteActionFactories.cpp:354 libs/ui/KisView.cpp:596
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Paste"
 msgid "(pasted)"
 msgstr "چاپلا"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:350
+#: libs/ui/actions/KisPasteActionFactories.cpp:352
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Paste"
 msgid "Pasted"
 msgstr "چاپلا"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:402
+#: libs/ui/actions/KisPasteActionFactories.cpp:404
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste Style"

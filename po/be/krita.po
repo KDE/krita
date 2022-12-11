@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-10 00:43+0000\n"
+"POT-Creation-Date: 2022-12-11 00:44+0000\n"
 "PO-Revision-Date: 2008-01-01 23:08+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -12685,7 +12685,7 @@ msgstr "Імпарт малюнка"
 msgid "Import"
 msgstr "Імпарт малюнка"
 
-#: krita/krita5.xmlgui:219 plugins/dockers/layerdocker/LayerBox.cpp:1251
+#: krita/krita5.xmlgui:219 plugins/dockers/layerdocker/LayerBox.cpp:1236
 #, fuzzy, kde-format
 msgid "&Convert"
 msgstr "Інвертаваць"
@@ -12693,14 +12693,14 @@ msgstr "Інвертаваць"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:230 krita/krita5.xmlgui:301
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1225
+#: plugins/dockers/layerdocker/LayerBox.cpp:1210
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, fuzzy, kde-format
 msgid "&Select"
 msgstr "Вылучэнне"
 
-#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1231
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1216
 #, fuzzy, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12721,7 +12721,7 @@ msgstr "Ператварэнне"
 msgid "S&plit"
 msgstr "Дадаць колер у палітру"
 
-#: krita/krita5.xmlgui:278 plugins/dockers/layerdocker/LayerBox.cpp:1258
+#: krita/krita5.xmlgui:278 plugins/dockers/layerdocker/LayerBox.cpp:1243
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "Дадаць колер у палітру"
@@ -37641,25 +37641,25 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:989
+#: plugins/dockers/layerdocker/LayerBox.cpp:974
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Здыманне вылучэння"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1011
+#: plugins/dockers/layerdocker/LayerBox.cpp:996
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Здыманне вылучэння"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1235
+#: plugins/dockers/layerdocker/LayerBox.cpp:1220
 #, fuzzy, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Стварыць"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1242
-#: plugins/dockers/layerdocker/LayerBox.cpp:1263
+#: plugins/dockers/layerdocker/LayerBox.cpp:1227
+#: plugins/dockers/layerdocker/LayerBox.cpp:1248
 #, kde-format
 msgid "&Add"
 msgstr ""

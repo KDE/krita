@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-10 00:43+0000\n"
-"PO-Revision-Date: 2022-12-07 16:39+0100\n"
+"POT-Creation-Date: 2022-12-11 00:44+0000\n"
+"PO-Revision-Date: 2022-12-10 09:34+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -12672,7 +12672,7 @@ msgstr "&Uvozi/izvozi"
 msgid "Import"
 msgstr "Uvozi"
 
-#: krita/krita5.xmlgui:219 plugins/dockers/layerdocker/LayerBox.cpp:1251
+#: krita/krita5.xmlgui:219 plugins/dockers/layerdocker/LayerBox.cpp:1236
 #, kde-format
 msgid "&Convert"
 msgstr "P&retvori"
@@ -12680,14 +12680,14 @@ msgstr "P&retvori"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:230 krita/krita5.xmlgui:301
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1225
+#: plugins/dockers/layerdocker/LayerBox.cpp:1210
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "Iz&beri"
 
-#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1231
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1216
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12708,7 +12708,7 @@ msgstr "Preoblikuj &vse plasti"
 msgid "S&plit"
 msgstr "&Razdeli"
 
-#: krita/krita5.xmlgui:278 plugins/dockers/layerdocker/LayerBox.cpp:1258
+#: krita/krita5.xmlgui:278 plugins/dockers/layerdocker/LayerBox.cpp:1243
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "&Razdeli alfo"
@@ -38427,36 +38427,34 @@ msgstr ""
 "Če je onemogočeno, jih prikaže pod imeni plasti (če je dovolj prostora)."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Selection to New Layer"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "Kopiraj izbor v novo plast"
+msgstr "Potrditveno polje za izbor plasti"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:424
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
-msgstr ""
+msgstr "Pokaži potrditveno polje za izbor/preklic izbora plasti."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:989
+#: plugins/dockers/layerdocker/LayerBox.cpp:974
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Maska za hiter izbor"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1011
+#: plugins/dockers/layerdocker/LayerBox.cpp:996
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Prekliči masko za hitri izbor"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1235
+#: plugins/dockers/layerdocker/LayerBox.cpp:1220
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "&Preklopi zaklepe in vidljivost"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1242
-#: plugins/dockers/layerdocker/LayerBox.cpp:1263
+#: plugins/dockers/layerdocker/LayerBox.cpp:1227
+#: plugins/dockers/layerdocker/LayerBox.cpp:1248
 #, kde-format
 msgid "&Add"
 msgstr "Dod&aj"
@@ -59621,15 +59619,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "Sli&karska orodja"
-
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "Slikarska orodja"
-
-#~ msgctxt "action"
-#~ msgid "Brush composite"
-#~ msgstr "Sestavljen čopič"

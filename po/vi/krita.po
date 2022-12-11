@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-10 00:43+0000\n"
+"POT-Creation-Date: 2022-12-11 00:44+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -12748,7 +12748,7 @@ msgstr "Nhập ảnh"
 msgid "Import"
 msgstr "Nhập ảnh"
 
-#: krita/krita5.xmlgui:219 plugins/dockers/layerdocker/LayerBox.cpp:1251
+#: krita/krita5.xmlgui:219 plugins/dockers/layerdocker/LayerBox.cpp:1236
 #, kde-format
 msgid "&Convert"
 msgstr "&Chuyển đổi"
@@ -12756,14 +12756,14 @@ msgstr "&Chuyển đổi"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:230 krita/krita5.xmlgui:301
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1225
+#: plugins/dockers/layerdocker/LayerBox.cpp:1210
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Chọn"
 
-#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1231
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1216
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -12785,7 +12785,7 @@ msgstr "Công cụ &xoá"
 msgid "S&plit"
 msgstr "Từ màu sang độ trong suốt"
 
-#: krita/krita5.xmlgui:278 plugins/dockers/layerdocker/LayerBox.cpp:1258
+#: krita/krita5.xmlgui:278 plugins/dockers/layerdocker/LayerBox.cpp:1243
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "Từ màu sang độ trong suốt"
@@ -38022,25 +38022,25 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:989
+#: plugins/dockers/layerdocker/LayerBox.cpp:974
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Không có phần chọn"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1011
+#: plugins/dockers/layerdocker/LayerBox.cpp:996
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Không có phần chọn"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1235
+#: plugins/dockers/layerdocker/LayerBox.cpp:1220
 #, fuzzy, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Lớp đầu tiên trong bảng nháp"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1242
-#: plugins/dockers/layerdocker/LayerBox.cpp:1263
+#: plugins/dockers/layerdocker/LayerBox.cpp:1227
+#: plugins/dockers/layerdocker/LayerBox.cpp:1248
 #, kde-format
 msgid "&Add"
 msgstr ""

@@ -65,15 +65,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-10 00:43+0000\n"
-"PO-Revision-Date: 2022-12-06 13:34+0100\n"
+"POT-Creation-Date: 2022-12-11 00:44+0000\n"
+"PO-Revision-Date: 2022-12-10 12:37+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.11.90\n"
+"X-Generator: Lokalize 22.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -12730,7 +12730,7 @@ msgstr "&Importar/exportar"
 msgid "Import"
 msgstr "Importar"
 
-#: krita/krita5.xmlgui:219 plugins/dockers/layerdocker/LayerBox.cpp:1251
+#: krita/krita5.xmlgui:219 plugins/dockers/layerdocker/LayerBox.cpp:1236
 #, kde-format
 msgid "&Convert"
 msgstr "&Convertir"
@@ -12738,14 +12738,14 @@ msgstr "&Convertir"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:230 krita/krita5.xmlgui:301
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1225
+#: plugins/dockers/layerdocker/LayerBox.cpp:1210
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Seleccionar"
 
-#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1231
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1216
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12766,7 +12766,7 @@ msgstr "Tr&ansformar todas las capas"
 msgid "S&plit"
 msgstr "&Dividir"
 
-#: krita/krita5.xmlgui:278 plugins/dockers/layerdocker/LayerBox.cpp:1258
+#: krita/krita5.xmlgui:278 plugins/dockers/layerdocker/LayerBox.cpp:1243
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "&Dividir alfa"
@@ -38586,36 +38586,34 @@ msgstr ""
 "espacio suficiente)."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) action"
-#| msgid "Merge Selected Layers"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "Fusionar las capas seleccionadas"
+msgstr "Casilla para seleccionar capas"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:424
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
-msgstr ""
+msgstr "Mostrar la casilla para seleccionar/deseleccionar capas."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:989
+#: plugins/dockers/layerdocker/LayerBox.cpp:974
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Máscara de selección rápida"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1011
+#: plugins/dockers/layerdocker/LayerBox.cpp:996
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Cancelar la máscara de selección rápida"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1235
+#: plugins/dockers/layerdocker/LayerBox.cpp:1220
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Conmu&tar bloqueos y visibilidad"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1242
-#: plugins/dockers/layerdocker/LayerBox.cpp:1263
+#: plugins/dockers/layerdocker/LayerBox.cpp:1227
+#: plugins/dockers/layerdocker/LayerBox.cpp:1248
 #, kde-format
 msgid "&Add"
 msgstr "&Añadir"

@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-10 00:43+0000\n"
-"PO-Revision-Date: 2022-12-09 19:15+0300\n"
+"POT-Creation-Date: 2022-12-11 00:44+0000\n"
+"PO-Revision-Date: 2022-12-10 22:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -12662,7 +12662,7 @@ msgstr "&İçe/Dışa Aktar"
 msgid "Import"
 msgstr "İçe Aktar"
 
-#: krita/krita5.xmlgui:219 plugins/dockers/layerdocker/LayerBox.cpp:1251
+#: krita/krita5.xmlgui:219 plugins/dockers/layerdocker/LayerBox.cpp:1236
 #, kde-format
 msgid "&Convert"
 msgstr "&Dönüştür"
@@ -12670,14 +12670,14 @@ msgstr "&Dönüştür"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:230 krita/krita5.xmlgui:301
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1225
+#: plugins/dockers/layerdocker/LayerBox.cpp:1210
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Seçim"
 
-#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1231
+#: krita/krita5.xmlgui:238 plugins/dockers/layerdocker/LayerBox.cpp:1216
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12698,7 +12698,7 @@ msgstr "Tüm Katmanları &Dönüştür"
 msgid "S&plit"
 msgstr "&Ayır"
 
-#: krita/krita5.xmlgui:278 plugins/dockers/layerdocker/LayerBox.cpp:1258
+#: krita/krita5.xmlgui:278 plugins/dockers/layerdocker/LayerBox.cpp:1243
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Alfayı A&yır"
@@ -12965,14 +12965,14 @@ msgstr "Video canlandırma içe aktar"
 #, kde-format
 msgctxt "action"
 msgid "&Render Animation..."
-msgstr "&Canlandırma Doku..."
+msgstr "&Canlandırmayı Sun..."
 
 #. i18n: context: toolTip @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:143
 #, kde-format
 msgctxt "action"
 msgid "Render Animation to GIF, Image Sequence or Video"
-msgstr "Canlandırmayı GIF, Görsel Sıralaması veya Video Olarak Doku"
+msgstr "Canlandırmayı GIF, Görsel Sıralaması veya Video Olarak Sun"
 
 #. i18n: context: iconText @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
@@ -12982,21 +12982,21 @@ msgstr "Canlandırmayı GIF, Görsel Sıralaması veya Video Olarak Doku"
 #, kde-format
 msgctxt "action"
 msgid "Render Animation"
-msgstr "Canlandırma Doku"
+msgstr "Canlandırmayı Sun"
 
 #. i18n: context: text @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:153
 #, kde-format
 msgctxt "action"
 msgid "&Render Animation Again"
-msgstr "&Canlandırmayı Yeniden Doku"
+msgstr "&Canlandırmayı Yeniden Sun"
 
 #. i18n: context: toolTip @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:155
 #, kde-format
 msgctxt "action"
 msgid "Render Animation Again"
-msgstr "Canlandırmayı Yeniden Doku"
+msgstr "Canlandırmayı Yeniden Sun"
 
 #. i18n: context: text @ Action (save_incremental_version), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:165
@@ -16779,7 +16779,7 @@ msgstr "Oluşturucu"
 #: libs/image/generator/kis_generator_stroke_strategy.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Fill Layer Render"
-msgstr "Katman Dokumasını Doldur"
+msgstr "Dolgu Katmanı Sunumu"
 
 #: libs/image/kis_adjustment_layer.cc:124
 #, kde-format
@@ -17241,7 +17241,7 @@ msgstr "Adsız"
 #: libs/image/kis_regenerate_frame_stroke_strategy.cpp:98
 msgctxt "(qtundo-format)"
 msgid "Render Animation"
-msgstr "Canlandırmayı Doku"
+msgstr "Canlandırmayı Sun"
 
 #: libs/image/kis_selection_filters.cpp:116
 msgctxt "(qtundo-format)"
@@ -17718,7 +17718,7 @@ msgid ""
 "be saved."
 msgstr ""
 "Görselde <b>bir katman üzerinde birden çok saydamlık maskesi var</b>. Birden "
-"çok saydamlık maskesi olan tüm katmanlar için yalnızca dokunan sonuç "
+"çok saydamlık maskesi olan tüm katmanlar için yalnızca sunum yapılan sonuç "
 "kaydedilir."
 
 #: libs/impex/NodeTypeCheck.h:25
@@ -20249,7 +20249,7 @@ msgid ""
 "Could not render animation:\n"
 "%1"
 msgstr ""
-"Canlandırma dokunamadı:\n"
+"Canlandırma sunulamadı:\n"
 "%1"
 
 #: libs/ui/animation/KisAnimationRender.cpp:136
@@ -20257,18 +20257,18 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
-msgstr "Dokuma hatası"
+msgstr "Sunum hatası"
 
 #: libs/ui/animation/KisAnimationRender.cpp:138
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
-msgstr "Canlandırma kareleri dokunamadı! Çıktı dosyaları eksik."
+msgstr "Canlandırma kareleri sunulamadı! Çıktı dosyaları eksik."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:52
 #: libs/ui/KisMainWindow.cpp:2163
 #, kde-format
 msgid "Render Animation"
-msgstr "Canlandırma Doku"
+msgstr "Canlandırmayı Sun"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:101
 #, kde-format
@@ -20353,7 +20353,7 @@ msgstr "Bu bir kaynak kodu arşividir. Lütfen bunun yerine FFmpeg'i kurun."
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:568
 #, kde-format
 msgid "Please enter a file name to render to."
-msgstr "Oluşturulacak dosyanın adını giriniz."
+msgstr "Sunumun yapılacağı dosyanın adını girin."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:40
 #, kde-format
@@ -21677,7 +21677,7 @@ msgstr "FFProbe Yolu:"
 #: libs/ui/animation/wdg_animationrenderer.ui:24
 #, kde-format
 msgid "Animation Renderer Image"
-msgstr "Canlandırma Dokuyucusu Görseli"
+msgstr "Canlandırma Sunucusu Görseli"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:39
@@ -21727,13 +21727,13 @@ msgstr "Video Seçenekleri"
 #: libs/ui/animation/wdg_animationrenderer.ui:255
 #, kde-format
 msgid "Select the ffmpeg render options."
-msgstr "Ffmpeg oluşturma seçeneklerini Seç."
+msgstr "ffmpeg sunum seçeneklerini Seç."
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:267
 #, kde-format
 msgid "FF&Mpeg: "
-msgstr "FF&Mpeg: "
+msgstr "FF&mpeg: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
@@ -21741,7 +21741,7 @@ msgstr "FF&Mpeg: "
 #: plugins/dockers/recorder/recorder_export.ui:524
 #, kde-format
 msgid "Render as:"
-msgstr "Olarak gerçekle:"
+msgstr "Şöyle sun:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/animation/wdg_animationrenderer.ui:293
@@ -21753,13 +21753,13 @@ msgstr "Video Konumu:"
 #: libs/ui/animation/wdg_animationrenderer.ui:309
 #, kde-format
 msgid "Include Audio"
-msgstr "Sesi Dahil et"
+msgstr "Sesi İçer"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #: libs/ui/animation/wdg_animationrenderer.ui:318
 #, kde-format
 msgid "FFMpeg Version: None"
-msgstr "FFmpeg Sürümü: Hiçbiri"
+msgstr "FFmpeg Sürümü: Yok"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGifWarningFPS)
 #: libs/ui/animation/wdg_animationrenderer.ui:325
@@ -21789,7 +21789,7 @@ msgstr ""
 #: libs/ui/animation/wdg_animationrenderer.ui:361
 #, kde-format
 msgid "Image Sequence Options"
-msgstr "Görüntü Serisi Seçenekleri"
+msgstr "Görsel Sıralaması Seçenekleri"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:369
@@ -21804,8 +21804,8 @@ msgid ""
 "Select the file format for the image sequence. If you want to render to "
 "video or animated gif, you can only select PNG"
 msgstr ""
-"Görsel sıralaması için dosya biçimini seçin. Video veya hareketli gif "
-"dokumak istiyorsanız yalnızca PNG seçebilirsiniz"
+"Görsel sıralaması için dosya biçimini seçin. Video veya hareketli gif sunmak "
+"istiyorsanız yalnızca PNG seçebilirsiniz"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnExportOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:397
@@ -22862,7 +22862,7 @@ msgstr "OpenGL"
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
-msgstr "Yazılımsal Dokuyucu (çok yavaş)"
+msgstr "Yazılımsal Sunucu (çok yavaş)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1522
 #, kde-format
@@ -22941,7 +22941,7 @@ msgstr "Uyarılar:"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1827
 #, kde-format
 msgid "WARNING: current display doesn't support HDR rendering"
-msgstr "UYARI: Geçerli ekran HDR olarak dokumayı desteklemiyor"
+msgstr "UYARI: Geçerli ekran HDR olarak sunmayı desteklemiyor"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1912
 #, kde-format
@@ -23041,7 +23041,7 @@ msgstr "Vuruş Seçim Özellikleri"
 #: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:102
 #, kde-format
 msgid "Regenerating cache..."
-msgstr "Ön bellek yeniden üretiliyor..."
+msgstr "Önbellek yeniden üretiliyor..."
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:64
 #, kde-format
@@ -23086,7 +23086,7 @@ msgstr ""
 "\n"
 "%1\n"
 "\n"
-"Dokuma iptal edildi."
+"Sunum iptal edildi."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:332
 #, kde-format
@@ -23782,14 +23782,14 @@ msgstr "&Profiller:"
 #: libs/ui/forms/wdgapplyprofile.ui:88
 #, kde-format
 msgid "Rendering intent determines the bias in the color conversion."
-msgstr "Oluşturma amacı, renk dönüşümünde sapmayı belirler."
+msgstr "Sunum amacı, renk dönüşümünde sapmayı belirler."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, grpRenderIntent)
 #: libs/ui/forms/wdgapplyprofile.ui:91 libs/ui/forms/wdgimageproperties.ui:288
 #, kde-format
 msgid "Rendering Intent"
-msgstr "Hazırlama Amacı"
+msgstr "Sunum Amacı"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgapplyprofile.ui:97
@@ -23993,7 +23993,7 @@ msgstr "Ayarlanmış ekranınız için icm profili"
 #: libs/ui/forms/wdgcolorsettings.ui:166
 #, kde-format
 msgid "&Rendering intent:"
-msgstr "&Hazırlama amacı:"
+msgstr "&Sunum amacı:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
@@ -24039,7 +24039,7 @@ msgstr "Not: Bunlar yeni görseller için olan prova ayarlarıdır."
 #: libs/ui/forms/wdgcolorsettings.ui:266
 #, kde-format
 msgid "Proofing Rendering Intent:"
-msgstr "Prova Dokuma Amacı:"
+msgstr "Prova Sunumu Amacı:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAdaptationState)
 #: libs/ui/forms/wdgcolorsettings.ui:297
@@ -24255,13 +24255,13 @@ msgstr "Ölçekleme Kipi:"
 #: libs/ui/forms/wdgdisplaysettings.ui:186
 #, kde-format
 msgid "Preferred Renderer (needs restart):"
-msgstr "Tercih Edilen Dokumacı (yeniden başlatma gerektirir):"
+msgstr "Tercih Edilen Sunucu (yeniden başlatma gerektirir):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
 #, kde-format
 msgid "Current Renderer:"
-msgstr "Geçerli Dokumacı:"
+msgstr "Geçerli Sunucu:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLargePixmapCache)
 #: libs/ui/forms/wdgdisplaysettings.ui:232
@@ -26354,7 +26354,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:283
 #, kde-format
 msgid "Frame Rendering Clones Limit"
-msgstr "Kare Dokuma Klonları Sınırı"
+msgstr "Kare Sunumu Klonları Sınırı"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFrameClonesLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:296
@@ -26383,7 +26383,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:303
 #, kde-format
 msgid "Frame Rendering Timeout"
-msgstr "Kare Dokuma Zaman Aşımı"
+msgstr "Kare Sunumu Zaman Aşımı"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFrameTimeout)
 #: libs/ui/forms/wdgperformancesettings.ui:316
@@ -26394,8 +26394,8 @@ msgid ""
 "p><p><br/></p><p><span style=\" font-weight:600;\">Recommended value:</span> "
 "30...60 seconds</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Bir kareyi dokumak için gereken zaman aşımı. Eğer "
-"canlandırma dokumanız sürekli olarak bir zaman aşımıyla başarısız oluyorsa "
+"<html><head/><body><p>Bir kareyi sunmak için gereken zaman aşımı. Eğer "
+"canlandırma sunumunuz sürekli olarak bir zaman aşımıyla başarısız oluyorsa "
 "bu değeri artırmayı deneyin</p><p><br/></p><p><span style=\" font-weight:600;"
 "\">Önerilen değer:</span> 30...60 saniye</p></body></html>"
 
@@ -26435,7 +26435,7 @@ msgstr "OpenGL kare hızının hata ayıklama günlüğü"
 #: libs/ui/forms/wdgperformancesettings.ui:359
 #, kde-format
 msgid "Debug logging for brush rendering speed"
-msgstr "Fırça işleme hızı için hata ayıklama günlüğü"
+msgstr "Fırça sunum hızı için hata ayıklama günlüğü"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisableAVXOptimizations)
 #: libs/ui/forms/wdgperformancesettings.ui:366
@@ -26551,7 +26551,7 @@ msgid ""
 "using on-disk storage backend.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Görsel belirtilen sınırdan büyükse karenin küçültülmüş "
-"sürümünü doku. \"Disk üzerinde\" önbellek depolama arka ucunu kullanırken bu "
+"sürümünü sun. \"Disk üzerinde\" önbellek depolama arka ucunu kullanırken bu "
 "seçeneği etkinleştirdiğinizden emin olun..</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCachedFramesSizeLimit)
@@ -26579,7 +26579,7 @@ msgid ""
 "visible part of it</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Görsel çok büyük olduğunda, yalnızca geçerli görünen "
-"kısmı doku</p></body></html>"
+"kısmı sun</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseRegionOfInterest)
 #: libs/ui/forms/wdgperformancesettings.ui:494
@@ -26608,7 +26608,7 @@ msgid ""
 "when the user is idle</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Kullanıcı boştayken canlandırma önbelleğini arka "
-"planda önden doku.</p></body></html>"
+"planda önden sun.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBackgroundCacheGeneration)
 #: libs/ui/forms/wdgperformancesettings.ui:517
@@ -29357,7 +29357,7 @@ msgstr "Mime türü bulunamadı. -mimetype seçeneğini kullanmayı deneyin"
 #: libs/ui/KisApplication.cpp:629
 #, kde-format
 msgid "Failed to render animation frames!"
-msgstr "Canlandırma kareleri dokunamadı!"
+msgstr "Canlandırma kareleri sunulamadı!"
 
 #: libs/ui/KisApplication.cpp:656 libs/ui/KisApplication.cpp:846
 #, kde-format
@@ -30164,8 +30164,8 @@ msgid ""
 "\n"
 "Please select a location where the original file will not be overridden!"
 msgstr ""
-"Görsel henüz oluşturulurken bir dosyayı kaydediyorsunuz. Kaydedilen dosya "
-"eksik veya bozuk olabilir.\n"
+"Görsel henüz sunulurken bir dosya kaydediyorsunuz. Kaydedilen dosya eksik "
+"veya bozuk olabilir.\n"
 "\n"
 "Lütfen özgün dosyanın geçersiz kılınmadığı bir yer seçin!"
 
@@ -31774,7 +31774,7 @@ msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
 "issues."
 msgstr ""
-"Doku arabellekleri, başarım gerekçelerinden dolayı ANGLE dokuyucusunda "
+"Doku arabellekleri, başarım gerekçelerinden dolayı ANGLE sunucusunda "
 "kesinlikle devre dışı bırakılmıştır."
 
 #: libs/ui/opengl/kis_opengl.cpp:594
@@ -31801,14 +31801,14 @@ msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
-"Tercih edilen işleyici istenen yüzey biçimini desteklemiyor. Başka bir "
-"işleyici seçildi."
+"Tercih edilen sunucu istenen yüzey biçimini desteklemiyor. Başka bir sunucu "
+"seçildi."
 
 #: libs/ui/opengl/kis_opengl.cpp:998
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
-"Tercih edilen çıktı biçimi, geçerli dokuyucular tarafından desteklenmiyor"
+"Tercih edilen çıktı biçimi, geçerli sunucular tarafından desteklenmiyor"
 
 #: libs/ui/opengl/kis_opengl_image_textures.cpp:843
 #, kde-format
@@ -38392,23 +38392,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Katmanları seçmek/seçimini kaldırmak için onay kutusunu göster"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:989
+#: plugins/dockers/layerdocker/LayerBox.cpp:974
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Hızlı Seçim Maskesi"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1011
+#: plugins/dockers/layerdocker/LayerBox.cpp:996
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Hızlı Seçim Maskesini İptal Et"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1235
+#: plugins/dockers/layerdocker/LayerBox.cpp:1220
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "&Kilit ve Görünürlüğü Aç/Kapat"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1242
-#: plugins/dockers/layerdocker/LayerBox.cpp:1263
+#: plugins/dockers/layerdocker/LayerBox.cpp:1227
+#: plugins/dockers/layerdocker/LayerBox.cpp:1248
 #, kde-format
 msgid "&Add"
 msgstr "&Ekle"
@@ -38523,7 +38523,7 @@ msgstr "Matematik ve Hesaplamalar"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:163
 #, kde-format
 msgid "Image Rendering"
-msgstr "Görsel Dokuma"
+msgstr "Görsel Sunumu"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:167
 #, kde-format
@@ -39205,7 +39205,7 @@ msgstr "Kayıtları kaldır"
 #, kde-format
 msgctxt "How long it took to render the video"
 msgid "Render time:"
-msgstr "Dokuma süresi:"
+msgstr "Sunum süresi:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRestart)
 #: plugins/dockers/recorder/recorder_export.ui:1053
@@ -40317,7 +40317,7 @@ msgstr "Renk Uzayı Dönüştürme"
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:30
 #, kde-format
 msgid "&Rendering Intent"
-msgstr "&Dokuma Amacı"
+msgstr "&Sunum Amacı"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:36
@@ -45570,7 +45570,7 @@ msgstr "Önayar adı:"
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:126
 #, kde-format
 msgid "&Render Script to Thumbnail"
-msgstr "&Betiği Küçük Görsele Doku"
+msgstr "&Betiği Küçük Görsele Sun"
 
 #: plugins/generators/simplexnoise/simplexnoisegenerator.cpp:38
 #, kde-format
@@ -56119,7 +56119,7 @@ msgstr "Yansıt"
 #: plugins/tools/basictools/kis_tool_multihand.cpp:421
 #, kde-format
 msgid "Translate"
-msgstr "Dönüştür"
+msgstr "Çokla"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:422
 #, kde-format
@@ -56129,7 +56129,7 @@ msgstr "Kar Tanesi"
 #: plugins/tools/basictools/kis_tool_multihand.cpp:423
 #, kde-format
 msgid "Copy Translate"
-msgstr "Çeviriyi Kopyala"
+msgstr "Noktalara Çokla"
 
 #: plugins/tools/basictools/kis_tool_multihand.h:91
 #, kde-format
@@ -56475,7 +56475,7 @@ msgstr "Fırçalar:"
 #: plugins/tools/basictools/wdgmultihandtool.ui:74
 #, kde-format
 msgid "Subbrushes:"
-msgstr "Altfırçalar:"
+msgstr "Alt fırçalar:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:87

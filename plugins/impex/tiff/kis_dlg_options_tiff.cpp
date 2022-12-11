@@ -107,8 +107,7 @@ void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP c
         const QString colorModelId =
             cfg->getString(KisImportExportFilter::ColorModelIDTag);
 
-        if (colorModelId == CMYKAColorModelID.id()
-            || colorModelId == YCbCrAColorModelID.id()) {
+        if (colorModelId == YCbCrAColorModelID.id()) {
             alpha->setChecked(false);
             alpha->setEnabled(false);
         }
@@ -157,9 +156,11 @@ void KisTIFFOptionsWidget::flattenToggled(bool t)
     if (!t) {
         alpha->setChecked(true);
     }
+#ifdef TIFF_CAN_WRITE_PSD_TAGS
     chkPhotoshop->setEnabled(!t);
     if (t) {
         chkPhotoshop->setChecked(false);
     }
+#endif
 }
 

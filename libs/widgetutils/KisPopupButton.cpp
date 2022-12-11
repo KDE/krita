@@ -23,10 +23,17 @@
 
 class KisPopupButtonFrame : public QFrame
 {
+    QHBoxLayout* frameLayout {0};
+
 public:
     KisPopupButtonFrame(QWidget *parent, bool detach)
         : QFrame(parent)
     {
+        setObjectName("KisPopupButtonFrame");
+        setProperty("_kis_excludeFromLayoutThumbnail", true);
+        frameLayout = new QHBoxLayout(this);
+        frameLayout->setMargin(0);
+
         setDetached(detach);
     }
 
@@ -43,13 +50,23 @@ public:
         // At least on Windows, not doing this may result in weird window drop
         // shadows.
         destroy();
+
         if (detach) {
             setWindowFlags(Qt::Dialog);
-            setFrameStyle(QFrame::NoFrame);
-        } else {
+            setFrameStyle(QFrame::NoFrame);        
+            setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+            // setting the size policy to fixed sets the maximum size, somehow
+            setMaximumSize(0xFFFFFF, 0xFFFFFF);
+            frameLayout->setSizeConstraint(QLayout::SizeConstraint::SetDefaultConstraint);
+        }
+        else {
             setWindowFlags(Qt::Popup);
             setFrameStyle(QFrame::Box | QFrame::Plain);
+            setSizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
+            frameLayout->setSizeConstraint(QLayout::SizeConstraint::SetFixedSize);
         }
+
+        updateGeometry();
     }
 
 protected:
@@ -77,11 +94,10 @@ protected:
 
 struct KisPopupButton::Private {
     Private()
-        : frameLayout(nullptr)
+        // : frameLayout(nullptr)
     {}
     QPointer<KisPopupButtonFrame> frame;
     QPointer<QWidget> popupWidget;
-    QPointer<QHBoxLayout> frameLayout;
     bool arrowVisible { true };
     bool isPopupDetached { false };
     bool isDetachedGeometrySet { false };
@@ -123,16 +139,11 @@ void KisPopupButton::setPopupWidget(QWidget* widget)
     if (widget) {
         delete m_d->frame;
         m_d->frame = new KisPopupButtonFrame(this->window(), m_d->isPopupDetached);
-        m_d->frame->setProperty("_kis_excludeFromLayoutThumbnail", true);
-        m_d->frame->setObjectName("popup frame");
         m_d->frame->setWindowTitle(widget->windowTitle());
-        m_d->frameLayout = new QHBoxLayout(m_d->frame.data());
-        m_d->frameLayout->setMargin(0);
-        m_d->frameLayout->setSizeConstraint(QLayout::SetFixedSize);
-        m_d->frame->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+
         m_d->popupWidget = widget;
-        m_d->popupWidget->setParent(m_d->frame.data());
-        m_d->frameLayout->addWidget(m_d->popupWidget);
+
+        m_d->frame->layout()->addWidget(m_d->popupWidget);
     }
 }
 

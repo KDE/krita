@@ -307,6 +307,7 @@ void NodeView::currentChanged(const QModelIndex &current, const QModelIndex &pre
     QTreeView::currentChanged(current, previous);
     if (current != previous) {
         Q_ASSERT(!current.isValid() || current.model() == model());
+        KisSignalsBlocker blocker(this);
         model()->setData(current, true, KisNodeModel::ActiveRole);
     }
 }
@@ -320,13 +321,7 @@ void NodeView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottom
             QModelIndex index = topLeft.sibling(x, y);
             if (index.data(KisNodeModel::ActiveRole).toBool()) {
                 if (currentIndex() != index) {
-                    // Means, we only have to make a selection if there wasn't one already (which happens when
-                    // you open a new document).
-                    if (selectionModel()->hasSelection()) {
-                        selectionModel()->setCurrentIndex(index, QItemSelectionModel::NoUpdate);
-                    } else {
-                        setCurrentIndex(index);
-                    }
+                    setCurrentIndex(index);
                 }
 
                 return;

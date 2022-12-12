@@ -270,6 +270,10 @@ public:
     void createBlankKeyframes(const QModelIndex& index, KUndo2Command* cmd = nullptr);
 
 private:
+    // For now, board is structured as a tree, with each board element being the top level
+    // and storyboard components (numbers, comments, etc.) being children/leaves.
+    bool isValidBoard(const QModelIndex &index) const {return index.parent().isValid() == false;}
+
     bool moveRowsImpl(const QModelIndex &sourceParent, int sourceRow, int count,
                     const QModelIndex &destinationParent, int destinationChild, KUndo2Command *parentCMD = nullptr);
 

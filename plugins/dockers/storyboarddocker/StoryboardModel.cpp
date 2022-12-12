@@ -123,16 +123,15 @@ int StoryboardModel::columnCount(const QModelIndex &parent) const
 
 QVariant StoryboardModel::data(const QModelIndex &index, int role) const
 {
-
     if (!index.isValid()) {
         return QVariant();
     }
+
     //return data only for the storyboardChild i.e. 2nd level nodes
-    if (!index.parent().isValid()) {
+    if (isValidBoard(index)) {
         if (role == TotalSceneDurationInFrames) {
             int duration = this->index(StoryboardItem::DurationFrame, 0, index).data().toInt()
-                + this->index(StoryboardItem::DurationSecond, 0, index).data().toInt()
-                * getFramesPerSecond();
+                + this->index(StoryboardItem::DurationSecond, 0, index).data().toInt() * getFramesPerSecond();
             return duration;
         }
         else if (role == TotalSceneDurationInSeconds) {
@@ -172,7 +171,7 @@ QVariant StoryboardModel::data(const QModelIndex &index, int role) const
 bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
     if (index.isValid() && !isLocked() && (role == Qt::EditRole || role == Qt::DisplayRole)) {
-        if (!index.parent().isValid()) {
+        if (isValidBoard(index)) {
             return false;
         }
 
@@ -283,7 +282,7 @@ bool StoryboardModel::setThumbnailPixmapData(const QModelIndex & parentIndex, co
     QPixmap pxmap = QPixmap::fromImage(image);
     pxmap = pxmap.scaled((1.5)*scale*m_image->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-    if (!index.parent().isValid())
+    if (isValidBoard(index))
         return false;
 
     QSharedPointer<StoryboardChild> child = m_items.at(index.parent().row())->child(index.row());
@@ -329,7 +328,7 @@ Qt::ItemFlags StoryboardModel::flags(const QModelIndex & index) const
     }
 
     //1st level nodes
-    if (!index.parent().isValid()) {
+    if (isValidBoard(index)) {
         return Qt::ItemIsDragEnabled | Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     }
 

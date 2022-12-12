@@ -92,14 +92,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-11 00:44+0000\n"
-"PO-Revision-Date: 2022-11-23 20:38+0100\n"
+"PO-Revision-Date: 2022-12-11 07:52+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.08.2\n"
+"X-Generator: Lokalize 22.08.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
@@ -12698,16 +12698,14 @@ msgid "&View"
 msgstr "&Widok"
 
 #: krita/krita5.xmlgui:86
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Wrap Around Mode"
+#, kde-format
 msgid "Wrap Around Mode Direction"
-msgstr "Tryb owijania"
+msgstr "Kierunek trybu owijania"
 
 #: krita/krita5.xmlgui:96
 #, kde-format
 msgid "&Zoom, Rotate, and Mirror"
-msgstr ""
+msgstr "Powięks&z, obróć i odbij"
 
 #: krita/krita5.xmlgui:128
 #, kde-format
@@ -13732,9 +13730,7 @@ msgstr "Tryb pełnoekranowy"
 #. i18n: context: text @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:640 krita/kritamenu.action:643
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Detach canvas"
+#, kde-format
 msgctxt "action"
 msgid "Detach Canvas"
 msgstr "Odłącz płótno"
@@ -13771,12 +13767,10 @@ msgstr "Tryb owijania"
 #. i18n: context: iconText @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:664 krita/kritamenu.action:666
 #: krita/kritamenu.action:667
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Wrap Around Mode"
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Both Directions"
-msgstr "Tryb owijania"
+msgstr "Owiń w obu kierunkach"
 
 #. i18n: context: text @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
@@ -13786,12 +13780,10 @@ msgstr "Tryb owijania"
 #. i18n: context: iconText @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:676 krita/kritamenu.action:678
 #: krita/kritamenu.action:679
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr "Lustrzane odbicie poziome"
+msgstr "Owiń w poziomie"
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -13801,12 +13793,10 @@ msgstr "Lustrzane odbicie poziome"
 #. i18n: context: iconText @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:688 krita/kritamenu.action:690
 #: krita/kritamenu.action:691
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Vertically"
-msgstr "Lustrzane odbicie pionowe"
+msgstr "Owiń w pionie"
 
 #. i18n: context: text @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:700
@@ -13904,19 +13894,17 @@ msgstr "Odbij widok wokół płótna"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "Powiększ do 100%"
+msgstr "Powięks&z do 100%"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:764 krita/kritamenu.action:765
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
 msgstr "Powiększ do 100%"
@@ -13954,57 +13942,51 @@ msgstr "Pomniejsz"
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:798 krita/kritamenu.action:801
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View"
-msgstr "Zmieść na stronie"
+msgstr "Zmieść w widoku"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
-#, fuzzy, kde-format
-#| msgid "Canvas Size"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View"
-msgstr "Rozmiar płótna"
+msgstr "Zmieść płótno w widoku"
 
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:808 krita/kritamenu.action:811
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr "Zmieść na szerokości"
+msgstr "Zmieść widok na szerokości"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Width"
-msgstr "Zmieść na szerokości"
+msgstr "Zmieść płótno na szerokości widoku"
 
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:818 krita/kritamenu.action:821
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
-msgstr "Zmieść na wysokości"
+msgstr "Zmieść widok na wysokości"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Height"
-msgstr "Zmieść na wysokości"
+msgstr "Zmieść płótno na wysokości widoku"
 
 #. i18n: context: text @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -14014,12 +13996,10 @@ msgstr "Zmieść na wysokości"
 #. i18n: context: iconText @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:828 krita/kritamenu.action:830
 #: krita/kritamenu.action:831
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle Zoom Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Fit to View"
-msgstr "Przełącznik mieszczenia się na stronie"
+msgstr "Przełącz mieszczenie się w widoku"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:838
@@ -14073,30 +14053,27 @@ msgstr "Wyzeruj obrót płótna"
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:874 krita/kritamenu.action:877
-#, fuzzy, kde-format
-#| msgid "Master Display:"
+#, kde-format
 msgctxt "action"
 msgid "Reset Display"
-msgstr "Główny wyświetlacz:"
+msgstr "Wyzeruj wyświetlacz"
 
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
-#, fuzzy, kde-format
-#| msgid "Reset the options to their default values"
+#, kde-format
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
-msgstr "Wyzeruj ustawienia do ich wartości domyślnych"
+msgstr "Wyzeruj powiększenie, obrót i odbicia do ich wartości domyślnych."
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:884 krita/kritamenu.action:887
-#, fuzzy, kde-format
-#| msgid "Print Size"
+#, kde-format
 msgctxt "action"
 msgid "View Print Size"
-msgstr "Rozmiar wydruku"
+msgstr "Zobacz rozmiar wydruku"
 
 #. i18n: context: toolTip @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:886
@@ -14104,6 +14081,8 @@ msgstr "Rozmiar wydruku"
 msgctxt "action"
 msgid "Map the canvas display to print size, based on the image resolution."
 msgstr ""
+"Zmapuj wyświetlanie płótna do rozmiaru wydruku na podstawie rozdzielczości "
+"obrazu."
 
 #. i18n: context: text @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:894
@@ -17032,8 +17011,7 @@ msgstr "Maska wyboru"
 
 #: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2473
 #: plugins/impex/psd/psd_loader.cpp:189
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Tło"
@@ -17400,7 +17378,7 @@ msgstr "Wygładź zaznaczanie"
 #: libs/image/kis_selection_filters.cpp:1169
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
-msgstr ""
+msgstr "Zwiększ zaznaczenie aż do najciemniejszego piksela"
 
 #: libs/image/kis_switch_time_stroke_strategy.cpp:32
 msgctxt "(qtundo-format)"
@@ -17744,6 +17722,9 @@ msgid ""
 "millisecond</b>. The format cannot represent this, and the frame duration "
 "will be rounded to the nearest millisecond."
 msgstr ""
+"Obraz jest animowany z czasem trwania klatki w <b>ułamkach milisekundy</b>. "
+"Format nie jest w stanie tego odwzorować, więc czas trwania klatki zostanie "
+"zaokrąglony do najbliższej milisekundy."
 
 #: libs/impex/KisExportCheckRegistry.cpp:104 libs/ui/kis_layer_manager.cc:647
 #, kde-format
@@ -28363,10 +28344,9 @@ msgid "Zoom to 100%"
 msgstr "Powiększ do 100%"
 
 #: libs/ui/input/kis_zoom_action.cpp:117
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgid "Fit to View"
-msgstr "Zmieść na stronie"
+msgstr "Zmieść w widoku"
 
 #: libs/ui/input/kis_zoom_action.cpp:118
 #, fuzzy, kde-format
@@ -29548,7 +29528,7 @@ msgstr ""
 #: libs/ui/KisApplication.cpp:841
 #, kde-format
 msgid "Couldn't open file %1"
-msgstr "Nie można otworzyć pliku %1"
+msgstr "Nie udało się otworzyć pliku %1"
 
 #: libs/ui/KisApplication.cpp:860
 #, kde-format
@@ -33724,11 +33704,9 @@ msgid "Select regions found from the active layer"
 msgstr "Pobierz obszar, używając bieżącej warstwy"
 
 #: libs/ui/widgets/kis_selection_options.cc:244
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) action"
-#| msgid "Select a color from the image or current layer"
+#, kde-format
 msgid "Select regions found from the merging of all layers"
-msgstr "Wybierz barwę z obrazu lub bieżącej warstwy"
+msgstr "Zaznacz obszary uzyskane ze scalenia wszystkich warstw"
 
 #: libs/ui/widgets/kis_selection_options.cc:246
 #, kde-format
@@ -34772,11 +34750,9 @@ msgid "Tool Options"
 msgstr "Ustawienia narzędzia"
 
 #: libs/widgets/KoZoomMode.cpp:14
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "View"
+#, kde-format
 msgid "Fit View"
-msgstr "Widok"
+msgstr "Zmieść widok"
 
 #: libs/widgets/KoZoomMode.cpp:15
 #, fuzzy, kde-format
@@ -37640,15 +37616,13 @@ msgid "Dropped frames are not available in this Krita instance"
 msgstr "Upuszczone klatki nie są dostępne w tym wystąpieniu Krity"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:870
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add blank frame"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
-msgstr[0] "Dodaj pustą klatkę"
-msgstr[1] "Dodaj pustą klatkę"
-msgstr[2] "Dodaj pustą klatkę"
+msgstr[0] "Dodaj %1 pustą klatkę"
+msgstr[1] "Dodaj %1 puste klatki"
+msgstr[2] "Dodaj %1 pustych klatek"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:915
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:963
@@ -38522,32 +38496,28 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:375
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
-msgstr "Brak"
+msgstr "Żadne"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:376
-#, fuzzy, kde-format
-#| msgid "Simple"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Prosty"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:377
-#, fuzzy, kde-format
-#| msgid "Color Balance"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
-msgstr "Równowaga barw"
+msgstr "Zrównoważony"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:378
-#, fuzzy, kde-format
-#| msgid "Details"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
-msgstr "Szczegóły"
+msgstr "Szczegółowy"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:391
 #, fuzzy, kde-format
@@ -38558,12 +38528,10 @@ msgid "Blending info text opacity"
 msgstr "Nieprzezroczystość napisu"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:409
-#, fuzzy, kde-format
-#| msgctxt "spline filtering"
-#| msgid "spline"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
-msgstr "krzywa sklejana"
+msgstr "W wierszu"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:411
 #, kde-format
@@ -39408,7 +39376,7 @@ msgstr "Usuń nagrania"
 #| msgid "Render as:"
 msgctxt "How long it took to render the video"
 msgid "Render time:"
-msgstr "Renderuj jako:"
+msgstr "Czas wyświetlania"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRestart)
 #: plugins/dockers/recorder/recorder_export.ui:1053
@@ -49909,9 +49877,7 @@ msgstr "Najwyższa jakość"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:829
-#, fuzzy, kde-format
-#| msgctxt "JPEG metadata filter"
-#| msgid "Filters:"
+#, kde-format
 msgctxt "WebP metadata options"
 msgid "Filters:"
 msgstr "Filtry:"
@@ -50247,8 +50213,7 @@ msgid "Background"
 msgstr "Tło"
 
 #: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:68
-#, fuzzy, kde-format
-#| msgid "Foreground"
+#, kde-format
 msgctxt "Foreground painting color"
 msgid "Foreground"
 msgstr "Pierwszy plan"
@@ -56068,10 +56033,9 @@ msgid "Reset"
 msgstr "Wyzeruj"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:560
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Fill the active selection, or the entire canvas"
-msgstr "Rozmyj zaznaczenie o daną ilość"
+msgstr "Wypełnij bieżące zaznaczenie lub całe płótno"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:561
 #, fuzzy, kde-format
@@ -56099,17 +56063,14 @@ msgid "Set the rotation of the pattern"
 msgstr "Określ obrót wzorca"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:570
-#, fuzzy, kde-format
-#| msgid "Fill only regions similar in color to the initial region"
+#, kde-format
 msgid "Fill regions similar in color to the clicked region"
-msgstr "Wypełnij tylko obszary podobne w barwie do obszaru początkowego"
+msgstr "Wypełnij obszary podobne w barwie do naciśniętego obszaru"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:571
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions of a specific color"
+#, kde-format
 msgid "Fill all regions until a specific boundary color"
-msgstr "Obszary o danej barwie"
+msgstr "Wypełnij wszystkie obszary do chwili danej barwy granicznej"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:572
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
@@ -56136,16 +56097,13 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:575
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set if the contour of the current selection should be treated as a "
-#| "boundary when obtaining the region"
+#, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when filling the region"
 msgstr ""
 "Zaznacz, jeśli zarys bieżącego zaznaczenia ma być potraktowany jako granica "
-"przy pobieraniu obszaru"
+"przy wypełnianiu obszaru"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:577
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:454
@@ -56177,19 +56135,17 @@ msgstr "Pobierz obszar, używając bieżącej warstwy"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:583
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
-#, fuzzy, kde-format
-#| msgid "Obtain the region using a merged copy of all layers"
+#, kde-format
 msgid "Fill regions found from the merging of all layers"
-msgstr "Pobierz obszar, używając scalonej kopii wszystkich warstw"
+msgstr "Wypełnij obszary uzyskane ze scalenia wszystkich warstw"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:584
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "All regions except those of a specific color"
+#, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
-msgstr "Wszystkie obszary poza tymi o danych barwach"
+msgstr ""
+"Wypełnia obszary uzyskane ze scalania warstw o danych etykietach barwnych"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:586
 #, fuzzy, kde-format
@@ -56198,12 +56154,13 @@ msgid "Dragging will fill regions of any color"
 msgstr "Wypełnij obszary dowolną barwą"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:587
-#, fuzzy, kde-format
-#| msgid "Fill only regions similar in color to the initial region"
+#, kde-format
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
-msgstr "Wypełnij tylko obszary podobne w barwie do obszaru początkowego"
+msgstr ""
+"Przeciągnięcie wypełni tylko obszary podobne w barwie do obszaru "
+"początkowego (użyteczne przy wypełnianiu szkiców)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:589
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:463
@@ -56212,11 +56169,10 @@ msgid "Reset the options to their default values"
 msgstr "Wyzeruj ustawienia do ich wartości domyślnych"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:598
-#, fuzzy, kde-format
-#| msgid "Simple mode"
+#, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
-msgstr "Tryb prosty"
+msgstr "Tryb wypełniania"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:605
 #, fuzzy, kde-format
@@ -57336,17 +57292,14 @@ msgid "Feather: "
 msgstr "Piórkowanie: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
-#, fuzzy, kde-format
-#| msgid "Fill only regions similar in color to the initial region"
+#, kde-format
 msgid "Select regions similar in color to the clicked region"
-msgstr "Wypełnij tylko obszary podobne w barwie do obszaru początkowego"
+msgstr "Zaznacz obszary podobne w barwie do obszaru naciśniętego"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions of a specific color"
+#, kde-format
 msgid "Select all regions until a specific boundary color"
-msgstr "Obszary o danej barwie"
+msgstr "Zaznacz wszystkie obszary do chwili danej barwy granicznej"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:466
@@ -57364,16 +57317,13 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set if the contour of the current selection should be treated as a "
-#| "boundary when obtaining the new one"
+#, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
 "Zaznacz, jeśli zarys bieżącego zaznaczenia ma być potraktowany jako granica "
-"przy pobieraniu obszaru"
+"przy tworzeniu nowego zaznaczenia"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:416
 #, kde-format
@@ -58645,15 +58595,12 @@ msgid "Enable to fill opposite regions instead"
 msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:443
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check this option to also fill the shapes that touch the contour of the "
-#| "enclosing region"
+#, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
-"Zaznacz to pole, aby wypełnić także kształty, które dotykają zarysu "
-"otaczającego obszaru"
+"Włącz, aby wypełnić także kształty, które dotykają zarysu otaczającego "
+"obszaru"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:472
 #, kde-format
@@ -58696,8 +58643,7 @@ msgid "Reference"
 msgstr "Odniesienie"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:714
-#, fuzzy, kde-format
-#| msgid "All"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Wszystkie"
@@ -58714,7 +58660,7 @@ msgstr "Wybierak danej barwy"
 #| msgid "Transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
-msgstr "Przezroczyste"
+msgstr "Przezroczystość"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:723
 #, fuzzy, kde-format
@@ -58740,12 +58686,10 @@ msgid "All, excluding transparency"
 msgstr "Płonąca przezroczystość"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:732
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions of a specific color or transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
-msgstr "Obszary o danej barwie lub przezroczyste"
+msgstr "Wszystkie, wykluczając daną barwę lub przezroczystość"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:735
 #, fuzzy, kde-format
@@ -58764,12 +58708,10 @@ msgid "Any surrounded by transparency"
 msgstr "Obszary otoczone przezroczystością"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:741
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions surrounded by a specific color or transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
-msgstr "Obszary sąsiadujące wg danej barwy lub przezroczyste"
+msgstr "Dowolna otoczona daną barwą lub przezroczystością"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
 #, kde-format

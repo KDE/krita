@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-11 00:44+0000\n"
-"PO-Revision-Date: 2022-12-06 10:14+0100\n"
+"PO-Revision-Date: 2022-12-09 08:46+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -38524,18 +38524,16 @@ msgstr ""
 "espai)."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Selection to New Layer"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "Copia la selecció a una capa nova"
+msgstr "Casella de selecció per a seleccionar capes"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:424
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
-msgstr ""
+msgstr "Mostra una casella de selecció per a seleccionar/desseleccionar capes."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:974
 msgctxt "(qtundo-format)"
@@ -59840,15 +59838,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "Eines de &pintura"
-
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "Eines de pintura"
-
-#~ msgctxt "action"
-#~ msgid "Brush composite"
-#~ msgstr "Composició del pinzell"

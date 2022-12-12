@@ -98,14 +98,8 @@ private:
 extern template class KisCurveWidgetControlsManager<QSpinBox>;
 extern template class KisCurveWidgetControlsManager<QDoubleSpinBox>;
 
-class KisCurveWidgetControlsManagerInt : public KisCurveWidgetControlsManager<QSpinBox>
-{
-    using KisCurveWidgetControlsManager::KisCurveWidgetControlsManager;
-};
+using KisCurveWidgetControlsManagerInt = KisCurveWidgetControlsManager<QSpinBox>;
+using KisCurveWidgetControlsManagerDouble = KisCurveWidgetControlsManager<QDoubleSpinBox>;
 
-class KisCurveWidgetControlsManagerDouble : public KisCurveWidgetControlsManager<QDoubleSpinBox>
-{
-    using KisCurveWidgetControlsManager::KisCurveWidgetControlsManager;
-};
 
 #endif // KISCURVEWIDGETCONTROLSMANAGER_H

@@ -14,9 +14,10 @@
 class Ui_WdgCurveOption;
 class KisCurveOption;
 class QComboBox;
-class KisCurveWidgetControlsManagerInt;
 
+#include <KisCurveWidgetControlsManager.h>
 #include <kis_dynamic_sensor.h>
+
 
 class PAINTOP_EXPORT KisCurveOptionWidget : public KisPaintOpOption
 {

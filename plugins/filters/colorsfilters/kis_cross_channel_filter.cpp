@@ -40,7 +40,6 @@
 #include "kis_painter.h"
 #include "widgets/kis_curve_widget.h"
 #include <KisGlobalResourcesInterface.h>
-#include <KisCurveWidgetControlsManager.h>
 
 #include "../../color/colorspaceextensions/kis_hsv_adjustment.h"
 

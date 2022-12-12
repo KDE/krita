@@ -9,6 +9,7 @@
 
 #include <tuple>
 #include <utility>
+#include <optional>
 
 /**
  * 'kismpl' stands for kis-meta-program-library

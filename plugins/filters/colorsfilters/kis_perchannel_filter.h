@@ -20,8 +20,8 @@
 #include "virtual_channel_info.h"
 
 #include "kis_multichannel_filter_base.h"
+#include <KisCurveWidgetControlsManager.h>
 
-class KisCurveWidgetControlsManagerInt;
 
 class KisPerChannelFilterConfiguration
         : public KisMultiChannelFilterConfiguration

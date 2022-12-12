@@ -22,8 +22,7 @@
 #include "virtual_channel_info.h"
 
 #include "kis_multichannel_filter_base.h"
-
-class KisCurveWidgetControlsManagerInt;
+#include <KisCurveWidgetControlsManager.h>
 
 /**
  * Filter which applies a relative adjustment to a (virtual) color channel based on the value of another.

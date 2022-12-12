@@ -545,14 +545,9 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     }
 #ifdef Q_OS_ANDROID
     KisApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
-
-    // TODO: remove "share" - sh_zam
-    // points to /data/data/org.krita/files/share/locale
-    KLocalizedString::addDomainLocaleDir("krita", QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/share/locale");
-#else
+#endif
     // Enable debugging translations from undeployed apps
     KLocalizedString::addDomainLocaleDir("krita", QDir(root + "share/locale").absolutePath());
-#endif
 
     KLocalizedString::setApplicationDomain("krita");
 

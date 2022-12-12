@@ -142,9 +142,10 @@ public:
 
     MaskingBrushData bakedOptionData() const {
         MaskingBrushData data = m_maskingData.get();
-        data.brush.autoBrush = autoBrushModel.bakedOptionData();
-        std::tie(data.brush.common, data.brush.predefinedBrush) =
-            predefinedBrushModel.bakedOptionData();
+
+        KisBrushModel::bakeFromModels(data.brush,
+                                      autoBrushModel.bakedOptionData(),
+                                      predefinedBrushModel.bakedOptionData());
         return data;
     }
 

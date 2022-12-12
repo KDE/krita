@@ -116,7 +116,7 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
     ENDIF (MINGW)
 
     if (MSVC)
-        SET_TARGET_PROPERTIES(${_logical_name} PROPERTIES PDB_NAME "PyKrita.krita")
+        SET_TARGET_PROPERTIES(${_logical_name} PROPERTIES PDB_NAME "sip_v4_${_logical_name}")
     ENDIF (MSVC)
 
     IF (WIN32)
@@ -128,7 +128,6 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
         INSTALL(
             FILES $<TARGET_PDB_FILE:${_logical_name}>
             DESTINATION "${PYTHON_SITE_PACKAGES_INSTALL_DIR}/${_parent_module_path}"
-            RENAME ${_child_module_name}.pdb
             OPTIONAL
         )
     endif()
@@ -234,6 +233,10 @@ else()
             # SIP v5+ redefines access to protected variables.
             target_compile_definitions(${_logical_name} PRIVATE SIP_PROTECTED_IS_PUBLIC)
             target_compile_definitions(${_logical_name} PRIVATE protected=public)
+        endif()
+
+        if(MSVC)
+            set_target_properties(${_logical_name} PROPERTIES PDB_NAME "sip_v5_${_logical_name}")
         endif ()
 
         if (WIN32)

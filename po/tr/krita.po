@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-10 02:24+0000\n"
-"PO-Revision-Date: 2022-12-10 22:11+0300\n"
+"PO-Revision-Date: 2022-12-11 20:36+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 22.12.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -32499,7 +32499,7 @@ msgstr ""
 "Kırmızı Kroma)</a></b>, video kodlaması için tasarlanmış bir modeldir. İnsan "
 "algısına dayanır, yani açıklık, kırmızı-yeşil denge ve sarı-mavi denge "
 "arasındaki farkı kodlamaya çalışır. Bu durumda Kroma, doymuşluğun özel bir "
-"türünü belirten bir kelimedir; bu durumlarda, doymamış eşdeğerleri sırasıyla "
+"türünü belirten bir sözcüktür; bu durumlarda, doymamış eşdeğerleri sırasıyla "
 "Yeşil ve Sarı olan Kırmızı ve Mavi'nin doygunluğu."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:440
@@ -53128,8 +53128,8 @@ msgid ""
 "separated."
 msgstr ""
 "Bunlar metin katmanlarını tanımlamak için kullanılabilecek anahtar "
-"sözcüklerdir. Katman yalnızca tanınacak anahtar kelimeyi içermelidir. "
-"Anahtar sözcükler virgülle ayrılmalıdır."
+"sözcüklerdir. Katman yalnızca tanınacak anahtar sözcüğü içermelidir. Anahtar "
+"sözcükler virgülle ayrılmalıdır."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:257
 msgid ""
@@ -53138,8 +53138,8 @@ msgid ""
 "separated."
 msgstr ""
 "Bunlar panel katmanlarını tanımlamak için kullanılabilecek anahtar "
-"sözcüklerdir. Katman yalnızca tanınacak anahtar kelimeyi içermelidir. "
-"Anahtar sözcükler virgülle ayrılmalıdır."
+"sözcüklerdir. Katman yalnızca tanınacak anahtar sözcüğü içermelidir. Anahtar "
+"sözcükler virgülle ayrılmalıdır."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:258
 msgid "Text Layer Key:"

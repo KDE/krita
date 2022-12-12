@@ -143,7 +143,7 @@ lager::reader<BrushData> KisBrushOptionWidget::bakedBrushData() const
     });
 }
 
-lager::reader<KisPaintopLodLimitations> KisBrushOptionWidget::lodLimitationsReader() const
+KisPaintOpOption::OptionalLodLimitationsReader KisBrushOptionWidget::lodLimitationsReader() const
 {
     return m_d->brushData.map(&KisBrushModel::brushLodLimitations);
 }

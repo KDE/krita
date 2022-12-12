@@ -130,18 +130,24 @@ void KisPaintOpOption::lodLimitations(KisPaintopLodLimitations *l) const
     Q_UNUSED(l);
 }
 
-lager::reader<KisPaintopLodLimitations> KisPaintOpOption::effectiveLodLimitations() const
+KisPaintOpOption::OptionalLodLimitationsReader KisPaintOpOption::effectiveLodLimitations() const
 {
-    return lager::with(m_d->pageEnabledReader, lodLimitationsReader())
-        .map([](bool enabled, const KisPaintopLodLimitations &l) {
-            return enabled ? l : KisPaintopLodLimitations();
-        });
+    OptionalLodLimitationsReader reader = lodLimitationsReader();
+
+    if (reader) {
+        reader = lager::with(m_d->pageEnabledReader, *reader)
+            .map([](bool enabled, const KisPaintopLodLimitations &l) {
+                return enabled ? l : KisPaintopLodLimitations();
+            });
+    }
+
+    return reader;
 }
 
-lager::reader<KisPaintopLodLimitations> KisPaintOpOption::lodLimitationsReader() const
+KisPaintOpOption::OptionalLodLimitationsReader KisPaintOpOption::lodLimitationsReader() const
 {
     // no limitations by default
-    return lager::make_constant(KisPaintopLodLimitations());
+    return std::nullopt;
 }
 
 KisPaintOpOption::PaintopCategory KisPaintOpOption::category() const

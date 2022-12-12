@@ -17,6 +17,8 @@
 #include <MyPaintBasicOptionWidget.h>
 #include <MyPaintStandardOptionData.h>
 
+#include <kis_paintop_lod_limitations.h>
+
 namespace KisPaintOpOptionWidgetUtils {
 
 template <typename Data>
@@ -26,7 +28,14 @@ MyPaintCurveOptionWidget2* createMyPaintCurveOptionWidget(Data data, const QStri
     return createOptionWidget<MyPaintCurveOptionWidget2>(std::move(data), yLimit, yValueSuffix);
 }
 
-} // namespace
+template <typename Data>
+MyPaintCurveOptionWidget2* createMyPaintCurveOptionWidgetWithLodLimitations(Data data, const QString &yValueSuffix = "")
+{
+    const qreal yLimit = qAbs(data.strengthMaxValue - data.strengthMinValue);
+    return createOptionWidgetWithLodLimitations<MyPaintCurveOptionWidget2>(std::move(data), yLimit, yValueSuffix);
+}
+
+} // namespace KisPaintOpOptionWidgetUtils
 
 
 KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
@@ -37,7 +46,7 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
 
     namespace kpowu = KisPaintOpOptionWidgetUtils;
 
-    MyPaintCurveOptionWidget2 *radiusWidget =
+    m_radiusWidget =
         kpowu::createMyPaintCurveOptionWidget(MyPaintRadiusLogarithmicData());
     MyPaintCurveOptionWidget2 *hardnessWidget =
         kpowu::createMyPaintCurveOptionWidget(MyPaintHardnessData());
@@ -46,13 +55,13 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
 
     KisPaintOpSettingsWidget::addPaintOpOption(
         kpowu::createOptionWidget<MyPaintBasicOptionWidget>(MyPaintBasicOptionData(),
-                                                            radiusWidget->strengthValueDenorm(),
+                                                            m_radiusWidget->strengthValueDenorm(),
                                                             hardnessWidget->strengthValueDenorm(),
                                                             opacityWidget->strengthValueDenorm()));
 
-    addPaintOpOption(radiusWidget,
+    addPaintOpOption(m_radiusWidget,
                      BASIC);
-    addPaintOpOption(kpowu::createMyPaintCurveOptionWidget(MyPaintRadiusByRandomData()),
+    addPaintOpOption(kpowu::createMyPaintCurveOptionWidgetWithLodLimitations(MyPaintRadiusByRandomData()),
                      BASIC);
     addPaintOpOption(hardnessWidget,
                      BASIC);
@@ -97,7 +106,7 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
                      SPEED);
     addPaintOpOption(kpowu::createMyPaintCurveOptionWidget(MyPaintOffsetBySpeedFilterData()),
                      SPEED);
-    addPaintOpOption(kpowu::createMyPaintCurveOptionWidget(MyPaintOffsetByRandomData()),
+    addPaintOpOption(kpowu::createMyPaintCurveOptionWidgetWithLodLimitations(MyPaintOffsetByRandomData()),
                      SPEED);
 
     addPaintOpOption(kpowu::createMyPaintCurveOptionWidget(MyPaintDabsPerBasicRadiusData()),
@@ -151,6 +160,11 @@ KisPropertiesConfigurationSP  KisMyPaintOpSettingsWidget::configuration() const
     config->setProperty("paintop", "mypaintbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;
+}
+
+lager::reader<qreal> KisMyPaintOpSettingsWidget::effectiveBrushSize() const
+{
+    return m_radiusWidget->strengthValueDenorm().map([] (qreal value) { return 2 * exp(value); });
 }
 
 void KisMyPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, MyPaintPaintopCategory id)

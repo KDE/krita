@@ -23,8 +23,13 @@ public:
 
     KisPropertiesConfigurationSP configuration() const override;
 
+    lager::reader<qreal> effectiveBrushSize() const override;
+
 protected:
     void addPaintOpOption(KisPaintOpOption *option, MyPaintPaintopCategory id);
+
+private:
+    MyPaintCurveOptionWidget2 *m_radiusWidget {nullptr};
 };
 
 #endif

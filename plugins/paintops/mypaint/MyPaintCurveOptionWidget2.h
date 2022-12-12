@@ -22,7 +22,11 @@ public:
 
     using KisCurveOptionWidget2::strengthValueDenorm;
 
+    OptionalLodLimitationsReader lodLimitationsReader() const override;
+
 private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif // MYPAINTCURVEOPTIONWIDGET2_H

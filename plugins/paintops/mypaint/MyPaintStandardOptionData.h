@@ -7,6 +7,8 @@
 #define MYPAINTSTANDARDOPTIONDATA_H
 
 #include <MyPaintCurveOptionData.h>
+#include <kis_paintop_lod_limitations.h>
+
 
 struct MyPaintRadiusLogarithmicData : MyPaintCurveOptionData
 {
@@ -42,6 +44,14 @@ struct MyPaintRadiusByRandomData : MyPaintCurveOptionData
         : MyPaintCurveOptionData(KoID("radius_by_random", i18n("Radius by Random")),
                                  false, true, 0.0, 1.50)
     {
+    }
+
+    KisPaintopLodLimitations lodLimitations() const {
+        KisPaintopLodLimitations l;
+        if (qAbs(strengthValue) > 0.05) {
+            l.limitations << KoID("Radius by Random", i18nc("PaintOp instant preview limitation", "Radius by Random, consider disabling Instant Preview"));
+        }
+        return l;
     }
 };
 
@@ -218,6 +228,15 @@ struct MyPaintOffsetByRandomData : MyPaintCurveOptionData
                                  false, true, -3.0, 3.0)
     {
     }
+
+    KisPaintopLodLimitations lodLimitations() const {
+        KisPaintopLodLimitations l;
+        if (qAbs(strengthValue) > 0.05) {
+            l.limitations << KoID("Offset by Random", i18nc("PaintOp instant preview limitation", "Offset by Random, consider disabling Instant Preview"));
+        }
+        return l;
+    }
+
 };
 
 struct MyPaintDabsPerBasicRadiusData : MyPaintCurveOptionData

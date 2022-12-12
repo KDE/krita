@@ -32,7 +32,7 @@ KisSizeOptionWidget::~KisSizeOptionWidget()
 {
 }
 
-lager::reader<KisPaintopLodLimitations> KisSizeOptionWidget::lodLimitationsReader() const
+KisPaintOpOption::OptionalLodLimitationsReader KisSizeOptionWidget::lodLimitationsReader() const
 {
     return m_d->lodLimitations;
 }

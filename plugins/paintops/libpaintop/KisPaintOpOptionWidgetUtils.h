@@ -7,9 +7,11 @@
 #define KISPAINTOPOPTIONWIDGETUTILS_H
 
 #include <boost/tti/has_type.hpp>
+#include <boost/tti/has_member_function.hpp>
 #include <lager/state.hpp>
 #include <KisZug.h>
 #include <KisCurveOptionWidget2.h>
+#include "kis_paintop_lod_limitations.h"
 
 namespace KisPaintOpOptionWidgetUtils
 {
@@ -17,6 +19,7 @@ namespace KisPaintOpOptionWidgetUtils
 namespace detail {
 
 BOOST_TTI_HAS_TYPE(data_type)
+BOOST_TTI_HAS_MEMBER_FUNCTION(lodLimitations)
 
 template <typename Data, typename... Args>
 struct DataStorage
@@ -84,7 +87,24 @@ struct WidgetWrapper :
     using BaseClass::BaseClass;
 };
 
-}
+template <typename Widget, typename Data, typename... Args>
+struct WidgetWrapperWithLodLimitations : WidgetWrapper<Widget, Data, Args...>
+{
+    using BaseClass = WidgetWrapper<Widget, Data, Args...>;
+
+    // reuse c-tor from the base
+    using BaseClass::BaseClass;
+
+    KisPaintOpOption::OptionalLodLimitationsReader
+    lodLimitationsReader() const override {
+        return kiszug::fold_optional_cursors(std::bit_or{},
+                                             BaseClass::lodLimitationsReader(),
+                                             KisPaintOpOption::OptionalLodLimitationsReader(
+                                                 this->m_data.map(&Data::lodLimitations)));
+    }
+};
+
+} // namespace detail
 
 /**
  * Creates an option widget and lager::store for its \p Data
@@ -105,6 +125,20 @@ Widget* createOptionWidget(Data&& data, Args... args)
 {
     return new detail::WidgetWrapper<Widget, Data, Args...>(std::forward<Data>(data), std::forward<Args>(args)...);
 }
+
+/**
+ * Same as normal createOptionWidget(), but creates a widget that fetches
+ * lod limitations directly from the \p Data object by calling
+ * Data::lodLimitations().
+ */
+
+template <typename Widget, typename Data, typename... Args>
+Widget* createOptionWidgetWithLodLimitations(Data&& data, Args... args)
+{
+    static_assert(detail::has_member_function_lodLimitations<KisPaintopLodLimitations (Data::*)() const>::value, "Data must have Data::lodLomitations() member function defined to use a widget with lod limitaitons generation");
+    return new detail::WidgetWrapperWithLodLimitations<Widget, Data, Args...>(std::forward<Data>(data), std::forward<Args>(args)...);
+}
+
 
 /**
  * Creates an option widget and lager::store for its \p Data

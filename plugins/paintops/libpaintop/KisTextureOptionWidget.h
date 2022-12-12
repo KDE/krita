@@ -23,7 +23,7 @@ public:
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 protected:
-    lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const override;
+    OptionalLodLimitationsReader lodLimitationsReader() const override;
 
 private:
     struct Private;

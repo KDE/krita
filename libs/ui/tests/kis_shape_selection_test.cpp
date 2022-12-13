@@ -14,8 +14,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoPathShape.h>
 
-#include "KisImageResolutionProxy.h"
-#include "kis_default_bounds.h"
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #include "flake/kis_shape_selection.h"
@@ -36,10 +34,7 @@ void KisShapeSelectionTest::testAddChild()
     doc->newImage("test", 300, 300, cs, bgColor, KisConfig::CANVAS_COLOR, 1, "test", 100);
     KisImageSP image = doc->image();
 
-    KisDefaultBoundsSP bounds(new KisDefaultBounds(image));
-    KisImageResolutionProxySP resolutionProxy(new KisImageResolutionProxy(image));
-
-    KisSelectionSP selection = new KisSelection(bounds, resolutionProxy);
+    KisSelectionSP selection = new KisSelection();
     QVERIFY(!selection->hasNonEmptyPixelSelection());
     QVERIFY(!selection->hasNonEmptyShapeSelection());
 
@@ -97,10 +92,7 @@ void KisShapeSelectionTest::testUndoFlattening()
 
     QCOMPARE(image->locked(), false);
 
-    KisDefaultBoundsSP bounds(new KisDefaultBounds(image));
-    KisImageResolutionProxySP resolutionProxy(new KisImageResolutionProxy(image));
-
-    KisSelectionSP selection = new KisSelection(bounds, resolutionProxy);
+    KisSelectionSP selection = new KisSelection();
     QCOMPARE(selection->hasNonEmptyPixelSelection(), false);
     QCOMPARE(selection->hasNonEmptyShapeSelection(), false);
 
@@ -206,10 +198,7 @@ void KisShapeSelectionTest::testHistoryOnFlattening()
 
     QCOMPARE(image->locked(), false);
 
-    KisDefaultBoundsSP bounds(new KisDefaultBounds(image));
-    KisImageResolutionProxySP resolutionProxy(new KisImageResolutionProxy(image));
-
-    KisSelectionSP selection = new KisSelection(bounds, resolutionProxy);
+    KisSelectionSP selection = new KisSelection();
     QCOMPARE(selection->hasNonEmptyPixelSelection(), false);
     QCOMPARE(selection->hasNonEmptyShapeSelection(), false);
 

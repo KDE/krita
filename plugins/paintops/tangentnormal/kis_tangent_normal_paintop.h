@@ -52,7 +52,6 @@ private:
 private:
     //private functions//
     KisTangentTiltOption m_tangentTiltOption;
-    KisTangentTiltOptionData m_tangentTiltOptionData;
 
     KisFlowOpacityOption2 m_opacityOption;
     KisFlowOption m_flowOption;

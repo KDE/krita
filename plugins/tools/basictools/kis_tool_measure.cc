@@ -85,6 +85,7 @@ void KisToolMeasureOptionsWidget::slotUnitChanged(int index)
 void KisToolMeasureOptionsWidget::slotResolutionChanged(double xRes, double /*yRes*/)
 {
     m_resolution = xRes;
+    updateDistance();
 }
 
 void KisToolMeasureOptionsWidget::updateDistance()

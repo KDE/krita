@@ -201,33 +201,30 @@ void KoColorSpaceRegistry::init()
 
 KoColorSpaceRegistry::KoColorSpaceRegistry() : d(new Private(this))
 {
-    d->colorConversionSystem = nullptr;
-    d->colorConversionCache = nullptr;
+    d->colorConversionSystem = 0;
+    d->colorConversionCache = 0;
 }
 
 KoColorSpaceRegistry::~KoColorSpaceRegistry()
 {
-    delete d->colorConversionSystem;
-    d->colorConversionSystem = nullptr;
+    // Just leak on exit... It's faster.
+//    delete d->colorConversionSystem;
+//    Q_FOREACH (KoColorProfile* profile, d->profileMap) {
+//        delete profile;
+//    }
+//    d->profileMap.clear();
 
-    Q_FOREACH (const KoColorSpace * cs, d->csMap) {
-        cs->d->deletability = OwnedByRegistryRegistryDeletes;
-        delete cs;
-    }
-    d->csMap.clear();
+//    Q_FOREACH (const KoColorSpace * cs, d->csMap) {
+//        cs->d->deletability = OwnedByRegistryRegistryDeletes;
+//    }
+//    d->csMap.clear();
 
-    // deleting colorspaces calls a function in the cache
-    delete d->colorConversionCache;
-    d->colorConversionCache = nullptr;
+//    // deleting colorspaces calls a function in the cache
+//    delete d->colorConversionCache;
+//    d->colorConversionCache = 0;
 
-    // Delete the colorspace factories
-    Q_FOREACH(KoColorSpaceFactory *f, d->colorSpaceFactoryRegistry.values()) {
-        d->colorSpaceFactoryRegistry.remove(f->id());
-        delete f;
-    }
-    Q_FOREACH(KoColorSpaceFactory *f, d->colorSpaceFactoryRegistry.doubleEntries()) {
-        delete f;
-    }
+//    // Delete the colorspace factories
+//    qDeleteAll(d->localFactories);
 
     delete d;
 }
@@ -235,13 +232,6 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
 void KoColorSpaceRegistry::add(KoColorSpaceFactory* item)
 {
     QWriteLocker l(&d->registrylock);
-    if (d->colorSpaceFactoryRegistry.contains(item->id())) {
-        const KoColorSpaceFactory *original =
-            d->colorSpaceFactoryRegistry.get(item->id());
-        warnPigment << "Replacing color space factory" << item->id()
-                    << item->name() << "with" << original->id()
-                    << original->name();
-    }
     d->colorSpaceFactoryRegistry.add(item);
     d->colorConversionSystem->insertColorSpace(item);
 }

@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-11 00:44+0000\n"
+"POT-Creation-Date: 2022-12-13 00:52+0000\n"
 "PO-Revision-Date: 2022-10-08 21:34-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -15879,14 +15879,14 @@ msgstr ""
 "Krita は Wayland プラットフォームをサポートしていません。Wayland で Krita を"
 "起動する場合は XWayland を使用してください。Krita を終了します。"
 
-#: krita/main.cc:627 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:622 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: 警告"
 
-#: krita/main.cc:628
+#: krita/main.cc:623
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15898,12 +15898,12 @@ msgstr ""
 "サポートされているバージョンの Windows に更新してください: Windows 7、8、"
 "8.1、10"
 
-#: krita/main.cc:650 krita/main.cc:655
+#: krita/main.cc:645 krita/main.cc:650
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita タブレットサポート"
 
-#: krita/main.cc:651
+#: krita/main.cc:646
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15914,7 +15914,7 @@ msgstr ""
 "タブレットを使用している場合は、タブレットドライバが正しくインストールされて"
 "いることを確認してください。"
 
-#: krita/main.cc:656
+#: krita/main.cc:651
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -46046,7 +46046,7 @@ msgstr "アニメーションスタイルの設定"
 msgid "Selection mode:"
 msgstr "選択モード:"
 
-#: plugins/impex/exr/exr_converter.cc:885
+#: plugins/impex/exr/exr_converter.cc:883
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -46061,19 +46061,19 @@ msgstr ""
 "<br/><br/>このことによる視覚的な違いはほとんどないですが、心に留めておいてく"
 "ださい。"
 
-#: plugins/impex/exr/exr_converter.cc:892
+#: plugins/impex/exr/exr_converter.cc:890
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR 画像が変更されました"
 
-#: plugins/impex/exr/exr_converter.cc:1292
+#: plugins/impex/exr/exr_converter.cc:1305
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (種類: \"%2\")"
 
-#: plugins/impex/exr/exr_converter.cc:1297
+#: plugins/impex/exr/exr_converter.cc:1310
 #, kde-format
 msgctxt "@info"
 msgid ""

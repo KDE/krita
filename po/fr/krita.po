@@ -101,8 +101,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-11 00:44+0000\n"
-"PO-Revision-Date: 2022-12-06 19:05+0100\n"
+"POT-Creation-Date: 2022-12-13 00:52+0000\n"
+"PO-Revision-Date: 2022-12-11 20:24+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
 "Language: fr\n"
@@ -110,7 +110,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.11.90\n"
+"X-Generator: Lokalize 22.12.0\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -15790,14 +15790,14 @@ msgstr ""
 "Krita ne prend pas en charge la plate-forme « Wayland ». Veuillez utiliser "
 "« XWayland » pour exécuter Krita. Krita va maintenant se fermer."
 
-#: krita/main.cc:627 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:622 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita : avertissement"
 
-#: krita/main.cc:628
+#: krita/main.cc:623
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15809,12 +15809,12 @@ msgstr ""
 "Veuillez faire une mise à jour vers une version prise en charge de Windows : "
 " Windows 7, 8, 8.1 or 10."
 
-#: krita/main.cc:650 krita/main.cc:655
+#: krita/main.cc:645 krita/main.cc:650
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Prise en charge des tablettes sous Krita"
 
-#: krita/main.cc:651
+#: krita/main.cc:646
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15825,7 +15825,7 @@ msgstr ""
 "« Windows Ink ». Si vous avez une tablette graphique, veuillez vous assurer "
 "que son pilote est correctement installé."
 
-#: krita/main.cc:656
+#: krita/main.cc:651
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -38789,18 +38789,17 @@ msgstr ""
 "calques (s'il y a assez d'espace)."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Merge Selected Layers"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "&Fusionner les calques sélectionnés"
+msgstr "Boîte à cocher pour la sélection de calques"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:424
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
+"Afficher la boîte à cocher pour sélectionner / dé-sélectionner des calques."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:974
 msgctxt "(qtundo-format)"
@@ -46192,7 +46191,7 @@ msgstr "Options pour styles animés"
 msgid "Selection mode:"
 msgstr "Mode de sélection :"
 
-#: plugins/impex/exr/exr_converter.cc:885
+#: plugins/impex/exr/exr_converter.cc:883
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -46207,19 +46206,19 @@ msgstr ""
 "après l'enregistrement de l'image.<br/><br/>La différence sera presque "
 "invisible mais sachez-le."
 
-#: plugins/impex/exr/exr_converter.cc:892
+#: plugins/impex/exr/exr_converter.cc:890
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Une image « EXR » a été modifiée."
 
-#: plugins/impex/exr/exr_converter.cc:1292
+#: plugins/impex/exr/exr_converter.cc:1305
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (type : « %2 »)"
 
-#: plugins/impex/exr/exr_converter.cc:1297
+#: plugins/impex/exr/exr_converter.cc:1310
 #, kde-format
 msgctxt "@info"
 msgid ""

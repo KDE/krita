@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-11 00:44+0000\n"
+"POT-Creation-Date: 2022-12-13 00:52+0000\n"
 "PO-Revision-Date: 2022-12-10 12:37+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -15735,14 +15735,14 @@ msgstr ""
 "Krita no funciona en la plataforma Wayland. Use XWayland para ejecutar Krita "
 "en Wayland. Krita se cerrará ahora."
 
-#: krita/main.cc:627 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:622 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Advertencia"
 
-#: krita/main.cc:628
+#: krita/main.cc:623
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15753,12 +15753,12 @@ msgstr ""
 "Esto no está recomendado. Por favor, no informe de ningún error.\n"
 "Actualice a una versión de Windows compatible: Windows 7, 8, 8.1 o 10."
 
-#: krita/main.cc:650 krita/main.cc:655
+#: krita/main.cc:645 krita/main.cc:650
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Uso de tabletas en Krita"
 
-#: krita/main.cc:651
+#: krita/main.cc:646
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15769,7 +15769,7 @@ msgstr ""
 "dispositivos de lápiz Windows Ink. Si tiene una tableta de dibujo, asegúrese "
 "de que su controlador se ha instalado correctamente."
 
-#: krita/main.cc:656
+#: krita/main.cc:651
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -45964,7 +45964,7 @@ msgstr "Opciones del estilo animado"
 msgid "Selection mode:"
 msgstr "Modo de selección:"
 
-#: plugins/impex/exr/exr_converter.cc:885
+#: plugins/impex/exr/exr_converter.cc:883
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -45979,19 +45979,19 @@ msgstr ""
 "la imagen.<br/><br/>Esto difícilmente provocará alguna diferencia visual, "
 "simplemente téngalo en cuenta."
 
-#: plugins/impex/exr/exr_converter.cc:892
+#: plugins/impex/exr/exr_converter.cc:890
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "La imagen EXR se ha modificado"
 
-#: plugins/impex/exr/exr_converter.cc:1292
+#: plugins/impex/exr/exr_converter.cc:1305
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (tipo: «%2»)"
 
-#: plugins/impex/exr/exr_converter.cc:1297
+#: plugins/impex/exr/exr_converter.cc:1310
 #, kde-format
 msgctxt "@info"
 msgid ""

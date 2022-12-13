@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-11 00:44+0000\n"
-"PO-Revision-Date: 2022-11-28 18:01+0000\n"
+"POT-Creation-Date: 2022-12-13 00:52+0000\n"
+"PO-Revision-Date: 2022-12-12 17:54+0000\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -15990,14 +15990,14 @@ msgstr ""
 "O Krita não suporta a plataforma Wayland. Use o XWayland para executar o "
 "Krita no Wayland. O Krita irá agora fechar."
 
-#: krita/main.cc:627 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:622 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Aviso"
 
-#: krita/main.cc:628
+#: krita/main.cc:623
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16009,12 +16009,12 @@ msgstr ""
 "Por favor actualize para uma versão suportada do Windows: Windows 7, 8, 8.1 "
 "ou 10."
 
-#: krita/main.cc:650 krita/main.cc:655
+#: krita/main.cc:645 krita/main.cc:650
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Suporte para Tabletes do Krita"
 
-#: krita/main.cc:651
+#: krita/main.cc:646
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16025,7 +16025,7 @@ msgstr ""
 "dispositivos do Windows Ink. Se tiver uma tablete de desenho, certifique-se "
 "por favor que o controlador da mesma está devidamente instalado."
 
-#: krita/main.cc:656
+#: krita/main.cc:651
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -38810,18 +38810,16 @@ msgstr ""
 "Se estiver inactivo, mostra debaixo dos nomes das camadas (se tiver espaço)."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Selection to New Layer"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "Copiar a Selecção para uma Nova Camada"
+msgstr "Opção de Selecção das Camadas"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:424
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
-msgstr ""
+msgstr "Mostrar uma opção para seleccionar/deseleccionar as camadas."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:974
 msgctxt "(qtundo-format)"
@@ -46183,7 +46181,7 @@ msgstr "Opções animadas do estilo"
 msgid "Selection mode:"
 msgstr "Modo de selecção:"
 
-#: plugins/impex/exr/exr_converter.cc:885
+#: plugins/impex/exr/exr_converter.cc:883
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -46198,19 +46196,19 @@ msgstr ""
 "ao gravar a imagem de volta.<br/><br/>Isto dificilmente fará qualquer efeito "
 "visual, sendo apenas para ter isto em mente."
 
-#: plugins/impex/exr/exr_converter.cc:892
+#: plugins/impex/exr/exr_converter.cc:890
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "A imagem EXR foi modificada"
 
-#: plugins/impex/exr/exr_converter.cc:1292
+#: plugins/impex/exr/exr_converter.cc:1305
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (tipo: \"%2\")"
 
-#: plugins/impex/exr/exr_converter.cc:1297
+#: plugins/impex/exr/exr_converter.cc:1310
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -47190,16 +47188,13 @@ msgstr "Alto"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, lossyQuality)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:101
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set the lossy quality of JPEG-XL export.\n"
-#| "Default: 100 (visually lossless)."
+#, kde-format
 msgid ""
 "Set the lossy quality of JPEG-XL export.\n"
 "Default: 90 (visually lossless)."
 msgstr ""
 "Define a qualidade com perdas das exportação em JPEG-XL.\n"
-"Predefinição: 100 (visualmente sem perdas)"
+"Predefinição: 90 (visualmente sem perdas)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:117
@@ -60106,15 +60101,3 @@ msgstr "Ferramenta de Ampliação"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta de Imagens de Referência"
-
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "Ferramentas de &Pintura"
-
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "Ferramentas de Pintura"
-
-#~ msgctxt "action"
-#~ msgid "Brush composite"
-#~ msgstr "Composto do pincel"

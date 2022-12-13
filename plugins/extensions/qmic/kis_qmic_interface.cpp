@@ -79,19 +79,14 @@ QSize KisImageInterface::gmic_qt_get_image_size(int mode)
             // placed above the active layer.
             const auto activeLayer = nodes->last();
 
+            // G'MIC takes as the image size the size of the active layer.
+            // This is a lie since a query to All will imply a query to Active
+            // through CroppedActiveLayerProxy, and the latter will return a
+            // bogus size if we reply straight with the paint device's bounds.
             if (activeLayer && activeLayer->paintDevice()) {
-                KisSelectionSP selection =
-                    p->m_viewManager->image()->globalSelection();
-
-                QRect cropRect = [&]() {
-                    if (selection) {
-                        return selection->selectedExactRect();
-                    } else {
-                        return activeLayer->exactBounds();
-                    }
-                }();
-
-                size = cropRect.size();
+                const QSize layerSize = activeLayer->exactBounds().size();
+                const QSize imageSize = activeLayer->image()->bounds().size();
+                size = size.expandedTo(layerSize).expandedTo(imageSize);
             }
         } break;
         case InputLayerMode::All:
@@ -99,19 +94,14 @@ QSize KisImageInterface::gmic_qt_get_image_size(int mode)
         case InputLayerMode::AllVisible:
             for (auto &node : *nodes) {
                 if (node && node->paintDevice()) {
-                    KisSelectionSP selection =
-                        p->m_viewManager->image()->globalSelection();
-
-                    QRect cropRect = [&]() {
-                        if (selection) {
-                            return selection->selectedExactRect();
-                        } else {
-                            return node->exactBounds();
-                        }
-                    }();
-
-                    size.setWidth(std::max(size.width(), cropRect.width()));
-                    size.setHeight(std::max(size.height(), cropRect.height()));
+                    // XXX: when using All, G'MIC will instead do another query
+                    // through CroppedActiveLayerProxy to determine the image's
+                    // "size". So we need to be both consistent with the image's
+                    // bounds, but also extend them in case the layer's
+                    // partially offscreen.
+                    const QSize layerSize = node->exactBounds().size();
+                    const QSize imageSize = node->image()->bounds().size();
+                    size = size.expandedTo(layerSize).expandedTo(imageSize);
                 }
             }
             break;
@@ -163,11 +153,19 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
          if (node && node->paintDevice()) {
             KisSelectionSP selection = p->m_viewManager->image()->globalSelection();
 
-            QRect cropRect = [&]() {
+            const QRect cropRect = [&]() {
                 if (selection) {
                     return selection->selectedExactRect();
                 } else {
-                    return node->exactBounds();
+                    // XXX: This is a lie, see gmic_qt_get_image_size as to why
+                    const QRect nodeBounds = node->exactBounds();
+                    const QRect imageBounds = node->image()->bounds();
+
+                    if (imageBounds.contains(nodeBounds)) {
+                        return imageBounds;
+                    } else {
+                        return nodeBounds.united(imageBounds);
+                    }
                 }
             }();
 

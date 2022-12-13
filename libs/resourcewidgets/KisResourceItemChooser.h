@@ -67,7 +67,7 @@ public:
     void setListViewMode(ListViewMode viewMode);
 
     /// Sets the visibility of tagging KlineEdits.
-    /// Default is true.
+    /// Default is false.
     void showTaggingBar(bool show);
 
     KisTagFilterResourceProxyModel *tagFilterModel() const;

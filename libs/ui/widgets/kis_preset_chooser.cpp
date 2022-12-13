@@ -220,6 +220,16 @@ void KisPresetChooser::setViewMode(KisPresetChooser::ViewMode mode)
     updateViewSettings();
 }
 
+void KisPresetChooser::setViewModeToThumbnail()
+{
+    setViewMode(KisPresetChooser::ViewMode::THUMBNAIL);
+}
+
+void KisPresetChooser::setViewModeToDetail()
+{
+    setViewMode(KisPresetChooser::ViewMode::DETAIL);
+}
+
 void KisPresetChooser::notifyConfigChanged()
 {
     KisConfig cfg(true);

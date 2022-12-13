@@ -45,7 +45,10 @@ public:
 
     /// Sets a list of resources in the paintop list, when ever user press enter in the linedit of paintop_presets_popup Class
     void setViewMode(ViewMode mode);
+    void setViewModeToThumbnail();
+    void setViewModeToDetail();
 
+    // TODO: remove this everyone sets this to false
     void showButtons(bool show);
 
     void setCurrentResource(KoResourceSP resource);

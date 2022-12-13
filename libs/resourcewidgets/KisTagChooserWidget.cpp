@@ -27,9 +27,7 @@
 
 #include <KoIcon.h>
 
-#include "KisResourceItemChooserContextMenu.h"
 #include "KisTagToolButton.h"
-#include "kis_debug.h"
 #include <KisTagResourceModel.h>
 
 class Q_DECL_HIDDEN KisTagChooserWidget::Private
@@ -50,9 +48,15 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QString resourceTyp
     d->resourceType = resourceType;
 
     d->comboBox = new QComboBox(this);
-
     d->comboBox->setToolTip(i18n("Tag"));
-    d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed);
+    d->comboBox->setSizePolicy(QSizePolicy::Policy::Expanding , QSizePolicy::Policy::Fixed);
+
+    // Allow the combo box to not depend on content size.
+    // Removing below code will cause the QComboBox when inside a QSplitter to have a width
+    // equal to the longest QComboBox item regardless of size policy.
+    d->comboBox->setMinimumContentsLength(1);
+    d->comboBox->setSizeAdjustPolicy(QComboBox::SizeAdjustPolicy::AdjustToMinimumContentsLengthWithIcon);
+
     d->comboBox->setInsertPolicy(QComboBox::InsertAlphabetically);
     model->sort(KisAllTagsModel::Name);
     d->comboBox->setModel(model);

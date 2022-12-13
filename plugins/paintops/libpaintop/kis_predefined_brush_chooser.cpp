@@ -331,12 +331,10 @@ void KisPredefinedBrushChooser::slotBrushSelected(KoResourceSP resource)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(resource);
 
-    KisBrushModel::CommonData commonBrushData;
-    KisBrushModel::PredefinedBrushData predefinedBrushData;
-    std::tie(commonBrushData, predefinedBrushData) = m_d->model->bakedOptionData();
-
+    KisBrushModel::PredefinedBrushData predefinedBrushData = m_d->model->bakedOptionData();
     if (resource->signature() == predefinedBrushData.resourceSignature) return;
 
+    KisBrushModel::CommonData commonBrushData;
     KisPredefinedBrushFactory::loadFromBrushResource(commonBrushData, predefinedBrushData, resource.dynamicCast<KisBrush>());
 
     predefinedBrushData.scale = 1.0;

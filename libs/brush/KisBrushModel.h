@@ -189,8 +189,6 @@ void BRUSH_EXPORT setEffectiveSizeForBrush(const BrushType type,
 qreal BRUSH_EXPORT lightnessModeActivated(BrushType type,
                                           const PredefinedBrushData &predefinedBrush);
 
-void BRUSH_EXPORT bakeFromModels(BrushData &data, const AutoBrushData &autoBrush, const std::tuple<CommonData, PredefinedBrushData> &predefinedBrush);
-
 }
 
 #endif // KISBRUSHMODEL_H

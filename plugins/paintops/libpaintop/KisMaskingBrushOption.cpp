@@ -143,9 +143,8 @@ public:
     MaskingBrushData bakedOptionData() const {
         MaskingBrushData data = m_maskingData.get();
 
-        KisBrushModel::bakeFromModels(data.brush,
-                                      autoBrushModel.bakedOptionData(),
-                                      predefinedBrushModel.bakedOptionData());
+        data.brush.autoBrush = autoBrushModel.bakedOptionData();
+        data.brush.predefinedBrush = predefinedBrushModel.bakedOptionData();
         return data;
     }
 

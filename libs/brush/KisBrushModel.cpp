@@ -141,18 +141,4 @@ qreal effectiveSizeForBrush(const BrushData &brush)
     return effectiveSizeForBrush(brush.type, brush.autoBrush, brush.predefinedBrush, brush.textBrush);
 }
 
-void bakeFromModels(BrushData &data, const AutoBrushData &autoBrush, const std::tuple<CommonData, PredefinedBrushData> &predefinedBrush)
-{
-    data.autoBrush = autoBrush;
-
-    CommonData temporaryCommonData;
-
-    std::tie(temporaryCommonData, data.predefinedBrush) =
-        predefinedBrush;
-
-    if (data.type == Predefined) {
-        data.common = temporaryCommonData;
-    }
-}
-
 }

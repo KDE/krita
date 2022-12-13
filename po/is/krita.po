@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-10 02:24+0000\n"
+"POT-Creation-Date: 2022-12-13 03:05+0000\n"
 "PO-Revision-Date: 2018-01-04 15:20+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
@@ -45420,7 +45420,7 @@ msgstr "PNG útflutningsvalkostir"
 msgid "Selection mode:"
 msgstr "Valhamur"
 
-#: plugins/impex/exr/exr_converter.cc:885
+#: plugins/impex/exr/exr_converter.cc:883
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -45430,20 +45430,20 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:892
+#: plugins/impex/exr/exr_converter.cc:890
 #, fuzzy, kde-format
 #| msgid "Open a document which was recently opened"
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Opna nýlega opnað skjal"
 
-#: plugins/impex/exr/exr_converter.cc:1292
+#: plugins/impex/exr/exr_converter.cc:1305
 #, fuzzy, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "grænt"
 
-#: plugins/impex/exr/exr_converter.cc:1297
+#: plugins/impex/exr/exr_converter.cc:1310
 #, kde-format
 msgctxt "@info"
 msgid ""

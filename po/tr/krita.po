@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-10 02:24+0000\n"
+"POT-Creation-Date: 2022-12-13 03:05+0000\n"
 "PO-Revision-Date: 2022-12-11 20:36+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -45417,7 +45417,7 @@ msgstr "Hareketli biçem seçenekleri"
 msgid "Selection mode:"
 msgstr "Seçim kipi:"
 
-#: plugins/impex/exr/exr_converter.cc:885
+#: plugins/impex/exr/exr_converter.cc:883
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -45431,19 +45431,19 @@ msgstr ""
 "görsel geri kaydedilirken geri <i>alınamayacak</i>.<br/><br/>Bunun görsel "
 "bir fark yaratması pek mümkün değil, yalnızca aklınızda bulunsun."
 
-#: plugins/impex/exr/exr_converter.cc:892
+#: plugins/impex/exr/exr_converter.cc:890
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR görseli değiştirildi"
 
-#: plugins/impex/exr/exr_converter.cc:1292
+#: plugins/impex/exr/exr_converter.cc:1305
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (tür: \"%2\")"
 
-#: plugins/impex/exr/exr_converter.cc:1297
+#: plugins/impex/exr/exr_converter.cc:1310
 #, kde-format
 msgctxt "@info"
 msgid ""

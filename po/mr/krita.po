@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-10 02:24+0000\n"
+"POT-Creation-Date: 2022-12-13 03:05+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -46217,7 +46217,7 @@ msgstr "केसांचे पर्याय"
 msgid "Selection mode:"
 msgstr "निवड पद्धत :"
 
-#: plugins/impex/exr/exr_converter.cc:885
+#: plugins/impex/exr/exr_converter.cc:883
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -46227,19 +46227,19 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:892
+#: plugins/impex/exr/exr_converter.cc:890
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:1292
+#: plugins/impex/exr/exr_converter.cc:1305
 #, fuzzy, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "प्रत बनवा"
 
-#: plugins/impex/exr/exr_converter.cc:1297
+#: plugins/impex/exr/exr_converter.cc:1310
 #, kde-format
 msgctxt "@info"
 msgid ""

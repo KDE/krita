@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-10 02:24+0000\n"
+"POT-Creation-Date: 2022-12-13 03:05+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -44902,7 +44902,7 @@ msgstr "Yorugʻlik"
 msgid "Selection mode:"
 msgstr "Tanlash usuli:"
 
-#: plugins/impex/exr/exr_converter.cc:885
+#: plugins/impex/exr/exr_converter.cc:883
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -44912,19 +44912,19 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:892
+#: plugins/impex/exr/exr_converter.cc:890
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Namuna bilan yangi hujjatni ochish"
 
-#: plugins/impex/exr/exr_converter.cc:1292
+#: plugins/impex/exr/exr_converter.cc:1305
 #, fuzzy, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "Yashildan nusxa olish"
 
-#: plugins/impex/exr/exr_converter.cc:1297
+#: plugins/impex/exr/exr_converter.cc:1310
 #, kde-format
 msgctxt "@info"
 msgid ""

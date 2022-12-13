@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-10 02:24+0000\n"
+"POT-Creation-Date: 2022-12-13 03:05+0000\n"
 "PO-Revision-Date: 2022-09-26 14:48+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -46109,7 +46109,7 @@ msgstr "Опции анимированного стиля"
 msgid "Selection mode:"
 msgstr "Режим выделения:"
 
-#: plugins/impex/exr/exr_converter.cc:885
+#: plugins/impex/exr/exr_converter.cc:883
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -46124,19 +46124,19 @@ msgstr ""
 "сохранении изображения.<br/><br/>Визуальные отличия будет очень трудно "
 "обнаружить, имейте это в виду."
 
-#: plugins/impex/exr/exr_converter.cc:892
+#: plugins/impex/exr/exr_converter.cc:890
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Изображение EXR было изменено"
 
-#: plugins/impex/exr/exr_converter.cc:1292
+#: plugins/impex/exr/exr_converter.cc:1305
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (тип: «%2»)"
 
-#: plugins/impex/exr/exr_converter.cc:1297
+#: plugins/impex/exr/exr_converter.cc:1310
 #, kde-format
 msgctxt "@info"
 msgid ""

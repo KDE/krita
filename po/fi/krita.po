@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-10 02:24+0000\n"
+"POT-Creation-Date: 2022-12-13 03:05+0000\n"
 "PO-Revision-Date: 2022-09-14 16:45+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -47612,7 +47612,7 @@ msgstr "Harjas asetukset"
 msgid "Selection mode:"
 msgstr "Valintatapa:"
 
-#: plugins/impex/exr/exr_converter.cc:885
+#: plugins/impex/exr/exr_converter.cc:883
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -47626,14 +47626,14 @@ msgstr ""
 "palauteta</i> tallennettaessa kuva takaisin.<br/><br/>Tällä ei ole juurikaan "
 "näkyvää vaikutusta, mutta asia kannattaa pitää mielessä."
 
-#: plugins/impex/exr/exr_converter.cc:892
+#: plugins/impex/exr/exr_converter.cc:890
 #, fuzzy, kde-format
 #| msgid "This layer cannot be saved to EXR."
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Tätä tasoa ei voi tallentaa EXR:ksi"
 
-#: plugins/impex/exr/exr_converter.cc:1292
+#: plugins/impex/exr/exr_converter.cc:1305
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip %2 is shortcut"
 #| msgid "%1 (%2)"
@@ -47641,7 +47641,7 @@ msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (%2)"
 
-#: plugins/impex/exr/exr_converter.cc:1297
+#: plugins/impex/exr/exr_converter.cc:1310
 #, kde-format
 msgctxt "@info"
 msgid ""

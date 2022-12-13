@@ -24,7 +24,8 @@ class StoryboardTimelineSyncTest : public QObject
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-    void cleanup();
+
+    void cleanup(); // Called between each test. vvv
 
     void testAddKeyframeExtendsDuration();
     void testStoryboardTimelineTimeSyncronization();

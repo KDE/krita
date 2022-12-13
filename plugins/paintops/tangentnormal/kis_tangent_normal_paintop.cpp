@@ -39,7 +39,6 @@ KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisPaintOpSettingsSP sett
 {
     Q_UNUSED(image);
     //Init, read settings, etc//
-    m_tangentTiltOptionData.read(settings.data());
     m_airbrushData.read(settings.data());
 
     m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);

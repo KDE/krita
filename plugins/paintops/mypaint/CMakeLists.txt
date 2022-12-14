@@ -19,6 +19,7 @@ set(kritamypaintop_SOURCES
     MyPaintSurface.cpp
     MyPaintPaintOpPreset.cpp
     MyPaintPaintOpFactory.cpp
+    MyPaintStandardOptionData.cpp
 )
 
 ki18n_wrap_ui(kritamypaintop_SOURCES wdgmypaintoptions.ui wdgmypaintcurveoption.ui)

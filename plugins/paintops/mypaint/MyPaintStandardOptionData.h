@@ -12,30 +12,17 @@
 
 struct MyPaintRadiusLogarithmicData : MyPaintCurveOptionData
 {
-    MyPaintRadiusLogarithmicData()
-        : MyPaintCurveOptionData(KoID("radius_logarithmic",
-                                      i18n("Radius Logarithmic")),
-                                 false, true, 0.01, 8.0)
-    {
-    }
+    MyPaintRadiusLogarithmicData();
 };
 
 struct MyPaintHardnessData : MyPaintCurveOptionData
 {
-    MyPaintHardnessData()
-        : MyPaintCurveOptionData(KoID("hardness", i18n("Hardness")),
-                                 false, true, 0.02, 1.0)
-    {
-    }
+    MyPaintHardnessData();
 };
 
 struct MyPaintOpacityData : MyPaintCurveOptionData
 {
-    MyPaintOpacityData()
-        : MyPaintCurveOptionData(KoID("opaque", i18n("Opaque")),
-                                 false, true, 0.0, 2.0)
-    {
-    }
+    MyPaintOpacityData();
 };
 
 struct MyPaintRadiusByRandomData : MyPaintCurveOptionData

@@ -25,7 +25,17 @@ struct MyPaintCurveOptionData : KisCurveOptionDataCommon
                               bool isChecked = false,
                               qreal minValue = 0.0,
                               qreal maxValue = 1.0);
-        
+
+protected:
+    MyPaintCurveOptionData(const QString &prefix,
+                           const KoID &id,
+                           bool isCheckable,
+                           bool isChecked,
+                           qreal minValue,
+                           qreal maxValue,
+                           MyPaintSensorPack *sensorInterface);
+public:
+
     MyPaintSensorData& sensorStruct();
     const MyPaintSensorData& sensorStruct() const;
 };

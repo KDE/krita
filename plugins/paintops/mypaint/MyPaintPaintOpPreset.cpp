@@ -21,6 +21,7 @@
 
 #include "MyPaintPaintOpSettings.h"
 #include "MyPaintSensorPack.h"
+#include "MyPaintStandardOptionData.h"
 
 class KisMyPaintPaintOpPreset::Private {
 
@@ -139,6 +140,27 @@ bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfa
     s->setProperty("filename", this->filename());
     s->setProperty(MYPAINT_JSON, this->getJsonData());
     s->setProperty("EraserMode", qRound(isEraser));
+
+
+    {
+        /**
+         * See a comment in `namespace deprecated_remove_after_krita6` in
+         * MyPaintStandardOptionData.cpp
+         */
+
+        auto recoverDeprecatedProperty = [] (auto data, KisPaintOpSettingsSP settings) {
+            /// we just round-trip the save operation to save the property
+            /// out ot json object
+
+            data.read(settings.data());
+            data.write(settings.data());
+        };
+
+        recoverDeprecatedProperty(MyPaintRadiusLogarithmicData(), s);
+        recoverDeprecatedProperty(MyPaintOpacityData(), s);
+        recoverDeprecatedProperty(MyPaintHardnessData(), s);
+    }
+
 
     if (!metadata().contains("paintopid")) {
         addMetaData("paintopid", "mypaintbrush");

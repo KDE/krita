@@ -135,7 +135,7 @@ android {
     project.ext.constant = 5
 
     def versionMajor    = 5
-    def versionMinor    = 1
+    def versionMinor    = 2
 
     /**
      * This version does **not** correspond to the patch version
@@ -143,7 +143,7 @@ android {
      * (including alpha and beta) release of versionMajor.versionMinor
      * branch
      */
-    def versionRelease  = 17
+    def versionRelease  = 18
 
     defaultConfig {
         targetSdkVersion 31

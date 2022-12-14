@@ -366,13 +366,25 @@
    </item>
    <item row="1" column="0">
     <widget class="QGroupBox" name="presetsContainer">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>42</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="title">
       <string/>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
+     <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,0">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_7">
         <item>
@@ -701,6 +713,18 @@
    </item>
    <item row="1" column="2">
     <widget class="QGroupBox" name="scratchpadControls">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>42</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="title">
       <string/>
      </property>

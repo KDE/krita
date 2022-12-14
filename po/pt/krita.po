@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-13 00:52+0000\n"
+"POT-Creation-Date: 2022-12-14 00:45+0000\n"
 "PO-Revision-Date: 2022-12-12 17:54+0000\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -20119,24 +20119,24 @@ msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
 msgstr "pasta de recursos"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:126
-#, kde-format
-msgid "Storage Resources"
-msgstr "Recursos de Armazenamento"
-
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:187
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:165
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
 msgstr "Importar o recurso"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:192
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:172
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Apagar o recurso"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:300
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:193
+#, kde-format
+msgid "Storage Resources"
+msgstr "Recursos de Armazenamento"
+
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:230
 #: libs/ui/KisMainWindow.cpp:2555
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:609
 #, kde-format
@@ -40228,7 +40228,7 @@ msgstr ""
 "Indique por favor um intervalo correcto. Não existem painéis na gama de "
 "imagens indicada."
 
-#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1267
+#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1266
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "
@@ -42439,7 +42439,7 @@ msgctxt "@title:column"
 msgid "Comment"
 msgstr "Comentário"
 
-#: plugins/extensions/qmic/kis_qmic_interface.cpp:239
+#: plugins/extensions/qmic/kis_qmic_interface.cpp:237
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
 msgstr "Filtro do G'MIC"
@@ -56578,13 +56578,13 @@ msgstr ""
 msgid "Line Tool"
 msgstr "Ferramenta de Linhas"
 
-#: plugins/tools/basictools/kis_tool_measure.cc:74
+#: plugins/tools/basictools/kis_tool_measure.cc:76
 #, kde-format
 msgctxt "angle value in degrees"
 msgid "%1°"
 msgstr "%1°"
 
-#: plugins/tools/basictools/kis_tool_measure.cc:141
+#: plugins/tools/basictools/kis_tool_measure.cc:150
 #, kde-format
 msgctxt "%1=distance %2=unit of distance %3=angle in degrees"
 msgid ""
@@ -56594,7 +56594,7 @@ msgstr ""
 "%1 %2\n"
 "%3°"
 
-#: plugins/tools/basictools/kis_tool_measure.h:101
+#: plugins/tools/basictools/kis_tool_measure.h:102
 #, kde-format
 msgid "Measure Tool"
 msgstr "Ferramenta de Medida"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-13 00:52+0000\n"
+"POT-Creation-Date: 2022-12-14 00:45+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -20130,24 +20130,24 @@ msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
 msgstr "ឯកសារ​ប្រភព ៖"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:126
-#, fuzzy, kde-format
-msgid "Storage Resources"
-msgstr "ធនធាន"
-
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:187
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:165
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
 msgstr "នាំ​ចូល​រូបភាព"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:192
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:172
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "លុប​ទាំងអស់"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:300
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:193
+#, fuzzy, kde-format
+msgid "Storage Resources"
+msgstr "ធនធាន"
+
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:230
 #: libs/ui/KisMainWindow.cpp:2555
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:609
 #, fuzzy, kde-format
@@ -39578,7 +39578,7 @@ msgid ""
 "provided."
 msgstr ""
 
-#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1267
+#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1266
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "
@@ -41901,7 +41901,7 @@ msgctxt "@title:column"
 msgid "Comment"
 msgstr "មាតិកា​"
 
-#: plugins/extensions/qmic/kis_qmic_interface.cpp:239
+#: plugins/extensions/qmic/kis_qmic_interface.cpp:237
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
@@ -56002,14 +56002,14 @@ msgstr ""
 msgid "Line Tool"
 msgstr "ឧបករណ៍​របស់​កម្មវិធី​គូរ"
 
-#: plugins/tools/basictools/kis_tool_measure.cc:74
+#: plugins/tools/basictools/kis_tool_measure.cc:76
 #, fuzzy, kde-format
 #| msgid "°"
 msgctxt "angle value in degrees"
 msgid "%1°"
 msgstr "°"
 
-#: plugins/tools/basictools/kis_tool_measure.cc:141
+#: plugins/tools/basictools/kis_tool_measure.cc:150
 #, kde-format
 msgctxt "%1=distance %2=unit of distance %3=angle in degrees"
 msgid ""
@@ -56017,7 +56017,7 @@ msgid ""
 "%3°"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_measure.h:101
+#: plugins/tools/basictools/kis_tool_measure.h:102
 #, fuzzy, kde-format
 msgid "Measure Tool"
 msgstr "ចតុកោណកែង"

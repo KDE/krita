@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-13 00:52+0000\n"
-"PO-Revision-Date: 2022-12-01 06:51\n"
+"POT-Creation-Date: 2022-12-14 00:45+0000\n"
+"PO-Revision-Date: 2022-12-13 12:20\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -13544,7 +13544,7 @@ msgstr "新建窗口"
 #, kde-format
 msgctxt "action"
 msgid "N&ext"
-msgstr "下一个视图(&E)"
+msgstr "下个视图(&E)"
 
 #. i18n: context: toolTip @ Action (windows_next), Actions (Window), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (windows_next), Actions (Window), ActionCollection (Menu)
@@ -13554,7 +13554,7 @@ msgstr "下一个视图(&E)"
 #, kde-format
 msgctxt "action"
 msgid "Next"
-msgstr "下一个视图"
+msgstr "下个视图"
 
 #. i18n: context: text @ Action (windows_previous), Actions (Window), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (windows_previous), Actions (Window), ActionCollection (Menu)
@@ -13567,7 +13567,7 @@ msgstr "下一个视图"
 #, kde-format
 msgctxt "action"
 msgid "Previous"
-msgstr "上一个视图"
+msgstr "上个视图"
 
 #. i18n: context: text @ Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:613
@@ -19730,24 +19730,24 @@ msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
 msgstr "资源文件夹"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:126
-#, kde-format
-msgid "Storage Resources"
-msgstr "启用/禁用资源包"
-
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:187
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:165
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
 msgstr "导入资源"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:192
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:172
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "删除资源"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:300
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:193
+#, kde-format
+msgid "Storage Resources"
+msgstr "启用/禁用资源包"
+
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:230
 #: libs/ui/KisMainWindow.cpp:2555
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:609
 #, kde-format
@@ -24369,7 +24369,7 @@ msgstr "无缩放"
 #: libs/ui/forms/wdgdlgfilelayer.ui:128
 #, kde-format
 msgid "Scale to Image Size"
-msgstr "缩放至图像大小"
+msgstr "缩放到图像大小"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioScalePPI)
 #: libs/ui/forms/wdgdlgfilelayer.ui:135
@@ -28049,7 +28049,7 @@ msgstr "缩小"
 #: libs/ui/input/kis_zoom_action.cpp:116 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
-msgstr "缩放至 100%"
+msgstr "缩放到 100%"
 
 #: libs/ui/input/kis_zoom_action.cpp:117
 #, kde-format
@@ -38013,18 +38013,16 @@ msgstr ""
 "不勾选时，图层混合信息将显示在图层名称下方 (当空间足够时)。"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Selection to New Layer"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "复制选区 - 到新图层"
+msgstr "显示图层选择复选框"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:424
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
-msgstr ""
+msgstr "显示用于选择/取消选择图层的复选框。"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:974
 msgctxt "(qtundo-format)"
@@ -39405,7 +39403,7 @@ msgid ""
 "provided."
 msgstr "请输入正确的范围。在指定的帧范围中不存在分镜头。"
 
-#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1267
+#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1266
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "
@@ -41585,7 +41583,7 @@ msgctxt "@title:column"
 msgid "Comment"
 msgstr "注释"
 
-#: plugins/extensions/qmic/kis_qmic_interface.cpp:239
+#: plugins/extensions/qmic/kis_qmic_interface.cpp:237
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
 msgstr "G'MIC 滤镜"
@@ -46276,16 +46274,13 @@ msgstr "最大"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, lossyQuality)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:101
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set the lossy quality of JPEG-XL export.\n"
-#| "Default: 100 (visually lossless)."
+#, kde-format
 msgid ""
 "Set the lossy quality of JPEG-XL export.\n"
 "Default: 90 (visually lossless)."
 msgstr ""
-"设置 JPEG-XL 导出的有损画质。\n"
-"默认：100 (视觉无损)。"
+"设置 JPEG-XL 使用有损模式导出时的画质。\n"
+"默认：90 (视觉无损)。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:117
@@ -54477,7 +54472,7 @@ msgstr "按关键字筛选图像..."
 #: plugins/python/photobash_images/photobash_images_docker.ui:388
 #, kde-format
 msgid "Scale To Canvas"
-msgstr "缩放至画布大小"
+msgstr "缩放到画布大小"
 
 #: plugins/python/plugin_importer/plugin_downloader.py:70
 msgid "Could not determine download link from URL"
@@ -55391,13 +55386,13 @@ msgstr ""
 msgid "Line Tool"
 msgstr "直线工具"
 
-#: plugins/tools/basictools/kis_tool_measure.cc:74
+#: plugins/tools/basictools/kis_tool_measure.cc:76
 #, kde-format
 msgctxt "angle value in degrees"
 msgid "%1°"
 msgstr "%1°"
 
-#: plugins/tools/basictools/kis_tool_measure.cc:141
+#: plugins/tools/basictools/kis_tool_measure.cc:150
 #, kde-format
 msgctxt "%1=distance %2=unit of distance %3=angle in degrees"
 msgid ""
@@ -55407,7 +55402,7 @@ msgstr ""
 "%1 %2\n"
 "%3°"
 
-#: plugins/tools/basictools/kis_tool_measure.h:101
+#: plugins/tools/basictools/kis_tool_measure.h:102
 #, kde-format
 msgid "Measure Tool"
 msgstr "测量工具"
@@ -58845,15 +58840,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "绘画工具(&P)"
-
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "绘画工具"
-
-#~ msgctxt "action"
-#~ msgid "Brush composite"
-#~ msgstr "笔刷混合模式"

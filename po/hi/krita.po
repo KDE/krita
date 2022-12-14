@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-13 00:52+0000\n"
+"POT-Creation-Date: 2022-12-14 00:45+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -19830,24 +19830,24 @@ msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
 msgstr "संसाधन फोल्डर"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:126
-#, kde-format
-msgid "Storage Resources"
-msgstr "संचय संसाधन"
-
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:187
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:165
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
 msgstr "संसाधन आयात करें"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:192
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:172
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "संसाधन मिटाएँ"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:300
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:193
+#, kde-format
+msgid "Storage Resources"
+msgstr "संचय संसाधन"
+
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:230
 #: libs/ui/KisMainWindow.cpp:2555
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:609
 #, kde-format
@@ -39283,7 +39283,7 @@ msgid ""
 "provided."
 msgstr ""
 
-#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1267
+#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1266
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "
@@ -41477,7 +41477,7 @@ msgctxt "@title:column"
 msgid "Comment"
 msgstr "टिप्पणी"
 
-#: plugins/extensions/qmic/kis_qmic_interface.cpp:239
+#: plugins/extensions/qmic/kis_qmic_interface.cpp:237
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Gmic filter"
@@ -55328,13 +55328,13 @@ msgstr ""
 msgid "Line Tool"
 msgstr "रेखा औज़ार"
 
-#: plugins/tools/basictools/kis_tool_measure.cc:74
+#: plugins/tools/basictools/kis_tool_measure.cc:76
 #, kde-format
 msgctxt "angle value in degrees"
 msgid "%1°"
 msgstr "%1°"
 
-#: plugins/tools/basictools/kis_tool_measure.cc:141
+#: plugins/tools/basictools/kis_tool_measure.cc:150
 #, fuzzy, kde-format
 #| msgid ""
 #| "%1 %2\n"
@@ -55347,7 +55347,7 @@ msgstr ""
 "%1 %2\n"
 "%3°"
 
-#: plugins/tools/basictools/kis_tool_measure.h:101
+#: plugins/tools/basictools/kis_tool_measure.h:102
 #, kde-format
 msgid "Measure Tool"
 msgstr "मापक औज़ार"

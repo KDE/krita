@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-13 03:05+0000\n"
+"POT-Creation-Date: 2022-12-15 02:44+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -16004,8 +16004,8 @@ msgid ""
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:627 libs/ui/KisApplication.cpp:405
-#: libs/ui/KisApplication.cpp:670
+#: krita/main.cc:627 libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:675
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -17271,7 +17271,7 @@ msgstr "Uvezi sliku"
 msgid "Selection Mask"
 msgstr "Kao maska odabira..."
 
-#: libs/image/kis_image.cc:725 libs/ui/KisDocument.cpp:2469
+#: libs/image/kis_image.cc:725 libs/ui/KisDocument.cpp:2473
 #: plugins/impex/psd/psd_loader.cpp:189
 #: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:68
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:302
@@ -19782,13 +19782,13 @@ msgstr "Upravljane Resurs Bundlima"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:527
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:535
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:539
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:545
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:548
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:555
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:569
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:526
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:534
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:538
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:544
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:547
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:554
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:568
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19804,12 +19804,12 @@ msgstr "Upravljane Resurs Bundlima"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
 #: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:969
-#: libs/ui/KisApplication.cpp:972 libs/ui/KisApplication.cpp:988
-#: libs/ui/KisApplication.cpp:1020 libs/ui/KisApplication.cpp:1034
-#: libs/ui/KisApplication.cpp:1062 libs/ui/KisDocument.cpp:925
-#: libs/ui/KisDocument.cpp:933 libs/ui/KisDocument.cpp:1837
-#: libs/ui/KisDocument.cpp:1880 libs/ui/KisDocument.cpp:1888
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
+#: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
+#: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
+#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:931
+#: libs/ui/KisDocument.cpp:939 libs/ui/KisDocument.cpp:1841
+#: libs/ui/KisDocument.cpp:1884 libs/ui/KisDocument.cpp:1892
 #: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1082
 #: libs/ui/KisMainWindow.cpp:1208 libs/ui/KisMainWindow.cpp:1307
 #: libs/ui/KisMainWindow.cpp:1913 libs/ui/KisMainWindow.cpp:1922
@@ -19825,7 +19825,7 @@ msgstr "Upravljane Resurs Bundlima"
 #: libs/ui/widgets/kis_custom_image_widget.cc:292
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1305
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1308
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:295
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
@@ -20903,7 +20903,7 @@ msgctxt "spline filtering"
 msgid "spline"
 msgstr "Linija"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:527
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:526
 #, kde-format
 msgid ""
 "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on another "
@@ -20915,21 +20915,21 @@ msgid ""
 "visit this section of our User Manual.</a>"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:535
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:555
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:534
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:554
 #, kde-format
 msgid ""
 "The location of FFmpeg is invalid. Please select the correct location of the "
 "FFmpeg executable on your system."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:539
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:538
 #, fuzzy, kde-format
 #| msgid "Please enter a name for the filter effect"
 msgid "Please extract ffmpeg from the archive first."
 msgstr "Unesite ime za filterski efekat"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:546
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:545
 #, kde-format
 msgid ""
 "This is a source code archive. Please download the application archive "
@@ -20937,12 +20937,12 @@ msgid ""
 "ffmpeg file."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:549
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:548
 #, kde-format
 msgid "This is a source code archive. Please install ffmpeg instead."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:569
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:568
 #, fuzzy, kde-format
 #| msgid "Please enter a name for the filter effect"
 msgid "Please enter a file name to render to."
@@ -30095,7 +30095,7 @@ msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Veličina sloja"
 
-#: libs/ui/KisApplication.cpp:368
+#: libs/ui/KisApplication.cpp:373
 #, kde-format
 msgid ""
 "%1\n"
@@ -30103,7 +30103,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:368 libs/ui/KisApplication.cpp:374
+#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Krita: Internal Error"
@@ -30111,7 +30111,7 @@ msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Interna greška programa Krita"
 
-#: libs/ui/KisApplication.cpp:374
+#: libs/ui/KisApplication.cpp:379
 #, kde-format
 msgid ""
 "\n"
@@ -30119,7 +30119,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:406
+#: libs/ui/KisApplication.cpp:411
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -30130,53 +30130,53 @@ msgstr ""
 "To nije preporučljivo.\n"
 "Molim preuzmite i instalirajte x64 gradnju umjesto toga."
 
-#: libs/ui/KisApplication.cpp:423
+#: libs/ui/KisApplication.cpp:428
 #, fuzzy, kde-format
 #| msgid "Manage Resources..."
 msgid "Initializing Globals..."
 msgstr "Upravljaj Resursima"
 
-#: libs/ui/KisApplication.cpp:454
+#: libs/ui/KisApplication.cpp:459
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "Dodaj resurse"
 
-#: libs/ui/KisApplication.cpp:469
+#: libs/ui/KisApplication.cpp:474
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "Promijeni opcije praćenja"
 
-#: libs/ui/KisApplication.cpp:568
+#: libs/ui/KisApplication.cpp:573
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Mimevrsta nije nađena, pokušaj koristiti -mimetype opciju"
 
-#: libs/ui/KisApplication.cpp:624
+#: libs/ui/KisApplication.cpp:629
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to render animation frames!"
 msgstr "Bezuspješno kreiranje akcije."
 
-#: libs/ui/KisApplication.cpp:651 libs/ui/KisApplication.cpp:841
+#: libs/ui/KisApplication.cpp:656 libs/ui/KisApplication.cpp:846
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "&Datoteka sloj"
 
-#: libs/ui/KisApplication.cpp:659 libs/ui/KisApplication.cpp:664
-#: libs/ui/KisApplication.cpp:835 libs/ui/KisApplication.cpp:849
-#: libs/ui/KisApplication.cpp:854
+#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:669
+#: libs/ui/KisApplication.cpp:840 libs/ui/KisApplication.cpp:854
+#: libs/ui/KisApplication.cpp:859
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Upozorenje"
 
-#: libs/ui/KisApplication.cpp:660 libs/ui/KisApplication.cpp:850
+#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:855
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Ne mogu da izaberem boju jer aktivan sloj nije vidljiv."
 
-#: libs/ui/KisApplication.cpp:665
+#: libs/ui/KisApplication.cpp:670
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30189,7 +30189,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:671
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30197,7 +30197,7 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:836
+#: libs/ui/KisApplication.cpp:841
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -30207,27 +30207,27 @@ msgstr ""
 "Ne mogu otvoriti\n"
 "%1"
 
-#: libs/ui/KisApplication.cpp:855
+#: libs/ui/KisApplication.cpp:860
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:970
+#: libs/ui/KisApplication.cpp:975
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Predložak nije pronađen za:%1"
 
-#: libs/ui/KisApplication.cpp:973
+#: libs/ui/KisApplication.cpp:978
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Pronađeno je previše šablona za: %1"
 
-#: libs/ui/KisApplication.cpp:989
+#: libs/ui/KisApplication.cpp:994
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Šablon %1 nije mogao da se učita."
 
-#: libs/ui/KisApplication.cpp:1021
+#: libs/ui/KisApplication.cpp:1026
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30237,7 +30237,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1035
+#: libs/ui/KisApplication.cpp:1040
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30245,7 +30245,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1063
+#: libs/ui/KisApplication.cpp:1068
 #, fuzzy, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Da li zaista želite pisati preko postojećeg šablona '%1'?"
@@ -30382,32 +30382,32 @@ msgstr "Zatvori dokument"
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:776
+#: libs/ui/KisDocument.cpp:788
 #, fuzzy, kde-format
 #| msgid "Opening Document"
 msgid "Exporting Document..."
 msgstr "Otvaram okument"
 
-#: libs/ui/KisDocument.cpp:777
+#: libs/ui/KisDocument.cpp:789
 #, fuzzy, kde-format
 msgid "Saving Document..."
 msgstr "Snimi dokument"
 
-#: libs/ui/KisDocument.cpp:787
+#: libs/ui/KisDocument.cpp:799
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:920
+#: libs/ui/KisDocument.cpp:926
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Greška tokom automatskog snimanja. Particija puna?"
 
-#: libs/ui/KisDocument.cpp:926
+#: libs/ui/KisDocument.cpp:932
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save %1\n"
@@ -30419,7 +30419,7 @@ msgstr ""
 "Ne mogu snimiti%1\n"
 "Razlog: %2"
 
-#: libs/ui/KisDocument.cpp:935
+#: libs/ui/KisDocument.cpp:941
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30429,42 +30429,42 @@ msgid ""
 "The following problems were encountered when saving:"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:953
+#: libs/ui/KisDocument.cpp:959
 #, fuzzy, kde-format
 #| msgid "Finish line:"
 msgid "Finished saving %1"
 msgstr "Finalna linija:"
 
-#: libs/ui/KisDocument.cpp:1358
+#: libs/ui/KisDocument.cpp:1362
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosaving... %1"
 msgstr "Automatski snimam..."
 
-#: libs/ui/KisDocument.cpp:1366
+#: libs/ui/KisDocument.cpp:1370
 #, kde-format
 msgid "Autosaving..."
 msgstr "Automatski snimam..."
 
-#: libs/ui/KisDocument.cpp:1372
+#: libs/ui/KisDocument.cpp:1376
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1515
+#: libs/ui/KisDocument.cpp:1519
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Greška tokom automatskog snimanja. Particija puna?"
 
-#: libs/ui/KisDocument.cpp:1529
+#: libs/ui/KisDocument.cpp:1533
 #, fuzzy, kde-format
 #| msgid "Finish line:"
 msgid "Finished autosaving %1"
 msgstr "Finalna linija:"
 
-#: libs/ui/KisDocument.cpp:1771
+#: libs/ui/KisDocument.cpp:1775
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -30476,18 +30476,18 @@ msgstr ""
 "Loše formiran URL\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1837
+#: libs/ui/KisDocument.cpp:1841
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Datoteka %1 ne postoji."
 
-#: libs/ui/KisDocument.cpp:1866
+#: libs/ui/KisDocument.cpp:1870
 #, fuzzy, kde-format
 #| msgid "Opening Document"
 msgid "Opening document"
 msgstr "Otvaram okument"
 
-#: libs/ui/KisDocument.cpp:1881
+#: libs/ui/KisDocument.cpp:1885
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open %2.\n"
@@ -30501,25 +30501,25 @@ msgstr ""
 "Razlog:%1.\n"
 "%3"
 
-#: libs/ui/KisDocument.cpp:1889
+#: libs/ui/KisDocument.cpp:1893
 #, kde-format
 msgid "There were problems opening %1"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2018
+#: libs/ui/KisDocument.cpp:2022
 #, fuzzy, kde-format
 #| msgid "Not Filled"
 msgid "Not Saved"
 msgstr "Bez popune"
 
-#: libs/ui/KisDocument.cpp:2476
+#: libs/ui/KisDocument.cpp:2480
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Pozadina"
 
-#: libs/ui/KisDocument.cpp:2532
+#: libs/ui/KisDocument.cpp:2534
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30788,18 +30788,18 @@ msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Otvori i izmijeni..."
 
-#: libs/ui/KisImportExportManager.cpp:378
+#: libs/ui/KisImportExportManager.cpp:373
 #, fuzzy, kde-format
 #| msgid "Opening Document"
 msgid "Opening document..."
 msgstr "Otvaram okument"
 
-#: libs/ui/KisImportExportManager.cpp:443
+#: libs/ui/KisImportExportManager.cpp:435
 #, fuzzy, kde-format
 msgid "Saving document..."
 msgstr "Snimi dokument"
 
-#: libs/ui/KisImportExportManager.cpp:537
+#: libs/ui/KisImportExportManager.cpp:529
 #, fuzzy, kde-format
 #| msgid ""
 #| "This image contains vector, clone or fill layers.\n"
@@ -30810,7 +30810,7 @@ msgstr ""
 "Ova slika sadrži vektor, klon ili fill slojeve\n"
 "Ovi slojevi će biti spašeni kao raster slojevi."
 
-#: libs/ui/KisImportExportManager.cpp:540
+#: libs/ui/KisImportExportManager.cpp:532
 #, fuzzy, kde-format
 #| msgid ""
 #| "This image contains vector, clone or fill layers.\n"
@@ -30823,7 +30823,7 @@ msgstr ""
 "Ova slika sadrži vektor, klon ili fill slojeve\n"
 "Ovi slojevi će biti spašeni kao raster slojevi."
 
-#: libs/ui/KisImportExportManager.cpp:543
+#: libs/ui/KisImportExportManager.cpp:535
 #, fuzzy, kde-format
 #| msgid ""
 #| "This image contains vector, clone or fill layers.\n"
@@ -30834,7 +30834,7 @@ msgstr ""
 "Ova slika sadrži vektor, klon ili fill slojeve\n"
 "Ovi slojevi će biti spašeni kao raster slojevi."
 
-#: libs/ui/KisImportExportManager.cpp:546
+#: libs/ui/KisImportExportManager.cpp:538
 #, fuzzy, kde-format
 #| msgid ""
 #| "This image contains vector, clone or fill layers.\n"
@@ -30847,52 +30847,52 @@ msgstr ""
 "Ova slika sadrži vektor, klon ili fill slojeve\n"
 "Ovi slojevi će biti spašeni kao raster slojevi."
 
-#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:543
 #, fuzzy, kde-format
 #| msgid "Cannot export images in %1.\n"
 msgid "Error: cannot save this image as a %1."
 msgstr "Ne mogu da izvezem slike u %1.\n"
 
-#: libs/ui/KisImportExportManager.cpp:552
-#: libs/ui/KisImportExportManager.cpp:595
+#: libs/ui/KisImportExportManager.cpp:544
+#: libs/ui/KisImportExportManager.cpp:587
 #, fuzzy, kde-format
 #| msgid "Dimensions"
 msgid "Reasons:"
 msgstr "Dimenzije"
 
-#: libs/ui/KisImportExportManager.cpp:560
+#: libs/ui/KisImportExportManager.cpp:552
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Greška u izvozu u Photoshop"
 
-#: libs/ui/KisImportExportManager.cpp:577
+#: libs/ui/KisImportExportManager.cpp:569
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:589
+#: libs/ui/KisImportExportManager.cpp:581
 #, fuzzy, kde-format
 #| msgid "Cannot export images in %1.\n"
 msgid "You will lose information when saving this image as a %1."
 msgstr "Ne mogu da izvezem slike u %1.\n"
 
-#: libs/ui/KisImportExportManager.cpp:592
+#: libs/ui/KisImportExportManager.cpp:584
 #, fuzzy, kde-format
 #| msgid "Ruler assistant"
 msgid "Reason:"
 msgstr "Lenjirski pomoćnik"
 
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
-#: libs/ui/KisImportExportManager.cpp:610
+#: libs/ui/KisImportExportManager.cpp:602
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
 #, kde-format
 msgid "Options"
 msgstr "Opcije"
 
 #. i18n: ectx: property (title), widget (QGroupBox, scale)
-#: libs/ui/KisImportExportManager.cpp:618
+#: libs/ui/KisImportExportManager.cpp:610
 #: plugins/impex/webp/dlg_webp_import.ui:173
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
@@ -30900,7 +30900,7 @@ msgstr "Opcije"
 msgid "Resize"
 msgstr "Promijeni veličinu"
 
-#: libs/ui/KisImportExportManager.cpp:624
+#: libs/ui/KisImportExportManager.cpp:616
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr ""
@@ -34687,34 +34687,34 @@ msgstr "Promijeni boju popunjavanja"
 msgid "Change filling gradient"
 msgstr "Promijeni boju popunjavanja"
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:639
+#: libs/ui/widgets/KoFillConfigWidget.cpp:638
 #, fuzzy, kde-format
 #| msgid "Gradient"
 msgctxt "default prefix for the saved gradient"
 msgid "gradient"
 msgstr "Gradijent"
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:648
+#: libs/ui/widgets/KoFillConfigWidget.cpp:647
 #, fuzzy, kde-format
 #| msgid "SVG Gradient"
 msgctxt "@title:window"
 msgid "Save Gradient"
 msgstr "SVG Gradijent"
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:649
+#: libs/ui/widgets/KoFillConfigWidget.cpp:648
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgid "Enter gradient name:"
 msgstr "Unesite ime grupe:"
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:656
+#: libs/ui/widgets/KoFillConfigWidget.cpp:655
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:204
 #, kde-format
 msgctxt "@title:window"
 msgid "Name Already Exists"
 msgstr ""
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:657
+#: libs/ui/widgets/KoFillConfigWidget.cpp:656
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:205
 #, fuzzy, kde-format
 #| msgid ""
@@ -38865,12 +38865,12 @@ msgstr "Nisam mogao da napravim datoteku za snimanje"
 msgid "The editor template was not found."
 msgstr ""
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:264
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:262
 #, kde-format
 msgid "Saving of gamut mask '%1' was aborted."
 msgstr ""
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:265
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:263
 #, kde-format
 msgid ""
 "<p>The mask template is invalid.</p><p>Please check that:<ul><li>your "
@@ -38878,7 +38878,7 @@ msgid ""
 "one or more vector shapes on the 'maskShapesLayer'</li></ul></p>"
 msgstr ""
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:311
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:309
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -38886,12 +38886,12 @@ msgstr ""
 msgid "Gamut mask <b>'%1'</b> has been modified."
 msgstr "<p>Dokument <b>'%1'</b> je mijenjan.</p><p>Želite li ga snimiti?</p>"
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:312
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:310
 #, fuzzy, kde-format
 msgid "Do you want to save it?"
 msgstr "Da li zaista želite pisati preko postojećeg šablona '%1'?"
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:564
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:562
 #, kde-format
 msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgstr ""

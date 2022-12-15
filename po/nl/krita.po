@@ -61,7 +61,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-13 03:05+0000\n"
+"POT-Creation-Date: 2022-12-15 02:44+0000\n"
 "PO-Revision-Date: 2022-11-02 09:17+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -15588,8 +15588,8 @@ msgstr ""
 "Krita ondersteunt het platform Wayland niet. Gebruik XWayland om Krita op "
 "Wayland uit te voeren. Krita zal nu afsluiten."
 
-#: krita/main.cc:627 libs/ui/KisApplication.cpp:405
-#: libs/ui/KisApplication.cpp:670
+#: krita/main.cc:627 libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -16830,7 +16830,7 @@ msgstr "Geïmporteerde afbeelding"
 msgid "Selection Mask"
 msgstr "Selectiemasker"
 
-#: libs/image/kis_image.cc:725 libs/ui/KisDocument.cpp:2469
+#: libs/image/kis_image.cc:725 libs/ui/KisDocument.cpp:2473
 #: plugins/impex/psd/psd_loader.cpp:189
 #: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:68
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:302
@@ -19140,13 +19140,13 @@ msgstr "Lokale hulpbronnen"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:527
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:535
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:539
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:545
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:548
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:555
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:569
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:526
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:534
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:538
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:544
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:547
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:554
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:568
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19162,12 +19162,12 @@ msgstr "Lokale hulpbronnen"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
 #: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:969
-#: libs/ui/KisApplication.cpp:972 libs/ui/KisApplication.cpp:988
-#: libs/ui/KisApplication.cpp:1020 libs/ui/KisApplication.cpp:1034
-#: libs/ui/KisApplication.cpp:1062 libs/ui/KisDocument.cpp:925
-#: libs/ui/KisDocument.cpp:933 libs/ui/KisDocument.cpp:1837
-#: libs/ui/KisDocument.cpp:1880 libs/ui/KisDocument.cpp:1888
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
+#: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
+#: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
+#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:931
+#: libs/ui/KisDocument.cpp:939 libs/ui/KisDocument.cpp:1841
+#: libs/ui/KisDocument.cpp:1884 libs/ui/KisDocument.cpp:1892
 #: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1082
 #: libs/ui/KisMainWindow.cpp:1208 libs/ui/KisMainWindow.cpp:1307
 #: libs/ui/KisMainWindow.cpp:1913 libs/ui/KisMainWindow.cpp:1922
@@ -19183,7 +19183,7 @@ msgstr "Lokale hulpbronnen"
 #: libs/ui/widgets/kis_custom_image_widget.cc:292
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1305
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1308
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:295
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
@@ -20188,7 +20188,7 @@ msgctxt "spline filtering"
 msgid "spline"
 msgstr "Spline"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:527
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:526
 #, kde-format
 msgid ""
 "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on another "
@@ -20207,8 +20207,8 @@ msgstr ""
 "krita.org/nl/reference_manual/render_animation.html#setting-up-krita-for-"
 "exporting-animations\">bezoek deze sectie van onze Gebruikershandleiding.</a>"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:535
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:555
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:534
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:554
 #, kde-format
 msgid ""
 "The location of FFmpeg is invalid. Please select the correct location of the "
@@ -20217,12 +20217,12 @@ msgstr ""
 "De locatie van FFmpeg is ongeldig. Selecteer de juiste locatie van het "
 "uitvoerbare programma FFmpeg op uw systeem."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:539
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:538
 #, kde-format
 msgid "Please extract ffmpeg from the archive first."
 msgstr "ffmpeg eerst uit het archief uitpakken."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:546
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:545
 #, kde-format
 msgid ""
 "This is a source code archive. Please download the application archive "
@@ -20233,12 +20233,12 @@ msgstr ""
 "Builds'), pak het uit en lever daarna het pad aan het uitgepakte ffmpeg-"
 "bestand."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:549
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:548
 #, kde-format
 msgid "This is a source code archive. Please install ffmpeg instead."
 msgstr "Dit is een broncode archief. Installeer in plaats daarvan ffmpeg."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:569
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:568
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Voer een bestandsnaam waarnaar te renderen."
@@ -29224,7 +29224,7 @@ msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Laagstijlen"
 
-#: libs/ui/KisApplication.cpp:368
+#: libs/ui/KisApplication.cpp:373
 #, kde-format
 msgid ""
 "%1\n"
@@ -29235,13 +29235,13 @@ msgstr ""
 "\n"
 "Krita zal nu stoppen."
 
-#: libs/ui/KisApplication.cpp:368 libs/ui/KisApplication.cpp:374
+#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: fatale fout"
 
-#: libs/ui/KisApplication.cpp:374
+#: libs/ui/KisApplication.cpp:379
 #, kde-format
 msgid ""
 "\n"
@@ -29252,7 +29252,7 @@ msgstr ""
 "\n"
 "Krita zal nu stoppen."
 
-#: libs/ui/KisApplication.cpp:406
+#: libs/ui/KisApplication.cpp:411
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -29263,51 +29263,51 @@ msgstr ""
 "Dit wordt afgeraden.\n"
 "Download en installeer een x64 versie in plaats hiervan."
 
-#: libs/ui/KisApplication.cpp:423
+#: libs/ui/KisApplication.cpp:428
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Globale elementen worden geïnitialiseerd..."
 
-#: libs/ui/KisApplication.cpp:454
+#: libs/ui/KisApplication.cpp:459
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Typen hulpbronnen worden toegevoegd..."
 
-#: libs/ui/KisApplication.cpp:469
+#: libs/ui/KisApplication.cpp:474
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Hoofdvenster wordt geladen..."
 
-#: libs/ui/KisApplication.cpp:568
+#: libs/ui/KisApplication.cpp:573
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 "Mime-bestandstype niet gevonden. Probeer de optie -mimetype te gebruiken."
 
-#: libs/ui/KisApplication.cpp:624
+#: libs/ui/KisApplication.cpp:629
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Animatieframes renderen is mislukt!"
 
-#: libs/ui/KisApplication.cpp:651 libs/ui/KisApplication.cpp:841
+#: libs/ui/KisApplication.cpp:656 libs/ui/KisApplication.cpp:846
 #, kde-format
 msgid "File layer"
 msgstr "Bestandslaag"
 
-#: libs/ui/KisApplication.cpp:659 libs/ui/KisApplication.cpp:664
-#: libs/ui/KisApplication.cpp:835 libs/ui/KisApplication.cpp:849
-#: libs/ui/KisApplication.cpp:854
+#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:669
+#: libs/ui/KisApplication.cpp:840 libs/ui/KisApplication.cpp:854
+#: libs/ui/KisApplication.cpp:859
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita:waarschuwing"
 
-#: libs/ui/KisApplication.cpp:660 libs/ui/KisApplication.cpp:850
+#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:855
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Kan %1 niet toevoegen als een bestandslaag: het bestand bestaat niet."
 
-#: libs/ui/KisApplication.cpp:665
+#: libs/ui/KisApplication.cpp:670
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29329,7 +29329,7 @@ msgstr ""
 "één exemplaar van Krita toestaan\" in de instellingen (Instellingen -> "
 "Algemeen -> Venster)."
 
-#: libs/ui/KisApplication.cpp:671
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29340,32 +29340,32 @@ msgstr ""
 "U kunt ofwel een nieuw bestand aanmaken met de optie --new-image of u kunt "
 "een bestaand bestand openen."
 
-#: libs/ui/KisApplication.cpp:836
+#: libs/ui/KisApplication.cpp:841
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Kon bestand %1 niet openen"
 
-#: libs/ui/KisApplication.cpp:855
+#: libs/ui/KisApplication.cpp:860
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Kan de bestandslaag niet toevoegen: er is geen document open."
 
-#: libs/ui/KisApplication.cpp:970
+#: libs/ui/KisApplication.cpp:975
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Geen sjabloon gevonden voor: %1"
 
-#: libs/ui/KisApplication.cpp:973
+#: libs/ui/KisApplication.cpp:978
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Teveel sjablonen gevonden voor: %1"
 
-#: libs/ui/KisApplication.cpp:989
+#: libs/ui/KisApplication.cpp:994
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Sjabloon %1 kon niet worden geladen."
 
-#: libs/ui/KisApplication.cpp:1021
+#: libs/ui/KisApplication.cpp:1026
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29380,7 +29380,7 @@ msgstr ""
 "\n"
 "Krita opnieuw opstarten om wijzigingen effect te laten hebben."
 
-#: libs/ui/KisApplication.cpp:1035
+#: libs/ui/KisApplication.cpp:1040
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29391,7 +29391,7 @@ msgstr ""
 "\n"
 "Ga na dat geen ander programma het bestand gebruikt en probeer opnieuw."
 
-#: libs/ui/KisApplication.cpp:1063
+#: libs/ui/KisApplication.cpp:1068
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Wilt u het instellingenbestand wissen?"
@@ -29542,17 +29542,17 @@ msgstr "Document klonen"
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "Naar %1 kan niet geschreven worden. Sla het op onder een andere naam."
 
-#: libs/ui/KisDocument.cpp:776
+#: libs/ui/KisDocument.cpp:788
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Document wordt geëxporteerd..."
 
-#: libs/ui/KisDocument.cpp:777
+#: libs/ui/KisDocument.cpp:789
 #, kde-format
 msgid "Saving Document..."
 msgstr "Document wordt opgeslagen..."
 
-#: libs/ui/KisDocument.cpp:787
+#: libs/ui/KisDocument.cpp:799
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -29561,13 +29561,13 @@ msgstr ""
 "Beginnen met opslaan van %1 lukt niet. Wacht totdat de huidige "
 "opslagoperatie is geëindigd."
 
-#: libs/ui/KisDocument.cpp:920
+#: libs/ui/KisDocument.cpp:926
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Fout tijdens het opslaan van %1: %2"
 
-#: libs/ui/KisDocument.cpp:926
+#: libs/ui/KisDocument.cpp:932
 #, kde-format
 msgid ""
 "Could not save %1.\n"
@@ -29576,7 +29576,7 @@ msgstr ""
 "Kon %1 niet opgeslaan.\n"
 "Reden: %2"
 
-#: libs/ui/KisDocument.cpp:935
+#: libs/ui/KisDocument.cpp:941
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -29588,38 +29588,38 @@ msgstr ""
 "%1 is opgeslagen maar is niet compleet.\n"
 "De volgende problemen zijn opgetreden bij opslaan:"
 
-#: libs/ui/KisDocument.cpp:953
+#: libs/ui/KisDocument.cpp:959
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Opslaan van %1 beëindigd"
 
-#: libs/ui/KisDocument.cpp:1358
+#: libs/ui/KisDocument.cpp:1362
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Bezig met automatisch opslaan... %1"
 
-#: libs/ui/KisDocument.cpp:1366
+#: libs/ui/KisDocument.cpp:1370
 #, kde-format
 msgid "Autosaving..."
 msgstr "Bezig met automatisch opslaan..."
 
-#: libs/ui/KisDocument.cpp:1372
+#: libs/ui/KisDocument.cpp:1376
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Automatisch opslaan uitgesteld: document is bezig..."
 
-#: libs/ui/KisDocument.cpp:1515
+#: libs/ui/KisDocument.cpp:1519
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Fout tijdens het automatisch opslaan van %1: %2"
 
-#: libs/ui/KisDocument.cpp:1529
+#: libs/ui/KisDocument.cpp:1533
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Automatisch opslaan van %1 beëindigd"
 
-#: libs/ui/KisDocument.cpp:1771
+#: libs/ui/KisDocument.cpp:1775
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -29628,17 +29628,17 @@ msgstr ""
 "Misvormd pad\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1837
+#: libs/ui/KisDocument.cpp:1841
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Bestand %1 bestaat niet."
 
-#: libs/ui/KisDocument.cpp:1866
+#: libs/ui/KisDocument.cpp:1870
 #, kde-format
 msgid "Opening document"
 msgstr "Bezig met document te openen"
 
-#: libs/ui/KisDocument.cpp:1881
+#: libs/ui/KisDocument.cpp:1885
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -29647,23 +29647,23 @@ msgstr ""
 "Kon %2 niet openen.\n"
 "Reden: %1."
 
-#: libs/ui/KisDocument.cpp:1889
+#: libs/ui/KisDocument.cpp:1893
 #, kde-format
 msgid "There were problems opening %1"
 msgstr "Er waren problemen om %1 te openen."
 
-#: libs/ui/KisDocument.cpp:2018
+#: libs/ui/KisDocument.cpp:2022
 #, kde-format
 msgid "Not Saved"
 msgstr "Niet opgeslagen"
 
-#: libs/ui/KisDocument.cpp:2476
+#: libs/ui/KisDocument.cpp:2480
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Gekleurde achtergrond"
 
-#: libs/ui/KisDocument.cpp:2532
+#: libs/ui/KisDocument.cpp:2534
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -29930,17 +29930,17 @@ msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Audio openen"
 
-#: libs/ui/KisImportExportManager.cpp:378
+#: libs/ui/KisImportExportManager.cpp:373
 #, kde-format
 msgid "Opening document..."
 msgstr "Document wordt geopend..."
 
-#: libs/ui/KisImportExportManager.cpp:443
+#: libs/ui/KisImportExportManager.cpp:435
 #, kde-format
 msgid "Saving document..."
 msgstr "Document wordt opgeslagen..."
 
-#: libs/ui/KisImportExportManager.cpp:537
+#: libs/ui/KisImportExportManager.cpp:529
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
@@ -29948,7 +29948,7 @@ msgstr ""
 "De afbeelding bevat <b>assistenten</b>. De assistenten zullen niet "
 "opgeslagen worden."
 
-#: libs/ui/KisImportExportManager.cpp:540
+#: libs/ui/KisImportExportManager.cpp:532
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -29958,7 +29958,7 @@ msgstr ""
 "De afbeelding bevat <b>referentie-afbeeldingen</b>. De referentie-"
 "afbeeldingen zullen niet opgeslagen worden."
 
-#: libs/ui/KisImportExportManager.cpp:543
+#: libs/ui/KisImportExportManager.cpp:535
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
@@ -29966,7 +29966,7 @@ msgstr ""
 "De afbeelding bevat <b>hulplijnen</b>. De hulplijnen zullen niet opgeslagen "
 "worden."
 
-#: libs/ui/KisImportExportManager.cpp:546
+#: libs/ui/KisImportExportManager.cpp:538
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -29976,24 +29976,24 @@ msgstr ""
 "De afbeelding bevat een <b>aangepaste rasterconfiguratie</b>. De "
 "configuratie zal niet opgeslagen worden."
 
-#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:543
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "Fout: kan deze afbeelding niet opslaan in %1."
 
-#: libs/ui/KisImportExportManager.cpp:552
-#: libs/ui/KisImportExportManager.cpp:595
+#: libs/ui/KisImportExportManager.cpp:544
+#: libs/ui/KisImportExportManager.cpp:587
 #, kde-format
 msgid "Reasons:"
 msgstr "Redenen:"
 
-#: libs/ui/KisImportExportManager.cpp:560
+#: libs/ui/KisImportExportManager.cpp:552
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita: fout in exporteren"
 
-#: libs/ui/KisImportExportManager.cpp:577
+#: libs/ui/KisImportExportManager.cpp:569
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
@@ -30001,32 +30001,32 @@ msgstr ""
 "Waarschuwing: opslaan als een %1 zal informatie uit uw afbeelding doen "
 "verliezen.    "
 
-#: libs/ui/KisImportExportManager.cpp:589
+#: libs/ui/KisImportExportManager.cpp:581
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr ""
 "U zult informatie verliezen bij opslaan van deze afbeelding als een %1."
 
-#: libs/ui/KisImportExportManager.cpp:592
+#: libs/ui/KisImportExportManager.cpp:584
 #, kde-format
 msgid "Reason:"
 msgstr "Reden:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
-#: libs/ui/KisImportExportManager.cpp:610
+#: libs/ui/KisImportExportManager.cpp:602
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
 #, kde-format
 msgid "Options"
 msgstr "Opties"
 
 #. i18n: ectx: property (title), widget (QGroupBox, scale)
-#: libs/ui/KisImportExportManager.cpp:618
+#: libs/ui/KisImportExportManager.cpp:610
 #: plugins/impex/webp/dlg_webp_import.ui:173
 #, kde-format
 msgid "Resize"
 msgstr "Grootte wijzigen"
 
-#: libs/ui/KisImportExportManager.cpp:624
+#: libs/ui/KisImportExportManager.cpp:616
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Sla uw afbeelding ook op als een Krita bestand."
@@ -33930,31 +33930,31 @@ msgstr "De vulkleur wijzigen"
 msgid "Change filling gradient"
 msgstr "Vulling kleurverloop wijzigen"
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:639
+#: libs/ui/widgets/KoFillConfigWidget.cpp:638
 #, kde-format
 msgctxt "default prefix for the saved gradient"
 msgid "gradient"
 msgstr "Kleuverloop"
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:648
+#: libs/ui/widgets/KoFillConfigWidget.cpp:647
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Gradient"
 msgstr "Kleurverloop opslaan"
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:649
+#: libs/ui/widgets/KoFillConfigWidget.cpp:648
 #, kde-format
 msgid "Enter gradient name:"
 msgstr "Naam kleurverloopnaam invoeren:"
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:656
+#: libs/ui/widgets/KoFillConfigWidget.cpp:655
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:204
 #, kde-format
 msgctxt "@title:window"
 msgid "Name Already Exists"
 msgstr "Naam bestaat al"
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:657
+#: libs/ui/widgets/KoFillConfigWidget.cpp:656
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:205
 #, kde-format
 msgid "The name '%1' already exists, do you wish to overwrite it?"
@@ -38008,12 +38008,12 @@ msgstr "Kon gamut-masker niet openen voor bewerken."
 msgid "The editor template was not found."
 msgstr "Het sjabloon voor bewerken is niet gevonden."
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:264
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:262
 #, kde-format
 msgid "Saving of gamut mask '%1' was aborted."
 msgstr "Opslaan van gamut-masker '%1' is afgebroken."
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:265
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:263
 #, kde-format
 msgid ""
 "<p>The mask template is invalid.</p><p>Please check that:<ul><li>your "
@@ -38024,17 +38024,17 @@ msgstr ""
 "een vectorlaag bevat genaamd 'maskShapesLayer'</li><li>er een of meer "
 "vectorvormen aan de 'maskShapesLayer' zitten</li></ul></p>"
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:311
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:309
 #, kde-format
 msgid "Gamut mask <b>'%1'</b> has been modified."
 msgstr "Gamut-masker <b>'%1'</b> is gewijzigd."
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:312
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:310
 #, kde-format
 msgid "Do you want to save it?"
 msgstr "Wilt u het opslaan?"
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:564
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:562
 #, kde-format
 msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgstr "Wilt u het masker <b>'%1'</b> echt verwijderen?"

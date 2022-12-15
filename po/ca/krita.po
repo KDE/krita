@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-13 03:05+0000\n"
+"POT-Creation-Date: 2022-12-15 02:44+0000\n"
 "PO-Revision-Date: 2022-11-30 21:46+0100\n"
 "Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -15548,8 +15548,8 @@ msgstr ""
 "El Krita no admet la plataforma Wayland. Useu XWayland per a executar el "
 "Krita a Wayland. El Krita tancarà ara."
 
-#: krita/main.cc:627 libs/ui/KisApplication.cpp:405
-#: libs/ui/KisApplication.cpp:670
+#: krita/main.cc:627 libs/ui/KisApplication.cpp:410
+#: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -16791,7 +16791,7 @@ msgstr "Imatge importada"
 msgid "Selection Mask"
 msgstr "Màscara de selecció"
 
-#: libs/image/kis_image.cc:725 libs/ui/KisDocument.cpp:2469
+#: libs/image/kis_image.cc:725 libs/ui/KisDocument.cpp:2473
 #: plugins/impex/psd/psd_loader.cpp:189
 #: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:68
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:302
@@ -19096,13 +19096,13 @@ msgstr "Recursos locals"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:527
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:535
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:539
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:545
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:548
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:555
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:569
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:526
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:534
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:538
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:544
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:547
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:554
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:568
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19118,12 +19118,12 @@ msgstr "Recursos locals"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
 #: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:969
-#: libs/ui/KisApplication.cpp:972 libs/ui/KisApplication.cpp:988
-#: libs/ui/KisApplication.cpp:1020 libs/ui/KisApplication.cpp:1034
-#: libs/ui/KisApplication.cpp:1062 libs/ui/KisDocument.cpp:925
-#: libs/ui/KisDocument.cpp:933 libs/ui/KisDocument.cpp:1837
-#: libs/ui/KisDocument.cpp:1880 libs/ui/KisDocument.cpp:1888
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
+#: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
+#: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
+#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:931
+#: libs/ui/KisDocument.cpp:939 libs/ui/KisDocument.cpp:1841
+#: libs/ui/KisDocument.cpp:1884 libs/ui/KisDocument.cpp:1892
 #: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1082
 #: libs/ui/KisMainWindow.cpp:1208 libs/ui/KisMainWindow.cpp:1307
 #: libs/ui/KisMainWindow.cpp:1913 libs/ui/KisMainWindow.cpp:1922
@@ -19139,7 +19139,7 @@ msgstr "Recursos locals"
 #: libs/ui/widgets/kis_custom_image_widget.cc:292
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1305
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1308
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:295
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:293
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
@@ -20143,7 +20143,7 @@ msgctxt "spline filtering"
 msgid "spline"
 msgstr "Spline"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:527
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:526
 #, kde-format
 msgid ""
 "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on another "
@@ -20162,8 +20162,8 @@ msgstr ""
 "krita.org/en/reference_manual/render_animation.html#setting-up-krita-for-"
 "exporting-animations\">visiteu aquesta secció del manual de l'usuari.</a>"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:535
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:555
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:534
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:554
 #, kde-format
 msgid ""
 "The location of FFmpeg is invalid. Please select the correct location of the "
@@ -20172,12 +20172,12 @@ msgstr ""
 "La ubicació del FFmpeg no és vàlida. Si us plau, seleccioneu la ubicació "
 "correcta de l'executable del FFmpeg en aquest sistema."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:539
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:538
 #, kde-format
 msgid "Please extract ffmpeg from the archive first."
 msgstr "Si us plau, primer extraieu el «ffmpeg» de l'arxiu."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:546
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:545
 #, kde-format
 msgid ""
 "This is a source code archive. Please download the application archive "
@@ -20187,13 +20187,13 @@ msgstr ""
 "Aquest és un arxiu de codi font. Baixeu l'arxiu de l'aplicació («Windows "
 "Builds»), desempaqueteu-lo i proporcioneu el camí al fitxer «ffmpeg» extret."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:549
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:548
 #, kde-format
 msgid "This is a source code archive. Please install ffmpeg instead."
 msgstr ""
 "Aquest és un arxiu de codi font. En el seu lloc instal·leu el «ffmpeg»."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:569
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:568
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Si us plau, introduïu un nom de fitxer a representar."
@@ -29172,7 +29172,7 @@ msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Estils de capa"
 
-#: libs/ui/KisApplication.cpp:368
+#: libs/ui/KisApplication.cpp:373
 #, kde-format
 msgid ""
 "%1\n"
@@ -29183,13 +29183,13 @@ msgstr ""
 "\n"
 "El Krita sortirà ara."
 
-#: libs/ui/KisApplication.cpp:368 libs/ui/KisApplication.cpp:374
+#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Error fatal"
 
-#: libs/ui/KisApplication.cpp:374
+#: libs/ui/KisApplication.cpp:379
 #, kde-format
 msgid ""
 "\n"
@@ -29200,7 +29200,7 @@ msgstr ""
 "\n"
 "El Krita sortirà ara."
 
-#: libs/ui/KisApplication.cpp:406
+#: libs/ui/KisApplication.cpp:411
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -29211,50 +29211,50 @@ msgstr ""
 "Això no és recomanable.\n"
 "En el seu lloc, baixeu i instal·leu la compilació de x64."
 
-#: libs/ui/KisApplication.cpp:423
+#: libs/ui/KisApplication.cpp:428
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "S'estan inicialitzant els globals..."
 
-#: libs/ui/KisApplication.cpp:454
+#: libs/ui/KisApplication.cpp:459
 #, kde-format
 msgid "Adding resource types..."
 msgstr "S'estan afegint els tipus de recursos..."
 
-#: libs/ui/KisApplication.cpp:469
+#: libs/ui/KisApplication.cpp:474
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "S'està carregant la finestra principal..."
 
-#: libs/ui/KisApplication.cpp:568
+#: libs/ui/KisApplication.cpp:573
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "No s'ha trobat el tipus MIME, prova usant l'opció -mimetype"
 
-#: libs/ui/KisApplication.cpp:624
+#: libs/ui/KisApplication.cpp:629
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Ha fallat en renderitzar els fotogrames de l'animació!"
 
-#: libs/ui/KisApplication.cpp:651 libs/ui/KisApplication.cpp:841
+#: libs/ui/KisApplication.cpp:656 libs/ui/KisApplication.cpp:846
 #, kde-format
 msgid "File layer"
 msgstr "Capa de fitxer"
 
-#: libs/ui/KisApplication.cpp:659 libs/ui/KisApplication.cpp:664
-#: libs/ui/KisApplication.cpp:835 libs/ui/KisApplication.cpp:849
-#: libs/ui/KisApplication.cpp:854
+#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:669
+#: libs/ui/KisApplication.cpp:840 libs/ui/KisApplication.cpp:854
+#: libs/ui/KisApplication.cpp:859
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Avís"
 
-#: libs/ui/KisApplication.cpp:660 libs/ui/KisApplication.cpp:850
+#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:855
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "No s'ha pogut afegir %1 com a capa de fitxer: el fitxer no existeix."
 
-#: libs/ui/KisApplication.cpp:665
+#: libs/ui/KisApplication.cpp:670
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29276,7 +29276,7 @@ msgstr ""
 "només una única instància del Krita» a l'arranjament (Arranjament -> General "
 "-> Finestra)."
 
-#: libs/ui/KisApplication.cpp:671
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29287,32 +29287,32 @@ msgstr ""
 "Podeu crear un document nou usant l'opció «--new-image», o podeu obrir un "
 "fitxer existent."
 
-#: libs/ui/KisApplication.cpp:836
+#: libs/ui/KisApplication.cpp:841
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "No s'ha pogut obrir el fitxer %1"
 
-#: libs/ui/KisApplication.cpp:855
+#: libs/ui/KisApplication.cpp:860
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "No s'ha pogut afegir la capa de fitxer: no hi ha cap document obert."
 
-#: libs/ui/KisApplication.cpp:970
+#: libs/ui/KisApplication.cpp:975
 #, kde-format
 msgid "No template found for: %1"
 msgstr "No s'ha trobat cap plantilla per a: %1"
 
-#: libs/ui/KisApplication.cpp:973
+#: libs/ui/KisApplication.cpp:978
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "S'ha trobat massa plantilles per a: %1"
 
-#: libs/ui/KisApplication.cpp:989
+#: libs/ui/KisApplication.cpp:994
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Hi ha hagut un error en carregar la plantilla %1."
 
-#: libs/ui/KisApplication.cpp:1021
+#: libs/ui/KisApplication.cpp:1026
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29327,7 +29327,7 @@ msgstr ""
 "\n"
 "Reinicieu el Krita per tal que els canvis tinguin efecte."
 
-#: libs/ui/KisApplication.cpp:1035
+#: libs/ui/KisApplication.cpp:1040
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29339,7 +29339,7 @@ msgstr ""
 "Si us plau, assegureu-vos que cap altre programa estigui usant el fitxer i "
 "torneu-ho a provar."
 
-#: libs/ui/KisApplication.cpp:1063
+#: libs/ui/KisApplication.cpp:1068
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Voleu netejar el fitxer de configuració?"
@@ -29489,17 +29489,17 @@ msgstr "Clona el document"
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "No es pot escriure a %1. Deseu-ho amb un nom diferent."
 
-#: libs/ui/KisDocument.cpp:776
+#: libs/ui/KisDocument.cpp:788
 #, kde-format
 msgid "Exporting Document..."
 msgstr "S'està exportant el document..."
 
-#: libs/ui/KisDocument.cpp:777
+#: libs/ui/KisDocument.cpp:789
 #, kde-format
 msgid "Saving Document..."
 msgstr "S'està desant el document..."
 
-#: libs/ui/KisDocument.cpp:787
+#: libs/ui/KisDocument.cpp:799
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -29508,13 +29508,13 @@ msgstr ""
 "No s'ha pogut iniciar el desament de %1. Espereu fins que finalitzi "
 "l'operació actual de desament."
 
-#: libs/ui/KisDocument.cpp:920
+#: libs/ui/KisDocument.cpp:926
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Error en desar %1: %2"
 
-#: libs/ui/KisDocument.cpp:926
+#: libs/ui/KisDocument.cpp:932
 #, kde-format
 msgid ""
 "Could not save %1.\n"
@@ -29523,7 +29523,7 @@ msgstr ""
 "No s'ha pogut desar %1.\n"
 "Raó: %2"
 
-#: libs/ui/KisDocument.cpp:935
+#: libs/ui/KisDocument.cpp:941
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -29535,38 +29535,38 @@ msgstr ""
 "%1 s'ha desat, però està incomplet.\n"
 "En desar-lo s'han trobat els problemes següents:"
 
-#: libs/ui/KisDocument.cpp:953
+#: libs/ui/KisDocument.cpp:959
 #, kde-format
 msgid "Finished saving %1"
 msgstr "%1 ha finalitzat el desament"
 
-#: libs/ui/KisDocument.cpp:1358
+#: libs/ui/KisDocument.cpp:1362
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "S'està desant automàticament... %1"
 
-#: libs/ui/KisDocument.cpp:1366
+#: libs/ui/KisDocument.cpp:1370
 #, kde-format
 msgid "Autosaving..."
 msgstr "S'està desant automàticament..."
 
-#: libs/ui/KisDocument.cpp:1372
+#: libs/ui/KisDocument.cpp:1376
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "El desament automàtic es posposa: el document està ocupat..."
 
-#: libs/ui/KisDocument.cpp:1515
+#: libs/ui/KisDocument.cpp:1519
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Error durant en desar automàticament %1: %2"
 
-#: libs/ui/KisDocument.cpp:1529
+#: libs/ui/KisDocument.cpp:1533
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "%1 ha finalitzat el desament automàtic"
 
-#: libs/ui/KisDocument.cpp:1771
+#: libs/ui/KisDocument.cpp:1775
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -29575,17 +29575,17 @@ msgstr ""
 "Camí amb format incorrecte\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1837
+#: libs/ui/KisDocument.cpp:1841
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "El fitxer %1 no existeix."
 
-#: libs/ui/KisDocument.cpp:1866
+#: libs/ui/KisDocument.cpp:1870
 #, kde-format
 msgid "Opening document"
 msgstr "Obertura de document"
 
-#: libs/ui/KisDocument.cpp:1881
+#: libs/ui/KisDocument.cpp:1885
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -29594,23 +29594,23 @@ msgstr ""
 "No s'ha pogut obrir %2.\n"
 "Motiu: %1"
 
-#: libs/ui/KisDocument.cpp:1889
+#: libs/ui/KisDocument.cpp:1893
 #, kde-format
 msgid "There were problems opening %1"
 msgstr "Hi ha problemes en obrir %1"
 
-#: libs/ui/KisDocument.cpp:2018
+#: libs/ui/KisDocument.cpp:2022
 #, kde-format
 msgid "Not Saved"
 msgstr "Sense desar"
 
-#: libs/ui/KisDocument.cpp:2476
+#: libs/ui/KisDocument.cpp:2480
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Emplenat del fons"
 
-#: libs/ui/KisDocument.cpp:2532
+#: libs/ui/KisDocument.cpp:2534
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -29880,23 +29880,23 @@ msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Obre l'àudio"
 
-#: libs/ui/KisImportExportManager.cpp:378
+#: libs/ui/KisImportExportManager.cpp:373
 #, kde-format
 msgid "Opening document..."
 msgstr "Obrint un document..."
 
-#: libs/ui/KisImportExportManager.cpp:443
+#: libs/ui/KisImportExportManager.cpp:435
 #, kde-format
 msgid "Saving document..."
 msgstr "S'està desant el document..."
 
-#: libs/ui/KisImportExportManager.cpp:537
+#: libs/ui/KisImportExportManager.cpp:529
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr "La imatge conté <b>assistents</b>. Els assistents no es desaran."
 
-#: libs/ui/KisImportExportManager.cpp:540
+#: libs/ui/KisImportExportManager.cpp:532
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -29906,13 +29906,13 @@ msgstr ""
 "La imatge conté <b>imatges de referència</b>. Les imatges de referència no "
 "es desaran."
 
-#: libs/ui/KisImportExportManager.cpp:543
+#: libs/ui/KisImportExportManager.cpp:535
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "La imatge conté <b>guies</b>. Les guies no es desaran."
 
-#: libs/ui/KisImportExportManager.cpp:546
+#: libs/ui/KisImportExportManager.cpp:538
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -29922,54 +29922,54 @@ msgstr ""
 "La imatge conté una <b>configuració de quadrícula personalitzada</b>. La "
 "configuració no es desarà."
 
-#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:543
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "Error: No es pot desar aquesta imatge com a %1."
 
-#: libs/ui/KisImportExportManager.cpp:552
-#: libs/ui/KisImportExportManager.cpp:595
+#: libs/ui/KisImportExportManager.cpp:544
+#: libs/ui/KisImportExportManager.cpp:587
 #, kde-format
 msgid "Reasons:"
 msgstr "Motius:"
 
-#: libs/ui/KisImportExportManager.cpp:560
+#: libs/ui/KisImportExportManager.cpp:552
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita: Error d'exportació"
 
-#: libs/ui/KisImportExportManager.cpp:577
+#: libs/ui/KisImportExportManager.cpp:569
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr "Avís: En desar com un %1 es perdrà informació de la imatge."
 
-#: libs/ui/KisImportExportManager.cpp:589
+#: libs/ui/KisImportExportManager.cpp:581
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr "En desar com a %1 es perdrà informació de la imatge."
 
-#: libs/ui/KisImportExportManager.cpp:592
+#: libs/ui/KisImportExportManager.cpp:584
 #, kde-format
 msgid "Reason:"
 msgstr "Motiu:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
-#: libs/ui/KisImportExportManager.cpp:610
+#: libs/ui/KisImportExportManager.cpp:602
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
 #, kde-format
 msgid "Options"
 msgstr "Opcions"
 
 #. i18n: ectx: property (title), widget (QGroupBox, scale)
-#: libs/ui/KisImportExportManager.cpp:618
+#: libs/ui/KisImportExportManager.cpp:610
 #: plugins/impex/webp/dlg_webp_import.ui:173
 #, kde-format
 msgid "Resize"
 msgstr "Redimensiona"
 
-#: libs/ui/KisImportExportManager.cpp:624
+#: libs/ui/KisImportExportManager.cpp:616
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "També desa la imatge com un fitxer del Krita."
@@ -33871,31 +33871,31 @@ msgstr "Canvia el color de l'emplenat"
 msgid "Change filling gradient"
 msgstr "Canvia el degradat de l'emplenat"
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:639
+#: libs/ui/widgets/KoFillConfigWidget.cpp:638
 #, kde-format
 msgctxt "default prefix for the saved gradient"
 msgid "gradient"
 msgstr "degradat"
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:648
+#: libs/ui/widgets/KoFillConfigWidget.cpp:647
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Gradient"
 msgstr "Desa el degradat"
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:649
+#: libs/ui/widgets/KoFillConfigWidget.cpp:648
 #, kde-format
 msgid "Enter gradient name:"
 msgstr "Introduïu el nom del degradat:"
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:656
+#: libs/ui/widgets/KoFillConfigWidget.cpp:655
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:204
 #, kde-format
 msgctxt "@title:window"
 msgid "Name Already Exists"
 msgstr "El nom ja existeix"
 
-#: libs/ui/widgets/KoFillConfigWidget.cpp:657
+#: libs/ui/widgets/KoFillConfigWidget.cpp:656
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:205
 #, kde-format
 msgid "The name '%1' already exists, do you wish to overwrite it?"
@@ -37955,12 +37955,12 @@ msgstr "No s'ha pogut obrir la màscara de gamma per a edició."
 msgid "The editor template was not found."
 msgstr "No s'ha trobat l'editor de la plantilla."
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:264
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:262
 #, kde-format
 msgid "Saving of gamut mask '%1' was aborted."
 msgstr "El desament de la màscara de gamma «%1» s'ha interromput."
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:265
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:263
 #, kde-format
 msgid ""
 "<p>The mask template is invalid.</p><p>Please check that:<ul><li>your "
@@ -37971,17 +37971,17 @@ msgstr ""
 "vostra plantilla conté una capa vectorial anomenada «maskShapesLayer»</"
 "li><li>hi ha una o més formes vectorials a la «maskShapesLayer»</li></ul></p>"
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:311
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:309
 #, kde-format
 msgid "Gamut mask <b>'%1'</b> has been modified."
 msgstr "La màscara de gamma <b>«%1»</b> ha estat modificada."
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:312
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:310
 #, kde-format
 msgid "Do you want to save it?"
 msgstr "Voleu desar-la?"
 
-#: plugins/dockers/gamutmask/gamutmask_dock.cpp:564
+#: plugins/dockers/gamutmask/gamutmask_dock.cpp:562
 #, kde-format
 msgid "Are you sure you want to delete mask <b>'%1'</b>?"
 msgstr "Esteu segur/a que voleu suprimir la màscara <b>«%1»</b>?"

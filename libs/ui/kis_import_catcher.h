@@ -32,6 +32,8 @@ public:
     KisImportCatcher(const QString &url, KisViewManager* view, const QString &layerType);
     ~KisImportCatcher() override;
 
+    int numLayersImported() const;
+
     static void adaptClipToImageColorSpace(KisPaintDeviceSP dev, KisImageSP image);
 
 private Q_SLOTS:

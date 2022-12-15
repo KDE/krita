@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-14 00:45+0000\n"
-"PO-Revision-Date: 2022-07-21 15:53+0200\n"
+"PO-Revision-Date: 2022-12-09 17:44+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.04.3\n"
+"X-Generator: Lokalize 22.08.3\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,1000,-1,-1,-1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -20752,7 +20752,7 @@ msgstr ""
 #, kde-format
 msgctxt "WEBP codec name"
 msgid "WEBP"
-msgstr ""
+msgstr "WEBP"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:40
 #, kde-format
@@ -21771,7 +21771,7 @@ msgstr ""
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:107
 #, kde-format
 msgid "Up"
-msgstr "Преместване нагоре"
+msgstr "Нагоре"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDown)
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:114
@@ -38111,7 +38111,7 @@ msgstr "Избиране на конфигурация на OpenColorIO"
 #: plugins/dockers/lut/lutdocker_dock.cpp:560
 #, kde-format
 msgid "Luminance"
-msgstr ""
+msgstr "Осветеност"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:561
 #, kde-format
@@ -47512,7 +47512,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:slider"
 msgid "T(K):"
-msgstr ""
+msgstr "T(K):"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:444
 #, kde-format
@@ -58370,11 +58370,3 @@ msgstr "Мащабиране"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Референтни изображения"
-
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "Инструменти за ри&суване"
-
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "Инструменти за рисуване"

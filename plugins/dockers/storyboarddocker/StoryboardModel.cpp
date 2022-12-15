@@ -56,22 +56,19 @@ QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &paren
     if (row < 0 || row >= rowCount(parent)) {
         return QModelIndex();
     }
-    if (column !=0) {
+    if (column != 0) {
         return QModelIndex();
     }
     
-    //1st level node has invalid parent
-    if (!parent.isValid()) {
-        return createIndex(row, column, m_items.at(row).data());
-    }
-    else if (!parent.parent().isValid()) {
+    if (isValidBoard(parent)) {
         StoryboardItemSP parentItem = m_items.at(parent.row());
         QSharedPointer<StoryboardChild> childItem = parentItem->child(row);
-        if (childItem) {
-            return createIndex(row, column, childItem.data());
-        }
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(childItem, QModelIndex());
+        return createIndex(row, column, childItem.data());
+    } else {
+        return createIndex(row, column, m_items.at(row).data());
     }
-    return QModelIndex();
 }
 
 QModelIndex StoryboardModel::parent(const QModelIndex &index) const

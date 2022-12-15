@@ -272,7 +272,7 @@ public:
 private:
     // For now, board is structured as a tree, with each board element being the top level
     // and storyboard components (numbers, comments, etc.) being children/leaves.
-    bool isValidBoard(const QModelIndex &index) const {return index.parent().isValid() == false;}
+    inline bool isValidBoard(const QModelIndex &index) const {return index.isValid() && !index.parent().isValid();}
 
     bool moveRowsImpl(const QModelIndex &sourceParent, int sourceRow, int count,
                     const QModelIndex &destinationParent, int destinationChild, KUndo2Command *parentCMD = nullptr);

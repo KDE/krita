@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-15 02:44+0000\n"
-"PO-Revision-Date: 2022-12-11 20:36+0300\n"
+"PO-Revision-Date: 2022-12-15 19:42+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -11430,21 +11430,21 @@ msgstr "Katman alfası mirasını aç/kapat"
 #, kde-format
 msgctxt "action"
 msgid "Add &Paint Layer"
-msgstr "&Boyama Katmanı Ekle"
+msgstr "&Boya Katmanı Ekle"
 
 #. i18n: context: toolTip @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2662
 #, kde-format
 msgctxt "action"
 msgid "Add a new Paint Layer"
-msgstr "Yeni bir boyama katmanı ekle"
+msgstr "Yeni bir boya katmanı ekle"
 
 #. i18n: context: iconText @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2663
 #, kde-format
 msgctxt "action"
 msgid "Paint Layer"
-msgstr "Boyama Katmanı"
+msgstr "Boya Katmanı"
 
 #. i18n: context: text @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2672
@@ -11829,7 +11829,7 @@ msgstr "Katman İçe Aktar"
 #, kde-format
 msgctxt "action"
 msgid "&as Paint Layer..."
-msgstr "&Boyama Katmanı Olarak..."
+msgstr "&Boya Katmanı Olarak..."
 
 #. i18n: context: toolTip @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
@@ -11839,7 +11839,7 @@ msgstr "&Boyama Katmanı Olarak..."
 #, kde-format
 msgctxt "action"
 msgid "as Paint Layer"
-msgstr "Boyama Karmanı olarak"
+msgstr "Boya Katmanı Olarak"
 
 #. i18n: context: text @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2948
@@ -11897,7 +11897,7 @@ msgstr "Seçim Maskesi olarak"
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Paint Layer"
-msgstr "&Boyama Katmanına Dönüştür"
+msgstr "&Boya Katmanına Dönüştür"
 
 #. i18n: context: toolTip @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
@@ -11907,7 +11907,7 @@ msgstr "&Boyama Katmanına Dönüştür"
 #, kde-format
 msgctxt "action"
 msgid "to Paint Layer"
-msgstr "Boyama Katmanına"
+msgstr "Boya Katmanına"
 
 #. i18n: context: text @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2996
@@ -16784,7 +16784,7 @@ msgstr "Arka Plan"
 #: libs/image/kis_image.cc:729 libs/ui/kis_layer_manager.cc:618
 #, kde-format
 msgid "Paint Layer"
-msgstr "Katmanı Boya"
+msgstr "Boya Katmanı"
 
 #: libs/image/kis_image.cc:828
 msgctxt "(qtundo-format)"
@@ -17075,7 +17075,7 @@ msgstr "Alfayı Maskelere Ayır"
 #: libs/image/kis_layer_utils.cpp:2173
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
-msgstr "Bir Boyama Katmanına Dönüştür"
+msgstr "Bir Boya Katmanına Dönüştür"
 
 #: libs/image/kis_processing_visitor.cpp:22
 #, kde-format
@@ -17473,7 +17473,7 @@ msgid ""
 "the layer will be converted to a paintlayer"
 msgstr ""
 "Görselde <b>%1</b> türünden desteklenmeyen bir dolgu katmanı var; katman bir "
-"boyama katmanına dönüştürülecek"
+"boya katmanına dönüştürülecek"
 
 #: libs/impex/KisExportCheckRegistry.cpp:100 libs/ui/kis_layer_manager.cc:647
 #, kde-format
@@ -31699,8 +31699,7 @@ msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
 "mask."
 msgstr ""
-"Fırça aracı bu katman üzerini boyayamaz.  Lütfen boyama katmanı veya maske "
-"seçin."
+"Fırça aracı bu katmanda boya yapamaz.  Lütfen boya katmanı veya maske seçin."
 
 #: libs/ui/tool/kis_tool_freehand.cc:212
 #: libs/ui/tool/kis_tool_polyline_base.cpp:119
@@ -33096,8 +33095,8 @@ msgid ""
 "size is %4 bit. A single paint layer will thus take up %5 of RAM."
 msgstr ""
 "Bu belge %3 kipinde %1 piksele %2 piksel olacak, bu da piksel boyutunun %4 "
-"bit olduğu anlamına geliyor. Tek bir boya katmanı bu nedenle %5 RAM "
-"alacaktır."
+"bit olacağı anlamına gelir. Buna istinaden, tek bir boya katmanı %5 RAM "
+"kullanır."
 
 #: libs/ui/widgets/kis_filter_selector_widget.cc:157
 #, kde-format
@@ -34361,7 +34360,7 @@ msgstr "Rengi Palete Ekle"
 #: libs/widgets/KoEditColorSetDialog.cpp:202
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr "%1 palet dosyasına yazılamıyor. Salt-okunur olabilir. "
+msgstr "%1 palet dosyasına yazılamıyor. Saltokunur olabilir."
 
 #. i18n: ectx: property (text), widget (QLabel, paletteLabel)
 #: libs/widgets/KoEditColorSetDialog.cpp:202
@@ -49439,7 +49438,7 @@ msgstr "Alfaya Bulaşma"
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:142
 #, kde-format
 msgid "Paint Thickness Mode"
-msgstr "Boyama Kalınlığı Kipi"
+msgstr "Boya Kalınlığı Kipi"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:146
 #, kde-format
@@ -50637,7 +50636,7 @@ msgstr "Arka planı doldur"
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:167
 #, kde-format
 msgid "Sample Input layer"
-msgstr "Örnek girdi katmanı"
+msgstr "Örnek Girdi Katmanı"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mixBgColorCHBox)
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:180
@@ -51662,7 +51661,7 @@ msgstr "Boya Kalınlığı"
 #: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option_widget.cpp:29
 #, kde-format
 msgid "Overwrite (Smooth out when low) existing paint thickness"
-msgstr "Var olan boyama kalınlığının üzerine yaz (düşükken pürüzsüzleştir)"
+msgstr "Var olan boya kalınlığının üzerine yaz (düşükken pürüzsüzleştir)"
 
 #: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option_widget.cpp:30
 #, kde-format
@@ -55299,7 +55298,7 @@ msgstr "Rastgele Fırça Vuruşu"
 #: plugins/tools/basictools/kis_tool_brush.cc:179
 #, kde-format
 msgid "Sample count:"
-msgstr "Temel sayım:"
+msgstr "Örnek Sayısı:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:190
 #, kde-format
@@ -55355,7 +55354,7 @@ msgstr "Fırçanın bloklandığı yarıçap"
 #: plugins/tools/basictools/kis_tool_brush.cc:394
 #, kde-format
 msgid "Finish line:"
-msgstr "Çizgiyi sonlandır:"
+msgstr "Bitiş çizgisi:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:407
 #, kde-format
@@ -55441,7 +55440,7 @@ msgstr "Serbest Fırça Aracı"
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:96
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only."
-msgstr "%1 palet dosyasına yazılamıyor. Salt-okunur olabilir."
+msgstr "%1 palet dosyasına yazılamıyor. Saltokunur olabilir."
 
 #: plugins/tools/basictools/kis_tool_colorsampler.h:122
 #, kde-format
@@ -58325,7 +58324,7 @@ msgstr "Çokluçizgi Aracı. Shift ve fare tıklaması çok çizgiliyi sonlandı
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:133
 #, kde-format
 msgid "Select a paint layer to use this tool"
-msgstr "Bu aracı kullanmak için bir boyama katmanı seç"
+msgstr "Bu aracı kullanmak için bir boya katmanı seç"
 
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:172
 msgctxt "(qtundo-format)"

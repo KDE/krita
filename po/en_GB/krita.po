@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-14 00:45+0000\n"
+"POT-Creation-Date: 2022-12-16 00:48+0000\n"
 "PO-Revision-Date: 2022-09-18 12:12+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -39870,7 +39870,7 @@ msgstr ""
 "Please enter correct range. There are no panels in the range of frames "
 "provided."
 
-#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1266
+#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1263
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "

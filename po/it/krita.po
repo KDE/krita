@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-14 00:45+0000\n"
+"POT-Creation-Date: 2022-12-16 00:48+0000\n"
 "PO-Revision-Date: 2022-11-27 13:21+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -39986,7 +39986,7 @@ msgstr ""
 "Inserisci l'intervallo corretto. Non ci sono pannelli nell'intervallo di "
 "fotogrammi indicato."
 
-#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1266
+#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1263
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "

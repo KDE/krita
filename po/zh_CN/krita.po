@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-14 00:45+0000\n"
+"POT-Creation-Date: 2022-12-16 00:48+0000\n"
 "PO-Revision-Date: 2022-12-13 12:20\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -39403,7 +39403,7 @@ msgid ""
 "provided."
 msgstr "请输入正确的范围。在指定的帧范围中不存在分镜头。"
 
-#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1266
+#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1263
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "

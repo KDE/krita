@@ -61,15 +61,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-14 00:45+0000\n"
-"PO-Revision-Date: 2022-12-09 10:10+0100\n"
+"POT-Creation-Date: 2022-12-16 00:48+0000\n"
+"PO-Revision-Date: 2022-12-15 11:34+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 22.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -6727,7 +6727,7 @@ msgstr "Kleurverloop"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/marker.gpl"
 msgid "Markers"
-msgstr "Markeerstiften "
+msgstr "Markeringen"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-16.gpl:2
@@ -7222,7 +7222,7 @@ msgstr "Kleurverloop"
 #, kde-format
 msgctxt "./krita/data/palettes/marker.gpl"
 msgid "Markers"
-msgstr "Markeerstiften "
+msgstr "Markeringen"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/palettes/pixelart-16.gpl:2
@@ -40012,7 +40012,7 @@ msgstr ""
 "Gaarne een juist bereik invoeren. Er zijn geen panelen in het geleverde "
 "bereik van frames."
 
-#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1266
+#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1263
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "

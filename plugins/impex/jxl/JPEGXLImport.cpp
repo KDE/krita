@@ -42,6 +42,7 @@ class Q_DECL_HIDDEN JPEGXLImportData
 {
 public:
     JxlBasicInfo m_info{};
+    JxlExtraChannelInfo m_extra{};
     JxlPixelFormat m_pixelFormat{};
     JxlFrameHeader m_header{};
     KisPaintDeviceSP m_currentFrame{nullptr};
@@ -49,6 +50,7 @@ public:
     int m_durationFrameInTicks{0};
     KoID m_colorID;
     KoID m_depthID;
+    bool isCMYK = false;
     bool applyOOTF = true;
     float displayGamma = 1.2f;
     float displayNits = 1000.0;
@@ -295,6 +297,19 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 errFile << "JxlDecoderGetBasicInfo failed";
                 return ImportExportCodes::ErrorWhileReading;
             }
+
+            for (uint32_t i = 0; i < d.m_info.num_extra_channels; i++) {
+                if (JXL_DEC_SUCCESS != JxlDecoderGetExtraChannelInfo(dec.get(), i, &d.m_extra)) {
+                    errFile << "JxlDecoderGetExtraChannelInfo failed";
+                    break;
+                }
+                if (d.m_extra.type == JXL_CHANNEL_BLACK) d.isCMYK = true;
+            }
+            if (d.isCMYK) {
+                errFile << "CMYK(A) JPEG-XL is not yet supported!";
+                return ImportExportCodes::FormatFeaturesUnsupported;
+            }
+
             dbgFile << "Info";
             dbgFile << "Size:" << d.m_info.xsize << "x" << d.m_info.ysize;
             dbgFile << "Depth:" << d.m_info.bits_per_sample << d.m_info.exponent_bits_per_sample;

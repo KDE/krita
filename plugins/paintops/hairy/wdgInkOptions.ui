@@ -180,7 +180,7 @@
      </widget>
     </item>
     <item column="2" row="2">
-     <widget class="KisDoubleSliderSpinBox" name="bristleInkAmountSlider" native="true">
+     <widget class="KisSliderSpinBox" name="bristleInkAmountSlider" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -197,7 +197,7 @@
      </widget>
     </item>
     <item column="2" row="3">
-     <widget class="KisDoubleSliderSpinBox" name="bristleLengthSlider" native="true">
+     <widget class="KisSliderSpinBox" name="bristleLengthSlider" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -207,7 +207,7 @@
      </widget>
     </item>
     <item column="2" row="1">
-     <widget class="KisDoubleSliderSpinBox" name="pressureSlider" native="true">
+     <widget class="KisSliderSpinBox" name="pressureSlider" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -224,7 +224,7 @@
      </widget>
     </item>
     <item column="2" row="4">
-     <widget class="KisDoubleSliderSpinBox" name="inkDepletionSlider" native="true">
+     <widget class="KisSliderSpinBox" name="inkDepletionSlider" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -243,7 +243,7 @@
    <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
+   <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>

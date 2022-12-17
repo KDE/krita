@@ -10,7 +10,7 @@
 
 class KisPainter;
 
-class KisOpacityOption : public KisStandardOption<KisOpacityOptionData>
+class PAINTOP_EXPORT KisOpacityOption : public KisStandardOption<KisOpacityOptionData>
 {
 public:
     using BaseClass = KisStandardOption<KisOpacityOptionData>;

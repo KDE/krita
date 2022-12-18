@@ -8,6 +8,11 @@
 
 #include "JPEGXLExport.h"
 
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
+#include "filter/kis_filter.h"
+#include <KisGlobalResourcesInterface.h>
+
 #include <jxl/color_encoding.h>
 #include <jxl/encode_cxx.h>
 #include <jxl/resizable_parallel_runner_cxx.h>
@@ -340,6 +345,9 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
     const float hlgNominalPeak = cfg->getFloat("HLGnominalPeak", 1000.0f);
     const bool removeHGLOOTF = cfg->getBool("removeHGLOOTF", true);
 
+    int colorByteDepth = -1;
+    const int imageSize = (bounds.width() * bounds.height());
+
     const bool hasPrimaries = cs->profile()->hasColorants();
     const TransferCharacteristics gamma = cs->profile()->getTransferCharacteristics();
     static constexpr std::array<TransferCharacteristics, 14> supportedTRC = {TRC_LINEAR,
@@ -376,6 +384,8 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             pixelFormat.num_channels = 4;
         } else if (cs->colorModelId() == GrayAColorModelID) {
             pixelFormat.num_channels = 2;
+        } else if (cs->colorModelId() == CMYKAColorModelID) {
+            pixelFormat.num_channels = 3;
         }
         return pixelFormat;
     }();
@@ -396,23 +406,27 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 info->exponent_bits_per_sample = 0;
                 info->alpha_bits = 8;
                 info->alpha_exponent_bits = 0;
+                colorByteDepth = 1;
             } else if (pixelFormat.data_type == JXL_TYPE_UINT16) {
                 info->bits_per_sample = 16;
                 info->exponent_bits_per_sample = 0;
                 info->alpha_bits = 16;
                 info->alpha_exponent_bits = 0;
+                colorByteDepth = 2;
 #ifdef HAVE_OPENEXR
             } else if (pixelFormat.data_type == JXL_TYPE_FLOAT16) {
                 info->bits_per_sample = 16;
                 info->exponent_bits_per_sample = 5;
                 info->alpha_bits = 16;
                 info->alpha_exponent_bits = 5;
+                colorByteDepth = 2;
 #endif
             } else if (pixelFormat.data_type == JXL_TYPE_FLOAT) {
                 info->bits_per_sample = 32;
                 info->exponent_bits_per_sample = 8;
                 info->alpha_bits = 32;
                 info->alpha_exponent_bits = 8;
+                colorByteDepth = 4;
             }
         }
         if (cs->colorModelId() == RGBAColorModelID) {
@@ -421,6 +435,9 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         } else if (cs->colorModelId() == GrayAColorModelID) {
             info->num_color_channels = 1;
             info->num_extra_channels = 1;
+        } else if (cs->colorModelId() == CMYKAColorModelID) {
+            info->num_color_channels = 3;
+            info->num_extra_channels = 2;
         }
         // Use original profile on lossless, non-matrix profile or unsupported transfer curve.
         if (cfg->getBool("lossless") || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID))
@@ -446,6 +463,33 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
     if (JXL_ENC_SUCCESS != JxlEncoderSetBasicInfo(enc.get(), basicInfo.get())) {
         errFile << "JxlEncoderSetBasicInfo failed";
         return ImportExportCodes::InternalError;
+    }
+
+    // CMYKA extra channel info
+    if (cs->colorModelId() == CMYKAColorModelID) {
+        const auto blackInfo = [&]() {
+            auto black{std::make_unique<JxlExtraChannelInfo>()};
+            JxlEncoderInitExtraChannelInfo(JXL_CHANNEL_BLACK, black.get());
+            black->bits_per_sample = basicInfo->bits_per_sample;
+            black->exponent_bits_per_sample = basicInfo->exponent_bits_per_sample;
+            return black;
+        }();
+        const auto alphaInfo = [&]() {
+            auto alpha{std::make_unique<JxlExtraChannelInfo>()};
+            JxlEncoderInitExtraChannelInfo(JXL_CHANNEL_ALPHA, alpha.get());
+            alpha->bits_per_sample = basicInfo->bits_per_sample;
+            alpha->exponent_bits_per_sample = basicInfo->exponent_bits_per_sample;
+            return alpha;
+        }();
+
+        if (JXL_ENC_SUCCESS != JxlEncoderSetExtraChannelInfo(enc.get(), 0, blackInfo.get())) {
+            errFile << "JxlEncoderSetBasicInfo Key failed";
+            return ImportExportCodes::InternalError;
+        }
+        if (JXL_ENC_SUCCESS != JxlEncoderSetExtraChannelInfo(enc.get(), 1, alphaInfo.get())) {
+            errFile << "JxlEncoderSetBasicInfo Alpha failed";
+            return ImportExportCodes::InternalError;
+        }
     }
 
     {
@@ -824,15 +868,35 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             }
         } else {
             // Insert the projection itself only
-            const QByteArray pixels = [&]() {
-                const KisPaintDeviceSP dev = image->projection();
+            const KisPaintDeviceSP dev = image->projection();
+            const KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+            const KisFilterConfigurationSP kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
+            if (cs->colorModelId() == CMYKAColorModelID) {
+                // Inverting colors for CMYK
+                f->process(dev, bounds, kfc->cloneWithResourcesSnapshot());
+            }
+            const QVector<quint8*> planes = dev->readPlanarBytes(0, 0, bounds.width(), bounds.height());
 
+            const QByteArray pixels = [&]() {
                 const KoID colorModel = cs->colorModelId();
                 const KoID colorDepth = cs->colorDepthId();
 
                 if (colorModel != RGBAColorModelID
                     || (colorDepth != Integer8BitsColorDepthID && colorDepth != Integer16BitsColorDepthID
                         && conversionPolicy == ConversionPolicy::KeepTheSame)) {
+                    // CMYK
+                    if (colorModel == CMYKAColorModelID) {
+                        QByteArray cmy;
+                        // Set interleaved CMY buffer
+                        for (int i = 0; i < (imageSize * colorByteDepth); i += colorByteDepth) {
+                            for (int j = 0; j < 3; j++) {
+                                for (int k = 0; k < colorByteDepth; k++) {
+                                    cmy.append(planes.at(j)[i+k]);
+                                }
+                            }
+                        }
+                        return cmy;
+                    }
                     // blast it wholesale
                     QByteArray p;
                     p.resize(bounds.width() * bounds.height() * static_cast<int>(cs->pixelSize()));
@@ -861,6 +925,22 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 != JXL_ENC_SUCCESS) {
                 errFile << "JxlEncoderAddImageFrame failed";
                 return ImportExportCodes::InternalError;
+            }
+
+            // CMYKA separate planar buffer for Key and Alpha
+            if (cs->colorModelId() == CMYKAColorModelID) {
+                const QByteArray pixelsKey = QByteArray(reinterpret_cast<char*>(planes[3]), imageSize * colorByteDepth);
+                const QByteArray pixelsAlpha = QByteArray(reinterpret_cast<char*>(planes[4]), imageSize * colorByteDepth);
+                if (JxlEncoderSetExtraChannelBuffer(frameSettings, &pixelFormat, pixelsKey.data(), static_cast<size_t>(pixelsKey.size()), 0)
+                != JXL_ENC_SUCCESS) {
+                    errFile << "JxlEncoderSetExtraChannelBuffer Key failed";
+                    return ImportExportCodes::InternalError;
+                }
+                if (JxlEncoderSetExtraChannelBuffer(frameSettings, &pixelFormat, pixelsAlpha.data(), static_cast<size_t>(pixelsAlpha.size()), 1)
+                != JXL_ENC_SUCCESS) {
+                    errFile << "JxlEncoderSetExtraChannelBuffer Alpha failed";
+                    return ImportExportCodes::InternalError;
+                }
             }
         }
         JxlEncoderCloseInput(enc.get());
@@ -904,14 +984,18 @@ void JPEGXLExport::initializeCapabilities()
     addCapability(KisExportCheckRegistry::instance()->get("TiffExifCheck")->create(KisExportCheckBase::PARTIALLY));
     supportedColorModels << QPair<KoID, KoID>() << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
                          << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
+                         << QPair<KoID, KoID>(CMYKAColorModelID, Integer8BitsColorDepthID)
                          << QPair<KoID, KoID>(RGBAColorModelID, Integer16BitsColorDepthID)
                          << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID)
+                         << QPair<KoID, KoID>(CMYKAColorModelID, Integer16BitsColorDepthID)
 #ifdef HAVE_OPENEXR
                          << QPair<KoID, KoID>(RGBAColorModelID, Float16BitsColorDepthID)
                          << QPair<KoID, KoID>(GrayAColorModelID, Float16BitsColorDepthID)
+                         << QPair<KoID, KoID>(CMYKAColorModelID, Float16BitsColorDepthID)
 #endif
                          << QPair<KoID, KoID>(RGBAColorModelID, Float32BitsColorDepthID)
-                         << QPair<KoID, KoID>(GrayAColorModelID, Float32BitsColorDepthID);
+                         << QPair<KoID, KoID>(GrayAColorModelID, Float32BitsColorDepthID)
+                         << QPair<KoID, KoID>(CMYKAColorModelID, Float32BitsColorDepthID);
     addSupportedColorModels(supportedColorModels, "JPEG-XL");
 }
 

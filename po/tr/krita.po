@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-15 02:44+0000\n"
-"PO-Revision-Date: 2022-12-15 19:42+0300\n"
+"PO-Revision-Date: 2022-12-17 19:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -24659,7 +24659,7 @@ msgstr "Özel arayüz yazıtipi kullan"
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:29
 #, kde-format
 msgid "Font:"
-msgstr "Yazı tipi:"
+msgstr "Yazıtipi:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:614
@@ -35775,7 +35775,7 @@ msgstr "Kısayolları Kaydet"
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:206
 #, kde-format
 msgid "Import Shortcuts"
-msgstr "Kısayolları İçeri Aktar"
+msgstr "Kısayolları İçe Aktar"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:136
 #, kde-format
@@ -53244,7 +53244,7 @@ msgstr "Yazarı Kaldır"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:338
 msgid "Use font"
-msgstr "Yazı tipi kullan"
+msgstr "Yazıtipi kullan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
@@ -54421,7 +54421,7 @@ msgstr "Çeviri-yazımcı/Transcriber"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Type designer"
-msgstr "Yazı tipi tasarımcısı"
+msgstr "Dizgi tasarımcısı"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Typographer"
@@ -57283,7 +57283,7 @@ msgstr "Yazıtipi..."
 #, kde-format
 msgctxt "action"
 msgid "Change character size, font, boldface, italics etc."
-msgstr "Karakter boyutu, kalınlığı, eğikliği, yazı tipini vs. değiştir."
+msgstr "Karakter boyutu, kalınlığı, eğikliği, yazıtipi vb. değiştir."
 
 #. i18n: context: whatsThis @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:50

@@ -29671,12 +29671,12 @@ msgstr "Descarta-ho tot"
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:176
 #, kde-format
 msgid "The following autosave file can be recovered:"
-msgstr "Es pot recuperar el fitxer següent de guardada automàtica:"
+msgstr "Es pot recuperar el fitxer de guardada automàtica següent:"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:179
 #, kde-format
 msgid "The following autosave files can be recovered:"
-msgstr "Es poden recuperar els fitxers següents de guardada automàtica:"
+msgstr "Es poden recuperar els fitxers de guardada automàtica següents:"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:226
 #, kde-format
@@ -46517,7 +46517,7 @@ msgstr "1x1, 1x1, 1x1 (millor qualitat)"
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:228
 #, kde-format
 msgid "Force baseline JPEG"
-msgstr "Forçar el JPEG de línia base"
+msgstr "Forçar JPEG de línia base"
 
 #. i18n: ectx: property (text), widget (QCheckBox, optimize)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:238
@@ -47934,7 +47934,7 @@ msgstr "Resolució:"
 #: plugins/impex/png/kis_wdg_options_png.ui:18
 #, kde-format
 msgid "PNG Options"
-msgstr "Opcions del PNG"
+msgstr "Opcions de PNG"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/impex/png/kis_wdg_options_png.ui:44
@@ -48179,7 +48179,7 @@ msgstr "Bloc de mode de color dual"
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18
 #, kde-format
 msgid "WebP Options"
-msgstr "Opcions del WebP"
+msgstr "Opcions de WebP"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:45
@@ -48239,7 +48239,7 @@ msgstr ""
 "<p>Si està activada, tots els fitxers RAW es descodificaran amb una "
 "profunditat de color de 16 bits utilitzant una corba amb interval lineal. "
 "Per a evitar la renderització d'imatges fosques en l'editor, es recomana "
-"utilitzar la gestió del color en este mode.</p><p>Si està desactivat, tots "
+"utilitzar la gestió del color en este mode.</p><p>Si està desactivada, tots "
 "els fitxers RAW es descodificaran amb una profunditat de color de 8 bits "
 "utilitzant una corba amb interval BT.709 i un 99% de punt blanc. Este mode "
 "és més ràpid que la descodificació amb 16 bits.</p>"
@@ -49197,7 +49197,7 @@ msgstr "Cap"
 #, kde-format
 msgctxt "TIFF options"
 msgid "JPEG DCT compression"
-msgstr "Compressió DCT del JPEG"
+msgstr "Compressió DCT de JPEG"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:42
 #, kde-format
@@ -49314,7 +49314,7 @@ msgstr "Guarda el &canal alfa (transparència)"
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:230
 #, kde-format
 msgid "JPEG Compression Options"
-msgstr "Opcions de compressió del JPEG"
+msgstr "Opcions de compressió de JPEG"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSmallest)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:251
@@ -58272,7 +58272,7 @@ msgstr "Mode de l'editor"
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:31
 #, kde-format
 msgid "Note: the Rich Text editor only supports a subset of SVG."
-msgstr "Nota: L'editor de text enriquit només accepta un subconjunt dels SVG."
+msgstr "Nota: L'editor de text enriquit només accepta un subconjunt de SVG."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRichText)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:41

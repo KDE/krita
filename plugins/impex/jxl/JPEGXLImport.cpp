@@ -8,6 +8,11 @@
 
 #include "JPEGXLImport.h"
 
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
+#include "filter/kis_filter.h"
+#include <KisGlobalResourcesInterface.h>
+
 #include <jxl/decode_cxx.h>
 #include <jxl/resizable_parallel_runner_cxx.h>
 #include <jxl/types.h>
@@ -46,6 +51,7 @@ public:
     JxlPixelFormat m_pixelFormat{};
     JxlFrameHeader m_header{};
     KisPaintDeviceSP m_currentFrame{nullptr};
+    int cmykChannelID = -1;
     int m_nextFrameTime{0};
     int m_durationFrameInTicks{0};
     KoID m_colorID;
@@ -56,6 +62,7 @@ public:
     float displayNits = 1000.0;
     LinearizePolicy linearizePolicy = LinearizePolicy::KeepTheSame;
     const KoColorSpace *cs = nullptr;
+    QByteArray kPlane;
     QVector<qreal> lCoef;
 };
 
@@ -145,6 +152,9 @@ inline void imageOutCallback(void *that, size_t x, size_t y, size_t numPixels, c
 
             if (swap) {
                 std::swap(dst[0], dst[2]);
+            } else if (data->isCMYK) {
+                // Swap alpha and key channel for CMYK
+                std::swap(dst[3], dst[4]);
             }
 
             src += data->m_pixelFormat.num_channels;
@@ -303,11 +313,10 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     errFile << "JxlDecoderGetExtraChannelInfo failed";
                     break;
                 }
-                if (d.m_extra.type == JXL_CHANNEL_BLACK) d.isCMYK = true;
-            }
-            if (d.isCMYK) {
-                errFile << "CMYK(A) JPEG-XL is not yet supported!";
-                return ImportExportCodes::FormatFeaturesUnsupported;
+                if (d.m_extra.type == JXL_CHANNEL_BLACK) {
+                    d.isCMYK = true;
+                    d.cmykChannelID = i;
+                }
             }
 
             dbgFile << "Info";
@@ -350,10 +359,14 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 // Grayscale
                 d.m_pixelFormat.num_channels = 2;
                 d.m_colorID = GrayAColorModelID;
-            } else if (d.m_info.num_color_channels == 3) {
+            } else if (d.m_info.num_color_channels == 3 && !d.isCMYK) {
                 // RGBA
                 d.m_pixelFormat.num_channels = 4;
                 d.m_colorID = RGBAColorModelID;
+            } else if (d.m_info.num_color_channels == 3 && d.isCMYK) {
+                // CMYKA
+                d.m_pixelFormat.num_channels = 4;
+                d.m_colorID = CMYKAColorModelID;
             } else {
                 warnFile << "Forcing a RGBA conversion, unknown color space";
                 d.m_pixelFormat.num_channels = 4;
@@ -523,6 +536,29 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 errFile << "JxlDecoderSetImageOutBuffer failed";
                 return ImportExportCodes::InternalError;
             }
+
+            if (d.isCMYK) {
+                // Prepare planar buffer for key channel
+                size_t bufferSize;
+                if (JXL_DEC_SUCCESS != JxlDecoderExtraChannelBufferSize(dec.get(),
+                                                                        &d.m_pixelFormat,
+                                                                        &bufferSize,
+                                                                        d.cmykChannelID)) {
+                    errFile << "JxlDecoderExtraChannelBufferSize failed";
+                    return ImportExportCodes::ErrorWhileReading;
+                    break;
+                }
+                d.kPlane.resize(bufferSize);
+                if (JXL_DEC_SUCCESS != JxlDecoderSetExtraChannelBuffer(dec.get(),
+                                                                        &d.m_pixelFormat,
+                                                                        d.kPlane.data(),
+                                                                        bufferSize,
+                                                                        d.cmykChannelID)) {
+                    errFile << "JxlDecoderSetExtraChannelBuffer failed";
+                    return ImportExportCodes::ErrorWhileReading;
+                    break;
+                }
+            }
         } else if (status == JXL_DEC_FRAME) {
             if (d.m_info.have_animation) {
                 if (JXL_DEC_SUCCESS != JxlDecoderGetFrameHeader(dec.get(), &d.m_header)) {
@@ -584,6 +620,19 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 frame->importFrame(currentFrameTime, d.m_currentFrame, nullptr);
                 d.m_nextFrameTime += static_cast<int>(d.m_header.duration);
             } else {
+                if (d.isCMYK) {
+                    QVector<quint8*> planes = d.m_currentFrame->readPlanarBytes(0, 0, d.m_info.xsize, d.m_info.ysize);
+
+                    // Planar buffer insertion for key channel
+                    planes[3] = reinterpret_cast<quint8 *>(d.kPlane.data());
+                    d.m_currentFrame->writePlanarBytes(planes, 0, 0, d.m_info.xsize, d.m_info.ysize);
+
+                    // JPEG-XL decode outputs an inverted CMYK colors
+                    // This one I took from kis_filter_test for inverting the colors..
+                    const KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+                    const KisFilterConfigurationSP kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
+                    f->process(d.m_currentFrame, QRect(QPoint(0,0), QPoint(d.m_info.xsize,d.m_info.ysize)), kfc->cloneWithResourcesSnapshot());
+                }
                 layer->paintDevice()->makeCloneFrom(d.m_currentFrame, image->bounds());
             }
         } else if (status == JXL_DEC_SUCCESS || status == JXL_DEC_BOX) {

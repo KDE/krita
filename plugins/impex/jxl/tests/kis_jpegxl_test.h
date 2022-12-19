@@ -20,6 +20,7 @@ private Q_SLOTS:
     void testHDR();
     void testSaveRgbaColorSpace();
     void testSaveGreyAColorSpace();
+    void testSaveCmykAColorSpace();
     void testImportIncorrectFormat();
 
 #ifndef Q_OS_WIN

@@ -55,7 +55,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-16 00:48+0000\n"
-"PO-Revision-Date: 2022-03-16 22:45+0100\n"
+"PO-Revision-Date: 2022-12-18 23:04+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -63,7 +63,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8535,9 +8535,7 @@ msgstr "Inverte selection currente"
 
 #. i18n: context: iconText @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:246
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Invert Selection"
+#, kde-format
 msgctxt "action"
 msgid "Invert Selection"
 msgstr "Inverte selection"
@@ -13128,12 +13126,10 @@ msgstr "Aperi un documento que ha essite aperite recentemente"
 
 #. i18n: context: iconText @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Open &Recent"
+#, kde-format
 msgctxt "action"
 msgid "Open Recent"
-msgstr "Aperi &recente"
+msgstr "Aperi Recente "
 
 #. i18n: context: text @ Action (file_save), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:43
@@ -13190,8 +13186,7 @@ msgstr "Aperi Imagines"
 
 #. i18n: context: iconText @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:70
-#, fuzzy, kde-format
-#| msgid "Sessions"
+#, kde-format
 msgctxt "action"
 msgid "Sessions"
 msgstr "Sessiones"
@@ -13473,7 +13468,7 @@ msgstr "Quita Application"
 #| msgid "&Quit"
 msgctxt "action"
 msgid "Quit"
-msgstr "&Quita"
+msgstr "Quita"
 
 #. i18n: context: text @ Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:262
@@ -13532,8 +13527,7 @@ msgstr "Talia selection a area de transferentia"
 
 #. i18n: context: iconText @ Action (edit_cut), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:292
-#, fuzzy, kde-format
-#| msgid "Cut"
+#, kde-format
 msgctxt "action"
 msgid "Cut"
 msgstr "Talia"
@@ -13646,9 +13640,7 @@ msgstr "Colla contento de area de transferentia"
 
 #. i18n: context: iconText @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:364
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste"
+#, kde-format
 msgctxt "action"
 msgid "Paste"
 msgstr "Colla"
@@ -13984,12 +13976,10 @@ msgstr "Monstra l;e fenestra in schermo integre"
 
 #. i18n: context: iconText @ Action (fullscreen), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:631
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "F&ull Screen Mode"
+#, kde-format
 msgctxt "action"
 msgid "Full Screen Mode"
-msgstr "M&odo de schermo integre"
+msgstr "Modo de Schermo Integre"
 
 #. i18n: context: text @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
@@ -14180,8 +14170,7 @@ msgstr "Exeque zoom a 100%"
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:764 krita/kritamenu.action:765
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
 msgstr "Exeque zoom a 100%"
@@ -14219,11 +14208,10 @@ msgstr "Zoom Out (Diminuer)"
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:798 krita/kritamenu.action:801
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View"
-msgstr "Adapta al pagina"
+msgstr "Adapta a Vista"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
@@ -14485,12 +14473,10 @@ msgstr "Monstra o cela le barra de stato"
 
 #. i18n: context: iconText @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:957
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Status &Bar"
+#, kde-format
 msgctxt "action"
 msgid "Show Status Bar"
-msgstr "Monstra &Barra de stato"
+msgstr "Monstra barra de stato"
 
 #. i18n: context: text @ Action (view_pixel_grid), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_pixel_grid), Actions (View), ActionCollection (Menu)
@@ -15748,11 +15734,10 @@ msgstr "Reporta al Predefinite"
 
 #. i18n: context: iconText @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1864
-#, fuzzy, kde-format
-#| msgid "Reset All"
+#, kde-format
 msgctxt "action"
 msgid "Reset Settings"
-msgstr "Refixa toto"
+msgstr "Refixa preferentias"
 
 #. i18n: context: text @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1871
@@ -17311,8 +17296,7 @@ msgstr "al mascara de &selection"
 
 #: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2473
 #: plugins/impex/psd/psd_loader.cpp:189
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Fundo"
@@ -27124,7 +27108,7 @@ msgstr "Altessa"
 #, fuzzy, kde-format
 #| msgid "Height:"
 msgid "Height: "
-msgstr "Altessa:"
+msgstr "Altessa"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, doubleRatio)
 #: libs/ui/forms/wdgrectangleconstraints.ui:134
@@ -27894,9 +27878,7 @@ msgid "Mouse Wheel"
 msgstr "Rota de mus"
 
 #: libs/ui/input/config/kis_input_type_delegate.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "Shortcut type"
-#| msgid "Gesture"
+#, kde-format
 msgid "Gesture"
 msgstr "Gesto"
 
@@ -28367,9 +28349,9 @@ msgid "One Finger Tap"
 msgstr ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:450
-#, kde-format
+#, fuzzy, kde-format
 msgid "Two Finger Tap"
-msgstr ""
+msgstr "Tocco de duo digito:"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:452
 #, kde-format
@@ -28562,10 +28544,9 @@ msgid "Zoom to 100%"
 msgstr "Exeque zoom a 100%"
 
 #: libs/ui/input/kis_zoom_action.cpp:117
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgid "Fit to View"
-msgstr "Adapta al pagina"
+msgstr "Adapta a Vista"
 
 #: libs/ui/input/kis_zoom_action.cpp:118
 #, fuzzy, kde-format
@@ -33621,19 +33602,16 @@ msgid "Anti-aliasing"
 msgstr "Anti-aliasing"
 
 #: libs/ui/widgets/kis_selection_options.cc:184
-#, fuzzy, kde-format
-#| msgctxt "Grow as in deform brush engine"
-#| msgid "Grow"
+#, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in selection tools options"
 msgid "Grow: "
-msgstr "Cresce"
+msgstr "Cresce: "
 
 #: libs/ui/widgets/kis_selection_options.cc:198
-#, fuzzy, kde-format
-#| msgid "radius"
+#, kde-format
 msgctxt "The 'feather' spinbox prefix in selection tools options"
 msgid "Feather: "
-msgstr "radius"
+msgstr "Pluma: "
 
 #: libs/ui/widgets/kis_selection_options.cc:217
 #, fuzzy, kde-format
@@ -33730,31 +33708,25 @@ msgid ""
 msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:254
-#, fuzzy, kde-format
-#| msgid "Mode"
+#, kde-format
 msgctxt "The 'mode' section label in selection tools options"
 msgid "Mode"
 msgstr "Modo"
 
 #: libs/ui/widgets/kis_selection_options.cc:261
-#, fuzzy, kde-format
-#| msgid "Action"
+#, kde-format
 msgctxt "The 'action' section label in selection tools options"
 msgid "Action"
 msgstr "Action"
 
 #: libs/ui/widgets/kis_selection_options.cc:268
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "HSV Adjustment"
+#, kde-format
 msgctxt "The 'adjustments' section label in selection tools options"
 msgid "Adjustments"
-msgstr "Adaptation HSV"
+msgstr "Adaptationes"
 
 #: libs/ui/widgets/kis_selection_options.cc:279
-#, fuzzy, kde-format
-#| msgctxt "The 'reference' section label in fill tool options"
-#| msgid "Reference"
+#, kde-format
 msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "Referentia"
@@ -33845,7 +33817,7 @@ msgstr "Optiones per scalar"
 #, fuzzy, kde-format
 #| msgid "Insert Image"
 msgid "Insert name"
-msgstr "Inserta imagine"
+msgstr "Inserta nomine"
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:184
 #, kde-format
@@ -38218,10 +38190,9 @@ msgid "Export Animations"
 msgstr "Krita Gemini"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:105
-#, fuzzy, kde-format
-#| msgid "Insert Note"
+#, kde-format
 msgid "Insert Name"
-msgstr "Inserta Nota"
+msgstr "Inserta nomine"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:243
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:347
@@ -38630,25 +38601,22 @@ msgid "None"
 msgstr "Necun"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:376
-#, fuzzy, kde-format
-#| msgid "Simple"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Simple"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:377
-#, fuzzy, kde-format
-#| msgid "Color Balance"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
-msgstr "Balancia de color"
+msgstr "Balanciate"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:378
-#, fuzzy, kde-format
-#| msgid "Details"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
-msgstr "Detalios"
+msgstr "Detaliate"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:391
 #, fuzzy, kde-format
@@ -38658,12 +38626,10 @@ msgid "Blending info text opacity"
 msgstr "Interlinea"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:409
-#, fuzzy, kde-format
-#| msgctxt "spline filtering"
-#| msgid "spline"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
-msgstr "spline"
+msgstr "Incorporate (In linea)"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:411
 #, kde-format
@@ -42395,13 +42361,12 @@ msgid "Import"
 msgstr "Importa"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:144
-#, fuzzy, kde-format
-#| msgid "Activate"
+#, kde-format
 msgctxt ""
 "In bundle manager; press button to deactivate the resource library(remove "
 "resources from the resource library from the available resources)"
 msgid "Deactivate"
-msgstr "Activa"
+msgstr "Deactivate"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:148
 #, fuzzy, kde-format
@@ -42447,13 +42412,12 @@ msgstr ""
 "pacchetto?"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:340
-#, fuzzy, kde-format
-#| msgid "Activate"
+#, kde-format
 msgctxt ""
 "In bundle manager; press button to deactivate the bundle (remove resources "
 "from the bundle from the available resources)"
 msgid "Deactivate"
-msgstr "Activa"
+msgstr "Deactivate"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:344
 #, kde-format
@@ -43587,9 +43551,7 @@ msgid "Desaturate"
 msgstr "De-satura"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:229
-#, fuzzy, kde-format
-#| msgctxt "Lightness value in Lab color model"
-#| msgid "Lightness"
+#, kde-format
 msgid "Lightness"
 msgstr "Brillantia"
 
@@ -46994,8 +46956,7 @@ msgstr "Dishabilitate"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:103
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:137
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Enabled"
 msgstr "Habilitate"
@@ -47068,7 +47029,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Zero"
-msgstr ""
+msgstr "Zero"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:117
 #, fuzzy, kde-format
@@ -47086,43 +47047,37 @@ msgid "Top"
 msgstr "Culmine"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:119
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg0"
-msgstr ""
+msgstr "avg"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:120
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Select"
 msgstr "Selige"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:121
-#, fuzzy, kde-format
-#| msgid "Gradient"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gradient"
 msgstr "Gradiente"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Brush Smoothing"
-#| msgid "Weighted"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Weighted"
 msgstr "Cargate"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:123
-#, fuzzy, kde-format
-#| msgid "Top Right"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top right"
 msgstr "In alto a dextera"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:124
-#, fuzzy, kde-format
-#| msgid "Top Left"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top left"
 msgstr "In alto a sinistra"
@@ -47135,22 +47090,22 @@ msgid "Left left"
 msgstr "Indentation sinistre"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:126
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg1"
-msgstr ""
+msgstr "avg"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:127
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg2"
-msgstr ""
+msgstr "avg"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:128
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg3"
-msgstr ""
+msgstr "avg"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:129
 #, kde-format
@@ -47663,9 +47618,7 @@ msgstr "Processante"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:916
-#, fuzzy, kde-format
-#| msgctxt "JPEG metadata filter"
-#| msgid "Filters:"
+#, kde-format
 msgctxt "JPEG-XL metadata options"
 msgid "Filters:"
 msgstr "Filtros:"
@@ -49771,7 +49724,7 @@ msgstr "Grandor de Objectivo"
 #, fuzzy, kde-format
 #| msgid "0 B"
 msgid " B"
-msgstr "0 B"
+msgstr "B"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblTargetPSNR)
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseUnitSpinBox, targetPSNR)
@@ -50133,9 +50086,7 @@ msgstr "Maxime qualitate"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:829
-#, fuzzy, kde-format
-#| msgctxt "JPEG metadata filter"
-#| msgid "Filters:"
+#, kde-format
 msgctxt "WebP metadata options"
 msgid "Filters:"
 msgstr "Filtros:"
@@ -50468,15 +50419,13 @@ msgid "Hard"
 msgstr "Dur"
 
 #: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:68
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Background painting color"
 msgid "Background"
 msgstr "Fundo"
 
 #: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:68
-#, fuzzy, kde-format
-#| msgid "Foreground"
+#, kde-format
 msgctxt "Foreground painting color"
 msgid "Foreground"
 msgstr "Prime Plano"
@@ -52369,15 +52318,13 @@ msgid "Value"
 msgstr "Valor"
 
 #: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:75
-#, fuzzy, kde-format
-#| msgid "Lower value "
+#, kde-format
 msgctxt "Lower HSV brightness"
 msgid "Lower value "
 msgstr "Valor plus basse"
 
 #: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:87
-#, fuzzy, kde-format
-#| msgid "Higher value"
+#, kde-format
 msgctxt "Higher HSV brightness"
 msgid "Higher value"
 msgstr "Vlor plus alte"
@@ -53231,12 +53178,11 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "Repeat:"
 msgid "Repeat: "
-msgstr "Repete:"
+msgstr "Repete"
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:72
 #: plugins/paintops/spray/kis_sprayop_option.cpp:108
-#, fuzzy, kde-format
-#| msgid "x"
+#, kde-format
 msgctxt "Times symbol, like in 10x"
 msgid "x"
 msgstr "x"
@@ -53265,7 +53211,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "Standard"
 msgid "Standard deviation: "
-msgstr "Standard"
+msgstr "Deviation standard"
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:87
 #, kde-format
@@ -53362,44 +53308,39 @@ msgstr "Peso de Angulo:"
 msgctxt ""
 "Name of the group of options related to the spay area in the spray engine"
 msgid "Area"
-msgstr ""
+msgstr "Area"
 
 #. i18n: ectx: property (text), widget (QLabel, diameterLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:48
-#, fuzzy, kde-format
-#| msgid "Diameter:"
+#, kde-format
 msgctxt "Label for the diameter of the spray area in the spray engine"
 msgid "Diameter:"
 msgstr "Diametro:"
 
 #. i18n: ectx: property (text), widget (QLabel, aspectLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:67
-#, fuzzy, kde-format
-#| msgid "Aspect ratio:"
+#, kde-format
 msgctxt "Label for the aspect ratio of the spray area in the spray engine"
 msgid "Aspect ratio:"
 msgstr "Proportiones (rata de aspecto):"
 
 #. i18n: ectx: property (text), widget (QLabel, rotationLbl)
 #: plugins/paintops/spray/wdgsprayoptions.ui:86
-#, fuzzy, kde-format
-#| msgid "Angle:"
+#, kde-format
 msgctxt "Label for the angle of the spray area in the spray engine"
 msgid "Angle:"
 msgstr "Angulo:"
 
 #. i18n: ectx: property (text), widget (QLabel, scaleLbl)
 #: plugins/paintops/spray/wdgsprayoptions.ui:125
-#, fuzzy, kde-format
-#| msgid "Scale:"
+#, kde-format
 msgctxt "Label for the scale of the spray area in the spray engine"
 msgid "Scale:"
 msgstr "Scala:"
 
 #. i18n: ectx: property (text), widget (QLabel, spacingLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:138
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgctxt "Label for the spacing of the spray area in the spray engine"
 msgid "Spacing:"
 msgstr "Spatiar:"
@@ -53424,19 +53365,14 @@ msgstr "Partiicula"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/spray/wdgsprayoptions.ui:194
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "How much the midtone point used in auto levels is close to the center of "
-#| "the histogram (0%) or to the point selected in the method (100%)"
-#| msgid "Amount:"
+#, kde-format
 msgctxt "Label for the amount of particles in the spray engine"
 msgid "Amount:"
 msgstr "Amonta:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, countRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:203
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgctxt ""
 "Check box to indicate that the user should set the exact number of particles "
 "in the spray engine"
@@ -53445,8 +53381,7 @@ msgstr "Computo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, densityRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:213
-#, fuzzy, kde-format
-#| msgid "Density"
+#, kde-format
 msgctxt ""
 "Check box to indicate that the user should set the number of particles in "
 "terms of density relative to the spray area in the spray engine"
@@ -53455,8 +53390,7 @@ msgstr "Densitate"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxAngularDistribution)
 #: plugins/paintops/spray/wdgsprayoptions.ui:237
-#, fuzzy, kde-format
-#| msgid "Angular"
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the angular distribution of "
 "particles in the spray engine"
@@ -53477,16 +53411,14 @@ msgstr "Necun scala"
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:267
 #: plugins/paintops/spray/wdgsprayoptions.ui:362
-#, fuzzy, kde-format
-#| msgid "Curve"
+#, kde-format
 msgctxt "Custom curve based distribution in spray engine"
 msgid "Curve"
 msgstr "Curva"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxRadialDistribution)
 #: plugins/paintops/spray/wdgsprayoptions.ui:322
-#, fuzzy, kde-format
-#| msgid "Radial"
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the radial distribution of particles "
 "in the spray engine"
@@ -53495,19 +53427,17 @@ msgstr "Radial"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:352
-#, fuzzy, kde-format
-#| msgid "Gaussian"
+#, kde-format
 msgctxt "Gaussian distribution in spray engine"
 msgid "Gaussian"
 msgstr "Gaussian"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:357
-#, fuzzy, kde-format
-#| msgid "Faster"
+#, kde-format
 msgctxt "Clustering based distribution in spray engine"
 msgid "Cluster"
-msgstr "Plus rapide"
+msgstr "Cluster (racemo)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, centerBiasedPolarDistanceBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:407
@@ -53525,7 +53455,7 @@ msgstr ""
 #| msgid "Distribute"
 msgctxt "Label for the distribution of particles in the spray engine"
 msgid "Distribution:"
-msgstr "Distribue"
+msgstr "Distribution"
 
 #. i18n: ectx: property (text), widget (QCheckBox, proportionalBox)
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:158
@@ -54041,10 +53971,8 @@ msgid "Version history:"
 msgstr "Chronologia (historia) de Version:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:304
-#, fuzzy
-#| msgid "Translate"
 msgid "Translator header:"
-msgstr "Traduce"
+msgstr "Capite de Traductor:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:308
 msgid "The people responsible for the generation of the CBZ/ACBF files."
@@ -54077,18 +54005,12 @@ msgstr "Adde Autor"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:325
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:359
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Remove subpath"
 msgid "Remove Author"
-msgstr "Remove subpath (subpercurso)"
+msgstr "Remove Autor"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:338
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set Font"
 msgid "Use font"
-msgstr "Fixa font"
+msgstr "Usa font"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldKeyword)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldElement)
@@ -54121,35 +54043,24 @@ msgid "Italic"
 msgstr "Italic"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:365
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Text Color"
 msgid "Text Colors"
-msgstr "Color de texto "
+msgstr "Colores de texto "
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:369
-#, fuzzy
-#| msgid "Regular"
 msgid "Regular Text"
-msgstr "Regular"
+msgstr "Texto Regular"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:371
-#, fuzzy
-#| msgid "Indent"
 msgid "Inverted Text"
-msgstr "Indenta"
+msgstr "Texto invertite"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:386
-#, fuzzy
-#| msgid "Document Information"
 msgid "Document Info"
-msgstr "Information del documento"
+msgstr "Information de documento"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:387
-#, fuzzy
-#| msgid "Author"
 msgid "Author Info"
-msgstr "Autor"
+msgstr "Information de Autor"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:388
 msgid "Style Sheet"
@@ -54160,22 +54071,16 @@ msgid "ACBF"
 msgstr "ACBF"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:395
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Export"
 msgid "Export to EPUB"
-msgstr "Exporta"
+msgstr "Exporta a EPUB"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:400
 msgid "EPUB"
 msgstr "EPUB"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:405
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Export"
 msgid "Export to TIFF"
-msgstr "Exporta"
+msgstr "Exporta a TIFF"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:410
 msgid "TIFF"
@@ -54230,10 +54135,8 @@ msgstr "Salveguarda documento"
 #: plugins/python/comics_project_management_tools/comics_exporter.py:173
 #: plugins/python/comics_project_management_tools/comics_exporter.py:207
 #: plugins/python/comics_project_management_tools/comics_exporter.py:366
-#, fuzzy
-#| msgid "Update Composition"
 msgid "Export not Possible"
-msgstr "Actualisa composition"
+msgstr "Exportation non Possibile"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:173
 msgid "Nothing to export, URL not set."
@@ -54268,9 +54171,8 @@ msgid "{pages} of {pagesTotal} done."
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:238
-#, fuzzy
 msgid "Opening next page"
-msgstr "Adde un nove pagina"
+msgstr "Aperir proxime pagina"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:246
 #, fuzzy
@@ -54279,11 +54181,9 @@ msgid "Cleaning up page"
 msgstr "Paginas flancate"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:280
-#, fuzzy, python-brace-format
-#| msgctxt "action"
-#| msgid "Export"
+#, python-brace-format
 msgid "Exporting for {key}"
-msgstr "Exporta"
+msgstr "Exportante per {key}"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:366
 msgid "Export not happening because there are no pages."
@@ -54310,23 +54210,16 @@ msgid "Fantasy"
 msgstr "Magenta"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
-#, fuzzy
-#| msgid "Aperture:"
 msgid "Adventure"
-msgstr "Apertura:"
+msgstr "Aventura:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
-#, fuzzy
-#| msgid "Mirror"
 msgid "Horror"
-msgstr "Speculo"
+msgstr "Horror"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste"
 msgid "Mystery"
-msgstr "Colla"
+msgstr "Mysterio"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
 msgid "Crime"
@@ -54337,10 +54230,8 @@ msgid "Military"
 msgstr "Militar"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
-#, fuzzy
-#| msgid "Vertical Lines"
 msgid "Real Life"
-msgstr "Lineas vertical"
+msgstr "Vita Real"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
 #, fuzzy
@@ -54353,11 +54244,8 @@ msgid "Humor"
 msgstr "Humor"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste"
 msgid "Western"
-msgstr "Colla"
+msgstr "Western"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
 msgid "Manga"
@@ -54462,10 +54350,8 @@ msgid "Letterer"
 msgstr "Littera SU"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
-#, fuzzy
-#| msgid "Artistic"
 msgid "Cover Artist"
-msgstr "Artistic"
+msgstr "Artista e copertura"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
 msgid "Photographer"
@@ -54561,10 +54447,8 @@ msgid "Language:"
 msgstr "Linguage;"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:327
-#, fuzzy
-#| msgid "Direction:"
 msgid "Reading direction:"
-msgstr "Direction"
+msgstr "Direction de leger:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:328
 msgid "Genre:"
@@ -54752,10 +54636,8 @@ msgid "Scrape Text for Translation"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:318
-#, fuzzy
-#| msgid "Update Composition"
 msgid "Export Comic"
-msgstr "Actualisa composition"
+msgstr "Exporta Comic"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:323
 msgid "Copy Location"
@@ -54787,17 +54669,14 @@ msgid ""
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:378
-#, fuzzy
 msgid "Loading Pages..."
-msgstr "&Patrono..."
+msgstr "Cargante Paginas..."
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:651
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:118
-#, fuzzy
-#| msgid "Edit Profiles"
 msgid "Krita files"
-msgstr "Modifica profilos"
+msgstr "Files de Krita"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:531
 msgid "Which existing pages to add?"
@@ -54914,16 +54793,12 @@ msgid "Project name:"
 msgstr "Nomine de projectos:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:122
-#, fuzzy
-#| msgid "Project Vision"
 msgid "Project concept:"
-msgstr "Vision de Projecto"
+msgstr "Concepto  de Projecto;"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:123
-#, fuzzy
-#| msgid "Page Edge:"
 msgid "Pages folder:"
-msgstr "Limite de Pagina:"
+msgstr "Dossier de Paginas:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:124
 msgid "Export folder:"
@@ -56006,8 +55881,6 @@ msgid "Scope"
 msgstr "Extension"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
-#, fuzzy
-#| msgid "Value"
 msgctxt "Value in DebuggerTable"
 msgid "Value"
 msgstr "Valor"
@@ -56485,19 +56358,16 @@ msgid "Use selection as boundary"
 msgstr "Talia selection a area de transferentia"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:520
-#, fuzzy, kde-format
-#| msgctxt "Grow as in deform brush engine"
-#| msgid "Grow"
+#, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in fill tool options"
 msgid "Grow: "
-msgstr "Cresce"
+msgstr "Cresce: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:531
-#, fuzzy, kde-format
-#| msgid "radius"
+#, kde-format
 msgctxt "The 'feather' spinbox prefix in fill tool options"
 msgid "Feather: "
-msgstr "radius"
+msgstr "Pluma: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:557
 #, fuzzy, kde-format
@@ -56655,12 +56525,10 @@ msgid "Fill extent"
 msgstr "Extension de  file:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:628
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "HSV Adjustment"
+#, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
-msgstr "Adaptation HSV"
+msgstr "Adaptationes"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #, kde-format
@@ -57737,9 +57605,7 @@ msgid "Select Contiguous Area"
 msgstr "Instrumento de selection contigue"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:364
-#, fuzzy, kde-format
-#| msgctxt "The 'threshold' spinbox prefix in fill tool options"
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "The 'threshold' spinbox prefix in contiguous selection tool options"
 msgid "Threshold: "
 msgstr "Limine: "
@@ -57761,19 +57627,16 @@ msgid "Use selection as boundary"
 msgstr "Talia selection a area de transferentia"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:382
-#, fuzzy, kde-format
-#| msgctxt "Grow as in deform brush engine"
-#| msgid "Grow"
+#, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
 msgid "Grow: "
-msgstr "Cresce"
+msgstr "Cresce: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
-#, fuzzy, kde-format
-#| msgid "radius"
+#, kde-format
 msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
 msgid "Feather: "
-msgstr "radius"
+msgstr "Pluma: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
 #, kde-format
@@ -57919,9 +57782,7 @@ msgid "Select Similar Color"
 msgstr "Selige toto"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:462
-#, fuzzy, kde-format
-#| msgctxt "The 'threshold' spinbox prefix in fill tool options"
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "Limine: "
@@ -58007,23 +57868,19 @@ msgid "Filter Radius: "
 msgstr "radius"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:741
-#, fuzzy, kde-format
-#| msgctxt "The 'threshold' spinbox prefix in fill tool options"
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "Threshold in Magnetic Selection's Tool options"
 msgid "Threshold: "
 msgstr "Limine: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:749
-#, fuzzy, kde-format
-#| msgid "Search Radius: "
+#, kde-format
 msgctxt "Search Radius in Magnetic Selection's Tool options"
 msgid "Search Radius: "
 msgstr "Cerca Radius:"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:758
-#, fuzzy, kde-format
-#| msgid "Anchor Gap: "
+#, kde-format
 msgctxt "Anchor Gap in Magnetic Selection's Tool options"
 msgid "Anchor Gap: "
 msgstr "Apertura de ancora:"
@@ -59034,8 +58891,7 @@ msgid "Enclose and Fill"
 msgstr "Reimple con inundation"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:361
-#, fuzzy, kde-format
-#| msgid "Invert"
+#, kde-format
 msgctxt "The 'invert' checkbox in enclose and fill tool"
 msgid "Invert"
 msgstr "Inverte"
@@ -59049,17 +58905,13 @@ msgid "Include contour regions"
 msgstr "Inserta commento"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:381
-#, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
+#, kde-format
 msgctxt "The pattern 'scale' spinbox prefix in enclose and fill tool options"
 msgid "Scale: "
 msgstr "Scala: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:388
-#, fuzzy, kde-format
-#| msgctxt "The 'threshold' spinbox prefix in fill tool options"
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "The 'threshold' spinbox prefix in enclose and fill tool options"
 msgid "Threshold: "
 msgstr "Limine: "
@@ -59081,26 +58933,22 @@ msgid "Use selection as boundary"
 msgstr "Talia selection a area de transferentia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:401
-#, fuzzy, kde-format
-#| msgid "Anti-aliasing"
+#, kde-format
 msgctxt "The anti-alias checkbox in enclose and fill tool options"
 msgid "Anti-aliasing"
 msgstr "Anti-aliasing"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:404
-#, fuzzy, kde-format
-#| msgctxt "Grow as in deform brush engine"
-#| msgid "Grow"
+#, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in enclose and fill tool options"
 msgid "Grow: "
-msgstr "Cresce"
+msgstr "Cresce: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:415
-#, fuzzy, kde-format
-#| msgid "radius"
+#, kde-format
 msgctxt "The 'feather' spinbox prefix in enclose and fill tool options"
 msgid "Feather: "
-msgstr "radius"
+msgstr "Pluma: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:433
 #, fuzzy, kde-format
@@ -59110,9 +58958,9 @@ msgid "Reset"
 msgstr "Re-fixa"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:438
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bezier Curve"
-msgstr "Selectiones de recolta"
+msgstr "Curva de Bezier"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:439
 #, kde-format
@@ -59158,17 +59006,13 @@ msgid "Fill extent"
 msgstr "Extension de  file:"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:509
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "HSV Adjustment"
+#, kde-format
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
-msgstr "Adaptation HSV"
+msgstr "Adaptationes"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
-#, fuzzy, kde-format
-#| msgctxt "The 'reference' section label in fill tool options"
-#| msgid "Reference"
+#, kde-format
 msgctxt "The 'reference' section label in enclose and fill tool options"
 msgid "Reference"
 msgstr "Referentia"
@@ -59187,11 +59031,10 @@ msgid "Specific color"
 msgstr "Netta selection de vector"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:720
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
-msgstr "Transparente"
+msgstr "Transparentia"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:723
 #, fuzzy, kde-format

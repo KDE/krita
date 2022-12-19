@@ -73,12 +73,14 @@ public:
     KisTagFilterResourceProxyModel *tagFilterModel() const;
 
     /// Show the button for changing the view mode.
-    /// Default is true.
-    void setViewModeButtonVisible(bool visible);
+    /// Default is false.
+    void showViewModeBtn(bool visible);
 
     KisPopupButton *viewModeButton() const;
 
-    void setStoragePopupButtonVisible(bool visible);
+    /// Shows or hides the storage button.
+    /// Default is true.
+    void showStorageBtn(bool visible);
 
     /// Sets the height of the view rows
     void setRowHeight(int rowHeight);
@@ -108,8 +110,8 @@ public:
     void setCurrentItem(int row);
 
     /// Shows the import and export buttons for the resource.
-    /// No one actually shows them, should delete.
-    void showButtons(bool show);
+    /// Default is true.
+    void showImportExportBtns(bool show);
 
     /// determines whether the preview right or below the splitter
     void setPreviewOrientation(Qt::Orientation orientation);

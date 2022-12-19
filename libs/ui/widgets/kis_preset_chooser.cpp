@@ -211,7 +211,7 @@ KisPresetChooser::~KisPresetChooser()
 
 void KisPresetChooser::showButtons(bool show)
 {
-    m_chooser->showButtons(show);
+    m_chooser->showImportExportBtns(show);
 }
 
 void KisPresetChooser::setViewMode(KisPresetChooser::ViewMode mode)

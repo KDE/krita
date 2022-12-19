@@ -553,10 +553,10 @@ void KisGenericGradientEditor::updateAddGradientButton()
 
 void KisGenericGradientEditor::updateGradientPresetChooser()
 {
-    m_d->widgetGradientPresetChooser->resourceItemChooser()->showButtons(!m_d->compactGradientPresetChooserMode);
-    m_d->widgetGradientPresetChooser->resourceItemChooser()->setStoragePopupButtonVisible(!m_d->compactGradientPresetChooserMode);
+    m_d->widgetGradientPresetChooser->resourceItemChooser()->showImportExportBtns(!m_d->compactGradientPresetChooserMode);
+    m_d->widgetGradientPresetChooser->resourceItemChooser()->showStorageBtn(!m_d->compactGradientPresetChooserMode);
     m_d->widgetGradientPresetChooser->resourceItemChooser()->showTaggingBar(!m_d->compactGradientPresetChooserMode);
-    m_d->widgetGradientPresetChooser->resourceItemChooser()->setViewModeButtonVisible(!m_d->compactGradientPresetChooserMode);
+    m_d->widgetGradientPresetChooser->resourceItemChooser()->showViewModeBtn(!m_d->compactGradientPresetChooserMode);
 
     {
         int margin = !m_d->useGradientPresetChooserPopUp || m_d->compactGradientPresetChooserMode ? 0 : 10;

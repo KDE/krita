@@ -202,8 +202,10 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->buttonGroup->addButton(d->deleteButton, Button_Remove);
     connect(d->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
-    d->importExportBtns = new QFrame(this);
+    d->importExportBtns = new QFrame(this);  
     QHBoxLayout* importExportLayout = new QHBoxLayout(d->importExportBtns);
+    importExportLayout->setAlignment(Qt::AlignmentFlag::AlignLeft);
+    importExportLayout->setMargin(0);
     importExportLayout->addWidget(d->importButton);
     importExportLayout->addWidget(d->deleteButton);
 
@@ -278,8 +280,11 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     // Other
     updateView();
 
+    // Default Configuration
     updateButtonState();
+    showViewModeBtn(false);
     showTaggingBar(false);
+    showImportExportBtns(true);
 }
 
 KisResourceItemChooser::~KisResourceItemChooser()
@@ -362,7 +367,7 @@ void KisResourceItemChooser::slotButtonClicked(int button)
     updateButtonState();
 }
 
-void KisResourceItemChooser::showButtons(bool show)
+void KisResourceItemChooser::showImportExportBtns(bool show)
 {
     // assert(show == false);
     if (show) {
@@ -576,13 +581,13 @@ void KisResourceItemChooser::contextMenuRequested(const QPoint &pos)
     d->tagManager->contextMenuRequested(currentResource(), pos);
 }
 
-void KisResourceItemChooser::setStoragePopupButtonVisible(bool visible)
+void KisResourceItemChooser::showStorageBtn(bool visible)
 {
     d->storagePopupButton->setVisible(visible);
     d->showStoragePopupBtn = visible;
 }
 
-void KisResourceItemChooser::setViewModeButtonVisible(bool visible)
+void KisResourceItemChooser::showViewModeBtn(bool visible)
 {
     d->viewModeButton->setVisible(visible);
     d->showViewModeBtn = visible;

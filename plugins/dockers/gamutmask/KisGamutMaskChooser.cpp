@@ -148,7 +148,7 @@ KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
     m_itemChooser = new KisResourceItemChooser(ResourceType::GamutMasks, false, this);
     m_itemChooser->setItemDelegate(m_delegate);
     m_itemChooser->showTaggingBar(true);
-    m_itemChooser->showButtons(false);
+    m_itemChooser->showImportExportBtns(false);
     m_itemChooser->setSynced(true);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -178,7 +178,7 @@ KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
 
     // setting the view mode
     setViewMode(m_mode);
-    m_itemChooser->setViewModeButtonVisible(true);
+    m_itemChooser->showViewModeBtn(true);
     KisPopupButton* viewModeButton = m_itemChooser->viewModeButton();
     viewModeButton->setPopupWidget(menu);
 

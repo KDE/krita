@@ -223,6 +223,13 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
             if (FcPatternGetCharSet(fontSet->fonts[i], FC_CHARSET, 0, &set) == FcResultMatch) {
                 int index = 0;
                 for (const QString &grapheme : graphemes) {
+
+                    // Don't worry about matching controls directly,
+                    // as they are not important to font-selection (and many
+                    // fonts have no glyph entry for these)
+                    if (grapheme.at(0).category() == QChar::Other_Control) {
+                        continue;
+                    }
                     int familyIndex = -1;
                     if (familyValues.at(index) == -1) {
                         int fallbackMatch = fallbackMatchValues.at(index);

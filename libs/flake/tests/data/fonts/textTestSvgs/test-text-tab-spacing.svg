@@ -10,7 +10,7 @@
 <tspan x="10" dy="1.0em">  Lorem</tspan>
 <tspan x="10" dy="2.0em">	ipsum</tspan>
 <tspan x="10" dy="2.0em">dolor  sit	amet,</tspan>
-<tspan x="10" dy="2.0em">		consectetur	adipiscing elit.</tspan>
+<tspan x="10" dy="2.0em" style="tab-size: 8;">		consectetur	adipiscing elit.</tspan>
     </text>
 
 </g>

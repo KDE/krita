@@ -150,7 +150,6 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
         // Brush Presets
         KisPresetChooser* presetChooser = m_d->uiWdgPaintOpPresetSettings.presetWidget;
         presetChooser->showTaggingBar(true);
-        presetChooser->showButtons(false);
 
         // Brush Presets ViewMode Menu
         QMenu* viewModeMenu = new QMenu(this);

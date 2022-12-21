@@ -227,6 +227,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     reconfigure();
 
     opacityChange = new QGraphicsOpacityEffect(this);
+    opacityChange->setOpacity(1);
     setGraphicsEffect(opacityChange);
 
     /**

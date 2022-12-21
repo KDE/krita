@@ -35,7 +35,7 @@ class KRITAUI_EXPORT KisPresetChooser : public QWidget
 
 public:
 
-    KisPresetChooser(QWidget *parent = 0, const char *name = 0);
+    KisPresetChooser(QWidget *parent = 0);
     ~KisPresetChooser() override;
 
     enum ViewMode {
@@ -47,9 +47,6 @@ public:
     void setViewMode(ViewMode mode);
     void setViewModeToThumbnail();
     void setViewModeToDetail();
-
-    // TODO: remove this everyone sets this to false
-    void showButtons(bool show);
 
     void setCurrentResource(KoResourceSP resource);
 

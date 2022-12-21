@@ -170,20 +170,21 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
 }
 
-KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
+KisPresetChooser::KisPresetChooser(QWidget *parent)
     : QWidget(parent)
 {
-    setObjectName(name);
+    setObjectName("KisPresetChooser");
+
     QVBoxLayout * layout = new QVBoxLayout(this);
     layout->setMargin(0);
 
     m_chooser = new KisResourceItemChooser(ResourceType::PaintOpPresets, false, this);
-    m_chooser->setObjectName("ResourceChooser");
     m_chooser->setRowHeight(50);
     m_delegate = new KisPresetDelegate(this);
     m_chooser->setItemDelegate(m_delegate);
     m_chooser->setSynced(true);
     m_chooser->setResponsiveness(true);
+    m_chooser->showImportExportBtns(false);
     layout->addWidget(m_chooser);
 
     connect(m_chooser, SIGNAL(resourceSelected(KoResourceSP )),
@@ -207,11 +208,6 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
 
 KisPresetChooser::~KisPresetChooser()
 {
-}
-
-void KisPresetChooser::showButtons(bool show)
-{
-    m_chooser->showImportExportBtns(show);
 }
 
 void KisPresetChooser::setViewMode(KisPresetChooser::ViewMode mode)

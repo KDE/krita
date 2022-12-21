@@ -131,11 +131,6 @@ void KisPaintOpPresetsChooserPopup::paintEvent(QPaintEvent* event)
     }
 }
 
-void KisPaintOpPresetsChooserPopup::showButtons(bool show)
-{
-    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showButtons(show);
-}
-
 void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KisPaintOpPresetSP  preset)
 {
     if (preset) {

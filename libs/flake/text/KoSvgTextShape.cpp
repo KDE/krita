@@ -341,7 +341,7 @@ void KoSvgTextShape::relayout() const
     const qreal ftFontUnit = 64.0;
     const qreal ftFontUnitFactor = 1 / ftFontUnit;
     QTransform ftTF = QTransform::fromScale(ftFontUnitFactor, -ftFontUnitFactor);
-    const int finalRes = qMin(d->xRes, d->yRes);
+    const qreal finalRes = qMin(d->xRes, d->yRes);
     const qreal scaleToPT = 72. / finalRes;
     const qreal scaleToPixel = finalRes / 72.;
     QTransform dpiScale = QTransform::fromScale(scaleToPT, scaleToPT);
@@ -583,8 +583,8 @@ void KoSvgTextShape::relayout() const
 
     // 2. Set flags and assign initial positions
     // We also retreive a glyph path here.
-    size_t count;
-    raqm_glyph_t *glyphs = raqm_get_glyphs(layout.data(), &count);
+    size_t count = 0;
+    const raqm_glyph_t *glyphs = raqm_get_glyphs(layout.data(), &count);
     if (!glyphs) {
         return;
     }
@@ -1177,15 +1177,15 @@ void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
     qreal b = 0;
 
     QPointF aStartPos = startPos;
-    QPointF inlineWidth = startPos - endPos;
+    const QPointF inlineWidth = startPos - endPos;
     QPointF aEndPos = aStartPos - inlineWidth;
 
     for (int i : lineIndices) {
         if (!result.at(i).addressable || result.at(i).isHanging) {
             continue;
         }
-        qreal pos = isHorizontal ? result.at(i).finalPosition.x() : result.at(i).finalPosition.y();
-        qreal advance = isHorizontal ? result.at(i).advance.x() : result.at(i).advance.y();
+        const qreal pos = isHorizontal ? result.at(i).finalPosition.x() : result.at(i).finalPosition.y();
+        const qreal advance = isHorizontal ? result.at(i).advance.x() : result.at(i).advance.y();
 
         if (i == lineIndices.first()) {
             a = qMin(pos, pos + advance);
@@ -1195,13 +1195,13 @@ void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
             b = qMax(b, qMax(pos, pos + advance));
         }
     }
-    bool indenting = firstLine ? true : false;
+    bool indenting = firstLine;
     if (hangTextIndent) {
         indenting = !indenting;
     }
 
     if (indenting && anchor == KoSvgText::AnchorStart) {
-        qreal indent = isHorizontal ? textIndent.x() : textIndent.y();
+        const qreal indent = isHorizontal ? textIndent.x() : textIndent.y();
         if (ltr) {
             a -= indent;
         } else {
@@ -1550,9 +1550,9 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
         if (!spacingAndGlyphs) {
             n -= 1;
         }
-        qreal delta = chunkShape->layoutInterface()->textLength().customValue - (b - a);
+        const qreal delta = chunkShape->layoutInterface()->textLength().customValue - (b - a);
 
-        QPointF d = isHorizontal ? QPointF(delta / n, 0) : QPointF(0, delta / n);
+        const QPointF d = isHorizontal ? QPointF(delta / n, 0) : QPointF(0, delta / n);
 
         QPointF shift;
         bool secondTextLengthApplied = false;
@@ -1625,13 +1625,13 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     QMap<int, int> baselineTable;
-    int i = currentIndex;
-    int j = qMin(i + chunkShape->layoutInterface()->numChars(true), result.size());
+    const int i = currentIndex;
+    const int j = qMin(i + chunkShape->layoutInterface()->numChars(true), result.size());
 
     KoSvgTextProperties properties = chunkShape->textProperties();
 
-    qreal fontSize = properties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
-    qreal baselineShift = properties.property(KoSvgTextProperties::BaselineShiftValueId).toReal() * fontSize;
+    const qreal fontSize = properties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
+    const qreal baselineShift = properties.property(KoSvgTextProperties::BaselineShiftValueId).toReal() * fontSize;
     QPointF baselineShiftTotal;
     KoSvgText::BaselineShiftMode baselineShiftMode = KoSvgText::BaselineShiftMode(properties.property(KoSvgTextProperties::BaselineShiftModeId).toInt());
 
@@ -1662,7 +1662,7 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
                                                                                        style != QFont::StyleNormal);
 
     hb_font_t_up font(hb_ft_font_create_referenced(faces.front().data()));
-    qreal freetypePixelsToPt = (1.0 / 64.0) * float(72. / res);
+    const qreal freetypePixelsToPt = (1.0 / 64.0) * (72. / res);
 
     hb_direction_t dir = HB_DIRECTION_LTR;
     if (!isHorizontal) {
@@ -1833,7 +1833,7 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
         }
     }
 
-    int offset = parentBaselineTable.value(baselineAdjust, 0) - baselineTable.value(baselineAdjust, 0);
+    const int offset = parentBaselineTable.value(baselineAdjust, 0) - baselineTable.value(baselineAdjust, 0);
     QPointF shift;
     if (isHorizontal) {
         shift = QPointF(0, offset * -freetypePixelsToPt);

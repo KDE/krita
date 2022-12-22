@@ -358,7 +358,7 @@ void KoSvgTextShape::relayout() const
     bool first = false;
     QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> textChunks = layoutInterface()->collectSubChunks(false, first);
     QString text;
-    for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
+    for (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk : textChunks) {
         text.append(chunk.text);
     }
     debugFlake << "Laying out the following text: " << text;
@@ -414,9 +414,8 @@ void KoSvgTextShape::relayout() const
         }
 
         int start = 0;
-        int length = 0;
-        for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
-            length = chunk.text.size();
+        for (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk : textChunks) {
+            int length = chunk.text.size();
             KoSvgTextProperties properties = chunk.format.associatedShapeWrapper().shape()->textProperties();
 
             // In this section we retrieve the resolved transforms and
@@ -879,7 +878,7 @@ void KoSvgTextShape::relayout() const
     debugFlake << "9. return result.";
     d->result = result;
     globalIndex = 0;
-    for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
+    for (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk : textChunks) {
         KoSvgText::AssociatedShapeWrapper wrapper = chunk.format.associatedShapeWrapper();
         const int j = chunk.text.size();
         for (int i = globalIndex; i < globalIndex + j; i++) {

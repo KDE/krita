@@ -1000,21 +1000,26 @@ QPainterPath KoSvgTextShape::Private::convertFromFreeTypeOutline(FT_GlyphSlotRec
 
 QImage KoSvgTextShape::Private::convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyphSlot)
 {
+    KIS_ASSERT(glyphSlot->bitmap.width <= INT32_MAX);
+    KIS_ASSERT(glyphSlot->bitmap.rows <= INT32_MAX);
     QImage img;
-    QSize size(glyphSlot->bitmap.width, glyphSlot->bitmap.rows);
+    const int height = static_cast<int>(glyphSlot->bitmap.rows);
+    const QSize size(static_cast<int>(glyphSlot->bitmap.width), height);
 
     if (glyphSlot->bitmap.pixel_mode == FT_PIXEL_MODE_MONO) {
         img = QImage(size, QImage::Format_Mono);
         uchar *src = glyphSlot->bitmap.buffer;
-        for (uint y = 0; y < glyphSlot->bitmap.rows; y++) {
-            memcpy(img.scanLine(y), src, glyphSlot->bitmap.pitch);
+        KIS_ASSERT(glyphSlot->bitmap.pitch >= 0);
+        for (int y = 0; y < height; y++) {
+            memcpy(img.scanLine(y), src, static_cast<size_t>(glyphSlot->bitmap.pitch));
             src += glyphSlot->bitmap.pitch;
         }
     } else if (glyphSlot->bitmap.pixel_mode == FT_PIXEL_MODE_GRAY) {
         img = QImage(size, QImage::Format_Grayscale8);
         uchar *src = glyphSlot->bitmap.buffer;
-        for (uint y = 0; y < glyphSlot->bitmap.rows; y++) {
-            memcpy(img.scanLine(y), src, glyphSlot->bitmap.pitch);
+        KIS_ASSERT(glyphSlot->bitmap.pitch >= 0);
+        for (int y = 0; y < height; y++) {
+            memcpy(img.scanLine(y), src, static_cast<size_t>(glyphSlot->bitmap.pitch));
             src += glyphSlot->bitmap.pitch;
         }
     } else if (glyphSlot->bitmap.pixel_mode == FT_PIXEL_MODE_BGRA) {

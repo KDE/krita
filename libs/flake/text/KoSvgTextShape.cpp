@@ -521,18 +521,18 @@ void KoSvgTextShape::relayout() const
             if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
                 fontSizeAdjust.isAuto = (properties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3);
             }
-            const std::vector<FT_FaceUP> faces =
-                KoFontRegistry::instance()->facesForCSSValues(properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
-                                                              lengths,
-                                                              properties.fontAxisSettings(),
-                                                              chunk.text,
-                                                              finalRes,
-                                                              finalRes,
-                                                              fontSize,
-                                                              fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
-                                                              properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
-                                                              properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
-                                                              style != QFont::StyleNormal);
+            const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues(
+                properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
+                lengths,
+                properties.fontAxisSettings(),
+                chunk.text,
+                static_cast<quint32>(finalRes),
+                static_cast<quint32>(finalRes),
+                fontSize,
+                fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
+                properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
+                properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
+                style != QFont::StyleNormal);
             if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
                 raqm_set_language(layout.data(), properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8(), start, length);
             }

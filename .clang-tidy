@@ -18,6 +18,7 @@ Checks:              '
     ,clang-analyzer-cplusplus
     ,clang-analyzer-optin
     ,llvm-namespace-comment
+    ,readability-static-accessed-through-instance
     ,-modernize-use-trailing-return-type
     ,-cppcoreguidelines-avoid-magic-numbers
     ,-readability-redundant-member-init
@@ -65,11 +66,11 @@ CheckOptions:
   - key:             modernize-use-auto.MinTypeNameLength
     value:           10
   - key:             readability-identifier-length.IgnoredVariableNames
-    value:           '^(gc|rc|p[0-9]|i[dot]|ok)$'
+    value:           '^(gc|rc|p[0-9]|i[dot]|ok|[abdijknopt]|cr|fp|tf)$'
   - key:             readability-identifier-length.IgnoredParameterNames
-    value:           '^(cs|it)$'
+    value:           '^(cs|it|cr)$'
   - key:             readability-identifier-length.IgnoredLoopCounterNames
-    value:           '^[ijktuvxyz_]$'
+    value:           '^[cijktuvxyz_]$'
   - key:             modernize-use-transparent-functors.SafeMode
     value:           true
 ...

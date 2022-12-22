@@ -161,7 +161,7 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
 
     p = [&]() {
         const FcChar32 hash = FcPatternHash(p.data());
-        auto oldPattern = d->patterns().find(hash);
+        const auto oldPattern = d->patterns().find(hash);
         if (oldPattern != d->patterns().end()) {
             return oldPattern.value();
         } else {
@@ -175,7 +175,7 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
     FcCharSetUP charSet;
     FcFontSetUP fontSet = [&]() -> FcFontSetUP {
         const FcChar32 hash = FcPatternHash(p.data());
-        auto set = d->sets().find(hash);
+        const auto set = d->sets().find(hash);
 
         if (set != d->sets().end()) {
             return set.value();
@@ -259,23 +259,23 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
 
         // Remove the -1 entries.
         if (familyValues.contains(-1)) {
-            int val = -1;
-            for (int i : familyValues) {
-                if (i != val) {
-                    val = i;
+            int value = -1;
+            for (const int currentValue : familyValues) {
+                if (currentValue != value) {
+                    value = currentValue;
                     break;
                 }
             }
-            val = qMax(0, val);
+            value = qMax(0, value);
             for (int i = 0; i < familyValues.size(); i++) {
                 if (familyValues.at(i) < 0) {
                     if (fallbackMatchValues.at(i) < 0) {
-                        familyValues[i] = val;
+                        familyValues[i] = value;
                     } else {
                         familyValues[i] = fallbackMatchValues.at(i);
                     }
                 } else {
-                    val = familyValues.at(i);
+                    value = familyValues.at(i);
                 }
             }
         }
@@ -399,9 +399,9 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
         QMap<FT_Tag, qreal> tags;
         for (const QString &tagName : axisSettings.keys()) {
             if (tagName.size() == 4) {
-                QByteArray utfData = tagName.toUtf8();
-                char *t = utfData.data();
-                tags.insert(FT_MAKE_TAG(t[0], t[1], t[2], t[3]), axisSettings.value(tagName));
+                const QByteArray utfData = tagName.toUtf8();
+                const char *tag = utfData.data();
+                tags.insert(FT_MAKE_TAG(tag[0], tag[1], tag[2], tag[3]), axisSettings.value(tagName));
             }
         }
         if (FT_HAS_MULTIPLE_MASTERS(face)) {

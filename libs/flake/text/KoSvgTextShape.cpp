@@ -396,7 +396,7 @@ void KoSvgTextShape::relayout() const
     // This is done earlier so it's possible to get preresolved transforms from
     // the subchunks.
     QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
-    if (resolvedTransforms.size() > 0) {
+    if (!resolvedTransforms.empty()) {
         // Ensure the first entry defaults to 0.0 for x and y, otherwise textAnchoring
         // will not work for text that has been bidi-reordered.
         resolvedTransforms[0].xPos = 0.0;
@@ -534,7 +534,10 @@ void KoSvgTextShape::relayout() const
                 properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
                 style != QFont::StyleNormal);
             if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
-                raqm_set_language(layout.data(), properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8(), start, length);
+                raqm_set_language(layout.data(),
+                                  properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8(),
+                                  static_cast<size_t>(start),
+                                  static_cast<size_t>(length));
             }
             for (QString feature : fontFeatures) {
                 debugFlake << "adding feature" << feature;
@@ -542,17 +545,25 @@ void KoSvgTextShape::relayout() const
             }
 
             if (!letterSpacing.isAuto) {
-                raqm_set_letter_spacing_range(layout.data(), letterSpacing.customValue * ftFontUnit * scaleToPixel, false, start, length);
+                raqm_set_letter_spacing_range(layout.data(),
+                                              static_cast<int>(letterSpacing.customValue * ftFontUnit * scaleToPixel),
+                                              false,
+                                              static_cast<size_t>(start),
+                                              static_cast<size_t>(length));
             }
 
             if (!wordSpacing.isAuto) {
-                raqm_set_word_spacing_range(layout.data(), wordSpacing.customValue * ftFontUnit * scaleToPixel, false, start, length);
+                raqm_set_word_spacing_range(layout.data(),
+                                            static_cast<int>(wordSpacing.customValue * ftFontUnit * scaleToPixel),
+                                            false,
+                                            static_cast<size_t>(start),
+                                            static_cast<size_t>(length));
             }
 
             for (int i = 0; i < lengths.size(); i++) {
                 length = lengths.at(i);
                 FT_Int32 faceLoadFlags = loadFlags;
-                const FT_FaceUP &face = faces.at(i);
+                const FT_FaceUP &face = faces.at(static_cast<size_t>(i));
                 if (FT_HAS_COLOR(face)) {
                     loadFlags |= FT_LOAD_COLOR;
                 }
@@ -564,8 +575,14 @@ void KoSvgTextShape::relayout() const
                     raqm_set_freetype_load_flags(layout.data(), faceLoadFlags);
                 }
                 if (length > 0) {
-                    raqm_set_freetype_face_range(layout.data(), face.data(), start, length);
-                    raqm_set_freetype_load_flags_range(layout.data(), faceLoadFlags, start, length);
+                    raqm_set_freetype_face_range(layout.data(),
+                                                 face.data(),
+                                                 static_cast<size_t>(start),
+                                                 static_cast<size_t>(length));
+                    raqm_set_freetype_load_flags_range(layout.data(),
+                                                       faceLoadFlags,
+                                                       static_cast<size_t>(start),
+                                                       static_cast<size_t>(length));
                 }
                 start += length;
             }

@@ -64,9 +64,17 @@ KisImageFromClipboardWidget::~KisImageFromClipboardWidget()
 
 void KisImageFromClipboardWidget::createImage()
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(KisClipboard::instance()->hasClip());
-
     newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
+
+    // if this assert hits, there's no image
+    // let it immediately disable the creation step
+    KIS_SAFE_ASSERT_RECOVER(clip)
+    {
+        enableImageCreation(QImage());
+        return;
+    }
 
     KisDocument *doc = createNewImage();
 
@@ -74,10 +82,6 @@ void KisImageFromClipboardWidget::createImage()
         KisImageSP image = doc->image();
         if (image && image->root() && image->root()->firstChild()) {
             KisLayer *layer = qobject_cast<KisLayer *>(image->root()->firstChild().data());
-
-            KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
-
-            KIS_ASSERT(clip);
 
             KisImportCatcher::adaptClipToImageColorSpace(clip, image);
 

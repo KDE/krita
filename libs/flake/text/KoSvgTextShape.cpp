@@ -1649,17 +1649,18 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
     if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
         fontSizeAdjust.isAuto = (properties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3);
     }
-    const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues(properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
-                                                                                       lengths,
-                                                                                       properties.fontAxisSettings(),
-                                                                                       QString(),
-                                                                                       res,
-                                                                                       res,
-                                                                                       fontSize,
-                                                                                       fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
-                                                                                       properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
-                                                                                       properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
-                                                                                       style != QFont::StyleNormal);
+    const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues(
+        properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
+        lengths,
+        properties.fontAxisSettings(),
+        QString(),
+        static_cast<quint32>(res),
+        static_cast<quint32>(res),
+        fontSize,
+        fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
+        properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
+        properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
+        style != QFont::StyleNormal);
 
     hb_font_t_up font(hb_ft_font_create_referenced(faces.front().data()));
     const qreal freetypePixelsToPt = (1.0 / 64.0) * (72. / res);
@@ -1676,7 +1677,7 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
         baselineTable = parentBaselineTable;
         qreal multiplier = 1.0 / parentFontSize * fontSize;
         for (int key : baselineTable.keys()) {
-            baselineTable.insert(key, baselineTable.value(key) * multiplier);
+            baselineTable.insert(key, static_cast<int>(baselineTable.value(key) * multiplier));
         }
         dominantBaseline = KoSvgText::BaselineAuto;
     } else if (dominantBaseline == KoSvgText::BaselineNoChange) {
@@ -1696,7 +1697,7 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
             baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
             if (isHorizontal) {
                 hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
-                baselineTable.insert(KoSvgText::BaselineMiddle, (baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5);
+                baselineTable.insert(KoSvgText::BaselineMiddle, static_cast<int>((baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5));
                 hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
                 hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &baseline);
@@ -1722,7 +1723,7 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
             baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
             if (isHorizontal) {
                 hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
-                baselineTable.insert(KoSvgText::BaselineMiddle, (baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5);
+                baselineTable.insert(KoSvgText::BaselineMiddle, static_cast<int>((baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5));
                 hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
                 hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &baseline);

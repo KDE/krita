@@ -336,6 +336,12 @@ void KisSafeDocumentLoader::delayedLoadStart()
                     mergedImage.loadFromData(bytes);
                     Q_ASSERT(!mergedImage.isNull());
                     KisImageSP image = new KisImage(0, mergedImage.width(), mergedImage.height(), KoColorSpaceRegistry::instance()->rgb8(), "");
+
+                    constexpr double DOTS_PER_METER_TO_DOTS_PER_INCH = 0.00035285815102328864;
+                    double xres = mergedImage.dotsPerMeterX()  * DOTS_PER_METER_TO_DOTS_PER_INCH;
+                    double yres = mergedImage.dotsPerMeterY() * DOTS_PER_METER_TO_DOTS_PER_INCH;
+
+                    image->setResolution(xres, yres);
                     KisPaintLayerSP layer = new KisPaintLayer(image, "", OPACITY_OPAQUE_U8);
                     layer->paintDevice()->convertFromQImage(mergedImage, 0);
                     image->addNode(layer, image->rootLayer());

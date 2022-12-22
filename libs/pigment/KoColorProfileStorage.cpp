@@ -31,10 +31,12 @@ struct KoColorProfileStorage::Private {
     {
         Q_FOREACH (KoColorProfile *p, profileMap) {
             profileUniqueIdMap.remove(p->uniqueId());
+            duplicates.removeAll(p);
             delete p;
         }
         profileMap.clear();
         Q_FOREACH (KoColorProfile *p, profileUniqueIdMap) {
+            duplicates.removeAll(p);
             delete p;
         }
         profileUniqueIdMap.clear();

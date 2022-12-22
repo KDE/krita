@@ -13,6 +13,7 @@
 #include <QTextCharFormat>
 #include <QVariant>
 #include <QVector>
+#include <array>
 #include <boost/operators.hpp>
 #include <boost/optional.hpp>
 
@@ -411,9 +412,17 @@ BaselineShiftMode parseBaselineShiftMode(const QString &value);
 
 LengthAdjust parseLengthAdjust(const QString &value);
 
-static const QStringList fontStretchNames =
-    {"ultra-condensed", "extra-condensed", "condensed", "semi-condensed", "normal", "semi-expanded", "expanded", "extra-expanded", "ultra-expanded"};
-static const QStringList fontSizeNames = {"xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large"};
+static const std::array<const char *, 9> fontStretchNames = {"ultra-condensed",
+                                                             "extra-condensed",
+                                                             "condensed",
+                                                             "semi-condensed",
+                                                             "normal",
+                                                             "semi-expanded",
+                                                             "expanded",
+                                                             "extra-expanded",
+                                                             "ultra-expanded"};
+static const std::array<const char *, 7> fontSizeNames =
+    {"xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large"};
 /**
  * @brief parseCSSFontStretch
  * For CSS3, the font-stretches were only given as keywords. In Css 4 and above,

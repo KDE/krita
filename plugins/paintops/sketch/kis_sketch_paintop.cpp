@@ -26,7 +26,6 @@
 #include <brushengine/kis_paint_information.h>
 #include <kis_fixed_paint_device.h>
 
-#include <kis_pressure_opacity_option.h>
 #include <kis_dab_cache.h>
 #include "kis_lod_transform.h"
 #include <KoResourceLoadResult.h>
@@ -54,28 +53,23 @@
 
 KisSketchPaintOp::KisSketchPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
+    , m_opacityOption(settings.data())
+    , m_sizeOption(settings.data())
+    , m_rotationOption(settings.data())
+    , m_rateOption(settings.data())
+    , m_densityOption(settings.data())
+    , m_lineWidthOption(settings.data())
+    , m_offsetScaleOption(settings.data())
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
 
-    m_airbrushOption.readOptionSetting(settings);
-    m_opacityOption.readOptionSetting(settings);
-    m_sizeOption.readOptionSetting(settings);
-    m_rotationOption.readOptionSetting(settings);
-    m_rateOption.readOptionSetting(settings);
-    m_sketchProperties.readOptionSetting(settings);
+    m_airbrushOption.read(settings.data());
+    m_sketchProperties.read(settings.data());
     m_brushOption.readOptionSetting(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
-    m_densityOption.readOptionSetting(settings);
-    m_lineWidthOption.readOptionSetting(settings);
-    m_offsetScaleOption.readOptionSetting(settings);
 
     m_brush = m_brushOption.brush();
     m_dabCache = new KisDabCache(m_brush);
-
-    m_opacityOption.resetAllSensors();
-    m_sizeOption.resetAllSensors();
-    m_rotationOption.resetAllSensors();
-    m_rateOption.resetAllSensors();
 
     m_painter = 0;
     m_count = 0;
@@ -163,11 +157,11 @@ void KisSketchPaintOp::doPaintLine(const KisPaintInformation &pi1, const KisPain
     const qreal scale = lodAdditionalScale * m_sizeOption.apply(pi2);
     if ((scale * m_brush->width()) <= 0.01 || (scale * m_brush->height()) <= 0.01) return;
 
-    const qreal currentLineWidth = qMax(0.9, lodAdditionalScale * m_lineWidthOption.apply(pi2, m_sketchProperties.lineWidth));
+    const qreal currentLineWidth = qMax(0.9, lodAdditionalScale * m_lineWidthOption.apply(pi2) * m_sketchProperties.lineWidth);
 
-    const qreal currentOffsetScale = m_offsetScaleOption.apply(pi2, m_sketchProperties.offset);
+    const qreal currentOffsetScale = m_offsetScaleOption.apply(pi2) * m_sketchProperties.offset * 0.01;
     const double rotation = m_rotationOption.apply(pi2);
-    const double currentProbability = m_densityOption.apply(pi2, m_sketchProperties.probability);
+    const double currentProbability = m_densityOption.apply(pi2) * m_sketchProperties.probability;
 
     // shaded: does not draw this line, chrome does, fur does
     if (m_sketchProperties.makeConnection) {

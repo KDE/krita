@@ -6,8 +6,6 @@
 
 #include "kis_sketch_paintop_settings.h"
 
-#include <kis_sketchop_option.h>
-
 #include <KisPaintingModeOptionData.h>
 #include "kis_current_outline_fetcher.h"
 #include <KisOptimizedBrushOutline.h>
@@ -26,7 +24,7 @@ bool KisSketchPaintOpSettings::paintIncremental()
 
 KisOptimizedBrushOutline KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
-    bool isSimpleMode = getBool(SKETCH_USE_SIMPLE_MODE);
+    bool isSimpleMode = getBool("Sketch/simpleMode");
 
     if (!isSimpleMode) {
         return KisBrushBasedPaintOpSettings::brushOutline(info, mode, alignForZoom);

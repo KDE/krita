@@ -104,7 +104,7 @@ struct CharacterResult {
     LineEdgeBehaviour lineEnd = NoChange;
     LineEdgeBehaviour lineStart = NoChange;
     bool isHanging = false;
-    qreal textLengthApplied = false;
+    bool textLengthApplied = false;
 
     KoSvgText::TextAnchor anchor = KoSvgText::AnchorStart;
     KoSvgText::Direction direction = KoSvgText::DirectionLeftToRight;

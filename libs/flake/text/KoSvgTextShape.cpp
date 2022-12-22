@@ -90,7 +90,7 @@ struct CharacterResult {
     bool anchored_chunk = false; // whether this is the start of a new chunk.
 
     QPainterPath path;
-    QImage image{0};
+    QImage image{nullptr};
 
     QVector<QPainterPath> colorLayers;
     QVector<QBrush> colorLayerColors;
@@ -117,17 +117,9 @@ public:
     //       the shape, though it will be reset locally if the
     //       accessing thread changes
 
-    Private()
-    {
-    }
+    Private() = default;
 
-    Private(const Private &rhs)
-        : textRendering(rhs.textRendering)
-        , xRes(rhs.xRes)
-        , yRes(rhs.yRes)
-        , result(rhs.result)
-    {
-    }
+    Private(const Private &rhs) = default;
 
     TextRendering textRendering = Auto;
     int xRes = 72;
@@ -141,7 +133,8 @@ public:
     void breakLines(KoSvgTextProperties properties, QMap<int, int> logicalToVisual, QVector<CharacterResult> &result, QPointF startPos);
     void applyTextLength(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal);
     void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal);
-    qreal characterResultOnPath(CharacterResult &cr, qreal length, qreal offset, bool isHorizontal, bool isClosed);
+    static qreal
+    characterResultOnPath(CharacterResult &cr, qreal length, qreal offset, bool isHorizontal, bool isClosed);
     QPainterPath stretchGlyphOnPath(QPainterPath glyph, QPainterPath path, bool isHorizontal, qreal offset, bool isClosed);
     void applyTextPath(const KoShape *rootShape, QVector<CharacterResult> &result, bool isHorizontal);
     void computeFontMetrics(const KoShape *rootShape,
@@ -272,14 +265,14 @@ QList<KoShape *> KoSvgTextShape::textOutline() const
 {
     QList<KoShape *> shapes;
     int currentIndex = 0;
-    if (d->result.size() > 0) {
+    if (!d->result.empty()) {
         shapes = d->collectPaths(this, d->result, currentIndex);
     }
 
     return shapes;
 }
 
-void KoSvgTextShape::setTextRenderingFromString(QString textRendering)
+void KoSvgTextShape::setTextRenderingFromString(const QString &textRendering)
 {
     if (textRendering == "optimizeSpeed") {
         d->textRendering = OptimizeSpeed;
@@ -345,9 +338,9 @@ void KoSvgTextShape::relayout() const
     const qreal ftFontUnit = 64.0;
     const qreal ftFontUnitFactor = 1 / ftFontUnit;
     QTransform ftTF = QTransform::fromScale(ftFontUnitFactor, -ftFontUnitFactor);
-    qreal finalRes = qMin(d->xRes, d->yRes);
-    qreal scaleToPT = float(72. / finalRes);
-    qreal scaleToPixel = float(finalRes / 72.);
+    const int finalRes = qMin(d->xRes, d->yRes);
+    const qreal scaleToPT = 72. / finalRes;
+    const qreal scaleToPixel = finalRes / 72.;
     QTransform dpiScale = QTransform::fromScale(scaleToPT, scaleToPT);
     ftTF *= dpiScale;
     // Some fonts have a faulty underline thickness,
@@ -578,7 +571,7 @@ void KoSvgTextShape::relayout() const
         debugFlake << "text-length:" << text.size();
     }
     // set very first character as anchored chunk.
-    if (result.size() > 0) {
+    if (!result.empty()) {
         result[0].anchored_chunk = true;
     }
 
@@ -813,11 +806,11 @@ void KoSvgTextShape::relayout() const
                 KoSvgText::CharTransformation transform = resolvedTransforms[i];
                 CharacterResult charResult = result[i];
                 if (transform.xPos) {
-                    qreal d = transform.dxPos ? *transform.dxPos : 0.0;
+                    const qreal d = transform.dxPos ? *transform.dxPos : 0.0;
                     shift.setX(*transform.xPos + (d - charResult.finalPosition.x()));
                 }
                 if (transform.yPos) {
-                    qreal d = transform.dyPos ? *transform.dyPos : 0.0;
+                    const qreal d = transform.dyPos ? *transform.dyPos : 0.0;
                     shift.setY(*transform.yPos + (d - charResult.finalPosition.y()));
                 }
                 charResult.finalPosition += shift;
@@ -1792,9 +1785,10 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
 
         qreal width = 0;
         qreal offset = 0;
-        const int fallbackThickness = faces.front()->underline_thickness * (faces.front()->size->metrics.y_scale / 65535.0);
+        const double fallbackThickness =
+            faces.front()->underline_thickness * (faces.front()->size->metrics.y_scale / 65535.0);
         hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_UNDERLINE_SIZE, &baseline);
-        width = qMax(baseline, fallbackThickness);
+        width = qMax<double>(baseline, fallbackThickness);
 
         hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_UNDERLINE_OFFSET, &baseline);
         offset = baseline;
@@ -1805,7 +1799,7 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
         chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationOverline, 0, width);
 
         hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
-        width = qMax(baseline, fallbackThickness);
+        width = qMax<double>(baseline, fallbackThickness);
         hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &baseline);
         if (baseline == 0) {
             offset = baselineTable.value(KoSvgText::BaselineCentral);

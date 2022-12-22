@@ -68,7 +68,7 @@ public:
      *
      * @param textRendering the textRendering to use.
      */
-    void setTextRenderingFromString(QString textRendering);
+    void setTextRenderingFromString(const QString &textRendering);
 
     /**
      * @brief textRenderingString

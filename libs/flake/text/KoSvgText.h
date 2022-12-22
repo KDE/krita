@@ -504,7 +504,7 @@ struct TextTransformInfo : public boost::equality_comparable<TextTransformInfo> 
     }
 };
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TextTransformInfo &t);
-TextTransformInfo parseTextTransform(QString value);
+TextTransformInfo parseTextTransform(const QString &value);
 QString writeTextTransform(TextTransformInfo textTransform);
 
 /// "This property specifies the indentation applied to lines of inline content
@@ -525,7 +525,7 @@ struct TextIndentInfo : public boost::equality_comparable<TextIndentInfo> {
     }
 };
 
-TextIndentInfo parseTextIndent(QString value, const SvgLoadingContext &context);
+TextIndentInfo parseTextIndent(const QString &value, const SvgLoadingContext &context);
 QString writeTextIndent(TextIndentInfo textIndent);
 
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TextIndentInfo &value);
@@ -543,7 +543,7 @@ struct TabSizeInfo : public boost::equality_comparable<TabSizeInfo> {
         return (value == rhs.value) && (isNumber == rhs.isNumber);
     }
 };
-TabSizeInfo parseTabSize(QString value, const SvgLoadingContext &context);
+TabSizeInfo parseTabSize(const QString &value, const SvgLoadingContext &context);
 QString writeTabSize(TabSizeInfo tabSize);
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TabSizeInfo &value);
 

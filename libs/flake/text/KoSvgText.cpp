@@ -799,7 +799,7 @@ QString writeTextAlign(TextAlign value)
         "start";
 }
 
-TextTransformInfo parseTextTransform(QString value)
+TextTransformInfo parseTextTransform(const QString &value)
 {
     TextTransformInfo textTransform;
     const QStringList values = value.toLower().split(" ");
@@ -844,7 +844,7 @@ QString writeTextTransform(const TextTransformInfo textTransform)
     return values.join(" ");
 }
 
-TextIndentInfo parseTextIndent(QString value, const SvgLoadingContext &context)
+TextIndentInfo parseTextIndent(const QString &value, const SvgLoadingContext &context)
 {
     const QStringList values = value.toLower().split(" ");
     TextIndentInfo textIndent;
@@ -889,7 +889,7 @@ QString writeTextIndent(const TextIndentInfo textIndent)
     return values.join(" ");
 }
 
-TabSizeInfo parseTabSize(QString value, const SvgLoadingContext &context)
+TabSizeInfo parseTabSize(const QString &value, const SvgLoadingContext &context)
 {
     TabSizeInfo tabSizeInfo;
     bool ok = false;
@@ -918,14 +918,14 @@ int parseCSSFontStretch(const QString &value, int currentStretch)
     static constexpr std::array<int, 9> fontStretches = {50, 62, 75, 87, 100, 112, 125, 150, 200};
 
     if (value == "wider") {
-        auto it = std::upper_bound(fontStretches.begin(), fontStretches.end(), currentStretch);
+        const auto it = std::upper_bound(fontStretches.begin(), fontStretches.end(), currentStretch);
 
         newStretch = it != fontStretches.end() ? *it : fontStretches.back();
     } else if (value == "narrower") {
-        auto it = std::upper_bound(fontStretches.rbegin(), fontStretches.rend(), currentStretch, std::greater<int>());
+        const auto it =
+            std::upper_bound(fontStretches.rbegin(), fontStretches.rend(), currentStretch, std::greater<int>());
 
         newStretch = it != fontStretches.rend() ? *it : fontStretches.front();
-
     } else {
         // try to read numerical stretch value
         bool ok = false;
@@ -934,7 +934,9 @@ int parseCSSFontStretch(const QString &value, int currentStretch)
         if (!ok) {
             auto it = std::find(fontStretchNames.begin(), fontStretchNames.end(), value);
             if (it != fontStretchNames.end()) {
-                newStretch = fontStretches[it - fontStretchNames.begin()];
+                const auto index = std::distance(fontStretchNames.begin(), it);
+                KIS_ASSERT(index >= 0);
+                newStretch = fontStretches.at(static_cast<size_t>(index));
             }
         }
     }
@@ -957,24 +959,23 @@ int parseCSSFontWeight(const QString &value, int currentWeight)
     if (value == "bold")
         weight = 700;
     else if (value == "bolder") {
-        auto it = std::upper_bound(svgFontWeights.begin(), svgFontWeights.end(), currentWeight);
+        const auto it = std::upper_bound(svgFontWeights.begin(), svgFontWeights.end(), currentWeight);
 
         weight = it != svgFontWeights.end() ? *it : svgFontWeights.back();
     } else if (value == "lighter") {
-        auto it = std::upper_bound(svgFontWeights.rbegin(), svgFontWeights.rend(), currentWeight, std::greater<int>());
+        const auto it =
+            std::upper_bound(svgFontWeights.rbegin(), svgFontWeights.rend(), currentWeight, std::greater<int>());
 
         weight = it != svgFontWeights.rend() ? *it : svgFontWeights.front();
     } else {
         bool ok = false;
 
         // try to read numerical weight value
-        int parsed = value.toInt(&ok, 10);
+        const int parsed = value.toInt(&ok, 10);
         if (ok) {
             weight = qBound(0, parsed, 1000);
         }
     }
     return weight;
 }
-}
-
-
+} // namespace KoSvgText

@@ -130,7 +130,10 @@ public:
     void clearAssociatedOutlines(const KoShape *rootShape);
     QPainterPath convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot);
     QImage convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyphSlot);
-    void breakLines(KoSvgTextProperties properties, QMap<int, int> logicalToVisual, QVector<CharacterResult> &result, QPointF startPos);
+    void breakLines(const KoSvgTextProperties &properties,
+                    const QMap<int, int> &logicalToVisual,
+                    QVector<CharacterResult> &result,
+                    QPointF startPos);
     void applyTextLength(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal);
     void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal);
     static qreal
@@ -138,7 +141,7 @@ public:
     QPainterPath stretchGlyphOnPath(QPainterPath glyph, QPainterPath path, bool isHorizontal, qreal offset, bool isClosed);
     void applyTextPath(const KoShape *rootShape, QVector<CharacterResult> &result, bool isHorizontal);
     void computeFontMetrics(const KoShape *rootShape,
-                            QMap<int, int> parentBaselineTable,
+                            const QMap<int, int> &parentBaselineTable,
                             qreal parentFontSize,
                             QPointF superScript,
                             QPointF subScript,
@@ -147,8 +150,8 @@ public:
                             qreal res,
                             bool isHorizontal);
     void computeTextDecorations(const KoShape *rootShape,
-                                QVector<CharacterResult> result,
-                                QMap<int, int> logicalToVisual,
+                                const QVector<CharacterResult>& result,
+                                const QMap<int, int>& logicalToVisual,
                                 qreal minimumDecorationThickness,
                                 KoPathShape *textPath,
                                 qreal textPathoffset,
@@ -1116,7 +1119,7 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
 }
 
 void handleCollapseAndHang(QVector<CharacterResult> &result,
-                           QVector<int> lineIndices,
+                           const QVector<int> &lineIndices,
                            QPointF endPos,
                            QPointF lineOffset,
                            bool inlineSize,
@@ -1295,7 +1298,10 @@ void finalizeLine(QVector<CharacterResult> &result,
     firstLine = false;
 }
 
-void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties, QMap<int, int> logicalToVisual, QVector<CharacterResult> &result, QPointF startPos)
+void KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &properties,
+                                         const QMap<int, int> &logicalToVisual,
+                                         QVector<CharacterResult> &result,
+                                         QPointF startPos)
 {
     KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(properties.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
     KoSvgText::Direction direction = KoSvgText::Direction(properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
@@ -1606,7 +1612,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
  * This function handles computing the baselineOffsets
  */
 void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
-                                                 QMap<int, int> parentBaselineTable,
+                                                 const QMap<int, int> &parentBaselineTable,
                                                  qreal parentFontSize,
                                                  QPointF superScript,
                                                  QPointF subScript,
@@ -1853,8 +1859,8 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
  * question.
  */
 void KoSvgTextShape::Private::computeTextDecorations(const KoShape *rootShape,
-                                                     QVector<CharacterResult> result,
-                                                     QMap<int, int> logicalToVisual,
+                                                     const QVector<CharacterResult>& result,
+                                                     const QMap<int, int>& logicalToVisual,
                                                      qreal minimumDecorationThickness,
                                                      KoPathShape *textPath,
                                                      qreal textPathoffset,

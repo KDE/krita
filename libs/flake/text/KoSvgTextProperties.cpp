@@ -6,17 +6,18 @@
 
 #include "KoSvgTextProperties.h"
 
-#include <QMap>
-#include "KoSvgText.h"
-#include <SvgUtil.h>
-#include <SvgLoadingContext.h>
-#include <SvgGraphicContext.h>
 #include <QFontMetrics>
 #include <QGlobalStatic>
-#include "kis_global.h"
-#include "kis_dom_utils.h"
-
+#include <QMap>
 #include <fontconfig/fontconfig.h>
+
+#include <SvgGraphicContext.h>
+#include <SvgLoadingContext.h>
+#include <SvgUtil.h>
+#include <kis_dom_utils.h>
+#include <kis_global.h>
+
+#include "KoSvgText.h"
 
 struct KoSvgTextProperties::Private
 {
@@ -637,11 +638,13 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
 
     if (hasProperty(FontStretchId)) {
         const int stretch = property(FontStretchId).toInt();
-        static const QVector<int> fontStretches = {50, 62, 75, 87, 100, 112, 125, 150, 200};
-        if (svg1_1 || fontStretches.contains(stretch)) {
-            auto it = std::lower_bound(fontStretches.begin(), fontStretches.end(), stretch);
+        static constexpr std::array<int, 9> fontStretches = {50, 62, 75, 87, 100, 112, 125, 150, 200};
+        if (svg1_1 || std::find(fontStretches.begin(), fontStretches.end(), stretch) != fontStretches.end()) {
+            const auto it = std::lower_bound(fontStretches.begin(), fontStretches.end(), stretch);
             if (it != fontStretches.end()) {
-                result.insert("font-stretch", KoSvgText::fontStretchNames[it - fontStretches.begin()]);
+                const auto index = std::distance(fontStretches.begin(), it);
+                KIS_ASSERT(index >= 0);
+                result.insert("font-stretch", KoSvgText::fontStretchNames.at(static_cast<size_t>(index)));
             }
         } else {
             result.insert("font-stretch", KisDomUtils::toString(stretch));

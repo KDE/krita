@@ -315,6 +315,7 @@ void KoSvgTextShape::resetTextShape()
     relayout();
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::relayout() const
 {
     d->clearAssociatedOutlines(this);
@@ -947,6 +948,7 @@ void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)
     }
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 QPainterPath KoSvgTextShape::Private::convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot)
 {
     QPointF cp = QPointF();
@@ -1162,6 +1164,7 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
     return offset;
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void handleCollapseAndHang(QVector<CharacterResult> &result,
                            const QVector<int> &lineIndices,
                            QPointF endPos,
@@ -1204,6 +1207,7 @@ void handleCollapseAndHang(QVector<CharacterResult> &result,
     }
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
                               QVector<int> lineIndices,
                               QPointF startPos,
@@ -1342,6 +1346,7 @@ void finalizeLine(QVector<CharacterResult> &result,
     firstLine = false;
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &properties,
                                          const QMap<int, int> &logicalToVisual,
                                          QVector<CharacterResult> &result,
@@ -1540,6 +1545,7 @@ void KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &properties,
     debugFlake << "Linebreaking finished";
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
                                               QVector<CharacterResult> &result,
                                               int &currentIndex,
@@ -1655,15 +1661,17 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
  * @brief KoSvgTextShape::Private::computeFontMetrics
  * This function handles computing the baselineOffsets
  */
-void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
-                                                 const QMap<int, int> &parentBaselineTable,
-                                                 qreal parentFontSize,
-                                                 QPointF superScript,
-                                                 QPointF subScript,
-                                                 QVector<CharacterResult> &result,
-                                                 int &currentIndex,
-                                                 qreal res,
-                                                 bool isHorizontal)
+
+void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function-cognitive-complexity)
+    const KoShape *rootShape,
+    const QMap<int, int> &parentBaselineTable,
+    qreal parentFontSize,
+    QPointF superScript,
+    QPointF subScript,
+    QVector<CharacterResult> &result,
+    int &currentIndex,
+    qreal res,
+    bool isHorizontal)
 {
     const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
@@ -1903,17 +1911,18 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
  * bends them to the textPath, strokes them, and then adds them to the node in
  * question.
  */
-void KoSvgTextShape::Private::computeTextDecorations(const KoShape *rootShape,
-                                                     const QVector<CharacterResult>& result,
-                                                     const QMap<int, int>& logicalToVisual,
-                                                     qreal minimumDecorationThickness,
-                                                     KoPathShape *textPath,
-                                                     qreal textPathoffset,
-                                                     bool side,
-                                                     int &currentIndex,
-                                                     bool isHorizontal,
-                                                     bool ltr,
-                                                     bool wrapping)
+void KoSvgTextShape::Private::computeTextDecorations( // NOLINT(readability-function-cognitive-complexity)
+    const KoShape *rootShape,
+    const QVector<CharacterResult> &result,
+    const QMap<int, int> &logicalToVisual,
+    qreal minimumDecorationThickness,
+    KoPathShape *textPath,
+    qreal textPathoffset,
+    bool side,
+    int &currentIndex,
+    bool isHorizontal,
+    bool ltr,
+    bool wrapping)
 {
     const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
@@ -2165,6 +2174,7 @@ void KoSvgTextShape::Private::computeTextDecorations(const KoShape *rootShape,
     currentIndex = j;
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal)
 {
     int i = 0;
@@ -2214,6 +2224,7 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result, b
     }
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 qreal KoSvgTextShape::Private::characterResultOnPath(CharacterResult &cr, qreal length, qreal offset, bool isHorizontal, bool isClosed)
 {
     const bool rtl = (cr.direction == KoSvgText::DirectionRightToLeft);
@@ -2288,6 +2299,7 @@ QPainterPath KoSvgTextShape::Private::stretchGlyphOnPath(const QPainterPath &gly
     return p;
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape, QVector<CharacterResult> &result, bool isHorizontal)
 {
     // Unlike all the other applying functions, this one only iterrates over the
@@ -2384,6 +2396,7 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape, QVector<Ch
     }
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                                          const QPainterPath &outlineRect,
                                          const KoShape *rootShape,
@@ -2577,6 +2590,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
     }
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 QList<KoShape *> KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex)
 {
     const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);

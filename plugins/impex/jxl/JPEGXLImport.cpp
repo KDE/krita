@@ -8,9 +8,6 @@
 
 #include "JPEGXLImport.h"
 
-#include "filter/kis_filter_configuration.h"
-#include "filter/kis_filter_registry.h"
-#include "filter/kis_filter.h"
 #include <KisGlobalResourcesInterface.h>
 
 #include <jxl/decode_cxx.h>
@@ -29,6 +26,9 @@
 #include <KoColorTransferFunctions.h>
 #include <KoConfig.h>
 #include <dialogs/kis_dlg_hlg_import.h>
+#include <filter/kis_filter.h>
+#include <filter/kis_filter_configuration.h>
+#include <filter/kis_filter_registry.h>
 #include <kis_assert.h>
 #include <kis_debug.h>
 #include <kis_group_layer.h>
@@ -51,7 +51,7 @@ public:
     JxlPixelFormat m_pixelFormat{};
     JxlFrameHeader m_header{};
     KisPaintDeviceSP m_currentFrame{nullptr};
-    int cmykChannelID = -1;
+    uint32_t cmykChannelID = 0;
     int m_nextFrameTime{0};
     int m_durationFrameInTicks{0};
     KoID m_colorID;
@@ -62,7 +62,7 @@ public:
     float displayNits = 1000.0;
     LinearizePolicy linearizePolicy = LinearizePolicy::KeepTheSame;
     const KoColorSpace *cs = nullptr;
-    QByteArray kPlane;
+    std::vector<quint8> kPlane;
     QVector<qreal> lCoef;
 };
 
@@ -539,21 +539,20 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
 
             if (d.isCMYK) {
                 // Prepare planar buffer for key channel
-                size_t bufferSize;
-                if (JXL_DEC_SUCCESS != JxlDecoderExtraChannelBufferSize(dec.get(),
-                                                                        &d.m_pixelFormat,
-                                                                        &bufferSize,
-                                                                        d.cmykChannelID)) {
+                size_t bufferSize = 0;
+                if (JXL_DEC_SUCCESS
+                    != JxlDecoderExtraChannelBufferSize(dec.get(), &d.m_pixelFormat, &bufferSize, d.cmykChannelID)) {
                     errFile << "JxlDecoderExtraChannelBufferSize failed";
                     return ImportExportCodes::ErrorWhileReading;
                     break;
                 }
                 d.kPlane.resize(bufferSize);
-                if (JXL_DEC_SUCCESS != JxlDecoderSetExtraChannelBuffer(dec.get(),
-                                                                        &d.m_pixelFormat,
-                                                                        d.kPlane.data(),
-                                                                        bufferSize,
-                                                                        d.cmykChannelID)) {
+                if (JXL_DEC_SUCCESS
+                    != JxlDecoderSetExtraChannelBuffer(dec.get(),
+                                                       &d.m_pixelFormat,
+                                                       d.kPlane.data(),
+                                                       bufferSize,
+                                                       d.cmykChannelID)) {
                     errFile << "JxlDecoderSetExtraChannelBuffer failed";
                     return ImportExportCodes::ErrorWhileReading;
                     break;
@@ -630,8 +629,11 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     // JPEG-XL decode outputs an inverted CMYK colors
                     // This one I took from kis_filter_test for inverting the colors..
                     const KisFilterSP f = KisFilterRegistry::instance()->value("invert");
-                    const KisFilterConfigurationSP kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
-                    f->process(d.m_currentFrame, QRect(QPoint(0,0), QPoint(d.m_info.xsize,d.m_info.ysize)), kfc->cloneWithResourcesSnapshot());
+                    KIS_ASSERT(f);
+                    const KisFilterConfigurationSP kfc =
+                        f->defaultConfiguration(KisGlobalResourcesInterface::instance());
+                    KIS_ASSERT(kfc);
+                    f->process(d.m_currentFrame, {0, 0, static_cast<int>(d.m_info.xsize), static_cast<int>(d.m_info.ysize)}, kfc->cloneWithResourcesSnapshot());
                 }
                 layer->paintDevice()->makeCloneFrom(d.m_currentFrame, image->bounds());
             }

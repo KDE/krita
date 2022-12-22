@@ -8,9 +8,6 @@
 
 #include "JPEGXLExport.h"
 
-#include "filter/kis_filter_configuration.h"
-#include "filter/kis_filter_registry.h"
-#include "filter/kis_filter.h"
 #include <KisGlobalResourcesInterface.h>
 
 #include <jxl/color_encoding.h>
@@ -32,6 +29,9 @@
 #include <KoColorSpace.h>
 #include <KoColorTransferFunctions.h>
 #include <KoConfig.h>
+#include <filter/kis_filter.h>
+#include <filter/kis_filter_configuration.h>
+#include <filter/kis_filter_registry.h>
 #include <kis_assert.h>
 #include <kis_debug.h>
 #include <kis_exif_info_visitor.h>
@@ -50,11 +50,8 @@ K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_jxl_export.json", registerPlugi
 namespace JXLCMYK
 {
 template<typename CSTrait>
-inline QByteArray writeCMYKPixels(bool isTrichromatic,
-                                  int chPos,
-                                  const int width,
-                                  const int height,
-                                  KisHLineConstIteratorSP it)
+inline QByteArray
+writeCMYKPixels(bool isTrichromatic, int chPos, const int width, const int height, KisHLineConstIteratorSP it)
 {
     const int channels = isTrichromatic ? 3 : 1;
     const int chSize = static_cast<int>(CSTrait::pixelSize / 5);
@@ -70,7 +67,7 @@ inline QByteArray writeCMYKPixels(bool isTrichromatic,
         for (int x = 0; x < width; x++) {
             const quint8 *src = it->rawDataConst();
 
-            if (isTrichromatic){
+            if (isTrichromatic) {
                 for (int i = 0; i < channels; i++) {
                     std::memcpy(ptr, src + (i * chSize), chSize);
                     ptr += chSize;
@@ -925,7 +922,9 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             const KisPaintDeviceSP dev = image->projection();
 
             const KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+            KIS_ASSERT(f);
             const KisFilterConfigurationSP kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
+            KIS_ASSERT(kfc);
             if (cs->colorModelId() == CMYKAColorModelID) {
                 // Inverting colors for CMYK
                 f->process(dev, bounds, kfc->cloneWithResourcesSnapshot());
@@ -984,27 +983,27 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             if (cs->colorModelId() == CMYKAColorModelID) {
                 KisHLineConstIteratorSP it = dev->createHLineConstIteratorNG(0, 0, image->width());
 
-                const QByteArray chaK = JXLCMYK::writeCMYKLayer(cs->colorDepthId(),
-                                                                false,
-                                                                3,
-                                                                image->width(),
-                                                                image->height(),
-                                                                it);
+                const QByteArray chaK =
+                    JXLCMYK::writeCMYKLayer(cs->colorDepthId(), false, 3, image->width(), image->height(), it);
                 it->resetRowPos();
-                const QByteArray chaA = JXLCMYK::writeCMYKLayer(cs->colorDepthId(),
-                                                                false,
-                                                                4,
-                                                                image->width(),
-                                                                image->height(),
-                                                                it);
+                const QByteArray chaA =
+                    JXLCMYK::writeCMYKLayer(cs->colorDepthId(), false, 4, image->width(), image->height(), it);
 
-                if (JxlEncoderSetExtraChannelBuffer(frameSettings, &pixelFormat, chaK, static_cast<size_t>(chaK.size()), 0)
-                != JXL_ENC_SUCCESS) {
+                if (JxlEncoderSetExtraChannelBuffer(frameSettings,
+                                                    &pixelFormat,
+                                                    chaK,
+                                                    static_cast<size_t>(chaK.size()),
+                                                    0)
+                    != JXL_ENC_SUCCESS) {
                     errFile << "JxlEncoderSetExtraChannelBuffer Key failed";
                     return ImportExportCodes::InternalError;
                 }
-                if (JxlEncoderSetExtraChannelBuffer(frameSettings, &pixelFormat, chaA, static_cast<size_t>(chaA.size()), 1)
-                != JXL_ENC_SUCCESS) {
+                if (JxlEncoderSetExtraChannelBuffer(frameSettings,
+                                                    &pixelFormat,
+                                                    chaA,
+                                                    static_cast<size_t>(chaA.size()),
+                                                    1)
+                    != JXL_ENC_SUCCESS) {
                     errFile << "JxlEncoderSetExtraChannelBuffer Alpha failed";
                     return ImportExportCodes::InternalError;
                 }

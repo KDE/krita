@@ -154,13 +154,13 @@ QVector<bool> KoCssTextUtils::collapseSpaces(QString &text, KoSvgText::TextSpace
                     collapse = false;
                     break;
                 case KoSvgText::PreserveBreaks:
-                    collapse = isSegmentBreak ? false : true;
+                    collapse = !isSegmentBreak;
                     if (isTab) {
                         text[i] = QChar::Space;
                     }
                     break;
                 case KoSvgText::PreserveSpaces:
-                    collapse = isSegmentBreak ? true : false;
+                    collapse = isSegmentBreak;
                     break;
                 }
             }
@@ -244,15 +244,12 @@ bool KoCssTextUtils::characterCanHang(const QChar c, KoSvgText::HangingPunctuati
 
 bool KoCssTextUtils::IsCssWordSeparator(const QString grapheme)
 {
-    if (grapheme == "\u0020" || // Space
+    return (grapheme == "\u0020" || // Space
         grapheme == "\u00A0" || // No Break Space
         grapheme == "\u1361" || // Ethiopic Word Space
         grapheme == "\u10100" || // Aegean Word Sepator Line
         grapheme == "\u10101" || // Aegean Word Sepator Dot
-        grapheme == "\u1039F") { // Ugaric Word Divider
-        return true;
-    }
-    return false;
+        grapheme == "\u1039F");
 }
 
 QStringList KoCssTextUtils::textToUnicodeGraphemeClusters(const QString text, const QString langCode)

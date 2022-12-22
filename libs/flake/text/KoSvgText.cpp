@@ -5,15 +5,19 @@
  */
 
 #include "KoSvgText.h"
-#include <SvgUtil.h>
-#include <SvgLoadingContext.h>
+
 #include <QDebug>
-#include "kis_dom_utils.h"
+#include <array>
+
+#include <kis_dom_utils.h>
 
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoVectorPatternBackground.h>
 #include <KoShapeStroke.h>
+
+#include <SvgLoadingContext.h>
+#include <SvgUtil.h>
 
 #include <KoSvgTextChunkShape.h>
 #include <KoSvgTextChunkShapeLayoutInterface.h>
@@ -647,7 +651,7 @@ QStringList fontVariantOpentypeTags(FontVariantFeature feature)
     case EastAsianRuby:
         return {"ruby"};
     default:
-        return QStringList();
+        return {};
     }
 }
 
@@ -798,8 +802,8 @@ QString writeTextAlign(TextAlign value)
 TextTransformInfo parseTextTransform(QString value)
 {
     TextTransformInfo textTransform;
-    QStringList values = value.toLower().split(" ");
-    for (QString param : values) {
+    const QStringList values = value.toLower().split(" ");
+    for (const QString &param : values) {
         if (param == "capitalize") {
             textTransform.capitals = TextTransformCapitalize;
         } else if (param == "uppercase") {
@@ -842,9 +846,9 @@ QString writeTextTransform(const TextTransformInfo textTransform)
 
 TextIndentInfo parseTextIndent(QString value, const SvgLoadingContext &context)
 {
-    QStringList values = value.toLower().split(" ");
+    const QStringList values = value.toLower().split(" ");
     TextIndentInfo textIndent;
-    for (QString param : values) {
+    for (const QString &param : values) {
         bool ok = false;
         qreal parsed = 0.0;
         if (param.endsWith("%")) {
@@ -911,7 +915,7 @@ int parseCSSFontStretch(const QString &value, int currentStretch)
 {
     int newStretch = 100;
 
-    static const std::vector<int> fontStretches = {50, 62, 75, 87, 100, 112, 125, 150, 200};
+    static constexpr std::array<int, 9> fontStretches = {50, 62, 75, 87, 100, 112, 125, 150, 200};
 
     if (value == "wider") {
         auto it = std::upper_bound(fontStretches.begin(), fontStretches.end(), currentStretch);
@@ -948,7 +952,7 @@ int parseCSSFontWeight(const QString &value, int currentWeight)
     // 500,600          58,66
     // 700              75          (bold)
     // 800,900          87,99
-    static const std::vector<int> svgFontWeights = {100, 200, 300, 400, 500, 600, 700, 800, 900};
+    static constexpr std::array<int, 9> svgFontWeights = {100, 200, 300, 400, 500, 600, 700, 800, 900};
 
     if (value == "bold")
         weight = 700;

@@ -917,8 +917,8 @@ QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) cons
         if (hasProperty(id)) {
             FontVariantFeature feature = FontVariantFeature(property(id).toInt());
             if (feature != FontVariantNormal) {
-                QStringList openTypeTags = fontVariantOpentypeTags(feature);
-                for (QString tag : openTypeTags) {
+                const QStringList openTypeTags = fontVariantOpentypeTags(feature);
+                for (const QString &tag : openTypeTags) {
                     QString openTypeTag = tag;
                     openTypeTag += QString("[%1:%2]").arg(start).arg(start + length);
                     if (feature == NoCommonLigatures || feature == NoDiscretionaryLigatures || feature == NoHistoricalLigatures

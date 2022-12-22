@@ -128,18 +128,22 @@ public:
     QVector<CharacterResult> result;
 
     void clearAssociatedOutlines(const KoShape *rootShape);
-    QPainterPath convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot);
-    QImage convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyphSlot);
-    void breakLines(const KoSvgTextProperties &properties,
-                    const QMap<int, int> &logicalToVisual,
-                    QVector<CharacterResult> &result,
-                    QPointF startPos);
+    static QPainterPath convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot);
+    static QImage convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyphSlot);
+    static void breakLines(const KoSvgTextProperties &properties,
+                           const QMap<int, int> &logicalToVisual,
+                           QVector<CharacterResult> &result,
+                           QPointF startPos);
     void applyTextLength(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal);
-    void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal);
+    static void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal);
     static qreal
     characterResultOnPath(CharacterResult &cr, qreal length, qreal offset, bool isHorizontal, bool isClosed);
-    QPainterPath stretchGlyphOnPath(QPainterPath glyph, QPainterPath path, bool isHorizontal, qreal offset, bool isClosed);
-    void applyTextPath(const KoShape *rootShape, QVector<CharacterResult> &result, bool isHorizontal);
+    static QPainterPath stretchGlyphOnPath(const QPainterPath &glyph,
+                                           const QPainterPath &path,
+                                           bool isHorizontal,
+                                           qreal offset,
+                                           bool isClosed);
+    static void applyTextPath(const KoShape *rootShape, QVector<CharacterResult> &result, bool isHorizontal);
     void computeFontMetrics(const KoShape *rootShape,
                             const QMap<int, int> &parentBaselineTable,
                             qreal parentFontSize,
@@ -160,8 +164,12 @@ public:
                                 bool isHorizontal,
                                 bool ltr,
                                 bool wrapping);
-    void
-    paintPaths(QPainter &painter, QPainterPath outlineRect, const KoShape *rootShape, QVector<CharacterResult> &result, QPainterPath &chunk, int &currentIndex);
+    void paintPaths(QPainter &painter,
+                    const QPainterPath &outlineRect,
+                    const KoShape *rootShape,
+                    QVector<CharacterResult> &result,
+                    QPainterPath &chunk,
+                    int &currentIndex);
     QList<KoShape *> collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex);
 };
 
@@ -2239,7 +2247,11 @@ qreal KoSvgTextShape::Private::characterResultOnPath(CharacterResult &cr, qreal 
     return mid;
 }
 
-QPainterPath KoSvgTextShape::Private::stretchGlyphOnPath(QPainterPath glyph, QPainterPath path, bool isHorizontal, qreal offset, bool isClosed)
+QPainterPath KoSvgTextShape::Private::stretchGlyphOnPath(const QPainterPath &glyph,
+                                                         const QPainterPath &path,
+                                                         bool isHorizontal,
+                                                         qreal offset,
+                                                         bool isClosed)
 {
     QPainterPath p = glyph;
     for (int i = 0; i < glyph.elementCount(); i++) {
@@ -2373,7 +2385,7 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape, QVector<Ch
 }
 
 void KoSvgTextShape::Private::paintPaths(QPainter &painter,
-                                         QPainterPath outlineRect,
+                                         const QPainterPath &outlineRect,
                                          const KoShape *rootShape,
                                          QVector<CharacterResult> &result,
                                          QPainterPath &chunk,

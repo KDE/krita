@@ -620,8 +620,8 @@ void KoSvgTextShape::relayout() const
 
     KIS_ASSERT(count <= INT32_MAX);
 
-    for (int g = 0; g < static_cast<int>(count); g++) {
-        const raqm_glyph_t currentGlyph = glyphs[g];
+    for (int i = 0; i < static_cast<int>(count); i++) {
+        const raqm_glyph_t currentGlyph = glyphs[i];
         KIS_ASSERT(currentGlyph.cluster <= INT32_MAX);
         const int cluster = static_cast<int>(currentGlyph.cluster);
         CharacterResult charResult = result[cluster];
@@ -648,7 +648,7 @@ void KoSvgTextShape::relayout() const
             continue;
         }
 
-        debugFlake << "glyph" << g << "cluster" << cluster << currentGlyph.index;
+        debugFlake << "glyph" << i << "cluster" << cluster << currentGlyph.index;
 
         FT_Matrix matrix;
         FT_Vector delta;
@@ -720,8 +720,8 @@ void KoSvgTextShape::relayout() const
                                               &iterator));
         }
 
-        charResult.visualIndex = g;
-        logicalToVisual.insert(cluster, g);
+        charResult.visualIndex = i;
+        logicalToVisual.insert(cluster, i);
 
         charResult.middle = false;
         QPointF advance(currentGlyph.x_advance, currentGlyph.y_advance);
@@ -848,12 +848,12 @@ void KoSvgTextShape::relayout() const
                 KoSvgText::CharTransformation transform = resolvedTransforms[i];
                 CharacterResult charResult = result[i];
                 if (transform.xPos) {
-                    const qreal d = transform.dxPos ? *transform.dxPos : 0.0;
-                    shift.setX(*transform.xPos + (d - charResult.finalPosition.x()));
+                    const qreal delta = transform.dxPos ? *transform.dxPos : 0.0;
+                    shift.setX(*transform.xPos + (delta - charResult.finalPosition.x()));
                 }
                 if (transform.yPos) {
-                    const qreal d = transform.dyPos ? *transform.dyPos : 0.0;
-                    shift.setY(*transform.yPos + (d - charResult.finalPosition.y()));
+                    const qreal delta = transform.dyPos ? *transform.dyPos : 0.0;
+                    shift.setY(*transform.yPos + (delta - charResult.finalPosition.y()));
                 }
                 charResult.finalPosition += shift;
 
@@ -976,7 +976,7 @@ QPainterPath KoSvgTextShape::Private::convertFromFreeTypeOutline(FT_GlyphSlotRec
         glyph.moveTo(start);
         std::array<QPointF, 4> curve;
         curve[0] = start;
-        int n = 1;
+        size_t n = 1;
         while (i < last_point) {
             ++i;
             curve.at(n) = cp + QPointF(glyphSlot->outline.points[i].x, glyphSlot->outline.points[i].y);
@@ -1066,7 +1066,7 @@ QImage KoSvgTextShape::Private::convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyph
     } else if (glyphSlot->bitmap.pixel_mode == FT_PIXEL_MODE_BGRA) {
         img = QImage(size, QImage::Format_ARGB32_Premultiplied);
         const uint8_t *src = glyphSlot->bitmap.buffer;
-        for (uint y = 0; y < glyphSlot->bitmap.rows; y++) {
+        for (int y = 0; y < height; y++) {
             auto *argb = reinterpret_cast<QRgb *>(img.scanLine(y));
             for (unsigned int x = 0; x < glyphSlot->bitmap.width; x++) {
                 argb[x] = qRgba(src[2], src[1], src[0], src[3]);

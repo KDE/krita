@@ -46,8 +46,8 @@ public:
                                              QVector<int> &lengths,
                                              const QMap<QString, qreal> &axisSettings,
                                              const QString &text = "",
-                                             int xRes = 72,
-                                             int yRes = 72,
+                                             quint32 xRes = 72,
+                                             quint32 yRes = 72,
                                              qreal size = -1,
                                              qreal fontSizeAdjust = 1.0,
                                              int weight = 400,
@@ -66,7 +66,12 @@ public:
      *
      * @returns whether the configuration was successful.
      */
-    bool configureFaces(const std::vector<FT_FaceUP> &faces, qreal size, qreal fontSizeAdjust, int xRes, int yRes, const QMap<QString, qreal> &axisSettings);
+    bool configureFaces(const std::vector<FT_FaceUP> &faces,
+                        qreal size,
+                        qreal fontSizeAdjust,
+                        quint32 xRes,
+                        quint32 yRes,
+                        const QMap<QString, qreal> &axisSettings);
 
 private:
     class Private;

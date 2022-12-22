@@ -130,8 +130,8 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
                                                          QVector<int> &lengths,
                                                          const QMap<QString, qreal> &axisSettings,
                                                          const QString &text,
-                                                         int xRes,
-                                                         int yRes,
+                                                         quint32 xRes,
+                                                         quint32 yRes,
                                                          qreal size,
                                                          qreal fontSizeAdjust,
                                                          int weight,
@@ -345,22 +345,22 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
 bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
                                     qreal size,
                                     qreal fontSizeAdjust,
-                                    int xRes,
-                                    int yRes,
+                                    quint32 xRes,
+                                    quint32 yRes,
                                     const QMap<QString, qreal> &axisSettings)
 {
     int errorCode = 0;
-    int ftFontUnit = 64.0;
-    qreal finalRes = qMin(xRes, yRes);
-    qreal scaleToPixel = float(finalRes / 72.);
+    const qreal ftFontUnit = 64.0;
+    const qreal finalRes = qMin(xRes, yRes);
+    const qreal scaleToPixel = finalRes / 72;
     for (const FT_FaceUP &face : faces) {
         if (!FT_IS_SCALABLE(face)) {
-            int fontSizePixels = size * ftFontUnit * scaleToPixel;
-            int sizeDelta = 0;
+            const qreal fontSizePixels = size * ftFontUnit * scaleToPixel;
+            qreal sizeDelta = 0;
             int selectedIndex = -1;
 
             for (int i = 0; i < face->num_fixed_sizes; i++) {
-                int newDelta = qAbs((fontSizePixels)-face->available_sizes[i].x_ppem);
+                const qreal newDelta = qAbs((fontSizePixels)-face->available_sizes[i].x_ppem);
                 if (newDelta < sizeDelta || i == 0) {
                     selectedIndex = i;
                     sizeDelta = newDelta;
@@ -369,7 +369,8 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
 
             if (selectedIndex >= 0) {
                 if (FT_HAS_COLOR(face)) {
-                    long scale = long(65535 * qreal(fontSizePixels) / qreal(face->available_sizes[selectedIndex].x_ppem));
+                    const FT_Fixed scale = static_cast<FT_Fixed>(65535. * qreal(fontSizePixels)
+                                                                 / qreal(face->available_sizes[selectedIndex].x_ppem));
                     FT_Matrix matrix;
                     matrix.xx = scale;
                     matrix.xy = 0;
@@ -381,13 +382,17 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
                 errorCode = FT_Select_Size(face.data(), selectedIndex);
             }
         } else {
-            errorCode = FT_Set_Char_Size(face.data(), size * ftFontUnit, 0, xRes, yRes);
+            errorCode = FT_Set_Char_Size(face.data(), static_cast<FT_F26Dot6>(size * ftFontUnit), 0, xRes, yRes);
             hb_font_t_up font(hb_ft_font_create_referenced(face.data()));
             hb_position_t xHeight = 0;
             hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_X_HEIGHT, &xHeight);
             if (xHeight > 0 && fontSizeAdjust > 0 && fontSizeAdjust < 1.0) {
                 qreal aspect = xHeight / (size * ftFontUnit * scaleToPixel);
-                errorCode = FT_Set_Char_Size(face.data(), (fontSizeAdjust / aspect) * (size * ftFontUnit), 0, xRes, yRes);
+                errorCode = FT_Set_Char_Size(face.data(),
+                                             static_cast<FT_F26Dot6>((fontSizeAdjust / aspect) * (size * ftFontUnit)),
+                                             0,
+                                             xRes,
+                                             yRes);
             }
         }
 

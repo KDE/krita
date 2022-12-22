@@ -886,14 +886,13 @@ void KoSvgTextShape::relayout() const
     debugFlake << "9. return result.";
     d->result = result;
     globalIndex = 0;
-    QTransform tf;
     for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
         KoSvgText::AssociatedShapeWrapper wrapper = chunk.format.associatedShapeWrapper();
-        int j = chunk.text.size();
+        const int j = chunk.text.size();
         for (int i = globalIndex; i < globalIndex + j; i++) {
-            if (result.at(i).addressable && result.at(i).hidden == false) {
-                tf.reset();
-                tf.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
+            if (result.at(i).addressable && !result.at(i).hidden) {
+                QTransform tf =
+                    QTransform::fromTranslate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
                 tf.rotateRadians(result.at(i).rotate);
                 wrapper.addCharacterRect(tf.mapRect(result.at(i).boundingBox));
             }
@@ -2373,8 +2372,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
     }
 
     if (chunkShape->isTextNode()) {
-        QTransform tf;
-        int j = currentIndex + chunkShape->layoutInterface()->numChars(true);
+        const int j = currentIndex + chunkShape->layoutInterface()->numChars(true);
         KoClipMaskPainter fillPainter(&painter, painter.transform().mapRect(outlineRect.boundingRect()));
         if (chunkShape->background()) {
             chunkShape->background()->paint(*fillPainter.shapePainter(), outlineRect);
@@ -2391,9 +2389,9 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
         textDecorationsRest.setFillRule(Qt::WindingFill);
 
         for (int i = currentIndex; i < j; i++) {
-            if (result.at(i).addressable && result.at(i).hidden == false) {
-                tf.reset();
-                tf.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
+            if (result.at(i).addressable && !result.at(i).hidden) {
+                QTransform tf =
+                    QTransform::fromTranslate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
                 tf.rotateRadians(result.at(i).rotate);
                 /* Debug
                 painter.save();
@@ -2563,15 +2561,14 @@ QList<KoShape *> KoSvgTextShape::Private::collectPaths(const KoShape *rootShape,
     if (chunkShape->isTextNode()) {
         QPainterPath chunk;
 
-        QTransform tf;
-        int j = currentIndex + chunkShape->layoutInterface()->numChars(true);
+        const int j = currentIndex + chunkShape->layoutInterface()->numChars(true);
         for (int i = currentIndex; i < j; i++) {
-            if (result.at(i).addressable && result.at(i).hidden == false) {
-                tf.reset();
-                tf.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
+            if (result.at(i).addressable && !result.at(i).hidden) {
+                QTransform tf =
+                    QTransform::fromTranslate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
                 tf.rotateRadians(result.at(i).rotate);
                 QPainterPath p = tf.map(result.at(i).path);
-                if (result.at(i).colorLayers.size()) {
+                if (!result.at(i).colorLayers.empty()) {
                     for (int c = 0; c < result.at(i).colorLayers.size(); c++) {
                         QBrush color = result.at(i).colorLayerColors.at(c);
                         bool replace = result.at(i).replaceWithForeGroundColor.at(c);

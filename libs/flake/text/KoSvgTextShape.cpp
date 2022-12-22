@@ -539,7 +539,7 @@ void KoSvgTextShape::relayout() const
                                   static_cast<size_t>(start),
                                   static_cast<size_t>(length));
             }
-            for (QString feature : fontFeatures) {
+            for (const QString &feature : fontFeatures) {
                 debugFlake << "adding feature" << feature;
                 raqm_add_font_feature(layout.data(), feature.toUtf8(), feature.toUtf8().size());
             }
@@ -609,44 +609,48 @@ void KoSvgTextShape::relayout() const
     QPointF totalAdvanceFTFontCoordinates;
     QMap<int, int> logicalToVisual;
 
-    for (int g = 0; g < int(count); g++) {
-        CharacterResult charResult = result[glyphs[g].cluster];
-        charResult.addressable = !collapseChars.at(glyphs[g].cluster);
+    KIS_ASSERT(count <= INT32_MAX);
+
+    for (int g = 0; g < static_cast<int>(count); g++) {
+        const raqm_glyph_t currentGlyph = glyphs[g];
+        KIS_ASSERT(currentGlyph.cluster <= INT32_MAX);
+        const int cluster = static_cast<int>(currentGlyph.cluster);
+        CharacterResult charResult = result[cluster];
+        charResult.addressable = !collapseChars.at(cluster);
         if (!charResult.addressable) {
             continue;
         }
 
         FT_Int32 faceLoadFlags = loadFlags;
-        if (!isHorizontal && FT_HAS_VERTICAL(glyphs[g].ftface)) {
+        if (!isHorizontal && FT_HAS_VERTICAL(currentGlyph.ftface)) {
             faceLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
         }
-        if (FT_HAS_COLOR(glyphs[g].ftface)) {
+        if (FT_HAS_COLOR(currentGlyph.ftface)) {
             faceLoadFlags |= FT_LOAD_COLOR;
         }
 
         QPointF spaceAdvance;
-        if (tabSizeInfo.contains(glyphs[g].cluster)) {
-            FT_Load_Glyph(glyphs[g].ftface, FT_Get_Char_Index(glyphs[g].ftface, ' '), faceLoadFlags);
-            spaceAdvance = QPointF(glyphs[g].ftface->glyph->advance.x, glyphs[g].ftface->glyph->advance.y);
+        if (tabSizeInfo.contains(cluster)) {
+            FT_Load_Glyph(currentGlyph.ftface, FT_Get_Char_Index(currentGlyph.ftface, ' '), faceLoadFlags);
+            spaceAdvance = QPointF(currentGlyph.ftface->glyph->advance.x, currentGlyph.ftface->glyph->advance.y);
         }
 
-        int error = FT_Load_Glyph(glyphs[g].ftface, glyphs[g].index, faceLoadFlags);
-        if (error != 0) {
+        if (FT_Load_Glyph(currentGlyph.ftface, currentGlyph.index, faceLoadFlags) != 0) {
             continue;
         }
 
-        debugFlake << "glyph" << g << "cluster" << glyphs[g].cluster << glyphs[g].index;
+        debugFlake << "glyph" << g << "cluster" << cluster << currentGlyph.index;
 
         FT_Matrix matrix;
         FT_Vector delta;
-        FT_Get_Transform(glyphs[g].ftface, &matrix, &delta);
+        FT_Get_Transform(currentGlyph.ftface, &matrix, &delta);
         QTransform glyphTf;
         qreal factor_16 = 1.0 / 65536.0;
         glyphTf.setMatrix(matrix.xx * factor_16, matrix.xy * factor_16, 0, matrix.yx * factor_16, matrix.yy * factor_16, 0, 0, 0, 1);
 
-        QPainterPath glyph = d->convertFromFreeTypeOutline(glyphs[g].ftface->glyph);
+        QPainterPath glyph = d->convertFromFreeTypeOutline(currentGlyph.ftface->glyph);
 
-        glyph.translate(glyphs[g].x_offset, glyphs[g].y_offset);
+        glyph.translate(currentGlyph.x_offset, currentGlyph.y_offset);
         glyph = glyphTf.map(glyph);
         glyph = ftTF.map(glyph);
 
@@ -660,22 +664,27 @@ void KoSvgTextShape::relayout() const
             charResult.path = glyph;
         }
         // TODO: Handle glyph clusters better...
-        charResult.image = d->convertFromFreeTypeBitmap(glyphs[g].ftface->glyph)
-                               .transformed(glyphTf, d->textRendering == OptimizeSpeed ? Qt::FastTransformation : Qt::SmoothTransformation);
+        charResult.image =
+            d->convertFromFreeTypeBitmap(currentGlyph.ftface->glyph)
+                .transformed(glyphTf,
+                             d->textRendering == OptimizeSpeed ? Qt::FastTransformation : Qt::SmoothTransformation);
 
         // Retreive CPAL/COLR V0 color layers, directly based off the sample
         // code in the freetype docs.
         FT_UInt layerGlyphIndex = 0;
         FT_UInt layerColorIndex = 0;
         FT_LayerIterator iterator;
-        FT_Color *palette;
-        int paletteIndex = 0;
-        error = FT_Palette_Select(glyphs[g].ftface, paletteIndex, &palette);
-        if (error) {
-            palette = NULL;
+        FT_Color *palette = nullptr;
+        const unsigned short paletteIndex = 0;
+        if (FT_Palette_Select(currentGlyph.ftface, paletteIndex, &palette) != 0) {
+            palette = nullptr;
         }
-        iterator.p = NULL;
-        bool haveLayers = FT_Get_Color_Glyph_Layer(glyphs[g].ftface, glyphs[g].index, &layerGlyphIndex, &layerColorIndex, &iterator);
+        iterator.p = nullptr;
+        bool haveLayers = FT_Get_Color_Glyph_Layer(currentGlyph.ftface,
+                                                   currentGlyph.index,
+                                                   &layerGlyphIndex,
+                                                   &layerColorIndex,
+                                                   &iterator);
         if (haveLayers && palette) {
             do {
                 QBrush layerColor;
@@ -688,23 +697,27 @@ void KoSvgTextShape::relayout() const
                     FT_Color color = palette[layerColorIndex];
                     layerColor = QColor(color.red, color.green, color.blue, color.alpha);
                 }
-                FT_Load_Glyph(glyphs[g].ftface, layerGlyphIndex, faceLoadFlags);
-                QPainterPath p = d->convertFromFreeTypeOutline(glyphs[g].ftface->glyph);
-                p.translate(glyphs[g].x_offset, glyphs[g].y_offset);
+                FT_Load_Glyph(currentGlyph.ftface, layerGlyphIndex, faceLoadFlags);
+                QPainterPath p = d->convertFromFreeTypeOutline(currentGlyph.ftface->glyph);
+                p.translate(currentGlyph.x_offset, currentGlyph.y_offset);
                 charResult.colorLayers.append(ftTF.map(p));
                 charResult.colorLayerColors.append(layerColor);
                 charResult.replaceWithForeGroundColor.append(isForeGroundColor);
 
-            } while (FT_Get_Color_Glyph_Layer(glyphs[g].ftface, glyphs[g].index, &layerGlyphIndex, &layerColorIndex, &iterator));
+            } while (FT_Get_Color_Glyph_Layer(currentGlyph.ftface,
+                                              currentGlyph.index,
+                                              &layerGlyphIndex,
+                                              &layerColorIndex,
+                                              &iterator));
         }
 
         charResult.visualIndex = g;
-        logicalToVisual.insert(glyphs[g].cluster, g);
+        logicalToVisual.insert(cluster, g);
 
         charResult.middle = false;
-        QPointF advance(glyphs[g].x_advance, glyphs[g].y_advance);
-        if (tabSizeInfo.contains(glyphs[g].cluster)) {
-            KoSvgText::TabSizeInfo tabSize = tabSizeInfo.value(glyphs[g].cluster);
+        QPointF advance(currentGlyph.x_advance, currentGlyph.y_advance);
+        if (tabSizeInfo.contains(cluster)) {
+            KoSvgText::TabSizeInfo tabSize = tabSizeInfo.value(cluster);
             qreal newAdvance = tabSize.value * ftFontUnit;
             if (tabSize.isNumber) {
                 QPointF extraSpacing = isHorizontal ? QPointF(tabSize.extraSpacing * ftFontUnit, 0) : QPointF(0, tabSize.extraSpacing * ftFontUnit);
@@ -721,7 +734,8 @@ void KoSvgTextShape::relayout() const
 
         QRectF bbox;
         if (usePixmap) {
-            QPointF topLeft((glyphs[g].ftface->glyph->bitmap_left * 64), (glyphs[g].ftface->glyph->bitmap_top * 64));
+            QPointF topLeft((currentGlyph.ftface->glyph->bitmap_left * 64),
+                            (currentGlyph.ftface->glyph->bitmap_top * 64));
             topLeft = glyphTf.map(topLeft);
             QPointF bottomRight(topLeft.x() + (charResult.image.height() * 64), topLeft.y() - (charResult.image.height() * 64));
             bbox = QRectF(topLeft, bottomRight);
@@ -733,12 +747,12 @@ void KoSvgTextShape::relayout() const
             }
         } else if (isHorizontal) {
             bbox = QRectF(0,
-                          glyphs[g].ftface->size->metrics.descender,
+                          currentGlyph.ftface->size->metrics.descender,
                           ftTF.inverted().map(charResult.advance).x(),
-                          (glyphs[g].ftface->size->metrics.ascender - glyphs[g].ftface->size->metrics.descender));
+                          (currentGlyph.ftface->size->metrics.ascender - currentGlyph.ftface->size->metrics.descender));
             bbox = glyphTf.mapRect(bbox);
         } else {
-            hb_font_t_up font(hb_ft_font_create_referenced(glyphs[g].ftface));
+            hb_font_t_up font(hb_ft_font_create_referenced(currentGlyph.ftface));
             hb_position_t ascender = 0;
             hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &ascender);
             hb_position_t descender = 0;
@@ -754,7 +768,7 @@ void KoSvgTextShape::relayout() const
         totalAdvanceFTFontCoordinates += advance;
         charResult.cssPosition = ftTF.map(totalAdvanceFTFontCoordinates) - charResult.advance;
 
-        result[glyphs[g].cluster] = charResult;
+        result[cluster] = charResult;
     }
 
     // fix it so that characters that are in the 'middle' due to either being

@@ -407,7 +407,7 @@ void KoSvgTextShape::relayout() const
     // pass everything to a css-compatible text-layout algortihm.
     raqm_t_up layout(raqm_create());
 
-    if (raqm_set_text_utf16(layout.data(), text.utf16(), text.size())) {
+    if (raqm_set_text_utf16(layout.data(), text.utf16(), static_cast<size_t>(text.size()))) {
         if (writingMode == KoSvgText::VerticalRL || writingMode == KoSvgText::VerticalLR) {
             raqm_set_par_direction(layout.data(), raqm_direction_t::RAQM_DIRECTION_TTB);
         } else if (direction == KoSvgText::DirectionRightToLeft) {

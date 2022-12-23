@@ -11,6 +11,7 @@
 
 #include <QBuffer>
 #include <QtEndian>
+#include <algorithm>
 #include <zlib.h>
 
 #include <kis_debug.h>
@@ -83,114 +84,64 @@ QByteArray compress(const QByteArray &data)
         return output;
 }
 
-// from gimp's psd-util.c
-int decompress(const QByteArray &input, QByteArray &output, int unpacked_len)
+QByteArray decompress(const QByteArray &input, int unpacked_len)
 {
+    QByteArray output;
     output.resize(unpacked_len);
 
-    /*
-     *  Decode a PackBits chunk.
-     */
-    qint32 n;
-    const char *src = input.data();
-    char *dst = output.data();
-    char dat;
-    int unpack_left = unpacked_len;
-    int pack_left = input.size();
-    qint32 error_code = 0;
-    int return_val = 0;
+    const auto *src = input.cbegin();
+    auto *dst = output.begin();
 
-    while (unpack_left > 0 && pack_left > 0) {
-        n = *src;
-        src++;
-        pack_left--;
+    while (src < input.end() && dst < output.end()) {
+        const char n = *src; // NOLINT(readability-identifier-length)
+        src += 1;
 
-        if (n == 128) /* nop */
+        if (n >= 0) { // copy next n+1 chars
+            const int bytes = 1 + n;
+            if (src + bytes > input.cend()) {
+                errFile << "Input buffer exhausted in replicate of" << bytes << "chars, left" << (input.cend() - src);
+                return {};
+            }
+            if (dst + bytes > output.end()) {
+                errFile << "Overrun in packbits replicate of" << bytes << "chars, left" << (output.end() - dst);
+                return {};
+            }
+            std::copy_n(src, bytes, dst);
+            src += bytes;
+            dst += bytes;
+        } else if (n >= -127 && n <= -1) { // replicate next char -n+1 times
+            const int bytes = 1 - n;
+            if (src >= input.cend()) {
+                errFile << "Input buffer exhausted in copy";
+                return {};
+            }
+            if (dst + bytes > output.end()) {
+                errFile << "Output buffer exhausted in copy of" << bytes << "chars, left" << (output.end() - dst);
+                return {};
+            }
+            const char byte = *src;
+            std::fill_n(dst, bytes, byte);
+            src += 1;
+            dst += bytes;
+        } else if (n == -128) {
             continue;
-        else if (n > 128)
-            n -= 256;
-
-        if (n < 0) /* replicate next gchar |n|+ 1 times */
-        {
-            n = 1 - n;
-            if (!pack_left) {
-                dbgFile << "Input buffer exhausted in replicate";
-                error_code = 1;
-                break;
-            }
-            if (n > unpack_left) {
-                dbgFile << "Overrun in packbits replicate of" << n - unpack_left << "chars";
-                error_code = 2;
-            }
-            dat = *src;
-            for (; n > 0; --n) {
-                if (!unpack_left)
-                    break;
-                *dst = dat;
-                dst++;
-                unpack_left--;
-            }
-            if (unpack_left) {
-                src++;
-                pack_left--;
-            }
-        } else /* copy next n+1 gchars literally */
-        {
-            n++;
-            for (; n > 0; --n) {
-                if (!pack_left) {
-                    dbgFile << "Input buffer exhausted in copy";
-                    error_code = 3;
-                    break;
-                }
-                if (!unpack_left) {
-                    dbgFile << "Output buffer exhausted in copy";
-                    error_code = 4;
-                    break;
-                }
-                *dst = *src;
-                dst++;
-                unpack_left--;
-                src++;
-                pack_left--;
-            }
         }
     }
 
-    if (unpack_left > 0) {
-        /* Pad with zeros to end of output buffer */
-        for (n = 0; n < pack_left; ++n) {
-            *dst = 0;
-            dst++;
-        }
+    if (dst < output.end()) {
+        errFile << "Packbits decode - unpack left" << (output.end() - dst);
+        std::fill(dst, output.end(), 0);
     }
 
-    if (unpack_left) {
-        dbgFile << "Packbits decode - unpack left" << unpack_left;
-        return_val -= unpack_left;
-    }
-    if (pack_left) {
-        /* Some images seem to have a pad byte at the end of the packed data */
-        if (error_code || pack_left != 1) {
-            dbgFile << "Packbits decode - pack left" << pack_left;
-            return_val = pack_left;
-        }
+    // If the input line was odd width, there's a padding byte
+    if (src + 1 < input.cend()) {
+        QByteArray leftovers;
+        leftovers.resize(static_cast<int>(input.cend() - src));
+        std::copy(src, input.cend(), leftovers.begin());
+        errFile << "Packbits decode - pack left" << leftovers.size() << leftovers.toHex();
     }
 
-    if (error_code)
-        dbgFile << "Error code" << error_code;
-
-    return return_val;
-}
-
-QByteArray decompress(const QByteArray &data, int expected_length)
-{
-    QByteArray output(expected_length, '\0');
-    const int result = KisRLE::decompress(data, output, expected_length);
-    if (result != 0)
-        return QByteArray();
-    else
-        return output;
+    return output;
 }
 } // namespace KisRLE
 

@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-16 00:48+0000\n"
+"POT-Creation-Date: 2022-12-23 00:44+0000\n"
 "PO-Revision-Date: 2022-10-01 11:35+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -33342,7 +33342,7 @@ msgstr "Filterinställnings-XML"
 msgid "No configuration options"
 msgstr "Inga inställningsalternativ"
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:138
 #, fuzzy, kde-format
 #| msgid "The layer does not have an image associated with it."
 msgid "The clipboard is empty or does not have an image in it."
@@ -46492,14 +46492,14 @@ msgstr ""
 msgid "Sign with Author Profile Data"
 msgstr "Signera med upphovsmannaprofildata"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:469
-#: plugins/impex/jxl/JPEGXLImport.cpp:480
+#: plugins/impex/jxl/JPEGXLImport.cpp:497
+#: plugins/impex/jxl/JPEGXLImport.cpp:508
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "Kunde inte läsa bildprofilen."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:514
+#: plugins/impex/jxl/JPEGXLImport.cpp:564
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "JPEG-XL image is animated, but cannot retrieve animation frame header."
@@ -46507,7 +46507,7 @@ msgstr ""
 "JPEG-XL-bilden är animerad, men det går inte att hämta animeringens "
 "bildhuvud."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:542
+#: plugins/impex/jxl/JPEGXLImport.cpp:592
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

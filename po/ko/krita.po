@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-16 00:48+0000\n"
+"POT-Creation-Date: 2022-12-23 00:44+0000\n"
 "PO-Revision-Date: 2022-05-15 22:38+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -34270,7 +34270,7 @@ msgstr "필터 설정 XML"
 msgid "No configuration options"
 msgstr "설정 옵션 없음"
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:138
 #, fuzzy, kde-format
 #| msgid "The layer does not have an image associated with it."
 msgid "The clipboard is empty or does not have an image in it."
@@ -47492,8 +47492,8 @@ msgstr ""
 msgid "Sign with Author Profile Data"
 msgstr "작성자 프로필 데이터로 서명"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:469
-#: plugins/impex/jxl/JPEGXLImport.cpp:480
+#: plugins/impex/jxl/JPEGXLImport.cpp:497
+#: plugins/impex/jxl/JPEGXLImport.cpp:508
 #, fuzzy, kde-format
 #| msgctxt "Saving .kra file error message"
 #| msgid "Could not save image profile."
@@ -47501,13 +47501,13 @@ msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "이미지 프로필을 저장할 수 없습니다."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:514
+#: plugins/impex/jxl/JPEGXLImport.cpp:564
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "JPEG-XL image is animated, but cannot retrieve animation frame header."
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:542
+#: plugins/impex/jxl/JPEGXLImport.cpp:592
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

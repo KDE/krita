@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-16 00:48+0000\n"
+"POT-Creation-Date: 2022-12-23 00:44+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -33115,7 +33115,7 @@ msgstr "ការ​កំណត់​រចនាសម្ព័ន្ធ​ថ
 msgid "No configuration options"
 msgstr "គ្មាន​ជម្រើស​កំណត់​រចនាសម្ព័ន្ធ ។"
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:138
 #, fuzzy, kde-format
 msgid "The clipboard is empty or does not have an image in it."
 msgstr "ចំណាំ​បច្ចុប្បន្ន"
@@ -46342,20 +46342,20 @@ msgstr ""
 msgid "Sign with Author Profile Data"
 msgstr "អនុវត្ត​ទម្រង់​"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:469
-#: plugins/impex/jxl/JPEGXLImport.cpp:480
+#: plugins/impex/jxl/JPEGXLImport.cpp:497
+#: plugins/impex/jxl/JPEGXLImport.cpp:508
 #, fuzzy, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "មិន​អាច​បន្ថែម​ស្រទាប់​ទៅ​កាន់​រូបភាព​បាន​ទេ ។"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:514
+#: plugins/impex/jxl/JPEGXLImport.cpp:564
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "JPEG-XL image is animated, but cannot retrieve animation frame header."
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:542
+#: plugins/impex/jxl/JPEGXLImport.cpp:592
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

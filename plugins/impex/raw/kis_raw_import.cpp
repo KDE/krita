@@ -3,27 +3,32 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
+
 #include "kis_raw_import.h"
 
+#include <exiv2/exiv2.hpp>
 #include <kpluginfactory.h>
-#include <KoDialog.h>
-
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
-#include <KisImportExportErrorCode.h>
-#include <KoColorSpaceTraits.h>
-
-#include "kis_debug.h"
-#include "KisDocument.h"
-#include "kis_image.h"
-#include "kis_paint_device.h"
-#include "kis_transaction.h"
-#include "kis_group_layer.h"
-#include "kis_paint_layer.h"
-#include "kis_iterator_ng.h"
+#include <libkdcraw_version.h>
 
 #include <kdcraw.h>
-#include <libkdcraw_version.h>
+
+#include <KisDocument.h>
+#include <KisExiv2IODevice.h>
+#include <KisImportExportErrorCode.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceTraits.h>
+#include <KoDialog.h>
+#include <kis_debug.h>
+#include <kis_group_layer.h>
+#include <kis_image.h>
+#include <kis_iterator_ng.h>
+#include <kis_meta_data_backend_registry.h>
+#include <kis_meta_data_io_backend.h>
+#include <kis_meta_data_tags.h>
+#include <kis_paint_device.h>
+#include <kis_paint_layer.h>
+#include <kis_transaction.h>
 
 using namespace KDcrawIface;
 
@@ -160,6 +165,71 @@ KisImportExportErrorCode KisRawImport::convert(KisDocument *document, QIODevice 
                 pixel->alpha = 0xFFFF;
             } while (it->nextPixel());
             it->nextRow();
+        }
+
+        {
+            // HACK!! Externally parse the Exif metadata
+            // libtiff has no way to access the fields wholesale
+            try {
+                KisExiv2IODevice::ptr_type basicIoDevice(new KisExiv2IODevice(filename()));
+
+                const std::unique_ptr<Exiv2::Image> readImg(Exiv2::ImageFactory::open(basicIoDevice).release());
+
+                readImg->readMetadata();
+
+                const KisMetaData::IOBackend *io = KisMetadataBackendRegistry::instance()->value("exif");
+
+                // All IFDs are paint layer children of root
+                KisNodeSP node = image->rootLayer()->firstChild();
+
+                QBuffer ioDevice;
+
+                {
+                    // Synthesize the Exif blob
+                    Exiv2::ExifData tempData;
+                    Exiv2::Blob tempBlob;
+
+                    // NOTE: do not use std::copy_if, auto_ptrs beware
+                    for (const Exiv2::Exifdatum &i : readImg->exifData()) {
+                        const uint16_t tag = i.tag();
+
+                        if (tag == Exif::Image::ImageWidth || tag == Exif::Image::ImageLength
+                            || tag == Exif::Image::BitsPerSample || tag == Exif::Image::Compression
+                            || tag == Exif::Image::PhotometricInterpretation || tag == Exif::Image::Orientation
+                            || tag == Exif::Image::SamplesPerPixel || tag == Exif::Image::PlanarConfiguration
+                            || tag == Exif::Image::YCbCrSubSampling || tag == Exif::Image::YCbCrPositioning
+                            || tag == Exif::Image::XResolution || tag == Exif::Image::YResolution
+                            || tag == Exif::Image::ResolutionUnit || tag == Exif::Image::TransferFunction
+                            || tag == Exif::Image::WhitePoint || tag == Exif::Image::PrimaryChromaticities
+                            || tag == Exif::Image::YCbCrCoefficients || tag == Exif::Image::ReferenceBlackWhite
+                            || tag == Exif::Image::InterColorProfile) {
+                            dbgMetaData << "Ignoring TIFF-specific" << i.key().c_str();
+                            continue;
+                        }
+
+                        tempData.add(i);
+                    }
+
+                    // Encode into temporary blob
+                    Exiv2::ExifParser::encode(tempBlob, Exiv2::littleEndian, tempData);
+
+                    // Reencode into Qt land
+                    ioDevice.setData(reinterpret_cast<char *>(tempBlob.data()), static_cast<int>(tempBlob.size()));
+                }
+
+                // Get layer
+                KisLayer *layer = qobject_cast<KisLayer *>(node.data());
+                KIS_ASSERT_RECOVER(layer)
+                {
+                    errFile << "Attempted to import metadata on an empty document";
+                    return ImportExportCodes::InternalError;
+                }
+
+                // Inject the data as any other IOBackend
+                io->loadFrom(layer->metaData(), &ioDevice);
+            } catch (Exiv2::AnyError &e) {
+                errFile << "Failed metadata import:" << e.code() << e.what();
+            }
         }
 
         QApplication::restoreOverrideCursor();

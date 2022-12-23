@@ -21,7 +21,7 @@ KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::None, parent)
 {
     namespace kpowu = KisPaintOpOptionWidgetUtils;
-    addPaintOpOption(kpowu::createOptionWidget<KisHairyBristleOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidgetWithLodLimitations<KisHairyBristleOptionWidget>());
     addPaintOpOption(kpowu::createOptionWidget<KisHairyInkOptionWidget>());
     addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
     addPaintOpOption(kpowu::createOpacityOptionWidget());

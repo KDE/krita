@@ -157,6 +157,27 @@ Widget* createOptionWidget()
 }
 
 /**
+ * Creates an option widget and lager::store for its \p Data
+ * type.
+ *
+ * This override `typename Widget::data_type` to
+ * default-construct the data and pass it to the
+ * widget. If widget does not provide this type,
+ * compilation will fail.
+ *
+ * Same as normal createOptionWidget(), but creates a widget that fetches lod
+ * limitations directly from the \p Data object by calling
+ * Data::lodLimitations().
+ */
+template <typename Widget>
+Widget* createOptionWidgetWithLodLimitations()
+{
+    static_assert(detail::has_type_data_type<Widget>::value, "Widget must have 'data_type' member type defined to use the default construction method");
+    return createOptionWidgetWithLodLimitations<Widget>(typename Widget::data_type{});
+}
+
+
+/**
  * Creates an instance of KisCurveOptionWidget and a
  * lager::store for its \p Data type.
  *

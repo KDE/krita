@@ -25,7 +25,7 @@ KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
 {
     namespace kpowu = KisPaintOpOptionWidgetUtils;
 
-    addPaintOpOption(kpowu::createOptionWidget<KisSketchOpOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidgetWithLodLimitations<KisSketchOpOptionWidget>());
     addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
     addPaintOpOption(kpowu::createOpacityOptionWidget());
     addPaintOpOption(kpowu::createOptionWidget<KisSizeOptionWidget>());

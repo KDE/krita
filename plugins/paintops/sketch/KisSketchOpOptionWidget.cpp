@@ -93,8 +93,3 @@ void KisSketchOpOptionWidget::readOptionSetting(const KisPropertiesConfiguration
     data.read(setting.data());
     m_d->model.optionData.set(data);
 }
-
-lager::reader<KisPaintopLodLimitations> KisSketchOpOptionWidget::lodLimitationsReader() const
-{
-    return m_d->model.optionData.map(&KisSketchOpOptionData::lodLimitations);
-}

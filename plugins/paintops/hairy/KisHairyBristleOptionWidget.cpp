@@ -93,8 +93,3 @@ void KisHairyBristleOptionWidget::readOptionSetting(const KisPropertiesConfigura
     data.read(setting.data());
     m_d->model.optionData.set(data);
 }
-
-lager::reader<KisPaintopLodLimitations> KisHairyBristleOptionWidget::lodLimitationsReader() const
-{
-    return m_d->model.optionData.map(&KisHairyBristleOptionData::lodLimitations);
-}

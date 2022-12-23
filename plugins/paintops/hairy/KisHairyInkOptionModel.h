@@ -22,7 +22,7 @@ public:
 
     LAGER_QT_CURSOR(bool, inkDepletionEnabled);
     LAGER_QT_CURSOR(int, inkAmount);
-    LAGER_QT_CURSOR(KisCubicCurve, inkDepletionCurve);
+    LAGER_QT_CURSOR(QString, inkDepletionCurve);
     LAGER_QT_CURSOR(bool, useSaturation);
     LAGER_QT_CURSOR(bool, useOpacity);
     LAGER_QT_CURSOR(bool, useWeights);

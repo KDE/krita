@@ -62,16 +62,15 @@ public:
     }
 public Q_SLOTS:
     void slotWidgetChanged() {
-        Q_EMIT sigWidgetChanged(m_curveWidget->curve());
+        Q_EMIT sigWidgetChanged(m_curveWidget->curve().toString());
     }
 
-    void slotPropertyChanged(KisCubicCurve curve) {
+    void slotPropertyChanged(const QString &curve) {
         m_curveWidget->setCurve(curve);
     }
 
 Q_SIGNALS:
-    // this signal was added only in Qt 5.15
-    void sigWidgetChanged(KisCubicCurve curve);
+    void sigWidgetChanged(const QString &curve);
 
 private:
     KisCurveWidget *m_curveWidget;
@@ -88,21 +87,21 @@ void connectControlCurve(KisCurveWidget *widget, QObject *source, const char *pr
     QMetaMethod signal = prop.notifySignal();
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterCount() >= 1);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterType(0) == QMetaType::type("KisCubicCurve"));
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterType(0) == QMetaType::type("QString"));
 
     ConnectCurveWidgetHelper *helper = new ConnectCurveWidgetHelper(widget);
 
     const QMetaObject* dstMeta = helper->metaObject();
 
     QMetaMethod updateSlot = dstMeta->method(
-                dstMeta->indexOfSlot("slotPropertyChanged(KisCubicCurve)"));
+                dstMeta->indexOfSlot("slotPropertyChanged(QString)"));
     QObject::connect(source, signal, helper, updateSlot);
 
-    helper->slotPropertyChanged(prop.read(source).value<KisCubicCurve>());
+    helper->slotPropertyChanged(prop.read(source).toString());
 
     if (prop.isWritable()) {
         QObject::connect(helper, &ConnectCurveWidgetHelper::sigWidgetChanged,
-                         source, [prop, source] (KisCubicCurve value) { prop.write(source, QVariant::fromValue(value)); });
+                         source, [prop, source] (const QString &value) { prop.write(source, value); });
     }
 }
 

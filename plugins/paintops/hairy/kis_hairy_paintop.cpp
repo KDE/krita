@@ -77,7 +77,7 @@ void KisHairyPaintOp::loadSettings()
     m_properties.inkAmount = m_hairyInkOption.inkAmount;
     //TODO: wait for the transfer function with variable size
 
-    m_properties.inkDepletionCurve = m_hairyInkOption.inkDepletionCurve.floatTransfer(m_hairyInkOption.inkAmount);
+    m_properties.inkDepletionCurve = KisCubicCurve(m_hairyInkOption.inkDepletionCurve).floatTransfer(m_hairyInkOption.inkAmount);
 
     m_properties.inkDepletionEnabled = m_hairyInkOption.inkDepletionEnabled;
     m_properties.useSaturation = m_hairyInkOption.useSaturation;

@@ -33,7 +33,7 @@ struct KisHairyInkOptionData : boost::equality_comparable<KisHairyInkOptionData>
     bool inkDepletionEnabled {false};
 
     int inkAmount {1024};
-    KisCubicCurve inkDepletionCurve {QList<QPointF>{{0.0, 0.0}, {1.0, 1.0}}};
+    QString inkDepletionCurve {DEFAULT_CURVE_STRING};
 
     bool useSaturation {false};
     bool useOpacity {true};

@@ -32,7 +32,7 @@ bool KisHairyInkOptionData::read(const KisPropertiesConfiguration *setting)
     bristleLengthWeight = setting->getInt(HAIRY_INK_BRISTLE_LENGTH_WEIGHT, 50);
     bristleInkAmountWeight = setting->getInt(HAIRY_INK_BRISTLE_INK_AMOUNT_WEIGHT, 50);
     inkDepletionWeight = setting->getInt(HAIRY_INK_DEPLETION_WEIGHT, 50);
-    inkDepletionCurve = setting->getCubicCurve(HAIRY_INK_DEPLETION_CURVE, QList<QPointF>{{0.0, 0.0}, {1.0, 1.0}});
+    inkDepletionCurve = setting->getCubicCurve(HAIRY_INK_DEPLETION_CURVE, KisCubicCurve()).toString();
     useSoakInk = setting->getBool(HAIRY_INK_SOAK, false);
 
     return true;
@@ -49,6 +49,6 @@ void KisHairyInkOptionData::write(KisPropertiesConfiguration *setting) const
     setting->setProperty(HAIRY_INK_BRISTLE_LENGTH_WEIGHT, bristleLengthWeight);
     setting->setProperty(HAIRY_INK_BRISTLE_INK_AMOUNT_WEIGHT, bristleInkAmountWeight);
     setting->setProperty(HAIRY_INK_DEPLETION_WEIGHT, inkDepletionWeight);
-    setting->setProperty(HAIRY_INK_DEPLETION_CURVE, QVariant::fromValue(inkDepletionCurve));
+    setting->setProperty(HAIRY_INK_DEPLETION_CURVE, QVariant::fromValue(KisCubicCurve(inkDepletionCurve)));
     setting->setProperty(HAIRY_INK_SOAK, useSoakInk);
 }

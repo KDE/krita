@@ -136,12 +136,6 @@ public:
     KisCubicCurve curve();
 
     /**
-     * Replace the current curve with a curve specified by the curve defined by the control
-     * points in @p inlist.
-     */
-    void setCurve(KisCubicCurve inlist);
-
-    /**
      * Connect/disconnect external spinboxes to the curve
      * @p inMin / @p inMax - is the range for input values
      * @p outMin / @p outMax - is the range for output values
@@ -155,6 +149,13 @@ public:
      * so the user can move this point anywhere in a moment
      */
     void addPointInTheMiddle();
+
+public Q_SLOTS:
+    /**
+     * Replace the current curve with a curve specified by the curve defined by the control
+     * points in @p inlist.
+     */
+    void setCurve(KisCubicCurve inlist);
 
 private:
 

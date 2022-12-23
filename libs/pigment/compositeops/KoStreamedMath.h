@@ -15,7 +15,13 @@
 
 #include <cstdint>
 #include <iostream>
+#include <type_traits>
+#include <xsimd_extensions/xsimd.hpp>
+
+#if XSIMD_VERSION_MAJOR < 10
 #include <KoRgbaInterleavers.h>
+#endif
+
 #include <KoAlwaysInline.h>
 #include <KoColorSpaceMaths.h>
 #include <KoCompositeOp.h>
@@ -609,9 +615,18 @@ struct PixelWrapper<quint16, _impl> {
         //    float rrgg;
         //    float bbaa;
         // }
+#if XSIMD_VERSION_MAJOR < 10
         uint_v pixelsC1C2;
         uint_v pixelsC3Alpha;
         KoRgbaInterleavers<16>::deinterleave(src, pixelsC1C2, pixelsC3Alpha);
+#else
+        const auto *srcPtr = static_cast<const typename uint_v::value_type *>(src);
+        const auto idx1 = xsimd::detail::make_sequence_as_batch<int_v>() * 2; // stride == 2
+        const auto idx2 = idx1 + 1; // offset 1 == 2nd members
+
+        const auto pixelsC1C2 = uint_v::gather(srcPtr, idx1);
+        const auto pixelsC3Alpha = uint_v::gather(srcPtr, idx2);
+#endif
 
         dst_c1 = xsimd::to_float(xsimd::bitwise_cast<int_v>(pixelsC1C2 & mask)); // r
         dst_c2 = xsimd::to_float(xsimd::bitwise_cast<int_v>((pixelsC1C2 >> 16) & mask)); // g
@@ -635,7 +650,17 @@ struct PixelWrapper<quint16, _impl> {
         const auto c1c2 = ((v2 & mask) << 16) | (v1 & mask);
         const auto c3ca = ((v4 & mask) << 16) | (v3 & mask);
 
+#if XSIMD_VERSION_MAJOR < 10
         KoRgbaInterleavers<16>::interleave(dst, c1c2, c3ca);
+#else
+        auto dstPtr = reinterpret_cast<typename int_v::value_type *>(dst);
+
+        const auto idx1 = xsimd::detail::make_sequence_as_batch<int_v>() * 2;
+        const auto idx2 = idx1 + 1;
+
+        c1c2.scatter(dstPtr, idx1);
+        c3ca.scatter(dstPtr, idx2);
+#endif
     }
 
     ALWAYS_INLINE
@@ -776,14 +801,41 @@ struct PixelWrapper<float, _impl> {
     // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
     ALWAYS_INLINE void read(const void *src, float_v &dst_c1, float_v &dst_c2, float_v &dst_c3, float_v &dst_alpha)
     {
+#if XSIMD_VERSION_MAJOR < 10
         KoRgbaInterleavers<32>::deinterleave(src, dst_c1, dst_c2, dst_c3, dst_alpha);
+#else
+        const auto srcPtr = reinterpret_cast<const typename float_v::value_type *>(src);
+        const auto idx1 = xsimd::detail::make_sequence_as_batch<int_v>() * 4; // stride == 4
+        const auto idx2 = idx1 + 1;
+        const auto idx3 = idx1 + 2;
+        const auto idx4 = idx1 + 3;
+
+        dst_c1 = float_v::gather(srcPtr, idx1);
+        dst_c2 = float_v::gather(srcPtr, idx2);
+        dst_c3 = float_v::gather(srcPtr, idx3);
+        dst_alpha = float_v::gather(srcPtr, idx4);
+#endif
     }
 
     ALWAYS_INLINE void
     // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
     write(void *dst, const float_v &src_c1, const float_v &src_c2, const float_v &src_c3, const float_v &src_alpha)
     {
+#if XSIMD_VERSION_MAJOR < 10
         KoRgbaInterleavers<32>::interleave(dst, src_c1, src_c2, src_c3, src_alpha);
+#else
+        auto dstPtr = reinterpret_cast<typename float_v::value_type *>(dst);
+
+        const auto idx1 = xsimd::detail::make_sequence_as_batch<int_v>() * 4; // stride == 4
+        const auto idx2 = idx1 + 1;
+        const auto idx3 = idx1 + 2;
+        const auto idx4 = idx1 + 3;
+
+        src_c1.scatter(dstPtr, idx1);
+        src_c2.scatter(dstPtr, idx2);
+        src_c3.scatter(dstPtr, idx3);
+        src_alpha.scatter(dstPtr, idx4);
+#endif
     }
 
     ALWAYS_INLINE

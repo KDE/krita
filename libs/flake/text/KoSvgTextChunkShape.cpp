@@ -692,7 +692,9 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
             // feature.
             QString id = SvgStyleWriter::embedShape(s->textPath, context);
             // inkscape can only read 'xlink:href'
-            context.shapeWriter().addAttribute("xlink:href", "#" + id);
+            if (!id.isEmpty()) {
+                context.shapeWriter().addAttribute("xlink:href", "#" + id);
+            }
         }
         if (s->textPathInfo.startOffset != 0) {
             QString offset = KisDomUtils::toString(s->textPathInfo.startOffset);

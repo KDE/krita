@@ -202,12 +202,16 @@ void embedShapes(const QList<KoShape*> &shapes, KoXmlWriter &outWriter)
     outWriter.addCompleteElement(&buffer);
 }
 
-QString SvgStyleWriter::embedShape(KoShape *shape, SvgSavingContext &context)
+QString SvgStyleWriter::embedShape(const KoShape *shape, SvgSavingContext &context)
 {
     QList<KoShape *> shapes;
+    KoShape* clonedShape = shape->cloneShape();
+    if (!clonedShape) {
+        return QString();
+    }
     const QString uid = context.createUID("path");
-    shapes.append(shape);
-    shape->setName(uid);
+    clonedShape->setName(uid);
+    shapes.append(clonedShape);
     embedShapes(shapes, context.styleWriter());
     return uid;
 }

@@ -21,6 +21,7 @@
 
 #include <KisMultiSensorsSelector2.h>
 #include <KisDynamicSensorFactoryRegistry.h>
+#include <KisCurveWidgetConnectionHelper.h>
 
 struct KisCurveOptionWidget2::Private
 {
@@ -146,15 +147,7 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> o
                     m_curveOptionWidget->strengthSlider->setValue(value);
                 }));
 
-    m_d->model.LAGER_QT(activeCurve).bind(
-                std::bind(&KisCurveWidget::setCurve,
-                                    m_curveOptionWidget->curveWidget,
-                                    std::placeholders::_1));
-
-    connect(m_curveOptionWidget->curveWidget,
-            &KisCurveWidget::curveChanged,
-            this,
-            &KisCurveOptionWidget2::slotCurveChanged);
+    connectControl(m_curveOptionWidget->curveWidget, &m_d->model, "activeCurve");
 
     m_d->model.LAGER_QT(useCurve).bind(std::bind(&KisCurveOptionWidget2::setCurveWidgetsEnabled, this, std::placeholders::_1));
     connectControl(m_curveOptionWidget->checkBoxUseCurve, &m_d->model, "useCurve");
@@ -215,12 +208,6 @@ void KisCurveOptionWidget2::setCurveWidgetsEnabled(bool value)
 QWidget* KisCurveOptionWidget2::curveWidget()
 {
     return m_widget;
-}
-
-void KisCurveOptionWidget2::slotCurveChanged(const KisCubicCurve &curve)
-{
-    const QString string = curve.toString();
-    m_d->model.setactiveCurve(string);
 }
 
 void KisCurveOptionWidget2::updateSensorCurveLabels(const QString &sensorId, const int length)

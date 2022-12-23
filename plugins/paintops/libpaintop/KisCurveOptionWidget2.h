@@ -62,8 +62,6 @@ protected:
     QWidget* curveWidget();
 
 protected Q_SLOTS:
-    void slotCurveChanged(const KisCubicCurve &curve);
-
     void updateSensorCurveLabels(const QString &sensorId, const int length);
     void updateThemedIcons();
 

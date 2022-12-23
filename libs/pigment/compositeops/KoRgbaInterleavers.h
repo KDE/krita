@@ -9,6 +9,10 @@
 
 #include <xsimd_extensions/xsimd.hpp>
 
+#if XSIMD_VERSION_MAJOR >= 10
+#error "The interleavers use per-lane zipping semantics, which are not compatible with xsimd 10"
+#endif
+
 using namespace xsimd;
 
 template<typename T, size_t S>

@@ -45,7 +45,7 @@ public:
     lager::reader<KisBrushModel::BrushData> bakedBrushData() const;
 
 protected:
-    lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const override;
+    OptionalLodLimitationsReader lodLimitationsReader() const override;
 
 private:
 

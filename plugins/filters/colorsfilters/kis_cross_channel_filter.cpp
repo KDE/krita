@@ -200,7 +200,8 @@ KisPropertiesConfigurationSP KisCrossChannelConfigWidget::configuration() const
 
 void KisCrossChannelConfigWidget::updateChannelControls()
 {
-    m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, 0, 100, -100, 100);
+    m_curveControlsManager.reset(new KisCurveWidgetControlsManagerInt(m_page->curveWidget,
+                                                                      m_page->intIn, m_page->intOut, 0, 100, -100, 100));
 
     const int index = m_page->cmbDriverChannel->findData(m_driverChannels[m_activeVChannel]);
     m_page->cmbDriverChannel->setCurrentIndex(index);

@@ -22,7 +22,7 @@ public:
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
-    lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const override;
+    OptionalLodLimitationsReader lodLimitationsReader() const override;
 
 private:
     struct Private;

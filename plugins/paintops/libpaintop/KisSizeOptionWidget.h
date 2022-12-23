@@ -19,7 +19,7 @@ public:
     KisSizeOptionWidget(lager::cursor<KisSizeOptionData> optionData, KisPaintOpOption::PaintopCategory categoryOverride);
     ~KisSizeOptionWidget();
 
-    lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const;
+    OptionalLodLimitationsReader lodLimitationsReader() const override;
 
 private:
     struct Private;

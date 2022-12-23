@@ -6,6 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "KisCurveOption2.h"
+#include "KisCurveOptionData.h"
 #include "kis_algebra_2d.h"
 
 #include <sensors2/KisDynamicSensors2.h>
@@ -34,22 +35,24 @@ std::vector<std::unique_ptr<KisDynamicSensor2>> generateSensors(const KisCurveOp
         commonCurve = KisCubicCurve(data.commonCurve);
     }
 
-    addSensor<KisDynamicSensorPressure2>(result, data.sensorPressure, commonCurve);
-    addSensor<KisDynamicSensorPressureIn2>(result, data.sensorPressureIn, commonCurve);
-    addSensor<KisDynamicSensorTangentialPressure2>(result, data.sensorTangentialPressure, commonCurve);
-    addSensor<KisDynamicSensorDrawingAngle2>(result, data.sensorDrawingAngle, commonCurve);
-    addSensor<KisDynamicSensorXTilt2>(result, data.sensorXTilt, commonCurve);
-    addSensor<KisDynamicSensorYTilt2>(result, data.sensorYTilt, commonCurve);
-    addSensor<KisDynamicSensorTiltDirection2>(result, data.sensorTiltDirection, commonCurve);
-    addSensor<KisDynamicSensorTiltElevation2>(result, data.sensorTiltElevation, commonCurve);
-    addSensor<KisDynamicSensorRotation2>(result, data.sensorRotation, commonCurve);
-    addSensor<KisDynamicSensorFuzzyPerDab2>(result, data.sensorFuzzyPerDab, commonCurve);
-    addSensor<KisDynamicSensorFuzzyPerStroke2>(result, data.sensorFuzzyPerStroke, commonCurve, data.id.id());
-    addSensor<KisDynamicSensorSpeed2>(result, data.sensorSpeed, commonCurve);
-    addSensor<KisDynamicSensorFade2>(result, data.sensorFade, commonCurve);
-    addSensor<KisDynamicSensorDistance2>(result, data.sensorDistance, commonCurve);
-    addSensor<KisDynamicSensorTime2>(result, data.sensorTime, commonCurve);
-    addSensor<KisDynamicSensorPerspective2>(result, data.sensorPerspective, commonCurve);
+    const KisKritaSensorData &sensorStruct = data.sensorStruct();
+
+    addSensor<KisDynamicSensorPressure2>(result, sensorStruct.sensorPressure, commonCurve);
+    addSensor<KisDynamicSensorPressureIn2>(result, sensorStruct.sensorPressureIn, commonCurve);
+    addSensor<KisDynamicSensorTangentialPressure2>(result, sensorStruct.sensorTangentialPressure, commonCurve);
+    addSensor<KisDynamicSensorDrawingAngle2>(result, sensorStruct.sensorDrawingAngle, commonCurve);
+    addSensor<KisDynamicSensorXTilt2>(result, sensorStruct.sensorXTilt, commonCurve);
+    addSensor<KisDynamicSensorYTilt2>(result, sensorStruct.sensorYTilt, commonCurve);
+    addSensor<KisDynamicSensorTiltDirection2>(result, sensorStruct.sensorTiltDirection, commonCurve);
+    addSensor<KisDynamicSensorTiltElevation2>(result, sensorStruct.sensorTiltElevation, commonCurve);
+    addSensor<KisDynamicSensorRotation2>(result, sensorStruct.sensorRotation, commonCurve);
+    addSensor<KisDynamicSensorFuzzyPerDab2>(result, sensorStruct.sensorFuzzyPerDab, commonCurve);
+    addSensor<KisDynamicSensorFuzzyPerStroke2>(result, sensorStruct.sensorFuzzyPerStroke, commonCurve, data.id.id());
+    addSensor<KisDynamicSensorSpeed2>(result, sensorStruct.sensorSpeed, commonCurve);
+    addSensor<KisDynamicSensorFade2>(result, sensorStruct.sensorFade, commonCurve);
+    addSensor<KisDynamicSensorDistance2>(result, sensorStruct.sensorDistance, commonCurve);
+    addSensor<KisDynamicSensorTime2>(result, sensorStruct.sensorTime, commonCurve);
+    addSensor<KisDynamicSensorPerspective2>(result, sensorStruct.sensorPerspective, commonCurve);
 
     return result;
 }
@@ -89,7 +92,6 @@ KisCurveOption2::KisCurveOption2(const KisCurveOptionData &data)
     : m_isChecked(data.isChecked)
     , m_useCurve(data.useCurve)
     , m_curveMode(data.curveMode)
-    , m_separateCurveValue(data.separateCurveValue)
     , m_strengthValue(data.strengthValue)
     , m_strengthMinValue(data.strengthMinValue)
     , m_strengthMaxValue(data.strengthMaxValue)

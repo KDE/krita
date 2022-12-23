@@ -12,7 +12,7 @@ class PAINTOP_EXPORT KisDynamicSensorFactoryDistance : public KisSimpleDynamicSe
 {
 public:
     KisDynamicSensorFactoryDistance();
-    QWidget* createConfigWidget(lager::cursor<KisCurveOptionData> data, QWidget*parent) override;
+    QWidget* createConfigWidget(lager::cursor<KisCurveOptionDataCommon> data, QWidget*parent) override;
 
     int maximumValue(int length) override;
     QString maximumLabel(int length) override;

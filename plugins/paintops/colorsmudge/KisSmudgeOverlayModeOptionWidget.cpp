@@ -89,7 +89,7 @@ void KisSmudgeOverlayModeOptionWidget::readOptionSetting(const KisPropertiesConf
 
 }
 
-lager::reader<KisPaintopLodLimitations> KisSmudgeOverlayModeOptionWidget::lodLimitationsReader() const
+KisPaintOpOption::OptionalLodLimitationsReader KisSmudgeOverlayModeOptionWidget::lodLimitationsReader() const
 {
     return m_d->lodLimitations;
 }

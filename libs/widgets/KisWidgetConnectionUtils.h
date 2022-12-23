@@ -66,9 +66,29 @@ struct FromSpacingState {
     }
 };
 
+template <typename T>
+struct SpinBoxState {
+    T value = T{};
+    T min = T{};
+    T max = T{};
+    bool enabled = true;
+};
+
+struct ToSpinBoxState {
+    template <typename T>
+    SpinBoxState<std::decay_t<T>> operator()(T &&value, T &&min, T &&max, bool enabled) {
+        return {std::forward<T>(value), std::forward<T>(min), std::forward<T>(max), enabled};
+    }
+};
+
+using IntSpinBoxState = SpinBoxState<int>;
+using DoubleSpinBoxState = SpinBoxState<qreal>;
+
 void KRITAWIDGETS_EXPORT connectControl(QAbstractButton *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QSpinBox *spinBox, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QDoubleSpinBox *spinBox, QObject *source, const char *property);
+void KRITAWIDGETS_EXPORT connectControlState(QDoubleSpinBox *spinBox, QObject *source, const char *readStateProperty, const char *writeProperty);
+void KRITAWIDGETS_EXPORT connectControlState(QSpinBox *spinBox, QObject *source, const char *readStateProperty, const char *writeProperty);
 void KRITAWIDGETS_EXPORT connectControl(KisMultipliersDoubleSliderSpinBox *spinBox, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QButtonGroup *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QComboBox *button, QObject *source, const char *property);
@@ -80,17 +100,21 @@ void KRITAWIDGETS_EXPORT connectControl(KisSpacingSelectionWidget *widget, QObje
 void KRITAWIDGETS_EXPORT connectControl(KisAngleSelector *widget, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QLineEdit *widget, QObject *source, const char *property);
 
-};
+} // namespace KisWidgetConnectionUtils
 
 using KisWidgetConnectionUtils::CheckBoxState;
 using KisWidgetConnectionUtils::ButtonGroupState;
 using KisWidgetConnectionUtils::ComboBoxState;
 using KisWidgetConnectionUtils::SpacingState;
+using KisWidgetConnectionUtils::DoubleSpinBoxState;
+using KisWidgetConnectionUtils::IntSpinBoxState;
 
 Q_DECLARE_METATYPE(CheckBoxState)
 Q_DECLARE_METATYPE(ButtonGroupState)
 Q_DECLARE_METATYPE(ComboBoxState)
 Q_DECLARE_METATYPE(SpacingState)
+Q_DECLARE_METATYPE(DoubleSpinBoxState)
+Q_DECLARE_METATYPE(IntSpinBoxState)
 
 
 #endif // KISWIDGETCONNECTIONUTILS_H

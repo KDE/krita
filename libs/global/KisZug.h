@@ -12,6 +12,7 @@
 #include <zug/transducer/map.hpp>
 #include <zug/reducing/last.hpp>
 #include <lager/lenses.hpp>
+#include <lager/reader.hpp>
 
 /**
  * kiszug is a namespace extending the functionality of
@@ -82,6 +83,31 @@ constexpr auto foreach_arg =
             return std::make_tuple(zug::compat::invoke(to_functor(mapping), ZUG_FWD(t))...);
         });
     };
+
+/**
+ * Fold all valid optional cursors from a set into one by using \p func
+ *
+ * Example:
+ *
+ * std::optional<lager::reader<int>> brushSize1 = ...;
+ * std::optional<lager::reader<int>> brushSize2 = ...;
+ *
+ * std::optional<lager::reader<int>> maxSize =
+ *     fold_optional_cursors(&std::max, brushSize1, brushSize2);
+ *
+ * The resulting reader 'maxSize' will hold the maximum value of the two
+ * brushes, or nothing if the source readers do not exist.
+ */
+template <typename Func, typename... Cursors,
+         typename FirstCursor = typename kismpl::first_type_t<std::remove_reference_t<Cursors>...>::value_type,
+         typename T = typename FirstCursor::value_type>
+std::optional<lager::reader<T>> fold_optional_cursors(const Func &func, Cursors&& ...cursors) {
+    auto fold_func = [func] (const auto &lhs, const auto &rhs) {
+        return lager::with(lhs, rhs).map(func);
+    };
+
+    return kismpl::fold_optional(fold_func, cursors...);
+}
 
 namespace lenses {
 template <typename T>

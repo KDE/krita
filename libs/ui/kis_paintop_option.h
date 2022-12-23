@@ -39,6 +39,8 @@ class KRITAUI_EXPORT KisPaintOpOption : public QObject
     Q_OBJECT
 public:
 
+    using OptionalLodLimitationsReader = std::optional<lager::reader<KisPaintopLodLimitations>>;
+
     enum PaintopCategory {
         GENERAL,
         COLOR,
@@ -82,10 +84,10 @@ public:
     QWidget *configurationPage() const;
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
-    lager::reader<KisPaintopLodLimitations> effectiveLodLimitations() const;
+    OptionalLodLimitationsReader effectiveLodLimitations() const;
 
 protected:
-    virtual lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const;
+    virtual OptionalLodLimitationsReader lodLimitationsReader() const;
     void setConfigurationPage(QWidget *page);
 
     KisResourcesInterfaceSP resourcesInterface() const;

@@ -12,6 +12,29 @@
 
 #include "KisDrawingAngleSensorModel.h"
 #include "KisWidgetConnectionUtils.h"
+#include "KisKritaSensorPack.h"
+
+namespace {
+    auto safeDereferenceDrawingAngleSensor = lager::lenses::getset(
+    [](const KisCurveOptionDataCommon &data) -> KisDrawingAngleSensorData {
+        const KisKritaSensorPack *pack = dynamic_cast<const KisKritaSensorPack*>(data.sensorData.constData());
+        if (pack) {
+            return pack->constSensorsStruct().sensorDrawingAngle;
+        } else {
+            qWarning() << "safeDereferenceDrawingAngleSensor(get): failed to get a Krita sensor data";
+            return KisDrawingAngleSensorData();
+        }
+    },
+    [](KisCurveOptionDataCommon data, KisDrawingAngleSensorData sensor) -> KisCurveOptionDataCommon {
+        KisKritaSensorPack *pack = dynamic_cast<KisKritaSensorPack*>(data.sensorData.data());
+        if (pack) {
+            pack->sensorsStruct().sensorDrawingAngle = sensor;
+        } else {
+            qWarning() << "safeDereferenceDrawingAngleSensor(set): failed to get a Krita sensor data";
+        }
+        return data;
+    });
+}
 
 KisDynamicSensorFactoryDrawingAngle::KisDynamicSensorFactoryDrawingAngle()
     : KisSimpleDynamicSensorFactory(
@@ -22,12 +45,12 @@ KisDynamicSensorFactoryDrawingAngle::KisDynamicSensorFactoryDrawingAngle()
 
 }
 
-QWidget *KisDynamicSensorFactoryDrawingAngle::createConfigWidget(lager::cursor<KisCurveOptionData> data, QWidget *parent)
+QWidget *KisDynamicSensorFactoryDrawingAngle::createConfigWidget(lager::cursor<KisCurveOptionDataCommon> data, QWidget *parent)
 {
     QWidget *widget = new QWidget(parent);
 
     KisDrawingAngleSensorModel *model =
-        new KisDrawingAngleSensorModel(data[&KisCurveOptionData::sensorDrawingAngle], widget);
+        new KisDrawingAngleSensorModel(data.zoom(safeDereferenceDrawingAngleSensor), widget);
 
     using namespace KisWidgetConnectionUtils;
 

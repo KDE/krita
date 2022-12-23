@@ -246,6 +246,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_utility_title_bar.cpp
     widgets/kis_curve_widget.cpp
     widgets/KisCurveWidgetConnectionHelper.cpp
+    widgets/KisCurveWidgetControlsManager.cpp
     widgets/kis_custom_image_widget.cc
     widgets/kis_image_from_clipboard_widget.cpp
     widgets/kis_double_widget.cc

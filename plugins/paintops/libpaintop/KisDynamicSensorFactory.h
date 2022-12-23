@@ -21,7 +21,7 @@ public:
     virtual QString minimumLabel() = 0;
     virtual QString maximumLabel(int length) = 0;
     virtual QString valueSuffix() = 0;
-    virtual QWidget* createConfigWidget(lager::cursor<KisCurveOptionData>, QWidget*) = 0;
+    virtual QWidget* createConfigWidget(lager::cursor<KisCurveOptionDataCommon>, QWidget*) = 0;
 };
 
 #endif // KISDYNAMICSENSORFACTORY_H

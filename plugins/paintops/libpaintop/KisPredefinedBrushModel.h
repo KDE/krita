@@ -34,8 +34,6 @@ public:
     lager::constant<bool> m_supportsHSLBrushTips;
     lager::cursor<qreal> m_commonBrushSizeData;
 
-    lager::cursor<std::tuple<CommonData, PredefinedBrushData>> m_effectiveBrushData;
-    lager::cursor<CommonData> m_effectiveCommonData;
     lager::cursor<PredefinedBrushData> m_effectivePredefinedData;
 
 
@@ -60,7 +58,7 @@ public:
     LAGER_QT_READER(QString, brushDetails);
     LAGER_QT_READER(bool, lightnessModeEnabled);
 
-    std::tuple<CommonData, PredefinedBrushData> bakedOptionData() const;
+    PredefinedBrushData bakedOptionData() const;
 
     static enumBrushApplication effectiveBrushApplication(PredefinedBrushData predefinedData, bool supportsHSLBrushTips);
     static qreal effectiveBrushSize(PredefinedBrushData predefinedData);

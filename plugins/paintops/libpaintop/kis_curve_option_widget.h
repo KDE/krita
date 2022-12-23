@@ -15,7 +15,9 @@ class Ui_WdgCurveOption;
 class KisCurveOption;
 class QComboBox;
 
+#include <KisCurveWidgetControlsManager.h>
 #include <kis_dynamic_sensor.h>
+
 
 class PAINTOP_EXPORT KisCurveOptionWidget : public KisPaintOpOption
 {
@@ -46,7 +48,7 @@ protected Q_SLOTS:
     void slotModified();
     void slotUseSameCurveChanged();
 
-    virtual void updateSensorCurveLabels(KisDynamicSensorSP sensor) const;
+    virtual void updateSensorCurveLabels(KisDynamicSensorSP sensor);
     void updateCurve(KisDynamicSensorSP sensor);
     virtual void updateValues();
     void updateMode();
@@ -69,6 +71,7 @@ protected Q_SLOTS:
 protected:
     QWidget* m_widget {nullptr};
     Ui_WdgCurveOption* m_curveOptionWidget {nullptr};
+    QScopedPointer<KisCurveWidgetControlsManagerInt> m_curveControlsManager;
     QComboBox* m_curveMode {nullptr};
     KisCurveOption* m_curveOption {nullptr};
     qreal strengthToCurveOptionValueScale {0.0};

@@ -90,9 +90,9 @@ void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setti
     using namespace KisBrushModel;
 
     BrushData data = m_d->brushData.get();
+
     data.autoBrush = m_d->autoBrushModel.bakedOptionData();
-    std::tie(data.common, data.predefinedBrush) =
-        m_d->predefinedBrushModel.bakedOptionData();
+    data.predefinedBrush = m_d->predefinedBrushModel.bakedOptionData();
 
     data.write(settings.data());
 
@@ -136,14 +136,15 @@ lager::reader<BrushData> KisBrushOptionWidget::bakedBrushData() const
             .map([this] (BrushData data, qreal commonBrushSize) {
 
         Q_UNUSED(commonBrushSize); // we keep it as a dep only for updates!
+
         data.autoBrush = m_d->autoBrushModel.bakedOptionData();
-        std::tie(data.common, data.predefinedBrush) =
-            m_d->predefinedBrushModel.bakedOptionData();
+        data.predefinedBrush = m_d->predefinedBrushModel.bakedOptionData();
+
         return data;
     });
 }
 
-lager::reader<KisPaintopLodLimitations> KisBrushOptionWidget::lodLimitationsReader() const
+KisPaintOpOption::OptionalLodLimitationsReader KisBrushOptionWidget::lodLimitationsReader() const
 {
     return m_d->brushData.map(&KisBrushModel::brushLodLimitations);
 }

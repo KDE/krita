@@ -5,18 +5,21 @@ include_directories(${LIBMYPAINT_INCLUDE_DIR})
 link_directories(${LIBMYPAINT_LIBRARIES})
 
 set(kritamypaintop_SOURCES
+    MyPaintSensorPack.cpp
+    MyPaintCurveOptionData.cpp
+    MyPaintCurveOptionWidget2.cpp
+    MyPaintCurveRangeModel.cpp
+    MyPaintCurveOptionRangeControlsStrategy.cpp
     MyPaintPaintOp.cpp
-    MyPaintPaintOpOption.cpp
+    MyPaintBasicOptionData.cpp
+    MyPaintBasicOptionModel.cpp
+    MyPaintBasicOptionWidget.cpp
     MyPaintPaintOpSettings.cpp
     MyPaintPaintOpSettingsWidget.cpp
     MyPaintSurface.cpp
     MyPaintPaintOpPreset.cpp
     MyPaintPaintOpFactory.cpp
-    MyPaintCurveOptionWidget.cpp
-    MyPaintBrushOption.cpp
-    MyPaintCurveOption.cpp
-    ../libpaintop/kis_multi_sensors_selector.cpp
-    ../libpaintop/kis_multi_sensors_model_p.cpp
+    MyPaintStandardOptionData.cpp
 )
 
 ki18n_wrap_ui(kritamypaintop_SOURCES wdgmypaintoptions.ui wdgmypaintcurveoption.ui)

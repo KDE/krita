@@ -45,7 +45,7 @@ QString KisSimpleDynamicSensorFactory::valueSuffix()
     return m_valueSuffix;
 }
 
-QWidget *KisSimpleDynamicSensorFactory::createConfigWidget(lager::cursor<KisCurveOptionData>, QWidget *)
+QWidget *KisSimpleDynamicSensorFactory::createConfigWidget(lager::cursor<KisCurveOptionDataCommon>, QWidget *)
 {
     return nullptr;
 }

@@ -9,6 +9,7 @@
 
 #include <tuple>
 #include <utility>
+#include <optional>
 
 /**
  * 'kismpl' stands for kis-meta-program-library
@@ -137,7 +138,44 @@ struct first_type
 template <typename... T>
 using first_type_t = typename first_type<T...>::type;
 
+namespace detail {
+template <typename Fun, typename T>
+struct fold_optional_impl {
+    std::optional<T> fold(const std::optional<T> &first) {
+        return first;
+    }
 
+    std::optional<T> fold(const std::optional<T> &first, const std::optional<T> &second) {
+        if (first && second) {
+            return m_fun(*first, *second);
+        } else if (first) {
+            return first;
+        } else {
+            return second;
+        }
+    }
+
+    template <typename... Rest>
+    std::optional<T> fold(const std::optional<T> &first, std::optional<T> const &second, const std::optional<Rest> &...rest) {
+        return fold(fold(first, second), rest...);
+    }
+
+    const Fun m_fun;
+};
+
+} // namespace detail
+
+/**
+ * Folds all the valid optional values using the binary function \p fun into one
+ * optional value. When none optional values are present, an empty optional of the
+ * specified type is returned.
+ */
+template <typename Fun, typename... Args,
+         typename T = typename first_type_t<std::remove_reference_t<Args>...>::value_type>
+std::optional<T> fold_optional(Fun &&fun, Args &&...args) {
+    return detail::fold_optional_impl<Fun, T>{std::forward<Fun>(fun)}.fold(args...);
 }
+
+} // namespace kismpl
 
 #endif // KISMPL_H

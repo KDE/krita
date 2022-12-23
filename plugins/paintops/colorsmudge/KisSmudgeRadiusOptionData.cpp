@@ -9,10 +9,10 @@
 KisSmudgeRadiusOptionData::KisSmudgeRadiusOptionData()
     : KisCurveOptionData(
           KoID("SmudgeRadius", i18n("Smudge Radius")),
-          true, false, false,
+          true, false,
           0.0, 3.0)
 {
-    valueFixUpReadCallback = [] (KisCurveOptionData *data, const KisPropertiesConfiguration *setting) {
+    valueFixUpReadCallback = [] (KisCurveOptionDataCommon *data, const KisPropertiesConfiguration *setting) {
         const int smudgeRadiusVersion = setting->getInt("SmudgeRadiusVersion", 1);
         if (smudgeRadiusVersion < 2) {
             data->strengthValue = data->strengthValue / 100.0;

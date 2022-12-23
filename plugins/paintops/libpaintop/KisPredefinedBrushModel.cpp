@@ -68,26 +68,34 @@ QString calcBrushDetails(PredefinedBrushData data)
 }
 
 auto effectiveResourceData = lager::lenses::getset(
-    [](const std::tuple<CommonData, PredefinedBrushData> &packedData) {
-        if (std::get<1>(packedData).resourceSignature != KoResourceSignature()) {
-            return packedData;
+    [](const PredefinedBrushData &predefinedDataArg) {
+        if (predefinedDataArg.resourceSignature != KoResourceSignature()) {
+            return predefinedDataArg;
         }
 
         CommonData commonData;
-        PredefinedBrushData predefinedData;
-        std::tie(commonData, predefinedData) = packedData;
+
+        /// NOTE: we cannot just pass the data by value because of the
+        /// bug in lager: https://github.com/arximboldi/lager/issues/160
+        PredefinedBrushData predefinedData = predefinedDataArg;
 
         auto source = KisGlobalResourcesInterface::instance()->source<KisBrush>(ResourceType::Brushes);
 
         KisBrushSP fallbackResource = source.fallbackResource();
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(fallbackResource, packedData);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(fallbackResource, predefinedData);
 
         KisPredefinedBrushFactory::loadFromBrushResource(commonData, predefinedData, fallbackResource);
 
-        return std::make_tuple(commonData, predefinedData);
+        /// NOTE: we discard `commonData` returned from the loaded brush, because
+        /// we expect spacing and size information to be shared between auto and
+        /// predefined brushes. If the user wants to load the settings embedded
+        /// into the brush itself he/she should reset it explicitly via the GUI
+        /// controls.
+
+        return predefinedData;
     },
-    [](const std::tuple<CommonData, PredefinedBrushData>&,
-       const std::tuple<CommonData, PredefinedBrushData> &y) {
+    [](const PredefinedBrushData&,
+       const PredefinedBrushData &y) {
 
         return y;
     });
@@ -103,10 +111,7 @@ KisPredefinedBrushModel::KisPredefinedBrushModel(lager::cursor<CommonData> commo
       m_predefinedBrushData(predefinedBrushData),
       m_supportsHSLBrushTips(supportsHSLBrushTips),
       m_commonBrushSizeData(commonBrushSizeData),
-      m_effectiveBrushData(lager::with(m_commonData, m_predefinedBrushData)
-                           .zoom(effectiveResourceData)),
-      m_effectiveCommonData(m_effectiveBrushData.zoom(lager::lenses::first)),
-      m_effectivePredefinedData(m_effectiveBrushData.zoom(lager::lenses::second)),
+      m_effectivePredefinedData(m_predefinedBrushData.zoom(effectiveResourceData)),
       LAGER_QT(resourceSignature) {m_effectivePredefinedData[&PredefinedBrushData::resourceSignature]},
       LAGER_QT(baseSize) {m_effectivePredefinedData[&PredefinedBrushData::baseSize]},
       LAGER_QT(brushSize) {m_commonBrushSizeData},
@@ -122,11 +127,11 @@ KisPredefinedBrushModel::KisPredefinedBrushModel(lager::cursor<CommonData> commo
       LAGER_QT(contrastAdjustment) {m_effectivePredefinedData[&PredefinedBrushData::contrastAdjustment]
                   .xform(kiszug::map_mupliply<qreal>(100.0) | kiszug::map_round,
                          kiszug::map_static_cast<qreal> | kiszug::map_mupliply<qreal>(0.01))},
-      LAGER_QT(angle) {m_effectiveCommonData[&CommonData::angle]
+      LAGER_QT(angle) {m_commonData[&CommonData::angle]
                   .zoom(kiszug::lenses::scale<qreal>(180.0 / M_PI))},
-      LAGER_QT(spacing) {m_effectiveCommonData[&CommonData::spacing]},
-      LAGER_QT(useAutoSpacing) {m_effectiveCommonData[&CommonData::useAutoSpacing]},
-      LAGER_QT(autoSpacingCoeff) {m_effectiveCommonData[&CommonData::autoSpacingCoeff]},
+      LAGER_QT(spacing) {m_commonData[&CommonData::spacing]},
+      LAGER_QT(useAutoSpacing) {m_commonData[&CommonData::useAutoSpacing]},
+      LAGER_QT(autoSpacingCoeff) {m_commonData[&CommonData::autoSpacingCoeff]},
       LAGER_QT(aggregatedSpacing) {lager::with(LAGER_QT(spacing),
                                                LAGER_QT(useAutoSpacing),
                                                LAGER_QT(autoSpacingCoeff))
@@ -149,7 +154,7 @@ KisPredefinedBrushModel::KisPredefinedBrushModel(lager::cursor<CommonData> commo
 }
 
 
-std::tuple<CommonData, PredefinedBrushData> KisPredefinedBrushModel::bakedOptionData() const
+PredefinedBrushData KisPredefinedBrushModel::bakedOptionData() const
 {
     PredefinedBrushData data = m_effectivePredefinedData.get();
     data.application =
@@ -157,7 +162,7 @@ std::tuple<CommonData, PredefinedBrushData> KisPredefinedBrushModel::bakedOption
             LAGER_QT(applicationSwitchState)->currentIndex);
     data.scale = m_commonBrushSizeData.get() / data.baseSize.width();
 
-    return std::make_tuple(m_effectiveCommonData.get(), data);
+    return data;
 
 }
 

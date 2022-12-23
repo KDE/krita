@@ -8,9 +8,8 @@
 
 #include <cmath>
 #include <kis_color_option.h>
-#include <libmypaint/mypaint-brush.h>
 #include <KisOptimizedBrushOutline.h>
-#include "MyPaintPaintOpOption.h"
+#include <MyPaintStandardOptionData.h>
 
 struct KisMyPaintOpSettings::Private
 {
@@ -31,32 +30,32 @@ KisMyPaintOpSettings::~KisMyPaintOpSettings()
 
 void KisMyPaintOpSettings::setPaintOpSize(qreal value)
 {
-    KisMyPaintOptionProperties op;
-    op.readOptionSettingImpl(this);
-    op.diameter = value;
-    op.writeOptionSettingImpl(this);
+    MyPaintRadiusLogarithmicData data;
+    data.read(this);
+    data.strengthValue = log(0.5 * value);
+    data.write(this);
 }
 
 qreal KisMyPaintOpSettings::paintOpSize() const
 {
-    KisMyPaintOptionProperties op;
-    op.readOptionSettingImpl(this);
-    return op.diameter;
+    MyPaintRadiusLogarithmicData data;
+    data.read(this);
+    return 2 * exp(data.strengthValue);
 }
 
 void KisMyPaintOpSettings::setPaintOpOpacity(qreal value)
 {
-    KisMyPaintOptionProperties op;
-    op.readOptionSettingImpl(this);
-    op.opacity = value;
-    op.writeOptionSettingImpl(this);
+    MyPaintOpacityData data;
+    data.read(this);
+    data.strengthValue = value;
+    data.write(this);
 }
 
 qreal KisMyPaintOpSettings::paintOpOpacity()
 {
-    KisMyPaintOptionProperties op;
-    op.readOptionSettingImpl(this);
-    return op.opacity;
+    MyPaintOpacityData data;
+    data.read(this);
+    return data.strengthValue;
 }
 
 bool KisMyPaintOpSettings::paintIncremental()
@@ -64,19 +63,25 @@ bool KisMyPaintOpSettings::paintIncremental()
     return true;
 }
 
+void KisMyPaintOpSettings::resetSettings(const QStringList &preserveProperties)
+{
+    QStringList allKeys = preserveProperties;
+    allKeys << MYPAINT_JSON;
+    KisOutlineGenerationPolicy<KisPaintOpSettings>::resetSettings(allKeys);
+}
 
 KisOptimizedBrushOutline KisMyPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     KisOptimizedBrushOutline path;
 
-    KisMyPaintOptionProperties op;
-    op.readOptionSettingImpl(this);
-
     if (mode.isVisible) {
         qreal finalScale = 1.0;
 
-        qreal radius = 0.5 * op.diameter;
-        qreal offset = op.offset;
+        MyPaintOffsetByRandomData data;
+        data.read(this);
+        const qreal offset = data.strengthValue;
+
+        qreal radius = 0.5 * paintOpSize();
         radius = radius + 2 * radius * offset;
         radius = qBound(3.5, radius, 500.0);
 

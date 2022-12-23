@@ -48,7 +48,7 @@ struct KisSoftnessOptionData : KisCurveOptionData
     KisSoftnessOptionData()
         : KisCurveOptionData(
               KoID("Softness", i18n("Softness")),
-              true, false, false,
+              true, false,
               0.1, 1.0)
     {}
 };

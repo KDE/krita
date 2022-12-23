@@ -9,6 +9,29 @@
 
 #include <KisWidgetConnectionUtils.h>
 #include <KisSensorWithLengthModel.h>
+#include <KisKritaSensorPack.h>
+
+namespace {
+    auto safeDereferenceTimeSensor = lager::lenses::getset(
+    [](const KisCurveOptionDataCommon &data) -> KisSensorWithLengthData {
+        const KisKritaSensorPack *pack = dynamic_cast<const KisKritaSensorPack*>(data.sensorData.constData());
+        if (pack) {
+            return pack->constSensorsStruct().sensorTime;
+        } else {
+            qWarning() << "safeDereferenceTimeSensor(get): failed to get a Krita sensor data";
+            return KisSensorWithLengthData(FadeId);
+        }
+    },
+    [](KisCurveOptionDataCommon data, KisSensorWithLengthData sensor) -> KisCurveOptionDataCommon {
+        KisKritaSensorPack *pack = dynamic_cast<KisKritaSensorPack*>(data.sensorData.data());
+        if (pack) {
+            pack->sensorsStruct().sensorTime = sensor;
+        } else {
+            qWarning() << "safeDereferenceTimeSensor(set): failed to get a Krita sensor data";
+        }
+        return data;
+    });
+}
 
 KisDynamicSensorFactoryTime::KisDynamicSensorFactoryTime()
     : KisSimpleDynamicSensorFactory(
@@ -19,14 +42,14 @@ KisDynamicSensorFactoryTime::KisDynamicSensorFactoryTime()
 
 }
 
-QWidget *KisDynamicSensorFactoryTime::createConfigWidget(lager::cursor<KisCurveOptionData> data, QWidget *parent)
+QWidget *KisDynamicSensorFactoryTime::createConfigWidget(lager::cursor<KisCurveOptionDataCommon> data, QWidget *parent)
 {
     QWidget* wdg = new QWidget(parent);
     Ui_SensorTimeConfiguration stc;
     stc.setupUi(wdg);
 
     KisSensorWithLengthModel *model =
-        new KisSensorWithLengthModel(data[&KisCurveOptionData::sensorTime], wdg);
+        new KisSensorWithLengthModel(data.zoom(safeDereferenceTimeSensor), wdg);
 
     using namespace KisWidgetConnectionUtils;
 

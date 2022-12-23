@@ -189,7 +189,6 @@ void BRUSH_EXPORT setEffectiveSizeForBrush(const BrushType type,
 qreal BRUSH_EXPORT lightnessModeActivated(BrushType type,
                                           const PredefinedBrushData &predefinedBrush);
 
-
 }
 
 #endif // KISBRUSHMODEL_H

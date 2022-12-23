@@ -31,7 +31,7 @@ struct KisSharpnessOptionWidget::Private
 };
 
 KisSharpnessOptionWidget::KisSharpnessOptionWidget(lager::cursor<KisSharpnessOptionData> optionData)
-    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionData>), KisPaintOpOption::GENERAL)
+    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL)
     , m_d(new Private(optionData))
 {
     using namespace KisWidgetConnectionUtils;

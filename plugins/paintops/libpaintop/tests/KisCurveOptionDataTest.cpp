@@ -26,8 +26,8 @@ void KisCurveOptionDataTest::testCurveOptionData()
 
     QVERIFY(data == data2);
 
-    data2.sensorPressure.isActive = true;
-    data2.sensorPressure.curve = "0.0,0.5;1,1;";
+    data2.sensorStruct().sensorPressure.isActive = true;
+    data2.sensorStruct().sensorPressure.curve = "0.0,0.5;1,1;";
 
     QVERIFY(data != data2);
 
@@ -35,8 +35,8 @@ void KisCurveOptionDataTest::testCurveOptionData()
 
     QVERIFY(data == data2);
 
-    data2.sensorPressure.isActive = true;
-    data2.sensorPressure.curve = "0.0,0.5;1,1;";
+    data2.sensorStruct().sensorPressure.isActive = true;
+    data2.sensorStruct().sensorPressure.curve = "0.0,0.5;1,1;";
 
     KisPropertiesConfiguration config;
 
@@ -56,11 +56,11 @@ void KisCurveOptionDataTest::testSerializeDisabledSensors()
                             KisPaintOpOption::GENERAL);
 
     // sensor is disabled!
-    data.sensorPressure.isActive = false;
-    data.sensorPressure.curve = "0.0,0.5;1,1;";
+    data.sensorStruct().sensorPressure.isActive = false;
+    data.sensorStruct().sensorPressure.curve = "0.0,0.5;1,1;";
 
-    data.sensorRotation.isActive = true;
-    data.sensorRotation.curve = "0.0,0.5;1,1;";
+    data.sensorStruct().sensorRotation.isActive = true;
+    data.sensorStruct().sensorRotation.curve = "0.0,0.5;1,1;";
 
     KisCurveOptionData data2(KoID("Opacity"),
                              KisPaintOpOption::GENERAL);
@@ -83,11 +83,11 @@ void KisCurveOptionDataTest::testSerializeDisabledSensors()
      * in the same data in C++ sense.
      */
 
-    QCOMPARE(data2.sensorPressure.isActive, false);
-    QCOMPARE(data2.sensorRotation.isActive, true);
+    QCOMPARE(data2.sensorStruct().sensorPressure.isActive, false);
+    QCOMPARE(data2.sensorStruct().sensorRotation.isActive, true);
 
     QVERIFY(data != data2);
-    data2.sensorPressure.curve = data.sensorPressure.curve;
+    data2.sensorStruct().sensorPressure.curve = data.sensorStruct().sensorPressure.curve;
     QVERIFY(data == data2);
 
 }
@@ -114,9 +114,9 @@ void KisCurveOptionDataTest::testSerializeNoSensors()
      * sensors with the default curve.
      */
 
-    QCOMPARE(data.sensorPressure.isActive, false);
-    QCOMPARE(data2.sensorPressure.isActive, true);
-    QCOMPARE(data2.sensorPressure.curve, DEFAULT_CURVE_STRING);
+    QCOMPARE(data.sensorStruct().sensorPressure.isActive, false);
+    QCOMPARE(data2.sensorStruct().sensorPressure.isActive, true);
+    QCOMPARE(data2.sensorStruct().sensorPressure.curve, DEFAULT_CURVE_STRING);
     QVERIFY(data != data2);
 }
 

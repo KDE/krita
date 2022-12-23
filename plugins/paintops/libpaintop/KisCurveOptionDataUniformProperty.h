@@ -10,7 +10,7 @@
 #include "kis_slider_based_paintop_property.h"
 #include <kritapaintop_export.h>
 
-class KisCurveOptionData;
+struct KisCurveOptionData;
 class KisPaintOpPresetUpdateProxy;
 
 class PAINTOP_EXPORT KisCurveOptionDataUniformProperty : public KisDoubleSliderBasedPaintOpProperty

@@ -110,7 +110,7 @@ public:
      * Removes all the settings from the object while keeping the paintop id,
      * which is loaded to the object by the factory
      */
-    void resetSettings(const QStringList &preserveProperties = QStringList());
+    virtual void resetSettings(const QStringList &preserveProperties = QStringList());
 
     /**
      * @return the node the paintop is working on.

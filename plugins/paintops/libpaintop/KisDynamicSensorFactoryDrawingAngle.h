@@ -12,7 +12,7 @@ class PAINTOP_EXPORT KisDynamicSensorFactoryDrawingAngle : public KisSimpleDynam
 {
 public:
     KisDynamicSensorFactoryDrawingAngle();
-    QWidget* createConfigWidget(lager::cursor<KisCurveOptionData> data, QWidget*parent) override;
+    QWidget* createConfigWidget(lager::cursor<KisCurveOptionDataCommon> data, QWidget*parent) override;
 };
 
 #endif // KISDYNAMICSENSORFACTORYDRAWINGANGLE_H

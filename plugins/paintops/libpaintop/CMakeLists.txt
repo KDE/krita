@@ -15,7 +15,16 @@ set(kritalibpaintop_LIB_SRCS
     kis_curve_option_widget.cpp
     kis_curve_option_uniform_property.cpp
     KisCurveOptionDataUniformProperty.cpp
+    KisSensorData.cpp
+    KisSensorPackInterface.cpp
+    KisKritaSensorPack.cpp
+    KisCurveOptionDataCommon.cpp
     KisCurveOptionData.cpp
+    KisCurveOptionInputControlsStrategyInterface.cpp
+    KisCurveOptionInputControlsStrategy.cpp
+    KisCurveOptionRangeControlsStrategyInterface.cpp
+    KisCurveRangeModelInterface.cpp
+    KisCurveRangeModel.cpp
     KisCurveOptionModel.cpp
     KisCurveOptionWidget2.cpp
     KisCurveOption2.cpp

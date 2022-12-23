@@ -15,6 +15,7 @@
 #include "kis_curve_option.h"
 #include "kis_signals_blocker.h"
 #include "kis_icon_utils.h"
+#include "KisCurveWidgetControlsManager.h"
 
 KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption *curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider)
     : KisPaintOpOption(curveOption->id().name(), curveOption->category(), curveOption->isChecked())
@@ -189,7 +190,7 @@ void KisCurveOptionWidget::slotUseSameCurveChanged()
     emitSettingChanged();
 }
 
-void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor) const
+void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor)
 {
     if (sensor) {
         m_curveOptionWidget->label_xmin->setText(sensor->minimumLabel(sensor->sensorType()));
@@ -206,8 +207,11 @@ void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor) co
         m_curveOptionWidget->intIn->setSuffix(inSuffix);
         m_curveOptionWidget->intOut->setSuffix(outSuffix);
 
-        m_curveOptionWidget->curveWidget->setupInOutControls(m_curveOptionWidget->intIn,m_curveOptionWidget->intOut,
-                                                         inMinValue,inMaxValue,outMinValue,outMaxValue);
+        m_curveControlsManager.reset(
+            new KisCurveWidgetControlsManagerInt(
+                m_curveOptionWidget->curveWidget,
+                m_curveOptionWidget->intIn,m_curveOptionWidget->intOut,
+                inMinValue,inMaxValue,outMinValue,outMaxValue));
     }
 }
 

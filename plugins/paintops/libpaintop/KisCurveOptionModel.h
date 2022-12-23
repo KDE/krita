@@ -9,6 +9,7 @@
 
 #include "kritapaintop_export.h"
 #include "KisCurveOptionData.h"
+#include "KisCurveRangeModelInterface.h"
 
 #include <lager/state.hpp>
 #include <lager/constant.hpp>
@@ -23,14 +24,16 @@ class PAINTOP_EXPORT KisCurveOptionModel : public QObject
 {
     Q_OBJECT
 public:
-    KisCurveOptionModel(lager::cursor<KisCurveOptionData> optionData,
+    KisCurveOptionModel(lager::cursor<KisCurveOptionDataCommon> optionData,
                         lager::reader<bool> externallyEnabled,
-                        std::optional<lager::reader<RangeState>> rangeOverride);
+                        std::optional<lager::reader<RangeState>> strengthRangeOverride,
+                        qreal strengthDisplayMultiplier,
+                        KisCurveRangeModelFactory rangeModelFactory);
     ~KisCurveOptionModel();
 
     // the state must be declared **before** any cursors or readers
-    lager::cursor<KisCurveOptionData> optionData;
-    lager::reader<RangeState> rangeNorm;
+    lager::cursor<KisCurveOptionDataCommon> optionData;
+    lager::reader<RangeState> strengthRangeNorm;
     lager::state<QString, lager::automatic_tag> activeSensorIdData;
     LAGER_QT_READER(bool, isCheckable);
     LAGER_QT_CURSOR(bool, isChecked);
@@ -45,8 +48,14 @@ public:
     LAGER_QT_READER(int, activeSensorLength);
     LAGER_QT_READER(LabelsState, labelsState);
     LAGER_QT_CURSOR(QString, activeCurve);
+    std::unique_ptr<KisCurveRangeModelInterface> rangeModel;
+    LAGER_QT_CURSOR(QString, displayedCurve);
+    LAGER_QT_READER(QString, curveXMinLabel);
+    LAGER_QT_READER(QString, curveXMaxLabel);
+    LAGER_QT_READER(QString, curveYMinLabel);
+    LAGER_QT_READER(QString, curveYMaxLabel);
 
-    KisCurveOptionData bakedOptionData() const;
+    KisCurveOptionDataCommon bakedOptionData() const;
 };
 
 #endif // KISCURVEOPTIONMODEL_H

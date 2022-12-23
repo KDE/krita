@@ -22,7 +22,7 @@ public:
     KisMultiSensorsSelector2(QWidget* parent);
     ~KisMultiSensorsSelector2() override;
 
-    void setOptionDataCursor(lager::cursor<KisCurveOptionData> optionData);
+    void setOptionDataCursor(lager::cursor<KisCurveOptionDataCommon> optionData);
 
     void setCurrent(const QString &id);
     QString currentHighlighted();

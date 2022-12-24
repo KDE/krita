@@ -32,17 +32,18 @@
 
 using namespace KDcrawIface;
 
-K_PLUGIN_FACTORY_WITH_JSON(KisRawImportFactory, "krita_raw_import.json",
-                           registerPlugin<KisRawImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(KisRawImportFactory, "krita_raw_import.json", registerPlugin<KisRawImport>();)
 
 KisRawImport::KisRawImport(QObject *parent, const QVariantList &)
     : KisImportExportFilter(parent)
     , m_dialog(new KoDialog())
     , m_rawWidget(new WdgRawImport())
 {
-    m_dialog->enableButtonApply(false);
+    m_dialog->setButtons(KoDialog::Ok | KoDialog::Cancel | KoDialog::Apply);
+    m_dialog->setDefaultButton(KoDialog::Ok);
+
     m_dialog->setMainWidget(m_rawWidget);
-    connect(m_rawWidget->pushButtonUpdate, SIGNAL(clicked()), this, SLOT(slotUpdatePreview()));
+    connect(m_dialog, &KoDialog::applyClicked, this, &KisRawImport::slotUpdatePreview);
 }
 
 KisRawImport::~KisRawImport()
@@ -59,12 +60,9 @@ inline quint16 correctIndian(quint16 v)
 #endif
 }
 
-KisImportExportErrorCode KisRawImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode
+KisRawImport::convert(KisDocument *document, QIODevice * /*io*/, KisPropertiesConfigurationSP /*configuration*/)
 {
-    // Show dialog
-    m_dialog->setCursor(Qt::ArrowCursor);
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-
 #if KDCRAW_VERSION < 0x010200
     m_rawWidget->rawSettings->setDefaultSettings();
 #else
@@ -79,13 +77,13 @@ KisImportExportErrorCode KisRawImport::convert(KisDocument *document, QIODevice 
     }
 
     if (r == QDialog::Accepted) {
-
         QApplication::setOverrideCursor(Qt::WaitCursor);
         // Do the decoding
-        // TODO: it would probably be better done in a thread, while an other thread simulate that the application is still living (or even better if libkdcraw was giving us some progress report
+        // TODO: it would probably be better done in a thread, while an other thread simulate that the application is
+        // still living (or even better if libkdcraw was giving us some progress report
         QByteArray imageData;
         RawDecodingSettings settings = rawDecodingSettings();
-        settings.sixteenBitsImage =  true;
+        settings.sixteenBitsImage = true;
         int width, height, rgbmax;
         KDcraw dcraw;
         if (!dcraw.decodeRAWImage(filename(), settings, imageData, width, height, rgbmax))
@@ -119,7 +117,9 @@ KisImportExportErrorCode KisRawImport::convert(KisDocument *document, QIODevice 
                 QFile profileFile(settings.outputProfile);
 
                 if (profileFile.open(QFile::ReadOnly)) {
-                    profile = KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), profileFile.readAll());
+                    profile = KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(),
+                                                                                   Integer16BitsColorDepthID.id(),
+                                                                                   profileFile.readAll());
                 } else {
                     qWarning() << "WARNING: couldn't open custom profile file" << settings.outputProfile;
                 }
@@ -134,7 +134,7 @@ KisImportExportErrorCode KisRawImport::convert(KisDocument *document, QIODevice 
         }
 
         // Init the image
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb16(profile);
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb16(profile);
         KisImageSP image = new KisImage(document->createUndoStore(), width, height, cs, filename());
         KIS_ASSERT_RECOVER_RETURN_VALUE(!image.isNull(), ImportExportCodes::InternalError);
 
@@ -150,8 +150,8 @@ KisImportExportErrorCode KisRawImport::convert(KisDocument *document, QIODevice 
         KisHLineIteratorSP it = device->createHLineIteratorNG(0, 0, width);
         for (int y = 0; y < height; ++y) {
             do {
-                KoBgrU16Traits::Pixel* pixel = reinterpret_cast<KoBgrU16Traits::Pixel*>(it->rawData());
-                quint16* ptr = (reinterpret_cast<quint16*>(imageData.data())) + (y * width + it->x()) * 3;
+                KoBgrU16Traits::Pixel *pixel = reinterpret_cast<KoBgrU16Traits::Pixel *>(it->rawData());
+                quint16 *ptr = (reinterpret_cast<quint16 *>(imageData.data())) + (y * width + it->x()) * 3;
 #if KDCRAW_VERSION < 0x000400
                 pixel->red = correctIndian(ptr[2]);
                 pixel->green = correctIndian(ptr[1]);
@@ -244,15 +244,15 @@ void KisRawImport::slotUpdatePreview()
 {
     QByteArray imageData;
     RawDecodingSettings settings = rawDecodingSettings();
-    settings.sixteenBitsImage =  false;
+    settings.sixteenBitsImage = false;
     int width, height, rgbmax;
     KDcraw dcraw;
     if (dcraw.decodeHalfRAWImage(filename(), settings, imageData, width, height, rgbmax)) {
         QImage image(width, height, QImage::Format_RGB32);
         for (int y = 0; y < height; ++y) {
-            QRgb *pixel= reinterpret_cast<QRgb *>(image.scanLine(y));
+            QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
             for (int x = 0; x < width; ++x) {
-                quint8* ptr = ((quint8*)imageData.data()) + (y * width + x) * 3;
+                quint8 *ptr = ((quint8 *)imageData.data()) + (y * width + x) * 3;
                 pixel[x] = qRgb(ptr[0], ptr[1], ptr[2]);
             }
         }

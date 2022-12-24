@@ -54,9 +54,6 @@
         <property name="text">
          <string>No image loaded</string>
         </property>
-        <property name="scaledContents">
-         <bool>true</bool>
-        </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>

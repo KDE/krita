@@ -247,18 +247,24 @@ void KisRawImport::slotUpdatePreview()
     QByteArray imageData;
     RawDecodingSettings settings = rawDecodingSettings();
     settings.sixteenBitsImage = false;
-    int width, height, rgbmax;
+    int width = 0;
+    int height = 0;
+    int rgbmax = 0;
     KDcraw dcraw;
     if (dcraw.decodeHalfRAWImage(filename(), settings, imageData, width, height, rgbmax)) {
         QImage image(width, height, QImage::Format_RGB32);
+        quint8 *ptr = reinterpret_cast<quint8 *>(imageData.data());
         for (int y = 0; y < height; ++y) {
             QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
             for (int x = 0; x < width; ++x) {
-                quint8 *ptr = ((quint8 *)imageData.data()) + (y * width + x) * 3;
                 pixel[x] = qRgb(ptr[0], ptr[1], ptr[2]);
+                ptr += 3;
             }
         }
-        m_rawWidget->preview->setPixmap(QPixmap::fromImage(image));
+        const QSize previewSize = m_rawWidget->preview->size() * m_rawWidget->preview->devicePixelRatioF();
+        QPixmap img = QPixmap::fromImage(image).scaled(previewSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        img.setDevicePixelRatio(m_rawWidget->preview->devicePixelRatioF());
+        m_rawWidget->preview->setPixmap(img);
     }
 
     m_dialog->enableButtonApply(false);

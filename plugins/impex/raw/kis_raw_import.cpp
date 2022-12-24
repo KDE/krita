@@ -36,14 +36,13 @@ K_PLUGIN_FACTORY_WITH_JSON(KisRawImportFactory, "krita_raw_import.json",
                            registerPlugin<KisRawImport>();)
 
 KisRawImport::KisRawImport(QObject *parent, const QVariantList &)
-        : KisImportExportFilter(parent)
+    : KisImportExportFilter(parent)
+    , m_dialog(new KoDialog())
+    , m_rawWidget(new WdgRawImport())
 {
-    m_dialog = new KoDialog();
     m_dialog->enableButtonApply(false);
-    QWidget* widget = new QWidget;
-    m_rawWidget.setupUi(widget);
-    m_dialog->setMainWidget(widget);
-    connect(m_rawWidget.pushButtonUpdate, SIGNAL(clicked()), this, SLOT(slotUpdatePreview()));
+    m_dialog->setMainWidget(m_rawWidget);
+    connect(m_rawWidget->pushButtonUpdate, SIGNAL(clicked()), this, SLOT(slotUpdatePreview()));
 }
 
 KisRawImport::~KisRawImport()
@@ -67,9 +66,9 @@ KisImportExportErrorCode KisRawImport::convert(KisDocument *document, QIODevice 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
 #if KDCRAW_VERSION < 0x010200
-    m_rawWidget.rawSettings->setDefaultSettings();
+    m_rawWidget->rawSettings->setDefaultSettings();
 #else
-    m_rawWidget.rawSettings->resetToDefault();
+    m_rawWidget->rawSettings->resetToDefault();
 #endif
 
     slotUpdatePreview();
@@ -257,7 +256,7 @@ void KisRawImport::slotUpdatePreview()
                 pixel[x] = qRgb(ptr[0], ptr[1], ptr[2]);
             }
         }
-        m_rawWidget.preview->setPixmap(QPixmap::fromImage(image));
+        m_rawWidget->preview->setPixmap(QPixmap::fromImage(image));
     }
 }
 
@@ -266,30 +265,29 @@ RawDecodingSettings KisRawImport::rawDecodingSettings()
 #if KDCRAW_VERSION < 0x010200
     RawDecodingSettings settings;
     settings.sixteenBitsImage = true;
-    settings.brightness = m_rawWidget.rawSettings->brightness();
-    settings.RAWQuality = m_rawWidget.rawSettings->quality();
-    settings.outputColorSpace = m_rawWidget.rawSettings->outputColorSpace();
-    settings.RGBInterpolate4Colors = m_rawWidget.rawSettings->useFourColor();
-    settings.DontStretchPixels = m_rawWidget.rawSettings->useDontStretchPixels();
-    settings.unclipColors = m_rawWidget.rawSettings->unclipColor();
-    settings.whiteBalance = m_rawWidget.rawSettings->whiteBalance();
-    settings.customWhiteBalance = m_rawWidget.rawSettings->customWhiteBalance();
-    settings.customWhiteBalanceGreen = m_rawWidget.rawSettings->customWhiteBalanceGreen();
+    settings.brightness = m_rawWidget->rawSettings->brightness();
+    settings.RAWQuality = m_rawWidget->rawSettings->quality();
+    settings.outputColorSpace = m_rawWidget->rawSettings->outputColorSpace();
+    settings.RGBInterpolate4Colors = m_rawWidget->rawSettings->useFourColor();
+    settings.DontStretchPixels = m_rawWidget->rawSettings->useDontStretchPixels();
+    settings.unclipColors = m_rawWidget->rawSettings->unclipColor();
+    settings.whiteBalance = m_rawWidget->rawSettings->whiteBalance();
+    settings.customWhiteBalance = m_rawWidget->rawSettings->customWhiteBalance();
+    settings.customWhiteBalanceGreen = m_rawWidget->rawSettings->customWhiteBalanceGreen();
 
-    settings.enableBlackPoint = m_rawWidget.rawSettings->useBlackPoint();
-    settings.blackPoint = m_rawWidget.rawSettings->blackPoint();
+    settings.enableBlackPoint = m_rawWidget->rawSettings->useBlackPoint();
+    settings.blackPoint = m_rawWidget->rawSettings->blackPoint();
 
-    settings.enableNoiseReduction = m_rawWidget.rawSettings->useNoiseReduction();
-    settings.NRThreshold = m_rawWidget.rawSettings->NRThreshold();
+    settings.enableNoiseReduction = m_rawWidget->rawSettings->useNoiseReduction();
+    settings.NRThreshold = m_rawWidget->rawSettings->NRThreshold();
 
-    settings.enableCACorrection = m_rawWidget.rawSettings->useCACorrection();
-    settings.caMultiplier[0] = m_rawWidget.rawSettings->caRedMultiplier();
-    settings.caMultiplier[1] = m_rawWidget.rawSettings->caBlueMultiplier();
-
+    settings.enableCACorrection = m_rawWidget->rawSettings->useCACorrection();
+    settings.caMultiplier[0] = m_rawWidget->rawSettings->caRedMultiplier();
+    settings.caMultiplier[1] = m_rawWidget->rawSettings->caBlueMultiplier();
 
     return settings;
 #else
-    return m_rawWidget.rawSettings->settings();
+    return m_rawWidget->rawSettings->settings();
 #endif
 }
 

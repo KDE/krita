@@ -44,6 +44,10 @@ KisRawImport::KisRawImport(QObject *parent, const QVariantList &)
 
     m_dialog->setMainWidget(m_rawWidget);
     connect(m_dialog, &KoDialog::applyClicked, this, &KisRawImport::slotUpdatePreview);
+    connect(m_rawWidget, &WdgRawImport::paint, this, &KisRawImport::slotUpdatePreview);
+    connect(m_rawWidget->rawSettings, &DcrawSettingsWidget::signalSettingsChanged, [&]() {
+        m_dialog->enableButtonApply(true);
+    });
 }
 
 KisRawImport::~KisRawImport()
@@ -68,8 +72,6 @@ KisRawImport::convert(KisDocument *document, QIODevice * /*io*/, KisPropertiesCo
 #else
     m_rawWidget->rawSettings->resetToDefault();
 #endif
-
-    slotUpdatePreview();
 
     int r = QDialog::Accepted;
     if (!batchMode()) {
@@ -258,6 +260,8 @@ void KisRawImport::slotUpdatePreview()
         }
         m_rawWidget->preview->setPixmap(QPixmap::fromImage(image));
     }
+
+    m_dialog->enableButtonApply(false);
 }
 
 RawDecodingSettings KisRawImport::rawDecodingSettings()

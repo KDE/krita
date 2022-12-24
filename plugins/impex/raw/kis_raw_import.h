@@ -23,6 +23,15 @@ public:
     {
         setupUi(this);
     }
+
+    void showEvent(QShowEvent *event) override
+    {
+        Q_EMIT paint();
+        QWidget::showEvent(event);
+    }
+
+Q_SIGNALS:
+    void paint();
 };
 
 namespace KDcrawIface

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-23 00:44+0000\n"
-"PO-Revision-Date: 2022-12-13 12:20\n"
+"PO-Revision-Date: 2022-12-24 11:42\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -13626,7 +13626,7 @@ msgstr "全屏模式"
 #, kde-format
 msgctxt "action"
 msgid "Detach Canvas"
-msgstr "独立画布窗口"
+msgstr "分离画布窗口"
 
 #. i18n: context: toolTip @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:642
@@ -42276,21 +42276,21 @@ msgstr "S-Pen 手势右划"
 #, kde-format
 msgctxt "action"
 msgid "S-Pen Gesture Circle Clockwise"
-msgstr "S-Pen 手势顺时针旋转"
+msgstr "S-Pen 手势顺时针画圈"
 
 #. i18n: context: text @ Action (spen_circle_ccw), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:99
 #, kde-format
 msgctxt "action"
 msgid "S-Pen Gesture Circle Counter-Clockwise"
-msgstr "S-Pen 手势逆时针旋转"
+msgstr "S-Pen 手势逆时针画圈"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:112
 #, kde-format
 msgctxt "action"
 msgid "Toggle popup palette with S-Pen"
-msgstr "用 S-Pen 打开/关闭弹出面板"
+msgstr "S-Pen 弹出面板开关"
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:33

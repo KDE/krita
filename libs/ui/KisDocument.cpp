@@ -6,7 +6,7 @@
  */
 
 #include "KisMainWindow.h" // XXX: remove
-#include <QMessageBox> // XXX: remove
+#include <QMessageBox>
 
 #include <KisMimeDatabase.h>
 
@@ -878,39 +878,21 @@ QByteArray KisDocument::serializeToNativeByteArray()
     return buffer.data();
 }
 
-class DlgLoadMessages : public KoDialog
+class DlgLoadMessages : public QMessageBox
 {
 public:
     DlgLoadMessages(const QString &title,
                     const QString &message,
-                    const QStringList &warnings)
-        : KoDialog(qApp->activeWindow())
+                    const QStringList &warnings = {},
+                    const QString &details = {})
+        : QMessageBox(QMessageBox::Warning, title, message, QMessageBox::Ok, qApp->activeWindow())
     {
-        setWindowTitle(title);
-        QWidget *page = new QWidget();
-        QVBoxLayout *layout = new QVBoxLayout(page);
-        QHBoxLayout *hlayout = new QHBoxLayout();
-        QLabel *labelWarning= new QLabel();
-        labelWarning->setPixmap(KisIconUtils::loadIcon("warning").pixmap(32, 32));
-        labelWarning->setAlignment(Qt::AlignTop);
-        hlayout->addWidget(labelWarning);
-        hlayout->addWidget(new QLabel(message), 1);
-        layout->addLayout(hlayout);
-        if (!warnings.isEmpty()) {
-            QTextBrowser *browser = new QTextBrowser();
-            QString warning = "<html><body><ul>";
-            Q_FOREACH (const QString &w, warnings) {
-                warning += "\n<li>" + w + "</li>";
-            }
-            warning += "</ul>";
-            browser->setHtml(warning);
-            browser->setMinimumHeight(200);
-            browser->setMinimumWidth(400);
-            layout->addWidget(browser);
+        if (!details.isEmpty()) {
+            setInformativeText(details);
         }
-        setMainWidget(page);
-        page->setParent(this);
-        setButtons(KoDialog::Ok);
+        if (!warnings.isEmpty()) {
+            setDetailedText(warnings.join("\n"));
+        }
     }
 };
 
@@ -929,21 +911,27 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
 
         if (!fileBatchMode()) {
             DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
-                                i18n("Could not save %1.\nReason: %2", job.filePath, status.errorMessage()),
+                                i18n("Could not save %1.", job.filePath),
                                 errorMessage.split("\n", QString::SkipEmptyParts)
-                                    + warningMessage.split("\n", QString::SkipEmptyParts));
+                                    + warningMessage.split("\n", QString::SkipEmptyParts),
+                                status.errorMessage());
             dlg.exec();
         }
     }
     else {
         if (!fileBatchMode() && !warningMessage.isEmpty()) {
+            QStringList reasons = warningMessage.split("\n", QString::SkipEmptyParts);
             DlgLoadMessages dlg(
                 i18nc("@title:window", "Krita"),
-                i18nc("dialog box shown to the user if there were warnings while saving the document, %1 is the file "
-                      "path",
-                      "%1 has been saved but is incomplete.\nThe following problems were encountered when saving:",
+                i18nc("dialog box shown to the user if there were warnings while saving the document, "
+                      "%1 is the file path",
+                      "%1 has been saved but is incomplete.",
                       job.filePath),
-                warningMessage.split("\n", QString::SkipEmptyParts));
+                reasons,
+                reasons.isEmpty()
+                    ? ""
+                    : i18nc("dialog box shown to the user if there were warnings while saving the document",
+                            "Some problems were encountered when saving."));
             dlg.exec();
         }
 
@@ -1886,16 +1874,17 @@ bool KisDocument::openFile()
 
         if (!msg.isEmpty() && !fileBatchMode()) {
             DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
-                                i18n("Could not open %2.\nReason: %1", msg, prettyPath()),
+                                i18n("Could not open %1.", prettyPath()),
                                 errorMessage().split("\n", QString::SkipEmptyParts)
-                                    + warningMessage().split("\n", QString::SkipEmptyParts));
+                                    + warningMessage().split("\n", QString::SkipEmptyParts),
+                                msg);
             dlg.exec();
         }
         return false;
     }
     else if (!warningMessage().isEmpty() && !fileBatchMode()) {
         DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
-                            i18n("There were problems opening %1", prettyPath()),
+                            i18n("There were problems opening %1.", prettyPath()),
                             warningMessage().split("\n", QString::SkipEmptyParts));
         dlg.exec();
         setPath(QString());

@@ -6,6 +6,7 @@
 
 #include "kis_raw_import.h"
 
+#include <cmath>
 #include <exiv2/exiv2.hpp>
 #include <kpluginfactory.h>
 #include <libkdcraw_version.h>
@@ -19,6 +20,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 #include <KoDialog.h>
+#include <KoUpdater.h>
 #include <kis_debug.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
@@ -31,6 +33,23 @@
 #include <kis_transaction.h>
 
 using namespace KDcrawIface;
+
+class Q_DECL_HIDDEN MyKDcraw : public KDcraw
+{
+public:
+    MyKDcraw(KoUpdater *updater)
+        : updater(updater)
+    {
+    }
+
+    void setWaitingDataProgress(double value) override
+    {
+        updater->setProgress(static_cast<int>(value * 100.0));
+    }
+
+private:
+    KoUpdater *updater;
+};
 
 K_PLUGIN_FACTORY_WITH_JSON(KisRawImportFactory, "krita_raw_import.json", registerPlugin<KisRawImport>();)
 
@@ -81,19 +100,19 @@ KisRawImport::convert(KisDocument *document, QIODevice * /*io*/, KisPropertiesCo
     if (r == QDialog::Accepted) {
         QApplication::setOverrideCursor(Qt::WaitCursor);
         // Do the decoding
-        // TODO: it would probably be better done in a thread, while an other thread simulate that the application is
-        // still living (or even better if libkdcraw was giving us some progress report
         QByteArray imageData;
         RawDecodingSettings settings = rawDecodingSettings();
         settings.sixteenBitsImage = true;
-        int width, height, rgbmax;
-        KDcraw dcraw;
+        int width = 0;
+        int height = 0;
+        int rgbmax = 0;
+        MyKDcraw dcraw(updater());
         if (!dcraw.decodeRAWImage(filename(), settings, imageData, width, height, rgbmax))
             return ImportExportCodes::FileFormatIncorrect;
 
         QApplication::restoreOverrideCursor();
 
-        const KoColorProfile *profile = 0;
+        const KoColorProfile *profile = nullptr;
 
         switch (settings.outputColorSpace) {
         case RawDecodingSettings::RAWCOLOR:
@@ -150,6 +169,10 @@ KisRawImport::convert(KisDocument *document, QIODevice * /*io*/, KisPropertiesCo
 
         // Copy the data
         KisHLineIteratorSP it = device->createHLineIteratorNG(0, 0, width);
+        const float original = static_cast<float>(updater()->progress());
+        // Leave 10% for the metadata
+        const float step = (static_cast<float>(updater()->maximum() * 0.9) - original) / (float)height;
+
         for (int y = 0; y < height; ++y) {
             do {
                 KoBgrU16Traits::Pixel *pixel = reinterpret_cast<KoBgrU16Traits::Pixel *>(it->rawData());
@@ -166,6 +189,8 @@ KisRawImport::convert(KisDocument *document, QIODevice * /*io*/, KisPropertiesCo
                 pixel->alpha = 0xFFFF;
             } while (it->nextPixel());
             it->nextRow();
+
+            updater()->setProgress(static_cast<int>(original + step * float(y)));
         }
 
         {
@@ -235,6 +260,7 @@ KisRawImport::convert(KisDocument *document, QIODevice * /*io*/, KisPropertiesCo
 
         QApplication::restoreOverrideCursor();
         document->setCurrentImage(image);
+        updater()->setProgress(updater()->maximum());
         return ImportExportCodes::OK;
     }
 

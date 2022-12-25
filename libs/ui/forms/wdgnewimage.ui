@@ -692,21 +692,26 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>cmbPredefined</tabstop>
   <tabstop>bnLandscape</tabstop>
   <tabstop>bnPortrait</tabstop>
+  <tabstop>doubleWidth</tabstop>
+  <tabstop>cmbWidthUnit</tabstop>
   <tabstop>doubleHeight</tabstop>
   <tabstop>cmbHeightUnit</tabstop>
   <tabstop>doubleResolution</tabstop>
+  <tabstop>cmbResolutionUnit</tabstop>
   <tabstop>txtPredefinedName</tabstop>
   <tabstop>bnSaveAsPredefined</tabstop>
-  <tabstop>txtDescription</tabstop>
-  <tabstop>tabWidget</tabstop>
-  <tabstop>cmbColor</tabstop>
+  <tabstop>txtName</tabstop>
   <tabstop>intNumLayers</tabstop>
+  <tabstop>cmbColor</tabstop>
+  <tabstop>sliderOpacity</tabstop>
   <tabstop>radioBackgroundAsRaster</tabstop>
   <tabstop>radioBackgroundAsProjection</tabstop>
   <tabstop>radioBackgroundAsFill</tabstop>
-  <tabstop>txtName</tabstop>
+  <tabstop>txtDescription</tabstop>
  </tabstops>
  <resources/>
  <connections/>

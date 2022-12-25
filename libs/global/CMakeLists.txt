@@ -28,8 +28,6 @@ set(kritaglobal_LIB_SRCS
     kis_acyclic_signal_connector.cpp
     kis_latency_tracker.cpp
     KisQPainterStateSaver.cpp
-    KisSharedThreadPoolAdapter.cpp
-    KisSharedRunnable.cpp
     KisRollingMeanAccumulatorWrapper.cpp
     kis_config_notifier.cpp
     KisDeleteLaterWrapper.cpp

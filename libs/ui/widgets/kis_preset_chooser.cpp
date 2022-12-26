@@ -31,9 +31,6 @@
 
 #include <brushengine/kis_paintop_settings.h>
 #include <brushengine/kis_paintop_preset.h>
-#include "KisResourceServerProvider.h"
-#include "kis_global.h"
-#include "kis_slider_spin_box.h"
 #include "kis_config_notifier.h"
 #include <kis_icon.h>
 #include <KisResourceModelProvider.h>
@@ -173,28 +170,22 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
 }
 
-KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
+KisPresetChooser::KisPresetChooser(QWidget *parent)
     : QWidget(parent)
 {
-    setObjectName(name);
+    setObjectName("KisPresetChooser");
+
     QVBoxLayout * layout = new QVBoxLayout(this);
     layout->setMargin(0);
 
     m_chooser = new KisResourceItemChooser(ResourceType::PaintOpPresets, false, this);
-    m_chooser->setObjectName("ResourceChooser");
     m_chooser->setRowHeight(50);
     m_delegate = new KisPresetDelegate(this);
     m_chooser->setItemDelegate(m_delegate);
     m_chooser->setSynced(true);
+    m_chooser->setResponsiveness(true);
+    m_chooser->showImportExportBtns(false);
     layout->addWidget(m_chooser);
-
-    {
-        QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this->itemChooser()->itemView());
-        if (scroller) {
-            connect(scroller, SIGNAL(stateChanged(QScroller::State)),
-                    this, SLOT(slotScrollerStateChanged(QScroller::State)));
-        }
-    }
 
     connect(m_chooser, SIGNAL(resourceSelected(KoResourceSP )),
             this, SLOT(slotResourceWasSelected(KoResourceSP )));
@@ -204,7 +195,9 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     connect(m_chooser, SIGNAL(resourceClicked(KoResourceSP )),
             this, SIGNAL(resourceClicked(KoResourceSP )));
 
-    m_mode = THUMBNAIL;
+    connect(m_chooser, &KisResourceItemChooser::listViewModeChanged, this, &KisPresetChooser::showHideBrushNames);
+
+    m_mode = ViewMode::THUMBNAIL;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(notifyConfigChanged()));
@@ -217,21 +210,20 @@ KisPresetChooser::~KisPresetChooser()
 {
 }
 
-void KisPresetChooser::showButtons(bool show)
-{
-    m_chooser->showButtons(show);
-}
-
 void KisPresetChooser::setViewMode(KisPresetChooser::ViewMode mode)
 {
     m_mode = mode;
     updateViewSettings();
 }
 
-void KisPresetChooser::resizeEvent(QResizeEvent* event)
+void KisPresetChooser::setViewModeToThumbnail()
 {
-    QWidget::resizeEvent(event);
-    updateViewSettings();
+    setViewMode(KisPresetChooser::ViewMode::THUMBNAIL);
+}
+
+void KisPresetChooser::setViewModeToDetail()
+{
+    setViewMode(KisPresetChooser::ViewMode::DETAIL);
 }
 
 void KisPresetChooser::notifyConfigChanged()
@@ -239,8 +231,6 @@ void KisPresetChooser::notifyConfigChanged()
     KisConfig cfg(true);
     m_delegate->setUseDirtyPresets(cfg.useDirtyPresets());
     setIconSize(cfg.presetIconSize());
-
-    updateViewSettings();
 }
 
 void KisPresetChooser::slotResourceWasSelected(KoResourceSP resource)
@@ -269,29 +259,17 @@ void KisPresetChooser::slotCurrentPresetChanged()
 
 void KisPresetChooser::updateViewSettings()
 {
-    if (m_mode == THUMBNAIL) {
-        m_chooser->setSynced(true);
+    switch (m_mode) {
+    case ViewMode::THUMBNAIL: {
+        m_chooser->setListViewMode(ListViewMode::IconGrid);
         m_delegate->setShowText(false);
-        m_chooser->itemView()->setViewMode(QListView::IconMode);
-        m_chooser->itemView()->setFlow(QListView::LeftToRight);
+        break;
     }
-    else if (m_mode == DETAIL) {
-        m_chooser->setSynced(false);
-        m_chooser->itemView()->setViewMode(QListView::ListMode);
-        m_chooser->itemView()->setFlow(QListView::TopToBottom);
-        m_chooser->setColumnWidth(m_chooser->width());
-
-        KisResourceItemChooserSync* chooserSync = KisResourceItemChooserSync::instance();
-        m_chooser->setRowHeight(chooserSync->baseLength());
+    case ViewMode::DETAIL: {
+        m_chooser->setListViewMode(ListViewMode::Detail);
         m_delegate->setShowText(true);
+        break;
     }
-    else if (m_mode == STRIP) {
-        m_chooser->setSynced(false);
-        m_chooser->itemView()->setViewMode(QListView::ListMode);
-        m_chooser->itemView()->setFlow(QListView::LeftToRight);
-        // An offset of 7 keeps the cell exactly square, TODO: use constants, not hardcoded numbers
-        m_chooser->setColumnWidth(m_chooser->viewSize().height() - 7);
-        m_delegate->setShowText(false);
     }
 }
 
@@ -315,7 +293,6 @@ KisResourceItemChooser *KisPresetChooser::itemChooser()
     return m_chooser;
 }
 
-
 void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 {
     QMap<QString, QVariant> metaDataFilter;
@@ -330,7 +307,6 @@ void KisPresetChooser::setIconSize(int newSize)
 {
     KisResourceItemChooserSync* chooserSync = KisResourceItemChooserSync::instance();
     chooserSync->setBaseLength(newSize);
-    updateViewSettings();
 }
 
 int KisPresetChooser::iconSize()
@@ -338,8 +314,6 @@ int KisPresetChooser::iconSize()
     KisResourceItemChooserSync* chooserSync = KisResourceItemChooserSync::instance();
     return chooserSync->baseLength();
 }
-
-
 
 void KisPresetChooser::saveIconSize()
 {
@@ -349,7 +323,15 @@ void KisPresetChooser::saveIconSize()
     }
 }
 
-void KisPresetChooser::slotScrollerStateChanged(QScroller::State state)
+void KisPresetChooser::showHideBrushNames(ListViewMode newViewMode)
 {
-    KisKineticScroller::updateCursor(this, state);
+    switch (newViewMode) {
+    case ListViewMode::Detail: {
+        m_delegate->setShowText(true);
+        break;
+    }
+    default: {
+        m_delegate->setShowText(false);
+    }
+    }
 }

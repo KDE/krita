@@ -119,13 +119,16 @@ private:
 
     struct Private;
     Private * const m_d;
+    const int brushPresetsPanelMinWidth = 80;
+    const int brushPresetsPanelInitWidth = 200;
+    const int scratchPadPanelMinWidth = 80;
+    const int scratchPadPanelInitWidth = 200;
+
     QString current_paintOpId;
     QList<KisPaintOpInfo> sortedBrushEnginesList;
 
-
     QMenu * newPresetBrushEnginesMenu;
     QList<QAction*> newBrushEngineOptions;
-
 
     void toggleBrushRenameUIActive(bool isRenaming);
 };

@@ -79,7 +79,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(mode);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(true);
 
-    m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setViewModeButtonVisible(true);
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->showViewModeBtn(true);
     m_d->viewModeButton = m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->viewModeButton();
     m_d->viewModeButton->setPopupWidget(menu);
 
@@ -129,11 +129,6 @@ void KisPaintOpPresetsChooserPopup::paintEvent(QPaintEvent* event)
         m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
         m_d->firstShown = false;
     }
-}
-
-void KisPaintOpPresetsChooserPopup::showButtons(bool show)
-{
-    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showButtons(show);
 }
 
 void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KisPaintOpPresetSP  preset)

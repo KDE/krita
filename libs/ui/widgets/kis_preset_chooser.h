@@ -15,6 +15,7 @@
 #include <KoResource.h>
 #include <KoID.h>
 #include "kis_signal_auto_connection.h"
+#include "ResourceListViewModes.h"
 
 class KoAbstractResourceServerAdapter;
 class KisPresetDelegate;
@@ -34,24 +35,28 @@ class KRITAUI_EXPORT KisPresetChooser : public QWidget
 
 public:
 
-    KisPresetChooser(QWidget *parent = 0, const char *name = 0);
+    KisPresetChooser(QWidget *parent = 0);
     ~KisPresetChooser() override;
 
-    enum ViewMode{
+    enum ViewMode {
         THUMBNAIL, /// Shows thumbnails
-        DETAIL,  /// Shows thumbsnails with text next to it
-        STRIP  /// Shows thumbnails arranged in a single row
+        DETAIL  /// Shows thumbsnails with text next to it
     };
 
     /// Sets a list of resources in the paintop list, when ever user press enter in the linedit of paintop_presets_popup Class
     void setViewMode(ViewMode mode);
-    void showButtons(bool show);
+    void setViewModeToThumbnail();
+    void setViewModeToDetail();
 
     void setCurrentResource(KoResourceSP resource);
+
     KoResourceSP currentResource() const;
+
     /// Sets the visibility of tagging klineEdits
     void showTaggingBar(bool show);
+
     KisResourceItemChooser *itemChooser();
+
     void setPresetFilter(const QString& paintOpId);
 
     /// get the base size for the icons. Used by the slider in the view options
@@ -70,15 +75,16 @@ public Q_SLOTS:
     /// saves the icon size for the presets. called by the horizontal slider release event.
     void saveIconSize();
 
-    void slotScrollerStateChanged(QScroller::State state);
+    /// Shows/hides brush names when KisResourceItemListView used by KisResourceItemChooser
+    /// changes it's ListViewMode.
+    /// If this method is removed then the Details view brush names will still be displayed when
+    /// KisResourceItemChooser is in horizontal layout.
+    void showHideBrushNames(ListViewMode newViewMode);
 
 private Q_SLOTS:
     void notifyConfigChanged();
     void slotResourceWasSelected(KoResourceSP resource);
     void slotCurrentPresetChanged();
-
-protected:
-    void resizeEvent(QResizeEvent* event) override;
 
 private:
     KisResourceItemChooser *m_chooser {0};

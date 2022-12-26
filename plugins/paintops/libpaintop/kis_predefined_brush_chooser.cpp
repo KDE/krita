@@ -170,7 +170,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize, QWidget *
     m_itemChooser->setSynced(true);
     m_itemChooser->setMinimumWidth(100);
     m_itemChooser->setMinimumHeight(150);
-    m_itemChooser->showButtons(false); // turn the import and delete buttons since we want control over them
+    m_itemChooser->showImportExportBtns(false); // turn the import and delete buttons since we want control over them
 
 
     addPresetButton->setIcon(KisIconUtils::loadIcon("list-add"));

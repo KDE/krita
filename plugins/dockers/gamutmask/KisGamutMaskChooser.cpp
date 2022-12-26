@@ -148,7 +148,7 @@ KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
     m_itemChooser = new KisResourceItemChooser(ResourceType::GamutMasks, false, this);
     m_itemChooser->setItemDelegate(m_delegate);
     m_itemChooser->showTaggingBar(true);
-    m_itemChooser->showButtons(false);
+    m_itemChooser->showImportExportBtns(false);
     m_itemChooser->setSynced(true);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -178,7 +178,7 @@ KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
 
     // setting the view mode
     setViewMode(m_mode);
-    m_itemChooser->setViewModeButtonVisible(true);
+    m_itemChooser->showViewModeBtn(true);
     KisPopupButton* viewModeButton = m_itemChooser->viewModeButton();
     viewModeButton->setPopupWidget(menu);
 
@@ -215,16 +215,14 @@ void KisGamutMaskChooser::updateViewSettings()
     cfg.writeEntry("GamutMasks.viewMode", qint32(m_mode));
 
     if (m_mode == KisGamutMaskChooser::THUMBNAIL) {
-        m_itemChooser->setSynced(true);
-        m_itemChooser->itemView()->setViewMode(QListView::IconMode);
-        m_itemChooser->setRowHeight(this->fontMetrics().lineSpacing()*4);
-        m_itemChooser->setColumnWidth(this->fontMetrics().lineSpacing()*4);
+        m_itemChooser->setListViewMode(ListViewMode::IconGrid);
+        m_itemChooser->setRowHeight(this->fontMetrics().lineSpacing() * 4);
+        m_itemChooser->setColumnWidth(this->fontMetrics().lineSpacing() * 4);
         m_delegate->setViewMode(m_mode);
-    } else if (m_mode == KisGamutMaskChooser::DETAIL) {
-        m_itemChooser->setSynced(false);
-        m_itemChooser->itemView()->setViewMode(QListView::ListMode);
+    }
+    else if (m_mode == KisGamutMaskChooser::DETAIL) {
+        m_itemChooser->setListViewMode(ListViewMode::Detail);
         m_itemChooser->setRowHeight(this->fontMetrics().lineSpacing()*4);
-        m_itemChooser->setColumnWidth(m_itemChooser->width());
         m_delegate->setViewMode(m_mode);
     }
 }

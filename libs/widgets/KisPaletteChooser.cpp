@@ -56,8 +56,8 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
 
     m_d->itemChooser->setItemDelegate(m_d->delegate.data());
     m_d->itemChooser->setRowHeight(40);
-    m_d->itemChooser->itemView()->setViewMode(QListView::ListMode);
-    m_d->itemChooser->showButtons(false);
+    m_d->itemChooser->setListViewMode(ListViewMode::Detail);
+    m_d->itemChooser->showImportExportBtns(false);
     m_d->itemChooser->showTaggingBar(true);
     QHBoxLayout *paletteLayout = new QHBoxLayout(m_ui->viewPalette);
     paletteLayout->addWidget(m_d->itemChooser.data());

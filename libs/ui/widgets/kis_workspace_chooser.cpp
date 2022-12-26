@@ -106,7 +106,7 @@ KisWorkspaceChooser::ChooserWidgets KisWorkspaceChooser::createChooserWidgets(co
     widgets.itemChooser->setItemDelegate(new KisWorkspaceDelegate(this));
     widgets.itemChooser->setFixedSize(250, 250);
     widgets.itemChooser->setRowHeight(30);
-    widgets.itemChooser->itemView()->setViewMode(QListView::ListMode);
+    widgets.itemChooser->setListViewMode(ListViewMode::Detail);
     widgets.itemChooser->showTaggingBar(false);
     widgets.saveButton = new QPushButton(i18n("Save"));
 

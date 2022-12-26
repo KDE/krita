@@ -451,10 +451,15 @@ inline auto writeInterleavedWithDepth(QSysInfo::Endian endian, Args &&...args)
 template<typename... Args>
 inline auto writeInterleavedLayer(const KoID &id, Args &&...args)
 {
+#ifdef HAVE_OPENEXR
     if (id == Float16BitsColorDepthID) {
         return writeInterleavedWithDepth<KoBgrF16Traits>(
             std::forward<Args>(args)...);
-    } else {
+    } else
+#else
+    Q_UNUSED(id);
+#endif
+    {
         return writeInterleavedWithDepth<KoBgrF32Traits>(
             std::forward<Args>(args)...);
     }

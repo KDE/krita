@@ -30,8 +30,8 @@ endif()
 
 ExternalProject_Add( ext_lager
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    GIT_REPOSITORY https://github.com/arximboldi/lager.git
-    GIT_TAG 5df6dabc56285c5d78e8e1684f584c5d7953a65b
+    GIT_REPOSITORY https://github.com/dimula73/lager.git
+    GIT_TAG 0b6ab3e0e880bc36be5da4984d768fde03b7cf19
 
     CMAKE_ARGS -Dlager_BUILD_DEBUGGER_EXAMPLES=OFF ${EXTRA_LAGER_ARGS} -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_lager} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 

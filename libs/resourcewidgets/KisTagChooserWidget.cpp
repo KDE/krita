@@ -23,6 +23,7 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
+#include <kis_assert.h>
 #include <KisSqueezedComboBox.h>
 
 #include <KoIcon.h>

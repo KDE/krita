@@ -12,6 +12,9 @@
 #include <lager/cursor.hpp>
 #include <lager/reader.hpp>
 
+#include <QString>
+#include <QRectF>
+
 class PAINTOP_EXPORT KisCurveRangeModelInterface
 {
 public:

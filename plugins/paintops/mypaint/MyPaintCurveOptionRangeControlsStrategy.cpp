@@ -15,6 +15,7 @@
 #include <kis_slider_spin_box.h>
 #include <KisWidgetConnectionUtils.h>
 #include <KisMpl.h>
+#include <kis_debug.h>
 
 MyPaintCurveOptionRangeControlsStrategy::MyPaintCurveOptionRangeControlsStrategy(KisCurveRangeModelInterface *rangeInterface, QWidget *rangeControlsPlaceholder)
     : m_rangeModel(dynamic_cast<MyPaintCurveRangeModel*>(rangeInterface))

@@ -6,6 +6,7 @@
 #include "KisCurveWidgetConnectionHelper.h"
 
 #include <QMetaProperty>
+#include "kis_debug.h"
 
 #include "kis_cubic_curve.h"
 #include "kis_curve_widget.h"

@@ -18,6 +18,8 @@
 #include <libmypaint/mypaint-brush.h>
 #include <kis_algebra_2d.h>
 #include <MyPaintCurveRangeModel.h>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 namespace detail {
 

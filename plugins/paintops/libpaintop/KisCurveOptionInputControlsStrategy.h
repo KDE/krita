@@ -12,6 +12,7 @@
 #include <lager/reader.hpp>
 #include <QScopedPointer>
 #include <KisCurveOptionInputControlsStrategyInterface.h>
+#include <QString>
 
 class KisCurveWidgetControlsManagerBase;
 class QSpinBox;

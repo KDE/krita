@@ -9,6 +9,7 @@
 
 #include <KisCurveOptionRangeControlsStrategyInterface.h>
 #include <lager/reader.hpp>
+#include <QString>
 
 class MyPaintCurveRangeModel;
 

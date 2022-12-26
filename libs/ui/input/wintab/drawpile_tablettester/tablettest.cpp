@@ -116,11 +116,13 @@ void TabletTester::tabletEvent(QTabletEvent *e)
 
     const qreal speed = m_tabletSpeedSmoother.getNextSpeed(e->posF(), e->timestamp());
 
-    msg += QString(" X=%1 Y=%2 B=%3 P=%4% S=%5")
+    msg += QString(" X=%1 Y=%2 B=%3 P=%4% TX=%6 TY=%7 S=%9")
         .arg(e->posF().x(), 0, 'f', 2)
         .arg(e->posF().y(), 0, 'f', 2)
         .arg(e->buttons())
         .arg(e->pressure()*100, 0, 'f', 1)
+        .arg(e->xTilt())
+        .arg(e->yTilt())
         .arg(speed, 0, 'f', 1)
         ;
 

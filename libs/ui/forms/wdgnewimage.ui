@@ -525,7 +525,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="KisDoubleSliderSpinBox" name="sliderOpacity" native="true"/>
+        <widget class="KisDoubleSliderSpinBox" name="sliderOpacity"/>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="lblBackgroundStyle">
@@ -664,12 +664,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KisColorButton</class>
    <extends>QPushButton</extends>
    <header>kis_color_button.h</header>
@@ -689,6 +683,12 @@
    <class>KisDoubleParseSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>kis_double_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>KisDoubleParseSpinBox</extends>
+   <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

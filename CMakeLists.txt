@@ -1072,6 +1072,16 @@ set_package_properties(QUAZIP PROPERTIES
     PURPOSE "Needed for reading and writing KRA and ORA files"
 )
 
+##
+## Test for KDcraw
+##
+find_package(KF5KDcraw 5.0.0)
+set_package_properties(KF5KDcraw PROPERTIES
+    DESCRIPTION "A thread-safe wrapper around libraw"
+    URL "https://api.kde.org/libkdcraw/html/index.html"
+    TYPE OPTIONAL
+    PURPOSE "Needed for reading RAW files"
+)
 
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
     find_package(KF5I18n CONFIG REQUIRED)

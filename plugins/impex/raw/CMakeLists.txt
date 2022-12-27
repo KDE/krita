@@ -3,13 +3,10 @@ add_subdirectory(tests)
 include_directories(${LibRaw_INCLUDE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libkdcraw/src)
 
-set(krita_raw_import_SOURCES kis_raw_import.cpp 
-    3rdparty/libkdcraw/src/dcrawinfocontainer.cpp
+set(krita_raw_import_SOURCES
+    kis_raw_import.cpp 
     3rdparty/libkdcraw/src/dcrawsettingswidget.cpp
-    3rdparty/libkdcraw/src/kdcraw.cpp
-    3rdparty/libkdcraw/src/kdcraw_p.cpp
     3rdparty/libkdcraw/src/libkdcraw_debug.cpp
-    3rdparty/libkdcraw/src/rawdecodingsettings.cpp
     3rdparty/libkdcraw/src/rcombobox.cpp
     3rdparty/libkdcraw/src/rexpanderbox.cpp
     3rdparty/libkdcraw/src/rnuminput.cpp
@@ -22,7 +19,7 @@ ki18n_wrap_ui(krita_raw_import_SOURCES
 )
 
 kis_add_library(krita_raw_import MODULE ${krita_raw_import_SOURCES})
-target_link_libraries(krita_raw_import kritaui ${LibRaw_LIBRARIES} kritaexifcommon)
+target_link_libraries(krita_raw_import kritaui ${LibRaw_LIBRARIES} KF5::KDcraw kritaexifcommon)
 
 install(TARGETS krita_raw_import  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( PROGRAMS  krita_raw.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

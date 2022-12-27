@@ -9,15 +9,12 @@ set(krita_raw_import_SOURCES kis_raw_import.cpp
     3rdparty/libkdcraw/src/kdcraw.cpp
     3rdparty/libkdcraw/src/kdcraw_p.cpp
     3rdparty/libkdcraw/src/libkdcraw_debug.cpp
-    3rdparty/libkdcraw/src/ractionjob.cpp
-    3rdparty/libkdcraw/src/ractionthreadbase.cpp
     3rdparty/libkdcraw/src/rawdecodingsettings.cpp
     3rdparty/libkdcraw/src/rcombobox.cpp
     3rdparty/libkdcraw/src/rexpanderbox.cpp
     3rdparty/libkdcraw/src/rnuminput.cpp
     3rdparty/libkdcraw/src/rsliderspinbox.cpp
     3rdparty/libkdcraw/src/rwidgetutils.cpp
-    3rdparty/libkdcraw/src/squeezedcombobox.cpp
 )
 
 ki18n_wrap_ui(krita_raw_import_SOURCES 

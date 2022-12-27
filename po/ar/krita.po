@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-23 00:44+0000\n"
+"POT-Creation-Date: 2022-12-27 00:46+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -17916,8 +17916,8 @@ msgid "Processing"
 msgstr "يعالج"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1409
-#: libs/ui/KisMainWindow.cpp:1689 libs/ui/KisMainWindow.cpp:1702
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1414
+#: libs/ui/KisMainWindow.cpp:1694 libs/ui/KisMainWindow.cpp:1707
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18685,8 +18685,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "المستند"
 
-#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2053
-#: libs/ui/KisMainWindow.cpp:2136
+#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2058
+#: libs/ui/KisMainWindow.cpp:2141
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "استيراد الصّور"
@@ -20047,17 +20047,17 @@ msgstr "يحمّل حزم الموارد..."
 #: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:931
 #: libs/ui/KisDocument.cpp:939 libs/ui/KisDocument.cpp:1841
 #: libs/ui/KisDocument.cpp:1884 libs/ui/KisDocument.cpp:1892
-#: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1082
-#: libs/ui/KisMainWindow.cpp:1208 libs/ui/KisMainWindow.cpp:1307
-#: libs/ui/KisMainWindow.cpp:1913 libs/ui/KisMainWindow.cpp:1922
-#: libs/ui/KisMainWindow.cpp:2061 libs/ui/KisMainWindow.cpp:2122
-#: libs/ui/KisMainWindow.cpp:2143 libs/ui/KisMainWindow.cpp:2756
+#: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1087
+#: libs/ui/KisMainWindow.cpp:1213 libs/ui/KisMainWindow.cpp:1312
+#: libs/ui/KisMainWindow.cpp:1918 libs/ui/KisMainWindow.cpp:1927
+#: libs/ui/KisMainWindow.cpp:2066 libs/ui/KisMainWindow.cpp:2127
+#: libs/ui/KisMainWindow.cpp:2148 libs/ui/KisMainWindow.cpp:2761
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:35
 #: libs/ui/KisRemoteFileFetcher.cpp:56 libs/ui/KisRemoteFileFetcher.cpp:86
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:681 libs/ui/KisView.cpp:1137
-#: libs/ui/KisWelcomePageWidget.cpp:709 libs/ui/KisWindowLayoutResource.cpp:373
+#: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:292
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1350
@@ -20425,7 +20425,7 @@ msgstr "المصغّرة"
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:121 libs/resources/KisTagModel.cpp:300
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:599
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:629
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:655
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:707
@@ -20481,7 +20481,7 @@ msgid "Resources Cache Database Explorer"
 msgstr ""
 
 #: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:69
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:54
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #, kde-format
 msgid "Tag"
@@ -20593,27 +20593,27 @@ msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
 msgstr "افتح مجلّد الموارد"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:165
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Import resource"
-msgstr "استورد موردًا"
-
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:172
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Delete resource"
-msgstr "احذف المورد"
-
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:193
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:129
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Manage Resources"
 msgid "Storage Resources"
 msgstr "أدر الموارد"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:230
-#: libs/ui/KisMainWindow.cpp:2555
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:190
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Import resource"
+msgstr "استورد موردًا"
+
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:195
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete resource"
+msgstr "احذف المورد"
+
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:333
+#: libs/ui/KisMainWindow.cpp:2560
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:609
 #, kde-format
 msgctxt "@title:window"
@@ -20798,34 +20798,34 @@ msgid ""
 "bundle."
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:69
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:74
 #, kde-format
 msgid "Tag options"
 msgstr "خيارات الوسم"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:140
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:301
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
 #, fuzzy, kde-format
 #| msgid "Rename tag"
 msgctxt "Dialog title"
 msgid "Can't rename the tag"
 msgstr "أعد تسمية الوسم"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:140
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:273
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:301
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:153
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:158
 #, kde-format
 msgctxt "Dialog title"
 msgid "Remove existing tag with that name?"
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:155
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:160
 #, kde-format
 msgctxt ""
 "Dialog message (the arguments are both somewhat user readable nouns or "
@@ -20838,7 +20838,7 @@ msgid ""
 "Tag's unique name: %2"
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:261
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:266
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
 #, fuzzy, kde-format
 #| msgid "Go to previous page"
@@ -20848,7 +20848,7 @@ msgctxt ""
 msgid "Restore previous tag"
 msgstr "انتقل إلى الصّفحة السّابقة"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:262
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
 #, fuzzy, kde-format
 #| msgid "Add Existing Layer"
 msgctxt ""
@@ -20856,7 +20856,7 @@ msgctxt ""
 msgid "Use existing tag"
 msgstr "أضف طبقة موجود"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:264
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:269
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
 #, fuzzy, kde-format
 #| msgid "Overwrite Brush"
@@ -20864,7 +20864,7 @@ msgctxt "Dialog title"
 msgid "Overwrite tag?"
 msgstr "استبدل"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:265
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
 #, fuzzy, kde-format
 #| msgid ""
@@ -20876,7 +20876,7 @@ msgstr ""
 "هناك لاحة بالاسم هذا بالفعل.\n"
 "أتريد الكتابة فوقها؟"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:266
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
 #, fuzzy, kde-format
 msgctxt ""
@@ -20891,11 +20891,11 @@ msgstr "استبدل (الاختصار R)"
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnCancelMaskEdit)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:50
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
-#: libs/ui/forms/wdgpaintopsettings.ui:201
+#: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:43
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:265
@@ -20909,7 +20909,7 @@ msgstr "استبدل (الاختصار R)"
 msgid "Cancel"
 msgstr "ألغِ"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:273
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
 #, fuzzy, kde-format
 #| msgid "Cannot create storage"
 msgctxt "Dialog title"
@@ -21092,7 +21092,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "فشل تصيير إطارات الحركة!"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:52
-#: libs/ui/KisMainWindow.cpp:2163
+#: libs/ui/KisMainWindow.cpp:2168
 #, kde-format
 msgid "Render Animation"
 msgstr "تصيير الحركة"
@@ -23217,7 +23217,7 @@ msgid "Numerical"
 msgstr "عدديّ"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:137
-#: libs/ui/KisMainWindow.cpp:1176
+#: libs/ui/KisMainWindow.cpp:1181
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "استيراد الصّور"
@@ -23356,7 +23356,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "أدخِل اسم النّمط الجديد"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2566
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2571
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -24275,7 +24275,7 @@ msgid "Show details"
 msgstr "أظهر التّفاصيل"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:455 libs/ui/KisWelcomePageWidget.cpp:396
+#: libs/ui/forms/KisWelcomePage.ui:455 libs/ui/KisWelcomePageWidget.cpp:398
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -24293,43 +24293,43 @@ msgid "Community"
 msgstr "المجتمع"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:647 libs/ui/KisWelcomePageWidget.cpp:382
+#: libs/ui/forms/KisWelcomePage.ui:647 libs/ui/KisWelcomePageWidget.cpp:384
 #, kde-format
 msgid "User Manual"
 msgstr "دليل المستخدم"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:737 libs/ui/KisWelcomePageWidget.cpp:379
+#: libs/ui/forms/KisWelcomePage.ui:737 libs/ui/KisWelcomePageWidget.cpp:381
 #, kde-format
 msgid "Getting Started"
 msgstr "استعد للبدء"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:824 libs/ui/KisWelcomePageWidget.cpp:376
+#: libs/ui/forms/KisWelcomePage.ui:824 libs/ui/KisWelcomePageWidget.cpp:378
 #, kde-format
 msgid "User Community"
 msgstr "مجتمع المستخدمين"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:911 libs/ui/KisWelcomePageWidget.cpp:388
+#: libs/ui/forms/KisWelcomePage.ui:911 libs/ui/KisWelcomePageWidget.cpp:390
 #, kde-format
 msgid "Krita Website"
 msgstr "موقع كريتا"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:1001 libs/ui/KisWelcomePageWidget.cpp:391
+#: libs/ui/forms/KisWelcomePage.ui:1001 libs/ui/KisWelcomePageWidget.cpp:393
 #, kde-format
 msgid "Source Code"
 msgstr "الشيفرة المصدرية"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:1088 libs/ui/KisWelcomePageWidget.cpp:385
+#: libs/ui/forms/KisWelcomePage.ui:1088 libs/ui/KisWelcomePageWidget.cpp:387
 #, kde-format
 msgid "Support Krita"
 msgstr "ادعم كريتا"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:1178 libs/ui/KisWelcomePageWidget.cpp:394
+#: libs/ui/forms/KisWelcomePage.ui:1178 libs/ui/KisWelcomePageWidget.cpp:396
 #, kde-format
 msgid "Powered by KDE"
 msgstr "ممكنة بواسطة كدي"
@@ -24347,7 +24347,7 @@ msgid "Start"
 msgstr "ابدأ"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1428 libs/ui/KisWelcomePageWidget.cpp:623
+#: libs/ui/forms/KisWelcomePage.ui:1428 libs/ui/KisWelcomePageWidget.cpp:625
 #, kde-format
 msgid "DEV BUILD"
 msgstr ""
@@ -26900,7 +26900,7 @@ msgid "Brush Editor"
 msgstr "محرّر الفُرش"
 
 #. i18n: ectx: property (text), widget (QLabel, currentBrushNameLabel)
-#: libs/ui/forms/wdgpaintopsettings.ui:134
+#: libs/ui/forms/wdgpaintopsettings.ui:130
 #, fuzzy, kde-format
 #| msgid "Choose workspace"
 msgid "Current brush preset"
@@ -26908,7 +26908,7 @@ msgstr "اختر مساحة عمل"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:188 libs/ui/KisMainWindow.cpp:1061
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1066
 #: libs/ui/widgets/kis_workspace_chooser.cpp:111
 #: libs/ui/widgets/kis_workspace_chooser.cpp:190
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -26921,44 +26921,44 @@ msgid "Save"
 msgstr "احفظ"
 
 #. i18n: ectx: property (text), widget (QLabel, currentBrushEngineLabel)
-#: libs/ui/forms/wdgpaintopsettings.ui:234
+#: libs/ui/forms/wdgpaintopsettings.ui:230
 #, kde-format
 msgid "Current Brush Engine"
 msgstr "محرّك الفُرش الحاليّ"
 
 #. i18n: ectx: property (text), widget (QPushButton, saveNewBrushPresetButton)
-#: libs/ui/forms/wdgpaintopsettings.ui:344
+#: libs/ui/forms/wdgpaintopsettings.ui:340
 #, fuzzy, kde-format
 msgid "Save New Brush Preset..."
 msgstr "احفظ الفرشاة كمسبقة ضبط جديدة."
 
 #. i18n: ectx: property (text), widget (QPushButton, saveBrushPresetButton)
-#: libs/ui/forms/wdgpaintopsettings.ui:363
+#: libs/ui/forms/wdgpaintopsettings.ui:359
 #, fuzzy, kde-format
 #| msgid "Overwrite Brush"
 msgid "Overwrite Brush Preset"
 msgstr "اكتب فوق الفرشاة"
 
 #. i18n: ectx: property (text), widget (QLabel, presetsSidebarLabel)
-#: libs/ui/forms/wdgpaintopsettings.ui:419
+#: libs/ui/forms/wdgpaintopsettings.ui:427
 #, kde-format
 msgid "Presets"
 msgstr "مسبقات الضّبط"
 
 #. i18n: ectx: property (text), widget (QLabel, engineFilterLabel)
-#: libs/ui/forms/wdgpaintopsettings.ui:436
+#: libs/ui/forms/wdgpaintopsettings.ui:444
 #, kde-format
 msgid "Engine:"
 msgstr "المحرّك:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, eraserBrushSizeCheckBox)
-#: libs/ui/forms/wdgpaintopsettings.ui:652
+#: libs/ui/forms/wdgpaintopsettings.ui:615
 #, kde-format
 msgid "Erase mode will use a separate brush size"
 msgstr "سيستخدم وضع المسح مقاسَ فرشاة منفصل"
 
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBrushSizeCheckBox)
-#: libs/ui/forms/wdgpaintopsettings.ui:655
+#: libs/ui/forms/wdgpaintopsettings.ui:618
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Decrease font size"
@@ -26966,13 +26966,13 @@ msgid "Eraser switch size"
 msgstr "إنقاص حجم الخطّ"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, eraserBrushOpacityCheckBox)
-#: libs/ui/forms/wdgpaintopsettings.ui:671
+#: libs/ui/forms/wdgpaintopsettings.ui:634
 #, kde-format
 msgid "Erase mode will use a separate brush opacity"
 msgstr "سيستخدم وضع المسح شفافيّةَ فرشاة منفصلة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBrushOpacityCheckBox)
-#: libs/ui/forms/wdgpaintopsettings.ui:674
+#: libs/ui/forms/wdgpaintopsettings.ui:637
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Increase opacity"
@@ -26980,45 +26980,45 @@ msgid "Eraser switch opacity"
 msgstr "زِد الشّفافيّة"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dirtyPresetCheckBox)
-#: libs/ui/forms/wdgpaintopsettings.ui:690
+#: libs/ui/forms/wdgpaintopsettings.ui:653
 #, kde-format
 msgid "Temporarily Save Tweaks To Presets"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, scratchpadSidebarLabel)
-#: libs/ui/forms/wdgpaintopsettings.ui:805
+#: libs/ui/forms/wdgpaintopsettings.ui:780
 #, kde-format
 msgid "Scratchpad"
 msgstr "المفكّرة"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, paintPresetIcon)
-#: libs/ui/forms/wdgpaintopsettings.ui:868
+#: libs/ui/forms/wdgpaintopsettings.ui:843
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Fill area with brush preset icon"
 msgstr "املأ المنطقة بلون الخلفيّة"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, fillLayer)
-#: libs/ui/forms/wdgpaintopsettings.ui:887
+#: libs/ui/forms/wdgpaintopsettings.ui:862
 #, fuzzy, kde-format
 #| msgid "Fill area with gradient"
 msgid "Fill area with current image"
 msgstr "املأ المنطقة بتدرّج"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, fillGradient)
-#: libs/ui/forms/wdgpaintopsettings.ui:906
+#: libs/ui/forms/wdgpaintopsettings.ui:881
 #, kde-format
 msgid "Fill area with gradient"
 msgstr "املأ المنطقة بتدرّج"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, fillSolid)
-#: libs/ui/forms/wdgpaintopsettings.ui:925
+#: libs/ui/forms/wdgpaintopsettings.ui:900
 #, kde-format
 msgid "Fill area with background color"
 msgstr "املأ المنطقة بلون الخلفيّة"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, eraseScratchPad)
-#: libs/ui/forms/wdgpaintopsettings.ui:944
+#: libs/ui/forms/wdgpaintopsettings.ui:919
 #, kde-format
 msgid "Reset area to white"
 msgstr "صفّر المنطقة إلى الأبيض"
@@ -29956,7 +29956,7 @@ msgstr ""
 msgid "Fit Canvas to View"
 msgstr "مقاس رقعة الرّسم"
 
-#: libs/ui/kis_popup_palette.cpp:867
+#: libs/ui/kis_popup_palette.cpp:868
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Reset Foreground and Background Color"
@@ -29965,7 +29965,7 @@ msgid ""
 "Right click to set to black and white."
 msgstr "صفّر لوني المقدّمة والخلفيّة"
 
-#: libs/ui/kis_popup_palette.cpp:1004
+#: libs/ui/kis_popup_palette.cpp:1005
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -31071,34 +31071,34 @@ msgstr "اعرض شريط أدوات %1"
 msgid "Hide %1 Toolbar"
 msgstr "أخفِ شريط أدوات %1"
 
-#: libs/ui/KisMainWindow.cpp:1024
+#: libs/ui/KisMainWindow.cpp:1029
 #, kde-format
 msgid "Write Protected"
 msgstr "محميّ ضدّ الكتابة"
 
-#: libs/ui/KisMainWindow.cpp:1028
+#: libs/ui/KisMainWindow.cpp:1033
 #, kde-format
 msgid "Recovered"
 msgstr "مستعاد"
 
-#: libs/ui/KisMainWindow.cpp:1058
+#: libs/ui/KisMainWindow.cpp:1063
 #, kde-format
 msgid "Save as %1"
 msgstr "احفظ ك‍َ %1"
 
-#: libs/ui/KisMainWindow.cpp:1082
+#: libs/ui/KisMainWindow.cpp:1087
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "الملف %1 ليس موجودا."
 
-#: libs/ui/KisMainWindow.cpp:1176
+#: libs/ui/KisMainWindow.cpp:1181
 #, fuzzy, kde-format
 #| msgctxt "description of a file type"
 #| msgid "OpenRaster Image"
 msgid "Open Images"
 msgstr "صورة OpenRaster"
 
-#: libs/ui/KisMainWindow.cpp:1308
+#: libs/ui/KisMainWindow.cpp:1313
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -31111,48 +31111,48 @@ msgstr ""
 "\n"
 "رجاءً اختر مكانًا حيث الملفّ الأصليّ سيبقى في مأمن!"
 
-#: libs/ui/KisMainWindow.cpp:1364
+#: libs/ui/KisMainWindow.cpp:1369
 #, kde-format
 msgid "Exporting"
 msgstr "التّصدير"
 
-#: libs/ui/KisMainWindow.cpp:1364
+#: libs/ui/KisMainWindow.cpp:1369
 #, fuzzy, kde-format
 #| msgid "Saving Format"
 msgid "Saving As"
 msgstr "نسق الحفظ"
 
-#: libs/ui/KisMainWindow.cpp:1668
+#: libs/ui/KisMainWindow.cpp:1673
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "أنشئ مستندًا جديدًا"
 
-#: libs/ui/KisMainWindow.cpp:1692
+#: libs/ui/KisMainWindow.cpp:1697
 #, kde-format
 msgid "Custom Document"
 msgstr "مستند مخصص"
 
-#: libs/ui/KisMainWindow.cpp:1704
+#: libs/ui/KisMainWindow.cpp:1709
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "أنشئ من الحافظة"
 
-#: libs/ui/KisMainWindow.cpp:1882
+#: libs/ui/KisMainWindow.cpp:1887
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Save Layer/Mask"
 msgid "Layers/Masks"
 msgstr "احفظ الطّبقة/القناع"
 
-#: libs/ui/KisMainWindow.cpp:1908
+#: libs/ui/KisMainWindow.cpp:1913
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:181
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:286
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "ليس لديك أي حزم موارد ممكّنة."
 
-#: libs/ui/KisMainWindow.cpp:1912
+#: libs/ui/KisMainWindow.cpp:1917
 #, kde-format
 msgid ""
 "\n"
@@ -31160,7 +31160,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1922
+#: libs/ui/KisMainWindow.cpp:1927
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
 #, kde-format
@@ -31169,7 +31169,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2061 libs/ui/KisMainWindow.cpp:2143
+#: libs/ui/KisMainWindow.cpp:2066 libs/ui/KisMainWindow.cpp:2148
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31178,60 +31178,60 @@ msgstr ""
 "تعذّر إنهاء استيراد الحركة:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2122
+#: libs/ui/KisMainWindow.cpp:2127
 #, fuzzy, kde-format
 #| msgid "Failed to render animation frames!"
 msgid "Failed to create new document. Animation import aborted."
 msgstr "فشل تصيير إطارات الحركة!"
 
-#: libs/ui/KisMainWindow.cpp:2546
+#: libs/ui/KisMainWindow.cpp:2551
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "ا&ستورد مساحة عمل..."
 
-#: libs/ui/KisMainWindow.cpp:2561
+#: libs/ui/KisMainWindow.cpp:2566
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "مساحة عمل ج&ديدة..."
 
-#: libs/ui/KisMainWindow.cpp:2565
+#: libs/ui/KisMainWindow.cpp:2570
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "مساحة عمل جديدة..."
 
-#: libs/ui/KisMainWindow.cpp:2609
+#: libs/ui/KisMainWindow.cpp:2614
 #, fuzzy, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2612
+#: libs/ui/KisMainWindow.cpp:2617
 #, fuzzy, kde-format
 msgid "%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2779
+#: libs/ui/KisMainWindow.cpp:2784
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2795
+#: libs/ui/KisMainWindow.cpp:2800
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "خطأ تثبيت"
 
-#: libs/ui/KisMainWindow.cpp:2904
+#: libs/ui/KisMainWindow.cpp:2909
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "ال&سمات"
 
-#: libs/ui/KisMainWindow.cpp:2962
+#: libs/ui/KisMainWindow.cpp:2967
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "فراغ موسع"
@@ -31683,12 +31683,12 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "مجهّلة"
 
-#: libs/ui/KisWelcomePageWidget.cpp:146
+#: libs/ui/KisWelcomePageWidget.cpp:148
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr "مكّن الأخبار والتحقق من الإصدارات الجديدة"
 
-#: libs/ui/KisWelcomePageWidget.cpp:148
+#: libs/ui/KisWelcomePageWidget.cpp:150
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
@@ -31696,34 +31696,40 @@ msgid ""
 msgstr ""
 "اعرض أخبار عن كريتا: هذا يحتاج إلى الإنترنت لجلب المعلومات من موقع krita.org"
 
-#: libs/ui/KisWelcomePageWidget.cpp:151
+#: libs/ui/KisWelcomePageWidget.cpp:153
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, kde-format
 msgid "Language"
 msgstr "اللغة"
 
-#: libs/ui/KisWelcomePageWidget.cpp:152
+#: libs/ui/KisWelcomePageWidget.cpp:154
 #, kde-format
 msgid "English news is always up to date."
 msgstr "الأخبار الإنجليزية دائما محدثة."
 
-#: libs/ui/KisWelcomePageWidget.cpp:418
+#: libs/ui/KisWelcomePageWidget.cpp:420
 #, kde-format
 msgid "Get your Krita Supporter Badge here!"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:728
+#: libs/ui/KisWelcomePageWidget.cpp:648
+#: plugins/dockers/presethistory/presethistory_dock.cpp:302
+#, kde-format
+msgid "Forget \"%1\""
+msgstr "انسَ \"%1\""
+
+#: libs/ui/KisWelcomePageWidget.cpp:745
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "إصدارة جديدة من كريتا متوفرة."
 
-#: libs/ui/KisWelcomePageWidget.cpp:757
+#: libs/ui/KisWelcomePageWidget.cpp:774
 #, fuzzy, kde-format
 #| msgid "An exception occurred while running the script."
 msgid "An error occurred during the update"
 msgstr "حدث استثناء أثناء تشغيل السّكربت."
 
-#: libs/ui/KisWelcomePageWidget.cpp:763
+#: libs/ui/KisWelcomePageWidget.cpp:780
 #, kde-format
 msgid "Restart is required."
 msgstr "إعادة التّشغيل مطلوبة."
@@ -32927,7 +32933,7 @@ msgstr "صندوق الأدوات"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:141
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:155
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:321
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
 #, kde-format
@@ -34155,7 +34161,7 @@ msgid "Mid-gray level:"
 msgstr "اعرض المستويات:"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:125
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:160
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:160
 #, kde-format
 msgctxt "@title Which elements to display (e.g., thumbnails or details)"
@@ -34163,55 +34169,55 @@ msgid "Display"
 msgstr "العرض"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:131
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:164
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:168
 #, kde-format
 msgid "Thumbnails"
 msgstr "المصغّرات"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:136
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:172
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:174
 #, kde-format
 msgid "Details"
 msgstr "التّفاصيل"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:96
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:110
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
 #, kde-format
 msgid "The settings for this preset have changed from their default."
 msgstr ""
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:98
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:112
 #, kde-format
 msgid "Toggle showing presets"
 msgstr ""
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:100
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:114
 #, kde-format
 msgid "Toggle showing scratchpad"
 msgstr ""
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:102
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:116
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Reload the brush preset"
 msgstr "املأ المنطقة بلون الخلفيّة"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:117
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Rename the brush preset"
 msgstr "املأ المنطقة بلون الخلفيّة"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:185
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:217
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Show Brush Editor"
 msgid "Detach Brush Editor"
 msgstr "اعرض محرّر الفُرش"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:534
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:564
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
@@ -39795,7 +39801,7 @@ msgstr ""
 msgid "Add foreground color"
 msgstr "أضف لون مقدّمة"
 
-#: plugins/dockers/presetdocker/presetdocker_dock.cpp:26
+#: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
 #, kde-format
 msgctxt "@title:window Brush presets chooser docker"
 msgid "Brush Presets"
@@ -39835,11 +39841,6 @@ msgstr "عدد الصّفوف:"
 #| msgid "Number of rows:"
 msgid "Number of Brushes Shown:"
 msgstr "عدد الصّفوف:"
-
-#: plugins/dockers/presethistory/presethistory_dock.cpp:302
-#, kde-format
-msgid "Forget \"%1\""
-msgstr "انسَ \"%1\""
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:305
 #, kde-format

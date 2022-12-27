@@ -891,7 +891,27 @@ public:
             setInformativeText(details);
         }
         if (!warnings.isEmpty()) {
-            setDetailedText(warnings.join("\n"));
+            setDetailedText(warnings);
+        }
+    }
+
+private:
+    void setDetailedText(const QStringList &text)
+    {
+        QMessageBox::setDetailedText(text.first());
+
+        QTextEdit *messageBox = findChild<QTextEdit *>();
+
+        if (messageBox) {
+            messageBox->setAcceptRichText(true);
+
+            QString warning = "<html><body><ul>";
+            Q_FOREACH (const QString &i, text) {
+                warning += "\n<li>" + i + "</li>";
+            }
+            warning += "</ul></body></html>";
+
+            messageBox->setText(warning);
         }
     }
 };

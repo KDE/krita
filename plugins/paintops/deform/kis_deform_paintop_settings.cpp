@@ -8,10 +8,10 @@
 #include <kis_deform_paintop_settings.h>
 #include <kis_deform_paintop_settings_widget.h>
 
-#include <kis_brush_size_option.h>
+#include "KisBrushSizeOptionData.h"
 
 #include <kis_airbrush_option_widget.h>
-#include <kis_deform_option.h>
+#include "KisDeformOptionData.h"
 
 struct KisDeformPaintOpSettings::Private
 {
@@ -32,17 +32,17 @@ KisDeformPaintOpSettings::~KisDeformPaintOpSettings()
 
 void KisDeformPaintOpSettings::setPaintOpSize(qreal value)
 {
-    KisBrushSizeOptionProperties option;
-    option.readOptionSetting(this);
-    option.brush_diameter = value;
-    option.writeOptionSetting(this);
+    KisBrushSizeOptionData option;
+    option.read(this);
+    option.brushDiameter = value;
+    option.write(this);
 }
 
 qreal KisDeformPaintOpSettings::paintOpSize() const
 {
-    KisBrushSizeOptionProperties option;
-    option.readOptionSetting(this);
-    return option.brush_diameter;
+    KisBrushSizeOptionData option;
+    option.read(this);
+    return option.brushDiameter;
 }
 
 bool KisDeformPaintOpSettings::paintIncremental()
@@ -57,7 +57,7 @@ bool KisDeformPaintOpSettings::isAirbrushing() const
         return getBool(AIRBRUSH_ENABLED);
     }
     else {
-        return getBool(DEFORM_USE_MOVEMENT_PAINT);
+        return getBool("Deform/useMovementPaint");
     }
 }
 
@@ -65,9 +65,9 @@ KisOptimizedBrushOutline KisDeformPaintOpSettings::brushOutline(const KisPaintIn
 {
     KisOptimizedBrushOutline path;
     if (mode.isVisible) {
-        qreal width = getInt(BRUSH_DIAMETER);
-        qreal height = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT);
-        path = ellipseOutline(width, height, getDouble(BRUSH_SCALE), -getDouble(BRUSH_ROTATION));
+        qreal width = getInt("Brush/diameter");
+        qreal height = getInt("Brush/diameter") * getDouble("Brush/aspect");
+        path = ellipseOutline(width, height, getDouble("Brush/scale"), -getDouble("Brush/rotation"));
 
         path = outlineFetcher()->fetchOutline(info, this, path, mode, alignForZoom);
 
@@ -106,16 +106,16 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    DeformOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    prop->setValue(option.deform_amount);
+                    KisDeformOptionData option;
+                    option.read(prop->settings().data());
+                    prop->setValue(option.deformAmount);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    DeformOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    option.deform_amount = prop->value().toReal();
-                    option.writeOptionSetting(prop->settings().data());
+                    KisDeformOptionData option;
+                    option.read(prop->settings().data());
+                    option.deformAmount = prop->value().toReal();
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -140,16 +140,16 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    DeformOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    prop->setValue(int(option.deform_action - 1));
+                    KisDeformOptionData option;
+                    option.read(prop->settings().data());
+                    prop->setValue(int(option.deformAction));
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    DeformOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    option.deform_action = prop->value().toInt() + 1;
-                    option.writeOptionSetting(prop->settings().data());
+                    KisDeformOptionData option;
+                    option.read(prop->settings().data());
+                    option.deformAction = (DeformModes)prop->value().toInt();
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -173,17 +173,17 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    KisBrushSizeOptionProperties option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisBrushSizeOptionData option;
+                    option.read(prop->settings().data());
 
-                    prop->setValue(int(option.brush_rotation));
+                    prop->setValue(int(option.brushRotation));
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    KisBrushSizeOptionProperties option;
-                    option.readOptionSetting(prop->settings().data());
-                    option.brush_rotation = prop->value().toInt();
-                    option.writeOptionSetting(prop->settings().data());
+                    KisBrushSizeOptionData option;
+                    option.read(prop->settings().data());
+                    option.brushRotation = prop->value().toInt();
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));

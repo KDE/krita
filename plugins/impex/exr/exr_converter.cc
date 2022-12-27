@@ -598,11 +598,29 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
         bool topLevelRGBFound = false;
         info.name = HDR_LAYER;
 
-        QStringList topLevelChannelNames = QStringList() << "A" << "R" << "G" << "B"
-                                                         << ".A" << ".R" << ".G" << ".B"
-                                                         << "A." << "R." << "G." << "B."
-                                                         << "A." << "R." << "G." << "B."
-                                                         << ".alpha" << ".red" << ".green" << ".blue";
+        QStringList topLevelChannelNames = QStringList() << "A"
+                                                         << "R"
+                                                         << "G"
+                                                         << "B"
+                                                         << ".A"
+                                                         << ".R"
+                                                         << ".G"
+                                                         << ".B"
+                                                         << "A."
+                                                         << "R."
+                                                         << "G."
+                                                         << "B."
+                                                         << "A."
+                                                         << "R."
+                                                         << "G."
+                                                         << "B."
+                                                         << ".alpha"
+                                                         << ".red"
+                                                         << ".green"
+                                                         << ".blue"
+                                                         << "Y"
+                                                         << ".Y"
+                                                         << "Y.";
 
         for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) {
             const Imf::Channel &channel = i.channel();

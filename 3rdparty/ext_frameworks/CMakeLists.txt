@@ -15,7 +15,6 @@ SET(EXTPREFIX_frameworks "${EXTPREFIX}" )
 # On Linux:
 #        KCrash
 
-if (ANDROID)
 ExternalProject_Add(
     ext_extra_cmake_modules
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -23,6 +22,7 @@ ExternalProject_Add(
     URL_HASH SHA256=5972ec6d78c3e95ab9cbecdb0661c158570e868466357c5cec2b63a4251ecce4
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Android-Skip-setting-up-fastlane.patch
           COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Android-Recursively-find-dependency-of-dependencies.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ecm_install_to_share.diff
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
                -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
@@ -33,24 +33,6 @@ ExternalProject_Add(
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
 )
-else()
-ExternalProject_Add(
-    ext_extra_cmake_modules
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://download.kde.org/stable/frameworks/5.64/extra-cmake-modules-5.64.0.zip
-    URL_MD5 e8fa4bba6a534feb9d9e39db036923da
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ecm_install_to_share.diff
-          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Skip-looking-for-Png2Ico-when-IcoTool-is-found.patch
-          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Don-t-cause-warning-on-newer-CMake-due-to-package-na.patch
-    INSTALL_DIR ${EXTPREFIX_frameworks}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
-               -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
-                ${GLOBAL_PROFILE}
-                -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-                -DBUILD_TESTING=false
-    UPDATE_COMMAND ""
-)
-endif()
 
 set(kconfig_patches
     ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Patch-kconfig-to-save-the-config-to-AppConfigLocatio.patch

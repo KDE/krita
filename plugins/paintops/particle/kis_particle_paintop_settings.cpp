@@ -6,7 +6,7 @@
 #include "kis_particle_paintop_settings.h"
 
 #include "kis_particle_paintop_settings_widget.h"
-#include "kis_particleop_option.h"
+#include "KisParticleOpOptionData.h"
 
 #include <KisPaintingModeOptionData.h>
 #include <kis_airbrush_option_widget.h>
@@ -57,17 +57,17 @@ QList<KisUniformPaintOpPropertySP> KisParticlePaintOpSettings::uniformProperties
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ParticleOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisParticleOpOptionData option;
+                    option.read(prop->settings().data());
 
-                    prop->setValue(int(option.particle_count));
+                    prop->setValue(int(option.particleCount));
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ParticleOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    option.particle_count = prop->value().toInt();
-                    option.writeOptionSetting(prop->settings().data());
+                    KisParticleOpOptionData option;
+                    option.read(prop->settings().data());
+                    option.particleCount = prop->value().toInt();
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -87,16 +87,16 @@ QList<KisUniformPaintOpPropertySP> KisParticlePaintOpSettings::uniformProperties
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ParticleOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    prop->setValue(option.particle_weight);
+                    KisParticleOpOptionData option;
+                    option.read(prop->settings().data());
+                    prop->setValue(option.particleWeight);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ParticleOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    option.particle_weight = prop->value().toReal();
-                    option.writeOptionSetting(prop->settings().data());
+                    KisParticleOpOptionData option;
+                    option.read(prop->settings().data());
+                    option.particleWeight = prop->value().toReal();
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -116,16 +116,16 @@ QList<KisUniformPaintOpPropertySP> KisParticlePaintOpSettings::uniformProperties
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ParticleOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    prop->setValue(option.particle_scale_x);
+                    KisParticleOpOptionData option;
+                    option.read(prop->settings().data());
+                    prop->setValue(option.particleScaleX);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ParticleOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    option.particle_scale_x = prop->value().toReal();
-                    option.writeOptionSetting(prop->settings().data());
+                    KisParticleOpOptionData option;
+                    option.read(prop->settings().data());
+                    option.particleScaleX = prop->value().toReal();
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -145,16 +145,16 @@ QList<KisUniformPaintOpPropertySP> KisParticlePaintOpSettings::uniformProperties
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ParticleOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    prop->setValue(option.particle_scale_y);
+                    KisParticleOpOptionData option;
+                    option.read(prop->settings().data());
+                    prop->setValue(option.particleScaleY);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ParticleOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    option.particle_scale_y = prop->value().toReal();
-                    option.writeOptionSetting(prop->settings().data());
+                    KisParticleOpOptionData option;
+                    option.read(prop->settings().data());
+                    option.particleScaleY = prop->value().toReal();
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -174,16 +174,16 @@ QList<KisUniformPaintOpPropertySP> KisParticlePaintOpSettings::uniformProperties
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ParticleOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    prop->setValue(option.particle_gravity);
+                    KisParticleOpOptionData option;
+                    option.read(prop->settings().data());
+                    prop->setValue(option.particleGravity);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ParticleOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    option.particle_gravity = prop->value().toReal();
-                    option.writeOptionSetting(prop->settings().data());
+                    KisParticleOpOptionData option;
+                    option.read(prop->settings().data());
+                    option.particleGravity = prop->value().toReal();
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -201,17 +201,17 @@ QList<KisUniformPaintOpPropertySP> KisParticlePaintOpSettings::uniformProperties
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ParticleOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisParticleOpOptionData option;
+                    option.read(prop->settings().data());
 
-                    prop->setValue(int(option.particle_iterations));
+                    prop->setValue(int(option.particleIterations));
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ParticleOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    option.particle_iterations = prop->value().toInt();
-                    option.writeOptionSetting(prop->settings().data());
+                    KisParticleOpOptionData option;
+                    option.read(prop->settings().data());
+                    option.particleIterations = prop->value().toInt();
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));

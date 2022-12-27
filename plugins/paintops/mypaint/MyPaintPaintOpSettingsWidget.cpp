@@ -93,6 +93,10 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
                      COLOR);
     addPaintOpOption(kpowu::createMyPaintCurveOptionWidget(MyPaintColorizeData()),
                      COLOR);
+    addPaintOpOption(kpowu::createMyPaintCurveOptionWidget(MyPaintPosterizeData()),
+                     COLOR);
+    addPaintOpOption(kpowu::createMyPaintCurveOptionWidget(MyPaintPosterizationLevelsData()),
+                     COLOR);
 
     addPaintOpOption(kpowu::createMyPaintCurveOptionWidget(MyPaintFineSpeedGammaData()),
                      SPEED);
@@ -134,7 +138,13 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
                      SMUDGE);
     addPaintOpOption(kpowu::createMyPaintCurveOptionWidget(MyPaintSmudgeLengthData()),
                      SMUDGE);
+    addPaintOpOption(kpowu::createMyPaintCurveOptionWidget(MyPaintSmudgeLengthMultiplierData()),
+                     SMUDGE);
     addPaintOpOption(kpowu::createMyPaintCurveOptionWidget(MyPaintSmudgeRadiusLogData()),
+                     SMUDGE);
+    addPaintOpOption(kpowu::createMyPaintCurveOptionWidget(MyPaintSmudgeTransparencyData()),
+                     SMUDGE);
+    addPaintOpOption(kpowu::createMyPaintCurveOptionWidget(MyPaintSmudgeBucketData()),
                      SMUDGE);
 
     addPaintOpOption(kpowu::createMyPaintCurveOptionWidget(MyPaintStrokeDurationLogData()),

@@ -324,6 +324,16 @@ MyPaintBrushSetting optionIdToMyPaintBrushSettings(const KoID &id) {
         return MYPAINT_BRUSH_SETTING_OFFSET_BY_SPEED_SLOWNESS;
     else if (id.id() == "stroke_duration_logarithmic")
         return MYPAINT_BRUSH_SETTING_STROKE_DURATION_LOGARITHMIC;
+    else if (id.id() == "smudge_length_log")
+        return MYPAINT_BRUSH_SETTING_SMUDGE_LENGTH_LOG;
+    else if (id.id() == "smudge_bucket")
+        return MYPAINT_BRUSH_SETTING_SMUDGE_BUCKET;
+    else if (id.id() == "smudge_transparency")
+        return MYPAINT_BRUSH_SETTING_SMUDGE_TRANSPARENCY;
+    else if (id.id() == "posterize")
+        return MYPAINT_BRUSH_SETTING_POSTERIZE;
+    else if (id.id() == "posterize_num")
+        return MYPAINT_BRUSH_SETTING_POSTERIZE_NUM;
 
     return MYPAINT_BRUSH_SETTING_ERASER;
 }

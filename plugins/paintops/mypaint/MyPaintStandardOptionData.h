@@ -154,6 +154,24 @@ struct MyPaintColorizeData : MyPaintCurveOptionData
     }
 };
 
+struct MyPaintPosterizeData : MyPaintCurveOptionData
+{
+    MyPaintPosterizeData()
+        : MyPaintCurveOptionData(KoID("posterize", i18n("Posterize")),
+                                 false, true, 0.0, 1.0)
+    {
+    }
+};
+
+struct MyPaintPosterizationLevelsData : MyPaintCurveOptionData
+{
+    MyPaintPosterizationLevelsData()
+        : MyPaintCurveOptionData(KoID("posterize_num", i18n("Posterization Levels")),
+                                 false, true, 0.0, 1.28)
+    {
+    }
+};
+
 struct MyPaintFineSpeedGammaData : MyPaintCurveOptionData
 {
     MyPaintFineSpeedGammaData()
@@ -322,6 +340,33 @@ struct MyPaintSmudgeRadiusLogData : MyPaintCurveOptionData
     MyPaintSmudgeRadiusLogData()
         : MyPaintCurveOptionData(KoID("smudge_radius_log", i18n("Smudge Radius Log")),
                                  false, true, -1.6, 1.6)
+    {
+    }
+};
+
+struct MyPaintSmudgeLengthMultiplierData : MyPaintCurveOptionData
+{
+    MyPaintSmudgeLengthMultiplierData()
+        : MyPaintCurveOptionData(KoID("smudge_length_log", i18n("Smudge Length Multiplier")),
+                                 false, true, 0.0, 20)
+    {
+    }
+};
+
+struct MyPaintSmudgeBucketData : MyPaintCurveOptionData
+{
+    MyPaintSmudgeBucketData()
+        : MyPaintCurveOptionData(KoID("smudge_bucket", i18n("Smudge Bucket")),
+                                 false, true, 0.0, 255.0)
+    {
+    }
+};
+
+struct MyPaintSmudgeTransparencyData : MyPaintCurveOptionData
+{
+    MyPaintSmudgeTransparencyData()
+        : MyPaintCurveOptionData(KoID("smudge_transparency", i18n("Smudge Transparency")),
+                                 false, true, -1.0, 1.0)
     {
     }
 };

@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-24 02:35+0000\n"
+"POT-Creation-Date: 2022-12-28 02:43+0000\n"
 "PO-Revision-Date: 2020-01-12 12:14+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -47857,7 +47857,7 @@ msgstr "Opcións de estilo animado"
 msgid "Selection mode:"
 msgstr "Modo de selección:"
 
-#: plugins/impex/exr/exr_converter.cc:883
+#: plugins/impex/exr/exr_converter.cc:901
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -47872,19 +47872,19 @@ msgstr ""
 "a imaxe.<br/> <br/> Isto non debería causar ningunha diferenza visual "
 "notábel, pero téñao en conta."
 
-#: plugins/impex/exr/exr_converter.cc:890
+#: plugins/impex/exr/exr_converter.cc:908
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Modificouse a imaxe EXR"
 
-#: plugins/impex/exr/exr_converter.cc:1305
+#: plugins/impex/exr/exr_converter.cc:1323
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (tipo: «%2»)"
 
-#: plugins/impex/exr/exr_converter.cc:1310
+#: plugins/impex/exr/exr_converter.cc:1328
 #, kde-format
 msgctxt "@info"
 msgid ""

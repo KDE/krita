@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-24 02:35+0000\n"
+"POT-Creation-Date: 2022-12-28 02:43+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -46391,7 +46391,7 @@ msgstr "Επιλογές τρίχας"
 msgid "Selection mode:"
 msgstr "Λειτουργία επιλογής:"
 
-#: plugins/impex/exr/exr_converter.cc:883
+#: plugins/impex/exr/exr_converter.cc:901
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -46401,19 +46401,19 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:890
+#: plugins/impex/exr/exr_converter.cc:908
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Άνοιγμα ενός νέου εγγράφου με ένα πρότυπο"
 
-#: plugins/impex/exr/exr_converter.cc:1305
+#: plugins/impex/exr/exr_converter.cc:1323
 #, fuzzy, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "Αντιγραφή από"
 
-#: plugins/impex/exr/exr_converter.cc:1310
+#: plugins/impex/exr/exr_converter.cc:1328
 #, kde-format
 msgctxt "@info"
 msgid ""

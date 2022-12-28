@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-24 02:35+0000\n"
+"POT-Creation-Date: 2022-12-28 02:43+0000\n"
 "PO-Revision-Date: 2022-10-23 17:55+0800\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -44965,7 +44965,7 @@ msgstr "動畫格式選項"
 msgid "Selection mode:"
 msgstr "選擇模式："
 
-#: plugins/impex/exr/exr_converter.cc:883
+#: plugins/impex/exr/exr_converter.cc:901
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -44978,19 +44978,19 @@ msgstr ""
 "些像素調整為含有 Alpha。原始數值在儲存影像時將<b>不會</b>被還原。<br/><br/>這"
 "並不會構成視覺上的明顯區別，只是提醒一下。"
 
-#: plugins/impex/exr/exr_converter.cc:890
+#: plugins/impex/exr/exr_converter.cc:908
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR 影像已被調整"
 
-#: plugins/impex/exr/exr_converter.cc:1305
+#: plugins/impex/exr/exr_converter.cc:1323
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (類型：「%2」)"
 
-#: plugins/impex/exr/exr_converter.cc:1310
+#: plugins/impex/exr/exr_converter.cc:1328
 #, kde-format
 msgctxt "@info"
 msgid ""

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-24 02:35+0000\n"
+"POT-Creation-Date: 2022-12-28 02:43+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -45114,7 +45114,7 @@ msgstr "tuỳ chọn"
 msgid "Selection mode:"
 msgstr "Chế độ chọn:"
 
-#: plugins/impex/exr/exr_converter.cc:883
+#: plugins/impex/exr/exr_converter.cc:901
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -45124,19 +45124,19 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:890
+#: plugins/impex/exr/exr_converter.cc:908
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Mở một tài liệu mới với mẫu"
 
-#: plugins/impex/exr/exr_converter.cc:1305
+#: plugins/impex/exr/exr_converter.cc:1323
 #, fuzzy, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "xanh nước biển"
 
-#: plugins/impex/exr/exr_converter.cc:1310
+#: plugins/impex/exr/exr_converter.cc:1328
 #, kde-format
 msgctxt "@info"
 msgid ""

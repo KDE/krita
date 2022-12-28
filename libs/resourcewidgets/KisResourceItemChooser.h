@@ -101,6 +101,7 @@ public:
 
     /// Sets the item representing the resource as selected
     void setCurrentResource(KoResourceSP resource);
+    void setCurrentResource(QString resourceName);
 
     /**
      * Sets the selected resource, does nothing if there is no valid item

@@ -120,6 +120,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     // Viewmode button
     d->viewModeButton = new KisPopupButton(this);
+    d->viewModeButton->setToolTip(i18n("Display settings"));
     d->viewModeButton->setVisible(false);
     d->viewModeButton->setArrowVisible(false);
     d->viewModeButton->setAutoRaise(true);
@@ -423,6 +424,33 @@ void KisResourceItemChooser::setCurrentResource(KoResourceSP resource)
         d->currentResource = resource;
     }
     updatePreview(index);
+}
+
+void KisResourceItemChooser::setCurrentResource(QString resourceName)
+{
+    // don't update if the change came from the same chooser
+    if (d->updatesBlocked) {
+        return;
+    }
+
+    for (int row = 0; row < d->tagFilterProxyModel->rowCount(); row++) {
+        for (int col = 0; col < d->tagFilterProxyModel->columnCount(); col++) {
+            QModelIndex index = d->tagFilterProxyModel->index(row, col);
+            KoResourceSP resource = d->tagFilterProxyModel->resourceForIndex(index);
+
+            if (resource->name() == resourceName) {
+                d->view->setCurrentIndex(index);
+
+                // The resource may currently be filtered out, but we want to be able
+                // to select it if the filter changes and includes the resource.
+                // Otherwise, activate() already took care of setting the current resource.
+                if (!index.isValid()) {
+                    d->currentResource = resource;
+                }
+                updatePreview(index);
+            }
+        }
+    }
 }
 
 void KisResourceItemChooser::setPreviewOrientation(Qt::Orientation orientation)

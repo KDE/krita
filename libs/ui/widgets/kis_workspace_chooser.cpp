@@ -7,7 +7,7 @@
 #include "kis_workspace_chooser.h"
 
 #include <QVBoxLayout>
-#include <QAbstractItemDelegate>
+#include <QStyledItemDelegate>
 #include <QPainter>
 #include <QPushButton>
 #include <QAction>
@@ -39,62 +39,82 @@
 #include <kis_icon.h>
 #include <KisResourceUserOperations.h>
 
-class KisWorkspaceDelegate : public QAbstractItemDelegate
+
+class KisWorkspaceDelegate : public QStyledItemDelegate
 {
 public:
-    KisWorkspaceDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent) {}
+    static const int heightHint = 30;
+
+public:
+    KisWorkspaceDelegate(QObject * parent = 0) : QStyledItemDelegate(parent) {}
     ~KisWorkspaceDelegate() override {}
-    /// reimplemented
-    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
-    /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override {
-        return option.decorationSize;
+
+
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override
+    {
+        if (!index.isValid())
+            return;
+
+        QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled) ? QPalette::Active : QPalette::Disabled;
+        QPalette::ColorRole cr = (option.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text;
+        painter->setPen(option.palette.color(cg, cr));
+
+        if (option.state & QStyle::State_Selected) {
+            painter->fillRect(option.rect, option.palette.highlight());
+        }
+        else {
+            painter->fillRect(option.rect, option.palette.base());
+        }
+
+        int verticalPadding = (option.rect.height() - painter->fontMetrics().ascent()) / 2;
+        const int correction = -3;
+
+        QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
+        painter->drawText(
+            option.rect.x() + 5,
+            option.rect.y() + verticalPadding + painter->fontMetrics().ascent() + correction,
+            name
+        );
+    }
+
+    QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex &) const override
+    {
+        return QSize(-1, heightHint);
     }
 };
 
-void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
-{
-    if (!index.isValid())
-        return;
-
-    QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled) ? QPalette::Active : QPalette::Disabled;
-    QPalette::ColorRole cr = (option.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text;
-    painter->setPen(option.palette.color(cg, cr));
-
-    if (option.state & QStyle::State_Selected) {
-        painter->fillRect(option.rect, option.palette.highlight());
-    }
-    else {
-        painter->fillRect(option.rect, option.palette.base());
-    }
-
-    QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
-    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, name);
-}
-
-KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent): QWidget(parent), m_view(view)
+KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager* view, QWidget* parent): QWidget(parent), m_view(view)
 {
     m_layout = new QGridLayout(this);
 
+    // Workspaces
     m_workspaceWidgets = createChooserWidgets(ResourceType::Workspaces, i18n("Workspaces"));
-    m_windowLayoutWidgets = createChooserWidgets(ResourceType::WindowLayouts, i18n("Window layouts"));
+
+    KisConfig cfg(true);
+    QString workspaceName = cfg.readEntry<QString>("CurrentWorkspace");
+    m_workspaceWidgets.itemChooser->setCurrentResource(workspaceName);
 
     connect(m_workspaceWidgets.itemChooser, SIGNAL(resourceSelected(KoResourceSP )),
-            this, SLOT(workspaceSelected(KoResourceSP )));
+        this, SLOT(workspaceSelected(KoResourceSP )));
     connect(m_workspaceWidgets.saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSaveWorkspace()));
     connect(m_workspaceWidgets.nameEdit, SIGNAL(textEdited(const QString&)), this, SLOT(slotUpdateWorkspaceSaveButton()));
 
+    slotUpdateWorkspaceSaveButton();
+
+    // Window layouts
+    m_windowLayoutWidgets = createChooserWidgets(ResourceType::WindowLayouts, i18n("Window layouts"));
+
     connect(m_windowLayoutWidgets.itemChooser, SIGNAL(resourceSelected(KoResourceSP )),
-            this, SLOT(windowLayoutSelected(KoResourceSP )));
+        this, SLOT(windowLayoutSelected(KoResourceSP )));
     connect(m_windowLayoutWidgets.saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSaveWindowLayout()));
     connect(m_windowLayoutWidgets.nameEdit, SIGNAL(textEdited(const QString&)), this, SLOT(slotUpdateWindowLayoutSaveButton()));
-    slotUpdateWorkspaceSaveButton();
+
     slotUpdateWindowLayoutSaveButton();
 }
 
 KisWorkspaceChooser::ChooserWidgets KisWorkspaceChooser::createChooserWidgets(const QString &resourceType, const QString &title)
 {
-    ChooserWidgets widgets;
+    ChooserWidgets r;
 
     QLabel *titleLabel = new QLabel(this);
     QFont titleFont;
@@ -102,25 +122,25 @@ KisWorkspaceChooser::ChooserWidgets KisWorkspaceChooser::createChooserWidgets(co
     titleLabel->setFont(titleFont);
     titleLabel->setText(title);
 
-    widgets.itemChooser = new KisResourceItemChooser(resourceType, false, this);
-    widgets.itemChooser->setItemDelegate(new KisWorkspaceDelegate(this));
-    widgets.itemChooser->setFixedSize(250, 250);
-    widgets.itemChooser->setRowHeight(30);
-    widgets.itemChooser->setListViewMode(ListViewMode::Detail);
-    widgets.itemChooser->showTaggingBar(false);
-    widgets.saveButton = new QPushButton(i18n("Save"));
+    r.itemChooser = new KisResourceItemChooser(resourceType, false, this);
+    r.itemChooser->setItemDelegate(new KisWorkspaceDelegate(this));
+    r.itemChooser->setListViewMode(ListViewMode::Detail);
+    r.itemChooser->setRowHeight(KisWorkspaceDelegate::heightHint);
+    r.itemChooser->showTaggingBar(false);
 
-    widgets.nameEdit = new QLineEdit(this);
-    widgets.nameEdit->setPlaceholderText(i18n("Insert name"));
-    widgets.nameEdit->setClearButtonEnabled(true);
+    r.nameEdit = new QLineEdit(this);
+    r.nameEdit->setPlaceholderText(i18n("Insert name"));
+    r.nameEdit->setClearButtonEnabled(true);
+
+    r.saveButton = new QPushButton(i18n("Save"));
 
     int firstRow = m_layout->rowCount();
-    m_layout->addWidget(titleLabel, firstRow, 0, 1, 2);
-    m_layout->addWidget(widgets.itemChooser, firstRow + 1, 0, 1, 2);
-    m_layout->addWidget(widgets.nameEdit, firstRow + 2, 0, 1, 1);
-    m_layout->addWidget(widgets.saveButton, firstRow + 2, 1, 1, 1);
+    m_layout->addWidget(titleLabel,    firstRow,     0, 1, 2);
+    m_layout->addWidget(r.itemChooser, firstRow + 1, 0, 1, 2);
+    m_layout->addWidget(r.nameEdit,    firstRow + 2, 0, 1, 1);
+    m_layout->addWidget(r.saveButton,  firstRow + 2, 1, 1, 1);
 
-    return widgets;
+    return r;
 }
 
 KisWorkspaceChooser::~KisWorkspaceChooser()
@@ -196,6 +216,7 @@ void KisWorkspaceChooser::workspaceSelected(KoResourceSP resource)
     if (!m_view->qtMainWindow()) {
         return;
     }
+
     KisConfig cfg(false);
     cfg.writeEntry("CurrentWorkspace", resource->name());
     KisWorkspaceResourceSP workspace = resource.dynamicCast<KisWorkspaceResource>();
@@ -266,4 +287,13 @@ void KisWorkspaceChooser::windowLayoutSelected(KoResourceSP resource)
 {
     KisWindowLayoutResourceSP layout = resource.dynamicCast<KisWindowLayoutResource>();
     layout->applyLayout();
+}
+
+// WORKAROUND: setting the row height of the resource chooser get's overriden somehow
+// so set it again here
+void KisWorkspaceChooser::showEvent(QShowEvent* event)
+{
+    QWidget::showEvent(event);
+    m_workspaceWidgets.itemChooser->setRowHeight(KisWorkspaceDelegate::heightHint);
+    m_windowLayoutWidgets.itemChooser->setRowHeight(KisWorkspaceDelegate::heightHint);
 }

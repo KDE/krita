@@ -7,7 +7,6 @@
 #ifndef KISRESOURCEITEMLISTVIEW_H
 #define KISRESOURCEITEMLISTVIEW_H
 
-#include <QWidget>
 #include <QListView>
 #include <QScopedPointer>
 

@@ -8,9 +8,7 @@
 #include "KisResourceItemDelegate.h"
 
 #include <QPainter>
-#include <QDebug>
 
-#include "KisResourceModel.h"
 
 KisResourceItemDelegate::KisResourceItemDelegate(QObject *parent)
     : QAbstractItemDelegate(parent)

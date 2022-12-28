@@ -7,11 +7,9 @@
 #include "KisResourceItemListView.h"
 
 #include <QEvent>
-#include <QHeaderView>
 #include <QScroller>
 #include <QScrollBar>
 #include <QHelpEvent>
-#include <QDebug>
 
 #include "KisIconToolTip.h"
 
@@ -24,6 +22,8 @@ struct  Q_DECL_HIDDEN KisResourceItemListView::Private
 
     QScroller* scroller {0};
     QString prev_scrollbar_style;
+
+    QSize requestedItemSize = QSize(64, 64);
 };
 
 KisResourceItemListView::KisResourceItemListView(QWidget *parent)
@@ -31,12 +31,14 @@ KisResourceItemListView::KisResourceItemListView(QWidget *parent)
     , m_d(new Private)
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
-    setContextMenuPolicy(Qt::DefaultContextMenu);
+    setContextMenuPolicy(Qt::DefaultContextMenu);   
+    setResizeMode(QListView::Adjust);
+    setUniformItemSizes(true);
+
+    // Default configuration
     setViewMode(QListView::IconMode);
     setGridSize(QSize(64, 64));
     setIconSize(QSize(64, 64));
-    setResizeMode(QListView::Adjust);
-    setUniformItemSizes(true);
 
     m_d->scroller = KisKineticScroller::createPreconfiguredScroller(this);
     if (m_d->scroller) {
@@ -45,7 +47,7 @@ KisResourceItemListView::KisResourceItemListView(QWidget *parent)
 
     connect(this, SIGNAL(clicked(QModelIndex)), SIGNAL(currentResourceClicked(const QModelIndex &)));
 
-     m_d->prev_scrollbar_style = horizontalScrollBar()->styleSheet();
+    m_d->prev_scrollbar_style = horizontalScrollBar()->styleSheet();
 }
 
 KisResourceItemListView::~KisResourceItemListView()
@@ -56,13 +58,19 @@ void KisResourceItemListView::setListViewMode(ListViewMode viewMode)
 {
     m_d->viewMode = viewMode;
 
+    auto restoreScrollbar = [&, this] () {
+        horizontalScrollBar()->setStyleSheet(m_d->prev_scrollbar_style);
+        setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
+    };
+
     switch (viewMode) {
     case ListViewMode::IconGrid: {
         setViewMode(ViewMode::IconMode);
         setFlow(Flow::LeftToRight);
         setWrapping(true);
-        horizontalScrollBar()->setStyleSheet(m_d->prev_scrollbar_style);
-        setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
+        restoreScrollbar();
+
+        setItemSize(m_d->requestedItemSize);
         break;
     }
     case ListViewMode::IconStripHorizontal: {
@@ -73,23 +81,26 @@ void KisResourceItemListView::setListViewMode(ListViewMode viewMode)
         // this is the only way to hide it and not have it ocupy space
         horizontalScrollBar()->setStyleSheet("QScrollBar::horizontal {height: 0px;}");
         setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
+
+        setItemSize(m_d->requestedItemSize);
         break;
     }
     case ListViewMode::Detail: {
         setViewMode(ViewMode::ListMode);
         setFlow(Flow::TopToBottom);
         setWrapping(false);
-        horizontalScrollBar()->setStyleSheet(m_d->prev_scrollbar_style);
-        setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
+        restoreScrollbar();
+
+        setItemSize(m_d->requestedItemSize);
         break;
     }
     }
-
-    setItemSize(iconSize());
 }
 
 void KisResourceItemListView::setItemSize(QSize size)
 {
+    m_d->requestedItemSize = size;
+
     switch (m_d->viewMode) {
     case ListViewMode::IconGrid: {
         setGridSize(size);
@@ -102,7 +113,7 @@ void KisResourceItemListView::setItemSize(QSize size)
         break;
     }
     case ListViewMode::Detail: {
-        const int w = width();
+        const int w = width() - horizontalScrollBar()->width();
         setGridSize(QSize(w, size.height()));
         setIconSize(QSize(size));
         break;
@@ -195,14 +206,17 @@ bool KisResourceItemListView::viewportEvent(QEvent *event)
 
 void KisResourceItemListView::resizeEvent(QResizeEvent *event)
 {
-    if (m_d->viewMode == ListViewMode::IconStripHorizontal) {
+    QListView::resizeEvent(event);
+
+    switch (m_d->viewMode) {
+    case ListViewMode::IconStripHorizontal: {
         const int height = event->size().height();
         setGridSize(QSize(height, height));
         setIconSize(QSize(height, height));
+        break;
     }
-    // trigger relaying the items, internally here not externally
-    // by calling setItemSize
-    else {
-        setGridSize(gridSize());
+    case ListViewMode::Detail: {
+        setItemSize(m_d->requestedItemSize);
+    }
     }
 }

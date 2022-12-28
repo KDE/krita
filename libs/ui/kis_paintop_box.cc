@@ -310,12 +310,13 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     m_cmbCompositeOp->setFixedHeight(buttonsize);
     m_cmbCompositeOp->connectBlendmodeActions(m_viewManager->actionManager());
 
-    KisWorkspaceChooser *workspacePopup = new KisWorkspaceChooser(viewManager);
+    // Workspace Button
     m_workspaceWidget = new KisPopupButton(this);
     m_workspaceWidget->setIcon(KisIconUtils::loadIcon("workspace-chooser"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(buttonsize, buttonsize);
     m_workspaceWidget->setIconSize(QSize(iconsize, iconsize));
+    KisWorkspaceChooser *workspacePopup = new KisWorkspaceChooser(viewManager);
     m_workspaceWidget->setPopupWidget(workspacePopup);
     m_workspaceWidget->setAutoRaise(true);
     m_workspaceWidget->setArrowVisible(false);

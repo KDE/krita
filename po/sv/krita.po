@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-27 00:46+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2022-10-01 11:35+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -16973,7 +16973,7 @@ msgstr "Importerad bild"
 msgid "Selection Mask"
 msgstr "Markeringsmask"
 
-#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2473
+#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2487
 #: plugins/impex/psd/psd_loader.cpp:189
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19331,9 +19331,9 @@ msgstr "Lokala resurser"
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
 #: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
 #: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
-#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:931
-#: libs/ui/KisDocument.cpp:939 libs/ui/KisDocument.cpp:1841
-#: libs/ui/KisDocument.cpp:1884 libs/ui/KisDocument.cpp:1892
+#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:933
+#: libs/ui/KisDocument.cpp:945 libs/ui/KisDocument.cpp:1853
+#: libs/ui/KisDocument.cpp:1896 libs/ui/KisDocument.cpp:1906
 #: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1087
 #: libs/ui/KisMainWindow.cpp:1213 libs/ui/KisMainWindow.cpp:1312
 #: libs/ui/KisMainWindow.cpp:1918 libs/ui/KisMainWindow.cpp:1927
@@ -24570,6 +24570,7 @@ msgstr "Profil:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnPreviewMask)
 #. i18n: ectx: property (text), widget (QCheckBox, checkPreview)
 #. i18n: ectx: property (text), widget (QLabel, lblThumbnail)
@@ -24578,6 +24579,7 @@ msgstr "Profil:"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:219
 #: plugins/dockers/recorder/recorder_profile_settings.ui:177
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:98
+#: plugins/impex/raw/wdgrawimport.ui:49
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:50
 #, kde-format
 msgid "Preview"
@@ -29679,65 +29681,72 @@ msgstr ""
 "Kunde inte börja spara %1. Vänta tills den pågående åtgärden för att spara "
 "är färdig."
 
-#: libs/ui/KisDocument.cpp:926
+#: libs/ui/KisDocument.cpp:928
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Fel när %1 skulle sparas: %2"
 
-#: libs/ui/KisDocument.cpp:932
+#: libs/ui/KisDocument.cpp:934
 #, kde-format
-msgid ""
-"Could not save %1.\n"
-"Reason: %2"
-msgstr ""
-"Kunde inte spara %1.\n"
-"Orsak: %2"
+msgid "Could not save %1."
+msgstr "Kunde inte spara %1."
 
-#: libs/ui/KisDocument.cpp:941
+#: libs/ui/KisDocument.cpp:948
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
-msgid ""
-"%1 has been saved but is incomplete.\n"
-"The following problems were encountered when saving:"
+msgid "%1 has been saved but is incomplete."
+msgstr ""
+
+#: libs/ui/KisDocument.cpp:954
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "dialog box shown to the user if there were warnings while saving the "
+#| "document, %1 is the file path"
+#| msgid ""
+#| "%1 has been saved but is incomplete.\n"
+#| "The following problems were encountered when saving:"
+msgctxt ""
+"dialog box shown to the user if there were warnings while saving the document"
+msgid "Some problems were encountered when saving."
 msgstr ""
 "%1 har sparats men är ofullständigt.\n"
 "Följande problem inträffade när det sparades:"
 
-#: libs/ui/KisDocument.cpp:959
+#: libs/ui/KisDocument.cpp:971
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Spara %1 färdigt"
 
-#: libs/ui/KisDocument.cpp:1362
+#: libs/ui/KisDocument.cpp:1374
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Sparar automatiskt... %1"
 
-#: libs/ui/KisDocument.cpp:1370
+#: libs/ui/KisDocument.cpp:1382
 #, kde-format
 msgid "Autosaving..."
 msgstr "Sparar automatiskt..."
 
-#: libs/ui/KisDocument.cpp:1376
+#: libs/ui/KisDocument.cpp:1388
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Spara automatiskt fördröjt: dokumentet är upptaget ..."
 
-#: libs/ui/KisDocument.cpp:1519
+#: libs/ui/KisDocument.cpp:1531
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Fel vid spara automatiskt av %1: %2"
 
-#: libs/ui/KisDocument.cpp:1533
+#: libs/ui/KisDocument.cpp:1545
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Spara %1 automatiskt färdigt"
 
-#: libs/ui/KisDocument.cpp:1775
+#: libs/ui/KisDocument.cpp:1787
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -29746,42 +29755,40 @@ msgstr ""
 "Felaktig sökväg\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1841
+#: libs/ui/KisDocument.cpp:1853
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Filen %1 finns inte."
 
-#: libs/ui/KisDocument.cpp:1870
+#: libs/ui/KisDocument.cpp:1882
 #, kde-format
 msgid "Opening document"
 msgstr "Öppnar dokument"
 
-#: libs/ui/KisDocument.cpp:1885
-#, kde-format
-msgid ""
-"Could not open %2.\n"
-"Reason: %1"
-msgstr ""
-"Kunde inte öppna %2.\n"
-"Orsak: %1"
+#: libs/ui/KisDocument.cpp:1897
+#, fuzzy, kde-format
+#| msgid "Could not open '%1'."
+msgid "Could not open %1."
+msgstr "Kunde inte öppna '%1'."
 
-#: libs/ui/KisDocument.cpp:1893
-#, kde-format
-msgid "There were problems opening %1"
+#: libs/ui/KisDocument.cpp:1907
+#, fuzzy, kde-format
+#| msgid "There were problems opening %1"
+msgid "There were problems opening %1."
 msgstr "Problem uppstod när %1 skulle öppnas"
 
-#: libs/ui/KisDocument.cpp:2022
+#: libs/ui/KisDocument.cpp:2036
 #, kde-format
 msgid "Not Saved"
 msgstr "Inte sparad"
 
-#: libs/ui/KisDocument.cpp:2480
+#: libs/ui/KisDocument.cpp:2494
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Bakgrundsfyllnad"
 
-#: libs/ui/KisDocument.cpp:2534
+#: libs/ui/KisDocument.cpp:2548
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -45811,7 +45818,7 @@ msgstr "Alternativ för animerad stil"
 msgid "Selection mode:"
 msgstr "Markeringsläge:"
 
-#: plugins/impex/exr/exr_converter.cc:883
+#: plugins/impex/exr/exr_converter.cc:901
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -45826,19 +45833,19 @@ msgstr ""
 "bilden sparas.<br/><br/>Det leder knappt till någon synlig skillnad, men var "
 "ändå medveten om det."
 
-#: plugins/impex/exr/exr_converter.cc:890
+#: plugins/impex/exr/exr_converter.cc:908
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR-bild har ändras"
 
-#: plugins/impex/exr/exr_converter.cc:1305
+#: plugins/impex/exr/exr_converter.cc:1323
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (typ: \"%2\")"
 
-#: plugins/impex/exr/exr_converter.cc:1310
+#: plugins/impex/exr/exr_converter.cc:1328
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -49014,16 +49021,8 @@ msgstr "Återställ till standardvärde"
 msgid "Browse..."
 msgstr "Bläddra..."
 
-#. i18n: ectx: property (text), widget (QPushButton, btnUpdate)
-#. i18n: ectx: property (text), widget (QPushButton, pushButtonUpdate)
-#: plugins/impex/raw/wdgrawimport.ui:33
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:30
-#, kde-format
-msgid "Update"
-msgstr "Uppdatera"
-
 #. i18n: ectx: property (text), widget (QLabel, preview)
-#: plugins/impex/raw/wdgrawimport.ui:96
+#: plugins/impex/raw/wdgrawimport.ui:55
 #, kde-format
 msgid "No image loaded"
 msgstr "Ingen bild laddad"
@@ -58636,6 +58635,12 @@ msgstr ""
 msgid "Auto updates"
 msgstr "Automatiska uppdateringar"
 
+#. i18n: ectx: property (text), widget (QPushButton, btnUpdate)
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:30
+#, kde-format
+msgid "Update"
+msgstr "Uppdatera"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowKeyStrokes)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:39
 #, kde-format
@@ -59649,6 +59654,20 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referensbildverktyg"
 
+#~ msgid ""
+#~ "Could not save %1.\n"
+#~ "Reason: %2"
+#~ msgstr ""
+#~ "Kunde inte spara %1.\n"
+#~ "Orsak: %2"
+
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Kunde inte öppna %2.\n"
+#~ "Orsak: %1"
+
 #~ msgctxt "action"
 #~ msgid "&Painter's Tools"
 #~ msgstr "&Målarverktyg"
@@ -59917,9 +59936,6 @@ msgstr "Referensbildverktyg"
 
 #~ msgid "Cannot sample a color as the active layer is not visible."
 #~ msgstr "Kan inte hämta färg eftersom det aktiva lagret inte är synligt."
-
-#~ msgid "Could not save %1."
-#~ msgstr "Kunde inte spara %1."
 
 #, fuzzy
 #~| msgctxt "Blending mode - Intensity HSI"

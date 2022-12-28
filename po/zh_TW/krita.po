@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-27 00:46+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2022-11-24 09:58+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -16885,7 +16885,7 @@ msgstr "匯入的影像"
 msgid "Selection Mask"
 msgstr "選取區域遮罩"
 
-#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2473
+#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2487
 #: plugins/impex/psd/psd_loader.cpp:189
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19222,9 +19222,9 @@ msgstr "本機資源"
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
 #: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
 #: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
-#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:931
-#: libs/ui/KisDocument.cpp:939 libs/ui/KisDocument.cpp:1841
-#: libs/ui/KisDocument.cpp:1884 libs/ui/KisDocument.cpp:1892
+#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:933
+#: libs/ui/KisDocument.cpp:945 libs/ui/KisDocument.cpp:1853
+#: libs/ui/KisDocument.cpp:1896 libs/ui/KisDocument.cpp:1906
 #: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1087
 #: libs/ui/KisMainWindow.cpp:1213 libs/ui/KisMainWindow.cpp:1312
 #: libs/ui/KisMainWindow.cpp:1918 libs/ui/KisMainWindow.cpp:1927
@@ -24403,6 +24403,7 @@ msgstr "色彩特性檔案："
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnPreviewMask)
 #. i18n: ectx: property (text), widget (QCheckBox, checkPreview)
 #. i18n: ectx: property (text), widget (QLabel, lblThumbnail)
@@ -24411,6 +24412,7 @@ msgstr "色彩特性檔案："
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:219
 #: plugins/dockers/recorder/recorder_profile_settings.ui:177
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:98
+#: plugins/impex/raw/wdgrawimport.ui:49
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:50
 #, kde-format
 msgid "Preview"
@@ -29438,65 +29440,77 @@ msgid ""
 "finished."
 msgstr "不可開始儲存「%1」。請待目前進行中的儲存操作完成後再重試。"
 
-#: libs/ui/KisDocument.cpp:926
+#: libs/ui/KisDocument.cpp:928
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "儲存%1 時出錯： %2"
 
-#: libs/ui/KisDocument.cpp:932
-#, kde-format
-msgid ""
-"Could not save %1.\n"
-"Reason: %2"
+#: libs/ui/KisDocument.cpp:934
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not save\n"
+#| "%1"
+msgid "Could not save %1."
 msgstr ""
-"無法儲存 %1。\n"
-"原因：%2"
+"無法儲存\n"
+"%1"
 
-#: libs/ui/KisDocument.cpp:941
+#: libs/ui/KisDocument.cpp:948
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
-msgid ""
-"%1 has been saved but is incomplete.\n"
-"The following problems were encountered when saving:"
+msgid "%1 has been saved but is incomplete."
+msgstr ""
+
+#: libs/ui/KisDocument.cpp:954
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "dialog box shown to the user if there were warnings while saving the "
+#| "document, %1 is the file path"
+#| msgid ""
+#| "%1 has been saved but is incomplete.\n"
+#| "The following problems were encountered when saving:"
+msgctxt ""
+"dialog box shown to the user if there were warnings while saving the document"
+msgid "Some problems were encountered when saving."
 msgstr ""
 "已儲存 %1 但檔案不完整。\n"
 "儲存檔案時遇到以下問題："
 
-#: libs/ui/KisDocument.cpp:959
+#: libs/ui/KisDocument.cpp:971
 #, kde-format
 msgid "Finished saving %1"
 msgstr "完成儲存 %1"
 
-#: libs/ui/KisDocument.cpp:1362
+#: libs/ui/KisDocument.cpp:1374
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "正在自動儲存… %1"
 
-#: libs/ui/KisDocument.cpp:1370
+#: libs/ui/KisDocument.cpp:1382
 #, kde-format
 msgid "Autosaving..."
 msgstr "正在自動儲存…"
 
-#: libs/ui/KisDocument.cpp:1376
+#: libs/ui/KisDocument.cpp:1388
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "自動儲存已推遲：檔案正在被佔用…"
 
-#: libs/ui/KisDocument.cpp:1519
+#: libs/ui/KisDocument.cpp:1531
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "自動儲存 %1 時出錯：%2"
 
-#: libs/ui/KisDocument.cpp:1533
+#: libs/ui/KisDocument.cpp:1545
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "完成自動儲存 %1"
 
-#: libs/ui/KisDocument.cpp:1775
+#: libs/ui/KisDocument.cpp:1787
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -29505,42 +29519,40 @@ msgstr ""
 "路徑格式錯誤\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1841
+#: libs/ui/KisDocument.cpp:1853
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "檔案 %1 不存在。"
 
-#: libs/ui/KisDocument.cpp:1870
+#: libs/ui/KisDocument.cpp:1882
 #, kde-format
 msgid "Opening document"
 msgstr "正在開啟檔案"
 
-#: libs/ui/KisDocument.cpp:1885
-#, kde-format
-msgid ""
-"Could not open %2.\n"
-"Reason: %1"
-msgstr ""
-"無法開啟 %2。\n"
-"原因：%1"
+#: libs/ui/KisDocument.cpp:1897
+#, fuzzy, kde-format
+#| msgid "Could not open '%1'."
+msgid "Could not open %1."
+msgstr "無法開啟「%1」。"
 
-#: libs/ui/KisDocument.cpp:1893
-#, kde-format
-msgid "There were problems opening %1"
+#: libs/ui/KisDocument.cpp:1907
+#, fuzzy, kde-format
+#| msgid "There were problems opening %1"
+msgid "There were problems opening %1."
 msgstr "開啟 %1 時遇到了一些問題"
 
-#: libs/ui/KisDocument.cpp:2022
+#: libs/ui/KisDocument.cpp:2036
 #, kde-format
 msgid "Not Saved"
 msgstr "未儲存"
 
-#: libs/ui/KisDocument.cpp:2480
+#: libs/ui/KisDocument.cpp:2494
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "背景色填充"
 
-#: libs/ui/KisDocument.cpp:2534
+#: libs/ui/KisDocument.cpp:2548
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -45293,7 +45305,7 @@ msgstr "動畫格式選項"
 msgid "Selection mode:"
 msgstr "選擇模式："
 
-#: plugins/impex/exr/exr_converter.cc:883
+#: plugins/impex/exr/exr_converter.cc:901
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -45306,19 +45318,19 @@ msgstr ""
 "些像素調整為含有 Alpha。原始數值在儲存影像時將<b>不會</b>被還原。<br/><br/>這"
 "並不會構成視覺上的明顯區別，只是提醒一下。"
 
-#: plugins/impex/exr/exr_converter.cc:890
+#: plugins/impex/exr/exr_converter.cc:908
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR 影像已被調整"
 
-#: plugins/impex/exr/exr_converter.cc:1305
+#: plugins/impex/exr/exr_converter.cc:1323
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (類型：「%2」)"
 
-#: plugins/impex/exr/exr_converter.cc:1310
+#: plugins/impex/exr/exr_converter.cc:1328
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -48388,16 +48400,8 @@ msgstr "重設為預設值"
 msgid "Browse..."
 msgstr "瀏覽…"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnUpdate)
-#. i18n: ectx: property (text), widget (QPushButton, pushButtonUpdate)
-#: plugins/impex/raw/wdgrawimport.ui:33
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:30
-#, kde-format
-msgid "Update"
-msgstr "更新"
-
 #. i18n: ectx: property (text), widget (QLabel, preview)
-#: plugins/impex/raw/wdgrawimport.ui:96
+#: plugins/impex/raw/wdgrawimport.ui:55
 #, kde-format
 msgid "No image loaded"
 msgstr "未載入影像"
@@ -57851,6 +57855,12 @@ msgstr ""
 msgid "Auto updates"
 msgstr "自動更新"
 
+#. i18n: ectx: property (text), widget (QPushButton, btnUpdate)
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:30
+#, kde-format
+msgid "Update"
+msgstr "更新"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowKeyStrokes)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:39
 #, kde-format
@@ -58851,6 +58861,20 @@ msgstr "縮放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "參考圖工具"
+
+#~ msgid ""
+#~ "Could not save %1.\n"
+#~ "Reason: %2"
+#~ msgstr ""
+#~ "無法儲存 %1。\n"
+#~ "原因：%2"
+
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "無法開啟 %2。\n"
+#~ "原因：%1"
 
 #~ msgctxt "action"
 #~ msgid "&Painter's Tools"

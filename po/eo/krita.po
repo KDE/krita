@@ -43,7 +43,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-27 00:46+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2015-03-25 21:27+0100\n"
 "Last-Translator: Axel Rousseau <axel.rousseau@esperanto-france.org>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -17134,7 +17134,7 @@ msgstr "Importi Bildon"
 msgid "Selection Mask"
 msgstr "Elekto"
 
-#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2473
+#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2487
 #: plugins/impex/psd/psd_loader.cpp:189
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -19555,9 +19555,9 @@ msgstr "Fonto"
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
 #: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
 #: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
-#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:931
-#: libs/ui/KisDocument.cpp:939 libs/ui/KisDocument.cpp:1841
-#: libs/ui/KisDocument.cpp:1884 libs/ui/KisDocument.cpp:1892
+#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:933
+#: libs/ui/KisDocument.cpp:945 libs/ui/KisDocument.cpp:1853
+#: libs/ui/KisDocument.cpp:1896 libs/ui/KisDocument.cpp:1906
 #: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1087
 #: libs/ui/KisMainWindow.cpp:1213 libs/ui/KisMainWindow.cpp:1312
 #: libs/ui/KisMainWindow.cpp:1918 libs/ui/KisMainWindow.cpp:1927
@@ -24680,6 +24680,7 @@ msgstr "Ecoj de Ebeno"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnPreviewMask)
 #. i18n: ectx: property (text), widget (QCheckBox, checkPreview)
 #. i18n: ectx: property (text), widget (QLabel, lblThumbnail)
@@ -24688,6 +24689,7 @@ msgstr "Ecoj de Ebeno"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:219
 #: plugins/dockers/recorder/recorder_profile_settings.ui:177
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:98
+#: plugins/impex/raw/wdgrawimport.ui:49
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:50
 #, kde-format
 msgid "Preview"
@@ -29650,66 +29652,70 @@ msgid ""
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:926
+#: libs/ui/KisDocument.cpp:928
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:932
+#: libs/ui/KisDocument.cpp:934
 #, fuzzy, kde-format
 #| msgid ""
-#| "Could not save %1\n"
-#| "Reason: %2"
-msgid ""
-"Could not save %1.\n"
-"Reason: %2"
+#| "Could not save\n"
+#| "%1"
+msgid "Could not save %1."
 msgstr ""
-"Ne eblis konservigi %1\n"
-"Kialo: %2"
+"Ne eblis konservi\n"
+"%1Ne eblis konservi\n"
+"%1"
 
-#: libs/ui/KisDocument.cpp:941
+#: libs/ui/KisDocument.cpp:948
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
-msgid ""
-"%1 has been saved but is incomplete.\n"
-"The following problems were encountered when saving:"
+msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:959
+#: libs/ui/KisDocument.cpp:954
+#, kde-format
+msgctxt ""
+"dialog box shown to the user if there were warnings while saving the document"
+msgid "Some problems were encountered when saving."
+msgstr ""
+
+#: libs/ui/KisDocument.cpp:971
 #, fuzzy, kde-format
 msgid "Finished saving %1"
 msgstr "&Poligonilo"
 
-#: libs/ui/KisDocument.cpp:1362
+#: libs/ui/KisDocument.cpp:1374
 #, fuzzy, kde-format
 msgid "Autosaving... %1"
 msgstr "Konservanta..."
 
-#: libs/ui/KisDocument.cpp:1370
+#: libs/ui/KisDocument.cpp:1382
 #, fuzzy, kde-format
 msgid "Autosaving..."
 msgstr "Konservanta..."
 
-#: libs/ui/KisDocument.cpp:1376
+#: libs/ui/KisDocument.cpp:1388
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1519
+#: libs/ui/KisDocument.cpp:1531
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1533
+#: libs/ui/KisDocument.cpp:1545
 #, fuzzy, kde-format
 msgid "Finished autosaving %1"
 msgstr "&Poligonilo"
 
-#: libs/ui/KisDocument.cpp:1775
+#: libs/ui/KisDocument.cpp:1787
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -29721,46 +29727,41 @@ msgstr ""
 "Ne valida ligo (URL)\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1841
+#: libs/ui/KisDocument.cpp:1853
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Dosiero %1 ne ekzistas."
 
-#: libs/ui/KisDocument.cpp:1870
+#: libs/ui/KisDocument.cpp:1882
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Opening document"
 msgstr "Malfermi dokumenton"
 
-#: libs/ui/KisDocument.cpp:1885
+#: libs/ui/KisDocument.cpp:1897
 #, fuzzy, kde-format
-msgid ""
-"Could not open %2.\n"
-"Reason: %1"
-msgstr ""
-"Ne eblis malfermi\n"
-"%2.\n"
-"Kialo: %1"
+msgid "Could not open %1."
+msgstr "Forigu elekton"
 
-#: libs/ui/KisDocument.cpp:1893
+#: libs/ui/KisDocument.cpp:1907
 #, kde-format
-msgid "There were problems opening %1"
+msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2022
+#: libs/ui/KisDocument.cpp:2036
 #, fuzzy, kde-format
 #| msgid "Not Filled"
 msgid "Not Saved"
 msgstr "Malplenigita:"
 
-#: libs/ui/KisDocument.cpp:2480
+#: libs/ui/KisDocument.cpp:2494
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Fono"
 
-#: libs/ui/KisDocument.cpp:2534
+#: libs/ui/KisDocument.cpp:2548
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -45655,7 +45656,7 @@ msgstr "Blua"
 msgid "Selection mode:"
 msgstr "Elektomoduso:"
 
-#: plugins/impex/exr/exr_converter.cc:883
+#: plugins/impex/exr/exr_converter.cc:901
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -45665,13 +45666,13 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:890
+#: plugins/impex/exr/exr_converter.cc:908
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Malfermi novan dokumenton laŭ ŝablono"
 
-#: plugins/impex/exr/exr_converter.cc:1305
+#: plugins/impex/exr/exr_converter.cc:1323
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip %2 is shortcut"
 #| msgid "%1 (%2)"
@@ -45679,7 +45680,7 @@ msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (%2)"
 
-#: plugins/impex/exr/exr_converter.cc:1310
+#: plugins/impex/exr/exr_converter.cc:1328
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -48578,16 +48579,8 @@ msgstr "Defaŭlta"
 msgid "Browse..."
 msgstr "Foliumi"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnUpdate)
-#. i18n: ectx: property (text), widget (QPushButton, pushButtonUpdate)
-#: plugins/impex/raw/wdgrawimport.ui:33
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:30
-#, kde-format
-msgid "Update"
-msgstr "Ĝisdatigi"
-
 #. i18n: ectx: property (text), widget (QLabel, preview)
-#: plugins/impex/raw/wdgrawimport.ui:96
+#: plugins/impex/raw/wdgrawimport.ui:55
 #, fuzzy, kde-format
 msgid "No image loaded"
 msgstr "&Cela kolorspaco:"
@@ -58448,6 +58441,12 @@ msgstr ""
 msgid "Auto updates"
 msgstr "&Rotacii"
 
+#. i18n: ectx: property (text), widget (QPushButton, btnUpdate)
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:30
+#, kde-format
+msgid "Update"
+msgstr "Ĝisdatigi"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowKeyStrokes)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:39
 #, fuzzy, kde-format
@@ -59460,6 +59459,26 @@ msgid "Reference Images Tool"
 msgstr "Referencbildo:"
 
 #, fuzzy
+#~| msgid ""
+#~| "Could not save %1\n"
+#~| "Reason: %2"
+#~ msgid ""
+#~ "Could not save %1.\n"
+#~ "Reason: %2"
+#~ msgstr ""
+#~ "Ne eblis konservigi %1\n"
+#~ "Kialo: %2"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Ne eblis malfermi\n"
+#~ "%2.\n"
+#~ "Kialo: %1"
+
+#, fuzzy
 #~ msgctxt "action"
 #~ msgid "&Painter's Tools"
 #~ msgstr "&Pentriloj"
@@ -59653,16 +59672,6 @@ msgstr "Referencbildo:"
 #~ msgctxt "@item:tooltip"
 #~ msgid "Layer opacity and blending mode"
 #~ msgstr "Elektomoduso:"
-
-#, fuzzy
-#~| msgid ""
-#~| "Could not save\n"
-#~| "%1"
-#~ msgid "Could not save %1."
-#~ msgstr ""
-#~ "Ne eblis konservi\n"
-#~ "%1Ne eblis konservi\n"
-#~ "%1"
 
 #, fuzzy
 #~| msgid "Intensity"

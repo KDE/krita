@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-27 00:46+0000\n"
+"POT-Creation-Date: 2022-12-28 00:47+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -17066,7 +17066,7 @@ msgstr "Imports, importēt Attēls"
 msgid "Selection Mask"
 msgstr "Izlase Kasīklis"
 
-#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2473
+#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2487
 #: plugins/impex/psd/psd_loader.cpp:189
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19456,9 +19456,9 @@ msgstr "Avots:"
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
 #: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
 #: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
-#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:931
-#: libs/ui/KisDocument.cpp:939 libs/ui/KisDocument.cpp:1841
-#: libs/ui/KisDocument.cpp:1884 libs/ui/KisDocument.cpp:1892
+#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:933
+#: libs/ui/KisDocument.cpp:945 libs/ui/KisDocument.cpp:1853
+#: libs/ui/KisDocument.cpp:1896 libs/ui/KisDocument.cpp:1906
 #: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1087
 #: libs/ui/KisMainWindow.cpp:1213 libs/ui/KisMainWindow.cpp:1312
 #: libs/ui/KisMainWindow.cpp:1918 libs/ui/KisMainWindow.cpp:1927
@@ -24538,6 +24538,7 @@ msgstr "Profils:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnPreviewMask)
 #. i18n: ectx: property (text), widget (QCheckBox, checkPreview)
 #. i18n: ectx: property (text), widget (QLabel, lblThumbnail)
@@ -24546,6 +24547,7 @@ msgstr "Profils:"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:219
 #: plugins/dockers/recorder/recorder_profile_settings.ui:177
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:98
+#: plugins/impex/raw/wdgrawimport.ui:49
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:50
 #, kde-format
 msgid "Preview"
@@ -29457,64 +29459,67 @@ msgid ""
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:926
+#: libs/ui/KisDocument.cpp:928
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Kļūda autosaglabāšanas laikā! Pilns disks?"
 
-#: libs/ui/KisDocument.cpp:932
+#: libs/ui/KisDocument.cpp:934
 #, fuzzy, kde-format
-msgid ""
-"Could not save %1.\n"
-"Reason: %2"
-msgstr "Nē Izlase"
+msgid "Could not save %1."
+msgstr "&Monitora profils:"
 
-#: libs/ui/KisDocument.cpp:941
+#: libs/ui/KisDocument.cpp:948
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
-msgid ""
-"%1 has been saved but is incomplete.\n"
-"The following problems were encountered when saving:"
+msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:959
+#: libs/ui/KisDocument.cpp:954
+#, kde-format
+msgctxt ""
+"dialog box shown to the user if there were warnings while saving the document"
+msgid "Some problems were encountered when saving."
+msgstr ""
+
+#: libs/ui/KisDocument.cpp:971
 #, fuzzy, kde-format
 msgid "Finished saving %1"
 msgstr "&Puslīnija"
 
-#: libs/ui/KisDocument.cpp:1362
+#: libs/ui/KisDocument.cpp:1374
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosaving... %1"
 msgstr "Autosaglabāšana..."
 
-#: libs/ui/KisDocument.cpp:1370
+#: libs/ui/KisDocument.cpp:1382
 #, kde-format
 msgid "Autosaving..."
 msgstr "Autosaglabāšana..."
 
-#: libs/ui/KisDocument.cpp:1376
+#: libs/ui/KisDocument.cpp:1388
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1519
+#: libs/ui/KisDocument.cpp:1531
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Kļūda autosaglabāšanas laikā! Pilns disks?"
 
-#: libs/ui/KisDocument.cpp:1533
+#: libs/ui/KisDocument.cpp:1545
 #, fuzzy, kde-format
 msgid "Finished autosaving %1"
 msgstr "&Puslīnija"
 
-#: libs/ui/KisDocument.cpp:1775
+#: libs/ui/KisDocument.cpp:1787
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -29526,45 +29531,40 @@ msgstr ""
 "Slikti formēts URL\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1841
+#: libs/ui/KisDocument.cpp:1853
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "File %1 does not exist."
 msgstr "Fails %1 neeksistē."
 
-#: libs/ui/KisDocument.cpp:1870
+#: libs/ui/KisDocument.cpp:1882
 #, fuzzy, kde-format
 msgid "Opening document"
 msgstr "Atvērt Avīze Dokumenti"
 
-#: libs/ui/KisDocument.cpp:1885
+#: libs/ui/KisDocument.cpp:1897
 #, fuzzy, kde-format
-msgid ""
-"Could not open %2.\n"
-"Reason: %1"
-msgstr ""
-"Nevar atvērt\n"
-"%2.\n"
-"Iemesls: %1"
+msgid "Could not open %1."
+msgstr "&Monitora profils:"
 
-#: libs/ui/KisDocument.cpp:1893
+#: libs/ui/KisDocument.cpp:1907
 #, kde-format
-msgid "There were problems opening %1"
+msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2022
+#: libs/ui/KisDocument.cpp:2036
 #, fuzzy, kde-format
 #| msgid "Not Filled"
 msgid "Not Saved"
 msgstr "Bez aizpildījuma"
 
-#: libs/ui/KisDocument.cpp:2480
+#: libs/ui/KisDocument.cpp:2494
 #, fuzzy, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "fons"
 
-#: libs/ui/KisDocument.cpp:2534
+#: libs/ui/KisDocument.cpp:2548
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -45178,7 +45178,7 @@ msgstr "Spilgtums"
 msgid "Selection mode:"
 msgstr "Izvēles režīms:"
 
-#: plugins/impex/exr/exr_converter.cc:883
+#: plugins/impex/exr/exr_converter.cc:901
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -45188,19 +45188,19 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:890
+#: plugins/impex/exr/exr_converter.cc:908
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Atvērt jaunu dokumentu ar šablonu"
 
-#: plugins/impex/exr/exr_converter.cc:1305
+#: plugins/impex/exr/exr_converter.cc:1323
 #, fuzzy, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "(dokumenta) kopija Zaļš"
 
-#: plugins/impex/exr/exr_converter.cc:1310
+#: plugins/impex/exr/exr_converter.cc:1328
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -48060,16 +48060,8 @@ msgstr "Pašreizējais slānis"
 msgid "Browse..."
 msgstr "Bulta"
 
-#. i18n: ectx: property (text), widget (QPushButton, btnUpdate)
-#. i18n: ectx: property (text), widget (QPushButton, pushButtonUpdate)
-#: plugins/impex/raw/wdgrawimport.ui:33
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:30
-#, fuzzy, kde-format
-msgid "Update"
-msgstr "Atjaunot priekšskatījumu"
-
 #. i18n: ectx: property (text), widget (QLabel, preview)
-#: plugins/impex/raw/wdgrawimport.ui:96
+#: plugins/impex/raw/wdgrawimport.ui:55
 #, fuzzy, kde-format
 msgid "No image loaded"
 msgstr "Izgatavošana"
@@ -57736,6 +57728,12 @@ msgstr ""
 msgid "Auto updates"
 msgstr "&Autoatjaunināšana"
 
+#. i18n: ectx: property (text), widget (QPushButton, btnUpdate)
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:30
+#, fuzzy, kde-format
+msgid "Update"
+msgstr "Atjaunot priekšskatījumu"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowKeyStrokes)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:39
 #, fuzzy, kde-format
@@ -58736,6 +58734,21 @@ msgid "Reference Images Tool"
 msgstr "Atsauksme:"
 
 #, fuzzy
+#~ msgid ""
+#~ "Could not save %1.\n"
+#~ "Reason: %2"
+#~ msgstr "Nē Izlase"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Nevar atvērt\n"
+#~ "%2.\n"
+#~ "Iemesls: %1"
+
+#, fuzzy
 #~ msgctxt "action"
 #~ msgid "&Painter's Tools"
 #~ msgstr "Darbarīki"
@@ -58931,10 +58944,6 @@ msgstr "Atsauksme:"
 #~ msgctxt "@item:tooltip"
 #~ msgid "Layer opacity and blending mode"
 #~ msgstr "Saplūšanas režīms"
-
-#, fuzzy
-#~ msgid "Could not save %1."
-#~ msgstr "&Monitora profils:"
 
 #, fuzzy
 #~ msgid "Intensity"

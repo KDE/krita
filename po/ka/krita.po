@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-28 00:47+0000\n"
-"PO-Revision-Date: 2022-12-27 07:46+0100\n"
+"POT-Creation-Date: 2022-12-29 00:50+0000\n"
+"PO-Revision-Date: 2022-12-28 09:29+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -5111,7 +5111,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "Abstract_lines.png"
 msgid "Abstract lines"
-msgstr ""
+msgstr "აბსტრაქტული ხაზები"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5308,7 +5308,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Rough_Paper."
 "png"
 msgid "Rough Paper"
-msgstr ""
+msgstr "უხეში ფურცელი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -19559,7 +19559,7 @@ msgstr ""
 #: libs/resources/KisTagModel.cpp:303
 #, kde-format
 msgid "All Resources"
-msgstr ""
+msgstr "ყველა რესურსი"
 
 #: libs/resources/KisTagModel.cpp:313
 #, kde-format
@@ -19642,13 +19642,13 @@ msgstr "ჭდეები"
 #: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:113
 #, kde-format
 msgid "Schema Information"
-msgstr ""
+msgstr "სქემის ინფორმაცია"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:119
 #, kde-format
 msgid "Database Version"
-msgstr ""
+msgstr "ბაზის ვერსია"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDatabaseVersion)
 #. i18n: ectx: property (text), widget (QLabel, lblKritaVersion)
@@ -19797,7 +19797,7 @@ msgstr "რესურსის სახელის გადარქმე�
 #, kde-format
 msgctxt "@title:window"
 msgid "Overwrite the resource?"
-msgstr ""
+msgstr "გადავაწერო ამ რესურსს?"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:120
 #, kde-format
@@ -20136,7 +20136,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
-msgstr ""
+msgstr "რენდერის შეცდომა"
 
 #: libs/ui/animation/KisAnimationRender.cpp:138
 #, kde-format
@@ -20165,19 +20165,19 @@ msgstr ""
 #, kde-format
 msgctxt "lanczos3 filtering"
 msgid "lanczos3"
-msgstr ""
+msgstr "lanczos3"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:104
 #, kde-format
 msgctxt "nearest neighbor filtering"
 msgid "neighbor"
-msgstr ""
+msgstr "მეზობელი"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:105
 #, kde-format
 msgctxt "spline filtering"
 msgid "spline"
-msgstr ""
+msgstr "სპლაინი"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:526
 #, kde-format
@@ -20226,7 +20226,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Video Animation"
-msgstr ""
+msgstr "ვიდეო ანიმაციის შემოტანა"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #, kde-format
@@ -20311,7 +20311,7 @@ msgstr ""
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:357
 #, kde-format
 msgid "Select your Video File"
-msgstr ""
+msgstr "აირჩიეთ თქვენი ვიდეო ფაილი"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:390
 #, kde-format
@@ -21183,13 +21183,13 @@ msgstr ""
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:293
 #, kde-format
 msgid "MaxCLL:"
-msgstr ""
+msgstr "MaxCLL:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:310
 #, kde-format
 msgid "MaxFALL:"
-msgstr ""
+msgstr "MaxFALL:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, VideoImportDialog)
 #: libs/ui/animation/VideoImportDialog.ui:24
@@ -22511,17 +22511,17 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:353
 #, kde-format
 msgid "Open default window"
-msgstr ""
+msgstr "ნაგულისხმები ფანჯრის გახსნა"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:354
 #, kde-format
 msgid "Load previous session"
-msgstr ""
+msgstr "წინა სესიის ჩატვირთვა"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:355
 #, kde-format
 msgid "Show session manager"
-msgstr ""
+msgstr "სესიების მმართველის ჩვენება"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:450
 #, kde-format
@@ -22541,7 +22541,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:759
 #, kde-format
 msgid "Select a Background Image"
-msgstr ""
+msgstr "ფონური გამოსახულების არჩევა"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:771
 #: libs/ui/KisTemplateCreateDia.cpp:390
@@ -22564,7 +22564,7 @@ msgstr "ეკრანი %1 (%2):"
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, kde-format
 msgid "Install Color Profiles"
-msgstr ""
+msgstr "ფერის პროფილების დაყენება"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1174
 #, kde-format
@@ -22640,7 +22640,7 @@ msgstr "ეკრანის Id: %1"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1644
 #, kde-format
 msgid "Display Name: %1 %2"
-msgstr ""
+msgstr "საჩვენებელი სახელი: %1 %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1645
 #, kde-format
@@ -22680,7 +22680,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1685
 #, kde-format
 msgid "Warning(s):"
-msgstr ""
+msgstr "გაფრთხილებები:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1827
 #, kde-format
@@ -22744,12 +22744,12 @@ msgstr "ტაბლეტი"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1989
 #, kde-format
 msgid "Canvas-only settings"
-msgstr ""
+msgstr "მხოლოდ-ტილოს მორგება"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1991
 #, kde-format
 msgid "Canvas-only"
-msgstr ""
+msgstr "მხოლოდ-ტილო"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1999
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2001
@@ -23009,7 +23009,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:70
 #, kde-format
 msgid "Save New Brush Preset"
-msgstr ""
+msgstr "ფუნჯის ახალი პრესეტის შენახვა"
 
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:79
 #: plugins/generators/seexpr/kis_wdg_seexpr_presets_save.cpp:75
@@ -23022,7 +23022,7 @@ msgstr "ასლი"
 #: libs/ui/forms/wdgsavebrushpreset.ui:24
 #, kde-format
 msgid "Save Brush Preset"
-msgstr ""
+msgstr "ფუნჯის პრესეტის შენახვა"
 
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:133
 #, kde-format
@@ -23080,7 +23080,7 @@ msgstr "ახალი სახელი:"
 #: libs/ui/flake/kis_shape_controller.cpp:196
 #, kde-format
 msgid "Vector Layer %1"
-msgstr ""
+msgstr "ვექტორის ფენა %1"
 
 #: libs/ui/flake/kis_take_all_shapes_command.cpp:15
 msgctxt "(qtundo-format)"
@@ -23137,7 +23137,7 @@ msgstr ""
 #: libs/ui/forms/KisWelcomePage.ui:365
 #, kde-format
 msgid "Update now!"
-msgstr ""
+msgstr "ახლა განახლება!"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
 #: libs/ui/forms/KisWelcomePage.ui:372
@@ -23375,7 +23375,7 @@ msgstr "სათაური:"
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:241
 #, kde-format
 msgid "Sub&ject:"
-msgstr ""
+msgstr "&სათაური:"
 
 #. i18n: ectx: property (text), widget (QLabel, fullNameLabel)
 #: libs/ui/forms/koDocumentInfoAuthorWidget.ui:21
@@ -23461,7 +23461,7 @@ msgstr "გარჩევადობა:"
 #: libs/ui/forms/wdgapplyprofile.ui:27
 #, kde-format
 msgid "Apply Profile"
-msgstr ""
+msgstr "პროფილის გადატარება"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgapplyprofile.ui:33
@@ -23572,13 +23572,13 @@ msgstr ""
 #: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:24
 #, kde-format
 msgid "Edit presets"
-msgstr ""
+msgstr "პრესეტების ჩასწორება"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButtonBookmarkCurrent)
 #: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:48
 #, kde-format
 msgid "Bookmark current"
-msgstr ""
+msgstr "მიმდინარეს ჩანიშვნა"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButtonDelete)
 #: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:55
@@ -23630,7 +23630,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:89
 #, kde-format
 msgid "As&k each time"
-msgstr ""
+msgstr "&ყოველ ჯერზე კითხვა"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2_2)
 #: libs/ui/forms/wdgcolorsettings.ui:96
@@ -23664,7 +23664,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:153
 #, kde-format
 msgid "Use system monitor profile"
-msgstr ""
+msgstr "სისტემური მონიტორის პროფილის გამოყენება"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblRenderingIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:163
@@ -23877,13 +23877,13 @@ msgstr ""
 #: libs/ui/forms/wdgdisplaysettings.ui:46
 #, kde-format
 msgid "Canvas Acceleration"
-msgstr ""
+msgstr "ტილოს აჩქარება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpOpenGL)
 #: libs/ui/forms/wdgdisplaysettings.ui:58
 #, kde-format
 msgid "Canvas &Graphics Acceleration"
-msgstr ""
+msgstr "ტილოს &გრაფიკული აჩქარება"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:73
@@ -23898,7 +23898,7 @@ msgstr ""
 #: libs/ui/forms/wdgdisplaysettings.ui:76
 #, kde-format
 msgid "Use texture buffer"
-msgstr ""
+msgstr "ტექსტურის ბუფერის გამოყენება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:146
@@ -23910,13 +23910,13 @@ msgstr "ორხაზოვანი ფილტრი"
 #: libs/ui/forms/wdgdisplaysettings.ui:151
 #, kde-format
 msgid "Trilinear Filtering"
-msgstr ""
+msgstr "სამხაზოვანი ფილტრი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:156
 #, kde-format
 msgid "High Quality Filtering"
-msgstr ""
+msgstr "მაღალი ხარისხის ფილტრი"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:170
@@ -24235,7 +24235,7 @@ msgstr ""
 #: libs/ui/forms/wdgfilterselector.ui:130
 #, kde-format
 msgid "Edit Presets"
-msgstr ""
+msgstr "პრესეტების ჩასწორება"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnXML)
 #: libs/ui/forms/wdgfilterselector.ui:137
@@ -24432,13 +24432,13 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:424
 #, kde-format
 msgid "Multiple Document Mode:"
-msgstr ""
+msgstr "ბევრი დოკუმენტის რეჟიმი:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_cmbMDIType)
 #: libs/ui/forms/wdggeneralsettings.ui:444
 #, kde-format
 msgid "Subwindows"
-msgstr ""
+msgstr "ქვეფანჯრები"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_cmbMDIType)
 #: libs/ui/forms/wdggeneralsettings.ui:449
@@ -24469,13 +24469,13 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:561
 #, kde-format
 msgid "Window Background:"
-msgstr ""
+msgstr "ფანჯრის ფონი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkUseCustomFont)
 #: libs/ui/forms/wdggeneralsettings.ui:590
 #, kde-format
 msgid "Use custom interface font"
-msgstr ""
+msgstr "ინტერფესისი ფონტის ხელით მითითება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -24636,7 +24636,7 @@ msgstr "მომხმარებლის საქაღალდე"
 #: libs/ui/forms/wdggeneralsettings.ui:898
 #, kde-format
 msgid "Temporary File Location"
-msgstr ""
+msgstr "დროებითი ფაილის მდებარეობა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/forms/wdggeneralsettings.ui:906
@@ -24660,7 +24660,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:943
 #, kde-format
 msgid "KRA File Compression"
-msgstr ""
+msgstr "KRA ფაილის შეკუმშვა"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkZip64)
 #: libs/ui/forms/wdggeneralsettings.ui:949
@@ -25587,7 +25587,7 @@ msgstr ""
 #: libs/ui/forms/wdgnewimage.ui:688
 #, kde-format
 msgid "This document..."
-msgstr ""
+msgstr "ეს დოკუმენტი..."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgNewWindowLayout)
 #: libs/ui/forms/wdgnewwindowlayout.ui:24
@@ -28430,6 +28430,8 @@ msgid ""
 "%1\n"
 "selected"
 msgstr ""
+"%1\n"
+"მონიშნულია"
 
 #: libs/ui/kis_paintop_options_model.cpp:24
 #, kde-format
@@ -28464,7 +28466,7 @@ msgstr ""
 #: libs/ui/kis_popup_palette.cpp:153
 #, kde-format
 msgid "Clear color history"
-msgstr ""
+msgstr "ფერების ისტორიის გასუფთავება"
 
 #: libs/ui/kis_popup_palette.cpp:176
 #, kde-format
@@ -28581,6 +28583,8 @@ msgid ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></b></"
 "p>"
 msgstr ""
+"<html><head/><body><p><b><span style=\" color:%1;\">უახლესი ფაილები</span></"
+"b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:215
 #, kde-format
@@ -28782,17 +28786,17 @@ msgstr ""
 #: libs/ui/KisApplication.cpp:428
 #, kde-format
 msgid "Initializing Globals..."
-msgstr ""
+msgstr "გლობალების ინიციალიზაცია..."
 
 #: libs/ui/KisApplication.cpp:459
 #, kde-format
 msgid "Adding resource types..."
-msgstr ""
+msgstr "რესურსის ტიპების დამატება..."
 
 #: libs/ui/KisApplication.cpp:474
 #, kde-format
 msgid "Loading Main Window..."
-msgstr ""
+msgstr "მთავარი ფანჯრის ჩატვირთვა..."
 
 #: libs/ui/KisApplication.cpp:573
 #, kde-format
@@ -28815,7 +28819,7 @@ msgstr "ფაილის ფენა"
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
-msgstr ""
+msgstr "Krita: გაფრთხილება"
 
 #: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:855
 #, kde-format
@@ -31127,19 +31131,19 @@ msgstr "&სიღრმე:"
 msgid "Li&nk with Layer"
 msgstr "Li&nk with Layer"
 
-#: libs/ui/opengl/kis_opengl.cpp:165
+#: libs/ui/opengl/kis_opengl.cpp:147
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:594
+#: libs/ui/opengl/kis_opengl.cpp:576
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:596
+#: libs/ui/opengl/kis_opengl.cpp:578
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31147,14 +31151,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:996
+#: libs/ui/opengl/kis_opengl.cpp:978
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:998
+#: libs/ui/opengl/kis_opengl.cpp:980
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -52853,7 +52857,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Annotator"
-msgstr ""
+msgstr "ანოტატორი"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Bibliographic antecedent"

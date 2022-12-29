@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-28 00:47+0000\n"
-"PO-Revision-Date: 2022-12-09 08:46+0100\n"
+"POT-Creation-Date: 2022-12-29 00:50+0000\n"
+"PO-Revision-Date: 2022-12-28 06:03+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -29727,14 +29727,9 @@ msgid "Error during saving %1: %2"
 msgstr "S'ha produït un error en guardar %1: %2"
 
 #: libs/ui/KisDocument.cpp:934
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save\n"
-#| "%1"
+#, kde-format
 msgid "Could not save %1."
-msgstr ""
-"No s'ha pogut guardar\n"
-"%1"
+msgstr "No s'ha pogut guardar «%1»."
 
 #: libs/ui/KisDocument.cpp:948
 #, kde-format
@@ -29742,22 +29737,14 @@ msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
 msgid "%1 has been saved but is incomplete."
-msgstr ""
+msgstr "%1 s'ha guardat, però està incomplet."
 
 #: libs/ui/KisDocument.cpp:954
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "dialog box shown to the user if there were warnings while saving the "
-#| "document, %1 is the file path"
-#| msgid ""
-#| "%1 has been saved but is incomplete.\n"
-#| "The following problems were encountered when saving:"
+#, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
-msgstr ""
-"%1 s'ha guardat, però està incomplet.\n"
-"En guardar-lo s'han trobat els problemes següents:"
+msgstr "En guardar-lo s'han trobat els problemes següents:"
 
 #: libs/ui/KisDocument.cpp:971
 #, kde-format
@@ -29810,16 +29797,14 @@ msgid "Opening document"
 msgstr "Obertura de document"
 
 #: libs/ui/KisDocument.cpp:1897
-#, fuzzy, kde-format
-#| msgid "Could not open '%1'."
+#, kde-format
 msgid "Could not open %1."
-msgstr "No s'ha pogut obrir «%1»."
+msgstr "No s'ha pogut obrir %1."
 
 #: libs/ui/KisDocument.cpp:1907
-#, fuzzy, kde-format
-#| msgid "There were problems opening %1"
+#, kde-format
 msgid "There were problems opening %1."
-msgstr "Hi ha problemes en obrir %1"
+msgstr "Hi ha hagut problemes en obrir %1."
 
 #: libs/ui/KisDocument.cpp:2036
 #, kde-format
@@ -31889,7 +31874,7 @@ msgstr "Profun&ditat:"
 msgid "Li&nk with Layer"
 msgstr "En&llaça amb la capa"
 
-#: libs/ui/opengl/kis_opengl.cpp:165
+#: libs/ui/opengl/kis_opengl.cpp:147
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
@@ -31898,12 +31883,12 @@ msgstr ""
 "Les memòries intermèdies de textures estan desactivades explícitament en el "
 "renderitzador ANGLE per problemes de rendiment."
 
-#: libs/ui/opengl/kis_opengl.cpp:594
+#: libs/ui/opengl/kis_opengl.cpp:576
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "El controlador gràfic d'Intel emprat té problemes coneguts amb OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:596
+#: libs/ui/opengl/kis_opengl.cpp:578
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31914,7 +31899,7 @@ msgstr ""
 "que s'utilitzarà ANGLE de manera predeterminada. Manualment podreu canviar a "
 "OpenGL, però no es garantix que funcione adequadament."
 
-#: libs/ui/opengl/kis_opengl.cpp:996
+#: libs/ui/opengl/kis_opengl.cpp:978
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -31923,7 +31908,7 @@ msgstr ""
 "El renderitzador preferit no permet el format de superfície requerit. S'ha "
 "seleccionat un altre renderitzador."
 
-#: libs/ui/opengl/kis_opengl.cpp:998
+#: libs/ui/opengl/kis_opengl.cpp:980
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -39049,7 +39034,7 @@ msgstr "Configura el nombre de pinzells mostrats..."
 #, kde-format
 msgctxt "action"
 msgid "Recorder"
-msgstr "Enregistrador"
+msgstr "Gravador"
 
 #. i18n: context: iconText @ Action (recorder_record_toggle), Actions (Recorder), ActionCollection (Recorder)
 #. i18n: context: text @ Action (recorder_record_toggle), Actions (Recorder), ActionCollection (Recorder)
@@ -39717,18 +39702,18 @@ msgstr "REC"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:214
 #, kde-format
 msgid "Recorder is active"
-msgstr "L'enregistrador està actiu"
+msgstr "El gravador està actiu"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:214
 #, kde-format
 msgid "Recorder is paused"
-msgstr "L'enregistrador està en pausa"
+msgstr "El gravador està en pausa"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:227
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
-msgstr "Enregistrador"
+msgstr "Gravador"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:403
 #, kde-format
@@ -39739,7 +39724,7 @@ msgstr "Seleccioneu una carpeta per als enregistraments"
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
-msgstr "Enregistrador"
+msgstr "Gravador"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:484
 #, kde-format
@@ -39747,7 +39732,7 @@ msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
 "check free disk space and start the recorder again."
 msgstr ""
-"L'enregistrador s'ha parat a causa d'una fallada en escriure un fotograma. "
+"El gravador s'ha parat a causa d'una fallada en escriure un fotograma. "
 "Comproveu l'espai lliure al disc i torneu a iniciar-lo."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:489
@@ -39756,8 +39741,8 @@ msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time. Try increasing the capture interval."
 msgstr ""
-"Avís de rendiment baix. L'enregistrador no pot escriure tots els fotogrames "
-"a temps. Intenteu augmentar l'interval de captura."
+"Avís de rendiment baix. El gravador no pot escriure tots els fotogrames a "
+"temps. Intenteu augmentar l'interval de captura."
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
 #, kde-format
@@ -59849,17 +59834,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr ""
-#~ "No s'ha pogut guardar %1.\n"
-#~ "Raó: %2"
-
-#~ msgid ""
-#~ "Could not open %2.\n"
-#~ "Reason: %1"
-#~ msgstr ""
-#~ "No s'ha pogut obrir %2.\n"
-#~ "Motiu: %1"

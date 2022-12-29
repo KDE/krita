@@ -41,9 +41,10 @@
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QTextBrowser" name="txtBugInfo">
-        <property name="lineWrapMode">
-          <enum>QTextEdit::NoWrap</enum>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
+       </widget>
       </item>
      </layout>
     </widget>

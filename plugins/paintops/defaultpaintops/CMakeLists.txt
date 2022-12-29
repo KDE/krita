@@ -14,9 +14,11 @@ set(kritadefaultpaintops_SOURCES
         brush/KisDabRenderingJob.cpp
         brush/KisDabRenderingExecutor.cpp
         duplicate/kis_duplicateop.cpp
-	duplicate/kis_duplicateop_settings.cpp
-	duplicate/kis_duplicateop_settings_widget.cpp
-	duplicate/kis_duplicateop_option.cpp
+        duplicate/kis_duplicateop_settings.cpp
+        duplicate/kis_duplicateop_settings_widget.cpp
+        duplicate/KisDuplicateOptionData.cpp
+        duplicate/KisDuplicateOptionModel.cpp
+        duplicate/KisDuplicateOptionWidget.cpp
     )
 
 ki18n_wrap_ui(kritadefaultpaintops_SOURCES duplicate/wdgduplicateop.ui )

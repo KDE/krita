@@ -50,28 +50,21 @@
 
 #include "kis_duplicateop_settings.h"
 #include "kis_duplicateop_settings_widget.h"
-#include "kis_duplicateop_option.h"
+#include <KisDuplicateOptionData.h>
 
 KisDuplicateOp::KisDuplicateOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_image(image)
     , m_node(node)
     , m_settings(static_cast<KisDuplicateOpSettings*>(const_cast<KisPaintOpSettings*>(settings.data())))
+    , m_sizeOption(settings.data())
+    , m_opacityOption(settings.data())
+    , m_rotationOption(settings.data())
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    m_sizeOption.readOptionSetting(settings);
-    m_rotationOption.readOptionSetting(settings);
-    m_opacityOption.readOptionSetting(settings);
-    m_sizeOption.resetAllSensors();
-    m_rotationOption.resetAllSensors();
-    m_opacityOption.resetAllSensors();
 
-    m_healing = settings->getBool(DUPLICATE_HEALING);
-    m_perspectiveCorrection = settings->getBool(DUPLICATE_CORRECT_PERSPECTIVE);
-    m_moveSourcePoint = settings->getBool(DUPLICATE_MOVE_SOURCE_POINT);
-    m_cloneFromProjection = settings->getBool(DUPLICATE_CLONE_FROM_PROJECTION);
-
+    m_duplicateOptionData.read(settings.data());
     m_srcdev = source()->createCompositionSourceDevice();
 }
 
@@ -99,7 +92,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     KisPaintDeviceSP realSourceDevice;
 
-    if (m_cloneFromProjection && m_image) {
+    if (m_duplicateOptionData.cloneFromProjection && m_image) {
         realSourceDevice = m_image->projection();
     }
     else {
@@ -141,7 +134,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     QPoint srcPoint;
 
-    if (m_moveSourcePoint) {
+    if (m_duplicateOptionData.moveSourcePoint) {
         srcPoint = (dstRect.topLeft() - m_settings->offset()).toPoint();
     }
     else {
@@ -199,7 +192,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     }
 
     // heal ?
-    if (m_healing) {
+    if (m_duplicateOptionData.healing) {
         QRect healRect(dstRect);
 
         const bool smallWidth = healRect.width() < 3;

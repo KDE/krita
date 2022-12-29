@@ -62,14 +62,12 @@ void saveStructure(Exiv2::XmpData &xmpData_,
 }
 }
 
-bool KisXMPIO::saveTo(KisMetaData::Store *store, QIODevice *ioDevice, HeaderType headerType) const
+bool KisXMPIO::saveTo(const KisMetaData::Store *store, QIODevice *ioDevice, HeaderType headerType) const
 {
     dbgMetaData << "Save XMP Data";
     Exiv2::XmpData xmpData_;
 
-    for (QHash<QString, KisMetaData::Entry>::const_iterator it = store->begin(); it != store->end(); ++it) {
-        const KisMetaData::Entry &entry = *it;
-
+    for (const KisMetaData::Entry &entry : *store) {
         // Check whether the prefix and namespace are know to exiv2
         std::string prefix = exiv2Prefix(entry.schema());
         dbgMetaData << "Saving " << entry.name();

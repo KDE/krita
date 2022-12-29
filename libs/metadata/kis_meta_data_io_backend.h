@@ -59,7 +59,7 @@ public:
      *                   which type of header
      * @return true if the save was successful (XXX: actually, all backends always return true...)
      */
-    virtual bool saveTo(Store *store, QIODevice *ioDevice, HeaderType headerType = NoHeader) const = 0;
+    virtual bool saveTo(const Store *store, QIODevice *ioDevice, HeaderType headerType = NoHeader) const = 0;
 
     /**
      * @param store the list of metadata

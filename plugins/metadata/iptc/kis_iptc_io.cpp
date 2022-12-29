@@ -86,15 +86,14 @@ void KisIptcIO::initMappingsTable() const
     }
 }
 
-bool KisIptcIO::saveTo(KisMetaData::Store *store, QIODevice *ioDevice, HeaderType headerType) const
+bool KisIptcIO::saveTo(const KisMetaData::Store *store, QIODevice *ioDevice, HeaderType headerType) const
 {
     QStringList blockedEntries = QStringList() << "photoshop:DateCreated";
 
     initMappingsTable();
     ioDevice->open(QIODevice::WriteOnly);
     Exiv2::IptcData iptcData;
-    for (QHash<QString, KisMetaData::Entry>::const_iterator it = store->begin(); it != store->end(); ++it) {
-        const KisMetaData::Entry &entry = *it;
+    for (const KisMetaData::Entry &entry : *store) {
         if (d->kmdToIPTC.contains(entry.qualifiedName())) {
             if (blockedEntries.contains(entry.qualifiedName())) {
                 warnKrita << "skipping" << entry.qualifiedName() << entry.value();

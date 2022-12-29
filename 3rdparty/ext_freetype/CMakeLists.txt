@@ -45,6 +45,8 @@ ExternalProject_Add(
             --prefix=${EXTPREFIX_harfbuzz}
             --libdir=lib
             -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
+            -Dglib=disabled
+            -Dgobject=disabled
             ${EXTRA_MESON_FLAGS}
 
     BUILD_COMMAND ${CMAKE_COMMAND} -E env

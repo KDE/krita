@@ -1,49 +1,45 @@
 /*
  *  SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
+
 #include "kis_about_application.h"
+
+#include <KAboutData>
+#include <KLocalizedString>
+#include <QFile>
+#include <QStandardPaths>
 
 #include <kis_debug.h>
 
-#include <QStandardPaths>
-#include <QTabWidget>
-#include <QLabel>
-#include <QTextEdit>
-#include <QTextBrowser>
-#include <QString>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QDate>
-#include <QApplication>
-#include <QFile>
-#include <QDesktopServices>
-#include <kaboutdata.h>
-
-#include <klocalizedstring.h>
 #include "kis_splash_screen.h"
+#include "ui_wdgaboutapplication.h"
+
+class Q_DECL_HIDDEN WdgAboutApplication : public QWidget, public Ui::WdgAboutApplication
+{
+public:
+    WdgAboutApplication(QWidget *parent = nullptr)
+        : QWidget(parent)
+    {
+        setupUi(this);
+    }
+};
 
 KisAboutApplication::KisAboutApplication(QWidget *parent)
-    : QDialog(parent)
+    : KoDialog(parent)
 {
     setWindowTitle(i18n("About Krita"));
+    setButtons(KoDialog::Close);
 
-    QVBoxLayout *vlayout = new QVBoxLayout(this);
-    vlayout->setMargin(0);
-    vlayout->setSizeConstraint(QLayout::SetFixedSize);
-    QTabWidget *wdgTab = new QTabWidget;
-    vlayout->addWidget(wdgTab);
+    WdgAboutApplication *wdgTab = new WdgAboutApplication(this);
+
     KisSplashScreen *splash = new KisSplashScreen(true);
-
     splash->setWindowFlags(Qt::Widget);
     splash->displayLinks(true);
 
-    wdgTab->addTab(splash, i18n("About"));
-
-    QTextEdit *lblAuthors = new QTextEdit();
-    lblAuthors->setReadOnly(true);
+    wdgTab->aboutTab->layout()->addWidget(splash);
 
     QString authors = i18n("<html>"
                           "<head/>"
@@ -59,9 +55,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
         authors.append(developersText.readAll().split("\n", QString::SkipEmptyParts).join(", "));
     }
     authors.append(".</p></body></html>");
-    lblAuthors->setText(authors);
-    wdgTab->addTab(lblAuthors, i18nc("Heading for the list of Krita authors/developers", "Authors"));
-
+    wdgTab->lblAuthors->setText(authors);
 
     // Translators
     KAboutData aboutData(KAboutData::applicationData());
@@ -76,10 +70,6 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
         qDebug() << aboutTranslationTeam << aboutData.ocsProviderUrl();
     }
-
-    QTextBrowser *lblTranslators = new QTextBrowser();
-
-    lblTranslators->setOpenExternalLinks(true);
 
     QString translatorHtml = i18n(
         "<html>"
@@ -100,9 +90,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
              "kde.org</a></p>"));
     translatorHtml.append("</body></html>");
 
-    lblTranslators->setText(translatorHtml);
-
-    wdgTab->addTab(lblTranslators, i18nc("@title:tab", "Translators"));
+    wdgTab->lblTranslators->setText(translatorHtml);
 
     QString backers = i18n("<html>"
                           "<head/>"
@@ -118,13 +106,8 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
         backers.append(backersText.readAll().split("\n", QString::SkipEmptyParts).join(", "));
     }
     backers.append(i18n(".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"));
-    lblKickstarter->setText(backers);
-    wdgTab->addTab(lblKickstarter, i18n("Backers"));
+    wdgTab->lblKickstarter->setText(backers);
 
-
-
-    QTextEdit *lblCredits = new QTextEdit();
-    lblCredits->setReadOnly(true);
     QString credits = i18n("<html>"
                           "<head/>"
                           "<body>"
@@ -148,11 +131,8 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     }
     credits.append(i18n(".</p><p><i>For supporting Krita development with advice, icons, brush sets and more.</i></p></body></html>"));
 
-    lblCredits->setText(credits);
-    wdgTab->addTab(lblCredits, i18n("Also Thanks To"));
+    wdgTab->lblCredits->setText(credits);
 
-    QTextEdit *lblLicense = new QTextEdit();
-    lblLicense->setReadOnly(true);
     QString license = i18n("<html>"
                            "<head/>"
                            "<body>"
@@ -181,12 +161,8 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
         license.append(licenseText.readAll());
     }
     license.append("</pre></body></html>");
-    lblLicense->setText(license);
+    wdgTab->lblLicense->setText(license);
 
-    wdgTab->addTab(lblLicense, i18n("License"));
-
-    QTextBrowser *lblThirdParty = new QTextBrowser();
-    lblThirdParty->setOpenExternalLinks(true);
     QFile thirdPartyFile(":/libraries.txt");
     if (thirdPartyFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream thirdPartyText(&thirdPartyFile);
@@ -207,21 +183,11 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
             }
         }
         thirdPartyHtml.append("<ul></p></body></html>");
-        lblThirdParty->setText(thirdPartyHtml);
+        wdgTab->lblThirdParty->setText(thirdPartyHtml);
     }
-    wdgTab->addTab(lblThirdParty, i18n("Third-party libraries"));
 
-
-    QPushButton *bnClose = new QPushButton(i18n("Close"));
-    bnClose->setIcon(QIcon::fromTheme(QStringLiteral("dialog-close")));
-    connect(bnClose, SIGNAL(clicked()), SLOT(close()));
-
-    QHBoxLayout *hlayout = new QHBoxLayout;
-    hlayout->setMargin(10);
-    hlayout->addStretch(10);
-    hlayout->addWidget(bnClose);
-
-    vlayout->addLayout(hlayout);
-
-    setMinimumSize(vlayout->sizeHint());
+    setMainWidget(wdgTab);
+    setMinimumSize(sizeHint());
+    Q_ASSERT(layout());
+    layout()->setSizeConstraint(QLayout::SetFixedSize);
 }

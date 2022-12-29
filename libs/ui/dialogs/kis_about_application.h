@@ -6,9 +6,9 @@
 #ifndef KIS_ABOUT_APPLICATION_H
 #define KIS_ABOUT_APPLICATION_H
 
-#include <QDialog>
+#include <KoDialog.h>
 
-class KisAboutApplication : public QDialog
+class KisAboutApplication : public KoDialog
 {
     Q_OBJECT
 public:

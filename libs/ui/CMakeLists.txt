@@ -551,6 +551,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     widgets/KisDitherWidget.ui
     widgets/KisAutoLevelsWidget.ui
 
+    forms/wdgaboutapplication.ui
     forms/wdgdlgpngimport.ui
     forms/wdgfullscreensettings.ui
     forms/wdgsegmentgradienteditor.ui

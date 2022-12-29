@@ -53,13 +53,11 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     QFile fileDevelopers(":/developers.txt");
     Q_ASSERT(fileDevelopers.exists());
-    fileDevelopers.open(QIODevice::ReadOnly);
-
-    Q_FOREACH (const QByteArray &author, fileDevelopers.readAll().split('\n')) {
-        authors.append(QString::fromUtf8(author));
-        authors.append(", ");
+    if (fileDevelopers.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream developersText(&fileDevelopers);
+        developersText.setCodec("UTF-8");
+        authors.append(developersText.readAll().split("\n", QString::SkipEmptyParts).join(", "));
     }
-    authors.chop(2);
     authors.append(".</p></body></html>");
     lblAuthors->setText(authors);
     wdgTab->addTab(lblAuthors, i18nc("Heading for the list of Krita authors/developers", "Authors"));
@@ -90,11 +88,11 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     QFile fileBackers(":/backers.txt");
     Q_ASSERT(fileBackers.exists());
-    fileBackers.open(QIODevice::ReadOnly | QIODevice::Text);
-    QTextStream backersText(&fileBackers);
-    backersText.setCodec("UTF-8");
-    backers.append(backersText.readAll().replace("\n", ", "));
-    backers.chop(2);
+    if (fileBackers.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream backersText(&fileBackers);
+        backersText.setCodec("UTF-8");
+        backers.append(backersText.readAll().split("\n", QString::SkipEmptyParts).join(", "));
+    }
     backers.append(i18n(".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"));
     lblKickstarter->setText(backers);
     wdgTab->addTab(lblKickstarter, i18n("Backers"));
@@ -111,17 +109,19 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     QFile fileCredits(":/credits.txt");
     Q_ASSERT(fileCredits.exists());
-    fileCredits.open(QIODevice::ReadOnly);
-
-    Q_FOREACH (const QString &credit, QString::fromUtf8(fileCredits.readAll()).split('\n', QString::SkipEmptyParts)) {
-        if (credit.contains(":")) {
-            QList<QString> creditSplit = credit.split(':');
-            credits.append(creditSplit.at(0));
-            credits.append(" (<i>" + creditSplit.at(1) + "</i>)");
-            credits.append(", ");
+    if (fileCredits.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream creditsText(&fileCredits);
+        creditsText.setCodec("UTF-8");
+        Q_FOREACH (const QString &credit, creditsText.readAll().split('\n', QString::SkipEmptyParts)) {
+            if (credit.contains(":")) {
+                QList<QString> creditSplit = credit.split(':');
+                credits.append(creditSplit.at(0));
+                credits.append(" (<i>" + creditSplit.at(1) + "</i>)");
+                credits.append(", ");
+            }
         }
+        credits.chop(2);
     }
-    credits.chop(2);
     credits.append(i18n(".</p><p><i>For supporting Krita development with advice, icons, brush sets and more.</i></p></body></html>"));
 
     lblCredits->setText(credits);
@@ -151,9 +151,11 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     QFile licenseFile(":/LICENSE");
     Q_ASSERT(licenseFile.exists());
-    licenseFile.open(QIODevice::ReadOnly);
-    QByteArray ba = licenseFile.readAll();
-    license.append(QString::fromUtf8(ba));
+    if (licenseFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream licenseText(&licenseFile);
+        licenseText.setCodec("UTF-8");
+        license.append(licenseText.readAll());
+    }
     license.append("</pre></body></html>");
     lblLicense->setText(license);
 
@@ -162,8 +164,9 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     QTextBrowser *lblThirdParty = new QTextBrowser();
     lblThirdParty->setOpenExternalLinks(true);
     QFile thirdPartyFile(":/libraries.txt");
-    if (thirdPartyFile.open(QIODevice::ReadOnly)) {
-        ba = thirdPartyFile.readAll();
+    if (thirdPartyFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream thirdPartyText(&thirdPartyFile);
+        thirdPartyText.setCodec("UTF-8");
 
         QString thirdPartyHtml = i18n("<html>"
                                       "<head/>"
@@ -171,8 +174,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
                                       "<h1 align=\"center\"><b>Third-party Libraries used by Krita</b></h1>"
                                       "<p>Krita is built on the following free software libraries:</p><p><ul>");
 
-
-        Q_FOREACH(const QString &lib, QString::fromUtf8(ba).split('\n')) {
+        Q_FOREACH (const QString &lib, thirdPartyText.readAll().split('\n', QString::SkipEmptyParts)) {
             if (!lib.startsWith("#")) {
                 QStringList parts = lib.split(',');
                 if (parts.size() >= 3) {

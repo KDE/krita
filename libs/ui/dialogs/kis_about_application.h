@@ -7,20 +7,12 @@
 #define KIS_ABOUT_APPLICATION_H
 
 #include <QDialog>
-#include <QList>
-
-#include <kaboutdata.h>
 
 class KisAboutApplication : public QDialog
 {
     Q_OBJECT
 public:
-    explicit KisAboutApplication(QWidget *parent = 0);
-
-
-private:
-    QWidget *createTranslatorsWidget(const QList<KAboutPerson> &translators,
-                                     const QString &ocsProviderUrl);
+    KisAboutApplication(QWidget *parent = nullptr);
 };
 
 

@@ -71,14 +71,38 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     }
 
-    if (!aboutData.translators().isEmpty()) {
-        wdgTab->addTab(createTranslatorsWidget(aboutData.translators(), aboutData.ocsProviderUrl()),
-                       i18nc("@title:tab", "Translators"));
+    {
+        const QString aboutTranslationTeam = KAboutData::aboutTranslationTeam();
+
+        qDebug() << aboutTranslationTeam << aboutData.ocsProviderUrl();
     }
 
+    QTextBrowser *lblTranslators = new QTextBrowser();
 
-    QTextEdit *lblKickstarter = new QTextEdit();
-    lblKickstarter->setReadOnly(true);
+    lblTranslators->setOpenExternalLinks(true);
+
+    QString translatorHtml = i18n(
+        "<html>"
+        "<head/>"
+        "<body>"
+        "<h1 align=\"center\"><b>Translators</b></h1>"
+        "<p><ul>");
+
+    Q_FOREACH (const KAboutPerson &person, aboutData.translators()) {
+        translatorHtml.append(QString("<li>%1</li>").arg(person.name()));
+    }
+
+    translatorHtml.append("<ul></p>");
+    translatorHtml.append(
+        i18n("<p>KDE is translated into many languages thanks to the work of the "
+             "translation teams all over the world.</p><p>For more information on KDE "
+             "internationalization visit <a href=\"http://l10n.kde.org\">http://l10n."
+             "kde.org</a></p>"));
+    translatorHtml.append("</body></html>");
+
+    lblTranslators->setText(translatorHtml);
+
+    wdgTab->addTab(lblTranslators, i18nc("@title:tab", "Translators"));
 
     QString backers = i18n("<html>"
                           "<head/>"
@@ -201,37 +225,3 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     setMinimumSize(vlayout->sizeHint());
 }
-
-QWidget *KisAboutApplication::createTranslatorsWidget(const QList<KAboutPerson> &translators, const QString &ocsProviderUrl)
-{
-    QString aboutTranslationTeam = KAboutData::aboutTranslationTeam();
-
-    qDebug() << aboutTranslationTeam << ocsProviderUrl;
-
-    QTextBrowser *lblTranslators = new QTextBrowser();
-
-    lblTranslators->setOpenExternalLinks(true);
-
-    QString translatorHtml = i18n("<html>"
-                                  "<head/>"
-                                  "<body>"
-                                  "<h1 align=\"center\"><b>Translators</b></h1>"
-                                  "<p><ul>");
-
-
-    Q_FOREACH(const KAboutPerson &person, translators) {
-        translatorHtml.append(QString("<li>%1</li>").arg(person.name()));
-    }
-
-    translatorHtml.append("<ul></p>");
-    translatorHtml.append(i18n("<p>KDE is translated into many languages thanks to the work of the "
-                          "translation teams all over the world.</p><p>For more information on KDE "
-                          "internationalization visit <a href=\"http://l10n.kde.org\">http://l10n."
-                          "kde.org</a></p>"));
-    translatorHtml.append("</body></html>");
-
-    lblTranslators->setText(translatorHtml);
-
-    return lblTranslators;
-}
-

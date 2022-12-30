@@ -66,9 +66,9 @@ CheckOptions:
   - key:             modernize-use-auto.MinTypeNameLength
     value:           10
   - key:             readability-identifier-length.IgnoredVariableNames
-    value:           '^(gc|rc|p[0-9]|i[dot]|ok|[abdijknopt]|cr|fp|tf)$'
+    value:           '^(gc|rc|p[0-9]|i[dot]|ok|[abcdijknopt]|c[rs]|fp|tf)$'
   - key:             readability-identifier-length.IgnoredParameterNames
-    value:           '^(cs|it|cr)$'
+    value:           '^(c[rs]|i[dot]|v)$'
   - key:             readability-identifier-length.IgnoredLoopCounterNames
     value:           '^[cijktuvxyz_]$'
   - key:             modernize-use-transparent-functors.SafeMode

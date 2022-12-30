@@ -501,6 +501,18 @@
       <isCheckable>true</isCheckable>
       <statusTip/>
     </Action>
+    <Action name="eraser_preset_action">
+      <icon>draw-eraser</icon>
+      <text>Toggle eraser preset</text>
+      <whatsThis/>
+      <toolTip>Toggle eraser preset</toolTip>
+      <iconText>Toggle eraser preset</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip/>
+    </Action>
     <Action name="reload_preset_action">
       <icon>reload-preset</icon>
       <text>Reload Original Preset</text>

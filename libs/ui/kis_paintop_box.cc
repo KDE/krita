@@ -139,6 +139,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     m_eraseAction = m_viewManager->actionManager()->createAction("erase_action");
     m_eraseModeButton->setDefaultAction(m_eraseAction);
 
+    m_eraserPresetAction = m_viewManager->actionManager()->createAction("eraser_preset_action");
+
     m_reloadButton = new QToolButton(this);
     m_reloadButton->setFixedSize(buttonsize, buttonsize);
     m_reloadButton->setIconSize(QSize(iconsize, iconsize));
@@ -485,6 +487,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(KisNodeSP))    , SLOT(slotNodeChanged(KisNodeSP)));
     connect(m_cmbCompositeOp     , SIGNAL(currentIndexChanged(int))           , SLOT(slotSetCompositeMode(int)));
     connect(m_eraseAction          , SIGNAL(toggled(bool))                    , SLOT(slotToggleEraseMode(bool)));
+    connect(m_eraserPresetAction , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraserPreset(bool)));
     connect(alphaLockAction      , SIGNAL(toggled(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
 
     m_disablePressureAction = m_viewManager->actionManager()->createAction("disable_pressure");
@@ -884,6 +887,8 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 
     //qDebug() << "slotInputDeviceChanged()" << inputDevice.device() << inputDevice.uniqueTabletId();
 
+    m_eraserPresetAction->setChecked(inputDevice.pointer() == QTabletEvent::Eraser);
+
     m_currTabletToolID = TabletToolID(inputDevice);
 
     if (toolData == m_tabletToolMap.end()) {
@@ -918,6 +923,15 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
             setCurrentPaintop(toolData->paintOpID);
         }
     }
+}
+
+void KisPaintopBox::slotToggleEraserPreset(bool usingEraser)
+{
+    QTabletEvent::TabletDevice dev = QTabletEvent::NoDevice;
+    QTabletEvent::PointerType ptr = usingEraser ? QTabletEvent::Eraser : QTabletEvent::Pen;
+    qint64 id = -1;
+    const KoInputDevice inputDevice(dev, ptr, id);
+    slotInputDeviceChanged(inputDevice);
 }
 
 void KisPaintopBox::slotCreatePresetFromScratch(QString paintop)

@@ -14,6 +14,7 @@ c_args = common_args + @_security_c_flags@
 cpp_args = common_args +  @_security_cxx_flags@
 c_link_args = common_link_args + @_security_exe_linker_flags@
 cpp_link_args = common_link_args + @_security_exe_linker_flags@
+@_pkg_config_libdir@
 
 [built-in options]
 pkg_config_path = '@EXTPREFIX@/share/pkgconfig,@EXTPREFIX@/lib/pkgconfig'

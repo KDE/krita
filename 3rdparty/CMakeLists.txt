@@ -389,6 +389,19 @@ mesonify(SECURITY_C_FLAGS _security_c_flags)
 mesonify(SECURITY_CXX_FLAGS _security_cxx_flags)
 mesonify(SECURITY_EXE_LINKER_FLAGS _security_exe_linker_flags)
 
+# Block any libraries not coming from our PATH when crosscompiling
+if (UNIX)
+    if (CMAKE_CROSSCOMPILING)
+        set(_pkg_config_libdir "pkg_config_libdir = ''")
+    else()
+        set(_pkg_config_libdir "pkg_config_libdir = '/usr/lib/pkgconfig:/usr/share/pkgconfig'")
+    endif()
+else()
+    # In Windows either we pick up the MSYS2 pkg-config
+    # or we ship our own, both use the correct architecture.
+    set(_pkg_config_libdir)
+endif()
+
 include(TestBigEndian)
 test_big_endian(IS_ENDIAN)
 set(CROSSCOMPILING REQUIRED)

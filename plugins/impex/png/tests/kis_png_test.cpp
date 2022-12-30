@@ -112,7 +112,9 @@ void roudTripHdrImage(const KoColorSpace *savingColorSpace)
 void KisPngTest::testSaveHDR()
 {
     QVector<KoID> colorDepthIds;
+#ifdef HAVE_OPENEXR
     colorDepthIds << Float16BitsColorDepthID;
+#endif
     colorDepthIds << Float32BitsColorDepthID;
 
     QVector<const KoColorProfile*> profiles;

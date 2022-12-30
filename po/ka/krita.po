@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-29 00:50+0000\n"
-"PO-Revision-Date: 2022-12-28 09:29+0100\n"
+"PO-Revision-Date: 2022-12-29 02:31+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -701,7 +701,7 @@ msgstr "აბსტრაქტული ხაზები"
 #, kde-format
 msgctxt "./krita/data/patterns/Maze_lines.png"
 msgid "Maze lines"
-msgstr ""
+msgstr "რთული წირები"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -713,33 +713,33 @@ msgstr "უხეში ფურცელი"
 #, kde-format
 msgctxt "./krita/data/patterns/Rough_Wall_With_Impasto.png"
 msgid "Rough Wall With Impasto"
-msgstr ""
+msgstr "უხეში კედელი ორნამენტებით"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Sand_fine.png"
 msgid "Sand fine"
-msgstr ""
+msgstr "წვრილი ქვიშა"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Stars_Sized.png"
 msgid "Stars Sized"
-msgstr ""
+msgstr "ვარსკვლავის ფორმა"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/a)_Eraser_Circle.kpp"
 msgid "a) Eraser Circle"
-msgstr ""
+msgstr "ა) მრგვალი საშლელი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/b)_Basic-5_Size_default.kpp"
 msgid "b) Basic-5 Size default"
-msgstr ""
+msgstr "ბ) სტანდარტული ზომა 5, ნაგულისხმები"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -849,19 +849,19 @@ msgstr "ანიმაცია"
 #, kde-format
 msgctxt "./krita/data/workspaces/Big_Paint.kws"
 msgid "Big Paint"
-msgstr ""
+msgstr "დიდი ტილო"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/workspaces/Big_Paint_2.kws"
 msgid "Big Paint 2"
-msgstr ""
+msgstr "დიდი ტილო 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/workspaces/Big_Vector.kws"
 msgid "Big Vector"
-msgstr ""
+msgstr "დიდი ვექტორი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -879,7 +879,7 @@ msgstr "მინიმალური"
 #, kde-format
 msgctxt "./krita/data/workspaces/Small_Vector.kws"
 msgid "Small Vector"
-msgstr ""
+msgstr "პატარა ვექტორი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -891,7 +891,7 @@ msgstr ""
 #, kde-format
 msgctxt "./krita/data/workspaces/VFX_Paint.kws"
 msgid "VFX Paint"
-msgstr ""
+msgstr "საღებავი VFX"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -25010,7 +25010,7 @@ msgstr ""
 #: libs/ui/forms/wdggeometryoptions.ui:120
 #, kde-format
 msgid "Rotate:"
-msgstr ""
+msgstr "შემობრუნება:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, ScaleLbl)
@@ -25035,7 +25035,7 @@ msgstr "გაფართოება:"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:24
 #, kde-format
 msgid "New Image"
-msgstr ""
+msgstr "ახალი გამოსახულება"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
@@ -25078,7 +25078,7 @@ msgstr ""
 #: libs/ui/forms/wdgimageproperties.ui:199
 #, kde-format
 msgid "Number of Layers:"
-msgstr ""
+msgstr "ფენების რაოდენობა:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, grpMode)
 #: libs/ui/forms/wdgimageproperties.ui:216
@@ -25137,7 +25137,7 @@ msgstr "ანოტაციები"
 #: libs/ui/forms/wdgimportimagesequence.ui:37
 #, kde-format
 msgid "Add images..."
-msgstr ""
+msgstr "გამოსახულებების დამატება..."
 
 #. i18n: ectx: property (text), widget (QPushButton, removeButton)
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
@@ -25220,7 +25220,7 @@ msgstr ""
 #: libs/ui/forms/wdgimportimagesequence.ui:135
 #, kde-format
 msgid "Source FPS:"
-msgstr ""
+msgstr "წყაროს FPS:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblName)
 #: libs/ui/forms/wdglayerproperties.ui:28 libs/ui/forms/wdgnewimage.ui:628
@@ -26163,7 +26163,7 @@ msgstr ""
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:138
 #, kde-format
 msgid "Instant Preview"
-msgstr ""
+msgstr "სწრაფი მინიატურა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransformToolUseInStackPreview)
 #: libs/ui/forms/wdgperformancesettings.ui:550
@@ -26190,7 +26190,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:566
 #, kde-format
 msgid "in Filters"
-msgstr ""
+msgstr "filtrebSi"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTransformToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:573
@@ -26246,13 +26246,13 @@ msgstr ""
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:57
 #, kde-format
 msgid "Palette Size:"
-msgstr ""
+msgstr "პალიტრის ზომა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:80
 #, kde-format
 msgid "Color Selector:"
-msgstr ""
+msgstr "ფერის ამრჩევი:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:88
@@ -26786,25 +26786,25 @@ msgstr ""
 #: libs/ui/imagesize/dlg_canvassize.cc:41
 #, kde-format
 msgid "Resize Canvas"
-msgstr ""
+msgstr "ტილოს ზომა"
 
 #: libs/ui/imagesize/dlg_imagesize.cc:41
 #: libs/ui/widgets/kis_custom_image_widget.cc:56
 #, kde-format
 msgid "Pixels/Inch"
-msgstr ""
+msgstr "პიქსელი/დუიმი"
 
 #: libs/ui/imagesize/dlg_imagesize.cc:47
 #: libs/ui/widgets/kis_custom_image_widget.cc:62
 #, kde-format
 msgid "Pixels/Centimeter"
-msgstr ""
+msgstr "პიქსელი/სმ"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageSize)
 #: libs/ui/imagesize/dlg_imagesize.cc:54 libs/ui/imagesize/wdg_imagesize.ui:18
 #, kde-format
 msgid "Scale To New Size"
-msgstr ""
+msgstr "ახალ ზომამდე მასშტაბირება"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgLayerSize)
 #: libs/ui/imagesize/dlg_layersize.cc:44 libs/ui/imagesize/wdg_layersize.ui:18
@@ -26820,7 +26820,7 @@ msgstr "ფენის ზომის შეცვლა"
 #: libs/ui/imagesize/imagesize.cc:167
 #, kde-format
 msgid "Scale Selection"
-msgstr ""
+msgstr "მონიშნულის მასშტაბირება"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgCanvasSize)
 #: libs/ui/imagesize/wdg_canvassize.ui:24
@@ -26834,7 +26834,7 @@ msgstr "ტილოს ზომა"
 #: libs/ui/imagesize/wdg_canvassize.ui:30 libs/ui/imagesize/wdg_layersize.ui:24
 #, kde-format
 msgid "New Size"
-msgstr ""
+msgstr "ახალი ზომა"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, constrainProportionsCkb)
 #: libs/ui/imagesize/wdg_canvassize.ui:132
@@ -29046,14 +29046,9 @@ msgid "Error during saving %1: %2"
 msgstr "შეცდომა %1-ის შენახვისას: %2"
 
 #: libs/ui/KisDocument.cpp:934
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save\n"
-#| "%1"
+#, kde-format
 msgid "Could not save %1."
-msgstr ""
-"შენახვის შეცდომა\n"
-"%1"
+msgstr "%1-ის შენახვის შეცდომა."
 
 #: libs/ui/KisDocument.cpp:948
 #, kde-format
@@ -29064,19 +29059,11 @@ msgid "%1 has been saved but is incomplete."
 msgstr ""
 
 #: libs/ui/KisDocument.cpp:954
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "dialog box shown to the user if there were warnings while saving the "
-#| "document, %1 is the file path"
-#| msgid ""
-#| "%1 has been saved but is incomplete.\n"
-#| "The following problems were encountered when saving:"
+#, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
-msgstr ""
-"%1 შენახულია, მაგრამ არა ბოლომდე.\n"
-"შენახვისას აღმოჩენილი პრობლემა:"
+msgstr "პრობლემები შენახვისას."
 
 #: libs/ui/KisDocument.cpp:971
 #, kde-format
@@ -29124,23 +29111,22 @@ msgstr "ფაილი არ არსებობს: %1."
 #: libs/ui/KisDocument.cpp:1882
 #, kde-format
 msgid "Opening document"
-msgstr ""
+msgstr "დოკუმენტის გახსნა"
 
 #: libs/ui/KisDocument.cpp:1897
-#, fuzzy, kde-format
-#| msgid "Could not load %1."
+#, kde-format
 msgid "Could not open %1."
-msgstr "შეცდომა %1-ის ჩატვირთვისას."
+msgstr "%1-ის გახნის შეცდომა."
 
 #: libs/ui/KisDocument.cpp:1907
 #, kde-format
 msgid "There were problems opening %1."
-msgstr ""
+msgstr "პრობლემა %1-ის გახსნისას."
 
 #: libs/ui/KisDocument.cpp:2036
 #, kde-format
 msgid "Not Saved"
-msgstr ""
+msgstr "არ შენახულა"
 
 #: libs/ui/KisDocument.cpp:2494
 #, kde-format
@@ -29179,7 +29165,7 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:30
 #, kde-format
 msgid "A fatal error occurred."
-msgstr ""
+msgstr "ფატალური შეცდომა."
 
 #: libs/ui/KisImportExportErrorCode.cpp:32
 #, kde-format
@@ -29249,7 +29235,7 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format
 msgid "The file doesn't exist."
-msgstr ""
+msgstr "ფაილი არ არსებობს."
 
 #: libs/ui/KisImportExportErrorCode.cpp:150
 #, kde-format
@@ -29259,7 +29245,7 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:152
 #, kde-format
 msgid "The file format cannot be parsed."
-msgstr ""
+msgstr "ფაილის ფორმატის დამუშავების შეცდომა."
 
 #: libs/ui/KisImportExportErrorCode.cpp:154
 #, kde-format
@@ -29279,7 +29265,7 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:162
 #, kde-format
 msgid "The file cannot be created."
-msgstr ""
+msgstr "ფაილის შექმნის შეცდომა."
 
 #: libs/ui/KisImportExportErrorCode.cpp:164
 #, kde-format
@@ -29294,12 +29280,12 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:168
 #, kde-format
 msgid "Error occurred while writing to the file."
-msgstr ""
+msgstr "შეცდომა ფაილის ჩაწერისას."
 
 #: libs/ui/KisImportExportErrorCode.cpp:170
 #, kde-format
 msgid "Krita does not support this file format."
-msgstr ""
+msgstr "Krita-ს ამ ფორმატის მხარდაჭერა არ გააჩნია."
 
 #: libs/ui/KisImportExportErrorCode.cpp:174
 #, kde-format
@@ -29316,7 +29302,7 @@ msgstr "უცნობი შეცდომა."
 #: libs/ui/KisImportExportErrorCode.cpp:182
 #, kde-format
 msgid "Image is busy."
-msgstr ""
+msgstr "გამოსახულება დაკავებულია."
 
 #: libs/ui/KisImportExportFilter.cpp:151
 #, kde-format
@@ -29328,7 +29314,7 @@ msgstr ""
 #: libs/ui/KisImportExportFilter.cpp:155
 #, kde-format
 msgid "%1 is not readable"
-msgstr ""
+msgstr "%1 წაკითხვადი არაა"
 
 #: libs/ui/KisImportExportFilter.cpp:159
 #, kde-format
@@ -30363,7 +30349,7 @@ msgstr ""
 #: libs/ui/layerstyles/wdgInnerGlow.ui:297 libs/ui/layerstyles/WdgSatin.ui:162
 #, kde-format
 msgid "Anti-aliased"
-msgstr ""
+msgstr "მომრგვალებულად დახატვა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:272
@@ -30616,7 +30602,7 @@ msgstr ""
 #: libs/ui/layerstyles/wdgblendingoptions.ui:302
 #, kde-format
 msgid "This Layer"
-msgstr ""
+msgstr "ეს ფენა"
 
 #. i18n: ectx: property (text), widget (QLabel, lblThisMax_2)
 #. i18n: ectx: property (text), widget (QLabel, lblUnderMax_2)
@@ -30630,7 +30616,7 @@ msgstr "255"
 #: libs/ui/layerstyles/wdgblendingoptions.ui:330
 #, kde-format
 msgid "Underlying Layer"
-msgstr ""
+msgstr "ქვედა ფენა"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
@@ -30638,7 +30624,7 @@ msgstr ""
 #: libs/ui/layerstyles/wdglayerstyles.ui:114
 #, kde-format
 msgid "Color Overlay"
-msgstr ""
+msgstr "ფერის გალაგება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
@@ -30662,7 +30648,7 @@ msgstr "ელემენტები"
 #: libs/ui/layerstyles/wdgInnerGlow.ui:285 libs/ui/layerstyles/WdgSatin.ui:149
 #, kde-format
 msgid "Contour:"
-msgstr ""
+msgstr "კონტური:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkAntiAliased)
 #: libs/ui/layerstyles/wdgContour.ui:45 libs/ui/layerstyles/wdgdropshadow.ui:75
@@ -31202,7 +31188,7 @@ msgstr "ტრასფორმირება"
 #: libs/ui/tool/kis_tool.cc:573
 #, kde-format
 msgid "No options"
-msgstr ""
+msgstr "პარამეტრების გარეშე"
 
 #: libs/ui/tool/kis_tool.cc:677
 #, kde-format
@@ -31269,6 +31255,8 @@ msgid ""
 "X: %1 px\n"
 "Y: %2 px"
 msgstr ""
+"X: %1 პქს\n"
+"Y: %2 პქს"
 
 #: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
@@ -32274,7 +32262,7 @@ msgstr ""
 #: libs/ui/widgets/kis_canvas_drop.cpp:33
 #, kde-format
 msgid "Insert as New Layer"
-msgstr ""
+msgstr "ახალი ფენად ჩასმა"
 
 #: libs/ui/widgets/kis_canvas_drop.cpp:34
 #, kde-format

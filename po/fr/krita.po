@@ -97,14 +97,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Durand Daniel, 2010.
+# Xavier BESNARD <xavier.besnard]neuf.fr>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-29 00:50+0000\n"
-"PO-Revision-Date: 2022-12-11 20:24+0100\n"
-"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"PO-Revision-Date: 2022-12-29 11:04+0100\n"
+"Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
+"Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29912,22 +29913,14 @@ msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
 msgid "%1 has been saved but is incomplete."
-msgstr ""
+msgstr "%1 a été enregistrée mais est incomplet."
 
 #: libs/ui/KisDocument.cpp:954
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "dialog box shown to the user if there were warnings while saving the "
-#| "document, %1 is the file path"
-#| msgid ""
-#| "%1 has been saved but is incomplete.\n"
-#| "The following problems were encountered when saving:"
+#, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
-msgstr ""
-"%1 a été enregistré mais est incomplet. \n"
-"Les problèmes suivants ont été rencontrés lors de l'enregistrement :"
+msgstr "Certains problèmes ont été rencontrés lors de l'enregistrement."
 
 #: libs/ui/KisDocument.cpp:971
 #, kde-format
@@ -29982,16 +29975,14 @@ msgid "Opening document"
 msgstr "Ouverture du document"
 
 #: libs/ui/KisDocument.cpp:1897
-#, fuzzy, kde-format
-#| msgid "Could not open '%1'."
+#, kde-format
 msgid "Could not open %1."
-msgstr "Impossible d'ouvrir « %1 »."
+msgstr "Impossible d'ouvrir %1."
 
 #: libs/ui/KisDocument.cpp:1907
-#, fuzzy, kde-format
-#| msgid "There were problems opening %1"
+#, kde-format
 msgid "There were problems opening %1."
-msgstr "Des problèmes sont survenus durant l'ouverture de %1."
+msgstr "Des problèmes sont survenus lors de l'ouverture de %1."
 
 #: libs/ui/KisDocument.cpp:2036
 #, kde-format

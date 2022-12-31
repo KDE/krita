@@ -159,7 +159,6 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
 
     float unitValue = KoColorSpaceMathsTraits<channelType>::unitValue;
     float minValue = KoColorSpaceMathsTraits<channelType>::min;
-    float maxValue = KoColorSpaceMathsTraits<channelType>::max;
     bool eraser = painter()->compositeOpId() == COMPOSITE_ERASE;
 
 
@@ -259,10 +258,10 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
         if (unitValue == 1.0f) {
             swap(b, r);
         }
-        nativeArray[0] = qBound(minValue, b * unitValue, maxValue);
-        nativeArray[1] = qBound(minValue, g * unitValue, maxValue);
-        nativeArray[2] = qBound(minValue, r * unitValue, maxValue);
-        nativeArray[3] = qBound(minValue, a * unitValue, maxValue);
+        nativeArray[0] = KoColorSpaceMaths<float, channelType>::scaleToA(b);
+        nativeArray[1] = KoColorSpaceMaths<float, channelType>::scaleToA(g);
+        nativeArray[2] = KoColorSpaceMaths<float, channelType>::scaleToA(r);
+        nativeArray[3] = KoColorSpaceMaths<float, channelType>::scaleToA(a);
 
         maskPointer++;
     }

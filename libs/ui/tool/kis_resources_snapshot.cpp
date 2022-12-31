@@ -148,7 +148,9 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->strokeStyle = KisPainter::StrokeStyleBrush;
     m_d->fillStyle = KisPainter::FillStyleNone;
 
-    m_d->globalAlphaLock = resourceManager->resource(KoCanvasResource::GlobalAlphaLock).toBool();
+    // Erasing and alpha lock don't mix. If both are enabled, erasing takes priority.
+    m_d->globalAlphaLock = !resourceManager->resource(KoCanvasResource::EraserMode).toBool()
+            && resourceManager->resource(KoCanvasResource::GlobalAlphaLock).toBool();
     m_d->effectiveZoom = resourceManager->resource(KoCanvasResource::EffectiveZoom).toDouble();
 
     m_d->presetAllowsLod = resourceManager->resource(KoCanvasResource::EffectiveLodAvailablility).toBool();

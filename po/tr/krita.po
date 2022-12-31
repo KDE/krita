@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-29 00:50+0000\n"
-"PO-Revision-Date: 2022-12-17 19:00+0300\n"
+"PO-Revision-Date: 2022-12-31 00:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23556,9 +23556,9 @@ msgstr ""
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\">Krita, dünyanın her bir "
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Krita; dünyanın her bir "
 "yanındaki sayısal sanatçılar için topluluk tarafından sürdürülen, açık "
-"kaynaklı bir araçtır.<br />Geliştirme süreci, <a href=\"https://docs.krita."
+"kaynaklı bir araçtır.<br />Geliştirme süreci; <a href=\"https://docs.krita."
 "org/en/contributors_manual.html\">katkıcılarımız</a>, sponsorlarımız ve <a "
 "href=\"https://fund.krita.org/\">geliştirme fonumuz </a>üyeleri tarafından "
 "yapılan katkılarla sürmektedir.</p></body></html>"
@@ -29636,14 +29636,9 @@ msgid "Error during saving %1: %2"
 msgstr "%1 dosyası kaydedilirken hata: %2"
 
 #: libs/ui/KisDocument.cpp:934
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save\n"
-#| "%1"
+#, kde-format
 msgid "Could not save %1."
-msgstr ""
-"%1\n"
-"kaydedilemedi"
+msgstr "%1 kaydedilemedi."
 
 #: libs/ui/KisDocument.cpp:948
 #, kde-format
@@ -29651,22 +29646,14 @@ msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
 msgid "%1 has been saved but is incomplete."
-msgstr ""
+msgstr "%1 kaydedildi; ancak tamamlanmamış"
 
 #: libs/ui/KisDocument.cpp:954
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "dialog box shown to the user if there were warnings while saving the "
-#| "document, %1 is the file path"
-#| msgid ""
-#| "%1 has been saved but is incomplete.\n"
-#| "The following problems were encountered when saving:"
+#, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
-msgstr ""
-"%1 kaydedildi; ancak tam değil.\n"
-"Kaydederken aşağıdaki sorunlara denk gelindi:"
+msgstr "Kaydetme sırasında sorunlarla karşılaşıldı."
 
 #: libs/ui/KisDocument.cpp:971
 #, kde-format
@@ -29719,16 +29706,14 @@ msgid "Opening document"
 msgstr "Belge açılıyor"
 
 #: libs/ui/KisDocument.cpp:1897
-#, fuzzy, kde-format
-#| msgid "Could not open '%1'."
+#, kde-format
 msgid "Could not open %1."
-msgstr "'%1' açılamadı."
+msgstr "%1 açılamadı."
 
 #: libs/ui/KisDocument.cpp:1907
-#, fuzzy, kde-format
-#| msgid "There were problems opening %1"
+#, kde-format
 msgid "There were problems opening %1."
-msgstr "%1 açılırken sorunlar bulundu"
+msgstr "%1 açılırken sorunlarla karşılaşıldı."
 
 #: libs/ui/KisDocument.cpp:2036
 #, kde-format

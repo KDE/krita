@@ -641,9 +641,13 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
             if (std::strlen(boxType.data()) != 0) {
                 // Release buffer and get its final size.
                 const auto availOut = JxlDecoderReleaseBoxBuffer(dec.get());
-                box.resize(box.size() - static_cast<int>(availOut));
+                const int finalSize = box.size() - static_cast<int>(availOut);
+                // Only resize and write boxes if it's not empty.
+                if (finalSize != 0) {
+                    box.resize(finalSize);
 
-                metadataBoxes[boxType] = box;
+                    metadataBoxes[boxType] = box;
+                }
             }
             if (status == JXL_DEC_SUCCESS) {
                 // All decoding successfully finished.
@@ -714,6 +718,8 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
             // Update the box size if it was truncated in a previous buffering.
             boxSize = box.size();
             box.resize(boxSize * 2);
+            // Release buffer before setting it up again
+            JxlDecoderReleaseBoxBuffer(dec.get());
             if (JxlDecoderSetBoxBuffer(
                     dec.get(),
                     reinterpret_cast<uint8_t *>(box.data() + boxSize),

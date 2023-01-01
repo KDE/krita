@@ -682,7 +682,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         }
     }
 
-    if (cfg->getBool("storeMetadata", false)) {
+    if (cfg->getBool("storeMetaData", false)) {
         auto metaDataStore = [&]() -> std::unique_ptr<KisMetaData::Store> {
             KisExifInfoVisitor exivInfoVisitor;
             exivInfoVisitor.visit(image->rootLayer().data());
@@ -712,7 +712,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                                     "Exif",
                                     reinterpret_cast<const uint8_t *>(ioDevice.data().constData()),
                                     static_cast<size_t>(ioDevice.size()),
-                                    JXL_FALSE)) {
+                                    cfg->getBool("lossless") ? JXL_FALSE : JXL_TRUE)) {
                 errFile << "JxlEncoderAddBox for EXIF failed";
                 return ImportExportCodes::InternalError;
             }
@@ -731,7 +731,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                                     "xml ",
                                     reinterpret_cast<const uint8_t *>(ioDevice.data().constData()),
                                     static_cast<size_t>(ioDevice.size()),
-                                    JXL_FALSE)) {
+                                    cfg->getBool("lossless") ? JXL_FALSE : JXL_TRUE)) {
                 errFile << "JxlEncoderAddBox for XMP failed";
                 return ImportExportCodes::InternalError;
             }
@@ -750,7 +750,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                                     "xml ",
                                     reinterpret_cast<const uint8_t *>(ioDevice.data().constData()),
                                     static_cast<size_t>(ioDevice.size()),
-                                    JXL_FALSE)) {
+                                    cfg->getBool("lossless") ? JXL_FALSE : JXL_TRUE)) {
                 errFile << "JxlEncoderAddBox for IPTC failed";
                 return ImportExportCodes::InternalError;
             }
@@ -1130,7 +1130,7 @@ KisPropertiesConfigurationSP JPEGXLExport::defaultConfiguration(const QByteArray
     cfg->setProperty("exif", true);
     cfg->setProperty("xmp", true);
     cfg->setProperty("iptc", true);
-    cfg->setProperty("storeMetadata", false);
+    cfg->setProperty("storeMetaData", false);
     cfg->setProperty("filters", "");
     return cfg;
 }

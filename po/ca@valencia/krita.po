@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-29 00:50+0000\n"
-"PO-Revision-Date: 2022-12-28 06:03+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2022-12-30 23:03+0100\n"
+"Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Kate 22.08.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -25543,7 +25543,7 @@ msgstr "Provatura suau"
 #: libs/ui/forms/wdgimageproperties.ui:278
 #, kde-format
 msgid "Store Softproofing configuration in the image"
-msgstr "Emmagatzema la configuració de la provatura suau a la imatge"
+msgstr "Emmagatzema la configuració de la provatura suau en la imatge"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, sldAdaptationState)
 #: libs/ui/forms/wdgimageproperties.ui:336
@@ -30425,7 +30425,7 @@ msgstr "Importa una paleta"
 #: libs/ui/KisPaletteEditor.cpp:144
 #, kde-format
 msgid "Do you want to store this palette in your current image?"
-msgstr "Voleu emmagatzemar esta a la imatge actual?"
+msgstr "Voleu emmagatzemar esta paleta en la imatge actual?"
 
 #: libs/ui/KisPaletteEditor.cpp:218 libs/ui/KisPaletteEditor.cpp:275
 #, kde-format
@@ -32933,8 +32933,8 @@ msgstr ""
 "<p>Citant la Viquipèdia, «Academy Color Encoding System (ACES) és un sistema "
 "de codificació del color de la imatge proposat per Academy of Motion Picture "
 "Arts and Sciences que permet un flux de treball que inclou completament la "
-"precisió del color, amb un intercanvi sense costures a les imatges de cinema "
-"d'alta qualitat independentment de l'origen».</p>"
+"precisió del color, amb un intercanvi sense costures en les imatges de "
+"cinema d'alta qualitat independentment de l'origen».</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:516
 #, kde-format
@@ -39169,9 +39169,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Se suprimiran els enregistraments per a este document i no els podreu tornar "
-"a exportar com a una filmació a intervals. Cal tindre en compte que encara "
-"es conservaran els ja exportats.\n"
+"Se suprimiran les gravacions per a este document i no els podreu tornar a "
+"exportar com a una filmació a intervals. Cal tindre en compte que encara es "
+"conservaran les ja exportades.\n"
 "\n"
 "Voleu continuar?"
 
@@ -39346,7 +39346,7 @@ msgstr "Mostra en la carpeta"
 #, kde-format
 msgctxt "Open the folder when the new created video is placed"
 msgid "Remove recordings"
-msgstr "Elimina els enregistraments"
+msgstr "Elimina les gravacions"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRenderTimeTitle)
 #: plugins/dockers/recorder/recorder_export.ui:1026
@@ -39463,16 +39463,15 @@ msgid ""
 "though).\n"
 "Do you wish to continue?"
 msgstr ""
-"Se suprimiran els enregistraments seleccionats i ja no els podreu exportar "
-"com a una filmació a intervals (encara que es conservaran els ja "
-"exportats).\n"
+"Se suprimiran les gravacions seleccionades i ja no les podreu exportar com a "
+"una filmació a intervals (encara que es conservaran les ja exportades).\n"
 "Voleu continuar?"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderSnapshotsManager)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:18
 #, kde-format
 msgid "Clean up Recordings"
-msgstr "Neteja els enregistraments"
+msgstr "Neteja les gravacions"
 
 #. i18n: ectx: property (text), widget (QLabel, labelProgress)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:95
@@ -39484,7 +39483,7 @@ msgstr "S'està explorant..."
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:198
 #, kde-format
 msgid "Please select recordings to remove"
-msgstr "Seleccioneu els enregistraments que s'han d'eliminar"
+msgstr "Seleccioneu les gravacions que s'han d'eliminar"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSpaceTitle)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:259
@@ -39503,19 +39502,19 @@ msgstr "0 B"
 #, kde-format
 msgctxt "A folder where recordings are stored"
 msgid "Recordings directory:"
-msgstr "Carpeta d'enregistraments:"
+msgstr "Carpeta de gravacions:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonManageRecordings)
 #: plugins/dockers/recorder/recorderdocker.ui:105
 #, kde-format
 msgid "Manage recordings..."
-msgstr "Gestiona els enregistraments..."
+msgstr "Gestiona les gravacions..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowse)
 #: plugins/dockers/recorder/recorderdocker.ui:130
 #, kde-format
 msgid "Select the recordings directory..."
-msgstr "Seleccioneu la carpeta d'enregistraments..."
+msgstr "Seleccioneu la carpeta de gravacions..."
 
 #. i18n: ectx: property (text), widget (QLabel, labelCaptureRate)
 #: plugins/dockers/recorder/recorderdocker.ui:155
@@ -39718,7 +39717,7 @@ msgstr "Gravador"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:403
 #, kde-format
 msgid "Select a Directory for Recordings"
-msgstr "Seleccioneu una carpeta per als enregistraments"
+msgstr "Seleccioneu una carpeta per a les gravacions"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:483
 #, kde-format

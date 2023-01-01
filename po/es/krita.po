@@ -66,7 +66,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-29 00:50+0000\n"
-"PO-Revision-Date: 2022-12-10 12:37+0100\n"
+"PO-Revision-Date: 2022-12-31 10:47+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -29772,22 +29772,14 @@ msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
 msgid "%1 has been saved but is incomplete."
-msgstr ""
+msgstr "%1 se ha guardado, aunque está incompleto."
 
 #: libs/ui/KisDocument.cpp:954
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "dialog box shown to the user if there were warnings while saving the "
-#| "document, %1 is the file path"
-#| msgid ""
-#| "%1 has been saved but is incomplete.\n"
-#| "The following problems were encountered when saving:"
+#, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
-msgstr ""
-"Se ha guardado %1, pero está incompleto.\n"
-"Se han encontrado los siguientes problemas al guardarlo:"
+msgstr "Se han encontrado algunos problemas al guardar."
 
 #: libs/ui/KisDocument.cpp:971
 #, kde-format
@@ -29842,16 +29834,14 @@ msgid "Opening document"
 msgstr "Abriendo documento"
 
 #: libs/ui/KisDocument.cpp:1897
-#, fuzzy, kde-format
-#| msgid "Could not open '%1'."
+#, kde-format
 msgid "Could not open %1."
-msgstr "No se ha podido abrir «%1»."
+msgstr "No se ha podido abrir %1."
 
 #: libs/ui/KisDocument.cpp:1907
-#, fuzzy, kde-format
-#| msgid "There were problems opening %1"
+#, kde-format
 msgid "There were problems opening %1."
-msgstr "Ha habido problemas al abrir %1"
+msgstr "Ha habido problemas al abrir %1."
 
 #: libs/ui/KisDocument.cpp:2036
 #, kde-format

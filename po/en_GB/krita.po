@@ -63,15 +63,15 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-29 00:50+0000\n"
-"PO-Revision-Date: 2022-09-18 12:12+0100\n"
+"PO-Revision-Date: 2022-12-31 17:40+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
-"Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
+"Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -12671,7 +12671,7 @@ msgstr "Wrap Around Mode Direction"
 #: krita/krita5.xmlgui:96
 #, kde-format
 msgid "&Zoom, Rotate, and Mirror"
-msgstr ""
+msgstr "&Zoom, Rotate, and Mirror"
 
 #: krita/krita5.xmlgui:128
 #, kde-format
@@ -13696,12 +13696,10 @@ msgstr "Full Screen Mode"
 #. i18n: context: text @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:640 krita/kritamenu.action:643
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Detach canvas"
+#, kde-format
 msgctxt "action"
 msgid "Detach Canvas"
-msgstr "Detach canvas"
+msgstr "Detach Canvas"
 
 #. i18n: context: toolTip @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:642
@@ -13862,19 +13860,17 @@ msgstr "Mirror View Around Canvas"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "Zoom to 100%"
+msgstr "&Zoom to 100%"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:764 krita/kritamenu.action:765
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
 msgstr "Zoom to 100%"
@@ -13912,57 +13908,51 @@ msgstr "Zoom Out"
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:798 krita/kritamenu.action:801
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View"
-msgstr "Fit to Page"
+msgstr "Fit to View"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
-#, fuzzy, kde-format
-#| msgid "Canvas Size"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View"
-msgstr "Canvas Size"
+msgstr "Fit Canvas to View"
 
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:808 krita/kritamenu.action:811
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr "Fit to Width"
+msgstr "Fit to View Width"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Width"
-msgstr "Fit to Width"
+msgstr "Fit Canvas to View Width"
 
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:818 krita/kritamenu.action:821
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
-msgstr "Fit to Height"
+msgstr "Fit to View Height"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Height"
-msgstr "Fit to Height"
+msgstr "Fit Canvas to View Height"
 
 #. i18n: context: text @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -13972,12 +13962,10 @@ msgstr "Fit to Height"
 #. i18n: context: iconText @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:828 krita/kritamenu.action:830
 #: krita/kritamenu.action:831
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle Zoom Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Fit to View"
-msgstr "Toggle Zoom Fit to Page"
+msgstr "Toggle Fit to View"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:838
@@ -14031,37 +14019,34 @@ msgstr "Reset Canvas Rotation"
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:874 krita/kritamenu.action:877
-#, fuzzy, kde-format
-#| msgid "Master Display:"
+#, kde-format
 msgctxt "action"
 msgid "Reset Display"
-msgstr "Master Display:"
+msgstr "Reset Display"
 
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
-#, fuzzy, kde-format
-#| msgid "Reset the options to their default values"
+#, kde-format
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
-msgstr "Reset the options to their default values"
+msgstr "Reset zoom, rotation, and mirroring to their default states."
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:884 krita/kritamenu.action:887
-#, fuzzy, kde-format
-#| msgid "Print Size"
+#, kde-format
 msgctxt "action"
 msgid "View Print Size"
-msgstr "Print Size"
+msgstr "View Print Size"
 
 #. i18n: context: toolTip @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:886
 #, kde-format
 msgctxt "action"
 msgid "Map the canvas display to print size, based on the image resolution."
-msgstr ""
+msgstr "Map the canvas display to print size, based on the image resolution."
 
 #. i18n: context: text @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:894
@@ -16984,8 +16969,7 @@ msgstr "Selection Mask"
 
 #: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2487
 #: plugins/impex/psd/psd_loader.cpp:189
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Background"
@@ -18022,11 +18006,10 @@ msgid "JPEG-XL Image"
 msgstr "JPEG-XL Image"
 
 #: libs/koplugin/KisMimeDatabase.cpp:349
-#, fuzzy, kde-format
-#| msgid "Document"
+#, kde-format
 msgctxt "description of a file type"
 msgid "CSV Document"
-msgstr "Document"
+msgstr "CSV Document"
 
 #: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2058
 #: libs/ui/KisMainWindow.cpp:2141
@@ -24380,10 +24363,9 @@ msgstr "HDR Warning.................................."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:339
-#, fuzzy, kde-format
-#| msgid "Canvas decorations"
+#, kde-format
 msgid "Canvas Decorations"
-msgstr "Canvas decorations"
+msgstr "Canvas Decorations"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:351
@@ -27594,7 +27576,7 @@ msgstr "Input Profile"
 #: libs/ui/input/config/kis_input_configuration_page.ui:83
 #, kde-format
 msgid "Manage canvas input profiles"
-msgstr ""
+msgstr "Manage canvas input profiles"
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:38
 #, kde-format
@@ -28289,22 +28271,19 @@ msgid "Zoom to 100%"
 msgstr "Zoom to 100%"
 
 #: libs/ui/input/kis_zoom_action.cpp:117
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgid "Fit to View"
-msgstr "Fit to Page"
+msgstr "Fit to View"
 
 #: libs/ui/input/kis_zoom_action.cpp:118
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgid "Fit to View Width"
-msgstr "Fit to Width"
+msgstr "Fit to View Width"
 
 #: libs/ui/input/kis_zoom_action.cpp:119
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgid "Fit to View Height"
-msgstr "Fit to Height"
+msgstr "Fit to View Height"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:37
 #, kde-format
@@ -28358,10 +28337,9 @@ msgid "Toggle Eraser"
 msgstr "Toggle Eraser"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgid "Master Display:"
+#, kde-format
 msgid "Reset Display"
-msgstr "Master Display:"
+msgstr "Reset Display"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, TabletTest)
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:18
@@ -29081,10 +29059,9 @@ msgid "100%"
 msgstr "100%"
 
 #: libs/ui/kis_popup_palette.cpp:198
-#, fuzzy, kde-format
-#| msgid "Canvas Size"
+#, kde-format
 msgid "Fit Canvas to View"
-msgstr "Canvas Size"
+msgstr "Fit Canvas to View"
 
 #: libs/ui/kis_popup_palette.cpp:868
 #, kde-format
@@ -29696,10 +29673,9 @@ msgid "Error during saving %1: %2"
 msgstr "Error during saving %1: %2"
 
 #: libs/ui/KisDocument.cpp:934
-#, fuzzy, kde-format
-#| msgid "Could not save %1"
+#, kde-format
 msgid "Could not save %1."
-msgstr "Could not save %1"
+msgstr "Could not save %1."
 
 #: libs/ui/KisDocument.cpp:948
 #, kde-format
@@ -29707,22 +29683,14 @@ msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
 msgid "%1 has been saved but is incomplete."
-msgstr ""
+msgstr "%1 has been saved but is incomplete."
 
 #: libs/ui/KisDocument.cpp:954
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "dialog box shown to the user if there were warnings while saving the "
-#| "document, %1 is the file path"
-#| msgid ""
-#| "%1 has been saved but is incomplete.\n"
-#| "The following problems were encountered when saving:"
+#, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
-msgstr ""
-"%1 has been saved but is incomplete.\n"
-"The following problems were encountered when saving:"
+msgstr "Some problems were encountered when saving."
 
 #: libs/ui/KisDocument.cpp:971
 #, kde-format
@@ -29775,16 +29743,14 @@ msgid "Opening document"
 msgstr "Opening document"
 
 #: libs/ui/KisDocument.cpp:1897
-#, fuzzy, kde-format
-#| msgid "Could not open '%1'."
+#, kde-format
 msgid "Could not open %1."
-msgstr "Could not open '%1'."
+msgstr "Could not open %1."
 
 #: libs/ui/KisDocument.cpp:1907
-#, fuzzy, kde-format
-#| msgid "There were problems opening %1"
+#, kde-format
 msgid "There were problems opening %1."
-msgstr "There were problems opening %1"
+msgstr "There were problems opening %1."
 
 #: libs/ui/KisDocument.cpp:2036
 #, kde-format
@@ -33356,10 +33322,9 @@ msgid "No configuration options"
 msgstr "No configuration options"
 
 #: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:138
-#, fuzzy, kde-format
-#| msgid "The layer does not have an image associated with it."
+#, kde-format
 msgid "The clipboard is empty or does not have an image in it."
-msgstr "The layer does not have an image associated with it."
+msgstr "The clipboard is empty or does not have an image in it."
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:42
 #, kde-format
@@ -33596,17 +33561,15 @@ msgid "Symmetric Difference"
 msgstr "Symmetric Difference"
 
 #: libs/ui/widgets/kis_selection_options.cc:233
-#, fuzzy, kde-format
-#| msgid "Set line width of actual selection"
+#, kde-format
 msgid "Smooths the edges of the selection"
-msgstr "Set line width of actual selection"
+msgstr "Smooths the edges of the selection"
 
 #: libs/ui/widgets/kis_selection_options.cc:235
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:408
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Grow or shrink the selection by the set amount"
-msgstr "Blur the selection by the set amount"
+msgstr "Grow or shrink the selection by the set amount"
 
 #: libs/ui/widgets/kis_selection_options.cc:237
 #: plugins/tools/basictools/kis_tool_fill.cc:579
@@ -33622,23 +33585,21 @@ msgid "Blur the selection by the set amount"
 msgstr "Blur the selection by the set amount"
 
 #: libs/ui/widgets/kis_selection_options.cc:242
-#, fuzzy, kde-format
-#| msgid "Obtain the region using the active layer"
+#, kde-format
 msgid "Select regions found from the active layer"
-msgstr "Obtain the region using the active layer"
+msgstr "Select regions found from the active layer"
 
 #: libs/ui/widgets/kis_selection_options.cc:244
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) action"
-#| msgid "Select a color from the image or current layer"
+#, kde-format
 msgid "Select regions found from the merging of all layers"
-msgstr "Select a colour from the image or current layer"
+msgstr "Select regions found from the merging of all layers"
 
 #: libs/ui/widgets/kis_selection_options.cc:246
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
+"Select regions found from the merging of layers with specific colour labels"
 
 #: libs/ui/widgets/kis_selection_options.cc:254
 #, kde-format
@@ -34675,16 +34636,14 @@ msgid "Tool Options"
 msgstr "Tool Options"
 
 #: libs/widgets/KoZoomMode.cpp:14
-#, fuzzy, kde-format
-#| msgid "PaintView"
+#, kde-format
 msgid "Fit View"
-msgstr "PaintView"
+msgstr "Fit View"
 
 #: libs/widgets/KoZoomMode.cpp:15
-#, fuzzy, kde-format
-#| msgid "Fit Page Width"
+#, kde-format
 msgid "Fit View Width"
-msgstr "Fit Page Width"
+msgstr "Fit View Width"
 
 #: libs/widgets/KoZoomMode.cpp:17
 #, kde-format
@@ -34697,10 +34656,9 @@ msgid "Fit Text Width"
 msgstr "Fit Text Width"
 
 #: libs/widgets/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit Page Height"
+#, kde-format
 msgid "Fit View Height"
-msgstr "Fit Page Height"
+msgstr "Fit View Height"
 
 #: libs/widgets/KoZoomWidget.cpp:124
 #, kde-format
@@ -37533,14 +37491,12 @@ msgid "Dropped frames are not available in this Krita instance"
 msgstr "Dropped frames are not available in this Krita instance"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:870
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add blank frame"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
 msgstr[0] "Add blank frame"
-msgstr[1] "Add blank frame"
+msgstr[1] "Add %1 blank frames"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:915
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:963
@@ -38388,11 +38344,10 @@ msgid "Tree Indentation"
 msgstr "Tree Indentation"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:368
-#, fuzzy, kde-format
-#| msgid "Blending Mode"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
-msgstr "Blending Mode"
+msgstr "Blending Info Style"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:370
 #, kde-format
@@ -38409,42 +38364,34 @@ msgstr ""
 "Detailed: Show both opacity and blending mode even if unchanged."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:375
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "None"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:376
-#, fuzzy, kde-format
-#| msgid "Simple"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Simple"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:377
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Layer Docker subtitle style"
-#| msgid "Balanced"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Balanced"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:378
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Layer Docker subtitle style"
-#| msgid "Detailed"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Detailed"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:391
-#, fuzzy, kde-format
-#| msgctxt "@item:tooltip"
-#| msgid "Subtitle text opacity"
+#, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "Subtitle text opacity"
+msgstr "Blending info text opacity"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:409
 #, kde-format
@@ -38453,32 +38400,26 @@ msgid "Inline"
 msgstr "Inline"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:411
-#, fuzzy, kde-format
-#| msgctxt "@item:tooltip"
-#| msgid ""
-#| "If enabled, show subtitles beside layer names.\n"
-#| "If disabled, show below layer names (when enough space)."
+#, kde-format
 msgctxt "@item:tooltip"
 msgid ""
 "If enabled, show blending info beside layer names.\n"
 "If disabled, show below layer names (when enough space)."
 msgstr ""
-"If enabled, show subtitles beside layer names.\n"
+"If enabled, show blending info beside layer names.\n"
 "If disabled, show below layer names (when enough space)."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format) action"
-#| msgid "Merge Selected Layers"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "Merge Selected Layers"
+msgstr "Tick-box for Selecting Layers"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:424
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
-msgstr ""
+msgstr "Show tick-box to select/unselect layers."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:974
 msgctxt "(qtundo-format)"
@@ -38892,11 +38833,10 @@ msgid "Export Palette"
 msgstr "Export Palette"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:230
-#, fuzzy, kde-format
-#| msgid "Import successful"
+#, kde-format
 msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
-msgstr "Import successful"
+msgstr "Palette exported successfully"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:372
 #, kde-format
@@ -38945,16 +38885,14 @@ msgid "Bubble Up on Repeated Use"
 msgstr "Bubble Up on Repeated Use"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:202
-#, fuzzy, kde-format
-#| msgid "Number of rows:"
+#, kde-format
 msgid "Set Number of Brushes Shown"
-msgstr "Number of rows:"
+msgstr "Set Number of Brushes Shown"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:203
-#, fuzzy, kde-format
-#| msgid "Number of rows:"
+#, kde-format
 msgid "Number of Brushes Shown:"
-msgstr "Number of rows:"
+msgstr "Number of Brushes Shown:"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:305
 #, kde-format
@@ -38969,7 +38907,7 @@ msgstr "History Behaviour:"
 #: plugins/dockers/presethistory/presethistory_dock.cpp:312
 #, kde-format
 msgid "Configure Number of Brushes Shown..."
-msgstr ""
+msgstr "Configure Number of Brushes Shown..."
 
 #. i18n: context: text @ Actions (Recorder), ActionCollection (Recorder)
 #: plugins/dockers/recorder/recorder.action:4
@@ -39190,10 +39128,9 @@ msgstr "Extend the last frame in the exported video by the specified duration"
 
 #. i18n: ectx: property (text), widget (QCheckBox, extendResultCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:351
-#, fuzzy, kde-format
-#| msgid "Extend end result"
+#, kde-format
 msgid "Extend result for:"
-msgstr "Extend end result"
+msgstr "Extend result for:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseExport)
 #: plugins/dockers/recorder/recorder_export.ui:360
@@ -39219,10 +39156,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, resultPreviewCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:409
-#, fuzzy, kde-format
-#| msgid "Enable result preview"
+#, kde-format
 msgid "Enable preview for:"
-msgstr "Enable result preview"
+msgstr "Enable preview for:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseFfmpeg)
 #: plugins/dockers/recorder/recorder_export.ui:537
@@ -39290,11 +39226,10 @@ msgstr "Remove recordings"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRenderTimeTitle)
 #: plugins/dockers/recorder/recorder_export.ui:1026
-#, fuzzy, kde-format
-#| msgid "Render as:"
+#, kde-format
 msgctxt "How long it took to render the video"
 msgid "Render time:"
-msgstr "Render as:"
+msgstr "Render time:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRestart)
 #: plugins/dockers/recorder/recorder_export.ui:1053
@@ -39677,6 +39612,8 @@ msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time. Try increasing the capture interval."
 msgstr ""
+"Low performance warning. The recorder is not able to write all the frames in "
+"time. Try increasing the capture interval."
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
 #, kde-format
@@ -46762,11 +46699,10 @@ msgid "Use all predictors"
 msgstr "Use all predictors"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:170
-#, fuzzy, kde-format
-#| msgid "Save as %1"
+#, kde-format
 msgctxt "Color space option"
 msgid "Save as is"
-msgstr "Save as %1"
+msgstr "Save as is"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:172
 #, kde-format
@@ -46775,6 +46711,8 @@ msgid ""
 "The image will be stored without conversion, the ICC profile will be "
 "converted to CICP or embedded if it was not possible."
 msgstr ""
+"The image will be stored without conversion, the ICC profile will be "
+"converted to CICP or embedded if it was not possible."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:37
@@ -46798,10 +46736,9 @@ msgstr "Encoding options"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:69
-#, fuzzy, kde-format
-#| msgid "Lossless encoding"
+#, kde-format
 msgid "Lossy encoding"
-msgstr "Lossless encoding"
+msgstr "Lossy encoding"
 
 #. i18n: ectx: property (text), widget (QLabel, lblHighQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:87
@@ -46818,6 +46755,8 @@ msgid ""
 "Set the lossy quality of JPEG-XL export.\n"
 "Default: 90 (visually lossless)."
 msgstr ""
+"Set the lossy quality of JPEG-XL export.\n"
+"Default: 90 (visually lossless)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:117
@@ -46835,12 +46774,15 @@ msgid ""
 "(e.g. for non-photographic images).\n"
 "Default: disabled."
 msgstr ""
+"Use modular encoding instead of default VarDCT for lossy compression\n"
+"(e.g. for non-photographic images).\n"
+"Default: disabled."
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceModular)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131
 #, kde-format
 msgid "Use modular mode"
-msgstr ""
+msgstr "Use modular mode"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:141
@@ -46916,6 +46858,8 @@ msgid ""
 "Applications like Google Chrome expect HDR images to store their color "
 "profile as CICP values. You can adjust the ICC profile conversion below."
 msgstr ""
+"Applications like Google Chrome expect HDR images to store their colour "
+"profile as CICP values. You can adjust the ICC profile conversion below."
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:370
@@ -48018,10 +47962,9 @@ msgstr "Sign with author data"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDownsample)
 #: plugins/impex/png/kis_wdg_options_png.ui:214
-#, fuzzy, kde-format
-#| msgid "Force convert to sRGB"
+#, kde-format
 msgid "Force convert to 8 bits/channel"
-msgstr "Force convert to sRGB"
+msgstr "Force convert to 8 bits/channel"
 
 #: plugins/impex/psd/psd_export.cc:56
 #, kde-format
@@ -50056,15 +49999,13 @@ msgid "Hard"
 msgstr "Hard"
 
 #: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:68
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Background painting color"
 msgid "Background"
 msgstr "Background"
 
 #: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:68
-#, fuzzy, kde-format
-#| msgid "Foreground"
+#, kde-format
 msgctxt "Foreground painting color"
 msgid "Foreground"
 msgstr "Foreground"
@@ -55878,22 +55819,19 @@ msgid "Reset"
 msgstr "Reset"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:560
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Fill the active selection, or the entire canvas"
-msgstr "Blur the selection by the set amount"
+msgstr "Fill the active selection, or the entire canvas"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:561
-#, fuzzy, kde-format
-#| msgid "Select a contiguous area"
+#, kde-format
 msgid "Fill a contiguous region"
-msgstr "Select a contiguous area"
+msgstr "Fill a contiguous region"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:562
-#, fuzzy, kde-format
-#| msgid "Fill regions of any color"
+#, kde-format
 msgid "Fill all regions of a similar color"
-msgstr "Fill regions of any colour"
+msgstr "Fill all regions of a similar colour"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:567
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:447
@@ -55908,16 +55846,14 @@ msgid "Set the rotation of the pattern"
 msgstr "Set the rotation of the pattern"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:570
-#, fuzzy, kde-format
-#| msgid "Fill only regions similar in color to the initial region"
+#, kde-format
 msgid "Fill regions similar in color to the clicked region"
-msgstr "Fill only regions similar in colour to the initial region"
+msgstr "Fill regions similar in colour to the clicked region"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:571
-#, fuzzy, kde-format
-#| msgid "Select all pixels until a specific boundary color"
+#, kde-format
 msgid "Fill all regions until a specific boundary color"
-msgstr "Select all pixels until a specific boundary colour"
+msgstr "Fill all regions until a specific boundary colour"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:572
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
@@ -55932,6 +55868,8 @@ msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
 "increases the range of similar colors to be filled."
 msgstr ""
+"Set the colour similarity tolerance of the fill. Increasing threshold "
+"increases the range of similar colours to be filled."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:574
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:451
@@ -55940,77 +55878,70 @@ msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
 "decreases opacity of fill areas depending on color similarity."
 msgstr ""
+"Set the extent of the opaque portion of the fill. Decreasing spread "
+"decreases opacity of fill areas depending on colour similarity."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:575
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set if the contour of the current selection should be treated as a "
-#| "boundary when obtaining the region"
+#, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when filling the region"
 msgstr ""
-"Set if the contour of the current selection should be treated as a boundary "
-"when obtaining the region"
+"Set if the contour of the active selection should be treated as a boundary "
+"when filling the region"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:577
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:454
-#, fuzzy, kde-format
-#| msgid "Smooth the jagged edges"
+#, kde-format
 msgid "Smooths the edges of the fill"
-msgstr "Smooth the jagged edges"
+msgstr "Smooths the edges of the fill"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:578
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:455
-#, fuzzy, kde-format
-#| msgid "Blur the region by the set amount"
+#, kde-format
 msgid "Grow or shrink the fill by the set amount"
-msgstr "Blur the region by the set amount"
+msgstr "Grow or shrink the fill by the set amount"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:457
-#, fuzzy, kde-format
-#| msgid "Blur the region by the set amount"
+#, kde-format
 msgid "Blur the fill by the set amount"
-msgstr "Blur the region by the set amount"
+msgstr "Blur the fill by the set amount"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:459
-#, fuzzy, kde-format
-#| msgid "Obtain the region using the active layer"
+#, kde-format
 msgid "Fill regions found from the active layer"
-msgstr "Obtain the region using the active layer"
+msgstr "Fill regions found from the active layer"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:583
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
-#, fuzzy, kde-format
-#| msgid "Obtain the region using a merged copy of all layers"
+#, kde-format
 msgid "Fill regions found from the merging of all layers"
-msgstr "Obtain the region using a merged copy of all layers"
+msgstr "Fill regions found from the merging of all layers"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:584
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "All regions except those of a specific color"
+#, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
-msgstr "All regions except those of a specific colour"
+msgstr ""
+"Fill regions found from the merging of layers with specific colour labels"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:586
-#, fuzzy, kde-format
-#| msgid "Fill regions of any color"
+#, kde-format
 msgid "Dragging will fill regions of any color"
-msgstr "Fill regions of any colour"
+msgstr "Dragging will fill regions of any colour"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:587
-#, fuzzy, kde-format
-#| msgid "Fill only regions similar in color to the initial region"
+#, kde-format
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
-msgstr "Fill only regions similar in colour to the initial region"
+msgstr ""
+"Dragging will fill only regions similar in colour to the initial region "
+"(useful for filling line-art)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:589
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:463
@@ -56019,25 +55950,22 @@ msgid "Reset the options to their default values"
 msgstr "Reset the options to their default values"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:598
-#, fuzzy, kde-format
-#| msgid "Simple mode"
+#, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
-msgstr "Simple mode"
+msgstr "Fill mode"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:605
-#, fuzzy, kde-format
-#| msgid "All Resources"
+#, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
-msgstr "All Resources"
+msgstr "Fill source"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
-#, fuzzy, kde-format
-#| msgid "File extension:"
+#, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
-msgstr "File extension:"
+msgstr "Fill extent"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:628
 #, kde-format
@@ -56055,7 +55983,7 @@ msgstr "Reference"
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
-msgstr ""
+msgstr "Drag-fill mode"
 
 #: plugins/tools/basictools/kis_tool_fill.h:219
 #, kde-format
@@ -57135,16 +57063,14 @@ msgid "Feather: "
 msgstr "Feather: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
-#, fuzzy, kde-format
-#| msgid "Fill only regions similar in color to the initial region"
+#, kde-format
 msgid "Select regions similar in color to the clicked region"
-msgstr "Fill only regions similar in colour to the initial region"
+msgstr "Select regions similar in colour to the clicked region"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
-#, fuzzy, kde-format
-#| msgid "Select all pixels until a specific boundary color"
+#, kde-format
 msgid "Select all regions until a specific boundary color"
-msgstr "Select all pixels until a specific boundary colour"
+msgstr "Select all regions until a specific boundary colour"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:466
@@ -57153,6 +57079,8 @@ msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
+"Set the colour similarity tolerance of the selection. Increasing threshold "
+"increases the range of similar colours to be selected."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
 #, kde-format
@@ -57160,18 +57088,17 @@ msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
+"Set the extent of the opaque portion of the selection. Decreasing spread "
+"decreases opacity of selection areas depending on colour similarity."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set if the contour of the current selection should be treated as a "
-#| "boundary when obtaining the new one"
+#, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
-"Set if the contour of the current selection should be treated as a boundary "
-"when obtaining the new one"
+"Set if the contour of the active selection should be treated as a boundary "
+"when making a new selection"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:416
 #, kde-format
@@ -58438,18 +58365,14 @@ msgstr "Lasso"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:442
 #, kde-format
 msgid "Enable to fill opposite regions instead"
-msgstr ""
+msgstr "Enable to fill opposite regions instead"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:443
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check this option to also fill the shapes that touch the contour of the "
-#| "enclosing region"
+#, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
-"Tick this option to also fill the shapes that touch the contour of the "
-"enclosing region"
+"Enable to also fill shapes that touch the contour of the enclosing region"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:472
 #, kde-format
@@ -58458,26 +58381,22 @@ msgid "Enclosing method"
 msgstr "Enclosing method"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:479
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparent regions"
+#, kde-format
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
-msgstr "Transparent regions"
+msgstr "Target regions"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:489
-#, fuzzy, kde-format
-#| msgid "All Resources"
+#, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
-msgstr "All Resources"
+msgstr "Fill source"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
-#, fuzzy, kde-format
-#| msgid "File extension:"
+#, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
-msgstr "File extension:"
+msgstr "Fill extent"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:509
 #, kde-format
@@ -58492,80 +58411,64 @@ msgid "Reference"
 msgstr "Reference"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:714
-#, fuzzy, kde-format
-#| msgid "All"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "All"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:717
-#, fuzzy, kde-format
-#| msgid "Specific Color Selector"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
-msgstr "Specific Colour Selector"
+msgstr "Specific colour"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:720
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
-msgstr "Transparent"
+msgstr "Transparency"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:723
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions of a specific color or transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
-msgstr "Regions of a specific colour or transparent"
+msgstr "Specific colour or transparency"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:726
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions of a specific color"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
-msgstr "Regions of a specific colour"
+msgstr "All, excluding a specific colour"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:729
-#, fuzzy, kde-format
-#| msgid "Burning Transparency"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
-msgstr "Burning Transparency"
+msgstr "All, excluding transparency"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:732
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions of a specific color or transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
-msgstr "Regions of a specific colour or transparent"
+msgstr "All, excluding a specific colour or transparency"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:735
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions surrounded by a specific color"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
-msgstr "Regions surrounded by a specific colour"
+msgstr "Any surrounded by a specific colour"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:738
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions surrounded by transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
-msgstr "Regions surrounded by transparent"
+msgstr "Any surrounded by transparency"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:741
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Regions surrounded by a specific color or transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
-msgstr "Regions surrounded by a specific colour or transparent"
+msgstr "Any surrounded by a specific colour or transparency"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
 #, kde-format

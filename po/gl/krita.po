@@ -9208,7 +9208,9 @@ msgstr "Inverter a selección"
 
 #. i18n: context: iconText @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:246
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Invert Selection"
 msgctxt "action"
 msgid "Invert Selection"
 msgstr "Inverter a selección"
@@ -12076,12 +12078,10 @@ msgstr "Engadir un novo grupo"
 
 #. i18n: context: iconText @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2447
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Group Layer"
+#, kde-format
 msgctxt "action"
 msgid "Group Layer"
-msgstr "Capa de &grupo"
+msgstr "Capa de grupo"
 
 #. i18n: context: text @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2456
@@ -12323,9 +12323,7 @@ msgstr "Selección local"
 
 #. i18n: context: iconText @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2567
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Local Selection"
+#, kde-format
 msgctxt "action"
 msgid "Local Selection"
 msgstr "Selección local"
@@ -13603,9 +13601,7 @@ msgstr "Baixar a capa ou máscara"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3460
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Properties..."
+#, kde-format
 msgctxt "action"
 msgid "&Properties..."
 msgstr "&Propiedades…"
@@ -16396,7 +16392,9 @@ msgstr "Mostrar as docas"
 
 #. i18n: context: text @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1797
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Sho&w Docker Titlebars"
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
 msgstr "Mostrar as &barras de título das docas"
@@ -16406,7 +16404,9 @@ msgstr "Mostrar as &barras de título das docas"
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1799 krita/kritamenu.action:1800
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Show Docker Titlebars"
 msgctxt "action"
 msgid "Show Docker Titlebars"
 msgstr "Mostrar as barras de título das docas"
@@ -16806,7 +16806,9 @@ msgid "Workspaces"
 msgstr "Espazos de traballo"
 
 #: krita/main.cc:524
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Fatal Error"
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Erro fatal"
@@ -23589,13 +23591,17 @@ msgid "Authors"
 msgstr "Autores"
 
 #: libs/ui/dialogs/kis_about_application.cpp:71
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "NAME OF TRANSLATORS"
+#| msgid "Your names"
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "mvillarino, Miguel Branco, Adrián Chaves Fernández"
 
 #: libs/ui/dialogs/kis_about_application.cpp:72
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "EMAIL OF TRANSLATORS"
+#| msgid "Your emails"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
@@ -25608,8 +25614,7 @@ msgstr "Profundidade:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfiles)
 #: libs/ui/forms/wdgcolorspaceselector.ui:73
-#, fuzzy, kde-format
-#| msgid "Profile:"
+#, kde-format
 msgid "Profile:"
 msgstr "Perfil:"
 
@@ -26703,9 +26708,7 @@ msgstr "(require reiniciar)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1307
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Animation"
+#, kde-format
 msgid "Animation"
 msgstr "Animación"
 
@@ -28288,7 +28291,8 @@ msgstr "Ferramenta de mover"
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:6
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:14
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Form"
 msgid "Form"
 msgstr "Formulario"
 
@@ -31432,8 +31436,7 @@ msgid "Could not open %1."
 msgstr "Non se puido abrir: «%1»."
 
 #: libs/ui/KisDocument.cpp:1907
-#, fuzzy, kde-format
-#| msgid "There were problems opening %1."
+#, kde-format
 msgid "There were problems opening %1."
 msgstr "Producíronse problemas ao abrir %1."
 
@@ -31988,14 +31991,12 @@ msgid "New Workspace..."
 msgstr "Novo espazo de traballo…"
 
 #: libs/ui/KisMainWindow.cpp:2614
-#, fuzzy, kde-format
-#| msgid "&%1 %2"
+#, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
 #: libs/ui/KisMainWindow.cpp:2617
-#, fuzzy, kde-format
-#| msgid "%1 %2"
+#, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
@@ -36470,13 +36471,17 @@ msgid "Get help..."
 msgstr "Obter axuda…"
 
 #: libs/widgets/KoDockWidgetTitleBar.cpp:44
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Float Docker"
 msgctxt "@info:tooltip"
 msgid "Float Docker"
 msgstr "Facer a doca flotante"
 
 #: libs/widgets/KoDockWidgetTitleBar.cpp:52
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Close Docker"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Pechar a doca"
@@ -42149,7 +42154,8 @@ msgstr "Importar paletas"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnComment)
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:31
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Comments"
 msgid "Comments"
 msgstr "Comentarios"
 
@@ -45554,8 +45560,7 @@ msgid "Desaturate"
 msgstr "Reducir a saturación"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:229
-#, fuzzy, kde-format
-#| msgid "Lightness"
+#, kde-format
 msgid "Lightness"
 msgstr "Claridade"
 
@@ -52277,8 +52282,7 @@ msgid "Dulling"
 msgstr "Opaco"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:95
-#, fuzzy, kde-format
-#| msgid "Color Rate"
+#, kde-format
 msgid "Color Rate"
 msgstr "Intervalo de cores"
 

@@ -105,7 +105,7 @@ KisPropertiesConfigurationSP KisWebPExport::defaultConfiguration(const QByteArra
     cfg->setProperty("exif", true);
     cfg->setProperty("xmp", true);
     cfg->setProperty("iptc", true);
-    cfg->setProperty("storeMetadata", false);
+    cfg->setProperty("storeMetaData", false);
     cfg->setProperty("filters", "");
 
     return cfg;
@@ -314,6 +314,9 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
                 return ImportExportCodes::InternalError;
             }
 
+            currentFrame.get()->width = bounds.width();
+            currentFrame.get()->height = bounds.height();
+
             // Insert the projection itself only
             const std::vector<uint8_t> pixels = [&]() {
                 const QRect bounds = image->bounds();
@@ -378,7 +381,7 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
         }
     }
 
-    if (cfg->getBool("storeMetadata", false)) {
+    if (cfg->getBool("storeMetaData", false)) {
         auto metaDataStore = [&]() -> std::unique_ptr<KisMetaData::Store> {
             KisExifInfoVisitor exivInfoVisitor;
             exivInfoVisitor.visit(image->rootLayer().data());

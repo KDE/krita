@@ -15,7 +15,6 @@ Name[et]=Digitaal
 Name[eu]=Digitala
 Name[fi]=Digitaalinen
 Name[fr]=Numérique
-Name[gl]=Dixital
 Name[hi]=डिजिटल
 Name[hu]=Digitális
 Name[ia]=Digital

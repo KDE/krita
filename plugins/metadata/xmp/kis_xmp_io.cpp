@@ -223,7 +223,10 @@ bool KisXMPIO::loadFrom(KisMetaData::Store *store, QIODevice *ioDevice) const
     dbgMetaData << xmpPacket_.length();
     //     dbgMetaData << xmpPacket_.c_str();
     Exiv2::XmpData xmpData_;
-    Exiv2::XmpParser::decode(xmpData_, xmpPacket_);
+    if (Exiv2::XmpParser::decode(xmpData_, xmpPacket_) != 0) {
+        warnMetaData << "Failed to decode as XMP";
+        return false;
+    }
     QMap<const KisMetaData::Schema *, QMap<QString, QMap<QString, KisMetaData::Value>>> structures;
     QMap<const KisMetaData::Schema *, QMap<QString, QVector<QMap<QString, KisMetaData::Value>>>> arraysOfStructures;
     for (Exiv2::XmpData::iterator it = xmpData_.begin(); it != xmpData_.end(); ++it) {

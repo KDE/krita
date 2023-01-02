@@ -288,7 +288,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
 
     KisImageSP image{nullptr};
     KisLayerSP layer{nullptr};
-    QHash<QByteArray, QByteArray> metadataBoxes;
+    QMultiHash<QByteArray, QByteArray> metadataBoxes;
     QByteArray boxType(5, 0x0);
     QByteArray box(16384, 0x0);
     auto boxSize = box.size();
@@ -643,10 +643,13 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 const auto availOut = JxlDecoderReleaseBoxBuffer(dec.get());
                 const int finalSize = box.size() - static_cast<int>(availOut);
                 // Only resize and write boxes if it's not empty.
-                if (finalSize != 0) {
+                // And only input metadata boxes while skipping other boxes.
+                if (((std::equal(exifTag.cbegin(), exifTag.cend(), boxType.cbegin()))
+                     || (std::equal(xmpTag.cbegin(), xmpTag.cend(), boxType.cbegin())))
+                    && finalSize != 0) {
                     box.resize(finalSize);
 
-                    metadataBoxes[boxType] = box;
+                    metadataBoxes.insert(boxType, box);
                 }
             }
             if (status == JXL_DEC_SUCCESS) {
@@ -654,8 +657,9 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
 
                 // Insert layer metadata if available (delayed
                 // in case the boxes came before the BASIC_INFO event)
-                for (const QByteArray &boxType : metadataBoxes.keys()) {
-                    QByteArray &box = metadataBoxes[boxType];
+                for (auto metaBox = metadataBoxes.begin(); metaBox != metadataBoxes.end(); metaBox++) {
+                    const QByteArray &boxType = metaBox.key();
+                    QByteArray &box = metaBox.value();
                     QBuffer buf(&box);
                     if (std::equal(boxType.cbegin(),
                                    boxType.cend(),

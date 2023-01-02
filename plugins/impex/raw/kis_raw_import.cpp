@@ -7,6 +7,7 @@
 #include "kis_raw_import.h"
 
 #include <cmath>
+#include <cstddef>
 #include <exiv2/exiv2.hpp>
 #include <kpluginfactory.h>
 #include <libkdcraw_version.h>
@@ -24,12 +25,12 @@
 #include <kis_debug.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
-#include <kis_iterator_ng.h>
 #include <kis_meta_data_backend_registry.h>
 #include <kis_meta_data_io_backend.h>
 #include <kis_meta_data_tags.h>
 #include <kis_paint_device.h>
 #include <kis_paint_layer.h>
+#include <kis_random_accessor_ng.h>
 #include <kis_transaction.h>
 
 using namespace KDcrawIface;
@@ -167,31 +168,60 @@ KisRawImport::convert(KisDocument *document, QIODevice * /*io*/, KisPropertiesCo
         KisPaintDeviceSP device = layer->paintDevice();
         KIS_ASSERT_RECOVER_RETURN_VALUE(!device.isNull(), ImportExportCodes::InternalError);
 
-        // Copy the data
-        KisHLineIteratorSP it = device->createHLineIteratorNG(0, 0, width);
-        const float original = static_cast<float>(updater()->progress());
-        // Leave 10% for the metadata
-        const float step = (static_cast<float>(updater()->maximum() * 0.9) - original) / (float)height;
+        // NOLINTBEGIN(bugprone-easily-swappable-parameters, cppcoreguidelines-pro-type-reinterpret-cast)
+        const auto readLayer = [](KisLayerSP layer,
+                                  const QByteArray &imageData,
+                                  int width,
+                                  int height,
+                                  const QPointer<KoUpdater> &updater) -> void {
+            const float original = static_cast<float>(updater->progress());
+            // Leave 10% for the metadata
+            const float step = (static_cast<float>(updater->maximum() * 0.9) - original) / (float)height;
+            // Copy the data
+            KisRandomAccessorSP it = layer->paintDevice()->createRandomAccessorNG();
 
-        for (int y = 0; y < height; ++y) {
-            do {
-                KoBgrU16Traits::Pixel *pixel = reinterpret_cast<KoBgrU16Traits::Pixel *>(it->rawData());
-                quint16 *ptr = (reinterpret_cast<quint16 *>(imageData.data())) + (y * width + it->x()) * 3;
+            for (int y = 0; y < height;) {
+                const int numContiguousRows = qMin(it->numContiguousRows(y), height - y);
+                for (int x = 0; x < width;) {
+                    const int numContiguousColumns = qMin(it->numContiguousColumns(x), width - x);
+
+                    it->moveTo(x, y);
+
+                    const int rowStride = it->rowStride(x, y);
+
+                    quint8 *d = it->rawData();
+
+                    for (int i = 0; i < numContiguousRows; i++) {
+                        const auto *ptr =
+                            reinterpret_cast<const typename KoBgrU16Traits::channels_type *>(imageData.data())
+                            + static_cast<ptrdiff_t>(((y + i) * width + x) * 3);
+
+                        for (int j = 0; j < numContiguousColumns; j++) {
+                            auto *pixel = reinterpret_cast<typename KoBgrU16Traits::Pixel *>(d) + j;
 #if KDCRAW_VERSION < 0x000400
-                pixel->red = correctIndian(ptr[2]);
-                pixel->green = correctIndian(ptr[1]);
-                pixel->blue = correctIndian(ptr[0]);
+                            pixel->red = correctIndian(ptr[2]);
+                            pixel->green = correctIndian(ptr[1]);
+                            pixel->blue = correctIndian(ptr[0]);
+                            pixel->alpha = 0xFFFF;
 #else
-                pixel->red = correctIndian(ptr[0]);
-                pixel->green = correctIndian(ptr[1]);
-                pixel->blue = correctIndian(ptr[2]);
+                            *pixel = {correctIndian(ptr[2]), correctIndian(ptr[1]), correctIndian(ptr[0]), 0xFFFF};
 #endif
-                pixel->alpha = 0xFFFF;
-            } while (it->nextPixel());
-            it->nextRow();
+                            ptr += 3;
+                        }
 
-            updater()->setProgress(static_cast<int>(original + step * float(y)));
-        }
+                        d += rowStride;
+                    }
+
+                    x += numContiguousColumns;
+                }
+
+                y += numContiguousRows;
+                updater->setProgress(static_cast<int>(original + step * float(y)));
+            }
+        };
+        // NOLINTEND(bugprone-easily-swappable-parameters, cppcoreguidelines-pro-type-reinterpret-cast)
+
+        readLayer(layer, imageData, width, height, updater());
 
         {
             // HACK!! Externally parse the Exif metadata

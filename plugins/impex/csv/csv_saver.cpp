@@ -6,35 +6,33 @@
 
 #include "csv_saver.h"
 
-#include <QDebug>
 #include <QApplication>
-
-#include <QFileInfo>
-#include <QFile>
+#include <QDebug>
 #include <QDir>
-#include <QVector>
+#include <QFile>
+#include <QFileInfo>
 #include <QIODevice>
 #include <QRect>
-#include <KisMimeDatabase.h>
+#include <QVector>
 
-#include <KisPart.h>
 #include <KisDocument.h>
+#include <KisMimeDatabase.h>
+#include <KisPart.h>
+#include <KoColorModelStandardIds.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoColorModelStandardIds.h>
-
 #include <kis_annotation.h>
-#include <kis_types.h>
-
 #include <kis_debug.h>
-#include <kis_image.h>
 #include <kis_group_layer.h>
-#include <kis_paint_layer.h>
-#include <kis_paint_device.h>
-#include <kis_raster_keyframe_channel.h>
+#include <kis_image.h>
 #include <kis_image_animation_interface.h>
-#include <kis_time_span.h>
 #include <kis_iterator_ng.h>
+#include <kis_paint_device.h>
+#include <kis_paint_layer.h>
+#include <kis_png_converter.h>
+#include <kis_raster_keyframe_channel.h>
+#include <kis_time_span.h>
+#include <kis_types.h>
 
 #include "csv_layer_record.h"
 

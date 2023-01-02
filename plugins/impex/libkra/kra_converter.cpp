@@ -18,13 +18,12 @@
 #include <KoDocumentInfo.h>
 #include <KoXmlWriter.h>
 
+#include <KisDocument.h>
 #include <KritaVersionWrapper.h>
+#include <kis_clone_layer.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
-#include <kis_png_converter.h>
-#include <KisDocument.h>
-#include <kis_clone_layer.h>
 
 static const char CURRENT_DTD_VERSION[] = "2.0";
 

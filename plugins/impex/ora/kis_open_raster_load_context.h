@@ -13,8 +13,6 @@ class KoStore;
 
 #include <KoStoreDevice.h>
 #include <kis_image.h>
-#include <kis_paint_device.h>
-#include "kis_png_converter.h"
 #include <kis_types.h>
 
 class KisOpenRasterLoadContext

@@ -8,15 +8,13 @@
 #define CSV_SAVER_H_
 
 #include <QObject>
-#include <QIODevice>
-#include "kis_types.h"
-#include "kis_raster_keyframe_channel.h"
-#include "kis_png_converter.h"
 
-/* The KisImportExportErrorCode definitions come from kis_png_converter.h here */
+#include <KisImportExportErrorCode.h>
+#include <kis_types.h>
 
-#include "csv_layer_record.h"
+class CSVLayerRecord;
 class KisDocument;
+class QIODevice;
 
 class CSVSaver : public QObject {
 

@@ -21,10 +21,10 @@
 #include <kis_filter_configuration.h>
 #include <KisGlobalResourcesInterface.h>
 
-#include <kis_paint_layer.h>
-#include <kis_png_converter.h>
-#include <kis_selection.h>
 #include <kis_dom_utils.h>
+#include <kis_paint_layer.h>
+#include <kis_selection.h>
+
 
 #include "KisDocument.h"
 

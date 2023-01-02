@@ -7,12 +7,10 @@
 #ifndef _ORA_CONVERTER_H_
 #define _ORA_CONVERTER_H_
 
-#include <stdio.h>
-
 #include <QObject>
 
-#include "kis_png_converter.h"
-#include "kis_types.h"
+#include <KisImportExportErrorCode.h>
+#include <kis_types.h>
 
 class KisDocument;
 
@@ -22,7 +20,7 @@ class OraConverter : public QObject
 public:
     OraConverter(KisDocument *doc);
     ~OraConverter() override;
-public:
+
     KisImportExportErrorCode buildImage(QIODevice *io);
     KisImportExportErrorCode buildFile(QIODevice *io, KisImageSP image, vKisNodeSP activeNodes);
     /**

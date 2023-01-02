@@ -29484,10 +29484,10 @@ msgstr ""
 "Podeu crear un document nou utilitzant l'opció «--new-image», o podeu obrir "
 "un fitxer existent.\n"
 "\n"
-"Si en lloc d'açò voleu afegir la capa de fitxer a un document que ja és a "
-"una instància en execució de Krita, activeu la casella de selecció «Permet "
-"només una única instància de Krita» a la configuració (Configuració -> "
-"General -> Finestra)."
+"Si en lloc d'açò voleu afegir la capa de fitxer a un document que ja es "
+"troba en una instància en execució de Krita, activeu la casella de selecció "
+"«Permet només una única instància de Krita» en la configuració (Configuració "
+"-> General -> Finestra)."
 
 #: libs/ui/KisApplication.cpp:676
 #, kde-format

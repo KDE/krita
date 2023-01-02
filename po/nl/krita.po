@@ -56,20 +56,20 @@
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2013, 2014, 2015, 2016.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2015, 2016.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2015, 2017, 2018, 2019, 2020, 2021, 2022.
-# Ronald Stroethoff <stroet43@zonnet.nl>, 2019, 2020, 2021, 2022.
+# Ronald Stroethoff <stroet43@zonnet.nl>, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-29 00:50+0000\n"
-"PO-Revision-Date: 2022-12-28 13:53+0100\n"
-"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2023-01-01 21:20+0100\n"
+"Last-Translator: Ronald Stroethoff <stroet43@zonnet.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -4464,7 +4464,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Color.kpp"
 msgid "l) Adjust Color"
-msgstr "i) Aangepaste kleur"
+msgstr "l) Aangepaste kleur"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4473,7 +4473,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Dodge.kpp"
 msgid "l) Adjust Dodge"
-msgstr "I) Aangepaste Dodge"
+msgstr "l) Aangepaste Dodge"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4482,7 +4482,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Lighten.kpp"
 msgid "l) Adjust Lighten"
-msgstr "I) Aangepaste Verlichting"
+msgstr "l) Aangepaste Verlichting"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4491,7 +4491,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Multiply.kpp"
 msgid "l) Adjust Multiply"
-msgstr "I) Aangepaste Vermenigvuldiging"
+msgstr "l) Aangepaste Vermenigvuldiging"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4896,7 +4896,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Leaves.kpp"
 msgid "z) Stamp Leaves"
-msgstr "A-4 Blad Stempel"
+msgstr "z) Blad Stempel"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -8322,7 +8322,7 @@ msgstr "Crash-log voor bugrapporten tonen."
 #, kde-format
 msgctxt "action"
 msgid "Search Actions"
-msgstr "Zoekacties"
+msgstr "Acties zoeken"
 
 #. i18n: context: toolTip @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:199
@@ -24996,7 +24996,7 @@ msgstr "Schakel wijzigen van selectie met Control/Alt om"
 #: libs/ui/forms/wdggeneralsettings.ui:714
 #, kde-format
 msgid "Enable Touch Painting"
-msgstr "Tekenen met aanraking inschakelen"
+msgstr "Vinger-verven inschakelen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTranformToolAfterPaste)
 #: libs/ui/forms/wdggeneralsettings.ui:721
@@ -26867,7 +26867,7 @@ msgstr "sRGB driehoekkiezer"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:93
 #, kde-format
 msgid "Wide Gamut Selector"
-msgstr "Brede gamut-selector"
+msgstr "Brede kleurenbereik-kiezer"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:101
@@ -49074,7 +49074,7 @@ msgstr "Adobe RGB"
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Wide Gamut"
-msgstr "Breed kleurengamma"
+msgstr "Breed kleurenbereik"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:703
 #, kde-format
@@ -49118,7 +49118,7 @@ msgstr ""
 "li><li><emphasis strong='true'>Adobe RGB</emphasis>: deze kleurruimte is een "
 "uitgebreide RGB kleurruimte, ontwikkeld door Adobe. Het wordt gebruikt voor "
 "fotografieapplicaties zoals advertising en kunst.</li><li><emphasis "
-"strong='true'>Breed kleurengamma</emphasis>: deze kleurruimte is een "
+"strong='true'>Breed kleurenbereik</emphasis>: deze kleurruimte is een "
 "uitgebreide versie van de Adobe RGB kleurruimte.</li><li><emphasis "
 "strong='true'>Pro-Photo</emphasis>: deze kleurruimte is een RGB kleurruimte, "
 "ontwikkeld door Kodak, die speciaal een groot kleurengamma biedt en "

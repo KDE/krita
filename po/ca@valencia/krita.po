@@ -25338,7 +25338,7 @@ msgstr "Provatura suau"
 #: libs/ui/forms/wdgimageproperties.ui:278
 #, kde-format
 msgid "Store Softproofing configuration in the image"
-msgstr "Emmagatzema la configuració de la provatura suau a la imatge"
+msgstr "Emmagatzema la configuració de la provatura suau en la imatge"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, sldAdaptationState)
 #: libs/ui/forms/wdgimageproperties.ui:336
@@ -29275,10 +29275,10 @@ msgstr ""
 "Podeu crear un document nou utilitzant l'opció «--new-image», o podeu obrir "
 "un fitxer existent.\n"
 "\n"
-"Si en lloc d'açò voleu afegir la capa de fitxer a un document que ja és a "
-"una instància en execució de Krita, activeu la casella de selecció «Permet "
-"només una única instància de Krita» a la configuració (Configuració -> "
-"General -> Finestra)."
+"Si en lloc d'açò voleu afegir la capa de fitxer a un document que ja es "
+"troba en una instància en execució de Krita, activeu la casella de selecció "
+"«Permet només una única instància de Krita» en la configuració (Configuració "
+"-> General -> Finestra)."
 
 #: libs/ui/KisApplication.cpp:676
 #, kde-format
@@ -32726,8 +32726,8 @@ msgstr ""
 "<p>Citant la Viquipèdia, «Academy Color Encoding System (ACES) és un sistema "
 "de codificació del color de la imatge proposat per Academy of Motion Picture "
 "Arts and Sciences que permet un flux de treball que inclou completament la "
-"precisió del color, amb un intercanvi sense costures a les imatges de cinema "
-"d'alta qualitat independentment de l'origen».</p>"
+"precisió del color, amb un intercanvi sense costures en les imatges de "
+"cinema d'alta qualitat independentment de l'origen».</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:516
 #, kde-format
@@ -38709,7 +38709,7 @@ msgstr "Comportament de l'historial:"
 #, kde-format
 msgctxt "action"
 msgid "Recorder"
-msgstr "Enregistrador"
+msgstr "Gravador"
 
 #. i18n: context: iconText @ Action (recorder_record_toggle), Actions (Recorder), ActionCollection (Recorder)
 #. i18n: context: text @ Action (recorder_record_toggle), Actions (Recorder), ActionCollection (Recorder)
@@ -38844,9 +38844,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Se suprimiran els enregistraments per a este document i no els podreu tornar "
-"a exportar com a una filmació a intervals. Cal tindre en compte que encara "
-"es conservaran els ja exportats.\n"
+"Se suprimiran les gravacions per a este document i no els podreu tornar a "
+"exportar com a una filmació a intervals. Cal tindre en compte que encara es "
+"conservaran les ja exportades.\n"
 "\n"
 "Voleu continuar?"
 
@@ -39027,7 +39027,7 @@ msgstr "Mostra en la carpeta"
 #, kde-format
 msgctxt "Open the folder when the new created video is placed"
 msgid "Remove recordings"
-msgstr "Elimina els enregistraments"
+msgstr "Elimina les gravacions"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRestart)
 #: plugins/dockers/recorder/recorder_export.ui:1061
@@ -39137,16 +39137,15 @@ msgid ""
 "though).\n"
 "Do you wish to continue?"
 msgstr ""
-"Se suprimiran els enregistraments seleccionats i ja no els podreu exportar "
-"com a una filmació a intervals (encara que es conservaran els ja "
-"exportats).\n"
+"Se suprimiran les gravacions seleccionades i ja no les podreu exportar com a "
+"una filmació a intervals (encara que es conservaran les ja exportades).\n"
 "Voleu continuar?"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderSnapshotsManager)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:18
 #, kde-format
 msgid "Clean up Recordings"
-msgstr "Neteja els enregistraments"
+msgstr "Neteja les gravacions"
 
 #. i18n: ectx: property (text), widget (QLabel, labelProgress)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:95
@@ -39158,7 +39157,7 @@ msgstr "S'està explorant..."
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:198
 #, kde-format
 msgid "Please select recordings to remove"
-msgstr "Seleccioneu els enregistraments que s'han d'eliminar"
+msgstr "Seleccioneu les gravacions que s'han d'eliminar"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSpaceTitle)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:259
@@ -39177,19 +39176,19 @@ msgstr "0 B"
 #, kde-format
 msgctxt "A folder where recordings are stored"
 msgid "Recordings directory:"
-msgstr "Carpeta d'enregistraments:"
+msgstr "Carpeta de gravacions:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonManageRecordings)
 #: plugins/dockers/recorder/recorderdocker.ui:105
 #, kde-format
 msgid "Manage recordings..."
-msgstr "Gestiona els enregistraments..."
+msgstr "Gestiona les gravacions..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowse)
 #: plugins/dockers/recorder/recorderdocker.ui:130
 #, kde-format
 msgid "Select the recordings directory..."
-msgstr "Seleccioneu la carpeta d'enregistraments..."
+msgstr "Seleccioneu la carpeta de gravacions..."
 
 #. i18n: ectx: property (text), widget (QLabel, labelCaptureRate)
 #: plugins/dockers/recorder/recorderdocker.ui:155
@@ -39376,29 +39375,29 @@ msgstr "REC"
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:205
 #, kde-format
 msgid "Recorder is active"
-msgstr "L'enregistrador està actiu"
+msgstr "El gravador està actiu"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:205
 #, kde-format
 msgid "Recorder is paused"
-msgstr "L'enregistrador està en pausa"
+msgstr "El gravador està en pausa"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:210
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
-msgstr "Enregistrador"
+msgstr "Gravador"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:385
 #, kde-format
 msgid "Select a Directory for Recordings"
-msgstr "Seleccioneu una carpeta per als enregistraments"
+msgstr "Seleccioneu una carpeta per a les gravacions"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:465
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
-msgstr "Enregistrador"
+msgstr "Gravador"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:466
 #, kde-format
@@ -39406,7 +39405,7 @@ msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
 "check free disk space and start the recorder again."
 msgstr ""
-"L'enregistrador s'ha parat a causa d'una fallada en escriure un fotograma. "
+"El gravador s'ha parat a causa d'una fallada en escriure un fotograma. "
 "Comproveu l'espai lliure al disc i torneu a iniciar-lo."
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37

@@ -40,8 +40,8 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(ImportFactory, "krita_jxl_import.json", registerPlugin<JPEGXLImport>();)
 
-constexpr static std::array<char, 5> exifTag = {'E', 'x', 'i', 'f', 0x0};
-constexpr static std::array<char, 5> xmpTag = {'x', 'm', 'l', ' ', 0x0};
+const QByteArray exifTag = "exif";
+const QByteArray xmpTag = "xml ";
 
 class Q_DECL_HIDDEN JPEGXLImportData
 {
@@ -644,9 +644,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 const int finalSize = box.size() - static_cast<int>(availOut);
                 // Only resize and write boxes if it's not empty.
                 // And only input metadata boxes while skipping other boxes.
-                if (((std::equal(exifTag.cbegin(), exifTag.cend(), boxType.cbegin()))
-                     || (std::equal(xmpTag.cbegin(), xmpTag.cend(), boxType.cbegin())))
-                    && finalSize != 0) {
+                if ((boxType.toLower().contains(exifTag) || boxType.toLower().contains(xmpTag)) && finalSize != 0) {
                     box.resize(finalSize);
 
                     metadataBoxes.insert(boxType, box);
@@ -661,9 +659,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     const QByteArray &boxType = metaBox.key();
                     QByteArray &box = metaBox.value();
                     QBuffer buf(&box);
-                    if (std::equal(boxType.cbegin(),
-                                   boxType.cend(),
-                                   exifTag.cbegin())) {
+                    if (boxType.toLower().contains(exifTag)) {
                         dbgFile << "Loading EXIF data. Size: " << box.size();
 
                         const auto *backend =
@@ -671,9 +667,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                                 "exif");
 
                         backend->loadFrom(layer->metaData(), &buf);
-                    } else if (std::equal(boxType.cbegin(),
-                                          boxType.cend(),
-                                          xmpTag.cbegin())) {
+                    } else if (boxType.toLower().contains(xmpTag)) {
                         dbgFile << "Loading XMP or IPTC data. Size: "
                                 << box.size();
 
@@ -700,12 +694,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     errFile << "JxlDecoderGetBoxType failed";
                     return ImportExportCodes::ErrorWhileReading;
                 }
-                if ((std::equal(exifTag.cbegin(),
-                                exifTag.cend(),
-                                boxType.cbegin()))
-                    || (std::equal(xmpTag.cbegin(),
-                                   xmpTag.cend(),
-                                   boxType.cbegin()))) {
+                if (boxType.toLower().contains(exifTag) || boxType.toLower().contains(xmpTag)) {
                     if (JxlDecoderSetBoxBuffer(
                             dec.get(),
                             reinterpret_cast<uint8_t *>(box.data()),

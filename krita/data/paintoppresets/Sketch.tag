@@ -49,6 +49,7 @@ Comment[hi]=रेखा-चित्र ब्रश के नमूने
 Comment[hu]=Vázlat ecsetsablonok
 Comment[id]=Prasetel kuas sketsa
 Comment[it]=Preimpostazioni del pennello per eseguire schizzi
+Comment[ka]=ესკიზური ფუნჯების პროფილები
 Comment[ko]=스케치 브러시 사전 설정
 Comment[nl]=Voorinstellingen van penselen voor schetsen
 Comment[nn]=Ferdigpenslar for skissearbeid

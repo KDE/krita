@@ -49,6 +49,7 @@ Comment[hi]=इंकिंग ब्रश के नमूने
 Comment[hu]=Tinta ecsetsablonok
 Comment[id]=Prasetel Kuas Tinta
 Comment[it]=Preimpostazioni del pennello con effetto inchiostro
+Comment[ka]=მელნის პროფილები
 Comment[ko]=잉크 브러시 사전 설정
 Comment[nl]=Voorinstellingen van penselen voor inkten
 Comment[nn]=Ferdigpenslar for tusjing

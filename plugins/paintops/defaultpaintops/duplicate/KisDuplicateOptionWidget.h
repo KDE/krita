@@ -10,7 +10,7 @@
 #include <KisDuplicateOptionData.h>
 #include <kis_paintop_option.h>
 
-class PAINTOP_EXPORT KisDuplicateOptionWidget : public KisPaintOpOption
+class KisDuplicateOptionWidget : public KisPaintOpOption
 {
     Q_OBJECT
 public:

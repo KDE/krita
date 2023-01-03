@@ -22,7 +22,7 @@ const QString DUPLICATE_CLONE_FROM_PROJECTION = "Duplicateop/CloneFromProjection
 
 class KisPropertiesConfiguration;
 
-struct PAINTOP_EXPORT KisDuplicateOptionData : boost::equality_comparable<KisDuplicateOptionData> {
+struct KisDuplicateOptionData : boost::equality_comparable<KisDuplicateOptionData> {
     inline friend bool operator==(const KisDuplicateOptionData &lhs, const KisDuplicateOptionData &rhs)
     {
         return lhs.healing == rhs.healing && lhs.correctPerspective == rhs.correctPerspective

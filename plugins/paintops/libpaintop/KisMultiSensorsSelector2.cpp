@@ -121,7 +121,11 @@ void KisMultiSensorsSelector2::sensorActivated(const QModelIndex& index)
 
 bool KisMultiSensorsSelector2::eventFilter(QObject *obj, QEvent *event)
 {
-    // TODO: check what this function does?
+    /**
+     * This filter makes it possibe to select a sensor by click+drag gesture.
+     * Such gesture is very easy to do with a tablet stylus. Basically, we
+     * activate the lastly-dragged-over sensor on mause/tablet-release
+     */
 
     if (event->type() == (QEvent::MouseButtonRelease) || event->type() == QEvent::TabletRelease) {
         QModelIndex index = d->form.sensorsList->currentIndex();

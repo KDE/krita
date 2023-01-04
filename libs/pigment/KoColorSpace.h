@@ -296,6 +296,17 @@ public:
     virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const = 0;
 
     /**
+     * The toQColor16 methods take a byte array that is at least pixelSize() long
+     * and converts the contents to a 16 bit QColor, using the given profile as a source
+     * profile and the optional profile as a destination profile.
+     *
+     * @param src a pointer to the source pixel
+     * @param c the QColor that will be filled with the color at src
+     * @param profile the optional profile that describes the color in c, for instance the monitor profile
+     */
+    virtual void toQColor16(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const = 0;
+
+    /**
      * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.
      *
      * @param data A pointer to a contiguous memory region containing width * height pixels
@@ -602,6 +613,11 @@ public:
      * Calculate the intensity of the given pixel, scaled down to the range 0-255. XXX: Maybe this should be more flexible
      */
     virtual quint8 intensity8(const quint8 * src) const = 0;
+
+    /**
+     * Calculate the intensity of the given pixel, scaled down to the range 0-1
+     */
+    virtual qreal intensityF(const quint8 * src) const = 0;
 
     /*
      *increase luminosity by step

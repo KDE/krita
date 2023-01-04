@@ -71,7 +71,18 @@ void RgbU8ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 quint8 RgbU8ColorSpace::intensity8(const quint8 *src) const
 {
     const KoBgrU8Traits::Pixel *p = reinterpret_cast<const KoBgrU8Traits::Pixel *>(src);
-    return (quint8)(p->red * 0.30 + p->green * 0.59 + p->blue * 0.11);
+    // Integer version of:
+    //      static_cast<quint8>(qRound(p->red * 0.30 + p->green * 0.59 + p->blue * 0.11))
+    // The "+ 50" is used for rounding
+    return static_cast<quint8>((p->red * 30 + p->green * 59 + p->blue * 11 + 50) / 100);
+}
+
+qreal RgbU8ColorSpace::intensityF(const quint8 *src) const
+{
+    const KoBgrU8Traits::Pixel *p = reinterpret_cast<const KoBgrU8Traits::Pixel *>(src);
+    // Integer version of:
+    //      (p->red * 0.30 + p->green * 0.59 + p->blue * 0.11) / 255.0
+    return static_cast<qreal>(p->red * 30 + p->green * 59 + p->blue * 11) / (100.0 * 255.0);
 }
 
 void RgbU8ColorSpace::toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const

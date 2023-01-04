@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-29 00:50+0000\n"
+"POT-Creation-Date: 2023-01-04 00:46+0000\n"
 "PO-Revision-Date: 2022-11-24 09:58+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -16306,8 +16306,8 @@ msgstr "縮小(&M)"
 #: libs/ui/animation/VideoImportDialog.ui:687
 #: libs/ui/animation/wdg_animationrenderer.ui:258
 #: libs/ui/animation/wdg_animationrenderer.ui:400
-#: libs/ui/forms/wdggeneralsettings.ui:493 libs/ui/forms/wdgnewimage.ui:234
-#: libs/ui/forms/wdgnewimage.ui:253
+#: libs/ui/forms/wdggeneralsettings.ui:493 libs/ui/forms/wdgnewimage.ui:273
+#: libs/ui/forms/wdgnewimage.ui:292
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:291
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:351
 #: libs/ui/layerstyles/WdgColorOverlay.ui:61
@@ -16988,7 +16988,7 @@ msgid "Crop Selections"
 msgstr "裁切選取區域"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: libs/image/kis_keyframe_channel.cpp:25 libs/ui/forms/wdgnewimage.ui:408
+#: libs/image/kis_keyframe_channel.cpp:25 libs/ui/forms/wdgnewimage.ui:424
 #, kde-format
 msgid "Content"
 msgstr "內容"
@@ -19160,7 +19160,7 @@ msgstr "輸出"
 #: libs/pigment/resources/KoColorSet.cpp:832
 #: libs/pigment/resources/KoColorSet.cpp:909
 #: libs/pigment/resources/KoColorSet.cpp:1121
-#: libs/ui/actions/KisPasteActionFactories.cpp:350
+#: libs/ui/actions/KisPasteActionFactories.cpp:352
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:348 libs/ui/KisView.cpp:1134
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20149,17 +20149,17 @@ msgid "Paste shapes"
 msgstr "貼上形狀"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:357 libs/ui/KisView.cpp:597
+#: libs/ui/actions/KisPasteActionFactories.cpp:359 libs/ui/KisView.cpp:597
 #, kde-format
 msgid "(pasted)"
 msgstr "(已貼上)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:355
+#: libs/ui/actions/KisPasteActionFactories.cpp:357
 #, kde-format
 msgid "Pasted"
 msgstr "已貼上"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:410
+#: libs/ui/actions/KisPasteActionFactories.cpp:412
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "貼上樣式"
@@ -22714,7 +22714,7 @@ msgid "Screen %1 (%2):"
 msgstr "顯示器 %1 (%2)："
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:959
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:791
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, kde-format
 msgid "Install Color Profiles"
@@ -23535,11 +23535,13 @@ msgstr "總計編輯時長(&M)："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, lbCommentsDesc)
+#. i18n: ectx: property (title), widget (QGroupBox, grpDescription)
 #. i18n: ectx: property (text), widget (QLabel, labelTopics)
 #. i18n: ectx: property (text), widget (QLabel, description)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:151
 #: libs/ui/forms/wdgmetadatamergestrategychooser.ui:53
+#: libs/ui/forms/wdgnewimage.ui:596
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:90
 #: plugins/extensions/pykrita/plugin/info.ui:48
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:173
@@ -23645,7 +23647,7 @@ msgstr "Y 解析度："
 #. i18n: ectx: property (text), widget (QLabel, lblYResolution_3)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
 #: libs/ui/forms/wdg_resolution.ui:110 libs/ui/forms/wdgimageproperties.ui:94
-#: libs/ui/forms/wdgnewimage.ui:177 libs/ui/imagesize/wdg_imagesize.ui:244
+#: libs/ui/forms/wdgnewimage.ui:128 libs/ui/imagesize/wdg_imagesize.ui:244
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:301
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:42
 #, kde-format
@@ -23706,7 +23708,7 @@ msgstr ""
 #: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:183
 #: libs/ui/forms/wdgcolorsettings.ui:274
 #: libs/ui/forms/wdgimageproperties.ui:298
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:483
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:45
 #, kde-format
 msgid "Perceptual"
@@ -23745,7 +23747,7 @@ msgstr ""
 #: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:193
 #: libs/ui/forms/wdgcolorsettings.ui:284
 #: libs/ui/forms/wdgimageproperties.ui:308
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:492
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:89
 #, kde-format
 msgctxt "ICC profile rendering intent"
@@ -23886,7 +23888,7 @@ msgstr "繪製意圖(&R)："
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:188 libs/ui/forms/wdgcolorsettings.ui:279
 #: libs/ui/forms/wdgimageproperties.ui:303
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:486
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:499
 #, kde-format
 msgid "Relative Colorimetric"
 msgstr "相對比色模式"
@@ -23896,7 +23898,7 @@ msgstr "相對比色模式"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:198 libs/ui/forms/wdgcolorsettings.ui:289
 #: libs/ui/forms/wdgimageproperties.ui:313
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:489
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:502
 #, kde-format
 msgid "Absolute Colorimetric"
 msgstr "絕對比色模式"
@@ -23970,19 +23972,19 @@ msgid "Profile:"
 msgstr "特性檔案："
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnInstallProfile)
-#: libs/ui/forms/wdgcolorspaceselector.ui:120
+#: libs/ui/forms/wdgcolorspaceselector.ui:119
 #, kde-format
 msgid "Install a new profile from a file"
 msgstr "安裝新特性檔案"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, bnInstallProfile)
-#: libs/ui/forms/wdgcolorspaceselector.ui:123
+#: libs/ui/forms/wdgcolorspaceselector.ui:122
 #, kde-format
 msgid "Install a new profile from a file."
 msgstr "安裝新特性檔案。"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAdvanced)
-#: libs/ui/forms/wdgcolorspaceselector.ui:136
+#: libs/ui/forms/wdgcolorspaceselector.ui:134
 #, kde-format
 msgid "Color Space Browser"
 msgstr "色彩空間瀏覽器"
@@ -25269,7 +25271,7 @@ msgstr "縮放："
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:36
+#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:18
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:24
 #, kde-format
 msgid "New Image"
@@ -25279,7 +25281,7 @@ msgstr "建立影像"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #. i18n: ectx: property (text), widget (QLabel, dimensionLbl)
-#: libs/ui/forms/wdgimageproperties.ui:28 libs/ui/forms/wdgnewimage.ui:58
+#: libs/ui/forms/wdgimageproperties.ui:28 libs/ui/forms/wdgnewimage.ui:46
 #: plugins/impex/brush/wdg_export_gih.ui:161
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:64
 #, kde-format
@@ -25307,7 +25309,7 @@ msgstr "背景色："
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, lblOpacity)
-#: libs/ui/forms/wdgimageproperties.ui:189 libs/ui/forms/wdgnewimage.ui:424
+#: libs/ui/forms/wdgimageproperties.ui:189 libs/ui/forms/wdgnewimage.ui:520
 #, kde-format
 msgid "Background Opacity:"
 msgstr "背景不透明度："
@@ -25473,7 +25475,7 @@ msgid "Source FPS:"
 msgstr "源 FPS："
 
 #. i18n: ectx: property (text), widget (QLabel, lblName)
-#: libs/ui/forms/wdglayerproperties.ui:28 libs/ui/forms/wdgnewimage.ui:628
+#: libs/ui/forms/wdglayerproperties.ui:28 libs/ui/forms/wdgnewimage.ui:430
 #, kde-format
 msgid "&Name:"
 msgstr "名稱(&N)："
@@ -25675,34 +25677,34 @@ msgstr "記住"
 #. i18n: ectx: property (title), widget (QGroupBox, grpImage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImagesplit)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgLayerSplit)
-#: libs/ui/forms/wdgnewimage.ui:78
+#: libs/ui/forms/wdgnewimage.ui:54
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:18
 #: plugins/extensions/layersplit/wdg_layersplit.ui:18
 #, kde-format
 msgid "Image Size"
 msgstr "影像大小"
 
-#. i18n: ectx: property (text), widget (QLabel, lblHeight)
-#: libs/ui/forms/wdgnewimage.ui:145
-#, kde-format
-msgid "&Height:"
-msgstr "高度(&H)："
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdgnewimage.ui:187
+#: libs/ui/forms/wdgnewimage.ui:60
 #, kde-format
 msgid "P&redefined:"
 msgstr "預設(&R)："
 
 #. i18n: ectx: property (text), widget (QLabel, lblWidth)
-#: libs/ui/forms/wdgnewimage.ui:203
+#: libs/ui/forms/wdgnewimage.ui:70
 #, kde-format
 msgid "W&idth:"
 msgstr "寬度(&I)："
 
+#. i18n: ectx: property (text), widget (QLabel, lblHeight)
+#: libs/ui/forms/wdgnewimage.ui:118
+#, kde-format
+msgid "&Height:"
+msgstr "高度(&H)："
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLandscape)
 #. i18n: ectx: property (text), item, widget (QComboBox, pageOrientationComboBox)
-#: libs/ui/forms/wdgnewimage.ui:231
+#: libs/ui/forms/wdgnewimage.ui:270
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:108
 #, kde-format
 msgid "Landscape"
@@ -25710,7 +25712,7 @@ msgstr "橫向"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnPortrait)
 #. i18n: ectx: property (text), item, widget (QComboBox, pageOrientationComboBox)
-#: libs/ui/forms/wdgnewimage.ui:250
+#: libs/ui/forms/wdgnewimage.ui:289
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:103
 #, kde-format
 msgid "Portrait"
@@ -25718,49 +25720,55 @@ msgstr "縱向"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpClipboard)
 #. i18n: ectx: property (text), widget (QPushButton, clipboardButton)
-#: libs/ui/forms/wdgnewimage.ui:284
+#: libs/ui/forms/wdgnewimage.ui:320
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:94
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:363
 #, kde-format
 msgid "Clipboard"
 msgstr "剪貼簿"
 
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: libs/ui/forms/wdgnewimage.ui:344
+#, kde-format
+msgid "Save Image Size as:"
+msgstr "將影像尺寸儲存成："
+
 #. i18n: ectx: property (title), widget (QGroupBox, grpMode)
-#: libs/ui/forms/wdgnewimage.ui:336
+#: libs/ui/forms/wdgnewimage.ui:354
 #, kde-format
 msgctxt "Label of Color as color space in Create New Image dialogue"
 msgid "Color"
 msgstr "色彩"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/forms/wdgnewimage.ui:363
-#, kde-format
-msgid "Save Image Size as:"
-msgstr "將影像尺寸儲存成："
-
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnSaveAsPredefined)
-#: libs/ui/forms/wdgnewimage.ui:389
+#: libs/ui/forms/wdgnewimage.ui:410
 #, kde-format
 msgid "Save the current dimensions"
 msgstr "儲存目前尺寸"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSaveAsPredefined)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
-#: libs/ui/forms/wdgnewimage.ui:392
+#: libs/ui/forms/wdgnewimage.ui:413
 #: libs/widgetutils/config/kstandardaction_p.h:32
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:135
 #, kde-format
 msgid "&Save"
 msgstr "儲存(&S)"
 
+#. i18n: ectx: property (text), widget (QLineEdit, txtName)
+#: libs/ui/forms/wdgnewimage.ui:449
+#, kde-format
+msgid "untitled-1"
+msgstr "無標題-1"
+
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdgnewimage.ui:414
+#: libs/ui/forms/wdgnewimage.ui:456
 #, kde-format
 msgid "Layers:"
 msgstr "圖層數量："
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intNumLayers)
-#: libs/ui/forms/wdgnewimage.ui:449
+#: libs/ui/forms/wdgnewimage.ui:475
 #, kde-format
 msgid ""
 "Number of layers that the image will start with, including optional "
@@ -25768,41 +25776,35 @@ msgid ""
 msgstr "影像建立後的圖層數目，包括可選的背景圖層。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColor)
-#: libs/ui/forms/wdgnewimage.ui:465
+#: libs/ui/forms/wdgnewimage.ui:491
 #, kde-format
 msgid "Bac&kground Color:"
 msgstr "背景色彩(&K)："
 
-#. i18n: ectx: property (text), widget (QLabel, lblBackgroundStyle)
+#. i18n: ectx: property (title), widget (QGroupBox, grpBackground)
 #. i18n: ectx: property (text), widget (QLabel, labelBackground)
 #. i18n: ectx: property (text), widget (QLabel, mLabelBackground)
-#: libs/ui/forms/wdgnewimage.ui:478
+#: libs/ui/forms/wdgnewimage.ui:539
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:175
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:719
 #, kde-format
 msgid "Background:"
 msgstr "背景："
 
-#. i18n: ectx: property (text), widget (QLabel, lblDescription)
-#: libs/ui/forms/wdgnewimage.ui:488
-#, kde-format
-msgid "&Description:"
-msgstr "描述(&D)："
-
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsRaster)
-#: libs/ui/forms/wdgnewimage.ui:525
+#: libs/ui/forms/wdgnewimage.ui:551
 #, kde-format
 msgid "Use background color and opacity to create a background raster layer."
 msgstr "使用背景色彩和不透明度建立背景點陣圖層。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsRaster)
-#: libs/ui/forms/wdgnewimage.ui:528
+#: libs/ui/forms/wdgnewimage.ui:554
 #, kde-format
 msgid "As &raster layer"
 msgstr "作為點陣圖層(&R)"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsProjection)
-#: libs/ui/forms/wdgnewimage.ui:541
+#: libs/ui/forms/wdgnewimage.ui:567
 #, kde-format
 msgid ""
 "Use background color and opacity as the base canvas color. This can be "
@@ -25811,13 +25813,13 @@ msgstr ""
 "使用背景色彩和不透明度作為基底畫布色彩。此屬性可在「影像 > 屬性」中重新設定。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsProjection)
-#: libs/ui/forms/wdgnewimage.ui:544
+#: libs/ui/forms/wdgnewimage.ui:570
 #, kde-format
 msgid "As can&vas color"
 msgstr "作為畫布色彩(&V)"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsFill)
-#: libs/ui/forms/wdgnewimage.ui:557
+#: libs/ui/forms/wdgnewimage.ui:583
 #, kde-format
 msgid ""
 "Use background color and opacity to create a background fill layer. The "
@@ -25827,19 +25829,13 @@ msgstr ""
 "定。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsFill)
-#: libs/ui/forms/wdgnewimage.ui:560
+#: libs/ui/forms/wdgnewimage.ui:586
 #, kde-format
 msgid "As fill la&yer"
 msgstr "作為填充圖層(&Y)"
 
-#. i18n: ectx: property (text), widget (QLineEdit, txtName)
-#: libs/ui/forms/wdgnewimage.ui:650
-#, kde-format
-msgid "untitled-1"
-msgstr "無標題-1"
-
 #. i18n: ectx: property (text), widget (QLabel, lblDocumentInfo)
-#: libs/ui/forms/wdgnewimage.ui:688
+#: libs/ui/forms/wdgnewimage.ui:651
 #, kde-format
 msgid "This document..."
 msgstr "此檔案…"
@@ -29711,8 +29707,8 @@ msgid "The action was cancelled by the user."
 msgstr "操作已由使用者取消。"
 
 #: libs/ui/KisImportExportErrorCode.cpp:178
-#: plugins/impex/libkra/kra_converter.cpp:379
-#: plugins/impex/libkra/kra_converter.cpp:408
+#: plugins/impex/libkra/kra_converter.cpp:378
+#: plugins/impex/libkra/kra_converter.cpp:407
 #, kde-format
 msgid "Unknown error."
 msgstr "未知錯誤。"
@@ -32294,43 +32290,43 @@ msgid ""
 "The Tone Response Curve of this color space is either sRGB, L* or rec709 TRC."
 msgstr "此色彩空間的階調響應曲線是 sRGB 、 L* 或 rec709 TRC 的其中之一。"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:300
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:313
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Estimated Gamma cannot be retrieved for CMYK."
 msgstr "無法為 CMYK 色彩空間得出估算 gamma 值。"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:344
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:357
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is assumed to be the L * TRC. "
 msgstr "假設為 L * TRC。 "
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:365
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:378
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Estimated Gamma cannot be retrieved for YCbCr."
 msgstr "無法為 YCbCr 色彩空間得出估算 gamma 值。"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:371
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:384
 #, kde-format
 msgctxt "About <Profilename>"
 msgid "About %1/%2"
 msgstr "關於 %1/%2"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:373
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:386
 #, kde-format
 msgctxt "ICC profile version"
 msgid "ICC Version: %1"
 msgstr "ICC 版本：%1"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:376
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:389
 #, kde-format
 msgctxt "Who made the profile?"
 msgid "Manufacturer: %1"
 msgstr "製造者：%1"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:381
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:394
 #, kde-format
 msgctxt ""
 "What is the copyright? These are from embedded strings from the icc profile, "
@@ -32338,7 +32334,7 @@ msgctxt ""
 msgid "Copyright: %1"
 msgstr "版權：%1"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:389
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:402
 #, kde-format
 msgctxt "If the selected model is RGB"
 msgid ""
@@ -32356,7 +32352,7 @@ msgstr ""
 "於繪畫。您可以在繪畫後將 RGB 影像轉換到其他色彩空間。RGB 也是 HDR 編輯的推薦"
 "色彩空間。"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:395
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:408
 #, kde-format
 msgctxt "If the selected model is CMYK"
 msgid ""
@@ -32376,7 +32372,7 @@ msgstr ""
 "的 CMYK 特性檔案來進行轉換。<br/>我們<b>不建議</b> 把 CMYK 用於繪畫過程。"
 "Krita 也無法獲取此色彩空間的色料特性或階調響應曲線 (TRC) 。"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:404
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:417
 #, kde-format
 msgctxt "If the selected model is XYZ"
 msgid ""
@@ -32393,7 +32389,7 @@ msgstr ""
 "b>將 XYZ 用於繪畫過程，但可用於成品的編碼作業。此設定檔的階調響應曲線 (TRC) "
 "是線性的。"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:411
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:424
 #, kde-format
 msgctxt "If the selected model is Grayscale"
 msgid ""
@@ -32408,7 +32404,7 @@ msgstr ""
 "僅為一半。<br/>灰階影像適用於繪製線稿和灰度作品。Krita 允許在同一影像中同時包"
 "含 RGB 和灰度圖層。"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:418
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:431
 #, kde-format
 msgctxt "If the selected model is LAB"
 msgid ""
@@ -32433,7 +32429,7 @@ msgstr ""
 "們<b>不建議</b>將此色彩空間用於繪畫或匯出，但是可以用於做後期處理。此色彩空間"
 "的階調響應曲線 (TRC) 假設為 L* TRC。"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:429
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:442
 #, kde-format
 msgctxt "If the selected model is YCbCr"
 msgid ""
@@ -32450,7 +32446,7 @@ msgstr ""
 "度、紅綠平衡以及黃藍平衡三個參數進行編碼。此模型中的色品是飽和度的一種特殊形"
 "式，其範圍的飽和端為紅和藍，不飽和端為綠和黃。"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:440
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:453
 #, kde-format
 msgctxt "When the selected Bitdepth is 8"
 msgid ""
@@ -32463,7 +32459,7 @@ msgstr ""
 "色彩數量為 256 與通道數目的乘冪 (即 256 的 n 次方)。建議用於網路影像或簡單影"
 "像。"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:446
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:459
 #, kde-format
 msgctxt "When the selected Bitdepth is 16"
 msgid ""
@@ -32482,7 +32478,7 @@ msgstr ""
 "建議在使用此位深的影像時留意記憶體的佔用情況，如電腦執行過慢則套用回 8 位元影"
 "象。切記：將 16 位元/每通道轉換到 8 位元/每通道時應關閉色彩空間轉換最佳化。"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:455
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:468
 #, kde-format
 msgctxt "When the selected Bitdepth is 16 bit float"
 msgid ""
@@ -32503,7 +32499,7 @@ msgstr ""
 "多。我們建議在使用此位深的影像時留意記憶體的佔用情況，如電腦執行過慢則套用回 "
 "8 位元色彩深度。"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:464
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:477
 #, kde-format
 msgctxt "When the selected Bitdepth is 32bit float"
 msgid ""
@@ -32522,7 +32518,7 @@ msgstr ""
 "影像的四倍，對處理器資源的需求也高出許多。我們建議在使用此位深的影像時留意記"
 "憶體的佔用情況，如電腦執行過慢則套用回 8 位元色彩深度。"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:473
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:486
 #, kde-format
 msgctxt ""
 "When the selected Bitdepth is 64bit float, but this isn't actually available "
@@ -32543,12 +32539,12 @@ msgstr ""
 "也高出許多。我們建議在使用此位深度的影像時留意記憶體的佔用情況，如電腦執行過"
 "慢則套用回 8 位元色彩深度。"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:481
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:494
 #, kde-format
 msgid "The following conversion intents are possible: "
 msgstr "可以使用下列色彩轉換意圖："
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:500
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:513
 #, kde-format
 msgctxt "These are Elle Stone's notes on her profiles that we ship."
 msgid ""
@@ -32564,7 +32560,7 @@ msgstr ""
 "ninedegreesbelow.com/photography/lcms-make-icc-profiles.html\">完整說明</a>。"
 "</b></p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:508
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:521
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32578,7 +32574,7 @@ msgstr ""
 "它是一個色彩精確、涵蓋電影工業每一方面的色彩管理流程，意圖實現不同來源之間高"
 "品質動態影像的無縫交換。</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:516
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:529
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32591,7 +32587,7 @@ msgstr ""
 "P3 的色域。它和 ACES 色彩空間的不同點在於它的資料不存在負值，只包含極少位於人"
 "眼可見色域之外的色彩。</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:523
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:536
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32615,7 +32611,7 @@ msgstr ""
 "些印表機匹配得更好。</p><p>Adobe RGB 1998 色域常被用於新型高端廣色域顯示器"
 "上。</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:537
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:550
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32641,7 +32637,7 @@ msgstr ""
 "p><p>除非必須確保色彩空間包含一切真實色彩，否則不應使用此特性檔案來進行影像編"
 "輯。</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:552
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:565
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32660,7 +32656,7 @@ msgstr ""
 "值來自 Lindbloom，另一組數值則來自 LCMS 第一版教學。色彩管理領域的專家認為其"
 "正確的基色數值應該透過光譜的波長來計算，本特性檔案採用了該方案。</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:565
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:578
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32674,7 +32670,7 @@ msgstr ""
 "一切可見色彩。它包含的概念色比例也高於 ACES 和 AllColorsRGB 色彩空間。此色彩"
 "空間不套用作影像編輯。</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:573
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:586
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32706,7 +32702,7 @@ msgstr ""
 "業空間有點奇怪，至少開頭會有這個感覺，因此您應該自行衡量轉移流程的好處與壞"
 "處。</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:591
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:604
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32724,7 +32720,7 @@ msgstr ""
 "援。在數位暗房場景中， Rec.2020 比色域範圍狹小的 sRGB 色彩空間更適合作為一般 "
 "RGB 作業空間。</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:600
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:613
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32756,7 +32752,7 @@ msgstr ""
 "sRGB 色彩空間 (包括在此色彩特性檔案庫中提供的所有 RGB 特性檔案) 都是階調矩陣"
 "特性檔案，而階調矩陣設定檔不含可感知模式所用的尋找表。</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:616
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:629
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32774,7 +32770,7 @@ msgstr ""
 "間耐人尋味，在它發表之後不久，Adobe 便將其注意力轉向了 ProPhotoRGB 色彩空間。"
 "</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:624
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:637
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32792,7 +32788,7 @@ msgstr ""
 "節省一些資料量。對於要上傳至網際網路的灰階影像，使用 sRGB 階調響應曲線 (TRC) "
 "的 V2 規範灰階特性檔案</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:632
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:645
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32806,7 +32802,7 @@ msgstr ""
 "它們只套用作 16 位元整數及浮點、32 位元整數及浮點影像的編輯流程。許多影像編輯"
 "作業線上性 gamma 的色彩空間下能產生更好的結果。</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:639
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:652
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32818,7 +32814,7 @@ msgstr ""
 "議在使用感知上統一的 RGB 色彩空間時對影像進行相應的處理操作。在編輯高位元色深"
 "的影像時應使用 V4 規範的特性檔案。</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:645
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:658
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32830,7 +32826,7 @@ msgstr ""
 "近似 (但並非絕對) 感知上統一的階調響應曲線 (TRC) 。尤其是 ProPhotoRGB 色彩空"
 "間的 gamma 為 1.8 的TRC 與感知上統一的標準偏差較大。</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:650
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32847,7 +32843,7 @@ msgstr ""
 "條件。即便如此，在使用 AdobeRGB1998 色彩空間時必須小心避免造成色調分離現象。"
 "還要注意不要把這兩個特性檔案的線性 gamma 版本用於 8 位元影像的編輯流程。</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:658
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:671
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32858,7 +32854,7 @@ msgstr ""
 "<p>如果影像需儲存為高位元深並使用 LCMS 作為色彩管理模組的影像軟體進行編輯，"
 "如 Krita 、digiKam/showFoto 和 GIMP 2.9 等，應使用 V4 規範的特性檔案。</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:676
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -47145,32 +47141,32 @@ msgctxt "Saving .kra file error message"
 msgid "Could not save assistants."
 msgstr "無法儲存輔助尺。"
 
-#: plugins/impex/libkra/kra_converter.cpp:76
+#: plugins/impex/libkra/kra_converter.cpp:75
 #, kde-format
 msgid "Not a valid Krita file"
 msgstr "無效的 Krita 檔案"
 
-#: plugins/impex/libkra/kra_converter.cpp:94
+#: plugins/impex/libkra/kra_converter.cpp:93
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "無效檔案：沒有「maindoc.xml」檔案。"
 
-#: plugins/impex/libkra/kra_converter.cpp:150
+#: plugins/impex/libkra/kra_converter.cpp:149
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "無法建立要儲存的檔案"
 
-#: plugins/impex/libkra/kra_converter.cpp:223
+#: plugins/impex/libkra/kra_converter.cpp:222
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "無法寫入「%1」。請檢查分區是否已滿。"
 
-#: plugins/impex/libkra/kra_converter.cpp:315
+#: plugins/impex/libkra/kra_converter.cpp:314
 #, kde-format
 msgid "Could not find %1"
 msgstr "無法找到 %1"
 
-#: plugins/impex/libkra/kra_converter.cpp:327
+#: plugins/impex/libkra/kra_converter.cpp:326
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -47179,22 +47175,22 @@ msgstr ""
 "在 %1 的第 %2 行第 %3 列發生解析錯誤\n"
 "錯誤訊息：%4"
 
-#: plugins/impex/libkra/kra_converter.cpp:345
+#: plugins/impex/libkra/kra_converter.cpp:344
 #, kde-format
 msgid "The format is not supported or the file is corrupted"
 msgstr "檔案格式不支援或者檔案已損壞"
 
-#: plugins/impex/libkra/kra_converter.cpp:356
+#: plugins/impex/libkra/kra_converter.cpp:355
 #, kde-format
 msgid "The file is too new for this version of Krita (%1)."
 msgstr "此檔案對此版 Krita 而言格式太新 (%1)。"
 
-#: plugins/impex/libkra/kra_converter.cpp:362
+#: plugins/impex/libkra/kra_converter.cpp:361
 #, kde-format
 msgid "The file has no layers."
 msgstr "檔案沒有圖層。"
 
-#: plugins/impex/libkra/kra_converter.cpp:395
+#: plugins/impex/libkra/kra_converter.cpp:394
 #, kde-format
 msgid "The file does not contain an image."
 msgstr "檔案不包含影像。"
@@ -58861,6 +58857,9 @@ msgstr "縮放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "參考圖工具"
+
+#~ msgid "&Description:"
+#~ msgstr "描述(&D)："
 
 #~ msgid ""
 #~ "Could not save %1.\n"

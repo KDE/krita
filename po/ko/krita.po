@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-29 00:50+0000\n"
+"POT-Creation-Date: 2023-01-04 00:46+0000\n"
 "PO-Revision-Date: 2022-05-15 22:38+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17216,8 +17216,8 @@ msgstr "축소(&M)"
 #: libs/ui/animation/VideoImportDialog.ui:687
 #: libs/ui/animation/wdg_animationrenderer.ui:258
 #: libs/ui/animation/wdg_animationrenderer.ui:400
-#: libs/ui/forms/wdggeneralsettings.ui:493 libs/ui/forms/wdgnewimage.ui:234
-#: libs/ui/forms/wdgnewimage.ui:253
+#: libs/ui/forms/wdggeneralsettings.ui:493 libs/ui/forms/wdgnewimage.ui:273
+#: libs/ui/forms/wdgnewimage.ui:292
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:291
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:351
 #: libs/ui/layerstyles/WdgColorOverlay.ui:61
@@ -17904,7 +17904,7 @@ msgid "Crop Selections"
 msgstr "선택 자르기"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: libs/image/kis_keyframe_channel.cpp:25 libs/ui/forms/wdgnewimage.ui:408
+#: libs/image/kis_keyframe_channel.cpp:25 libs/ui/forms/wdgnewimage.ui:424
 #, kde-format
 msgid "Content"
 msgstr "내용"
@@ -20102,7 +20102,7 @@ msgstr "종점"
 #: libs/pigment/resources/KoColorSet.cpp:832
 #: libs/pigment/resources/KoColorSet.cpp:909
 #: libs/pigment/resources/KoColorSet.cpp:1121
-#: libs/ui/actions/KisPasteActionFactories.cpp:350
+#: libs/ui/actions/KisPasteActionFactories.cpp:352
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:348 libs/ui/KisView.cpp:1134
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -21116,17 +21116,17 @@ msgid "Paste shapes"
 msgstr "모양 붙여넣기"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:357 libs/ui/KisView.cpp:597
+#: libs/ui/actions/KisPasteActionFactories.cpp:359 libs/ui/KisView.cpp:597
 #, kde-format
 msgid "(pasted)"
 msgstr "(붙여넣기)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:355
+#: libs/ui/actions/KisPasteActionFactories.cpp:357
 #, kde-format
 msgid "Pasted"
 msgstr "붙여넣기"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:410
+#: libs/ui/actions/KisPasteActionFactories.cpp:412
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "스타일 붙여넣기"
@@ -23734,7 +23734,7 @@ msgid "Screen %1 (%2):"
 msgstr "화면 %1(%2):"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:959
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:791
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, kde-format
 msgid "Install Color Profiles"
@@ -24568,11 +24568,13 @@ msgstr "총 편집 시간(&M):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, lbCommentsDesc)
+#. i18n: ectx: property (title), widget (QGroupBox, grpDescription)
 #. i18n: ectx: property (text), widget (QLabel, labelTopics)
 #. i18n: ectx: property (text), widget (QLabel, description)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:151
 #: libs/ui/forms/wdgmetadatamergestrategychooser.ui:53
+#: libs/ui/forms/wdgnewimage.ui:596
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:90
 #: plugins/extensions/pykrita/plugin/info.ui:48
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:173
@@ -24678,7 +24680,7 @@ msgstr "Y 해상도:"
 #. i18n: ectx: property (text), widget (QLabel, lblYResolution_3)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
 #: libs/ui/forms/wdg_resolution.ui:110 libs/ui/forms/wdgimageproperties.ui:94
-#: libs/ui/forms/wdgnewimage.ui:177 libs/ui/imagesize/wdg_imagesize.ui:244
+#: libs/ui/forms/wdgnewimage.ui:128 libs/ui/imagesize/wdg_imagesize.ui:244
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:301
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:42
 #, kde-format
@@ -24741,7 +24743,7 @@ msgstr ""
 #: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:183
 #: libs/ui/forms/wdgcolorsettings.ui:274
 #: libs/ui/forms/wdgimageproperties.ui:298
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:483
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:45
 #, kde-format
 msgid "Perceptual"
@@ -24782,7 +24784,7 @@ msgstr ""
 #: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:193
 #: libs/ui/forms/wdgcolorsettings.ui:284
 #: libs/ui/forms/wdgimageproperties.ui:308
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:492
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:89
 #, kde-format
 msgctxt "ICC profile rendering intent"
@@ -24925,7 +24927,7 @@ msgstr "렌더링 목적(&R):"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:188 libs/ui/forms/wdgcolorsettings.ui:279
 #: libs/ui/forms/wdgimageproperties.ui:303
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:486
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:499
 #, kde-format
 msgid "Relative Colorimetric"
 msgstr "상대적 색도계"
@@ -24935,7 +24937,7 @@ msgstr "상대적 색도계"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:198 libs/ui/forms/wdgcolorsettings.ui:289
 #: libs/ui/forms/wdgimageproperties.ui:313
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:489
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:502
 #, kde-format
 msgid "Absolute Colorimetric"
 msgstr "절대적 색도계"
@@ -25010,19 +25012,19 @@ msgid "Profile:"
 msgstr "프로필:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnInstallProfile)
-#: libs/ui/forms/wdgcolorspaceselector.ui:120
+#: libs/ui/forms/wdgcolorspaceselector.ui:119
 #, kde-format
 msgid "Install a new profile from a file"
 msgstr "파일에서 새 프로필 설치"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, bnInstallProfile)
-#: libs/ui/forms/wdgcolorspaceselector.ui:123
+#: libs/ui/forms/wdgcolorspaceselector.ui:122
 #, kde-format
 msgid "Install a new profile from a file."
 msgstr "파일에서 새 프로필을 설치합니다."
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAdvanced)
-#: libs/ui/forms/wdgcolorspaceselector.ui:136
+#: libs/ui/forms/wdgcolorspaceselector.ui:134
 #, kde-format
 msgid "Color Space Browser"
 msgstr "색 공간 탐색기"
@@ -26360,7 +26362,7 @@ msgstr "크기 조정:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:36
+#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:18
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:24
 #, kde-format
 msgid "New Image"
@@ -26370,7 +26372,7 @@ msgstr "새 이미지"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #. i18n: ectx: property (text), widget (QLabel, dimensionLbl)
-#: libs/ui/forms/wdgimageproperties.ui:28 libs/ui/forms/wdgnewimage.ui:58
+#: libs/ui/forms/wdgimageproperties.ui:28 libs/ui/forms/wdgnewimage.ui:46
 #: plugins/impex/brush/wdg_export_gih.ui:161
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:64
 #, kde-format
@@ -26398,7 +26400,7 @@ msgstr "배경색:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, lblOpacity)
-#: libs/ui/forms/wdgimageproperties.ui:189 libs/ui/forms/wdgnewimage.ui:424
+#: libs/ui/forms/wdgimageproperties.ui:189 libs/ui/forms/wdgnewimage.ui:520
 #, kde-format
 msgid "Background Opacity:"
 msgstr "배경 불투명도:"
@@ -26565,7 +26567,7 @@ msgid "Source FPS:"
 msgstr "원본 FPS:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblName)
-#: libs/ui/forms/wdglayerproperties.ui:28 libs/ui/forms/wdgnewimage.ui:628
+#: libs/ui/forms/wdglayerproperties.ui:28 libs/ui/forms/wdgnewimage.ui:430
 #, kde-format
 msgid "&Name:"
 msgstr "이름(&N):"
@@ -26768,34 +26770,34 @@ msgstr "기억하기"
 #. i18n: ectx: property (title), widget (QGroupBox, grpImage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImagesplit)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgLayerSplit)
-#: libs/ui/forms/wdgnewimage.ui:78
+#: libs/ui/forms/wdgnewimage.ui:54
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:18
 #: plugins/extensions/layersplit/wdg_layersplit.ui:18
 #, kde-format
 msgid "Image Size"
 msgstr "이미지 크기"
 
-#. i18n: ectx: property (text), widget (QLabel, lblHeight)
-#: libs/ui/forms/wdgnewimage.ui:145
-#, kde-format
-msgid "&Height:"
-msgstr "높이(&H):"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdgnewimage.ui:187
+#: libs/ui/forms/wdgnewimage.ui:60
 #, kde-format
 msgid "P&redefined:"
 msgstr "사전 정의(&R):"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWidth)
-#: libs/ui/forms/wdgnewimage.ui:203
+#: libs/ui/forms/wdgnewimage.ui:70
 #, kde-format
 msgid "W&idth:"
 msgstr "너비(&I):"
 
+#. i18n: ectx: property (text), widget (QLabel, lblHeight)
+#: libs/ui/forms/wdgnewimage.ui:118
+#, kde-format
+msgid "&Height:"
+msgstr "높이(&H):"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLandscape)
 #. i18n: ectx: property (text), item, widget (QComboBox, pageOrientationComboBox)
-#: libs/ui/forms/wdgnewimage.ui:231
+#: libs/ui/forms/wdgnewimage.ui:270
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:108
 #, kde-format
 msgid "Landscape"
@@ -26803,7 +26805,7 @@ msgstr "가로"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnPortrait)
 #. i18n: ectx: property (text), item, widget (QComboBox, pageOrientationComboBox)
-#: libs/ui/forms/wdgnewimage.ui:250
+#: libs/ui/forms/wdgnewimage.ui:289
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:103
 #, kde-format
 msgid "Portrait"
@@ -26811,49 +26813,55 @@ msgstr "세로"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpClipboard)
 #. i18n: ectx: property (text), widget (QPushButton, clipboardButton)
-#: libs/ui/forms/wdgnewimage.ui:284
+#: libs/ui/forms/wdgnewimage.ui:320
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:94
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:363
 #, kde-format
 msgid "Clipboard"
 msgstr "클립보드"
 
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: libs/ui/forms/wdgnewimage.ui:344
+#, kde-format
+msgid "Save Image Size as:"
+msgstr "이미지 크기를 다음으로 저장:"
+
 #. i18n: ectx: property (title), widget (QGroupBox, grpMode)
-#: libs/ui/forms/wdgnewimage.ui:336
+#: libs/ui/forms/wdgnewimage.ui:354
 #, kde-format
 msgctxt "Label of Color as color space in Create New Image dialogue"
 msgid "Color"
 msgstr "색상"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/forms/wdgnewimage.ui:363
-#, kde-format
-msgid "Save Image Size as:"
-msgstr "이미지 크기를 다음으로 저장:"
-
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnSaveAsPredefined)
-#: libs/ui/forms/wdgnewimage.ui:389
+#: libs/ui/forms/wdgnewimage.ui:410
 #, kde-format
 msgid "Save the current dimensions"
 msgstr "현재 크기 저장"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSaveAsPredefined)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
-#: libs/ui/forms/wdgnewimage.ui:392
+#: libs/ui/forms/wdgnewimage.ui:413
 #: libs/widgetutils/config/kstandardaction_p.h:32
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:135
 #, kde-format
 msgid "&Save"
 msgstr "저장(&S)"
 
+#. i18n: ectx: property (text), widget (QLineEdit, txtName)
+#: libs/ui/forms/wdgnewimage.ui:449
+#, kde-format
+msgid "untitled-1"
+msgstr "제목 없음-1"
+
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdgnewimage.ui:414
+#: libs/ui/forms/wdgnewimage.ui:456
 #, kde-format
 msgid "Layers:"
 msgstr "레이어:"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intNumLayers)
-#: libs/ui/forms/wdgnewimage.ui:449
+#: libs/ui/forms/wdgnewimage.ui:475
 #, kde-format
 msgid ""
 "Number of layers that the image will start with, including optional "
@@ -26863,41 +26871,35 @@ msgstr ""
 "니다."
 
 #. i18n: ectx: property (text), widget (QLabel, lblColor)
-#: libs/ui/forms/wdgnewimage.ui:465
+#: libs/ui/forms/wdgnewimage.ui:491
 #, kde-format
 msgid "Bac&kground Color:"
 msgstr "배경색(&K):"
 
-#. i18n: ectx: property (text), widget (QLabel, lblBackgroundStyle)
+#. i18n: ectx: property (title), widget (QGroupBox, grpBackground)
 #. i18n: ectx: property (text), widget (QLabel, labelBackground)
 #. i18n: ectx: property (text), widget (QLabel, mLabelBackground)
-#: libs/ui/forms/wdgnewimage.ui:478
+#: libs/ui/forms/wdgnewimage.ui:539
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:175
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:719
 #, kde-format
 msgid "Background:"
 msgstr "배경:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblDescription)
-#: libs/ui/forms/wdgnewimage.ui:488
-#, kde-format
-msgid "&Description:"
-msgstr "설명(&D):"
-
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsRaster)
-#: libs/ui/forms/wdgnewimage.ui:525
+#: libs/ui/forms/wdgnewimage.ui:551
 #, kde-format
 msgid "Use background color and opacity to create a background raster layer."
 msgstr "배경색과 불투명도를 사용하여 배경 래스터 레이어를 만듭니다."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsRaster)
-#: libs/ui/forms/wdgnewimage.ui:528
+#: libs/ui/forms/wdgnewimage.ui:554
 #, kde-format
 msgid "As &raster layer"
 msgstr "래스터 레이어로(&R)"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsProjection)
-#: libs/ui/forms/wdgnewimage.ui:541
+#: libs/ui/forms/wdgnewimage.ui:567
 #, kde-format
 msgid ""
 "Use background color and opacity as the base canvas color. This can be "
@@ -26907,13 +26909,13 @@ msgstr ""
 "시 설정할 수 있습니다"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsProjection)
-#: libs/ui/forms/wdgnewimage.ui:544
+#: libs/ui/forms/wdgnewimage.ui:570
 #, kde-format
 msgid "As can&vas color"
 msgstr "캔버스 색상으로(&V)"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsFill)
-#: libs/ui/forms/wdgnewimage.ui:557
+#: libs/ui/forms/wdgnewimage.ui:583
 #, kde-format
 msgid ""
 "Use background color and opacity to create a background fill layer. The "
@@ -26923,19 +26925,13 @@ msgstr ""
 "상은 레이어의 속성에서 다시 설정할 수 있습니다."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsFill)
-#: libs/ui/forms/wdgnewimage.ui:560
+#: libs/ui/forms/wdgnewimage.ui:586
 #, kde-format
 msgid "As fill la&yer"
 msgstr "채우기 레이어로(&Y)"
 
-#. i18n: ectx: property (text), widget (QLineEdit, txtName)
-#: libs/ui/forms/wdgnewimage.ui:650
-#, kde-format
-msgid "untitled-1"
-msgstr "제목 없음-1"
-
 #. i18n: ectx: property (text), widget (QLabel, lblDocumentInfo)
-#: libs/ui/forms/wdgnewimage.ui:688
+#: libs/ui/forms/wdgnewimage.ui:651
 #, kde-format
 msgid "This document..."
 msgstr "이 문서를..."
@@ -30874,8 +30870,8 @@ msgid "The action was cancelled by the user."
 msgstr "사용자가 작업을 취소했습니다."
 
 #: libs/ui/KisImportExportErrorCode.cpp:178
-#: plugins/impex/libkra/kra_converter.cpp:379
-#: plugins/impex/libkra/kra_converter.cpp:408
+#: plugins/impex/libkra/kra_converter.cpp:378
+#: plugins/impex/libkra/kra_converter.cpp:407
 #, kde-format
 msgid "Unknown error."
 msgstr "알 수 없는 오류입니다."
@@ -33504,19 +33500,19 @@ msgid ""
 "The Tone Response Curve of this color space is either sRGB, L* or rec709 TRC."
 msgstr "이 색 공간의 톤 응답 곡선은 sRGB, L* 또는 rec709 TRC입니다."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:300
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:313
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Estimated Gamma cannot be retrieved for CMYK."
 msgstr "CMYK 이미지의 예상 감마를 계산할 수 없습니다."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:344
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:357
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is assumed to be the L * TRC. "
 msgstr "L * TRC로 가정합니다. "
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:365
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:378
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Estimated Gamma cannot be retrieved for YCrCb."
@@ -33524,14 +33520,14 @@ msgctxt "@info:tooltip"
 msgid "Estimated Gamma cannot be retrieved for YCbCr."
 msgstr "YCrCb 이미지의 예상 감마를 계산할 수 없습니다."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:371
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:384
 #, fuzzy, kde-format
 #| msgid "&About %1"
 msgctxt "About <Profilename>"
 msgid "About %1/%2"
 msgstr "%1 정보(&A)"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:373
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:386
 #, fuzzy, kde-format
 #| msgctxt "ICC profile version"
 #| msgid "ICC Version: "
@@ -33539,14 +33535,14 @@ msgctxt "ICC profile version"
 msgid "ICC Version: %1"
 msgstr "ICC 버전: "
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:376
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:389
 #, fuzzy, kde-format
 #| msgid "Min Luminance: %1"
 msgctxt "Who made the profile?"
 msgid "Manufacturer: %1"
 msgstr "최소 휘도: %1"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:381
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:394
 #, kde-format
 msgctxt ""
 "What is the copyright? These are from embedded strings from the icc profile, "
@@ -33554,7 +33550,7 @@ msgctxt ""
 msgid "Copyright: %1"
 msgstr "저작권: %1"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:389
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:402
 #, kde-format
 msgctxt "If the selected model is RGB"
 msgid ""
@@ -33572,7 +33568,7 @@ msgstr ""
 "모델 중에서 가장 광범위하며 나중에 다른 공간으로 변환할 수 있는 페인팅 모델"
 "로 추천합니다. RGB는 HDR 편집에 추천하는 색 공간이기도 합니다."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:395
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:408
 #, kde-format
 msgctxt "If the selected model is CMYK"
 msgid ""
@@ -33593,7 +33589,7 @@ msgstr ""
 "는 추천하지 <b>않습니다</b>. 안타깝게도 Krita는 이 공간에 대한 색소나 TRC를 "
 "검색할 수 없습니다."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:404
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:417
 #, kde-format
 msgctxt "If the selected model is XYZ"
 msgid ""
@@ -33610,7 +33606,7 @@ msgstr ""
 "니다. XYZ는 페인팅에는 추천하지 <b>않지만</b>, 인코딩하는 데 유용할 수 있습니"
 "다. 톤 응답 곡선은 선형으로 간주됩니다."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:411
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:424
 #, kde-format
 msgctxt "If the selected model is Grayscale"
 msgid ""
@@ -33626,7 +33622,7 @@ msgstr ""
 "델은 회색조 및 잉크로 그린 듯한 이미지에 유용합니다. Krita에서는 동일한 이미"
 "지에서 회색조 레이어와 RGB 레이어를 섞을 수 있습니다."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:418
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:431
 #, fuzzy, kde-format
 #| msgctxt "If the selected model is LAB"
 #| msgid ""
@@ -33665,7 +33661,7 @@ msgstr ""
 "다. 이 색 공간은 페인팅이나 내보내기에 추천하지 <b>않지만</b>, 후처리 시 유용"
 "하게 사용할 수 있습니다. TRC는 L* TRC로 간주됩니다."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:429
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:442
 #, fuzzy, kde-format
 #| msgctxt "If the selected model is YCbCr"
 #| msgid ""
@@ -33697,7 +33693,7 @@ msgstr ""
 "있지만, YCrCb 오픈 소스 ICC 프로필이 없기 때문에 현재 Krita에서는 이에 대한 "
 "프로필을 제공하지 않습니다."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:440
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:453
 #, kde-format
 msgctxt "When the selected Bitdepth is 8"
 msgid ""
@@ -33710,7 +33706,7 @@ msgstr ""
 "값은 256가지가 있으며, 전체 값은 256의 사용 가능한 채널 수 제곱입니다. 웹용 "
 "이미지 또는 간단한 이미지에 사용하는 것이 좋습니다."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:446
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:459
 #, kde-format
 msgctxt "When the selected Bitdepth is 16"
 msgid ""
@@ -33731,7 +33727,7 @@ msgstr ""
 "를 사용하는 것이 좋습니다. 16비트/채널에서 8비트/채널로 변환 할 때 변환 최적"
 "화를 비활성화하십시오."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:455
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:468
 #, kde-format
 msgctxt "When the selected Bitdepth is 16 bit float"
 msgid ""
@@ -33753,7 +33749,7 @@ msgstr ""
 "처리 성능이 필요합니다.  이 설정을 사용할 때 파일의 RAM 사용량을 주의 깊게 관"
 "찰하는 것을 추천하며, 컴퓨터 속도가 느려지면 8비트를 사용하는 것이 좋습니다."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:464
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:477
 #, kde-format
 msgctxt "When the selected Bitdepth is 32bit float"
 msgid ""
@@ -33774,7 +33770,7 @@ msgstr ""
 "할 때 파일의 RAM 사용량을 주의 깊게 관찰하는 것을 추천하며, 컴퓨터 속도가 느"
 "려지면 8비트를 사용하는 것이 좋습니다."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:473
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:486
 #, kde-format
 msgctxt ""
 "When the selected Bitdepth is 64bit float, but this isn't actually available "
@@ -33797,12 +33793,12 @@ msgstr ""
 "설정을 사용할 때 파일의 RAM 사용량을 주의 깊게 관찰하는 것을 추천하며, 컴퓨"
 "터 속도가 느려지면 8비트를 사용하는 것이 좋습니다."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:481
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:494
 #, kde-format
 msgid "The following conversion intents are possible: "
 msgstr "다음과 같은 변환 의도는 가능합니다: "
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:500
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:513
 #, kde-format
 msgctxt "These are Elle Stone's notes on her profiles that we ship."
 msgid ""
@@ -33818,7 +33814,7 @@ msgstr ""
 "photography/lcms-make-icc-profiles.html\">전체 문서</a>도 확인하십시오</i>.</"
 "p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:508
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:521
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33833,7 +33829,7 @@ msgstr ""
 "서 '원본과 관계 없는 고화질 영화 이미지의 원활한 상호 교환'을 허용합니다.'</"
 "p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:516
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:529
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33847,7 +33843,7 @@ msgstr ""
 "이 없고 인간이 볼 수 있는 실제 색역의 바깥에 있는 색은 가까운 작은 영역의 일"
 "부만 들어 있습니다.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:523
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:536
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33873,7 +33869,7 @@ msgstr ""
 "터의 색역과 더 일치합니다.</p><p>Adobe RGB 1998 색역은 오늘날의 고급 광색역 "
 "모니터의 합리적인 근사치입니다.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:537
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:550
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33901,7 +33897,7 @@ msgstr ""
 "가능한 모든 실제 색상이 들어 있어야 하는 경우가 아니면 이 프로필을 편집에 사"
 "용할 특별한 이유가 없습니다.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:552
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:565
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33922,7 +33918,7 @@ msgstr ""
 "서는 또 다른 집합을 제안합니다. 이 분야의 전문가는 실제 원색이 스펙트럼 파장"
 "에서 계산되어야 한다고 주장합니다.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:565
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:578
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33937,7 +33933,7 @@ msgstr ""
 "프로필 팩에 들어 있습니다. IdentityRGB 작업 공간에서 실제로 이미지를 편집하려"
 "는 이유는 특별히 없습니다.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:573
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:586
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33971,7 +33967,7 @@ msgstr ""
 "업 공간으로 전환할 때 필요한 비용이 있으므로 작업 흐름을 변경할 때의 장단점"
 "을 고려해야 합니다.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:591
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:604
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33991,7 +33987,7 @@ msgstr ""
 "우 작은 sRGB 색역 대신 Rec.2020이 일반 RGB 작업 영역으로 사용하기에 더 적합합"
 "니다.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:600
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:613
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -34024,7 +34020,7 @@ msgstr ""
 "다! 표준 sRGB 색 공간(및 제 프로필 팩에 있는 다른 RGB 프로필)은 행렬 프로필이"
 "며, 행렬 프로필에는 인지 의도 테이블이 없습니다.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:616
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:629
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -34042,7 +34038,7 @@ msgstr ""
 "거 V2 광색역 프로필과 일치하는 프로필을 생성합니다. 흥미 있는 색 공간이지만, "
 "Adobe는 이 색 공간을 발표한 후 ProPhotoRGB로 전환했습니다.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:624
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:637
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -34061,7 +34057,7 @@ msgstr ""
 "로 변환했을 때 몇 킬로바이트를 절약할 수 있습니다. 인터넷에 업로드한 회색조 "
 "이미지는 sRGB TRC를 사용하여 V2 회색 프로필로 변환합니다.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:632
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:645
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -34076,7 +34072,7 @@ msgstr ""
 "32비트 정수)로 편집할 때만 사용해야 합니다. 많은 편집 작업에서 선형 감마 색"
 "상 공간에서 더 나은 결과를 얻을 수 있습니다.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:639
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:652
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -34088,7 +34084,7 @@ msgstr ""
 "편집 작업은 실제로 인지적으로 균일한 RGB에서 수행해야 합니다. 색 농도가 높은 "
 "이미지를 편집한다면 V4 버전을 사용하고 있는지 확인하십시오.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:645
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:658
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -34100,7 +34096,7 @@ msgstr ""
 "인지적으로 정확하지는 않은 균일한 TRC를 가지고 있습니다. ProPhotoRGB의 감마"
 "=1.8인 TRC는 인지적으로 균일함과는 거리가 있습니다.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:650
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -34119,7 +34115,7 @@ msgstr ""
 "다. 물론 8비트 편집에는 이러한 프로필의 선형 감마 버전을 사용할 수 없습니다."
 "</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:658
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:671
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -34130,7 +34126,7 @@ msgstr ""
 "<p>Krita, digiKam/showFoto, 김프 2.9 등 LCMS를 색 관리 모듈로 사용하는 고 색 "
 "농도 이미지 편집기에서 이미지를 편집하려면 V4 프로필을 사용하십시오.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:676
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -48705,32 +48701,32 @@ msgctxt "Saving .kra file error message"
 msgid "Could not save assistants."
 msgstr "도우미를 저장할 수 없습니다."
 
-#: plugins/impex/libkra/kra_converter.cpp:76
+#: plugins/impex/libkra/kra_converter.cpp:75
 #, kde-format
 msgid "Not a valid Krita file"
 msgstr "올바른 Krita 파일이 아님"
 
-#: plugins/impex/libkra/kra_converter.cpp:94
+#: plugins/impex/libkra/kra_converter.cpp:93
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "잘못된 문서: 'maindoc.xml' 파일이 없습니다."
 
-#: plugins/impex/libkra/kra_converter.cpp:150
+#: plugins/impex/libkra/kra_converter.cpp:149
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "저장할 파일을 만들 수 없음"
 
-#: plugins/impex/libkra/kra_converter.cpp:223
+#: plugins/impex/libkra/kra_converter.cpp:222
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "'%1'에 쓸 수 없습니다. 파티션이 가득 찼습니까?"
 
-#: plugins/impex/libkra/kra_converter.cpp:315
+#: plugins/impex/libkra/kra_converter.cpp:314
 #, kde-format
 msgid "Could not find %1"
 msgstr "%1을(를) 찾을 수 없음"
 
-#: plugins/impex/libkra/kra_converter.cpp:327
+#: plugins/impex/libkra/kra_converter.cpp:326
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -48739,22 +48735,22 @@ msgstr ""
 "%1의 %2행, %3열에서 해석 오류\n"
 "오류 메시지: %4"
 
-#: plugins/impex/libkra/kra_converter.cpp:345
+#: plugins/impex/libkra/kra_converter.cpp:344
 #, kde-format
 msgid "The format is not supported or the file is corrupted"
 msgstr "이 형식을 지원하지 않거나 파일이 잘못됨"
 
-#: plugins/impex/libkra/kra_converter.cpp:356
+#: plugins/impex/libkra/kra_converter.cpp:355
 #, kde-format
 msgid "The file is too new for this version of Krita (%1)."
 msgstr "파일의 버전이 Krita의 버전(%1)보다 높습니다."
 
-#: plugins/impex/libkra/kra_converter.cpp:362
+#: plugins/impex/libkra/kra_converter.cpp:361
 #, kde-format
 msgid "The file has no layers."
 msgstr "파일에 레이어가 없습니다."
 
-#: plugins/impex/libkra/kra_converter.cpp:395
+#: plugins/impex/libkra/kra_converter.cpp:394
 #, kde-format
 msgid "The file does not contain an image."
 msgstr "파일에 이미지가 없습니다."
@@ -60695,6 +60691,9 @@ msgstr "확대/축소 도구"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "참조 이미지 도구"
+
+#~ msgid "&Description:"
+#~ msgstr "설명(&D):"
 
 #, fuzzy
 #~| msgid ""

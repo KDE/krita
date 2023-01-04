@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-29 00:50+0000\n"
-"PO-Revision-Date: 2022-12-29 02:31+0100\n"
+"POT-Creation-Date: 2023-01-04 00:46+0000\n"
+"PO-Revision-Date: 2023-01-03 09:20+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2818,7 +2818,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Paint."
 "kws"
 msgid "Big Paint"
-msgstr ""
+msgstr "დიდი ტილო"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2826,7 +2826,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Paint_2."
 "kws"
 msgid "Big Paint 2"
-msgstr ""
+msgstr "დიდი ტილო 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2834,7 +2834,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Vector."
 "kws"
 msgid "Big Vector"
-msgstr ""
+msgstr "დიდი ვექტორი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2856,7 +2856,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/"
 "Small_Vector.kws"
 msgid "Small Vector"
-msgstr ""
+msgstr "პატარა ვექტორი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2864,7 +2864,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/VFX_Paint."
 "kws"
 msgid "VFX Paint"
-msgstr ""
+msgstr "საღებავი VFX"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3836,7 +3836,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "a)_Eraser_Circle.kpp"
 msgid "a) Eraser Circle"
-msgstr ""
+msgstr "ა) მრგვალი საშლელი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3908,7 +3908,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "b)_Basic-5_Size_default.kpp"
 msgid "b) Basic-5 Size default"
-msgstr ""
+msgstr "ბ) სტანდარტული ზომა 5, ნაგულისხმები"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5258,7 +5258,7 @@ msgstr "HR შპალერი"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Maze_lines.png"
 msgid "Maze lines"
-msgstr ""
+msgstr "რთული წირები"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5316,14 +5316,14 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "Rough_Wall_With_Impasto.png"
 msgid "Rough Wall With Impasto"
-msgstr ""
+msgstr "უხეში კედელი ორნამენტებით"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Sand_fine.png"
 msgid "Sand fine"
-msgstr ""
+msgstr "წვრილი ქვიშა"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5401,7 +5401,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Stars_Sized."
 "png"
 msgid "Stars Sized"
-msgstr ""
+msgstr "ვარსკვლავის ფორმა"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7864,7 +7864,7 @@ msgstr "გასატეხი წერტილი"
 #, kde-format
 msgctxt "action"
 msgid "Make line point"
-msgstr ""
+msgstr "ხაზის მონაკვეთის წერტილადგარდაქმნა"
 
 #. i18n: context: iconText @ Action (pathpoint-symmetric), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-symmetric), Actions (Path Tool), ActionCollection (Tools)
@@ -7890,7 +7890,7 @@ msgstr "სიმეტრიული წერტილი"
 #, kde-format
 msgctxt "action"
 msgid "Make curve point"
-msgstr ""
+msgstr "წერტილის ნაწილის მრუდად გარდაქმნა"
 
 #. i18n: context: iconText @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
@@ -10591,7 +10591,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Insert Column Left"
-msgstr ""
+msgstr "სვეტის მარცხნივ ჩასმა"
 
 #. i18n: context: toolTip @ Action (insert_column_left), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2035
@@ -10607,7 +10607,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Insert Column Right"
-msgstr ""
+msgstr "სვეტის მარჯვნივ ჩასმა"
 
 #. i18n: context: toolTip @ Action (insert_column_right), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2047
@@ -12863,7 +12863,7 @@ msgstr "სესიები"
 #, kde-format
 msgctxt "action"
 msgid "Open ex&isting Document as Untitled Document..."
-msgstr ""
+msgstr "&არსებული დოკუმენტის უსახელო დოკუმენტად გახსნა..."
 
 #. i18n: context: toolTip @ Action (file_import_file), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_file), Actions (File), ActionCollection (Menu)
@@ -14586,7 +14586,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Resize Canvas"
-msgstr ""
+msgstr "ტილოს ზომა"
 
 #. i18n: context: text @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1341
@@ -14651,7 +14651,7 @@ msgstr "ყველაფრის მონიშვნა"
 #, kde-format
 msgctxt "action"
 msgid "&Deselect"
-msgstr ""
+msgstr "&მონიშვნის მოხსნა"
 
 #. i18n: context: toolTip @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (deselect), Actions (Select), ActionCollection (Menu)
@@ -15224,7 +15224,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Dockers"
-msgstr ""
+msgstr "პანელების ჩვენება"
 
 #. i18n: context: text @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1797
@@ -15241,7 +15241,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Docker Titlebars"
-msgstr ""
+msgstr "პანელების სათაურის ჩვენება"
 
 #. i18n: context: text @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1809
@@ -15808,7 +15808,7 @@ msgstr "დაბრუნება"
 #: libs/flake/commands/KoSubpathJoinCommand.cpp:43
 msgctxt "(qtundo-format)"
 msgid "Join subpaths"
-msgstr ""
+msgstr "ქვეკონტურების შეერთბა"
 
 #: libs/flake/commands/KoMultiPathPointMergeCommand.cpp:38
 #: libs/flake/commands/KoPathPointMergeCommand.cpp:135
@@ -15997,7 +15997,7 @@ msgstr "ჩრდილის დაყენება"
 #: libs/flake/commands/KoShapeShearCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
-msgstr ""
+msgstr "ობიექტების დახრა"
 
 #: libs/flake/commands/KoShapeSizeCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -16021,12 +16021,12 @@ msgstr "გაუმჭვირვალობის დაყენება"
 #: libs/flake/commands/KoShapeUnclipCommand.cpp:83
 msgctxt "(qtundo-format)"
 msgid "Unclip Shape"
-msgstr ""
+msgstr "ობიექტის მიმაგრების მოხსნა"
 
 #: libs/flake/commands/KoShapeUnclipCommand.cpp:92
 msgctxt "(qtundo-format)"
 msgid "Unclip Shapes"
-msgstr ""
+msgstr "ობიექტების მმაგრების მოხსნა"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1266
@@ -16037,12 +16037,12 @@ msgstr "ფორმების განჯგუფება"
 #: libs/flake/commands/KoSubpathJoinCommand.cpp:45
 msgctxt "(qtundo-format)"
 msgid "Close subpath"
-msgstr ""
+msgstr "ქვეკონტურის დახურვა"
 
 #: libs/flake/commands/KoSubpathRemoveCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Remove subpath"
-msgstr ""
+msgstr "ქვეკონტურის წაშლა"
 
 #: libs/flake/html/HtmlWriter.cpp:70
 #, kde-format
@@ -16076,12 +16076,12 @@ msgstr ""
 #: libs/flake/KoPathShapeFactory.cpp:23
 #, kde-format
 msgid "Simple path shape"
-msgstr ""
+msgstr "უბრალო კონტური"
 
 #: libs/flake/KoPathShapeFactory.cpp:25
 #, kde-format
 msgid "A simple path shape"
-msgstr ""
+msgstr "უბრალო კონტური"
 
 #: libs/flake/KoShapeController.cpp:56
 #, kde-format
@@ -16160,7 +16160,7 @@ msgstr "ფორმის ჩასწორება"
 #: libs/flake/tools/KoPathTool.cpp:661
 #, kde-format
 msgid "Drag to move handle."
-msgstr ""
+msgstr "კონტროლის წერტილის გადასატანად გადაათრიეთ ის."
 
 #: libs/flake/tools/KoPathTool.cpp:715
 #, kde-format
@@ -16170,7 +16170,7 @@ msgstr ""
 #: libs/flake/tools/KoPathTool.cpp:717
 #, kde-format
 msgid "Drag to move control point."
-msgstr ""
+msgstr "საკონტროლო წერტილის გადატანად გადაათრიეთ ის."
 
 #: libs/flake/tools/KoPathTool.cpp:740
 #, kde-format
@@ -16287,8 +16287,8 @@ msgstr "&დაპატარავება"
 #: libs/ui/animation/VideoImportDialog.ui:687
 #: libs/ui/animation/wdg_animationrenderer.ui:258
 #: libs/ui/animation/wdg_animationrenderer.ui:400
-#: libs/ui/forms/wdggeneralsettings.ui:493 libs/ui/forms/wdgnewimage.ui:234
-#: libs/ui/forms/wdgnewimage.ui:253
+#: libs/ui/forms/wdggeneralsettings.ui:493 libs/ui/forms/wdgnewimage.ui:273
+#: libs/ui/forms/wdgnewimage.ui:292
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:291
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:351
 #: libs/ui/layerstyles/WdgColorOverlay.ui:61
@@ -16966,7 +16966,7 @@ msgid "Crop Selections"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: libs/image/kis_keyframe_channel.cpp:25 libs/ui/forms/wdgnewimage.ui:408
+#: libs/image/kis_keyframe_channel.cpp:25 libs/ui/forms/wdgnewimage.ui:424
 #, kde-format
 msgid "Content"
 msgstr "შემცველობა"
@@ -17242,7 +17242,7 @@ msgstr ""
 #: libs/image/kis_sync_lod_cache_stroke_strategy.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Instant Preview"
-msgstr ""
+msgstr "სწრაფი მინიატურა"
 
 #: libs/image/kis_update_scheduler.cpp:126
 #, kde-format
@@ -18021,7 +18021,7 @@ msgstr "ალფა (16-ბიტიანი მთელი)"
 #: libs/pigment/colorspaces/KoAlphaColorSpace.h:172
 #, kde-format
 msgid "Undefined operation in the alpha color space"
-msgstr ""
+msgstr "ალფა-არხის ფერების სივრცის მხარდაუჭერელი ოპერაცია"
 
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:29
 #: libs/pigment/colorspaces/KoLabColorSpace.h:66
@@ -18141,7 +18141,7 @@ msgstr ""
 #: libs/pigment/KoBasicHistogramProducers.cpp:427
 #, kde-format
 msgid "Generic RGB Histogram"
-msgstr ""
+msgstr "ზოგადი RGB ჰისტოგრამა"
 
 #: libs/pigment/KoBasicHistogramProducers.cpp:364
 #, kde-format
@@ -18173,7 +18173,7 @@ msgstr "L*"
 #: libs/pigment/KoBasicHistogramProducers.cpp:511
 #, kde-format
 msgid "Generic L*a*b* Histogram"
-msgstr ""
+msgstr "ზოგადი L*a*b* ჰისტოგრამა"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:12
 #, kde-format
@@ -18352,7 +18352,7 @@ msgstr "გაყოფა"
 #, kde-format
 msgctxt "Blending mode - Inverse Subtract"
 msgid "Inverse Subtract"
-msgstr ""
+msgstr "უკუღმა გამოკლება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:51
 #, kde-format
@@ -18424,7 +18424,7 @@ msgstr "გამუქება"
 #, kde-format
 msgctxt "Blending mode - Linear Burn"
 msgid "Linear Burn"
-msgstr ""
+msgstr "წრფივი გამუქება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:64
 #, kde-format
@@ -18436,13 +18436,13 @@ msgstr "გამუქება"
 #, kde-format
 msgctxt "Blending mode - Gamma Dark"
 msgid "Gamma Dark"
-msgstr ""
+msgstr "გამის გამუქება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:66
 #, kde-format
 msgctxt "Blending mode - Darker Color"
 msgid "Darker Color"
-msgstr ""
+msgstr "უფრო მუქი"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:67
 #, kde-format
@@ -18466,13 +18466,13 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - Color Dodge"
 msgid "Color Dodge"
-msgstr ""
+msgstr "ფერის გაღიავება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
 msgctxt "Blending mode - Linear Dodge"
 msgid "Linear Dodge"
-msgstr ""
+msgstr "ხაზოვანი გაღიაევბა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -18484,7 +18484,7 @@ msgstr "გაღიავება"
 #, kde-format
 msgctxt "Blending mode - Linear Light"
 msgid "Linear Light"
-msgstr ""
+msgstr "ხაზოვანი განათება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:75
 #, kde-format
@@ -18496,13 +18496,13 @@ msgstr "ეკრანი"
 #, kde-format
 msgctxt "Blending mode - Pin Light"
 msgid "Pin Light"
-msgstr ""
+msgstr "წერტილოვანი სინათლე"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:77
 #, kde-format
 msgctxt "Blending mode - Vivid Light"
 msgid "Vivid Light"
-msgstr ""
+msgstr "კაშკაშა სინათლე"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:78
 #, kde-format
@@ -18514,7 +18514,7 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - Hard Light"
 msgid "Hard Light"
-msgstr ""
+msgstr "მაგარი სინათლე"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:80
 #, kde-format
@@ -18532,19 +18532,19 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - Soft Light (Photoshop)"
 msgid "Soft Light (Photoshop)"
-msgstr ""
+msgstr "რბილი სინათლე (Photoshop)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:83
 #, kde-format
 msgctxt "Blending mode - Soft Light (SVG)"
 msgid "Soft Light (SVG)"
-msgstr ""
+msgstr "რბილი სინათლე (SVG)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:84
 #, kde-format
 msgctxt "Blending mode - Gamma Light"
 msgid "Gamma Light"
-msgstr ""
+msgstr "გამის განათება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:85
 #, kde-format
@@ -18556,7 +18556,7 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - Lighter Color"
 msgid "Lighter Color"
-msgstr ""
+msgstr "უფრო ღია"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:87
 #, kde-format
@@ -18646,13 +18646,13 @@ msgstr "სხვაობა"
 #, kde-format
 msgctxt "Blending mode - Equivalence"
 msgid "Equivalence"
-msgstr ""
+msgstr "ეკვივალენტური"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:104
 #, kde-format
 msgctxt "Blending mode - Additive Subtractive"
 msgid "Additive Subtractive"
-msgstr ""
+msgstr "ადიტიური დამატება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:105
 #, kde-format
@@ -18664,7 +18664,7 @@ msgstr "გამორიცხვა"
 #, kde-format
 msgctxt "Blending mode - Arcus Tangent"
 msgid "Arcus Tangent"
-msgstr ""
+msgstr "მხები სხივი"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:107
 #, kde-format
@@ -18682,7 +18682,7 @@ msgstr "უკან"
 #, kde-format
 msgctxt "Blending mode - Greater"
 msgid "Greater"
-msgstr ""
+msgstr "მეტი"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:112
 #, kde-format
@@ -18712,13 +18712,13 @@ msgstr "წაშლა"
 #, kde-format
 msgctxt "Blending mode - Alpha Darken"
 msgid "Alpha Darken"
-msgstr ""
+msgstr "ალფა-არხის გამუქება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:117
 #, kde-format
 msgctxt "Blending mode - Hard Mix"
 msgid "Hard Mix"
-msgstr ""
+msgstr "უხეში შერევა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:118
 #, kde-format
@@ -18736,13 +18736,13 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - Grain Merge"
 msgid "Grain Merge"
-msgstr ""
+msgstr "მარცვლების შერწყმა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
 msgctxt "Blending mode - Grain Extract"
 msgid "Grain Extract"
-msgstr ""
+msgstr "მარცვლის გამოყოფა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:122
 #, kde-format
@@ -18754,13 +18754,13 @@ msgstr "პარალელური"
 #, kde-format
 msgctxt "Blending mode - Allanon"
 msgid "Allanon"
-msgstr ""
+msgstr "საშუალო არითმეტიკული"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:124
 #, kde-format
 msgctxt "Blending mode - Geometric Mean"
 msgid "Geometric Mean"
-msgstr ""
+msgstr "საშუალო გეომეტრიული"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:125
 #, kde-format
@@ -18820,13 +18820,13 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - Bumpmap"
 msgid "Bumpmap"
-msgstr ""
+msgstr "რელიეფური"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:136
 #, kde-format
 msgctxt "Blending mode - Combine Normal Map"
 msgid "Combine Normal Map"
-msgstr ""
+msgstr "ნორმალის რუკების კომბინირება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:137
 #, kde-format
@@ -18862,7 +18862,7 @@ msgstr "ასლი"
 #, kde-format
 msgctxt "Blending mode - Tangent Normalmap"
 msgid "Tangent Normalmap"
-msgstr ""
+msgstr "მხების ნორმალების რუკა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:144
 #, kde-format
@@ -18892,43 +18892,43 @@ msgstr "სიკაშკაშე"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSY"
 msgid "Decrease Saturation"
-msgstr ""
+msgstr "გაჯერებულობის შემცირება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:149
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSY"
 msgid "Increase Saturation"
-msgstr ""
+msgstr "გაჯერებულობის გაზრდა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:150
 #, kde-format
 msgctxt "Blending mode - Decrease Luminosity HSY"
 msgid "Decrease Luminosity"
-msgstr ""
+msgstr "სიკაშკაშის შემცირება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:151
 #, kde-format
 msgctxt "Blending mode - Increase Luminosity HSY"
 msgid "Increase Luminosity"
-msgstr ""
+msgstr "სიკაშკაშის გაზრდა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:153
 #, kde-format
 msgctxt "Blending mode - Color HSI"
 msgid "Color HSI"
-msgstr ""
+msgstr "HSI ფერი"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:154
 #, kde-format
 msgctxt "Blending mode - Hue HSI"
 msgid "Hue HSI"
-msgstr ""
+msgstr "HSI ტონი"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:155
 #, kde-format
 msgctxt "Blending mode - Saturation HSI"
 msgid "Saturation HSI"
-msgstr ""
+msgstr "HSI გაჯერებულობა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:156
 #, kde-format
@@ -18940,43 +18940,43 @@ msgstr "ინტენსვობა"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSI"
 msgid "Decrease Saturation HSI"
-msgstr ""
+msgstr "HSI გაჯერებულობის შემცირება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:158
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSI"
 msgid "Increase Saturation HSI"
-msgstr ""
+msgstr "HSI გაჯერებულობის გაზრდა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:159
 #, kde-format
 msgctxt "Blending mode - Decrease Intensity"
 msgid "Decrease Intensity"
-msgstr ""
+msgstr "ინტენსივობის შემცირება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:160
 #, kde-format
 msgctxt "Blending mode - Increase Intensity"
 msgid "Increase Intensity"
-msgstr ""
+msgstr "ინტენსივობის გაზრდა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:162
 #, kde-format
 msgctxt "Blending mode - Color HSL"
 msgid "Color HSL"
-msgstr ""
+msgstr "HSL ფერი"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:163
 #, kde-format
 msgctxt "Blending mode - Hue HSL"
 msgid "Hue HSL"
-msgstr ""
+msgstr "HSL ტონი"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:164
 #, kde-format
 msgctxt "Blending mode - Saturation HSL"
 msgid "Saturation HSL"
-msgstr ""
+msgstr "HSL გაჯერებულობა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:165
 #, kde-format
@@ -18988,43 +18988,43 @@ msgstr "სიკა_შკაშე"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSL"
 msgid "Decrease Saturation HSL"
-msgstr ""
+msgstr "HSL გაჯერებულობის შემცირება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:167
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSL"
 msgid "Increase Saturation HSL"
-msgstr ""
+msgstr "HSL გაჯერებულობის გაზრდა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:168
 #, kde-format
 msgctxt "Blending mode - Decrease Lightness"
 msgid "Decrease Lightness"
-msgstr ""
+msgstr "განათებულობის შემცირება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:169
 #, kde-format
 msgctxt "Blending mode - Increase Lightness"
 msgid "Increase Lightness"
-msgstr ""
+msgstr "განათებულობის გაზრდა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:171
 #, kde-format
 msgctxt "Blending mode - Color HSV"
 msgid "Color HSV"
-msgstr ""
+msgstr "ფერის HSV"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:172
 #, kde-format
 msgctxt "Blending mode - Hue HSV"
 msgid "Hue HSV"
-msgstr ""
+msgstr "HSV ტონი"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:173
 #, kde-format
 msgctxt "Blending mode - Saturation HSV"
 msgid "Saturation HSV"
-msgstr ""
+msgstr "HSV გაჯერებულობა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:174
 #, kde-format
@@ -19036,13 +19036,13 @@ msgstr "მნიშვნელობა"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSV"
 msgid "Decrease Saturation HSV"
-msgstr ""
+msgstr "HSV გაჯერებულობის შემცირება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:176
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSV"
 msgid "Increase Saturation HSV"
-msgstr ""
+msgstr "HSV გაჯერებულობის გაზრდა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:177
 #, kde-format
@@ -19124,7 +19124,7 @@ msgstr "გარე"
 #: libs/pigment/resources/KoColorSet.cpp:832
 #: libs/pigment/resources/KoColorSet.cpp:909
 #: libs/pigment/resources/KoColorSet.cpp:1121
-#: libs/ui/actions/KisPasteActionFactories.cpp:350
+#: libs/ui/actions/KisPasteActionFactories.cpp:352
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:348 libs/ui/KisView.cpp:1134
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20096,17 +20096,17 @@ msgid "Paste shapes"
 msgstr ""
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:357 libs/ui/KisView.cpp:597
+#: libs/ui/actions/KisPasteActionFactories.cpp:359 libs/ui/KisView.cpp:597
 #, kde-format
 msgid "(pasted)"
 msgstr ""
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:355
+#: libs/ui/actions/KisPasteActionFactories.cpp:357
 #, kde-format
 msgid "Pasted"
 msgstr ""
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:410
+#: libs/ui/actions/KisPasteActionFactories.cpp:412
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr ""
@@ -22560,7 +22560,7 @@ msgid "Screen %1 (%2):"
 msgstr "ეკრანი %1 (%2):"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:959
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:791
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, kde-format
 msgid "Install Color Profiles"
@@ -23340,11 +23340,13 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, lbCommentsDesc)
+#. i18n: ectx: property (title), widget (QGroupBox, grpDescription)
 #. i18n: ectx: property (text), widget (QLabel, labelTopics)
 #. i18n: ectx: property (text), widget (QLabel, description)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:151
 #: libs/ui/forms/wdgmetadatamergestrategychooser.ui:53
+#: libs/ui/forms/wdgnewimage.ui:596
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:90
 #: plugins/extensions/pykrita/plugin/info.ui:48
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:173
@@ -23450,7 +23452,7 @@ msgstr "Y გარჩევადობა:"
 #. i18n: ectx: property (text), widget (QLabel, lblYResolution_3)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
 #: libs/ui/forms/wdg_resolution.ui:110 libs/ui/forms/wdgimageproperties.ui:94
-#: libs/ui/forms/wdgnewimage.ui:177 libs/ui/imagesize/wdg_imagesize.ui:244
+#: libs/ui/forms/wdgnewimage.ui:128 libs/ui/imagesize/wdg_imagesize.ui:244
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:301
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:42
 #, kde-format
@@ -23507,7 +23509,7 @@ msgstr ""
 #: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:183
 #: libs/ui/forms/wdgcolorsettings.ui:274
 #: libs/ui/forms/wdgimageproperties.ui:298
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:483
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:45
 #, kde-format
 msgid "Perceptual"
@@ -23544,7 +23546,7 @@ msgstr ""
 #: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:193
 #: libs/ui/forms/wdgcolorsettings.ui:284
 #: libs/ui/forms/wdgimageproperties.ui:308
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:492
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:89
 #, kde-format
 msgctxt "ICC profile rendering intent"
@@ -23683,7 +23685,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:188 libs/ui/forms/wdgcolorsettings.ui:279
 #: libs/ui/forms/wdgimageproperties.ui:303
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:486
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:499
 #, kde-format
 msgid "Relative Colorimetric"
 msgstr "შეფარდებით კოლორიმეტრული"
@@ -23693,7 +23695,7 @@ msgstr "შეფარდებით კოლორიმეტრული"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:198 libs/ui/forms/wdgcolorsettings.ui:289
 #: libs/ui/forms/wdgimageproperties.ui:313
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:489
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:502
 #, kde-format
 msgid "Absolute Colorimetric"
 msgstr ""
@@ -23767,19 +23769,19 @@ msgid "Profile:"
 msgstr "პროფილი:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnInstallProfile)
-#: libs/ui/forms/wdgcolorspaceselector.ui:120
+#: libs/ui/forms/wdgcolorspaceselector.ui:119
 #, kde-format
 msgid "Install a new profile from a file"
 msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, bnInstallProfile)
-#: libs/ui/forms/wdgcolorspaceselector.ui:123
+#: libs/ui/forms/wdgcolorspaceselector.ui:122
 #, kde-format
 msgid "Install a new profile from a file."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAdvanced)
-#: libs/ui/forms/wdgcolorspaceselector.ui:136
+#: libs/ui/forms/wdgcolorspaceselector.ui:134
 #, kde-format
 msgid "Color Space Browser"
 msgstr ""
@@ -25031,7 +25033,7 @@ msgstr "გაფართოება:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:36
+#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:18
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:24
 #, kde-format
 msgid "New Image"
@@ -25041,7 +25043,7 @@ msgstr "ახალი გამოსახულება"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #. i18n: ectx: property (text), widget (QLabel, dimensionLbl)
-#: libs/ui/forms/wdgimageproperties.ui:28 libs/ui/forms/wdgnewimage.ui:58
+#: libs/ui/forms/wdgimageproperties.ui:28 libs/ui/forms/wdgnewimage.ui:46
 #: plugins/impex/brush/wdg_export_gih.ui:161
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:64
 #, kde-format
@@ -25069,7 +25071,7 @@ msgstr "ფონის ფერი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, lblOpacity)
-#: libs/ui/forms/wdgimageproperties.ui:189 libs/ui/forms/wdgnewimage.ui:424
+#: libs/ui/forms/wdgimageproperties.ui:189 libs/ui/forms/wdgnewimage.ui:520
 #, kde-format
 msgid "Background Opacity:"
 msgstr ""
@@ -25223,7 +25225,7 @@ msgid "Source FPS:"
 msgstr "წყაროს FPS:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblName)
-#: libs/ui/forms/wdglayerproperties.ui:28 libs/ui/forms/wdgnewimage.ui:628
+#: libs/ui/forms/wdglayerproperties.ui:28 libs/ui/forms/wdgnewimage.ui:430
 #, kde-format
 msgid "&Name:"
 msgstr "&სახელი:"
@@ -25423,34 +25425,34 @@ msgstr "დამახსოვრება"
 #. i18n: ectx: property (title), widget (QGroupBox, grpImage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImagesplit)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgLayerSplit)
-#: libs/ui/forms/wdgnewimage.ui:78
+#: libs/ui/forms/wdgnewimage.ui:54
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:18
 #: plugins/extensions/layersplit/wdg_layersplit.ui:18
 #, kde-format
 msgid "Image Size"
 msgstr "გამოსახულების ზომა"
 
-#. i18n: ectx: property (text), widget (QLabel, lblHeight)
-#: libs/ui/forms/wdgnewimage.ui:145
-#, kde-format
-msgid "&Height:"
-msgstr "&სიმაღლე:"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdgnewimage.ui:187
+#: libs/ui/forms/wdgnewimage.ui:60
 #, kde-format
 msgid "P&redefined:"
 msgstr "&წინასწარ განსაზღვრული:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWidth)
-#: libs/ui/forms/wdgnewimage.ui:203
+#: libs/ui/forms/wdgnewimage.ui:70
 #, kde-format
 msgid "W&idth:"
 msgstr "&სიგანე:"
 
+#. i18n: ectx: property (text), widget (QLabel, lblHeight)
+#: libs/ui/forms/wdgnewimage.ui:118
+#, kde-format
+msgid "&Height:"
+msgstr "&სიმაღლე:"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLandscape)
 #. i18n: ectx: property (text), item, widget (QComboBox, pageOrientationComboBox)
-#: libs/ui/forms/wdgnewimage.ui:231
+#: libs/ui/forms/wdgnewimage.ui:270
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:108
 #, kde-format
 msgid "Landscape"
@@ -25458,7 +25460,7 @@ msgstr "ლანდშაფტური"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnPortrait)
 #. i18n: ectx: property (text), item, widget (QComboBox, pageOrientationComboBox)
-#: libs/ui/forms/wdgnewimage.ui:250
+#: libs/ui/forms/wdgnewimage.ui:289
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:103
 #, kde-format
 msgid "Portrait"
@@ -25466,49 +25468,55 @@ msgstr "პორტრეტი"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpClipboard)
 #. i18n: ectx: property (text), widget (QPushButton, clipboardButton)
-#: libs/ui/forms/wdgnewimage.ui:284
+#: libs/ui/forms/wdgnewimage.ui:320
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:94
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:363
 #, kde-format
 msgid "Clipboard"
 msgstr "გაცვლის ბაფერი"
 
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: libs/ui/forms/wdgnewimage.ui:344
+#, kde-format
+msgid "Save Image Size as:"
+msgstr ""
+
 #. i18n: ectx: property (title), widget (QGroupBox, grpMode)
-#: libs/ui/forms/wdgnewimage.ui:336
+#: libs/ui/forms/wdgnewimage.ui:354
 #, kde-format
 msgctxt "Label of Color as color space in Create New Image dialogue"
 msgid "Color"
 msgstr "ფერი"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/forms/wdgnewimage.ui:363
-#, kde-format
-msgid "Save Image Size as:"
-msgstr ""
-
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnSaveAsPredefined)
-#: libs/ui/forms/wdgnewimage.ui:389
+#: libs/ui/forms/wdgnewimage.ui:410
 #, kde-format
 msgid "Save the current dimensions"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSaveAsPredefined)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
-#: libs/ui/forms/wdgnewimage.ui:392
+#: libs/ui/forms/wdgnewimage.ui:413
 #: libs/widgetutils/config/kstandardaction_p.h:32
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:135
 #, kde-format
 msgid "&Save"
 msgstr "&შენახვა"
 
+#. i18n: ectx: property (text), widget (QLineEdit, txtName)
+#: libs/ui/forms/wdgnewimage.ui:449
+#, kde-format
+msgid "untitled-1"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdgnewimage.ui:414
+#: libs/ui/forms/wdgnewimage.ui:456
 #, kde-format
 msgid "Layers:"
 msgstr "ფენები:"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intNumLayers)
-#: libs/ui/forms/wdgnewimage.ui:449
+#: libs/ui/forms/wdgnewimage.ui:475
 #, kde-format
 msgid ""
 "Number of layers that the image will start with, including optional "
@@ -25516,41 +25524,35 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblColor)
-#: libs/ui/forms/wdgnewimage.ui:465
+#: libs/ui/forms/wdgnewimage.ui:491
 #, kde-format
 msgid "Bac&kground Color:"
 msgstr "&ფონის ფერი:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblBackgroundStyle)
+#. i18n: ectx: property (title), widget (QGroupBox, grpBackground)
 #. i18n: ectx: property (text), widget (QLabel, labelBackground)
 #. i18n: ectx: property (text), widget (QLabel, mLabelBackground)
-#: libs/ui/forms/wdgnewimage.ui:478
+#: libs/ui/forms/wdgnewimage.ui:539
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:175
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:719
 #, kde-format
 msgid "Background:"
 msgstr "ფონი:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblDescription)
-#: libs/ui/forms/wdgnewimage.ui:488
-#, kde-format
-msgid "&Description:"
-msgstr "&აღწერილობა:"
-
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsRaster)
-#: libs/ui/forms/wdgnewimage.ui:525
+#: libs/ui/forms/wdgnewimage.ui:551
 #, kde-format
 msgid "Use background color and opacity to create a background raster layer."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsRaster)
-#: libs/ui/forms/wdgnewimage.ui:528
+#: libs/ui/forms/wdgnewimage.ui:554
 #, kde-format
 msgid "As &raster layer"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsProjection)
-#: libs/ui/forms/wdgnewimage.ui:541
+#: libs/ui/forms/wdgnewimage.ui:567
 #, kde-format
 msgid ""
 "Use background color and opacity as the base canvas color. This can be "
@@ -25558,13 +25560,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsProjection)
-#: libs/ui/forms/wdgnewimage.ui:544
+#: libs/ui/forms/wdgnewimage.ui:570
 #, kde-format
 msgid "As can&vas color"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsFill)
-#: libs/ui/forms/wdgnewimage.ui:557
+#: libs/ui/forms/wdgnewimage.ui:583
 #, kde-format
 msgid ""
 "Use background color and opacity to create a background fill layer. The "
@@ -25572,19 +25574,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsFill)
-#: libs/ui/forms/wdgnewimage.ui:560
+#: libs/ui/forms/wdgnewimage.ui:586
 #, kde-format
 msgid "As fill la&yer"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLineEdit, txtName)
-#: libs/ui/forms/wdgnewimage.ui:650
-#, kde-format
-msgid "untitled-1"
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QLabel, lblDocumentInfo)
-#: libs/ui/forms/wdgnewimage.ui:688
+#: libs/ui/forms/wdgnewimage.ui:651
 #, kde-format
 msgid "This document..."
 msgstr "ეს დოკუმენტი..."
@@ -28951,7 +28947,7 @@ msgstr ""
 #: libs/ui/KisApplicationArguments.cpp:91
 #, kde-format
 msgid "Override display DPI"
-msgstr ""
+msgstr "ეკრანის DPI-ის გადაფარვა"
 
 #: libs/ui/KisApplicationArguments.cpp:95
 #, kde-format
@@ -28981,7 +28977,7 @@ msgstr ""
 #: libs/ui/KisApplicationArguments.cpp:100
 #, kde-format
 msgid "File(s) or URL(s) to open"
-msgstr ""
+msgstr "გასახსნელი ბმულები და ფაილები"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:169
 #, kde-format
@@ -29293,8 +29289,8 @@ msgid "The action was cancelled by the user."
 msgstr ""
 
 #: libs/ui/KisImportExportErrorCode.cpp:178
-#: plugins/impex/libkra/kra_converter.cpp:379
-#: plugins/impex/libkra/kra_converter.cpp:408
+#: plugins/impex/libkra/kra_converter.cpp:378
+#: plugins/impex/libkra/kra_converter.cpp:407
 #, kde-format
 msgid "Unknown error."
 msgstr "უცნობი შეცდომა."
@@ -29879,7 +29875,7 @@ msgstr "&მონიშნეთ..."
 #: libs/ui/KisTemplateCreateDia.cpp:150
 #, kde-format
 msgid "Use the new template as default"
-msgstr ""
+msgstr "ახალი შაბლონის ნაგულისხმებად გამოყენება"
 
 #: libs/ui/KisTemplateCreateDia.cpp:153
 #, kde-format
@@ -29889,7 +29885,7 @@ msgstr ""
 #: libs/ui/KisTemplateCreateDia.cpp:285
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
-msgstr ""
+msgstr "ნამდვილად გნებავთ არსებულ '%1' შაბლონს თავზე გადააწეროთ?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:379
 #, kde-format
@@ -29928,7 +29924,7 @@ msgstr "ჯგუფის წაშლა"
 #: libs/ui/KisTemplateCreateDia.cpp:437
 #, kde-format
 msgid "Do you really want to remove that template?"
-msgstr ""
+msgstr "ნამდვილად გნებავთ ამ შაბლონის წაშლა?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:438
 #, kde-format
@@ -31829,43 +31825,43 @@ msgid ""
 "The Tone Response Curve of this color space is either sRGB, L* or rec709 TRC."
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:300
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:313
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Estimated Gamma cannot be retrieved for CMYK."
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:344
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:357
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is assumed to be the L * TRC. "
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:365
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:378
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Estimated Gamma cannot be retrieved for YCbCr."
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:371
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:384
 #, kde-format
 msgctxt "About <Profilename>"
 msgid "About %1/%2"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:373
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:386
 #, kde-format
 msgctxt "ICC profile version"
 msgid "ICC Version: %1"
 msgstr "ICC ვერსია: %1"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:376
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:389
 #, kde-format
 msgctxt "Who made the profile?"
 msgid "Manufacturer: %1"
 msgstr "მწარმოებელი: %1"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:381
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:394
 #, kde-format
 msgctxt ""
 "What is the copyright? These are from embedded strings from the icc profile, "
@@ -31873,7 +31869,7 @@ msgctxt ""
 msgid "Copyright: %1"
 msgstr "საავტორო უფლებები: %1"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:389
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:402
 #, kde-format
 msgctxt "If the selected model is RGB"
 msgid ""
@@ -31886,7 +31882,7 @@ msgid ""
 "editing."
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:395
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:408
 #, kde-format
 msgctxt "If the selected model is CMYK"
 msgid ""
@@ -31900,7 +31896,7 @@ msgid ""
 "colorants or the TRC for this space."
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:404
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:417
 #, kde-format
 msgctxt "If the selected model is XYZ"
 msgid ""
@@ -31912,7 +31908,7 @@ msgid ""
 "encode in. The Tone Response Curve is assumed to be linear."
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:411
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:424
 #, kde-format
 msgctxt "If the selected model is Grayscale"
 msgid ""
@@ -31923,7 +31919,7 @@ msgid ""
 "you can mix Grayscale and RGB layers in the same image."
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:418
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:431
 #, kde-format
 msgctxt "If the selected model is LAB"
 msgid ""
@@ -31940,7 +31936,7 @@ msgid ""
 "TRC is assumed to be the L* TRC."
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:429
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:442
 #, kde-format
 msgctxt "If the selected model is YCbCr"
 msgid ""
@@ -31953,7 +31949,7 @@ msgid ""
 "and Yellow respectively."
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:440
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:453
 #, kde-format
 msgctxt "When the selected Bitdepth is 8"
 msgid ""
@@ -31963,7 +31959,7 @@ msgid ""
 "intended for the web, or otherwise simple images."
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:446
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:459
 #, kde-format
 msgctxt "When the selected Bitdepth is 16"
 msgid ""
@@ -31977,7 +31973,7 @@ msgid ""
 "from 16 bit/channel to 8 bit/channel."
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:455
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:468
 #, kde-format
 msgctxt "When the selected Bitdepth is 16 bit float"
 msgid ""
@@ -31992,7 +31988,7 @@ msgid ""
 "bit if your computer slows down."
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:464
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:477
 #, kde-format
 msgctxt "When the selected Bitdepth is 32bit float"
 msgid ""
@@ -32006,7 +32002,7 @@ msgid ""
 "otherwise use 8 bit if your computer slows down."
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:473
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:486
 #, kde-format
 msgctxt ""
 "When the selected Bitdepth is 64bit float, but this isn't actually available "
@@ -32022,12 +32018,12 @@ msgid ""
 "otherwise use 8 bit if your computer slows down."
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:481
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:494
 #, kde-format
 msgid "The following conversion intents are possible: "
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:500
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:513
 #, kde-format
 msgctxt "These are Elle Stone's notes on her profiles that we ship."
 msgid ""
@@ -32038,7 +32034,7 @@ msgid ""
 "\">the full documentation</a> as well.</i></p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:508
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:521
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32049,7 +32045,7 @@ msgid ""
 "source'.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:516
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:529
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32059,7 +32055,7 @@ msgid ""
 "just barely outside the area of real colors humans can see</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:523
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:536
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32076,7 +32072,7 @@ msgid ""
 "to some of today's high-end wide gamut monitors.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:537
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:550
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32094,7 +32090,7 @@ msgid ""
 "colors.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:552
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:565
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32108,7 +32104,7 @@ msgid ""
 "be calculated from the spectral wavelengths, so I did.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:565
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:578
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32119,7 +32115,7 @@ msgid ""
 "to actually edit images in the IdentityRGB working space.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:573
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:586
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32140,7 +32136,7 @@ msgid ""
 "and cons of changing your workflow.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:591
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:604
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32153,7 +32149,7 @@ msgid ""
 "working space than the exceedingly small sRGB color space.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:600
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:613
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32174,7 +32170,7 @@ msgid ""
 "profile, and matrix profiles don't have perceptual intent tables.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:616
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:629
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32187,7 +32183,7 @@ msgid ""
 "color space.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:624
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:637
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32200,7 +32196,7 @@ msgid ""
 "internet, convert the image to the V2 Gray profile with the sRGB TRC.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:632
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:645
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32211,7 +32207,7 @@ msgid ""
 "color spaces.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:639
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:652
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32220,7 +32216,7 @@ msgid ""
 "Make sure you use the V4 versions for editing high bit depth images.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:645
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:658
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32229,7 +32225,7 @@ msgid ""
 "gamma=1.8 TRC is not quite as close to being perceptually uniform.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:650
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32242,7 +32238,7 @@ msgid ""
 "8-bit editing.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:658
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:671
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -32251,7 +32247,7 @@ msgid ""
 "showFoto, and GIMP 2.9.</p>"
 msgstr ""
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:676
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33450,7 +33446,7 @@ msgstr ""
 #: libs/widgets/KoConfigAuthorPage.cpp:70
 #, kde-format
 msgid "Delete the author profile"
-msgstr ""
+msgstr "ავტორის პროფილის წაშლა"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:79
 #, kde-format
@@ -39260,7 +39256,7 @@ msgstr ""
 #: plugins/extensions/colorrange/wdg_colorrange.ui:141
 #, kde-format
 msgid "&Deselect"
-msgstr ""
+msgstr "&მონიშვნის მოხსნა"
 
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:66
 #, kde-format
@@ -46350,54 +46346,54 @@ msgctxt "Saving .kra file error message"
 msgid "Could not save assistants."
 msgstr ""
 
-#: plugins/impex/libkra/kra_converter.cpp:76
+#: plugins/impex/libkra/kra_converter.cpp:75
 #, kde-format
 msgid "Not a valid Krita file"
 msgstr ""
 
-#: plugins/impex/libkra/kra_converter.cpp:94
+#: plugins/impex/libkra/kra_converter.cpp:93
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
-msgstr ""
+msgstr "არასწორი დოკუმენტი: ფაილი 'maindoc.xml' არ არსებობს."
 
-#: plugins/impex/libkra/kra_converter.cpp:150
+#: plugins/impex/libkra/kra_converter.cpp:149
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "შესანახად ფაილის შენახვის შეცდომა"
 
-#: plugins/impex/libkra/kra_converter.cpp:223
+#: plugins/impex/libkra/kra_converter.cpp:222
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "%1-ის ჩაწერის შეცდომა. დანაყოფი გადავსებულია?"
 
-#: plugins/impex/libkra/kra_converter.cpp:315
+#: plugins/impex/libkra/kra_converter.cpp:314
 #, kde-format
 msgid "Could not find %1"
 msgstr "%1-ის პოვნა შეუძლებელია"
 
-#: plugins/impex/libkra/kra_converter.cpp:327
+#: plugins/impex/libkra/kra_converter.cpp:326
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
 "Error message: %4"
 msgstr ""
 
-#: plugins/impex/libkra/kra_converter.cpp:345
+#: plugins/impex/libkra/kra_converter.cpp:344
 #, kde-format
 msgid "The format is not supported or the file is corrupted"
 msgstr ""
 
-#: plugins/impex/libkra/kra_converter.cpp:356
+#: plugins/impex/libkra/kra_converter.cpp:355
 #, kde-format
 msgid "The file is too new for this version of Krita (%1)."
 msgstr ""
 
-#: plugins/impex/libkra/kra_converter.cpp:362
+#: plugins/impex/libkra/kra_converter.cpp:361
 #, kde-format
 msgid "The file has no layers."
 msgstr "ფაილს ფენები არ გააჩნია."
 
-#: plugins/impex/libkra/kra_converter.cpp:395
+#: plugins/impex/libkra/kra_converter.cpp:394
 #, kde-format
 msgid "The file does not contain an image."
 msgstr ""
@@ -52210,7 +52206,7 @@ msgstr ""
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Colorist"
-msgstr ""
+msgstr "კოლორისტი"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
 msgid "Letterer"
@@ -56159,7 +56155,7 @@ msgstr "&ფორმატი"
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:45
 #, kde-format
 msgid "&Weight"
-msgstr ""
+msgstr "&წონა"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:81
 #, kde-format
@@ -57737,6 +57733,9 @@ msgstr "გადიდების ხელსაწყო"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
+
+#~ msgid "&Description:"
+#~ msgstr "&აღწერილობა:"
 
 #~ msgctxt "@item:inmenu Layers Docker settings, combobox"
 #~ msgid "Subtitle Style"

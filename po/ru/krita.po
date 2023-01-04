@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-29 00:50+0000\n"
+"POT-Creation-Date: 2023-01-04 00:46+0000\n"
 "PO-Revision-Date: 2022-10-18 12:26+0300\n"
 "Last-Translator: Мария Шикунова <translation-team@basealt.ru>\n"
 "Language-Team: Russian <l10n@basealt.ru>\n"
@@ -16545,8 +16545,8 @@ msgstr "У&меньшить масштаб"
 #: libs/ui/animation/VideoImportDialog.ui:687
 #: libs/ui/animation/wdg_animationrenderer.ui:258
 #: libs/ui/animation/wdg_animationrenderer.ui:400
-#: libs/ui/forms/wdggeneralsettings.ui:493 libs/ui/forms/wdgnewimage.ui:234
-#: libs/ui/forms/wdgnewimage.ui:253
+#: libs/ui/forms/wdggeneralsettings.ui:493 libs/ui/forms/wdgnewimage.ui:273
+#: libs/ui/forms/wdgnewimage.ui:292
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:291
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:351
 #: libs/ui/layerstyles/WdgColorOverlay.ui:61
@@ -17306,7 +17306,7 @@ msgstr ""
 "кадрирование выделений"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
-#: libs/image/kis_keyframe_channel.cpp:25 libs/ui/forms/wdgnewimage.ui:408
+#: libs/image/kis_keyframe_channel.cpp:25 libs/ui/forms/wdgnewimage.ui:424
 #, kde-format
 msgid "Content"
 msgstr "Содержимое"
@@ -19552,7 +19552,7 @@ msgstr "Выходной"
 #: libs/pigment/resources/KoColorSet.cpp:832
 #: libs/pigment/resources/KoColorSet.cpp:909
 #: libs/pigment/resources/KoColorSet.cpp:1121
-#: libs/ui/actions/KisPasteActionFactories.cpp:350
+#: libs/ui/actions/KisPasteActionFactories.cpp:352
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:348 libs/ui/KisView.cpp:1134
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20562,17 +20562,17 @@ msgstr ""
 "вставку форм"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:357 libs/ui/KisView.cpp:597
+#: libs/ui/actions/KisPasteActionFactories.cpp:359 libs/ui/KisView.cpp:597
 #, kde-format
 msgid "(pasted)"
 msgstr "(вставлено)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:355
+#: libs/ui/actions/KisPasteActionFactories.cpp:357
 #, kde-format
 msgid "Pasted"
 msgstr "Вставлено"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:410
+#: libs/ui/actions/KisPasteActionFactories.cpp:412
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr ""
@@ -23183,7 +23183,7 @@ msgid "Screen %1 (%2):"
 msgstr "Экран %1 (%2):"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:959
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:791
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, kde-format
 msgid "Install Color Profiles"
@@ -24014,11 +24014,13 @@ msgstr "Общее время &правки:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, lbCommentsDesc)
+#. i18n: ectx: property (title), widget (QGroupBox, grpDescription)
 #. i18n: ectx: property (text), widget (QLabel, labelTopics)
 #. i18n: ectx: property (text), widget (QLabel, description)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:151
 #: libs/ui/forms/wdgmetadatamergestrategychooser.ui:53
+#: libs/ui/forms/wdgnewimage.ui:596
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:90
 #: plugins/extensions/pykrita/plugin/info.ui:48
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:173
@@ -24124,7 +24126,7 @@ msgstr "Вертикальное разрешение:"
 #. i18n: ectx: property (text), widget (QLabel, lblYResolution_3)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
 #: libs/ui/forms/wdg_resolution.ui:110 libs/ui/forms/wdgimageproperties.ui:94
-#: libs/ui/forms/wdgnewimage.ui:177 libs/ui/imagesize/wdg_imagesize.ui:244
+#: libs/ui/forms/wdgnewimage.ui:128 libs/ui/imagesize/wdg_imagesize.ui:244
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:301
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:42
 #, kde-format
@@ -24187,7 +24189,7 @@ msgstr ""
 #: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:183
 #: libs/ui/forms/wdgcolorsettings.ui:274
 #: libs/ui/forms/wdgimageproperties.ui:298
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:483
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:45
 #, kde-format
 msgid "Perceptual"
@@ -24229,7 +24231,7 @@ msgstr ""
 #: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:193
 #: libs/ui/forms/wdgcolorsettings.ui:284
 #: libs/ui/forms/wdgimageproperties.ui:308
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:492
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:89
 #, kde-format
 msgctxt "ICC profile rendering intent"
@@ -24382,7 +24384,7 @@ msgstr "&Обработка цветопередачи:"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:188 libs/ui/forms/wdgcolorsettings.ui:279
 #: libs/ui/forms/wdgimageproperties.ui:303
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:486
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:499
 #, kde-format
 msgid "Relative Colorimetric"
 msgstr "Относительная колориметрическая"
@@ -24392,7 +24394,7 @@ msgstr "Относительная колориметрическая"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
 #: libs/ui/forms/wdgcolorsettings.ui:198 libs/ui/forms/wdgcolorsettings.ui:289
 #: libs/ui/forms/wdgimageproperties.ui:313
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:489
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:502
 #, kde-format
 msgid "Absolute Colorimetric"
 msgstr "Абсолютная колориметрическая"
@@ -24468,19 +24470,19 @@ msgid "Profile:"
 msgstr "Профиль:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnInstallProfile)
-#: libs/ui/forms/wdgcolorspaceselector.ui:120
+#: libs/ui/forms/wdgcolorspaceselector.ui:119
 #, kde-format
 msgid "Install a new profile from a file"
 msgstr "Установить новый профиль из файла"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, bnInstallProfile)
-#: libs/ui/forms/wdgcolorspaceselector.ui:123
+#: libs/ui/forms/wdgcolorspaceselector.ui:122
 #, kde-format
 msgid "Install a new profile from a file."
 msgstr "Установить новый профиль из файла."
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAdvanced)
-#: libs/ui/forms/wdgcolorspaceselector.ui:136
+#: libs/ui/forms/wdgcolorspaceselector.ui:134
 #, kde-format
 msgid "Color Space Browser"
 msgstr "Просмотр цветового пространства"
@@ -25794,7 +25796,7 @@ msgstr "Масштаб:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:36
+#: libs/ui/forms/wdgimageproperties.ui:18 libs/ui/forms/wdgnewimage.ui:18
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:24
 #, kde-format
 msgid "New Image"
@@ -25804,7 +25806,7 @@ msgstr "Новое изображение"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #. i18n: ectx: property (text), widget (QLabel, dimensionLbl)
-#: libs/ui/forms/wdgimageproperties.ui:28 libs/ui/forms/wdgnewimage.ui:58
+#: libs/ui/forms/wdgimageproperties.ui:28 libs/ui/forms/wdgnewimage.ui:46
 #: plugins/impex/brush/wdg_export_gih.ui:161
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:64
 #, kde-format
@@ -25832,7 +25834,7 @@ msgstr "Цвет фона:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, lblOpacity)
-#: libs/ui/forms/wdgimageproperties.ui:189 libs/ui/forms/wdgnewimage.ui:424
+#: libs/ui/forms/wdgimageproperties.ui:189 libs/ui/forms/wdgnewimage.ui:520
 #, kde-format
 msgid "Background Opacity:"
 msgstr "Непрозрачность фона:"
@@ -26001,7 +26003,7 @@ msgid "Source FPS:"
 msgstr "Частота кадров источника:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblName)
-#: libs/ui/forms/wdglayerproperties.ui:28 libs/ui/forms/wdgnewimage.ui:628
+#: libs/ui/forms/wdglayerproperties.ui:28 libs/ui/forms/wdgnewimage.ui:430
 #, kde-format
 msgid "&Name:"
 msgstr "&Название:"
@@ -26209,34 +26211,34 @@ msgstr "Запомнить"
 #. i18n: ectx: property (title), widget (QGroupBox, grpImage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImagesplit)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgLayerSplit)
-#: libs/ui/forms/wdgnewimage.ui:78
+#: libs/ui/forms/wdgnewimage.ui:54
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:18
 #: plugins/extensions/layersplit/wdg_layersplit.ui:18
 #, kde-format
 msgid "Image Size"
 msgstr "Размер изображения"
 
-#. i18n: ectx: property (text), widget (QLabel, lblHeight)
-#: libs/ui/forms/wdgnewimage.ui:145
-#, kde-format
-msgid "&Height:"
-msgstr "&Высота:"
-
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdgnewimage.ui:187
+#: libs/ui/forms/wdgnewimage.ui:60
 #, kde-format
 msgid "P&redefined:"
 msgstr "&Предустановленный:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWidth)
-#: libs/ui/forms/wdgnewimage.ui:203
+#: libs/ui/forms/wdgnewimage.ui:70
 #, kde-format
 msgid "W&idth:"
 msgstr "&Ширина:"
 
+#. i18n: ectx: property (text), widget (QLabel, lblHeight)
+#: libs/ui/forms/wdgnewimage.ui:118
+#, kde-format
+msgid "&Height:"
+msgstr "&Высота:"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLandscape)
 #. i18n: ectx: property (text), item, widget (QComboBox, pageOrientationComboBox)
-#: libs/ui/forms/wdgnewimage.ui:231
+#: libs/ui/forms/wdgnewimage.ui:270
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:108
 #, kde-format
 msgid "Landscape"
@@ -26244,7 +26246,7 @@ msgstr "Альбомный"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnPortrait)
 #. i18n: ectx: property (text), item, widget (QComboBox, pageOrientationComboBox)
-#: libs/ui/forms/wdgnewimage.ui:250
+#: libs/ui/forms/wdgnewimage.ui:289
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:103
 #, kde-format
 msgid "Portrait"
@@ -26252,50 +26254,56 @@ msgstr "Портретный"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpClipboard)
 #. i18n: ectx: property (text), widget (QPushButton, clipboardButton)
-#: libs/ui/forms/wdgnewimage.ui:284
+#: libs/ui/forms/wdgnewimage.ui:320
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:94
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:363
 #, kde-format
 msgid "Clipboard"
 msgstr "Буфер обмена"
 
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: libs/ui/forms/wdgnewimage.ui:344
+#, kde-format
+msgid "Save Image Size as:"
+msgstr "Сохранить размер изображения как:"
+
 # BUGME: need to split strings. It's an adjective in layersplit.cpp and a noun in the majority of other places. --aspotashev
 #. i18n: ectx: property (title), widget (QGroupBox, grpMode)
-#: libs/ui/forms/wdgnewimage.ui:336
+#: libs/ui/forms/wdgnewimage.ui:354
 #, kde-format
 msgctxt "Label of Color as color space in Create New Image dialogue"
 msgid "Color"
 msgstr "Цвет"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/forms/wdgnewimage.ui:363
-#, kde-format
-msgid "Save Image Size as:"
-msgstr "Сохранить размер изображения как:"
-
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnSaveAsPredefined)
-#: libs/ui/forms/wdgnewimage.ui:389
+#: libs/ui/forms/wdgnewimage.ui:410
 #, kde-format
 msgid "Save the current dimensions"
 msgstr "Сохранить текущие пропорции"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSaveAsPredefined)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
-#: libs/ui/forms/wdgnewimage.ui:392
+#: libs/ui/forms/wdgnewimage.ui:413
 #: libs/widgetutils/config/kstandardaction_p.h:32
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:135
 #, kde-format
 msgid "&Save"
 msgstr "&Сохранить"
 
+#. i18n: ectx: property (text), widget (QLineEdit, txtName)
+#: libs/ui/forms/wdgnewimage.ui:449
+#, kde-format
+msgid "untitled-1"
+msgstr "Безымянный-1"
+
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/forms/wdgnewimage.ui:414
+#: libs/ui/forms/wdgnewimage.ui:456
 #, kde-format
 msgid "Layers:"
 msgstr "Слои:"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intNumLayers)
-#: libs/ui/forms/wdgnewimage.ui:449
+#: libs/ui/forms/wdgnewimage.ui:475
 #, kde-format
 msgid ""
 "Number of layers that the image will start with, including optional "
@@ -26305,42 +26313,36 @@ msgstr ""
 "слой."
 
 #. i18n: ectx: property (text), widget (QLabel, lblColor)
-#: libs/ui/forms/wdgnewimage.ui:465
+#: libs/ui/forms/wdgnewimage.ui:491
 #, kde-format
 msgid "Bac&kground Color:"
 msgstr "&Цвет фона:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblBackgroundStyle)
+#. i18n: ectx: property (title), widget (QGroupBox, grpBackground)
 #. i18n: ectx: property (text), widget (QLabel, labelBackground)
 #. i18n: ectx: property (text), widget (QLabel, mLabelBackground)
-#: libs/ui/forms/wdgnewimage.ui:478
+#: libs/ui/forms/wdgnewimage.ui:539
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:175
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:719
 #, kde-format
 msgid "Background:"
 msgstr "Фон:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblDescription)
-#: libs/ui/forms/wdgnewimage.ui:488
-#, kde-format
-msgid "&Description:"
-msgstr "&Описание:"
-
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsRaster)
-#: libs/ui/forms/wdgnewimage.ui:525
+#: libs/ui/forms/wdgnewimage.ui:551
 #, kde-format
 msgid "Use background color and opacity to create a background raster layer."
 msgstr ""
 "Использовать цвет и прозрачность фона для создания фонового растрового слоя."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsRaster)
-#: libs/ui/forms/wdgnewimage.ui:528
+#: libs/ui/forms/wdgnewimage.ui:554
 #, kde-format
 msgid "As &raster layer"
 msgstr "Как &растровый слой"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsProjection)
-#: libs/ui/forms/wdgnewimage.ui:541
+#: libs/ui/forms/wdgnewimage.ui:567
 #, kde-format
 msgid ""
 "Use background color and opacity as the base canvas color. This can be "
@@ -26350,13 +26352,13 @@ msgstr ""
 "Изменить цвет можно с помощью пункта меню «Изображение > Свойства»."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsProjection)
-#: libs/ui/forms/wdgnewimage.ui:544
+#: libs/ui/forms/wdgnewimage.ui:570
 #, kde-format
 msgid "As can&vas color"
 msgstr "Как цвет &холста"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsFill)
-#: libs/ui/forms/wdgnewimage.ui:557
+#: libs/ui/forms/wdgnewimage.ui:583
 #, kde-format
 msgid ""
 "Use background color and opacity to create a background fill layer. The "
@@ -26366,19 +26368,13 @@ msgstr ""
 "слоя. Цвет для этого слоя можно изменить в свойствах слоя."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsFill)
-#: libs/ui/forms/wdgnewimage.ui:560
+#: libs/ui/forms/wdgnewimage.ui:586
 #, kde-format
 msgid "As fill la&yer"
 msgstr "Как заливаемый &слой"
 
-#. i18n: ectx: property (text), widget (QLineEdit, txtName)
-#: libs/ui/forms/wdgnewimage.ui:650
-#, kde-format
-msgid "untitled-1"
-msgstr "Безымянный-1"
-
 #. i18n: ectx: property (text), widget (QLabel, lblDocumentInfo)
-#: libs/ui/forms/wdgnewimage.ui:688
+#: libs/ui/forms/wdgnewimage.ui:651
 #, kde-format
 msgid "This document..."
 msgstr "Этот документ..."
@@ -30407,8 +30403,8 @@ msgid "The action was cancelled by the user."
 msgstr "Операция была отменена пользователем."
 
 #: libs/ui/KisImportExportErrorCode.cpp:178
-#: plugins/impex/libkra/kra_converter.cpp:379
-#: plugins/impex/libkra/kra_converter.cpp:408
+#: plugins/impex/libkra/kra_converter.cpp:378
+#: plugins/impex/libkra/kra_converter.cpp:407
 #, kde-format
 msgid "Unknown error."
 msgstr "Неизвестная ошибка."
@@ -33063,43 +33059,43 @@ msgstr ""
 "Кривая отклика этого цветового пространства такая же как sRGB, L*, или "
 "rec709."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:300
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:313
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Estimated Gamma cannot be retrieved for CMYK."
 msgstr "Предполагаемая гамма не может быть получена для CMYK."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:344
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:357
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is assumed to be the L * TRC. "
 msgstr "Предполагается, что это L * TRC. "
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:365
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:378
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Estimated Gamma cannot be retrieved for YCbCr."
 msgstr "Предполагаемая гамма не может быть получена для YCbCr."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:371
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:384
 #, kde-format
 msgctxt "About <Profilename>"
 msgid "About %1/%2"
 msgstr "О %1/%2"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:373
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:386
 #, kde-format
 msgctxt "ICC profile version"
 msgid "ICC Version: %1"
 msgstr "Версия ICC: %1"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:376
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:389
 #, kde-format
 msgctxt "Who made the profile?"
 msgid "Manufacturer: %1"
 msgstr "Производитель: %1"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:381
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:394
 #, kde-format
 msgctxt ""
 "What is the copyright? These are from embedded strings from the icc profile, "
@@ -33107,7 +33103,7 @@ msgctxt ""
 msgid "Copyright: %1"
 msgstr "Авторские права: %1"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:389
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:402
 #, kde-format
 msgctxt "If the selected model is RGB"
 msgid ""
@@ -33127,7 +33123,7 @@ msgstr ""
 "преобразовать в другие цветовые пространства. RGB также рекомендовано для "
 "работы с HDR изображениями."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:395
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:408
 #, kde-format
 msgctxt "If the selected model is CMYK"
 msgid ""
@@ -33149,7 +33145,7 @@ msgstr ""
 "сожалению, Krita не позволяет извлекать пигменты и кривые отклика этого "
 "цветового пространства."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:404
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:417
 #, kde-format
 msgctxt "If the selected model is XYZ"
 msgid ""
@@ -33167,7 +33163,7 @@ msgstr ""
 "b> рекомендуется для редактирования, но может быть использовано для "
 "кодирования. Кривая отклика линейна."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:411
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:424
 #, kde-format
 msgctxt "If the selected model is Grayscale"
 msgid ""
@@ -33185,7 +33181,7 @@ msgstr ""
 "набросков в чёрно-белых тонах. В Krita, можно использовать слои с Grayscale "
 "и RGB в одном изображении."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:418
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:431
 #, kde-format
 msgctxt "If the selected model is LAB"
 msgid ""
@@ -33212,7 +33208,7 @@ msgstr ""
 "пространство <b>не</b> рекомендовано для рисования или экспорта, но зато "
 "очень полезно для пост-процессинга. Кривая отклика примерно соответствует L*."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:429
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:442
 #, kde-format
 msgctxt "If the selected model is YCbCr"
 msgid ""
@@ -33231,7 +33227,7 @@ msgstr ""
 "случае — особый тип насыщенности, низкие значения красного и синего "
 "соответствуют зелёному и жёлтому."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:440
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:453
 #, kde-format
 msgctxt "When the selected Bitdepth is 8"
 msgid ""
@@ -33244,7 +33240,7 @@ msgstr ""
 "доступны 256 значений, итого получается 256*количество каналов. "
 "Рекомендуется использовать для веб-графики и простых изображений."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:446
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:459
 #, kde-format
 msgctxt "When the selected Bitdepth is 16"
 msgid ""
@@ -33266,7 +33262,7 @@ msgstr ""
 "потери быстродействия используйте 8 бит. Не забудьте отключить конверсивную "
 "оптимизацию при конвертировании из 16 бит/канал в 8 бит/канал."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:455
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:468
 #, kde-format
 msgctxt "When the selected Bitdepth is 16 bit float"
 msgid ""
@@ -33290,7 +33286,7 @@ msgstr ""
 "устройствах это сильно нагружает процессор. Внимательно следите за "
 "потреблением памяти и в случае потери быстродействия используйте 8 бит."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:464
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:477
 #, kde-format
 msgctxt "When the selected Bitdepth is 32bit float"
 msgid ""
@@ -33312,7 +33308,7 @@ msgstr ""
 "устройствах это сильно нагружает процессор. Внимательно следите за "
 "потреблением памяти и в случае потери быстродействия используйте 8 бит."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:473
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:486
 #, kde-format
 msgctxt ""
 "When the selected Bitdepth is 64bit float, but this isn't actually available "
@@ -33336,12 +33332,12 @@ msgstr ""
 "устройствах это сильно нагружает процессор. Внимательно следите за "
 "потреблением памяти и в случае потери быстродействия используйте 8 бит."
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:481
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:494
 #, kde-format
 msgid "The following conversion intents are possible: "
 msgstr "Возможны следующие способы преобразования: "
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:500
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:513
 #, kde-format
 msgctxt "These are Elle Stone's notes on her profiles that we ship."
 msgid ""
@@ -33357,7 +33353,7 @@ msgstr ""
 "Смотрите также <a href=\"http://ninedegreesbelow.com/photography/lcms-make-"
 "icc-profiles.html\">полную версию документации</a>.</i></p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:508
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:521
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33373,7 +33369,7 @@ msgstr ""
 "высококачественными изображениями и кинофильмами, полученными из разных "
 "источников».</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:516
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:529
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33387,7 +33383,7 @@ msgstr ""
 "содержит отрицательных значений и включает лишь незначительное количество "
 "цветов за пределами зоны реальных цветов, видимых людьми</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:523
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:536
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33415,7 +33411,7 @@ msgstr ""
 "p><p> Цветовой охват Adobe RGB 1998 является хорошим приближением для "
 "некоторых современных hi-end мониторов с широким цветовым диапазоном.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:537
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:550
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33444,7 +33440,7 @@ msgstr ""
 "жгучая потребность быть уверенным, что цветовое пространство охватывает все "
 "мыслимые цвета.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:552
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:565
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33466,7 +33462,7 @@ msgstr ""
 "просила друга узнать у эксперта, тот сказал, что реальные первичные цвета "
 "должны вычисляться из спектральных длин волн, что я и сделала.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:565
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:578
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33482,7 +33478,7 @@ msgstr ""
 "Я не могу придумать какой-либо причины, которая заставила бы вас "
 "редактировать изображения в IdentityRGB.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:573
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:586
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33515,7 +33511,7 @@ msgstr ""
 "цветовое пространство RGB. Для большинства работ по редактированию я "
 "рекомендую BetaRGB, Rec2020, или ACEScg профили  ProPhotoRGB.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:591
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:604
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33534,7 +33530,7 @@ msgstr ""
 "больше подходит на роль главного профиля RGB, чем маленькое цветовое "
 "пространство sRGB.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:600
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:613
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33571,7 +33567,7 @@ msgstr ""
 "моего набора) является матричным профилем, а матричные профили не имеют "
 "перцептуальных таблиц.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:616
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:629
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33591,7 +33587,7 @@ msgstr ""
 "очень интересное цветовое пространство, но сразу после его введения, Adobe "
 "переключились на цветовое пространство ProPhotoRGB.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:624
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:637
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33611,7 +33607,7 @@ msgstr ""
 "килобайты, но  и улучшить позицию страницы в выдаче Google. Этот профиль "
 "имеет такую же кривую отклика, как и sRGB.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:632
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:645
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33627,7 +33623,7 @@ msgstr ""
 "точкой). Многие операции редактирования дают лучшие результаты в цветовых "
 "пространствах с линейной гаммой.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:639
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:652
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33640,7 +33636,7 @@ msgstr ""
 "выполнять в перцептуально равномерном RGB. Убедитесь, что используете версии "
 "V4 для изображений с высокой глубиной цветности.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:645
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:658
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33652,7 +33648,7 @@ msgstr ""
 "имеют примерно, но не полностью перцептуально равномерные кривые отклика. "
 "ProPhotoRGB с гаммой=1.8 далёк от перцептуальной равномерности.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:650
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33672,7 +33668,7 @@ msgstr ""
 "постеризацию. И конечно вам не стоит использовать версии этих профилей с "
 "линейной гаммой при 8-битном редактировании.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:658
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:671
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -33684,7 +33680,7 @@ msgstr ""
 "редакторах с большой глубиной цветности и LCMS в качестве модуля управления "
 "цветом. Это Krita, digiKam/showFoto, и GIMP 2.9.</p>"
 
-#: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
+#: libs/ui/widgets/kis_advanced_color_space_selector.cc:676
 #, kde-format
 msgctxt "From Elle's notes."
 msgid ""
@@ -48385,33 +48381,33 @@ msgctxt "Saving .kra file error message"
 msgid "Could not save assistants."
 msgstr "Не удалось сохранить направляющие."
 
-#: plugins/impex/libkra/kra_converter.cpp:76
+#: plugins/impex/libkra/kra_converter.cpp:75
 #, kde-format
 msgid "Not a valid Krita file"
 msgstr "Некорректный файл Krita"
 
-#: plugins/impex/libkra/kra_converter.cpp:94
+#: plugins/impex/libkra/kra_converter.cpp:93
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Некорректный документ: нет файла «maindoc.xml»."
 
-#: plugins/impex/libkra/kra_converter.cpp:150
+#: plugins/impex/libkra/kra_converter.cpp:149
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "Не удалось создать файл для сохранения"
 
-#: plugins/impex/libkra/kra_converter.cpp:223
+#: plugins/impex/libkra/kra_converter.cpp:222
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr ""
 "Не удалось записать «%1». Возможно, на диске не осталось свободного места."
 
-#: plugins/impex/libkra/kra_converter.cpp:315
+#: plugins/impex/libkra/kra_converter.cpp:314
 #, kde-format
 msgid "Could not find %1"
 msgstr "Не удалось найти %1"
 
-#: plugins/impex/libkra/kra_converter.cpp:327
+#: plugins/impex/libkra/kra_converter.cpp:326
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -48420,22 +48416,22 @@ msgstr ""
 "Ошибка анализа в %1 в строке %2, столбце %3.\n"
 "Текст ошибки: %4"
 
-#: plugins/impex/libkra/kra_converter.cpp:345
+#: plugins/impex/libkra/kra_converter.cpp:344
 #, kde-format
 msgid "The format is not supported or the file is corrupted"
 msgstr "Формат не поддерживается или файл повреждён"
 
-#: plugins/impex/libkra/kra_converter.cpp:356
+#: plugins/impex/libkra/kra_converter.cpp:355
 #, kde-format
 msgid "The file is too new for this version of Krita (%1)."
 msgstr "Файл слишком новый для этой версии Krita (%1)."
 
-#: plugins/impex/libkra/kra_converter.cpp:362
+#: plugins/impex/libkra/kra_converter.cpp:361
 #, kde-format
 msgid "The file has no layers."
 msgstr "В файле нет слоёв."
 
-#: plugins/impex/libkra/kra_converter.cpp:395
+#: plugins/impex/libkra/kra_converter.cpp:394
 #, kde-format
 msgid "The file does not contain an image."
 msgstr "Файл не содержит изображения."
@@ -60480,6 +60476,9 @@ msgstr "Изменение масштаба"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Эталонные изображения"
+
+#~ msgid "&Description:"
+#~ msgstr "&Описание:"
 
 #~ msgid ""
 #~ "Could not save %1.\n"

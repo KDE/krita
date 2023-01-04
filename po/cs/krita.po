@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013, 2014.
-# Vit Pelcak <vpelcak@suse.cz>, 2021, 2022.
+# Vit Pelcak <vit@pelcak.org>, 2021, 2022.
 #
 # -- kritalibs
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
@@ -17754,11 +17754,10 @@ msgid "JPEG-XL Image"
 msgstr ""
 
 #: libs/koplugin/KisMimeDatabase.cpp:349
-#, fuzzy, kde-format
-#| msgid "Document"
+#, kde-format
 msgctxt "description of a file type"
 msgid "CSV Document"
-msgstr "Dokument"
+msgstr ""
 
 #: libs/libkis/Document.cpp:936 libs/ui/KisMainWindow.cpp:2053
 #: libs/ui/KisMainWindow.cpp:2136
@@ -45370,11 +45369,10 @@ msgid "Use all predictors"
 msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:168
-#, fuzzy, kde-format
-#| msgid "Save as %1"
+#, kde-format
 msgctxt "Color space option"
 msgid "Save as is"
-msgstr "Uložit jako %1"
+msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:170
 #, kde-format
@@ -57637,11 +57635,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "&Malířské nástroje"
-
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "Malířské nástroje"

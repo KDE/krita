@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-15 02:44+0000\n"
+"POT-Creation-Date: 2022-12-28 02:43+0000\n"
 "PO-Revision-Date: 2022-08-20 11:02+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -15568,14 +15568,14 @@ msgstr ""
 "Krita støttar ikkje Wayland-plattforma. Bruk XWayland for å køyra Krita på "
 "Wayland. Krita vert no lukka."
 
-#: krita/main.cc:627 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:622 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: åtvaring"
 
-#: krita/main.cc:628
+#: krita/main.cc:623
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15586,12 +15586,12 @@ msgstr ""
 "Dette er ikkje tilrådd. Ikkje meld frå om eventuelle feil du opplever.\n"
 "Du bør oppdatera til ein versjon som er støtta: Windows 7, 8, 8.1 eller 10."
 
-#: krita/main.cc:650 krita/main.cc:655
+#: krita/main.cc:645 krita/main.cc:650
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Teikneplate-støtte i Krita"
 
-#: krita/main.cc:651
+#: krita/main.cc:646
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15602,7 +15602,7 @@ msgstr ""
 "penneeining. Viss du har ei teikneplate, sjå til at drivaren til teikneplata "
 "er rett installert."
 
-#: krita/main.cc:656
+#: krita/main.cc:651
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -45567,7 +45567,7 @@ msgstr "Animasjonsstil"
 msgid "Selection mode:"
 msgstr "Utvalsmodus:"
 
-#: plugins/impex/exr/exr_converter.cc:883
+#: plugins/impex/exr/exr_converter.cc:901
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -45581,20 +45581,20 @@ msgstr ""
 "tilbakestilte ved lagring av biletet.<br/><br/>Dette vil knapt ha nokon "
 "visuell verknad, men du bør likevel vera klar over det."
 
-#: plugins/impex/exr/exr_converter.cc:890
+#: plugins/impex/exr/exr_converter.cc:908
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR-biletet er endra"
 
-#: plugins/impex/exr/exr_converter.cc:1305
+#: plugins/impex/exr/exr_converter.cc:1323
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (type: «%2»)"
 
 # skip-rule: passiv
-#: plugins/impex/exr/exr_converter.cc:1310
+#: plugins/impex/exr/exr_converter.cc:1328
 #, kde-format
 msgctxt "@info"
 msgid ""

@@ -251,6 +251,8 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     } else /* if (m_mode == Ants) */ {
         gc.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing, m_antialiasSelectionOutline);
 
+        gc.setOpacity(m_maskColor.alphaF());
+
         // render selection outline in white
         gc.setPen(m_outlinePen);
         gc.drawPath(m_outlinePath);

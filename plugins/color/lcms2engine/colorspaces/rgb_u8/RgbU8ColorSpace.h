@@ -41,6 +41,7 @@ public:
     void colorFromXML(quint8 *pixel, const QDomElement &elt) const override;
 
     quint8 intensity8(const quint8 * src) const override;
+    qreal intensityF(const quint8 * src) const override;
     
     void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const override;
     QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;

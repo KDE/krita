@@ -140,10 +140,26 @@ public:
         m_alphaMaskApplicator->fillGrayBrushWithColor(dst, brush, brushColor, nPixels);
     }
 
+    /**
+     * By default this does the same as toQColor
+     */
+    void toQColor16(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const override {
+        this->toQColor(src, c, profile);
+    }
+
     quint8 intensity8(const quint8 * src) const override {
         QColor c;
         const_cast<KoColorSpaceAbstract<_CSTrait> *>(this)->toQColor(src, &c);
-        return static_cast<quint8>(c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11);
+        // Integer version of:
+        //      static_cast<quint8>(qRound(c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11))
+        // The "+ 50" is used for rounding
+        return static_cast<quint8>((c.red() * 30 + c.green() * 59 + c.blue() * 11 + 50) / 100);
+    }
+
+    qreal intensityF(const quint8 * src) const override {
+        QColor c;
+        const_cast<KoColorSpaceAbstract<_CSTrait> *>(this)->toQColor16(src, &c);
+        return c.redF() * 0.30 + c.greenF() * 0.59 + c.blueF() * 0.11;
     }
 
     KoColorTransformation* createInvertTransformation() const override {

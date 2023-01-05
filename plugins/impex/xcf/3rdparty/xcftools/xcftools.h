@@ -41,7 +41,7 @@ void nls_init(void);
 /* These legacy fall-backs will probably work on every system
  * that does not supply a inttypes.h ... */
 typedef unsigned char     uint8_t ;
-typedef unsigned long int uint32_t;
+typedef unsigned long int uint32_t, uintptr_t;
 typedef signed char       int8_t ;
 typedef signed long int   int32_t ;
 # define PRIX32 "lX"
@@ -102,11 +102,9 @@ void free_or_close_xcf(void);
 /* ****************************************************************** */
 /* utils.c */
 
-
 #define XCF_ERROR 1
 #define XCF_OK 0
 #define XCF_PTR_EMPTY 0
-
 
 extern const char *progname ;
 extern int verboseFlag ;

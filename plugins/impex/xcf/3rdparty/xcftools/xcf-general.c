@@ -199,7 +199,7 @@ xcfString(uint32_t ptr,uint32_t *after)
           xcffree(buffer) ;
           continue ;
         }
-        FatalUnexpected("!iconv on layer name at %"PRIX32,ptr);
+        FatalUnexpected("!iconv on layer name at %" PRIX32, ptr);
         return XCF_PTR_EMPTY:
       }
   }
@@ -247,11 +247,10 @@ struct xcfImage XCF ;
 int
 getBasicXcfInfo(void)
 {
-
   uint32_t ptr, data, layerfile ;
   PropType type ;
   int i, j ;
-  
+
   int errorStatus;
   uint32_t ptrout;
 
@@ -269,8 +268,8 @@ getBasicXcfInfo(void)
     return XCF_ERROR;
   }
 
-  if (XCF.version < 0 || XCF.version > 3) {
-      return XCF_ERROR;
+  if (XCF.version < 0 || XCF.version > 2) {
+    fprintf(stderr, _("Warning: XCF version %d not supported (trying anyway...)\n"), XCF.version);
   }
 
   XCF.compression = COMPRESS_NONE ;
@@ -383,7 +382,6 @@ getBasicXcfInfo(void)
         return XCF_ERROR;
     }
     L->pixels.tileptrs = 0 ;
-
     if (xcfOffset(ptr  , 4*4, &(L->pixels.hierarchy)) != XCF_OK) {
         xcffree(XCF.layers);
         XCF.layers = XCF_PTR_EMPTY;
@@ -402,4 +400,3 @@ getBasicXcfInfo(void)
   }
   return XCF_OK;
 }
-

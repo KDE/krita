@@ -2,10 +2,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
 )
 
-include_directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
-)
-
 if (ANDROID)
     # We explicitly set QT_OPENGL_ES_3 here because Qt for some reason does
     # not enable this for Android.
@@ -661,40 +657,58 @@ endif()
 kis_add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS})
 generate_export_header(kritaui BASE_NAME kritaui)
 
-target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
-                      kritaversion kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils kritaresources ${PNG_LIBRARIES}
+target_link_libraries(kritaui
+    PUBLIC
+        KF5::CoreAddons
+        KF5::Completion
+        KF5::I18n
+        KF5::ItemViews
+
+        Qt5::Network
+
+        Eigen3::Eigen
+        ${PNG_LIBRARIES}
+
+        kritaversion
+        kritaimpex
+        kritacolor
+        kritaimage
+        kritalibbrush
+        kritawidgets
+        kritawidgetutils
+        kritaresources
 )
 
 if (ANDROID)
-    target_link_libraries(kritaui GLESv3)
-    target_link_libraries(kritaui Qt5::Gui)
-    target_link_libraries(kritaui Qt5::AndroidExtras)
+    target_link_libraries(kritaui PRIVATE GLESv3)
+    target_link_libraries(kritaui PUBLIC Qt5::Gui)
+    target_link_libraries(kritaui PRIVATE Qt5::AndroidExtras)
 endif()
 
 if (HAVE_QT_MULTIMEDIA)
-    target_link_libraries(kritaui Qt5::Multimedia)
+    target_link_libraries(kritaui PUBLIC Qt5::Multimedia)
 endif()
 
 if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
-  target_link_libraries(kritaui ${X11_X11_LIB}
+  target_link_libraries(kritaui PRIVATE ${X11_X11_LIB}
                                 ${X11_Xinput_LIB})
 endif()
 
 if(APPLE)
-    target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
-    target_link_libraries(kritaui ${APPKIT_LIBRARY})
+    target_link_libraries(kritaui PRIVATE ${FOUNDATION_LIBRARY})
+    target_link_libraries(kritaui PRIVATE ${APPKIT_LIBRARY})
 endif ()
 
 
-target_link_libraries(kritaui ${OPENEXR_LIBRARIES})
+target_link_libraries(kritaui PUBLIC ${OPENEXR_LIBRARIES})
 
 # Add VSync disable workaround
 if(NOT WIN32 AND NOT APPLE AND NOT ANDROID)
-    target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
+    target_link_libraries(kritaui PRIVATE ${CMAKE_DL_LIBS} Qt5::X11Extras)
 endif()
 
 if(X11_FOUND)
-    target_link_libraries(kritaui Qt5::X11Extras ${X11_LIBRARIES})
+    target_link_libraries(kritaui PRIVATE Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
 target_include_directories(kritaui

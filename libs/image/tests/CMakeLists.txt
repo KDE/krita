@@ -20,10 +20,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/sdk/tests
 )
 
-include_Directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
-)
-
 include(ECMAddTests)
 
 macro_add_unittest_definitions()

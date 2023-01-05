@@ -1,8 +1,3 @@
-include_directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
-    ${Vc_INCLUDE_DIR}
-)
-
 add_subdirectory( dtd )
 add_subdirectory( data )
 add_subdirectory( integration )

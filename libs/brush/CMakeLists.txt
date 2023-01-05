@@ -1,9 +1,5 @@
 add_subdirectory( tests )
 
-include_directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
-)
-
 set(kritalibbrush_LIB_SRCS
     kis_predefined_brush_factory.cpp
     kis_auto_brush.cpp

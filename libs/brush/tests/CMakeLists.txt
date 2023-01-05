@@ -4,9 +4,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/image/metadata
     ${CMAKE_SOURCE_DIR}/sdk/tests
 )
-include_directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
-)
 
 macro_add_unittest_definitions()
 

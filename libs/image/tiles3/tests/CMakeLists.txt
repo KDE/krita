@@ -2,10 +2,6 @@ include_directories(
     ${CMAKE_BINARY_DIR}/libs/image
 )
 
-include_directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
-)
-
 include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 
 macro_add_unittest_definitions()

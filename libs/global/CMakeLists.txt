@@ -8,10 +8,6 @@ option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in 
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
-include_directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
-)
-
 set(kritaglobal_LIB_SRCS
     kis_assert.cpp
     kis_debug.cpp
@@ -72,7 +68,9 @@ target_link_libraries(kritaglobal
         Qt5::Widgets 
         Qt5::Xml 
         KF5::I18n
+    PRIVATE
         ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES}
+        Eigen3::Eigen
 )
 
 if (ANDROID)

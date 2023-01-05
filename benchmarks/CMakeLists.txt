@@ -3,9 +3,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/pigment
     ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
 )
-include_directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
-)
 
 macro_add_unittest_definitions()
 

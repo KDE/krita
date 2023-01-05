@@ -30,8 +30,7 @@ kis_add_library(kritadefaulttools MODULE ${kritadefaulttools_SOURCES})
 
 generate_export_header(kritadefaulttools BASE_NAME kritadefaulttools)
 
-target_link_libraries(kritadefaulttools kritaui kritabasicflakes)
-target_link_libraries(kritadefaulttools ${Boost_SYSTEM_LIBRARY})
+target_link_libraries(kritadefaulttools kritaui kritabasicflakes Boost::boost)
 
 install(TARGETS kritadefaulttools  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

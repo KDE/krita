@@ -378,9 +378,8 @@ target_link_libraries(kritaimage
         Qt5::Concurrent
 
         Eigen3::Eigen
+        Boost::boost
 )
-
-target_link_libraries(kritaimage PUBLIC ${Boost_SYSTEM_LIBRARY})
 
 if(HAVE_CXX_ATOMICS_WITH_LIB OR HAVE_CXX_ATOMICS64_WITH_LIB)
    target_link_libraries(kritaimage PUBLIC atomic)

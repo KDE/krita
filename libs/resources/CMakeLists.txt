@@ -64,6 +64,7 @@ target_link_libraries(kritaresources
         Qt5::Core
         Qt5::Widgets
         Qt5::Sql
+        Boost::boost
     PRIVATE
         kritaversion
         kritaglobal

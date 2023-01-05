@@ -667,6 +667,7 @@ target_link_libraries(kritaui
         Qt5::Network
 
         Eigen3::Eigen
+        Boost::boost
         ${PNG_LIBRARIES}
 
         kritaversion

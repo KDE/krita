@@ -124,6 +124,7 @@ target_link_libraries( kritapigment
         Qt5::Core
         Qt5::Gui
         Qt5::Xml
+        Boost::boost
         ${WIN32_PLATFORM_NET_LIBS}
 )
 

@@ -20,6 +20,7 @@ target_link_libraries(kritacommand
         KF5::ConfigGui
         Qt5::Core 
         Qt5::Widgets
+        Boost::boost
 )
 
 set_target_properties(kritacommand PROPERTIES

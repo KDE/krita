@@ -68,6 +68,7 @@ target_link_libraries(kritaglobal
         Qt5::Widgets 
         Qt5::Xml 
         KF5::I18n
+        Boost::boost
     PRIVATE
         GSL::gsl
         Eigen3::Eigen

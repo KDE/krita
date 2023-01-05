@@ -969,7 +969,7 @@ endif()
 ##
 ## Test for eigen3
 ##
-find_package(Eigen3 3.0 REQUIRED)
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 set_package_properties(Eigen3 PROPERTIES
     DESCRIPTION "C++ template library for linear algebra"
     URL "http://eigen.tuxfamily.org"

@@ -403,7 +403,11 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
            nclxDescription.set_full_range_flag(true);
            nclxDescription.set_matrix_coefficients(heif_matrix_coefficients_RGB_GBR);
            if (convertToRec2020) {
+#if LIBHEIF_HAVE_VERSION(1, 14, 1)
+               nclxDescription.set_color_primaries(heif_color_primaries_ITU_R_BT_2020_2_and_2100_0);
+#else
                nclxDescription.set_color_primaties(heif_color_primaries_ITU_R_BT_2020_2_and_2100_0);
+#endif
            } else {
                const ColorPrimaries primaries =
                    image->colorSpace()->profile()->getColorPrimaries();
@@ -413,7 +417,11 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(
                    primaries >= PRIMARIES_ADOBE_RGB_1998,
                    ImportExportCodes::FormatColorSpaceUnsupported);
+#if LIBHEIF_HAVE_VERSION(1, 14, 1)
+               nclxDescription.set_color_primaries(heif_color_primaries(primaries));
+#else
                nclxDescription.set_color_primaties(heif_color_primaries(primaries));
+#endif
            }
 
            if (conversionPolicy == ConversionPolicy::ApplyPQ) {

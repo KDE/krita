@@ -1713,6 +1713,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     sldSelectionOverlayOpacity->setSingleStep(0.05);
     sldSelectionOverlayOpacity->setValue(imageCfg.selectionOverlayMaskColor().alphaF());
 
+    sldSelectionOutlineOpacity->setRange(0.0, 1.0, 2);
+    sldSelectionOutlineOpacity->setSingleStep(0.05);
+    sldSelectionOutlineOpacity->setValue(imageCfg.selectionOutlineOpacity());
+
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
     KoColor ck1(KoColorSpaceRegistry::instance()->rgb8());
@@ -1765,11 +1769,14 @@ void DisplaySettingsTab::setDefault()
     chkMoving->setChecked(cfg.scrollCheckers(true));
 
     KisImageConfig imageCfg(false);
+
     KoColor c;
     c.fromQColor(imageCfg.selectionOverlayMaskColor(true));
     c.setOpacity(1.0);
     btnSelectionOverlayColor->setColor(c);
     sldSelectionOverlayOpacity->setValue(imageCfg.selectionOverlayMaskColor(true).alphaF());
+
+    sldSelectionOutlineOpacity->setValue(imageCfg.selectionOutlineOpacity(true));
 
     intCheckSize->setValue(cfg.checkSize(true));
     KoColor ck1(KoColorSpaceRegistry::instance()->rgb8());
@@ -2294,6 +2301,7 @@ bool KisDlgPreferences::editPreferences()
         KoColor c = m_displaySettings->btnSelectionOverlayColor->color();
         c.setOpacity(m_displaySettings->sldSelectionOverlayOpacity->value());
         cfgImage.setSelectionOverlayMaskColor(c.toQColor());
+        cfgImage.setSelectionOutlineOpacity(m_displaySettings->sldSelectionOutlineOpacity->value());
         cfg.setAntialiasCurves(m_displaySettings->chkCurveAntialiasing->isChecked());
         cfg.setAntialiasSelectionOutline(m_displaySettings->chkSelectionOutlineAntialiasing->isChecked());
         cfg.setShowSingleChannelAsColor(m_displaySettings->chkChannelsAsColor->isChecked());

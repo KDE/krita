@@ -641,6 +641,16 @@ void KisImageConfig::setAnimationCacheRegionOfInterestMargin(qreal value)
     m_config.writeEntry("animationCacheRegionOfInterestMargin", value);
 }
 
+qreal KisImageConfig::selectionOutlineOpacity(bool defaultValue) const
+{
+    return defaultValue ? 1.0 : m_config.readEntry("selectionOutlineOpacity", 1.0);
+}
+
+void KisImageConfig::setSelectionOutlineOpacity(qreal value)
+{
+    m_config.writeEntry("selectionOutlineOpacity", value);
+}
+
 QColor KisImageConfig::selectionOverlayMaskColor(bool defaultValue) const
 {
     QColor def(255, 0, 0, 128);

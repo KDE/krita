@@ -132,6 +132,9 @@ public:
     qreal animationCacheRegionOfInterestMargin(bool defaultValue = false) const;
     void setAnimationCacheRegionOfInterestMargin(qreal value);
 
+    qreal selectionOutlineOpacity(bool defaultValue = false) const;
+    void setSelectionOutlineOpacity(qreal value);
+
     QColor selectionOverlayMaskColor(bool defaultValue = false) const;
     void setSelectionOverlayMaskColor(const QColor &color);
 
@@ -185,4 +188,3 @@ private:
 
 
 #endif /* KIS_IMAGE_CONFIG_H_ */
-

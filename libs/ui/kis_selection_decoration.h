@@ -65,6 +65,8 @@ private:
     QPen m_outlinePen;
     Mode m_mode;
 
+    qreal m_opacity;
+
     QColor m_maskColor;
     bool m_antialiasSelectionOutline;
 

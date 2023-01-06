@@ -192,6 +192,7 @@ void KisSelectionDecoration::slotConfigChanged()
     KisImageConfig imageConfig(true);
     KisConfig cfg(true);
 
+    m_opacity = imageConfig.selectionOutlineOpacity();
     m_maskColor = imageConfig.selectionOverlayMaskColor();
     m_antialiasSelectionOutline = cfg.antialiasSelectionOutline();
 }
@@ -251,7 +252,7 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     } else /* if (m_mode == Ants) */ {
         gc.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing, m_antialiasSelectionOutline);
 
-        gc.setOpacity(m_maskColor.alphaF());
+        gc.setOpacity(m_opacity);
 
         // render selection outline in white
         gc.setPen(m_outlinePen);
@@ -278,4 +279,3 @@ void KisSelectionDecoration::notifyWindowMinimized(bool minimized)
         selectionChanged();
     }
 }
-

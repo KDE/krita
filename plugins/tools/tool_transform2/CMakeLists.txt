@@ -1,6 +1,4 @@
-if (NOT WIN32)
-    add_subdirectory(tests)
-endif()
+add_subdirectory(tests)
 
 set(kritatooltransform_SOURCES
     tool_transform_args.cc

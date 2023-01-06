@@ -511,6 +511,7 @@ public:
     void updateCursorDelayed() {
         setAlternateSelectionAction(KisSelectionModifierMapper::map(m_currentModifiers));
         QTimer::singleShot(100,
+            this,
             [this]()
             {
                 KisNodeSP selectionMask = locateSelectionMaskUnderCursor(m_currentPos, m_currentModifiers);

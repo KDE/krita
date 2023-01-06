@@ -214,8 +214,8 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         setProperty(WordSpacingId, KoSvgText::fromAutoValue(KoSvgText::parseAutoValueXY(value, context, "normal")));
     } else if (command == "font-family") {
         QStringList familiesList = value.split(',', QString::SkipEmptyParts);
-        for (QString &family : familiesList) {
-            family = family.trimmed();
+        Q_FOREACH (const QString &fam, familiesList) {
+            QString family = fam.trimmed();
             if ((family.startsWith('\"') && family.endsWith('\"')) ||
                 (family.startsWith('\'') && family.endsWith('\''))) {
 
@@ -234,7 +234,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "font-variant" || command == "font-variant-ligatures" || command == "font-variant-position" || command == "font-variant-caps"
                || command == "font-variant-numeric" || command == "font-variant-east-asian" || command == "font-variant-alternates") {
         const QStringList features = value.split(" ");
-        for (QString f : features) {
+        Q_FOREACH (const QString f, features) {
             KoSvgText::FontVariantFeature feature = featureMap.value(f.split("(").first());
 
             if (feature == KoSvgText::CommonLigatures || feature == KoSvgText::NoCommonLigatures) {
@@ -615,7 +615,7 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
                                 FontVariantHistoricalFormsId,
                                 FontVariantPositionId,
                                 FontVariantCapsId};
-    for (PropertyId id : liga) {
+    Q_FOREACH (PropertyId id, liga) {
         if (hasProperty(id)) {
             features.append(featureMap.key(KoSvgText::FontVariantFeature(property(id).toInt())));
         }
@@ -913,12 +913,12 @@ QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) cons
                                 FontVariantEastAsianWidthId,
                                 FontVariantRubyId};
 
-    for (PropertyId id : list) {
+    Q_FOREACH (PropertyId id, list) {
         if (hasProperty(id)) {
             FontVariantFeature feature = FontVariantFeature(property(id).toInt());
             if (feature != FontVariantNormal) {
                 const QStringList openTypeTags = fontVariantOpentypeTags(feature);
-                for (const QString &tag : openTypeTags) {
+                Q_FOREACH (const QString &tag, openTypeTags) {
                     QString openTypeTag = tag;
                     openTypeTag += QString("[%1:%2]").arg(start).arg(start + length);
                     if (feature == NoCommonLigatures || feature == NoDiscretionaryLigatures || feature == NoHistoricalLigatures

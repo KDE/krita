@@ -145,7 +145,7 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
     // FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, FC_WIDTH,
     // FC_WEIGHT, FC_SLANT, nullptr);
     FcPatternUP p(FcPatternCreate());
-    for (const QString &family : families) {
+    Q_FOREACH (const QString &family, families) {
         QByteArray utfData = family.toUtf8();
         const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
         FcPatternAddString(p.data(), FC_FAMILY, vals);
@@ -222,7 +222,7 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         for (int i = 0; i < fontSet->nfont; i++) {
             if (FcPatternGetCharSet(fontSet->fonts[i], FC_CHARSET, 0, &set) == FcResultMatch) {
                 int index = 0;
-                for (const QString &grapheme : graphemes) {
+                Q_FOREACH (const QString &grapheme, graphemes) {
 
                     // Don't worry about matching controls directly,
                     // as they are not important to font-selection (and many
@@ -233,7 +233,7 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
                     int familyIndex = -1;
                     if (familyValues.at(index) == -1) {
                         int fallbackMatch = fallbackMatchValues.at(index);
-                        for (uint unicode : grapheme.toUcs4()) {
+                        Q_FOREACH (uint unicode, grapheme.toUcs4()) {
                             if (FcCharSetHasChar(set, unicode)) {
                                 familyIndex = i;
                                 if (fallbackMatch < 0) {
@@ -260,7 +260,7 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         // Remove the -1 entries.
         if (familyValues.contains(-1)) {
             int value = -1;
-            for (const int currentValue : familyValues) {
+            Q_FOREACH (const int currentValue, familyValues) {
                 if (currentValue != value) {
                     value = currentValue;
                     break;
@@ -317,7 +317,7 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         modifications += QString::number(fontSizeAdjust);
     }
     if (!axisSettings.isEmpty()) {
-        for (const QString &key : axisSettings.keys()) {
+        Q_FOREACH (const QString &key, axisSettings.keys()) {
             modifications += "|" + key + QString::number(axisSettings.value(key));
         }
     }
@@ -353,7 +353,7 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
     const qreal ftFontUnit = 64.0;
     const qreal finalRes = qMin(xRes, yRes);
     const qreal scaleToPixel = finalRes / 72;
-    for (const FT_FaceUP &face : faces) {
+    Q_FOREACH (const FT_FaceUP &face, faces) {
         if (!FT_IS_SCALABLE(face)) {
             const qreal fontSizePixels = size * ftFontUnit * scaleToPixel;
             qreal sizeDelta = 0;
@@ -397,7 +397,7 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
         }
 
         QMap<FT_Tag, qreal> tags;
-        for (const QString &tagName : axisSettings.keys()) {
+        Q_FOREACH (const QString &tagName, axisSettings.keys()) {
             if (tagName.size() == 4) {
                 const QByteArray utfData = tagName.toUtf8();
                 const char *tag = utfData.data();
@@ -413,7 +413,7 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
             for (FT_UInt i = 0; i < amaster->num_axis; i++) {
                 FT_Var_Axis axis = amaster->axis[i];
                 designCoords[i] = axis.def;
-                for (FT_Tag tag : tags.keys()) {
+                Q_FOREACH (FT_Tag tag, tags.keys()) {
                     if (axis.tag == tag) {
                         designCoords[i] = qBound(axis.minimum, long(tags.value(tag) * 65535), axis.maximum);
                     }

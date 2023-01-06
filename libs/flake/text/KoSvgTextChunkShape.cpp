@@ -724,8 +724,8 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
 
         fillTransforms(&xPos, &yPos, &dxPos, &dyPos, &rotate, s->localTransformations);
 
-        for (double &i : rotate) {
-            i = kisRadiansToDegrees(i);
+        for (int i = 0; i < rotate.size(); i++) {
+            rotate[i] = kisRadiansToDegrees(rotate[i]);
         }
 
         writeTextListAttribute("x", xPos, context.shapeWriter());

@@ -803,7 +803,7 @@ TextTransformInfo parseTextTransform(const QString &value)
 {
     TextTransformInfo textTransform;
     const QStringList values = value.toLower().split(" ");
-    for (const QString &param : values) {
+    Q_FOREACH (const QString &param, values) {
         if (param == "capitalize") {
             textTransform.capitals = TextTransformCapitalize;
         } else if (param == "uppercase") {
@@ -848,7 +848,7 @@ TextIndentInfo parseTextIndent(const QString &value, const SvgLoadingContext &co
 {
     const QStringList values = value.toLower().split(" ");
     TextIndentInfo textIndent;
-    for (const QString &param : values) {
+    Q_FOREACH (const QString &param, values) {
         bool ok = false;
         qreal parsed = 0.0;
         if (param.endsWith("%")) {

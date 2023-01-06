@@ -53,7 +53,7 @@ static QChar findProportionalToFullWidth(const QChar &value, const QChar &defaul
 QString KoCssTextUtils::transformTextFullWidth(const QString &text)
 {
     QString transformedText;
-    for (const QChar &c : text) {
+    Q_FOREACH (const QChar &c, text) {
         if (c.decompositionTag() == QChar::Narrow) {
             transformedText.append(c.decomposition());
         } else {
@@ -129,7 +129,7 @@ static QChar findSmallKanaToBigKana(const QChar &value, const QChar &defaultValu
 QString KoCssTextUtils::transformTextFullSizeKana(const QString &text)
 {
     QString transformedText;
-    for (const QChar &c : text) {
+    Q_FOREACH (const QChar &c, text) {
         transformedText.append(findSmallKanaToBigKana(c, c));
     }
 

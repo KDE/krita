@@ -370,7 +370,7 @@ void KoSvgTextShape::relayout() const
     bool first = false;
     QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> textChunks = layoutInterface()->collectSubChunks(false, first);
     QString text;
-    for (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk : textChunks) {
+    Q_FOREACH (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk, textChunks) {
         text.append(chunk.text);
     }
     debugFlake << "Laying out the following text: " << text;
@@ -426,7 +426,7 @@ void KoSvgTextShape::relayout() const
         }
 
         int start = 0;
-        for (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk : textChunks) {
+        Q_FOREACH (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk, textChunks) {
             int length = chunk.text.size();
             KoSvgTextProperties properties = chunk.format.associatedShapeWrapper().shape()->textProperties();
 
@@ -548,7 +548,7 @@ void KoSvgTextShape::relayout() const
                                   static_cast<size_t>(start),
                                   static_cast<size_t>(length));
             }
-            for (const QString &feature : fontFeatures) {
+            Q_FOREACH (const QString &feature, fontFeatures) {
                 debugFlake << "adding feature" << feature;
                 raqm_add_font_feature(layout.data(), feature.toUtf8(), feature.toUtf8().size());
             }
@@ -921,7 +921,7 @@ void KoSvgTextShape::relayout() const
     debugFlake << "9. return result.";
     d->result = result;
     globalIndex = 0;
-    for (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk : textChunks) {
+    Q_FOREACH (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk, textChunks) {
         KoSvgText::AssociatedShapeWrapper wrapper = chunk.format.associatedShapeWrapper();
         const int j = chunk.text.size();
         for (int i = globalIndex; i < globalIndex + j; i++) {
@@ -1097,7 +1097,7 @@ void addWordToLine(QVector<CharacterResult> &result,
         lineIndices.clear();
     }
 
-    for (int j : wordIndices) {
+    Q_FOREACH (int j, wordIndices) {
         CharacterResult cr = result.at(j);
         if (lineBox.isEmpty() && j == wordIndices.first()) {
             if (result.at(j).lineStart == Collapse) {
@@ -1154,7 +1154,7 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
     QPointF ascent = offset * ascentRatio;
     bool returnDescent = lineIndices.isEmpty() ? false : lineIndices.first() == 0;
     if (!returnDescent) {
-        for (int j : lineIndices) {
+        Q_FOREACH (int j, lineIndices) {
             result[j].cssPosition += ascent;
             result[j].finalPosition = result.at(j).cssPosition;
         }
@@ -1228,7 +1228,7 @@ void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
     const QPointF inlineWidth = startPos - endPos;
     QPointF aEndPos = aStartPos - inlineWidth;
 
-    for (int i : lineIndices) {
+    Q_FOREACH (int i, lineIndices) {
         if (!result.at(i).addressable || result.at(i).isHanging) {
             continue;
         }
@@ -1275,7 +1275,7 @@ void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
     }
 
     QPointF shiftP = isHorizontal ? QPointF(shift, 0) : QPointF(0, shift);
-    for (int j : lineIndices) {
+    Q_FOREACH (int j, lineIndices) {
         if (!result.at(j).isHanging) {
             result[j].cssPosition += shiftP;
             result[j].finalPosition = result.at(j).cssPosition;
@@ -1316,14 +1316,14 @@ void finalizeLine(QVector<CharacterResult> &result,
     bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
 
     QMap<int, int> visualToLogical;
-    for (int j : lineIndices) {
+    Q_FOREACH (int j, lineIndices) {
         visualToLogical.insert(result.at(j).visualIndex, j);
     }
     currentPos = lineOffset;
 
     handleCollapseAndHang(result, lineIndices, endPos, lineOffset, inlineSize, writingMode, ltr, atEnd);
 
-    for (int j : visualToLogical.values()) {
+    Q_FOREACH (int j, visualToLogical.values()) {
         if (!result.at(j).addressable || result.at(j).isHanging) {
             continue;
         }
@@ -1466,7 +1466,7 @@ void KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &properties,
                         wordAdvance = QPointF();
                         wordLength = 0;
                         QVector<int> partialWord;
-                        for (int i : wordIndices) {
+                        Q_FOREACH (int i, wordIndices) {
                             wordAdvance += result.at(i).advance;
                             wordLength = isHorizontal ? wordAdvance.x() : wordAdvance.y();
                             if (wordLength <= inlineSize.customValue) {
@@ -1606,7 +1606,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
 
         QPointF shift;
         bool secondTextLengthApplied = false;
-        for (int k : visualToLogical.keys()) {
+        Q_FOREACH (int k, visualToLogical.keys()) {
             CharacterResult cr = result[visualToLogical.value(k)];
             if (cr.addressable) {
                 cr.finalPosition += shift;
@@ -1647,7 +1647,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
                 break;
             }
         }
-        for (int k : visualToLogical.keys()) {
+        Q_FOREACH (int k, visualToLogical.keys()) {
             if (k > lastVisualValue) {
                 result[visualToLogical.value(k)].finalPosition += shift;
             }
@@ -1728,7 +1728,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     if (dominantBaseline == KoSvgText::BaselineResetSize && parentFontSize > 0) {
         baselineTable = parentBaselineTable;
         qreal multiplier = 1.0 / parentFontSize * fontSize;
-        for (int key : baselineTable.keys()) {
+        Q_FOREACH (int key, baselineTable.keys()) {
             baselineTable.insert(key, static_cast<int>(baselineTable.value(key) * multiplier));
         }
         dominantBaseline = KoSvgText::BaselineAuto;
@@ -1973,7 +1973,7 @@ void KoSvgTextShape::Private::computeTextDecorations( // NOLINT(readability-func
         decorationPaths.insert(DecorationOverline, QPainterPath());
         decorationPaths.insert(DecorationLineThrough, QPainterPath());
 
-        for (TextDecoration type : decorationPaths.keys()) {
+        Q_FOREACH (TextDecoration type, decorationPaths.keys()) {
             qreal offset = chunkShape->layoutInterface()->getTextDecorationOffset(type);
             decorationOffsets.insert(type, isHorizontal ? QPointF(0, offset) : QPointF(offset, 0));
         }
@@ -2138,7 +2138,7 @@ void KoSvgTextShape::Private::computeTextDecorations( // NOLINT(readability-func
             }
             decorationOffsets[DecorationLineThrough] += (pathWidth * 0.5);
 
-            for (TextDecoration type : decorationPaths.keys()) {
+            Q_FOREACH (TextDecoration type, decorationPaths.keys()) {
                 if (decor.testFlag(type)) {
                     QPointF offset = decorationOffsets.value(type);
 
@@ -2162,7 +2162,7 @@ void KoSvgTextShape::Private::computeTextDecorations( // NOLINT(readability-func
 
         chunkShape->layoutInterface()->clearTextDecorations();
 
-        for (TextDecoration type : decorationPaths.keys()) {
+        Q_FOREACH (TextDecoration type, decorationPaths.keys()) {
             QPainterPath decorationPath = decorationPaths.value(type);
             if (!decorationPath.isEmpty()) {
                 stroker.setWidth(qMax(minimumDecorationThickness, chunkShape->layoutInterface()->getTextDecorationWidth(type)));

@@ -121,15 +121,10 @@ if (WIN32)
     endif ()
     list(APPEND _QT_conf -opengl dynamic)
 
-    if (USE_STRAWBERRYPERL)
+    if (NOT PERL_FOUND) # Implies strawberry perl
       list(APPEND QT_EXTRA_DEPS ext_strawberryperl)
     endif()
 
-    if (KRITA_PERL_PATH) 
-      list(APPEND QT_ENV_ARGS --modify PATH=path_list_append:${KRITA_PERL_PATH})
-    else()
-      message(WARNING "KRITA_PERL_PATH is not set. Most probably, Qt will fail to configure!")
-    endif()
 
   ExternalProject_Add(
       ext_qt
@@ -143,11 +138,11 @@ if (WIN32)
       GIT_REMOTE_UPDATE_STRATEGY REBASE
 
       INSTALL_DIR ${EXTPREFIX_qt}
-      CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env ${QT_ENV_ARGS} <SOURCE_DIR>/configure.bat ${_QT_conf}
+      CONFIGURE_COMMAND <SOURCE_DIR>/configure.bat ${_QT_conf}
 
-      BUILD_COMMAND ${CMAKE_COMMAND} -E env ${QT_ENV_ARGS} ${QT_BUILD_COMMAND}
+      BUILD_COMMAND ${QT_BUILD_COMMAND}
 
-      INSTALL_COMMAND ${CMAKE_COMMAND} -E env ${QT_ENV_ARGS} ${QT_INSTALL_COMMAND}
+      INSTALL_COMMAND ${QT_INSTALL_COMMAND}
       UPDATE_COMMAND ""
       # Use a short name to reduce the chance of exceeding path length limit
       SOURCE_DIR s

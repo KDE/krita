@@ -99,7 +99,22 @@ option(QT_ENABLE_DEBUG_INFO "Build Qt with full debug info included" OFF)
 option(QT_ENABLE_ASAN "Build Qt with ASAN" OFF)
 endif()
 
-find_package(Perl)
+include(FeatureSummary)
+
+if (WIN32)
+    set(_is_perl_required)
+    set(_perl_type OPTIONAL)
+else()
+    set(_is_perl_required REQUIRED)
+    set(_perl_type REQUIRED)
+endif()
+find_package(Perl ${_is_perl_required})
+set_package_properties(Perl PROPERTIES
+    URL "https://www.perl.org/"
+    DESCRIPTION "Perl is a highly capable, feature-rich programming language with over 30 years of development."
+    TYPE ${_perl_type}
+    PURPOSE "Needed for building Qt from source."
+)
 
 if (WIN32)
     option(ENABLE_MSYS2_FIXES "Enable patches that are needed for MSYS2+Clang Krita build" OFF)
@@ -390,8 +405,9 @@ if(WIN32)
     add_subdirectory(ext_googleangle)
 endif()
 
-# perl is required by Qt built from source
-add_subdirectory( ext_perl )
+if (WIN32 AND NOT PERL_FOUND)
+    add_subdirectory( ext_perl )
+endif()
 add_subdirectory( ext_qt )
 add_subdirectory( ext_libraw )
 if (ANDROID)

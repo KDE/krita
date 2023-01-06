@@ -829,6 +829,13 @@ if not "%GETTEXT_SEARCH_PATH%" == "" (
     set PATH=!PATH!;!GETTEXT_SEARCH_PATH!
 )
 
+
+if not "%PERL_DIR%" == "" (
+    set "PATH=%PATH%;%PERL_DIR%"
+) else (
+    set "PATH=%PATH%;%DEPS_INSTALL_DIR%\Strawberry\perl\bin"
+)
+
 :: Prepare the CMake command lines
 set CMDLINE_CMAKE_DEPS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
     -DSUBMAKE_JOBS=%PARALLEL_JOBS% ^

@@ -21,8 +21,8 @@ ExternalProject_Add(ext_raw
 
 ExternalProject_Add(ext_kdcraw
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://download.kde.org/Attic/release-service/21.04.3/src/libkdcraw-21.04.3.tar.xz
-    URL_HASH SHA256=2b46d5abdec202a1167f072157aa0ff149480ed986e92b80db3b091eeb9d3706
+    URL https://download.kde.org/stable/release-service/22.12.1/src/libkdcraw-22.12.1.tar.xz
+    URL_HASH SHA256=8b0a71937f7ed4926c2c047e0bd36001e5e98f52b1cf633d8bfbe4e4eeac65eb
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_libraw}
         -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}

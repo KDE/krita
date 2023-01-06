@@ -55,7 +55,7 @@
 # Juan Manuel García Molina <juanma@superiodico.net>, 2006.
 # Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2007, 2009, 2010.
 # Jaime Robles <jaime@kde.org>, 2007.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2011, 2014, 2015, 2021, 2022.
+# Eloy Cuadra <ecuadra@eloihr.net>, 2008, 2011, 2014, 2015, 2021, 2022, 2023.
 # Enrique Matias Sanchez (Quique) <cronopios@gmail.com>, 2009.
 # Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>, 2011.
 # Raul Gonzalez <raulgf83@gmail.com>, 2011, 2012, 2013, 2014, 2015.
@@ -66,7 +66,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-05 00:45+0000\n"
-"PO-Revision-Date: 2022-12-31 10:47+0100\n"
+"PO-Revision-Date: 2023-01-05 18:56+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -8685,11 +8685,10 @@ msgstr "Fijar el modo de borrador"
 #. i18n: context: toolTip @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:506 krita/krita.action:508 krita/krita.action:509
-#, fuzzy, kde-format
-#| msgid "Toggle Eraser"
+#, kde-format
 msgctxt "action"
 msgid "Toggle eraser preset"
-msgstr "Conmutar el borrador"
+msgstr "Conmutar preajuste del borrador"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -22326,8 +22325,7 @@ msgid "Save without waiting"
 msgstr "Guardar sin esperar"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Cancel Operation and Save"
+#, kde-format
 msgid "Cancel operation and save"
 msgstr "Cancelar la operación y guardar"
 

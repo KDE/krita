@@ -856,6 +856,10 @@ set_package_properties(libjpeg-turbo PROPERTIES
 macro_bool_to_01(libjpeg-turbo_FOUND HAVE_JPEG_TURBO)
 configure_file(config-jpeg.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-jpeg.h )
 
+if(libjpeg-turbo_FOUND)
+    set(JPEG_TURBO_LIBRARIES libjpeg-turbo::turbojpeg)
+endif()
+
 find_package(GIF)
 set_package_properties(GIF PROPERTIES
     DESCRIPTION "Library for loading and saving gif files."

@@ -33,7 +33,7 @@ target_link_libraries(kritatiffimport
     LibExiv2::LibExiv2
     kritametadata
     kritaexifcommon
-    libjpeg-turbo::turbojpeg
+    ${JPEG_TURBO_LIBRARIES}
     ${KRITATIFFPSD_LIBRARY}
     ${TIFF_LIBRARIES}
     )

@@ -30,7 +30,7 @@ ExternalProject_Add(ext_kdcraw
         ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_raw ext_extra_cmake_modules
+    DEPENDS ext_raw ext_extra_cmake_modules ext_qt
 )
 
 add_custom_target(ext_libraw)

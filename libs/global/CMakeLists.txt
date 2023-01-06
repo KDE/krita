@@ -69,7 +69,7 @@ target_link_libraries(kritaglobal
         Qt5::Xml 
         KF5::I18n
     PRIVATE
-        ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES}
+        GSL::gsl
         Eigen3::Eigen
 )
 

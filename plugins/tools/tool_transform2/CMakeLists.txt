@@ -42,8 +42,7 @@ if (NOT GSL_FOUND)
 else ()
   target_link_libraries(kritatooltransform_static
     PUBLIC
-      ${GSL_LIBRARIES}
-      ${GSL_CBLAS_LIBRARIES}
+      GSL::gsl
   )
 endif ()
 

@@ -399,7 +399,7 @@ target_link_libraries(kritaimage PUBLIC kritamultiarch)
 if (NOT GSL_FOUND)
   message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Shaped Gradients might be non-normalized! Please install GSL library.")
 else ()
-  target_link_libraries(kritaimage PRIVATE ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+  target_link_libraries(kritaimage PRIVATE GSL::gsl)
 endif ()
 
 target_include_directories(kritaimage

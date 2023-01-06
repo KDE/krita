@@ -48,7 +48,7 @@ endif(WIN32)
 
 set(EXTRA_AVIF_DEPS "")
 
-if (USE_STRAWBERRYPERL)
+if (WIN32 AND NOT PERL_FOUND) # Implies strawberry perl
     set(LIBAOM_STRAWBERRYPERL_DEP ext_strawberryperl)
 endif()
 

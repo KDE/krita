@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-28 02:43+0000\n"
+"POT-Creation-Date: 2023-01-06 03:19+0000\n"
 "PO-Revision-Date: 2022-11-18 11:22+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -19038,7 +19038,7 @@ msgstr "Oddalji"
 #: libs/pigment/resources/KoColorSet.cpp:839
 #: libs/pigment/resources/KoColorSet.cpp:916
 #: libs/pigment/resources/KoColorSet.cpp:1128
-#: libs/ui/actions/KisPasteActionFactories.cpp:347
+#: libs/ui/actions/KisPasteActionFactories.cpp:349
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:348 libs/ui/KisView.cpp:959
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20029,17 +20029,17 @@ msgid "Paste shapes"
 msgstr "Prilepi like"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:354 libs/ui/KisView.cpp:596
+#: libs/ui/actions/KisPasteActionFactories.cpp:356 libs/ui/KisView.cpp:596
 #, kde-format
 msgid "(pasted)"
 msgstr "(prilepljeno)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:352
+#: libs/ui/actions/KisPasteActionFactories.cpp:354
 #, kde-format
 msgid "Pasted"
 msgstr "Prilepljeno"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:404
+#: libs/ui/actions/KisPasteActionFactories.cpp:406
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "Slog lepljenja"

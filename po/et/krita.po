@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-28 02:43+0000\n"
+"POT-Creation-Date: 2023-01-06 03:19+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -20302,7 +20302,7 @@ msgstr "Välja"
 #: libs/pigment/resources/KoColorSet.cpp:839
 #: libs/pigment/resources/KoColorSet.cpp:916
 #: libs/pigment/resources/KoColorSet.cpp:1128
-#: libs/ui/actions/KisPasteActionFactories.cpp:347
+#: libs/ui/actions/KisPasteActionFactories.cpp:349
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:348 libs/ui/KisView.cpp:959
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -21334,17 +21334,17 @@ msgid "Paste shapes"
 msgstr "Kujundite asetamine"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:354 libs/ui/KisView.cpp:596
+#: libs/ui/actions/KisPasteActionFactories.cpp:356 libs/ui/KisView.cpp:596
 #, kde-format
 msgid "(pasted)"
 msgstr "(asetatud)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:352
+#: libs/ui/actions/KisPasteActionFactories.cpp:354
 #, kde-format
 msgid "Pasted"
 msgstr "Asetatud"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:404
+#: libs/ui/actions/KisPasteActionFactories.cpp:406
 #, fuzzy
 #| msgid "Layer Style"
 msgctxt "(qtundo-format)"

@@ -19,8 +19,6 @@ ExternalProject_Add(ext_raw
     DEPENDS ext_lcms2 ext_jpeg
 )
 
-# Last 5.12-compatible version
-# TODO: update to latest on upgrade to 5.15
 ExternalProject_Add(ext_kdcraw
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://download.kde.org/Attic/release-service/21.04.3/src/libkdcraw-21.04.3.tar.xz
@@ -32,7 +30,7 @@ ExternalProject_Add(ext_kdcraw
         ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_raw
+    DEPENDS ext_raw ext_extra_cmake_modules
 )
 
 add_custom_target(ext_libraw)

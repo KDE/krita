@@ -1,6 +1,7 @@
 SET(PREFIX_pkgconfig "${EXTPREFIX}" )
 
 ExternalProject_Add( ext_pkgconfig
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL http://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz
     URL_MD5 f6e931e319531b736fadc017f470e68a

@@ -44,7 +44,8 @@ elseif (ANDROID)
             ANDROID_NDK_HOME=${CMAKE_ANDROID_NDK}
             ANDROID_NDK=${CMAKE_ANDROID_NDK}
             PATH=${ANDROID_TOOLCHAIN_ROOT}/bin/:$ENV{PATH}
-            <SOURCE_DIR>/Configure android-${CMAKE_ANDROID_ARCH} -D__ANDROID_API__=23 --prefix=${PREFIX_ext_openssl} --openssldir=ssl
+            <SOURCE_DIR>/Configure android-${CMAKE_ANDROID_ARCH} -D__ANDROID_API__=${ANDROID_PLATFORM_LEVEL}
+            --prefix=${PREFIX_ext_openssl} --openssldir=ssl
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env
             PATH=${ANDROID_TOOLCHAIN_ROOT}/bin:$ENV{PATH}

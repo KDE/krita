@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.20.0 FATAL_ERROR)
+
 project (krita-and-all-its-deps)
 
 #
@@ -18,6 +20,10 @@ if(APPLE)
 	endif()
 else(APPLE)
 	cmake_minimum_required(VERSION 3.7.0 FATAL_ERROR)
+endif()
+
+if(POLICY CMP0135)
+  cmake_policy(SET CMP0135 NEW)
 endif()
 
 #
@@ -93,22 +99,16 @@ option(QT_ENABLE_DEBUG_INFO "Build Qt with full debug info included" OFF)
 option(QT_ENABLE_ASAN "Build Qt with ASAN" OFF)
 endif()
 
+find_package(Perl)
+
 if (WIN32)
-        option(ENABLE_MSYS2_FIXES "Enable patches that are needed for MSYS2+Clang Krita build" OFF)
-	option(QT_ENABLE_DYNAMIC_OPENGL "Build Qt with dynamic ANGLE support '-opengl dynamic -angle' (needs env var 'WindowsSdkDir' set to path of Windows 10 SDK)" ON)
-    option(USE_EXTERNAL_ANGLE "Use a newer custom Google ANGLE build instead of the one bundled in Qt" ON)
+    option(ENABLE_MSYS2_FIXES "Enable patches that are needed for MSYS2+Clang Krita build" OFF)
 
-    if (QT_ENABLE_DYNAMIC_OPENGL)
-		if (DEFINED ENV{WindowsSdkDir})
-			message(STATUS "WindowsSdkDir is set to '$ENV{WindowsSdkDir}'")
-		else (DEFINED ENV{WindowsSdkDir})
-			message(FATAL_ERROR "Environment variable 'WindowsSdkDir' not set! Please set it to path of Windows 10 SDK or disable QT_ENABLE_DYNAMIC_OPENGL")
-		endif ()
-    endif ()
-
-    if(USE_EXTERNAL_ANGLE AND NOT QT_ENABLE_DYNAMIC_OPENGL)
-        message(WARNING "USE_EXTERNAL_ANGLE does not have any effect when QT_ENABLE_DYNAMIC_OPENGL is disabled.")
-    endif()
+	if (DEFINED ENV{WindowsSdkDir})
+		message(STATUS "WindowsSdkDir is set to '$ENV{WindowsSdkDir}'")
+	else (DEFINED ENV{WindowsSdkDir})
+		message(FATAL_ERROR "Environment variable 'WindowsSdkDir' not set! Please set it to path of Windows 10 SDK")
+	endif ()
 
     if(ENABLE_MSYS2_FIXES)
         find_package(ZLIB)
@@ -140,10 +140,6 @@ if (WIN32)
 elseif (APPLE OR ANDROID)
     set (ZLIB_DEP ext_zlib)
 endif (WIN32)
-
-if (WIN32)
-    option(USE_QT_TABLET_WINDOWS "Do not use Krita's forked Wintab and Windows Ink support on Windows, but leave everything to Qt." ON)
-endif ()
 
 set(SECURITY_EXE_LINKER_FLAGS "")
 set(SECURITY_SHARED_LINKER_FLAGS "")
@@ -390,10 +386,12 @@ add_subdirectory( ext_ocio )
 add_subdirectory( ext_openjpeg )
 add_subdirectory( ext_fontconfig)
 
-if(USE_EXTERNAL_ANGLE AND QT_ENABLE_DYNAMIC_OPENGL)
+if(WIN32)
     add_subdirectory(ext_googleangle)
 endif()
 
+# perl is required by Qt built from source
+add_subdirectory( ext_perl )
 add_subdirectory( ext_qt )
 add_subdirectory( ext_libraw )
 if (ANDROID)

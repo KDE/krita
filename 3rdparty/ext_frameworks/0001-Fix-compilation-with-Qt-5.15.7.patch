@@ -1,0 +1,24 @@
+From cd2153b3195c1b17c1a782e06e7e02bfc0c4cf43 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Fri, 25 Nov 2022 09:22:08 +0300
+Subject: [PATCH] Fix compilation with Qt 5.15.7
+
+---
+ src/klineedit.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/klineedit.cpp b/src/klineedit.cpp
+index acabe6f..a9d41a4 100644
+--- a/src/klineedit.cpp
++++ b/src/klineedit.cpp
+@@ -41,6 +41,7 @@
+ #include <QClipboard>
+ #include <QMenu>
+ #include <QToolTip>
++#include <QKeyEvent>
+ 
+ KLineEditPrivate::~KLineEditPrivate()
+ {
+-- 
+2.38.1.windows.1
+

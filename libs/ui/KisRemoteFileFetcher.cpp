@@ -7,6 +7,7 @@
 #include "KisRemoteFileFetcher.h"
 
 #include <QApplication>
+#include <QDebug>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
 #include <QProgressDialog>

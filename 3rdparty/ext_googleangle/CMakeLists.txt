@@ -100,6 +100,7 @@ ExternalProject_Add(
     SOURCE_DIR src
     BINARY_DIR build
     STAMP_DIR stamps
+    DEPENDS ext_patch
 )
 
 # ANGLE requires `third_party/zlib` to be pulled separately. The git commit

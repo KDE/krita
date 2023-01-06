@@ -136,7 +136,7 @@ bool KisImportExportErrorCode::isInternalError() const
 
 QString KisImportExportErrorCode::errorMessage() const
 {
-    QString internal = i18n("Unexpected error. Please contact developers.");
+    QString internal = i18n("Unexpected error.");
     if (errorFieldUsed == CannotRead) {
         return cannotRead.errorMessage();
     } else if (errorFieldUsed == CannotWrite) {

@@ -137,7 +137,7 @@ ExternalProject_Add(ext_libx265_12bit
     -DHIGH_BIT_DEPTH=TRUE -DMAIN12=TRUE -DEXPORT_C_API=FALSE  -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
     INSTALL_COMMAND ${CMAKE_COMMAND} -E copy ${x265_LIBDIR}${x265_LIBRARY} ${EXTPREFIX_heif}/lib/${x265_12bit_LIBRARY}
 
-    DEPENDS ext_nasm
+    DEPENDS ext_nasm ext_libx265_10bit
 )
 ExternalProject_Add(
     ext_libx265
@@ -160,7 +160,7 @@ ExternalProject_Add(
 
     UPDATE_COMMAND ""
 
-    DEPENDS ext_nasm ext_libx265_10bit ext_libx265_12bit
+    DEPENDS ext_nasm ext_libx265_12bit
 )
 
 ExternalProject_Add(

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-06 03:19+0000\n"
-"PO-Revision-Date: 2023-01-05 07:05+0100\n"
+"PO-Revision-Date: 2023-01-06 12:56+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -8291,7 +8291,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Invert Selection"
-msgstr ""
+msgstr "მონიშვნის &ინვერსია"
 
 #. i18n: context: toolTip @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:245
@@ -26814,7 +26814,7 @@ msgstr "შეყვანა"
 #, kde-format
 msgctxt "Action to trigger with shortcut"
 msgid "Action"
-msgstr ""
+msgstr "პარამეტრები"
 
 #. i18n: ectx: property (text), widget (QPushButton, editProfilesButton)
 #: libs/ui/input/config/kis_edit_profiles_dialog.cpp:54
@@ -32474,7 +32474,7 @@ msgstr "რეჟიმი"
 #, kde-format
 msgctxt "The 'action' section label in selection tools options"
 msgid "Action"
-msgstr ""
+msgstr "პარამეტრები"
 
 #: libs/ui/widgets/kis_selection_options.cc:257
 #, kde-format
@@ -34570,7 +34570,7 @@ msgstr ""
 #: libs/widgetutils/xmlgui/KisShortcutsDialog.ui:38
 #, kde-format
 msgid "Action"
-msgstr ""
+msgstr "პარამეტრები"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, list)
 #: libs/widgetutils/xmlgui/KisShortcutsDialog.ui:43
@@ -50365,7 +50365,7 @@ msgstr ""
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
 #, kde-format
 msgid "Base Value: "
-msgstr ""
+msgstr "საბაზისო მნიშვნელობა: "
 
 #: plugins/paintops/mypaint/MyPaintPaintOpOption.cpp:24
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:315
@@ -50412,7 +50412,7 @@ msgstr ""
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:64
 #, kde-format
 msgid "Direction Filter"
-msgstr ""
+msgstr "მიმართულების ფილტრი"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:71
 #, kde-format
@@ -50427,27 +50427,27 @@ msgstr "წნევის მომატება"
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:85
 #, kde-format
 msgid "Change Color H"
-msgstr ""
+msgstr "ფერის H-ის შეცვლა"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:90
 #, kde-format
 msgid "Change Color L"
-msgstr ""
+msgstr "ფერის L-ის შეცვლა"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:95
 #, kde-format
 msgid "Change Color V"
-msgstr ""
+msgstr "ფერის V-ის შეცვლა"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:100
 #, kde-format
 msgid "Change Color HSL S"
-msgstr ""
+msgstr "ფერის HSL S-ის შეცვლა"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:105
 #, kde-format
 msgid "Change Color HSV S"
-msgstr ""
+msgstr "ფერის HSV S-ის შეცვლა"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:110
 #, kde-format
@@ -50621,22 +50621,22 @@ msgstr ""
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:54
 #, kde-format
 msgid "Particles"
-msgstr ""
+msgstr "ნაწილაკები"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:83
 #, kde-format
 msgid "Opacity Weight"
-msgstr ""
+msgstr "გაუმჭვირვალობის დონე"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:112
 #, kde-format
 msgid "dx scale"
-msgstr ""
+msgstr "ზომა X ღერძზე"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:141
 #, kde-format
 msgid "dy scale"
-msgstr ""
+msgstr "ზომა Y ღერძზე"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:170
 #, kde-format
@@ -50663,19 +50663,19 @@ msgstr "ნაწილაკი"
 #: plugins/paintops/particle/wdgparticleoptions.ui:47
 #, kde-format
 msgid "Particles:"
-msgstr ""
+msgstr "ნაწილაკები:"
 
 #. i18n: ectx: property (text), widget (QLabel, opacity)
 #: plugins/paintops/particle/wdgparticleoptions.ui:79
 #, kde-format
 msgid "Opacity weight:"
-msgstr ""
+msgstr "გაუმჭვირვალობის დონე:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel_5)
 #: plugins/paintops/particle/wdgparticleoptions.ui:108
 #, kde-format
 msgid "Iterations:"
-msgstr ""
+msgstr "იტერაციები:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel_2)
 #: plugins/paintops/particle/wdgparticleoptions.ui:118
@@ -50687,18 +50687,18 @@ msgstr "მიზიდულობა:"
 #: plugins/paintops/particle/wdgparticleoptions.ui:131
 #, kde-format
 msgid "dx scale:"
-msgstr ""
+msgstr "ზომა X ღერძზე:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel_4)
 #: plugins/paintops/particle/wdgparticleoptions.ui:141
 #, kde-format
 msgid "dy scale:"
-msgstr ""
+msgstr "ზომა Y ღერძზე:"
 
 #: plugins/paintops/roundmarker/roundmarker_paintop_plugin.cpp:30
 #, kde-format
 msgid "Quick Brush"
-msgstr ""
+msgstr "სწრაფი ფუნჯი"
 
 #: plugins/paintops/sketch/kis_density_option.cpp:11
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:157
@@ -50709,7 +50709,7 @@ msgstr "სიმკვრივე"
 #: plugins/paintops/sketch/kis_offset_scale_option.cpp:11
 #, kde-format
 msgid "Offset scale"
-msgstr ""
+msgstr "წანაცვლების მასშტაბი"
 
 #: plugins/paintops/sketch/kis_sketchop_option.cpp:96
 #, kde-format
@@ -50762,22 +50762,22 @@ msgstr ""
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:122
 #, kde-format
 msgid "Particle Count"
-msgstr ""
+msgstr "ნაწილაკების რაოდენობა"
 
 #: plugins/paintops/spray/kis_spray_shape_dynamics.cpp:21
 #, kde-format
 msgid "Shape dynamics"
-msgstr ""
+msgstr "ფორმის დინამიკა"
 
 #: plugins/paintops/spray/kis_spray_shape_option.cpp:30
 #, kde-format
 msgid "Spray shape"
-msgstr ""
+msgstr "შესხმის ფორმა"
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:22
 #, kde-format
 msgid "Spray Area"
-msgstr ""
+msgstr "შესხმის ადგილი"
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:63
 #, kde-format
@@ -50978,7 +50978,7 @@ msgctxt ""
 "Name of the group of options related to the spay particles in the spray "
 "engine"
 msgid "Particles"
-msgstr ""
+msgstr "ნაწილაკები"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/spray/wdgsprayoptions.ui:194

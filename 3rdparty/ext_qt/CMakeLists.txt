@@ -224,7 +224,7 @@ elseif (NOT APPLE)
 else( APPLE )
 
       if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "arm64")
-        set(QT_DEVICE_OPTION "-device-option" "QMAKE_APPLE_DEVICE_ARCHS=arm64")
+        set(QT_DEVICE_OPTION "-device-option" "QMAKE_APPLE_DEVICE_ARCHS=arm64" "CONFIG+=sdk_no_version_check")
       endif()
 
       ExternalProject_Add(

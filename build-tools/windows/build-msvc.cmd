@@ -818,22 +818,26 @@ set "BUILDDIR_PLUGINS_INSTALL_CMAKE=%KRITA_INSTALL_DIR:\=/%"
 set "BUILDDIR_PLUGINS_INSTALL_CMAKE=%BUILDDIR_KRITA_INSTALL_CMAKE: =\ %"
 
 if not "%PERL_DIR%" == "" (
-    set "PERL_EXECUTABLE=%PERL_DIR%\perl.exe"
-    set "PERL_EXECUTABLE=%PERL_EXECUTABLE:\=/%"
-    set "PERL_EXECUTABLE=%PERL_EXECUTABLE: =\ %"
+    :: Safety measure for Strawberry Perl injecting pkg-config in the PATH
+    call :find_on_path STRAWBERRY_PERL_PKG_CONFIG_EXE_DIR pkg-config.bat
+    if exist "%PERL_DIR%\pkg-config.bat" (
+        echo Found unpatched Strawberry Perl, ignoring due to its pkg-config introducing external binaries.
+        set "PATH=%PATH%;%DEPS_INSTALL_DIR%\Strawberry\perl\bin"
+    ) else (
+        echo Found patched Strawberry Perl, it is safe to use.
+        set "PERL_EXECUTABLE=%PERL_DIR%\perl.exe"
+        set "PERL_EXECUTABLE=!PERL_EXECUTABLE:\=/!"
+        set "PERL_EXECUTABLE=!PERL_EXECUTABLE: =\ !"
+        set "PATH=%PATH%;%PERL_DIR%"
+    )
+) else (
+    set "PATH=%PATH%;%DEPS_INSTALL_DIR%\Strawberry\perl\bin"
 )
 
 set PATH=%DEPS_INSTALL_DIR%\bin;%PATH%
 
 if not "%GETTEXT_SEARCH_PATH%" == "" (
     set PATH=!PATH!;!GETTEXT_SEARCH_PATH!
-)
-
-
-if not "%PERL_DIR%" == "" (
-    set "PATH=%PATH%;%PERL_DIR%"
-) else (
-    set "PATH=%PATH%;%DEPS_INSTALL_DIR%\Strawberry\perl\bin"
 )
 
 :: Prepare the CMake command lines

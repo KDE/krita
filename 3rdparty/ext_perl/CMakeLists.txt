@@ -9,10 +9,13 @@ ExternalProject_Add(
 
     BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying Strawberry Perl portable
     CONFIGURE_COMMAND ""
-    INSTALL_COMMAND ${CMAKE_COMMAND} -E echo "Deploying Strawberry Perl"
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${CMAKE_CURRENT_BINARY_DIR}/Strawberry
             ${EXTPREFIX_perl}/Strawberry
+        COMMAND ${CMAKE_COMMAND} -E echo "Removing Strawberry Perl pkg-config"
+        COMMAND ${CMAKE_COMMAND} -E rm
+            ${EXTPREFIX_perl}/Strawberry/perl/bin/pkg-config.bat
+            ${EXTPREFIX_perl}/Strawberry/perl/bin/pkg-config
     UPDATE_COMMAND ""
 
     SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/Strawberry"

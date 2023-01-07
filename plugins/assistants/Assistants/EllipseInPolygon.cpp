@@ -97,6 +97,48 @@ bool EllipseInPolygon::updateToPointOnConcentricEllipse(QTransform _originalTran
         return false;
     }
 
+    // first check on which side of the horizon line the original ellipse is
+    QPointF topPoint = QPointF(0.5, 1.0);
+    QPointF topPointInFinalCoordinates = _originalTransform.map(topPoint);
+    auto whichSideOnLine = [] (QLineF line, QPointF point) {
+        return KisAlgebra2D::signZZ((line.p2().x() - line.p1().x()) * (point.y() - line.p1().y()) - (line.p2().y() - line.p1().y()) * (point.x() - line.p1().x()));
+    };
+
+    int side1 = whichSideOnLine(horizonLine, pointOnConcetric);
+    int side2 = whichSideOnLine(horizonLine, topPointInFinalCoordinates);
+
+    if (side1 != side2) {
+        //
+        QTransform reflectionTransform;
+        QPointF p = horizonLine.p2() - horizonLine.p1();
+        auto sq = [] (qreal v) {
+            return AlgebraFunctions::sqPow(v);
+        };
+
+        p = p/(qSqrt(sq(p.x()) + sq(p.y())));
+        reflectionTransform.setMatrix(sq(p.x()) - sq(p.x()), 2*p.x()*p.y(), 0, 2*p.x()*p.y(), sq(p.y()) - sq(p.x()), 0, 0, 0, 1);
+        //transform.
+        // find original points
+        // then mirror them
+        // then
+        QVector<QPointF> originalPoly;
+        originalPoly << QPointF(0.5, 1.0) << QPointF(1.0, 0.5) << QPointF(0.5, 0) << QPointF(0, 0.5);
+
+        for (int i = 0; i < originalPoly.size(); i++) {
+            QPointF p = originalPoly[i];
+            p = _originalTransform.map(p);
+            p = reflectionTransform.map(p);
+            originalPoly[i] = p;
+        }
+        QPolygonF origPoly = QPolygonF(originalPoly);
+
+        QTransform out;
+        if (QTransform::squareToQuad(origPoly, out)) {
+            _originalTransform = out;
+        }
+    }
+
+
     QTransform inverted = _originalTransform.inverted();
 
     QPointF pointInOriginalCoordinates = inverted.map(pointOnConcetric);
@@ -2620,4 +2662,14 @@ qreal AlgebraFunctions::bisectionMethod(std::function<qreal (qreal)> f, qreal ta
     if (debug) ENTER_FUNCTION() << "Actual steps = " << i;
 
     return t;
+}
+
+qreal AlgebraFunctions::sqPow(qreal p)
+{
+    return p*p;
+}
+
+int AlgebraFunctions::sqPow(int p)
+{
+    return p*p;
 }

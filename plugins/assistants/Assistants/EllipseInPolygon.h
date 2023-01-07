@@ -255,6 +255,9 @@ class AlgebraFunctions
 public:
     static qreal newtonUntilOvershoot (std::function<qreal(qreal)> f, std::function<qreal(qreal)> fd, qreal t0, qreal& previousT, bool& overshoot, bool debug);
     static qreal bisectionMethod (std::function<qreal(qreal)> f, qreal ta, qreal tb, bool debug);
+    static qreal sqPow(qreal p);
+    static int sqPow(int p);
+
 
 
 };

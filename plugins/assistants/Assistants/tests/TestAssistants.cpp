@@ -448,6 +448,40 @@ void TestAssistants::testProjectionNewMethod()
     // polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(722.562,626.904), QPointF(349.884,528.397)) point = QPointF(553.452,264.769)
 
 
+    ENTER_FUNCTION() << "************************ START 10 (mirroring A - no mirroring) **************************";
+
+    // The values were:  polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(683.107,1006.81), QPointF(349.884,528.397))
+    // originalPoint = QPointF(1067.62,719.146) and unfortunate result: result = QPointF(1057.48,709.158)
+    poly.clear();
+    poly << QPointF(0, 0) << QPointF(400, 0) << QPointF(300, 200) << QPointF(100, 200);
+    original.updateToPolygon(poly, QLineF());
+    point = QPointF(300, 300);
+
+    result = original.projectModifiedEberlySecond(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+    QVERIFY(form(result, original) < eps);
+
+
+    ENTER_FUNCTION() << "************************ START 10 (mirroring) **************************";
+
+    // The values were:  polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(683.107,1006.81), QPointF(349.884,528.397))
+    // originalPoint = QPointF(1067.62,719.146) and unfortunate result: result = QPointF(1057.48,709.158)
+    poly.clear();
+    poly << QPointF(0, 0) << QPointF(400, 0) << QPointF(300, 200) << QPointF(100, 200);
+    original.updateToPolygon(poly, QLineF());
+    point = QPointF(300, 600);
+
+    result = original.projectModifiedEberlySecond(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+    QVERIFY(form(result, original) < eps);
 
 
 }

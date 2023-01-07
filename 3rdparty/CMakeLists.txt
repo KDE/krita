@@ -450,17 +450,17 @@ endif()
 # Meson needs the sitecustomize.py to set the site-packages root
 add_subdirectory( ext_python )
 
+if (NOT NINJA_BINARY_PATH)
+    set(NINJA_DEP ext_ninja)
+    message(STATUS "Ninja not available, building 3rdparty version.")
+    add_subdirectory(ext_ninja)
+endif()
+
 if (NOT MESON_BINARY_PATH)
     set(MESON_DEP ext_meson)
     set(MESON_BINARY_PATH ${EXTPREFIX}/bin/meson)
     message(STATUS "Meson not available, building 3rdparty version.")
     add_subdirectory(ext_meson)
-endif()
-
-if (NOT NINJA_BINARY_PATH)
-    set(NINJA_DEP ext_ninja)
-    message(STATUS "Ninja not available, building 3rdparty version.")
-    add_subdirectory(ext_ninja)
 endif()
 
 if (NOT PKG_CONFIG_FOUND)

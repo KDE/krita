@@ -370,7 +370,6 @@ build_3rdparty () {
         ext_tiff \
         ext_openjpeg \
         ext_gsl \
-        ext_libraw \
         ext_giflib \
         ext_freetype \
         ext_fontconfig \
@@ -399,6 +398,7 @@ build_3rdparty () {
 
     cmake_3rdparty \
         ext_extra_cmake_modules \
+        ext_libraw \
         ext_kconfig \
         ext_kwidgetsaddons \
         ext_kcompletion \

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-05 00:45+0000\n"
+"POT-Creation-Date: 2023-01-07 00:46+0000\n"
 "PO-Revision-Date: 2022-05-15 22:38+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -16549,13 +16549,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "작업 공간"
 
-#: krita/main.cc:524
+#: krita/main.cc:525
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "치명적 오류"
 
-#: krita/main.cc:524
+#: krita/main.cc:525
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -16564,14 +16564,14 @@ msgstr ""
 "Krita에서는 Wayland 플랫폼을 지원하지 않습니다. Wayland에서 Krita를 실행하려"
 "면 XWayland를 사용하십시오. Krita를 종료합니다."
 
-#: krita/main.cc:622 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:623 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: 경고"
 
-#: krita/main.cc:623
+#: krita/main.cc:624
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16582,12 +16582,12 @@ msgstr ""
 "실행을 추천하지 않습니다. 버그를 보고하지 마십시오.\n"
 "지원하는 Windows 버전을 사용하십시오: Windows 7, 8, 8.1, 10."
 
-#: krita/main.cc:645 krita/main.cc:650
+#: krita/main.cc:646 krita/main.cc:651
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita 태블릿 지원"
 
-#: krita/main.cc:646
+#: krita/main.cc:647
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16597,7 +16597,7 @@ msgstr ""
 "WinTab 드라이버를 불러올 수 없으며 Windows 잉크 펜 장치를 찾을 수 없습니다. "
 "그래픽 태블릿이 있다면 드라이버 설치 상태를 확인하십시오."
 
-#: krita/main.cc:651
+#: krita/main.cc:652
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -20186,8 +20186,8 @@ msgstr "로컬 리소스"
 #: libs/ui/KisMainWindow.cpp:2066 libs/ui/KisMainWindow.cpp:2127
 #: libs/ui/KisMainWindow.cpp:2148 libs/ui/KisMainWindow.cpp:2761
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
-#: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:35
-#: libs/ui/KisRemoteFileFetcher.cpp:56 libs/ui/KisRemoteFileFetcher.cpp:86
+#: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
+#: libs/ui/KisRemoteFileFetcher.cpp:57 libs/ui/KisRemoteFileFetcher.cpp:87
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:681 libs/ui/KisView.cpp:1137
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
@@ -22195,8 +22195,8 @@ msgstr "마스터 디스플레이:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:38
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1949
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1951
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1956
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1958
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:598
 #, kde-format
@@ -22294,8 +22294,8 @@ msgstr "비디오 애니메이션 가져오기"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1921
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1926
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -23010,67 +23010,64 @@ msgstr "이미지 경계"
 msgid "Image Center"
 msgstr "이미지 중앙"
 
-#: libs/ui/dialogs/kis_about_application.cpp:31
+#: libs/ui/dialogs/kis_about_application.cpp:33
 #, kde-format
 msgid "About Krita"
 msgstr "Krita 정보"
 
-#: libs/ui/dialogs/kis_about_application.cpp:43
-#, kde-format
-msgid "About"
-msgstr "Krita 정보"
-
-#: libs/ui/dialogs/kis_about_application.cpp:48
+#: libs/ui/dialogs/kis_about_application.cpp:44
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><h1 align=\"center\">만든 사람들</h1></p><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:65
-#, kde-format
-msgctxt "Heading for the list of Krita authors/developers"
-msgid "Authors"
-msgstr "작성자"
-
-#: libs/ui/dialogs/kis_about_application.cpp:71
+#: libs/ui/dialogs/kis_about_application.cpp:63
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Yeheun Shin,이정희,박신조"
 
-#: libs/ui/dialogs/kis_about_application.cpp:72
+#: libs/ui/dialogs/kis_about_application.cpp:64
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "syh0091@gmail.com,daemul72@gmail.com,kde@peremen.name"
 
-#: libs/ui/dialogs/kis_about_application.cpp:78
+#: libs/ui/dialogs/kis_about_application.cpp:75
 #, kde-format
-msgctxt "@title:tab"
-msgid "Translators"
-msgstr "번역자"
+msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
+msgstr "<html><head/><body><h1 align=\"center\">번역자</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:85
+#: libs/ui/dialogs/kis_about_application.cpp:87
+#, kde-format
+msgid ""
+"<p>KDE is translated into many languages thanks to the work of the "
+"translation teams all over the world.</p><p>For more information on KDE "
+"internationalization visit <a href=\"http://l10n.kde.org\">http://l10n.kde."
+"org</a></p>"
+msgstr ""
+"<p>KDE는 전세계 번역 팀의 고마운 작업으로 많은 언어로 번역됩니다.</p><p>KDE "
+"국제화에 대한 더 많은 정보를 찾고 싶으시면  <a href=\"http://l10n.kde.org"
+"\">http://l10n.kde.org</a>를 방문해 주십시오.</p><p>한국  KDE 국제화에 관한 "
+"자세한 정보는 <a href=\"http://www.kde.or.kr\">http://www.kde.or.kr</a>(한국 "
+"KDE 사용자 모임)을 방문해 주십시오.</p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:95
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">후원자</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:98
+#: libs/ui/dialogs/kis_about_application.cpp:108
 #, kde-format
 msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
 msgstr ""
 ".</p><p><i>감사합니다! 여러분 모두 <b>대단합니다</b>!</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:100
-#, kde-format
-msgid "Backers"
-msgstr "후원자"
-
-#: libs/ui/dialogs/kis_about_application.cpp:106
+#: libs/ui/dialogs/kis_about_application.cpp:111
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">특별히 감사</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:125
+#: libs/ui/dialogs/kis_about_application.cpp:132
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -23079,12 +23076,7 @@ msgstr ""
 ".</p><p><i>Krita 개발에 조언, 아이콘, 브러시 세트 등을 지원해 주셔서 감사합니"
 "다.</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:128
-#, kde-format
-msgid "Also Thanks To"
-msgstr "그 외 감사한 분들"
-
-#: libs/ui/dialogs/kis_about_application.cpp:132
+#: libs/ui/dialogs/kis_about_application.cpp:136
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -23116,12 +23108,7 @@ msgstr ""
 "전의 상용 소프트웨어로는 상업적인 목적으로 작품을 사용하지 못하는 것과 대비됩"
 "니다.</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:160
-#, kde-format
-msgid "License"
-msgstr "라이선스"
-
-#: libs/ui/dialogs/kis_about_application.cpp:168
+#: libs/ui/dialogs/kis_about_application.cpp:171
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -23131,40 +23118,6 @@ msgstr ""
 "<html><head/><body><h1 align=\"center\"><b> Krita에 사용된 제3자 라이브러리</"
 "b></h1><p>Krita는 아래 자유 소프트웨어 라이브러리를 기반으로 합니다:</"
 "p><p><ul>"
-
-#: libs/ui/dialogs/kis_about_application.cpp:186
-#, kde-format
-msgid "Third-party libraries"
-msgstr "제3자 라이브러리"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnClose)
-#. i18n: ectx: property (text), widget (QPushButton, pushButtonClose)
-#: libs/ui/dialogs/kis_about_application.cpp:189
-#: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:75
-#: libs/ui/forms/wdgsessionmanager.ui:94
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:20
-#, kde-format
-msgid "Close"
-msgstr "닫기"
-
-#: libs/ui/dialogs/kis_about_application.cpp:213
-#, kde-format
-msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
-msgstr "<html><head/><body><h1 align=\"center\">번역자</h1><p>"
-
-#: libs/ui/dialogs/kis_about_application.cpp:225
-#, kde-format
-msgid ""
-"<p>KDE is translated into many languages thanks to the work of the "
-"translation teams all over the world.</p><p>For more information on KDE "
-"internationalization visit <a href=\"http://l10n.kde.org\">http://l10n.kde."
-"org</a></p>"
-msgstr ""
-"<p>KDE는 전세계 번역 팀의 고마운 작업으로 많은 언어로 번역됩니다.</p><p>KDE "
-"국제화에 대한 더 많은 정보를 찾고 싶으시면  <a href=\"http://l10n.kde.org"
-"\">http://l10n.kde.org</a>를 방문해 주십시오.</p><p>한국  KDE 국제화에 관한 "
-"자세한 정보는 <a href=\"http://www.kde.or.kr\">http://www.kde.or.kr</a>(한국 "
-"KDE 사용자 모임)을 방문해 주십시오.</p>"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:57
 #, kde-format
@@ -23355,7 +23308,7 @@ msgstr "레이어 속성"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:605 libs/ui/kis_node_model.cpp:568
+#: libs/ui/forms/wdgdisplaysettings.ui:523 libs/ui/kis_node_model.cpp:568
 #: libs/ui/kis_node_model.cpp:571 libs/ui/kis_paintop_box.cc:269
 #: libs/ui/kis_paintop_box.cc:277 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
@@ -23859,95 +23812,95 @@ msgstr "백색 점: %1, %2"
 msgid "Warning(s):"
 msgstr "경고:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1827
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1834
 #, kde-format
 msgid "WARNING: current display doesn't support HDR rendering"
 msgstr "경고: 현재 디스플레이에서 HDR 렌더링을 지원하지 않음"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1912
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
 #, kde-format
 msgid "Configure Krita"
 msgstr "Krita 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1929
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "키보드 단축키"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1931
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "단축키"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1941
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "캔버스 입력 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1942
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1949
 #, kde-format
 msgid "Canvas Input"
 msgstr "캔버스 입력"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1959
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1966
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #, kde-format
 msgid "Color Management"
 msgstr "색 관리"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1961
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1968
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "색상"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1969
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1971
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1976
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1978
 #, kde-format
 msgid "Performance"
 msgstr "성능"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1979
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1986
 #, kde-format
 msgid "Tablet settings"
 msgstr "태블릿 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1981
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1988
 #, kde-format
 msgid "Tablet"
 msgstr "태블릿"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1989
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1996
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "캔버스만 보기 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1991
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1998
 #, kde-format
 msgid "Canvas-only"
 msgstr "캔버스만 보기"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1999
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2001
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2006
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2008
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "팝업 팔레트"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2009
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2016
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "작성자"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2011
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2018
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "작성자"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2018
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2025
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -24695,6 +24648,51 @@ msgstr "Y 해상도:"
 msgid "Resolution:"
 msgstr "해상도:"
 
+#. i18n: ectx: attribute (title), widget (QWidget, aboutTab)
+#: libs/ui/forms/wdgaboutapplication.ui:29
+#, kde-format
+msgid "About"
+msgstr "Krita 정보"
+
+#. i18n: ectx: attribute (title), widget (QWidget, authorsTab)
+#: libs/ui/forms/wdgaboutapplication.ui:35
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:366
+#, kde-format
+msgid "Authors"
+msgstr "작성자"
+
+#. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
+#: libs/ui/forms/wdgaboutapplication.ui:49
+#, fuzzy, kde-format
+#| msgctxt "@title:tab"
+#| msgid "Translators"
+msgid "Translators"
+msgstr "번역자"
+
+#. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
+#: libs/ui/forms/wdgaboutapplication.ui:66
+#, kde-format
+msgid "Backers"
+msgstr "후원자"
+
+#. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
+#: libs/ui/forms/wdgaboutapplication.ui:80
+#, kde-format
+msgid "Also Thanks To"
+msgstr "그 외 감사한 분들"
+
+#. i18n: ectx: attribute (title), widget (QWidget, licenseTab)
+#: libs/ui/forms/wdgaboutapplication.ui:94
+#, kde-format
+msgid "License"
+msgstr "라이선스"
+
+#. i18n: ectx: attribute (title), widget (QWidget, thirdPartyLibrariesTab)
+#: libs/ui/forms/wdgaboutapplication.ui:108
+#, kde-format
+msgid "Third-party libraries"
+msgstr "제3자 라이브러리"
+
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: libs/ui/forms/wdgapplyprofile.ui:27
 #, kde-format
@@ -24837,6 +24835,15 @@ msgstr "현재 항목 책갈피에 추가"
 #, kde-format
 msgid "Delete"
 msgstr "삭제"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnClose)
+#. i18n: ectx: property (text), widget (QPushButton, pushButtonClose)
+#: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:75
+#: libs/ui/forms/wdgsessionmanager.ui:94
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:20
+#, kde-format
+msgid "Close"
+msgstr "닫기"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSourceLayer)
 #: libs/ui/forms/wdgchangeclonesource.ui:34
@@ -25297,8 +25304,20 @@ msgstr "크기:"
 msgid "Canvas Border Color:"
 msgstr "캔버스 테두리 색상:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdgdisplaysettings.ui:475
+#. i18n: ectx: property (text), widget (QLabel, lblCanvasBorderColor_2)
+#: libs/ui/forms/wdgdisplaysettings.ui:469
+#, kde-format
+msgid "Pixel Grid:"
+msgstr "픽셀 격자:"
+
+#. i18n: ectx: property (text), widget (QLabel, gridThresholdLabel)
+#: libs/ui/forms/wdgdisplaysettings.ui:516
+#, kde-format
+msgid "Start showing at:"
+msgstr "다음부터 표시:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: libs/ui/forms/wdgdisplaysettings.ui:558
 #, kde-format
 msgid "Selection Overlay:"
 msgstr "선택 오버레이:"
@@ -25307,7 +25326,7 @@ msgstr "선택 오버레이:"
 #. i18n: ectx: property (text), widget (QLabel, opacityLbl)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
-#: libs/ui/forms/wdgdisplaysettings.ui:522 libs/ui/kis_paintop_box.cc:254
+#: libs/ui/forms/wdgdisplaysettings.ui:605 libs/ui/kis_paintop_box.cc:254
 #: libs/ui/kis_paintop_box.cc:260
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
@@ -25317,64 +25336,59 @@ msgstr "선택 오버레이:"
 msgid "Opacity:"
 msgstr "불투명도:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblCanvasBorderColor_2)
-#: libs/ui/forms/wdgdisplaysettings.ui:551
-#, kde-format
-msgid "Pixel Grid:"
-msgstr "픽셀 격자:"
-
-#. i18n: ectx: property (text), widget (QLabel, gridThresholdLabel)
-#: libs/ui/forms/wdgdisplaysettings.ui:598
-#, kde-format
-msgid "Start showing at:"
-msgstr "다음부터 표시:"
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: libs/ui/forms/wdgdisplaysettings.ui:640
+#, fuzzy, kde-format
+#| msgid "Selection Overlay:"
+msgid "Selection Outline Opacity:"
+msgstr "선택 오버레이:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: libs/ui/forms/wdgdisplaysettings.ui:648
+#: libs/ui/forms/wdgdisplaysettings.ui:704
 #: libs/ui/forms/wdggeneralsettings.ui:1003
 #, kde-format
 msgid "Miscellaneous"
 msgstr "기타"
 
 #. i18n: ectx: property (text), widget (QCheckBox, hideScrollbars)
-#: libs/ui/forms/wdgdisplaysettings.ui:667
+#: libs/ui/forms/wdgdisplaysettings.ui:723
 #, kde-format
 msgid "Hide Canvas Scrollbars"
 msgstr "캔버스 스크롤 바 숨기기"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCurveAntialiasing)
-#: libs/ui/forms/wdgdisplaysettings.ui:677
+#: libs/ui/forms/wdgdisplaysettings.ui:733
 #, kde-format
 msgid "Enable curve anti-aliasing"
 msgstr "곡선 앤티에일리어싱 활성화"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHidePopups)
-#: libs/ui/forms/wdgdisplaysettings.ui:684
+#: libs/ui/forms/wdgdisplaysettings.ui:740
 #, kde-format
 msgid "Hide layer thumbnail popup"
 msgstr "레이어 미리 보기 팝업 숨기기"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannelsAsColor)
-#: libs/ui/forms/wdgdisplaysettings.ui:691
+#: libs/ui/forms/wdgdisplaysettings.ui:747
 #, kde-format
 msgid "Color channels in color"
 msgstr "색상 채널을 색으로 표시"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSelectionOutlineAntialiasing)
-#: libs/ui/forms/wdgdisplaysettings.ui:701
+#: libs/ui/forms/wdgdisplaysettings.ui:757
 #, kde-format
 msgid "Enable selection outline anti-aliasing"
 msgstr "선택 외곽선 앤티에일리어싱 사용"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:708
+#: libs/ui/forms/wdgdisplaysettings.ui:764
 #, kde-format
 msgid "If checked, the checkers will move when scrolling the canvas."
 msgstr "이 옵션을 선택하면 캔버스를 이동할 때 체크 무늬도 따라서 이동합니다."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:711
+#: libs/ui/forms/wdgdisplaysettings.ui:767
 #, kde-format
 msgid ""
 "Determines whether the checks will stay put or whether they will scroll "
@@ -25382,7 +25396,7 @@ msgid ""
 msgstr "체커를 고정하거나 캔버스와 같이 스크롤할지 여부를 지정합니다"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:714
+#: libs/ui/forms/wdgdisplaysettings.ui:770
 #, kde-format
 msgid "&Move checkers when scrolling"
 msgstr "스크롤할 때 체커 이동(&M)"
@@ -30813,9 +30827,10 @@ msgid "Cannot open file for writing. Reason: %1"
 msgstr "쓰려는 파일을 열 수 없습니다. 이유: %1"
 
 #: libs/ui/KisImportExportErrorCode.cpp:139
-#, kde-format
-msgid "Unexpected error. Please contact developers."
-msgstr "알 수 없는 오류입니다. 개발자에게 연락하십시오."
+#, fuzzy, kde-format
+#| msgid "Internal error."
+msgid "Unexpected error."
+msgstr "내부 오류."
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format
@@ -31443,27 +31458,27 @@ msgstr "채도 설정"
 msgid "Could not load %1."
 msgstr "%1을(를) 불러올 수 없습니다."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:38
+#: libs/ui/KisRemoteFileFetcher.cpp:39
 #, fuzzy, kde-format
 #| msgid "Do you want to save it?"
 msgctxt "Fetching remote image"
 msgid "Do you want to download the image at %1?"
 msgstr "저장하시겠습니까?"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:57
+#: libs/ui/KisRemoteFileFetcher.cpp:58
 #, fuzzy, kde-format
 #| msgid "Could not load reference images from '%1'."
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "'%1'에서 참조 이미지를 불러올 수 없습니다."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:71
+#: libs/ui/KisRemoteFileFetcher.cpp:72
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:88
+#: libs/ui/KisRemoteFileFetcher.cpp:89
 #, fuzzy, kde-format
 #| msgid "Could not load %1."
 msgctxt "Fetching remote image"
@@ -41106,12 +41121,12 @@ msgid "Copy to clipboard"
 msgstr "클립보드에 복사"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:39
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:84
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:73
 #, kde-format
 msgid "Save to file"
 msgstr "파일에 저장"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:95
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:84
 #, kde-format
 msgid "Unable to open file"
 msgstr "파일을 열 수 없습니다"
@@ -41151,8 +41166,8 @@ msgid ""
 "Krita System Information: please paste this information to the bug report"
 msgstr "Krita 시스템 정보: 이 정보를 버그 보고서에 붙여 넣으십시오"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/buginfo/wdg_buginfo.ui:21
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plugins/extensions/buginfo/wdg_buginfo.ui:39
 #, kde-format
 msgid "Please add this information to a bug report:"
 msgstr "다음 정보를 버그 보고서에 붙여 넣어 주십시오:"
@@ -46895,7 +46910,7 @@ msgstr "문서에서 색 프로필을 찾을 수 없습니다."
 msgid "Unknown error: %1"
 msgstr "알 수 없는 오류: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:519
+#: plugins/impex/heif/HeifExport.cpp:527
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46905,7 +46920,7 @@ msgstr ""
 "이미지의 명도는 최대 해상도로 유지되고, 채도는 두 차원에서 절반으로 줄어듭니"
 "다."
 
-#: plugins/impex/heif/HeifExport.cpp:520
+#: plugins/impex/heif/HeifExport.cpp:528
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46914,28 +46929,28 @@ msgid ""
 msgstr ""
 "이미지의 명도는 최대 해상도가 되고, 채도는 수평으로 절반으로 줄어듭니다."
 
-#: plugins/impex/heif/HeifExport.cpp:521
+#: plugins/impex/heif/HeifExport.cpp:529
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr "이미지의 명도와 채도는 모두 최대 해상도입니다."
 
-#: plugins/impex/heif/HeifExport.cpp:535
+#: plugins/impex/heif/HeifExport.cpp:543
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:182
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:535
+#: plugins/impex/heif/HeifExport.cpp:543
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:175
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:536
+#: plugins/impex/heif/HeifExport.cpp:544
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:177
 #, kde-format
 msgctxt "@tooltip"
@@ -46947,7 +46962,7 @@ msgstr ""
 "이미지는 먼저 Rec 2020 선형으로 변환된 다음, 지각 양자화 곡선(SMPTE 2048 곡선"
 "이라고도 함)으로 인코딩됩니다. 절대 명도가 중요한 HDR 영상에 권장됩니다."
 
-#: plugins/impex/heif/HeifExport.cpp:538
+#: plugins/impex/heif/HeifExport.cpp:546
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
 #, kde-format
 msgctxt "@tooltip"
@@ -46960,7 +46975,7 @@ msgstr ""
 "코딩됩니다. HDR을 처리하지 못할 수 있는 디스플레이에서 표시될 수 있는 HDR 이"
 "미지에 권장됩니다."
 
-#: plugins/impex/heif/HeifExport.cpp:544
+#: plugins/impex/heif/HeifExport.cpp:552
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:191
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -46969,7 +46984,7 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "색소 유지, PQ 인코딩"
 
-#: plugins/impex/heif/HeifExport.cpp:545
+#: plugins/impex/heif/HeifExport.cpp:553
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #, kde-format
 msgctxt "@tooltip"
@@ -46981,7 +46996,7 @@ msgstr ""
 "이미지는 먼저 선형화된 다음 지각 양자화 곡선 (SMPTE 2048 곡선이라고도 함)으"
 "로 인코딩됩니다. 절대 명도가 중요한 이미지에 권장됩니다."
 
-#: plugins/impex/heif/HeifExport.cpp:549
+#: plugins/impex/heif/HeifExport.cpp:557
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -46990,7 +47005,7 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "색소 유지, HLG 인코딩"
 
-#: plugins/impex/heif/HeifExport.cpp:550
+#: plugins/impex/heif/HeifExport.cpp:558
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
 #, kde-format
 msgctxt "@tooltip"
@@ -47002,7 +47017,7 @@ msgstr ""
 "처리하지 못할 수 있는 디스플레이에서 표시될 수 있는 화면용 이미지에 권장됩니"
 "다"
 
-#: plugins/impex/heif/HeifExport.cpp:554
+#: plugins/impex/heif/HeifExport.cpp:562
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -47011,7 +47026,7 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "색소 유지, SMPTE ST 428 인코딩"
 
-#: plugins/impex/heif/HeifExport.cpp:555
+#: plugins/impex/heif/HeifExport.cpp:563
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
 #, kde-format
 msgctxt "@tooltip"
@@ -47023,7 +47038,7 @@ msgstr ""
 "이미지는 먼저 선형화된 다음 SMPTEST 428로 인코딩됩니다. Krita는 항상 이러한 "
 "이미지를 선형 부동 소수점으로 엽니다. 이 옵션은 과정을 뒤집습니다"
 
-#: plugins/impex/heif/HeifExport.cpp:560
+#: plugins/impex/heif/HeifExport.cpp:568
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option"
 #| msgid "No changes, clip"
@@ -47031,7 +47046,7 @@ msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "변경 사항 없음, 클립"
 
-#: plugins/impex/heif/HeifExport.cpp:561
+#: plugins/impex/heif/HeifExport.cpp:569
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -49103,13 +49118,13 @@ msgstr ""
 "다.<br/>참고: 품질 100을 사용하면 PNG와 유사하지만 종종 더 효율적인 무손실 압"
 "축으로 전환합니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:224
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:264
 #, kde-format
 msgctxt "@option:check"
 msgid "16 bits color depth"
 msgstr "16비트 색 농도"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:225
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:265
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49125,13 +49140,13 @@ msgstr ""
 "일을 BT.709 감마 곡선과 99번째 백분위수 흰색 점으로 8비트 색상 깊이로 디코딩"
 "합니다. 이 모드는 16비트 디코딩보다 빠릅니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:244
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:284
 #, kde-format
 msgctxt "@option:check"
 msgid "Interpolate RGB as four colors"
 msgstr "RGB를 4가지 색상으로 보간"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:245
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:285
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49150,19 +49165,19 @@ msgstr ""
 "간 흐려지지만 VNG 품질 방법이나 AHD 품질 방법으로 미로를 사용하여 잘못된 2x2 "
 "메시 패턴을 삭제합니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:259
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:299
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Visit LibRaw project website"
 msgstr "LibRaw 프로젝트 웹사이트 방문"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:269
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:309
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not stretch or rotate pixels"
 msgstr "픽셀을 늘이거나 회전하지 않기"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:271
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:311
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49176,79 +49191,79 @@ msgstr ""
 "지를 올바른 가로 세로 비율로 늘이지 않습니다. 어쨌든 이 옵션은 각 출력 픽셀"
 "이 하나의 RAW 픽셀에 해당하도록 보장합니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:279
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:319
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Quality:"
 msgstr "품질:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:283
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:323
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "Bilinear"
 msgstr "이중 선형"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:284
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:324
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "VNG"
 msgstr "VNG"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:285
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:325
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "PPG"
 msgstr "PPG"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:286
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:326
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AHD"
 msgstr "AHD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:289
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:329
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "DCB"
 msgstr "DCB"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:290
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:330
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AHD v2"
 msgstr "AHD v2"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:291
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:331
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AFD"
 msgstr "AFD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:292
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:332
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "VCD"
 msgstr "VCD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:293
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:333
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "VCD & AHD"
 msgstr "VCD 및 AHD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:294
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:334
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "LMMSE"
 msgstr "LMMSE"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:296
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:336
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AMaZE"
 msgstr "AMaZE"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:313
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:353
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49320,13 +49335,13 @@ msgstr ""
 "li></ul></p> <p>참고: RAW 디코더가 확장 팩 없이 빌드된 경우 일부 방식을 사용"
 "할 수 없습니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:382
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:422
 #, kde-format
 msgctxt "@label:slider"
 msgid "Pass:"
 msgstr "패스:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:383
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:423
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49346,13 +49361,13 @@ msgstr ""
 "strong='true'>DCB</emphasis>, 및 <emphasis strong='true'>VCD & AHD</"
 "emphasis>.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:395
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:435
 #, kde-format
 msgctxt "@option:check"
 msgid "Refine interpolation"
 msgstr "보간법 미세 조정"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:396
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:436
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49367,43 +49382,43 @@ msgstr ""
 "화 필터를 켭니다.</li><li><emphasis strong='true'>VCD 및 AHD</emphasis>: 향상"
 "된 효과적인 색상 보간(EECI)을 켜서 선명도를 개선합니다.</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:413
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:453
 #, kde-format
 msgctxt "@label"
 msgid "Demosaicing"
 msgstr "디모자이킹"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:421
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:461
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Method:"
 msgstr "방법:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:423
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:463
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Default D65"
 msgstr "기본 D65"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:424
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:464
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Camera"
 msgstr "카메라"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:425
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:465
 #, kde-format
 msgctxt "@item:inlistbox set while balance automatically"
 msgid "Automatic"
 msgstr "자동"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:426
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:466
 #, kde-format
 msgctxt "@item:inlistbox set white balance manually"
 msgid "Manual"
 msgstr "수동"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:428
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:468
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49425,26 +49440,26 @@ msgstr ""
 "strong='true'>수동</emphasis>: 사용자 정의 온도 및 녹색 레벨 값을 설정합니다."
 "</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:443
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:483
 #, kde-format
 msgctxt "@label:slider"
 msgid "T(K):"
 msgstr "T(K):"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:444
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:484
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<title>Temperature</title><p>Set here the color temperature in Kelvin.</p>"
 msgstr "<title>색온도</title><p>켈빈 단위로 색온도를 설정합니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:451
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:491
 #, kde-format
 msgctxt "@label:slider Green component"
 msgid "Green:"
 msgstr "녹색:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:452
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:492
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49453,37 +49468,37 @@ msgstr ""
 "<p>여기에 녹색 구성 요소를 지정하여 마젠타 색상 배색 삭제 레벨을 지정하십시"
 "오.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:455
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:495
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Highlights:"
 msgstr "강조:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:457
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:497
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Solid white"
 msgstr "단색 흰색"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:458
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:498
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Unclip"
 msgstr "클립 해제"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:459
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:499
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Blend"
 msgstr "혼합하기"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:460
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:500
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Rebuild"
 msgstr "재빌드"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:462
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:502
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49503,13 +49518,13 @@ msgstr ""
 "과 클리핑되지 않은 값을 함께 혼합합니다.</li><li><emphasis strong='true'>재빌"
 "드</emphasis>: 레벨 값을 사용하여 강조를 재구성합니다.</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:473
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:513
 #, kde-format
 msgctxt "@label:slider Highlight reconstruct level"
 msgid "Level:"
 msgstr "레벨:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:477
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:517
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49519,25 +49534,25 @@ msgstr ""
 "<title>레벨</title><p>재구성 강조 레벨을 지정합니다. 값이 낮을수록 흰색을 선"
 "호하고 값이 높을수록 색상을 선호합니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:481
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:521
 #, kde-format
 msgctxt "@option:check"
 msgid "Exposure Correction (E.V)"
 msgstr "노출 보정(E.V)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:482
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:522
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "<p>Turn on the exposure correction before interpolation.</p>"
 msgstr "<p>보간 전에 노출 보정을 켭니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:485
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:525
 #, kde-format
 msgctxt "@label:slider"
 msgid "Linear Shift:"
 msgstr "선형 시프트:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:490
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:530
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49545,13 +49560,13 @@ msgid ""
 "interpolation in E.V</p>"
 msgstr "<title>시프트</title><p>E.V 단위로 된 노출 보정 선형 시프트입니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:493
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:533
 #, kde-format
 msgctxt "@label:slider"
 msgid "Highlight:"
 msgstr "강조:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:498
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:538
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49562,13 +49577,13 @@ msgstr ""
 "<title>강조</title><p>E.V 단위로 된 보정하기 전에 강조를 보존할 양입니다. 시"
 "프트 보정이 > 1.0 E.V인 경우에만 적용됩니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:502
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:542
 #, kde-format
 msgctxt "@option:check"
 msgid "Correct false colors in highlights"
 msgstr "잘못된 색상 강조 수정"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:503
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:543
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49579,13 +49594,13 @@ msgstr ""
 "<p>이 옵션을 사용하면 '분홍색 구름'(및 텅스텐 램프 아래의 파란색 강조) 없이 "
 "과장된 채널이 있는 이미지가 훨씬 더 정확하게 처리됩니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:507
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:547
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto Brightness"
 msgstr "자동 명도"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:508
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:548
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49595,13 +49610,13 @@ msgstr ""
 "<p>이 옵션을 사용하지 않으면 고정된 흰색 레벨을 사용하고 이미지 히스토그램을 "
 "무시하고 명도를 조정합니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:511
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:551
 #, kde-format
 msgctxt "@label:slider"
 msgid "Brightness:"
 msgstr "명도:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:516
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:556
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49611,13 +49626,13 @@ msgstr ""
 "<title>명도</title><p>출력 이미지의 명도 레벨을 지정합니다. 기본값은 1.0입니"
 "다(8비트 모드에서만 작동).</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:526
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:566
 #, kde-format
 msgctxt "@option:check Black point"
 msgid "Black:"
 msgstr "검은색:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:527
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:567
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49628,7 +49643,7 @@ msgstr ""
 "<title>흑색 점</title><p>특정 흑색 점 값을 사용하여 RAW 사진을 디코딩합니다. "
 "이 옵션을 사용하지 않으면 흑색 점 값을 자동으로 계산합니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:534
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:574
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49637,13 +49652,13 @@ msgid ""
 msgstr ""
 "<title>흑색 점 값</title><p>출력 이미지의 특정 흑색 점 값을 지정합니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:537
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:577
 #, kde-format
 msgctxt "@option:check White point"
 msgid "White:"
 msgstr "흰색:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:538
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:578
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49654,7 +49669,7 @@ msgstr ""
 "<title>백색 점</title><p>특정 백색 점 값을 사용하여 RAW 사진을 디코딩합니다. "
 "이 옵션을 사용하지 않으면 백색 점 값을 자동으로 계산합니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:545
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:585
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49663,49 +49678,49 @@ msgid ""
 msgstr ""
 "<title>백색 점 값</title><p>출력 이미지의 특정 백색 점 값을 지정합니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:582
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:622
 #, kde-format
 msgctxt "@label"
 msgid "White Balance"
 msgstr "화이트 밸런스"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:590
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:630
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Noise reduction:"
 msgstr "잡음 감소:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:592
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:632
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "None"
 msgstr "없음"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:593
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:633
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Wavelets"
 msgstr "웨이블릿"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:594
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:634
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "FBDD"
 msgstr "FBDD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:595
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:635
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "CFA Line Denoise"
 msgstr "CFA 라인 잡음 감소"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:596
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:636
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Impulse Denoise"
 msgstr "임펄스 잡음 감소"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:598
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49731,13 +49746,13 @@ msgstr ""
 "스 잡음 감소</emphasis>: 임펄스 잡음을 억제합니다. 보간법 적용 후에 적용됩니"
 "다.</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:624
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:664
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Chromatic Aberration correction"
 msgstr "색수차 보정 사용"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:625
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:665
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49747,13 +49762,13 @@ msgstr ""
 "<title>색수차 보정 사용</title><p>지정한 값에 따라서 원시 빨간색-녹색 및 파란"
 "색-노란색 축을 확대합니다(기본값: 자동).</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:630
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:670
 #, kde-format
 msgctxt "@option:check"
 msgid "Automatic color axis adjustments"
 msgstr "자동 색상 축 조정"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:631
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:671
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49768,13 +49783,13 @@ msgstr ""
 "실패할 수 있습니다. 이 경우 이 옵션을 비활성화하고 수동으로 색상 요소를 조정"
 "하십시오.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:678
 #, kde-format
 msgctxt "@label:slider"
 msgid "Red-Green:"
 msgstr "빨간색-녹색:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:643
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:683
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49784,13 +49799,13 @@ msgstr ""
 "<title>빨간색-녹색 승수</title><p>빨간색-녹색 축의 보정 정도를 설정합니다.</"
 "p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:646
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:686
 #, kde-format
 msgctxt "@label:slider"
 msgid "Blue-Yellow:"
 msgstr "파란색-노란색:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:651
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:691
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49800,37 +49815,37 @@ msgstr ""
 "<title>파란색-노란색 승수</title><p>파란색-노란색 축의 보정 정도를 설정합니"
 "다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:670
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:710
 #, kde-format
 msgctxt "@label"
 msgid "Corrections"
 msgstr "보정"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:678
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:718
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Camera Profile:"
 msgstr "카메라 프로필:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:680
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:720
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "None"
 msgstr "없음"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:681
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Embedded"
 msgstr "임베드됨"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:682
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:722
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Custom"
 msgstr "사용자 정의"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:684
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49848,54 +49863,54 @@ msgstr ""
 "다.</li><li><emphasis strong='true'>사용자 정의</emphasis>: 사용자 정의 입력 "
 "색 공간 프로필을 사용합니다.</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:695
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:735
 #, kde-format
 msgid "ICC Files (*.icc; *.icm)"
 msgstr "ICC 파일 (*.icc; *.icm)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:697
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:737
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Workspace:"
 msgstr "작업 공간:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:699
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:739
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Raw (no profile)"
 msgstr "Raw(프로필 없음)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:700
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:740
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "sRGB"
 msgstr "sRGB"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:701
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:741
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Adobe RGB"
 msgstr "Adobe RGB"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:702
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:742
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Wide Gamut"
 msgstr "광색역"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:703
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:743
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Pro-Photo"
 msgstr "Pro-Photo"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:704
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:744
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Custom"
 msgstr "사용자 정의"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:706
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:746
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49928,24 +49943,24 @@ msgstr ""
 "역을 제공합니다.</li><li><emphasis strong='true'>사용자 정의</emphasis>: 사용"
 "자 정의 출력 색 공간 프로필을 사용합니다.</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:729
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:769
 #, kde-format
 msgid "ICC Files (*.icc *.icm)"
 msgstr "ICC 파일 (*.icc *.icm)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:741
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:781
 #, kde-format
 msgctxt "@label"
 msgid "Color Management"
 msgstr "색 관리"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:947
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:987
 #, kde-format
 msgctxt "@label"
 msgid "Threshold:"
 msgstr "임곗값:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:948
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:988
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49953,26 +49968,26 @@ msgid ""
 "use.</p>"
 msgstr "<title>임곗값</title><p>사용할 잡음 감소 임곗값을 설정합니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:961
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1001
 #, kde-format
 msgctxt "@label"
 msgid "Luminance:"
 msgstr "휘도:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:962
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1002
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<title>Luminance</title><p>Amount of Luminance impulse noise reduction.</p>"
 msgstr "<title>휘도</title><p>휘도 임펄스 잡음 감소량입니다.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:964
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1004
 #, kde-format
 msgctxt "@label"
 msgid "Chrominance:"
 msgstr "색차:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:965
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1005
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -55067,10 +55082,6 @@ msgstr ""
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 msgid "Role"
 msgstr "역할"
-
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:366
-msgid "Authors"
-msgstr "작성자"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
 msgid ""
@@ -60700,6 +60711,13 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "참조 이미지 도구"
 
+#~ msgctxt "Heading for the list of Krita authors/developers"
+#~ msgid "Authors"
+#~ msgstr "작성자"
+
+#~ msgid "Unexpected error. Please contact developers."
+#~ msgstr "알 수 없는 오류입니다. 개발자에게 연락하십시오."
+
 #~ msgid "&Description:"
 #~ msgstr "설명(&D):"
 
@@ -64930,9 +64948,6 @@ msgstr "참조 이미지 도구"
 
 #~ msgid "Krita could not create a new image."
 #~ msgstr "Krita에서 새로운 이미지를 만들 수 없습니다."
-
-#~ msgid "Internal error."
-#~ msgstr "내부 오류."
 
 #~ msgid "The HEIF file is corrupted."
 #~ msgstr "HEIF 파일이 손상되었습니다."

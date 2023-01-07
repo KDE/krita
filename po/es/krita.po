@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-05 00:45+0000\n"
+"POT-Creation-Date: 2023-01-07 00:46+0000\n"
 "PO-Revision-Date: 2023-01-05 18:56+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -15732,13 +15732,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Espacios de trabajo"
 
-#: krita/main.cc:524
+#: krita/main.cc:525
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Error fatal"
 
-#: krita/main.cc:524
+#: krita/main.cc:525
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15747,14 +15747,14 @@ msgstr ""
 "Krita no funciona en la plataforma Wayland. Use XWayland para ejecutar Krita "
 "en Wayland. Krita se cerrará ahora."
 
-#: krita/main.cc:622 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:623 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Advertencia"
 
-#: krita/main.cc:623
+#: krita/main.cc:624
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15765,12 +15765,12 @@ msgstr ""
 "Esto no está recomendado. Por favor, no informe de ningún error.\n"
 "Actualice a una versión de Windows compatible: Windows 7, 8, 8.1 o 10."
 
-#: krita/main.cc:645 krita/main.cc:650
+#: krita/main.cc:646 krita/main.cc:651
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Uso de tabletas en Krita"
 
-#: krita/main.cc:646
+#: krita/main.cc:647
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15781,7 +15781,7 @@ msgstr ""
 "dispositivos de lápiz Windows Ink. Si tiene una tableta de dibujo, asegúrese "
 "de que su controlador se ha instalado correctamente."
 
-#: krita/main.cc:651
+#: krita/main.cc:652
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -19367,8 +19367,8 @@ msgstr "Recursos locales"
 #: libs/ui/KisMainWindow.cpp:2066 libs/ui/KisMainWindow.cpp:2127
 #: libs/ui/KisMainWindow.cpp:2148 libs/ui/KisMainWindow.cpp:2761
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
-#: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:35
-#: libs/ui/KisRemoteFileFetcher.cpp:56 libs/ui/KisRemoteFileFetcher.cpp:86
+#: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
+#: libs/ui/KisRemoteFileFetcher.cpp:57 libs/ui/KisRemoteFileFetcher.cpp:87
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:681 libs/ui/KisView.cpp:1137
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
@@ -21354,8 +21354,8 @@ msgstr "Pantalla principal:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:38
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1949
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1951
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1956
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1958
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:598
 #, kde-format
@@ -21453,8 +21453,8 @@ msgstr "Importar animación de vídeo"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1921
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1926
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22158,28 +22158,17 @@ msgstr "Límites de la imagen"
 msgid "Image Center"
 msgstr "Centro de la imagen"
 
-#: libs/ui/dialogs/kis_about_application.cpp:31
+#: libs/ui/dialogs/kis_about_application.cpp:33
 #, kde-format
 msgid "About Krita"
 msgstr "Acerca de Krita"
 
-#: libs/ui/dialogs/kis_about_application.cpp:43
-#, kde-format
-msgid "About"
-msgstr "Acerca de"
-
-#: libs/ui/dialogs/kis_about_application.cpp:48
+#: libs/ui/dialogs/kis_about_application.cpp:44
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Creado por</h1></p><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:65
-#, kde-format
-msgctxt "Heading for the list of Krita authors/developers"
-msgid "Authors"
-msgstr "Autores"
-
-#: libs/ui/dialogs/kis_about_application.cpp:71
+#: libs/ui/dialogs/kis_about_application.cpp:63
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
@@ -22187,7 +22176,7 @@ msgstr ""
 "Sofía Priego,Raúl González,Juan Manuel García Molina,Enrique Matías Sánchez "
 "(Quique)"
 
-#: libs/ui/dialogs/kis_about_application.cpp:72
+#: libs/ui/dialogs/kis_about_application.cpp:64
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -22195,33 +22184,40 @@ msgstr ""
 "spriego@darksylvania.net,raulgf83@gmail.com,juanma@superiodico.net,"
 "cronopios@gmail.com"
 
-#: libs/ui/dialogs/kis_about_application.cpp:78
+#: libs/ui/dialogs/kis_about_application.cpp:75
 #, kde-format
-msgctxt "@title:tab"
-msgid "Translators"
-msgstr "Traductores"
+msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
+msgstr "<html><head/><body><h1 align=\"center\"><b>Traductores</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:85
+#: libs/ui/dialogs/kis_about_application.cpp:87
+#, kde-format
+msgid ""
+"<p>KDE is translated into many languages thanks to the work of the "
+"translation teams all over the world.</p><p>For more information on KDE "
+"internationalization visit <a href=\"http://l10n.kde.org\">http://l10n.kde."
+"org</a></p>"
+msgstr ""
+"<p>KDE está traducido a muchos idiomas gracias al trabajo de equipos de "
+"traducción de todo el mundo.</p><p>Para más información sobre la "
+"internacionalización de KDE visite <a href=\"http://l10n.kde.org\">http://"
+"l10n.kde.org</a>.</p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:95
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Patrocinado por</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:98
+#: libs/ui/dialogs/kis_about_application.cpp:108
 #, kde-format
 msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
 msgstr ".</p><p><i>¡Gracias! Sois <b>impresionantes</b>!</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:100
-#, kde-format
-msgid "Backers"
-msgstr "Patrocinadores"
-
-#: libs/ui/dialogs/kis_about_application.cpp:106
+#: libs/ui/dialogs/kis_about_application.cpp:111
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Gracias por</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:125
+#: libs/ui/dialogs/kis_about_application.cpp:132
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22230,12 +22226,7 @@ msgstr ""
 ".</p><p><i>Apoyar el desarrollo de Krita con consejos, iconos, definiciones "
 "de pinceles y más.</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:128
-#, kde-format
-msgid "Also Thanks To"
-msgstr "También gracias por"
-
-#: libs/ui/dialogs/kis_about_application.cpp:132
+#: libs/ui/dialogs/kis_about_application.cpp:136
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22270,12 +22261,7 @@ msgstr ""
 "versiones de prueba o educativas de los programas comerciales que impiden su "
 "trabajo en situaciones comerciales.</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:160
-#, kde-format
-msgid "License"
-msgstr "Licencia"
-
-#: libs/ui/dialogs/kis_about_application.cpp:168
+#: libs/ui/dialogs/kis_about_application.cpp:171
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -22285,39 +22271,6 @@ msgstr ""
 "<html><head/><body><h1 align=\"center\"><b>Bibliotecas de terceras partes "
 "usadas por Krita</b></h1><p>Krita está construido sobre las siguientes "
 "bibliotecas de software libre:</p><p><ul>"
-
-#: libs/ui/dialogs/kis_about_application.cpp:186
-#, kde-format
-msgid "Third-party libraries"
-msgstr "Bibliotecas de terceras partes"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnClose)
-#. i18n: ectx: property (text), widget (QPushButton, pushButtonClose)
-#: libs/ui/dialogs/kis_about_application.cpp:189
-#: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:75
-#: libs/ui/forms/wdgsessionmanager.ui:94
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:20
-#, kde-format
-msgid "Close"
-msgstr "Cerrar"
-
-#: libs/ui/dialogs/kis_about_application.cpp:213
-#, kde-format
-msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
-msgstr "<html><head/><body><h1 align=\"center\"><b>Traductores</b></h1><p><ul>"
-
-#: libs/ui/dialogs/kis_about_application.cpp:225
-#, kde-format
-msgid ""
-"<p>KDE is translated into many languages thanks to the work of the "
-"translation teams all over the world.</p><p>For more information on KDE "
-"internationalization visit <a href=\"http://l10n.kde.org\">http://l10n.kde."
-"org</a></p>"
-msgstr ""
-"<p>KDE está traducido a muchos idiomas gracias al trabajo de equipos de "
-"traducción de todo el mundo.</p><p>Para más información sobre la "
-"internacionalización de KDE visite <a href=\"http://l10n.kde.org\">http://"
-"l10n.kde.org</a>.</p>"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:57
 #, kde-format
@@ -22507,7 +22460,7 @@ msgstr "Propiedades de la capa"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:605 libs/ui/kis_node_model.cpp:568
+#: libs/ui/forms/wdgdisplaysettings.ui:523 libs/ui/kis_node_model.cpp:568
 #: libs/ui/kis_node_model.cpp:571 libs/ui/kis_paintop_box.cc:269
 #: libs/ui/kis_paintop_box.cc:277 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
@@ -23018,95 +22971,95 @@ msgstr "Punto blanco: %1, %2"
 msgid "Warning(s):"
 msgstr "Advertencia(s):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1827
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1834
 #, kde-format
 msgid "WARNING: current display doesn't support HDR rendering"
 msgstr "Advertencia: la pantalla actual no permite el renderizado HDR"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1912
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
 #, kde-format
 msgid "Configure Krita"
 msgstr "Configurar Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1929
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Accesos rápidos de teclado"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1931
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Accesos rápidos"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1941
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Preferencias de entrada del lienzo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1942
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1949
 #, kde-format
 msgid "Canvas Input"
 msgstr "Entrada del lienzo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1959
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1966
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #, kde-format
 msgid "Color Management"
 msgstr "Gestión de color"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1961
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1968
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Color"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1969
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1971
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1976
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1978
 #, kde-format
 msgid "Performance"
 msgstr "Rendimiento"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1979
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1986
 #, kde-format
 msgid "Tablet settings"
 msgstr "Preferencias de la tableta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1981
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1988
 #, kde-format
 msgid "Tablet"
 msgstr "Tableta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1989
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1996
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Preferencias del lienzo (solamente)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1991
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1998
 #, kde-format
 msgid "Canvas-only"
 msgstr "Solo el lienzo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1999
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2001
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2006
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2008
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Paleta emergente"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2009
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2016
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2011
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2018
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Autor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2018
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2025
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -23846,6 +23799,51 @@ msgstr "Resolución Y:"
 msgid "Resolution:"
 msgstr "Resolución:"
 
+#. i18n: ectx: attribute (title), widget (QWidget, aboutTab)
+#: libs/ui/forms/wdgaboutapplication.ui:29
+#, kde-format
+msgid "About"
+msgstr "Acerca de"
+
+#. i18n: ectx: attribute (title), widget (QWidget, authorsTab)
+#: libs/ui/forms/wdgaboutapplication.ui:35
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:366
+#, kde-format
+msgid "Authors"
+msgstr "Autores"
+
+#. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
+#: libs/ui/forms/wdgaboutapplication.ui:49
+#, fuzzy, kde-format
+#| msgctxt "@title:tab"
+#| msgid "Translators"
+msgid "Translators"
+msgstr "Traductores"
+
+#. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
+#: libs/ui/forms/wdgaboutapplication.ui:66
+#, kde-format
+msgid "Backers"
+msgstr "Patrocinadores"
+
+#. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
+#: libs/ui/forms/wdgaboutapplication.ui:80
+#, kde-format
+msgid "Also Thanks To"
+msgstr "También gracias por"
+
+#. i18n: ectx: attribute (title), widget (QWidget, licenseTab)
+#: libs/ui/forms/wdgaboutapplication.ui:94
+#, kde-format
+msgid "License"
+msgstr "Licencia"
+
+#. i18n: ectx: attribute (title), widget (QWidget, thirdPartyLibrariesTab)
+#: libs/ui/forms/wdgaboutapplication.ui:108
+#, kde-format
+msgid "Third-party libraries"
+msgstr "Bibliotecas de terceras partes"
+
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: libs/ui/forms/wdgapplyprofile.ui:27
 #, kde-format
@@ -23995,6 +23993,15 @@ msgstr "Marcar el actual como favorito"
 #, kde-format
 msgid "Delete"
 msgstr "Borrar"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnClose)
+#. i18n: ectx: property (text), widget (QPushButton, pushButtonClose)
+#: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:75
+#: libs/ui/forms/wdgsessionmanager.ui:94
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:20
+#, kde-format
+msgid "Close"
+msgstr "Cerrar"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSourceLayer)
 #: libs/ui/forms/wdgchangeclonesource.ui:34
@@ -24455,8 +24462,20 @@ msgstr "Tamaño:"
 msgid "Canvas Border Color:"
 msgstr "Color del borde del lienzo:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdgdisplaysettings.ui:475
+#. i18n: ectx: property (text), widget (QLabel, lblCanvasBorderColor_2)
+#: libs/ui/forms/wdgdisplaysettings.ui:469
+#, kde-format
+msgid "Pixel Grid:"
+msgstr "Cuadrícula de píxeles:"
+
+#. i18n: ectx: property (text), widget (QLabel, gridThresholdLabel)
+#: libs/ui/forms/wdgdisplaysettings.ui:516
+#, kde-format
+msgid "Start showing at:"
+msgstr "Empezar a mostrar en:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: libs/ui/forms/wdgdisplaysettings.ui:558
 #, kde-format
 msgid "Selection Overlay:"
 msgstr "Capa superpuesta de selección:"
@@ -24465,7 +24484,7 @@ msgstr "Capa superpuesta de selección:"
 #. i18n: ectx: property (text), widget (QLabel, opacityLbl)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
-#: libs/ui/forms/wdgdisplaysettings.ui:522 libs/ui/kis_paintop_box.cc:254
+#: libs/ui/forms/wdgdisplaysettings.ui:605 libs/ui/kis_paintop_box.cc:254
 #: libs/ui/kis_paintop_box.cc:260
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
@@ -24475,64 +24494,59 @@ msgstr "Capa superpuesta de selección:"
 msgid "Opacity:"
 msgstr "Opacidad:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblCanvasBorderColor_2)
-#: libs/ui/forms/wdgdisplaysettings.ui:551
-#, kde-format
-msgid "Pixel Grid:"
-msgstr "Cuadrícula de píxeles:"
-
-#. i18n: ectx: property (text), widget (QLabel, gridThresholdLabel)
-#: libs/ui/forms/wdgdisplaysettings.ui:598
-#, kde-format
-msgid "Start showing at:"
-msgstr "Empezar a mostrar en:"
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: libs/ui/forms/wdgdisplaysettings.ui:640
+#, fuzzy, kde-format
+#| msgid "Selection Overlay:"
+msgid "Selection Outline Opacity:"
+msgstr "Capa superpuesta de selección:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: libs/ui/forms/wdgdisplaysettings.ui:648
+#: libs/ui/forms/wdgdisplaysettings.ui:704
 #: libs/ui/forms/wdggeneralsettings.ui:1003
 #, kde-format
 msgid "Miscellaneous"
 msgstr "Diversos"
 
 #. i18n: ectx: property (text), widget (QCheckBox, hideScrollbars)
-#: libs/ui/forms/wdgdisplaysettings.ui:667
+#: libs/ui/forms/wdgdisplaysettings.ui:723
 #, kde-format
 msgid "Hide Canvas Scrollbars"
 msgstr "Ocultar barras de desplazamiento del lienzo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCurveAntialiasing)
-#: libs/ui/forms/wdgdisplaysettings.ui:677
+#: libs/ui/forms/wdgdisplaysettings.ui:733
 #, kde-format
 msgid "Enable curve anti-aliasing"
 msgstr "Activar el suavizado de curvas"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHidePopups)
-#: libs/ui/forms/wdgdisplaysettings.ui:684
+#: libs/ui/forms/wdgdisplaysettings.ui:740
 #, kde-format
 msgid "Hide layer thumbnail popup"
 msgstr "Ocultar la ventana emergente de la miniatura de la capa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannelsAsColor)
-#: libs/ui/forms/wdgdisplaysettings.ui:691
+#: libs/ui/forms/wdgdisplaysettings.ui:747
 #, kde-format
 msgid "Color channels in color"
 msgstr "Canales de color en color"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSelectionOutlineAntialiasing)
-#: libs/ui/forms/wdgdisplaysettings.ui:701
+#: libs/ui/forms/wdgdisplaysettings.ui:757
 #, kde-format
 msgid "Enable selection outline anti-aliasing"
 msgstr "Activar la selección del suavizado de bordes del contorno"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:708
+#: libs/ui/forms/wdgdisplaysettings.ui:764
 #, kde-format
 msgid "If checked, the checkers will move when scrolling the canvas."
 msgstr "Si se marca, el ajedrezado se moverá al desplazar el lienzo."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:711
+#: libs/ui/forms/wdgdisplaysettings.ui:767
 #, kde-format
 msgid ""
 "Determines whether the checks will stay put or whether they will scroll "
@@ -24542,7 +24556,7 @@ msgstr ""
 "lienzo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:714
+#: libs/ui/forms/wdgdisplaysettings.ui:770
 #, kde-format
 msgid "&Move checkers when scrolling"
 msgstr "&Mover el ajedrezado al desplazarse"
@@ -29950,10 +29964,10 @@ msgid "Cannot open file for writing. Reason: %1"
 msgstr "No se puede abrir el archivo para escritura. Motivo: %1"
 
 #: libs/ui/KisImportExportErrorCode.cpp:139
-#, kde-format
-msgid "Unexpected error. Please contact developers."
-msgstr ""
-"Error no esperado. Por favor, póngase en contacto con los desarrolladores."
+#, fuzzy, kde-format
+#| msgid "Internal error."
+msgid "Unexpected error."
+msgstr "Error interno."
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format
@@ -30571,25 +30585,25 @@ msgstr "Definir saturación"
 msgid "Could not load %1."
 msgstr "No se ha podido cargar %1."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:38
+#: libs/ui/KisRemoteFileFetcher.cpp:39
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Do you want to download the image at %1?"
 msgstr "¿Desea descargar la imagen de %1?"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:57
+#: libs/ui/KisRemoteFileFetcher.cpp:58
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "Descargando imagen de %1..."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:71
+#: libs/ui/KisRemoteFileFetcher.cpp:72
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr "Descargando imagen de %1... (%2 / %3)"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:88
+#: libs/ui/KisRemoteFileFetcher.cpp:89
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."
@@ -40272,12 +40286,12 @@ msgid "Copy to clipboard"
 msgstr "Copiar en el portapapeles"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:39
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:84
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:73
 #, kde-format
 msgid "Save to file"
 msgstr "Guardar en archivo"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:95
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:84
 #, kde-format
 msgid "Unable to open file"
 msgstr "No se ha podido abrir el archivo"
@@ -40320,8 +40334,8 @@ msgstr ""
 "Información del sistema de Krita: por favor, pegue esta información en el "
 "informe del fallo"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/buginfo/wdg_buginfo.ui:21
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plugins/extensions/buginfo/wdg_buginfo.ui:39
 #, kde-format
 msgid "Please add this information to a bug report:"
 msgstr "Por favor, añada esta información a un informe de fallo:"
@@ -46046,7 +46060,7 @@ msgstr "El perfil de color no se ha encontrado en el documento."
 msgid "Unknown error: %1"
 msgstr "Error desconocido: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:519
+#: plugins/impex/heif/HeifExport.cpp:527
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46056,7 +46070,7 @@ msgstr ""
 "El brillo de la imagen estará a máxima resolución, mientras que su colorido "
 "se reducirá a la mitad en ambas dimensiones."
 
-#: plugins/impex/heif/HeifExport.cpp:520
+#: plugins/impex/heif/HeifExport.cpp:528
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46066,7 +46080,7 @@ msgstr ""
 "El brillo de la imagen estará a máxima resolución, mientras que su colorido "
 "se reducirá a la mitad horizontalmente."
 
-#: plugins/impex/heif/HeifExport.cpp:521
+#: plugins/impex/heif/HeifExport.cpp:529
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46074,21 +46088,21 @@ msgid ""
 msgstr ""
 "Tanto el brillo como el colorido de la imagen estarán a máxima resolución."
 
-#: plugins/impex/heif/HeifExport.cpp:535
+#: plugins/impex/heif/HeifExport.cpp:543
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:182
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:535
+#: plugins/impex/heif/HeifExport.cpp:543
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:175
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:536
+#: plugins/impex/heif/HeifExport.cpp:544
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:177
 #, kde-format
 msgctxt "@tooltip"
@@ -46102,7 +46116,7 @@ msgstr ""
 "2048). Recomendado para imágenes HDR en las que el brillo absoluto es "
 "importante. "
 
-#: plugins/impex/heif/HeifExport.cpp:538
+#: plugins/impex/heif/HeifExport.cpp:546
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
 #, kde-format
 msgctxt "@tooltip"
@@ -46115,14 +46129,14 @@ msgstr ""
 "una curva «Hybrid Log Gamma». Recomendado para imágenes HDR cuando la "
 "pantalla pueda no entender HDR."
 
-#: plugins/impex/heif/HeifExport.cpp:544
+#: plugins/impex/heif/HeifExport.cpp:552
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:191
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Mantener los colorantes, codificar en PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:545
+#: plugins/impex/heif/HeifExport.cpp:553
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #, kde-format
 msgctxt "@tooltip"
@@ -46135,14 +46149,14 @@ msgstr ""
 "cuantización perceptual (conocida también como curva SMPTE 2048). "
 "Recomendado para imágenes en las que el brillo absoluto es importante. "
 
-#: plugins/impex/heif/HeifExport.cpp:549
+#: plugins/impex/heif/HeifExport.cpp:557
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Mantener los colorantes, codificar en HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:550
+#: plugins/impex/heif/HeifExport.cpp:558
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
 #, kde-format
 msgctxt "@tooltip"
@@ -46154,14 +46168,14 @@ msgstr ""
 "Log Gamma». Recomendado para imágenes destinadas a pantallas que no pueden "
 "entender PQ."
 
-#: plugins/impex/heif/HeifExport.cpp:554
+#: plugins/impex/heif/HeifExport.cpp:562
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Mantener los colorantes, codificar en SMPTE ST 428"
 
-#: plugins/impex/heif/HeifExport.cpp:555
+#: plugins/impex/heif/HeifExport.cpp:563
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
 #, kde-format
 msgctxt "@tooltip"
@@ -46174,13 +46188,13 @@ msgstr ""
 "Krita abre siempre las imágenes como esta como punto flotante lineal. Esta "
 "opción es para invertir este proceso."
 
-#: plugins/impex/heif/HeifExport.cpp:560
+#: plugins/impex/heif/HeifExport.cpp:568
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Sin cambios, recortar"
 
-#: plugins/impex/heif/HeifExport.cpp:561
+#: plugins/impex/heif/HeifExport.cpp:569
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48277,13 +48291,13 @@ msgstr ""
 "compresión sin pérdida similar a la de PNG (aunque a menudo más eficiente "
 "que ella).</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:224
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:264
 #, kde-format
 msgctxt "@option:check"
 msgid "16 bits color depth"
 msgstr "16 bits de profundidad de color"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:225
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:265
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48301,13 +48315,13 @@ msgstr ""
 "BT.709 y un punto blanco superior al 99%. Este modo es más rápido que la "
 "descodificación de 16 bits.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:244
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:284
 #, kde-format
 msgctxt "@option:check"
 msgid "Interpolate RGB as four colors"
 msgstr "Interpolar RGB como cuatro colores"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:245
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:285
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48328,19 +48342,19 @@ msgstr ""
 "falsos de malla de 2x2 con el método de calidad VNG o los mezcla con el "
 "método de calidad AHD.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:259
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:299
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Visit LibRaw project website"
 msgstr "Visite el sitio web del proyecto LibRaw"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:269
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:309
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not stretch or rotate pixels"
 msgstr "No estirar ni rotar los píxeles"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:271
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:311
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48355,79 +48369,79 @@ msgstr ""
 "cualquier caso, esta opción garantiza que cada píxel de salida corresponde a "
 "un píxel RAW</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:279
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:319
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Quality:"
 msgstr "Calidad:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:283
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:323
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "Bilinear"
 msgstr "Bilineal"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:284
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:324
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "VNG"
 msgstr "VNG"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:285
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:325
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "PPG"
 msgstr "PPG"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:286
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:326
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AHD"
 msgstr "AHD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:289
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:329
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "DCB"
 msgstr "DCB"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:290
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:330
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AHD v2"
 msgstr "AHD v2"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:291
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:331
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AFD"
 msgstr "AFD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:292
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:332
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "VCD"
 msgstr "VCD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:293
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:333
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "VCD & AHD"
 msgstr "VCD y AHD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:294
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:334
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "LMMSE"
 msgstr "LMMSE"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:296
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:336
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AMaZE"
 msgstr "AMaZE"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:313
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:353
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48509,13 +48523,13 @@ msgstr ""
 "pueden ser invariables si el descodificador RAW se ha compilado sin paquetes "
 "de extensiones.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:382
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:422
 #, kde-format
 msgctxt "@label:slider"
 msgid "Pass:"
 msgstr "Paso:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:383
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:423
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48535,13 +48549,13 @@ msgstr ""
 "strong='true'>AHD</emphasis>, <emphasis strong='true'>DCB</emphasis> y "
 "<emphasis strong='true'>VCD y AHD</emphasis>.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:395
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:435
 #, kde-format
 msgctxt "@option:check"
 msgid "Refine interpolation"
 msgstr "Refinar interpolación"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:396
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:436
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48558,43 +48572,43 @@ msgstr ""
 "refinamiento de interpolación mejorada de colores efectivos (EECI) para "
 "mejorar la nitidez.</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:413
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:453
 #, kde-format
 msgctxt "@label"
 msgid "Demosaicing"
 msgstr "Interpolación cromática"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:421
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:461
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Method:"
 msgstr "Método:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:423
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:463
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Default D65"
 msgstr "D65 predeterminado"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:424
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:464
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Camera"
 msgstr "Cámara"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:425
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:465
 #, kde-format
 msgctxt "@item:inlistbox set while balance automatically"
 msgid "Automatic"
 msgstr "Automático"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:426
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:466
 #, kde-format
 msgctxt "@item:inlistbox set white balance manually"
 msgid "Manual"
 msgstr "Manual"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:428
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:468
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48618,13 +48632,13 @@ msgstr ""
 "personalizada los valores de la temperatura y del nivel de verde.</li></ul></"
 "p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:443
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:483
 #, kde-format
 msgctxt "@label:slider"
 msgid "T(K):"
 msgstr "T(K):"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:444
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:484
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48633,13 +48647,13 @@ msgstr ""
 "<title>Temperatura</title><p>Ajuste aquí el color de la temperatura en "
 "Kelvin.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:451
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:491
 #, kde-format
 msgctxt "@label:slider Green component"
 msgid "Green:"
 msgstr "Verde:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:452
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:492
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48648,37 +48662,37 @@ msgstr ""
 "<p>Ajuste aquí el componente verde para fijar el nivel de eliminación del "
 "color magenta.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:455
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:495
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Highlights:"
 msgstr "Luces:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:457
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:497
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Solid white"
 msgstr "Blanco sólido"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:458
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:498
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Unclip"
 msgstr "Desencajar"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:459
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:499
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Blend"
 msgstr "Mezclar"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:460
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:500
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Rebuild"
 msgstr "Reconstruir"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:462
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:502
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48699,13 +48713,13 @@ msgstr ""
 "li><li><emphasis strong='true'>Reconstruir</emphasis>: reconstruye las luces "
 "usando un valor de nivel</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:473
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:513
 #, kde-format
 msgctxt "@label:slider Highlight reconstruct level"
 msgid "Level:"
 msgstr "Nivel:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:477
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:517
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48715,25 +48729,25 @@ msgstr ""
 "<title>Nivel</title><p>Especifique el nivel de luces reconstruido. Los "
 "valores bajos favorecen a los blancos y los valores altos a los colores.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:481
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:521
 #, kde-format
 msgctxt "@option:check"
 msgid "Exposure Correction (E.V)"
 msgstr "Corrección de exposición (E.V)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:482
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:522
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "<p>Turn on the exposure correction before interpolation.</p>"
 msgstr "<p>Activar el corrector de exposición antes de la interpolación.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:485
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:525
 #, kde-format
 msgctxt "@label:slider"
 msgid "Linear Shift:"
 msgstr "Desplazamiento lineal:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:490
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:530
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48743,13 +48757,13 @@ msgstr ""
 "<title>Desplazamiento</title><p>Desplazamiento lineal del corrector de "
 "exposición antes de la interpolación en E.V</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:493
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:533
 #, kde-format
 msgctxt "@label:slider"
 msgid "Highlight:"
 msgstr "Luz:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:498
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:538
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48761,13 +48775,13 @@ msgstr ""
 "la exposición antes de la interpolación en E.V. Solo tiene efecto si la "
 "corrección de desplazamiento es > 1,0 E.V</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:502
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:542
 #, kde-format
 msgctxt "@option:check"
 msgid "Correct false colors in highlights"
 msgstr "Corregir falsos colores en luces"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:503
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:543
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48779,13 +48793,13 @@ msgstr ""
 "exactitud, sin «nubes rosas» (ni luces azules bajo lámparas de tungsteno).</"
 "p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:507
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:547
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto Brightness"
 msgstr "Brillo automático"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:508
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:548
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48795,13 +48809,13 @@ msgstr ""
 "<p>Si está desactivado, usar un nivel de blanco fijo e ignorar el histograma "
 "de la imagen para ajustar el brillo.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:511
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:551
 #, kde-format
 msgctxt "@label:slider"
 msgid "Brightness:"
 msgstr "Brillo:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:516
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:556
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48811,13 +48825,13 @@ msgstr ""
 "<title>Brillo</title><p>Indica el nivel de brillo de la imagen de salida. El "
 "valor por omisión es 1,0 (solo funciona en el modo de 8 bits).</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:526
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:566
 #, kde-format
 msgctxt "@option:check Black point"
 msgid "Black:"
 msgstr "Negro:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:527
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:567
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48829,7 +48843,7 @@ msgstr ""
 "descodificar imágenes RAW. Si desactiva esta opción, el valor del punto "
 "negro se calculará de forma automática.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:534
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:574
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48839,13 +48853,13 @@ msgstr ""
 "<title>Valor del punto negro</title><p>Indica el valor del punto negro de la "
 "imagen de salida.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:537
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:577
 #, kde-format
 msgctxt "@option:check White point"
 msgid "White:"
 msgstr "Blanco:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:538
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:578
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48857,7 +48871,7 @@ msgstr ""
 "descodificar imágenes RAW. Si desactiva esta opción, el valor del punto "
 "blanco se calculará de forma automática.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:545
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:585
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48867,49 +48881,49 @@ msgstr ""
 "<title>Valor del punto blanco</title><p>Indica el valor del punto blanco de "
 "la imagen de salida.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:582
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:622
 #, kde-format
 msgctxt "@label"
 msgid "White Balance"
 msgstr "Balance de blancos"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:590
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:630
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Noise reduction:"
 msgstr "Reducción de ruido:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:592
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:632
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "None"
 msgstr "Ninguna"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:593
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:633
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Wavelets"
 msgstr "Ondícula"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:594
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:634
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "FBDD"
 msgstr "FBDD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:595
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:635
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "CFA Line Denoise"
 msgstr "Línea de reducción de ruido CFA"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:596
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:636
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Impulse Denoise"
 msgstr "Reducción de ruido por impulsos"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:598
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48937,13 +48951,13 @@ msgstr ""
 "impulsos</emphasis>: supresión de ruido por impulsos. Se aplica tras la "
 "interpolación.</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:624
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:664
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Chromatic Aberration correction"
 msgstr "Activar corrección de aberración cromática"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:625
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:665
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48954,13 +48968,13 @@ msgstr ""
 "rojo-verde y azul-amarillo de RAW con los factores indicados (automático por "
 "omisión).</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:630
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:670
 #, kde-format
 msgctxt "@option:check"
 msgid "Automatic color axis adjustments"
 msgstr "Ajustes automáticos de los ejes de color"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:631
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:671
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48976,13 +48990,13 @@ msgstr ""
 "método puede fallar si ha capturado un patrón azul-rojo. En tal caso, "
 "desactive esta opción y ajuste manualmente los factores de color.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:678
 #, kde-format
 msgctxt "@label:slider"
 msgid "Red-Green:"
 msgstr "Rojo-verde:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:643
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:683
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48992,13 +49006,13 @@ msgstr ""
 "<title>Multiplicador rojo-verde</title><p>Indique aquí la cantidad de "
 "corrección en el eje rojo-verde.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:646
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:686
 #, kde-format
 msgctxt "@label:slider"
 msgid "Blue-Yellow:"
 msgstr "Azul-amarillo:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:651
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:691
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49008,37 +49022,37 @@ msgstr ""
 "<title>Multiplicador azul-amarillo</title><p>Indique aquí la cantidad de "
 "corrección en el eje azul-amarillo.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:670
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:710
 #, kde-format
 msgctxt "@label"
 msgid "Corrections"
 msgstr "Correcciones"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:678
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:718
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Camera Profile:"
 msgstr "Perfil de la cámara:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:680
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:720
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "None"
 msgstr "Ninguno"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:681
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Embedded"
 msgstr "Incrustado"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:682
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:722
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Custom"
 msgstr "Personalizado"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:684
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49057,54 +49071,54 @@ msgstr ""
 "li><li><emphasis strong='true'>Personalizado</emphasis>: usar un perfil de "
 "espacio de color personalizado.</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:695
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:735
 #, kde-format
 msgid "ICC Files (*.icc; *.icm)"
 msgstr "Archivos ICC (*.icc; *.icm)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:697
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:737
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Workspace:"
 msgstr "Espacio de trabajo:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:699
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:739
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Raw (no profile)"
 msgstr "Raw (ningún perfil)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:700
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:740
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "sRGB"
 msgstr "sRGB"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:701
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:741
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Adobe RGB"
 msgstr "Adobe RGB"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:702
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:742
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Wide Gamut"
 msgstr "Gama de color amplia"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:703
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:743
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Pro-Photo"
 msgstr "Pro-Photo"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:704
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:744
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Custom"
 msgstr "Personalizado"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:706
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:746
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49142,24 +49156,24 @@ msgstr ""
 "strong='true'>Personalizado</emphasis>: usar un perfil de espacio de color "
 "de salida personalizado.</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:729
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:769
 #, kde-format
 msgid "ICC Files (*.icc *.icm)"
 msgstr "Archivos ICC (*.icc *.icm)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:741
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:781
 #, kde-format
 msgctxt "@label"
 msgid "Color Management"
 msgstr "Gestión de color"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:947
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:987
 #, kde-format
 msgctxt "@label"
 msgid "Threshold:"
 msgstr "Umbral:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:948
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:988
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49169,13 +49183,13 @@ msgstr ""
 "<title>Umbral</title><p>Indique aquí el valor del umbral de reducción de "
 "ruido a usar.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:961
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1001
 #, kde-format
 msgctxt "@label"
 msgid "Luminance:"
 msgstr "Luminancia:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:962
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1002
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49184,13 +49198,13 @@ msgstr ""
 "<title>Luminancia</title><p>Cantidad de reducción de ruido por impulsos de "
 "la luminancia.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:964
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1004
 #, kde-format
 msgctxt "@label"
 msgid "Chrominance:"
 msgstr "Crominancia:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:965
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1005
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -54334,10 +54348,6 @@ msgstr ""
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 msgid "Role"
 msgstr "Papel"
-
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:366
-msgid "Authors"
-msgstr "Autores"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
 msgid ""
@@ -59927,6 +59937,14 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Herramienta de imágenes de referencia"
 
+#~ msgctxt "Heading for the list of Krita authors/developers"
+#~ msgid "Authors"
+#~ msgstr "Autores"
+
+#~ msgid "Unexpected error. Please contact developers."
+#~ msgstr ""
+#~ "Error no esperado. Por favor, póngase en contacto con los desarrolladores."
+
 #~ msgid "&Description:"
 #~ msgstr "&Descripción:"
 
@@ -64208,9 +64226,6 @@ msgstr "Herramienta de imágenes de referencia"
 
 #~ msgid "Krita could not create a new image."
 #~ msgstr "Krita no ha podido crear una nueva imagen."
-
-#~ msgid "Internal error."
-#~ msgstr "Error interno."
 
 #~ msgid "The HEIF file is corrupted."
 #~ msgstr "El archivo HEIF está dañado."

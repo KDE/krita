@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-05 00:45+0000\n"
+"POT-Creation-Date: 2023-01-07 00:46+0000\n"
 "PO-Revision-Date: 2022-12-16 21:55-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -15863,13 +15863,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "ワークスペース"
 
-#: krita/main.cc:524
+#: krita/main.cc:525
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "致命的エラー"
 
-#: krita/main.cc:524
+#: krita/main.cc:525
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15878,14 +15878,14 @@ msgstr ""
 "Krita は Wayland プラットフォームをサポートしていません。Wayland で Krita を"
 "起動する場合は XWayland を使用してください。Krita を終了します。"
 
-#: krita/main.cc:622 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:623 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: 警告"
 
-#: krita/main.cc:623
+#: krita/main.cc:624
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15897,12 +15897,12 @@ msgstr ""
 "サポートされているバージョンの Windows に更新してください: Windows 7、8、"
 "8.1、10"
 
-#: krita/main.cc:645 krita/main.cc:650
+#: krita/main.cc:646 krita/main.cc:651
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita タブレットサポート"
 
-#: krita/main.cc:646
+#: krita/main.cc:647
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15913,7 +15913,7 @@ msgstr ""
 "タブレットを使用している場合は、タブレットドライバが正しくインストールされて"
 "いることを確認してください。"
 
-#: krita/main.cc:651
+#: krita/main.cc:652
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -19520,8 +19520,8 @@ msgstr "ローカルリソース"
 #: libs/ui/KisMainWindow.cpp:2066 libs/ui/KisMainWindow.cpp:2127
 #: libs/ui/KisMainWindow.cpp:2148 libs/ui/KisMainWindow.cpp:2761
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
-#: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:35
-#: libs/ui/KisRemoteFileFetcher.cpp:56 libs/ui/KisRemoteFileFetcher.cpp:86
+#: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
+#: libs/ui/KisRemoteFileFetcher.cpp:57 libs/ui/KisRemoteFileFetcher.cpp:87
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:681 libs/ui/KisView.cpp:1137
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
@@ -21462,8 +21462,8 @@ msgstr "表示:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:38
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1949
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1951
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1956
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1958
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:598
 #, kde-format
@@ -21561,8 +21561,8 @@ msgstr "動画アニメーションインポート"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1921
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1926
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22268,68 +22268,63 @@ msgstr "画像の境界"
 msgid "Image Center"
 msgstr "画像の中心"
 
-#: libs/ui/dialogs/kis_about_application.cpp:31
+#: libs/ui/dialogs/kis_about_application.cpp:33
 #, kde-format
 msgid "About Krita"
 msgstr "Krita について"
 
-#: libs/ui/dialogs/kis_about_application.cpp:43
-#, kde-format
-msgid "About"
-msgstr "Krita について"
-
-#: libs/ui/dialogs/kis_about_application.cpp:48
+#: libs/ui/dialogs/kis_about_application.cpp:44
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><p align=\"center\"><b>作成者</b></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:65
-#, kde-format
-msgctxt "Heading for the list of Krita authors/developers"
-msgid "Authors"
-msgstr "作者"
-
-#: libs/ui/dialogs/kis_about_application.cpp:71
+#: libs/ui/dialogs/kis_about_application.cpp:63
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Noboru Sinohara,Yukiko Bando, Tokiedian"
 
-#: libs/ui/dialogs/kis_about_application.cpp:72
+#: libs/ui/dialogs/kis_about_application.cpp:64
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "shinobo@leo.bekkoame.ne.jp,ybando@k6.dion.ne.jp, lamentisimo@gmail.com"
 
-#: libs/ui/dialogs/kis_about_application.cpp:78
+#: libs/ui/dialogs/kis_about_application.cpp:75
 #, kde-format
-msgctxt "@title:tab"
-msgid "Translators"
-msgstr "翻訳者"
+msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
+msgstr "<html><head/><body><h1 align=\"center\"><b>翻訳者</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:85
+#: libs/ui/dialogs/kis_about_application.cpp:87
+#, kde-format
+msgid ""
+"<p>KDE is translated into many languages thanks to the work of the "
+"translation teams all over the world.</p><p>For more information on KDE "
+"internationalization visit <a href=\"http://l10n.kde.org\">http://l10n.kde."
+"org</a></p>"
+msgstr ""
+"<p>KDE は世界中の翻訳チームによって多くの言語に翻訳されています。</p><p>KDE "
+"国際化についての情報はこちら <a href=\"http://l10n.kde.org\">http://l10n.kde."
+"org</a></p>"
+
+#: libs/ui/dialogs/kis_about_application.cpp:95
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
 msgstr "<html><head/><body><p align=\"center\"><b>後援</b></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:98
+#: libs/ui/dialogs/kis_about_application.cpp:108
 #, kde-format
 msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
 msgstr ""
 "</p><p><i>ありがとうございます! あなたは<b>最高</b>です!</i></p></body></"
 "html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:100
-#, kde-format
-msgid "Backers"
-msgstr "後援"
-
-#: libs/ui/dialogs/kis_about_application.cpp:106
+#: libs/ui/dialogs/kis_about_application.cpp:111
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><p align=\"center\"><b>謝辞</b></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:125
+#: libs/ui/dialogs/kis_about_application.cpp:132
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22338,12 +22333,7 @@ msgstr ""
 "</p><p><i>Krita の開発への助言、アイコン、ブラシセットその他による支援</i></"
 "p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:128
-#, kde-format
-msgid "Also Thanks To"
-msgstr "謝辞"
-
-#: libs/ui/dialogs/kis_about_application.cpp:132
+#: libs/ui/dialogs/kis_about_application.cpp:136
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22377,12 +22367,7 @@ msgstr ""
 "きません。これは商用ソフトウェアの試用版・学生版が皆さんの作品の商用利用を禁"
 "止しているのとは対照的なものです。</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:160
-#, kde-format
-msgid "License"
-msgstr "ライセンス"
-
-#: libs/ui/dialogs/kis_about_application.cpp:168
+#: libs/ui/dialogs/kis_about_application.cpp:171
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -22392,38 +22377,6 @@ msgstr ""
 "<html><head/><body><h1 align=\"center\"><b>Krita が使用する サードパーティー"
 "ライブラリ</b></h1><p>Krita は、次のフリーソフトウェアライブラリから構築され"
 "ています。</p><p><ul>"
-
-#: libs/ui/dialogs/kis_about_application.cpp:186
-#, kde-format
-msgid "Third-party libraries"
-msgstr "サードパーティーライブラリ"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnClose)
-#. i18n: ectx: property (text), widget (QPushButton, pushButtonClose)
-#: libs/ui/dialogs/kis_about_application.cpp:189
-#: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:75
-#: libs/ui/forms/wdgsessionmanager.ui:94
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:20
-#, kde-format
-msgid "Close"
-msgstr "閉じる"
-
-#: libs/ui/dialogs/kis_about_application.cpp:213
-#, kde-format
-msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
-msgstr "<html><head/><body><h1 align=\"center\"><b>翻訳者</b></h1><p><ul>"
-
-#: libs/ui/dialogs/kis_about_application.cpp:225
-#, kde-format
-msgid ""
-"<p>KDE is translated into many languages thanks to the work of the "
-"translation teams all over the world.</p><p>For more information on KDE "
-"internationalization visit <a href=\"http://l10n.kde.org\">http://l10n.kde."
-"org</a></p>"
-msgstr ""
-"<p>KDE は世界中の翻訳チームによって多くの言語に翻訳されています。</p><p>KDE "
-"国際化についての情報はこちら <a href=\"http://l10n.kde.org\">http://l10n.kde."
-"org</a></p>"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:57
 #, kde-format
@@ -22616,7 +22569,7 @@ msgstr "レイヤーのプロパティ"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:605 libs/ui/kis_node_model.cpp:568
+#: libs/ui/forms/wdgdisplaysettings.ui:523 libs/ui/kis_node_model.cpp:568
 #: libs/ui/kis_node_model.cpp:571 libs/ui/kis_paintop_box.cc:269
 #: libs/ui/kis_paintop_box.cc:277 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
@@ -23112,95 +23065,95 @@ msgstr "白色点: %1, %2"
 msgid "Warning(s):"
 msgstr "警告:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1827
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1834
 #, kde-format
 msgid "WARNING: current display doesn't support HDR rendering"
 msgstr "警告: 現在のディスプレイは HDR レンダリングをサポートしていません"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1912
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
 #, kde-format
 msgid "Configure Krita"
 msgstr "Krita の設定"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1929
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1931
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "ショートカット"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1941
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "キャンバス入力の設定"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1942
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1949
 #, kde-format
 msgid "Canvas Input"
 msgstr "キャンバス入力"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1959
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1966
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #, kde-format
 msgid "Color Management"
 msgstr "色管理"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1961
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1968
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "色"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1969
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1971
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1976
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1978
 #, kde-format
 msgid "Performance"
 msgstr "パフォーマンス"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1979
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1986
 #, kde-format
 msgid "Tablet settings"
 msgstr "タブレットの設定"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1981
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1988
 #, kde-format
 msgid "Tablet"
 msgstr "タブレット"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1989
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1996
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "キャンバスのみ表示の設定"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1991
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1998
 #, kde-format
 msgid "Canvas-only"
 msgstr "キャンバスのみ表示"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1999
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2001
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2006
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2008
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "パレットをポップアップ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2009
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2016
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "作者"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2011
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2018
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "作者"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2018
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2025
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -23923,6 +23876,51 @@ msgstr "Y 解像度:"
 msgid "Resolution:"
 msgstr "解像度:"
 
+#. i18n: ectx: attribute (title), widget (QWidget, aboutTab)
+#: libs/ui/forms/wdgaboutapplication.ui:29
+#, kde-format
+msgid "About"
+msgstr "Krita について"
+
+#. i18n: ectx: attribute (title), widget (QWidget, authorsTab)
+#: libs/ui/forms/wdgaboutapplication.ui:35
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:366
+#, kde-format
+msgid "Authors"
+msgstr "作者"
+
+#. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
+#: libs/ui/forms/wdgaboutapplication.ui:49
+#, fuzzy, kde-format
+#| msgctxt "@title:tab"
+#| msgid "Translators"
+msgid "Translators"
+msgstr "翻訳者"
+
+#. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
+#: libs/ui/forms/wdgaboutapplication.ui:66
+#, kde-format
+msgid "Backers"
+msgstr "後援"
+
+#. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
+#: libs/ui/forms/wdgaboutapplication.ui:80
+#, kde-format
+msgid "Also Thanks To"
+msgstr "謝辞"
+
+#. i18n: ectx: attribute (title), widget (QWidget, licenseTab)
+#: libs/ui/forms/wdgaboutapplication.ui:94
+#, kde-format
+msgid "License"
+msgstr "ライセンス"
+
+#. i18n: ectx: attribute (title), widget (QWidget, thirdPartyLibrariesTab)
+#: libs/ui/forms/wdgaboutapplication.ui:108
+#, kde-format
+msgid "Third-party libraries"
+msgstr "サードパーティーライブラリ"
+
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: libs/ui/forms/wdgapplyprofile.ui:27
 #, kde-format
@@ -24067,6 +24065,15 @@ msgstr "現在のものをブックマークに追加"
 #, kde-format
 msgid "Delete"
 msgstr "削除"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnClose)
+#. i18n: ectx: property (text), widget (QPushButton, pushButtonClose)
+#: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:75
+#: libs/ui/forms/wdgsessionmanager.ui:94
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:20
+#, kde-format
+msgid "Close"
+msgstr "閉じる"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSourceLayer)
 #: libs/ui/forms/wdgchangeclonesource.ui:34
@@ -24529,8 +24536,20 @@ msgstr "サイズ:"
 msgid "Canvas Border Color:"
 msgstr "キャンバスの枠の色:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/forms/wdgdisplaysettings.ui:475
+#. i18n: ectx: property (text), widget (QLabel, lblCanvasBorderColor_2)
+#: libs/ui/forms/wdgdisplaysettings.ui:469
+#, kde-format
+msgid "Pixel Grid:"
+msgstr "ピクセル グリッド:"
+
+#. i18n: ectx: property (text), widget (QLabel, gridThresholdLabel)
+#: libs/ui/forms/wdgdisplaysettings.ui:516
+#, kde-format
+msgid "Start showing at:"
+msgstr "表示を開始するズームレベル:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: libs/ui/forms/wdgdisplaysettings.ui:558
 #, kde-format
 msgid "Selection Overlay:"
 msgstr "選択範囲オーバーレイ:"
@@ -24539,7 +24558,7 @@ msgstr "選択範囲オーバーレイ:"
 #. i18n: ectx: property (text), widget (QLabel, opacityLbl)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
-#: libs/ui/forms/wdgdisplaysettings.ui:522 libs/ui/kis_paintop_box.cc:254
+#: libs/ui/forms/wdgdisplaysettings.ui:605 libs/ui/kis_paintop_box.cc:254
 #: libs/ui/kis_paintop_box.cc:260
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
@@ -24549,65 +24568,60 @@ msgstr "選択範囲オーバーレイ:"
 msgid "Opacity:"
 msgstr "不透明度:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblCanvasBorderColor_2)
-#: libs/ui/forms/wdgdisplaysettings.ui:551
-#, kde-format
-msgid "Pixel Grid:"
-msgstr "ピクセル グリッド:"
-
-#. i18n: ectx: property (text), widget (QLabel, gridThresholdLabel)
-#: libs/ui/forms/wdgdisplaysettings.ui:598
-#, kde-format
-msgid "Start showing at:"
-msgstr "表示を開始するズームレベル:"
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: libs/ui/forms/wdgdisplaysettings.ui:640
+#, fuzzy, kde-format
+#| msgid "Selection Overlay:"
+msgid "Selection Outline Opacity:"
+msgstr "選択範囲オーバーレイ:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: libs/ui/forms/wdgdisplaysettings.ui:648
+#: libs/ui/forms/wdgdisplaysettings.ui:704
 #: libs/ui/forms/wdggeneralsettings.ui:1003
 #, kde-format
 msgid "Miscellaneous"
 msgstr "その他"
 
 #. i18n: ectx: property (text), widget (QCheckBox, hideScrollbars)
-#: libs/ui/forms/wdgdisplaysettings.ui:667
+#: libs/ui/forms/wdgdisplaysettings.ui:723
 #, kde-format
 msgid "Hide Canvas Scrollbars"
 msgstr "キャンバスのスクロールバーを非表示"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCurveAntialiasing)
-#: libs/ui/forms/wdgdisplaysettings.ui:677
+#: libs/ui/forms/wdgdisplaysettings.ui:733
 #, kde-format
 msgid "Enable curve anti-aliasing"
 msgstr "カーブのアンチエイリアスを有効化"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHidePopups)
-#: libs/ui/forms/wdgdisplaysettings.ui:684
+#: libs/ui/forms/wdgdisplaysettings.ui:740
 #, kde-format
 msgid "Hide layer thumbnail popup"
 msgstr "レイヤーのサムネイルポップアップを表示しない"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannelsAsColor)
-#: libs/ui/forms/wdgdisplaysettings.ui:691
+#: libs/ui/forms/wdgdisplaysettings.ui:747
 #, kde-format
 msgid "Color channels in color"
 msgstr "色チャンネル"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSelectionOutlineAntialiasing)
-#: libs/ui/forms/wdgdisplaysettings.ui:701
+#: libs/ui/forms/wdgdisplaysettings.ui:757
 #, kde-format
 msgid "Enable selection outline anti-aliasing"
 msgstr "選択範囲の境界線のアンチエイリアスを有効化"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:708
+#: libs/ui/forms/wdgdisplaysettings.ui:764
 #, kde-format
 msgid "If checked, the checkers will move when scrolling the canvas."
 msgstr ""
 "チェックすると、キャンバスをスクロールしたときにチェッカーも同時に動きます"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:711
+#: libs/ui/forms/wdgdisplaysettings.ui:767
 #, kde-format
 msgid ""
 "Determines whether the checks will stay put or whether they will scroll "
@@ -24617,7 +24631,7 @@ msgstr ""
 "す。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoving)
-#: libs/ui/forms/wdgdisplaysettings.ui:714
+#: libs/ui/forms/wdgdisplaysettings.ui:770
 #, kde-format
 msgid "&Move checkers when scrolling"
 msgstr "スクロール時にチェッカーを移動する(&M)"
@@ -29991,8 +30005,8 @@ msgstr "ファイルが書き込めないため開けませんでした。理由
 
 #: libs/ui/KisImportExportErrorCode.cpp:139
 #, kde-format
-msgid "Unexpected error. Please contact developers."
-msgstr "予期しないエラーが発生しました。開発者に連絡してください。"
+msgid "Unexpected error."
+msgstr ""
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format
@@ -30605,25 +30619,25 @@ msgstr "彩度を設定"
 msgid "Could not load %1."
 msgstr "%1 を読み込めませんでした。"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:38
+#: libs/ui/KisRemoteFileFetcher.cpp:39
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Do you want to download the image at %1?"
 msgstr "画像を %1 からダウンロードしますか？"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:57
+#: libs/ui/KisRemoteFileFetcher.cpp:58
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "%1 から画像をダウンロード中..."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:71
+#: libs/ui/KisRemoteFileFetcher.cpp:72
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr "%1 から画像をダウンロード中... (%2 / %3)"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:88
+#: libs/ui/KisRemoteFileFetcher.cpp:89
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."
@@ -40228,12 +40242,12 @@ msgid "Copy to clipboard"
 msgstr "クリップボードにコピー"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:39
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:84
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:73
 #, kde-format
 msgid "Save to file"
 msgstr "ファイルに保存"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:95
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:84
 #, kde-format
 msgid "Unable to open file"
 msgstr "ファイルを開くことができません"
@@ -40268,8 +40282,8 @@ msgid ""
 "Krita System Information: please paste this information to the bug report"
 msgstr "Krita システム情報: この情報をバグ報告欄に貼り付けてください"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/buginfo/wdg_buginfo.ui:21
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plugins/extensions/buginfo/wdg_buginfo.ui:39
 #, kde-format
 msgid "Please add this information to a bug report:"
 msgstr "この情報をバグ報告に追加してください:"
@@ -46131,7 +46145,7 @@ msgstr "色プロファイルがこのドキュメントに見つかりません
 msgid "Unknown error: %1"
 msgstr "未知のエラー: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:519
+#: plugins/impex/heif/HeifExport.cpp:527
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46139,7 +46153,7 @@ msgid ""
 "colorfulness will be halved in both dimensions."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:520
+#: plugins/impex/heif/HeifExport.cpp:528
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46147,28 +46161,28 @@ msgid ""
 "colorfulness will be halved horizontally."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:521
+#: plugins/impex/heif/HeifExport.cpp:529
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:535
+#: plugins/impex/heif/HeifExport.cpp:543
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:182
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:535
+#: plugins/impex/heif/HeifExport.cpp:543
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:175
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:536
+#: plugins/impex/heif/HeifExport.cpp:544
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:177
 #, kde-format
 msgctxt "@tooltip"
@@ -46178,7 +46192,7 @@ msgid ""
 "for HDR images where the absolute brightness is important."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:538
+#: plugins/impex/heif/HeifExport.cpp:546
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
 #, kde-format
 msgctxt "@tooltip"
@@ -46188,14 +46202,14 @@ msgid ""
 "not understand HDR."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:544
+#: plugins/impex/heif/HeifExport.cpp:552
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:191
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:545
+#: plugins/impex/heif/HeifExport.cpp:553
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #, kde-format
 msgctxt "@tooltip"
@@ -46205,14 +46219,14 @@ msgid ""
 "where the absolute brightness is important."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:549
+#: plugins/impex/heif/HeifExport.cpp:557
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:550
+#: plugins/impex/heif/HeifExport.cpp:558
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
 #, kde-format
 msgctxt "@tooltip"
@@ -46221,14 +46235,14 @@ msgid ""
 "curve. Recommended for images intended for screens which cannot understand PQ"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:554
+#: plugins/impex/heif/HeifExport.cpp:562
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:555
+#: plugins/impex/heif/HeifExport.cpp:563
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
 #, kde-format
 msgctxt "@tooltip"
@@ -46238,13 +46252,13 @@ msgid ""
 "is there to reverse that"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:560
+#: plugins/impex/heif/HeifExport.cpp:568
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:561
+#: plugins/impex/heif/HeifExport.cpp:569
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48317,13 +48331,13 @@ msgstr ""
 "す。<br/>注意:100 の品質で PNG と同様の (多くの場合、PNG よりも効率的な) 可逆"
 "圧縮に切り替わります。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:224
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:264
 #, kde-format
 msgctxt "@option:check"
 msgid "16 bits color depth"
 msgstr "16ビット色深度"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:225
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:265
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48340,13 +48354,13 @@ msgstr ""
 "タイルの白色点でデコードされます。このモードは16ビットデコードより高速です。"
 "</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:244
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:284
 #, kde-format
 msgctxt "@option:check"
 msgid "Interpolate RGB as four colors"
 msgstr "RGB を4つの色に補間"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:245
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:285
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48366,19 +48380,19 @@ msgstr ""
 "メッシュパターンを VNG 品質の方法で削除したり、AHD 品質の方法で混ぜる必要がな"
 "くなります。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:259
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:299
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Visit LibRaw project website"
 msgstr "LibRaw プロジェクトウェブサイトを閲覧"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:269
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:309
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not stretch or rotate pixels"
 msgstr "ピクセルの伸縮や回転を行わない"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:271
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:311
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48392,79 +48406,79 @@ msgstr ""
 "いアスペクト比に伸縮しないでください。いずれの場合も、このオプションは各出力"
 "ピクセルが 1つの RAW ピクセルに対応することを保証します。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:279
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:319
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Quality:"
 msgstr "品質:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:283
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:323
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "Bilinear"
 msgstr "Bilinear"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:284
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:324
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "VNG"
 msgstr "VNG"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:285
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:325
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "PPG"
 msgstr "PPG"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:286
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:326
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AHD"
 msgstr "AHD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:289
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:329
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "DCB"
 msgstr "DCB"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:290
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:330
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AHD v2"
 msgstr "AHD v2"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:291
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:331
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AFD"
 msgstr "AFD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:292
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:332
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "VCD"
 msgstr "VCD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:293
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:333
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "VCD & AHD"
 msgstr "VCD & AHD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:294
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:334
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "LMMSE"
 msgstr "LMMSE"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:296
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:336
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "AMaZE"
 msgstr "AMaZE"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:313
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:353
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48505,13 +48519,13 @@ msgid ""
 "if RAW decoder have been built without extension packs.</p>"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:382
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:422
 #, kde-format
 msgctxt "@label:slider"
 msgid "Pass:"
 msgstr "パス:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:383
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:423
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48531,13 +48545,13 @@ msgstr ""
 "emphasis>、および <emphasis strong='true'>VCD & AHD</emphasis> に使用可能で"
 "す。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:395
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:435
 #, kde-format
 msgctxt "@option:check"
 msgid "Refine interpolation"
 msgstr "補間を改良"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:396
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:436
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48553,43 +48567,43 @@ msgstr ""
 "strong='true'>VCD & AHD</emphasis>: シャープネスを向上させるために、拡張され"
 "た効果的な色補間(EECI)リファインを有効にします。</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:413
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:453
 #, kde-format
 msgctxt "@label"
 msgid "Demosaicing"
 msgstr "デモザイク"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:421
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:461
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Method:"
 msgstr "方式:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:423
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:463
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Default D65"
 msgstr "デフォルト D65"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:424
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:464
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Camera"
 msgstr "カメラ"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:425
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:465
 #, kde-format
 msgctxt "@item:inlistbox set while balance automatically"
 msgid "Automatic"
 msgstr "自動"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:426
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:466
 #, kde-format
 msgctxt "@item:inlistbox set white balance manually"
 msgid "Manual"
 msgstr "マニュアル"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:428
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:468
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48611,26 +48625,26 @@ msgstr ""
 "イトバランスを計算します。</li><li><emphasis strong='true'>マニュアル</"
 "emphasis>: カスタムの温度およびグリーンレベル値を設定します。</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:443
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:483
 #, kde-format
 msgctxt "@label:slider"
 msgid "T(K):"
 msgstr "T(K):"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:444
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:484
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<title>Temperature</title><p>Set here the color temperature in Kelvin.</p>"
 msgstr "<title>温度</title><p>色温度をケルビンで設定します。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:451
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:491
 #, kde-format
 msgctxt "@label:slider Green component"
 msgid "Green:"
 msgstr "緑(G):"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:452
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:492
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48639,37 +48653,37 @@ msgstr ""
 "<p>ここで緑の要素を設定して、マゼンタ色の色キャストの除去レベルを設定します。"
 "</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:455
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:495
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Highlights:"
 msgstr "ハイライト:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:457
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:497
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Solid white"
 msgstr "ソリッドホワイト"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:458
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:498
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Unclip"
 msgstr "クリップ解除"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:459
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:499
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Blend"
 msgstr "ブレンド"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:460
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:500
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Rebuild"
 msgstr "再構築"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:462
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:502
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48690,13 +48704,13 @@ msgstr ""
 "strong='true'>再構築</emphasis>: レベル値を使用してハイライトを再構築</li></"
 "ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:473
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:513
 #, kde-format
 msgctxt "@label:slider Highlight reconstruct level"
 msgid "Level:"
 msgstr "レベル:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:477
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:517
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48706,25 +48720,25 @@ msgstr ""
 "<title>レベル</title><p>再構築のハイライトレベルを指定します。低い値は白に、"
 "高い値は色を優先します。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:481
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:521
 #, kde-format
 msgctxt "@option:check"
 msgid "Exposure Correction (E.V)"
 msgstr "露出の修正(E.V)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:482
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:522
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "<p>Turn on the exposure correction before interpolation.</p>"
 msgstr "<p>補間前に露出補正をオンにします。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:485
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:525
 #, kde-format
 msgctxt "@label:slider"
 msgid "Linear Shift:"
 msgstr "線形シフト:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:490
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:530
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48732,13 +48746,13 @@ msgid ""
 "interpolation in E.V</p>"
 msgstr "<title>シフト</title><p>E.V で補間する前の露出補正を線形シフト</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:493
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:533
 #, kde-format
 msgctxt "@label:slider"
 msgid "Highlight:"
 msgstr "ハイライト:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:498
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:538
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48749,13 +48763,13 @@ msgstr ""
 "<title>ハイライト</title><p>E.V. で補間する前の露出補正のための ハイライト保"
 "存量。シフト補正が >1.0E.V の場合にのみ有効です。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:502
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:542
 #, kde-format
 msgctxt "@option:check"
 msgid "Correct false colors in highlights"
 msgstr "ハイライトの疑似色を修正する"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:503
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:543
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48767,13 +48781,13 @@ msgstr ""
 "よびタングステンランプ以下の青色のハイライト) なしで、より正確に処理されま"
 "す。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:507
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:547
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto Brightness"
 msgstr "自動明度"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:508
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:548
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48783,13 +48797,13 @@ msgstr ""
 "<p>無効にした場合は、修正された白レベルを使用し、画像ヒストグラムを無視して明"
 "度を調整します。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:511
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:551
 #, kde-format
 msgctxt "@label:slider"
 msgid "Brightness:"
 msgstr "明度:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:516
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:556
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48799,13 +48813,13 @@ msgstr ""
 "<title>明度</title><p>出力画像の明度レベルを指定します。デフォルト値は1.0で"
 "す (8ビット・モードでのみ動作)。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:526
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:566
 #, kde-format
 msgctxt "@option:check Black point"
 msgid "Black:"
 msgstr "黒:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:527
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:567
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48816,7 +48830,7 @@ msgstr ""
 "<title>黒点</title><p>RAW 画像のデコードには、特定の黒点の値を使用します。こ"
 "のオプションをオフに設定すると、黒点の値が自動的に計算されます。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:534
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:574
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48824,13 +48838,13 @@ msgid ""
 "output image.</p>"
 msgstr "<title>黒点の値</title><p>出力画像の 特定の黒点の値を指定します。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:537
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:577
 #, kde-format
 msgctxt "@option:check White point"
 msgid "White:"
 msgstr "白:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:538
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:578
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48841,7 +48855,7 @@ msgstr ""
 "<title>白色点</title><p>RAW 画像のデコードには、特定の白色点の値を使用しま"
 "す。このオプションを無効にすると、白色点の値が自動的に計算されます。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:545
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:585
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48850,49 +48864,49 @@ msgid ""
 msgstr ""
 "<title>白色点の値</title><p>出力画像の 特定の白色点の値を指定します。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:582
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:622
 #, kde-format
 msgctxt "@label"
 msgid "White Balance"
 msgstr "ホワイトバランス"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:590
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:630
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Noise reduction:"
 msgstr "ノイズリダクション:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:592
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:632
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "None"
 msgstr "なし"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:593
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:633
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Wavelets"
 msgstr "ウェーブレット"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:594
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:634
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "FBDD"
 msgstr "FBDD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:595
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:635
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "CFA Line Denoise"
 msgstr "CFA 線ノイズ除去"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:596
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:636
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Impulse Denoise"
 msgstr "Impulse ノイズ除去"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:598
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48918,13 +48932,13 @@ msgstr ""
 "ズの抑制。補間後に適用されます。</li><li><emphasis strong='true'>Impulse ノイ"
 "ズ除去</emphasis>: Impulse ノイズの抑制。補間後に適用されます。</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:624
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:664
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Chromatic Aberration correction"
 msgstr "色収差補正を有効化"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:625
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:665
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48934,13 +48948,13 @@ msgstr ""
 "<title>色収差補正を有効化</title><p>赤-緑と青-黄の生データの軸を 指定した係数"
 "だけ拡大します (デフォルトでは自動)。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:630
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:670
 #, kde-format
 msgctxt "@option:check"
 msgid "Automatic color axis adjustments"
 msgstr "色軸の自動調整"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:631
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:671
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48955,13 +48969,13 @@ msgstr ""
 "影すると、この補正が失敗することがあります。その場合、このオプションを無効に"
 "して、色係数を手動で調整します。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:678
 #, kde-format
 msgctxt "@label:slider"
 msgid "Red-Green:"
 msgstr "赤-緑:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:643
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:683
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48969,13 +48983,13 @@ msgid ""
 "red-green axis</p>"
 msgstr "<title>赤-緑の乗数</title><p>赤-緑軸の補正量を設定します。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:646
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:686
 #, kde-format
 msgctxt "@label:slider"
 msgid "Blue-Yellow:"
 msgstr "青-黄:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:651
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:691
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -48983,37 +48997,37 @@ msgid ""
 "blue-yellow axis</p>"
 msgstr "<title>青-黄の乗数</title><p>青-黄軸の補正量を設定します。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:670
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:710
 #, kde-format
 msgctxt "@label"
 msgid "Corrections"
 msgstr "修正"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:678
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:718
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Camera Profile:"
 msgstr "カメラのプロファイル:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:680
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:720
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "None"
 msgstr "ショートカットは存在しません"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:681
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Embedded"
 msgstr "埋め込み"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:682
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:722
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Custom"
 msgstr "カスタム"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:684
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49031,54 +49045,54 @@ msgstr ""
 "ファイルを使用します。</li><li> <emphasis strong='true'>カスタム</emphasis>: "
 "カスタム入力色空間プロファイルを使用します。</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:695
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:735
 #, kde-format
 msgid "ICC Files (*.icc; *.icm)"
 msgstr "ICC ファイル (*.icc; *.icm)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:697
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:737
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Workspace:"
 msgstr "ワークスペース:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:699
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:739
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Raw (no profile)"
 msgstr "生 (プロファイルなし)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:700
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:740
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "sRGB"
 msgstr "sRGB"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:701
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:741
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Adobe RGB"
 msgstr "Adobe RGB"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:702
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:742
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Wide Gamut"
 msgstr "広色域"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:703
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:743
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Pro-Photo"
 msgstr "Pro-Photo"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:704
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:744
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Custom"
 msgstr "カスタム"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:706
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:746
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49099,24 +49113,24 @@ msgid ""
 "output color space profile.</li></ul></p>"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:729
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:769
 #, kde-format
 msgid "ICC Files (*.icc *.icm)"
 msgstr "ICC ファイル (*.icc *.icm)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:741
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:781
 #, kde-format
 msgctxt "@label"
 msgid "Color Management"
 msgstr "色管理"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:947
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:987
 #, kde-format
 msgctxt "@label"
 msgid "Threshold:"
 msgstr "しきい値:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:948
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:988
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49126,26 +49140,26 @@ msgstr ""
 "<title>しきい値</title><p>ここに使用するノイズリダクションの しきい値を設定し"
 "ます。</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:961
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1001
 #, kde-format
 msgctxt "@label"
 msgid "Luminance:"
 msgstr "輝度:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:962
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1002
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<title>Luminance</title><p>Amount of Luminance impulse noise reduction.</p>"
 msgstr "<title>輝度</title><p> 輝度 Impulse ノイズリダクションの量</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:964
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1004
 #, kde-format
 msgctxt "@label"
 msgid "Chrominance:"
 msgstr "クロミナンス:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:965
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1005
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -54317,10 +54331,6 @@ msgstr ""
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 msgid "Role"
 msgstr "役割"
-
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:366
-msgid "Authors"
-msgstr "作者"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
 msgid ""
@@ -59966,6 +59976,13 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
+
+#~ msgctxt "Heading for the list of Krita authors/developers"
+#~ msgid "Authors"
+#~ msgstr "作者"
+
+#~ msgid "Unexpected error. Please contact developers."
+#~ msgstr "予期しないエラーが発生しました。開発者に連絡してください。"
 
 #~ msgid "&Description:"
 #~ msgstr "付記(&D):"

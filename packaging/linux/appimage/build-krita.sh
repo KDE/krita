@@ -56,7 +56,12 @@ fi
 cd $BUILD_PREFIX/krita-build/
 
 # Determine how many CPUs we have
-CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
+CPU_COUNT=`grep -c processor /proc/cpuinfo`
+
+if [ "${CPU_COUNT}" -ge "2" ]; then
+    let "jobs = ${CPU_COUNT} - 2"
+    CPU_COUNT=$jobs
+fi
 
 # Configure Krita
 cmake $KRITA_SOURCES \
@@ -71,9 +76,8 @@ cmake $KRITA_SOURCES \
     -DHAVE_MEMORY_LEAK_TRACKER=FALSE \
     -DBRANDING="${KRITA_BRANDING}"
 
-
 # Build and Install Krita (ready for the next phase)
-make -j$CPU_COUNT install
+cmake --build . --target install --parallel $CPU_COUNT
 
 # We add Krita's AppImage location for plugins (GMic)
 export PLUGINS_INSTALL_PREFIX=$BUILD_PREFIX/krita.appdir/usr
@@ -96,9 +100,6 @@ fi
 # Switch to our build directory as we're basically ready to start building...
 cd $BUILD_PREFIX/plugins-build/
 
-# Determine how many CPUs we have
-CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
-
 # Configure the dependencies for building
 cmake $KRITA_SOURCES/3rdparty_plugins \
     -DCMAKE_INSTALL_PREFIX=$PLUGINS_INSTALL_PREFIX \
@@ -107,4 +108,4 @@ cmake $KRITA_SOURCES/3rdparty_plugins \
     -DSUBMAKE_JOBS=$CPU_COUNT
 
 # Now start building everything we need, in the appropriate order
-cmake --build . --target ext_gmic -- -j$CPU_COUNT
+cmake --build . --target ext_gmic --parallel $CPU_COUNT

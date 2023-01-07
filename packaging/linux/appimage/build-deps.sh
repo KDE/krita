@@ -101,42 +101,52 @@ fi
 
 SUBMAKE_JOBS=`grep -c processor /proc/cpuinfo`
 
+if [ "${SUBMAKE_JOBS}" -ge "2" ]; then
+    let "jobs = ${SUBMAKE_JOBS} - 2"
+    SUBMAKE_JOBS=$jobs
+fi
+
 # Configure the dependencies for building
-cmake $KRITA_SOURCES/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DINSTALL_ROOT=$DEPS_INSTALL_PREFIX -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOADS_DIR -DQT_ENABLE_DEBUG_INFO=$QT_DEBUG
+cmake $KRITA_SOURCES/3rdparty \
+    -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX \
+    -DINSTALL_ROOT=$DEPS_INSTALL_PREFIX \
+    -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOADS_DIR \
+    -DQT_ENABLE_DEBUG_INFO=$QT_DEBUG \
+    -DSUBMAKE_JOBS=${SUBMAKE_JOBS}
 
 # Now start building everything we need, in the appropriate order
 #cmake --build . --config RelWithDebInfo --target ext_png
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_tiff
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_tiff
 #cmake --build . --config RelWithDebInfo --target ext_jpeg
 
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_boost
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_fftw3
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_eigen3
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_expat
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_exiv2
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_lcms2
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_ocio
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_openexr
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_libraw
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_giflib
-#cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_gsl
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_python
-#cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_freetype
-#cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_fontconfig
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_qt
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_poppler
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_kcrash
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_sip
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_pyqt
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_quazip
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_openjpeg
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_nasm
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_libx265
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_libde265
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_libheif
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_seexpr
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_mypaint
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_fcitx-qt5
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_webp
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_jpegxl
-cmake --build . --config RelWithDebInfo -j${SUBMAKE_JOBS} --target ext_xsimd
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_boost
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_fftw3
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_eigen3
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_expat
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_exiv2
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_lcms2
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_ocio
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_openexr
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_libraw
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_giflib
+#cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_gsl
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_python
+#cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_freetype
+#cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_fontconfig
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_qt
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_poppler
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_kcrash
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_sip
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_pyqt
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_quazip
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_openjpeg
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_nasm
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_libx265
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_libde265
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_libheif
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_seexpr
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_mypaint
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_fcitx-qt5
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_webp
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_jpegxl
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_xsimd

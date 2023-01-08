@@ -11,17 +11,6 @@ else()
     set (HAVE_FAILING_CMAKE FALSE)
 endif()
 
-include_directories(
-    ${CMAKE_BINARY_DIR}/libs/image/
-    ${CMAKE_SOURCE_DIR}/libs/image/
-    ${CMAKE_SOURCE_DIR}/libs/image/brushengine
-    ${CMAKE_SOURCE_DIR}/libs/image/tiles3
-    ${CMAKE_SOURCE_DIR}/libs/image/tiles3/swap
-    ${CMAKE_SOURCE_DIR}/sdk/tests
-)
-
-include(ECMAddTests)
-
 macro_add_unittest_definitions()
 
 set(KisRandomGeneratorDemoSources kis_random_generator_demo.cpp kimageframe.cpp)

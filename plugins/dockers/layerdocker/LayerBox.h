@@ -36,6 +36,8 @@
 #include <QComboBox>
 #include <kis_idle_watcher.h>
 
+#include "kritalayerdocker_export.h"
+
 class QModelIndex;
 
 typedef QList<QModelIndex> QModelIndexList;
@@ -60,7 +62,7 @@ class KisSelectionActionsAdapter;
  * This widget adds docking functionality and command buttons.
  *
  */
-class LayerBox : public QDockWidget, public KisMainwindowObserver
+class KRITALAYERDOCKER_EXPORT LayerBox : public QDockWidget, public KisMainwindowObserver
 {
 
     Q_OBJECT
@@ -189,7 +191,7 @@ private:
     KisIdleWatcher m_idleWatcher;
 };
 
-class LayerBoxFactory : public KoDockFactoryBase
+class KRITALAYERDOCKER_EXPORT LayerBoxFactory : public KoDockFactoryBase
 {
 
 public:

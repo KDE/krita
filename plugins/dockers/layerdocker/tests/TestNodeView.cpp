@@ -22,11 +22,7 @@
 #include "kis_node_model.h"
 #include "kis_color_filter_combo.h"
 
-#include "kistest.h"
-#include <sdk/tests/testutil.h>
-
-//#define ENABLE_GUI_TESTS
-
+#include <testresources.h>
 
 void NodeViewTest::init()
 {

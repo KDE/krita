@@ -10,6 +10,8 @@
 #include <QTreeView>
 #include <QScroller>
 
+#include "kritalayerdocker_export.h"
+
 class QStyleOptionViewItem;
 class KisNodeModel;
 
@@ -23,7 +25,7 @@ class KisNodeModel;
  *
  * This widget should work correctly in your Qt designer .ui file.
  */
-class NodeView: public QTreeView
+class KRITALAYERDOCKER_EXPORT NodeView : public QTreeView
 {
     Q_OBJECT
 Q_SIGNALS:

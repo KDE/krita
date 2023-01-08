@@ -1,25 +1,14 @@
 add_subdirectory(tests)
 
-set(kritalayerdocker_SOURCES 
+set(kritalayerdocker_static_SRCS
     LayerBox.cpp
-    LayerDocker.cpp
     NodeDelegate.cpp
     NodeToolTip.cpp
     NodeView.cpp
     NodeViewVisibilityDelegate.cpp
 )
 
-
-set(kritalayerdocker_PART_HEADERS
-    LayerBox.h
-    LayerDocker.h
-    NodeDelegate.h
-    NodeToolTip.h
-    NodeView.h
-    NodeViewVisibilityDelegate.h
-)
-
-ki18n_wrap_ui(kritalayerdocker_SOURCES
+ki18n_wrap_ui(kritalayerdocker_static_SRCS
     WdgLayerBox.ui
 )
 
@@ -28,10 +17,17 @@ QT5_WRAP_CPP(kritalayerdocker_HEADERS_MOC
     SyncButtonAndAction.h
 )
 
-kis_add_library(kritalayerdocker MODULE ${kritalayerdocker_SOURCES}
-        ${kritalayerdocker_PART_HEADERS}
-        ${kritalayerdocker_HEADERS_MOC}
+kis_add_library(kritalayerdocker_static STATIC ${kritalayerdocker_static_SRCS} ${kritalayerdocker_HEADERS_MOC})
+
+generate_export_header(kritalayerdocker_static BASE_NAME kritalayerdocker)
+
+target_link_libraries(kritalayerdocker_static kritaui)
+
+set(kritalayerdocker_SOURCES 
+    LayerDocker.cpp
 )
 
-target_link_libraries(kritalayerdocker kritaui)
+kis_add_library(kritalayerdocker MODULE ${kritalayerdocker_SOURCES})
+
+target_link_libraries(kritalayerdocker kritaui kritalayerdocker_static)
 install(TARGETS kritalayerdocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

@@ -1,8 +1,6 @@
 add_subdirectory(tests)
 
-
-set(kritadefaulttools_SOURCES
-    default_tools.cc
+set(kritadefaulttools_static_SRCS
     kis_tool_colorsampler.cc
     kis_tool_brush.cc
     kis_tool_line.cc
@@ -21,16 +19,30 @@ set(kritadefaulttools_SOURCES
     kis_tool_multihand_config.cpp
     kis_tool_pencil.cc
     kis_tool_pan.cpp
-    )
+)
 
-ki18n_wrap_ui(kritadefaulttools_SOURCES wdgcolorsampler.ui wdgmovetool.ui wdgmultihandtool.ui)
-qt5_add_resources(kritadefaulttools_SOURCES defaulttools.qrc )
+ki18n_wrap_ui(kritadefaulttools_static_SRCS wdgcolorsampler.ui wdgmovetool.ui wdgmultihandtool.ui)
+
+qt5_add_resources(kritadefaulttools_static_SRCS defaulttools.qrc )
+
+kis_add_library(kritadefaulttools_static STATIC ${kritadefaulttools_static_SRCS})
+
+target_link_libraries(kritadefaulttools_static 
+    PUBLIC
+        kritaui
+        kritabasicflakes
+        Boost::boost
+)
+
+set(kritadefaulttools_SOURCES
+    default_tools.cc
+)
 
 kis_add_library(kritadefaulttools MODULE ${kritadefaulttools_SOURCES})
 
 generate_export_header(kritadefaulttools BASE_NAME kritadefaulttools)
 
-target_link_libraries(kritadefaulttools kritaui kritabasicflakes Boost::boost)
+target_link_libraries(kritadefaulttools kritadefaulttools_static)
 
 install(TARGETS kritadefaulttools  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

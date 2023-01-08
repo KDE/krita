@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-07 00:46+0000\n"
-"PO-Revision-Date: 2023-01-05 21:58+0300\n"
+"PO-Revision-Date: 2023-01-07 23:15+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23730,9 +23730,7 @@ msgstr "Yazarlar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Translators"
+#, kde-format
 msgid "Translators"
 msgstr "Çevirmenler"
 
@@ -24401,10 +24399,9 @@ msgstr "Matlık:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:640
-#, fuzzy, kde-format
-#| msgid "Selection Overlay:"
+#, kde-format
 msgid "Selection Outline Opacity:"
-msgstr "Seçim Kaplaması:"
+msgstr "Seçim Ana Hat Matlığı:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -29839,7 +29836,7 @@ msgstr "Dosya yazma için açılamadı. Gerekçe: %1"
 #: libs/ui/KisImportExportErrorCode.cpp:139
 #, kde-format
 msgid "Unexpected error."
-msgstr ""
+msgstr "Beklenmedik hata."
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format

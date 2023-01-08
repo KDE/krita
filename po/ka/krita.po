@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-07 00:46+0000\n"
-"PO-Revision-Date: 2023-01-06 06:35+0100\n"
+"PO-Revision-Date: 2023-01-07 07:40+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2911,7 +2911,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/05_paper-"
 "torchon.png"
 msgid "05 paper-torchon"
-msgstr ""
+msgstr "05 ქაღალდის არშია"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2935,7 +2935,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/08_bump-"
 "relief.png"
 msgid "08 bump-relief"
-msgstr ""
+msgstr "08 ბარელიეფი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2943,7 +2943,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/09_drawed_crosshatched.png"
 msgid "09 drawed crosshatched"
-msgstr ""
+msgstr "09 დახაზული შტრიხი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2951,7 +2951,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/09b_drawed-"
 "CrossedLines.png"
 msgid "09b drawed-CrossedLines"
-msgstr ""
+msgstr "09b დახატული მკვეთი ხაზები"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2959,7 +2959,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/10_drawed_dotted.png"
 msgid "10 drawed dotted"
-msgstr ""
+msgstr "10 დახატული წერტილები"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2967,7 +2967,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/11_drawed_furry.png"
 msgid "11 drawed furry"
-msgstr ""
+msgstr "11 დახატული ქურქი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2975,7 +2975,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:"
 "patterns/12_drawed_vertical.png"
 msgid "12 drawed vertical"
-msgstr ""
+msgstr "12 ვერტიკალური ნახატი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2991,7 +2991,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/14_texture-"
 "rock.png"
 msgid "14 texture-rock"
-msgstr ""
+msgstr "14 ტექსტურა-ქვა"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2999,7 +2999,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/15_texture-"
 "rockB.png"
 msgid "15 texture-rockB"
-msgstr ""
+msgstr "15 ტექსტურა-ქვაB"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3007,7 +3007,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/16_texture-"
 "woody.png"
 msgid "16 texture-woody"
-msgstr ""
+msgstr "16 ტექსტურა-ხე"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3015,7 +3015,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/17_texture-"
 "melt.png"
 msgid "17 texture-melt"
-msgstr ""
+msgstr "17 ტექსტურა-დამდნარი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3023,7 +3023,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/18_texture-"
 "bark.png"
 msgid "18 texture-bark"
-msgstr ""
+msgstr "18 ტექსტურა-მერქანი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3031,7 +3031,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/18b_WaveFlex."
 "png"
 msgid "18b WaveFlex"
-msgstr ""
+msgstr "18b ტალღისმოზაიკა"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3039,7 +3039,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/19_texture-"
 "crackle.png"
 msgid "19 texture-crackle"
-msgstr ""
+msgstr "19 ტექსტურა-გაბზარული"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3047,7 +3047,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/20_texture-"
 "vegetal.png"
 msgid "20 texture-vegetal"
-msgstr ""
+msgstr "20 ტექსტურა-მცენარე"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3055,7 +3055,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/21_texture-"
 "chainmail.png"
 msgid "21 texture-chainmail"
-msgstr ""
+msgstr "21 ტექსტურა-ჯაჭვისპერანგი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3063,7 +3063,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/22_texture-"
 "reptile.png"
 msgid "22 texture-reptile"
-msgstr ""
+msgstr "22 ტექსტურა-რეპტილია"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3071,7 +3071,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/23-dynamic-"
 "screentone-A.png"
 msgid "23-dynamic-screentone-A"
-msgstr ""
+msgstr "23-დინამიკური-სკრინტონი-A"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3079,7 +3079,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/24-dynamic-"
 "screentone-B.png"
 msgid "24-dynamic-screentone-B"
-msgstr ""
+msgstr "24-დინამიკური-სკრინტონი-B"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3087,7 +3087,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/25-dynamic-"
 "screentone-C.png"
 msgid "25-dynamic-screentone-C"
-msgstr ""
+msgstr "25-დინამიკური-სკრინტონი-C"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3548,7 +3548,7 @@ msgstr "A -2 Sparkle 3"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk.png"
 msgid "chalk"
-msgstr ""
+msgstr "ცარცი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3631,7 +3631,7 @@ msgstr "გრადიენტი"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/hair.png"
 msgid "hair"
-msgstr ""
+msgstr "თმა"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3718,7 +3718,7 @@ msgstr ""
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rock.png"
 msgid "rock"
-msgstr ""
+msgstr "ქვა"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4927,7 +4927,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/05_paper-"
 "torchon.png"
 msgid "05 paper-torchon"
-msgstr ""
+msgstr "05 ქაღალდის არშია"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4943,7 +4943,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/08_bump-"
 "relief.png"
 msgid "08 bump-relief"
-msgstr ""
+msgstr "08 ბარელიეფი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4951,7 +4951,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/09_drawed_crosshatched.png"
 msgid "09 drawed crosshatched"
-msgstr ""
+msgstr "09 დახაზული შტრიხი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4959,7 +4959,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/09b_drawed-"
 "CrossedLines.png"
 msgid "09b drawed-CrossedLines"
-msgstr ""
+msgstr "09b დახატული მკვეთი ხაზები"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4967,7 +4967,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/10_drawed_dotted.png"
 msgid "10 drawed dotted"
-msgstr ""
+msgstr "10 დახატული წერტილები"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4975,7 +4975,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/11_drawed_furry.png"
 msgid "11 drawed furry"
-msgstr ""
+msgstr "11 დახატული ქურქი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4983,7 +4983,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/12_drawed_vertical.png"
 msgid "12 drawed vertical"
-msgstr ""
+msgstr "12 ვერტიკალური ნახატი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4999,7 +4999,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/14_texture-"
 "rock.png"
 msgid "14 texture-rock"
-msgstr ""
+msgstr "14 ტექსტურა-ქვა"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5007,7 +5007,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/15_texture-"
 "rockB.png"
 msgid "15 texture-rockB"
-msgstr ""
+msgstr "15 ტექსტურა-ქვაB"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5015,7 +5015,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/16_texture-"
 "woody.png"
 msgid "16 texture-woody"
-msgstr ""
+msgstr "16 ტექსტურა-ხე"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5023,7 +5023,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/17_texture-"
 "melt.png"
 msgid "17 texture-melt"
-msgstr ""
+msgstr "17 ტექსტურა-დამდნარი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5031,7 +5031,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/18_texture-"
 "bark.png"
 msgid "18 texture-bark"
-msgstr ""
+msgstr "18 ტექსტურა-მერქანი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5039,7 +5039,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/18b_WaveFlex."
 "png"
 msgid "18b WaveFlex"
-msgstr ""
+msgstr "18b ტალღისმოზაიკა"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5047,7 +5047,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/19_texture-"
 "crackle.png"
 msgid "19 texture-crackle"
-msgstr ""
+msgstr "19 ტექსტურა-გაბზარული"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5055,7 +5055,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/20_texture-"
 "vegetal.png"
 msgid "20 texture-vegetal"
-msgstr ""
+msgstr "20 ტექსტურა-მცენარე"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5063,7 +5063,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/21_texture-"
 "chainmail.png"
 msgid "21 texture-chainmail"
-msgstr ""
+msgstr "21 ტექსტურა-ჯაჭვისპერანგი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5071,7 +5071,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/22_texture-"
 "reptile.png"
 msgid "22 texture-reptile"
-msgstr ""
+msgstr "22 ტექსტურა-რეპტილია"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5079,7 +5079,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/23-dynamic-"
 "screentone-A.png"
 msgid "23-dynamic-screentone-A"
-msgstr ""
+msgstr "23-დინამიკური-სკრინტონი-A"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5087,7 +5087,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/24-dynamic-"
 "screentone-B.png"
 msgid "24-dynamic-screentone-B"
-msgstr ""
+msgstr "24-დინამიკური-სკრინტონი-B"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5095,7 +5095,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/25-dynamic-"
 "screentone-C.png"
 msgid "25-dynamic-screentone-C"
-msgstr ""
+msgstr "25-დინამიკური-სკრინტონი-C"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8291,7 +8291,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Invert Selection"
-msgstr ""
+msgstr "მონიშვნის &ინვერსია"
 
 #. i18n: context: toolTip @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:245
@@ -10663,7 +10663,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Remove Column"
-msgstr ""
+msgstr "სვეტის წაშლა"
 
 #. i18n: context: toolTip @ Action (remove_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2095
@@ -23433,9 +23433,7 @@ msgstr "ავტორები"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Translators"
+#, kde-format
 msgid "Translators"
 msgstr "მთარგმნელები"
 
@@ -24072,10 +24070,9 @@ msgstr "გაუმჭვირვალობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:640
-#, fuzzy, kde-format
-#| msgid "Selection Overlay:"
+#, kde-format
 msgid "Selection Outline Opacity:"
-msgstr "მონიშვნის განაწილება:"
+msgstr "მონიშვნის განაწილების გაუმჭვირვალობა:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -51304,7 +51301,7 @@ msgctxt ""
 "Name of the group of options related to the spay particles in the spray "
 "engine"
 msgid "Particles"
-msgstr ""
+msgstr "ნაწილაკები"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/spray/wdgsprayoptions.ui:194

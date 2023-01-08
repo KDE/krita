@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-07 00:46+0000\n"
-"PO-Revision-Date: 2023-01-05 08:43+0200\n"
+"PO-Revision-Date: 2023-01-07 09:04+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -24023,9 +24023,7 @@ msgstr "Автори"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Translators"
+#, kde-format
 msgid "Translators"
 msgstr "Перекладачі"
 
@@ -24696,10 +24694,9 @@ msgstr "Непрозорість:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:640
-#, fuzzy, kde-format
-#| msgid "Selection Overlay:"
+#, kde-format
 msgid "Selection Outline Opacity:"
-msgstr "Накладка позначення:"
+msgstr "Непрозорість контура позначення:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -30257,7 +30254,7 @@ msgstr "Не вдалося відкрити файл для записуван�
 #: libs/ui/KisImportExportErrorCode.cpp:139
 #, kde-format
 msgid "Unexpected error."
-msgstr ""
+msgstr "Неочікувана помилка."
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format

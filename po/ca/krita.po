@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-07 00:46+0000\n"
-"PO-Revision-Date: 2023-01-05 05:14+0100\n"
+"PO-Revision-Date: 2023-01-07 10:09+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -23784,9 +23784,7 @@ msgstr "Autors"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Translators"
+#, kde-format
 msgid "Translators"
 msgstr "Traductors"
 
@@ -24461,10 +24459,9 @@ msgstr "Opacitat:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:640
-#, fuzzy, kde-format
-#| msgid "Selection Overlay:"
+#, kde-format
 msgid "Selection Outline Opacity:"
-msgstr "Superposició de la selecció:"
+msgstr "Selecció de l'opacitat del contorn:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -29930,7 +29927,7 @@ msgstr "No s'ha pogut obrir el fitxer per a escriptura. Motiu: %1"
 #: libs/ui/KisImportExportErrorCode.cpp:139
 #, kde-format
 msgid "Unexpected error."
-msgstr ""
+msgstr "Error inesperat."
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format
@@ -59843,13 +59840,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgctxt "Heading for the list of Krita authors/developers"
-#~ msgid "Authors"
-#~ msgstr "Autors"
-
-#~ msgid "Unexpected error. Please contact developers."
-#~ msgstr "Error inesperat. Contacteu amb els desenvolupadors."
-
-#~ msgid "&Description:"
-#~ msgstr "&Descripció:"

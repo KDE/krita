@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-07 00:46+0000\n"
-"PO-Revision-Date: 2023-01-05 22:27+0100\n"
+"PO-Revision-Date: 2023-01-07 14:30+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -23842,9 +23842,7 @@ msgstr "Auteurs"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Translators"
+#, kde-format
 msgid "Translators"
 msgstr "Vertalers"
 
@@ -24519,10 +24517,9 @@ msgstr "Dekking:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:640
-#, fuzzy, kde-format
-#| msgid "Selection Overlay:"
+#, kde-format
 msgid "Selection Outline Opacity:"
-msgstr "Overlay voor selectie:"
+msgstr "Selectie van dekking van omlijning:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -29993,10 +29990,9 @@ msgid "Cannot open file for writing. Reason: %1"
 msgstr "Kon het bestand niet openen voor schrijven. Reden: %1"
 
 #: libs/ui/KisImportExportErrorCode.cpp:139
-#, fuzzy, kde-format
-#| msgid "Internal error."
+#, kde-format
 msgid "Unexpected error."
-msgstr "Interne fout."
+msgstr "Onverwachte fout."
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format
@@ -58435,7 +58431,7 @@ msgstr "Vergrendel verhouding"
 #: plugins/tools/tool_crop/kis_tool_crop.cc:253
 #, kde-format
 msgid "Crop Tool Actions"
-msgstr "Acties voor afsnijhulpmiddel"
+msgstr "Acties voor hulpmiddel bijsnijden"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:722
 #, kde-format
@@ -58458,14 +58454,14 @@ msgstr ""
 #: plugins/tools/tool_crop/kis_tool_crop.h:215
 #, kde-format
 msgid "Crop Tool"
-msgstr "Snijgereedschap"
+msgstr "Hulpmiddel bijsnijden"
 
 #. i18n: context: text @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_crop/KisToolCrop.action:7
 #, kde-format
 msgctxt "action"
 msgid "Crop Tool"
-msgstr "Uitsnedegereedschap"
+msgstr "Hulpmiddel bijsnijden"
 
 #. i18n: context: toolTip @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)

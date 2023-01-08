@@ -1,23 +1,9 @@
 project(kritapigment)
 
-# we have to repeat platform specifics from top-level
-if (WIN32)
-    include_directories(${CMAKE_SOURCE_DIR}/winquirks)
-    add_definitions(-D_USE_MATH_DEFINES)
-    add_definitions(-DNOMINMAX)
-    set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
-endif ()
-
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/resources
-    ${CMAKE_CURRENT_SOURCE_DIR}/compositeops)
-
 set(LINK_OPENEXR_LIB)
 if(OpenEXR_FOUND)
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
 endif()
-
-set(LINK_VC_LIB)
 
 if(HAVE_XSIMD)
     ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
@@ -125,7 +111,6 @@ target_link_libraries( kritapigment
         Qt5::Gui
         Qt5::Xml
         Boost::boost
-        ${WIN32_PLATFORM_NET_LIBS}
 )
 
 set_target_properties(kritapigment PROPERTIES

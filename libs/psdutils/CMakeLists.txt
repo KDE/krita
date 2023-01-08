@@ -19,11 +19,7 @@ target_include_directories(kritapsdutils
         ${ZLIB_INCLUDE_DIR}
 )
 
-if (WIN32)
-    target_link_libraries(kritapsdutils kritapigment kritaglobal KF5::I18n  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})
-else (WIN32)
-    target_link_libraries(kritapsdutils kritapigment kritaglobal KF5::I18n  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${ZLIB_LIBRARIES})
-endif (WIN32)
+target_link_libraries(kritapsdutils kritapigment kritaglobal KF5::I18n  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${ZLIB_LIBRARIES})
 
 set_target_properties(kritapsdutils PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

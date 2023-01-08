@@ -5,11 +5,7 @@ include_directories(
 
 macro_add_unittest_definitions()
 
-if (WIN32)
-    set(PSD_TEST_LIBS kritapsdutils Qt5::Test ${WIN32_PLATFORM_NET_LIBS})
-else (WIN32)
-    set(PSD_TEST_LIBS kritapsdutils Qt5::Test)
-endif (WIN32)
+set(PSD_TEST_LIBS kritapsdutils Qt5::Test)
 
 kis_add_tests(
     psd_utils_test.cpp

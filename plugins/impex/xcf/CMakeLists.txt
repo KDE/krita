@@ -61,6 +61,10 @@ set_property(TARGET xcftools PROPERTY C_STANDARD 11)
 set_property(TARGET xcftools PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_include_directories(xcftools INTERFACE ${XCFTOOLS_SOURCE_DIR})
 
+if (WIN32)
+    target_link_libraries(xcftools PUBLIC ws2_32)
+endif()
+
 if (CMAKE_C_COMPILER_ID MATCHES "GNU")
     target_compile_options(xcftools PRIVATE -Wno-undef -Wno-missing-format-attribute -Wno-sign-compare -Wno-format -Wno-suggest-attribute=format -Wno-format-security)
 elseif (CMAKE_C_COMPILER_ID MATCHES "Clang")

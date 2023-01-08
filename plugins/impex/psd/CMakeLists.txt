@@ -41,11 +41,7 @@ set(kritapsdexport_SOURCES
 
 kis_add_library(kritapsdexport MODULE ${kritapsdexport_SOURCES})
 
-if (MSVC)
-    target_link_libraries(kritapsdexport kritaui kritapsd kritaimpex kritastore ${WIN32_PLATFORM_NET_LIBS})
-else ()
-    target_link_libraries(kritapsdexport kritaui kritapsd kritaimpex)
-endif ()
+target_link_libraries(kritapsdexport kritaui kritapsd kritaimpex kritastore)
 
 install(TARGETS kritapsdexport DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

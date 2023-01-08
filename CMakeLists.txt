@@ -726,7 +726,6 @@ if(WIN32)
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/winquirks)
     add_definitions(-D_USE_MATH_DEFINES)
     add_definitions(-DNOMINMAX)
-    set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif()
 
 # set custom krita plugin installdir

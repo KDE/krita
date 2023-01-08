@@ -1,7 +1,5 @@
 macro_add_unittest_definitions()
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
-
 ########### next target ###############
 
 if (HAVE_OCIO_V2)
@@ -20,7 +18,7 @@ kis_add_test(
     ${KRITA_LUTDOCKER_SOURCES}
      $<TARGET_PROPERTY:kritatestsdk,SOURCE_DIR>/stroke_testing_utils.cpp
     TEST_NAME KisOcioDisplayFilterTest
-    LINK_LIBRARIES kritaui OpenColorIO::OpenColorIO KF5::I18n kritatestsdk
+    LINK_LIBRARIES kritaui OpenColorIO::OpenColorIO KF5::I18n kritatestsdk kritalutdocker_static
     NAME_PREFIX "plugins-dockers-lut-"
     )
 

@@ -101,7 +101,7 @@ fi
 
 SUBMAKE_JOBS=`grep -c processor /proc/cpuinfo`
 
-if [ "${SUBMAKE_JOBS}" -ge "2" ]; then
+if [ $SUBMAKE_JOBS -gt 2 ]; then
     let "jobs = ${SUBMAKE_JOBS} - 2"
     SUBMAKE_JOBS=$jobs
 fi

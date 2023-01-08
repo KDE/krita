@@ -88,6 +88,11 @@ configure_plugins() {
 
 PROC_COUNT=`grep processor /proc/cpuinfo | wc -l`
 
+if [ $PROC_COUNT -gt "2" ]; then
+    let "jobs = ${PROC_COUNT} - 2"
+    PROC_COUNT=$jobs
+fi
+
 build_qt() {
     if [[ ! -z $QT_ANDROID && -e $QT_ANDROID/lib/libQt5AndroidExtras_*.so ]]; then
         echo "Qt path provided; Skipping Qt build"

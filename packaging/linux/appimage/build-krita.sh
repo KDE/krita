@@ -58,7 +58,7 @@ cd $BUILD_PREFIX/krita-build/
 # Determine how many CPUs we have
 CPU_COUNT=`grep -c processor /proc/cpuinfo`
 
-if [ "${CPU_COUNT}" -ge "2" ]; then
+if [ $CPU_COUNT -gt 2 ]; then
     let "jobs = ${CPU_COUNT} - 2"
     CPU_COUNT=$jobs
 fi

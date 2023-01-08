@@ -1,10 +1,6 @@
-include_directories(
-    ${CMAKE_SOURCE_DIR}/plugins/impex/psd
-)
-
 macro_add_unittest_definitions()
 
-set(PSD_TEST_LIBS kritapsd kritatestsdk)
+set(PSD_TEST_LIBS kritapsd kritapsd_static kritatestsdk)
 
 kis_add_test(psd_header_test.cpp
     TEST_NAME psd_header_test

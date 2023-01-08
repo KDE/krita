@@ -1,13 +1,7 @@
-include_directories(${CMAKE_SOURCE_DIR}/sdk/tests
-    ${CMAKE_CURRENT_SOURCE_DIR}/..
-    ${CMAKE_BINARY_DIR}/plugins/extensions/qmic
-)
-
 macro_add_unittest_definitions()
-
 
 kis_add_test(kis_qmic_tests.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../kis_qmic_simple_convertor.cpp
     TEST_NAME kis_qmic_tests
-    LINK_LIBRARIES kritaimage kritaqmicinterface Qt5::Test
+    LINK_LIBRARIES kritaimage kritaqmicinterface kritatestsdk
     NAME_PREFIX "plugins-extensions-qmic-")
 

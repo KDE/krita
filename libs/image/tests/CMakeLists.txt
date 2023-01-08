@@ -128,16 +128,14 @@ kis_add_tests(
     kis_mesh_transform_worker_test.cpp
     KisKeyframeAnimationInterfaceSignalTest.cpp
     KisOverlayPaintDeviceWrapperTest.cpp
-    LINK_LIBRARIES kritaimage Qt5::Test
+    LINK_LIBRARIES kritaimage kritatestsdk
     NAME_PREFIX "libs-image-"
     )
-
-include(KritaAddBrokenUnitTest)
 
 krita_add_broken_unit_tests(
     kis_transform_mask_test.cpp
     kis_perspective_transform_worker_test.cpp
-    LINK_LIBRARIES kritaimage Qt5::Test
+    LINK_LIBRARIES kritaimage kritatestsdk
     NAME_PREFIX "libs-image-"
     )
 

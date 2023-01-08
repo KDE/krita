@@ -1,13 +1,5 @@
 macro_add_unittest_definitions()
 
-include_directories (
-    ${CMAKE_SOURCE_DIR}/libs/widgetutils
-    ${CMAKE_SOURCE_DIR}/sdk/tests
-)
-
-include(ECMAddTests)
-
-
 kis_add_tests(
     KisActionsSnapshotTest.cpp
     KoPropertiesTest.cpp
@@ -16,7 +8,7 @@ kis_add_tests(
     TestSqueezedComboBox.cpp
     kis_parse_spin_boxes_test.cpp
     NAME_PREFIX "libs-widgetutils-"
-    LINK_LIBRARIES kritawidgetutils kritaimage Qt5::Test
+    LINK_LIBRARIES kritawidgetutils kritaimage kritatestsdk
 )
 
 ki18n_wrap_ui(DialogStateSaver_SRCS
@@ -27,7 +19,7 @@ kis_add_test(
     KisDialogStateSaverTest.cpp
     ${DialogStateSaver_SRCS}
     TEST_NAME KisDialogStateSaverTest
-    LINK_LIBRARIES kritawidgetutils Qt5::Test KF5::ConfigCore
+    LINK_LIBRARIES kritawidgetutils kritatestsdk KF5::ConfigCore
     NAME_PREFIX "libs-widgetutils-"
     )
 

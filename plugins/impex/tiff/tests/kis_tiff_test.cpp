@@ -21,6 +21,8 @@
 
 #include <config-jpeg.h>
 
+#include <KoConfig.h>
+
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif

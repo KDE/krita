@@ -1,8 +1,3 @@
-include_directories(   
-    ${CMAKE_BINARY_DIR}/libs/image
-)
-
-include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 
 macro_add_unittest_definitions()
 
@@ -16,7 +11,7 @@ kis_add_tests(
     kis_swapped_data_store_test.cpp
     kis_tile_data_store_test.cpp
     kis_tile_data_pooler_test.cpp
-    LINK_LIBRARIES kritaimage Qt5::Test
+    LINK_LIBRARIES kritaimage kritatestsdk
     NAME_PREFIX "libs-image-tiles3-"
     )
 

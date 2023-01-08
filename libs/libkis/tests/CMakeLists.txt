@@ -1,8 +1,5 @@
-include(ECMAddTests)
-include(KritaAddBrokenUnitTest)
-include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
-macro_add_unittest_definitions()
 
+macro_add_unittest_definitions()
 
 kis_add_tests(
     #TestKrita.cpp
@@ -15,6 +12,6 @@ kis_add_tests(
     TestManagedColor.cpp
     TestNotifier.cpp
     NAME_PREFIX "libs-libkis-"
-    LINK_LIBRARIES kritalibkis Qt5::Test
+    LINK_LIBRARIES kritalibkis kritatestsdk
     )
 

@@ -653,18 +653,6 @@ endif(MINGW)
 # - https://invent.kde.org/frameworks/extra-cmake-modules/-/blob/v5.101.0/kde-modules/KDECompilerSettings.cmake#L502-526
 kde_enable_exceptions()
 
-set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_SOURCE_DIR}/sdk/tests/data/)
-macro(macro_add_unittest_definitions)
-  add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
-  if(WIN32)
-    add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-  else()
-    add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
-  endif()
-  add_definitions(-DFILES_DEFAULT_DATA_DIR="${KRITA_DEFAULT_TEST_DATA_DIR}")
-  add_definitions(-DSYSTEM_RESOURCES_DATA_DIR="${CMAKE_SOURCE_DIR}/krita/data/")
-endmacro()
-
 function(krita_select_pch_file targetname pch_file_name)
     #TODO: make kritaimage and kritaglobal targets to link to its own PCH
 
@@ -1108,14 +1096,6 @@ endif()
 ##
 include(CheckAtomic)
 
- ############################
-#############################
-## Add Krita helper macros ##
-#############################
-############################
-
-include(MacroKritaAddBenchmark)
-
  ####################
 #####################
 ## Define includes ##
@@ -1126,6 +1106,8 @@ include(MacroKritaAddBenchmark)
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}
                            ${CMAKE_CURRENT_BINARY_DIR}
 )
+
+add_subdirectory(sdk/tests)
 
 add_subdirectory(libs)
 add_subdirectory(plugins)

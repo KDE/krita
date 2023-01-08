@@ -3,16 +3,15 @@
  */
 
 #include "TestKoLcmsColorProfile.h"
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
-#include <LcmsColorProfileContainer.h>
+
+#include <cmath>
+#include <lcms2.h>
 
 #include <KoColor.h>
-
+#include <KoColorProfile.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 #include <simpletest.h>
-
-#include <lcms2.h>
-#include <cmath>
 
 qreal testRounding(qreal value)
 {

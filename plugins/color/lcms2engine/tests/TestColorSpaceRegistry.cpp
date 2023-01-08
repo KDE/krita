@@ -4,15 +4,13 @@
 
 #include "TestColorSpaceRegistry.h"
 
+#include <lcms2.h>
+
 #include <simpletest.h>
-
-#include "KoColorSpaceRegistry.h"
-#include "KoColorSpace.h"
-#include "RgbU8ColorSpace.h"
-#include "RgbU16ColorSpace.h"
-#include "LabColorSpace.h"
-
-#include "sdk/tests/testpigment.h"
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
+#include <KoColorProfile.h>
+#include <sdk/tests/testpigment.h>
 
 void TestColorSpaceRegistry::testConstruction()
 {

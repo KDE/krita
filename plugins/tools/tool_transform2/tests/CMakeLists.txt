@@ -1,14 +1,8 @@
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/..
-    ${CMAKE_CURRENT_BINARY_DIR}/..
-    ${CMAKE_SOURCE_DIR}/sdk/tests
-)
-
 macro_add_unittest_definitions()
 
 ########### next target ###############
 
 kis_add_test(test_animated_transform_parameters.cpp
     NAME_PREFIX plugins-tooltransform-
-    LINK_LIBRARIES kritatooltransform_static kritaui kritaimage Qt5::Test)
+    LINK_LIBRARIES kritatooltransform_static kritaui kritaimage kritatestsdk)
 

@@ -13,8 +13,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/generator
     ${CMAKE_CURRENT_SOURCE_DIR}/layerstyles
     ${CMAKE_CURRENT_SOURCE_DIR}/processing
-
-    ${CMAKE_SOURCE_DIR}/sdk/tests
 )
 
 if(FFTW3_FOUND)

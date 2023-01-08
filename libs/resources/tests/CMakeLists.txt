@@ -1,6 +1,3 @@
-include(ECMAddTests)
-include(KritaAddBrokenUnitTest)
-include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 macro_add_unittest_definitions()
 
 kis_add_tests(
@@ -21,5 +18,5 @@ kis_add_tests(
     TestStorageFilterProxyModel.cpp
     TestTagResourceModel.cpp
     NAME_PREFIX "libs-kritaresources-"
-    LINK_LIBRARIES kritaglobal kritapigment kritaplugin kritaresources kritawidgets kritaversion KF5::ConfigCore Qt5::Sql Qt5::Test
+    LINK_LIBRARIES kritaglobal kritapigment kritaplugin kritaresources kritawidgets kritaversion KF5::ConfigCore Qt5::Sql kritatestsdk
     )

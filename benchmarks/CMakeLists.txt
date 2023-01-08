@@ -1,9 +1,3 @@
-include_directories(
-    ${CMAKE_SOURCE_DIR}/sdk/tests
-    ${CMAKE_SOURCE_DIR}/libs/pigment
-    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
-)
-
 macro_add_unittest_definitions()
 
 ########### next target ###############
@@ -46,22 +40,22 @@ krita_add_benchmark(KisAnimationRenderingBenchmark TESTNAME krita-benchmarks-Kis
 krita_add_benchmark(KisFilterSelectionsBenchmark TESTNAME krita-image-KisFilterSelectionsBenchmark ${kis_filter_selections_benchmark_SRCS})
 krita_add_benchmark(KisThumbnailBenchmark TESTNAME krita-benchmarks-KisThumbnail ${kis_thumbnail_benchmark_SRCS})
 
-target_link_libraries(KisDatamanagerBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisHLineIteratorBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisVLineIteratorBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisRandomIteratorBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisProjectionBenchmark  kritaimage  kritaui Qt5::Test)
-target_link_libraries(KisBContrastBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisBlurBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisLevelFilterBenchmark kritaimage  Qt5::Test)
-target_link_libraries(KisPainterBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisStrokeBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisFastMathBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisFloodfillBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisGradientBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisLowMemoryBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisAnimationRenderingBenchmark  kritaimage kritaui  Qt5::Test)
-target_link_libraries(KisFilterSelectionsBenchmark   kritaimage  Qt5::Test)
+target_link_libraries(KisDatamanagerBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisHLineIteratorBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisVLineIteratorBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisRandomIteratorBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisProjectionBenchmark  kritaimage  kritaui kritatestsdk)
+target_link_libraries(KisBContrastBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisBlurBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisLevelFilterBenchmark kritaimage  kritatestsdk)
+target_link_libraries(KisPainterBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisStrokeBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisFastMathBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisFloodfillBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisGradientBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisLowMemoryBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisAnimationRenderingBenchmark  kritaimage kritaui  kritatestsdk)
+target_link_libraries(KisFilterSelectionsBenchmark   kritaimage  kritatestsdk)
 
 if(HAVE_XSIMD)
 ko_compile_for_all_implementations_no_scalar(__per_arch_composition_objects kis_composition_benchmark.cpp)
@@ -86,9 +80,9 @@ foreach(_obj IN LISTS __per_arch_composition_objects)
 
     configure_file(kis_composition_benchmark.h ${_fake_header} COPYONLY)
 
-    target_link_libraries(${_target} kritaimage Qt5::Test kritamultiarch)
+    target_link_libraries(${_target} kritaimage kritatestsdk kritamultiarch)
 endforeach()
 endif()
 
-target_link_libraries(KisMaskGeneratorBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisThumbnailBenchmark  kritaimage  Qt5::Test)
+target_link_libraries(KisMaskGeneratorBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisThumbnailBenchmark  kritaimage  kritatestsdk)

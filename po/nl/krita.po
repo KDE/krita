@@ -55,14 +55,14 @@
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2010, 2011, 2012.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2013, 2014, 2015, 2016.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2015, 2016.
-# Freek de Kruijf <freekdekruijf@kde.nl>, 2015, 2017, 2018, 2019, 2020, 2021, 2022.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Ronald Stroethoff <stroet43@zonnet.nl>, 2019, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-06 03:19+0000\n"
-"PO-Revision-Date: 2022-12-15 11:35+0100\n"
+"PO-Revision-Date: 2023-01-06 17:49+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -58020,7 +58020,7 @@ msgstr "Vergrendel verhouding"
 #: plugins/tools/tool_crop/kis_tool_crop.cc:253
 #, kde-format
 msgid "Crop Tool Actions"
-msgstr "Acties voor afsnijhulpmiddel"
+msgstr "Acties voor hulpmiddel bijsnijden"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:722
 #, kde-format
@@ -58043,14 +58043,14 @@ msgstr ""
 #: plugins/tools/tool_crop/kis_tool_crop.h:215
 #, kde-format
 msgid "Crop Tool"
-msgstr "Snijgereedschap"
+msgstr "Hulpmiddel bijsnijden"
 
 #. i18n: context: text @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_crop/KisToolCrop.action:7
 #, kde-format
 msgctxt "action"
 msgid "Crop Tool"
-msgstr "Uitsnedegereedschap"
+msgstr "Hulpmiddel bijsnijden"
 
 #. i18n: context: toolTip @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolCrop), Actions (tool-shortcuts), ActionCollection (Tools)

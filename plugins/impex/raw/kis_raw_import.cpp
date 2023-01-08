@@ -9,6 +9,7 @@
 #include <cmath>
 #include <cstddef>
 #include <exiv2/exiv2.hpp>
+#include <utility>
 #include <kpluginfactory.h>
 #include <libkdcraw_version.h>
 
@@ -38,18 +39,19 @@ using namespace KDcrawIface;
 class Q_DECL_HIDDEN MyKDcraw : public KDcraw
 {
 public:
-    MyKDcraw(KoUpdater *updater)
-        : updater(updater)
+    MyKDcraw(QPointer<KoUpdater> updater)
+        : updater(std::move(updater))
     {
     }
 
     void setWaitingDataProgress(double value) override
     {
-        updater->setProgress(static_cast<int>(value * 100.0));
+        if (updater)
+            updater->setProgress(static_cast<int>(value * 100.0));
     }
 
 private:
-    KoUpdater *updater;
+    QPointer<KoUpdater> updater;
 };
 
 K_PLUGIN_FACTORY_WITH_JSON(KisRawImportFactory, "krita_raw_import.json", registerPlugin<KisRawImport>();)

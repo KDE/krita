@@ -409,18 +409,19 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                nclxDescription.set_color_primaties(heif_color_primaries_ITU_R_BT_2020_2_and_2100_0);
 #endif
            } else {
-               const ColorPrimaries primaries =
-                   image->colorSpace()->profile()->getColorPrimaries();
-               // PRIMARIES_ADOBE_RGB_1998 and higher are not valid for CICP.
-               // But this should have already been caught by the KeepTheSame
-               // clause...
-               KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(
-                   primaries >= PRIMARIES_ADOBE_RGB_1998,
-                   ImportExportCodes::FormatColorSpaceUnsupported);
+                const ColorPrimaries primaries =
+                    image->colorSpace()->profile()->getColorPrimaries();
+                // PRIMARIES_ADOBE_RGB_1998 and higher are not valid for CICP.
+                // But this should have already been caught by the KeepTheSame
+                // clause...
+                KIS_SAFE_ASSERT_RECOVER(primaries <= PRIMARIES_EBU_Tech_3213_E) {
+                    errFile << "Attempt to export a file with unsupported primaries" << primaries;
+                    return ImportExportCodes::FormatColorSpaceUnsupported;
+                }
 #if LIBHEIF_HAVE_VERSION(1, 14, 1)
-               nclxDescription.set_color_primaries(heif_color_primaries(primaries));
+                nclxDescription.set_color_primaries(heif_color_primaries(primaries));
 #else
-               nclxDescription.set_color_primaties(heif_color_primaries(primaries));
+                nclxDescription.set_color_primaties(heif_color_primaries(primaries));
 #endif
            }
 

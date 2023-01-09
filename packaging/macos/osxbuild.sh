@@ -809,7 +809,7 @@ osxbuild.sh install ${KIS_BUILD_DIR}"
         # remove all build and install directories to start
         # a fresh install. this no different than using rm directly
         dir_clean "${KIS_TBUILD_DIR}"
-        dir_clean "${$KIS_BUILD_DIR}"
+        dir_clean "${KIS_BUILD_DIR}"
         dir_clean "${KIS_INSTALL_DIR}"
         exit
 

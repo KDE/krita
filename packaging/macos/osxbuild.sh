@@ -268,17 +268,8 @@ build_3rdparty_fixes(){
     local error=${2}
 
     if [[ "${pkg}" = "ext_qt" && -e "${KIS_INSTALL_DIR}/bin/qmake" ]]; then
+        log "link qmake to qmake-qt5"
         ln -sf qmake "${KIS_INSTALL_DIR}/bin/qmake-qt5"
-        # build macdeployqt
-        log_cmd cd "${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src"
-        print_if_error "macdeployqt source dir was not found, it will be missing for deployment!"
-
-        if [[ ! ${osxbuild_error} -ne 0 && ! -e "${KIS_INSTALL_DIR}/bin/macdeployqt" ]]; then
-            make sub-macdeployqt-all
-            make sub-macdeployqt-install_subtargets
-            make install
-        fi
-        cd "${KIS_TBUILD_DIR}"
         error="false"
 
     elif [[ "${pkg}" = "ext_openexr" ]]; then

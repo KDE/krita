@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-07 00:46+0000\n"
-"PO-Revision-Date: 2023-01-06 08:30+0100\n"
+"POT-Creation-Date: 2023-01-09 00:53+0000\n"
+"PO-Revision-Date: 2023-01-08 11:35+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -23726,9 +23726,7 @@ msgstr "Avtorji"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Translators"
+#, kde-format
 msgid "Translators"
 msgstr "Prevajalci"
 
@@ -24396,10 +24394,9 @@ msgstr "Prekrivnost:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:640
-#, fuzzy, kde-format
-#| msgid "Selection Overlay:"
+#, kde-format
 msgid "Selection Outline Opacity:"
-msgstr "Prekrivanje izbora:"
+msgstr "Prekrivnost orisa izbora:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -29842,7 +29839,7 @@ msgstr "Datoteke ni mogoče odpreti za pisanje. Razlog: %1"
 #: libs/ui/KisImportExportErrorCode.cpp:139
 #, kde-format
 msgid "Unexpected error."
-msgstr ""
+msgstr "Nepričakovana napaka."
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format
@@ -45884,7 +45881,7 @@ msgstr "Barvni profil ni bil najden v dokumentu."
 msgid "Unknown error: %1"
 msgstr "Neznana napaka: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:527
+#: plugins/impex/heif/HeifExport.cpp:528
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45894,7 +45891,7 @@ msgstr ""
 "Svetlost slike bo pri polni ločljivosti, barvitost pa bo prepolovljena v "
 "obeh dimenzijah."
 
-#: plugins/impex/heif/HeifExport.cpp:528
+#: plugins/impex/heif/HeifExport.cpp:529
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45904,28 +45901,28 @@ msgstr ""
 "Svetlost slike bo pri polni ločljivosti, barvitost pa bo prepolovljena "
 "vodoravno."
 
-#: plugins/impex/heif/HeifExport.cpp:529
+#: plugins/impex/heif/HeifExport.cpp:530
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr "Svetlost in barvitost slike bosta v polni ločljivosti."
 
-#: plugins/impex/heif/HeifExport.cpp:543
+#: plugins/impex/heif/HeifExport.cpp:544
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:182
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:543
+#: plugins/impex/heif/HeifExport.cpp:544
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:175
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:544
+#: plugins/impex/heif/HeifExport.cpp:545
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:177
 #, kde-format
 msgctxt "@tooltip"
@@ -45938,7 +45935,7 @@ msgstr ""
 "krivuljo zaznavnega kvantizerja (znano tudi kot krivuljo SMPTE 2048). "
 "Priporočeno za slike HDR, kjer je pomembna absolutna svetlost."
 
-#: plugins/impex/heif/HeifExport.cpp:546
+#: plugins/impex/heif/HeifExport.cpp:547
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
 #, kde-format
 msgctxt "@tooltip"
@@ -45951,14 +45948,14 @@ msgstr ""
 "hibridno logaritemsko krivuljo game (HLG). Priporočeno za slike HDR, kjer "
 "zaslon morda ne razume HDR."
 
-#: plugins/impex/heif/HeifExport.cpp:552
+#: plugins/impex/heif/HeifExport.cpp:553
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:191
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Obdrži barvila, kodiraj v PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:553
+#: plugins/impex/heif/HeifExport.cpp:554
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #, kde-format
 msgctxt "@tooltip"
@@ -45971,14 +45968,14 @@ msgstr ""
 "kvantizatorja (znana tudi kot krivulja SMPTE 2048). Priporočeno za slike, "
 "kjer je pomembna absolutna svetlost."
 
-#: plugins/impex/heif/HeifExport.cpp:557
+#: plugins/impex/heif/HeifExport.cpp:558
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Obdrži barvila, kodiraj v HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:558
+#: plugins/impex/heif/HeifExport.cpp:559
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
 #, kde-format
 msgctxt "@tooltip"
@@ -45989,14 +45986,14 @@ msgstr ""
 "Slika bo najprej linearizirana, nato pa kodirana s hibridno logaritemsko "
 "krivuljo game. Priporočeno za slike, namenjene zaslonom, ki ne razumejo PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:562
+#: plugins/impex/heif/HeifExport.cpp:563
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Obdrži barvila, kodiraj v SMPTE ST 428"
 
-#: plugins/impex/heif/HeifExport.cpp:563
+#: plugins/impex/heif/HeifExport.cpp:564
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
 #, kde-format
 msgctxt "@tooltip"
@@ -46009,13 +46006,13 @@ msgstr ""
 "odpira slike, kot je ta, kot z linearno plavajočo vejico, ta možnost je tam, "
 "da to preobrne"
 
-#: plugins/impex/heif/HeifExport.cpp:568
+#: plugins/impex/heif/HeifExport.cpp:569
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Brez sprememb, poreži"
 
-#: plugins/impex/heif/HeifExport.cpp:569
+#: plugins/impex/heif/HeifExport.cpp:570
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -59627,10 +59624,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgctxt "Heading for the list of Krita authors/developers"
-#~ msgid "Authors"
-#~ msgstr "Avtorji"
-
-#~ msgid "Unexpected error. Please contact developers."
-#~ msgstr "Nepričakovana napaka. Obrnite se na razvijalce."

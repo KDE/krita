@@ -44,6 +44,8 @@ public:
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
+    void requestStrokeEnd() override;
+    void requestStrokeCancellation() override;
 
     void undoLastPoint();
 
@@ -59,11 +61,13 @@ private:
     QPointF m_lastCursorPos;
     ToolType m_type;
     int m_numberOfContinuedModePoints;
+    bool m_hasUserInteractionRunning;
 
-    void finishOutlineAction();
     void updateFeedback();
     void updateContinuedMode();
     void updateCanvas();
+    void endStroke();
+    void cancelStroke();
 };
 
 #endif

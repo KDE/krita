@@ -115,9 +115,8 @@ void KisToolRectangleBase::activate(const QSet<KoShape *> &shapes)
 
 void KisToolRectangleBase::deactivate()
 {
-    updateArea();
+    cancelStroke();
     KisToolShape::deactivate();
-    endShape();
 }
 
 void KisToolRectangleBase::keyPressEvent(QKeyEvent *event) {
@@ -305,13 +304,43 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
+    // If the event was not originated by the user releasing the button
+    // (for example due to the canvas loosing focus), then we just cancel the
+    // operation. This prevents some issues with shapes being added after
+    // the image was closed while the shape was being made
+    if (event->spontaneous()) {
+        endStroke();
+    } else {
+        cancelStroke();
+    }
+    event->accept();
+}
+
+void KisToolRectangleBase::requestStrokeEnd()
+{
+    endStroke();
+}
+
+void KisToolRectangleBase::requestStrokeCancellation()
+{
+    cancelStroke();
+}
+
+void KisToolRectangleBase::endStroke()
+{
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
-
     updateArea();
-
     finishRect(createRect(m_dragStart, m_dragEnd), m_roundCornersX, m_roundCornersY);
     endShape();
-    event->accept();
+}
+
+void KisToolRectangleBase::cancelStroke()
+{
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
+    setMode(KisTool::HOVER_MODE);
+    updateArea();
+    endShape();
 }
 
 QRectF KisToolRectangleBase::createRect(const QPointF &start, const QPointF &end)

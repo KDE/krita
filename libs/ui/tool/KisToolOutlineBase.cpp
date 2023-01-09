@@ -26,6 +26,7 @@ KisToolOutlineBase::KisToolOutlineBase(KoCanvasBase * canvas, ToolType type, con
     , m_continuedMode(false)
     , m_type(type)
     , m_numberOfContinuedModePoints(0)
+    , m_hasUserInteractionRunning(false)
 {}
 
 KisToolOutlineBase::~KisToolOutlineBase()
@@ -46,7 +47,7 @@ void KisToolOutlineBase::keyReleaseEvent(QKeyEvent *event)
         !(event->modifiers() & Qt::ControlModifier)) {
         m_continuedMode = false;
         if (mode() != PAINT_MODE) {
-            finishOutlineAction();
+            endStroke();
         }
     }
     KisToolShape::keyReleaseEvent(event);
@@ -80,7 +81,7 @@ void KisToolOutlineBase::activate(const QSet<KoShape *> &shapes)
 
 void KisToolOutlineBase::deactivate()
 {
-    finishOutlineAction();
+    cancelStroke();
     
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
@@ -169,6 +170,7 @@ void KisToolOutlineBase::beginPrimaryAction(KoPointerEvent *event)
     setMode(KisTool::PAINT_MODE);
 
     if (!m_continuedMode || m_points.isEmpty()) {
+        m_hasUserInteractionRunning = true;
         beginShape();
     }
 
@@ -192,24 +194,20 @@ void KisToolOutlineBase::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolOutlineBase::endPrimaryAction(KoPointerEvent *event)
 {
-    Q_UNUSED(event);
-
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
-
     if (!m_continuedMode) {
-        finishOutlineAction();
+        // If the event was not originated by the user releasing the button
+        // (for example due to the canvas loosing focus), then we just cancel
+        // the operation. This prevents some issues with shapes being added
+        // after the image was closed while the shape was being made
+        if (event->spontaneous()) {
+            endStroke();
+        } else {
+            cancelStroke();
+        }
+        event->accept();
     }
-}
-
-void KisToolOutlineBase::finishOutlineAction()
-{
-    if (m_points.isEmpty()) {
-        return;
-    }
-    finishOutline(m_points);
-    m_points.clear();
-    endShape();
 }
 
 void KisToolOutlineBase::paint(QPainter& gc, const KoViewConverter &converter)
@@ -253,5 +251,40 @@ void KisToolOutlineBase::updateContinuedMode()
 
 bool KisToolOutlineBase::hasUserInteractionRunning() const
 {
-    return !m_points.isEmpty();
+    return m_hasUserInteractionRunning;
+}
+
+void KisToolOutlineBase::endStroke()
+{
+    if (!hasUserInteractionRunning()) {
+        return;
+    }
+    setMode(KisTool::HOVER_MODE);
+    m_hasUserInteractionRunning = false;
+
+    finishOutline(m_points);
+    m_points.clear();
+    endShape();
+}
+
+void KisToolOutlineBase::cancelStroke()
+{
+    if (!hasUserInteractionRunning()) {
+        return;
+    }
+    setMode(KisTool::HOVER_MODE);
+    m_hasUserInteractionRunning = false;
+
+    m_points.clear();
+    endShape();
+}
+
+void KisToolOutlineBase::requestStrokeEnd()
+{
+    endStroke();
+}
+
+void KisToolOutlineBase::requestStrokeCancellation()
+{
+    cancelStroke();
 }

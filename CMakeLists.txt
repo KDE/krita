@@ -529,13 +529,22 @@ endif()
 
 add_definitions(
   -DQT_USE_QSTRINGBUILDER
-  -DQT_STRICT_ITERATORS
   -DQT_NO_SIGNALS_SLOTS_KEYWORDS
   -DQT_NO_URL_CAST_FROM_STRING
   -DQT_USE_FAST_CONCATENATION 
   -DQT_USE_FAST_OPERATOR_PLUS
 )
 
+# MSVC is unable to disambiguate between definitions of QVector<QPointF> 
+# and QPolygonF. This is a known upstream bug e.g.:
+# - https://phabricator.kde.org/D21314
+# - https://codereview.qt-project.org/c/qt/qtbase/+/180229
+# Starting with Qt 5.13, it is impossible to use strict iterators
+# wholesale because of:
+# https://github.com/qt/qtbase/commit/972f8845a85d6a07140025e4257cb8a1a2699b5d
+if (NOT MSVC OR ${Qt5_VERSION} VERSION_LESS "5.13.0")
+  add_definitions(-DQT_STRICT_ITERATORS)
+endif()
 
 #if (${Qt5_VERSION} VERSION_GREATER "5.14.0" )
 #    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50F00)

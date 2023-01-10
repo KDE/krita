@@ -86,11 +86,9 @@ void KisToolGradient::activate(const QSet<KoShape*> &shapes)
 void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (mode() == KisTool::PAINT_MODE && m_startPos != m_endPos) {
-            qreal sx, sy;
-            converter.zoom(&sx, &sy);
-            painter.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
-            paintLine(painter);
+        paintLine(painter);
     }
+    KisToolPaint::paint(painter, converter);
 }
 
 void KisToolGradient::beginPrimaryAction(KoPointerEvent *event)
@@ -116,10 +114,10 @@ void KisToolGradient::continuePrimaryAction(KoPointerEvent *event)
      */
     //CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    QPointF pos = convertToPixelCoordAndSnap(event, QPointF(), false);
+    // First ensure the old guideline is deleted
+    updateGuideline();
 
-    QRectF bound(m_startPos, m_endPos);
-    canvas()->updateCanvas(convertToPt(bound.normalized()));
+    QPointF pos = convertToPixelCoordAndSnap(event, QPointF(), false);
 
     if (event->modifiers() == Qt::ShiftModifier) {
         m_endPos = straightLine(pos);
@@ -127,9 +125,7 @@ void KisToolGradient::continuePrimaryAction(KoPointerEvent *event)
         m_endPos = pos;
     }
 
-    bound.setTopLeft(m_startPos);
-    bound.setBottomRight(m_endPos);
-    canvas()->updateCanvas(convertToPt(bound.normalized()));
+    updateGuideline();
 }
 
 void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
@@ -193,7 +189,8 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
                 }));
         applicator.end();
     }
-    canvas()->updateCanvas(convertToPt(currentImage()->bounds()));
+
+    updateGuideline();
 }
 
 QPointF KisToolGradient::straightLine(QPointF point)
@@ -222,6 +219,14 @@ void KisToolGradient::paintLine(QPainter& gc)
         path.moveTo(viewStartPos);
         path.lineTo(viewStartEnd);
         paintToolOutline(&gc, path);
+    }
+}
+
+void KisToolGradient::updateGuideline()
+{
+    if (canvas()) {
+        QRectF bound(m_startPos, m_endPos);
+        canvas()->updateCanvas(convertToPt(bound.normalized().adjusted(-3, -3, 3, 3)));
     }
 }
 

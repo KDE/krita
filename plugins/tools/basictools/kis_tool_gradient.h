@@ -73,6 +73,7 @@ private Q_SLOTS:
 private:
 
     void paintLine(QPainter& gc);
+    void updateGuideline();
 
     QPointF straightLine(QPointF point);
 

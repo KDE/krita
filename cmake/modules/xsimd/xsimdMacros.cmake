@@ -11,7 +11,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #=============================================================================
 
-cmake_minimum_required(VERSION 3.12.0)
+if(CMAKE_VERSION VERSION_LESS 3.12.0)
+   message(FATAL_ERROR "CMake 3.12.0 is required by xsimdMacros.cmake")
+endif()
 
 include ("${CMAKE_CURRENT_LIST_DIR}/xsimdAddCompilerFlag.cmake")
 

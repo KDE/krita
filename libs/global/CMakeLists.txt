@@ -70,9 +70,12 @@ target_link_libraries(kritaglobal
         KF5::I18n
         Boost::boost
     PRIVATE
-        GSL::gsl
         Eigen3::Eigen
 )
+
+if (GSL_FOUND)
+  target_link_libraries(kritaglobal PRIVATE GSL::gsl)
+endif ()
 
 if (ANDROID)
     target_link_libraries(kritaglobal PRIVATE ${unwindstack_LIBRARIES} Qt5::AndroidExtras log)

@@ -140,40 +140,41 @@ int MultiFeedRssModel::rowCount(const QModelIndex &) const
 
 QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
 {
+    if (index.row() < m_aggregatedFeed.size()) {
+        RssItem item = m_aggregatedFeed.at(index.row());
 
-    RssItem item = m_aggregatedFeed.at(index.row());
-
-    switch (role) {
-    case Qt::DisplayRole:
-    {
-        QTextDocument doc;
-        doc.setHtml(item.description);
-        // Extract the first text block, which is the `<p>` element containing
-        // the shortened post text, excluding the "This post [...] appeared
-        // first on [...]" text.
-        QString text = doc.firstBlock().text();
-        if (text.length() > 92) {
-            text.truncate(90);
-            text.append("...");
+        switch (role) {
+        case Qt::DisplayRole:
+        {
+            QTextDocument doc;
+            doc.setHtml(item.description);
+            // Extract the first text block, which is the `<p>` element containing
+            // the shortened post text, excluding the "This post [...] appeared
+            // first on [...]" text.
+            QString text = doc.firstBlock().text();
+            if (text.length() > 92) {
+                text.truncate(90);
+                text.append("...");
+            }
+            return QString("<b><a href=\"" + item.link + "\">" + item.title + "</a></b>"
+                "<br><small>(" + item.pubDate.toLocalTime().toString(Qt::DefaultLocaleShortDate) + ") "
+                "<p style=\"margin-top: 4px\">" + text + "</p></small>");
         }
-        return QString("<b><a href=\"" + item.link + "\">" + item.title + "</a></b>"
-               "<br><small>(" + item.pubDate.toLocalTime().toString(Qt::DefaultLocaleShortDate) + ") "
-               "<p style=\"margin-top: 4px\">" + text + "</p></small>");
-    }
-    case KisRssReader::RssRoles::TitleRole:
-        return item.title;
-    case KisRssReader::RssRoles::DescriptionRole:
-        return item.description;
-    case KisRssReader::RssRoles::PubDateRole:
-        return item.pubDate.toString("dd-MM-yyyy hh:mm");
-    case KisRssReader::RssRoles::LinkRole:
-        return item.link;
-    case KisRssReader::RssRoles::CategoryRole:
-        return item.category;
-    case KisRssReader::RssRoles::BlogNameRole:
-        return item.blogName;
-    case KisRssReader::RssRoles::BlogIconRole:
-        return item.blogIcon;
+        case KisRssReader::RssRoles::TitleRole:
+            return item.title;
+        case KisRssReader::RssRoles::DescriptionRole:
+            return item.description;
+        case KisRssReader::RssRoles::PubDateRole:
+            return item.pubDate.toString("dd-MM-yyyy hh:mm");
+        case KisRssReader::RssRoles::LinkRole:
+            return item.link;
+        case KisRssReader::RssRoles::CategoryRole:
+            return item.category;
+        case KisRssReader::RssRoles::BlogNameRole:
+            return item.blogName;
+        case KisRssReader::RssRoles::BlogIconRole:
+            return item.blogIcon;
+        }
     }
 
     return QVariant();

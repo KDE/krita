@@ -144,6 +144,10 @@ PaletteDockerDock::PaletteDockerDock( )
         m_ui->paletteView->setAllowModification(false);
     }
 
+    m_ui->bnUndo->setVisible(false);
+    m_ui->bnRedo->setVisible(false);
+
+
     KoResourceServer<KoColorSet> *srv = KoResourceServerProvider::instance()->paletteServer();
     srv->addObserver(this);
 }

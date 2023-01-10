@@ -593,7 +593,7 @@ void KisTool::paintToolOutline(QPainter* painter, const KisOptimizedBrushOutline
         painter->setPen(QColor(128, 255, 128));
 
         for (auto it = path.begin(); it != path.end(); ++it) {
-            painter->drawPolygon(*it);
+            painter->drawPolyline(*it);
         }
 
         painter->restore();

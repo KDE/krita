@@ -43,8 +43,8 @@ qreal KisFilteredRollingMean::filteredMean() const
     const int cutOffTotal = m_values.size() - usefulElements;
 
     if (cutOffTotal > 0) {
-        const int cutMin = qRound(0.5 * cutOffTotal);
-        const int cutMax = cutOffTotal - cutMin;
+        const std::vector<double>::size_type cutMin = qRound(0.5 * cutOffTotal);
+        const std::vector<double>::size_type cutMax = cutOffTotal - cutMin;
 
         KIS_SAFE_ASSERT_RECOVER(cutMin <= m_cutOffBuffer.size()) {
             m_cutOffBuffer.resize(cutMin);

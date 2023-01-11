@@ -1,10 +1,14 @@
 [constants]
 common_args = ['-I@CMAKE_PREFIX_PATH@/include']
 common_link_args = ['-L@CMAKE_PREFIX_PATH@/lib']
+cross_compile_args = @_cross_compile_flags@
+cross_link_args = @_cross_linker_flags@
 
 [binaries]
-c = '@CMAKE_C_COMPILER@'
-cpp = '@CMAKE_CXX_COMPILER@'
+c = ['@CMAKE_C_COMPILER@'] + cross_compile_args
+cpp = ['@CMAKE_CXX_COMPILER@'] + cross_compile_args
+c_ld = ['@CMAKE_LINKER@'] + cross_link_args
+cpp_ld = ['@CMAKE_LINKER@'] + cross_link_args
 ar = '@CMAKE_AR@'
 strip = '@CMAKE_STRIP@'
 pkgconfig = '@PKG_CONFIG_EXECUTABLE@'

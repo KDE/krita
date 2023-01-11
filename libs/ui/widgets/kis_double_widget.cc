@@ -37,7 +37,6 @@ KisDoubleWidget::~KisDoubleWidget()
 void KisDoubleWidget::init(double min, double max)
 {
     m_spinBox = new KisDoubleParseSpinBox(this);
-    m_spinBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_spinBox->setMinimum(min);
     m_spinBox->setMaximum(max);
     m_spinBox->setSingleStep(0.05);
@@ -148,4 +147,5 @@ bool KisDoubleWidget::hasTracking() const
 {
     return m_slider->hasTracking();
 }
+
 

@@ -3,4 +3,4 @@
  */
 
 #define TESTPIGMENT
-#include <sdk/tests/kistest.h>
+#include "kistest.h"

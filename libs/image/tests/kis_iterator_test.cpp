@@ -20,7 +20,7 @@
 #include "kis_paint_device.h"
 #include <kis_repeat_iterators_pixel.h>
 
-#include "sdk/tests/testimage.h"
+#include <testimage.h>
 
 void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace*cs))
 {

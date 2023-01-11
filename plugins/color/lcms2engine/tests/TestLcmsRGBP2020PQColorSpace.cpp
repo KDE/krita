@@ -7,7 +7,7 @@
 #include "TestLcmsRGBP2020PQColorSpace.h"
 
 #include <simpletest.h>
-#include "sdk/tests/testpigment.h"
+#include <testpigment.h>
 
 #include "kis_debug.h"
 

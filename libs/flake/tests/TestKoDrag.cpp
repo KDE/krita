@@ -15,7 +15,7 @@
 #include <KoDocumentResourceManager.h>
 #include <KoShapeGroup.h>
 
-#include "../../sdk/tests/qimage_test_util.h"
+#include <qimage_test_util.h>
 
 void TestKoDrag::test()
 {

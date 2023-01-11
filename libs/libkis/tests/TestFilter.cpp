@@ -24,7 +24,7 @@
 #include <kis_paint_layer.h>
 #include <KisPart.h>
 
-#include  <sdk/tests/testui.h>
+#include <testui.h>
 
 void TestFilter::testApply()
 {

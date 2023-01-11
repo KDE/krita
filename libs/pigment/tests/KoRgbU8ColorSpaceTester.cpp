@@ -19,8 +19,7 @@
 #include "KoCompositeOp.h"
 #include "KoMixColorsOp.h"
 #include <KoCompositeOpRegistry.h>
-#include "sdk/tests/kistest.h"
-
+#include <kistest.h>
 
 #define NUM_CHANNELS 4
 

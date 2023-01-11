@@ -16,9 +16,9 @@
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
 
-#include <sdk/tests/testutil.h>
-#include <sdk/tests/testui.h>
-#include <sdk/tests/testui.h>
+#include <testui.h>
+#include <testutil.h>
+
 
 #include "modeltest.h"
 

@@ -5,19 +5,18 @@
  */
 
 #include "kis_crash_filter_test.h"
-#include <KoColorProfile.h>
-#include <simpletest.h>
+#include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
-#include "kis_selection.h"
-#include "kis_processing_information.h"
-#include "filter/kis_filter.h"
 #include "kis_pixel_selection.h"
-#include <KoColorSpaceRegistry.h>
+#include "kis_processing_information.h"
+#include "kis_selection.h"
 #include "kis_transaction.h"
-#include <sdk/tests/testing_timed_default_bounds.h>
 #include <KisGlobalResourcesInterface.h>
-
+#include <KoColorProfile.h>
+#include <KoColorSpaceRegistry.h>
+#include <simpletest.h>
+#include <testing_timed_default_bounds.h>
 
 bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
 {
@@ -104,5 +103,5 @@ void KisCrashFilterTest::testCrashFilters()
     }
 }
 
-#include <sdk/tests/testimage.h>
+#include <testimage.h>
 KISTEST_MAIN(KisCrashFilterTest)

@@ -27,7 +27,7 @@
 #include "opengl/kis_opengl.h"
 #include <KisGlobalResourcesInterface.h>
 
-#include  <sdk/tests/testui.h>
+#include <testui.h>
 
 void KisDerivedResourcesTest::test()
 {

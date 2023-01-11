@@ -19,7 +19,7 @@
 #include "DebugPigment.h"
 #include "kis_debug.h"
 
-#include "sdk/tests/testpigment.h"
+#include <testpigment.h>
 
 bool nearEqualValue(int a, int b)
 {

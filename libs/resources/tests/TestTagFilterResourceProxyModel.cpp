@@ -264,6 +264,6 @@ void TestTagFilterResourceProxyModel::cleanupTestCase()
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
-#include <sdk/tests/kistest.h>
+#include <kistest.h>
 KISTEST_MAIN(TestTagFilterResourceProxyModel)
 

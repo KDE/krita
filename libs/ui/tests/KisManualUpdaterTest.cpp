@@ -13,7 +13,7 @@
 #include <KisManualUpdater.h>
 #include <MockMultiFeedRssModel.h>
 
-#include <sdk/tests/testui.h>
+#include <testui.h>
 
 KisManualUpdaterTest::KisManualUpdaterTest(QObject *parent) : QObject(parent)
 {

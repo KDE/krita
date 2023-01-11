@@ -9,8 +9,9 @@
 #include "KoShapeContainer.h"
 #include "KoShapeManager.h"
 
-#include <sdk/tests/testflake.h>
 #include <MockShapes.h>
+#include <testflake.h>
+
 
 #include <simpletest.h>
 

@@ -6,17 +6,18 @@
 
 #include "FreehandStrokeBenchmark.h"
 
-#include <simpletest.h>
-#include <sdk/tests/testui.h>
-#include <KoCompositeOpRegistry.h>
-#include <KoColor.h>
-#include "stroke_testing_utils.h"
-#include "strokes/freehand_stroke.h"
-#include "strokes/KisFreehandStrokeInfo.h"
 #include "KisAsyncronousStrokeUpdateHelper.h"
-#include "kis_resources_snapshot.h"
 #include "kis_image.h"
+#include "kis_resources_snapshot.h"
+#include "stroke_testing_utils.h"
+#include "strokes/KisFreehandStrokeInfo.h"
+#include "strokes/freehand_stroke.h"
+#include <KoColor.h>
+#include <KoCompositeOpRegistry.h>
 #include <brushengine/kis_paint_information.h>
+#include <simpletest.h>
+#include <testui.h>
+
 
 #include "testutil.h"
 #include "KisResourceModel.h"

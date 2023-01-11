@@ -13,10 +13,9 @@
 #include <KoColorBackground.h>
 #include <KoColorProfile.h>
 
-
 #include "SvgParserTestingUtils.h"
-#include <sdk/tests/testflake.h>
-#include "../../sdk/tests/qimage_test_util.h"
+#include <qimage_test_util.h>
+#include <testflake.h>
 
 #ifdef USE_ROUND_TRIP
 #include "SvgWriter.h"

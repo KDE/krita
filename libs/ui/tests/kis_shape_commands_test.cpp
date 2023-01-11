@@ -18,11 +18,12 @@
 #include <KisPart.h>
 #include <KisDocument.h>
 
-#include <KoShapeStroke.h>
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
-#include <sdk/tests/testutil.h>
-#include <sdk/tests/testui.h>
+#include <KoShapeStroke.h>
+#include <testui.h>
+#include <testutil.h>
+
 
 void KisShapeCommandsTest::testGrouping()
 {

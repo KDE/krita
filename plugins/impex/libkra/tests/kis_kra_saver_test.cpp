@@ -45,8 +45,9 @@
 #include <generator/kis_generator_registry.h>
 
 #include <KoResourcePaths.h>
-#include  <sdk/tests/testui.h>
 #include <filestest.h>
+#include <testui.h>
+
 
 const QString KraMimetype = "application/x-krita";
 

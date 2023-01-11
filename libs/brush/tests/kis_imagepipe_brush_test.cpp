@@ -6,10 +6,11 @@
 
 #include "kis_imagepipe_brush_test.h"
 
-#include <sdk/tests/testbrush.h>
-#include <simpletest.h>
 #include <QPainter>
 #include <QPainterPath>
+#include <simpletest.h>
+#include <testbrush.h>
+
 
 #include <KoColor.h>
 #include <KoColorSpace.h>

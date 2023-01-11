@@ -369,7 +369,7 @@ void KisPixelSelectionTest::testOutlineCacheTransactions()
 }
 
 #include "kis_paint_device_debug_utils.h"
-#include <sdk/tests/testing_timed_default_bounds.h>
+#include <testing_timed_default_bounds.h>
 
 bool compareRect(KisPixelSelectionSP psel, const QRect &rc)
 {

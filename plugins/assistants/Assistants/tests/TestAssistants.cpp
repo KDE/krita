@@ -6,9 +6,9 @@
 
 #include "TestAssistants.h"
 
+#include <testui.h>
+#include <testutil.h>
 
-#include <sdk/tests/testutil.h>
-#include <sdk/tests/testui.h>
 
 #include <kis_painting_assistant.h>
 #include <PerspectiveBasedAssistantHelper.h>

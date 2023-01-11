@@ -27,8 +27,7 @@
 
 #include <filestest.h>
 
-#include  <sdk/tests/testui.h>
-
+#include <testui.h>
 
 const QString KraMimetype = "application/x-krita";
 

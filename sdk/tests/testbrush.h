@@ -3,4 +3,4 @@
  */
 
 #define TESTBRUSH
-#include <sdk/tests/kistest.h>
+#include "kistest.h"

@@ -11,14 +11,15 @@
 #include <simpletest.h>
 
 #include "KisDocument.h"
+#include "KisPart.h"
 #include "kis_image.h"
 #include "kis_undo_store.h"
-#include "KisPart.h"
-#include <KisViewManager.h>
 #include "util.h"
 #include <KisView.h>
+#include <KisViewManager.h>
 #include <kis_config.h>
-#include "sdk/tests/testui.h"
+#include <testui.h>
+
 
 void silenceReignsSupreme(QtMsgType /*type*/, const QMessageLogContext &/*context*/, const QString &/*msg*/)
 {

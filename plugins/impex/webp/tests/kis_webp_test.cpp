@@ -6,9 +6,10 @@
 
 #include "kis_webp_test.h"
 
-#include <sdk/tests/filestest.h>
-#include <sdk/tests/testui.h>
+#include <filestest.h>
 #include <simpletest.h>
+#include <testui.h>
+
 
 #include <QString>
 

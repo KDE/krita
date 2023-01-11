@@ -13,7 +13,7 @@
 #include <KoColorConversions.h>
 #include <KoColorTransferFunctions.h>
 #include <kis_debug.h>
-#include <sdk/tests/testpigment.h>
+#include <testpigment.h>
 
 void TestProfileGeneration::testTransferFunctions()
 {

@@ -17,7 +17,7 @@
 
 #include <KoColorModelStandardIdsUtils.h>
 #include <kis_meta_data_backend_registry.h>
-#include <sdk/tests/testui.h>
+#include <testui.h>
 
 #include <config-jpeg.h>
 

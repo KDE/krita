@@ -6,16 +6,17 @@
 */
 
 #include "TestSnapStrategy.h"
+#include "KoPathPoint.h"
+#include "KoPathShape.h"
+#include "KoShapeControllerBase.h"
+#include "KoSnapProxy.h"
+#include "KoSnapStrategy.h"
+#include "KoViewConverter.h"
+#include "MockShapes.h"
 #include <QPainterPath>
 #include <simpletest.h>
-#include "KoSnapStrategy.h"
-#include "KoPathShape.h"
-#include "KoSnapProxy.h"
-#include "KoShapeControllerBase.h"
-#include "MockShapes.h"
-#include "KoPathPoint.h"
-#include "KoViewConverter.h"
-#include <sdk/tests/testflake.h>
+#include <testflake.h>
+
 //#include <PointProperties.h>
 #include <KoSnapData.h>
 

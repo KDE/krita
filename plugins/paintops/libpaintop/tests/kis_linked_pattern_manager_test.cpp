@@ -20,7 +20,7 @@
 #include <KoResourceServerProvider.h>
 #include <KoResourceLoadResult.h>
 
-#include "sdk/tests/testresources.h"
+#include <testresources.h>
 
 KoPatternSP KisLinkedPatternManagerTest::createPattern()
 {

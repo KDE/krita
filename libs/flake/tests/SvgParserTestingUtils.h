@@ -92,7 +92,7 @@ struct SvgTester
     QString savedData;
 };
 
-#include "../../sdk/tests/qimage_test_util.h"
+#include <qimage_test_util.h>
 
 #ifdef USE_ROUND_TRIP
 #include "SvgWriter.h"

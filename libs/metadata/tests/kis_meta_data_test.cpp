@@ -18,7 +18,7 @@
 #include "kis_meta_data_parser.h"
 #include "kis_meta_data_validator.h"
 
-#include "sdk/tests/kistest.h"
+#include <kistest.h>
 
 using namespace KisMetaData;
 

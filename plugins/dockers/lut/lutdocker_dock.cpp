@@ -129,10 +129,6 @@ LutDockerDock::LutDockerDock()
     m_exposureDoubleWidget->setSingleStep(0.25);
     m_exposureDoubleWidget->setPageStep(1);
 
-    Q_FOREACH (KisDoubleParseSpinBox* spinbox, m_exposureDoubleWidget->findChildren<KisDoubleParseSpinBox*>()) {
-        spinbox->setMaximumWidth(52);
-    }
-
     connect(m_exposureDoubleWidget, SIGNAL(valueChanged(double)), SLOT(exposureValueChanged(double)));
     connect(m_exposureDoubleWidget, SIGNAL(sliderPressed()), SLOT(exposureSliderPressed()));
     connect(m_exposureDoubleWidget, SIGNAL(sliderReleased()), SLOT(exposureSliderReleased()));
@@ -149,6 +145,20 @@ LutDockerDock::LutDockerDock()
     connect(m_gammaDoubleWidget, SIGNAL(valueChanged(double)), SLOT(gammaValueChanged(double)));
     connect(m_gammaDoubleWidget, SIGNAL(sliderPressed()), SLOT(gammaSliderPressed()));
     connect(m_gammaDoubleWidget, SIGNAL(sliderReleased()), SLOT(gammaSliderReleased()));
+
+    int spinboxWidth = 0;
+    QList<KisDoubleParseSpinBox*> spinboxes;
+    Q_FOREACH (KisDoubleParseSpinBox* spinbox, m_exposureDoubleWidget->findChildren<KisDoubleParseSpinBox*>()) {
+        spinboxes.append(spinbox);
+        spinboxWidth = qMax(spinboxWidth, spinbox->sizeHint().width());
+    }
+    Q_FOREACH (KisDoubleParseSpinBox* spinbox, m_gammaDoubleWidget->findChildren<KisDoubleParseSpinBox*>()) {
+        spinboxes.append(spinbox);
+        spinboxWidth = qMax(spinboxWidth, spinbox->sizeHint().width());
+    }
+    Q_FOREACH (KisDoubleParseSpinBox* spinbox, spinboxes) {
+        spinbox->setMinimumWidth(spinboxWidth);
+    }
 
     m_bwPointChooser = new BlackWhitePointChooser(this);
 
@@ -677,3 +687,4 @@ void LutDockerDock::clearLut()
     m_txtLut->clear();
     updateDisplaySettings();
 }
+

@@ -11,7 +11,7 @@ else()
     set (HAVE_FAILING_CMAKE FALSE)
 endif()
 
-macro_add_unittest_definitions()
+include(KritaAddBrokenUnitTest)
 
 set(KisRandomGeneratorDemoSources kis_random_generator_demo.cpp kimageframe.cpp)
 ki18n_wrap_ui(KisRandomGeneratorDemoSources kis_random_generator_demo.ui)

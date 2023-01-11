@@ -1,4 +1,4 @@
-macro_add_unittest_definitions()
+include(KritaAddBrokenUnitTest)
 
 ##### Tests that currently fail and should be fixed #####
 

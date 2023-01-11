@@ -5,6 +5,7 @@
 include(CMakeParseArguments)
 include(ECMMarkAsTest)
 include(ECMMarkNonGuiExecutable)
+include(KritaTestSuite)
 
 
 # modified version of ECMAddTests.cmake in cmake-extra-modules
@@ -40,7 +41,8 @@ function(KRITA_ADD_UNIT_TEST)
   if(ARG_GUI)
       set(gui_args WIN32 MACOSX_BUNDLE)
   endif()
-  add_executable(${_targetname} ${gui_args} ${_sources})
+  add_executable(${_targetname} ${gui_args} ${_sources})  
+  set_test_sdk_compile_definitions(${_targetname})
 
   if (KRITA_ENABLE_PCH AND ARG_PCH_FILE)
       set_property(TARGET ${_targetname} PROPERTY PCH_WARN_INVALID TRUE )

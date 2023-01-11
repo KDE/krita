@@ -8,6 +8,8 @@
 
 add_custom_target(benchmark)
 
+include(KritaTestSuite)
+
 macro (KRITA_ADD_BENCHMARK _test_NAME)
 
     set(_srcList ${ARGN})
@@ -24,6 +26,7 @@ macro (KRITA_ADD_BENCHMARK _test_NAME)
     endif()
 
     add_executable( ${_test_NAME} ${_srcList} )
+    set_test_sdk_compile_definitions(${_test_NAME})
     ecm_mark_as_test(${_test_NAME})
 
     if(NOT KDE4_TEST_OUTPUT)
@@ -61,5 +64,4 @@ macro (KRITA_ADD_BENCHMARK _test_NAME)
            add_dependencies(buildtests ${_test_NAME})
         endif ()
     endif ()
-
 endmacro (KRITA_ADD_BENCHMARK)

@@ -1,5 +1,5 @@
 
-macro_add_unittest_definitions()
+include(KritaAddBrokenUnitTest)
 
 kis_add_tests(
     kis_tiled_data_manager_test.cpp

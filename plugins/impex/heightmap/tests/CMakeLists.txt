@@ -1,4 +1,4 @@
-macro_add_unittest_definitions()
+include(KritaAddBrokenUnitTest)
 
 kis_add_test(
     kis_heightmap_test.cpp

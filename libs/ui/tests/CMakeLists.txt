@@ -1,4 +1,4 @@
-macro_add_unittest_definitions()
+include(KritaAddBrokenUnitTest)
 
 kis_add_tests(
     kis_image_view_converter_test.cpp

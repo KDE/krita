@@ -1,4 +1,4 @@
-macro_add_unittest_definitions()
+include(KritaAddBrokenUnitTest)
 
 if(APPLE)
     krita_add_broken_unit_test(

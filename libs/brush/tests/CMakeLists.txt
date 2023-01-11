@@ -1,6 +1,6 @@
 ########### next target ###############
 
-macro_add_unittest_definitions()
+include(KritaAddBrokenUnitTest)
 
 kis_add_tests(
     kis_auto_brush_test.cpp

@@ -1,4 +1,4 @@
-macro_add_unittest_definitions()
+include(KritaAddBrokenUnitTest)
 
 if(OpenEXR_FOUND)
     include_directories(SYSTEM ${OPENEXR_INCLUDE_DIRS})

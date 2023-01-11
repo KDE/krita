@@ -1,4 +1,4 @@
-macro_add_unittest_definitions()
+include(KritaAddBrokenUnitTest)
 
 add_executable(CCSGraph CCSGraph.cpp)
 target_link_libraries(CCSGraph kritapigment KF5::I18n)

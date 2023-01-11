@@ -1,5 +1,5 @@
 
-macro_add_unittest_definitions()
+include(KritaAddBrokenUnitTest)
 
 kis_add_tests(
     #TestKrita.cpp

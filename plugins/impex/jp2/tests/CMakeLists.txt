@@ -1,4 +1,4 @@
-macro_add_unittest_definitions()
+include(KritaAddBrokenUnitTest)
 
 kis_add_test(KisJP2Test.cpp
     TEST_NAME KisJP2Test

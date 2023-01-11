@@ -1096,6 +1096,14 @@ endif()
 ##
 include(CheckAtomic)
 
+ ############################
+#############################
+## Add Krita helper macros ##
+#############################
+############################
+
+include(MacroKritaAddBenchmark)
+
  ####################
 #####################
 ## Define includes ##

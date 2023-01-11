@@ -1,4 +1,4 @@
-macro_add_unittest_definitions()
+include(KritaAddBrokenUnitTest)
 
 krita_add_broken_unit_test(
     kis_png_test.cpp

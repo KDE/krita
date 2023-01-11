@@ -1,4 +1,4 @@
-macro_add_unittest_definitions()
+include(KritaAddBrokenUnitTest)
 
 set(PSD_TEST_LIBS kritapsd kritapsd_static kritatestsdk)
 

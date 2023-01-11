@@ -1,5 +1,3 @@
-macro_add_unittest_definitions()
-
 ########### next target ###############
 
 set(kis_datamanager_benchmark_SRCS kis_datamanager_benchmark.cpp)

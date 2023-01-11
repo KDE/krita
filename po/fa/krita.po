@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-09 00:53+0000\n"
+"POT-Creation-Date: 2023-01-11 00:55+0000\n"
 "PO-Revision-Date: 2011-09-26 14:11+0330\n"
 "Last-Translator: Mohamad Reza Mirdamadi <mohi@ubuntu.ir>\n"
 "Language-Team: Farsi (Persian) <>\n"
@@ -33902,7 +33902,7 @@ msgstr "گرادیان"
 #. i18n: ectx: property (text), widget (QLabel, labelRepeat)
 #: libs/ui/widgets/KoFillConfigWidget.ui:255
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:91
-#: plugins/tools/basictools/kis_tool_gradient.cc:252
+#: plugins/tools/basictools/kis_tool_gradient.cc:257
 #, kde-format
 msgid "Repeat:"
 msgstr "تکرار:"
@@ -42893,7 +42893,7 @@ msgstr "آجرها"
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:85
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:245
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:50
-#: plugins/tools/basictools/kis_tool_gradient.cc:237
+#: plugins/tools/basictools/kis_tool_gradient.cc:242
 #, kde-format
 msgid "Shape:"
 msgstr "شکل:"
@@ -44773,49 +44773,49 @@ msgid "&Gradient..."
 msgstr "گرادیان"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:28
-#: plugins/tools/basictools/kis_tool_gradient.cc:240
+#: plugins/tools/basictools/kis_tool_gradient.cc:245
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn linearly"
 msgid "Linear"
 msgstr "خطی"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:29
-#: plugins/tools/basictools/kis_tool_gradient.cc:241
+#: plugins/tools/basictools/kis_tool_gradient.cc:246
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn bilinearly"
 msgid "Bi-Linear"
 msgstr "دو خطی"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:30
-#: plugins/tools/basictools/kis_tool_gradient.cc:242
+#: plugins/tools/basictools/kis_tool_gradient.cc:247
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn radially"
 msgid "Radial"
 msgstr "شعاعی"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:31
-#: plugins/tools/basictools/kis_tool_gradient.cc:243
+#: plugins/tools/basictools/kis_tool_gradient.cc:248
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn in a square around a centre"
 msgid "Square"
 msgstr "مربع"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_gradient.cc:244
+#: plugins/tools/basictools/kis_tool_gradient.cc:249
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn as an asymmetric cone"
 msgid "Conical"
 msgstr "مخروطی"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:33
-#: plugins/tools/basictools/kis_tool_gradient.cc:245
+#: plugins/tools/basictools/kis_tool_gradient.cc:250
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn as a symmetric cone"
 msgid "Conical Symmetric"
 msgstr "متقارن مخروطی"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:34
-#: plugins/tools/basictools/kis_tool_gradient.cc:246
+#: plugins/tools/basictools/kis_tool_gradient.cc:251
 #, fuzzy, kde-format
 #| msgid "Spiral"
 msgctxt "the gradient will be drawn as a spiral"
@@ -44823,35 +44823,35 @@ msgid "Spiral"
 msgstr "مارپیچ"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:35
-#: plugins/tools/basictools/kis_tool_gradient.cc:247
+#: plugins/tools/basictools/kis_tool_gradient.cc:252
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn as a reverse spiral"
 msgid "Reverse Spiral"
 msgstr "حذف زیرمسیر"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:36
-#: plugins/tools/basictools/kis_tool_gradient.cc:248
+#: plugins/tools/basictools/kis_tool_gradient.cc:253
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn in a selection outline"
 msgid "Shaped"
 msgstr "شکل:"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:39
-#: plugins/tools/basictools/kis_tool_gradient.cc:255
+#: plugins/tools/basictools/kis_tool_gradient.cc:260
 #, fuzzy, kde-format
 msgctxt "The gradient will not repeat"
 msgid "None"
 msgstr "هیچ‌کدام"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_gradient.cc:256
+#: plugins/tools/basictools/kis_tool_gradient.cc:261
 #, fuzzy, kde-format
 msgctxt "The gradient will repeat forwards"
 msgid "Forwards"
 msgstr "پیش‌سو"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:41
-#: plugins/tools/basictools/kis_tool_gradient.cc:257
+#: plugins/tools/basictools/kis_tool_gradient.cc:262
 #, fuzzy, kde-format
 msgctxt "The gradient will repeat alternatingly"
 msgid "Alternating"
@@ -44904,7 +44904,7 @@ msgstr "&اهلی‌"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:101
-#: plugins/tools/basictools/kis_tool_gradient.cc:262
+#: plugins/tools/basictools/kis_tool_gradient.cc:267
 #, kde-format
 msgid "Anti-alias threshold:"
 msgstr "حذف لبه ناصاف آستانه:"
@@ -55837,26 +55837,26 @@ msgstr ""
 msgid "Fill Tool"
 msgstr "بیضی"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:163
+#: plugins/tools/basictools/kis_tool_gradient.cc:159
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Gradient"
 msgstr "گرادیان"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:270
+#: plugins/tools/basictools/kis_tool_gradient.cc:275
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn with the color order reversed"
 msgid "Reverse"
 msgstr "معکوس"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:275
+#: plugins/tools/basictools/kis_tool_gradient.cc:280
 #, fuzzy, kde-format
 #| msgid "Other"
 msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "غیره"
 
-#: plugins/tools/basictools/kis_tool_gradient.h:106
+#: plugins/tools/basictools/kis_tool_gradient.h:107
 #, fuzzy, kde-format
 msgid "Gradient Tool"
 msgstr "گرادیان"

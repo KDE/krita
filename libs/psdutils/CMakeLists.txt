@@ -14,12 +14,15 @@ set(kritapsdutils_LIB_SRCS
 kis_add_library(kritapsdutils SHARED ${kritapsdutils_LIB_SRCS})
 generate_export_header(kritapsdutils BASE_NAME kritapsdutils)
 
-target_include_directories(kritapsdutils
+target_link_libraries(kritapsdutils
     PUBLIC
-        ${ZLIB_INCLUDE_DIR}
+        kritapigment
+        kritaglobal
+        Qt5::Core
+        Qt5::Gui
+    PRIVATE
+        ZLIB::ZLIB
 )
-
-target_link_libraries(kritapsdutils kritapigment kritaglobal KF5::I18n  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${ZLIB_LIBRARIES})
 
 set_target_properties(kritapsdutils PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

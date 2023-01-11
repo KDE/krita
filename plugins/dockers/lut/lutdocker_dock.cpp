@@ -40,6 +40,7 @@
 #include <kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_config_notifier.h>
+#include <kis_double_parse_spin_box.h>
 #include <widgets/kis_double_widget.h>
 #include <kis_image.h>
 #include <KisSqueezedComboBox.h>
@@ -123,10 +124,14 @@ LutDockerDock::LutDockerDock()
 
     m_exposureDoubleWidget->setToolTip(i18n("Select the exposure (stops) for HDR images."));
     m_exposureDoubleWidget->setRange(-10, 10);
-    m_exposureDoubleWidget->setPrecision(1);
+    m_exposureDoubleWidget->setPrecision(2);
     m_exposureDoubleWidget->setValue(0.0);
     m_exposureDoubleWidget->setSingleStep(0.25);
     m_exposureDoubleWidget->setPageStep(1);
+
+    Q_FOREACH (KisDoubleParseSpinBox* spinbox, m_exposureDoubleWidget->findChildren<KisDoubleParseSpinBox*>()) {
+        spinbox->setMaximumWidth(52);
+    }
 
     connect(m_exposureDoubleWidget, SIGNAL(valueChanged(double)), SLOT(exposureValueChanged(double)));
     connect(m_exposureDoubleWidget, SIGNAL(sliderPressed()), SLOT(exposureSliderPressed()));
@@ -220,7 +225,7 @@ void LutDockerDock::slotUpdateIcons()
 {
     m_btnConvertCurrentColor->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
     m_btmShowBWConfiguration->setIcon(KisIconUtils::loadIcon("settings-button"));
-    m_lblOcioVersion->setText(QString("%1 (%2)").arg(OCIO_VERSION_FULL_STR, KisOpenGL::currentDriver()));
+    m_lblOcioVersion->setText(QString("OCIO Version: %1").arg(OCIO_VERSION_FULL_STR));
     m_lblOcioVersion->setEnabled(false);
 }
 
@@ -672,4 +677,3 @@ void LutDockerDock::clearLut()
     m_txtLut->clear();
     updateDisplaySettings();
 }
-

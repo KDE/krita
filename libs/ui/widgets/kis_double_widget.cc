@@ -37,6 +37,7 @@ KisDoubleWidget::~KisDoubleWidget()
 void KisDoubleWidget::init(double min, double max)
 {
     m_spinBox = new KisDoubleParseSpinBox(this);
+    m_spinBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_spinBox->setMinimum(min);
     m_spinBox->setMaximum(max);
     m_spinBox->setSingleStep(0.05);
@@ -45,6 +46,7 @@ void KisDoubleWidget::init(double min, double max)
     connect(m_spinBox, SIGNAL(valueChanged(double)), this, SLOT(setSliderValue(double)));
 
     m_slider = new QSlider(Qt::Horizontal, this);
+    m_slider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_slider->setMinimum(static_cast<int>(min * 100 + 0.5));
     m_slider->setMaximum(static_cast<int>(max * 100 + 0.5));
     m_slider->setPageStep(1);
@@ -63,7 +65,6 @@ void KisDoubleWidget::init(double min, double max)
     m_layout->addWidget(m_slider);
     m_layout->addSpacing(5);
     m_layout->addWidget(m_spinBox);
-    m_layout->addItem(new QSpacerItem(5, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
 }
 
 double KisDoubleWidget::value() const
@@ -147,5 +148,4 @@ bool KisDoubleWidget::hasTracking() const
 {
     return m_slider->hasTracking();
 }
-
 

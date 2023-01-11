@@ -46,16 +46,14 @@ kis_add_test(
     TEST_NAME TestSvgParserCloned
     LINK_LIBRARIES kritaflake Qt5::Test
     NAME_PREFIX "libs-flake-")
-set_property(TARGET TestSvgParserCloned
-             PROPERTY COMPILE_DEFINITIONS USE_CLONED_SHAPES)
+target_compile_definitions(TestSvgParserCloned PRIVATE USE_CLONED_SHAPES)
 
 kis_add_test(
     TestSvgParser.cpp
     TEST_NAME TestSvgParserRoundTrip
     LINK_LIBRARIES kritaflake Qt5::Test
     NAME_PREFIX "libs-flake-")
-set_property(TARGET TestSvgParserRoundTrip
-             PROPERTY COMPILE_DEFINITIONS USE_ROUND_TRIP)
+target_compile_definitions(TestSvgParserRoundTrip PRIVATE USE_ROUND_TRIP)
 
 ############## broken tests ###############
 
@@ -73,15 +71,13 @@ krita_add_broken_unit_test( TestSvgText.cpp
     TEST_NAME TestSvgTextCloned
     LINK_LIBRARIES kritaflake Qt5::Test
     NAME_PREFIX "libs-flake-")
-set_property(TARGET TestSvgTextCloned
-             PROPERTY COMPILE_DEFINITIONS USE_CLONED_SHAPES)
+target_compile_definitions(TestSvgTextCloned PRIVATE USE_CLONED_SHAPES)
 
 krita_add_broken_unit_test( TestSvgText.cpp
     TEST_NAME TestSvgTextRoundTrip
     LINK_LIBRARIES kritaflake Qt5::Test
     NAME_PREFIX "libs-flake-")
-set_property(TARGET TestSvgTextRoundTrip
-             PROPERTY COMPILE_DEFINITIONS USE_ROUND_TRIP)
+target_compile_definitions(TestSvgTextRoundTrip PRIVATE USE_ROUND_TRIP)
 
 if (APPLE)
     set_property(TARGET TestKoMarkerCollection PROPERTY MACOSX_BUNDLE ON)

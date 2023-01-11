@@ -136,6 +136,6 @@ ExternalProject_Add_StepDependencies(ext_googleangle patch ext_googleangle_zlib-
 
 # Generate `angle_commit.h`
 string(SUBSTRING "${GOOGLE_ANGLE_BASE_COMMIT}" 0 12 ANGLE_COMMIT_HASH)
-set(ANGLE_COMMIT_HASH "${ANGLE_COMMIT_HASH}+krita_qt5.12.12")
+set(ANGLE_COMMIT_HASH "${ANGLE_COMMIT_HASH}+krita_qt5")
 string(LENGTH "${ANGLE_COMMIT_HASH}" ANGLE_COMMIT_HASH_SIZE)
 configure_file(angle_commit.h.in ${CMAKE_CURRENT_BINARY_DIR}/angle_commit.h)

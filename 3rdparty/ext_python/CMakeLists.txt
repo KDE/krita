@@ -33,20 +33,19 @@ if (UNIX)
             DEPENDS ext_openssl
         )
 
-        if (APPLE)
-            ExternalProject_Add_Step( ext_python update_certifi
-                COMMENT "Updating certifi"
-                COMMAND COMMAND ${PREFIX_ext_python}/bin/python3 -m pip install --upgrade certifi
-                DEPENDEES install
-            )
-        endif()
-
         ExternalProject_Add_Step( ext_python update_sip
             COMMENT "Updating pip"
             COMMAND COMMAND ${PREFIX_ext_python}/bin/python3 -m pip install --upgrade pip
             DEPENDEES install
         )
 
+        if (APPLE)
+            ExternalProject_Add_Step( ext_python update_certifi
+                COMMENT "Deploying certifi to our OpenSSL CApath"
+                COMMAND ${PREFIX_ext_python}/bin/python3 ${CMAKE_CURRENT_SOURCE_DIR}/install_certificates.py
+                DEPENDEES update_sip
+            )
+        endif()
     else()
 
     ExternalProject_Add( ext_python

@@ -97,7 +97,7 @@ void KisHatchingPaintOpSettings::fromXML(const QDomElement& elt)
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "KisPaintOpPresetUpdateProxy.h"
-#include "kis_hatching_options.h"
+#include "KisHatchingOptionsData.h"
 
 
 QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy)
@@ -122,16 +122,16 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    HatchingOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisHatchingOptionsData option;
+                    option.read(prop->settings().data());
                     prop->setValue(option.angle);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    HatchingOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisHatchingOptionsData option;
+                    option.read(prop->settings().data());
                     option.angle = prop->value().toReal();
-                    option.writeOptionSetting(prop->settings().data());
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -152,16 +152,16 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    HatchingOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisHatchingOptionsData option;
+                    option.read(prop->settings().data());
                     prop->setValue(option.separation);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    HatchingOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisHatchingOptionsData option;
+                    option.read(prop->settings().data());
                     option.separation = prop->value().toReal();
-                    option.writeOptionSetting(prop->settings().data());
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -182,16 +182,16 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    HatchingOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisHatchingOptionsData option;
+                    option.read(prop->settings().data());
                     prop->setValue(option.thickness);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    HatchingOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisHatchingOptionsData option;
+                    option.read(prop->settings().data());
                     option.thickness = prop->value().toReal();
-                    option.writeOptionSetting(prop->settings().data());
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));

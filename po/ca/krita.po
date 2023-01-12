@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-11 00:55+0000\n"
+"POT-Creation-Date: 2023-01-12 00:53+0000\n"
 "PO-Revision-Date: 2023-01-07 10:09+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -31895,13 +31895,13 @@ msgstr ""
 "Les memòries intermèdies de textures estan desactivades explícitament en el "
 "renderitzador ANGLE per problemes de rendiment."
 
-#: libs/ui/opengl/kis_opengl.cpp:576
+#: libs/ui/opengl/kis_opengl.cpp:582
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "El controlador gràfic d'Intel emprat té problemes coneguts amb l'OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:578
+#: libs/ui/opengl/kis_opengl.cpp:584
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31912,7 +31912,7 @@ msgstr ""
 "així que s'usarà ANGLE de manera predeterminada. Manualment podreu canviar a "
 "l'OpenGL, però no es garanteix que funcioni adequadament."
 
-#: libs/ui/opengl/kis_opengl.cpp:978
+#: libs/ui/opengl/kis_opengl.cpp:984
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -31921,7 +31921,7 @@ msgstr ""
 "El renderitzador preferit no permet el format de superfície requerit. S'ha "
 "seleccionat un altre renderitzador."
 
-#: libs/ui/opengl/kis_opengl.cpp:980
+#: libs/ui/opengl/kis_opengl.cpp:986
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -32002,8 +32002,8 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_freehand.cc:212
 #: libs/ui/tool/kis_tool_polyline_base.cpp:119
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:164
-#: libs/ui/tool/KisToolOutlineBase.cpp:161
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:163
+#: libs/ui/tool/KisToolOutlineBase.cpp:162
 #: plugins/tools/basictools/kis_tool_line.cc:201
 #: plugins/tools/basictools/kis_tool_path.cc:78
 #: plugins/tools/basictools/kis_tool_pencil.cc:53
@@ -32021,8 +32021,8 @@ msgid "Brush Size: %1 px"
 msgstr "Mida del pinzell: %1 px"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:113
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:158
-#: libs/ui/tool/KisToolOutlineBase.cpp:155
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:157
+#: libs/ui/tool/KisToolOutlineBase.cpp:156
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:66
 #, kde-format
 msgid ""
@@ -32041,7 +32041,7 @@ msgstr ""
 "Amplada: %1 px\n"
 "Alçada: %2 px"
 
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:293
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:292
 #: plugins/tools/basictools/kis_tool_line.cc:282
 #: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #, kde-format

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-11 00:55+0000\n"
+"POT-Creation-Date: 2023-01-12 00:53+0000\n"
 "PO-Revision-Date: 2023-01-08 11:35+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -31806,13 +31806,13 @@ msgstr ""
 "Medpomnilniki tekstur so zaradi težav z zmogljivostjo izrecno onemogočeni na "
 "upodobljevalniku ANGLE."
 
-#: libs/ui/opengl/kis_opengl.cpp:576
+#: libs/ui/opengl/kis_opengl.cpp:582
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Znano je, da ima grafični gonilnik Intel, ki ga uporabljate, težave z OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:578
+#: libs/ui/opengl/kis_opengl.cpp:584
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31823,7 +31823,7 @@ msgstr ""
 "uporabljen ANGLE. Lahko ročno preklopite na OpenGL, vendar pravilno "
 "delovanje ni zagotovljeno."
 
-#: libs/ui/opengl/kis_opengl.cpp:978
+#: libs/ui/opengl/kis_opengl.cpp:984
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -31832,7 +31832,7 @@ msgstr ""
 "Želeni upodabljalnik ne podpira zahtevane oblike površine. Izbran je bil "
 "drug upodabljalnik."
 
-#: libs/ui/opengl/kis_opengl.cpp:980
+#: libs/ui/opengl/kis_opengl.cpp:986
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "Razpoložljivi upodobljevalniki ne podpirajo želene oblike izhoda"
@@ -31911,8 +31911,8 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_freehand.cc:212
 #: libs/ui/tool/kis_tool_polyline_base.cpp:119
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:164
-#: libs/ui/tool/KisToolOutlineBase.cpp:161
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:163
+#: libs/ui/tool/KisToolOutlineBase.cpp:162
 #: plugins/tools/basictools/kis_tool_line.cc:201
 #: plugins/tools/basictools/kis_tool_path.cc:78
 #: plugins/tools/basictools/kis_tool_pencil.cc:53
@@ -31928,8 +31928,8 @@ msgid "Brush Size: %1 px"
 msgstr "Velikost čopiča: %1 sl. točk"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:113
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:158
-#: libs/ui/tool/KisToolOutlineBase.cpp:155
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:157
+#: libs/ui/tool/KisToolOutlineBase.cpp:156
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:66
 #, kde-format
 msgid ""
@@ -31948,7 +31948,7 @@ msgstr ""
 "Širina: %1 sl. točk\n"
 "Višina: %2 sl. točk"
 
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:293
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:292
 #: plugins/tools/basictools/kis_tool_line.cc:282
 #: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #, kde-format

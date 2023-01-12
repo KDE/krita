@@ -61,15 +61,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-11 00:55+0000\n"
-"PO-Revision-Date: 2023-01-07 14:30+0100\n"
+"POT-Creation-Date: 2023-01-12 00:53+0000\n"
+"PO-Revision-Date: 2023-01-11 18:06+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 22.12.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -19087,7 +19087,7 @@ msgstr "Verzadiging"
 #, kde-format
 msgctxt "Blending mode - Luminosity HSY"
 msgid "Luminosity"
-msgstr "Lichtkracht"
+msgstr "Lichtsterkte"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:148
 #, kde-format
@@ -31963,14 +31963,14 @@ msgstr ""
 "Textuurbuffers zijn expliciet uitgeschakeld op ANGLE-renderer vanwege "
 "problemen met prestaties."
 
-#: libs/ui/opengl/kis_opengl.cpp:576
+#: libs/ui/opengl/kis_opengl.cpp:582
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Het in gebruik zijnde grafische stuurprogramma voor Intel staat bekend om "
 "het hebben van problemen met OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:578
+#: libs/ui/opengl/kis_opengl.cpp:584
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31982,7 +31982,7 @@ msgstr ""
 "omschakelen naar OpenGL maar er is geen garantie dat het op de juiste manier "
 "werkt."
 
-#: libs/ui/opengl/kis_opengl.cpp:978
+#: libs/ui/opengl/kis_opengl.cpp:984
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -31991,7 +31991,7 @@ msgstr ""
 "Renderer met voorkeur ondersteunt het gevraagde oppervlakformaat niet. Een "
 "andere renderer is geselecteerd."
 
-#: libs/ui/opengl/kis_opengl.cpp:980
+#: libs/ui/opengl/kis_opengl.cpp:986
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -32073,8 +32073,8 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_freehand.cc:212
 #: libs/ui/tool/kis_tool_polyline_base.cpp:119
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:164
-#: libs/ui/tool/KisToolOutlineBase.cpp:161
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:163
+#: libs/ui/tool/KisToolOutlineBase.cpp:162
 #: plugins/tools/basictools/kis_tool_line.cc:201
 #: plugins/tools/basictools/kis_tool_path.cc:78
 #: plugins/tools/basictools/kis_tool_pencil.cc:53
@@ -32090,8 +32090,8 @@ msgid "Brush Size: %1 px"
 msgstr "Penseelgrootte: %1 px"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:113
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:158
-#: libs/ui/tool/KisToolOutlineBase.cpp:155
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:157
+#: libs/ui/tool/KisToolOutlineBase.cpp:156
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:66
 #, kde-format
 msgid ""
@@ -32110,7 +32110,7 @@ msgstr ""
 "Breedte: %1 px\n"
 "Hoogte: %2 px"
 
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:293
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:292
 #: plugins/tools/basictools/kis_tool_line.cc:282
 #: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #, kde-format
@@ -43513,7 +43513,7 @@ msgstr "Lichtkracht (ITU-R BT.&709)"
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:68
 #, kde-format
 msgid "Luminosity (ITU-R BT.&601)"
-msgstr "Lichtkracht (ITU-R BT.&601)"
+msgstr "Lichtsterkte (ITU-R BT.&601)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAverage)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:75
@@ -43543,7 +43543,7 @@ msgstr "&Type:"
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:59
 #, kde-format
 msgid "Hue/Saturation/Value"
-msgstr "Tint/verzadiging/intensiteit"
+msgstr "Tint/verzadiging/helderheid"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:64

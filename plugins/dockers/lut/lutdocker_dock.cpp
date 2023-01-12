@@ -40,8 +40,6 @@
 #include <kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_config_notifier.h>
-#include <kis_double_parse_spin_box.h>
-#include <widgets/kis_double_widget.h>
 #include <kis_image.h>
 #include <KisSqueezedComboBox.h>
 #include "kis_signals_blocker.h"

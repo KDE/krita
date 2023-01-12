@@ -33,6 +33,14 @@ if (UNIX)
             DEPENDS ext_openssl
         )
 
+        if (APPLE)
+            ExternalProject_Add_Step( ext_python update_certifi
+                COMMENT "Updating certifi"
+                COMMAND COMMAND ${PREFIX_ext_python}/bin/python3 -m pip install --upgrade certifi
+                DEPENDEES install
+            )
+        endif()
+
         ExternalProject_Add_Step( ext_python update_sip
             COMMENT "Updating pip"
             COMMAND COMMAND ${PREFIX_ext_python}/bin/python3 -m pip install --upgrade pip

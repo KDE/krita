@@ -57,11 +57,8 @@ class KisReferenceImagesLayer;
 #define KIS_MIME_TYPE "application/x-krita"
 
 /**
- *  The %Calligra document class
- *
- *  This class provides some functionality each %Calligra document should have.
- *
- *  @short The %Calligra document class
+ *  KisDocument contains the image and keeps track of loading,
+ *  modification, undo stack and saving.
  */
 class KRITAUI_EXPORT KisDocument : public QObject
 {
@@ -117,7 +114,7 @@ public:
      * @brief creates a clone of the document and returns it. Please make sure that you
      * hold all the necessary locks on the image before asking for a clone!
      */
-    KisDocument* clone(bool addStorage = false);
+    KisDocument *clone(bool addStorage = false);
 
     /**
      * @brief openPath Open a Path
@@ -624,9 +621,9 @@ public:
      * The shape controller matches internal krita image layers with
      * the flake shape hierarchy.
      */
-    KoShapeControllerBase * shapeController() const;
+    KoShapeControllerBase *shapeController() const;
 
-    KoShapeLayer* shapeForNode(KisNodeSP layer) const;
+    KoShapeLayer *shapeForNode(KisNodeSP layer) const;
 
     /**
      * Set the list of nodes that was marked as currently active. Used *only*

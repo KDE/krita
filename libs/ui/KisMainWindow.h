@@ -59,9 +59,7 @@ public:
 public:
 
     /**
-     *  Constructor.
-     *
-     *  Initializes a Calligra main window (with its basic GUI etc.).
+     *  Initializes a Krita main window (with its basic GUI etc.).
      */
     explicit KisMainWindow(QUuid id = QUuid());
 

@@ -22,7 +22,7 @@
 #include "KoID.h"
 
 #include "widgets/kis_cmb_idlist.h"
-#include <KisSqueezedComboBox.h>// TODO: add a label that would display if there isn't a good color conversion path (use KoColorConversionSystem::isGoodPath), all color spaces shipped with Calligra are expected to have a good path, but better warn the user in case
+#include <KisSqueezedComboBox.h>
 
 #include "kis_image.h"
 #include "kis_layer_utils.h"

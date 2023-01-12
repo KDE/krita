@@ -1,4 +1,4 @@
-/* This file is part of the Calligra project
+/*
  * SPDX-FileCopyrightText: 2005 Thomas Zander <zander@kde.org>
  * SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
  * SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>

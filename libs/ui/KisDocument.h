@@ -259,7 +259,7 @@ public:
     QDomDocument createDomDocument(const QString& tagName, const QString& version) const;
 
     /**
-     *  Return a correctly created QDomDocument for an old (1.3-style) %Calligra document,
+     *  Return a correctly created QDomDocument for an old (1.3-style) Krita document,
      *  including processing instruction, complete DOCTYPE tag (with systemId and publicId), and root element.
      *  This static method can be used e.g. by filters.
      *  @param appName the app's instance name, e.g. words, kspread, kpresenter etc.
@@ -320,7 +320,6 @@ public:
 
     /**
      * Sets the document Path to empty Path
-     * KParts doesn't allow this, but %Calligra apps have e.g. templates
      * After using loadNativeFormat on a template, one wants
      * to set the path to QString()
      */

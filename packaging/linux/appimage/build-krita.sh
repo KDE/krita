@@ -26,7 +26,7 @@ export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib:$LD_LIBRARY_PATH
 export PATH=$DEPS_INSTALL_PREFIX/bin:$PATH
 export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig:$DEPS_INSTALL_PREFIX/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
-# https://docs.python.org/3.8/using/cmdline.html#envvar-PYTHONHOME
+# https://docs.python.org/3.10/using/cmdline.html#envvar-PYTHONHOME
 export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 

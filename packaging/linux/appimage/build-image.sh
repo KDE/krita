@@ -32,7 +32,7 @@ export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib/:$DEPS_INSTALL_PREFIX/lib/$TRIPL
 export PATH=$DEPS_INSTALL_PREFIX/bin/:$PATH
 export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig/:$DEPS_INSTALL_PREFIX/lib/pkgconfig/:/usr/lib/pkgconfig/:$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
-# https://docs.python.org/3.8/using/cmdline.html#envvar-PYTHONHOME
+# https://docs.python.org/3.10/using/cmdline.html#envvar-PYTHONHOME
 if [ -d $DEPS_INSTALL_PREFIX/sip ] ; then
 export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip
 fi
@@ -57,7 +57,7 @@ fi
 cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/krita
 cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
-cp -r $DEPS_INSTALL_PREFIX/lib/python3.8 $APPDIR/usr/lib
+cp -r $DEPS_INSTALL_PREFIX/lib/python3.10 $APPDIR/usr/lib
 if [ -d $DEPS_INSTALL_PREFIX/share/sip ] ; then
 cp -r $DEPS_INSTALL_PREFIX/share/sip $APPDIR/usr/share
 fi
@@ -80,15 +80,15 @@ mkdir $BUILD_PREFIX/krita-apprun-build
 )
 rm -rf $BUILD_PREFIX/krita-apprun-build
 
-if [ -d $APPDIR/usr/lib/python3.8/site-packages ]; then
-    rm -rf $APPDIR/usr/lib/python3.8/site-packages/packaging*
-    rm -rf $APPDIR/usr/lib/python3.8/site-packages/pip*
-    rm -rf $APPDIR/usr/lib/python3.8/site-packages/pyparsing*
-    rm -rf $APPDIR/usr/lib/python3.8/site-packages/PyQt_builder*
-    rm -rf $APPDIR/usr/lib/python3.8/site-packages/setuptools*
-    rm -rf $APPDIR/usr/lib/python3.8/site-packages/sip*
-    rm -rf $APPDIR/usr/lib/python3.8/site-packages/toml*
-    rm -rf $APPDIR/usr/lib/python3.8/site-packages/easy-install.pth
+if [ -d $APPDIR/usr/lib/python3.10/site-packages ]; then
+    rm -rf $APPDIR/usr/lib/python3.10/site-packages/packaging*
+    rm -rf $APPDIR/usr/lib/python3.10/site-packages/pip*
+    rm -rf $APPDIR/usr/lib/python3.10/site-packages/pyparsing*
+    rm -rf $APPDIR/usr/lib/python3.10/site-packages/PyQt_builder*
+    rm -rf $APPDIR/usr/lib/python3.10/site-packages/setuptools*
+    rm -rf $APPDIR/usr/lib/python3.10/site-packages/sip*
+    rm -rf $APPDIR/usr/lib/python3.10/site-packages/toml*
+    rm -rf $APPDIR/usr/lib/python3.10/site-packages/easy-install.pth
 fi
 
 # Step 2: Relocate binaries from the architecture specific directory as required for Appimages
@@ -102,19 +102,19 @@ for lib in $PLUGINS/*.so*; do
   patchelf --set-rpath '$ORIGIN/..' $lib;
 done
 
-for lib in $APPDIR/usr/lib/python3.8/site-packages/PyQt5/*.so*; do
+for lib in $APPDIR/usr/lib/python3.10/site-packages/PyQt5/*.so*; do
   patchelf --set-rpath '$ORIGIN/../..' $lib;
 done
 
-for lib in $APPDIR/usr/lib/python3.8/lib-dynload/*.so*; do
+for lib in $APPDIR/usr/lib/python3.10/lib-dynload/*.so*; do
   patchelf --set-rpath '$ORIGIN/../..' $lib;
 done
 
 patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so
 patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/sketch/libkritasketchplugin.so
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so
-if [ -f $APPDIR/usr/lib/python3.8/site-packages/PyQt5/sip.so ] ; then
-patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/python3.8/site-packages/PyQt5/sip.so
+if [ -f $APPDIR/usr/lib/python3.10/site-packages/PyQt5/sip.so ] ; then
+patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/python3.10/site-packages/PyQt5/sip.so
 fi
 
 # Step 4: Find out what version of Krita we built and give the Appimage a proper name
@@ -227,7 +227,7 @@ if [ -n "$STRIP_APPIMAGE" ]; then
     function find-elf-files {
         # * python libraries are not strippable (strip fails with error)
         # * AppImage packages should not be stripped, because it breaks them
-        find $1 -type f -name "*" -not -name "*.o" -not -path "*/python3.8/*" -not -name "AppImageUpdate" -not -name "libstdc++.so.6.*" -exec sh -c '
+        find $1 -type f -name "*" -not -name "*.o" -not -path "*/python3.10/*" -not -name "AppImageUpdate" -not -name "libstdc++.so.6.*" -exec sh -c '
             case "$(head -n 1 "$1")" in
             ?ELF*) exit 0;;
             esac

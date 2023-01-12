@@ -55,7 +55,7 @@ find_library(libunibreak_LIBRARY
 if (NOT libunibreak_VERSION)
     file(READ ${libunibreak_INCLUDE_DIR}/unibreakbase.h _libunibreak_version_content)
 
-    string(REGEX MATCH "#define LIBUNIBREAK_VERSION_STRING[ \t]+ 0x[0]*([0-9]+)[0-9]*([0-9]+)\n" _version_match ${_libunibreak_version_content})
+    string(REGEX MATCH "#define UNIBREAK_VERSION[ \t]+0x([0-9][0-9])([0-9][0-9])[^\n]*\n" _version_match ${_libunibreak_version_content})
 
     if (_version_match)
         set(libunibreak_VERSION "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}")

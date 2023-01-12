@@ -7,11 +7,6 @@
 
 #include "kis_hatching_paintop_settings.h"
 
-#include <QDomDocument>
-#include <QDomElement>
-
-const QString HATCHING_VERSION = "Hatching/Version";
-
 struct KisHatchingPaintOpSettings::Private
 {
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
@@ -22,7 +17,6 @@ KisHatchingPaintOpSettings::KisHatchingPaintOpSettings(KisResourcesInterfaceSP r
     : KisBrushBasedPaintOpSettings(resourcesInterface),
       m_d(new Private)
 {
-    setProperty(HATCHING_VERSION, "2");
 }
 
 KisHatchingPaintOpSettings::~KisHatchingPaintOpSettings()
@@ -83,16 +77,6 @@ void KisHatchingPaintOpSettings::initializeTwin(KisPaintOpSettingsSP settings) c
 
 }
 
-void KisHatchingPaintOpSettings::fromXML(const QDomElement& elt)
-{
-    setProperty(HATCHING_VERSION, "1"); // This make sure that fromXML will override HAIRY_VERSION with 2, or will default to 1
-    KisBrushBasedPaintOpSettings::fromXML(elt);
-    QVariant v;
-    if (!getProperty(HATCHING_VERSION, v) || v == "1") {
-        setProperty("Hatching/thickness", 2.0 * getDouble("Hatching/thickness"));
-    }
-    setProperty(HATCHING_VERSION, "2"); // make sure it's saved as version 2 next time
-}
 
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include "kis_paintop_preset.h"

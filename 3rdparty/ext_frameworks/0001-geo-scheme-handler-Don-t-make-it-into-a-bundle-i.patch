@@ -1,18 +1,27 @@
-From 3d0ec7ebd5f3c6a32acbcb9fa633a7a54d3197d9 Mon Sep 17 00:00:00 2001
+From 45123b3f8f7381dec6f35bce4de6419b14cb001c Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Thu, 12 Jan 2023 13:25:51 -0300
 Subject: [PATCH] geo-scheme-handler: Don't make it into a bundle in macOS
 
 ---
- src/geo-scheme-handler/CMakeLists.txt | 1 +
+ src/geo-scheme-handler/CMakeLists.txt | 3 +++
  src/geo-scheme-handler/main.cpp       | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/src/geo-scheme-handler/CMakeLists.txt b/src/geo-scheme-handler/CMakeLists.txt
-index a2b76f6..2c732d8 100644
+index a2b76f6..145fecc 100644
 --- a/src/geo-scheme-handler/CMakeLists.txt
 +++ b/src/geo-scheme-handler/CMakeLists.txt
-@@ -8,6 +8,7 @@ add_executable(kde-geo-uri-handler
+@@ -1,6 +1,8 @@
+ # SPDX-FileCopyrightText: 2021 Volker Krause <vkrause@kde.org>
+ # SPDX-License-Identifier: BSD-2-Clause
+ 
++include(ECMMarkNonGuiExecutable)
++
+ add_executable(kde-geo-uri-handler
+     kgeourihandler.cpp
+     kgeourihandler_p.h
+@@ -8,6 +10,7 @@ add_executable(kde-geo-uri-handler
  )
  target_include_directories(kde-geo-uri-handler PRIVATE ${CMAKE_BINARY_DIR}) # for kguiaddons_version.h
  target_link_libraries(kde-geo-uri-handler PRIVATE Qt${QT_MAJOR_VERSION}::Gui)

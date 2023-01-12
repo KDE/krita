@@ -41,7 +41,6 @@
 #include <canvas/kis_canvas2.h>
 #include <KisViewManager.h>
 #include <widgets/kis_cmb_composite.h>
-#include <widgets/kis_double_widget.h>
 #include <kis_slider_spin_box.h>
 #include <kis_cursor.h>
 #include <kis_config.h>

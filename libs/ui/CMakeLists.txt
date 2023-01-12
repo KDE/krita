@@ -242,7 +242,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_curve_widget.cpp
     widgets/kis_custom_image_widget.cc
     widgets/kis_image_from_clipboard_widget.cpp
-    widgets/kis_double_widget.cc
     widgets/kis_filter_selector_widget.cc
     widgets/kis_iconwidget.cc
     widgets/kis_mask_widgets.cpp

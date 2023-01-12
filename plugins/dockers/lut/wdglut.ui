@@ -160,7 +160,7 @@
          </widget>
         </item>
         <item row="8" column="1">
-         <widget class="KisDoubleWidget" name="m_exposureDoubleWidget" native="true">
+         <widget class="KisDoubleSliderSpinBox" name="m_exposureDoubleWidget" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -255,7 +255,7 @@
          </widget>
         </item>
         <item row="9" column="1">
-         <widget class="KisDoubleWidget" name="m_gammaDoubleWidget" native="true">
+         <widget class="KisDoubleSliderSpinBox" name="m_gammaDoubleWidget" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -433,9 +433,9 @@
    <header>KisSqueezedComboBox.h</header>
   </customwidget>
   <customwidget>
-   <class>KisDoubleWidget</class>
+   <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header>widgets/kis_double_widget.h</header>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

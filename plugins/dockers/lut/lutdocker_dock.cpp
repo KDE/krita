@@ -123,11 +123,9 @@ LutDockerDock::LutDockerDock()
     connect(m_cmbDisplayDevice, SIGNAL(currentIndexChanged(int)), SLOT(refillViewCombobox()));
 
     m_exposureDoubleWidget->setToolTip(i18n("Select the exposure (stops) for HDR images."));
-    m_exposureDoubleWidget->setRange(-10, 10);
-    m_exposureDoubleWidget->setPrecision(2);
+    m_exposureDoubleWidget->setRange(-10.0, 10.0, 2);
     m_exposureDoubleWidget->setValue(0.0);
     m_exposureDoubleWidget->setSingleStep(0.25);
-    m_exposureDoubleWidget->setPageStep(1);
 
     connect(m_exposureDoubleWidget, SIGNAL(valueChanged(double)), SLOT(exposureValueChanged(double)));
     connect(m_exposureDoubleWidget, SIGNAL(sliderPressed()), SLOT(exposureSliderPressed()));
@@ -136,29 +134,13 @@ LutDockerDock::LutDockerDock()
     // Gamma needs to be exponential (gamma *= 1.1f, gamma /= 1.1f as steps)
 
     m_gammaDoubleWidget->setToolTip(i18n("Select the amount of gamma modification for display. This does not affect the pixels of your image."));
-    m_gammaDoubleWidget->setRange(0.1, 5);
-    m_gammaDoubleWidget->setPrecision(2);
+    m_gammaDoubleWidget->setRange(0.1, 5.0, 2);
     m_gammaDoubleWidget->setValue(1.0);
     m_gammaDoubleWidget->setSingleStep(0.1);
-    m_gammaDoubleWidget->setPageStep(1);
 
     connect(m_gammaDoubleWidget, SIGNAL(valueChanged(double)), SLOT(gammaValueChanged(double)));
     connect(m_gammaDoubleWidget, SIGNAL(sliderPressed()), SLOT(gammaSliderPressed()));
     connect(m_gammaDoubleWidget, SIGNAL(sliderReleased()), SLOT(gammaSliderReleased()));
-
-    int spinboxWidth = 0;
-    QList<KisDoubleParseSpinBox*> spinboxes;
-    Q_FOREACH (KisDoubleParseSpinBox* spinbox, m_exposureDoubleWidget->findChildren<KisDoubleParseSpinBox*>()) {
-        spinboxes.append(spinbox);
-        spinboxWidth = qMax(spinboxWidth, spinbox->sizeHint().width());
-    }
-    Q_FOREACH (KisDoubleParseSpinBox* spinbox, m_gammaDoubleWidget->findChildren<KisDoubleParseSpinBox*>()) {
-        spinboxes.append(spinbox);
-        spinboxWidth = qMax(spinboxWidth, spinbox->sizeHint().width());
-    }
-    Q_FOREACH (KisDoubleParseSpinBox* spinbox, spinboxes) {
-        spinbox->setMinimumWidth(spinboxWidth);
-    }
 
     m_bwPointChooser = new BlackWhitePointChooser(this);
 

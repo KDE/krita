@@ -47,6 +47,7 @@ ExternalProject_Add(
             -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
             -Dglib=disabled
             -Dgobject=disabled
+            -Dtests=disabled
             ${EXTRA_MESON_FLAGS}
 
     BUILD_COMMAND ${CMAKE_COMMAND} -E env

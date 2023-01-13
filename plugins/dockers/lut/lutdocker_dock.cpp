@@ -83,13 +83,12 @@ OCIO::ConstConfigRcPtr defaultRawProfile()
 LutDockerDock::LutDockerDock()
     : QDockWidget(i18n("LUT Management"))
     , m_canvas(0)
-    , m_draggingSlider(false)
 {
     using namespace std::placeholders; // For _1
     m_exposureCompressor.reset(
-        new KisSignalCompressorWithParam<qreal>(40, std::bind(&LutDockerDock::setCurrentExposureImpl, this, _1)));
+        new KisSignalCompressorWithParam<qreal>(40, std::bind(&LutDockerDock::exposureValueChanged, this, _1)));
     m_gammaCompressor.reset(
-        new KisSignalCompressorWithParam<qreal>(40, std::bind(&LutDockerDock::setCurrentGammaImpl, this, _1)));
+        new KisSignalCompressorWithParam<qreal>(40, std::bind(&LutDockerDock::gammaValueChanged, this, _1)));
 
     m_page = new QWidget(this);
     setupUi(m_page);
@@ -125,9 +124,8 @@ LutDockerDock::LutDockerDock()
     m_exposureDoubleWidget->setValue(0.0);
     m_exposureDoubleWidget->setSingleStep(0.25);
 
-    connect(m_exposureDoubleWidget, SIGNAL(valueChanged(double)), SLOT(exposureValueChanged(double)));
-    connect(m_exposureDoubleWidget, SIGNAL(sliderPressed()), SLOT(exposureSliderPressed()));
-    connect(m_exposureDoubleWidget, SIGNAL(sliderReleased()), SLOT(exposureSliderReleased()));
+    connect(m_exposureDoubleWidget, QOverload<double>::of(&KisDoubleSliderSpinBox::valueChanged),
+            [this](double value){ m_exposureCompressor->start(value); });
 
     // Gamma needs to be exponential (gamma *= 1.1f, gamma /= 1.1f as steps)
 
@@ -136,9 +134,8 @@ LutDockerDock::LutDockerDock()
     m_gammaDoubleWidget->setValue(1.0);
     m_gammaDoubleWidget->setSingleStep(0.1);
 
-    connect(m_gammaDoubleWidget, SIGNAL(valueChanged(double)), SLOT(gammaValueChanged(double)));
-    connect(m_gammaDoubleWidget, SIGNAL(sliderPressed()), SLOT(gammaSliderPressed()));
-    connect(m_gammaDoubleWidget, SIGNAL(sliderReleased()), SLOT(gammaSliderReleased()));
+    connect(m_gammaDoubleWidget, QOverload<double>::of(&KisDoubleSliderSpinBox::valueChanged),
+            [this](double value){ m_gammaCompressor->start(value); });
 
     m_bwPointChooser = new BlackWhitePointChooser(this);
 
@@ -154,8 +151,6 @@ LutDockerDock::LutDockerDock()
     connect(m_cmbView, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
     connect(m_cmbLook, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
     connect(m_cmbComponents, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
-
-    m_draggingSlider = false;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetOcioConfiguration()));
 
@@ -261,7 +256,13 @@ qreal LutDockerDock::currentExposure() const
 void LutDockerDock::setCurrentExposure(qreal value)
 {
     if (!canChangeExposureAndGamma()) return;
-    m_exposureCompressor->start(value);
+    m_exposureDoubleWidget->setValue(value);
+    if(m_canvas) {
+        m_canvas->viewManager()->showFloatingMessage(
+            i18nc("floating message about exposure", "Exposure: %1",
+                KritaUtils::prettyFormatReal(m_exposureDoubleWidget->value())),
+            QIcon(), 500, KisFloatingMessage::Low);
+    }
 }
 
 qreal LutDockerDock::currentGamma() const
@@ -274,29 +275,13 @@ qreal LutDockerDock::currentGamma() const
 void LutDockerDock::setCurrentGamma(qreal value)
 {
     if (!canChangeExposureAndGamma()) return;
-    m_gammaCompressor->start(value);
-}
-
-void LutDockerDock::setCurrentExposureImpl(qreal value)
-{
-    m_exposureDoubleWidget->setValue(value);
-    if (!m_canvas) return;
-
-    m_canvas->viewManager()->showFloatingMessage(
-        i18nc("floating message about exposure", "Exposure: %1",
-              KritaUtils::prettyFormatReal(m_exposureDoubleWidget->value())),
-        QIcon(), 500, KisFloatingMessage::Low);
-}
-
-void LutDockerDock::setCurrentGammaImpl(qreal value)
-{
     m_gammaDoubleWidget->setValue(value);
-    if (!m_canvas) return;
-
-    m_canvas->viewManager()->showFloatingMessage(
-        i18nc("floating message about gamma", "Gamma: %1",
-              KritaUtils::prettyFormatReal(m_gammaDoubleWidget->value())),
-        QIcon(), 500, KisFloatingMessage::Low);
+    if (m_canvas) {
+        m_canvas->viewManager()->showFloatingMessage(
+            i18nc("floating message about gamma", "Gamma: %1",
+                KritaUtils::prettyFormatReal(m_gammaDoubleWidget->value())),
+            QIcon(), 500, KisFloatingMessage::Low);
+    }
 }
 
 void LutDockerDock::slotImageColorSpaceChanged()
@@ -308,41 +293,18 @@ void LutDockerDock::slotImageColorSpaceChanged()
 
 void LutDockerDock::exposureValueChanged(double exposure)
 {
-    if (m_canvas && !m_draggingSlider) {
+    if (m_canvas) {
         m_canvas->viewManager()->canvasResourceProvider()->setHDRExposure(exposure);
         updateDisplaySettings();
     }
 }
 
-void LutDockerDock::exposureSliderPressed()
-{
-    m_draggingSlider = true;
-}
-
-void LutDockerDock::exposureSliderReleased()
-{
-    m_draggingSlider = false;
-    exposureValueChanged(m_exposureDoubleWidget->value());
-}
-
-
 void LutDockerDock::gammaValueChanged(double gamma)
 {
-    if (m_canvas && !m_draggingSlider) {
+    if (m_canvas) {
         m_canvas->viewManager()->canvasResourceProvider()->setHDRGamma(gamma);
         updateDisplaySettings();
     }
-}
-
-void LutDockerDock::gammaSliderPressed()
-{
-    m_draggingSlider = true;
-}
-
-void LutDockerDock::gammaSliderReleased()
-{
-    m_draggingSlider = false;
-    gammaValueChanged(m_gammaDoubleWidget->value());
 }
 
 void LutDockerDock::enableControls()

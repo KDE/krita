@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-06 03:19+0000\n"
+"POT-Creation-Date: 2023-01-13 03:53+0000\n"
 "PO-Revision-Date: 2022-12-11 07:39+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -28378,7 +28378,7 @@ msgstr "&Otwórz wybierak barwy pierwszoplanowej"
 msgid "&Open Background color selector"
 msgstr "&Otwórz wybierak barwy drugoplanowej"
 
-#: libs/ui/kis_control_frame.cpp:184 libs/ui/KisApplication.cpp:348
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -28386,12 +28386,12 @@ msgstr "&Otwórz wybierak barwy drugoplanowej"
 msgid "Patterns"
 msgstr "Wzorce"
 
-#: libs/ui/kis_control_frame.cpp:187 libs/ui/kis_control_frame.cpp:188
+#: libs/ui/kis_control_frame.cpp:188 libs/ui/kis_control_frame.cpp:189
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Własny wzorzec"
 
-#: libs/ui/kis_control_frame.cpp:234 libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
 #: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
@@ -45650,7 +45650,7 @@ msgstr "Nie znaleziono profilu barw w dokumencie."
 msgid "Unknown error: %1"
 msgstr "Nieznany błąd: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:603
+#: plugins/impex/heif/HeifExport.cpp:612
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45660,7 +45660,7 @@ msgstr ""
 "Jasność obrazu będzie w pełnej rozdzielczości, podczas gdy barwność zostanie "
 "połowiczna w obu kierunkach."
 
-#: plugins/impex/heif/HeifExport.cpp:604
+#: plugins/impex/heif/HeifExport.cpp:613
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45670,28 +45670,28 @@ msgstr ""
 "Jasność obrazu będzie w pełnej rozdzielczości, podczas gdy barwność zostanie "
 "połowiczna w poziomie."
 
-#: plugins/impex/heif/HeifExport.cpp:605
+#: plugins/impex/heif/HeifExport.cpp:614
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr "Zarówno jasność jak i barwność obrazu będą w pełnej rozdzielczości."
 
-#: plugins/impex/heif/HeifExport.cpp:619
+#: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:180
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:619
+#: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:173
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:620
+#: plugins/impex/heif/HeifExport.cpp:629
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:175
 #, kde-format
 msgctxt "@tooltip"
@@ -45704,7 +45704,7 @@ msgstr ""
 "krzywą kwantyzującą percepcyjnie (znaną też jako krzywa SMPTE 2048). "
 "Zalecane dla obrazów HDR, gdzie ważna jest jasność bezwzględna."
 
-#: plugins/impex/heif/HeifExport.cpp:622
+#: plugins/impex/heif/HeifExport.cpp:631
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:182
 #, kde-format
 msgctxt "@tooltip"
@@ -45717,14 +45717,14 @@ msgstr ""
 "krzywą hybrydowej gammy logarytmicznej. Zalecane dla obrazów HDR, w "
 "przypadku gdy wyświetlacz może nie rozumieć HDR."
 
-#: plugins/impex/heif/HeifExport.cpp:628
+#: plugins/impex/heif/HeifExport.cpp:637
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:189
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Zachowaj koloranty, zakoduj w PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:629
+#: plugins/impex/heif/HeifExport.cpp:638
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:191
 #, kde-format
 msgctxt "@tooltip"
@@ -45737,14 +45737,14 @@ msgstr ""
 "krzywą kwantyzującą percepcyjnie (znaną też jako krzywa SMPTE 2048). "
 "Zalecane dla obrazów, gdzie ważna jest jasność bezwzględna."
 
-#: plugins/impex/heif/HeifExport.cpp:633
+#: plugins/impex/heif/HeifExport.cpp:642
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Zachowaj koloranty, zakoduj w HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:634
+#: plugins/impex/heif/HeifExport.cpp:643
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, kde-format
 msgctxt "@tooltip"
@@ -45756,14 +45756,14 @@ msgstr ""
 "krzywą hybrydowej gammy logarytmicznej. Zalecane dla obrazów przeznaczonych "
 "na ekrany, które nie rozumieją PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:638
+#: plugins/impex/heif/HeifExport.cpp:647
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Zachowaj koloranty, zakoduj w SMPTE ST 428"
 
-#: plugins/impex/heif/HeifExport.cpp:639
+#: plugins/impex/heif/HeifExport.cpp:648
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "@tooltip"
@@ -45776,13 +45776,13 @@ msgstr ""
 "SMPTE ST 428. Krita zawsze otwiera obrazy jakby były opisane liczbami "
 "rzeczywistymi, a to ustawienie jest tu po to, aby temu przeciwdziałać"
 
-#: plugins/impex/heif/HeifExport.cpp:644
+#: plugins/impex/heif/HeifExport.cpp:653
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Bez zmian, przytnij"
 
-#: plugins/impex/heif/HeifExport.cpp:645
+#: plugins/impex/heif/HeifExport.cpp:654
 #, kde-format
 msgctxt "@tooltip"
 msgid ""

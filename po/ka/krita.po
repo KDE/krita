@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-06 03:19+0000\n"
-"PO-Revision-Date: 2023-01-06 12:56+0100\n"
+"POT-Creation-Date: 2023-01-13 03:53+0000\n"
+"PO-Revision-Date: 2023-01-12 10:13+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -3548,7 +3548,7 @@ msgstr "A -2 Sparkle 3"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk.png"
 msgid "chalk"
-msgstr ""
+msgstr "ცარცი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3631,7 +3631,7 @@ msgstr "გრადიენტი"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/hair.png"
 msgid "hair"
-msgstr ""
+msgstr "თმა"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3718,7 +3718,7 @@ msgstr ""
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rock.png"
 msgid "rock"
-msgstr ""
+msgstr "ქვა"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7799,7 +7799,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "To Path"
-msgstr ""
+msgstr "ბილიკამდე"
 
 #. i18n: context: iconText @ Action (pathpoint-remove), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-remove), Actions (Path Tool), ActionCollection (Tools)
@@ -10651,7 +10651,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Remove Column"
-msgstr ""
+msgstr "სვეტის წაშლა"
 
 #. i18n: context: toolTip @ Action (remove_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2083
@@ -13121,7 +13121,7 @@ msgstr "გამოსვლა"
 #, kde-format
 msgctxt "action"
 msgid "Edit"
-msgstr ""
+msgstr "ჩასოწრება"
 
 #. i18n: context: text @ Action (edit_undo), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_undo), Actions (Edit), ActionCollection (Menu)
@@ -18019,22 +18019,22 @@ msgstr "ალფას ნიღაბი"
 #: libs/pigment/KoColorModelStandardIds.cpp:13
 #, kde-format
 msgid "RGB/Alpha"
-msgstr ""
+msgstr "RGB/ალფა"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:14
 #, kde-format
 msgid "XYZ/Alpha"
-msgstr ""
+msgstr "XYZ/ალფა"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:15
 #, kde-format
 msgid "L*a*b*/Alpha"
-msgstr ""
+msgstr "L*a*b*/ალფა"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:16
 #, kde-format
 msgid "CMYK/Alpha"
-msgstr ""
+msgstr "CMYK/ალფა"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:17
 #, kde-format
@@ -18049,7 +18049,7 @@ msgstr ""
 #: libs/pigment/KoColorModelStandardIds.cpp:19
 #, kde-format
 msgid "YCbCr/Alpha"
-msgstr ""
+msgstr "YCbCr/ალფა"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:21
 #, kde-format
@@ -27776,7 +27776,7 @@ msgstr ""
 msgid "&Open Background color selector"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:184 libs/ui/KisApplication.cpp:348
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -27784,12 +27784,12 @@ msgstr ""
 msgid "Patterns"
 msgstr "შაბლონები"
 
-#: libs/ui/kis_control_frame.cpp:187 libs/ui/kis_control_frame.cpp:188
+#: libs/ui/kis_control_frame.cpp:188 libs/ui/kis_control_frame.cpp:189
 #, kde-format
 msgid "Custom Pattern"
 msgstr ""
 
-#: libs/ui/kis_control_frame.cpp:234 libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
 #: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
@@ -44362,7 +44362,7 @@ msgstr ""
 msgid "Unknown error: %1"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:603
+#: plugins/impex/heif/HeifExport.cpp:612
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -44370,7 +44370,7 @@ msgid ""
 "colorfulness will be halved in both dimensions."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:604
+#: plugins/impex/heif/HeifExport.cpp:613
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -44378,28 +44378,28 @@ msgid ""
 "colorfulness will be halved horizontally."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:605
+#: plugins/impex/heif/HeifExport.cpp:614
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:619
+#: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:180
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:619
+#: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:173
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:620
+#: plugins/impex/heif/HeifExport.cpp:629
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:175
 #, kde-format
 msgctxt "@tooltip"
@@ -44409,7 +44409,7 @@ msgid ""
 "for HDR images where the absolute brightness is important."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:622
+#: plugins/impex/heif/HeifExport.cpp:631
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:182
 #, kde-format
 msgctxt "@tooltip"
@@ -44419,14 +44419,14 @@ msgid ""
 "not understand HDR."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:628
+#: plugins/impex/heif/HeifExport.cpp:637
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:189
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:629
+#: plugins/impex/heif/HeifExport.cpp:638
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:191
 #, kde-format
 msgctxt "@tooltip"
@@ -44436,14 +44436,14 @@ msgid ""
 "where the absolute brightness is important."
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:633
+#: plugins/impex/heif/HeifExport.cpp:642
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:634
+#: plugins/impex/heif/HeifExport.cpp:643
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, kde-format
 msgctxt "@tooltip"
@@ -44452,14 +44452,14 @@ msgid ""
 "curve. Recommended for images intended for screens which cannot understand PQ"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:638
+#: plugins/impex/heif/HeifExport.cpp:647
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:639
+#: plugins/impex/heif/HeifExport.cpp:648
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "@tooltip"
@@ -44469,13 +44469,13 @@ msgid ""
 "is there to reverse that"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:644
+#: plugins/impex/heif/HeifExport.cpp:653
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr ""
 
-#: plugins/impex/heif/HeifExport.cpp:645
+#: plugins/impex/heif/HeifExport.cpp:654
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48141,7 +48141,7 @@ msgstr ""
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:148
 #, kde-format
 msgid "Connection Line"
-msgstr ""
+msgstr "მიერთებს ხაზი"
 
 #: plugins/paintops/curvebrush/kis_curves_opacity_option.cpp:11
 #, kde-format
@@ -52934,7 +52934,7 @@ msgstr ""
 #: plugins/python/krita_script_starter/bbdkss.ui:92
 #, kde-format
 msgid "Short Description"
-msgstr ""
+msgstr "მოკლე აღწერა"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, e_comment)
 #: plugins/python/krita_script_starter/bbdkss.ui:99
@@ -53242,7 +53242,7 @@ msgstr ""
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:45
 msgid "Invalid File"
-msgstr ""
+msgstr "არასწორი ფაილი"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:46
 msgid "Open files with .py extension"

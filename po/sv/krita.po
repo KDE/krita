@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-06 03:19+0000\n"
+"POT-Creation-Date: 2023-01-13 03:53+0000\n"
 "PO-Revision-Date: 2022-11-27 11:37+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -28298,7 +28298,7 @@ msgstr "Ö&ppna förgrundsfärgväljare"
 msgid "&Open Background color selector"
 msgstr "Ö&ppna bakgrundsfärgväljare"
 
-#: libs/ui/kis_control_frame.cpp:184 libs/ui/KisApplication.cpp:348
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -28306,12 +28306,12 @@ msgstr "Ö&ppna bakgrundsfärgväljare"
 msgid "Patterns"
 msgstr "Mönster"
 
-#: libs/ui/kis_control_frame.cpp:187 libs/ui/kis_control_frame.cpp:188
+#: libs/ui/kis_control_frame.cpp:188 libs/ui/kis_control_frame.cpp:189
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Egna mönster"
 
-#: libs/ui/kis_control_frame.cpp:234 libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
 #: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
@@ -45514,7 +45514,7 @@ msgstr "Färgprofil hittades inte i dokumentet."
 msgid "Unknown error: %1"
 msgstr "Okänt fel: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:603
+#: plugins/impex/heif/HeifExport.cpp:612
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45524,7 +45524,7 @@ msgstr ""
 "Bildens ljusstyrka använder full upplösning, medan färgomfånget halveras i "
 "båda dimensionerna."
 
-#: plugins/impex/heif/HeifExport.cpp:604
+#: plugins/impex/heif/HeifExport.cpp:613
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45534,28 +45534,28 @@ msgstr ""
 "Bildens ljusstyrka använder full upplösning, medan färgomfånget halveras "
 "horisontellt."
 
-#: plugins/impex/heif/HeifExport.cpp:605
+#: plugins/impex/heif/HeifExport.cpp:614
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr "Både bildens ljusstyrka och färgomfång använder full upplösning."
 
-#: plugins/impex/heif/HeifExport.cpp:619
+#: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:180
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rek. 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:619
+#: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:173
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rek. 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:620
+#: plugins/impex/heif/HeifExport.cpp:629
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:175
 #, kde-format
 msgctxt "@tooltip"
@@ -45568,7 +45568,7 @@ msgstr ""
 "perceptuell kvantiseringskurva (också känd som SMPTE 2048). Rekommenderas "
 "för HDR-bilder där den absoluta ljusstyrkan är viktig."
 
-#: plugins/impex/heif/HeifExport.cpp:622
+#: plugins/impex/heif/HeifExport.cpp:631
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:182
 #, kde-format
 msgctxt "@tooltip"
@@ -45581,14 +45581,14 @@ msgstr ""
 "Hybrid Log Gamma-kurva. Rekommenderas för HDR-bilder där bildskärmen kanske "
 "inte förstår HDR."
 
-#: plugins/impex/heif/HeifExport.cpp:628
+#: plugins/impex/heif/HeifExport.cpp:637
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:189
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Behåll färgvärden, koda PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:629
+#: plugins/impex/heif/HeifExport.cpp:638
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:191
 #, kde-format
 msgctxt "@tooltip"
@@ -45601,14 +45601,14 @@ msgstr ""
 "kvantiseringskurva (också känd som SMPTE 2048). Rekommenderas för bilder där "
 "den absoluta ljusstyrkan är viktig."
 
-#: plugins/impex/heif/HeifExport.cpp:633
+#: plugins/impex/heif/HeifExport.cpp:642
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Behåll färgvärden, koda HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:634
+#: plugins/impex/heif/HeifExport.cpp:643
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, kde-format
 msgctxt "@tooltip"
@@ -45619,14 +45619,14 @@ msgstr ""
 "Bilden görs först linjär, och kodas sedan med en Hybrid Log Gamma-kurva. "
 "Rekommenderas för bilder avsedda för skärmar som inte kan förstår PQ."
 
-#: plugins/impex/heif/HeifExport.cpp:638
+#: plugins/impex/heif/HeifExport.cpp:647
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Behåll färgvärden, koda SMPTE ST 428"
 
-#: plugins/impex/heif/HeifExport.cpp:639
+#: plugins/impex/heif/HeifExport.cpp:648
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "@tooltip"
@@ -45639,13 +45639,13 @@ msgstr ""
 "alltid bilder som de här med linjära flyttal. Det här alternativet finns för "
 "att vända på det."
 
-#: plugins/impex/heif/HeifExport.cpp:644
+#: plugins/impex/heif/HeifExport.cpp:653
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Inga ändringar, beskär"
 
-#: plugins/impex/heif/HeifExport.cpp:645
+#: plugins/impex/heif/HeifExport.cpp:654
 #, kde-format
 msgctxt "@tooltip"
 msgid ""

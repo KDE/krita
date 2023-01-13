@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-06 03:19+0000\n"
+"POT-Creation-Date: 2023-01-13 03:53+0000\n"
 "PO-Revision-Date: 2022-11-26 18:08+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -28389,7 +28389,7 @@ msgstr "Abrir el selector del c&olor del primer plano"
 msgid "&Open Background color selector"
 msgstr "Abrir el selector del c&olor del fondo"
 
-#: libs/ui/kis_control_frame.cpp:184 libs/ui/KisApplication.cpp:348
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -28397,12 +28397,12 @@ msgstr "Abrir el selector del c&olor del fondo"
 msgid "Patterns"
 msgstr "Patrones"
 
-#: libs/ui/kis_control_frame.cpp:187 libs/ui/kis_control_frame.cpp:188
+#: libs/ui/kis_control_frame.cpp:188 libs/ui/kis_control_frame.cpp:189
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Patrón personalizado"
 
-#: libs/ui/kis_control_frame.cpp:234 libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
 #: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
@@ -45711,7 +45711,7 @@ msgstr "El perfil de color no se ha encontrado en el documento."
 msgid "Unknown error: %1"
 msgstr "Error desconocido: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:603
+#: plugins/impex/heif/HeifExport.cpp:612
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45721,7 +45721,7 @@ msgstr ""
 "El brillo de la imagen estará a máxima resolución, mientras que su colorido "
 "se reducirá a la mitad en ambas dimensiones."
 
-#: plugins/impex/heif/HeifExport.cpp:604
+#: plugins/impex/heif/HeifExport.cpp:613
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45731,7 +45731,7 @@ msgstr ""
 "El brillo de la imagen estará a máxima resolución, mientras que su colorido "
 "se reducirá a la mitad horizontalmente."
 
-#: plugins/impex/heif/HeifExport.cpp:605
+#: plugins/impex/heif/HeifExport.cpp:614
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45739,21 +45739,21 @@ msgid ""
 msgstr ""
 "Tanto el brillo como el colorido de la imagen estarán a máxima resolución."
 
-#: plugins/impex/heif/HeifExport.cpp:619
+#: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:180
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:619
+#: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:173
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:620
+#: plugins/impex/heif/HeifExport.cpp:629
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:175
 #, kde-format
 msgctxt "@tooltip"
@@ -45767,7 +45767,7 @@ msgstr ""
 "2048). Recomendado para imágenes HDR en las que el brillo absoluto es "
 "importante. "
 
-#: plugins/impex/heif/HeifExport.cpp:622
+#: plugins/impex/heif/HeifExport.cpp:631
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:182
 #, kde-format
 msgctxt "@tooltip"
@@ -45780,14 +45780,14 @@ msgstr ""
 "una curva «Hybrid Log Gamma». Recomendado para imágenes HDR cuando la "
 "pantalla pueda no entender HDR."
 
-#: plugins/impex/heif/HeifExport.cpp:628
+#: plugins/impex/heif/HeifExport.cpp:637
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:189
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Mantener los colorantes, codificar en PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:629
+#: plugins/impex/heif/HeifExport.cpp:638
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:191
 #, kde-format
 msgctxt "@tooltip"
@@ -45800,14 +45800,14 @@ msgstr ""
 "cuantización perceptual (conocida también como curva SMPTE 2048). "
 "Recomendado para imágenes en las que el brillo absoluto es importante. "
 
-#: plugins/impex/heif/HeifExport.cpp:633
+#: plugins/impex/heif/HeifExport.cpp:642
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Mantener los colorantes, codificar en HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:634
+#: plugins/impex/heif/HeifExport.cpp:643
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, kde-format
 msgctxt "@tooltip"
@@ -45819,14 +45819,14 @@ msgstr ""
 "Log Gamma». Recomendado para imágenes destinadas a pantallas que no pueden "
 "entender PQ."
 
-#: plugins/impex/heif/HeifExport.cpp:638
+#: plugins/impex/heif/HeifExport.cpp:647
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Mantener los colorantes, codificar en SMPTE ST 428"
 
-#: plugins/impex/heif/HeifExport.cpp:639
+#: plugins/impex/heif/HeifExport.cpp:648
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "@tooltip"
@@ -45839,13 +45839,13 @@ msgstr ""
 "Krita abre siempre las imágenes como esta como punto flotante lineal. Esta "
 "opción es para invertir este proceso."
 
-#: plugins/impex/heif/HeifExport.cpp:644
+#: plugins/impex/heif/HeifExport.cpp:653
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Sin cambios, recortar"
 
-#: plugins/impex/heif/HeifExport.cpp:645
+#: plugins/impex/heif/HeifExport.cpp:654
 #, kde-format
 msgctxt "@tooltip"
 msgid ""

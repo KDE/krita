@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-06 03:19+0000\n"
+"POT-Creation-Date: 2023-01-13 03:53+0000\n"
 "PO-Revision-Date: 2021-07-04 00:31+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -29380,7 +29380,7 @@ msgstr "Selector da cor principal"
 msgid "&Open Background color selector"
 msgstr "Selector da cor de fundo"
 
-#: libs/ui/kis_control_frame.cpp:184 libs/ui/KisApplication.cpp:348
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -29388,12 +29388,12 @@ msgstr "Selector da cor de fundo"
 msgid "Patterns"
 msgstr "Padrões"
 
-#: libs/ui/kis_control_frame.cpp:187 libs/ui/kis_control_frame.cpp:188
+#: libs/ui/kis_control_frame.cpp:188 libs/ui/kis_control_frame.cpp:189
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Padrão Personalizado"
 
-#: libs/ui/kis_control_frame.cpp:234 libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
 #: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
@@ -46922,7 +46922,7 @@ msgstr "O perfil de cores não foi encontrado no documento."
 msgid "Unknown error: %1"
 msgstr "Erro desconhecido: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:603
+#: plugins/impex/heif/HeifExport.cpp:612
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46932,7 +46932,7 @@ msgstr ""
 "O brilho que terá a imagem na resolução total, enquanto a cor será reduzida "
 "a metade em ambas as dimensões."
 
-#: plugins/impex/heif/HeifExport.cpp:604
+#: plugins/impex/heif/HeifExport.cpp:613
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46942,7 +46942,7 @@ msgstr ""
 "O brilho que terá a imagem na resolução total, enquanto a cor será reduzida "
 "a metade na horizontal."
 
-#: plugins/impex/heif/HeifExport.cpp:605
+#: plugins/impex/heif/HeifExport.cpp:614
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46950,7 +46950,7 @@ msgid ""
 msgstr ""
 "Tanto brilho como a cor da imagem estarão presentes na resolução total."
 
-#: plugins/impex/heif/HeifExport.cpp:619
+#: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:180
 #, fuzzy, kde-format
 #| msgctxt "Colorspace name"
@@ -46959,7 +46959,7 @@ msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "HLG da Rec. 2100"
 
-#: plugins/impex/heif/HeifExport.cpp:619
+#: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:173
 #, fuzzy, kde-format
 #| msgctxt "Colorspace name"
@@ -46968,7 +46968,7 @@ msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "PQ da Rec. 2100"
 
-#: plugins/impex/heif/HeifExport.cpp:620
+#: plugins/impex/heif/HeifExport.cpp:629
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:175
 #, kde-format
 msgctxt "@tooltip"
@@ -46981,7 +46981,7 @@ msgstr ""
 "com uma curva de quantização perceptual (também conhecida como a curva SMPTE "
 "2048). É recomendada para imagens HDR onde é importante o brilho absoluto."
 
-#: plugins/impex/heif/HeifExport.cpp:622
+#: plugins/impex/heif/HeifExport.cpp:631
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:182
 #, kde-format
 msgctxt "@tooltip"
@@ -46994,7 +46994,7 @@ msgstr ""
 "com uma curva de Hybrid Log Gamma. É recomendada para imagens HDR onde o "
 "ecrã poderá não compreender o HDR."
 
-#: plugins/impex/heif/HeifExport.cpp:628
+#: plugins/impex/heif/HeifExport.cpp:637
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:189
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -47003,7 +47003,7 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Manter os colorantes, codificar com QP"
 
-#: plugins/impex/heif/HeifExport.cpp:629
+#: plugins/impex/heif/HeifExport.cpp:638
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:191
 #, kde-format
 msgctxt "@tooltip"
@@ -47016,7 +47016,7 @@ msgstr ""
 "quantização perceptual (também conhecida como a curva SMPTE 2048). É "
 "recomendada para imagens HDR onde é importante o brilho absoluto."
 
-#: plugins/impex/heif/HeifExport.cpp:633
+#: plugins/impex/heif/HeifExport.cpp:642
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -47025,7 +47025,7 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Manter os colorantes, codificar com HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:634
+#: plugins/impex/heif/HeifExport.cpp:643
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, kde-format
 msgctxt "@tooltip"
@@ -47037,7 +47037,7 @@ msgstr ""
 "Hybrid Log Gamma. É recomendada para imagens HDR onde o ecrã poderá não "
 "compreender a QP"
 
-#: plugins/impex/heif/HeifExport.cpp:638
+#: plugins/impex/heif/HeifExport.cpp:647
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option plus transfer function name"
@@ -47046,7 +47046,7 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Manter os colorantes, codificar com SMPTE ST 428"
 
-#: plugins/impex/heif/HeifExport.cpp:639
+#: plugins/impex/heif/HeifExport.cpp:648
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "@tooltip"
@@ -47059,7 +47059,7 @@ msgstr ""
 "Krita abre sempre estas imagens como sendo de vírgula-flutuante linear, "
 "sendo que esta opção existe para reverter isso"
 
-#: plugins/impex/heif/HeifExport.cpp:644
+#: plugins/impex/heif/HeifExport.cpp:653
 #, fuzzy, kde-format
 #| msgctxt "Colorspace option"
 #| msgid "No changes, clip"
@@ -47067,7 +47067,7 @@ msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Sem modificações, com recorte"
 
-#: plugins/impex/heif/HeifExport.cpp:645
+#: plugins/impex/heif/HeifExport.cpp:654
 #, kde-format
 msgctxt "@tooltip"
 msgid ""

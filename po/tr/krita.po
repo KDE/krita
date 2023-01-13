@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-06 03:19+0000\n"
-"PO-Revision-Date: 2023-01-09 01:08+0300\n"
+"POT-Creation-Date: 2023-01-13 03:53+0000\n"
+"PO-Revision-Date: 2023-01-13 01:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -28280,7 +28280,7 @@ msgstr "Ö&n alan renk seçiciyi aç"
 msgid "&Open Background color selector"
 msgstr "&Arka plan renk seçicisini aç"
 
-#: libs/ui/kis_control_frame.cpp:184 libs/ui/KisApplication.cpp:348
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -28288,12 +28288,12 @@ msgstr "&Arka plan renk seçicisini aç"
 msgid "Patterns"
 msgstr "Desenler"
 
-#: libs/ui/kis_control_frame.cpp:187 libs/ui/kis_control_frame.cpp:188
+#: libs/ui/kis_control_frame.cpp:188 libs/ui/kis_control_frame.cpp:189
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Özel Desen"
 
-#: libs/ui/kis_control_frame.cpp:234 libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
 #: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
@@ -35239,17 +35239,17 @@ msgstr "&Hakkında"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:129
 #, kde-format
 msgid "&Report Bugs or Wishes"
-msgstr "&Hata veya İstek Bildirin"
+msgstr "&Hata veya İstek Bildir"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
 #, kde-format
 msgid "&Join KDE"
-msgstr "&KDE Ekibine Katılın"
+msgstr "&KDE Ekibine Katıl"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:131
 #, kde-format
 msgid "&Support KDE"
-msgstr "&KDE Masaüstünü Destekleyin"
+msgstr "&KDE Masaüstünü Destekle"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:84
 #: libs/widgetutils/xmlgui/kbugreport.cpp:101
@@ -45496,7 +45496,7 @@ msgstr "Belgede renk profili bulunamadı."
 msgid "Unknown error: %1"
 msgstr "Bilinmeyen hata: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:603
+#: plugins/impex/heif/HeifExport.cpp:612
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45506,7 +45506,7 @@ msgstr ""
 "Görselin parlaklığı son çözünürlükte olacak; renkliliği ise her iki yönde "
 "yarılanacak."
 
-#: plugins/impex/heif/HeifExport.cpp:604
+#: plugins/impex/heif/HeifExport.cpp:613
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45516,28 +45516,28 @@ msgstr ""
 "Görselin parlaklığı son çözünürlükte olacak; renkliliği ise yatay olarak "
 "yarıya bölünecek."
 
-#: plugins/impex/heif/HeifExport.cpp:605
+#: plugins/impex/heif/HeifExport.cpp:614
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
 msgstr "Görselin hem parlaklığı hem renkliliği son çözünürlükte olacak."
 
-#: plugins/impex/heif/HeifExport.cpp:619
+#: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:180
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:619
+#: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:173
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:620
+#: plugins/impex/heif/HeifExport.cpp:629
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:175
 #, kde-format
 msgctxt "@tooltip"
@@ -45550,7 +45550,7 @@ msgstr ""
 "niceleyici eğrisi (SMPTE 2048 eğrisi olarak da bilinir) ile kodlanacaktır. "
 "Mutlak parlaklığın önemli olduğu HDR görseller için önerilir."
 
-#: plugins/impex/heif/HeifExport.cpp:622
+#: plugins/impex/heif/HeifExport.cpp:631
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:182
 #, kde-format
 msgctxt "@tooltip"
@@ -45563,14 +45563,14 @@ msgstr ""
 "eğrisi ile kodlanacaktır. Ekranın HDR'yi anlayamayabileceği HDR görseller "
 "için önerilir."
 
-#: plugins/impex/heif/HeifExport.cpp:628
+#: plugins/impex/heif/HeifExport.cpp:637
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:189
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Renklendiricileri tut, PQ olarak kodla"
 
-#: plugins/impex/heif/HeifExport.cpp:629
+#: plugins/impex/heif/HeifExport.cpp:638
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:191
 #, kde-format
 msgctxt "@tooltip"
@@ -45583,14 +45583,14 @@ msgstr ""
 "(SMPTE 2048 eğrisi olarak da bilinir) kodlanacaktır. Mutlak parlaklığın "
 "önemli olduğu görseller için önerilir."
 
-#: plugins/impex/heif/HeifExport.cpp:633
+#: plugins/impex/heif/HeifExport.cpp:642
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Renklendiricileri tut, HLG olarak kodla"
 
-#: plugins/impex/heif/HeifExport.cpp:634
+#: plugins/impex/heif/HeifExport.cpp:643
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, kde-format
 msgctxt "@tooltip"
@@ -45601,14 +45601,14 @@ msgstr ""
 "Görsel önce doğrusallaştırılacak ve ardından Hybrid Log Gamma eğrisi ile "
 "kodlanacaktır. PQ'yu anlayamayan ekranlara yönelik görüntüler için önerilir"
 
-#: plugins/impex/heif/HeifExport.cpp:638
+#: plugins/impex/heif/HeifExport.cpp:647
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Renklendiricileri tut, SMPTE ST 428 olarak kodla"
 
-#: plugins/impex/heif/HeifExport.cpp:639
+#: plugins/impex/heif/HeifExport.cpp:648
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "@tooltip"
@@ -45621,13 +45621,13 @@ msgstr ""
 "Krita, bunun gibi görüntüleri her zaman doğrusal kayan nokta olarak açar, bu "
 "seçenek bunu tersine çevirmek için vardır."
 
-#: plugins/impex/heif/HeifExport.cpp:644
+#: plugins/impex/heif/HeifExport.cpp:653
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Değişiklik yok, kırp"
 
-#: plugins/impex/heif/HeifExport.cpp:645
+#: plugins/impex/heif/HeifExport.cpp:654
 #, kde-format
 msgctxt "@tooltip"
 msgid ""

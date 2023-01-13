@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-07 00:46+0000\n"
+"POT-Creation-Date: 2023-01-12 00:53+0000\n"
 "PO-Revision-Date: 2022-08-20 11:02+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -31904,14 +31904,14 @@ msgstr ""
 "Tekstur­bufferar vert automatisk slåtte av for ANGLE-oppteiknaren, grunna "
 "ytingsproblem."
 
-#: libs/ui/opengl/kis_opengl.cpp:576
+#: libs/ui/opengl/kis_opengl.cpp:582
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Det er kjent at drivaren for Intel-skjermkort som du brukar, har problem med "
 "OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:578
+#: libs/ui/opengl/kis_opengl.cpp:584
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31922,7 +31922,7 @@ msgstr ""
 "derfor brukt som standard. Du kan manuelt byta til OpenGL, men det er ikkje "
 "sikkert det vil verka skikkeleg."
 
-#: libs/ui/opengl/kis_opengl.cpp:978
+#: libs/ui/opengl/kis_opengl.cpp:984
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -31931,7 +31931,7 @@ msgstr ""
 "Den føretrekte oppteiknaren støttar ikkje det førespurde overflateformatet. "
 "Ein annan oppteiknar vert derfor brukt."
 
-#: libs/ui/opengl/kis_opengl.cpp:980
+#: libs/ui/opengl/kis_opengl.cpp:986
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -32011,8 +32011,8 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_freehand.cc:212
 #: libs/ui/tool/kis_tool_polyline_base.cpp:119
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:164
-#: libs/ui/tool/KisToolOutlineBase.cpp:161
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:163
+#: libs/ui/tool/KisToolOutlineBase.cpp:162
 #: plugins/tools/basictools/kis_tool_line.cc:201
 #: plugins/tools/basictools/kis_tool_path.cc:78
 #: plugins/tools/basictools/kis_tool_pencil.cc:53
@@ -32028,8 +32028,8 @@ msgid "Brush Size: %1 px"
 msgstr "Penselstorleik: %1 pikslar"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:113
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:158
-#: libs/ui/tool/KisToolOutlineBase.cpp:155
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:157
+#: libs/ui/tool/KisToolOutlineBase.cpp:156
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:66
 #, kde-format
 msgid ""
@@ -32048,7 +32048,7 @@ msgstr ""
 "Breidd: %1 pikslar\n"
 "Høgd: %2 pikslar"
 
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:293
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:292
 #: plugins/tools/basictools/kis_tool_line.cc:282
 #: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #, kde-format
@@ -34160,7 +34160,7 @@ msgstr "Maskeovergang"
 #. i18n: ectx: property (text), widget (QLabel, labelRepeat)
 #: libs/ui/widgets/KoFillConfigWidget.ui:255
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:91
-#: plugins/tools/basictools/kis_tool_gradient.cc:252
+#: plugins/tools/basictools/kis_tool_gradient.cc:257
 #, kde-format
 msgid "Repeat:"
 msgstr "Gjentaking:"
@@ -43152,7 +43152,7 @@ msgstr "Iris"
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:85
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:245
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:50
-#: plugins/tools/basictools/kis_tool_gradient.cc:237
+#: plugins/tools/basictools/kis_tool_gradient.cc:242
 #, kde-format
 msgid "Shape:"
 msgstr "Form:"
@@ -45024,63 +45024,63 @@ msgid "&Gradient..."
 msgstr "&Fargeovergang …"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:28
-#: plugins/tools/basictools/kis_tool_gradient.cc:240
+#: plugins/tools/basictools/kis_tool_gradient.cc:245
 #, kde-format
 msgctxt "the gradient will be drawn linearly"
 msgid "Linear"
 msgstr "Lineær"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:29
-#: plugins/tools/basictools/kis_tool_gradient.cc:241
+#: plugins/tools/basictools/kis_tool_gradient.cc:246
 #, kde-format
 msgctxt "the gradient will be drawn bilinearly"
 msgid "Bi-Linear"
 msgstr "Bilineær"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:30
-#: plugins/tools/basictools/kis_tool_gradient.cc:242
+#: plugins/tools/basictools/kis_tool_gradient.cc:247
 #, kde-format
 msgctxt "the gradient will be drawn radially"
 msgid "Radial"
 msgstr "Radiell"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:31
-#: plugins/tools/basictools/kis_tool_gradient.cc:243
+#: plugins/tools/basictools/kis_tool_gradient.cc:248
 #, kde-format
 msgctxt "the gradient will be drawn in a square around a centre"
 msgid "Square"
 msgstr "Kvadratisk"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_gradient.cc:244
+#: plugins/tools/basictools/kis_tool_gradient.cc:249
 #, kde-format
 msgctxt "the gradient will be drawn as an asymmetric cone"
 msgid "Conical"
 msgstr "Konisk"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:33
-#: plugins/tools/basictools/kis_tool_gradient.cc:245
+#: plugins/tools/basictools/kis_tool_gradient.cc:250
 #, kde-format
 msgctxt "the gradient will be drawn as a symmetric cone"
 msgid "Conical Symmetric"
 msgstr "Konisk – symmetrisk"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:34
-#: plugins/tools/basictools/kis_tool_gradient.cc:246
+#: plugins/tools/basictools/kis_tool_gradient.cc:251
 #, kde-format
 msgctxt "the gradient will be drawn as a spiral"
 msgid "Spiral"
 msgstr "Spiral"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:35
-#: plugins/tools/basictools/kis_tool_gradient.cc:247
+#: plugins/tools/basictools/kis_tool_gradient.cc:252
 #, kde-format
 msgctxt "the gradient will be drawn as a reverse spiral"
 msgid "Reverse Spiral"
 msgstr "Omvend spiral"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:36
-#: plugins/tools/basictools/kis_tool_gradient.cc:248
+#: plugins/tools/basictools/kis_tool_gradient.cc:253
 #, kde-format
 msgctxt "the gradient will be drawn in a selection outline"
 msgid "Shaped"
@@ -45088,21 +45088,21 @@ msgstr "Etter utvalsform"
 
 # Inga gjentaking (av fargeovergangen).
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:39
-#: plugins/tools/basictools/kis_tool_gradient.cc:255
+#: plugins/tools/basictools/kis_tool_gradient.cc:260
 #, kde-format
 msgctxt "The gradient will not repeat"
 msgid "None"
 msgstr "Inga"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_gradient.cc:256
+#: plugins/tools/basictools/kis_tool_gradient.cc:261
 #, kde-format
 msgctxt "The gradient will repeat forwards"
 msgid "Forwards"
 msgstr "Framover"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:41
-#: plugins/tools/basictools/kis_tool_gradient.cc:257
+#: plugins/tools/basictools/kis_tool_gradient.cc:262
 #, kde-format
 msgctxt "The gradient will repeat alternatingly"
 msgid "Alternating"
@@ -45152,7 +45152,7 @@ msgstr "Relativ"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:101
-#: plugins/tools/basictools/kis_tool_gradient.cc:262
+#: plugins/tools/basictools/kis_tool_gradient.cc:267
 #, kde-format
 msgid "Anti-alias threshold:"
 msgstr "Grense for kantutjamning:"
@@ -45981,7 +45981,7 @@ msgstr "Fann ikkje nokon fargeprofil i dokumentet."
 msgid "Unknown error: %1"
 msgstr "Ukjend feil: %1"
 
-#: plugins/impex/heif/HeifExport.cpp:527
+#: plugins/impex/heif/HeifExport.cpp:528
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45991,7 +45991,7 @@ msgstr ""
 "Lysstyrken til biletet vert lagra i full oppløysing, mens oppløysinga til "
 "fargenivået vert halvert i begge dimensjonane."
 
-#: plugins/impex/heif/HeifExport.cpp:528
+#: plugins/impex/heif/HeifExport.cpp:529
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46001,7 +46001,7 @@ msgstr ""
 "Lysstyrken til biletet vert lagra i full oppløysing, mens oppløysinga til "
 "fargenivået vert halvert vassrett."
 
-#: plugins/impex/heif/HeifExport.cpp:529
+#: plugins/impex/heif/HeifExport.cpp:530
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46009,21 +46009,21 @@ msgid ""
 msgstr ""
 "Både lysstyrken og fargenivået til biletet vert lagra i full oppløysing."
 
-#: plugins/impex/heif/HeifExport.cpp:543
+#: plugins/impex/heif/HeifExport.cpp:544
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:182
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec. 2100 HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:543
+#: plugins/impex/heif/HeifExport.cpp:544
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:175
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec. 2100 PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:544
+#: plugins/impex/heif/HeifExport.cpp:545
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:177
 #, kde-format
 msgctxt "@tooltip"
@@ -46036,7 +46036,7 @@ msgstr ""
 "perseptuell kvantifiserings­kurve (PQ-kurva SMPTE 2048). Tilrådd for HDR-"
 "bilete der absolutt lysstyrke er viktig."
 
-#: plugins/impex/heif/HeifExport.cpp:546
+#: plugins/impex/heif/HeifExport.cpp:547
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
 #, kde-format
 msgctxt "@tooltip"
@@ -46049,14 +46049,14 @@ msgstr ""
 "log-gamma-kurve (HGL). Tilrådd for HDR-bilete som skal visast på skjermar "
 "som ikkje nødvendigvis forstår HDR."
 
-#: plugins/impex/heif/HeifExport.cpp:552
+#: plugins/impex/heif/HeifExport.cpp:553
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:191
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Behald primærfargar, kod PQ"
 
-#: plugins/impex/heif/HeifExport.cpp:553
+#: plugins/impex/heif/HeifExport.cpp:554
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #, kde-format
 msgctxt "@tooltip"
@@ -46069,14 +46069,14 @@ msgstr ""
 "kurve (PQ-kurva SMPTE 2048). Tilrådd for bilete der absolutt lysstyrke er "
 "viktig."
 
-#: plugins/impex/heif/HeifExport.cpp:557
+#: plugins/impex/heif/HeifExport.cpp:558
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Behald primærfargar, kod HLG"
 
-#: plugins/impex/heif/HeifExport.cpp:558
+#: plugins/impex/heif/HeifExport.cpp:559
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
 #, kde-format
 msgctxt "@tooltip"
@@ -46087,14 +46087,14 @@ msgstr ""
 "Biletet vert først linearisert og så koda med ei hybrid log-gamma-kurve "
 "(HGL). Tilrådd for bilete som skal visast på skjermar ikkje forstår PQ."
 
-#: plugins/impex/heif/HeifExport.cpp:562
+#: plugins/impex/heif/HeifExport.cpp:563
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Behald primærfargar, kod SMPTE ST 428"
 
-#: plugins/impex/heif/HeifExport.cpp:563
+#: plugins/impex/heif/HeifExport.cpp:564
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
 #, kde-format
 msgctxt "@tooltip"
@@ -46107,13 +46107,13 @@ msgstr ""
 "alltid slike bilete som lineære med flyttalsverdiar. Dette valet er til for "
 "å reversera dette."
 
-#: plugins/impex/heif/HeifExport.cpp:568
+#: plugins/impex/heif/HeifExport.cpp:569
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Ingen endringar, klipp verdiar"
 
-#: plugins/impex/heif/HeifExport.cpp:569
+#: plugins/impex/heif/HeifExport.cpp:570
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -56164,24 +56164,24 @@ msgstr ""
 msgid "Fill Tool"
 msgstr "Områdefyll"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:163
+#: plugins/tools/basictools/kis_tool_gradient.cc:159
 msgctxt "(qtundo-format)"
 msgid "Gradient"
 msgstr "Fargeovergang"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:270
+#: plugins/tools/basictools/kis_tool_gradient.cc:275
 #, kde-format
 msgctxt "the gradient will be drawn with the color order reversed"
 msgid "Reverse"
 msgstr "Omvend"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:275
+#: plugins/tools/basictools/kis_tool_gradient.cc:280
 #, kde-format
 msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "Mønsterspreiing"
 
-#: plugins/tools/basictools/kis_tool_gradient.h:106
+#: plugins/tools/basictools/kis_tool_gradient.h:107
 #, kde-format
 msgid "Gradient Tool"
 msgstr "Fargeovergang"

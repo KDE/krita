@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-12 00:53+0000\n"
+"POT-Creation-Date: 2023-01-13 00:54+0000\n"
 "PO-Revision-Date: 2022-09-14 16:45+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -21086,7 +21086,7 @@ msgstr "Tietokanta"
 #: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:140
 #: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:154
 #: libs/ui/forms/wdgdisplaysettings.ui:299
-#: libs/ui/forms/wdgimageproperties.ui:414 plugins/dockers/lut/wdglut.ui:358
+#: libs/ui/forms/wdgimageproperties.ui:414 plugins/dockers/lut/wdglut.ui:364
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:374
 #, kde-format
 msgid "TextLabel"
@@ -30028,7 +30028,7 @@ msgstr "Samankaltainen valinta"
 msgid "&Open Background color selector"
 msgstr "Taustaväri"
 
-#: libs/ui/kis_control_frame.cpp:184 libs/ui/KisApplication.cpp:348
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -30036,12 +30036,12 @@ msgstr "Taustaväri"
 msgid "Patterns"
 msgstr "Kuviot"
 
-#: libs/ui/kis_control_frame.cpp:187 libs/ui/kis_control_frame.cpp:188
+#: libs/ui/kis_control_frame.cpp:188 libs/ui/kis_control_frame.cpp:189
 #, kde-format
 msgid "Custom Pattern"
 msgstr "Oma kuvio"
 
-#: libs/ui/kis_control_frame.cpp:234 libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
 #: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
@@ -35712,7 +35712,7 @@ msgstr "SVG-väriliuku"
 #. i18n: ectx: property (text), widget (QLabel, labelRepeat)
 #: libs/ui/widgets/KoFillConfigWidget.ui:255
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:91
-#: plugins/tools/basictools/kis_tool_gradient.cc:257
+#: plugins/tools/basictools/kis_tool_gradient.cc:256
 #, kde-format
 msgid "Repeat:"
 msgstr "Toista:"
@@ -40493,47 +40493,47 @@ msgstr "Musta:"
 msgid "White:"
 msgstr "Valkoinen:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:85
+#: plugins/dockers/lut/lutdocker_dock.cpp:84
 #, kde-format
 msgid "LUT Management"
 msgstr "LUT-hallinta"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:104
+#: plugins/dockers/lut/lutdocker_dock.cpp:103
 #, kde-format
 msgid "Select custom configuration file."
 msgstr "Valitse asetustiedosto"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:111
-#: plugins/dockers/lut/lutdocker_dock.cpp:657
+#: plugins/dockers/lut/lutdocker_dock.cpp:110
+#: plugins/dockers/lut/lutdocker_dock.cpp:653
 #, kde-format
 msgid "Select LUT file"
 msgstr "Valitse LUT-tiedosto"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:124
+#: plugins/dockers/lut/lutdocker_dock.cpp:123
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr ""
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:137
+#: plugins/dockers/lut/lutdocker_dock.cpp:134
 #, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
 "the pixels of your image."
 msgstr ""
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:290
+#: plugins/dockers/lut/lutdocker_dock.cpp:286
 #, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "Valotus: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:301
+#: plugins/dockers/lut/lutdocker_dock.cpp:297
 #, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "Gamma: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:393
+#: plugins/dockers/lut/lutdocker_dock.cpp:389
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -40541,22 +40541,22 @@ msgid ""
 "mode to use them"
 msgstr ""
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:483
+#: plugins/dockers/lut/lutdocker_dock.cpp:479
 #, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "Valitse OpenColorIO-asetus"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:560
+#: plugins/dockers/lut/lutdocker_dock.cpp:556
 #, kde-format
 msgid "Luminance"
 msgstr "Luminanssi"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:561
+#: plugins/dockers/lut/lutdocker_dock.cpp:557
 #, kde-format
 msgid "All Channels"
 msgstr "Kaikki kanavat"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:620
+#: plugins/dockers/lut/lutdocker_dock.cpp:616
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "Item to indicate no look transform being selected"
@@ -40644,7 +40644,7 @@ msgid "Look:"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_btnConvertCurrentColor)
-#: plugins/dockers/lut/wdglut.ui:384
+#: plugins/dockers/lut/wdglut.ui:377
 #, kde-format
 msgid ""
 "Lock current color to have the same visual representation when changing OCIO "
@@ -40655,7 +40655,7 @@ msgstr ""
 "muutettaessa"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_btmShowBWConfiguration)
-#: plugins/dockers/lut/wdglut.ui:406
+#: plugins/dockers/lut/wdglut.ui:399
 #, kde-format
 msgid "Configure black and white points of the view"
 msgstr ""
@@ -45148,7 +45148,7 @@ msgstr "Iris"
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:85
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:245
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:50
-#: plugins/tools/basictools/kis_tool_gradient.cc:242
+#: plugins/tools/basictools/kis_tool_gradient.cc:241
 #, kde-format
 msgid "Shape:"
 msgstr "Muoto:"
@@ -47063,35 +47063,35 @@ msgid "&Gradient..."
 msgstr "Liukuväri…"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:28
-#: plugins/tools/basictools/kis_tool_gradient.cc:245
+#: plugins/tools/basictools/kis_tool_gradient.cc:244
 #, kde-format
 msgctxt "the gradient will be drawn linearly"
 msgid "Linear"
 msgstr "Lineaarinen"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:29
-#: plugins/tools/basictools/kis_tool_gradient.cc:246
+#: plugins/tools/basictools/kis_tool_gradient.cc:245
 #, kde-format
 msgctxt "the gradient will be drawn bilinearly"
 msgid "Bi-Linear"
 msgstr "Bilineaarinen"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:30
-#: plugins/tools/basictools/kis_tool_gradient.cc:247
+#: plugins/tools/basictools/kis_tool_gradient.cc:246
 #, kde-format
 msgctxt "the gradient will be drawn radially"
 msgid "Radial"
 msgstr "Säteittäinen"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:31
-#: plugins/tools/basictools/kis_tool_gradient.cc:248
+#: plugins/tools/basictools/kis_tool_gradient.cc:247
 #, kde-format
 msgctxt "the gradient will be drawn in a square around a centre"
 msgid "Square"
 msgstr "Neliö"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_gradient.cc:249
+#: plugins/tools/basictools/kis_tool_gradient.cc:248
 #, fuzzy, kde-format
 #| msgctxt "Conical gradient type"
 #| msgid "Conical"
@@ -47100,21 +47100,21 @@ msgid "Conical"
 msgstr "Kartiomainen"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:33
-#: plugins/tools/basictools/kis_tool_gradient.cc:250
+#: plugins/tools/basictools/kis_tool_gradient.cc:249
 #, kde-format
 msgctxt "the gradient will be drawn as a symmetric cone"
 msgid "Conical Symmetric"
 msgstr "Symmetrinen kartio"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:34
-#: plugins/tools/basictools/kis_tool_gradient.cc:251
+#: plugins/tools/basictools/kis_tool_gradient.cc:250
 #, kde-format
 msgctxt "the gradient will be drawn as a spiral"
 msgid "Spiral"
 msgstr "Spiraali"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:35
-#: plugins/tools/basictools/kis_tool_gradient.cc:252
+#: plugins/tools/basictools/kis_tool_gradient.cc:251
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Reverse paths"
@@ -47123,28 +47123,28 @@ msgid "Reverse Spiral"
 msgstr "Käännä polut"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:36
-#: plugins/tools/basictools/kis_tool_gradient.cc:253
+#: plugins/tools/basictools/kis_tool_gradient.cc:252
 #, fuzzy, kde-format
 msgctxt "the gradient will be drawn in a selection outline"
 msgid "Shaped"
 msgstr "Muoto"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:39
-#: plugins/tools/basictools/kis_tool_gradient.cc:260
+#: plugins/tools/basictools/kis_tool_gradient.cc:259
 #, kde-format
 msgctxt "The gradient will not repeat"
 msgid "None"
 msgstr "Ei mitään"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_gradient.cc:261
+#: plugins/tools/basictools/kis_tool_gradient.cc:260
 #, kde-format
 msgctxt "The gradient will repeat forwards"
 msgid "Forwards"
 msgstr "Eteenpäin"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:41
-#: plugins/tools/basictools/kis_tool_gradient.cc:262
+#: plugins/tools/basictools/kis_tool_gradient.cc:261
 #, kde-format
 msgctxt "The gradient will repeat alternatingly"
 msgid "Alternating"
@@ -47196,7 +47196,7 @@ msgstr "Suhteellinen"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:101
-#: plugins/tools/basictools/kis_tool_gradient.cc:267
+#: plugins/tools/basictools/kis_tool_gradient.cc:266
 #, kde-format
 msgid "Anti-alias threshold:"
 msgstr "Antialiasointikynnys:"
@@ -58522,18 +58522,18 @@ msgstr ""
 msgid "Fill Tool"
 msgstr "Täyttötyökalu"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:159
+#: plugins/tools/basictools/kis_tool_gradient.cc:158
 msgctxt "(qtundo-format)"
 msgid "Gradient"
 msgstr "Liukuväri"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:275
+#: plugins/tools/basictools/kis_tool_gradient.cc:274
 #, kde-format
 msgctxt "the gradient will be drawn with the color order reversed"
 msgid "Reverse"
 msgstr "Käänteinen"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:280
+#: plugins/tools/basictools/kis_tool_gradient.cc:279
 #, fuzzy, kde-format
 #| msgid "Other"
 msgctxt "the gradient will be dithered"

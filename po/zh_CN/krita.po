@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-12 00:53+0000\n"
-"PO-Revision-Date: 2023-01-02 07:11\n"
+"POT-Creation-Date: 2023-01-13 00:54+0000\n"
+"PO-Revision-Date: 2023-01-12 10:29\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -8622,11 +8622,10 @@ msgstr "橡皮擦模式"
 #. i18n: context: toolTip @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:506 krita/krita.action:508 krita/krita.action:509
-#, fuzzy, kde-format
-#| msgid "Toggle Eraser"
+#, kde-format
 msgctxt "action"
 msgid "Toggle eraser preset"
-msgstr "打开/关闭橡皮擦模式"
+msgstr "橡皮擦预设开关"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -19707,7 +19706,7 @@ msgstr "数据库版本"
 #: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:140
 #: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:154
 #: libs/ui/forms/wdgdisplaysettings.ui:299
-#: libs/ui/forms/wdgimageproperties.ui:414 plugins/dockers/lut/wdglut.ui:358
+#: libs/ui/forms/wdgimageproperties.ui:414 plugins/dockers/lut/wdglut.ui:364
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:374
 #, kde-format
 msgid "TextLabel"
@@ -22108,8 +22107,7 @@ msgid "Save without waiting"
 msgstr "直接保存不要等待"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Cancel Operation and Save"
+#, kde-format
 msgid "Cancel operation and save"
 msgstr "取消操作并保存"
 
@@ -23632,9 +23630,7 @@ msgstr "作者"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Translators"
+#, kde-format
 msgid "Translators"
 msgstr "翻译人员"
 
@@ -24290,10 +24286,9 @@ msgstr "不透明度："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:640
-#, fuzzy, kde-format
-#| msgid "Selection Overlay:"
+#, kde-format
 msgid "Selection Outline Opacity:"
-msgstr "选区蒙版颜色："
+msgstr "选区轮廓不透明度："
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -28132,7 +28127,7 @@ msgstr "打开/关闭隐藏面板模式"
 #: libs/ui/input/KisTouchGestureAction.cpp:24
 #, kde-format
 msgid "Toggle Eraser"
-msgstr "打开/关闭橡皮擦模式"
+msgstr "橡皮擦模式开关"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
 #, kde-format
@@ -28290,7 +28285,7 @@ msgstr "打开前景色拾色器(&O)"
 msgid "&Open Background color selector"
 msgstr "打开背景色拾色器(&O)"
 
-#: libs/ui/kis_control_frame.cpp:184 libs/ui/KisApplication.cpp:348
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -28298,12 +28293,12 @@ msgstr "打开背景色拾色器(&O)"
 msgid "Patterns"
 msgstr "图案"
 
-#: libs/ui/kis_control_frame.cpp:187 libs/ui/kis_control_frame.cpp:188
+#: libs/ui/kis_control_frame.cpp:188 libs/ui/kis_control_frame.cpp:189
 #, kde-format
 msgid "Custom Pattern"
 msgstr "自定义图案"
 
-#: libs/ui/kis_control_frame.cpp:234 libs/ui/KisApplication.cpp:333
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
 #: libs/ui/KisApplication.cpp:334
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
@@ -29646,7 +29641,7 @@ msgstr "无法打开文件进行写入。原因如下：%1"
 #: libs/ui/KisImportExportErrorCode.cpp:139
 #, kde-format
 msgid "Unexpected error."
-msgstr ""
+msgstr "意外错误。"
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format
@@ -33726,7 +33721,7 @@ msgstr "曲线网格渐变"
 #. i18n: ectx: property (text), widget (QLabel, labelRepeat)
 #: libs/ui/widgets/KoFillConfigWidget.ui:255
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:91
-#: plugins/tools/basictools/kis_tool_gradient.cc:257
+#: plugins/tools/basictools/kis_tool_gradient.cc:256
 #, kde-format
 msgid "Repeat:"
 msgstr "重复："
@@ -38239,47 +38234,47 @@ msgstr "黑点："
 msgid "White:"
 msgstr "白点："
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:85
+#: plugins/dockers/lut/lutdocker_dock.cpp:84
 #, kde-format
 msgid "LUT Management"
 msgstr "LUT 色彩管理"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:104
+#: plugins/dockers/lut/lutdocker_dock.cpp:103
 #, kde-format
 msgid "Select custom configuration file."
 msgstr "选择自定义配置文件。"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:111
-#: plugins/dockers/lut/lutdocker_dock.cpp:657
+#: plugins/dockers/lut/lutdocker_dock.cpp:110
+#: plugins/dockers/lut/lutdocker_dock.cpp:653
 #, kde-format
 msgid "Select LUT file"
 msgstr "选择 LUT 文件"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:124
+#: plugins/dockers/lut/lutdocker_dock.cpp:123
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr "为 HDR 图像选择曝光值 (档位)。"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:137
+#: plugins/dockers/lut/lutdocker_dock.cpp:134
 #, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
 "the pixels of your image."
 msgstr "选择用于显示的伽玛值校正量。这不会影响图像本身的像素属性。"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:290
+#: plugins/dockers/lut/lutdocker_dock.cpp:286
 #, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "曝光：%1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:301
+#: plugins/dockers/lut/lutdocker_dock.cpp:297
 #, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "伽玛值：%1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:393
+#: plugins/dockers/lut/lutdocker_dock.cpp:389
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -38287,22 +38282,22 @@ msgid ""
 "mode to use them"
 msgstr "曝光和伽玛值校正在内置模式中禁用。切换到 OCIO 模式以启用"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:483
+#: plugins/dockers/lut/lutdocker_dock.cpp:479
 #, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "选择 OpenColorIO 配置"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:560
+#: plugins/dockers/lut/lutdocker_dock.cpp:556
 #, kde-format
 msgid "Luminance"
 msgstr "亮度"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:561
+#: plugins/dockers/lut/lutdocker_dock.cpp:557
 #, kde-format
 msgid "All Channels"
 msgstr "全部通道"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:620
+#: plugins/dockers/lut/lutdocker_dock.cpp:616
 #, kde-format
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"
@@ -38389,7 +38384,7 @@ msgid "Look:"
 msgstr "观察："
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_btnConvertCurrentColor)
-#: plugins/dockers/lut/wdglut.ui:384
+#: plugins/dockers/lut/wdglut.ui:377
 #, kde-format
 msgid ""
 "Lock current color to have the same visual representation when changing OCIO "
@@ -38397,7 +38392,7 @@ msgid ""
 msgstr "锁定当前色彩，让 OCIO设置变化时的视觉效果保持一致"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_btmShowBWConfiguration)
-#: plugins/dockers/lut/wdglut.ui:406
+#: plugins/dockers/lut/wdglut.ui:399
 #, kde-format
 msgid "Configure black and white points of the view"
 msgstr "更改视图所用的黑点及白点"
@@ -42592,7 +42587,7 @@ msgstr "光圈"
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:85
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:245
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:50
-#: plugins/tools/basictools/kis_tool_gradient.cc:242
+#: plugins/tools/basictools/kis_tool_gradient.cc:241
 #, kde-format
 msgid "Shape:"
 msgstr "形状："
@@ -44442,84 +44437,84 @@ msgid "&Gradient..."
 msgstr "渐变(&G)..."
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:28
-#: plugins/tools/basictools/kis_tool_gradient.cc:245
+#: plugins/tools/basictools/kis_tool_gradient.cc:244
 #, kde-format
 msgctxt "the gradient will be drawn linearly"
 msgid "Linear"
 msgstr "线性渐变"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:29
-#: plugins/tools/basictools/kis_tool_gradient.cc:246
+#: plugins/tools/basictools/kis_tool_gradient.cc:245
 #, kde-format
 msgctxt "the gradient will be drawn bilinearly"
 msgid "Bi-Linear"
 msgstr "线性渐变 - 对称"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:30
-#: plugins/tools/basictools/kis_tool_gradient.cc:247
+#: plugins/tools/basictools/kis_tool_gradient.cc:246
 #, kde-format
 msgctxt "the gradient will be drawn radially"
 msgid "Radial"
 msgstr "径向渐变"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:31
-#: plugins/tools/basictools/kis_tool_gradient.cc:248
+#: plugins/tools/basictools/kis_tool_gradient.cc:247
 #, kde-format
 msgctxt "the gradient will be drawn in a square around a centre"
 msgid "Square"
 msgstr "方形渐变"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_gradient.cc:249
+#: plugins/tools/basictools/kis_tool_gradient.cc:248
 #, kde-format
 msgctxt "the gradient will be drawn as an asymmetric cone"
 msgid "Conical"
 msgstr "角渐变"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:33
-#: plugins/tools/basictools/kis_tool_gradient.cc:250
+#: plugins/tools/basictools/kis_tool_gradient.cc:249
 #, kde-format
 msgctxt "the gradient will be drawn as a symmetric cone"
 msgid "Conical Symmetric"
 msgstr "角渐变 - 对称"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:34
-#: plugins/tools/basictools/kis_tool_gradient.cc:251
+#: plugins/tools/basictools/kis_tool_gradient.cc:250
 #, kde-format
 msgctxt "the gradient will be drawn as a spiral"
 msgid "Spiral"
 msgstr "螺旋渐变"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:35
-#: plugins/tools/basictools/kis_tool_gradient.cc:252
+#: plugins/tools/basictools/kis_tool_gradient.cc:251
 #, kde-format
 msgctxt "the gradient will be drawn as a reverse spiral"
 msgid "Reverse Spiral"
 msgstr "反螺旋渐变"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:36
-#: plugins/tools/basictools/kis_tool_gradient.cc:253
+#: plugins/tools/basictools/kis_tool_gradient.cc:252
 #, kde-format
 msgctxt "the gradient will be drawn in a selection outline"
 msgid "Shaped"
 msgstr "按轮廓渐变"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:39
-#: plugins/tools/basictools/kis_tool_gradient.cc:260
+#: plugins/tools/basictools/kis_tool_gradient.cc:259
 #, kde-format
 msgctxt "The gradient will not repeat"
 msgid "None"
 msgstr "无"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_gradient.cc:261
+#: plugins/tools/basictools/kis_tool_gradient.cc:260
 #, kde-format
 msgctxt "The gradient will repeat forwards"
 msgid "Forwards"
 msgstr "正向"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:41
-#: plugins/tools/basictools/kis_tool_gradient.cc:262
+#: plugins/tools/basictools/kis_tool_gradient.cc:261
 #, kde-format
 msgctxt "The gradient will repeat alternatingly"
 msgid "Alternating"
@@ -44569,7 +44564,7 @@ msgstr "相对于渐变起点"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:101
-#: plugins/tools/basictools/kis_tool_gradient.cc:267
+#: plugins/tools/basictools/kis_tool_gradient.cc:266
 #, kde-format
 msgid "Anti-alias threshold:"
 msgstr "抗锯齿阈值："
@@ -55329,18 +55324,18 @@ msgstr "拖动连续填充"
 msgid "Fill Tool"
 msgstr "填充工具/油漆桶"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:159
+#: plugins/tools/basictools/kis_tool_gradient.cc:158
 msgctxt "(qtundo-format)"
 msgid "Gradient"
 msgstr "渐变"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:275
+#: plugins/tools/basictools/kis_tool_gradient.cc:274
 #, kde-format
 msgctxt "the gradient will be drawn with the color order reversed"
 msgid "Reverse"
 msgstr "反向"
 
-#: plugins/tools/basictools/kis_tool_gradient.cc:280
+#: plugins/tools/basictools/kis_tool_gradient.cc:279
 #, kde-format
 msgctxt "the gradient will be dithered"
 msgid "Dither"
@@ -58850,13 +58845,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgctxt "Heading for the list of Krita authors/developers"
-#~ msgid "Authors"
-#~ msgstr "开发人员"
-
-#~ msgid "Unexpected error. Please contact developers."
-#~ msgstr "意外错误。请联系开发人员。"
-
-#~ msgid "&Description:"
-#~ msgstr "内容描述(&D)："

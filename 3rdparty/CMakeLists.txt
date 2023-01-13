@@ -427,6 +427,11 @@ else()
     set(CROSSCOMPILING)
 endif()
 
+if (MSVC)
+    set(_c_ld "c_ld = ['${CMAKE_LINKER}'] + cross_link_args")
+    set(_cpp_ld "cpp_ld = ['${CMAKE_LINKER}'] + cross_link_args")
+endif()
+
 find_program(MESON_BINARY_PATH meson ${CROSSCOMPILING})
 find_program(NINJA_BINARY_PATH ninja ${CROSSCOMPILING})
 find_package(PkgConfig QUIET ${CROSSCOMPILING})

@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-13 00:54+0000\n"
+"POT-Creation-Date: 2023-01-14 00:54+0000\n"
 "PO-Revision-Date: 2022-10-30 06:06+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -38843,23 +38843,23 @@ msgstr "Zuria:"
 msgid "LUT Management"
 msgstr "LUTen kudeaketa"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:103
+#: plugins/dockers/lut/lutdocker_dock.cpp:102
 #, kde-format
 msgid "Select custom configuration file."
 msgstr "Hautatu konfigurazio-fitxategi pertsonalizatua"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:110
-#: plugins/dockers/lut/lutdocker_dock.cpp:653
+#: plugins/dockers/lut/lutdocker_dock.cpp:109
+#: plugins/dockers/lut/lutdocker_dock.cpp:615
 #, kde-format
 msgid "Select LUT file"
 msgstr "Hautatu LUT fitxategia"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:123
+#: plugins/dockers/lut/lutdocker_dock.cpp:122
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr "Hautatu HDR irudien esposizioa (geldilekuak)."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:134
+#: plugins/dockers/lut/lutdocker_dock.cpp:132
 #, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
@@ -38868,19 +38868,19 @@ msgstr ""
 "Hautatu zenbat gamma-aldaketa egin behar diren bistaratzeko. Horrek ez die "
 "irudiaren pixelei eragiten. "
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:286
+#: plugins/dockers/lut/lutdocker_dock.cpp:262
 #, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "Esposizioa: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:297
+#: plugins/dockers/lut/lutdocker_dock.cpp:281
 #, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "Gamma: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:389
+#: plugins/dockers/lut/lutdocker_dock.cpp:351
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -38890,22 +38890,22 @@ msgstr ""
 "Esposizioa eta gamma zuzenketak ezgaituta daude barneko moduan. Aldatu OCIO "
 "modura haiek erabiltzeko"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:479
+#: plugins/dockers/lut/lutdocker_dock.cpp:441
 #, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "Hautatu «OpenColorIO»ren konfigurazioa"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:556
+#: plugins/dockers/lut/lutdocker_dock.cpp:518
 #, kde-format
 msgid "Luminance"
 msgstr "Luminantzia"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:557
+#: plugins/dockers/lut/lutdocker_dock.cpp:519
 #, kde-format
 msgid "All Channels"
 msgstr "Kanal guztiak"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:616
+#: plugins/dockers/lut/lutdocker_dock.cpp:578
 #, kde-format
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"

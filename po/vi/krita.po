@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-13 00:54+0000\n"
+"POT-Creation-Date: 2023-01-14 00:54+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -38249,42 +38249,42 @@ msgstr "Cân bằng trắng:"
 msgid "LUT Management"
 msgstr "Quản lí màu"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:103
+#: plugins/dockers/lut/lutdocker_dock.cpp:102
 #, fuzzy, kde-format
 msgid "Select custom configuration file."
 msgstr "Không có tuỳ chọn nào."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:110
-#: plugins/dockers/lut/lutdocker_dock.cpp:653
+#: plugins/dockers/lut/lutdocker_dock.cpp:109
+#: plugins/dockers/lut/lutdocker_dock.cpp:615
 #, fuzzy, kde-format
 msgid "Select LUT file"
 msgstr "Chọn Tất cả"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:123
+#: plugins/dockers/lut/lutdocker_dock.cpp:122
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr ""
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:134
+#: plugins/dockers/lut/lutdocker_dock.cpp:132
 #, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
 "the pixels of your image."
 msgstr ""
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:286
+#: plugins/dockers/lut/lutdocker_dock.cpp:262
 #, fuzzy, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "Lộ sáng:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:297
+#: plugins/dockers/lut/lutdocker_dock.cpp:281
 #, fuzzy, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "Chế độ bằng tay"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:389
+#: plugins/dockers/lut/lutdocker_dock.cpp:351
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -38292,22 +38292,22 @@ msgid ""
 "mode to use them"
 msgstr ""
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:479
+#: plugins/dockers/lut/lutdocker_dock.cpp:441
 #, fuzzy, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "Không có tuỳ chọn nào."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:556
+#: plugins/dockers/lut/lutdocker_dock.cpp:518
 #, fuzzy, kde-format
 msgid "Luminance"
 msgstr "Khoảng cách:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:557
+#: plugins/dockers/lut/lutdocker_dock.cpp:519
 #, fuzzy, kde-format
 msgid "All Channels"
 msgstr "Kênh"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:616
+#: plugins/dockers/lut/lutdocker_dock.cpp:578
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "Item to indicate no look transform being selected"

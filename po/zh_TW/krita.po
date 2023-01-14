@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-13 00:54+0000\n"
+"POT-Creation-Date: 2023-01-14 00:54+0000\n"
 "PO-Revision-Date: 2022-11-24 09:58+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -38252,42 +38252,42 @@ msgstr "白點："
 msgid "LUT Management"
 msgstr "LUT 色彩管理"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:103
+#: plugins/dockers/lut/lutdocker_dock.cpp:102
 #, kde-format
 msgid "Select custom configuration file."
 msgstr "選擇自訂設定檔。"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:110
-#: plugins/dockers/lut/lutdocker_dock.cpp:653
+#: plugins/dockers/lut/lutdocker_dock.cpp:109
+#: plugins/dockers/lut/lutdocker_dock.cpp:615
 #, kde-format
 msgid "Select LUT file"
 msgstr "選擇 LUT 檔案"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:123
+#: plugins/dockers/lut/lutdocker_dock.cpp:122
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr "為 HDR 影像選擇曝光值 (檔位)。"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:134
+#: plugins/dockers/lut/lutdocker_dock.cpp:132
 #, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
 "the pixels of your image."
 msgstr "選擇用於顯示的 Gamma 校正量。這不會影響影像本身的像素屬性。"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:286
+#: plugins/dockers/lut/lutdocker_dock.cpp:262
 #, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "曝光：%1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:297
+#: plugins/dockers/lut/lutdocker_dock.cpp:281
 #, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "Gamma：%1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:389
+#: plugins/dockers/lut/lutdocker_dock.cpp:351
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -38295,22 +38295,22 @@ msgid ""
 "mode to use them"
 msgstr "曝光和 Gamma 校正在內置模式中無法使用。切換到 OCIO 模式以啟用"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:479
+#: plugins/dockers/lut/lutdocker_dock.cpp:441
 #, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "選擇 OpenColorIO 設定"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:556
+#: plugins/dockers/lut/lutdocker_dock.cpp:518
 #, kde-format
 msgid "Luminance"
 msgstr "光度"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:557
+#: plugins/dockers/lut/lutdocker_dock.cpp:519
 #, kde-format
 msgid "All Channels"
 msgstr "全部通道"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:616
+#: plugins/dockers/lut/lutdocker_dock.cpp:578
 #, kde-format
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"

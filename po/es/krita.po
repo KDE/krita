@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-13 00:54+0000\n"
+"POT-Creation-Date: 2023-01-14 00:54+0000\n"
 "PO-Revision-Date: 2023-01-08 12:22+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -38811,23 +38811,23 @@ msgstr "Blanco:"
 msgid "LUT Management"
 msgstr "Gestión de tabla de búsqueda (LUT)"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:103
+#: plugins/dockers/lut/lutdocker_dock.cpp:102
 #, kde-format
 msgid "Select custom configuration file."
 msgstr "Seleccionar archivo de configuración personalizado."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:110
-#: plugins/dockers/lut/lutdocker_dock.cpp:653
+#: plugins/dockers/lut/lutdocker_dock.cpp:109
+#: plugins/dockers/lut/lutdocker_dock.cpp:615
 #, kde-format
 msgid "Select LUT file"
 msgstr "Seleccionar archivo de tabla de búsqueda (LUT)"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:123
+#: plugins/dockers/lut/lutdocker_dock.cpp:122
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr "Seleccionar la exposición (paradas) para las imágenes HDR"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:134
+#: plugins/dockers/lut/lutdocker_dock.cpp:132
 #, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
@@ -38836,19 +38836,19 @@ msgstr ""
 "Seleccione la cantidad de corección gamma para la pantalla. Esto no afecta a "
 "los píxeles de la imagen."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:286
+#: plugins/dockers/lut/lutdocker_dock.cpp:262
 #, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "Exposición: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:297
+#: plugins/dockers/lut/lutdocker_dock.cpp:281
 #, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "Gamma: %1"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:389
+#: plugins/dockers/lut/lutdocker_dock.cpp:351
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -38858,22 +38858,22 @@ msgstr ""
 "Las correcciones de exposición y de gamma están desactivadas en el modo "
 "interno. Cambie al modo OCIO para usarlas."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:479
+#: plugins/dockers/lut/lutdocker_dock.cpp:441
 #, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "Seleccionar la configuración de OpenColorIO"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:556
+#: plugins/dockers/lut/lutdocker_dock.cpp:518
 #, kde-format
 msgid "Luminance"
 msgstr "Luminancia"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:557
+#: plugins/dockers/lut/lutdocker_dock.cpp:519
 #, kde-format
 msgid "All Channels"
 msgstr "Todos los canales"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:616
+#: plugins/dockers/lut/lutdocker_dock.cpp:578
 #, kde-format
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"

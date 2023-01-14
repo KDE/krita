@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-13 00:54+0000\n"
+"POT-Creation-Date: 2023-01-14 00:54+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -39291,23 +39291,23 @@ msgstr "Ισορροπία λευκού:"
 msgid "LUT Management"
 msgstr "Διαχείριση LUT"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:103
+#: plugins/dockers/lut/lutdocker_dock.cpp:102
 #, kde-format
 msgid "Select custom configuration file."
 msgstr "Επιλέξτε αρχείο προσαρμοσμένης διαμόρφωσης."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:110
-#: plugins/dockers/lut/lutdocker_dock.cpp:653
+#: plugins/dockers/lut/lutdocker_dock.cpp:109
+#: plugins/dockers/lut/lutdocker_dock.cpp:615
 #, kde-format
 msgid "Select LUT file"
 msgstr "Επιλογή LUT αρχείου"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:123
+#: plugins/dockers/lut/lutdocker_dock.cpp:122
 #, kde-format
 msgid "Select the exposure (stops) for HDR images."
 msgstr "Επιλέξτε την έκθεση (διακοπές) για HDR εικόνες."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:134
+#: plugins/dockers/lut/lutdocker_dock.cpp:132
 #, kde-format
 msgid ""
 "Select the amount of gamma modification for display. This does not affect "
@@ -39316,19 +39316,19 @@ msgstr ""
 "Επιλέξτε το ποσό της γάμμα τροποποίησης για την οθόνη. Αυτό δεν επηρεάζει τα "
 "εικονοστοιχεία της εικόνας σας."
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:286
+#: plugins/dockers/lut/lutdocker_dock.cpp:262
 #, fuzzy, kde-format
 msgctxt "floating message about exposure"
 msgid "Exposure: %1"
 msgstr "Έκθεση:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:297
+#: plugins/dockers/lut/lutdocker_dock.cpp:281
 #, fuzzy, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
 msgstr "Γάμμα:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:389
+#: plugins/dockers/lut/lutdocker_dock.cpp:351
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -39336,22 +39336,22 @@ msgid ""
 "mode to use them"
 msgstr ""
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:479
+#: plugins/dockers/lut/lutdocker_dock.cpp:441
 #, fuzzy, kde-format
 msgid "Select OpenColorIO Configuration"
 msgstr "Διαδρομή διαμόρφωσης OpenColorIO:"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:556
+#: plugins/dockers/lut/lutdocker_dock.cpp:518
 #, kde-format
 msgid "Luminance"
 msgstr "Ακτινοβολία"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:557
+#: plugins/dockers/lut/lutdocker_dock.cpp:519
 #, kde-format
 msgid "All Channels"
 msgstr "Όλα τα κανάλια"
 
-#: plugins/dockers/lut/lutdocker_dock.cpp:616
+#: plugins/dockers/lut/lutdocker_dock.cpp:578
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "Item to indicate no look transform being selected"

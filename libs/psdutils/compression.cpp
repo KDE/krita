@@ -93,7 +93,8 @@ QByteArray decompress(const QByteArray &input, int unpacked_len)
     auto *dst = output.begin();
 
     while (src < input.end() && dst < output.end()) {
-        const char n = *src; // NOLINT(readability-identifier-length)
+        // NOLINTNEXTLINE(*-reinterpret-cast,readability-identifier-length)
+        const int8_t n = *reinterpret_cast<const int8_t *>(src);
         src += 1;
 
         if (n >= 0) { // copy next n+1 chars
@@ -119,7 +120,7 @@ QByteArray decompress(const QByteArray &input, int unpacked_len)
                 errFile << "Output buffer exhausted in copy of" << bytes << "chars, left" << (output.end() - dst);
                 return {};
             }
-            const char byte = *src;
+            const auto byte = *src;
             std::fill_n(dst, bytes, byte);
             src += 1;
             dst += bytes;

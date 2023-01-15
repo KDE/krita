@@ -647,6 +647,10 @@ if(MINGW)
 endif(MINGW)
 
 # enable exceptions globally
+# WARNING: in MSVC this will NOT catch exceptions thrown through C code
+# see: 
+# - https://learn.microsoft.com/en-us/cpp/build/reference/eh-exception-handling-model?view=msvc-170#arguments
+# - https://invent.kde.org/frameworks/extra-cmake-modules/-/blob/v5.101.0/kde-modules/KDECompilerSettings.cmake#L502-526
 kde_enable_exceptions()
 
 set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_SOURCE_DIR}/sdk/tests/data/)

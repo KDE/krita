@@ -35,12 +35,21 @@ struct KisScreenColorSampler::Private
     KoColor currentColor = KoColor();
     KoColor beforeScreenColorSampling = KoColor();
 
+    bool performRealColorSamplingOfCanvas {true};
+
     KisScreenColorSamplingEventFilter *colorSamplingEventFilter = 0;
+
+    QWidget *inputGrabberWidget {nullptr};
 
 #ifdef Q_OS_WIN32
     QTimer *updateTimer = 0;
     QWindow dummyTransparentWindow;
 #endif
+
+    void updateInputGrabberWidget()
+    {
+        inputGrabberWidget = qApp->activeWindow();
+    }
 };
 
 KisScreenColorSampler::KisScreenColorSampler(bool showInfoLabel, QWidget *parent) : KisScreenColorSamplerBase(parent), m_d(new Private)
@@ -55,6 +64,8 @@ KisScreenColorSampler::KisScreenColorSampler(bool showInfoLabel, QWidget *parent
         m_d->lblScreenColorInfo = new QLabel(QLatin1String("\n"));
         layout->addWidget(m_d->lblScreenColorInfo);
     }
+
+    layout->setContentsMargins(0, 0, 0, 0);
 
     connect(m_d->screenColorSamplerButton, SIGNAL(clicked()), SLOT(sampleScreenColor()));
 
@@ -82,14 +93,31 @@ KoColor KisScreenColorSampler::currentColor()
     return m_d->currentColor;
 }
 
+bool KisScreenColorSampler::performRealColorSamplingOfCanvas() const
+{
+    return m_d->performRealColorSamplingOfCanvas;
+}
+
+void KisScreenColorSampler::setPerformRealColorSamplingOfCanvas(bool enable)
+{
+    m_d->performRealColorSamplingOfCanvas = enable;
+}
+
 void KisScreenColorSampler::sampleScreenColor()
 {
-    if (!m_d->colorSamplingEventFilter)
-        m_d->colorSamplingEventFilter = new KisScreenColorSamplingEventFilter(this);
-    this->installEventFilter(m_d->colorSamplingEventFilter);
-    // If user pushes Escape, the last color before sampling will be restored.
+    m_d->updateInputGrabberWidget();
+    if (m_d->inputGrabberWidget == nullptr) {
+        Q_EMIT sigNewColorSampled(currentColor());
+        return;
+    }
+
+    if (!m_d->colorSamplingEventFilter) {
+        m_d->colorSamplingEventFilter = new KisScreenColorSamplingEventFilter(this, this);
+    }
+    m_d->inputGrabberWidget->installEventFilter(m_d->colorSamplingEventFilter);
+     // If user pushes Escape, the last color before sampling will be restored.
     m_d->beforeScreenColorSampling = currentColor();
-    grabMouse(Qt::CrossCursor);
+    m_d->inputGrabberWidget->grabMouse(Qt::CrossCursor);
 
 #ifdef Q_OS_WIN32 // excludes WinCE and WinRT
     // On Windows mouse tracking doesn't work over other processes's windows
@@ -100,11 +128,11 @@ void KisScreenColorSampler::sampleScreenColor()
     // and loose focus.
     m_d->dummyTransparentWindow.show();
 #endif
-    grabKeyboard();
-    /* With setMouseTracking(true) the desired color can be more precisely sampled,
-     * and continuously pushing the mouse button is not necessary.
-     */
-    setMouseTracking(true);
+    m_d->inputGrabberWidget->grabKeyboard();
+     /* With setMouseTracking(true) the desired color can be more precisely sampled,
+      * and continuously pushing the mouse button is not necessary.
+      */
+    m_d->inputGrabberWidget->setMouseTracking(true);
 
     m_d->screenColorSamplerButton->setDisabled(true);
 
@@ -120,38 +148,38 @@ void KisScreenColorSampler::setCurrentColor(KoColor c)
 
 KoColor KisScreenColorSampler::grabScreenColor(const QPoint &p)
 {
-    // First check whether we're clicking on a Krita window for some real color sampling
-    Q_FOREACH(KisView *view, KisPart::instance()->views()) {
-        const KisCanvas2 *canvas = view->canvasBase();
-        const QWidget *canvasWidget = canvas->canvasWidget();
-        QPoint widgetPoint = canvasWidget->mapFromGlobal(p);
+     // First check whether we're clicking on a Krita window for some real color sampling
+    if (m_d->performRealColorSamplingOfCanvas) {
+        Q_FOREACH(KisView *view, KisPart::instance()->views()) {
+            const KisCanvas2 *canvas = view->canvasBase();
+            const QWidget *canvasWidget = canvas->canvasWidget();
+            QPoint widgetPoint = canvasWidget->mapFromGlobal(p);
 
-        if (canvasWidget->visibleRegion().contains(widgetPoint)) {
-            KisImageWSP image = view->image();
+            if (canvasWidget->visibleRegion().contains(widgetPoint)) {
+                KisImageWSP image = view->image();
 
-            if (image) {
-                QPointF imagePoint = canvas->coordinatesConverter()->widgetToImage(widgetPoint);
-                // sample from reference images first
-                KisSharedPtr<KisReferenceImagesLayer> referenceImageLayer = view->document()->referenceImagesLayer();
+                if (image) {
+                    QPointF imagePoint = canvas->coordinatesConverter()->widgetToImage(widgetPoint);
+                    // sample from reference images first
+                    KisSharedPtr<KisReferenceImagesLayer> referenceImageLayer = view->document()->referenceImagesLayer();
 
-                if (referenceImageLayer && canvas->referenceImagesDecoration()->visible()) {
-                    QColor color = referenceImageLayer->getPixel(imagePoint);
-                    if (color.isValid()) {
-                        return KoColor(color, image->colorSpace());
+                    if (referenceImageLayer && canvas->referenceImagesDecoration()->visible()) {
+                        QColor color = referenceImageLayer->getPixel(imagePoint);
+                        if (color.isValid()) {
+                            return KoColor(color, image->colorSpace());
+                        }
+                     }
+                    if (image->wrapAroundModePermitted()) {
+                        imagePoint = KisWrappedRect::ptToWrappedPt(imagePoint.toPoint(), image->bounds(), image->wrapAroundModeAxis());
                     }
-                }
+                    KoColor sampledColor = KoColor();
+                    image->projection()->pixel(imagePoint.x(), imagePoint.y(), &sampledColor);
+                    return sampledColor;
+                 }
+             }
+         }
+     }
 
-                if (image->wrapAroundModePermitted()) {
-                    imagePoint = KisWrappedRect::ptToWrappedPt(imagePoint.toPoint(), image->bounds(), image->wrapAroundModeAxis());
-                }
-                KoColor sampledColor = KoColor();
-                image->projection()->pixel(imagePoint.x(), imagePoint.y(), &sampledColor);
-                return sampledColor;
-            }
-        }
-    }
-
-    // And otherwise, we'll check the desktop
     const QDesktopWidget *desktop = QApplication::desktop();
     const QPixmap pixmap = QGuiApplication::screens().at(desktop->screenNumber())->grabWindow(desktop->winId(),
                                                                                               p.x(), p.y(), 1, 1);
@@ -194,8 +222,10 @@ bool KisScreenColorSampler::handleColorSamplingKeyPress(QKeyEvent *e)
     if (e->matches(QKeySequence::Cancel)) {
         releaseColorSampling();
         setCurrentColor(m_d->beforeScreenColorSampling);
+        Q_EMIT sigNewColorSampled(currentColor());
     } else if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {
         setCurrentColor(grabScreenColor(QCursor::pos()));
+        Q_EMIT sigNewColorSampled(currentColor());
         releaseColorSampling();
     }
     e->accept();
@@ -204,15 +234,14 @@ bool KisScreenColorSampler::handleColorSamplingKeyPress(QKeyEvent *e)
 
 void KisScreenColorSampler::releaseColorSampling()
 {
-
-    removeEventFilter(m_d->colorSamplingEventFilter);
-    releaseMouse();
+    m_d->inputGrabberWidget->removeEventFilter(m_d->colorSamplingEventFilter);
+    m_d->inputGrabberWidget->releaseMouse();
 #ifdef Q_OS_WIN32
     m_d->updateTimer->stop();
     m_d->dummyTransparentWindow.setVisible(false);
 #endif
-    releaseKeyboard();
-    setMouseTracking(false);
+    m_d->inputGrabberWidget->releaseKeyboard();
+    m_d->inputGrabberWidget->setMouseTracking(false);
 
     if (m_d->lblScreenColorInfo) {
         m_d->lblScreenColorInfo->setText(QLatin1String("\n"));
@@ -248,6 +277,7 @@ void KisScreenColorSampler::continueUpdateColorSampling(const QPoint &globalPos)
     // QTBUG-39792, do not change standard, custom color selectors while moving as
     // otherwise it is not possible to pre-select a custom cell for assignment.
     setCurrentColor(color);
+    Q_EMIT sigNewColorHovered(currentColor());
     updateColorLabelText(globalPos);
 }
 

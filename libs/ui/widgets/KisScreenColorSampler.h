@@ -36,13 +36,18 @@ public:
     /// reloads icon(s) when theme is updated
     void updateIcons() override;
 
+    bool performRealColorSamplingOfCanvas() const;
+
     static KisScreenColorSampler *createScreenColorSampler(QWidget *parent = 0) {return new KisScreenColorSampler(parent);}
 
 Q_SIGNALS:
     void sigNewColorSampled(KoColor c);
+    void sigNewColorHovered(KoColor c);
 
 public Q_SLOTS:
     void sampleScreenColor();
+    void setPerformRealColorSamplingOfCanvas(bool enable);
+    void setCurrentColor(KoColor c);
 
 private Q_SLOTS:
     void updateColorSampling();
@@ -52,7 +57,6 @@ private:
     struct Private; //The private struct
     const QScopedPointer<Private> m_d; //the private pointer
 
-    void setCurrentColor(KoColor c);
     KoColor grabScreenColor(const QPoint &p);
     void updateColorLabelText(const QPoint &globalPos);
     void releaseColorSampling();

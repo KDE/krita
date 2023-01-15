@@ -74,6 +74,9 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="stroke_selection"/>
       <Action name="delete"/>
       <Separator/>
+      <Action name="sample_screen_color"/>
+      <Action name="sample_screen_color_real_canvas"/>
+      <Separator/>
       <Action name="revert"/>
     </Menu>
     <Menu name="view">

@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritasamplescreencolor" version="8" translationDomain="krita">
+<MenuBar>
+    <Menu name="Edit"><text>&amp;Edit</text>
+        <Action name="sample_screen_color"/>
+        <Action name="sample_screen_color_real_canvas"/>
+    </Menu>
+</MenuBar>
+
+</kpartgui>

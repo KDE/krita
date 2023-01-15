@@ -286,6 +286,26 @@
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
+    <Action name="sample_screen_color">
+      <icon>sample-screen</icon>
+      <text>&amp;Sample Screen Color</text>
+      <whatsThis/>
+      <toolTip>Sample a color from the screen</toolTip>
+      <iconText>Sample Screen Color</iconText>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="sample_screen_color_real_canvas">
+      <icon>sample-screen</icon>
+      <text>&amp;Sample Screen Color (Sample Real Canvas)</text>
+      <whatsThis/>
+      <toolTip>Sample a color from the screen while sampling a real color from the canvas if the cursor is over it</toolTip>
+      <iconText>Sample Screen Color (Sample Real Canvas)</iconText>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
   </Actions>
   <Actions category="Painting">
     <text>Painting</text>

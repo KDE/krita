@@ -105,6 +105,7 @@
         <file>dark_selection-mode_mask.svg</file>
         <file>dark_select-all.svg</file>
         <file>dark_select-clear.svg</file>
+        <file>dark_sample-screen.svg</file>
         <file>dark_select-pixel.svg</file>
         <file>dark_select-shape.svg</file>
         <file>dark_selection_add.svg</file>
@@ -225,6 +226,7 @@
         <file>light_selection-mode_invisible.svg</file>
         <file>light_selection-mode_mask.svg</file>
         <file>light_select-all.svg</file>
+        <file>light_sample-screen.svg</file>
         <file>light_select-clear.svg</file>
         <file>light_select-pixel.svg</file>
         <file>light_select-shape.svg</file>

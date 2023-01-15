@@ -19,6 +19,7 @@ Checks:              '
     ,clang-analyzer-optin
     ,llvm-namespace-comment
     ,readability-static-accessed-through-instance
+    ,misc-const-correctness
     ,-modernize-use-trailing-return-type
     ,-cppcoreguidelines-avoid-magic-numbers
     ,-readability-redundant-member-init
@@ -72,5 +73,9 @@ CheckOptions:
   - key:             readability-identifier-length.IgnoredLoopCounterNames
     value:           '^[cijktuvxyz_]$'
   - key:             modernize-use-transparent-functors.SafeMode
+    value:           true
+  - key:             misc-const-correctness.WarnPointersAsValues
+    value:           true
+  - key:             misc-const-correctness.TransformPointersAsValues
     value:           true
 ...

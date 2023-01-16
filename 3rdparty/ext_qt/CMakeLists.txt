@@ -130,7 +130,7 @@ if (WIN32)
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
-      GIT_TAG 949819fdc6a19a1c8f0575f127e9854fd48bbd83
+      GIT_TAG 7208f1a6b7510eb086aeb9a53efe02b83a6fcb0a
       GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtwinextras qttranslations
       GIT_SUBMODULES_RECURSE false
       GIT_SHALLOW true
@@ -154,7 +154,7 @@ elseif (ANDROID)
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
-      GIT_TAG 949819fdc6a19a1c8f0575f127e9854fd48bbd83
+      GIT_TAG 7208f1a6b7510eb086aeb9a53efe02b83a6fcb0a
       GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qttranslations qtandroidextras
       GIT_SUBMODULES_RECURSE false
       GIT_SHALLOW true
@@ -200,7 +200,7 @@ elseif (NOT APPLE)
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
-      GIT_TAG 949819fdc6a19a1c8f0575f127e9854fd48bbd83
+      GIT_TAG 7208f1a6b7510eb086aeb9a53efe02b83a6fcb0a
       GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtx11extras qttranslations
       GIT_SUBMODULES_RECURSE false
       GIT_SHALLOW true
@@ -230,7 +230,7 @@ else( APPLE )
       ExternalProject_Add(
         ext_qt
         GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
-        GIT_TAG 949819fdc6a19a1c8f0575f127e9854fd48bbd83
+        GIT_TAG 7208f1a6b7510eb086aeb9a53efe02b83a6fcb0a
         GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtmacextras qttranslations
         GIT_SUBMODULES_RECURSE false
         GIT_SHALLOW true

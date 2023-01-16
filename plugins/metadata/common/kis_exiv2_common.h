@@ -175,6 +175,8 @@ inline Exiv2::Value *kmdValueToExivValue(const KisMetaData::Value &value, Exiv2:
         Q_FALLTHROUGH();
     case KisMetaData::Value::UnorderedArray:
         Q_FALLTHROUGH();
+    case KisMetaData::Value::LangArray:
+        Q_FALLTHROUGH();
     case KisMetaData::Value::AlternativeArray: {
         switch (type) {
         case Exiv2::unsignedByte:

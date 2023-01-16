@@ -213,18 +213,18 @@ inline Exiv2::Value *kmdValueToExivValue(const KisMetaData::Value &value, Exiv2:
             return ev;
         }
         default:
-            dbgMetaData << type << " " << value;
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(0 && "Unknown alternative array type", 0);
+            warnMetaData << type << " " << value.type() << value;
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(0 && "Unknown alternative array type", nullptr);
             break;
         }
         break;
-    }
+    } break;
     default:
-        dbgMetaData << type << " " << value;
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(0 && "Unknown array type", 0);
+        warnMetaData << type << " " << value.type() << value;
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false && "Unknown array type", nullptr);
         break;
     }
-    return 0;
+    return nullptr;
 }
 
 /// Convert a KisMetaData to an Exiv value, without knowing the targeted Exiv2::TypeId

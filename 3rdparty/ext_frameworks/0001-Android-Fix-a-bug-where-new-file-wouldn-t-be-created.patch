@@ -1,0 +1,41 @@
+From 40ff273f7170036137c999610331528d53255113 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Tue, 10 Jan 2023 15:09:10 +0000
+Subject: [PATCH] Android: Fix a bug where new file wouldn't be created
+
+for cases where the config path is a content:// Uri. One can only save
+to them through direct write, so this is important.
+
+Relevant code: https://invent.kde.org/qt/qt/qtbase/-/blob/dev/src/corelib/io/qsavefile.cpp#L218
+
+Corresponding bug report: https://krita-artists.org/t/cannot-save-input-profile-does-not-persist-on-startup-on-android/55693
+---
+ src/core/kconfigini.cpp | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/src/core/kconfigini.cpp b/src/core/kconfigini.cpp
+index d1bd2a0a..b1ed53b1 100644
+--- a/src/core/kconfigini.cpp
++++ b/src/core/kconfigini.cpp
+@@ -476,7 +476,18 @@ bool KConfigIniBackend::writeConfig(const QByteArray &locale, KEntryMap &entryMa
+     if (createNew) {
+         QSaveFile file(filePath());
+         if (!file.open(QIODevice::WriteOnly)) {
++#ifdef Q_OS_ANDROID
++            // HACK: when we are dealing with content:// URIs, QSaveFile has to rely on DirectWrite.
++            // Otherwise this method returns a false and we're done.
++            file.setDirectWriteFallback(true);
++            if (!file.open(QIODevice::WriteOnly)) {
++                qWarning(KCONFIG_CORE_LOG) << "Couldn't create a new file:" << filePath() << ". Error:" << file.errorString();
++                return false;
++            }
++#else
++            qWarning(KCONFIG_CORE_LOG) << "Couldn't create a new file:" << filePath() << ". Error:" << file.errorString();
+             return false;
++#endif
+         }
+ 
+         file.setTextModeEnabled(true); // to get eol translation
+-- 
+2.39.0
+

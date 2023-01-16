@@ -951,12 +951,12 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             // Insert the projection itself only
             const KisPaintDeviceSP dev = image->projection();
 
-            const KisFilterSP f = KisFilterRegistry::instance()->value("invert");
-            KIS_ASSERT(f);
-            const KisFilterConfigurationSP kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
-            KIS_ASSERT(kfc);
             if (cs->colorModelId() == CMYKAColorModelID) {
                 // Inverting colors for CMYK
+                const KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+                KIS_ASSERT(f);
+                const KisFilterConfigurationSP kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
+                KIS_ASSERT(kfc);
                 f->process(dev, bounds, kfc->cloneWithResourcesSnapshot());
             }
 

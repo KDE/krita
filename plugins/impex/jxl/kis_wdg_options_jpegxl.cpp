@@ -247,6 +247,7 @@ void KisWdgOptionsJPEGXL::setConfiguration(const KisPropertiesConfigurationSP cf
     modularMATreeLearningPercent->setValue(cfg->getInt("modularMATreeLearningPercent", -1));
     jpegReconCFL->setCurrentIndex(jpegReconCFL->findData(cfg->getInt("jpegReconCFL", -1)));
 
+    chkAuthor->setChecked(cfg->getBool("storeAuthor", false));
     exif->setChecked(cfg->getBool("exif", true));
     xmp->setChecked(cfg->getBool("xmp", true));
     iptc->setChecked(cfg->getBool("iptc", true));
@@ -299,6 +300,7 @@ KisPropertiesConfigurationSP KisWdgOptionsJPEGXL::configuration() const
     cfg->setProperty("modularMATreeLearningPercent", modularMATreeLearningPercent->value());
     cfg->setProperty("jpegReconCFL", jpegReconCFL->currentData());
 
+    cfg->setProperty("storeAuthor", chkAuthor->isChecked());
     cfg->setProperty("exif", exif->isChecked());
     cfg->setProperty("xmp", xmp->isChecked());
     cfg->setProperty("iptc", iptc->isChecked());

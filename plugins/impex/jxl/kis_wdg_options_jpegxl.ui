@@ -852,47 +852,58 @@ Higher values use more encoder memory.</string>
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,0">
-          <item row="0" column="0">
-           <widget class="QGroupBox" name="groupBox_3">
-            <property name="title">
-             <string>Formats:</string>
-            </property>
-            <layout class="QFormLayout" name="formLayout_5">
-             <item row="0" column="0" colspan="2">
-              <widget class="QCheckBox" name="exif">
-               <property name="text">
-                <string>Exif</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0" colspan="2">
-              <widget class="QCheckBox" name="iptc">
-               <property name="text">
-                <string>IPTC</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0" colspan="2">
-              <widget class="QCheckBox" name="xmp">
-               <property name="text">
-                <string>XMP</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QGroupBox" name="groupBox_3">
+              <property name="title">
+               <string>Formats:</string>
+              </property>
+              <layout class="QFormLayout" name="formLayout_5">
+               <item row="0" column="0" colspan="2">
+                <widget class="QCheckBox" name="exif">
+                 <property name="text">
+                  <string>Exif</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0" colspan="2">
+                <widget class="QCheckBox" name="iptc">
+                 <property name="text">
+                  <string>IPTC</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0" colspan="2">
+                <widget class="QCheckBox" name="xmp">
+                 <property name="text">
+                  <string>XMP</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_4">
+              <property name="title">
+               <string comment="JPEG-XL metadata options">Filters:</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <item>
+                <widget class="QListView" name="metaDataFilters"/>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
           </item>
-          <item row="0" column="1">
-           <widget class="QGroupBox" name="groupBox_4">
-            <property name="title">
-             <string comment="JPEG-XL metadata options">Filters:</string>
+          <item>
+           <widget class="QCheckBox" name="chkAuthor">
+            <property name="text">
+             <string>Sign with Author Profile Data</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_4">
-             <item>
-              <widget class="QListView" name="metaDataFilters"/>
-             </item>
-            </layout>
            </widget>
           </item>
          </layout>

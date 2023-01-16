@@ -30,6 +30,7 @@
 #include <KoColorSpace.h>
 #include <KoColorTransferFunctions.h>
 #include <KoConfig.h>
+#include <KoDocumentInfo.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <filter/kis_filter_registry.h>
@@ -41,6 +42,12 @@
 #include <kis_layer.h>
 #include <kis_layer_utils.h>
 #include <kis_meta_data_backend_registry.h>
+#include <kis_meta_data_entry.h>
+#include <kis_meta_data_filter_registry_model.h>
+#include <kis_meta_data_schema.h>
+#include <kis_meta_data_schema_registry.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_value.h>
 #include <kis_raster_keyframe_channel.h>
 #include <kis_time_span.h>
 
@@ -688,6 +695,8 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             exivInfoVisitor.visit(image->rootLayer().data());
             if (exivInfoVisitor.metaDataCount() == 1) {
                 return std::make_unique<KisMetaData::Store>(*exivInfoVisitor.exifInfo());
+            } else if (cfg->getBool("storeAuthor", true)) {
+                return std::make_unique<KisMetaData::Store>();
             } else {
                 return {};
             }
@@ -697,6 +706,26 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             KisMetaData::FilterRegistryModel model;
             model.setEnabledFilters(cfg->getString("filters").split(","));
             metaDataStore->applyFilters(model.enabledFilters());
+        }
+
+        const KisMetaData::Schema *dcSchema =
+            KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
+        Q_ASSERT(dcSchema);
+
+        if (cfg->getBool("storeAuthor", true)) {
+            QString author = document->documentInfo()->authorInfo("creator");
+            if (!author.isEmpty()) {
+                if (!document->documentInfo()->authorContactInfo().isEmpty()) {
+                    QString contact = document->documentInfo()->authorContactInfo().at(0);
+                    if (!contact.isEmpty()) {
+                        author = author + "(" + contact + ")";
+                    }
+                }
+                if (metaDataStore->containsEntry("creator")) {
+                    metaDataStore->removeEntry("creator");
+                }
+                metaDataStore->addEntry(KisMetaData::Entry(dcSchema, "creator", KisMetaData::Value(QVariant(author))));
+            }
         }
 
         if (metaDataStore && cfg->getBool("exif", true)) {
@@ -1127,6 +1156,7 @@ KisPropertiesConfigurationSP JPEGXLExport::defaultConfiguration(const QByteArray
     cfg->setProperty("modularMATreeLearningPercent", -1);
     cfg->setProperty("jpegReconCFL", -1);
 
+    cfg->setProperty("storeAuthor", false);
     cfg->setProperty("exif", true);
     cfg->setProperty("xmp", true);
     cfg->setProperty("iptc", true);

@@ -1,5 +1,7 @@
 SET(EXTPREFIX_qt  "${EXTPREFIX}")
 
+set(QT_GIT_TAG "84d8ab8cfe3b3b1aeb07952554eb1932833e304f")
+
 if (MINGW)
   set(QT_BUILD_COMMAND   mingw32-make -j${SUBMAKE_JOBS})
   set(QT_INSTALL_COMMAND mingw32-make -j${SUBMAKE_JOBS} install)
@@ -126,7 +128,7 @@ if (WIN32)
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
-      GIT_TAG 84d8ab8cfe3b3b1aeb07952554eb1932833e304f
+      GIT_TAG ${QT_GIT_TAG}
       GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtwinextras qttranslations
       GIT_SUBMODULES_RECURSE false
       GIT_PROGRESS true
@@ -149,7 +151,7 @@ elseif (ANDROID)
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
-      GIT_TAG 84d8ab8cfe3b3b1aeb07952554eb1932833e304f
+      GIT_TAG ${QT_GIT_TAG}
       GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qttranslations qtandroidextras
       GIT_SUBMODULES_RECURSE false
       GIT_PROGRESS true
@@ -190,7 +192,7 @@ elseif (NOT APPLE)
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
-      GIT_TAG 84d8ab8cfe3b3b1aeb07952554eb1932833e304f
+      GIT_TAG ${QT_GIT_TAG}
       GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtx11extras qttranslations
       GIT_SUBMODULES_RECURSE false
       GIT_PROGRESS true
@@ -219,7 +221,7 @@ else( APPLE )
       ExternalProject_Add(
         ext_qt
         GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
-        GIT_TAG 84d8ab8cfe3b3b1aeb07952554eb1932833e304f
+        GIT_TAG ${QT_GIT_TAG}
         GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtmacextras qttranslations
         GIT_SUBMODULES_RECURSE false
         GIT_PROGRESS true

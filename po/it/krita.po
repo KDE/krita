@@ -20,7 +20,7 @@
 # Simone Solinas <ksolsim@gmail.com>, 2008, 2009, 2010, 2011.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2022.
 # Luigi Toscano <luigi.toscano@tiscali.it>, 2015.
-# Valter Mura <valtermura@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Valter Mura <valtermura@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 #
 # Per i motivi/sfumature, vedere il seguente collegamento:
 # http://craik.shef.ac.uk/cpt-city/ggr/
@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-14 00:54+0000\n"
-"PO-Revision-Date: 2022-12-29 20:52+0100\n"
+"PO-Revision-Date: 2023-01-08 20:50+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8663,11 +8663,10 @@ msgstr "Imposta la modalità della gomma"
 #. i18n: context: toolTip @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:506 krita/krita.action:508 krita/krita.action:509
-#, fuzzy, kde-format
-#| msgid "Toggle Eraser"
+#, kde-format
 msgctxt "action"
 msgid "Toggle eraser preset"
-msgstr "Attiva/disattiva gomma"
+msgstr "Attiva/disattiva preimpostazione gomma"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -22265,8 +22264,7 @@ msgid "Save without waiting"
 msgstr "Salva senza attendere"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Cancel Operation and Save"
+#, kde-format
 msgid "Cancel operation and save"
 msgstr "Annulla l'operazione e salva"
 
@@ -23800,9 +23798,7 @@ msgstr "Autori"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Translators"
+#, kde-format
 msgid "Translators"
 msgstr "Traduttori"
 
@@ -24477,10 +24473,9 @@ msgstr "Opacità:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:640
-#, fuzzy, kde-format
-#| msgid "Selection Overlay:"
+#, kde-format
 msgid "Selection Outline Opacity:"
-msgstr "Sovrapposizione della selezione:"
+msgstr "Selezione opacità contorno:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)

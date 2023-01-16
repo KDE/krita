@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-14 00:54+0000\n"
-"PO-Revision-Date: 2023-01-11 18:06+0100\n"
+"PO-Revision-Date: 2023-01-15 15:15+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -15286,7 +15286,7 @@ msgstr "Krita &instellen..."
 #, kde-format
 msgctxt "action"
 msgid "Configure Krita"
-msgstr "Krita instellen"
+msgstr "Krita configureren"
 
 #. i18n: context: text @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1751
@@ -23009,7 +23009,7 @@ msgstr "WAARSCHUWING: huidige scherm ondersteunt geen HDR-rendering"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1919
 #, kde-format
 msgid "Configure Krita"
-msgstr "Krita instellen"
+msgstr "Krita configureren"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1936
 #, kde-format

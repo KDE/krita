@@ -17892,7 +17892,7 @@ msgstr "Paleta de colors de Krita"
 #, kde-format
 msgctxt "description of a file type"
 msgid "OpenColorIO Configuration"
-msgstr "Configuració d'OpenColorIO"
+msgstr "Configureu OpenColorIO"
 
 #: libs/koplugin/KisMimeDatabase.cpp:249
 #, kde-format
@@ -20413,7 +20413,7 @@ msgstr "Introduïu un nom de fitxer que s'haja de representar."
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Video Animation"
-msgstr "Importació d'una animació de vídeo"
+msgstr "Importeu una animació de vídeo"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #, kde-format
@@ -22953,7 +22953,7 @@ msgstr "AVÍS: La pantalla actual no permet la renderització HDR"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1919
 #, kde-format
 msgid "Configure Krita"
-msgstr "Configuració de Krita"
+msgstr "Configureu Krita"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1936
 #, kde-format
@@ -22969,7 +22969,7 @@ msgstr "Dreceres"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1948
 #, kde-format
 msgid "Canvas Input Settings"
-msgstr "Configuració d'entrada del llenç"
+msgstr "Configureu l'entrada del llenç"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1949
 #, kde-format
@@ -22997,7 +22997,7 @@ msgstr "Rendiment"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1986
 #, kde-format
 msgid "Tablet settings"
-msgstr "Configuració de la tauleta"
+msgstr "Configureu la tauleta"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1988
 #, kde-format
@@ -23983,7 +23983,7 @@ msgstr "Copia des de:"
 #: libs/ui/forms/wdgcolorsettings.ui:10 libs/ui/forms/wdgtabletsettings.ui:10
 #, kde-format
 msgid "Color Settings"
-msgstr "Configuració del color"
+msgstr "Configureu el color"
 
 #. i18n: ectx: property (title), widget (QGroupBox, useDefColorSpace)
 #: libs/ui/forms/wdgcolorsettings.ui:38
@@ -24360,7 +24360,7 @@ msgstr "Utilitza una memòria cau gran per als mapes de píxels"
 #: libs/ui/forms/wdgdisplaysettings.ui:249
 #, kde-format
 msgid "HDR Settings"
-msgstr "Configuració de l'HDR"
+msgstr "Configureu l'HDR"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentDisplayFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:255
@@ -27578,7 +27578,7 @@ msgstr "Acció"
 #: libs/ui/input/config/kis_input_configuration_page.ui:86
 #, kde-format
 msgid "Edit Profiles"
-msgstr "Edició dels perfils"
+msgstr "Editeu els perfils"
 
 #: libs/ui/input/config/kis_edit_profiles_dialog.cpp:71
 #, kde-format
@@ -27699,7 +27699,7 @@ msgstr "Gest"
 #: libs/ui/input/config/kis_key_input_editor.ui:33
 #, kde-format
 msgid "Edit Key Combination"
-msgstr "Edició de la combinació de tecles"
+msgstr "Editeu la combinació de tecles"
 
 #. i18n: ectx: property (text), widget (QLabel, keysLabel)
 #: libs/ui/input/config/kis_key_input_editor.ui:46
@@ -27718,13 +27718,13 @@ msgstr "Modificadors"
 #: libs/ui/input/config/kis_mouse_input_editor.ui:79
 #, kde-format
 msgid "Edit Mouse Input"
-msgstr "Edició de l'entrada del ratolí"
+msgstr "Editeu l'entrada del ratolí"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/input/config/kis_wheel_input_editor.ui:56
 #, kde-format
 msgid "Edit Mouse Wheel Input"
-msgstr "Edició de l'entrada de la roda del ratolí"
+msgstr "Editeu l'entrada de la roda del ratolí"
 
 #: libs/ui/input/kis_abstract_input_action.cpp:34
 #: libs/ui/input/kis_tool_invocation_action.cpp:41
@@ -29974,7 +29974,7 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:166
 #, kde-format
 msgid "There is not enough disk space left to save the file."
-msgstr "No hi ha prou espai en el disc per a guardar el fitxer."
+msgstr "No hi ha prou espai en el disc per que es guardarà el fitxer."
 
 #: libs/ui/KisImportExportErrorCode.cpp:168
 #, kde-format
@@ -31245,7 +31245,7 @@ msgstr "Canals:"
 #: libs/ui/layerstyles/wdgblendingoptions.ui:188
 #, kde-format
 msgid "Choose channels to blend"
-msgstr "Selecció dels canals que s'han de barrejar"
+msgstr "Seleccioneu els canals que s'han de barrejar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannel1_2)
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannel2_2)
@@ -32475,7 +32475,7 @@ msgstr "No s'ha seleccionat cap ansa"
 #, kde-format
 msgctxt "Title for the segment gradient handle editor"
 msgid "Edit Handle"
-msgstr "Edició de l'ansa"
+msgstr "Editeu l'ansa"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientSlider.cpp:1065
 #: libs/ui/widgets/gradient/KisStopGradientSlider.cpp:507
@@ -32548,7 +32548,7 @@ msgstr "No s'ha seleccionat cap parada"
 #, kde-format
 msgctxt "Title for the gradient stop editor"
 msgid "Edit Stop"
-msgstr "Edició de la parada"
+msgstr "Editeu la parada"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:112
 #: libs/ui/widgets/kis_color_space_selector.cc:66
@@ -38041,7 +38041,7 @@ msgstr "Preferències de la roda de color"
 #: plugins/dockers/artisticcolorselector/forms/wdgArtisticColorSelector.ui:95
 #, kde-format
 msgid "Docker settings"
-msgstr "Configuració de l'acoblador"
+msgstr "Configureu l'acoblador"
 
 #. i18n: ectx: property (text), widget (QCheckBox, bnInverseSat)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:134
@@ -38109,7 +38109,7 @@ msgstr "Seleccioneu un directori"
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
 #, kde-format
 msgid "Exporting Compositions..."
-msgstr "Exportació de les composicions..."
+msgstr "Exporteu les composicions..."
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
 #, kde-format
@@ -38637,7 +38637,7 @@ msgstr "Visor del registre"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:112
 #, kde-format
 msgid "Log Settings"
-msgstr "Configuració del registre"
+msgstr "Configureu el registre"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:123
 #, kde-format
@@ -38662,7 +38662,7 @@ msgstr "Motor del mosaic"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:147
 #, kde-format
 msgid "Plugin Management"
-msgstr "Gestió dels connectors"
+msgstr "Gestioneu els connectors"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:151
 #, kde-format
@@ -38748,12 +38748,12 @@ msgstr "Blanc:"
 #: plugins/dockers/lut/lutdocker_dock.cpp:84
 #, kde-format
 msgid "LUT Management"
-msgstr "Gestió de la LUT"
+msgstr "Gestioneu la LUT"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:102
 #, kde-format
 msgid "Select custom configuration file."
-msgstr "Seleccioneu el fitxer de configuració personalitzat."
+msgstr "Seleccioneu un fitxer de configuració personalitzat."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:109
 #: plugins/dockers/lut/lutdocker_dock.cpp:615
@@ -39245,7 +39245,7 @@ msgstr "FPS del vídeo:"
 #: plugins/dockers/recorder/recorder_export.ui:290
 #, kde-format
 msgid "Edit video profile"
-msgstr "Edició del perfil de vídeo"
+msgstr "Editeu el perfil de vídeo"
 
 #. i18n: ectx: property (text), widget (QLineEdit, editFfmpegPath)
 #: plugins/dockers/recorder/recorder_export.ui:303
@@ -39301,7 +39301,7 @@ msgstr "Activa la vista prèvia per a:"
 #: plugins/dockers/recorder/recorder_export.ui:537
 #, kde-format
 msgid "Setup ffmpeg executable location"
-msgstr "Configuració de la ubicació de l'executable de FFmpeg"
+msgstr "Configureu la ubicació de l'executable de FFmpeg"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinFirstFrameSec)
 #: plugins/dockers/recorder/recorder_export.ui:559
@@ -39392,7 +39392,7 @@ msgstr "Edita el perfil"
 #: plugins/dockers/recorder/recorder_profile_settings.ui:26
 #, kde-format
 msgid "Profile settings"
-msgstr "Configuració del perfil"
+msgstr "Configureu el perfil"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonPresetRevert)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:33
@@ -40047,7 +40047,7 @@ msgstr "Només els comentaris"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:20
 #, kde-format
 msgid "Export Storyboard"
-msgstr "Exportació del guió gràfic"
+msgstr "Exporteu el guió gràfic"
 
 #. i18n: ectx: property (text), widget (QLabel, pageSizeLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:34
@@ -42313,7 +42313,7 @@ msgstr "Esteu segur/a de voler sobreescriure el paquet existent?"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:220
 #, kde-format
 msgid "Could not open '%1' for saving."
-msgstr "No s'ha pogut obrir «%1» per a guardar."
+msgstr "No s'ha pogut obrir «%1» per que es guardarà."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:463
 #, kde-format
@@ -46169,7 +46169,7 @@ msgstr "Crominància:"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:234
 #, kde-format
 msgid "Conversion settings"
-msgstr "Configuració de la conversió"
+msgstr "Configureu la conversió"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/heif/WdgHeifExport.ui:69
@@ -47840,7 +47840,7 @@ msgstr "Document no vàlid, no existix el fitxer «maindoc.xml»."
 #: plugins/impex/libkra/kra_converter.cpp:149
 #, kde-format
 msgid "Could not create the file for saving"
-msgstr "No s'ha pogut crear el fitxer per a guardar-lo"
+msgstr "No s'ha pogut crear el fitxer per que es guardarà-lo"
 
 #: plugins/impex/libkra/kra_converter.cpp:222
 #, kde-format
@@ -48134,12 +48134,12 @@ msgid ""
 "html>"
 msgstr ""
 "<html><head/><body><p>Els fitxers <span style=\" font-weight:600;\">PNG</"
-"span> tenen <span style=\" font-style:italic;\">dues</span> opcions per a "
-"guardar la informació <span style=\" font-weight:600;\">sRGB</span>: com una "
-"etiqueta o com un perfil explícit. Per a utilitzar en llocs web, <span style="
-"\"font-style:italic;\">desactiveu</span> esta opció. Per a intercanvi amb "
-"altres aplicacions, <span style=\" font-style:italic;\">activeu</span> esta "
-"opció.</p></body></html>"
+"span> tenen <span style=\" font-style:italic;\">dues</span> opcions per que "
+"es guardarà la informació <span style=\" font-weight:600;\">sRGB</span>: com "
+"una etiqueta o com un perfil explícit. Per a utilitzar en llocs web, <span "
+"style=\"font-style:italic;\">desactiveu</span> esta opció. Per a intercanvi "
+"amb altres aplicacions, <span style=\" font-style:italic;\">activeu</span> "
+"esta opció.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSRGB)
 #: plugins/impex/png/kis_wdg_options_png.ui:197
@@ -50765,7 +50765,7 @@ msgstr "2D"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:101
 #, kde-format
 msgid "Brush Settings"
-msgstr "Configuració del pinzell"
+msgstr "Configureu el pinzell"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mousePressureCBox)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:134
@@ -53641,7 +53641,7 @@ msgstr "Exporta les opcions de configuració"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:222
 msgid "Crop Settings"
-msgstr "Configuració de l'escapçat"
+msgstr "Configureu l'escapçat"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:225
 msgid "Crop to outmost guides"
@@ -54378,7 +54378,7 @@ msgstr "Obri un projecte"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:261
 msgid "Project Settings"
-msgstr "Configuració del projecte"
+msgstr "Configureu el projecte"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:122
@@ -54541,7 +54541,7 @@ msgstr "Canvia la carpeta"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:104
 msgid "Comic Project Settings"
-msgstr "Configuració del projecte de còmic"
+msgstr "Configureu el projecte de còmic"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:114
 msgid "Where should the export go?"
@@ -54625,7 +54625,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:64
 msgid "Comic Project Setup"
-msgstr "Configuració del projecte de còmic"
+msgstr "Configureu el projecte de còmic"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:69
 msgid "Basic Comic Project Settings"
@@ -57302,7 +57302,7 @@ msgstr "Cal·ligrafia"
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:58
 #, kde-format
 msgid "Contiguous Area Selection"
-msgstr "Selecció d'àrea contigua"
+msgstr "Seleccioneu un àrea contigua"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:109
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:226
@@ -58230,7 +58230,7 @@ msgstr "&Gruix"
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:81
 #, kde-format
 msgid "Font Settings"
-msgstr "Configuració del tipus de lletra"
+msgstr "Configureu el tipus de lletra"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:90
 #, kde-format

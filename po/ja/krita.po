@@ -7,7 +7,7 @@
 # Tsugumi Harabayashi <tu.hrby@gmail.com>, 2014.
 # Tomohiro Hyakutake <tomhioo@outlook.jp>, 2019.
 # bbch <suzihi248@ruru.be>, 2020, 2022.
-# Fumiaki Okushi <fumiaki.okushi@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2017, 2019, 2020, 2022.
+# Fumiaki Okushi <fumiaki.okushi@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2017, 2019, 2020, 2022, 2023.
 # --- kritalibs
 # Translation of koffice into Japanese.
 # This file is distributed under the same license as the koffice package.
@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-14 00:54+0000\n"
-"PO-Revision-Date: 2022-12-16 21:55-0800\n"
+"PO-Revision-Date: 2023-01-15 21:44-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
 "Language: ja\n"
@@ -56152,16 +56152,12 @@ msgid "Spread: "
 msgstr "拡張: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:512
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Description for a checkbox in a Fill Tool to use selection borders as "
-#| "boundary when filling"
-#| msgid "Use selection as boundary:"
+#, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in fill tool to use selection "
 "borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr "選択を境界値として使用:"
+msgstr "選択を境界値として使用"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:520
 #, kde-format
@@ -56253,6 +56249,8 @@ msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when filling the region"
 msgstr ""
+"チェックすると、領域を塗りつぶす際にアクティブな選択範囲の境界線を境界として"
+"扱います。"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:577
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:454
@@ -56270,7 +56268,7 @@ msgstr "設定された量で塗りつぶしを拡大/縮小"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:457
 #, kde-format
 msgid "Blur the fill by the set amount"
-msgstr ""
+msgstr "設定した量だけ，塗りつぶしをぼかす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:459
@@ -56308,11 +56306,9 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:589
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:463
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reset to default value"
+#, kde-format
 msgid "Reset the options to their default values"
-msgstr "デフォルトの値に戻す"
+msgstr "設定項目をデフォルトの値に戻す"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #, kde-format
@@ -59976,27 +59972,3 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
-
-#~ msgctxt "Heading for the list of Krita authors/developers"
-#~ msgid "Authors"
-#~ msgstr "作者"
-
-#~ msgid "Unexpected error. Please contact developers."
-#~ msgstr "予期しないエラーが発生しました。開発者に連絡してください。"
-
-#~ msgid "&Description:"
-#~ msgstr "付記(&D):"
-
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr ""
-#~ "%1 の保存に失敗しました\n"
-#~ "理由: %2"
-
-#~ msgid ""
-#~ "Could not open %2.\n"
-#~ "Reason: %1"
-#~ msgstr ""
-#~ "%2 を開けませんでした。\n"
-#~ "理由: %1"

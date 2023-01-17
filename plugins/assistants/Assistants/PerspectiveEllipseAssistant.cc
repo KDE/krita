@@ -34,13 +34,17 @@ class PerspectiveEllipseAssistant::Private
 public:
     EllipseInPolygon ellipseInPolygon;
     EllipseInPolygon concentricEllipseInPolygon;
+    EllipseInPolygon concentricEllipseInPolygonMirrored;
 
     Ellipse simpleEllipse;
     Ellipse simpleConcentricEllipse;
+    Ellipse simpleConcentricEllipseMirrored;
+
 
     bool cacheValid { false };
 
     bool isConcentric {false};
+    bool ellipsesCorrectInStroke {false};
 
     PerspectiveBasedAssistantHelper::CacheData cache;
 
@@ -75,12 +79,18 @@ QPointF PerspectiveEllipseAssistant::project(const QPointF& pt, const QPointF& s
 {
     //return d->concentricEllipseInPolygon.project(pt);
     Q_UNUSED(strokeBegin);
+
+
     Q_ASSERT(isAssistantComplete());
 
     if (d->isConcentric) {
-        //return d->simpleConcentricEllipse.project(pt);
-        d->simpleConcentricEllipse;
-        return d->concentricEllipseInPolygon.projectModifiedEberlySecond(pt);
+        //return d->concentricEllipseInPolygon.projectModifiedEberlySecond(pt);
+        if (true || d->concentricEllipseInPolygon.onTheCorrectSideOfHorizon(pt)) {
+            return d->concentricEllipseInPolygon.projectModifiedEberlySecond(pt);
+        } else {
+            return d->concentricEllipseInPolygonMirrored.projectModifiedEberlySecond(pt);
+        }
+
     } else {
         return d->ellipseInPolygon.projectModifiedEberlySecond(pt);
         d->ellipseInPolygon.setSimpleEllipseVertices(d->simpleEllipse);
@@ -141,8 +151,16 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
     if (d->isConcentric && initialTransform.isInvertible()) {
         //ENTER_FUNCTION() << "Mouse pos was " << mousePos << "anty-transformed: " << initialTransform.inverted().map(mousePos);
 
-        d->concentricEllipseInPolygon.updateToPointOnConcentricEllipse(d->ellipseInPolygon.originalTransform, initialTransform.inverted().map(mousePos), d->cache.horizon);
-        d->concentricEllipseInPolygon.setSimpleEllipseVertices(d->simpleConcentricEllipse);
+        //if (!(m_followBrushPosition && m_adjustedPositionValid)) // that would mean we're drawing, in which case, leave it alone
+        //{
+
+            d->concentricEllipseInPolygon.updateToPointOnConcentricEllipse(d->ellipseInPolygon.originalTransform, initialTransform.inverted().map(mousePos), d->cache.horizon, false);
+            d->concentricEllipseInPolygon.setSimpleEllipseVertices(d->simpleConcentricEllipse);
+
+            d->concentricEllipseInPolygonMirrored.updateToPointOnConcentricEllipse(d->ellipseInPolygon.originalTransform, initialTransform.inverted().map(mousePos), d->cache.horizon, true);
+            //d->concentricEllipseInPolygonMirrored.setSimpleEllipseVertices(d->simpleConcentricEllipse);
+        //}
+
         //ENTER_FUNCTION() << "Set points to simple ellipse:" << d->concentricEllipseInPolygon.finalVertices[0]
         //                 << d->concentricEllipseInPolygon.finalVertices[1] << d->concentricEllipseInPolygon.finalVertices[2];
         //ENTER_FUNCTION() << "Is transform identity? " << d->simpleConcentricEllipse.getTransform().isIdentity();
@@ -421,6 +439,23 @@ bool PerspectiveEllipseAssistant::loadCustomXml(QXmlStreamReader *xml)
         ENTER_FUNCTION() << "Therefore, the assistant is now: " << ppVar(isConcentric());
     }
     return true;
+}
+
+void PerspectiveEllipseAssistant::endStroke()
+{
+    KisPaintingAssistant::endStroke();
+    d->ellipsesCorrectInStroke = false;
+}
+
+void PerspectiveEllipseAssistant::setAdjustedBrushPosition(const QPointF position)
+{
+    KisPaintingAssistant::setAdjustedBrushPosition(position);
+    // beginning of the stroke
+    if (d->ellipsesCorrectInStroke) {
+        d->concentricEllipseInPolygon.updateToPointOnConcentricEllipse(d->ellipseInPolygon.originalTransform, position, d->cache.horizon, false);
+        d->concentricEllipseInPolygonMirrored.updateToPointOnConcentricEllipse(d->ellipseInPolygon.originalTransform, position, d->cache.horizon, true);
+    }
+
 }
 
 bool PerspectiveEllipseAssistant::isConcentric() const

@@ -30,6 +30,9 @@ public:
     void saveCustomXml(QXmlStreamWriter* xml) override;
     bool loadCustomXml(QXmlStreamReader* xml) override;
 
+    void endStroke() override;
+    void setAdjustedBrushPosition(const QPointF position) override;
+
 
     bool isConcentric() const;
     void setConcentric(bool isConcentric);

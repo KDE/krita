@@ -90,11 +90,42 @@ bool EllipseInPolygon::updateToPolygon(QVector<QPointF> _polygon, QLineF horizon
 
 }
 
-bool EllipseInPolygon::updateToPointOnConcentricEllipse(QTransform _originalTransform, QPointF pointOnConcetric, QLineF horizonLine)
+bool EllipseInPolygon::updateToPointOnConcentricEllipse(QTransform _originalTransform, QPointF pointOnConcetric, QLineF horizonLine, bool mirrored)
 {
     m_valid = false; // let's make it false in case we return in the middle of the work
+    m_mirrored = mirrored;
     if (!_originalTransform.isInvertible()) {
         return false;
+    }
+
+
+    if (mirrored) {
+        // let's mirror the transformation!
+        qreal l = horizonLine.length();
+        l = 1/(l*l);
+        qreal lx = horizonLine.dx();
+        qreal ly = horizonLine.dy();
+
+        qreal a = l*(lx*lx - ly*ly);
+        qreal b = 2*l*lx*ly;
+
+        //qCritical() << "### Istotne, horizon was: " <<
+        //qCritical() << "### Before the mirroring, the (0, 0.5) point would end up: " << _originalTransform.map(QPointF(0, 0.5));
+
+        QTransform transpose = QTransform::fromTranslate(horizonLine.p1().x(), horizonLine.p1().y());
+        QTransform justMirror = QTransform(a, b, 0, b, -a, 0, 0, 0, 1);
+        QTransform toMultiply = transpose.inverted()*justMirror*transpose;
+        //qCritical() << "### The transform to multiply would transform (200, 100) this way: " << toMultiply.map(QPointF(200, 100));
+        //qCritical() << "### The transform to multiply would transform result of the previous transf. this way: " << toMultiply.map(_originalTransform.map(QPointF(0, 0.5)));
+
+        //qCritical() << "### The transpose is: " << transpose;
+        //qCritical() << "### The justMirror is: " << justMirror;
+        //qCritical() << "### The full matrix is: " << toMultiply;
+
+
+        _originalTransform = _originalTransform*toMultiply;
+        //qCritical() << "### After the mirroring, the (0, 0.5) point would end up: " << _originalTransform.map(QPointF(0, 0.5));
+
     }
 
     // first check on which side of the horizon line the original ellipse is
@@ -104,39 +135,8 @@ bool EllipseInPolygon::updateToPointOnConcentricEllipse(QTransform _originalTran
         return KisAlgebra2D::signZZ((line.p2().x() - line.p1().x()) * (point.y() - line.p1().y()) - (line.p2().y() - line.p1().y()) * (point.x() - line.p1().x()));
     };
 
-    int side1 = whichSideOnLine(horizonLine, pointOnConcetric);
-    int side2 = whichSideOnLine(horizonLine, topPointInFinalCoordinates);
-
-    if (side1 != side2) {
-        //
-        QTransform reflectionTransform;
-        QPointF p = horizonLine.p2() - horizonLine.p1();
-        auto sq = [] (qreal v) {
-            return AlgebraFunctions::sqPow(v);
-        };
-
-        p = p/(qSqrt(sq(p.x()) + sq(p.y())));
-        reflectionTransform.setMatrix(sq(p.x()) - sq(p.x()), 2*p.x()*p.y(), 0, 2*p.x()*p.y(), sq(p.y()) - sq(p.x()), 0, 0, 0, 1);
-        //transform.
-        // find original points
-        // then mirror them
-        // then
-        QVector<QPointF> originalPoly;
-        originalPoly << QPointF(0.5, 1.0) << QPointF(1.0, 0.5) << QPointF(0.5, 0) << QPointF(0, 0.5);
-
-        for (int i = 0; i < originalPoly.size(); i++) {
-            QPointF p = originalPoly[i];
-            p = _originalTransform.map(p);
-            p = reflectionTransform.map(p);
-            originalPoly[i] = p;
-        }
-        QPolygonF origPoly = QPolygonF(originalPoly);
-
-        QTransform out;
-        if (QTransform::squareToQuad(origPoly, out)) {
-            _originalTransform = out;
-        }
-    }
+    //int side1 = whichSideOnLine(horizonLine, pointOnConcetric);
+    //int side2 = whichSideOnLine(horizonLine, topPointInFinalCoordinates);
 
 
     QTransform inverted = _originalTransform.inverted();
@@ -152,11 +152,19 @@ bool EllipseInPolygon::updateToPointOnConcentricEllipse(QTransform _originalTran
     originalTransform = _originalTransform;
 
     QVector<QPointF> points;
-    points << originalTransform.map(pointInOriginalCoordinates)
-           << originalTransform.map(center + QPointF(distanceFromCenter, 0))
-           << originalTransform.map(center + QPointF(-distanceFromCenter, 0))
-           << originalTransform.map(center + QPointF(0, distanceFromCenter))
-           << originalTransform.map(center + QPointF(0, -distanceFromCenter));
+    if (mirrored) {
+        points << originalTransform.map(pointInOriginalCoordinates)
+               << originalTransform.map(center + QPointF(distanceFromCenter, 0))
+               << originalTransform.map(center + QPointF(-distanceFromCenter, 0))
+               << originalTransform.map(center + QPointF(0, distanceFromCenter))
+               << originalTransform.map(center + QPointF(0, -distanceFromCenter));
+    } else {
+        points << originalTransform.map(pointInOriginalCoordinates)
+               << originalTransform.map(center + QPointF(distanceFromCenter, 0))
+               << originalTransform.map(center + QPointF(-distanceFromCenter, 0))
+               << originalTransform.map(center + QPointF(0, distanceFromCenter))
+               << originalTransform.map(center + QPointF(0, -distanceFromCenter));
+    }
 
     concentricDefiningPointIndex = 0;
 
@@ -1847,6 +1855,16 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     return result;
 
+}
+
+bool EllipseInPolygon::onTheCorrectSideOfHorizon(QPointF point)
+{
+    int here = horizonLineSign(point);
+    int originalPoint = horizonLineSign(originalPoints[0]);
+    if (here == 0) {
+        return !m_mirrored; // let's keep points on the horizon on the not-mirrored side
+    }
+    return here == originalPoint;
 }
 
 bool EllipseInPolygon::setSimpleEllipseVertices(Ellipse &ellipse) const

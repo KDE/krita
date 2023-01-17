@@ -125,12 +125,15 @@ public:
     ///
     bool updateToPolygon(QVector<QPointF> _polygon, QLineF horizonLine);
 
-    bool updateToPointOnConcentricEllipse(QTransform _originalTransform, QPointF pointOnConcetric, QLineF horizonLine);
+    bool updateToPointOnConcentricEllipse(QTransform _originalTransform, QPointF pointOnConcetric, QLineF horizonLine, bool mirrored = false);
 
     QPointF project(QPointF point);
 
     QPointF projectModifiedEberly(QPointF point);
     QPointF projectModifiedEberlySecond(QPointF point);
+
+
+    bool onTheCorrectSideOfHorizon(QPointF point);
 
 
 
@@ -245,6 +248,7 @@ protected:
 
 
     bool m_valid {false};
+    bool m_mirrored {false};
 
 };
 

@@ -473,7 +473,9 @@ void TestAssistants::testProjectionNewMethod()
     poly.clear();
     poly << QPointF(0, 0) << QPointF(400, 0) << QPointF(300, 200) << QPointF(100, 200);
     original.updateToPolygon(poly, QLineF());
-    point = QPointF(300, 600);
+    // on the same side
+    point = QPointF(300, 200);
+
 
     result = original.projectModifiedEberlySecond(point);
     ENTER_FUNCTION() << ppVar(result);
@@ -482,6 +484,56 @@ void TestAssistants::testProjectionNewMethod()
     ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
 
     QVERIFY(form(result, original) < eps);
+
+    // the same but mirrored
+    point = QPointF(300, 600);
+
+
+    result = original.projectModifiedEberlySecond(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+    QVERIFY(form(result, original) < eps);
+
+    ENTER_FUNCTION() << "************************ START 11 (mirroring - better) **************************";
+
+    // The values were:  polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(683.107,1006.81), QPointF(349.884,528.397))
+    // originalPoint = QPointF(1067.62,719.146) and unfortunate result: result = QPointF(1057.48,709.158)
+    poly.clear();
+    poly << QPointF(0, 0) << QPointF(400, 0) << QPointF(300, 200) << QPointF(100, 200);
+    //original.updateToPolygon(poly, QLineF());
+    QTransform transform;
+    QTransform::squareToQuad(poly, transform);
+    original.updateToPointOnConcentricEllipse(transform, QPointF(0, 200), QLineF(QPointF(0, 400), QPointF(400, 400)));
+    // on the same side
+    point = QPointF(300, 200);
+
+
+
+    result = original.projectModifiedEberlySecond(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+    QVERIFY(form(result, original) < eps);
+
+    // the same but mirrored
+    point = QPointF(300, 600);
+
+
+    original.updateToPointOnConcentricEllipse(transform, QPointF(800, 200), QLineF(QPointF(0, 400), QPointF(400, 400)), true);
+    result = original.projectModifiedEberlySecond(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+    QVERIFY(form(result, original) < eps);
+
+
 
 
 }

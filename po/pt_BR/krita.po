@@ -5,7 +5,7 @@
 # Marcus Gama <marcus.gama@gmail.com>, 2006, 2007, 2008, 2009, 2010, 2011.
 # Diniz Bortolotto <diniz.bortolotto@gmail.com>, 2007, 2008.
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2019.
-# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2009, 2010, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2009, 2010, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Maj Gama <marcus.gama@gmail.com>, 2009, 2011.
 # Marcus Vinícius de Andrade Gama <marcus.gama@gmail.com>, 2009, 2010, 2012.
 # Aracele Torres <araceletorres@gmail.com>, 2010, 2011, 2014.
@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-13 03:53+0000\n"
-"PO-Revision-Date: 2022-04-13 11:40-0300\n"
+"PO-Revision-Date: 2023-01-16 23:46-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 20.04.2\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5862,15 +5862,13 @@ msgid "m) RGBA 06 Rock"
 msgstr "m) RGBA 06 rocha"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "0. Foreground to Background"
+#, kde-format
 msgctxt "memory/gradients/Foreground to Background.svg"
 msgid "0. Foreground to Background"
 msgstr "0. Primeiro plano para plano de fundo"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "1. Foreground to Transparent"
+#, kde-format
 msgctxt "memory/gradients/Foreground to Transparent.svg"
 msgid "1. Foreground to Transparent"
 msgstr "1. Primeiro plano para transparente"
@@ -8223,12 +8221,10 @@ msgstr "Mostrar informação do sistema para reportar bugs."
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:177 krita/krita.action:179 krita/krita.action:180
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Krita log for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show Android log for bug reports."
-msgstr "Mostrar log do Krita para reportar bugs."
+msgstr "Mostrar log do Android para reportar bugs."
 
 #. i18n: context: text @ Action (crashlog), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (crashlog), Actions (General), ActionCollection (Krita)
@@ -8237,12 +8233,10 @@ msgstr "Mostrar log do Krita para reportar bugs."
 #. i18n: context: toolTip @ Action (crashlog), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (crashlog), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:187 krita/krita.action:189 krita/krita.action:190
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Krita log for bug reports."
+#, kde-format
 msgctxt "action"
 msgid "Show crash log for bug reports."
-msgstr "Mostrar log do Krita para reportar bugs."
+msgstr "Mostrar log da falha para reportar bugs."
 
 #. i18n: context: text @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
@@ -8321,12 +8315,10 @@ msgstr "Inverte a seleção atual"
 
 #. i18n: context: iconText @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:246
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Invert Selection"
+#, kde-format
 msgctxt "action"
 msgid "Invert Selection"
-msgstr "Inverter seleção"
+msgstr "Inverter Seleção"
 
 #. i18n: context: text @ Action (create_snapshot), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_snapshot), Actions (General), ActionCollection (Krita)
@@ -8494,168 +8486,136 @@ msgstr "Tornar a cor do pincel mais amarela"
 #. i18n: context: text @ Action (increase_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_opacity), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:398 krita/krita.action:401
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase opacity"
+#, kde-format
 msgctxt "action"
 msgid "Increase Opacity"
 msgstr "Aumentar opacidade"
 
 #. i18n: context: toolTip @ Action (increase_opacity), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:400
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase opacity"
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Opacity"
-msgstr "Aumentar opacidade"
+msgstr "Aumentar opacidade do pincel"
 
 #. i18n: context: text @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:410 krita/krita.action:413
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease opacity"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Opacity"
 msgstr "Diminuir opacidade"
 
 #. i18n: context: toolTip @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:412
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease opacity"
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Opacity"
-msgstr "Diminuir opacidade"
+msgstr "Diminuir opacidade do pincel"
 
 #. i18n: context: text @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:422 krita/krita.action:425
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Value HSV"
-#| msgid "Increase Value"
+#, kde-format
 msgctxt "action"
 msgid "Increase Flow"
-msgstr "Aumentar valor"
+msgstr "Aumentar fluxo"
 
 #. i18n: context: toolTip @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:424
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Flow"
-msgstr "Aumentar tamanho do pincel"
+msgstr "Aumentar fluxo do pincel"
 
 #. i18n: context: text @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:434 krita/krita.action:437
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Value HSV"
-#| msgid "Decrease Value"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Flow"
-msgstr "Diminuir valor"
+msgstr "Diminuir fluxo"
 
 #. i18n: context: toolTip @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:436
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Flow"
-msgstr "Diminuir tamanho do pincel"
+msgstr "Diminuir fluxo do pincel"
 
 #. i18n: context: text @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:446 krita/krita.action:449
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Value HSV"
-#| msgid "Increase Value"
+#, kde-format
 msgctxt "action"
 msgid "Increase Fade"
-msgstr "Aumentar valor"
+msgstr "Aumentar desvanecimento"
 
 #. i18n: context: toolTip @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:448
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Fade"
-msgstr "Aumentar tamanho do pincel"
+msgstr "Aumentar desvanecimento do pincel"
 
 #. i18n: context: text @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:458 krita/krita.action:461
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Value HSV"
-#| msgid "Decrease Value"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Fade"
-msgstr "Diminuir valor"
+msgstr "Diminuir desvanecimento"
 
 #. i18n: context: toolTip @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:460
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Fade"
-msgstr "Diminuir tamanho do pincel"
+msgstr "Diminuir desvanecimento do pincel"
 
 #. i18n: context: text @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:470 krita/krita.action:473
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Saturation HSY"
-#| msgid "Increase Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Increase Scatter"
-msgstr "Aumentar saturação"
+msgstr "Aumentar dispersamento"
 
 #. i18n: context: toolTip @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:472
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Scatter strength"
-msgstr "Aumentar tamanho do pincel"
+msgstr "Aumentar força de dispersamento do pincel"
 
 #. i18n: context: text @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:482 krita/krita.action:485
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Scatter"
-msgstr "Diminuir saturação"
+msgstr "Diminuir dispersamento"
 
 #. i18n: context: toolTip @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:484
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Scatter strength"
-msgstr "Diminuir tamanho do pincel"
+msgstr "Diminuir força de dispersamento do pincel"
 
 #. i18n: context: text @ Action (erase_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (erase_action), Actions (Painting), ActionCollection (Krita)
@@ -8907,11 +8867,10 @@ msgstr "Trocar as cores do primeiro plano e do plano de fundo"
 #. i18n: context: text @ Action (toggle_brush_outline), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_brush_outline), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:699 krita/krita.action:702
-#, fuzzy, kde-format
-#| msgid "Tilt Outline"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Brush Outline"
-msgstr "Contorno da pressão"
+msgstr "Alternar contorno do pincel"
 
 #. i18n: context: toolTip @ Action (toggle_brush_outline), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:701
@@ -8921,6 +8880,8 @@ msgid ""
 "Disable the brush outline, or enable the previously used brush outline shape "
 "if already disabled"
 msgstr ""
+"Desabilite o contorno do pincél, ou habilite a forma de contorno do pincél "
+"usada previamente, caso já esteja desabilitado"
 
 #. i18n: context: text @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
@@ -9168,12 +9129,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:884
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Show Global Selection Mask"
+#, kde-format
 msgctxt "action"
 msgid "Show Global Selection Mask"
-msgstr "Mo&strar a máscara de seleção global"
+msgstr "Mostrar a máscara de seleção global"
 
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
@@ -11184,11 +11143,10 @@ msgstr "Adiciona uma camada vetorial"
 
 #. i18n: context: iconText @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2471
-#, fuzzy, kde-format
-#| msgid "Vector Layer"
+#, kde-format
 msgctxt "action"
 msgid "Vector Layer"
-msgstr "Camada vetorial"
+msgstr "Camada Vetorial"
 
 #. i18n: context: text @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2480
@@ -11353,12 +11311,10 @@ msgstr "Adiciona uma nova seleção local"
 
 #. i18n: context: iconText @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2567
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Local Selection"
+#, kde-format
 msgctxt "action"
 msgid "Local Selection"
-msgstr "Seleção local"
+msgstr "Seleção Local"
 
 #. i18n: context: text @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2576
@@ -11448,9 +11404,7 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2627
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Toggle Layer Soloing"
+#, kde-format
 msgctxt "action"
 msgid "Toggle layer soloing"
 msgstr "Alternar camada isolada"
@@ -11870,12 +11824,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2915
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert to a file layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to File Layer"
-msgstr "Converter para um arquivo de camadas"
+msgstr "Converter para Arquivo de Camadas"
 
 #. i18n: context: text @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2924
@@ -12858,8 +12810,7 @@ msgstr "Abre um documento existente"
 
 #. i18n: context: iconText @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:22
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "action"
 msgid "Open"
 msgstr "Abrir"
@@ -12880,12 +12831,10 @@ msgstr "Abrir um documento aberto recentemente"
 
 #. i18n: context: iconText @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Open &Recent"
+#, kde-format
 msgctxt "action"
 msgid "Open Recent"
-msgstr "Abrir &recente"
+msgstr "Abrir &Recente"
 
 #. i18n: context: text @ Action (file_save), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:43
@@ -12920,8 +12869,7 @@ msgstr "Salva o documento com novo nome"
 
 #. i18n: context: iconText @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:58
-#, fuzzy, kde-format
-#| msgid "Save As"
+#, kde-format
 msgctxt "action"
 msgid "Save As"
 msgstr "Salvar Como"
@@ -12942,8 +12890,7 @@ msgstr "Abrir o Gerenciador de Sessões"
 
 #. i18n: context: iconText @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:70
-#, fuzzy, kde-format
-#| msgid "Sessions"
+#, kde-format
 msgctxt "action"
 msgid "Sessions"
 msgstr "Sessões"
@@ -13052,8 +12999,7 @@ msgstr "Renderiza a Animação para GIF, Sequência de Imagem ou Vídeo"
 #. i18n: context: iconText @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:144 krita/kritamenu.action:156
-#, fuzzy, kde-format
-#| msgid "Render Animation"
+#, kde-format
 msgctxt "action"
 msgid "Render Animation"
 msgstr "Renderizar Animação"
@@ -13207,12 +13153,10 @@ msgstr "Fecha o aplicativo"
 
 #. i18n: context: iconText @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:252
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Quit"
+#, kde-format
 msgctxt "action"
 msgid "Quit"
-msgstr "Sai&r"
+msgstr "Sair"
 
 #. i18n: context: text @ Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:262
@@ -13271,8 +13215,7 @@ msgstr "Recorta a seleção para a área de transferência"
 
 #. i18n: context: iconText @ Action (edit_cut), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:292
-#, fuzzy, kde-format
-#| msgid "Cut"
+#, kde-format
 msgctxt "action"
 msgid "Cut"
 msgstr "Recortar"
@@ -13293,8 +13236,7 @@ msgstr "Copia a seleção para a área de transferência"
 
 #. i18n: context: iconText @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:304
-#, fuzzy, kde-format
-#| msgid "Copy"
+#, kde-format
 msgctxt "action"
 msgid "Copy"
 msgstr "Copiar"
@@ -13355,19 +13297,17 @@ msgstr "Cópia mesclada"
 #. i18n: context: text @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:349 krita/kritamenu.action:352
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Layer Style"
+#, kde-format
 msgctxt "action"
 msgid "Copy Layer Style"
-msgstr "Estilo da camada"
+msgstr "Copiar estilo de camada"
 
 #. i18n: context: toolTip @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:351
 #, kde-format
 msgctxt "action"
 msgid "Copy Layer Style from the Current Node"
-msgstr ""
+msgstr "Copiar estilo de camada do nó atual"
 
 #. i18n: context: text @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:361
@@ -13474,20 +13414,17 @@ msgstr "Colar como Imagem de Referência"
 #. i18n: context: text @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:433 krita/kritamenu.action:436
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste Shape Style"
+#, kde-format
 msgctxt "action"
 msgid "Paste Layer Style"
-msgstr "Colar estilo da forma"
+msgstr "Colar estilo de camada"
 
 #. i18n: context: toolTip @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:435
-#, fuzzy, kde-format
-#| msgid "Save Palette in the Current Document"
+#, kde-format
 msgctxt "action"
 msgid "Paste Layer Style into the Current Node"
-msgstr "Salvar paleta no documento atual"
+msgstr "Colar estilo de camada no nó atual"
 
 #. i18n: context: text @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:446
@@ -13694,12 +13631,10 @@ msgstr "Mostra apenas a tela ou toda a janela"
 
 #. i18n: context: iconText @ Action (view_show_canvas_only), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:619
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Show Canvas Only"
+#, kde-format
 msgctxt "action"
 msgid "Show Canvas Only"
-msgstr "Mo&strar somente a tela"
+msgstr "Mostrar Somente a Tela"
 
 #. i18n: context: text @ Action (fullscreen), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:628
@@ -13717,12 +13652,10 @@ msgstr "Mostra a janela em tela inteira"
 
 #. i18n: context: iconText @ Action (fullscreen), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:631
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "F&ull Screen Mode"
+#, kde-format
 msgctxt "action"
 msgid "Full Screen Mode"
-msgstr "&Modo de tela inteira"
+msgstr "Modo de Tela Inteira"
 
 #. i18n: context: text @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
@@ -13834,12 +13767,10 @@ msgstr "Espelho"
 #. i18n: context: iconText @ Action (mirror_canvas_around_cursor), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:706 krita/kritamenu.action:708
 #: krita/kritamenu.action:709
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror View"
+#, kde-format
 msgctxt "action"
 msgid "Mirror View Around Cursor"
-msgstr "Espelho"
+msgstr "Visão Espelhada ao Redor do Cursor"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:716
@@ -13963,6 +13894,9 @@ msgid ""
 "image and can be used to position your mouse at the right place on the "
 "canvas. <p>Uncheck this to hide the rulers.</p>"
 msgstr ""
+"As réguas mostram as posições horizontal e vertical do mouse na imagem e "
+"podem ser usadas para posicinar seu mouse no lugar certo na área de desenho. "
+"<p>Desabilite para esconder as réguas.</p>"
 
 #. i18n: context: toolTip @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_ruler), Actions (View), ActionCollection (Menu)
@@ -13995,6 +13929,8 @@ msgid ""
 "The rulers will track current mouse position and show it on screen. It can "
 "cause subtle performance slowdown"
 msgstr ""
+"As réguas irão acompanhar a posição atual do mouse e mostrá-la na tela. Pode "
+"causar uma sutil lentidão na performance."
 
 #. i18n: context: text @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
@@ -14321,12 +14257,10 @@ msgstr "Alterar a cor de fundo da imagem"
 
 #. i18n: context: iconText @ Action (image_color), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1068
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Image Background Color and Transparency..."
+#, kde-format
 msgctxt "action"
 msgid "Image Background Color and Transparency"
-msgstr "Transparência e cor de fundo da &imagem..."
+msgstr "Transparência e Cor de Fundo da Imagem"
 
 #. i18n: context: text @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1077
@@ -15482,43 +15416,37 @@ msgstr "Cor"
 
 #. i18n: context: text @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1875
-#, fuzzy, kde-format
-#| msgid "Foreground Color"
+#, kde-format
 msgctxt "action"
 msgid "&Choose Foreground Color"
-msgstr "Cor Principal"
+msgstr "&Escolher a cor do primeiro plano"
 
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1877 krita/kritamenu.action:1878
-#, fuzzy, kde-format
-#| msgid "Foreground Color"
+#, kde-format
 msgctxt "action"
 msgid "Choose Foreground Color"
-msgstr "Cor Principal"
+msgstr "Escolha a cor do primeiro plano"
 
 #. i18n: context: text @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1885
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Set Background Color"
+#, kde-format
 msgctxt "action"
 msgid "&Choose Background Color"
-msgstr "Definir cor do plano de fundo"
+msgstr "&Escolher a cor do plano de fundo"
 
 #. i18n: context: toolTip @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1887 krita/kritamenu.action:1888
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Set Background Color"
+#, kde-format
 msgctxt "action"
 msgid "Choose Background Color"
-msgstr "Definir cor do plano de fundo"
+msgstr "Escolha a cor do plano de fundo"
 
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -17560,15 +17488,14 @@ msgid ""
 msgstr "A imagem contém metadados <b>Exif</b>. Os metadados não serão salvos."
 
 #: libs/impex/ExifCheck.h:75
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "The image contains <b>Exif</b> metadata. The metadata will not be saved."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image has <b>Exif</b> metadata and multiple layers. Only metadata <b>in "
 "the first layer</b> will be saved."
-msgstr "A imagem contém metadados <b>Exif</b>. Os metadados não serão salvos."
+msgstr ""
+"A imagem possui metadados <b>Exif</b> e várias camadas. Apenas metadados "
+"<b>na primeira camada</b> serão salvos."
 
 #: libs/impex/FillLayerTypeCheck.h:92
 #, fuzzy, kde-format
@@ -19723,11 +19650,10 @@ msgid "Tag:"
 msgstr "Etiqueta:"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:101
-#, fuzzy, kde-format
-#| msgid "Resource Folder"
+#, kde-format
 msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
-msgstr "Pasta de recursos"
+msgstr "pasta de recursos"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:165
 #, kde-format
@@ -21331,24 +21257,7 @@ msgstr "Escolha um arquivo de vídeo"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWarning)
 #: libs/ui/animation/VideoImportDialog.ui:80
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Noto Sans'; font-size:11pt; "
-#| "font-weight:400; font-style:normal;\">\n"
-#| "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "size:16pt; font-weight:600; color:#ff1500;\">WARNING: </span><span style="
-#| "\" font-size:16pt; color:#ff1500;\">This video contains more than 100 "
-#| "frames. Loading too many frames can overload your computer. Use a </"
-#| "span><a href=\"https://kdenlive.org\"><span style=\" font-size:16pt; text-"
-#| "decoration: underline; color:#2980b9;\">video editor </span></a><span "
-#| "style=\" font-size:16pt; color:#ff1500;\">instead!</span></p></body></"
-#| "html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -21370,20 +21279,21 @@ msgid ""
 msgstr ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
+"\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Noto Sans'; font-size:11pt; font-"
-"weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
+"weight:500; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"size:16pt; font-weight:600; color:#ff1500;\">AVISO: </span><span style=\" "
-"font-size:16pt; color:#ff1500;\">Este vídeo contém mais de 100 frames. "
-"Carregar muitos quadros pode sobrecarregar seu computador. Use um </span><a "
-"href=\"https://kdenlive.org\"><span style=\" font-size:16pt; text-"
-"decoration: underline; color:#2980b9;\">editor de vídeo </span></a><span "
-"style=\" font-size:16pt; color:#ff1500;\">em vez disso!</span></p></body></"
-"html>"
+"size:16pt; font-weight:600; color:#ff692e;\">AVISO: </span><span style=\" "
+"font-size:16pt; font-weight:400; color:#ff692e;\">Este vídeo contém mais de "
+"100 frames. Carregar muitos quadros pode sobrecarregar seu computador. Use "
+"um </span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;\"> "
+"</span><a href=\"https://kdenlive.org\"><span style=\" font-size:16pt; font-"
+"weight:400; text-decoration: underline; color:#2980b9;\">editor de vídeo </"
+"span></a><span style=\" font-size:16pt; font-weight:400; color:#ff692e;\">em "
+"vez disso!</span></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:130
@@ -21476,21 +21386,20 @@ msgid ""
 "Use ffmpeg to detect similar frames and reduce the total number of frames "
 "imported."
 msgstr ""
+"Usar ffmpeg para detectar quadros similares e reduzir o número total de "
+"quadros importados."
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionFilterDuplicates)
 #: libs/ui/animation/VideoImportDialog.ui:472
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add duplicate frame"
+#, kde-format
 msgid "Filter duplicate frames"
-msgstr "Adicionar uma imagem duplicada"
+msgstr "Filtrar quadros duplicados"
 
 #. i18n: ectx: property (text), widget (QLabel, sensitivityLabel)
 #: libs/ui/animation/VideoImportDialog.ui:496
-#, fuzzy, kde-format
-#| msgid "Sensitivity:"
+#, kde-format
 msgid "Sensitivity"
-msgstr "Sensibilidade:"
+msgstr "Sensibilidade"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, sensitivitySpinbox)
 #: libs/ui/animation/VideoImportDialog.ui:514
@@ -21500,6 +21409,9 @@ msgid ""
 "which frames are added to Krita.\n"
 "The higher the sensitivity, the more frames are added to Krita."
 msgstr ""
+"Quão sensível deve ser o filtro de quadros duplicados ao determinar\n"
+"quais quadros serão adicionados ao Krita.\n"
+"Quanto maior a sensibilidade, mais quadros serão adicionados ao Krita."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabOptions)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
@@ -22755,6 +22667,17 @@ msgid ""
 "<p><b>Private app location</b> (<a href=\"copyprivate\">Copy</a>):<br/>\n"
 "%2</p>"
 msgstr ""
+"<p>Você está utilizando a versão pacote Microsoft Store do Krita. Mesmo que "
+"o Krita possa ser configurado para armazenar recursos na pasta AppData do "
+"usuário local, pode acontecer do Windows, na realidade, armazenar os "
+"arquivos dentro de um local do aplicativo privado.</p>\n"
+"<p>Verifique ambos locais para determinar onde os arquivos estão sendo "
+"armazenados.</p>\n"
+"<p><b>AppData do usuário</b> (<a href=\"copyuser\">Copiar</a>):<br/>\n"
+"%1</p>\n"
+"<p><b>Local do aplicativo privado</b> (<a href=\"copyprivate\">Copiar</a>):"
+"<br/>\n"
+"%2</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:705
 #, kde-format
@@ -23984,10 +23907,9 @@ msgstr "Colorimétrica absoluta"
 #: libs/ui/forms/wdgcolorsettings.ui:222
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:67
 #: libs/ui/widgets/kis_color_space_selector.cc:55
-#, fuzzy, kde-format
-#| msgid "No profile"
+#, kde-format
 msgid "Import profile"
-msgstr "Sem perfil"
+msgstr "Importar perfil"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgcolorsettings.ui:243
@@ -24032,9 +23954,7 @@ msgstr "Compensação de Pontos Pretos"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorSpaces)
 #: libs/ui/forms/wdgcolorspaceselector.ui:39
-#, fuzzy, kde-format
-#| msgctxt "EXIF: misc (model name or model number)"
-#| msgid "Model:"
+#, kde-format
 msgctxt "Color model"
 msgid "Model:"
 msgstr "Modelo:"
@@ -24048,9 +23968,7 @@ msgstr "Profundidade:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfiles)
 #: libs/ui/forms/wdgcolorspaceselector.ui:73
-#, fuzzy, kde-format
-#| msgctxt "Label of H.264 encoder profiles"
-#| msgid "Profile:"
+#, kde-format
 msgid "Profile:"
 msgstr "Perfil:"
 
@@ -24074,13 +23992,7 @@ msgstr "Navegador de espaço de cores"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_descriptionwidget)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-#| "\"><span style=\" font-weight:600; text-decoration: underline; color:"
-#| "#006e28;\">Color Spaces</span></a> determine how colors are encoded in "
-#| "your files. Different color spaces have different properties and are used "
-#| "for different purposes.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
 "\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
@@ -24243,9 +24155,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLargePixmapCache)
 #: libs/ui/forms/wdgdisplaysettings.ui:142
-#, kde-format
+#, fuzzy, kde-format
 msgid "Use large pixmap cache"
-msgstr ""
+msgstr "Use cache de pixmap grande"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:193
@@ -24668,9 +24580,9 @@ msgstr "Desbloquear (restaurar configurações da predefinição)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: libs/ui/forms/wdggeneralsettings.ui:213
-#, kde-format
+#, fuzzy, kde-format
 msgid "Eraser Cursor Icon:"
-msgstr ""
+msgstr "Borracha suave"
 
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #: libs/ui/forms/wdggeneralsettings.ui:229
@@ -24690,14 +24602,13 @@ msgstr "Enquanto pinta..."
 #: libs/ui/forms/wdggeneralsettings.ui:290
 #, kde-format
 msgid "Eraser Outline Color:"
-msgstr ""
+msgstr "Cor do Contorno da Borracha:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: libs/ui/forms/wdggeneralsettings.ui:316
-#, fuzzy, kde-format
-#| msgid "Brush (Background Color)"
+#, kde-format
 msgid "Brush Outline Color:"
-msgstr "Pincel (Cor de Fundo)"
+msgstr "Cor do Contorno do Pincél:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdggeneralsettings.ui:324
@@ -24726,31 +24637,31 @@ msgstr "Tamanho do seletor de zoom: "
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intZoomMarginSize)
 #: libs/ui/forms/wdggeneralsettings.ui:371
-#, kde-format
+#, fuzzy, kde-format
 msgid "Spacing between the image and the page when zoomed to fit, in pixels"
 msgstr ""
+"Espaçamento em pixels, entre a imagem e a página quando ajustada para caber "
+"na janela"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkHiDPI)
 #: libs/ui/forms/wdggeneralsettings.ui:392
-#, fuzzy, kde-format
-#| msgid "Enable Hi-DPI support"
+#, kde-format
 msgid "Enable HiDPI support"
-msgstr "Ativar suporte a Hi-DPI"
+msgstr "Ativar suporte a HiDPI"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkHiDPIFractionalScaling)
 #: libs/ui/forms/wdggeneralsettings.ui:401
-#, fuzzy, kde-format
-#| msgid "(Hi-DPI) Enable fractional scale factor"
+#, kde-format
 msgid "Enable fractional scale factor"
-msgstr "(Hi-DPI) Ativar fator de escala fracionária"
+msgstr "Ativar fator de escala fracionária"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #: libs/ui/forms/wdggeneralsettings.ui:408
-#, fuzzy, kde-format
-#| msgid "Note: Krita will need to be restarted for changes to take effect"
+#, kde-format
 msgid "<b>Note: Krita will need to be restarted for changes to take effect</b>"
 msgstr ""
-"Nota: É necessário reiniciar o Krita para que as mudanças tenham efeito"
+"<b>Nota: É necessário reiniciar o Krita para que as mudanças tenham efeito</"
+"b>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdggeneralsettings.ui:424
@@ -24797,10 +24708,9 @@ msgstr "Plano de fundo da janela:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkUseCustomFont)
 #: libs/ui/forms/wdggeneralsettings.ui:550
-#, fuzzy, kde-format
-#| msgid "Use Custom Interface Font:"
+#, kde-format
 msgid "Use custom interface font"
-msgstr "Usar fonte de interface personalizada:"
+msgstr "Usar fonte de interface personalizada"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -24986,10 +24896,9 @@ msgstr "Número de arquivos de backup mantidos:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdggeneralsettings.ui:879
-#, fuzzy, kde-format
-#| msgid "Kra File Compression"
+#, kde-format
 msgid "KRA File Compression"
-msgstr "Compressão do arquivo Kra"
+msgstr "Compressão do arquivo KRA"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkZip64)
 #: libs/ui/forms/wdggeneralsettings.ui:885
@@ -25029,7 +24938,7 @@ msgstr "Cortar arquivos antes de salvar"
 #: libs/ui/forms/wdggeneralsettings.ui:915
 #, kde-format
 msgid "Trim frames when importing animations"
-msgstr ""
+msgstr "Cortar quadros ao importar animações"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdggeneralsettings.ui:996
@@ -25089,21 +24998,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
 #: libs/ui/forms/wdggeneralsettings.ui:1140
-#, fuzzy, kde-format
-#| msgid "Enable Cumulative Undo"
+#, kde-format
 msgid "Enable native file dialogs"
-msgstr "Ativar o 'Desfazer' cumulativo"
+msgstr "Ativar diálogos de arquivos nativos"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: libs/ui/forms/wdggeneralsettings.ui:1163
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enable native file dialogs (warning: may not work correctly on some "
-#| "systems)"
+#, kde-format
 msgid "(Warning: may not work correctly on some systems)"
-msgstr ""
-"Ativar diálogos de arquivo nativos (aviso: talvez não funcione corretamente "
-"em alguns sistemas)"
+msgstr "(Aviso: talvez não funcione corretamente em alguns sistemas)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/forms/wdggeneralsettings.ui:1173
@@ -25132,9 +25035,7 @@ msgstr "(é necessário reiniciar o Krita)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1243
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/workspaces/Animation.kws"
-#| msgid "Animation"
+#, kde-format
 msgid "Animation"
 msgstr "Animação"
 
@@ -25152,8 +25053,7 @@ msgstr "Adapte o intervalo de reprodução aos quadros-chave"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
 #: libs/ui/forms/wdggeneralsettings.ui:1272
-#, fuzzy, kde-format
-#| msgid "Font DPI workaround"
+#, kde-format
 msgid "Font DPI Workaround"
 msgstr "Solução alternativa de fonte DPI"
 
@@ -25215,46 +25115,51 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
 #: libs/ui/forms/wdggeneralsettings.ui:1318
-#, kde-format
+#, fuzzy, kde-format
 msgid "Prefer downloading the original source (this requires Internet access)"
-msgstr ""
+msgstr "Optar por baixar a fonte original (necessária conexão à Internet)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteContext)
 #: libs/ui/forms/wdggeneralsettings.ui:1331
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Some applications, like Google Chrome, provide multiple formats when pasting "
 "or dropping an image."
 msgstr ""
+"Alguns aplicativos, como Google Chrome, fornecem formatos variados quando "
+"colando ou arranstando uma imagem."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnLocal)
 #: libs/ui/forms/wdggeneralsettings.ui:1338
-#, kde-format
+#, fuzzy, kde-format
 msgid "Prefer a local copy (if available; metadata may be lost)"
-msgstr ""
+msgstr "Optar por uma cópia local (se disponível, metadado será perdido)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnBitmap)
 #: libs/ui/forms/wdggeneralsettings.ui:1345
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Paste the attached sRGB bitmap (no filesystem or Internet access required, "
 "but metadata will be lost)"
 msgstr ""
+"Cole o bitmap sRGB anexado (sistema de arquivos ou acesso à Internet não são "
+"necessários, mas os metadados serão perdidos)."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsk)
 #: libs/ui/forms/wdggeneralsettings.ui:1352
-#, fuzzy, kde-format
-#| msgid "Ask each time"
+#, kde-format
 msgid "Ask each time"
 msgstr "Perguntar cada vez"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteNote)
 #: libs/ui/forms/wdggeneralsettings.ui:1365
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Note: This applies to drops in the Info window, the canvas, and paste "
 "actions."
 msgstr ""
+"Nota: Isto se aplica quando o conteúdo é solto na janela Info, área de "
+"desenho, e ações de colagem."
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/ui/forms/wdggeneralsettings.ui:1386
@@ -25736,34 +25641,35 @@ msgstr "Estratégia de mesclagem:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgMissingColorProfile)
 #: libs/ui/forms/wdgMissingColorProfile.ui:20
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Missing Color Profile"
+#, kde-format
 msgid "Missing Color Profile"
-msgstr "Faltando Perfil de Cor"
+msgstr "Faltando perfil de cor"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQuestion)
 #: libs/ui/forms/wdgMissingColorProfile.ui:32
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "The image data you are trying to paste has no color profile information. How "
 "do you want to interpret this data?"
 msgstr ""
+"Os dados de imagem que você está tentando colar não obtém informação de "
+"perfil de cor. Como você deseja que este dado seja interpretado?"
 
 #. i18n: ectx: property (text), widget (QLabel, lblExplanationWeb)
 #: libs/ui/forms/wdgMissingColorProfile.ui:63
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Use standard colors that are displayed from computer monitors. This is the "
 "most common way that images are stored."
 msgstr ""
+"Use cores padrão exibidas por monitores de computador. Este é o modo mais "
+"comum em que imagens são armazenadas."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsWeb)
 #: libs/ui/forms/wdgMissingColorProfile.ui:79
-#, fuzzy, kde-format
-#| msgid "As &Web"
+#, kde-format
 msgid "As &Web (sRGB)"
-msgstr "Como na &Web"
+msgstr "Como na &Web (sRGB)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsMonitor)
 #: libs/ui/forms/wdgMissingColorProfile.ui:89
@@ -25778,6 +25684,8 @@ msgid ""
 "If you know a bit about color management and want to use your monitor to "
 "determine the color profile."
 msgstr ""
+"Caso você saiba um pouco sobre gerenciamento de cor e queira usar seu "
+"monitor para determinar o perfil de cor."
 
 #. i18n: ectx: property (text), widget (QCheckBox, dontPrompt)
 #: libs/ui/forms/wdgMissingColorProfile.ui:115
@@ -26136,22 +26044,19 @@ msgstr "Redefinir a área para branco"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPasteFormat)
 #: libs/ui/forms/wdgPasteFormat.ui:20
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "In Resource manager, this is text shown instead of filename, name or "
-#| "location, when multiple resources are shown so there is no one specific "
-#| "filename"
-#| msgid "(Multiple selected)"
+#, kde-format
 msgid "Multiple Formats Detected"
-msgstr "(Múltiplos selecionados)"
+msgstr "Múltiplos formatos detectados"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgPasteFormat.ui:32
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "There are multiple formats for the image you're trying to paste. Which one "
 "do you want to use?"
 msgstr ""
+"Existem formatos variados para a imagem sendo colada. Qual você deseja "
+"utilizar?"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
 #: libs/ui/forms/wdgPasteFormat.ui:66
@@ -26162,45 +26067,46 @@ msgstr "Não é possível criar o armazenamento"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgPasteFormat.ui:79
-#, kde-format
+#, fuzzy, kde-format
 msgid "Preserves the original metadata and color profile."
-msgstr ""
+msgstr "Preserva os metadados originais e o perfil de cor."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnUseLocal)
 #: libs/ui/forms/wdgPasteFormat.ui:92
-#, fuzzy, kde-format
-#| msgid "Use &Global Light"
+#, kde-format
 msgid "Use &local file"
-msgstr "Usar uma luz &global"
+msgstr "Usar arquivo &local"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdgPasteFormat.ui:105
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Depending on the source application, it may not have all of the original's "
 "metadata or color profile."
 msgstr ""
+"Dependendo do aplicativo fonte, nem todos os metadados do perfil de cor do "
+"arquivo original podem estar presentes."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnUseBitmap)
 #: libs/ui/forms/wdgPasteFormat.ui:118
-#, kde-format
+#, fuzzy, kde-format
 msgid "Paste the attached &bitmap"
-msgstr ""
+msgstr "Cole o &bitmap anexado"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgPasteFormat.ui:131
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Use the bitmap provided by the source application. You will be asked for its "
 "profile."
 msgstr ""
+"Use o bitmap fornecido pelo aplicativo fonte. Seu perfil será solicitado."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRemember)
 #: libs/ui/forms/wdgPasteFormat.ui:144
-#, fuzzy, kde-format
-#| msgid "Remember"
+#, kde-format
 msgid "&Remember"
-msgstr "Relembrar"
+msgstr "&Lembrar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/forms/wdgperformancesettings.ui:39
@@ -26278,10 +26184,9 @@ msgstr "Anular as gravações em arquivo após:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdgperformancesettings.ui:184
-#, fuzzy, kde-format
-#| msgid "Swap File Size"
+#, kde-format
 msgid "Swap File"
-msgstr "Tamanho de Arquivo de Troca"
+msgstr "Arquivo de troca"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_6)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderSwapSize)
@@ -26293,10 +26198,9 @@ msgstr "O arquivo de memória virtual não será maior que este limite."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdgperformancesettings.ui:193
-#, fuzzy, kde-format
-#| msgid "File Size Limit:"
+#, kde-format
 msgid "Size Limit:"
-msgstr "Limite do tamanho do arquivo:"
+msgstr "Limite de tamanho:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -26399,10 +26303,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
 #: libs/ui/forms/wdgperformancesettings.ui:346
-#, fuzzy, kde-format
-#| msgid "Tag options"
+#, kde-format
 msgid "Debug options"
-msgstr "Opções de tag/etiqueta"
+msgstr "Opções de depuração"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOpenGLFramerateLogging)
 #: libs/ui/forms/wdgperformancesettings.ui:352
@@ -26442,12 +26345,7 @@ msgstr "Registro de desempenho"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/forms/wdgperformancesettings.ui:400
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>When performance logging is enabled Krita saves "
-#| "timing information into the '&lt;working_dir&gt;/log' folder. If you "
-#| "experience performance problems and want to help us, enable this option "
-#| "and add the contents of the directory to a bug report.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>When performance logging is enabled Krita saves timing "
 "information into the <tt>&lt;working_dir&gt;/log</tt> folder. If you "
@@ -26455,9 +26353,9 @@ msgid ""
 "add the contents of the directory to a bug report.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Quando o registro de desempenho estiver ativo, o Krita "
-"salva informações sobre os tempos na pasta '&lt;pasta_trabalho&gt;/log'. Se "
-"tiver problemas de desempenho e quiser nos ajudar, ative esta opção e "
-"adicione o conteúdo da pasta em um relatório de erro.</p></body></html>"
+"salva informações sobre os tempos na pasta <tt>&lt;pasta_trabalho&gt;/log</"
+"tt>. Se tiver problemas de desempenho e quiser nos ajudar, ative esta opção "
+"e adicione o conteúdo da pasta em um relatório de erro.</p></body></html>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgperformancesettings.ui:427
@@ -26618,10 +26516,9 @@ msgstr "Use visualização em pilha na ferramenta Transformar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/forms/wdgperformancesettings.ui:557
-#, fuzzy, kde-format
-#| msgid "Instant Preview"
+#, kde-format
 msgid "Force Instant Preview"
-msgstr "Visualização instantânea"
+msgstr "Forçar visualização instantânea"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFiltersForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:563
@@ -26637,11 +26534,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFiltersForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:566
-#, fuzzy, kde-format
-#| msgctxt "Filter as an effect"
-#| msgid "Filters"
+#, kde-format
 msgid "in Filters"
-msgstr "Filtros "
+msgstr "nos filtros"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTransformToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:573
@@ -26657,11 +26552,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransformToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:576
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Transform Tool"
+#, kde-format
 msgid "in Transform Tool"
-msgstr "Ferramenta de Transformação"
+msgstr "na ferramenta de transformação"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoveToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:583
@@ -26677,10 +26570,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoveToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:586
-#, fuzzy, kde-format
-#| msgid "Move Tool"
+#, kde-format
 msgid "in Move Tool"
-msgstr "Ferramenta Movimento"
+msgstr "na ferramenta de movimento"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPopupPaletteSettings)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
@@ -27246,6 +27138,9 @@ msgid ""
 "Maximum speed mapped to 1.0 for the speed sensor curve. Should be set to the "
 "maximum speed you can reach using Tablet Tester"
 msgstr ""
+"Velocidade máxima mapeada para 1.0 para a curva do sensor de velocidade. "
+"Deve ser definida para a velocidade máxima que você pode alcançar usando o "
+"Tablet Tester"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intBrushSpeedSmoothing)
 #: libs/ui/forms/wdgtabletsettings.ui:213
@@ -27254,6 +27149,8 @@ msgid ""
 "Amount of smoothing Krita should do to speed sensor. This value is very "
 "hardware-dependent"
 msgstr ""
+"Quantidade de suavização que o Krita deve fazer ao sensor de velocidade. "
+"Este valor depende muito do hardware"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTabletTest)
 #: libs/ui/forms/wdgtabletsettings.ui:220
@@ -28060,65 +27957,62 @@ msgstr "Rodar o tom"
 #: libs/ui/input/kis_shortcut_configuration.cpp:445
 #, kde-format
 msgid "Smart Zoom Gesture"
-msgstr ""
+msgstr "Gesto de zoom inteligente"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:448
 #, kde-format
 msgid "One Finger Tap"
-msgstr ""
+msgstr "Toque com um dedo"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:450
 #, kde-format
 msgid "Two Finger Tap"
-msgstr ""
+msgstr "Toque com dois dedos"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:452
 #, kde-format
 msgid "Three Finger Tap"
-msgstr ""
+msgstr "Toque com três dedos"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:454
 #, kde-format
 msgid "Four Finger Tap"
-msgstr ""
+msgstr "Toque com quatro dedos"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:456
 #, kde-format
 msgid "Five Finger Tap"
-msgstr ""
+msgstr "Toque com cinco dedos"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:458
-#, fuzzy, kde-format
-#| msgid "On Click Drag"
+#, kde-format
 msgid "One Finger Drag"
-msgstr "Arrastar ao Clicar"
+msgstr "Arrastar com um dedo"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:460
 #, kde-format
 msgid "Two Finger Drag"
-msgstr ""
+msgstr "Arrastar com dois dedos"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:462
 #, kde-format
 msgid "Three Finger Drag"
-msgstr ""
+msgstr "Arrastar com três dedos"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:464
 #, kde-format
 msgid "Four Finger Drag"
-msgstr ""
+msgstr "Arrastar com quatro dedos"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:466
 #, kde-format
 msgid "Five Finger Drag"
-msgstr ""
+msgstr "Arrastar com cinco dedos"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:469
-#, fuzzy, kde-format
-#| msgctxt "Shortcut type"
-#| msgid "Gesture"
+#, kde-format
 msgid "No Gesture"
-msgstr "Gesto"
+msgstr "Sem gestos"
 
 #: libs/ui/input/kis_tablet_debugger.cpp:97
 #, kde-format
@@ -28302,10 +28196,11 @@ msgid "Touch Gestures"
 msgstr "Gestos"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:18
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "The Touch Gestures actions launch a single action for the specified gesture"
 msgstr ""
+"As ações de Gestos de Toque iniciam uma única ação para o gesto especificado"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:23
 #, fuzzy, kde-format
@@ -28403,12 +28298,10 @@ msgid "Flow: %1%"
 msgstr "Fluxo:"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:347
-#, fuzzy, kde-format
-#| msgctxt "video importer: video file statistics"
-#| msgid "Frames: %1"
+#, kde-format
 msgctxt "Edge softness, Brush Option Fade"
 msgid "Fade: %1"
-msgstr "Quadros: %1"
+msgstr "Desvanecer: %1"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:375
 #, fuzzy, kde-format
@@ -28467,16 +28360,14 @@ msgid "&Painter's Tools"
 msgstr "Ferramentas de &Pintura"
 
 #: libs/ui/kis_control_frame.cpp:118
-#, fuzzy, kde-format
-#| msgid "Foreground color selector"
+#, kde-format
 msgid "&Open Foreground color selector"
-msgstr "Seletor de cor de primeiro plano"
+msgstr "&Abrir o seletor de cor de primeiro plano"
 
 #: libs/ui/kis_control_frame.cpp:123
-#, fuzzy, kde-format
-#| msgid "Background color selector"
+#, kde-format
 msgid "&Open Background color selector"
-msgstr "Seletor de cor de fundo"
+msgstr "&Abrir o seletor de cor de fundo"
 
 #: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
@@ -28724,10 +28615,9 @@ msgid "Mirror View"
 msgstr "Espelho"
 
 #: libs/ui/kis_mirror_manager.cpp:43
-#, fuzzy, kde-format
-#| msgid "Mirror View"
+#, kde-format
 msgid "Mirror View Around Cursor"
-msgstr "Espelho"
+msgstr "Visualização espelhada ao redor do cursor"
 
 #: libs/ui/kis_node_manager.cpp:453
 #, kde-format
@@ -29583,9 +29473,9 @@ msgid "File layer to be added to existing or new file"
 msgstr "A camada de arquivo a ser adicionada a um arquivo novo ou existente"
 
 #: libs/ui/KisApplicationArguments.cpp:99
-#, kde-format
+#, fuzzy, kde-format
 msgid "A location that overrides the configured location for Krita's resources"
-msgstr ""
+msgstr "Um local que substitui o local configurado para os recursos do Krita."
 
 #: libs/ui/KisApplicationArguments.cpp:100
 #, kde-format
@@ -29645,11 +29535,13 @@ msgid "Saving Document..."
 msgstr "Salvando documento... "
 
 #: libs/ui/KisDocument.cpp:799
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
+"Não foi possível comçar a salvar %1. Espere até que as operações de salvar "
+"atuais tenham terminado."
 
 #: libs/ui/KisDocument.cpp:926
 #, kde-format
@@ -30488,7 +30380,7 @@ msgstr "Não foi possível carregar imagens de referência de '%1'."
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
-msgstr ""
+msgstr "Baixando imagem de %1... (%2 / %3)"
 
 #: libs/ui/KisRemoteFileFetcher.cpp:88
 #, fuzzy, kde-format
@@ -30731,7 +30623,7 @@ msgid "Open Resource Folder"
 msgstr "Abrir pasta de recursos"
 
 #: libs/ui/KisViewManager.cpp:1323
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info resource folder"
 msgid ""
 "<p>You are using the Microsoft Store package version of Krita. Even though "
@@ -30744,18 +30636,28 @@ msgid ""
 "<p><b>Private app location</b>:<br/>\n"
 "%2</p>"
 msgstr ""
+"<p>Você está utilizando a versão pacote Microsoft Store do Krita. Mesmo que "
+"o Krita possa ser configurado para armazenar recursos na pasta AppData de "
+"usuário local, pode acontecer do Windows, na realidade, armazenar os "
+"arquivos dentro de um aplicativo privado local.</p>\n"
+"<p>Verifique ambos locais para determinar onde os arquivos estão sendo "
+"armazanados.</p>\n"
+"<p><b>Usuário AppData</b>:<br/>\n"
+"%1</p>\n"
+"<p><b>Aplicativo privado local</b>:<br/>\n"
+"%2</p>"
 
 #: libs/ui/KisViewManager.cpp:1338
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
-msgstr ""
+msgstr "Abrir no AppData do &usuário"
 
 #: libs/ui/KisViewManager.cpp:1339
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
-msgstr ""
+msgstr "Abrir em local &privado do aplicativo"
 
 #: libs/ui/KisViewManager.cpp:1457 libs/ui/KisViewManager.cpp:1475
 #, kde-format
@@ -31795,11 +31697,13 @@ msgid "Li&nk with Layer"
 msgstr "Li&gar com a camada"
 
 #: libs/ui/opengl/kis_opengl.cpp:165
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
 "issues."
 msgstr ""
+"Buffers de textura são explicitamente desabilitados no renderizador ANGLE "
+"devido a problemas de performance."
 
 #: libs/ui/opengl/kis_opengl.cpp:594
 #, kde-format
@@ -32012,32 +31916,28 @@ msgid "Icon Size"
 msgstr "Tamanho do ícone"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:144
-#, fuzzy, kde-format
-#| msgid "Layout"
+#, kde-format
 msgctxt "Toolbox layout"
 msgid "Layout"
 msgstr "Layout"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "Automático"
+msgstr "&Automático"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Left to right"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Left-to-right"
-msgstr "Esquerda para direita"
+msgstr "&Esquerda para direita"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:161
-#, fuzzy, kde-format
-#| msgid "Right to left"
+#, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Right-to-left"
-msgstr "Direita para esquerda"
+msgstr "&Direita para esquerda"
 
 #: libs/ui/utils/KisAppimageUpdater.cpp:171
 #, kde-format
@@ -32570,38 +32470,30 @@ msgid "Estimated Gamma cannot be retrieved for YCbCr."
 msgstr "Não é possível obter o gama estimado no YCrCb."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:371
-#, fuzzy, kde-format
-#| msgid "&About %1"
+#, kde-format
 msgctxt "About <Profilename>"
 msgid "About %1/%2"
-msgstr "&Sobre o %1"
+msgstr "Sobre %1/%2"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:373
-#, fuzzy, kde-format
-#| msgctxt "ICC profile version"
-#| msgid "ICC Version: "
+#, kde-format
 msgctxt "ICC profile version"
 msgid "ICC Version: %1"
-msgstr "Versão do ICC: "
+msgstr "Versão do ICC: %1"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:376
-#, fuzzy, kde-format
-#| msgid "Min Luminance: %1"
+#, kde-format
 msgctxt "Who made the profile?"
 msgid "Manufacturer: %1"
-msgstr "Luminância mínima: %1"
+msgstr "Fabricante: %1"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:381
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "What is the copyright? These are from embedded strings from the icc "
-#| "profile, so they default to english."
-#| msgid "Copyright: "
+#, kde-format
 msgctxt ""
 "What is the copyright? These are from embedded strings from the icc profile, "
 "so they default to english."
 msgid "Copyright: %1"
-msgstr "Copyright: "
+msgstr "Copyright: %1"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:389
 #, kde-format
@@ -32714,19 +32606,7 @@ msgstr ""
 "Curve) assume-se como sendo a do L*."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:429
-#, fuzzy, kde-format
-#| msgctxt "If the selected model is YCbCr"
-#| msgid ""
-#| "<b><a href=\"https://en.wikipedia.org/wiki/YCbCr\">YCbCr (Luma, Blue "
-#| "Chroma, Red Chroma)</a></b>, is a model designed for video encoding. It "
-#| "is based on human perception, meaning that it tries to encode the "
-#| "difference in lightness, red-green balance and yellow-blue balance. "
-#| "Chroma in this case is then a word indicating a special type of "
-#| "saturation, in these cases the saturation of Red and Blue, of which the "
-#| "desaturated equivalents are Green and Yellow respectively. It is "
-#| "available to open up certain images correctly, but Krita does not "
-#| "currently ship a profile for this due to lack of open source ICC profiles "
-#| "for YCrCb."
+#, kde-format
 msgctxt "If the selected model is YCbCr"
 msgid ""
 "<b><a href=\"https://en.wikipedia.org/wiki/YCbCr\">YCbCr (Luma, Blue Chroma, "
@@ -32744,10 +32624,7 @@ msgstr ""
 "luminosidade, no balanceamento entre verde-vermelho e amarelo-azul. O croma, "
 "neste caso, é apenas uma palavra que corresponde a um tipo especial de "
 "saturação, sendo nestes casos a saturação de Vermelho e Azul, dos quais as "
-"versões não-saturadas correspondem ao Verde e ao Amarelo, respectivamente. "
-"Está disponível para abrir determinadas imagens corretamente, mas no momento "
-"o Krita não fornece um perfil para isso, devido à ausência de perfis ICC de "
-"código aberto para o YCrCb."
+"versões não-saturadas correspondem ao Verde e ao Amarelo, respectivamente."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:440
 #, kde-format
@@ -33313,8 +33190,7 @@ msgid "No Label"
 msgstr "Sem etiqueta"
 
 #: libs/ui/widgets/kis_color_space_selector.cc:217
-#, fuzzy, kde-format
-#| msgid "Select a Colorspace"
+#, kde-format
 msgid "Select a Color Space"
 msgstr "Selecionar um espaço de cor"
 
@@ -33630,7 +33506,7 @@ msgstr ""
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:286
 #, kde-format
 msgid "Blur the selection by the set amount"
-msgstr ""
+msgstr "Embaçar a seleção pela quantidade definida"
 
 #: libs/ui/widgets/kis_selection_options.cc:230
 #, kde-format
@@ -33805,16 +33681,14 @@ msgstr "Salve o layout da janela atual."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:35
-#, fuzzy, kde-format
-#| msgid "Reset Highlights"
+#, kde-format
 msgctxt "Contrast enhancement section in auto levels"
 msgid "Shadows and Highlights"
-msgstr "Redefinir os tons claros"
+msgstr "Sombras e destaques"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:62
-#, fuzzy, kde-format
-#| msgid "Method:"
+#, kde-format
 msgctxt "Contrast enhancement method used in auto levels"
 msgid "Method:"
 msgstr "Método:"
@@ -33824,14 +33698,14 @@ msgstr "Método:"
 #, kde-format
 msgctxt "Use same black and white points for all the channels in auto levels"
 msgid "Adjust monochromatic contrast"
-msgstr ""
+msgstr "Ajuste o contraste monocromático"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxShadowsAndLightsMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:75
 #, kde-format
 msgctxt "Use different black and white points for each channel in auto levels"
 msgid "Adjust per channel contrast"
-msgstr ""
+msgstr "Ajuste por contraste de canal"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:83
@@ -33839,57 +33713,49 @@ msgstr ""
 msgctxt ""
 "Percentage of the histogram to clip in the shadous side in auto levels"
 msgid "Shadows clipping:"
-msgstr ""
+msgstr "Recorte de sombras:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:90
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Highlights:"
+#, kde-format
 msgctxt ""
 "Percentage of the histogram to clip in the highlights side in auto levels"
 msgid "Highlights clipping:"
-msgstr "Tons claros:"
+msgstr "Recorte de destaques:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:97
-#, fuzzy, kde-format
-#| msgid "Random offset:"
+#, kde-format
 msgctxt ""
 "Maximum distance the black/white points can be moved from their relative "
 "extremes in auto levels"
 msgid "Maximum offset:"
-msgstr "Deslocamento aleatório:"
+msgstr "Deslocamento máximo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Spot color:"
+#, kde-format
 msgctxt "Output color used for the shadows in auto levels"
 msgid "Shadows color:"
-msgstr "Cor de paragem:"
+msgstr "Cor das sombras:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:114
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Highlights:"
+#, kde-format
 msgctxt "Output color used for the highlights in auto levels"
 msgid "Highlights color:"
-msgstr "Tons claros:"
+msgstr "Cor de destaque:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:136
-#, fuzzy, kde-format
-#| msgid "Midtones"
+#, kde-format
 msgctxt "Midtones enhancement section in auto levels"
 msgid "Midtones"
-msgstr "Meio tons"
+msgstr "Meios-tons"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:163
-#, fuzzy, kde-format
-#| msgid "Method:"
+#, kde-format
 msgctxt "Midtones enhancement method used in auto levels"
 msgid "Method:"
 msgstr "Método:"
@@ -33899,35 +33765,32 @@ msgstr "Método:"
 #, kde-format
 msgctxt "Do not perform midtones enhancement in auto levels"
 msgid "Don't adjust the midtones"
-msgstr ""
+msgstr "Não ajuste os meios-tons"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:176
 #, kde-format
 msgctxt "Use the median point of the histogram as midtone point in auto levels"
 msgid "Use the median to adjust the midtones"
-msgstr ""
+msgstr "Use a mediana para ajustar os meios-tons"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:181
 #, kde-format
 msgctxt "Use the mean value of the histogram as midtone point in auto levels"
 msgid "Use the mean value to adjust the midtones"
-msgstr ""
+msgstr "Use o valor médio para ajustar os meios-tons"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:189
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgctxt "Output color used for the midtones in auto levels"
 msgid "Color:"
 msgstr "Cor:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:202
-#, fuzzy, kde-format
-#| msgctxt "Amount in Unsharp mask filter"
-#| msgid "Amount:"
+#, kde-format
 msgctxt ""
 "How much the midtone point used in auto levels is close to the center of the "
 "histogram (0%) or to the point selected in the method (100%)"
@@ -34742,6 +34605,9 @@ msgid ""
 "Map the displayed canvas size between pixel size or print size\n"
 "Current Mapping: %1"
 msgstr ""
+"Mapeie o tamanho da área de desenho exibida entre tamanho de pixel e tamanho "
+"de impressão\n"
+"Mapeamento Atual: %1"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtFileName)
 #: libs/widgets/wdg_file_name_requester.ui:39
@@ -34758,8 +34624,7 @@ msgstr "Selecione o nome do arquivo..."
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
 #: plugins/dockers/channeldocker/channeldocker_dock.cpp:28
-#, fuzzy, kde-format
-#| msgid "Channels"
+#, kde-format
 msgctxt "Channel as in Color Channels"
 msgid "Channels"
 msgstr "Canais"
@@ -35390,6 +35255,9 @@ msgid ""
 "understands.\n"
 "Make sure the file name ends in '.%1' for example."
 msgstr ""
+"O nome do arquivo selecionado não obtém uma extensão de arquivo que o Krita "
+"compreende.\n"
+"Certifique-se de que o nome do arquivo termine em '.%1', por exemplo."
 
 #: libs/widgetutils/KoFileDialog.cpp:507
 #, kde-format
@@ -36313,10 +36181,9 @@ msgstr "Habilitar régua vertical"
 
 #. i18n: ectx: property (text), widget (QCheckBox, fixedLengthCheckbox)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:117
-#, fuzzy, kde-format
-#| msgid "Fixed angle"
+#, kde-format
 msgid "Fixed Length"
-msgstr "Ângulo fixo"
+msgstr "Comprimento fixo"
 
 #. i18n: ectx: property (text), widget (QLabel, globalColorLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:160
@@ -36428,16 +36295,14 @@ msgid "Density: "
 msgstr "Densidade: "
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1492
-#, fuzzy, kde-format
-#| msgid "Subdivision:"
+#, kde-format
 msgid "Subdivisions: "
-msgstr "Subdivisão:"
+msgstr "Subdivisões: "
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1496
-#, fuzzy, kde-format
-#| msgid "Subdivision:"
+#, kde-format
 msgid "Minor Subdivisions: "
-msgstr "Subdivisão:"
+msgstr "Subdivisões menores: "
 
 #: plugins/assistants/Assistants/kis_assistant_tool.h:174
 #, kde-format
@@ -36946,10 +36811,9 @@ msgstr "Mostrar o seletor de cores"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:96
-#, fuzzy, kde-format
-#| msgid "Color &Model Type: "
+#, kde-format
 msgid "Color Model Type"
-msgstr "Tipo do &Modelo de Cores: "
+msgstr "Tipo do modelo de cores"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lumaCoefficientBox)
 #. i18n: ectx: property (title), widget (QGroupBox, lumaCoefficientGroupbox)
@@ -38816,10 +38680,9 @@ msgid "Save current palette"
 msgstr "Salvar paleta atual"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:123
-#, fuzzy, kde-format
-#| msgid "Load palette"
+#, kde-format
 msgid "Load a palette"
-msgstr "Carregar paleta"
+msgstr "Carregar uma paleta"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:216
 #, kde-format
@@ -39109,11 +38972,14 @@ msgstr "ffmpeg"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, resultPreviewCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:267
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Prepend a preview to the exported video.\n"
 "The preview will show the last frame of the video for the specified duration"
 msgstr ""
+"Prefixe uma visualização no vídeo exportado.\n"
+"A visualização será mostrada no último quadro do vídeo pela duração "
+"especificada."
 
 #. i18n: ectx: property (text), widget (QCheckBox, resultPreviewCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:273
@@ -39161,7 +39027,7 @@ msgstr " s"
 #: plugins/dockers/recorder/recorder_export.ui:609
 #, kde-format
 msgid "Extend the last frame in the exported video by the specified duration"
-msgstr ""
+msgstr "Extender o último quadro no vídeo exportado pela duração específicada."
 
 #. i18n: ectx: property (text), widget (QCheckBox, extendResultCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:612
@@ -42123,10 +41989,9 @@ msgid "The resource bundle name cannot be empty."
 msgstr "O nome do grupo de recursos não pode ficar em branco."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:381
-#, fuzzy, kde-format
-#| msgid "The resource bundle name cannot be empty."
+#, kde-format
 msgid "The save location cannot be empty."
-msgstr "O nome do grupo de recursos não pode ficar em branco."
+msgstr "O local de salvamento não pode estar vazio."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:392
 #, kde-format
@@ -42284,10 +42149,9 @@ msgid "Import Resources and Resource Libraries"
 msgstr "Importar recursos e bibliotecas de recursos"
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:38
-#, fuzzy, kde-format
-#| msgid "Manage Resources Libraries..."
+#, kde-format
 msgid "Manage Resource Libraries..."
-msgstr "Gerenciar bibliotecas de recursos ..."
+msgstr "Gerenciar bibliotecas de recursos..."
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:42
 #, kde-format
@@ -43406,8 +43270,7 @@ msgstr "Logarítmico"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:359
-#, fuzzy, kde-format
-#| msgid "Channel:"
+#, kde-format
 msgctxt "Channel as in Color Channels"
 msgid "Channel:"
 msgstr "Canal:"
@@ -43966,25 +43829,22 @@ msgid "Alpha Steps"
 msgstr "Passos do alfa"
 
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
-#, fuzzy, kde-format
-#| msgid ""
-#| "The current configuration was created for a different colorspace and "
-#| "cannot be used. All curves will be reset."
+#, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
 "be used.\n"
 "The channels will be reset."
 msgstr ""
-"A configuração atual foi criada para um espaço de cores diferente e não pode "
-"ser usada. Todas as curvas serão redefinidas."
+"A configuração atual foi criada para um espaço de cor diferente e não pode "
+"ser usada.\n"
+"Os canais serão reiniciados."
 
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:621
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:672
-#, fuzzy, kde-format
-#| msgid "&Auto Levels"
+#, kde-format
 msgctxt "@title:window"
 msgid "Auto Levels"
-msgstr "Níveis &automáticos"
+msgstr "Níveis automáticos"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgThreshold)
 #. i18n: ectx: property (windowTitle), widget (QWidget, LevelsConfigWidget)
@@ -43997,23 +43857,21 @@ msgstr "Níveis"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLightnessMode)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:49
-#, fuzzy, kde-format
-#| msgid "Lightness Only:"
+#, kde-format
 msgid "Modify lightness only"
-msgstr "Apenas luminosidade:"
+msgstr "Modificar luminosidade apenas"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAllChannelsMode)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:71
 #, kde-format
 msgid "Modify all channels independently"
-msgstr ""
+msgstr "Modifique todos os canais independentemente"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetAll)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:108
-#, fuzzy, kde-format
-#| msgid "Reset Channel"
+#, kde-format
 msgid "Reset channel"
-msgstr "Reiniciar canal"
+msgstr "Redefinir canal"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:130
@@ -44023,45 +43881,39 @@ msgstr "<b>Níveis de Entrada</b>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLinearHistogram)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:158
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color history"
+#, kde-format
 msgid "Show linear histogram"
-msgstr "Mostrar o histórico de cores"
+msgstr "Mostrar histograma linear"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLogarithmicHistogram)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:180
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color history"
+#, kde-format
 msgid "Show logarithmic histogram"
-msgstr "Mostrar o histórico de cores"
+msgstr "Mostrar histograma logarítmico"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonScaleHistogramToFit)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:201
 #, kde-format
 msgid "Scale the histogram to fit"
-msgstr ""
+msgstr "Dimensione o histograma para caber"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonScaleHistogramToCutLongPeaks)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:214
 #, kde-format
 msgid "Scale the histogram to cut long peaks "
-msgstr ""
+msgstr "Dimensione o histograma para cortar picos longos"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAutoLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:240
-#, fuzzy, kde-format
-#| msgid "Apply result to alpha channel"
+#, kde-format
 msgid "Apply auto levels to this channel"
-msgstr "Aplicar resultado ao canal alfa"
+msgstr "Aplicar níveis automáticos a este canal"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetInputLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:250
-#, fuzzy, kde-format
-#| msgid "Reset Filters"
+#, kde-format
 msgid "Reset input levels"
-msgstr "Redefinir filtros"
+msgstr "Redefinir os níveis de entrada"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:404
@@ -44071,31 +43923,27 @@ msgstr "<b>Níveis de Saída</b>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetOutputLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:427
-#, fuzzy, kde-format
-#| msgid "1st output"
+#, kde-format
 msgid "Reset output levels"
-msgstr "1ª saída"
+msgstr "Redefinir os níveis de saída"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3_2)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:524
-#, fuzzy, kde-format
-#| msgid "All Channels"
+#, kde-format
 msgid "<b>All Channels</b>"
-msgstr "Todos os canais"
+msgstr "<b>Todos os canais</b>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAutoLevelsAllChannels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:575
-#, fuzzy, kde-format
-#| msgid "Apply result to alpha channel"
+#, kde-format
 msgid "Apply auto levels to all the channels"
-msgstr "Aplicar resultado ao canal alfa"
+msgstr "Aplicar níveis automáticos a todos os canais"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetAllChannels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:585
-#, fuzzy, kde-format
-#| msgid "Reset All Channels"
+#, kde-format
 msgid "Reset all channels"
-msgstr "Reinicializar todos os canais"
+msgstr "Reiniciar todos os canais"
 
 #: plugins/filters/levelfilter/KisLevelsFilter.cpp:18
 #, kde-format
@@ -45245,57 +45093,51 @@ msgstr "Y: "
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text arfet as the suffix
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:360
-#, fuzzy, kde-format
-#| msgid "Sobel horizontally"
+#, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
 "generator"
 msgid "Every {n} cell horizontally"
 msgid_plural "Every {n} cells horizontally"
-msgstr[0] "Sobel horizontal"
-msgstr[1] "Sobel horizontal"
+msgstr[0] "Cada {n} célula horizontalmente"
+msgstr[1] "Cada {n} células horizontalmente"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text arfet as the suffix
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:376
-#, fuzzy, kde-format
-#| msgid "Flip vertically"
+#, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
 "generator"
 msgid "Every {n} cell vertically"
 msgid_plural "Every {n} cells vertically"
-msgstr[0] "Virar verticalmente"
-msgstr[1] "Virar verticalmente"
+msgstr[0] "Cada {n} célula verticalmente"
+msgstr[1] "Cada {n} células verticalmente"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:468
-#, fuzzy, kde-format
-#| msgid "Pixels/Inch"
+#, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
-msgstr "Pontos/Polegada"
+msgstr "pixels/polegada"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
-#, fuzzy, kde-format
-#| msgid "Pixels/Inch"
+#, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
-msgstr "Pontos/Polegada"
+msgstr "pixels/cm"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:472
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
-msgstr ""
+msgstr "linhas/polegada"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:473
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/patterns/Maze_lines.png"
-#| msgid "Maze lines"
+#, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
-msgstr "Linhas de labirinto"
+msgstr "linhas/cm"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScreentoneType)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:49
@@ -45311,35 +45153,30 @@ msgstr "Interpolação:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelEqualize)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:129
-#, fuzzy, kde-format
-#| msgid "Publication:"
+#, kde-format
 msgid "Equalization:"
-msgstr "Publicação:"
+msgstr "Equalização:"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonEqualizationNone)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:144
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "Screentone equalization mode"
 msgid "None"
 msgstr "Nenhum"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonEqualizationFunctionBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:157
-#, fuzzy, kde-format
-#| msgctxt "EXIF: flash"
-#| msgid "Function"
+#, kde-format
 msgctxt "Screentone equalization mode"
 msgid "Function Based"
-msgstr "Função"
+msgstr "Baseado em função"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonEqualizationTemplateBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:173
-#, fuzzy, kde-format
-#| msgid "templates"
+#, kde-format
 msgctxt "Screentone equalization mode"
 msgid "Template Based"
-msgstr "modelos"
+msgstr "Com base em modelo"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransformation)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:204
@@ -45349,24 +45186,21 @@ msgstr "Transformação"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSizeMode)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:245
-#, fuzzy, kde-format
-#| msgid "Scaling Mode:"
+#, kde-format
 msgid "Size Mode:"
-msgstr "Modo de escala:"
+msgstr "Modo de tamanho:"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonSizeModeResolutionBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:257
-#, fuzzy, kde-format
-#| msgid "Resolution:"
+#, kde-format
 msgid "Resolution based"
-msgstr "Resolução:"
+msgstr "Com base em resolução"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonSizeModePixelBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:273
-#, fuzzy, kde-format
-#| msgid "Pixels"
+#, kde-format
 msgid "Pixel based"
-msgstr "Pixels"
+msgstr "Baseado em pixel"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxUnits)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:337
@@ -45377,18 +45211,15 @@ msgstr "Polegadas (pol)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxUnits)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:342
-#, fuzzy, kde-format
-#| msgid "Centimeter"
+#, kde-format
 msgid "Centimeters"
-msgstr "Centímetros (cm)"
+msgstr "Centímetros"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonResolutionFromImage)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:353
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Image"
+#, kde-format
 msgid "Get From Image"
-msgstr "Recortar imagem"
+msgstr "Obter da imagem"
 
 #. i18n: ectx: property (text), widget (QLabel, label_frequency)
 #. i18n: ectx: property (text), widget (QLabel, labelFrequency)
@@ -45400,10 +45231,9 @@ msgstr "Frequência:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:563
-#, fuzzy, kde-format
-#| msgid "Pixel Grid:"
+#, kde-format
 msgid "Align to Pixel Grid:"
-msgstr "Grade do Pixel:"
+msgstr "Alinhar à grade de pixels:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPosition)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:586
@@ -45456,11 +45286,10 @@ msgid "Round"
 msgstr "Arredondamento"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:30
-#, fuzzy, kde-format
-#| msgid "Ellipse Shape"
+#, kde-format
 msgctxt "Screentone Pattern - Ellipse Dots (Krita 4 legacy version)"
 msgid "Ellipse (Legacy)"
-msgstr "Forma de Elipse"
+msgstr "Elipse (legado)"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:31
 #, kde-format
@@ -45893,18 +45722,14 @@ msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:180
-#, fuzzy, kde-format
-#| msgctxt "Colorspace name"
-#| msgid "Rec 2100 HLG"
+#, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec 2100 HLG"
 
 #: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:173
-#, fuzzy, kde-format
-#| msgctxt "Colorspace name"
-#| msgid "Rec 2100 PQ"
+#, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec 2100 PQ"
@@ -45938,9 +45763,7 @@ msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:637
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:189
-#, fuzzy, kde-format
-#| msgctxt "Colorspace option plus transfer function name"
-#| msgid "Keep colorants, encode PQ"
+#, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Mantenha os corantes, codifique PQ"
@@ -45960,9 +45783,7 @@ msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:642
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "Colorspace option plus transfer function name"
-#| msgid "Keep colorants, encode HLG"
+#, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Manter corantes, codificar HLG"
@@ -45981,9 +45802,7 @@ msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:647
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
-#, fuzzy, kde-format
-#| msgctxt "Colorspace option plus transfer function name"
-#| msgid "Keep colorants, encode SMPTE ST 428"
+#, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Manter corantes, codificar SMPTE ST 428"
@@ -46002,9 +45821,7 @@ msgstr ""
 "opção existe para reverter isso"
 
 #: plugins/impex/heif/HeifExport.cpp:653
-#, fuzzy, kde-format
-#| msgctxt "Colorspace option"
-#| msgid "No changes, clip"
+#, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
 msgstr "Sem alterações, clipe"
@@ -46484,23 +46301,25 @@ msgid "Unable to read the image profile."
 msgstr "Não foi possível salvar o perfil da imagem."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:507
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL errors"
 msgid "JPEG-XL image is animated, but cannot retrieve animation frame header."
 msgstr ""
+"Imagem JPEG-XL é animada, porém não pode recuperar o cabeçalho do quadro de "
+"animação."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:535
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."
-msgstr ""
+msgstr "A animação necessita de uma quantidade de quadros maior que 240 FPS."
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:32
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (only for low quality)"
-msgstr ""
+msgstr "Padrão (apenas para baixa qualidade)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:33
@@ -46512,24 +46331,24 @@ msgstr "Sem escalonamento"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:28
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:34
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
-msgstr ""
+msgstr "Sem escalonamento"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:35
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
-msgstr ""
+msgstr "Sem escalonamento"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
-msgstr ""
+msgstr "Sem escalonamento"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
@@ -46591,16 +46410,16 @@ msgid "Enabled"
 msgstr "Habilitado"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:59
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "VarDCT mode (e.g. for photographic images)"
-msgstr ""
+msgstr "Modo VarDCT (ex. para imagens fotográficas)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:60
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular mode (e.g. for lossless images)"
-msgstr ""
+msgstr "Modo modular (ex. para imagens sem perdas)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:71
 #, fuzzy, kde-format
@@ -46618,22 +46437,22 @@ msgid "Center-first order"
 msgstr "Parada central"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:96
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
-msgstr ""
+msgstr "64x64 condição de menor resolução"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:97
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512x512 + 64x64 lower resolution passes"
-msgstr ""
+msgstr "512x512 + 64x64 condições de menor resolução"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:108
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "128"
-msgstr ""
+msgstr "128"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:109
 #, fuzzy, kde-format
@@ -46646,19 +46465,19 @@ msgstr "255"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512"
-msgstr ""
+msgstr "512"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:111
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "1024"
-msgstr ""
+msgstr "1024"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:116
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Zero"
-msgstr ""
+msgstr "Zero"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:117
 #, fuzzy, kde-format
@@ -46679,7 +46498,7 @@ msgstr "Superior"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg0"
-msgstr ""
+msgstr "Méd0"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:120
 #, fuzzy, kde-format
@@ -46728,25 +46547,25 @@ msgstr "Recuo esquerdo"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg1"
-msgstr ""
+msgstr "Méd1"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:127
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg2"
-msgstr ""
+msgstr "Méd2"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:128
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg3"
-msgstr ""
+msgstr "Méd3"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:129
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Toptop predictive average"
-msgstr ""
+msgstr "Média toptop prevista"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:130
 #, fuzzy, kde-format
@@ -46771,24 +46590,26 @@ msgid "Save as is"
 msgstr "Salvar como %1"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:170
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@tooltip"
 msgid ""
 "The image will be stored without conversion, the ICC profile will be "
 "converted to CICP or embedded if it was not possible."
 msgstr ""
+"A imagem será armazenada sem conversão, o perfil ICC será convertido para "
+"CICP ou incorporado caso não seja possível."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:37
 #, kde-format
 msgid "If this is not enabled, only the first frame will be saved."
-msgstr ""
+msgstr "Caso isto não esteja habilidato, somente o primeiro quadro será salvo."
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
 #, kde-format
 msgid "Save as animated JPEG-XL"
-msgstr ""
+msgstr "Salvar como animação JPEG-XL"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:47
@@ -46827,13 +46648,18 @@ msgstr "Mais lento/melhor"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, effort)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:88
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Sets encoder effort/speed level without affecting decoding speed.\n"
 "Valid values are, from faster to slower speed: 1:lightning 2:thunder 3:"
 "falcon 4:cheetah 5:hare 6:wombat 7:squirrel 8:kitten 9:tortoise.\n"
 "Default: squirrel (7)."
 msgstr ""
+"Determina o nível de empenho/velocidade do codificador sem afetar a "
+"velocidade de decodificação.Valores válidos são, de mais rápido para mais "
+"devagar: 1:raio 2:relâmpago 3:falcão 4:guepardo 5:lebre 6:vombate 7:esquilo "
+"8:gato 9:jabuti.\n"
+"Padrão: esquilo (7)."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:106
@@ -46854,25 +46680,32 @@ msgstr "Menor qualidade"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:122
 #, kde-format
 msgid "Fastest/Slight quality loss"
-msgstr ""
+msgstr "Mais rápido/Leve perda de qualidade"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, decodingSpeed)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:134
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Sets the decoding speed tier for the provided options.\n"
 "Minimum is 0 (slowest to decode, best quality/density), and maximum is 4 "
 "(fastest to decode, at the cost of some quality/density).\n"
 "Default is 0."
 msgstr ""
+"Determina o nível de velocidade da decodificação para a opção fornecida.\n"
+"Mínimo é 0 (mais lento para decodificar, melhor qualidade/densidade), e  "
+"máximo é 4 (mais rápido para decodificar, ao custo de pouco da qualidade/"
+"densidade).\n"
+"Padrão é 0."
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:223
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Applications like Google Chrome expect HDR images to store their color "
 "profile as CICP values. You can adjust the ICC profile conversion below."
 msgstr ""
+"Aplicativos como Google Chrome esperam que imagens HDR armazenem seu perfil "
+"de cor como valores CICP. Você pode ajustar a conversão de perfil ICC abaixo."
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:291
@@ -46884,12 +46717,15 @@ msgstr "Canais de cor na cor"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, resampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:298
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Sets resampling option. If enabled, the image's color channels are "
 "downsampled before compression, and upsampled to original size in the "
 "decoder."
 msgstr ""
+"Define opção de reamostragem. Se habilitado, o plano de cor da imagem é "
+"reduzida antes da compactação, e aumentada ao tamanho original no "
+"decodificador."
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:305
@@ -46900,22 +46736,25 @@ msgstr "Compressão de plano alfa"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, extraChannelResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:312
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Sets resampling option. If enabled, the image's alpha channel is downsampled "
 "before compression, and upsampled to original size in the decoder."
 msgstr ""
+"Define opção de reamostragem. Se habilitado, o plano alfa da imagem é "
+"reduzida antes da compactação, e aumentada ao tamanho original no "
+"decodificador."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:319
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Photon noise"
-msgstr ""
+msgstr "Ruído Fóton"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, photonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:334
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Adds noise to the image emulating photographic film noise, the higher the "
 "given number, the grainier the image will be.\n"
@@ -46923,6 +46762,11 @@ msgid ""
 "a lot of noise.\n"
 "The default value is 0."
 msgstr ""
+"Adiciona ruído à imagem emulando ruído de filme fotográfico, quão maior o "
+"valor dado, mais granulada a imagem será.\n"
+"Como exemplo, um valor de 100 resulta em baixo ruído, enquanto um valor de "
+"3200 resulta em grande quantidade de ruído.\n"
+"O valor padrão é 0."
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:344
@@ -46972,26 +46816,26 @@ msgstr "Altura máxima"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:398
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Edge preserving filter level, -1 to 3. Use -1 for the default (encoder "
 "chooses), 0 to 3 to set a strength."
 msgstr ""
+"Nível de preservação de borda do filtro. Use -1 para o padrão (codificador "
+"escolhe), 0 até 3 para definir a intensidade."
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:413
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Gmic filter"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
-msgstr "Filtro Gmic"
+msgstr "Filtro estilo Gabor"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:420
 #, kde-format
 msgid "Enables or disables the gaborish filter."
-msgstr ""
+msgstr "Habilita ou desabilita o filtro estilo gabor."
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:427
@@ -47010,15 +46854,15 @@ msgstr "Ativar Pintura de Toque"
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:441
-#, kde-format
+#, fuzzy, kde-format
 msgid "Keep color of invisible pixels"
-msgstr ""
+msgstr "Mantém cor de pixels invisíveis"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, keepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:448
-#, kde-format
+#, fuzzy, kde-format
 msgid "Enables or disables preserving color of invisible pixels."
-msgstr ""
+msgstr "Habilita ou desabilita a preservação de cor em pixels invisíveis."
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:455
@@ -47030,18 +46874,20 @@ msgstr "Sem borda"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, groupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:462
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Determines the order in which 256x256 regions are stored in the codestream "
 "for progressive rendering."
 msgstr ""
+"Determina a ordem pela qual regiões de 256x256 são armazenadas no fluxo de "
+"código para a renderização progressiva."
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:469
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Chroma-from-luma"
-msgstr ""
+msgstr "Cromatização-à-partir-de-Luma"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:476
@@ -47062,11 +46908,13 @@ msgstr "Precisão a subpixels"
 #. i18n: ectx: property (toolTip), widget (QComboBox, qProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:489
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:506
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Set the progressive mode for the AC coefficients of VarDCT, using spectral "
 "progression from the DCT coefficients."
 msgstr ""
+"Defina o modo de progressão para os coeficientes AC de VarDCT, usando  "
+"progressão espectral do coeficiente DCT."
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:499
@@ -47087,9 +46935,10 @@ msgstr "Resolução X:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:520
-#, kde-format
+#, fuzzy, kde-format
 msgid "Set the progressive mode using lower-resolution DC images for VarDCT."
 msgstr ""
+"Defina o modo progressivo usando imagens DC de baixa resolução para VarDCT."
 
 #. i18n: ectx: property (title), widget (QGroupBox, modularEncodingParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:530
@@ -47108,19 +46957,24 @@ msgstr "Padrão Global"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:547
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Use Global channel palette if the amount of colors is smaller than this "
 "percentage of range.\n"
 "Use 0-100 to set an explicit percentage, -1 to use the encoder default.\n"
 "Used for modular encoding."
 msgstr ""
+"Use paleta de canais Global caso a quantidade de cores seja menor que esta "
+"percentagem de alcance.\n"
+"Use 0-100 para definir uma percentagem explicita, -1 para usar o "
+"decodificador padrão.\n"
+"Usado para codificação modular."
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:588
-#, kde-format
+#, fuzzy, kde-format
 msgid "Local channel palette range"
-msgstr ""
+msgstr "Carregar uma paleta"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:599
@@ -47131,21 +46985,29 @@ msgid ""
 "Use 0-100 to set an explicit percentage, -1 to use the encoder default.\n"
 "Used for modular encoding."
 msgstr ""
+"Use paleta de canais Local (por-grupo) caso a quantidade de cores seja menor "
+"que esta percentagem de alcance.\n"
+"Use 0-100 para definir uma percentagem explicita, -1 para usar o "
+"decodificador padrão.\n"
+"Usado para codificação modular."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:640
-#, kde-format
+#, fuzzy, kde-format
 msgid "Use color palette for ... colors or less"
-msgstr ""
+msgstr "Use paleta de cores para ... cores ou menos."
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, paletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:654
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Use color palette if amount of colors is smaller than or equal to this "
 "amount, or -1 to use the encoder default.\n"
 "Used for modular encoding."
 msgstr ""
+"Use paleta de cores caso a quantidade de cores seja menor ou igual a esta "
+"quantidade, ou -1 para usar o codificador padrão.\n"
+"Usado para codificação modular."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:676
@@ -47157,9 +47019,9 @@ msgstr "Carregar paleta"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, lossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:683
-#, kde-format
+#, fuzzy, kde-format
 msgid "Enables or disables delta palette. Used in modular mode."
-msgstr ""
+msgstr "Ativar geração de cache em segundo plano"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
@@ -47171,9 +47033,9 @@ msgstr "Tamanho do pingo"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:697
-#, kde-format
+#, fuzzy, kde-format
 msgid "Group size for modular encoding."
-msgstr ""
+msgstr "Tamanho do grupo para codificação modular."
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:704
@@ -47192,24 +47054,28 @@ msgstr "Sem editor para a ação atual."
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularMATreeLearningPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:718
-#, kde-format
+#, fuzzy, kde-format
 msgid "Pixels for MA tree learning"
-msgstr ""
+msgstr "Pixels para aprendizagem de árvore MA"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, modularMATreeLearningPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:746
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Fraction of pixels used to learn MA trees as a percentage.\n"
 "-1 = default, 0 = no MA and fast decode, 50 = default value, 100 = all.\n"
 "Higher values use more encoder memory."
 msgstr ""
+"Fração de pixels usados para aprender árvores MA como percentagem.\n"
+"-1 = padrão, 0 = sem MA e rápida decodificação, 50 = valor padrão,  100 = "
+"tudo.\n"
+"Valores maiores utilizam mais memória codificadora."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, responsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:767
-#, kde-format
+#, fuzzy, kde-format
 msgid "Enables or disables progressive encoding for modular mode."
-msgstr ""
+msgstr "Habilita ou disabilita codificação progressiva para o modo modular."
 
 #. i18n: ectx: property (text), widget (QLabel, lblResponsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:774
@@ -49058,13 +48924,18 @@ msgid ""
 "coefficient quantization and/or Huffman coding tables. Please upgrade your "
 "version of libjpeg-turbo and try again."
 msgstr ""
+"Este arquivo TIFF está compactado em JPEG, porém o libjpeg-turbo não foi "
+"capaz de carregar seu coeficiente de quantização e/ou tabelas de código "
+"Huffman. Por favor, atualize tua versão do libjpeg-turbo e tente novamente."
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1143
 #: plugins/impex/tiff/kis_tiff_import.cc:1326
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
 msgstr ""
+"Arquivos YCbCr TIFF subamostrados compactados em JPEG não podem ser "
+"carregados."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
 #. i18n: ectx: property (title), widget (QGroupBox, tiffOptions)
@@ -49099,31 +48970,27 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkPhotoshop)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:79
-#, fuzzy, kde-format
-#| msgid "Save layers to..."
+#, kde-format
 msgid "Save layers as Photoshop"
-msgstr "Salvar camadas para..."
+msgstr "Salvar camadas como Photoshop"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:88
-#, fuzzy, kde-format
-#| msgid "Lossless compression"
+#, kde-format
 msgid "Layer compression"
-msgstr "Compressão sem perdas"
+msgstr "Compressão de camada"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kComboBoxPSDCompressionType)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:99
-#, fuzzy, kde-format
-#| msgctxt "Recording symbol"
-#| msgid "REC"
+#, kde-format
 msgid "RLE"
-msgstr "REC"
+msgstr "RLE"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kComboBoxPSDCompressionType)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:104
 #, kde-format
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #. i18n: ectx: property (text), widget (QCheckBox, alpha)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:134
@@ -49844,11 +49711,9 @@ msgid "Dulling"
 msgstr "Seco"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:95
-#, fuzzy, kde-format
-#| msgctxt "Color rate of active Foreground color"
-#| msgid "Color Rate"
+#, kde-format
 msgid "Color Rate"
-msgstr "Intervalo de cores"
+msgstr "Taxa de cor"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:106
 #, kde-format
@@ -52161,9 +52026,9 @@ msgid "Sharpness"
 msgstr "Grau de detalhe"
 
 #: plugins/paintops/libpaintop/kis_pressure_sharpness_option_widget.cpp:26
-#, kde-format
+#, fuzzy, kde-format
 msgid "Align the brush preview outline to the pixel grid"
-msgstr ""
+msgstr "Alinhe a silhueta da amostra de pincel com a grade pixelada"
 
 #: plugins/paintops/libpaintop/kis_pressure_sharpness_option_widget.cpp:30
 #, kde-format
@@ -52308,6 +52173,8 @@ msgid ""
 "WARNING: Dependent size of the masked brush grew too big (%1 pixels). Its "
 "value has been cropped to %2 pixels."
 msgstr ""
+"AVISO: o tamanho dependente do pincel mascarado ficou muito grande (%1 "
+"pixels). Seu valor foi cortado para %2 pixels."
 
 #: plugins/paintops/libpaintop/sensors/kis_dynamic_sensor_drawing_angle.cpp:61
 #, kde-format
@@ -52818,14 +52685,16 @@ msgid "Spray Area"
 msgstr "Área do spray"
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:63
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Select how the particles are distributed as a function of the angle to the "
 "center of the spray area."
 msgstr ""
+"Selecione como as partículas são destribuídas em função do ângulo à partir "
+"do centro da área de spray."
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:66
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Set a custom distribution of the particles.\n"
 "The horizontal axis represents the angle from 0 to 360 degrees.\n"
@@ -52834,41 +52703,49 @@ msgid ""
 "The higher the curve at a given angle, the more particles will end at that "
 "angle."
 msgstr ""
+"Defina a distribuição customizada de particulas.\n"
+"O axis horizontal representa o ângulo de 0 a 360 graus.\n"
+"O axis vertical representa a probabilidade de uma particula terminar em tal "
+"ângulo.\n"
+"Quanto mais alta a curva num determinado ângulo, mais partículas terminarão "
+"naquele ângulo."
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:71
 #: plugins/paintops/spray/kis_sprayop_option.cpp:107
-#, fuzzy, kde-format
-#| msgid "Repeat:"
+#, kde-format
 msgid "Repeat: "
 msgstr "Repetir:"
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:72
 #: plugins/paintops/spray/kis_sprayop_option.cpp:108
-#, fuzzy, kde-format
-#| msgid "x"
+#, kde-format
 msgctxt "Times symbol, like in 10x"
 msgid "x"
 msgstr "x"
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:75
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Set how many times should the curve repeat from 0 degrees to 360 degrees."
-msgstr ""
+msgstr "Defina quantas vezes a curva deve ser repetida de 0 graus a 360 graus."
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:78
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Select how the particles are distributed as a function of the distance from "
 "the center of the spray area."
 msgstr ""
+"Selecione como as partículas são destribuídas em função da distância a "
+"partir do centro da área de spray."
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:81
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Activates the old behavior where the particles are more accumulated towards "
 "the center of the spray area."
 msgstr ""
+"Ativa comportamento antigo onde as partículas são acumuladas ao centro da "
+"área de spray."
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:83
 #, fuzzy, kde-format
@@ -52878,12 +52755,14 @@ msgid "Standard deviation: "
 msgstr "Luz normal A"
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:87
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Set the standard deviation for the gaussian distribution.\n"
 "Lower values will make the particles concentrate towards the center of the "
 "spray area."
 msgstr ""
+"Defina o desvio padrão para a distribuição gaussiana.\n"
+"Valores menores concentrarão as partículas ao centro da área de spray."
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:91
 #, fuzzy, kde-format
@@ -52892,7 +52771,7 @@ msgid "Clustering amount: "
 msgstr "Quantidade de deformação:"
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:95
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Set how the particles should spread in the spray area.\n"
 "Positive values will make the particles concentrate towards the center of "
@@ -52901,9 +52780,16 @@ msgid ""
 "the spray area.\n"
 "Values near 0 will make the particles spread more uniformly."
 msgstr ""
+"Defina como a distribuição de partículas devem ser expalhadas na área de "
+"spray.\n"
+"Valores positivos farão as partículas se concentrarem ao meio da área de "
+"spray.\n"
+"Valores negativos farão as partículas se concentrarem às bordas da área de "
+"spray.\n"
+"Valores próximo de 0 farão as partículas se expalharem mais uniformemente. "
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:102
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Set a custom distribution of the particles.\n"
 "The horizontal axis represents the distance from the center to the border of "
@@ -52913,13 +52799,21 @@ msgid ""
 "The higher the curve at a given distance, the more particles will end at "
 "that distance."
 msgstr ""
+"Defina distribuição customizada de particulas.\n"
+"O axis horizontal representa o ângulo de 0 a 360 graus.\n"
+"O axis vertical representa a probabilidade de uma particula terminar nesse "
+"ângulo.\n"
+"Quanto mais alta a curva num determinado ângulo, mais partículas terminarão "
+"naquele ângulo."
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:111
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Set how many times should the curve repeat from the center to the border of "
 "the spray area."
 msgstr ""
+"Defina quantas vezes a curva deve ser repetida do meio para as bordas da "
+"área de spray."
 
 #: plugins/paintops/spray/spray_paintop_plugin.cpp:27
 #, kde-format
@@ -52966,11 +52860,11 @@ msgstr "Peso do ângulo:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/paintops/spray/wdgsprayoptions.ui:33
-#, kde-format
+#, fuzzy, kde-format
 msgctxt ""
 "Name of the group of options related to the spay area in the spray engine"
 msgid "Area"
-msgstr ""
+msgstr "Área"
 
 #. i18n: ectx: property (text), widget (QLabel, diameterLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:48
@@ -53117,13 +53011,13 @@ msgstr "mais rápida"
 
 #. i18n: ectx: property (text), widget (QCheckBox, centerBiasedPolarDistanceBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:407
-#, kde-format
+#, fuzzy, kde-format
 msgctxt ""
 "Check box to indicate that the radial distribution should use the old method "
 "where particles are biased towards the center of the spray area in the spray "
 "engine"
 msgid "Center-biased spread (legacy)"
-msgstr ""
+msgstr "Propagação de foco central (legado)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/spray/wdgsprayoptions.ui:432
@@ -55176,9 +55070,6 @@ msgid "Set"
 msgstr "Configurar"
 
 #: plugins/python/palette_docker/palette_docker.py:72
-#, fuzzy
-#| msgctxt "Group as in Template Group"
-#| msgid "Add Group"
 msgctxt "Group as Color Group in a Palette"
 msgid "Add Group"
 msgstr "Adicionar grupo"
@@ -55223,63 +55114,48 @@ msgid "{input} has been exported to {output}."
 msgstr "{input} foi exportado para {output}."
 
 #: plugins/python/photobash_images/photobash_images_docker.py:73
-#, fuzzy
-#| msgctxt "description of a file type"
-#| msgid "Photoshop Image (Large)"
 msgctxt "@title:window"
 msgid "Photobash Images"
-msgstr "Imagem do Photoshop (Grande)"
+msgstr "Imagens do Photobash"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:141
 #: plugins/python/photobash_images/photobash_images_docker.py:471
-#, fuzzy
-#| msgctxt "action"
-#| msgid "References Tool"
 msgid "Change References Folder"
-msgstr "Ferramenta de referências"
+msgstr "Alterar pasta de referências"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:147
 #: plugins/python/photobash_images/photobash_images_docker.py:219
-#, fuzzy, python-brace-format
-#| msgid "Pattern Scale:"
+#, python-brace-format
 msgid "Image Scale: {0}%"
-msgstr "Escala do padrão:"
+msgstr "Escala da imagem: {0}%"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:321
-#, fuzzy, python-brace-format
-#| msgid "Page %1"
+#, python-brace-format
 msgid "Page: {0}/{1}"
-msgstr "Página %1"
+msgstr "Página: {0}/{1}"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:460
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change rectangle"
 msgid "Change Directory for Images"
-msgstr "Alterar retângulo"
+msgstr "Alterar pasta de imagens"
 
 #. i18n: ectx: property (text), widget (QPushButton, changePathButton)
 #: plugins/python/photobash_images/photobash_images_docker.py:469
 #: plugins/python/photobash_images/photobash_images_docker.ui:96
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "References Tool"
+#, kde-format
 msgid "Set References Folder"
-msgstr "Ferramenta de referências"
+msgstr "Pasta definir referências"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, filterTextEdit)
 #: plugins/python/photobash_images/photobash_images_docker.ui:71
-#, fuzzy, kde-format
-#| msgid "Filter Frames by Color"
+#, kde-format
 msgid "Filter images by words..."
-msgstr "Filtrar Quadros por Cor"
+msgstr "Filtrar imagens por palavras..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, fitCanvasCheckBox)
 #: plugins/python/photobash_images/photobash_images_docker.ui:388
-#, fuzzy, kde-format
-#| msgid "Rotate Canvas"
+#, kde-format
 msgid "Scale To Canvas"
-msgstr "Girar tela"
+msgstr "Escala para tela"
 
 #: plugins/python/plugin_importer/plugin_downloader.py:70
 msgid "Could not determine download link from URL"
@@ -55871,36 +55747,30 @@ msgid "Magnetism:"
 msgstr "Magnetismo:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:467
-#, fuzzy, kde-format
-#| msgid "Snap Single:"
+#, kde-format
 msgid "Snap to Single Line"
-msgstr "Aderir a único:"
+msgstr "Ajustar à linha única"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:470
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Make it only snap to a single assistant, prevents snapping mess while "
-#| "using the infinite assistants."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Make it only snap to a single assistant line, prevents snapping mess while "
 "using the infinite assistants."
 msgstr ""
-"Reduz a área para um único assistente, reduzindo a confusão ao usar os "
-"infinitos assistentes."
+"Faça com que seja encaixado apenas em uma única linha de assistente, "
+"evitando bagunça de encaixe ao usar os infinitos assistentes."
 
 #: plugins/tools/basictools/kis_tool_brush.cc:475
-#, fuzzy, kde-format
-#| msgid "Eraser"
+#, kde-format
 msgid "Snap Eraser"
-msgstr "Borracha"
+msgstr "Ajuste da borracha"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:478
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
-msgstr ""
+msgstr "Habilitar ajuste ao usar borrachas"
 
 #: plugins/tools/basictools/kis_tool_brush.h:137
 #, kde-format
@@ -55941,23 +55811,19 @@ msgid "Flood Fill"
 msgstr "Preenchimento"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:361
-#, fuzzy, kde-format
-#| msgid "Scale:"
+#, kde-format
 msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
 msgid "Scale: "
 msgstr "Escala:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:368
-#, fuzzy, kde-format
-#| msgctxt "The Threshold label in Fill tool options"
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "The 'threshold' spinbox prefix in fill tool options"
 msgid "Threshold: "
 msgstr "Limiar: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:371
-#, fuzzy, kde-format
-#| msgid "Spread:"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in fill tool options"
 msgid "Spread: "
 msgstr "Espalhar:"
@@ -55990,8 +55856,7 @@ msgid "Feather: "
 msgstr "Raio da passagem:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:413
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "The 'reset' button in fill tool options"
 msgid "Reset"
 msgstr "Reiniciar"
@@ -56124,19 +55989,16 @@ msgid "Region extent"
 msgstr "Tentativa de Desenho"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:478
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "HSV Adjustment"
+#, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
-msgstr "Ajuste do HSV"
+msgstr "Ajustes"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:487
-#, fuzzy, kde-format
-#| msgid "References"
+#, kde-format
 msgctxt "The 'reference' section label in fill tool options"
 msgid "Reference"
-msgstr "Referências"
+msgstr "Referência"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:496
 #, fuzzy, kde-format
@@ -56218,10 +56080,7 @@ msgid "%1°"
 msgstr "%1°"
 
 #: plugins/tools/basictools/kis_tool_measure.cc:141
-#, fuzzy, kde-format
-#| msgid ""
-#| "%1 %2\n"
-#| "%3°"
+#, kde-format
 msgctxt "%1=distance %2=unit of distance %3=angle in degrees"
 msgid ""
 "%1 %2\n"
@@ -58562,7 +58421,7 @@ msgstr "Desenhar uma curva Bezier"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:414
 #, kde-format
 msgid "Lasso"
-msgstr ""
+msgstr "Laço"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:417
 #, kde-format

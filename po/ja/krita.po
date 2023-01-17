@@ -7,7 +7,7 @@
 # Tsugumi Harabayashi <tu.hrby@gmail.com>, 2014.
 # Tomohiro Hyakutake <tomhioo@outlook.jp>, 2019.
 # bbch <suzihi248@ruru.be>, 2020, 2022.
-# Fumiaki Okushi <fumiaki.okushi@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2017, 2019, 2020, 2022.
+# Fumiaki Okushi <fumiaki.okushi@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2017, 2019, 2020, 2022, 2023.
 # --- kritalibs
 # Translation of koffice into Japanese.
 # This file is distributed under the same license as the koffice package.
@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-13 03:53+0000\n"
-"PO-Revision-Date: 2022-12-16 21:55-0800\n"
+"PO-Revision-Date: 2023-01-15 21:44-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
 "Language: ja\n"
@@ -55755,16 +55755,12 @@ msgid "Spread: "
 msgstr "拡張: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:377
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Description for a checkbox in a Fill Tool to use selection borders as "
-#| "boundary when filling"
-#| msgid "Use selection as boundary:"
+#, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in fill tool to use selection "
 "borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr "選択を境界値として使用:"
+msgstr "選択を境界値として使用"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:383
 #, kde-format
@@ -55792,7 +55788,7 @@ msgstr "現在の選択範囲"
 #: plugins/tools/basictools/kis_tool_fill.cc:417
 #, kde-format
 msgid "Contiguous region obtained from the layers"
-msgstr ""
+msgstr "レイヤーから得られる連続した領域"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:422
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:422
@@ -55833,6 +55829,8 @@ msgid ""
 "Set if the contour of the current selection should be treated as a boundary "
 "when obtaining the region"
 msgstr ""
+"チェックすると、領域を取得する際に現在の選択範囲の境界線を境界として扱いま"
+"す。"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:432
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:432
@@ -55840,7 +55838,7 @@ msgstr ""
 msgid ""
 "Grow (positive values) or shrink (negative values) the region by the set "
 "amount"
-msgstr ""
+msgstr "設定した量だけ、領域を拡大(正の値)または縮小(負の値)する"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:433
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:433
@@ -55852,41 +55850,36 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:435
 #, kde-format
 msgid "Obtain the region using the active layer"
-msgstr ""
+msgstr "アクティブなレイヤーを用いて領域を取得する"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:436
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:436
 #, kde-format
 msgid "Obtain the region using a merged copy of all layers"
-msgstr ""
+msgstr "すべてのレイヤーの統合済みコピーを用いて領域を取得する"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:437
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:437
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set the source for the selected clone layer(s)."
+#, kde-format
 msgid ""
 "Obtain the region using a merged copy of the selected color-labeled layers"
-msgstr "選択したクローンレイヤーのソースを設定します。"
+msgstr "選択した色ラベル付きレイヤーの統合済みコピーを用いて範囲を取得する"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:439
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid "Fill regions of any color"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "どのような色の領域をも塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:440
 #, kde-format
 msgid "Fill only regions similar in color to the initial region"
-msgstr ""
+msgstr "最初の領域の色に近い色の領域のみを塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:442
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:439
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reset to default value"
+#, kde-format
 msgid "Reset the options to their default values"
-msgstr "デフォルトの値に戻す"
+msgstr "設定項目をデフォルトの値に戻す"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:451
 #, kde-format
@@ -55901,11 +55894,10 @@ msgid "Fill with"
 msgstr "何で塗りつぶすか"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:469
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgctxt "The 'region extent' section label in fill tool options"
 msgid "Region extent"
-msgstr "色空間変換の方法"
+msgstr "領域"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:478
 #, kde-format
@@ -57033,6 +57025,7 @@ msgid ""
 "Set how far the selection should extend from the selected pixel in terms of "
 "color similarity"
 msgstr ""
+"選択したピクセルから、色の類似性でどの程度まで選択範囲を広げるかを設定する"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:275
 #, kde-format
@@ -57042,6 +57035,9 @@ msgid ""
 "the selected pixel.\n"
 "100% will make all the selection opaque up to its boundary."
 msgstr ""
+"選択範囲内で、どこまで完全に不透明な部分を広げるかを設定する。0%では選択範囲"
+"内のうち、選択したピクセルに完全に一致しているピクセルのみを不透明にする。"
+"100%では、選択範囲の境界までを不透明にする。"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:280
 #, kde-format
@@ -58364,11 +58360,10 @@ msgid "Fill with"
 msgstr "何で塗りつぶすか"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:476
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgctxt "The 'region extent' section label in enclose and fill tool options"
 msgid "Region extent"
-msgstr "色空間変換の方法"
+msgstr "領域"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:485
 #, kde-format

@@ -817,6 +817,12 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             return JxlEncoderSetFrameDistance(frameSettings, dist) == JXL_ENC_SUCCESS;
         };
 
+        // XXX: Workaround for a buggy modular mode on F32.
+        // Set to encoder default instead.
+        //
+        // See: https://github.com/libjxl/libjxl/issues/2064
+        const int setModular = (cs->colorDepthId() == Float32BitsColorDepthID) ? -1 : cfg->getInt("modular", -1);
+
         if (!setFrameLossless(cfg->getBool("lossless"))
             || !setSetting(JXL_ENC_FRAME_SETTING_EFFORT, cfg->getInt("effort", 7))
             || !setSetting(JXL_ENC_FRAME_SETTING_DECODING_SPEED, cfg->getInt("decodingSpeed", 0))
@@ -826,7 +832,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             || !setSetting(JXL_ENC_FRAME_SETTING_PATCHES, cfg->getInt("patches", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_EPF, cfg->getInt("epf", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_GABORISH, cfg->getInt("gaborish", -1))
-            || !setSetting(JXL_ENC_FRAME_SETTING_MODULAR, cfg->getInt("modular", -1))
+            || !setSetting(JXL_ENC_FRAME_SETTING_MODULAR, setModular)
             || !setSetting(JXL_ENC_FRAME_SETTING_KEEP_INVISIBLE, cfg->getInt("keepInvisible", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_GROUP_ORDER, cfg->getInt("groupOrder", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_RESPONSIVE, cfg->getInt("responsive", -1))

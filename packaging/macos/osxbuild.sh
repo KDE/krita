@@ -404,11 +404,11 @@ build_3rdparty () {
     cmake_3rdparty ext_xsimd
 
     cmake_3rdparty \
-        ext_freetype
-        ext_poppler
-        ext_fribidi
-        ext_raqm
-        ext_unibreak
+        ext_freetype \
+        ext_poppler \
+        ext_fribidi \
+        ext_raqm \
+        ext_unibreak \
         ext_fontconfig
 
     ## All builds done, creating a new install onlydeps install dir

@@ -121,12 +121,6 @@ set_package_properties(Perl PROPERTIES
 if (WIN32)
     option(ENABLE_MSYS2_FIXES "Enable patches that are needed for MSYS2+Clang Krita build" OFF)
 
-	if (DEFINED ENV{WindowsSdkDir})
-		message(STATUS "WindowsSdkDir is set to '$ENV{WindowsSdkDir}'")
-	else (DEFINED ENV{WindowsSdkDir})
-		message(FATAL_ERROR "Environment variable 'WindowsSdkDir' not set! Please set it to path of Windows 10 SDK")
-	endif ()
-
     if(ENABLE_MSYS2_FIXES)
         find_package(ZLIB)
         find_package(Iconv)

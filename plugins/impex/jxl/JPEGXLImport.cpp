@@ -654,6 +654,9 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
 
                     metadataBoxes.insert(type, box);
                 }
+                // Preemptively zero the box type out to prevent dangling
+                // boxes.
+                boxType.fill('\0');
             }
             if (status == JXL_DEC_SUCCESS) {
                 // All decoding successfully finished.

@@ -78,11 +78,7 @@ if (WIN32)
         list(APPEND _QT_conf -force-debug-info)
     endif(QT_ENABLE_DEBUG_INFO OR WIN32)
     if (QT_ENABLE_ASAN)
-        list(APPEND _QT_conf
-            QMAKE_CFLAGS+=-fsanitize=address
-            QMAKE_CXXFLAGS+=-fsanitize=address
-            QMAKE_LFLAGS+=-fsanitize=address
-            )
+        list(APPEND _QT_conf -sanitize address)
     endif ()
     if (MINGW)
         if (NOT QT_ENABLE_DEBUG_INFO)
@@ -188,11 +184,7 @@ elseif (NOT APPLE)
         set(QT_DEBUG_OPTIONS -force-debug-info)
     endif()
     if (QT_ENABLE_ASAN)
-        list(APPEND _QT_conf
-            QMAKE_CFLAGS+=-fsanitize=address
-            QMAKE_CXXFLAGS+=-fsanitize=address
-            QMAKE_LFLAGS+=-fsanitize=address
-            )
+        list(APPEND _QT_conf -sanitize address)
     endif ()
 
 

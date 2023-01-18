@@ -189,14 +189,20 @@ inline Exiv2::Value *kmdValueToExivValue(const KisMetaData::Value &value, Exiv2:
             return arrayToExivValue<int16_t>(value);
         case Exiv2::signedLong:
             return arrayToExivValue<int32_t>(value);
+        case Exiv2::asciiString:
+            Q_FALLTHROUGH();
         case Exiv2::string: {
-            Exiv2::StringValue *ev = new Exiv2::StringValue();
-            for (int i = 0; i < value.asArray().size(); ++i) {
-                ev->value_ += qvariant_cast<QString>(value.asArray()[i].asVariant()).toLatin1().constData();
-                if (i != value.asArray().size() - 1)
-                    ev->value_ += ',';
+            // Using toLatin1 here is not lossy for asciiString,
+            // but definitely is for string. IPTC allows UTF-8
+            // encoding which supersets ASCII. See:
+            // https://www.iptc.org/std/photometadata/specification/IPTC-PhotoMetadata#iim-properties
+            // https://doc.qt.io/qt-5/qstring.html#toLatin1
+            const QList<KisMetaData::Value> list = value.asArray();
+            QStringList result;
+            Q_FOREACH (const KisMetaData::Value &v, list) {
+                result << v.asVariant().value<QString>();
             }
-            return ev;
+            return new Exiv2::StringValue(result.join(',').toStdString());
         }
         case Exiv2::signedRational: {
             Exiv2::RationalValue *ev = new Exiv2::RationalValue();

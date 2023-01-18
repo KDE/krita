@@ -19,6 +19,7 @@
 #include <algorithm>
 #include <array>
 #include <cstring>
+#include <map>
 
 #include <KisDocument.h>
 #include <KisImportExportErrorCode.h>
@@ -290,7 +291,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
 
     KisImageSP image{nullptr};
     KisLayerSP layer{nullptr};
-    QMultiHash<QByteArray, QByteArray> metadataBoxes;
+    std::multimap<QByteArray, QByteArray> metadataBoxes;
     QByteArray boxType(5, 0x0);
     QByteArray box(16384, 0x0);
     auto boxSize = box.size();
@@ -650,9 +651,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 if ((std::equal(exifTag.begin(), exifTag.end(), type.constBegin())
                      || std::equal(xmpTag.begin(), xmpTag.end(), type.constBegin()))
                     && finalSize != 0) {
-                    box.resize(finalSize);
-
-                    metadataBoxes.insert(type, box);
+                    metadataBoxes.emplace(type, QByteArray(box.data(), finalSize));
                 }
                 // Preemptively zero the box type out to prevent dangling
                 // boxes.
@@ -663,9 +662,9 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
 
                 // Insert layer metadata if available (delayed
                 // in case the boxes came before the BASIC_INFO event)
-                for (auto metaBox = metadataBoxes.begin(); metaBox != metadataBoxes.end(); metaBox++) {
-                    const QByteArray &type = metaBox.key();
-                    QByteArray &value = metaBox.value();
+                for (auto &metaBox : metadataBoxes) {
+                    const QByteArray &type = metaBox.first;
+                    QByteArray &value = metaBox.second;
                     QBuffer buf(&value);
                     if (std::equal(exifTag.begin(), exifTag.end(), type.constBegin())) {
                         dbgFile << "Loading EXIF data. Size: " << value.size();

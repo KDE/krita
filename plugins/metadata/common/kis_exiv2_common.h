@@ -32,7 +32,7 @@ exivValueToKMDValue(const Exiv2::Value::AutoPtr &value, bool forceSeq, KisMetaDa
     case Exiv2::undefined: {
         dbgMetaData << "Undefined value :" << value->typeId() << " value =" << value->toString().c_str();
         QByteArray array(value->count(), 0);
-        value->copy(reinterpret_cast<Exiv2::byte *>(array.data()), Exiv2::invalidByteOrder);
+        value->copy((Exiv2::byte *)array.data(), Exiv2::invalidByteOrder);
         return {QString(array.toBase64())};
     }
     case Exiv2::unsignedByte:
@@ -41,11 +41,11 @@ exivValueToKMDValue(const Exiv2::Value::AutoPtr &value, bool forceSeq, KisMetaDa
     case Exiv2::signedShort:
     case Exiv2::signedLong: {
         if (value->count() == 1 && !forceSeq) {
-            return {static_cast<int>(value->toLong())};
+            return KisMetaData::Value((int)value->toLong());
         } else {
             QList<KisMetaData::Value> array;
             for (int i = 0; i < value->count(); i++)
-                array.push_back({static_cast<int>(value->toLong(i))});
+                array.push_back(KisMetaData::Value((int)value->toLong(i)));
             return {array, arrayType};
         }
     }
@@ -105,8 +105,8 @@ inline Exiv2::Value *variantToExivValue(const QVariant &variant, Exiv2::TypeId t
 {
     switch (type) {
     case Exiv2::undefined: {
-        const QByteArray arr = QByteArray::fromBase64(variant.toString().toLatin1());
-        return new Exiv2::DataValue(reinterpret_cast<const Exiv2::byte *>(arr.data()), arr.size());
+        QByteArray arr = QByteArray::fromBase64(variant.toString().toLatin1());
+        return new Exiv2::DataValue((Exiv2::byte *)arr.data(), arr.size());
     }
     case Exiv2::unsignedByte:
         return new Exiv2::ValueType<uint16_t>((uint16_t)variant.toUInt());

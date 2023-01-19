@@ -8,7 +8,7 @@
 #endif
 
 // Check GCC
-#ifdef __GNUC__
+#if __GNUC__
   #if defined (__x86_64__) || defined (__ppc64__)
     #define ENV64BIT
   #else

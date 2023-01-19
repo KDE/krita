@@ -129,6 +129,15 @@ void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintI
     transfo->setParameter(d->paramId, v);
     transfo->setParameter(3, 0); //sets the type to HSV.
     transfo->setParameter(4, false); //sets the colorize to false.
+
+    /**
+     * Theoretically, we might want to make this a user-selectable
+     * option, but I doubt anyone would complain. See details in the
+     * bugreport:
+     *
+     * https://bugs.kde.org/show_bug.cgi?id=462193
+     */
+    transfo->setParameter(8, false); //sets the compatibility to false.
 }
 
 

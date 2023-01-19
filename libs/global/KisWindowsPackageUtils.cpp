@@ -9,13 +9,9 @@
 
 #include <array>
 
-// XXX: needs to go first because under MinGW
-// clangd gets really confused and errors on missing
-// definition of WINAPI_FAMILY_PARTITION
-#include <windows.h>
-
+#include <Shlobj.h>
 #include <appmodel.h>
-#include <shlobj.h>
+#include <windows.h>
 
 #include <QDebug>
 #include <QString>

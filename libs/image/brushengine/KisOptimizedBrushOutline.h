@@ -111,6 +111,7 @@ private:
     QVector<QPolygonF> m_subpaths;
     QVector<QPolygonF> m_additionalDecorations;
     QTransform m_transform;
+    mutable QRectF m_cachedBoundingRect;
 };
 
 #endif // KISOPTIMIZEDBRUSHOUTLINE_H

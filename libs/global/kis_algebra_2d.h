@@ -210,20 +210,40 @@ inline void accumulateBounds(const Point &pt, Rect *bounds)
         Private::resetEmptyRectangle(pt, bounds);
     }
 
-    if (pt.x() > bounds->right()) {
+    /**
+     * `Rect::left()` is cheaper than `Rect::right()`,
+     * so check it first
+     */
+    if (pt.x() < bounds->left()) {
+        bounds->setLeft(pt.x());
+    } else if (pt.x() > bounds->right()) {
         bounds->setRight(pt.x());
     }
 
+    /**
+     * `Rect::top()` is cheaper than `Rect::bottom()`,
+     * so check it first
+     */
+    if (pt.y() < bounds->top()) {
+        bounds->setTop(pt.y());
+    } else if (pt.y() > bounds->bottom()) {
+        bounds->setBottom(pt.y());
+    }
+}
+
+template <class Point, class Rect>
+inline void accumulateBoundsNonEmpty(const Point &pt, Rect *bounds)
+{
     if (pt.x() < bounds->left()) {
         bounds->setLeft(pt.x());
-    }
-
-    if (pt.y() > bounds->bottom()) {
-        bounds->setBottom(pt.y());
+    } else if (pt.x() > bounds->right()) {
+        bounds->setRight(pt.x());
     }
 
     if (pt.y() < bounds->top()) {
         bounds->setTop(pt.y());
+    } else if (pt.y() > bounds->bottom()) {
+        bounds->setBottom(pt.y());
     }
 }
 

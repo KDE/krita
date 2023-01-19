@@ -50,6 +50,8 @@ KisOptimizedBrushOutline::const_iterator KisOptimizedBrushOutline::end() const
 
 QRectF KisOptimizedBrushOutline::boundingRect() const
 {
+    if (!m_cachedBoundingRect.isNull()) return m_cachedBoundingRect;
+
     /**
      * We don't use normal begin()/end() iteration here,
      * because it makes too many allocations for the polygons.
@@ -58,18 +60,46 @@ QRectF KisOptimizedBrushOutline::boundingRect() const
      */
 
     QRectF result;
+    bool resultInitialized = false;
 
     for (auto polyIt = m_subpaths.cbegin(); polyIt != m_subpaths.cend(); ++polyIt) {
-        for (auto it = polyIt->cbegin(); it != polyIt->cend(); ++it) {
-            KisAlgebra2D::accumulateBounds(m_transform.map(*it), &result);
+        /**
+         * This is a highly optimized way to accumulate a rect from a
+         * set of points:
+         *
+         * 1) `QRectF::isEmpty()` is expensive, so use `resultInitialized` instead
+         * 2) Use `KisAlgebra2D::accumulateBoundsNonEmpty` to avoid calling `isEmpty()`
+         */
+
+
+        auto it = polyIt->cbegin();
+
+        if (!resultInitialized && it != polyIt->cend()) {
+            KisAlgebra2D::Private::resetEmptyRectangle(*it, &result);
+            resultInitialized = true;
+            ++it;
+        }
+
+        for (; it != polyIt->cend(); ++it) {
+            KisAlgebra2D::accumulateBoundsNonEmpty(m_transform.map(*it), &result);
         }
     }
 
     for (auto polyIt = m_additionalDecorations.cbegin(); polyIt != m_additionalDecorations.cend(); ++polyIt) {
-        for (auto it = polyIt->cbegin(); it != polyIt->cend(); ++it) {
-            KisAlgebra2D::accumulateBounds(m_transform.map(*it), &result);
+        auto it = polyIt->cbegin();
+
+        if (!resultInitialized && it != polyIt->cend()) {
+            KisAlgebra2D::Private::resetEmptyRectangle(*it, &result);
+            resultInitialized = true;
+            ++it;
+        }
+
+        for (; it != polyIt->cend(); ++it) {
+            KisAlgebra2D::accumulateBoundsNonEmpty(m_transform.map(*it), &result);
         }
     }
+
+    m_cachedBoundingRect = result;
 
     return result;
 }
@@ -113,6 +143,8 @@ void KisOptimizedBrushOutline::addPath(const KisOptimizedBrushOutline &path)
     for (auto it = path.m_additionalDecorations.cbegin(); it != path.m_additionalDecorations.cend(); ++it) {
         m_additionalDecorations.append(invertedTransform.map(*it));
     }
+
+    m_cachedBoundingRect = QRectF();
 }
 
 void KisOptimizedBrushOutline::translate(qreal tx, qreal ty)

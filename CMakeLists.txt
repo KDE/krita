@@ -354,17 +354,6 @@ endif()
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 
-if (WIN32)
-# KDECompilerSettings sets Windows Vista as the default,
-# while MSVC's default is 0x0A00 (_WIN32_WINNT_WIN10, sdkddkver.h) and
-# MinGW's is 0x0601 (_WIN32_WINNT_WIN7, _mingw.h).
-# Both are enough to supply the APIs we need in main.cc, but since we
-# need the Windows 8 APIs anyway for the surface orientation and Store API,
-# we set the minimum here.
-remove_definitions(-D_WIN32_WINNT=0x0600 -DWINVER=0x0600 -D_WIN32_IE=0x0600)
-add_definitions(-D_WIN32_WINNT=0x0602 -DWINVER=0x0602  -D_WIN32_IE=0x0602)
-endif()
-
 # do not reorder to be alphabetical: this is the order in which the frameworks
 # depend on each other.
 find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS

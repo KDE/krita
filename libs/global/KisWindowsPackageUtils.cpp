@@ -5,36 +5,47 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+// Get Windows Vista API
+#if defined(WINVER) && WINVER < 0x0600
+#undef WINVER
+#endif
+#if defined(_WIN32_WINNT) && _WIN32_WINNT < 0x0600
+#undef _WIN32_WINNT
+#endif
+#ifndef WINVER
+#define WINVER 0x0600
+#endif
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0600
+#endif
+
 #include "KisWindowsPackageUtils.h"
 
 #include <array>
 
 #include <Shlobj.h>
-#include <appmodel.h>
 #include <windows.h>
 
 #include <QDebug>
 #include <QString>
 
-#ifndef PACKAGE_FULL_NAME_MAX_LENGTH
-constexpr int PACKAGE_FULL_NAME_MAX_LENGTH = 127;
-#endif
+constexpr int appmodel_PACKAGE_FULL_NAME_MAX_LENGTH = 127;
 
-#ifndef APPMODEL_ERROR_NO_PACKAGE
-constexpr LONG APPMODEL_ERROR_NO_PACKAGE = 15700;
-#endif
+constexpr LONG winerror_APPMODEL_ERROR_NO_PACKAGE = 15700;
 
 // ---
 // GetCurrentPackageFamilyName
 // appmodel.h / Kernel32.dll / Windows 8
 // ---
-using pGetCurrentPackageFamilyName_t = decltype(&GetCurrentPackageFamilyName);
+using pGetCurrentPackageFamilyName_t =
+    LONG(WINAPI *)(UINT32 *packageFamilyNameLength, PWSTR packageFamilyName);
 
 // ---
 // GetCurrentPackageFullName
 // appmodel.h / Kernel32.dll / Windows 8
 // ---
-using pGetCurrentPackageFullName_t = decltype(&GetCurrentPackageFullName);
+using pGetCurrentPackageFullName_t =
+    LONG(WINAPI *)(UINT32 *packageFullNameLength, PWSTR packageFullName);
 
 // Flag for `KNOWN_FOLDER_FLAG`, introduced in Win 10 ver 1703, which when
 // used within a Desktop Bridge process, will cause the API to return the
@@ -44,7 +55,6 @@ using pGetCurrentPackageFullName_t = decltype(&GetCurrentPackageFullName);
 // KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET
 // shlobj_core.h / Windows 10 v1703
 // ---
-// TODO: remove this once MinGW adds the flag -- see shlobj.h KNOWN_FOLDER_FLAG
 constexpr int shlobj_KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET = 0x00040000;
 
 struct AppmodelFunctions {
@@ -96,10 +106,13 @@ bool tryGetCurrentPackageFamilyName(QString *outName)
         return false;
     }
 
-    std::array<WCHAR, PACKAGE_FULL_NAME_MAX_LENGTH + 1> name{}; // includes null terminator
+    std::array<WCHAR, appmodel_PACKAGE_FULL_NAME_MAX_LENGTH + 1>
+        name{}; // includes null terminator
     UINT32 nameLength = name.size();
-    const LONG result = AppmodelFunctions::instance().getCurrentPackageFamilyName(&nameLength, name.data());
-    if (result == APPMODEL_ERROR_NO_PACKAGE) {
+    LONG result =
+        AppmodelFunctions::instance().getCurrentPackageFamilyName(&nameLength,
+                                                                  name.data());
+    if (result == winerror_APPMODEL_ERROR_NO_PACKAGE) {
         // Process not running from a package.
         return false;
     }
@@ -145,12 +158,13 @@ bool tryGetCurrentPackageFullName(QString *outName)
         return false;
     }
 
-    std::array<WCHAR, PACKAGE_FULL_NAME_MAX_LENGTH + 1> name{}; // includes null terminator
+    std::array<WCHAR, appmodel_PACKAGE_FULL_NAME_MAX_LENGTH + 1>
+        name{}; // includes null terminator
     UINT32 nameLength = name.size();
     const LONG result =
         AppmodelFunctions::instance().getCurrentPackageFullName(&nameLength,
                                                                 name.data());
-    if (result == APPMODEL_ERROR_NO_PACKAGE) {
+    if (result == winerror_APPMODEL_ERROR_NO_PACKAGE) {
         // Process not running from a package.
         return false;
     }

@@ -60,7 +60,6 @@
 #if defined Q_OS_WIN
 #include "config_use_qt_tablet_windows.h"
 #include <windows.h>
-#include <winuser.h>
 #ifndef USE_QT_TABLET_WINDOWS
 #include <kis_tablet_support_win.h>
 #include <kis_tablet_support_win8.h>
@@ -121,7 +120,18 @@ void installTranslators(KisApplication &app);
 #ifdef Q_OS_WIN
 namespace
 {
-using pSetDisplayAutoRotationPreferences_t = decltype(&SetDisplayAutoRotationPreferences);
+using ORIENTATION_PREFERENCE = enum ORIENTATION_PREFERENCE {
+    ORIENTATION_PREFERENCE_NONE = 0x0,
+    ORIENTATION_PREFERENCE_LANDSCAPE = 0x1,
+    ORIENTATION_PREFERENCE_PORTRAIT = 0x2,
+    ORIENTATION_PREFERENCE_LANDSCAPE_FLIPPED = 0x4,
+    ORIENTATION_PREFERENCE_PORTRAIT_FLIPPED = 0x8
+};
+#if !defined(_MSC_VER)
+using pSetDisplayAutoRotationPreferences_t = BOOL WINAPI (*)(ORIENTATION_PREFERENCE orientation);
+#else
+using pSetDisplayAutoRotationPreferences_t = BOOL(WINAPI *)(ORIENTATION_PREFERENCE orientation);
+#endif
 
 void resetRotation()
 {

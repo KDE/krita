@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-13 03:53+0000\n"
-"PO-Revision-Date: 2023-01-13 01:18+0300\n"
+"PO-Revision-Date: 2023-01-18 22:46+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15206,7 +15206,7 @@ msgstr "Biçemler"
 #, kde-format
 msgctxt "action"
 msgid "Active Author Profile"
-msgstr "Etkin Yazar Profili"
+msgstr "Etkin Çizer Profili"
 
 #. i18n: context: text @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1765
@@ -16100,19 +16100,19 @@ msgstr "Elips Şekil Aracı"
 #: libs/widgets/KoZoomController_p.h:28 libs/widgets/KoZoomWidget.cpp:52
 #, kde-format
 msgid "Zoom"
-msgstr "Büyüt"
+msgstr "Yakınlaştırma"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
 #: libs/flake/tools/KoZoomToolWidget.ui:24
 #, kde-format
 msgid "&Zoom In"
-msgstr "&Büyüt"
+msgstr "&Yakınlaştır"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
 #: libs/flake/tools/KoZoomToolWidget.ui:47
 #, kde-format
 msgid "Zoo&m Out"
-msgstr "&Küçült"
+msgstr "&Uzaklaştır"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -17814,7 +17814,7 @@ msgstr "Anonimleştirici"
 #: libs/metadata/kis_meta_data_filter_p.cc:44
 #, kde-format
 msgid "Remove personal information: author, location..."
-msgstr "Kişisel bilgiyi kaldır: Yazar, konum..."
+msgstr "Kişisel bilgiyi kaldır: Çizer, konum..."
 
 #: libs/metadata/kis_meta_data_filter_p.cc:84
 #, kde-format
@@ -17876,7 +17876,7 @@ msgid ""
 "photographic information."
 msgstr ""
 "Bu birleştirme stratejisi birleştirme için en iyi çözümü bulmayı dener; "
-"örneğin yazarlar listesini veya özdeş fotoğraf bilgisi olanları birleştirir."
+"örneğin çizerler listesini veya özdeş fotoğraf bilgisi olanları birleştirir."
 
 #: libs/metadata/kis_meta_data_value.cc:407
 #: libs/metadata/kis_meta_data_value.cc:446
@@ -22855,14 +22855,14 @@ msgstr "Açılır Palet"
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
-msgstr "Yazar"
+msgstr "Çizer"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1940
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
-msgstr "Yazar"
+msgstr "Çizer"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1947
 #, kde-format
@@ -23517,7 +23517,7 @@ msgstr "&Konu:"
 #: libs/widgets/KoConfigAuthorPage.ui:117
 #, kde-format
 msgid "Nickname:"
-msgstr "Ünvan:"
+msgstr "Takma Ad:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblfirstname)
 #: libs/ui/forms/koDocumentInfoAuthorWidget.ui:38
@@ -23536,7 +23536,7 @@ msgstr "Soyad:"
 #: libs/widgets/KoConfigAuthorPage.ui:46
 #, kde-format
 msgid "Initials:"
-msgstr "Baş harfler:"
+msgstr "Baş Harfler:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -28046,12 +28046,12 @@ msgstr "Göreceli Soyut Yakınlaştırma Kipi"
 #: libs/ui/input/kis_zoom_action.cpp:114
 #, kde-format
 msgid "Zoom In"
-msgstr "Büyüt"
+msgstr "Yakınlaştır"
 
 #: libs/ui/input/kis_zoom_action.cpp:115
 #, kde-format
 msgid "Zoom Out"
-msgstr "Küçült"
+msgstr "Uzaklaştır"
 
 #: libs/ui/input/kis_zoom_action.cpp:116
 #, fuzzy, kde-format
@@ -30475,7 +30475,7 @@ msgstr "Gamut Uyarıları kapalı."
 #: libs/ui/KisViewManager.cpp:742
 #, kde-format
 msgid "Active Author Profile"
-msgstr "Etkin Yazar Profili"
+msgstr "Etkin Çizer Profili"
 
 #: libs/ui/KisViewManager.cpp:872
 #, kde-format
@@ -34187,12 +34187,12 @@ msgstr "Palet Seç"
 #: libs/widgets/KoConfigAuthorPage.cpp:66
 #, kde-format
 msgid "Add new author profile (starts out as a copy of current)"
-msgstr "Yeni yazar profili ekle (geçerlinin bir kopyasıyla başlar)"
+msgstr "Yeni çizer profili ekle (geçerlinin bir kopyasıyla başlar)"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:70
 #, kde-format
 msgid "Delete the author profile"
-msgstr "Yazar Profilini Sil"
+msgstr "Çizer Profilini Sil"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:79
 #, kde-format
@@ -34209,7 +34209,7 @@ msgstr ""
 "Karikatürist,Renklendiren,Konsept Sanatçısı,Düzeltici,Kapak Sanatçısı,"
 "Oluşturan,Tasarımcı,Mürekkep Sanatçısı,Yazı Sanatçısı,Mat Boyacısı,Boya "
 "Sanatçısı,Kalem Sanatçısı,Düzeltmen,Piksel Sanatçısı,Redliner,Sprite "
-"Sanatçısı,Dizgici,Doku Sanatçısı,Çevirmen,Yazar,Diğer,Canlandırıcı"
+"Sanatçısı,Dizgici,Doku Sanatçısı,Çevirmen,Yazar,Diğer,Canlandırıcı;Çizer"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
@@ -34780,17 +34780,17 @@ msgstr "Sayfa yüksekliğini pencereye sığdıracak kadar yakınlaştır"
 #: libs/widgetutils/config/kstandardaction_p.h:59
 #, kde-format
 msgid "Zoom &In"
-msgstr "&Büyüt"
+msgstr "&Yakınlaştır"
 
 #: libs/widgetutils/config/kstandardaction_p.h:60
 #, kde-format
 msgid "Zoom &Out"
-msgstr "&Küçült"
+msgstr "&Uzaklaştır"
 
 #: libs/widgetutils/config/kstandardaction_p.h:61
 #, kde-format
 msgid "&Zoom..."
-msgstr "&Büyüt..."
+msgstr "&Yakınlaştırma..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:61
 #, kde-format
@@ -36729,13 +36729,13 @@ msgstr "Sabitleyici Yeniden Boyutlandığında: "
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:405
 #, kde-format
 msgid "Show Zoom Selector UI: "
-msgstr "Büyüteç Seçici UI Göster: "
+msgstr "Yakınlaştırma Seçici Arayüzü Göster:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:418
 #, kde-format
 msgid "Zoom Selector Size: "
-msgstr "Büyüteç Seçici Boyutu: "
+msgstr "Yakınlaştırma Seçici Boyutu: "
 
 #. i18n: ectx: property (text), widget (QCheckBox, hidePopupOnClickCheck)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:453
@@ -42002,7 +42002,7 @@ msgstr "Bir özkaynak kitaplığı oluştur"
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:190
 #, kde-format
 msgid "Author:"
-msgstr "Yazar:"
+msgstr "Çizer:"
 
 #. i18n: ectx: property (text), widget (QLabel, license)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -46080,15 +46080,15 @@ msgid ""
 "<html><head/><body><p>Add the author nickname and the first contact of the "
 "author profile. This is overridden by the anonymizer.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Yazarın takma adını ve yazar profilindeki öncelikli "
-"iletişim bilgilerini ekle. Bu anonimleştirici tarafından geçersiz kılınır.</"
-"p></body></html>"
+"<html><head/><body><p>Çizerin takma adını ve çizer profilindeki öncelikli "
+"iletişim bilgilerini ekleyin. Bu anonimleştirici tarafından geçersiz kılınır."
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuthor)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:358
 #, kde-format
 msgid "Sign with Author Profile Data"
-msgstr "Yazar Profil Bilgisiyle İmzala"
+msgstr "Çizer Profil Verisiyle İmzala"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:462
 #: plugins/impex/jxl/JPEGXLImport.cpp:473
@@ -47573,7 +47573,7 @@ msgstr ""
 #: plugins/impex/png/kis_wdg_options_png.ui:207
 #, kde-format
 msgid "Sign with author data"
-msgstr "Yazar verileriyle imzala"
+msgstr "Çizer verisiyle imzala"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDownsample)
 #: plugins/impex/png/kis_wdg_options_png.ui:214
@@ -53235,12 +53235,12 @@ msgstr "Soyad"
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:322
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Add Author"
-msgstr "Yazar Ekle"
+msgstr "Çizer Ekle"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:325
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:359
 msgid "Remove Author"
-msgstr "Yazarı Kaldır"
+msgstr "Çizeri Kaldır"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:338
 msgid "Use font"
@@ -53294,7 +53294,7 @@ msgstr "Belge Bilgisi"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:387
 msgid "Author Info"
-msgstr "Yazar Bilgisi"
+msgstr "Çizer Bilgisi"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:388
 msgid "Style Sheet"
@@ -53708,9 +53708,9 @@ msgid ""
 "can set their nickname, proper names (first, middle, last), role (penciller, "
 "inker, etc), email and homepage."
 msgstr ""
-"Aşağıdaki, çizgi romana katkıda bulunan yazarların bir tablosudur. Takma "
+"Aşağıdaki, çizgi romana katkıda bulunan çizerlerin bir tablosudur. Takma "
 "adlarını, ve gerçek adlarını (ilk, orta, son), katkılarını (Kalem Sanatçısı, "
-"Mürekkep Sanatçısı vb.), e-posta adreslerini ve Web sitelerini "
+"Mürekkep Sanatçısı vb.), e-posta adreslerini ve web sitelerini "
 "belirtebilirsiniz."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
@@ -53719,7 +53719,7 @@ msgstr "Katkısı"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:366
 msgid "Authors"
-msgstr "Yazarlar"
+msgstr "Çizerler"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
 msgid ""
@@ -53844,7 +53844,7 @@ msgstr "Sayfayı Pencerede Göster"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
 msgid "Scrape Author Info"
-msgstr "Yazar Bilgisi Tara"
+msgstr "Çizer Bilgisi Tara"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
 msgid ""
@@ -54001,10 +54001,10 @@ msgid ""
 "the Krita configuration, and not the project configuration."
 msgstr ""
 "Üst veri düzenleyicideki ek otomatik tamamlama anahtarlarının konumu. Bunu, "
-"her biri yeni bir satırda olmak üzere ekstra otomatik tamamlama "
-"anahtarlarını içeren dahili txt dosyalarıyla (derecelendirme için csv) "
-"key_characters/key_format/key_genre/key_rating/key_author_roles/key_other "
-"içeren bir klasöre doğrultun. Bu yol, proje yapılandırmasında değil, Krita "
+"her biri yeni bir satırda olmak üzere ek otomatik tamamlama anahtarlarını "
+"içeren içsel txt dosyalarıyla (derecelendirme için csv) key_characters/"
+"key_format/key_genre/key_rating/key_author_roles/key_other içeren bir "
+"klasöre doğrultun. Bu yol, proje yapılandırmasında değil, Krita "
 "yapılandırmasında saklanır."
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
@@ -54269,7 +54269,7 @@ msgstr "Atfedilen ad"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Author of dialog"
-msgstr "Dialog Yazarı"
+msgstr "Diyalog Yazarı"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Binding designer"
@@ -54341,7 +54341,7 @@ msgstr "Teknik ressam"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Dubious author"
-msgstr "Belirsiz yazar"
+msgstr "Belirsiz çizer"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Etcher"

@@ -178,11 +178,15 @@ inline Exiv2::Value *kmdValueToExivValue(const KisMetaData::Value &value, Exiv2:
             return new Exiv2::URationalValue({value.asRational().numerator, value.asRational().denominator});
         }
     case KisMetaData::Value::OrderedArray:
+        Q_FALLTHROUGH();
     case KisMetaData::Value::UnorderedArray:
+        Q_FALLTHROUGH();
     case KisMetaData::Value::LangArray:
+        Q_FALLTHROUGH();
     case KisMetaData::Value::AlternativeArray: {
         switch (type) {
         case Exiv2::unsignedByte:
+            Q_FALLTHROUGH();
         case Exiv2::unsignedShort:
             return arrayToExivValue<uint16_t>(value);
         case Exiv2::unsignedLong:
@@ -192,6 +196,7 @@ inline Exiv2::Value *kmdValueToExivValue(const KisMetaData::Value &value, Exiv2:
         case Exiv2::signedLong:
             return arrayToExivValue<int32_t>(value);
         case Exiv2::asciiString:
+            Q_FALLTHROUGH();
         case Exiv2::string: {
             // Using toLatin1 here is not lossy for asciiString,
             // but definitely is for string. IPTC allows UTF-8

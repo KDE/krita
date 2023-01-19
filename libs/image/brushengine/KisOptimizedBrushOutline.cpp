@@ -29,6 +29,7 @@ KisOptimizedBrushOutline::KisOptimizedBrushOutline(const QVector<QPolygonF> &sub
 void KisOptimizedBrushOutline::map(const QTransform &t)
 {
     m_transform *= t;
+    m_cachedBoundingRect = QRectF();
 }
 
 KisOptimizedBrushOutline KisOptimizedBrushOutline::mapped(const QTransform &t) const

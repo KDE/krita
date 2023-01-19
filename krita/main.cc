@@ -474,7 +474,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
                 }
             }
 
-            if (!uiLanguages.empty()) {
+            if (uiLanguages.size() > 0 ) {
                 QString envLanguage = uiLanguages.first();
                 envLanguage.replace(QChar('-'), QChar('_'));
 

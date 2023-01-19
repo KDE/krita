@@ -589,7 +589,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         const bool batchRun = args.exportAs() || args.exportSequence();
 
         if (!batchRun) {
-            if (app.sendMessage(args.serialize())) {
+            QByteArray ba = args.serialize();
+            if (app.sendMessage(ba)) {
                 return 0;
             }
         }

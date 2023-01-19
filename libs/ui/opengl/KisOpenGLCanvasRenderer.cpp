@@ -393,7 +393,7 @@ void KisOpenGLCanvasRenderer::paintCanvasOnly(const QRect &canvasImageDirtyRect,
     }
 }
 
-void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &path)
+void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &path, const QRect &viewportUpdateRect)
 {
     if (!d->solidColorShader->bind()) {
         return;
@@ -421,6 +421,12 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
     glEnable(GL_BLEND);
     glBlendFuncSeparate(GL_ONE, GL_SRC_COLOR, GL_ONE, GL_ONE);
     glBlendEquationSeparate(GL_FUNC_SUBTRACT, GL_FUNC_ADD);
+
+    if (!viewportUpdateRect.isEmpty()) {
+        const QRect deviceUpdateRect = widgetToSurface(viewportUpdateRect).toAlignedRect();
+        glScissor(deviceUpdateRect.x(), deviceUpdateRect.y(), deviceUpdateRect.width(), deviceUpdateRect.height());
+        glEnable(GL_SCISSOR_TEST);
+    }
 
     // Paint the tool outline
     if (KisOpenGL::supportsVAO()) {
@@ -464,6 +470,10 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
     if (KisOpenGL::supportsVAO()) {
         d->lineVertexBuffer.release();
         d->outlineVAO.release();
+    }
+
+    if (!viewportUpdateRect.isEmpty()) {
+        glDisable(GL_SCISSOR_TEST);
     }
 
     glBlendEquation(GL_FUNC_ADD);

@@ -260,7 +260,16 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *e)
 
 void KisOpenGLCanvas2::paintToolOutline(const KisOptimizedBrushOutline &path)
 {
-    d->renderer->paintToolOutline(path);
+    /**
+     * paintToolOutline() is called from drawDecorations(), which has clipping
+     * set only for QPainter-based painting; here we paint in native mode, so we
+     * should care about clipping manually
+     */
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(d->updateRect);
+    const QRect updateRect = d->updateRect ? *d->updateRect : QRect();
+
+    d->renderer->paintToolOutline(path, updateRect);
 }
 
 bool KisOpenGLCanvas2::isBusy() const

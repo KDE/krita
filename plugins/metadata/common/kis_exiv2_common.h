@@ -59,15 +59,11 @@ exivValueToKMDValue(const Exiv2::Value::AutoPtr &value, bool forceSeq, KisMetaDa
                 dbgMetaData << "Invalid size :" << value->size() << " value =" << value->toString().c_str();
                 return {};
             }
-            // XXX: Value::toRational induces a narrowing + sign conversion
-            const Exiv2::Rational ratio = value->toRational();
-            return {KisMetaData::Rational(ratio.first, ratio.second)};
+            return {KisMetaData::Rational(value->toRational().first, value->toRational().second)};
         } else {
             QList<KisMetaData::Value> array;
-            array.reserve(value->count());
             for (long i = 0; i < value->count(); i++) {
-                const Exiv2::Rational ratio = value->toRational(i);
-                array.push_back(KisMetaData::Rational(ratio.first, ratio.second));
+                array.push_back(KisMetaData::Rational(value->toRational(i).first, value->toRational(i).second));
             }
             return {array, arrayType};
         }
@@ -265,9 +261,10 @@ inline Exiv2::Value *kmdValueToExivXmpValue(const KisMetaData::Value &value)
         }
     }
     case KisMetaData::Value::Rational: {
-        const KisMetaData::Rational ratio = value.asRational();
-        const std::string rat = QString("%1 / %2").arg(ratio.numerator).arg(ratio.denominator).toStdString();
-        return new Exiv2::XmpTextValue(rat);
+        QString rat = "%1 / %2";
+        rat = rat.arg(value.asRational().numerator);
+        rat = rat.arg(value.asRational().denominator);
+        return new Exiv2::XmpTextValue(rat.toLatin1().constData());
     }
     case KisMetaData::Value::AlternativeArray:
     case KisMetaData::Value::OrderedArray:

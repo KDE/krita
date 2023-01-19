@@ -44,7 +44,6 @@ exivValueToKMDValue(const Exiv2::Value::AutoPtr &value, bool forceSeq, KisMetaDa
             return {static_cast<int>(value->toLong())};
         } else {
             QList<KisMetaData::Value> array;
-            array.reserve(value->count());
             for (int i = 0; i < value->count(); i++)
                 array.push_back({static_cast<int>(value->toLong(i))});
             return {array, arrayType};
@@ -154,9 +153,8 @@ Exiv2::Value *arrayToExivValue(const KisMetaData::Value &value)
 {
     Exiv2::ValueType<T> *exivValue = new Exiv2::ValueType<T>();
     const QList<KisMetaData::Value> array = value.asArray();
-    exivValue->value_.reserve(static_cast<size_t>(array.size()));
     Q_FOREACH (const KisMetaData::Value &item, array) {
-        exivValue->value_.emplace_back(item.asVariant().value<T>());
+        exivValue->value_.push_back(qvariant_cast<T>(item.asVariant()));
     }
     return exivValue;
 }

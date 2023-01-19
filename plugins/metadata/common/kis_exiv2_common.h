@@ -124,7 +124,7 @@ inline Exiv2::Value *variantToExivValue(const QVariant &variant, Exiv2::TypeId t
     case Exiv2::signedLong:
         return new Exiv2::ValueType<int32_t>((int32_t)variant.toInt());
     case Exiv2::date: {
-        const QDate date = variant.toDate();
+        QDate date = variant.toDate();
         return new Exiv2::DateValue(date.year(), date.month(), date.day());
     }
     case Exiv2::asciiString:
@@ -254,7 +254,7 @@ inline Exiv2::Value *kmdValueToExivXmpValue(const KisMetaData::Value &value)
     case KisMetaData::Value::Invalid:
         return new Exiv2::DataValue(Exiv2::invalidTypeId);
     case KisMetaData::Value::Variant: {
-        const QVariant var = value.asVariant();
+        QVariant var = value.asVariant();
         if (var.type() == QVariant::Bool) {
             if (var.toBool()) {
                 return new Exiv2::XmpTextValue("True");

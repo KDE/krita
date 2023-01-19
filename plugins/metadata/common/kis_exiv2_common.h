@@ -294,17 +294,17 @@ inline Exiv2::Value *kmdValueToExivXmpValue(const KisMetaData::Value &value)
     }
     case KisMetaData::Value::LangArray: {
         Exiv2::Value *arrV = new Exiv2::LangAltValue;
-        const QMap<QString, KisMetaData::Value> langArray = value.asLangArray();
-        for (auto it = langArray.cbegin(); it != langArray.cend(); ++it) {
+        QMap<QString, KisMetaData::Value> langArray = value.asLangArray();
+        for (auto it = langArray.begin(); it != langArray.end(); ++it) {
             QString exivVal;
             if (it.key() != "x-default") {
                 exivVal = "lang=" + it.key() + ' ';
             }
             // Q_ASSERT(it.value().type() == KisMetaData::Value::Variant);
-            const QVariant var = it.value().asVariant();
+            QVariant var = it.value().asVariant();
             // Q_ASSERT(var.type() == QVariant::String);
             exivVal += var.toString();
-            arrV->read(exivVal.toStdString());
+            arrV->read(exivVal.toLatin1().constData());
         }
         return arrV;
     }

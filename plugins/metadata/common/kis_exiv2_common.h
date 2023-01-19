@@ -130,18 +130,18 @@ inline Exiv2::Value *variantToExivValue(const QVariant &variant, Exiv2::TypeId t
     case Exiv2::asciiString:
         if (variant.type() == QVariant::DateTime) {
             return new Exiv2::AsciiValue(
-                QLocale::c().toString(variant.toDateTime(), QStringLiteral("yyyy:MM:dd hh:mm:ss")).toStdString());
+                qPrintable(QLocale::c().toString(variant.toDateTime(), QStringLiteral("yyyy:MM:dd hh:mm:ss"))));
         } else
-            return new Exiv2::AsciiValue(variant.toString().toStdString());
+            return new Exiv2::AsciiValue(qPrintable(variant.toString()));
     case Exiv2::string: {
         if (variant.type() == QVariant::DateTime) {
             return new Exiv2::StringValue(
-                QLocale::c().toString(variant.toDateTime(), QStringLiteral("yyyy:MM:dd hh:mm:ss")).toStdString());
+                qPrintable(QLocale::c().toString(variant.toDateTime(), QStringLiteral("yyyy:MM:dd hh:mm:ss"))));
         } else
-            return new Exiv2::StringValue(variant.toString().toStdString());
+            return new Exiv2::StringValue(qPrintable(variant.toString()));
     }
     case Exiv2::comment:
-        return new Exiv2::CommentValue(variant.toString().toStdString());
+        return new Exiv2::CommentValue(qPrintable(variant.toString()));
     default:
         dbgMetaData << "Unhandled type:" << type;
         // Q_ASSERT(false);
@@ -263,7 +263,7 @@ inline Exiv2::Value *kmdValueToExivXmpValue(const KisMetaData::Value &value)
             }
         } else {
             // Q_ASSERT(var.canConvert(QVariant::String));
-            return new Exiv2::XmpTextValue(var.toString().toStdString());
+            return new Exiv2::XmpTextValue(var.toString().toLatin1().constData());
         }
     }
     case KisMetaData::Value::Rational: {

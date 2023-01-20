@@ -30,14 +30,10 @@ public:
         Q_ASSERT(dstCs);
         Q_ASSERT(renderingIntent < 4);
 
-        if (srcCs->colorDepthId() == Integer8BitsColorDepthID
-                || srcCs->colorDepthId() == Integer16BitsColorDepthID) {
+        if ((srcProfile->isLinear() || dstProfile->isLinear()) &&
+            !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization)) {
 
-            if ((srcProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive) ||
-                 dstProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive)) &&
-                    !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization)) {
-                conversionFlags |= KoColorConversionTransformation::NoOptimization;
-            }
+            conversionFlags |= KoColorConversionTransformation::NoOptimization;
         }
         conversionFlags |= KoColorConversionTransformation::CopyAlpha;
 

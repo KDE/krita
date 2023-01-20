@@ -171,4 +171,32 @@ void TestLcmsRGBP2020PQColorSpace::testConvertToCmyk()
     testRoundTrip(srcCS, dstCS, SDR);
 }
 
+void TestLcmsRGBP2020PQColorSpace::testHDRClippingRec709ToRec2020()
+{
+    const KoColorProfile *p2020G10Profile = KoColorSpaceRegistry::instance()->p2020G10Profile();
+    const KoColorProfile *p709G10Profile = KoColorSpaceRegistry::instance()->p709G10Profile();
+
+    QVERIFY(p2020G10Profile);
+    QVERIFY(p709G10Profile);
+
+    const KoColorSpace *p709CS = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), p709G10Profile);
+    const KoColorSpace *p2020CS = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), p2020G10Profile);
+
+    KoColor p709Color(Qt::white, p709CS);
+
+    /**
+     * Set the colors above the normal range to check if they are clipped during
+     * the conversion
+     */
+    float* colorsPtr = reinterpret_cast<float*>(p709Color.data());
+    colorsPtr[0] = 1.5f;
+    colorsPtr[1] = 0.7f;
+    colorsPtr[2] = 0.3f;
+
+    KoColor p2020Color = p709Color.convertedTo(p2020CS);
+    KoColor p709ConvertedColor = p2020Color.convertedTo(p709CS);
+
+    QCOMPARE(p709Color, p709ConvertedColor);
+}
+
 KISTEST_MAIN(TestLcmsRGBP2020PQColorSpace)

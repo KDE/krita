@@ -15,6 +15,7 @@ private Q_SLOTS:
     void test();
     void testInternalConversions();
     void testConvertToCmyk();
+    void testHDRClippingRec709ToRec2020();
 };
 
 #endif // TESTLCMSRGBP2020PQCOLORSPACE_H

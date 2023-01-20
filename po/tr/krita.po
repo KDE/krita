@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-19 00:55+0000\n"
-"PO-Revision-Date: 2023-01-18 22:46+0300\n"
+"POT-Creation-Date: 2023-01-20 00:55+0000\n"
+"PO-Revision-Date: 2023-01-19 22:40+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -8348,11 +8348,10 @@ msgstr "Seçili Anlık Görüntüyü Kaldır"
 
 #. i18n: context: text @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:291
-#, fuzzy, kde-format
-#| msgid "Sample a Color"
+#, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color"
-msgstr "Renk Örnekle"
+msgstr "Ekran Rengini &Örnekle"
 
 #. i18n: context: toolTip @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -8366,18 +8365,17 @@ msgstr "Ekrandan bir renk örnekle"
 
 #. i18n: context: iconText @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:294
-#, fuzzy, kde-format
-#| msgid "Sample a Color"
+#, kde-format
 msgctxt "action"
 msgid "Sample Screen Color"
-msgstr "Renk Örnekle"
+msgstr "Ekran Rengini Örnekle"
 
 #. i18n: context: text @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:301
 #, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color (Sample Real Canvas)"
-msgstr ""
+msgstr "Ekran Rengini &Örnekle (Gerçek Tuvali Örnekle)"
 
 #. i18n: context: toolTip @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:303
@@ -8387,13 +8385,15 @@ msgid ""
 "Sample a color from the screen while sampling a real color from the canvas "
 "if the cursor is over it"
 msgstr ""
+"İmleç tuvalin üzerindeyse tuvalden gerçek bir renk örnekleme yaparken "
+"ekrandan bir renk örnekle"
 
 #. i18n: context: iconText @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:304
 #, kde-format
 msgctxt "action"
 msgid "Sample Screen Color (Sample Real Canvas)"
-msgstr ""
+msgstr "Ekran Rengini Örnekle (Gerçek Tuvali Örnekle)"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:311
@@ -15714,13 +15714,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Çalışma alanları"
 
-#: krita/main.cc:512
+#: krita/main.cc:525
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Ölümcül Hata"
 
-#: krita/main.cc:513
+#: krita/main.cc:525
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15729,14 +15729,14 @@ msgstr ""
 "Krita, Wayland platformunu desteklemiyor. Krita'yi Wayland üzerinde "
 "çalıştırmak için XWayland kullanın. Krita şimdi kapanacak."
 
-#: krita/main.cc:609 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:623 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Uyarı"
 
-#: krita/main.cc:610
+#: krita/main.cc:624
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15750,12 +15750,12 @@ msgstr ""
 "Windows işletim sisteminin yalnızca şu sürümleri desteklenmektedir: Windows "
 "7, 8, 8.1 ve 10."
 
-#: krita/main.cc:632 krita/main.cc:637
+#: krita/main.cc:646 krita/main.cc:651
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita Tablet Desteği"
 
-#: krita/main.cc:633
+#: krita/main.cc:647
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15766,7 +15766,7 @@ msgstr ""
 "tabletiniz varsa lütfen tablet sürücüsünün doğru şekilde kurulduğundan emin "
 "olun."
 
-#: krita/main.cc:638
+#: krita/main.cc:652
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -22488,7 +22488,7 @@ msgstr "Katman Özellikleri"
 #: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:260
 #: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:275
 #: plugins/paintops/libpaintop/kis_pressure_flow_opacity_option_widget.cpp:39
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:158
+#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:167
 #: plugins/paintops/mypaint/MyPaintBrushOption.cpp:104
 #: plugins/paintops/sketch/kis_sketchop_option.cpp:37
 #: plugins/paintops/sketch/kis_sketchop_option.cpp:41
@@ -32957,7 +32957,7 @@ msgstr ""
 "kullanır.</p><p>ACES renk uzayında olduğu gibi, AllColorsRGB da yüksek "
 "oranda hayali renk tutar. Hayali renkler için Tamamen <a href=\"http://"
 "ninedegreesbelow.com/photography/xyz-rgb.html\">Acısız Programcıların XYZ, "
-"RGB, ICC, xyY, ve TRCs Kılavuzu</a>na bakınız.</p><p>Eğer birisinin renk "
+"RGB, ICC, xyY ve TRCs Kılavuzu</a>na bakınız.</p><p>Eğer birisinin renk "
 "uzayının gerçekten olası tüm gerçek renkleri taşıyıp taşımadığından emin "
 "olması gerekmiyorsa birinin neden bu profili düzenlemek için kullanmak "
 "isteyeceğinin belirli bir gerekçesi yoktur.</p>"
@@ -41728,7 +41728,7 @@ msgid ""
 "The text associated with the action (used as the menu item label, etc), or "
 "None."
 msgstr ""
-"Eylem ile ilişkili metin (menü ögesi etiketi vb. olarak kullanılan), veya "
+"Eylem ile ilişkili metin (menü ögesi etiketi vb. olarak kullanılan) veya "
 "Hiçbiri."
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, menu)
@@ -41738,7 +41738,7 @@ msgid ""
 "The menu under which to place this item, such as 'tools' or 'settings', or "
 "None."
 msgstr ""
-"Altına bu ögenin yerleştirileceği menü, 'araçlar' veya 'ayarlar' gibi, veya "
+"Altına bu ögenin yerleştirileceği menü, 'araçlar' veya 'ayarlar' gibi veya "
 "Hiçbiri."
 
 #. i18n: ectx: property (text), widget (QLabel, labelShortcut)
@@ -41782,7 +41782,7 @@ msgid ""
 "The shortcut to fire this action such as 'Ctrl+1', or a QKeySequence "
 "instance, or None."
 msgstr ""
-"'Ctrl+1', veya bir QKeySequence örneği gibi bu eylemi başlatacak kısayol, "
+"'Ctrl+1' veya bir QKeySequence örneği gibi bu eylemi başlatacak kısayol, "
 "veya Hiçbiri."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -48320,8 +48320,8 @@ msgstr ""
 "kullanılabilirdir:<emphasis strong='true'>İkili Doğrusal</emphasis>,"
 "<emphasis strong='true'>VNG</emphasis>, <emphasis strong='true'>PPG</"
 "emphasis>,<emphasis strong='true'>AHD</emphasis>, <emphasis "
-"strong='true'>DCB</emphasis>, ve <emphasis strong='true'>VCD & AHD</"
-"emphasis>.</p>"
+"strong='true'>DCB</emphasis> ve <emphasis strong='true'>VCD & AHD</emphasis>."
+"</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:435
 #, kde-format
@@ -51599,7 +51599,7 @@ msgid " ms"
 msgstr " ms"
 
 #: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:273
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:156
+#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:165
 #: plugins/paintops/libpaintop/kis_pressure_rotation_option.cpp:75
 #: plugins/paintops/libpaintop/sensors/kis_dynamic_sensor_drawing_angle.cpp:76
 #: plugins/paintops/libpaintop/sensors/kis_dynamic_sensor_drawing_angle.cpp:85
@@ -54071,7 +54071,7 @@ msgid ""
 "inker, etc), email and homepage."
 msgstr ""
 "Aşağıdaki, çizgi romana katkıda bulunan çizerlerin bir tablosudur. Takma "
-"adlarını, ve gerçek adlarını (ilk, orta, son), katkılarını (Kalem Sanatçısı, "
+"adlarını ve gerçek adlarını (ilk, orta, son), katkılarını (Kalem Sanatçısı, "
 "Mürekkep Sanatçısı vb.), e-posta adreslerini ve web sitelerini "
 "belirtebilirsiniz."
 

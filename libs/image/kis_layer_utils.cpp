@@ -2082,7 +2082,7 @@ namespace KisLayerUtils {
             node = node->nextSibling();
         }
 
-        if (!rootNode->isFakeNode()) {
+        if (!rootNode->isFakeNode() && !rootNode->projectionLeaf()->isMask()) {
             // TODO: it would be better to count up changeRect inside
             // node's extent() method
             //

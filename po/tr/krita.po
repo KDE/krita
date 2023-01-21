@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-13 03:53+0000\n"
-"PO-Revision-Date: 2023-01-18 22:46+0300\n"
+"PO-Revision-Date: 2023-01-20 23:52+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -36257,7 +36257,7 @@ msgstr "Perspektif"
 #: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:328
 #, kde-format
 msgid "Perspective Ellipse assistant"
-msgstr "Perspektif elips yardımcısı"
+msgstr "Perspektif Elips yardımcısı"
 
 #: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:724
 #, kde-format
@@ -58038,7 +58038,7 @@ msgstr "Bezier Eğrisi"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:414
 #, kde-format
 msgid "Lasso"
-msgstr "Lasso"
+msgstr "Kement"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:417
 #, kde-format

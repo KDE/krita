@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-20 00:55+0000\n"
+"POT-Creation-Date: 2023-01-21 00:56+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -36420,7 +36420,7 @@ msgstr ""
 msgid "Cr"
 msgstr "​ច្រឹប"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:143
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:139
 #, fuzzy, kde-format
 msgid "ICC Engine"
 msgstr "ជួរ​ពណ៌​"

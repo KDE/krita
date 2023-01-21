@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-20 00:55+0000\n"
+"POT-Creation-Date: 2023-01-21 00:56+0000\n"
 "PO-Revision-Date: 2023-01-08 10:22+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
@@ -37045,7 +37045,7 @@ msgstr "Cb"
 msgid "Cr"
 msgstr "Cr"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:143
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:139
 #, kde-format
 msgid "ICC Engine"
 msgstr "Moteur ICC"

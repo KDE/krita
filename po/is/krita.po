@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-20 00:55+0000\n"
+"POT-Creation-Date: 2023-01-21 00:56+0000\n"
 "PO-Revision-Date: 2021-12-26 13:54+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -36595,7 +36595,7 @@ msgstr "cb"
 msgid "Cr"
 msgstr "CR"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:143
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:139
 #, fuzzy, kde-format
 msgid "ICC Engine"
 msgstr "Vél"

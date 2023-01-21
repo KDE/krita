@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-20 00:55+0000\n"
+"POT-Creation-Date: 2023-01-21 00:56+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -37477,7 +37477,7 @@ msgstr " 1986 CB2"
 msgid "Cr"
 msgstr " 1997 CR28"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:143
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:139
 #, kde-format
 msgid "ICC Engine"
 msgstr "محرّك ICC"

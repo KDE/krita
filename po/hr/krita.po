@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-20 00:55+0000\n"
+"POT-Creation-Date: 2023-01-21 00:56+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -35979,7 +35979,7 @@ msgstr ""
 msgid "Cr"
 msgstr "Alfa"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:143
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:139
 #, fuzzy, kde-format
 msgid "ICC Engine"
 msgstr "Boje"

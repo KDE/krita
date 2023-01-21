@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-20 00:55+0000\n"
-"PO-Revision-Date: 2023-01-08 08:23+0100\n"
+"POT-Creation-Date: 2023-01-21 00:56+0000\n"
+"PO-Revision-Date: 2023-01-20 09:20+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -8343,11 +8343,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:291
-#, fuzzy, kde-format
-#| msgid "Sample a Color"
+#, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color"
-msgstr "ფერის სემპლი"
+msgstr "&ეკრანის ფერის სემპლი"
 
 #. i18n: context: toolTip @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -8361,11 +8360,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:294
-#, fuzzy, kde-format
-#| msgid "Sample a Color"
+#, kde-format
 msgctxt "action"
 msgid "Sample Screen Color"
-msgstr "ფერის სემპლი"
+msgstr "ეკრანის ფერის სემპლი"
 
 #. i18n: context: text @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:301
@@ -17455,7 +17453,7 @@ msgstr "ეფექტი"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Tones"
-msgstr ""
+msgstr "ნოტები"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:74
 #, kde-format
@@ -35685,7 +35683,7 @@ msgstr "Cb"
 msgid "Cr"
 msgstr "Cr"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:143
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:139
 #, kde-format
 msgid "ICC Engine"
 msgstr "ICC ძრავა"
@@ -38098,7 +38096,7 @@ msgstr ""
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
 msgid "Cleaning up..."
-msgstr ""
+msgstr "მოსუფთავება..."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderExport)
 #: plugins/dockers/recorder/recorder_export.ui:18
@@ -48514,7 +48512,7 @@ msgstr ""
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:148
 #, kde-format
 msgid "Connection Line"
-msgstr ""
+msgstr "მიერთებს ხაზი"
 
 #: plugins/paintops/curvebrush/kis_curves_opacity_option.cpp:11
 #, kde-format
@@ -48978,13 +48976,13 @@ msgstr ""
 #: plugins/paintops/gridbrush/wdggridoptions.ui:147
 #, kde-format
 msgid "Horizontal offset:"
-msgstr ""
+msgstr "ჰორიზონტალური წანაცვლება:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:160
 #, kde-format
 msgid "Vertical offset:"
-msgstr ""
+msgstr "ვერტიკალური წანაცვლება:"
 
 #: plugins/paintops/hairy/hairy_paintop_plugin.cpp:30
 #, kde-format
@@ -52019,7 +52017,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:388
 msgid "Style Sheet"
-msgstr ""
+msgstr "სტილების ფურცელი"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:390
 msgid "ACBF"
@@ -53020,7 +53018,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Illustrator"
-msgstr ""
+msgstr "ილუსტრატორი"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Illuminator"
@@ -57736,7 +57734,7 @@ msgstr "გადამაადგილებელი ინსტრუმ�
 #, kde-format
 msgctxt "action"
 msgid "Move a layer"
-msgstr ""
+msgstr "ფენის გადატანა"
 
 #. i18n: context: text @ Action (KarbonCalligraphyTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KarbonCalligraphyTool), Actions (tool-shortcuts), ActionCollection (Tools)

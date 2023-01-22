@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013, 2014.
-# Vit Pelcak <vit@pelcak.org>, 2021, 2022.
+# Vit Pelcak <vit@pelcak.org>, 2021, 2022, 2023.
 #
 # -- kritalibs
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
@@ -49,15 +49,15 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-13 03:53+0000\n"
-"PO-Revision-Date: 2022-06-28 15:24+0200\n"
-"Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
+"PO-Revision-Date: 2023-01-13 09:38+0100\n"
+"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.04.2\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -10542,7 +10542,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Pin to Timeline"
-msgstr ""
+msgstr "Připnout k časové ose"
 
 #. i18n: context: toolTip @ Action (pin_to_timeline), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1964

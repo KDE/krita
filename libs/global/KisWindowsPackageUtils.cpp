@@ -27,6 +27,7 @@
 #include <windows.h>
 
 #include <QDebug>
+#include <QLibrary>
 #include <QString>
 
 constexpr int appmodel_PACKAGE_FULL_NAME_MAX_LENGTH = 127;
@@ -60,7 +61,7 @@ constexpr int shlobj_KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET = 0x00040000;
 struct AppmodelFunctions {
     pGetCurrentPackageFamilyName_t getCurrentPackageFamilyName{};
     pGetCurrentPackageFullName_t getCurrentPackageFullName{};
-    HMODULE dllKernel32;
+    QLibrary dllKernel32;
 
     template<typename T, typename U>
     inline T cast_to_function(U v) noexcept
@@ -75,20 +76,15 @@ struct AppmodelFunctions {
     }
 
     AppmodelFunctions()
-        : dllKernel32(LoadLibrary(TEXT("kernel32.dll")))
+        : dllKernel32("kernel32.dll")
     {
         getCurrentPackageFamilyName =
-            cast_to_function<pGetCurrentPackageFamilyName_t>(
-                GetProcAddress(dllKernel32, "GetCurrentPackageFamilyName"));
+            cast_to_function<pGetCurrentPackageFamilyName_t>(dllKernel32.resolve("GetCurrentPackageFamilyName"));
         getCurrentPackageFullName =
-            cast_to_function<pGetCurrentPackageFullName_t>(
-                GetProcAddress(dllKernel32, "GetCurrentPackageFullName"));
+            cast_to_function<pGetCurrentPackageFullName_t>(dllKernel32.resolve("GetCurrentPackageFullName"));
     }
 
-    ~AppmodelFunctions()
-    {
-        FreeLibrary(dllKernel32);
-    }
+    ~AppmodelFunctions() = default;
 };
 
 namespace KisWindowsPackageUtils

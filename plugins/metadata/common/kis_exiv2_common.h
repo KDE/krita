@@ -8,9 +8,9 @@
 #ifndef _KIS_EXIV2_COMMON_H_
 #define _KIS_EXIV2_COMMON_H_
 
-#include <QDateTime>
-
 #include <exiv2/exiv2.hpp>
+
+#include <QDateTime>
 
 #include <kis_debug.h>
 #include <kis_meta_data_value.h>
@@ -19,9 +19,7 @@
 
 // Convert an exiv value to a KisMetaData value
 inline KisMetaData::Value
-exivValueToKMDValue(const Exiv2::Value::AutoPtr value,
-                    bool forceSeq,
-                    KisMetaData::Value::ValueType arrayType = KisMetaData::Value::UnorderedArray)
+exivValueToKMDValue(const Exiv2::Value::AutoPtr &value, bool forceSeq, KisMetaData::Value::ValueType arrayType = KisMetaData::Value::UnorderedArray)
 {
     switch (value->typeId()) {
     case Exiv2::signedByte:
@@ -265,7 +263,7 @@ inline Exiv2::Value *kmdValueToExivXmpValue(const KisMetaData::Value &value)
     case KisMetaData::Value::AlternativeArray:
     case KisMetaData::Value::OrderedArray:
     case KisMetaData::Value::UnorderedArray: {
-        Exiv2::XmpArrayValue *arrV = new Exiv2::XmpArrayValue;
+        Exiv2::XmpArrayValue *arrV = new Exiv2::XmpArrayValue();
         switch (value.type()) {
         case KisMetaData::Value::OrderedArray:
             arrV->setXmpArrayType(Exiv2::XmpValue::xaSeq);

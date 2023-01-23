@@ -15,8 +15,6 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include <stdlib.h>
-
 #include <QString>
 #include <QPixmap>
 #include <kis_debug.h>
@@ -35,7 +33,7 @@
 
 #include <QOperatingSystemVersion>
 
-#include <time.h>
+#include <ctime>
 
 #include <KisApplication.h>
 #include <KoConfig.h>
@@ -245,7 +243,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 #endif
 
     // The global initialization of the random generator
-    qsrand(time(0));
+    qsrand(static_cast<uint>(std::time(nullptr)));
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
 
 #if defined HAVE_X11

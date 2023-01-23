@@ -15,6 +15,7 @@
 #include "kis_command_utils.h"
 #include "kis_time_span.h"
 #include "kis_image.h"
+#include <future>
 
 class KoProperties;
 class KoColor;
@@ -75,7 +76,7 @@ namespace KisLayerUtils
 
     KRITAIMAGE_EXPORT void splitAlphaToMask(KisImageSP image, KisNodeSP node, const QString& maskName);
 
-    KRITAIMAGE_EXPORT void convertToPaintLayer(KisImageSP image, KisNodeSP src);
+    KRITAIMAGE_EXPORT std::future<KisNodeSP> convertToPaintLayer(KisImageSP image, KisNodeSP src);
 
     typedef QMap<int, QSet<KisNodeSP> > FrameJobs;
     void updateFrameJobs(FrameJobs *jobs, KisNodeSP node);

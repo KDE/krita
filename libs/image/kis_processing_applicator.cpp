@@ -20,6 +20,7 @@
 #include "kis_image_signal_router.h"
 #include "KisAsynchronouslyMergeableCommandInterface.h"
 #include "kis_command_ids.h"
+#include <KisRunnableStrokeJobUtils.h>
 
 class DisableUIUpdatesCommand : public KisCommandUtils::FlipFlopCommand, public KisAsynchronouslyMergeableCommandInterface
 {
@@ -219,6 +220,29 @@ private:
     KisImageSignalVector m_emitSignals;
 };
 
+struct StrategyWithStatusPromise : KisStrokeStrategyUndoCommandBased
+{
+    StrategyWithStatusPromise(const KUndo2MagicString &name,
+                          KisStrokeUndoFacade *facade)
+        : KisStrokeStrategyUndoCommandBased(name, false, facade)
+    {
+    }
+
+    void finishStrokeCallback() override {
+        KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
+        m_successfullyCompleted.set_value(true);
+    }
+
+    void cancelStrokeCallback() override {
+        QVector<KisStrokeJobData *> jobs;
+        cancelStrokeCallbackImpl(jobs);
+        KritaUtils::addJobBarrier(jobs, [this] () { m_successfullyCompleted.set_value(false);});
+        addMutatedJobs(jobs);
+    }
+
+    std::promise<bool> m_successfullyCompleted;
+};
+
 
 KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
                                                  KisNodeSP node,
@@ -234,8 +258,10 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
       m_finalSignalsEmitted(false),
       m_sharedAllFramesToken(new bool(false))
 {
-    KisStrokeStrategyUndoCommandBased *strategy =
-            new KisStrokeStrategyUndoCommandBased(name, false, m_image.data());
+    StrategyWithStatusPromise *strategy =
+            new StrategyWithStatusPromise(name, m_image.data());
+
+    m_successfullyCompletedFuture = strategy->m_successfullyCompleted.get_future();
 
     if (m_flags.testFlag(SUPPORTS_WRAPAROUND_MODE)) {
         strategy->setSupportsWrapAroundMode(true);
@@ -270,6 +296,12 @@ KisProcessingApplicator::~KisProcessingApplicator()
 const KisStrokeId KisProcessingApplicator::getStroke() const
 {
     return m_strokeId;
+}
+
+std::future<bool>&& KisProcessingApplicator::successfullyCompletedFuture()
+{
+    KIS_ASSERT(m_successfullyCompletedFuture.valid());
+    return std::move(m_successfullyCompletedFuture);
 }
 
 void KisProcessingApplicator::applyVisitor(KisProcessingVisitorSP visitor,

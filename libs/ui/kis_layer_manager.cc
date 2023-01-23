@@ -453,7 +453,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
         return;
     }
 
-    KisLayerUtils::convertToPaintLayer(image, source);
+    (void) KisLayerUtils::convertToPaintLayer(image, source);
 }
 
 void KisLayerManager::convertGroupToAnimated()

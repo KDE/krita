@@ -52,6 +52,7 @@
 #include "kis_paint_device_frames_interface.h"
 #include "kis_command_ids.h"
 #include "kis_image_config.h"
+#include "KisFutureUtils.h"
 
 
 namespace KisLayerUtils {
@@ -2188,13 +2189,13 @@ namespace KisLayerUtils {
         applicator.end();
     }
 
-    void convertToPaintLayer(KisImageSP image, KisNodeSP src)
+    std::future<KisNodeSP> convertToPaintLayer(KisImageSP image, KisNodeSP src)
     {
         //Initialize all operation dependencies.
         ConvertToPaintLayerInfoSP info( new ConvertToPaintLayerInfo(image, src) );
 
         if (!info->hasTargetNode())
-            return;
+            return kismpl::make_ready_future(KisNodeSP());
 
         KisImageSignalVector emitSignals;
         KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE, emitSignals, kundo2_i18n("Convert to a Paint Layer"));
@@ -2215,6 +2216,11 @@ namespace KisLayerUtils {
         applicator.applyCommand(new SimpleRemoveLayers(info->toRemove(), info->image()));
 
         applicator.end();
+
+        return kismpl::then(applicator.successfullyCompletedFuture(),
+            [node = info->targetNode()] (std::future<bool> completed) {
+                return completed.get() ? node : KisNodeSP();
+            });
     }
 
     //===========================================================

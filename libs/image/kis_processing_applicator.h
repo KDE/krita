@@ -74,6 +74,13 @@ public:
     const KisStrokeId getStroke() const;
 
     /**
+     * A future that notifies the caller when the whole processing
+     * stroke has been completed. The returned value shows if the
+     * stroke has been completed (true) or cancelled (false).
+     */
+    std::future<bool> &&successfullyCompletedFuture();
+
+    /**
      * @brief runSingleCommandStroke creates a stroke and runs \p cmd in it.
      *        The text() field fo \p cmd is used as a title of the stroke.
      * @param image the image to run the stroke on
@@ -100,6 +107,7 @@ private:
     KisStrokeId m_strokeId;
     bool m_finalSignalsEmitted;
     QSharedPointer<bool> m_sharedAllFramesToken;
+    std::future<bool> m_successfullyCompletedFuture;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisProcessingApplicator::ProcessingFlags)

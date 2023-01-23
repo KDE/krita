@@ -300,8 +300,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     qputenv("QT_ANDROID_ENABLE_RIGHT_MOUSE_FROM_LONG_PRESS", "1");
 #endif
 
-    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    const QDir configPath(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation));
+    QSettings kritarc(configPath.absoluteFilePath("kritadisplayrc"), QSettings::IniFormat);
 
     bool enableOpenGLDebug = false;
     bool openGLDebugSynchronous = false;
@@ -364,8 +364,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         QCoreApplication app(argc, argv);
         Q_UNUSED(app);
         root = KoResourcePaths::getApplicationRoot();
-        QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
-        languageoverride.beginGroup(QStringLiteral("Language"));
+        QSettings languageoverride(configPath.absoluteFilePath("klanguageoverridesrc"), QSettings::IniFormat);
+        languageoverride.beginGroup("Language");
         language = languageoverride.value(qAppName(), "").toString();
     }
 
@@ -724,7 +724,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     int state = app.exec();
 
     {
-        QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+        QSettings kritarc(configPath.absoluteFilePath("kritadisplayrc"), QSettings::IniFormat);
         kritarc.setValue("canvasState", "OPENGL_SUCCESS");
     }
 

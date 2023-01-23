@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-21 00:56+0000\n"
-"PO-Revision-Date: 2023-01-20 23:52+0300\n"
+"PO-Revision-Date: 2023-01-22 22:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -13809,7 +13809,7 @@ msgstr "Yazılımsal Provayı Açar"
 #, kde-format
 msgctxt "action"
 msgid "Out of Gamut Warnings"
-msgstr "Gamut Dışı Uyarıları"
+msgstr "Gam Dışı Uyarıları"
 
 #. i18n: context: toolTip @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
@@ -13822,8 +13822,8 @@ msgid ""
 "Turns on warnings for colors out of proofed gamut, needs soft proofing to be "
 "turned on."
 msgstr ""
-"Prova edilmiş gamut dıșındaki renkler için uyarıları açar, yazılımsal "
-"provanın açık olması gereklidir."
+"Prova edilmiş gam dıșındaki renkler için uyarıları açar, yazılımsal provanın "
+"açık olması gereklidir."
 
 #. i18n: context: text @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
@@ -17959,7 +17959,7 @@ msgstr "Krita Başvuru Görseli Koleksiyonu"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Krita Gamut Mask"
-msgstr "Krita Gamut Maskesi"
+msgstr "Krita Gam Maskesi"
 
 #: libs/koplugin/KisMimeDatabase.cpp:294
 #, kde-format
@@ -19634,7 +19634,7 @@ msgstr "Oturumlar"
 #, kde-format
 msgctxt "resource type"
 msgid "Gamut Masks"
-msgstr "Gamut Maskeleri"
+msgstr "Gam Maskeleri"
 
 #: libs/resources/KisResourceTypes.cpp:53
 #, kde-format
@@ -20266,7 +20266,7 @@ msgstr "Şekilleri vektör seçimine dönüştür"
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:49
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
-msgstr "Çok Çizgili Çiz"
+msgstr "Süren Çizgi Çiz"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:120
 msgctxt "(qtundo-format)"
@@ -23877,7 +23877,7 @@ msgid ""
 "Within and outside gamut; same as Absolute Colorimetric. White point changed "
 "to result in neutral grays."
 msgstr ""
-"Gamut içi veya dışı; Mutlak Renkölçer ile aynı. Beyaz nokta, nötr gri ortaya "
+"Gam içi veya dışı; Mutlak Renkölçer ile aynı. Beyaz nokta, nötr gri ortaya "
 "çıkarmak için değiştirildi."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRelativeColorimetric)
@@ -23922,10 +23922,9 @@ msgid ""
 "is sacrificed. White point for source and destination; unchanged. Intended "
 "for spot colors (Pantone, TruMatch, logo colors, ...)"
 msgstr ""
-"Hedef aygıt gamutunda; renk, açıklık ve doygunluk korunur. Gamutun dışında; "
-"renk ve açıklık korunur, doygunluk feda edilir. Kaynak ve hedef için beyaz "
-"nokta; değişmedi. Spot renklere yöneliktir (Pantone, TruMatch, logo "
-"renkleri, ...)"
+"Hedef aygıt gamında; renk, açıklık ve doygunluk korunur. Gamın dışında; renk "
+"ve açıklık korunur, doygunluk feda edilir. Kaynak ve hedef için beyaz nokta; "
+"değişmez. Spot renklere yöneliktir (Pantone, TruMatch, logo renkleri, ...)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:130
@@ -24116,7 +24115,7 @@ msgstr "Uyum Durumu:"
 #: libs/ui/forms/wdgimageproperties.ui:350
 #, kde-format
 msgid "Gamut Warning:"
-msgstr "Gamut Uyarısı:"
+msgstr "Gam Uyarısı:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbBlackPointComp)
 #. i18n: ectx: property (text), widget (QCheckBox, ckbProofBlackPoint)
@@ -24699,14 +24698,14 @@ msgstr "Durum çubuğu"
 #: libs/ui/forms/wdgGamutMaskToolbar.ui:51
 #, kde-format
 msgid "Toggle gamut mask"
-msgstr "Gamut maskesini aç/kapat"
+msgstr "Gam maskesini aç/kapat"
 
 #. i18n: ectx: property (text), widget (QLabel, labelMaskName)
 #: libs/ui/forms/wdgGamutMaskToolbar.ui:70
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:23
 #, kde-format
 msgid "Select a mask in \"Gamut Masks\" docker"
-msgstr "\"Gamut Maskesi\" rıhtımcısında bir maske seç"
+msgstr "\"Gam Maskesi\" rıhtımcısında bir maske seç"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdggeneralsettings.ui:49
@@ -26796,7 +26795,7 @@ msgstr "sRGB Üçgen Seçici"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:93
 #, kde-format
 msgid "Wide Gamut Selector"
-msgstr "Geniş Gamut Seçici"
+msgstr "Geniş Gam Seçici"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:101
@@ -29347,7 +29346,7 @@ msgstr "Pencere düzenleri"
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, kde-format
 msgid "Gamut masks"
-msgstr "Gamut maskeleri"
+msgstr "Gam maskeleri"
 
 #: libs/ui/KisApplication.cpp:355
 #, kde-format
@@ -30694,12 +30693,12 @@ msgstr "Yazılımsal Prova kapalı."
 #: libs/ui/KisView.cpp:1346
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
-msgstr "Gamut Uyarıları kayan noktalı sayılarda çalışmaz."
+msgstr "Gam Uyarıları kayan noktalı sayılarda çalışmaz."
 
 #: libs/ui/KisView.cpp:1352
 #, kde-format
 msgid "Gamut Warnings turned on."
-msgstr "Gamut Uyarıları açık."
+msgstr "Gam Uyarıları açık."
 
 #: libs/ui/KisView.cpp:1354
 #, kde-format
@@ -30709,7 +30708,7 @@ msgstr "Ancak Yazılımsal Prova hâlâ kapalı."
 #: libs/ui/KisView.cpp:1357
 #, kde-format
 msgid "Gamut Warnings turned off."
-msgstr "Gamut Uyarıları kapalı."
+msgstr "Gam Uyarıları kapalı."
 
 #: libs/ui/KisViewManager.cpp:779
 #, kde-format
@@ -32898,10 +32897,10 @@ msgid ""
 "color space it has no negative values and contains only few colors that fall "
 "just barely outside the area of real colors humans can see</p>"
 msgstr ""
-"<p>ACEScg renk uzayı ACES renk uzayından daha küçük; ancak 'Rec-2020 gamut "
-"ve DCI-P3 gamut'unu içerecek kadar büyük; ACES renk uzayının aksine negatif "
+"<p>ACEScg renk uzayı ACES renk uzayından daha küçük; ancak 'Rec-2020 gam ve "
+"DCI-P3 gamını içerecek kadar büyük; ACES renk uzayının aksine negatif "
 "değerlere sahip değil ve insanların görebileceği gerçek renklerin alanı "
-"dışında yalnızca birkaç renk içeriyor </p>"
+"dışında yalnızca birkaç renk içerir </p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:536
 #, kde-format
@@ -32923,14 +32922,14 @@ msgstr ""
 "adı olarak 'ClayRGB' (ArgyllCMS'yi takip ettim) kullandım. Aşağıda "
 "kullanılan 'Adobe RGB 1998 ile uyumlu' terimi, AdobeRGB 1998 renk uzayı "
 "özelliklerinin başlangıcında önerilen terminolojidir.</p><p>Adobe RGB 1998 "
-"renk gamutu, sRGB'den daha fazla gerçek dünya cam göbeği renklerini, yeşil "
-"ve sarı yeşillikleri kapsar, ancak günümüzün en üst sınıf geniş menzil, "
+"renk gamı, sRGB'den daha fazla gerçek dünya camgöbeği renklerini, yeşil ve "
+"sarı yeşillikleri kapsar, ancak günümüzün en üst sınıf geniş menzil, "
 "mürekkep püskürtmeli yazıcılar kullanarak yazdırırken, özellikle "
-"yazdırılabilir cam göbeği renklerini, yeşil, sarı-yeşili içermez. BetaRGB "
-"(profil paketine dahil değildir) ve Rec.2020, bugünün geniş gamut "
-"yazıcılarının renk gamutları için daha iyi eşleşmelerdir.</p><p>Adobe RGB "
-"1998 renk yelpazesi, günümüzün ileri düzey geniş gamut monitörlerinin makul "
-"bir yaklaşımıdır.</p>"
+"yazdırılabilir camgöbeği renklerini, yeşil, sarı-yeşili içermez. BetaRGB "
+"(profil paketine dahil değildir) ve Rec.2020, bugünün geniş gam "
+"yazıcılarının renk gamları için daha iyi eşleşmelerdir.</p><p>Adobe RGB 1998 "
+"renk yelpazesi, günümüzün ileri düzey geniş gam monitörlerinin makul bir "
+"yaklaşımıdır.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:550
 #, kde-format
@@ -32949,11 +32948,11 @@ msgid ""
 "needs to make sure your color space really does hold all possible real "
 "colors.</p>"
 msgstr ""
-"<p>Bu profilin renk yelpazesi, ACES renk uzayı gametiyle kabaca aynı boyut "
-"ve şekle sahiptir ve ACES renk alanı gibi, AllColorsRGB olası tüm gerçek "
+"<p>Bu profilin renk yelpazesi, ACES renk uzayı gamıyla kabaca aynı boyut ve "
+"şekle sahiptir ve ACES renk alanı gibi, AllColorsRGB olası tüm gerçek "
 "renkleri tutar. Ancak AllColorsRGB aslında (standart gözlemci tarafından "
 "görüntülendiğinde gerçek olarak nitelenen bazı saçak renklerini yakalamak "
-"için) biraz daha geniş bir renk gamutuna sahiptir ve D50 beyaz noktasını "
+"için) biraz daha geniş bir renk gamına sahiptir ve D50 beyaz noktasını "
 "kullanır.</p><p>ACES renk uzayında olduğu gibi, AllColorsRGB da yüksek "
 "oranda hayali renk tutar. Hayali renkler için Tamamen <a href=\"http://"
 "ninedegreesbelow.com/photography/xyz-rgb.html\">Acısız Programcıların XYZ, "
@@ -33022,9 +33021,9 @@ msgid ""
 msgstr ""
 "<p>Olası telif hakkı ihlali sorunlarından kaçınmak için, bu profillerin "
 "temel adı olarak 'LargeRGB' (aşağıdaki RawTherapee'yi kullandım) kullandım.</"
-"p><p>Kodak, RIMM / ROMM (ProPhotoRGB) renk gamutunu yazdırılabilir ve en "
+"p><p>Kodak, RIMM / ROMM (ProPhotoRGB) renk gamını yazdırılabilir ve en "
 "gerçek dünya renklerini içerecek şekilde tasarladı. Bazı hayali renkleri "
-"içerir ve dijital kameralar tarafından yakalanabilecek gerçek dünya mavileri "
+"içerir ve sayısal kameralar tarafından yakalanabilecek gerçek dünya mavileri "
 "ve mor renklerinden bazılarını dışlar. Ayrıca, bazı (ve muhtemelen çok "
 "sayıda) kamera matrisi giriş profilleri tarafından yorumlandığı şekliyle, "
 "bazı çok doymuş \"kamera tarafından yakalanan\" sarıları hariç tutuyor.</"
@@ -33084,12 +33083,12 @@ msgstr ""
 "kalite CRT'lerle iyi bir eşleşme oluşturuyordu. Ancak sRGB, daha doymuş sRGB "
 "blues ve magentalarını sık sık görüntüleyemeyen tüketici sınıfı LCD "
 "monitörlerle iyi bir uyum oluşturmaz (iyi haber: teknoloji ilerledikçe, daha "
-"geniş gamutlar tüketici dereceli monitörlere doğru kayar).</p><p>Yazıcı renk "
-"gamutları, cam göbekleri, yeşillikler ve sarı-yeşil renklerde sRGB renk "
-"gamını kolayca aşabilir. İnterpolasyonlu kamera ham dosyalarındaki renkler "
+"geniş gamlar tüketici dereceli monitörlere doğru kayar).</p><p>Yazıcı renk "
+"gamları, cam göbekleri, yeşillikler ve sarı-yeşil renklerde sRGB renk gamını "
+"kolayca aşabilir. Aradeğerlemeli kamera ham dosyalarındaki renkler "
 "genellikle sRGB renk gamını da aşar.</p><p>Algılama amacı sRGB'ye "
-"dönüştürülürken sihirli bir şekilde gamut renklerinin dışına çıkarmamasını "
-"sRGB renk gamutuna dahil etmemektedir! Standart sRGB renk alanı (profil "
+"dönüştürülürken sihirli bir şekilde gam renklerinin dışına çıkarmamasını "
+"sRGB renk gamına dahil etmemektedir! Standart sRGB renk alanı (profil "
 "paketinde sağlanan diğer tüm RGB profilleri ile birlikte) bir matris "
 "profilidir ve matris profilleri algılama amaçlı tablolara sahip değildir.</p>"
 
@@ -33186,12 +33185,12 @@ msgid ""
 "And of course you cannot use the linear gamma versions of these profiles for "
 "8-bit editing.</p>"
 msgstr ""
-"<p>8 bitlik görüntüleri düzenlerken, küçük bir renk gamutu ve yaklaşık veya "
+"<p>8 bitlik görüntüleri düzenlerken, küçük bir renk gamı ve yaklaşık veya "
 "tamamen algısal olarak üniform TRC olan bir profil kullanmalısınız. Profil "
 "paketinde verilen profillerden yalnızca 8-bit düzenleme için sRGB ve "
 "AdobeRGB1998 (ClayRGB) renk alanları yeterince küçük. AdobeRGB1998 renk "
 "alanıyla bile, posterizasyona neden olmamak için dikkatli olmanız gerekir. "
-"Ve tabii ki 8 bit düzenleme için bu profillerin doğrusal gamma sürümlerini "
+"Ve tabii ki 8 bit düzenleme için bu profillerin doğrusal gama sürümlerini "
 "kullanamazsınız.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:671
@@ -35391,16 +35390,17 @@ msgid ""
 ">Visit <a href=\"%2\">%2</a> for more information about the KDE community "
 "and the software we produce.</html>"
 msgstr ""
-"<html><b>KDE</b>, <a href=\"%1\">Özgür Yazılım</a> geliştirmeyi taahhüt eden "
-"yazılım mühendisleri, sanatçılar, yazarlar, çevirmenler ve "
-"kolaylaştırıcılardan oluşan dünya çapında bir ağdır. Bu topluluk, KDE "
-"çerçevelerinin, çalışma alanlarının ve uygulamalarının bir parçası olarak "
-"yüzlerce Özgür Yazılım uygulaması yarattı.<br /><br />KDE, KDE'nin "
-"çabalarını veya ürünlerini diğerlerinin dışına çıkarmaya tek bir varlık "
-"tarafından denetlenmeyen bir kooperatif teşebbüsüdür. Herkesin, siz de dahil "
-"olmak üzere KDE'ye katılması ve katkıda bulunmasından mutluluk duyarız.<br /"
-"><br />KDE topluluğu ve ürettiğimiz yazılım hakkında daha fazla bilgi için "
-"<a href=\"%2\">%2</a> bağlantısını ziyaret edin.</html>"
+"<html><b>KDE</b>, dünyanın dört bir yanında bulunan ve <a href=\"%1\">Özgür "
+"Yazılım</a> geliştirme felsefesini benimsemiş yazılım mühendislerinin, "
+"sanatçıların, yazarların ve çevirmenlerin katılımı ile oluşmuş bir "
+"topluluktur. KDE; Plasma masaüstü ortamını, yüzlerce uygulamayı ve bu "
+"uygulamaları destekleyen çok sayıda yazılım kitaplığını geliştirir. KDE, "
+"katılımcı bir girişimdir ve KDE ürünlerini veya çalışmalarını denetleyen "
+"tekil bir kişilik yoktur. Bunun yerine, birlikte çalışarak dünyanın en iyi "
+"Özgür Yazılımları'nı geliştirmek olan ortak amacı paylaşarak çalışıyoruz. "
+"KDE Projesine siz de dahil herkes katılıp katkıda bulunabilir. KDE topluluğu "
+"ve ürettiği  yazılımlar hakkında daha fazla bilgi almak için <a href=\"%2\">"
+"%2</a> adresini ziyaret edin.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:69
 #, kde-format
@@ -35413,15 +35413,15 @@ msgid ""
 "improvement then you are welcome to use the bug tracking system to register "
 "your wish. Make sure you use the severity called \"Wishlist\".</html>"
 msgstr ""
-"<html>Yazılım her zaman iyileştirilebilir ve KDE ekibi bunu yapmaya "
-"hazırdır. Bununla birlikte, siz - kullanıcı -, bir şey beklendiği gibi "
-"çalışmadığında çalışmadığını veya daha iyi yapılabileceğini bize bildirmeniz "
-"gerekir.<br /><br />KDE'nin bir hata raporlama sistemi vardır. Hata "
-"raporlamak için <a href=\"%1\">%1</a> bağlantısını ziyaret edin veya \"Yardım"
-"\" menüsünden \"Hata Bildir...\" seçeneğini kullanın.<br /><br />İyileştirme "
-"öneriniz varsa arzunuzu kaydetmek için hata izleme sistemini "
-"kullanabilirsiniz. \"Wishlist\" adlı etiketi kullandığınızdan emin olun.</"
-"html>"
+"<html>Bir yazılım, doğası gereği her zaman iyileştirmeye açıktır ve KDE "
+"takımının tek amacı budur. Kullanıcılar olarak, bir şeyler beklediğiniz gibi "
+"çalışmadığında veya kimi şeylerin daha iyi olabileceğini düşündüğünüzde "
+"lütfen bize bunları bildirin.<br /><br />KDE Masaüstü Ortamı'nın bir hata "
+"izleme sistemi vardır. Hataları bildirmek için <a href=\"%1\">%1</a> "
+"adresini veya uygulamaların \"Yardım\" menüsünde bulunan \"Hata Bildir...\" "
+"ögesini kullanın.<br /><br />Bir iyileştirme önerisinde bulunmak için de "
+"hata izleme sistemini kullanabilirsiniz. \"Wishlist\" önceliğini "
+"seçtiğinizden emin olun.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:87
 #, kde-format
@@ -36972,7 +36972,7 @@ msgstr "Sabitleyici Yeniden Boyutlandığında: "
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:405
 #, kde-format
 msgid "Show Zoom Selector UI: "
-msgstr "Yakınlaştırma Seçici Arayüzü Göster:"
+msgstr "Yakınlaştırma Seçici Arayüzünü Göster: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:418
@@ -37895,13 +37895,13 @@ msgstr "HS&V"
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:256
 #, kde-format
 msgid "Gamut Mask Behavior"
-msgstr "Gamut Maskesi Davranışı"
+msgstr "Gam Maskesi Davranışı"
 
 #. i18n: ectx: property (text), widget (QRadioButton, enforceGamutMask)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:264
 #, kde-format
 msgid "Enforce gamut &mask"
-msgstr "&Gamut maskesini zorla"
+msgstr "&Gam maskesini zorla"
 
 #. i18n: ectx: property (text), widget (QRadioButton, permissiveGamutMask)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:271
@@ -38089,18 +38089,18 @@ msgstr "Seçili maskeyi sil"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:126
 #, kde-format
 msgid "Edit the gamut mask"
-msgstr "Gamut maskesini düzenle"
+msgstr "Gam maskesini düzenle"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:57
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:64
 #, kde-format
 msgid "Gamut Masks"
-msgstr "Gamut Maskeleri"
+msgstr "Gam Maskeleri"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:129
 #, kde-format
 msgid "Could not open gamut mask for editing."
-msgstr "Gamut maskesi, düzenleme için açılamadı."
+msgstr "Gam maskesi, düzenleme için açılamadı."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:130
 #, kde-format
@@ -38110,7 +38110,7 @@ msgstr "Düzenleyici şablonu bulunamadı."
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:263
 #, kde-format
 msgid "Saving of gamut mask '%1' was aborted."
-msgstr "'%1' gamut maskesi kaydı iptal edildi."
+msgstr "'%1' gam maskesinin kaydı iptal edildi."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:264
 #, kde-format
@@ -38119,7 +38119,7 @@ msgid ""
 "template contains a vector layer named 'maskShapesLayer'</li><li>there are "
 "one or more vector shapes on the 'maskShapesLayer'</li></ul></p>"
 msgstr ""
-"<p>Maske şablonu geçersiz.</p><p>Lütfen şunları denetleyin:<ul><li>şablonu "
+"<p>Maske şablonu geçersiz.</p><p>Lütfen şunları denetleyin:<ul><li>Şablonu "
 "'maskShapesLayer' adlı bir vektör katman adı içeriyor mu</"
 "li><li>'maskShapesLayer'da bir veya birden çok vektör şekil var mı</li></"
 "ul></p>"
@@ -38127,7 +38127,7 @@ msgstr ""
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:310
 #, kde-format
 msgid "Gamut mask <b>'%1'</b> has been modified."
-msgstr "Gamut maskesi <b>'%1'</b> değiştirildi."
+msgstr "Gam maskesi <b>'%1'</b> değiştirildi."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:311
 #, kde-format
@@ -40410,7 +40410,7 @@ msgid ""
 "then, it is used. Else reverts to perceptual\n"
 "intent."
 msgstr ""
-"Gamut içinde ve dışında; Mutlak\n"
+"Gam içinde ve dışında; Mutlak\n"
 "Renkölçer ile aynı. Beyaz nokta, nötr griye\n"
 "dönüşecek şekilde değişti.\n"
 "Eğer yeterli tablo profilde gösterilirse\n"
@@ -40462,8 +40462,8 @@ msgid ""
 "and destination; unchanged. Intended for spot\n"
 "colors (Pantone, TruMatch, logo colors, ...)"
 msgstr ""
-"Hedef araç gamutun içinde; renk tonu,\n"
-"aydınlık ve doygunluk geliştirildi. Gamutun dışında;\n"
+"Hedef araç gamının içinde; renk tonu,\n"
+"aydınlık ve doygunluk geliştirildi. Gamın dışında;\n"
 "renk tonu ve aydınlık geliştirildi,\n"
 "doygunluktan feda edildi. Kaynak ve hedef için\n"
 "beyaz nokta; değişmedi. Nokta renklere\n"
@@ -48872,7 +48872,7 @@ msgstr "Adobe RGB"
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Wide Gamut"
-msgstr "Geniş Gamut"
+msgstr "Geniş Gam"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:743
 #, kde-format
@@ -48915,8 +48915,8 @@ msgstr ""
 "seçenektir.</li><li><emphasis strong='true'>Adobe RGB</emphasis>: Bu renk "
 "uzayı, Adobe tarafından geliştirilen, genişletilmiş bir renk uzayıdır. "
 "Reklam ve güzel sanatlar gibi fotoğrafçılık uygulamaları için kullanılır.</"
-"li><li><emphasis strong='true'>Geniş Gamut</emphasis>: bu renk uzayı Adobe "
-"RGB renk uzayının genişletilmiş bir sürümüdür.</li><li><emphasis "
+"li><li><emphasis strong='true'>Geniş Gam</emphasis>: Bu renk uzayı Adobe RGB "
+"renk uzayının genişletilmiş bir sürümüdür.</li><li><emphasis "
 "strong='true'>Pro-Photo</emphasis>: Bu renk uzayı, Kodak tarafından "
 "geliştirilmiş, fotoğrafsal çıktılar düşünülerek tasarlanmış özellikle geniş "
 "bir aralık sunan bir RGB renk uzayıdır.</li><li><emphasis "
@@ -58663,14 +58663,14 @@ msgstr "Çokgen Aracı. Shift ve fare tıklaması çokgeni sonlandırır."
 #: plugins/tools/tool_polyline/kis_tool_polyline.h:42
 #, kde-format
 msgid "Polyline Tool: Shift-mouseclick ends the polyline."
-msgstr "Çok Çizgili Aracı: Shift ve fare tıklaması çok çizgiliyi sonlandırır."
+msgstr "Süren Çizgi Aracı: Shift ve fare tıklaması çoklu çizgiyi sonlandırır."
 
 #. i18n: context: text @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_polyline/KisToolPolyline.action:7
 #, kde-format
 msgctxt "action"
 msgid "Polyline Tool"
-msgstr "Çokluçizgi Aracı"
+msgstr "Süren Çizgi Aracı"
 
 #. i18n: context: toolTip @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -58681,7 +58681,7 @@ msgstr "Çokluçizgi Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Polyline Tool. Shift-mouseclick ends the polyline."
-msgstr "Çokluçizgi Aracı. Shift ve fare tıklaması çok çizgiliyi sonlandırır."
+msgstr "Süren Çizgi Aracı. Shift ve fare tıklaması çoklu çizgiyi sonlandırır."
 
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:133
 #, kde-format
@@ -59612,27 +59612,3 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
-
-#~ msgctxt "Heading for the list of Krita authors/developers"
-#~ msgid "Authors"
-#~ msgstr "Yazarlar"
-
-#~ msgid "Unexpected error. Please contact developers."
-#~ msgstr "Beklenmeyen hata. Geliştiricilerle iletişime geçin."
-
-#~ msgid "&Description:"
-#~ msgstr "&Açıklama:"
-
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr ""
-#~ "%1 kaydedilemedi.\n"
-#~ "Gerekçe: %2"
-
-#~ msgid ""
-#~ "Could not open %2.\n"
-#~ "Reason: %1"
-#~ msgstr ""
-#~ "%2 dosyası açılamadı.\n"
-#~ "Gerekçe: %1"

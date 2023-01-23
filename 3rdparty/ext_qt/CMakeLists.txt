@@ -129,7 +129,6 @@ if (WIN32)
       GIT_TAG 7208f1a6b7510eb086aeb9a53efe02b83a6fcb0a
       GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtwinextras qttranslations
       GIT_SUBMODULES_RECURSE false
-      GIT_SHALLOW true
       GIT_PROGRESS true
       GIT_REMOTE_UPDATE_STRATEGY REBASE
 
@@ -153,7 +152,6 @@ elseif (ANDROID)
       GIT_TAG 7208f1a6b7510eb086aeb9a53efe02b83a6fcb0a
       GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qttranslations qtandroidextras
       GIT_SUBMODULES_RECURSE false
-      GIT_SHALLOW true
       GIT_PROGRESS true
       GIT_REMOTE_UPDATE_STRATEGY REBASE
 
@@ -195,7 +193,6 @@ elseif (NOT APPLE)
       GIT_TAG 7208f1a6b7510eb086aeb9a53efe02b83a6fcb0a
       GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtx11extras qttranslations
       GIT_SUBMODULES_RECURSE false
-      GIT_SHALLOW true
       GIT_PROGRESS true
       GIT_REMOTE_UPDATE_STRATEGY REBASE
 
@@ -225,7 +222,6 @@ else( APPLE )
         GIT_TAG 7208f1a6b7510eb086aeb9a53efe02b83a6fcb0a
         GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtmacextras qttranslations
         GIT_SUBMODULES_RECURSE false
-        GIT_SHALLOW true
         GIT_PROGRESS true
         GIT_REMOTE_UPDATE_STRATEGY REBASE
 

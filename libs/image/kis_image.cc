@@ -638,7 +638,8 @@ void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
             }
 
             if (oldMask) {
-                m_image->m_d->rootLayer->setDirtyDontResetAnimationCache(oldMask->extent());
+                const QRect oldMaskRect = oldMask->graphListener() ? oldMask->extent() : m_image->bounds();
+                m_image->m_d->rootLayer->setDirtyDontResetAnimationCache(oldMaskRect);
             }
 
             if (newMask) {

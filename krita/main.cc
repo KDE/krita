@@ -765,7 +765,7 @@ void installPythonPluginUITranslator(KisApplication &app)
 
 void installQtTranslations(KisApplication &app)
 {
-    QStringList qtCatalogs = {
+    const QStringList qtCatalogs = {
         QStringLiteral("qt_"),
         QStringLiteral("qtbase_"),
         QStringLiteral("qtmultimedia_"),

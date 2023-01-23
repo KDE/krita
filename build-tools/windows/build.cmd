@@ -488,6 +488,42 @@ if "%PERL_DIR%" == "" (
     )
 ) else echo Perl found on %PERL_DIR%
 
+if "%ARG_SKIP_DEPS%" == "1" goto skip_windows_sdk_dir_check
+
+if "%WindowsSdkDir%" == "" if not "%ProgramFiles(x86)%" == "" set "WindowsSdkDir=%ProgramFiles(x86)%\Windows Kits\10"
+if "%WindowsSdkDir%" == "" set "WindowsSdkDir=%ProgramFiles(x86)%\Windows Kits\10"
+if exist "%WindowsSdkDir%\" (
+    pushd "%WindowsSdkDir%"
+    if exist "bin\x64\fxc.exe" (
+        set HAVE_FXC_EXE=1
+        if "%WindowsSdkVerBinPath%" == "" set "WindowsSdkVerBinPath=%WindowsSdkDir%"
+    ) else (
+        for /f "delims=" %%a in ('dir /a:d /b "bin\10.*"') do (
+            if exist "bin\%%a\x64\fxc.exe" (
+                set HAVE_FXC_EXE=1
+                if "%WindowsSdkVerBinPath%" == "" set "WindowsSdkVerBinPath=%WindowsSdkDir%\bin\%%a\"
+            )
+        )
+    )
+    popd
+)
+set QT_ENABLE_DYNAMIC_OPENGL=ON
+if not "%HAVE_FXC_EXE%" == "1" (
+    set WindowsSdkDir=
+    echo Windows SDK 10 with fxc.exe not found
+    echo Qt will *not* be built with ANGLE ^(dynamic OpenGL^) support.
+    if not "%ARG_NO_INTERACTIVE%" == "1" (
+        choice /c ny /n /m "Is this ok? [y/n] "
+        if errorlevel 3 exit 255
+        if not errorlevel 2 (
+            exit /b 102
+        )
+    )
+    set QT_ENABLE_DYNAMIC_OPENGL=OFF
+) else echo Windows SDK 10 with fxc.exe found on %WindowsSdkDir%
+
+:skip_windows_sdk_dir_check
+
 if not "%ARG_JOBS%" == "" (
     set "PARALLEL_JOBS=%ARG_JOBS%"
 )

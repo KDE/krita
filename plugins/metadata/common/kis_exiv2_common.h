@@ -149,7 +149,7 @@ Exiv2::Value *arrayToExivValue(const KisMetaData::Value &value)
 {
     Exiv2::ValueType<T> *exivValue = new Exiv2::ValueType<T>();
     const QList<KisMetaData::Value> array = value.asArray();
-    for (const KisMetaData::Value &item : array) {
+    Q_FOREACH (const KisMetaData::Value &item, array) {
         exivValue->value_.push_back(qvariant_cast<T>(item.asVariant()));
     }
     return exivValue;
@@ -205,20 +205,24 @@ inline Exiv2::Value *kmdValueToExivValue(const KisMetaData::Value &value, Exiv2:
             return new Exiv2::StringValue(result.join(',').toStdString());
         }
         case Exiv2::signedRational: {
-            Exiv2::RationalValue *ev = new Exiv2::RationalValue();
-            const QList<KisMetaData::Value> v = value.asArray();
-            for (int i = 0; i < v.size(); ++i) {
-                ev->value_.push_back(Exiv2::Rational(v[i].asRational().numerator, v[i].asRational().denominator));
+            Exiv2::RationalValue *exivValue = new Exiv2::RationalValue();
+            const QList<KisMetaData::Value> array = value.asArray();
+            exivValue->value_.reserve(static_cast<size_t>(array.size()));
+            Q_FOREACH (const KisMetaData::Value &item, array) {
+                const KisMetaData::Rational value = item.asRational();
+                exivValue->value_.emplace_back(value.numerator, value.denominator);
             }
-            return ev;
+            return exivValue;
         }
         case Exiv2::unsignedRational: {
-            Exiv2::URationalValue *ev = new Exiv2::URationalValue();
-            const QList<KisMetaData::Value> v = value.asArray();
-            for (int i = 0; i < v.size(); ++i) {
-                ev->value_.push_back(Exiv2::Rational(v[i].asRational().numerator, v[i].asRational().denominator));
+            Exiv2::URationalValue *exivValue = new Exiv2::URationalValue();
+            const QList<KisMetaData::Value> array = value.asArray();
+            exivValue->value_.reserve(static_cast<size_t>(array.size()));
+            Q_FOREACH (const KisMetaData::Value &item, array) {
+                const KisMetaData::Rational value = item.asRational();
+                exivValue->value_.emplace_back(static_cast<uint32_t>(value.numerator), static_cast<uint32_t>(value.denominator));
             }
-            return ev;
+            return exivValue;
         }
         default:
             warnMetaData << type << " " << value.type() << value;

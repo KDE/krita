@@ -144,14 +144,15 @@ inline Exiv2::Value *variantToExivValue(const QVariant &variant, Exiv2::TypeId t
     }
 }
 
-template<typename _TYPE_>
+template<typename T>
 Exiv2::Value *arrayToExivValue(const KisMetaData::Value &value)
 {
-    Exiv2::ValueType<_TYPE_> *ev = new Exiv2::ValueType<_TYPE_>();
-    for (int i = 0; i < value.asArray().size(); ++i) {
-        ev->value_.push_back(qvariant_cast<_TYPE_>(value.asArray()[i].asVariant()));
+    Exiv2::ValueType<T> *exivValue = new Exiv2::ValueType<T>();
+    const QList<KisMetaData::Value> array = value.asArray();
+    for (const KisMetaData::Value &item : array) {
+        exivValue->value_.push_back(qvariant_cast<T>(item.asVariant()));
     }
-    return ev;
+    return exivValue;
 }
 
 /// Convert a KisMetaData to an Exiv value

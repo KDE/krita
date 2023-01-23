@@ -522,7 +522,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     installTranslators(app);
 
-    if (app.platformName() == "wayland") {
+    if (KisApplication::platformName() == "wayland") {
         QMessageBox::critical(0, i18nc("@title:window", "Fatal Error"), i18n("Krita does not support the Wayland platform. Use XWayland to run Krita on Wayland. Krita will close now."));
         return -1;
     }
@@ -539,10 +539,10 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     if (!language.isEmpty()) {
         if (rightToLeft) {
-            app.setLayoutDirection(Qt::RightToLeft);
+            KisApplication::setLayoutDirection(Qt::RightToLeft);
         }
         else {
-            app.setLayoutDirection(Qt::LeftToRight);
+            KisApplication::setLayoutDirection(Qt::LeftToRight);
         }
     }
 #ifdef Q_OS_ANDROID
@@ -569,10 +569,9 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     dbgKrita << "PATH" << qgetenv("PATH");
 #endif
 
-    if (qApp->applicationDirPath().contains(KRITA_BUILD_DIR)) {
+    if (KisApplication::applicationDirPath().contains(KRITA_BUILD_DIR)) {
         qFatal("FATAL: You're trying to run krita from the build location. You can only run Krita from the installation location.");
     }
-
 
 #if defined HAVE_KCRASH
     KCrash::initialize();
@@ -597,10 +596,10 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     if (!runningInKDE) {
         // Icons in menus are ugly and distracting
-        app.setAttribute(Qt::AA_DontShowIconsInMenus);
+        KisApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
     }
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-    app.setAttribute(Qt::AA_DisableWindowContextHelpButton);
+    KisApplication::setAttribute(Qt::AA_DisableWindowContextHelpButton);
 #endif
     app.installEventFilter(KisQtWidgetsTweaker::instance());
 
@@ -673,7 +672,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     Q_UNUSED(supportedWindowsVersion);
 
     // Check if WinTab/WinInk has actually activated
-    const bool useWinInkAPI = !app.testAttribute(Qt::AA_MSWindowsUseWinTabAPI);
+    const bool useWinInkAPI = !KisApplication::testAttribute(Qt::AA_MSWindowsUseWinTabAPI);
 
     if (useWinInkAPI != cfg.useWin8PointerInput()) {
         KisUsageLogger::log("WARNING: WinTab tablet protocol is not supported on this device. Switching to WinInk...");
@@ -684,7 +683,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
 #endif
 #endif
-    app.setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
+    KisApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
 
     // Set up remote arguments.
     QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
@@ -713,15 +712,14 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     KisConfig(true).logImportantSettings();
 
-    app.setFont(KisUiFont::normalFont());
+    KisApplication::setFont(KisUiFont::normalFont());
 
     if (!app.start(args)) {
         KisUsageLogger::log("Could not start Krita Application");
         return 1;
     }
 
-
-    int state = app.exec();
+    int state = KisApplication::exec();
 
     {
         QSettings kritarc(configPath.absoluteFilePath("kritadisplayrc"), QSettings::IniFormat);
@@ -752,7 +750,7 @@ void removeInstalledTranslators(KisApplication &app)
     // ECMQmLoader creates all QTranslator's parented to the active QApp.
     QList<QTranslator *> translators = app.findChildren<QTranslator *>(QString(), Qt::FindDirectChildrenOnly);
     Q_FOREACH(const auto &translator, translators) {
-        app.removeTranslator(translator);
+        KisApplication::removeTranslator(translator);
     }
     dbgLocale << "Removed" << translators.size() << "QTranslator's";
 }
@@ -766,7 +764,7 @@ void installPythonPluginUITranslator(KisApplication &app)
     translator->setObjectName(QStringLiteral("KLocalizedTranslator.pykrita_plugin_ui"));
     translator->setTranslationDomain(QStringLiteral("krita"));
     translator->addContextToMonitor(QStringLiteral("pykrita_plugin_ui"));
-    app.installTranslator(translator);
+    KisApplication::installTranslator(translator);
 }
 
 void installQtTranslations(KisApplication &app)
@@ -796,7 +794,7 @@ void installQtTranslations(KisApplication &app)
             if (translator->load(localeToLoad, catalog, QString(), translationsPath)) {
                 dbgLocale << "Loaded Qt translations for" << localeToLoad << catalog;
                 translator->setObjectName(QStringLiteral("QTranslator.%1.%2").arg(localeToLoad.name(), catalog));
-                app.installTranslator(translator);
+                KisApplication::installTranslator(translator);
             } else {
                 delete translator;
             }
@@ -879,7 +877,7 @@ void installEcmTranslations(KisApplication &app)
             if (translator->load(fullPath)) {
                 dbgLocale << "Loaded ECM translations for" << localeDirName << catalog;
                 translator->setObjectName(QStringLiteral("QTranslator.%1.%2").arg(localeDirName, catalog));
-                app.installTranslator(translator);
+                KisApplication::installTranslator(translator);
             } else {
                 delete translator;
             }

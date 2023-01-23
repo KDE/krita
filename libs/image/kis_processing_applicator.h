@@ -7,14 +7,16 @@
 #ifndef __KIS_PROCESSING_APPLICATOR_H
 #define __KIS_PROCESSING_APPLICATOR_H
 
-#include "kritaimage_export.h"
+#include <future>
+
+#include <kundo2commandextradata.h>
+#include <kundo2magicstring.h>
+
+#include "KisImageSignals.h"
+#include "kis_stroke_job_strategy.h"
 #include "kis_types.h"
 
-#include "kis_stroke_job_strategy.h"
-#include "KisImageSignals.h"
-#include "kundo2magicstring.h"
-#include "kundo2commandextradata.h"
-
+#include "kritaimage_export.h"
 
 class KRITAIMAGE_EXPORT KisProcessingApplicator
 {

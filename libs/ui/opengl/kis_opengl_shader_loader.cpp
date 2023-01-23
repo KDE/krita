@@ -50,13 +50,18 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     // Load vertex shader
     QByteArray vertSource;
 
+// XXX Check can be removed and set to the MAC version after we move to Qt5.7
+#ifdef Q_OS_MACOS
+    vertSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
+    vertSource.append("#define texture2D texture\n");
+    vertSource.append("#define texture3D texture\n");
+#else
     if (KisOpenGL::hasOpenGLES()) {
         vertSource.append("#version 300 es\n");
     } else {
-        vertSource.append(KisOpenGL::supportsLoD() ? "#version 150 core\n" : "#version 120\n");
-        vertSource.append("#define texture2D texture\n");
-        vertSource.append("#define texture3D texture\n");
+        vertSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
     }
+#endif
     vertSource.append(vertHeader);
     QFile vertexShaderFile(":/" + vertPath);
     vertexShaderFile.open(QIODevice::ReadOnly);
@@ -69,6 +74,12 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     // Load fragment shader
     QByteArray fragSource;
 
+// XXX Check can be removed and set to the MAC version after we move to Qt5.7
+#ifdef Q_OS_MACOS
+    fragSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
+    fragSource.append("#define texture2D texture\n");
+    fragSource.append("#define texture3D texture\n");
+#else
     if (KisOpenGL::hasOpenGLES()) {
         fragSource.append("#version 300 es\n");
         if (KisOpenGL::supportsLoD()) {
@@ -89,10 +100,9 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
             );
         }
     } else {
-        fragSource.append(KisOpenGL::supportsLoD() ? "#version 150 core\n" : "#version 120\n");
-        fragSource.append("#define texture2D texture\n");
-        fragSource.append("#define texture3D texture\n");
+        fragSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
     }
+#endif
     fragSource.append(fragHeader);
     QFile fragmentShaderFile(":/" + fragPath);
     fragmentShaderFile.open(QIODevice::ReadOnly);

@@ -528,20 +528,14 @@ KisOpenGL::RendererConfig generateSurfaceConfig(KisOpenGL::OpenGLRenderer render
     config.angleRenderer = info.second;
 
     QSurfaceFormat &format = config.format;
-#if defined(QT_OPENGL_ES_2_ANGLE) || defined(QT_OPENGL_ES_2) || defined(QT_OPENGL_ES_3)
-    format.setVersion(3, 0);
-#else
-    // https://support.apple.com/en-us/HT202823
-    format.setVersion(4, 1);
-#endif
-#if defined(Q_OS_MACOS)
+#ifdef Q_OS_MACOS
+    format.setVersion(3, 2);
     format.setProfile(QSurfaceFormat::CoreProfile);
-#else
-    // NVIDIA cards don't return the maximum OpenGL version
-    // if the Core profile is forced. (They instead return a
-    // "via Cg compiler" profile instead.)
+#elif !defined(Q_OS_ANDROID)
+    // XXX This can be removed once we move to Qt5.7
+    format.setVersion(3, 0);
     format.setProfile(QSurfaceFormat::CompatibilityProfile);
-    format.setOption(QSurfaceFormat::DeprecatedFunctions);
+    format.setOptions(QSurfaceFormat::DeprecatedFunctions);
 #endif
     format.setDepthBufferSize(24);
     format.setStencilBufferSize(8);

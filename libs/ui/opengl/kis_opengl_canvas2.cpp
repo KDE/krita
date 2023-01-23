@@ -264,9 +264,10 @@ void KisOpenGLCanvas2::paintToolOutline(const KisOptimizedBrushOutline &path)
      * paintToolOutline() is called from drawDecorations(), which has clipping
      * set only for QPainter-based painting; here we paint in native mode, so we
      * should care about clipping manually
+     *
+     * `d->updateRect` might be empty in case the fractional DPI workaround
+     * is active.
      */
-
-    KIS_SAFE_ASSERT_RECOVER_NOOP(d->updateRect);
     const QRect updateRect = d->updateRect ? *d->updateRect : QRect();
 
     d->renderer->paintToolOutline(path, updateRect);

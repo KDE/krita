@@ -69,8 +69,9 @@ constexpr LONG APPMODEL_ERROR_NO_PACKAGE = 15700;
 // KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET
 // shlobj_core.h / Windows 10 v1703
 // ---
-// TODO: remove this once MinGW adds the flag -- see shlobj.h KNOWN_FOLDER_FLAG
-constexpr int shlobj_KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET = 0x00040000;
+#ifndef KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET
+constexpr int KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET = 0x00040000;
+#endif
 
 struct AppmodelFunctions {
     pGetCurrentPackageFamilyName_t getCurrentPackageFamilyName{};
@@ -205,7 +206,7 @@ QString getPackageRoamingAppDataLocation()
 {
     PWSTR path = nullptr;
     HRESULT result =
-        SHGetKnownFolderPath(FOLDERID_RoamingAppData, shlobj_KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET, nullptr, &path);
+        SHGetKnownFolderPath(FOLDERID_RoamingAppData, KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET, nullptr, &path);
     if (result != S_OK) {
         qWarning() << "SHGetKnownFolderPath returned error HRESULT:" << result;
         return {};

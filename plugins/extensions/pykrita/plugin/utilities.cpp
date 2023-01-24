@@ -267,9 +267,13 @@ namespace
 
 QString findKritaPythonLibsPath(const QString &libdir)
 {
-    QDir rootDir(KoResourcePaths::getApplicationRoot());
+    QString rootPath(KoResourcePaths::getApplicationRoot());
+
+    QDir rootDir(rootPath);
+    QDir frameworkDir(rootPath + "Frameworks/Python.framework/Versions/Current");
 
     QFileInfoList candidates =
+        frameworkDir.entryInfoList(QStringList() << "lib", QDir::Dirs | QDir::NoDotAndDotDot) +
         rootDir.entryInfoList(QStringList() << "lib*", QDir::Dirs | QDir::NoDotAndDotDot) +
         rootDir.entryInfoList(QStringList() << "Frameworks", QDir::Dirs | QDir::NoDotAndDotDot) +
         rootDir.entryInfoList(QStringList() << "share", QDir::Dirs | QDir::NoDotAndDotDot);

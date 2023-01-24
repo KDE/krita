@@ -64,18 +64,20 @@ if (UNIX)
     )
     endif()
 elseif(WIN32)
-        ExternalProject_Add( ext_python
+    ExternalProject_Add( ext_python
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://www.python.org/ftp/python/3.8.1/python-3.8.1-embed-amd64.zip
-        URL_MD5 4d091857a2153d9406bb5c522b211061
+        URL https://www.python.org/ftp/python/3.10.7/python-3.10.7-embed-amd64.zip
+        URL_MD5 7f90f8642c1b19cf02bce91a5f4f9263
 
         INSTALL_DIR ${PREFIX_ext_python}
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying python3 64-bit binary
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/ ${PREFIX_ext_python}/python
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E echo deploying python3 64-bit binary
+                COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/ ${PREFIX_ext_python}/python
                 COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python3.dll ${PREFIX_ext_python}/bin
-                COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python38.dll ${PREFIX_ext_python}/bin
+                COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python310.dll ${PREFIX_ext_python}/bin
                 COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/vcruntime140.dll ${PREFIX_ext_python}/bin
+                COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/vcruntime140_1.dll ${PREFIX_ext_python}/bin
                 COMMAND ${CMAKE_COMMAND} -E make_directory ${PREFIX_ext_python}/lib/site-packages/
                 COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sitecustomize.py ${PREFIX_ext_python}/lib/site-packages/
         UPDATE_COMMAND ""

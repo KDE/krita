@@ -55,5 +55,7 @@ ExternalProject_Add(
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} install -C <BINARY_DIR>
 
+    UPDATE_COMMAND ""
+
     DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ext_icu_meson
 )

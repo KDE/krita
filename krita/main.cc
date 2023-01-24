@@ -293,6 +293,18 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     const QDir configPath(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation));
     QSettings kritarc(configPath.absoluteFilePath("kritadisplayrc"), QSettings::IniFormat);
 
+    QString root;
+    QString language;
+    {
+        // Create a temporary application to get the root
+        QCoreApplication app(argc, argv);
+        Q_UNUSED(app);
+        root = KoResourcePaths::getApplicationRoot();
+        QSettings languageoverride(configPath.absoluteFilePath("klanguageoverridesrc"), QSettings::IniFormat);
+        languageoverride.beginGroup("Language");
+        language = languageoverride.value(qAppName(), "").toString();
+    }
+
     bool enableOpenGLDebug = false;
     bool openGLDebugSynchronous = false;
     bool logUsage = true;
@@ -344,19 +356,6 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     if (logUsage) {
         KisUsageLogger::initialize();
-    }
-
-
-    QString root;
-    QString language;
-    {
-        // Create a temporary application to get the root
-        QCoreApplication app(argc, argv);
-        Q_UNUSED(app);
-        root = KoResourcePaths::getApplicationRoot();
-        QSettings languageoverride(configPath.absoluteFilePath("klanguageoverridesrc"), QSettings::IniFormat);
-        languageoverride.beginGroup("Language");
-        language = languageoverride.value(qAppName(), "").toString();
     }
 
 

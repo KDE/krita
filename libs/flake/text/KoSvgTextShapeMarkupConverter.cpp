@@ -20,6 +20,11 @@
 #include <QStringList>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QTextCodec>
 
 #include <QTextBlock>
 #include <QTextLayout>
@@ -1112,6 +1117,297 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
         return false;
     }
     doc->setModified(false);
+    return true;
+}
+
+// PSD engine data parsing
+QJsonValue readJsonValue(QIODevice &dev, bool array) {
+    QJsonValue val;
+    if (!array) {
+        QJsonObject object;
+        QString key;
+        while(!dev.atEnd()) {
+            QByteArray line = dev.readLine();
+            if (line.isEmpty()) {
+                break;
+            }
+            // hacky
+            if (line.endsWith("\r")) {
+                line = line.trimmed();
+                line.append("\r");
+            } else {
+                line = line.trimmed();
+            }
+
+
+            if (line.startsWith("/")) {
+                QList<QByteArray> keyVal = line.split(' ');
+                if (keyVal.size() > 0) {
+                    key = keyVal.first();
+                    keyVal.removeFirst();
+                    key.remove(0, 1);
+                    //qDebug() << key;
+                }
+                if (keyVal.size() > 0) {
+                    if (keyVal.first().startsWith("(")) {
+                        line = keyVal.join(' ');
+                        if (!line.endsWith(")")) {
+                            QByteArray curLine = line;
+                            while(!curLine.endsWith(")")) {
+                                line = dev.readLine();
+                                if (line.endsWith("\r")) {
+                                    line = line.trimmed();
+                                    line.append("\r");
+                                } else {
+                                    line = line.trimmed();
+                                }
+                                curLine.append(line);
+                            }
+                            line = curLine;
+                        }
+                        line = line.remove(0, 1);
+                        line.chop(1);
+                        QTextCodec *Utf16Codec = QTextCodec::codecForName("UTF-16BE");
+                        object.insert(key, Utf16Codec->toUnicode(line));
+
+                    } else if (keyVal.first().startsWith("[")) {
+                            if (keyVal.size() > 1) {
+                                QJsonArray array;
+                                for (int i = 0; i < keyVal.size(); i++) {
+                                    if (keyVal.at(i) != "[" ||
+                                            keyVal.at(i) != "]") {
+                                        bool res;
+                                        float val = keyVal.at(i).toFloat(&res);
+                                        if (res) {
+                                            array.append(val);
+                                        }
+                                    }
+                                }
+                                object.insert(key, array);
+                            } else {
+                                object.insert(key, readJsonValue(dev, true));
+                            }
+                    } else {
+                        line = keyVal.join(' ');
+                        if (line == "true") {
+                            object.insert(key, true);
+                        } else if (line == "false") {
+                            object.insert(key, false);
+                        } else {
+                            bool res;
+                            float val = line.toFloat(&res);
+                            if (res) {
+                                object.insert(key, val);
+                            } else {
+                                object.insert(key, QString(line));
+                            }
+                        }
+                    }
+                }
+            } else if (line == "[") {
+                object.insert(key, readJsonValue(dev, true));
+            } else if (line == "<<") {
+                object.insert(key, readJsonValue(dev, false));
+            } else if (line == ">>") {
+                break;
+            }
+        }
+        val = object;
+    } else {
+        QJsonArray array;
+        while(!dev.atEnd()) {
+            QByteArray line = dev.readLine();
+            if (line.isEmpty()) {
+                break;
+            }
+            line = line.trimmed();
+            if (line == "[") {
+                array.append(readJsonValue(dev, true));
+            }
+
+            if (line == "<<") {
+                array.append(readJsonValue(dev, false));
+            }
+
+            if (line == "]") {
+                break;
+            }
+        }
+        val = array;
+    }
+
+    return val;
+}
+
+QColor colorFromPSDStyleSheet(QJsonObject color) {
+    QColor c(Qt::black);
+    if (color.value("Type").toInt() == 1) {
+        QJsonArray values = color.value("Values").toArray();
+        c = QColor::fromRgbF(values.at(1).toDouble(), values.at(2).toDouble(), values.at(3).toDouble(), values.at(0).toDouble());
+    }
+    return c;
+}
+
+QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, QString> fontNames) {
+    QStringList styles;
+
+    QStringList textDecor;
+    for (int i=0; i < PSDStyleSheet.keys().size(); i++) {
+        QString key = PSDStyleSheet.keys().at(i);
+
+        if (key == "FontSize") {
+            styles.append("font-size:"+QString::number(PSDStyleSheet.value(key).toDouble()));
+        } else if (key == "Font") {
+            QString family = fontNames.value(PSDStyleSheet.value(key).toInt());
+            styles.append("font-family:"+family);
+        } else if (key == "FillColor") {
+            bool fill = true;
+            if (PSDStyleSheet.keys().contains("FillFlag")) {
+                fill = PSDStyleSheet.value("FillFlag").toBool();
+            }
+            if (fill) {
+                QJsonObject color = PSDStyleSheet.value(key).toObject();
+                styles.append("fill:"+colorFromPSDStyleSheet(color).name());
+            } else {
+                styles.append("fill:none");
+            }
+        } else if (key == "StrokeColor") {
+            bool fill = true;
+            if (PSDStyleSheet.keys().contains("StrokeFlag")) {
+                fill = PSDStyleSheet.value("StrokeFlag").toBool();
+            }
+            if (fill) {
+                QJsonObject color = PSDStyleSheet.value(key).toObject();
+                styles.append("stroke:"+colorFromPSDStyleSheet(color).name());
+            } else {
+                styles.append("stroke:none");
+            }
+        } else if (key == "OutlineWidth") {
+            styles.append("stroke-width:"+QString::number(PSDStyleSheet.value(key).toDouble()));
+        } else if (key == "Tracking") {
+            double fontSize = PSDStyleSheet.value("FontSize").toDouble();
+            double letterSpacing = fontSize * (0.01 * PSDStyleSheet.value(key).toDouble());
+            styles.append("letter-spacing:"+QString::number(letterSpacing));
+        } else if (key == "Underline" && PSDStyleSheet.value(key).toBool()) {
+            textDecor.append("underline");
+        } if (key == "Strikethrough" && PSDStyleSheet.value(key).toBool()) {
+            textDecor.append("line-through");
+        }
+    }
+    if (!textDecor.isEmpty()) {
+        styles.append("text-decoration:"+textDecor.join(" "));
+    }
+    return styles.join("; ");
+}
+
+bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba, QString *svgText)
+{
+    debugFlake << "Convert from psd engine data";
+
+    QJsonObject root;
+    QBuffer dev(&ba);
+    if (dev.open(QIODevice::ReadOnly)) {
+        while(!dev.atEnd()) {
+            QByteArray buf = dev.readLine();
+            if (buf.trimmed() == "<<") {
+                root = readJsonValue(dev, false).toObject();
+            }
+        }
+        dev.close();
+    } else {
+        d->errors << dev.errorString();
+        return false;
+    }
+    qDebug() << "Parsed JSON Object" << root;
+
+    // This should proly be turned into a list of structs, where
+    // we search fontconfig on the name with FC_POSTSCRIPT_NAME,
+    // and we then note down the proper family name, slant, width and weight,
+    // so we can use that to set the proper svg values.
+    QMap<int, QString> fontNames;
+
+    QJsonObject engineDict = root.value("EngineDict").toObject();
+    if (engineDict.isEmpty()) {
+        d->errors << "No engine dict found in PSD engine data";
+        return false;
+    }
+    QJsonObject resourceDict = root.value("ResourceDict").toObject();
+    if (resourceDict.isEmpty()) {
+        d->errors << "No engine dict found in PSD engine data";
+        return false;
+    } else {
+        QJsonArray fonts = resourceDict.value("FontSet").toArray();
+        for (int i = 0; i < fonts.size(); i++) {
+            QJsonObject font = fonts.at(i).toObject();
+            fontNames.insert(i, font.value("Name").toString());
+        }
+    }
+    QJsonObject curve = root.value("Curve").toObject();
+    QJsonObject documentResources = root.value("DocumentResources").toObject();
+
+    QBuffer svgBuffer;
+    svgBuffer.open(QIODevice::WriteOnly);
+
+    QXmlStreamWriter svgWriter(&svgBuffer);
+
+    // disable auto-formatting to avoid axtra spaces appearing here and there
+    svgWriter.setAutoFormatting(false);
+
+    svgWriter.writeStartElement("text");
+
+    QJsonObject editor = engineDict.value("Editor").toObject();
+    QString text = "";
+    if (editor.isEmpty()) {
+        d->errors << "No editor dict found in PSD engine data";
+        return false;
+    } else {
+        text = editor.value("Text").toString();
+        text.replace("\r", "\n");
+    }
+
+    QJsonObject styleRun = engineDict.value("StyleRun").toObject();
+    if (styleRun.isEmpty()) {
+        d->errors << "No styleRun dict found in PSD engine data";
+        return false;
+    } else {
+        QJsonArray runLengthArray = styleRun.value("RunLengthArray").toArray();
+        QJsonArray runArray = styleRun.value("RunArray").toArray();
+        if (runLengthArray.isEmpty() && runArray.isEmpty()) {
+            d->errors << "No styleRun dict found in PSD engine data";
+            return false;
+        } else {
+            QJsonObject styleSheet = runArray.at(0).toObject().value("StyleSheet").toObject().value("StyleSheetData").toObject();
+            int length = 0;
+            int pos = 0;
+            for (int i = 0; i < runArray.size(); i++) {
+                QJsonObject newStyle = runArray.at(i).toObject().value("StyleSheet").toObject().value("StyleSheetData").toObject();
+                if (newStyle == styleSheet) {
+                    length += runLengthArray.at(i).toInt();
+                } else {
+                    svgWriter.writeStartElement("tspan");
+                    svgWriter.writeAttribute("style", stylesForPSDStyleSheet(styleSheet, fontNames));
+                    svgWriter.writeCharacters(text.mid(pos, length));
+                    svgWriter.writeEndElement();
+                    styleSheet = newStyle;
+                    pos += length;
+                    length = 0;
+                }
+            }
+            svgWriter.writeStartElement("tspan");
+            svgWriter.writeAttribute("style", stylesForPSDStyleSheet(styleSheet, fontNames));
+            svgWriter.writeCharacters(text.mid(pos));
+            svgWriter.writeEndElement();
+        }
+    }
+
+    svgWriter.writeEndElement();//text root element.
+
+    if (svgWriter.hasError()) {
+        d->errors << i18n("Unknown error writing SVG text element");
+        return false;
+    }
+    *svgText = QString::fromUtf8(svgBuffer.data()).trimmed();
+
     return true;
 }
 

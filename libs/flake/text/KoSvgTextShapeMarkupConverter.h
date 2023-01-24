@@ -84,6 +84,7 @@ public:
      */
     bool convertSvgToDocument(const QString &svgText, QTextDocument *doc);
 
+    bool convertPSDTextEngineDataToSVG(QByteArray ba, QString *svgText);
 
     /**
      * A list of errors happened during loading the user's text

@@ -15,6 +15,9 @@
 #include <KoColorProfile.h>
 #include <KoCompositeOp.h>
 #include <KoUnit.h>
+#include <KoSvgTextShape.h>
+#include <KoSvgTextShapeMarkupConverter.h>
+#include <kis_shape_layer.h>
 
 #include <kis_annotation.h>
 #include <kis_types.h>
@@ -343,6 +346,30 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 genlayer->setFilter(cfg);
                 layer = genlayer;
 
+
+            } else if (!layerRecord->infoBlocks.textData.isNull()) {
+                KisShapeLayerSP textLayer = new KisShapeLayer(m_doc->shapeController(), m_image, layerRecord->layerName, layerRecord->opacity);
+                KisAslCallbackObjectCatcher catcher;
+                psd_layer_type_shape text;
+                catcher.subscribeRawData("/TxLr/EngineData", std::bind(&psd_layer_type_shape::setEngineData, &text, _1));
+                catcher.subscribeUnitFloat("/TxLr/boundingBox/Left", "#Pnt", std::bind(&psd_layer_type_shape::setLeft, &text, _1));
+                catcher.subscribeUnitFloat("/TxLr/boundingBox/Top ", "#Pnt", std::bind(&psd_layer_type_shape::setTop, &text, _1));
+                catcher.subscribeUnitFloat("/TxLr/boundingBox/Rght", "#Pnt", std::bind(&psd_layer_type_shape::setRight, &text, _1));
+                catcher.subscribeUnitFloat("/TxLr/boundingBox/Btom", "#Pnt", std::bind(&psd_layer_type_shape::setBottom, &text, _1));
+                KisAslXmlParser parser;
+                parser.parseXML(layerRecord->infoBlocks.textData, catcher);
+                KoSvgTextShape *shape = new KoSvgTextShape();
+                KoSvgTextShapeMarkupConverter converter(shape);
+                QString svg;
+                QString styles;
+                bool res = converter.convertPSDTextEngineDataToSVG(text.engineData, &svg);
+                if (!res) {
+                    qDebug() << converter.errors();
+                }
+                converter.convertFromSvg(svg, styles, m_image->bounds(), m_image->xRes()*72.0);
+                shape->setPosition(text.bounds.topLeft() - shape->boundingRect().topLeft());
+                textLayer->addShape(shape);
+                layer = textLayer;
             } else {
                 layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
                 if (!layerRecord->readPixelData(io, layer->paintDevice())) {

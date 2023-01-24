@@ -83,6 +83,11 @@ void KisAslObjectCatcher::addGradient(const QString &path, KoAbstractGradientSP 
     dbgKrita << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "gradient" << value;
 }
 
+void KisAslObjectCatcher::addRawData(const QString &path, QByteArray ba)
+{
+    dbgKrita << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "bytearray";
+}
+
 void KisAslObjectCatcher::newStyleStarted()
 {
     dbgKrita << "Unhandled:"

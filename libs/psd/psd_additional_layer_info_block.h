@@ -634,6 +634,27 @@ struct KRITAPSD_EXPORT psd_layer_type_tool {
     bool anti_alias {false}; // Anti alias on/off
 };
 
+struct KRITAPSD_EXPORT psd_layer_type_shape {
+    QByteArray engineData;
+    QRectF bounds;
+
+    void setEngineData(QByteArray ba) {
+        engineData = ba;
+    }
+    void setTop(float val) {
+        bounds.setTop(val);
+    }
+    void setLeft(float val) {
+        bounds.setLeft(val);
+    }
+    void setRight(float val) {
+        bounds.setRight(val);
+    }
+    void setBottom(float val) {
+        bounds.setBottom(val);
+    }
+};
+
 /**
  * @brief The PsdAdditionalLayerInfoBlock class implements the Additional Layer Information block
  *
@@ -674,6 +695,8 @@ public:
 
     QDomDocument fillConfig;
     psd_fill_type fillType {psd_fill_solid_color};
+
+    QDomDocument textData;
 
     psd_section_type sectionDividerType;
     QString sectionDividerBlendMode;

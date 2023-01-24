@@ -40,6 +40,7 @@ public:
     virtual void addPattern(const QString &path, const KoPatternSP pattern, const QString &patternUuid);
     virtual void addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName);
     virtual void addGradient(const QString &path, KoAbstractGradientSP gradient);
+    virtual void addRawData(const QString &path, QByteArray ba);
 
     virtual void newStyleStarted();
 

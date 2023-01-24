@@ -663,6 +663,22 @@ void parseElement(const QDomElement &el, const QString &parentPath, KisAslObject
     } else if (type == "Boolean") {
         int v = KisDomUtils::toInt(el.attribute("value", "0"));
         catcher.addBoolean(buildPath(parentPath, key), v);
+    } else if (type == "RawData") {
+        QDomNode dataNode = el.firstChild();
+
+        if (!dataNode.isCDATASection()) {
+            warnKrita << "WARNING: failed to parse RawData XML section!";
+            return;
+        }
+
+        QDomCDATASection dataSection = dataNode.toCDATASection();
+        QByteArray data = dataSection.data().toLatin1();
+        data = QByteArray::fromBase64(data);
+
+        if (data.isEmpty()) {
+            warnKrita << "WARNING: failed to parse RawData XML section!";
+        }
+        catcher.addRawData(buildPath(parentPath, key), data);
     } else {
         warnKrita << "WARNING: XML (ASL) Unknown element type:" << type << ppVar(parentPath) << ppVar(key);
     }

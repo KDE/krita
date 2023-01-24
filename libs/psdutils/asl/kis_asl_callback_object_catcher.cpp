@@ -53,6 +53,7 @@ typedef QHash<QString, ASLCallbackCurve> MapHashCurve;
 typedef QHash<QString, ASLCallbackPattern> MapHashPattern;
 typedef QHash<QString, ASLCallbackPatternRef> MapHashPatternRef;
 typedef QHash<QString, ASLCallbackGradient> MapHashGradient;
+typedef QHash<QString, ASLCallbackRawData> MapHashRawData;
 
 struct KisAslCallbackObjectCatcher::Private {
     MapHashDouble mapDouble;
@@ -67,6 +68,7 @@ struct KisAslCallbackObjectCatcher::Private {
     MapHashPattern mapPattern;
     MapHashPatternRef mapPatternRef;
     MapHashGradient mapGradient;
+    MapHashRawData mapRawData;
 
     ASLCallbackNewStyle newStyleCallback;
 };
@@ -189,6 +191,11 @@ void KisAslCallbackObjectCatcher::newStyleStarted()
     }
 }
 
+void KisAslCallbackObjectCatcher::addRawData(const QString &path, QByteArray ba)
+{
+    passToCallback(path, m_d->mapRawData, ba);
+}
+
 /*****************************************************************/
 /*      Subscription methods                                      */
 /*****************************************************************/
@@ -256,4 +263,9 @@ void KisAslCallbackObjectCatcher::subscribeGradient(const QString &path, ASLCall
 void KisAslCallbackObjectCatcher::subscribeNewStyleStarted(ASLCallbackNewStyle callback)
 {
     m_d->newStyleCallback = callback;
+}
+
+void KisAslCallbackObjectCatcher::subscribeRawData(const QString &path, ASLCallbackRawData callback)
+{
+    m_d->mapRawData.insert(path, callback);
 }

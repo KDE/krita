@@ -29,5 +29,7 @@ ExternalProject_Add( ext_fontconfig
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} install -C <BINARY_DIR>
 
+    UPDATE_COMMAND ""
+
     DEPENDS ext_freetype ${GETTEXT_DEP} ${MESON_DEP} ${PKG_CONFIG_DEP}
 )

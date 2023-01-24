@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-21 00:56+0000\n"
+"POT-Creation-Date: 2023-01-24 00:55+0000\n"
 "PO-Revision-Date: 2023-01-19 09:25+0200\n"
 "Last-Translator: Fracture dept <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -16884,7 +16884,7 @@ msgstr ""
 "перейменування вузла"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:854
+#: libs/image/kis_image.cc:855
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr ""
@@ -17124,144 +17124,144 @@ msgstr "Пропускання"
 msgid "Imported Image"
 msgstr "Імпортоване зображення"
 
-#: libs/image/kis_image.cc:690 libs/image/kis_layer_utils.cpp:1871
+#: libs/image/kis_image.cc:691 libs/image/kis_layer_utils.cpp:1872
 #: libs/impex/KisExportCheckRegistry.cpp:124
 #, kde-format
 msgid "Selection Mask"
 msgstr "Маска вибору"
 
-#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2487
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2487
 #: plugins/impex/psd/psd_loader.cpp:189
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Тло"
 
-#: libs/image/kis_image.cc:754 libs/ui/kis_layer_manager.cc:618
+#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:618
 #, kde-format
 msgid "Paint Layer"
 msgstr "Шар малювання"
 
-#: libs/image/kis_image.cc:853
+#: libs/image/kis_image.cc:854
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr ""
 "Обрізати зображення\n"
 "обрізання зображення"
 
-#: libs/image/kis_image.cc:949
+#: libs/image/kis_image.cc:950
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr ""
 "Обрізати шар\n"
 "обрізання шару"
 
-#: libs/image/kis_image.cc:950
+#: libs/image/kis_image.cc:951
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr ""
 "Обрізати маску\n"
 "обрізання маски"
 
-#: libs/image/kis_image.cc:987
+#: libs/image/kis_image.cc:988
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr ""
 "Масштабувати зображення\n"
 "масштабування зображення"
 
-#: libs/image/kis_image.cc:988
+#: libs/image/kis_image.cc:989
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr ""
 "Змінити роздільну здатність зображення\n"
 "зміну роздільної здатності зображення"
 
-#: libs/image/kis_image.cc:1035
+#: libs/image/kis_image.cc:1036
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr ""
 "Масштабувати шар\n"
 "масштабування шару"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1161
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr ""
 "Обернути зображення\n"
 "обертання зображення"
 
-#: libs/image/kis_image.cc:1166
+#: libs/image/kis_image.cc:1167
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr ""
 "Обернути маску\n"
 "обертання маски"
 
-#: libs/image/kis_image.cc:1168
+#: libs/image/kis_image.cc:1169
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr ""
 "Обернути шар\n"
 "обертання шару"
 
-#: libs/image/kis_image.cc:1249
+#: libs/image/kis_image.cc:1250
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr ""
 "Перекосити маску\n"
 "перекошення маски"
 
-#: libs/image/kis_image.cc:1252
+#: libs/image/kis_image.cc:1253
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr ""
 "Перекосити шар\n"
 "перекошення шару"
 
-#: libs/image/kis_image.cc:1259
+#: libs/image/kis_image.cc:1260
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr ""
 "Перекосити зображення\n"
 "перекошування зображення"
 
-#: libs/image/kis_image.cc:1277
+#: libs/image/kis_image.cc:1278
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr ""
 "Перетворити простір кольорів шару\n"
 "перетворення простору кольорів шару"
 
-#: libs/image/kis_image.cc:1328
+#: libs/image/kis_image.cc:1329
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr ""
 "Перетворити простір кольорів зображення\n"
 "перетворення простору кольорів зображення"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1330
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr ""
 "Перетворити простір кольорів проєкції\n"
 "перетворення простору кольорів проєкції"
 
-#: libs/image/kis_image.cc:1387
+#: libs/image/kis_image.cc:1388
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr ""
 "Призначити профіль до шару\n"
 "призначення профілю до шару"
 
-#: libs/image/kis_image.cc:1428
+#: libs/image/kis_image.cc:1429
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr ""
 "Призначити профіль\n"
 "призначення профілю"
 
-#: libs/image/kis_image.cc:2488
+#: libs/image/kis_image.cc:2489
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr ""
@@ -17408,79 +17408,79 @@ msgstr "Відкриття файла"
 msgid "Error"
 msgstr "Помилка"
 
-#: libs/image/kis_layer_utils.cpp:599
+#: libs/image/kis_layer_utils.cpp:600
 #, kde-format
 msgid "Merged"
 msgstr "Об’єднано"
 
-#: libs/image/kis_layer_utils.cpp:1377
+#: libs/image/kis_layer_utils.cpp:1378
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr ""
 "Об’єднати вниз\n"
 "об’єднання вниз"
 
-#: libs/image/kis_layer_utils.cpp:1601
+#: libs/image/kis_layer_utils.cpp:1602
 #, kde-format
 msgid "Copy of"
 msgstr "Копія"
 
-#: libs/image/kis_layer_utils.cpp:1674
+#: libs/image/kis_layer_utils.cpp:1675
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr ""
 "Змінити колір проєкції\n"
 "зміну кольору проєкції"
 
-#: libs/image/kis_layer_utils.cpp:1834
+#: libs/image/kis_layer_utils.cpp:1835
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr ""
 "Об’єднати позначені вузли\n"
 "об’єднання позначених вузлів"
 
-#: libs/image/kis_layer_utils.cpp:1842
+#: libs/image/kis_layer_utils.cpp:1843
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr ""
 "Створити з видимого\n"
 "створення з видимого"
 
-#: libs/image/kis_layer_utils.cpp:1842
+#: libs/image/kis_layer_utils.cpp:1843
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Видиме"
 
-#: libs/image/kis_layer_utils.cpp:1920
+#: libs/image/kis_layer_utils.cpp:1921
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr ""
 "Об’єднати маски позначення\n"
 "об’єднання масок позначення"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1944
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr ""
 "Звести шар\n"
 "зведення шару"
 
-#: libs/image/kis_layer_utils.cpp:1956
+#: libs/image/kis_layer_utils.cpp:1957
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr ""
 "Звести зображення\n"
 "зведення зображення"
 
-#: libs/image/kis_layer_utils.cpp:2174
+#: libs/image/kis_layer_utils.cpp:2175
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr ""
 "Відділити прозорість як маску\n"
 "відділення прозорості як маски"
 
-#: libs/image/kis_layer_utils.cpp:2200
+#: libs/image/kis_layer_utils.cpp:2201
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr ""
@@ -27482,7 +27482,7 @@ msgstr "Нетиповий колір"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:232
 #: libs/ui/layerstyles/WdgColorOverlay.ui:27
 #: libs/ui/layerstyles/WdgStroke.ui:138
-#: plugins/extensions/layersplit/layersplit.cpp:203
+#: plugins/extensions/layersplit/layersplit.cpp:209
 #: plugins/generators/solid/colorgenerator.h:41
 #, kde-format
 msgid "Color"
@@ -32287,14 +32287,14 @@ msgstr ""
 "Буфери текстур явним чином вимкнено для обробника ANGLE через проблеми із "
 "швидкодією."
 
-#: libs/ui/opengl/kis_opengl.cpp:582
+#: libs/ui/opengl/kis_opengl.cpp:576
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Відомо, що використаний системою графічний драйвер Intel має проблеми із "
 "OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:584
+#: libs/ui/opengl/kis_opengl.cpp:578
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32305,7 +32305,7 @@ msgstr ""
 "буде використано ANGLE. Ви можете вручну перемкнутися на OpenGL, але при "
 "цьому належну роботу програми не гарантовано."
 
-#: libs/ui/opengl/kis_opengl.cpp:984
+#: libs/ui/opengl/kis_opengl.cpp:978
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32314,7 +32314,7 @@ msgstr ""
 "Для бажаного засобу обробки не передбачено потрібного вам формату поверхні. "
 "Вибрано інший засіб обробки."
 
-#: libs/ui/opengl/kis_opengl.cpp:986
+#: libs/ui/opengl/kis_opengl.cpp:980
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -41212,17 +41212,17 @@ msgstr "Перейти до наступної групи"
 msgid "Split Layer"
 msgstr "Поділ шару"
 
-#: plugins/extensions/layersplit/layersplit.cpp:86
+#: plugins/extensions/layersplit/layersplit.cpp:108
 #, kde-format
 msgid "Split into Layers"
 msgstr "Розділити на шари"
 
-#: plugins/extensions/layersplit/layersplit.cpp:89
+#: plugins/extensions/layersplit/layersplit.cpp:111
 #, kde-format
 msgid "Split into Masks"
 msgstr "Розділити на маски"
 
-#: plugins/extensions/layersplit/layersplit.cpp:188
+#: plugins/extensions/layersplit/layersplit.cpp:194
 msgctxt "(qtundo-format)"
 msgid "Split Layer"
 msgstr ""

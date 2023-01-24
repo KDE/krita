@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-21 00:56+0000\n"
+"POT-Creation-Date: 2023-01-24 00:55+0000\n"
 "PO-Revision-Date: 2022-11-24 09:58+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -16722,7 +16722,7 @@ msgid "Node Rename"
 msgstr "節點重新命名"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:854
+#: libs/image/kis_image.cc:855
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "調整影像大小"
@@ -16942,110 +16942,110 @@ msgstr "穿透"
 msgid "Imported Image"
 msgstr "匯入的影像"
 
-#: libs/image/kis_image.cc:690 libs/image/kis_layer_utils.cpp:1871
+#: libs/image/kis_image.cc:691 libs/image/kis_layer_utils.cpp:1872
 #: libs/impex/KisExportCheckRegistry.cpp:124
 #, kde-format
 msgid "Selection Mask"
 msgstr "選取區域遮罩"
 
-#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2487
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2487
 #: plugins/impex/psd/psd_loader.cpp:189
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "背景"
 
-#: libs/image/kis_image.cc:754 libs/ui/kis_layer_manager.cc:618
+#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:618
 #, kde-format
 msgid "Paint Layer"
 msgstr "顏料圖層"
 
-#: libs/image/kis_image.cc:853
+#: libs/image/kis_image.cc:854
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "裁切影像"
 
-#: libs/image/kis_image.cc:949
+#: libs/image/kis_image.cc:950
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "裁切圖層"
 
-#: libs/image/kis_image.cc:950
+#: libs/image/kis_image.cc:951
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "裁切遮罩"
 
-#: libs/image/kis_image.cc:987
+#: libs/image/kis_image.cc:988
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "縮放影像"
 
-#: libs/image/kis_image.cc:988
+#: libs/image/kis_image.cc:989
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "修改影像解析度"
 
-#: libs/image/kis_image.cc:1035
+#: libs/image/kis_image.cc:1036
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "縮放圖層"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1161
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "旋轉影像"
 
-#: libs/image/kis_image.cc:1166
+#: libs/image/kis_image.cc:1167
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "旋轉遮罩"
 
-#: libs/image/kis_image.cc:1168
+#: libs/image/kis_image.cc:1169
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "旋轉圖層"
 
-#: libs/image/kis_image.cc:1249
+#: libs/image/kis_image.cc:1250
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "切變遮罩"
 
-#: libs/image/kis_image.cc:1252
+#: libs/image/kis_image.cc:1253
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "切變圖層"
 
-#: libs/image/kis_image.cc:1259
+#: libs/image/kis_image.cc:1260
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "切變影像"
 
-#: libs/image/kis_image.cc:1277
+#: libs/image/kis_image.cc:1278
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "轉換圖層色彩空間"
 
-#: libs/image/kis_image.cc:1328
+#: libs/image/kis_image.cc:1329
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "轉換影像色彩空間"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1330
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "轉換投影色彩空間"
 
-#: libs/image/kis_image.cc:1387
+#: libs/image/kis_image.cc:1388
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "為影像指定特性檔案"
 
-#: libs/image/kis_image.cc:1428
+#: libs/image/kis_image.cc:1429
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "指定特性檔案"
 
-#: libs/image/kis_image.cc:2488
+#: libs/image/kis_image.cc:2489
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "裁切選取區域"
@@ -17190,63 +17190,63 @@ msgstr "開啟檔案"
 msgid "Error"
 msgstr "錯誤"
 
-#: libs/image/kis_layer_utils.cpp:599
+#: libs/image/kis_layer_utils.cpp:600
 #, kde-format
 msgid "Merged"
 msgstr "已合併"
 
-#: libs/image/kis_layer_utils.cpp:1377
+#: libs/image/kis_layer_utils.cpp:1378
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "向下合併"
 
-#: libs/image/kis_layer_utils.cpp:1601
+#: libs/image/kis_layer_utils.cpp:1602
 #, kde-format
 msgid "Copy of"
 msgstr "副本自"
 
-#: libs/image/kis_layer_utils.cpp:1674
+#: libs/image/kis_layer_utils.cpp:1675
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "變更投影色彩"
 
-#: libs/image/kis_layer_utils.cpp:1834
+#: libs/image/kis_layer_utils.cpp:1835
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "合併所選節點"
 
-#: libs/image/kis_layer_utils.cpp:1842
+#: libs/image/kis_layer_utils.cpp:1843
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "從可見圖層建立"
 
-#: libs/image/kis_layer_utils.cpp:1842
+#: libs/image/kis_layer_utils.cpp:1843
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "可見"
 
-#: libs/image/kis_layer_utils.cpp:1920
+#: libs/image/kis_layer_utils.cpp:1921
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "合併選取的遮罩"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1944
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "平整圖層"
 
-#: libs/image/kis_layer_utils.cpp:1956
+#: libs/image/kis_layer_utils.cpp:1957
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "平整影像"
 
-#: libs/image/kis_layer_utils.cpp:2174
+#: libs/image/kis_layer_utils.cpp:2175
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "分割 Alpha (透明度) 為遮罩"
 
-#: libs/image/kis_layer_utils.cpp:2200
+#: libs/image/kis_layer_utils.cpp:2201
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "轉成顏料圖層"
@@ -26994,7 +26994,7 @@ msgstr "自訂色彩"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:232
 #: libs/ui/layerstyles/WdgColorOverlay.ui:27
 #: libs/ui/layerstyles/WdgStroke.ui:138
-#: plugins/extensions/layersplit/layersplit.cpp:203
+#: plugins/extensions/layersplit/layersplit.cpp:209
 #: plugins/generators/solid/colorgenerator.h:41
 #, kde-format
 msgid "Color"
@@ -31642,12 +31642,12 @@ msgid ""
 "issues."
 msgstr "使用 ANGLE 繪製器時，紋理緩衝區因效能問題而會被強制停用。"
 
-#: libs/ui/opengl/kis_opengl.cpp:582
+#: libs/ui/opengl/kis_opengl.cpp:576
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "目前使用的 Intel 核芯顯示卡驅動程式對 OpenGL 的支援存有已知的問題。"
 
-#: libs/ui/opengl/kis_opengl.cpp:584
+#: libs/ui/opengl/kis_opengl.cpp:578
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31657,14 +31657,14 @@ msgstr ""
 "Intel 核芯顯示卡的驅動程式在 OpenGL 支援方面常常存在各種問題，因此預設將使用 "
 "ANGLE 繪製器。您可以手動切換成 OpenGL 模式，但是無法保證正常作業。"
 
-#: libs/ui/opengl/kis_opengl.cpp:984
+#: libs/ui/opengl/kis_opengl.cpp:978
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr "首選繪製器不支援請求的表面格式。已選用另一個繪製器。"
 
-#: libs/ui/opengl/kis_opengl.cpp:986
+#: libs/ui/opengl/kis_opengl.cpp:980
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "可用繪製器不支援首選輸出格式"
@@ -40191,17 +40191,17 @@ msgstr "移進下一組"
 msgid "Split Layer"
 msgstr "分割圖層"
 
-#: plugins/extensions/layersplit/layersplit.cpp:86
+#: plugins/extensions/layersplit/layersplit.cpp:108
 #, kde-format
 msgid "Split into Layers"
 msgstr "分割至圖層"
 
-#: plugins/extensions/layersplit/layersplit.cpp:89
+#: plugins/extensions/layersplit/layersplit.cpp:111
 #, kde-format
 msgid "Split into Masks"
 msgstr "分割成遮罩"
 
-#: plugins/extensions/layersplit/layersplit.cpp:188
+#: plugins/extensions/layersplit/layersplit.cpp:194
 msgctxt "(qtundo-format)"
 msgid "Split Layer"
 msgstr "分割圖層"

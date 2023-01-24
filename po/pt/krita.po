@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-21 00:56+0000\n"
+"POT-Creation-Date: 2023-01-24 00:55+0000\n"
 "PO-Revision-Date: 2023-01-19 09:52+0000\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -17076,7 +17076,7 @@ msgid "Node Rename"
 msgstr "Mudança de Nome do Nó"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:854
+#: libs/image/kis_image.cc:855
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Dimensionar a Imagem"
@@ -17303,110 +17303,110 @@ msgstr "Transparente"
 msgid "Imported Image"
 msgstr "Imagem Importada"
 
-#: libs/image/kis_image.cc:690 libs/image/kis_layer_utils.cpp:1871
+#: libs/image/kis_image.cc:691 libs/image/kis_layer_utils.cpp:1872
 #: libs/impex/KisExportCheckRegistry.cpp:124
 #, kde-format
 msgid "Selection Mask"
 msgstr "Máscara de Selecção"
 
-#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2487
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2487
 #: plugins/impex/psd/psd_loader.cpp:189
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Fundo"
 
-#: libs/image/kis_image.cc:754 libs/ui/kis_layer_manager.cc:618
+#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:618
 #, kde-format
 msgid "Paint Layer"
 msgstr "Camada de Pintura"
 
-#: libs/image/kis_image.cc:853
+#: libs/image/kis_image.cc:854
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Recortar a Imagem"
 
-#: libs/image/kis_image.cc:949
+#: libs/image/kis_image.cc:950
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Recortar a Camada"
 
-#: libs/image/kis_image.cc:950
+#: libs/image/kis_image.cc:951
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Recortar a Máscara"
 
-#: libs/image/kis_image.cc:987
+#: libs/image/kis_image.cc:988
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Escalar a Imagem"
 
-#: libs/image/kis_image.cc:988
+#: libs/image/kis_image.cc:989
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Mudar a Resolução da Imagem"
 
-#: libs/image/kis_image.cc:1035
+#: libs/image/kis_image.cc:1036
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "Escalar a Camada"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1161
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rodar a Imagem"
 
-#: libs/image/kis_image.cc:1166
+#: libs/image/kis_image.cc:1167
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Rodar a Máscara"
 
-#: libs/image/kis_image.cc:1168
+#: libs/image/kis_image.cc:1169
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "Rodar a Camada"
 
-#: libs/image/kis_image.cc:1249
+#: libs/image/kis_image.cc:1250
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Inclinar a Máscara"
 
-#: libs/image/kis_image.cc:1252
+#: libs/image/kis_image.cc:1253
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "Inclinar a Camada"
 
-#: libs/image/kis_image.cc:1259
+#: libs/image/kis_image.cc:1260
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Inclinar a Imagem"
 
-#: libs/image/kis_image.cc:1277
+#: libs/image/kis_image.cc:1278
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Converter o Espaço de Cores da Camada"
 
-#: libs/image/kis_image.cc:1328
+#: libs/image/kis_image.cc:1329
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Converter o Espaço de Cores da Imagem"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1330
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Converter o Espaço de Cores da Projecção"
 
-#: libs/image/kis_image.cc:1387
+#: libs/image/kis_image.cc:1388
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Atribuir o Perfil à Camada"
 
-#: libs/image/kis_image.cc:1428
+#: libs/image/kis_image.cc:1429
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Atribuir o Perfil"
 
-#: libs/image/kis_image.cc:2488
+#: libs/image/kis_image.cc:2489
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Recortar as Selecções"
@@ -17551,63 +17551,63 @@ msgstr "Abrir um Ficheiro"
 msgid "Error"
 msgstr "Erro"
 
-#: libs/image/kis_layer_utils.cpp:599
+#: libs/image/kis_layer_utils.cpp:600
 #, kde-format
 msgid "Merged"
 msgstr "Reunidas"
 
-#: libs/image/kis_layer_utils.cpp:1377
+#: libs/image/kis_layer_utils.cpp:1378
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Reunir Abaixo"
 
-#: libs/image/kis_layer_utils.cpp:1601
+#: libs/image/kis_layer_utils.cpp:1602
 #, kde-format
 msgid "Copy of"
 msgstr "Cópia de"
 
-#: libs/image/kis_layer_utils.cpp:1674
+#: libs/image/kis_layer_utils.cpp:1675
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Mudar a cor da projecção"
 
-#: libs/image/kis_layer_utils.cpp:1834
+#: libs/image/kis_layer_utils.cpp:1835
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Reunir os Nós Seleccionados"
 
-#: libs/image/kis_layer_utils.cpp:1842
+#: libs/image/kis_layer_utils.cpp:1843
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nova das Visíveis"
 
-#: libs/image/kis_layer_utils.cpp:1842
+#: libs/image/kis_layer_utils.cpp:1843
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Visíveis"
 
-#: libs/image/kis_layer_utils.cpp:1920
+#: libs/image/kis_layer_utils.cpp:1921
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Reunir as Máscaras de Selecção"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1944
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Achatar a Camada"
 
-#: libs/image/kis_layer_utils.cpp:1956
+#: libs/image/kis_layer_utils.cpp:1957
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Achatar a Imagem"
 
-#: libs/image/kis_layer_utils.cpp:2174
+#: libs/image/kis_layer_utils.cpp:2175
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Dividir o Alfa para uma Máscara"
 
-#: libs/image/kis_layer_utils.cpp:2200
+#: libs/image/kis_layer_utils.cpp:2201
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Converter para uma Camada de Pintura"
@@ -27515,7 +27515,7 @@ msgstr "Cor personalizada"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:232
 #: libs/ui/layerstyles/WdgColorOverlay.ui:27
 #: libs/ui/layerstyles/WdgStroke.ui:138
-#: plugins/extensions/layersplit/layersplit.cpp:203
+#: plugins/extensions/layersplit/layersplit.cpp:209
 #: plugins/generators/solid/colorgenerator.h:41
 #, kde-format
 msgid "Color"
@@ -32228,13 +32228,13 @@ msgstr ""
 "Os 'buffers' de texturas estão explicitamente desactivados no sistema de "
 "desenho ANGLE, devido a questões de performance."
 
-#: libs/ui/opengl/kis_opengl.cpp:582
+#: libs/ui/opengl/kis_opengl.cpp:576
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "O controlador gráfica da Intel é conhecido por ter problemas com o OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:584
+#: libs/ui/opengl/kis_opengl.cpp:578
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32245,7 +32245,7 @@ msgstr ""
 "OpenGL, pelo que será usado o ANGLE por omissão. Poderá mudar manualmente "
 "para o OpenGL, mas não é garantido que funcione correctamente."
 
-#: libs/ui/opengl/kis_opengl.cpp:984
+#: libs/ui/opengl/kis_opengl.cpp:978
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32254,7 +32254,7 @@ msgstr ""
 "O sistema de desenho preferido não suporta o formato da superfície pedido. "
 "Foi seleccionado outro sistema de desenho."
 
-#: libs/ui/opengl/kis_opengl.cpp:986
+#: libs/ui/opengl/kis_opengl.cpp:980
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -41020,17 +41020,17 @@ msgstr "Mover para o grupo seguinte"
 msgid "Split Layer"
 msgstr "Dividir a Camada"
 
-#: plugins/extensions/layersplit/layersplit.cpp:86
+#: plugins/extensions/layersplit/layersplit.cpp:108
 #, kde-format
 msgid "Split into Layers"
 msgstr "Dividir em Camadas"
 
-#: plugins/extensions/layersplit/layersplit.cpp:89
+#: plugins/extensions/layersplit/layersplit.cpp:111
 #, kde-format
 msgid "Split into Masks"
 msgstr "Dividir em Máscaras"
 
-#: plugins/extensions/layersplit/layersplit.cpp:188
+#: plugins/extensions/layersplit/layersplit.cpp:194
 msgctxt "(qtundo-format)"
 msgid "Split Layer"
 msgstr "Dividir a Camada"

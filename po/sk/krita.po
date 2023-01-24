@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-21 00:56+0000\n"
+"POT-Creation-Date: 2023-01-24 00:55+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -16785,7 +16785,7 @@ msgid "Node Rename"
 msgstr "Premenovanie uzla"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:854
+#: libs/image/kis_image.cc:855
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Zmeniť veľkosť obrázka"
@@ -17011,110 +17011,110 @@ msgstr "Prechod cez"
 msgid "Imported Image"
 msgstr "Importovaný obrázok"
 
-#: libs/image/kis_image.cc:690 libs/image/kis_layer_utils.cpp:1871
+#: libs/image/kis_image.cc:691 libs/image/kis_layer_utils.cpp:1872
 #: libs/impex/KisExportCheckRegistry.cpp:124
 #, kde-format
 msgid "Selection Mask"
 msgstr "Maska výberu"
 
-#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2487
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2487
 #: plugins/impex/psd/psd_loader.cpp:189
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Pozadie"
 
-#: libs/image/kis_image.cc:754 libs/ui/kis_layer_manager.cc:618
+#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:618
 #, kde-format
 msgid "Paint Layer"
 msgstr "Maľovať vrstvu"
 
-#: libs/image/kis_image.cc:853
+#: libs/image/kis_image.cc:854
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Orezať obrázok"
 
-#: libs/image/kis_image.cc:949
+#: libs/image/kis_image.cc:950
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Orezať vrstvu"
 
-#: libs/image/kis_image.cc:950
+#: libs/image/kis_image.cc:951
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Orezať masku"
 
-#: libs/image/kis_image.cc:987
+#: libs/image/kis_image.cc:988
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Zmeniť rozmery obrázka"
 
-#: libs/image/kis_image.cc:988
+#: libs/image/kis_image.cc:989
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Zmeniť rozlíšenie obrázka"
 
-#: libs/image/kis_image.cc:1035
+#: libs/image/kis_image.cc:1036
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "Zmeniť rozmery vrstvy"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1161
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Otočiť obrázok"
 
-#: libs/image/kis_image.cc:1166
+#: libs/image/kis_image.cc:1167
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Otočiť masku"
 
-#: libs/image/kis_image.cc:1168
+#: libs/image/kis_image.cc:1169
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "Otočiť vrstvu"
 
-#: libs/image/kis_image.cc:1249
+#: libs/image/kis_image.cc:1250
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Skosiť masku"
 
-#: libs/image/kis_image.cc:1252
+#: libs/image/kis_image.cc:1253
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "Skosiť vrstvu"
 
-#: libs/image/kis_image.cc:1259
+#: libs/image/kis_image.cc:1260
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Skosiť obrázok"
 
-#: libs/image/kis_image.cc:1277
+#: libs/image/kis_image.cc:1278
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Previesť farebný priestor vrstvy"
 
-#: libs/image/kis_image.cc:1328
+#: libs/image/kis_image.cc:1329
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Previesť farebný priestor obrázka"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1330
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Previesť projekčný farebný priestor"
 
-#: libs/image/kis_image.cc:1387
+#: libs/image/kis_image.cc:1388
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Priradiť profil vrstve"
 
-#: libs/image/kis_image.cc:1428
+#: libs/image/kis_image.cc:1429
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Priradiť profil"
 
-#: libs/image/kis_image.cc:2488
+#: libs/image/kis_image.cc:2489
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Orezať výbery"
@@ -17259,63 +17259,63 @@ msgstr "Otvoriť súbor"
 msgid "Error"
 msgstr "Chyba"
 
-#: libs/image/kis_layer_utils.cpp:599
+#: libs/image/kis_layer_utils.cpp:600
 #, kde-format
 msgid "Merged"
 msgstr "Zlúčené"
 
-#: libs/image/kis_layer_utils.cpp:1377
+#: libs/image/kis_layer_utils.cpp:1378
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Zlúčiť nižšie"
 
-#: libs/image/kis_layer_utils.cpp:1601
+#: libs/image/kis_layer_utils.cpp:1602
 #, kde-format
 msgid "Copy of"
 msgstr "Kópia z"
 
-#: libs/image/kis_layer_utils.cpp:1674
+#: libs/image/kis_layer_utils.cpp:1675
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Zmeniť farbu projekcie"
 
-#: libs/image/kis_layer_utils.cpp:1834
+#: libs/image/kis_layer_utils.cpp:1835
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Zlúčiť vybrané uzly"
 
-#: libs/image/kis_layer_utils.cpp:1842
+#: libs/image/kis_layer_utils.cpp:1843
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nová z viditeľnej"
 
-#: libs/image/kis_layer_utils.cpp:1842
+#: libs/image/kis_layer_utils.cpp:1843
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Viditeľná"
 
-#: libs/image/kis_layer_utils.cpp:1920
+#: libs/image/kis_layer_utils.cpp:1921
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Zlúčiť masky výberu"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1944
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Zarovnať vrstvu"
 
-#: libs/image/kis_layer_utils.cpp:1956
+#: libs/image/kis_layer_utils.cpp:1957
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Zarovnať obrázok"
 
-#: libs/image/kis_layer_utils.cpp:2174
+#: libs/image/kis_layer_utils.cpp:2175
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Rozdeliť alfu do masky"
 
-#: libs/image/kis_layer_utils.cpp:2200
+#: libs/image/kis_layer_utils.cpp:2201
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Previesť na vrstvu maľovania"
@@ -27183,7 +27183,7 @@ msgstr "Vlastné farby"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:232
 #: libs/ui/layerstyles/WdgColorOverlay.ui:27
 #: libs/ui/layerstyles/WdgStroke.ui:138
-#: plugins/extensions/layersplit/layersplit.cpp:203
+#: plugins/extensions/layersplit/layersplit.cpp:209
 #: plugins/generators/solid/colorgenerator.h:41
 #, kde-format
 msgid "Color"
@@ -31896,12 +31896,12 @@ msgstr ""
 "Vyrovnávacie pamäte textúr sú explicitne vypnuté pri vykresľovaní ANGLE "
 "kvôli problémom s výkonom."
 
-#: libs/ui/opengl/kis_opengl.cpp:582
+#: libs/ui/opengl/kis_opengl.cpp:576
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "Je známe, že používaný grafický ovládač Intel má problémy s OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:584
+#: libs/ui/opengl/kis_opengl.cpp:578
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31912,7 +31912,7 @@ msgstr ""
 "bude používať v predvolenom nastavení. Môžete ručne prepnúť na OpenGL, ale "
 "nie je zaručené, že bude správne pracovať."
 
-#: libs/ui/opengl/kis_opengl.cpp:984
+#: libs/ui/opengl/kis_opengl.cpp:978
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -31921,7 +31921,7 @@ msgstr ""
 "Preferované vykresľovanie nepodporuje požadovaný formát povrchu. Bol vybrané "
 "iné vykresľovanie."
 
-#: libs/ui/opengl/kis_opengl.cpp:986
+#: libs/ui/opengl/kis_opengl.cpp:980
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "Dostupné vykresľovania nepodporujú preferovaný výstupný formát"
@@ -40662,17 +40662,17 @@ msgstr "Presunúť do nasledujúcej skupiny"
 msgid "Split Layer"
 msgstr "Rozdeliť vrstvu"
 
-#: plugins/extensions/layersplit/layersplit.cpp:86
+#: plugins/extensions/layersplit/layersplit.cpp:108
 #, kde-format
 msgid "Split into Layers"
 msgstr "Rozdeliť na vrstvy"
 
-#: plugins/extensions/layersplit/layersplit.cpp:89
+#: plugins/extensions/layersplit/layersplit.cpp:111
 #, kde-format
 msgid "Split into Masks"
 msgstr "Rozdeliť na masky"
 
-#: plugins/extensions/layersplit/layersplit.cpp:188
+#: plugins/extensions/layersplit/layersplit.cpp:194
 msgctxt "(qtundo-format)"
 msgid "Split Layer"
 msgstr "Rozdeliť vrstvu"

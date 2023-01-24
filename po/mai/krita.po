@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-21 00:56+0000\n"
+"POT-Creation-Date: 2023-01-24 00:55+0000\n"
 "PO-Revision-Date: 2009-04-22 00:18+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -16967,7 +16967,7 @@ msgid "Node Rename"
 msgstr "नाम:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:854
+#: libs/image/kis_image.cc:855
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -17197,128 +17197,128 @@ msgstr ""
 msgid "Imported Image"
 msgstr "चित्र काटू"
 
-#: libs/image/kis_image.cc:690 libs/image/kis_layer_utils.cpp:1871
+#: libs/image/kis_image.cc:691 libs/image/kis_layer_utils.cpp:1872
 #: libs/impex/KisExportCheckRegistry.cpp:124
 #, fuzzy, kde-format
 msgid "Selection Mask"
 msgstr "चुनाव"
 
-#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2487
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2487
 #: plugins/impex/psd/psd_loader.cpp:189
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "पृष्ठभूमि रँग"
 
-#: libs/image/kis_image.cc:754 libs/ui/kis_layer_manager.cc:618
+#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:618
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "परत घुमाबू"
 
-#: libs/image/kis_image.cc:853
+#: libs/image/kis_image.cc:854
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "चित्र काटू"
 
-#: libs/image/kis_image.cc:949
+#: libs/image/kis_image.cc:950
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "परत जोड़ू"
 
-#: libs/image/kis_image.cc:950
+#: libs/image/kis_image.cc:951
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "मुखौटा भोथड़ करू"
 
-#: libs/image/kis_image.cc:987
+#: libs/image/kis_image.cc:988
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "परत मापू"
 
-#: libs/image/kis_image.cc:988
+#: libs/image/kis_image.cc:989
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "रिसॉल्यूशन:"
 
-#: libs/image/kis_image.cc:1035
+#: libs/image/kis_image.cc:1036
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "परत मापू"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1161
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "परत घुमाबू"
 
-#: libs/image/kis_image.cc:1166
+#: libs/image/kis_image.cc:1167
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "परत घुमाबू"
 
-#: libs/image/kis_image.cc:1168
+#: libs/image/kis_image.cc:1169
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "परत घुमाबू"
 
-#: libs/image/kis_image.cc:1249
+#: libs/image/kis_image.cc:1250
 #, fuzzy
 #| msgid "Unsharp Mask"
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "मुखौटा भोथड़ करू"
 
-#: libs/image/kis_image.cc:1252
+#: libs/image/kis_image.cc:1253
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "कारक मापू"
 
-#: libs/image/kis_image.cc:1259
+#: libs/image/kis_image.cc:1260
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "चित्र मापू"
 
-#: libs/image/kis_image.cc:1277
+#: libs/image/kis_image.cc:1278
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "रँग स्पेस"
 
-#: libs/image/kis_image.cc:1328
+#: libs/image/kis_image.cc:1329
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "रँग स्पेस"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1330
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "रँग स्पेस"
 
-#: libs/image/kis_image.cc:1387
+#: libs/image/kis_image.cc:1388
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "नीच्चाँ तक"
 
-#: libs/image/kis_image.cc:1428
+#: libs/image/kis_image.cc:1429
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "विकल्प"
 
-#: libs/image/kis_image.cc:2488
+#: libs/image/kis_image.cc:2489
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -17469,73 +17469,73 @@ msgstr "रंग-पट्टिका"
 msgid "Error"
 msgstr "चित्र काटू"
 
-#: libs/image/kis_layer_utils.cpp:599
+#: libs/image/kis_layer_utils.cpp:600
 #, fuzzy, kde-format
 msgid "Merged"
 msgstr "चित्र काटू"
 
-#: libs/image/kis_layer_utils.cpp:1377
+#: libs/image/kis_layer_utils.cpp:1378
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "विकल्प"
 
-#: libs/image/kis_layer_utils.cpp:1601
+#: libs/image/kis_layer_utils.cpp:1602
 #, fuzzy, kde-format
 #| msgid "Copy"
 msgid "Copy of"
 msgstr "कापी करू"
 
-#: libs/image/kis_layer_utils.cpp:1674
+#: libs/image/kis_layer_utils.cpp:1675
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "रँग स्पेस"
 
-#: libs/image/kis_layer_utils.cpp:1834
+#: libs/image/kis_layer_utils.cpp:1835
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "चयन बढाउ"
 
-#: libs/image/kis_layer_utils.cpp:1842
+#: libs/image/kis_layer_utils.cpp:1843
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "नाम:"
 
-#: libs/image/kis_layer_utils.cpp:1842
+#: libs/image/kis_layer_utils.cpp:1843
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "दृष्टिगोचर"
 
-#: libs/image/kis_layer_utils.cpp:1920
+#: libs/image/kis_layer_utils.cpp:1921
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "चुनाव"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1944
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "चित्र चपटा करू"
 
-#: libs/image/kis_layer_utils.cpp:1956
+#: libs/image/kis_layer_utils.cpp:1957
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "चित्र चपटा करू"
 
-#: libs/image/kis_layer_utils.cpp:2174
+#: libs/image/kis_layer_utils.cpp:2175
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "विकल्प"
 
-#: libs/image/kis_layer_utils.cpp:2200
+#: libs/image/kis_layer_utils.cpp:2201
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
@@ -27231,7 +27231,7 @@ msgstr "पसंदीदा"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:232
 #: libs/ui/layerstyles/WdgColorOverlay.ui:27
 #: libs/ui/layerstyles/WdgStroke.ui:138
-#: plugins/extensions/layersplit/layersplit.cpp:203
+#: plugins/extensions/layersplit/layersplit.cpp:209
 #: plugins/generators/solid/colorgenerator.h:41
 #, kde-format
 msgid "Color"
@@ -31819,12 +31819,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:582
+#: libs/ui/opengl/kis_opengl.cpp:576
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:584
+#: libs/ui/opengl/kis_opengl.cpp:578
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31832,14 +31832,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:984
+#: libs/ui/opengl/kis_opengl.cpp:978
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:986
+#: libs/ui/opengl/kis_opengl.cpp:980
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -40303,17 +40303,17 @@ msgstr "परत घसकाबू"
 msgid "Split Layer"
 msgstr "परत मापू"
 
-#: plugins/extensions/layersplit/layersplit.cpp:86
+#: plugins/extensions/layersplit/layersplit.cpp:108
 #, fuzzy, kde-format
 msgid "Split into Layers"
 msgstr "परत घुमाबू"
 
-#: plugins/extensions/layersplit/layersplit.cpp:89
+#: plugins/extensions/layersplit/layersplit.cpp:111
 #, fuzzy, kde-format
 msgid "Split into Masks"
 msgstr "परत घुमाबू"
 
-#: plugins/extensions/layersplit/layersplit.cpp:188
+#: plugins/extensions/layersplit/layersplit.cpp:194
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Layer"

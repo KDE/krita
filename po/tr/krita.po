@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-21 00:56+0000\n"
+"POT-Creation-Date: 2023-01-24 00:55+0000\n"
 "PO-Revision-Date: 2023-01-22 22:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -16752,7 +16752,7 @@ msgid "Node Rename"
 msgstr "Düğümü Yeniden Adlandır"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:854
+#: libs/image/kis_image.cc:855
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Görseli Yeniden Boyutlandır"
@@ -16978,110 +16978,110 @@ msgstr "Geçiş"
 msgid "Imported Image"
 msgstr "İçe Aktarılmış Görsel"
 
-#: libs/image/kis_image.cc:690 libs/image/kis_layer_utils.cpp:1871
+#: libs/image/kis_image.cc:691 libs/image/kis_layer_utils.cpp:1872
 #: libs/impex/KisExportCheckRegistry.cpp:124
 #, kde-format
 msgid "Selection Mask"
 msgstr "Seçim Maskesi"
 
-#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2487
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2487
 #: plugins/impex/psd/psd_loader.cpp:189
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Arka Plan"
 
-#: libs/image/kis_image.cc:754 libs/ui/kis_layer_manager.cc:618
+#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:618
 #, kde-format
 msgid "Paint Layer"
 msgstr "Boya Katmanı"
 
-#: libs/image/kis_image.cc:853
+#: libs/image/kis_image.cc:854
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Görseli Kırp"
 
-#: libs/image/kis_image.cc:949
+#: libs/image/kis_image.cc:950
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Katmanı Kırp"
 
-#: libs/image/kis_image.cc:950
+#: libs/image/kis_image.cc:951
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Maskeyi Kırp"
 
-#: libs/image/kis_image.cc:987
+#: libs/image/kis_image.cc:988
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Görseli Ölçekle"
 
-#: libs/image/kis_image.cc:988
+#: libs/image/kis_image.cc:989
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Görsel Çözünürlüğünü Değiştir"
 
-#: libs/image/kis_image.cc:1035
+#: libs/image/kis_image.cc:1036
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "Katmanı Ölçekle"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1161
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Görseli Döndür"
 
-#: libs/image/kis_image.cc:1166
+#: libs/image/kis_image.cc:1167
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Maskeyi Döndür"
 
-#: libs/image/kis_image.cc:1168
+#: libs/image/kis_image.cc:1169
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "Katmanı Döndür"
 
-#: libs/image/kis_image.cc:1249
+#: libs/image/kis_image.cc:1250
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Maskeyi Makasla"
 
-#: libs/image/kis_image.cc:1252
+#: libs/image/kis_image.cc:1253
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "Katmanı Makasla"
 
-#: libs/image/kis_image.cc:1259
+#: libs/image/kis_image.cc:1260
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Görseli Makasla"
 
-#: libs/image/kis_image.cc:1277
+#: libs/image/kis_image.cc:1278
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Katman Renk Uzayını Dönüştür"
 
-#: libs/image/kis_image.cc:1328
+#: libs/image/kis_image.cc:1329
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Görsel Renk Uzayı Dönüştür"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1330
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Yansıma Renk Uzayını Dönüştür"
 
-#: libs/image/kis_image.cc:1387
+#: libs/image/kis_image.cc:1388
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Katmana Profil Ata"
 
-#: libs/image/kis_image.cc:1428
+#: libs/image/kis_image.cc:1429
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profil Ata"
 
-#: libs/image/kis_image.cc:2488
+#: libs/image/kis_image.cc:2489
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Seçimleri Kırp"
@@ -17226,63 +17226,63 @@ msgstr "Dosya Aç"
 msgid "Error"
 msgstr "Hata"
 
-#: libs/image/kis_layer_utils.cpp:599
+#: libs/image/kis_layer_utils.cpp:600
 #, kde-format
 msgid "Merged"
 msgstr "Birleştirilmiş"
 
-#: libs/image/kis_layer_utils.cpp:1377
+#: libs/image/kis_layer_utils.cpp:1378
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Aşağı Birleştir"
 
-#: libs/image/kis_layer_utils.cpp:1601
+#: libs/image/kis_layer_utils.cpp:1602
 #, kde-format
 msgid "Copy of"
 msgstr "Kopyası"
 
-#: libs/image/kis_layer_utils.cpp:1674
+#: libs/image/kis_layer_utils.cpp:1675
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Gösterim rengini değiştir"
 
-#: libs/image/kis_layer_utils.cpp:1834
+#: libs/image/kis_layer_utils.cpp:1835
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Seçili Düğümleri Birleştir"
 
-#: libs/image/kis_layer_utils.cpp:1842
+#: libs/image/kis_layer_utils.cpp:1843
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Görünürden Yeni"
 
-#: libs/image/kis_layer_utils.cpp:1842
+#: libs/image/kis_layer_utils.cpp:1843
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Görünür"
 
-#: libs/image/kis_layer_utils.cpp:1920
+#: libs/image/kis_layer_utils.cpp:1921
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Seçim Maskelerini Birleştir"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1944
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Katmanı Düzleştir"
 
-#: libs/image/kis_layer_utils.cpp:1956
+#: libs/image/kis_layer_utils.cpp:1957
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Görseli Düzleştir"
 
-#: libs/image/kis_layer_utils.cpp:2174
+#: libs/image/kis_layer_utils.cpp:2175
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Alfayı Maskelere Ayır"
 
-#: libs/image/kis_layer_utils.cpp:2200
+#: libs/image/kis_layer_utils.cpp:2201
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Bir Boya Katmanına Dönüştür"
@@ -27155,7 +27155,7 @@ msgstr "Özel renk"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:232
 #: libs/ui/layerstyles/WdgColorOverlay.ui:27
 #: libs/ui/layerstyles/WdgStroke.ui:138
-#: plugins/extensions/layersplit/layersplit.cpp:203
+#: plugins/extensions/layersplit/layersplit.cpp:209
 #: plugins/generators/solid/colorgenerator.h:41
 #, kde-format
 msgid "Color"
@@ -31842,14 +31842,14 @@ msgstr ""
 "Doku arabellekleri, başarım gerekçelerinden dolayı ANGLE sunucusunda "
 "kesinlikle devre dışı bırakılmıştır."
 
-#: libs/ui/opengl/kis_opengl.cpp:582
+#: libs/ui/opengl/kis_opengl.cpp:576
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Kullanılan Intel grafik sürücüsünün OpenGL ile ilgili sorunları olduğu "
 "bilinmektedir."
 
-#: libs/ui/opengl/kis_opengl.cpp:584
+#: libs/ui/opengl/kis_opengl.cpp:578
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31860,7 +31860,7 @@ msgstr ""
 "eğilimindedir, dolayısıyla ANGLE öntanımlı olarak kullanılır. OpenGL'e elle "
 "geçebilirsiniz, ancak düzgün çalışacağı garanti edilmez."
 
-#: libs/ui/opengl/kis_opengl.cpp:984
+#: libs/ui/opengl/kis_opengl.cpp:978
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -31869,7 +31869,7 @@ msgstr ""
 "Tercih edilen sunucu istenen yüzey biçimini desteklemiyor. Başka bir sunucu "
 "seçildi."
 
-#: libs/ui/opengl/kis_opengl.cpp:986
+#: libs/ui/opengl/kis_opengl.cpp:980
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -40575,17 +40575,17 @@ msgstr "Sonraki gruba taşı"
 msgid "Split Layer"
 msgstr "Katmanı Ayır"
 
-#: plugins/extensions/layersplit/layersplit.cpp:86
+#: plugins/extensions/layersplit/layersplit.cpp:108
 #, kde-format
 msgid "Split into Layers"
 msgstr "Katmanlara Ayır"
 
-#: plugins/extensions/layersplit/layersplit.cpp:89
+#: plugins/extensions/layersplit/layersplit.cpp:111
 #, kde-format
 msgid "Split into Masks"
 msgstr "Maskelere Ayır"
 
-#: plugins/extensions/layersplit/layersplit.cpp:188
+#: plugins/extensions/layersplit/layersplit.cpp:194
 msgctxt "(qtundo-format)"
 msgid "Split Layer"
 msgstr "Katmanı Ayır"

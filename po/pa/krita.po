@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-21 00:56+0000\n"
+"POT-Creation-Date: 2023-01-24 00:55+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -18055,7 +18055,7 @@ msgid "Node Rename"
 msgstr "ਨਾਂ"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:854
+#: libs/image/kis_image.cc:855
 #, fuzzy
 #| msgid "Delete shapes"
 msgctxt "(qtundo-format)"
@@ -18299,14 +18299,14 @@ msgstr ""
 msgid "Imported Image"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
-#: libs/image/kis_image.cc:690 libs/image/kis_layer_utils.cpp:1871
+#: libs/image/kis_image.cc:691 libs/image/kis_layer_utils.cpp:1872
 #: libs/impex/KisExportCheckRegistry.cpp:124
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgid "Selection Mask"
 msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 
-#: libs/image/kis_image.cc:750 libs/ui/KisDocument.cpp:2487
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2487
 #: plugins/impex/psd/psd_loader.cpp:189
 #, fuzzy, kde-format
 #| msgid "Set background"
@@ -18314,132 +18314,132 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
-#: libs/image/kis_image.cc:754 libs/ui/kis_layer_manager.cc:618
+#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:618
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgid "Paint Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/image/kis_image.cc:853
+#: libs/image/kis_image.cc:854
 #, fuzzy
 #| msgid "Master Page"
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/image/kis_image.cc:949
+#: libs/image/kis_image.cc:950
 #, fuzzy
 #| msgid "Create Layer"
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/image/kis_image.cc:950
+#: libs/image/kis_image.cc:951
 #, fuzzy
 #| msgid "Show master shapes"
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 
-#: libs/image/kis_image.cc:987
+#: libs/image/kis_image.cc:988
 #, fuzzy
 #| msgid "Master Page"
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/image/kis_image.cc:988
+#: libs/image/kis_image.cc:989
 #, fuzzy
 #| msgid "Change page layout"
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "ਸਫ਼ਾ ਲੇਆਉਟ ਬਦਲੋ"
 
-#: libs/image/kis_image.cc:1035
+#: libs/image/kis_image.cc:1036
 #, fuzzy
 #| msgid "New Layer"
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1161
 #, fuzzy
 #| msgid "Master Page"
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/image/kis_image.cc:1166
+#: libs/image/kis_image.cc:1167
 #, fuzzy
 #| msgid "Delete shapes"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
-#: libs/image/kis_image.cc:1168
+#: libs/image/kis_image.cc:1169
 #, fuzzy
 #| msgid "Create Layer"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/image/kis_image.cc:1249
+#: libs/image/kis_image.cc:1250
 #, fuzzy
 #| msgid "Show master shapes"
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 
-#: libs/image/kis_image.cc:1252
+#: libs/image/kis_image.cc:1253
 #, fuzzy
 #| msgid "New Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/image/kis_image.cc:1259
+#: libs/image/kis_image.cc:1260
 #, fuzzy
 #| msgid "Show master shapes"
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 
-#: libs/image/kis_image.cc:1277
+#: libs/image/kis_image.cc:1278
 #, fuzzy
 #| msgid "Create Layer"
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/image/kis_image.cc:1328
+#: libs/image/kis_image.cc:1329
 #, fuzzy
 #| msgid "Line Color"
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1330
 #, fuzzy
 #| msgid "Create Layer"
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/image/kis_image.cc:1387
+#: libs/image/kis_image.cc:1388
 #, fuzzy
 #| msgid "Delete shapes"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
-#: libs/image/kis_image.cc:1428
+#: libs/image/kis_image.cc:1429
 #, fuzzy
 #| msgid "Active tool: %1"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 
-#: libs/image/kis_image.cc:2488
+#: libs/image/kis_image.cc:2489
 #, fuzzy
 #| msgid "Change Connection"
 msgctxt "(qtundo-format)"
@@ -18609,82 +18609,82 @@ msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 msgid "Error"
 msgstr "ਘੱਟੋ-ਘੱਟ ਝਲਕ"
 
-#: libs/image/kis_layer_utils.cpp:599
+#: libs/image/kis_layer_utils.cpp:600
 #, fuzzy, kde-format
 #| msgid "Move points"
 msgid "Merged"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
-#: libs/image/kis_layer_utils.cpp:1377
+#: libs/image/kis_layer_utils.cpp:1378
 #, fuzzy
 #| msgid "Move points"
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
-#: libs/image/kis_layer_utils.cpp:1601
+#: libs/image/kis_layer_utils.cpp:1602
 #, fuzzy, kde-format
 #| msgid "Copy"
 msgid "Copy of"
 msgstr "ਕਾਪੀ ਕਰੋ"
 
-#: libs/image/kis_layer_utils.cpp:1674
+#: libs/image/kis_layer_utils.cpp:1675
 #, fuzzy
 #| msgid "Change Connection"
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/image/kis_layer_utils.cpp:1834
+#: libs/image/kis_layer_utils.cpp:1835
 #, fuzzy
 #| msgid "Delete selected objects"
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "ਚੁਣੇ ਆਬਜੈਕਟ ਹਟਾਓ"
 
-#: libs/image/kis_layer_utils.cpp:1842
+#: libs/image/kis_layer_utils.cpp:1843
 #, fuzzy
 #| msgid "New Layer"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/image/kis_layer_utils.cpp:1842
+#: libs/image/kis_layer_utils.cpp:1843
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
-#: libs/image/kis_layer_utils.cpp:1920
+#: libs/image/kis_layer_utils.cpp:1921
 #, fuzzy
 #| msgid "Collection"
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "ਭੰਡਾਰ"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1944
 #, fuzzy
 #| msgid "Create Layer"
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/image/kis_layer_utils.cpp:1956
+#: libs/image/kis_layer_utils.cpp:1957
 #, fuzzy
 #| msgid "Master Page"
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/image/kis_layer_utils.cpp:2174
+#: libs/image/kis_layer_utils.cpp:2175
 #, fuzzy
 #| msgid "Tool Options"
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "ਟੂਲ ਚੋਣਾਂ"
 
-#: libs/image/kis_layer_utils.cpp:2200
+#: libs/image/kis_layer_utils.cpp:2201
 #, fuzzy
 #| msgid "Delete shapes"
 msgctxt "(qtundo-format)"
@@ -29098,7 +29098,7 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:232
 #: libs/ui/layerstyles/WdgColorOverlay.ui:27
 #: libs/ui/layerstyles/WdgStroke.ui:138
-#: plugins/extensions/layersplit/layersplit.cpp:203
+#: plugins/extensions/layersplit/layersplit.cpp:209
 #: plugins/generators/solid/colorgenerator.h:41
 #, fuzzy, kde-format
 #| msgid "Line Color"
@@ -34229,12 +34229,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:582
+#: libs/ui/opengl/kis_opengl.cpp:576
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:584
+#: libs/ui/opengl/kis_opengl.cpp:578
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -34242,14 +34242,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:984
+#: libs/ui/opengl/kis_opengl.cpp:978
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:986
+#: libs/ui/opengl/kis_opengl.cpp:980
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -43432,19 +43432,19 @@ msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 msgid "Split Layer"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
-#: plugins/extensions/layersplit/layersplit.cpp:86
+#: plugins/extensions/layersplit/layersplit.cpp:108
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgid "Split into Layers"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
-#: plugins/extensions/layersplit/layersplit.cpp:89
+#: plugins/extensions/layersplit/layersplit.cpp:111
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgid "Split into Masks"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
-#: plugins/extensions/layersplit/layersplit.cpp:188
+#: plugins/extensions/layersplit/layersplit.cpp:194
 #, fuzzy
 #| msgid "Delete Layer"
 msgctxt "(qtundo-format)"

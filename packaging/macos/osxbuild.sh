@@ -272,17 +272,6 @@ build_3rdparty_fixes(){
         ln -sf qmake "${KIS_INSTALL_DIR}/bin/qmake-qt5"
         error="false"
 
-    elif [[ "${pkg}" = "ext_openexr" ]]; then
-        # open exr will fail the first time is called
-        # rpath needs to be fixed an build rerun
-        log "Fixing rpath on openexr file: b44ExpLogTable"
-        log "Fixing rpath on openexr file: dwaLookups"
-        log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib $(find ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build -name b44ExpLogTable)
-        log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib $(find ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build -name dwaLookups)
-        # we must rerun build!
-        cmake_3rdparty ext_openexr "1"
-        error="false"
-
     elif [[ "${pkg}" = "ext_poppler" && "${error}" = "true" ]]; then
         log "re-running poppler to avoid possible glitch"
         cmake_3rdparty ext_poppler "1"

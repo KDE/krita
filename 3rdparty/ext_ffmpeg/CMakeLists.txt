@@ -9,6 +9,8 @@ ExternalProject_Add(
     URL_HASH SHA256=0eb4b4b9420a0f51db142ba3f9c64b333f826532dc0f48c6410ae51f4799b664
  
     CMAKE_ARGS ${LIBOGG_EXTRA_CMAKE_ARGS} -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ffmpeg} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+
+    UPDATE_COMMAND ""
 )
 
 ExternalProject_Add(
@@ -20,6 +22,8 @@ ExternalProject_Add(
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-vorbis-Fix-library-definition-files-lacking-a-library.patch
 
     CMAKE_ARGS ${LIBVORBIS_EXTRA_CMAKE_ARGS} -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ffmpeg} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+
+    UPDATE_COMMAND ""
 
     DEPENDS ${OGG_DEP}
 )
@@ -59,6 +63,8 @@ ExternalProject_Add(
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} install -C <BINARY_DIR>
 
+    UPDATE_COMMAND ""
+
     DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ${OGG_DEP} ext_libvorbis
 )
 
@@ -77,6 +83,8 @@ ExternalProject_Add(
         -DINSTALL_MANPAGES=FALSE
         ${GLOBAL_PROFILE}
 
+    UPDATE_COMMAND ""
+
     DEPENDS ${OGG_DEP}
 )
 
@@ -92,6 +100,8 @@ ExternalProject_Add(
         -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
         -DBUILD_SHARED_LIBS=TRUE
         ${GLOBAL_PROFILE}
+
+    UPDATE_COMMAND ""
 )
 
 # ======================== VIDEO ===========================
@@ -117,6 +127,8 @@ ExternalProject_Add(
     INSTALL_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} install -C <BINARY_DIR>
+
+    UPDATE_COMMAND ""
 
     DEPENDS ext_nasm ${MESON_DEP} ${PKG_CONFIG_DEP}
 )
@@ -169,6 +181,8 @@ ExternalProject_Add(
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} install -C <BINARY_DIR>
 
+    UPDATE_COMMAND ""
+
     DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ext_libmp3lame_meson
 )
 
@@ -183,6 +197,8 @@ if (NOT APPLE)
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
             -DBUILD_SHARED_LIBS=TRUE
             ${GLOBAL_PROFILE}
+
+        UPDATE_COMMAND ""
     )
 else()
     ExternalProject_Add(
@@ -194,6 +210,8 @@ else()
         CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_ffmpeg}
             --without-x
             ${GLOBAL_AUTOMAKE_PROFILE}
+
+        UPDATE_COMMAND ""
     )
 endif()
 
@@ -207,6 +225,8 @@ ExternalProject_Add(
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-MacOS-13-is-darwin22.patch
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_ffmpeg}  ${GLOBAL_AUTOMAKE_PROFILE}
+
+    UPDATE_COMMAND ""
 )
 
 # IMPORTANT:
@@ -282,6 +302,8 @@ ExternalProject_Add(
     INSTALL_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} install -C <BINARY_DIR>
+
+    UPDATE_COMMAND ""
 
     DEPENDS ${FLAC_DEP} ${VPX_DEP} ${OPUS_DEP} ${SDL_DEP} ${VPX_DEP} ext_libvorbis ext_libtheora ext_libopenh264 ext_libmp3lame ext_libaom ext_webp ext_png ext_jpeg ${MESON_DEP} ${PKG_CONFIG_DEP}
 )

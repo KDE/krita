@@ -112,7 +112,8 @@ cmake $KRITA_SOURCES/3rdparty \
     -DINSTALL_ROOT=$DEPS_INSTALL_PREFIX \
     -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOADS_DIR \
     -DQT_ENABLE_DEBUG_INFO=$QT_DEBUG \
-    -DSUBMAKE_JOBS=${SUBMAKE_JOBS}
+    -DSUBMAKE_JOBS=${SUBMAKE_JOBS} \
+    -G Ninja
 
 # Now start building everything we need, in the appropriate order
 #cmake --build . --config RelWithDebInfo --target ext_png

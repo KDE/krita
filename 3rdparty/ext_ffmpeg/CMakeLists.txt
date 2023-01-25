@@ -74,9 +74,17 @@ ExternalProject_Add(
     URL https://github.com/xiph/flac/releases/download/1.4.2/flac-1.4.2.tar.xz
     URL_HASH SHA256=e322d58a1f48d23d9dd38f432672865f6f79e73a6f9cc5a5f57fcaa83eb5a8e4
 
+    # Emmet: if you need metaflac, please add:
+    # -DIconv_IS_BUILT_IN=TRUE
+    # -DBUILD_PROGRAMS=FALSE
+    # and add ext_iconv to DEPENDS.
+    # otherwise CMake's FindIconv gets confused due to libiconv having
+    # its headers in the include path
+
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ffmpeg}
         -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
         -DBUILD_SHARED_LIBS=TRUE
+        -DBUILD_PROGRAMS=FALSE
         -DBUILD_EXAMPLES=FALSE
         -DBUILD_TESTING=FALSE
         -DBUILD_DOCS=FALSE

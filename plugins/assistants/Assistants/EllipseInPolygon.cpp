@@ -147,7 +147,7 @@ bool EllipseInPolygon::updateToPointOnConcentricEllipse(QTransform _originalTran
     double distanceFromCenter = kisDistance(pointInOriginalCoordinates, center);
 
     originalCircleRadius = distanceFromCenter;
-    qCritical() << "distance from center" << distanceFromCenter;
+    //qCritical() << "distance from center" << distanceFromCenter;
 
     originalTransform = _originalTransform;
 
@@ -168,8 +168,8 @@ bool EllipseInPolygon::updateToPointOnConcentricEllipse(QTransform _originalTran
 
     concentricDefiningPointIndex = 0;
 
-    ENTER_FUNCTION() << "Points are: " << pointInOriginalCoordinates
-                     << center + QPointF(distanceFromCenter, 0) << center + QPointF(-distanceFromCenter, 0);
+    //ENTER_FUNCTION() << "Points are: " << pointInOriginalCoordinates
+    //                 << center + QPointF(distanceFromCenter, 0) << center + QPointF(-distanceFromCenter, 0);
 
     // FIXME: it's good to update the polygon too, just in case
 
@@ -1275,6 +1275,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
         }
         octaveForm += "];";
 
+        /*
         qCritical() << "ModifiedElberly +Sec+ | --- (QVector, not Conic) ";
         qCritical() << "ModifiedElberly       | formula name: " << name;
         qCritical() << "ModifiedElberly       | true form? " << trueForm;
@@ -1282,7 +1283,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
         qCritical() << "ModifiedElberly       | Octave: " << octaveForm;
         qCritical() << "ModifiedElberly       | Actual data (A, B, C, D...): " << formula;
         qCritical() << "ModifiedElberly       | ---";
-
+        */
     };
 
 
@@ -1655,6 +1656,8 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     adjustCoefficients(f, swapXandY, negateX, negateY);
     if (qAbs(f.formINegatedY.C) < 1e-12) {
+        ENTER_FUNCTION() << "Weird formula: " << "C should not be 0";
+        writeFormulaInAllForms(f.formINegatedY.getData(), "form I negated Y");
         return originalPoint;
     }
 
@@ -1877,7 +1880,7 @@ bool EllipseInPolygon::setSimpleEllipseVertices(Ellipse &ellipse) const
 
 bool EllipseInPolygon::formulaRepresentsAnEllipse(double a, double b, double c)
 {
-    ENTER_FUNCTION() << "(b*b - 4*a*c)" << (b*b - 4*a*c) << " < 0 (should be for ellipse)" << a << b << c;
+    //ENTER_FUNCTION() << "(b*b - 4*a*c)" << (b*b - 4*a*c) << " < 0 (should be for ellipse)" << a << b << c;
     return (b*b - 4*a*c) < 0;
 }
 
@@ -2299,8 +2302,8 @@ bool EllipseInPolygon::updateToFivePoints(QVector<QPointF> points, QLineF _horiz
 
     // check if this is an ellipse
     if (!formulaRepresentsAnEllipse(a, b, c)) {
-        ENTER_FUNCTION() << "Formula doesn't represent an ellipse:" << a << b << c << d << e << f;
-        ENTER_FUNCTION() << "Is ellipse valid?" << isValid();
+        //ENTER_FUNCTION() << "Formula doesn't represent an ellipse:" << a << b << c << d << e << f;
+        //ENTER_FUNCTION() << "Is ellipse valid?" << isValid();
         //return false; //moved later
     }
 
@@ -2309,8 +2312,8 @@ bool EllipseInPolygon::updateToFivePoints(QVector<QPointF> points, QLineF _horiz
 
     // check if this is an ellipse
     if (!formulaRepresentsAnEllipse(a, b, c)) {
-        ENTER_FUNCTION() << "Formula doesn't represent an ellipse:" << a << b << c << d << e << f;
-        ENTER_FUNCTION() << "Is ellipse valid?" << isValid();
+        //ENTER_FUNCTION() << "Formula doesn't represent an ellipse:" << a << b << c << d << e << f;
+        //ENTER_FUNCTION() << "Is ellipse valid?" << isValid();
         //return false; //moved later
     }
 

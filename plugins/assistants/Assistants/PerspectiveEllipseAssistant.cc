@@ -45,6 +45,7 @@ public:
 
     bool isConcentric {false};
     bool ellipsesCorrectInStroke {false};
+    bool useMirrored {false};
 
     PerspectiveBasedAssistantHelper::CacheData cache;
 
@@ -84,8 +85,7 @@ QPointF PerspectiveEllipseAssistant::project(const QPointF& pt, const QPointF& s
     Q_ASSERT(isAssistantComplete());
 
     if (d->isConcentric) {
-        //return d->concentricEllipseInPolygon.projectModifiedEberlySecond(pt);
-        if (true || d->concentricEllipseInPolygon.onTheCorrectSideOfHorizon(pt)) {
+        if (d->useMirrored) {
             return d->concentricEllipseInPolygon.projectModifiedEberlySecond(pt);
         } else {
             return d->concentricEllipseInPolygonMirrored.projectModifiedEberlySecond(pt);
@@ -451,9 +451,15 @@ void PerspectiveEllipseAssistant::setAdjustedBrushPosition(const QPointF positio
 {
     KisPaintingAssistant::setAdjustedBrushPosition(position);
     // beginning of the stroke
-    if (d->ellipsesCorrectInStroke) {
-        d->concentricEllipseInPolygon.updateToPointOnConcentricEllipse(d->ellipseInPolygon.originalTransform, position, d->cache.horizon, false);
-        d->concentricEllipseInPolygonMirrored.updateToPointOnConcentricEllipse(d->ellipseInPolygon.originalTransform, position, d->cache.horizon, true);
+    if (!d->ellipsesCorrectInStroke) {
+        if (d->concentricEllipseInPolygon.onTheCorrectSideOfHorizon(position)) {
+            d->concentricEllipseInPolygon.updateToPointOnConcentricEllipse(d->ellipseInPolygon.originalTransform, position, d->cache.horizon, false);
+            d->useMirrored = false;
+        } else {
+            d->concentricEllipseInPolygonMirrored.updateToPointOnConcentricEllipse(d->ellipseInPolygon.originalTransform, position, d->cache.horizon, true);
+            d->useMirrored = true;
+        }
+        d->ellipsesCorrectInStroke = true;
     }
 
 }

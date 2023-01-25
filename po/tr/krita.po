@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-24 00:55+0000\n"
-"PO-Revision-Date: 2023-01-22 22:20+0300\n"
+"POT-Creation-Date: 2023-01-25 00:55+0000\n"
+"PO-Revision-Date: 2023-01-24 21:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2150,7 +2150,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Fill_block.kpp"
 msgid "Fill block"
-msgstr "Bloku doldur"
+msgstr "Dolgu blok"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2158,7 +2158,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Fill_circle.kpp"
 msgid "Fill circle"
-msgstr "Çemberi doldur"
+msgstr "Dolgu daire"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -15714,13 +15714,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Çalışma alanları"
 
-#: krita/main.cc:525
+#: krita/main.cc:512
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Ölümcül Hata"
 
-#: krita/main.cc:525
+#: krita/main.cc:513
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15729,14 +15729,14 @@ msgstr ""
 "Krita, Wayland platformunu desteklemiyor. Krita'yi Wayland üzerinde "
 "çalıştırmak için XWayland kullanın. Krita şimdi kapanacak."
 
-#: krita/main.cc:623 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:609 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Uyarı"
 
-#: krita/main.cc:624
+#: krita/main.cc:610
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15750,12 +15750,12 @@ msgstr ""
 "Windows işletim sisteminin yalnızca şu sürümleri desteklenmektedir: Windows "
 "7, 8, 8.1 ve 10."
 
-#: krita/main.cc:646 krita/main.cc:651
+#: krita/main.cc:632 krita/main.cc:637
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita Tablet Desteği"
 
-#: krita/main.cc:647
+#: krita/main.cc:633
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15766,7 +15766,7 @@ msgstr ""
 "tabletiniz varsa lütfen tablet sürücüsünün doğru şekilde kurulduğundan emin "
 "olun."
 
-#: krita/main.cc:652
+#: krita/main.cc:638
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -19880,7 +19880,7 @@ msgstr "Eklenecek Dosyayı Seç"
 #: libs/widgets/KisTagSelectionWidget.cpp:121
 #, kde-format
 msgid "Assign to tag"
-msgstr "Etikete ata"
+msgstr "Etikete Ata"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:94
 #, kde-format
@@ -19890,7 +19890,7 @@ msgstr "Bu etiketten kaldır"
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:103
 #, kde-format
 msgid "Remove from other tag"
-msgstr "Diğer etiketten kaldır"
+msgstr "Diğer Etiketten Kaldır"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:25
 #, kde-format
@@ -20176,7 +20176,7 @@ msgctxt ""
 "It appears in the checkbox next to the filter box in resources dockers; must "
 "be short."
 msgid "Filter in Tag"
-msgstr "Etikette Süz"
+msgstr "Etikette süz"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:56
 #, kde-format
@@ -22992,7 +22992,7 @@ msgstr "Başarım"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1986
 #, kde-format
 msgid "Tablet settings"
-msgstr "Tablet ayarları"
+msgstr "Tablet Ayarları"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1988
 #, kde-format
@@ -23002,12 +23002,12 @@ msgstr "Tablet"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1996
 #, kde-format
 msgid "Canvas-only settings"
-msgstr "Tuvale özel ayarlar"
+msgstr "Yalnızca Tuval Ayarları"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1998
 #, kde-format
 msgid "Canvas-only"
-msgstr "Tuvale özel"
+msgstr "Yalnızca Tuval"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2006
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2008
@@ -44190,7 +44190,7 @@ msgstr "&Yağlıboya..."
 #: plugins/paintops/sketch/kis_sketchop_option.cpp:22
 #, kde-format
 msgid "Brush size"
-msgstr "Fırça boyutu"
+msgstr "Fırça Boyutu"
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:206
 #, kde-format
@@ -51367,7 +51367,7 @@ msgstr "Otomatik"
 #, kde-format
 msgctxt "Predefined Brush tip mode"
 msgid "Predefined"
-msgstr "Önden Tanımlı"
+msgstr "Önceden Tanımlı"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:51
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:53
@@ -52704,7 +52704,7 @@ msgstr "Basit kip"
 #: plugins/paintops/sketch/wdgsketchoptions.ui:131
 #, kde-format
 msgid "Magnetify"
-msgstr "Magnetify"
+msgstr "Mıknatısla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomRGBCHbox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:162
@@ -55654,7 +55654,7 @@ msgstr "Python dosyaları (*.py)"
 #: plugins/tools/basictools/kis_tool_brush.cc:57
 msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
-msgstr "Rastgele Fırça Vuruşu"
+msgstr "Serbest Fırça Vuruşu"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:179
 #, kde-format
@@ -56201,12 +56201,12 @@ msgstr "Bezier Eğrisi Aracı: Shift-fare tıklaması eğriyi sonlandırır."
 #: plugins/tools/basictools/kis_tool_pencil.cc:120
 msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
-msgstr "Rastgele Yol Çiz"
+msgstr "Serbest Yol Çiz"
 
 #: plugins/tools/basictools/kis_tool_pencil.h:76
 #, kde-format
 msgid "Freehand Path Tool"
-msgstr "Rastgele Yol Aracı"
+msgstr "Serbest Yol Aracı"
 
 #: plugins/tools/basictools/kis_tool_rectangle.cc:53
 msgctxt "(qtundo-format)"

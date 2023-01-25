@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-24 00:55+0000\n"
+"POT-Creation-Date: 2023-01-25 00:55+0000\n"
 "PO-Revision-Date: 2023-01-19 09:52+0000\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -16037,13 +16037,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Espaços de Trabalho"
 
-#: krita/main.cc:525
+#: krita/main.cc:512
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Erro Fatal"
 
-#: krita/main.cc:525
+#: krita/main.cc:513
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -16052,14 +16052,14 @@ msgstr ""
 "O Krita não suporta a plataforma Wayland. Use o XWayland para executar o "
 "Krita no Wayland. O Krita irá agora fechar."
 
-#: krita/main.cc:623 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:609 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Aviso"
 
-#: krita/main.cc:624
+#: krita/main.cc:610
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16071,12 +16071,12 @@ msgstr ""
 "Por favor actualize para uma versão suportada do Windows: Windows 7, 8, 8.1 "
 "ou 10."
 
-#: krita/main.cc:646 krita/main.cc:651
+#: krita/main.cc:632 krita/main.cc:637
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Suporte para Tabletes do Krita"
 
-#: krita/main.cc:647
+#: krita/main.cc:633
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16087,7 +16087,7 @@ msgstr ""
 "dispositivos do Windows Ink. Se tiver uma tablete de desenho, certifique-se "
 "por favor que o controlador da mesma está devidamente instalado."
 
-#: krita/main.cc:652
+#: krita/main.cc:638
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "

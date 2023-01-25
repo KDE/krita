@@ -22,4 +22,4 @@ cpp_link_args = common_link_args + cross_link_args + security_linker_flags
 @_pkg_config_libdir@
 
 [built-in options]
-pkg_config_path = '@EXTPREFIX@/share/pkgconfig,@EXTPREFIX@/lib/pkgconfig'
+pkg_config_path = '@EXTPREFIX@/share/pkgconfig,@EXTPREFIX@/lib/pkgconfig,@EXTPREFIX@/lib64/pkgconfig'

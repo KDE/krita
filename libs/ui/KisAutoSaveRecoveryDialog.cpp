@@ -10,6 +10,7 @@
 
 #include <kwidgetitemdelegate.h>
 #include <klocalizedstring.h>
+#include <KisKineticScroller.h>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -222,6 +223,13 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
 
     m_model = new FileItemModel(fileItems, m_listView);
     m_listView->setModel(m_model);
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(m_listView);
+    if (scroller) {
+        connect(scroller, &QScroller::stateChanged, this, [&](QScroller::State state) {
+            KisKineticScroller::updateCursor(this, state);
+        });
+    }
+
     layout->addWidget(m_listView);
     layout->addWidget(new QLabel(i18n("If you select Cancel, all recoverable files will be kept.\nIf you press OK, selected files will be recovered, the unselected files discarded.")));
     setMainWidget(page);

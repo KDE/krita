@@ -382,6 +382,25 @@ void KisInputProfileManager::saveProfile(KisInputProfile *profile, QString stora
     config.sync();
 }
 
+QList<KisShortcutConfiguration *> KisInputProfileManager::getConflictingShortcuts(KisInputProfile *profile)
+{
+    QSet<KisShortcutConfiguration *> conflictedShortcuts;
+    const QList<KisShortcutConfiguration *> shortcuts = profile->allShortcuts();
+    for (auto startIt = shortcuts.constBegin(); startIt != shortcuts.constEnd(); ++startIt) {
+        KisShortcutConfiguration *first = *startIt;
+        for (auto index = startIt + 1; index != shortcuts.constEnd(); ++index) {
+            KisShortcutConfiguration *second = *index;
+            // since there can be multiple no-ops in the config and because no-ops are something a user can't
+            // perform, there should be no conflicts.
+            if (*first == *second && !first->isNoOp()) {
+                conflictedShortcuts.insert(first);
+                conflictedShortcuts.insert(second);
+            }
+        }
+    }
+    return conflictedShortcuts.values();
+}
+
 void KisInputProfileManager::resetAll()
 {
     QString kdeHome = KoResourcePaths::getAppDataLocation();

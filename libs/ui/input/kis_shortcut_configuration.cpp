@@ -65,6 +65,12 @@ KisShortcutConfiguration &KisShortcutConfiguration::operator=(const KisShortcutC
     return *this;
 }
 
+bool KisShortcutConfiguration::operator==(const KisShortcutConfiguration &other) const
+{
+    return d->type == other.d->type && d->keys == other.d->keys && d->buttons == other.d->buttons
+        && d->wheel == other.d->wheel && d->gesture == other.d->gesture;
+}
+
 KisShortcutConfiguration::~KisShortcutConfiguration()
 {
     delete d;
@@ -253,6 +259,15 @@ void KisShortcutConfiguration::setGesture(KisShortcutConfiguration::GestureActio
     if (d->gesture != type) {
         d->gesture = type;
     }
+}
+
+bool KisShortcutConfiguration::isNoOp() const
+{
+    return d->type == UnknownType || (d->type == KeyCombinationType && d->keys.isEmpty())
+        || (d->type == MouseButtonType && d->buttons.testFlag(Qt::NoButton))
+        || (d->type == MouseWheelType && d->wheel == NoMovement)
+        || ((d->type == GestureType || d->type == MacOSGestureType)
+            && (d->gesture == NoGesture || d->gesture == MaxGesture));
 }
 
 QString KisShortcutConfiguration::buttonsToText(Qt::MouseButtons buttons)

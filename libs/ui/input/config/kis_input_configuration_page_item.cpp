@@ -11,6 +11,7 @@
 
 #include "input/kis_abstract_input_action.h"
 #include "input/kis_input_profile_manager.h"
+#include "input/kis_shortcut_configuration.h"
 #include "kis_action_shortcuts_model.h"
 #include "kis_input_type_delegate.h"
 #include "kis_input_mode_delegate.h"
@@ -35,6 +36,12 @@ KisInputConfigurationPageItem::KisInputConfigurationPageItem(QWidget *parent, Qt
     ui->shortcutsView->header()->setSectionResizeMode(QHeaderView::Stretch);
     setExpanded(false);
 
+    ui->warningConflictLabel->setPixmap(KisIconUtils::loadIcon("warning").pixmap(16, 16));
+    ui->warningConflictLabel->hide();
+    connect(m_shortcutsModel,
+            SIGNAL(dataChanged(const QModelIndex, const QModelIndex)),
+            SIGNAL(inputConfigurationChanged()));
+
     QAction *deleteAction = new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete Shortcut"), ui->shortcutsView);
     connect(deleteAction, SIGNAL(triggered(bool)), SLOT(deleteShortcut()));
     ui->shortcutsView->addAction(deleteAction);
@@ -58,6 +65,11 @@ void KisInputConfigurationPageItem::setAction(KisAbstractInputAction *action)
     qobject_cast<KisInputModeDelegate *>(ui->shortcutsView->itemDelegateForColumn(2))->setAction(action);
 }
 
+void KisInputConfigurationPageItem::setWarningEnabled(bool enabled)
+{
+    ui->warningConflictLabel->setVisible(enabled);
+}
+
 void KisInputConfigurationPageItem::setExpanded(bool expand)
 {
     if (expand) {
@@ -78,6 +90,7 @@ void KisInputConfigurationPageItem::deleteShortcut()
 
     if (m_shortcutsModel->canRemoveRow(row)) {
         m_shortcutsModel->removeRow(row, QModelIndex());
+        emit inputConfigurationChanged();
     } else {
         QMessageBox shortcutMessage;
         shortcutMessage.setText(i18n("Deleting last shortcut for this action!"));

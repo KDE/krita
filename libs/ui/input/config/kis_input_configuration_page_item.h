@@ -32,6 +32,11 @@ public:
 
     void setAction(KisAbstractInputAction *action);
 
+    void setWarningEnabled(bool enabled);
+
+Q_SIGNALS:
+    void inputConfigurationChanged();
+
 public Q_SLOTS:
     void setExpanded(bool expand);
 

@@ -249,8 +249,11 @@ bool KisActionShortcutsModel::setData(const QModelIndex &index, const QVariant &
         KisShortcutConfiguration *newData = value.value<KisShortcutConfiguration *>();
         KisShortcutConfiguration *oldData = d->shortcuts.at(index.row());
 
-        if (newData == oldData)
+        if (newData == oldData) {
+            // change was done on the object
+            emit dataChanged(index, index);
             return true;
+        }
 
         oldData->setKeys(newData->keys());
         oldData->setButtons(newData->buttons());
@@ -264,6 +267,8 @@ bool KisActionShortcutsModel::setData(const QModelIndex &index, const QVariant &
         d->shortcuts.at(index.row())->setMode(value.toUInt());
         break;
     }
+
+    emit dataChanged(index, index);
 
     return true;
 }

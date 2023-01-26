@@ -16,6 +16,7 @@
 
 class KisAbstractInputAction;
 class KisInputProfile;
+class KisShortcutConfiguration;
 
 /**
  * \brief A class to manage a list of profiles and actions.
@@ -112,6 +113,11 @@ public:
      * Save \c profile to \c storagePath
      */
     void saveProfile(KisInputProfile *profile, QString storagePath);
+
+    /**
+     * Return the configurations that have conflicts.
+     */
+    QList<KisShortcutConfiguration *> getConflictingShortcuts(KisInputProfile *profile);
 
     /**
      * Reset all profiles to the default state.

@@ -43,7 +43,10 @@ KisInputConfigurationPage::KisInputConfigurationPage(QWidget *parent, Qt::Window
 
     connect(ui->editProfilesButton, SIGNAL(clicked(bool)), SLOT(editProfilesButtonClicked()));
     connect(KisInputProfileManager::instance(), SIGNAL(profilesChanged()), SLOT(updateSelectedProfile()));
-    connect(KisInputProfileManager::instance(), SIGNAL(currentProfileChanged()), SLOT(checkForConflicts()));
+    connect(KisInputProfileManager::instance(),
+            &KisInputProfileManager::currentProfileChanged,
+            this,
+            &KisInputConfigurationPage::checkForConflicts);
 
     QList<KisAbstractInputAction *> actions = KisInputProfileManager::instance()->actions();
     Q_FOREACH(KisAbstractInputAction * action, actions) {
@@ -95,7 +98,9 @@ void KisInputConfigurationPage::checkForConflicts()
     Q_FOREACH (KisShortcutConfiguration *shortcut, conflictingShortcuts) {
         if (shortcut->action()) {
             if (m_d->actionInputConfigurationMap.contains(shortcut->action())) {
-                m_d->actionInputConfigurationMap[shortcut->action()]->setWarningEnabled(true);
+                m_d->actionInputConfigurationMap[shortcut->action()]->setWarningEnabled(
+                    true,
+                    shortcut->getInputText());
             } else {
                 qWarning() << "KisInputConfigurationPageItem does not exist for the specified action:"
                            << shortcut->action()->name();

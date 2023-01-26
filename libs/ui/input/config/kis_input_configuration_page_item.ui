@@ -106,12 +106,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="warningConflictLabel">
+      <widget class="QPushButton" name="warningConflictButton">
        <property name="toolTip">
         <string>Conflict found for a Shortcut in this Action.</string>
-       </property>
-       <property name="text">
-        <string>TextLabel</string>
        </property>
       </widget>
      </item>

@@ -229,6 +229,11 @@ public:
     bool isNoOp() const;
 
     /**
+     * \return an input string for the shortcut type.
+     */
+    QString getInputText() const;
+
+    /**
      * Convert a set of mouse buttons into a user-readable
      * string.
      *

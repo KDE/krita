@@ -32,7 +32,7 @@ public:
 
     void setAction(KisAbstractInputAction *action);
 
-    void setWarningEnabled(bool enabled);
+    void setWarningEnabled(bool enabled, QString additionalToolTipText = QString());
 
 Q_SIGNALS:
     void inputConfigurationChanged();
@@ -47,6 +47,8 @@ private:
     Ui::KisInputConfigurationPageItem *ui {nullptr};
     KisAbstractInputAction *m_action {nullptr};
     KisActionShortcutsModel *m_shortcutsModel {nullptr};
+
+    const QString m_defaultToolTipText;
 };
 
 #endif // KISINPUTCONFIGURATIONPAGEITEM_H

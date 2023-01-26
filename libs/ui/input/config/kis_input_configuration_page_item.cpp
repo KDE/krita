@@ -20,9 +20,11 @@
 
 #include <QAction>
 #include <QMessageBox>
+#include <QToolTip>
 
 KisInputConfigurationPageItem::KisInputConfigurationPageItem(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f)
+    , m_defaultToolTipText(i18n("Conflict found for a Shortcut in this Action."))
 {
     ui = new Ui::KisInputConfigurationPageItem;
     this->setContentsMargins(0,0,0,0);
@@ -36,11 +38,16 @@ KisInputConfigurationPageItem::KisInputConfigurationPageItem(QWidget *parent, Qt
     ui->shortcutsView->header()->setSectionResizeMode(QHeaderView::Stretch);
     setExpanded(false);
 
-    ui->warningConflictLabel->setPixmap(KisIconUtils::loadIcon("warning").pixmap(16, 16));
-    ui->warningConflictLabel->hide();
-    connect(m_shortcutsModel,
-            SIGNAL(dataChanged(const QModelIndex, const QModelIndex)),
-            SIGNAL(inputConfigurationChanged()));
+    ui->warningConflictButton->setIcon(KisIconUtils::loadIcon("warning"));
+    ui->warningConflictButton->setFlat(true);
+    ui->warningConflictButton->hide();
+    connect(ui->warningConflictButton, &QPushButton::clicked, [&]() {
+        QToolTip::showText(QCursor::pos(), ui->warningConflictButton->toolTip());
+    });
+
+    connect(m_shortcutsModel, &KisActionShortcutsModel::dataChanged, this, [&]() {
+        emit inputConfigurationChanged();
+    });
 
     QAction *deleteAction = new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete Shortcut"), ui->shortcutsView);
     connect(deleteAction, SIGNAL(triggered(bool)), SLOT(deleteShortcut()));
@@ -65,9 +72,16 @@ void KisInputConfigurationPageItem::setAction(KisAbstractInputAction *action)
     qobject_cast<KisInputModeDelegate *>(ui->shortcutsView->itemDelegateForColumn(2))->setAction(action);
 }
 
-void KisInputConfigurationPageItem::setWarningEnabled(bool enabled)
+void KisInputConfigurationPageItem::setWarningEnabled(bool enabled, QString additionalToolTipText)
 {
-    ui->warningConflictLabel->setVisible(enabled);
+    ui->warningConflictButton->setVisible(enabled);
+    if (!enabled) {
+        ui->warningConflictButton->setToolTip(m_defaultToolTipText);
+    } else if (!additionalToolTipText.isEmpty()) {
+        const QString toolTipText =
+            ui->warningConflictButton->toolTip() + "\n" + i18n("Conflicting Input: ") + additionalToolTipText;
+        ui->warningConflictButton->setToolTip(toolTipText);
+    }
 }
 
 void KisInputConfigurationPageItem::setExpanded(bool expand)

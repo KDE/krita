@@ -10,6 +10,7 @@
 #include <kis_debug.h>
 
 #include <KLocalizedString>
+#include <QApplication>
 #include <QMetaClassInfo>
 #include <QKeySequence>
 

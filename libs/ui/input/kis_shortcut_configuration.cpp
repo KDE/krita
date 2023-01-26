@@ -270,6 +270,23 @@ bool KisShortcutConfiguration::isNoOp() const
             && (d->gesture == NoGesture || d->gesture == MaxGesture));
 }
 
+QString KisShortcutConfiguration::getInputText() const
+{
+    switch (d->type) {
+        case KeyCombinationType:
+            return keysToText(d->keys);
+        case MouseButtonType:
+            return buttonsInputToText(d->keys, d->buttons);
+        case MouseWheelType:
+            return wheelInputToText(d->keys, d->wheel);
+        case GestureType:
+        case MacOSGestureType:
+            return gestureToText(d->gesture);
+        default:
+            return QString();
+    }
+}
+
 QString KisShortcutConfiguration::buttonsToText(Qt::MouseButtons buttons)
 {
     QString text;

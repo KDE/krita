@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-25 00:55+0000\n"
-"PO-Revision-Date: 2023-01-20 09:20+0100\n"
+"PO-Revision-Date: 2023-01-25 07:02+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -13669,7 +13669,7 @@ msgstr "&მთელ-ეკრანზე"
 #, kde-format
 msgctxt "action"
 msgid "Display the window in full screen"
-msgstr ""
+msgstr "ფანჯრის სრულ-ეკრანზე გატანა"
 
 #. i18n: context: iconText @ Action (fullscreen), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:631
@@ -35413,7 +35413,7 @@ msgstr ""
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1441
 #, kde-format
 msgid "Save Assistant"
-msgstr ""
+msgstr "დამხმარის შენახვა"
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1539
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1543
@@ -39459,7 +39459,7 @@ msgstr ""
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:26
 #, kde-format
 msgid "Horizontal Lines"
-msgstr ""
+msgstr "ჰორიზონტალური ხაზები"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGuidesHorizontal)
 #. i18n: ectx: property (text), widget (QCheckBox, chkGuidesVertical)
@@ -39473,7 +39473,7 @@ msgstr ""
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:50
 #, kde-format
 msgid "Vertical Lines"
-msgstr ""
+msgstr "ვერტიკალური ხაზები"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:74
@@ -43992,7 +43992,7 @@ msgstr "ზომები:"
 #, kde-format
 msgctxt "Ratio as in fill layer options"
 msgid "Ratio:"
-msgstr ""
+msgstr "პროპორციები: "
 
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:48
 #, kde-format
@@ -49401,7 +49401,7 @@ msgstr ""
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:310
 #, kde-format
 msgid "Ratio:"
-msgstr ""
+msgstr "პროპორციები: "
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpFade)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:227
@@ -49747,7 +49747,7 @@ msgstr "ტექსტი:"
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:139
 #, kde-format
 msgid "The Quick Brown Fox Jumps Over The Lazy Dog"
-msgstr ""
+msgstr "ბაყაყი წყალში ყიყინებს"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, pipeModeChbox)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:171

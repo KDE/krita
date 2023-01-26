@@ -116,6 +116,11 @@ KisUndoView::KisUndoView(QWidget *parent)
 {
     d->init(this);
 
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 }
 
 /*!
@@ -123,10 +128,8 @@ KisUndoView::KisUndoView(QWidget *parent)
 */
 
 KisUndoView::KisUndoView(KUndo2QStack *stack, QWidget *parent)
-    : QListView(parent)
-    , d(new KisUndoViewPrivate)
+    : KisUndoView(parent)
 {
-    d->init(this);
     setStack(stack);
 }
 
@@ -139,17 +142,9 @@ KisUndoView::KisUndoView(KUndo2QStack *stack, QWidget *parent)
 */
 
 KisUndoView::KisUndoView(KUndo2Group *group, QWidget *parent)
-    : QListView(parent)
-    , d(new KisUndoViewPrivate)
+    : KisUndoView(parent)
 {
-    d->init(this);
     setGroup(group);
-
-    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
-    if (scroller) {
-        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
-                this, SLOT(slotScrollerStateChanged(QScroller::State)));
-    }
 }
 
 #endif // QT_NO_UNDOGROUP

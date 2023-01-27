@@ -1,5 +1,5 @@
 /*
- *  SPDX-FileCopyrightText: 2020 Agata Cacko <cacko.azh@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 Halla Rempt <halla@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

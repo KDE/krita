@@ -16,5 +16,10 @@
 	<true/>
 	<key>com.apple.security.files.user-selected.read-write</key>
 	<true/>
+	<!-- Temporary, use only for transition phase -->
+	<key>com.apple.security.temporary-exception.files.home-relative-path.read-write</key>
+	<array>
+	<string>/</string>
+	</array>
 </dict>
 </plist>

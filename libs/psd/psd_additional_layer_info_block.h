@@ -696,6 +696,7 @@ public:
     QDomDocument fillConfig;
     psd_fill_type fillType {psd_fill_solid_color};
 
+    QTransform textTransform;
     QDomDocument textData;
 
     psd_section_type sectionDividerType;

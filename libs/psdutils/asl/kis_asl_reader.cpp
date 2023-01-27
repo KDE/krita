@@ -797,20 +797,20 @@ QDomDocument readFillLayerImpl(QIODevice &device)
 }
 
 template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
-QDomDocument readTypeToolObjectSettingsImpl(QIODevice &device);
+QDomDocument readTypeToolObjectSettingsImpl(QIODevice &device, QTransform &transform);
 
-QDomDocument KisAslReader::readTypeToolObjectSettings(QIODevice &device, psd_byte_order byteOrder)
+QDomDocument KisAslReader::readTypeToolObjectSettings(QIODevice &device, QTransform &transform, psd_byte_order byteOrder)
 {
     switch (byteOrder) {
     case psd_byte_order::psdLittleEndian:
-        return readTypeToolObjectSettingsImpl<psd_byte_order::psdLittleEndian>(device);
+        return readTypeToolObjectSettingsImpl<psd_byte_order::psdLittleEndian>(device, transform);
     default:
-        return readTypeToolObjectSettingsImpl(device);
+        return readTypeToolObjectSettingsImpl(device, transform);
     }
 }
 
 template<psd_byte_order byteOrder>
-QDomDocument readTypeToolObjectSettingsImpl(QIODevice &device)
+QDomDocument readTypeToolObjectSettingsImpl(QIODevice &device, QTransform &transform)
 {
     QDomDocument doc;
 
@@ -828,17 +828,17 @@ QDomDocument readTypeToolObjectSettingsImpl(QIODevice &device)
         }
 
         // transform matrix.
-        quint64 xx = GARBAGE_VALUE_MARK;
+        double xx = GARBAGE_VALUE_MARK;
         SAFE_READ_EX(byteOrder, device, xx);
-        quint64 xy = GARBAGE_VALUE_MARK;
+        double xy = GARBAGE_VALUE_MARK;
         SAFE_READ_EX(byteOrder, device, xy);
-        quint64 yx = GARBAGE_VALUE_MARK;
+        double yx = GARBAGE_VALUE_MARK;
         SAFE_READ_EX(byteOrder, device, yx);
-        quint64 yy = GARBAGE_VALUE_MARK;
+        double yy = GARBAGE_VALUE_MARK;
         SAFE_READ_EX(byteOrder, device, yy);
-        quint64 tx = GARBAGE_VALUE_MARK;
+        double tx = GARBAGE_VALUE_MARK;
         SAFE_READ_EX(byteOrder, device, tx);
-        quint64 ty = GARBAGE_VALUE_MARK;
+        double ty = GARBAGE_VALUE_MARK;
         SAFE_READ_EX(byteOrder, device, ty);
 
         {
@@ -848,18 +848,10 @@ QDomDocument readTypeToolObjectSettingsImpl(QIODevice &device)
             SAFE_READ_SIGNATURE_EX(byteOrder, device, descriptorVersion, 16);
         }
 
+        transform = QTransform(xx, xy, yx, yy, tx, ty);
+
         QDomElement root = doc.createElement("asl");
         doc.appendChild(root);
-
-        QDomElement transform = doc.createElement("transform");
-        transform.setAttribute("xx", QString::number(xx));
-        transform.setAttribute("xy", QString::number(xy));
-        transform.setAttribute("yx", QString::number(yx));
-        transform.setAttribute("yy", QString::number(yy));
-        transform.setAttribute("tx", QString::number(tx));
-        transform.setAttribute("ty", QString::number(ty));
-        //root.appendChild(transform);
-
         // text layer data
         Private::readDescriptor<byteOrder>(device, "", &root, &doc);
 
@@ -873,7 +865,7 @@ QDomDocument readTypeToolObjectSettingsImpl(QIODevice &device)
 
         Private::readDescriptor<byteOrder>(device, "", &root, &doc);
 
-        // bounding box
+        /*// bounding box
         quint64 left = GARBAGE_VALUE_MARK;
         SAFE_READ_EX(byteOrder, device, left);
         quint64 top = GARBAGE_VALUE_MARK;
@@ -882,13 +874,7 @@ QDomDocument readTypeToolObjectSettingsImpl(QIODevice &device)
         SAFE_READ_EX(byteOrder, device, right);
         quint64 bottom = GARBAGE_VALUE_MARK;
         SAFE_READ_EX(byteOrder, device, bottom);
-
-        QDomElement bbox = doc.createElement("boundingBox");
-        bbox.setAttribute("left", QString::number(left));
-        bbox.setAttribute("top", QString::number(top));
-        bbox.setAttribute("right", QString::number(right));
-        bbox.setAttribute("bottom", QString::number(bottom));
-        //root.appendChild(bbox);
+        */
 
 
     } catch (KisAslReaderUtils::ASLParseException &e) {

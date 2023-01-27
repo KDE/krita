@@ -21,8 +21,7 @@ public:
 
     static QDomDocument readLfx2PsdSection(QIODevice &device, psd_byte_order byteOrder = psd_byte_order::psdBigEndian);
     static QDomDocument readFillLayer(QIODevice &device, psd_byte_order byteOrder = psd_byte_order::psdBigEndian);
-    static QDomDocument readTypeToolObjectSettings(QIODevice &device, psd_byte_order byteOrder = psd_byte_order::psdBigEndian);
-    //static QDomDocument readTypeToolWarp(QIODevice &device, psd_byte_order byteOrder = psd_byte_order::psdBigEndian);
+    static QDomDocument readTypeToolObjectSettings(QIODevice &device, QTransform &transform, psd_byte_order byteOrder = psd_byte_order::psdBigEndian);
     static QDomDocument readPsdSectionPattern(QIODevice &device, qint64 bytesLeft, psd_byte_order byteOrder = psd_byte_order::psdBigEndian);
 };
 

@@ -1247,20 +1247,229 @@ QColor colorFromPSDStyleSheet(QJsonObject color) {
     }
     return c;
 }
+QString stylesForPSDParagraphSheet(QJsonObject PSDParagraphSheet) {
+    QStringList styles;
+
+    for (int i=0; i < PSDParagraphSheet.keys().size(); i++) {
+        const QString key = PSDParagraphSheet.keys().at(i);
+        double val = PSDParagraphSheet.value(key).toDouble();
+        if (key == "Justification") {
+            QString textAlign = "start";
+            switch (PSDParagraphSheet.value(key).toInt()) {
+            case 0:
+                textAlign = "start";
+                break;
+            case 1:
+                textAlign = "end";
+                break;
+            case 2:
+                textAlign = "center";
+                break;
+            case 3:
+                textAlign = "justify start";
+                break;
+            case 4:
+                textAlign = "justify end"; // guess
+                break;
+            case 5:
+                textAlign = "justify center"; // guess
+                break;
+            case 6:
+                textAlign = "justify";
+                break;
+            default:
+                textAlign = "start";
+            }
+
+            styles.append("text-align:"+textAlign);
+        } else if (key == "FirstLineIndent") {
+            styles.append("text-indent:"+QString::number(val));
+            continue;
+        } else if (key == "StartIndent") {
+            // left margin (also for rtl?)
+            continue;
+        } else if (key == "EndIndent") {
+            // right margin (also for rtl?)
+            continue;
+        } else if (key == "SpaceBefore") {
+            // top margin for paragraph
+            continue;
+        } else if (key == "SpaceAfter") {
+            // bottom margin for paragraph
+            continue;
+        } else if (key == "AutoHyphenate") {
+            // hyphenate: auto;
+            continue;
+        } else if (key == "HyphenatedWordSize") {
+            // minimum wordsize at which to start hyphenating.
+            continue;
+        } else if (key == "PreHyphen") {
+            // minimum number of letters before hyphenation is allowed to start in a word.
+            // CSS-Text-4 hyphenate-limit-chars value 1.
+            continue;
+        } else if (key == "PostHyphen") {
+            // minimum amount of letters a hyphnated word is allowed to end with.
+            // CSS-Text-4 hyphenate-limit-chars value 2.
+            continue;
+        } else if (key == "ConsecutiveHyphens") {
+            // maximum consequetive lines with hyphenation.
+            // CSS-Text-4 hyphenate-limit-lines.
+            continue;
+        } else if (key == "Zone") {
+            // Hyphenation zone to control where hyphenation is allowed to start.
+            // CSS-Text-4 hyphenation-limit-zone.
+            // Note: there's also a hyphenate capitalized words, but no idea which key.
+            continue;
+        } else if (key == "WordSpacing") {
+            // val 0 is minimum allowed spacing, and val 2 is maximum allowed spacing, both for justified text.
+            // 0 to 1000%, 100% default.
+            val = PSDParagraphSheet.value(key).toArray()[1].toDouble();
+            styles.append("word-spacing:"+QString::number(val));
+            continue;
+        } else if (key == "LetterSpacing") {
+            // val 0 is minimum allowed spacing, and val 2 is maximum allowed spacing, both for justified text.
+            // -100% to 500%, 0% default.
+            val = PSDParagraphSheet.value(key).toArray()[1].toDouble();
+            styles.append("letter-spacing:"+QString::number(val));
+            continue;
+        } else if (key == "GlyphSpacing") {
+            // scaling of the glyphs, list of vals, 50% to 200%, default 100%.
+            continue;
+        } else if (key == "AutoLeading") {
+            styles.append("line-height:"+QString::number(val));
+            continue;
+        } else if (key == "Hanging") {
+            // Roman hanging punctuation, bool
+            continue;
+        } else if (key == "Burasagari") {
+            // CJK hanging punctuation, bool
+            if (PSDParagraphSheet.value(key).toBool()) {
+                styles.append("hanging-punctuation:allow-end");
+            }
+            continue;
+        } else if (key == "KinsokuOrder") {
+            // strict vs loose linebreaking... sorta.
+            continue;
+        } else if (key == "EveryLineComposer") {
+            // bool representing which text-wrapping method to use.
+            //'single-line' is 'stable/greedy' line breaking,
+            //'everyline' uses a penalty based system like Knuth's method.
+            continue;
+        } else {
+            qWarning() << "Unsupported PSD paragraph style key" << key << PSDParagraphSheet.value(key);
+        }
+    }
+
+    return styles.join("; ");
+}
 
 QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, QString> fontNames) {
     QStringList styles;
 
+    int weight = 400;
+    bool italic = false;
     QStringList textDecor;
+    QStringList baselineShift;
     for (int i=0; i < PSDStyleSheet.keys().size(); i++) {
-        QString key = PSDStyleSheet.keys().at(i);
-
-        if (key == "FontSize") {
-            styles.append("font-size:"+QString::number(PSDStyleSheet.value(key).toDouble()));
-        } else if (key == "Font") {
+        const QString key = PSDStyleSheet.keys().at(i);
+        if (key == "Font") {
             QString family = fontNames.value(PSDStyleSheet.value(key).toInt());
             styles.append("font-family:"+family);
-        } else if (key == "FillColor") {
+            continue;
+        } else if (key == "FontSize") {
+            // Note: FontSize might be in real points (72.27), but no idea where this is defined.
+            styles.append("font-size:"+QString::number(PSDStyleSheet.value(key).toDouble()));
+            continue;
+        } else if (key == "AutoKerning") {
+            //
+            continue;
+        } else if (key == "Kerning") {
+            // adjusts kerning value, we don't support this.
+            continue;
+        } else if (key == "FauxBold") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                weight = 700;
+            }
+            continue;
+        } else if (key == "FauxItalic") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                italic = true;
+            }
+            // synthetic Italic, bool
+            continue;
+        } else if (key == "AutoLeading") {
+            // bool for line-height...
+            continue;
+        } else if (key == "Leading") {
+            bool autoleading = true;
+            if (PSDStyleSheet.keys().contains("AutoLeading")) {
+                autoleading = PSDStyleSheet.value("AutoLeading").toBool();
+            }
+            if (!autoleading) {
+                styles.append("font-size:"+QString::number(PSDStyleSheet.value(key).toDouble()));
+            }
+            // value for line-height
+            continue;
+        } else if (key == "HorizontalScale") {
+            // adjust horizontal scale of glyphs, we don't support this.
+            continue;
+        } else if (key == "VerticalScale") {
+            // adjusts vertical scale glyphs, we don't support this.
+            continue;
+        } else if (key == "Tracking") {
+            double fontSize = PSDStyleSheet.value("FontSize").toDouble();
+            double letterSpacing = fontSize * (0.01 * PSDStyleSheet.value(key).toDouble());
+            styles.append("letter-spacing:"+QString::number(letterSpacing));
+            continue;
+        } else if (key == "BaselineShift") {
+            if (PSDStyleSheet.value(key).toDouble() > 0) {
+                baselineShift.append(QString::number(PSDStyleSheet.value(key).toDouble()));
+            }
+            continue;
+        } /*else if (key == "FontCaps") {
+            // No idea, might be text-transform:uppercase or font-variant:small-caps...
+            continue;
+        } */ else if (key == "FontBaseline") {
+            // 1 = super
+            // 2 = sub
+            if (PSDStyleSheet.value(key).toInt() == 1) {
+                baselineShift.append("super");
+            } else if (PSDStyleSheet.value(key).toInt() == 2) {
+                baselineShift.append("sub");
+            }
+            continue;
+        } else if (key == "Underline") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                textDecor.append("underline");
+            }
+            continue;
+        } else if (key == "Strikethrough") {
+            if (PSDStyleSheet.value(key).toBool()) {
+                textDecor.append("line-through");
+            }
+            continue;
+        } else if (key == "Ligatures") {
+            // font-variant: common-ligatures
+            continue;
+        } else if (key == "DLigatures") {
+            // font-variant: discretionary ligatures
+            continue;
+        } /* else if (key == "BaselineDirection") {
+            // 1: vertical, 2: horizontal... but why is this a character style?
+            continue;
+        }*/ else if (key == "Tsume") {
+            // Reduce spacing around a single character. Might be related to css-4-text text-spacing?
+            continue;
+        } else if (key == "StyleRunAlignment") {
+            // No idea?
+            continue;
+        }/* else if (key == "Language") {
+            // This is an enum... which terrifies me.
+            continue;
+        }*/ else if (key == "NoBreak") {
+            // Prevents word from breaking... I guess word-break???
+            continue;
+        }  else if (key == "FillColor") {
             bool fill = true;
             if (PSDStyleSheet.keys().contains("FillFlag")) {
                 fill = PSDStyleSheet.value("FillFlag").toBool();
@@ -1282,20 +1491,44 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, QString> fon
             } else {
                 styles.append("stroke:none");
             }
+            continue;
         } else if (key == "OutlineWidth") {
             styles.append("stroke-width:"+QString::number(PSDStyleSheet.value(key).toDouble()));
-        } else if (key == "Tracking") {
-            double fontSize = PSDStyleSheet.value("FontSize").toDouble();
-            double letterSpacing = fontSize * (0.01 * PSDStyleSheet.value(key).toDouble());
-            styles.append("letter-spacing:"+QString::number(letterSpacing));
-        } else if (key == "Underline" && PSDStyleSheet.value(key).toBool()) {
-            textDecor.append("underline");
-        } if (key == "Strikethrough" && PSDStyleSheet.value(key).toBool()) {
-            textDecor.append("line-through");
+        } else if (key == "FillFirst") {
+            // draw fill on top of stroke? paint-order: stroke markers fill, I guess.
+            continue;
+        } /*else if (key == "YUnderline") {
+            // Option relating to vertical underline left or right
+            continue;
+        } else if (key == "CharacterDirection") {
+            // text-orientation?
+            continue;
+        }*/ else if (key == "HindiNumbers") {
+            // bool, might be opentype feature.
+            continue;
+        } else if (key == "Kashida") {
+            // number, s related to drawing/inserting Kashida/Tatweel into Arabic justified text... We don't support this.
+            continue;
+        } else if (key == "DiacriticPos") {
+            // number, but no clue...
+            continue;
+        } else {
+            if (key != "FillFlag" && key != "StrokeFlag") {
+                qWarning() << "Unsupported PSD character stylesheet style key" << key << PSDStyleSheet.value(key);
+            }
         }
+    }
+    if (weight != 400) {
+        styles.append("font-weight:"+QString::number(weight));
+    }
+    if (italic) {
+        styles.append("font-style:italic");
     }
     if (!textDecor.isEmpty()) {
         styles.append("text-decoration:"+textDecor.join(" "));
+    }
+    if (!baselineShift.isEmpty()) {
+        styles.append("baseline-shift:"+baselineShift.join(" "));
     }
     return styles.join("; ");
 }
@@ -1318,7 +1551,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
         d->errors << dev.errorString();
         return false;
     }
-    qDebug() << "Parsed JSON Object" << root;
+    //qDebug() << "Parsed JSON Object" << root;
 
     // This should proly be turned into a list of structs, where
     // we search fontconfig on the name with FC_POSTSCRIPT_NAME,
@@ -1326,24 +1559,64 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
     // so we can use that to set the proper svg values.
     QMap<int, QString> fontNames;
 
-    QJsonObject engineDict = root.value("EngineDict").toObject();
+    QJsonObject engineDict = root["EngineDict"].toObject();
     if (engineDict.isEmpty()) {
         d->errors << "No engine dict found in PSD engine data";
         return false;
     }
-    QJsonObject resourceDict = root.value("ResourceDict").toObject();
+
+    QJsonObject resourceDict = root["ResourceDict"].toObject();
     if (resourceDict.isEmpty()) {
         d->errors << "No engine dict found in PSD engine data";
         return false;
     } else {
-        QJsonArray fonts = resourceDict.value("FontSet").toArray();
+        QJsonArray fonts = resourceDict["FontSet"].toArray();
         for (int i = 0; i < fonts.size(); i++) {
             QJsonObject font = fonts.at(i).toObject();
             fontNames.insert(i, font.value("Name").toString());
         }
     }
-    QJsonObject curve = root.value("Curve").toObject();
-    QJsonObject documentResources = root.value("DocumentResources").toObject();
+    QString paragraphStyle;
+
+    QJsonObject rendered = engineDict["Rendered"].toObject();
+    // rendering info...
+    if (!rendered.isEmpty()) {
+        QJsonObject shapeChild = rendered["Shapes"].toObject()["Children"].toArray()[0].toObject();
+        int shapeType = shapeChild["ShapeType"].toInt();
+        if (shapeType == 1) {
+            QJsonArray BoxBounds = shapeChild["Cookie"].toObject()["Photoshop"].toObject()["BoxBounds"].toArray();
+            paragraphStyle = "inline-size:"+QString::number(BoxBounds[2].toInt());
+        }
+    }
+
+    QPainterPath textCurve;
+    bool reversed = false;
+    QJsonObject curve = root["Curve"].toObject();
+    if (!curve.isEmpty()) {
+        QJsonArray points = curve["Points"].toArray();
+        QJsonArray range = curve["TextOnPathTRange"].toArray();
+        reversed = curve["Reversed"].toBool();
+        int length = points.size()/8;
+        for (int i = 0; i < length; i++) {
+            int iAdjust = i*8;
+            QPointF p1(points[iAdjust  ].toDouble(), points[iAdjust+1].toDouble());
+            QPointF p2(points[iAdjust+2].toDouble(), points[iAdjust+3].toDouble());
+            QPointF p3(points[iAdjust+4].toDouble(), points[iAdjust+5].toDouble());
+            QPointF p4(points[iAdjust+6].toDouble(), points[iAdjust+7].toDouble());
+
+            if (i == 0 || textCurve.currentPosition() != p1) {
+                textCurve.moveTo(p1);
+            }
+            if (p1==p2 && p3==p4) {
+                textCurve.lineTo(p4);
+            } else {
+                textCurve.cubicTo(p2, p3, p4);
+            }
+        }
+        qDebug() << curve;
+    }
+
+    QJsonObject documentResources = root["DocumentResources"].toObject();
 
     QBuffer svgBuffer;
     svgBuffer.open(QIODevice::WriteOnly);
@@ -1355,14 +1628,40 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
 
     svgWriter.writeStartElement("text");
 
-    QJsonObject editor = engineDict.value("Editor").toObject();
+    QJsonObject editor = engineDict["Editor"].toObject();
     QString text = "";
     if (editor.isEmpty()) {
         d->errors << "No editor dict found in PSD engine data";
         return false;
     } else {
-        text = editor.value("Text").toString();
+        text = editor["Text"].toString();
         text.replace("\r", "\n");
+    }
+
+    if (engineDict.contains("AntiAlias")) {
+        int antiAliasing = engineDict["AntiAlias"].toInt();
+        //0 = None, 1 = Sharp, 2 = Crisp, 3 = Strong, 4 = Smooth
+        if (antiAliasing) {
+            svgWriter.writeAttribute("text-rendering", "auto");
+        } else {
+            svgWriter.writeAttribute("text-rendering", "OptimizeSpeed");
+        }
+    }
+
+    QJsonObject paragraphRun = engineDict["ParagraphRun"].toObject();
+    if (!paragraphRun.isEmpty()) {
+        //QJsonArray runLengthArray = paragraphRun.value("RunLengthArray").toArray();
+        QJsonArray runArray = paragraphRun["RunArray"].toArray();
+        QJsonObject styleSheet = runArray[0].toObject()["ParagraphSheet"].toObject()["Properties"].toObject();
+        svgWriter.writeAttribute("style", stylesForPSDParagraphSheet(styleSheet));
+    }
+
+    if (!textCurve.isEmpty()) {
+        svgWriter.writeStartElement("textPath");
+        svgWriter.writeAttribute("path", KoPathShape::createShapeFromPainterPath(textCurve)->toString());
+        if (reversed) {
+            svgWriter.writeAttribute("side", "right");
+        }
     }
 
     QJsonObject styleRun = engineDict.value("StyleRun").toObject();
@@ -1390,7 +1689,7 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
                     svgWriter.writeEndElement();
                     styleSheet = newStyle;
                     pos += length;
-                    length = 0;
+                    length = runLengthArray.at(i).toInt();
                 }
             }
             svgWriter.writeStartElement("tspan");
@@ -1398,6 +1697,10 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
             svgWriter.writeCharacters(text.mid(pos));
             svgWriter.writeEndElement();
         }
+    }
+
+    if (!textCurve.isEmpty()) {
+        svgWriter.writeEndElement();
     }
 
     svgWriter.writeEndElement();//text root element.

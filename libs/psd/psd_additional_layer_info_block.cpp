@@ -235,7 +235,7 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         } else if (key == "vmsk" || key == "vsms") { // If key is "vsms" then we are writing for (Photoshop CS6) and the document will have a "vscg" key
 
         } else if (key == "TySh") {
-            textData = KisAslReader::readTypeToolObjectSettings(io, byteOrder);
+            textData = KisAslReader::readTypeToolObjectSettings(io, textTransform, byteOrder);
         } else if (key == "ffxi") {
         } else if (key == "lnsr") {
         } else if (key == "shpa") {

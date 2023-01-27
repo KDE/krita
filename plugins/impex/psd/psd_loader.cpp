@@ -352,10 +352,6 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 KisAslCallbackObjectCatcher catcher;
                 psd_layer_type_shape text;
                 catcher.subscribeRawData("/TxLr/EngineData", std::bind(&psd_layer_type_shape::setEngineData, &text, _1));
-                catcher.subscribeUnitFloat("/TxLr/boundingBox/Left", "#Pnt", std::bind(&psd_layer_type_shape::setLeft, &text, _1));
-                catcher.subscribeUnitFloat("/TxLr/boundingBox/Top ", "#Pnt", std::bind(&psd_layer_type_shape::setTop, &text, _1));
-                catcher.subscribeUnitFloat("/TxLr/boundingBox/Rght", "#Pnt", std::bind(&psd_layer_type_shape::setRight, &text, _1));
-                catcher.subscribeUnitFloat("/TxLr/boundingBox/Btom", "#Pnt", std::bind(&psd_layer_type_shape::setBottom, &text, _1));
                 KisAslXmlParser parser;
                 parser.parseXML(layerRecord->infoBlocks.textData, catcher);
                 KoSvgTextShape *shape = new KoSvgTextShape();
@@ -367,7 +363,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                     qDebug() << converter.errors();
                 }
                 converter.convertFromSvg(svg, styles, m_image->bounds(), m_image->xRes()*72.0);
-                shape->setPosition(text.bounds.topLeft() - shape->boundingRect().topLeft());
+                shape->setTransformation(layerRecord->infoBlocks.textTransform);
                 textLayer->addShape(shape);
                 layer = textLayer;
             } else {

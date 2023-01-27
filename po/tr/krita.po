@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-25 00:55+0000\n"
-"PO-Revision-Date: 2023-01-24 21:51+0300\n"
+"PO-Revision-Date: 2023-01-26 21:44+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -29640,7 +29640,7 @@ msgstr "Dosyaları Kurtar"
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:171
 #, kde-format
 msgid "Discard All"
-msgstr "Hepsini Görmezden Gel"
+msgstr "Tümünü At"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:176
 #, kde-format

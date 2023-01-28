@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-13 03:53+0000\n"
-"PO-Revision-Date: 2023-01-26 21:44+0300\n"
+"POT-Creation-Date: 2023-01-28 02:48+0000\n"
+"PO-Revision-Date: 2023-01-28 00:41+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16641,7 +16641,7 @@ msgctxt "property of a filter layer, noun"
 msgid "Filter"
 msgstr "Süzgeç"
 
-#: libs/image/kis_asl_layer_style_serializer.cpp:1273
+#: libs/image/kis_asl_layer_style_serializer.cpp:1283
 #, kde-format
 msgctxt "Auto-generated layer style name for embedded styles (style itself)"
 msgid "<%1> (embedded)"
@@ -26885,7 +26885,7 @@ msgstr "Satır:"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:419
 #, kde-format
 msgid "Foreground color"
-msgstr "Önalan rengi"
+msgstr "Ön plan rengi"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, lineColorBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -26895,7 +26895,7 @@ msgstr "Önalan rengi"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:420
 #, kde-format
 msgid "Background color"
-msgstr "Ark aplan rengi"
+msgstr "Arka plan rengi"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, lineColorBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -43121,17 +43121,17 @@ msgstr "Sürücü kanalı"
 #, kde-format
 msgctxt "action"
 msgid "Height to Normal Map Filter"
-msgstr "Yükseltiden Normal Eşlem Süzgecine"
+msgstr "Yükselti Eşleminden Normal Eşleme Süzgeci"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.cpp:29
 #, kde-format
 msgid "&Height to Normal Map..."
-msgstr "&Yükseltiden Normal Eşleme..."
+msgstr "&Yükselti Eşleminden Normal Eşleme..."
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.h:29
 #, kde-format
 msgid "Height to Normal Map"
-msgstr "Yükseltiden Normal Eşleme"
+msgstr "Yükselti Eşleminden Normal Eşleme"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:21
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:20

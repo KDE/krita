@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-13 03:53+0000\n"
+"POT-Creation-Date: 2023-01-28 02:48+0000\n"
 "PO-Revision-Date: 2007-08-24 15:02+0545\n"
 "Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -16896,7 +16896,7 @@ msgctxt "property of a filter layer, noun"
 msgid "Filter"
 msgstr "फिल्टर"
 
-#: libs/image/kis_asl_layer_style_serializer.cpp:1273
+#: libs/image/kis_asl_layer_style_serializer.cpp:1283
 #, kde-format
 msgctxt "Auto-generated layer style name for embedded styles (style itself)"
 msgid "<%1> (embedded)"

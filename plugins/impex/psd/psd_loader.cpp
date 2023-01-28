@@ -407,6 +407,14 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                     }
                 }
 
+                Q_FOREACH (const KoPatternSP &pattern, serializer.patterns()) {
+                    if (pattern && pattern->valid()) {
+                        resourceProxy.addResource(pattern);
+                    } else {
+                        qWarning() << "Invalid or empty pattern" << pattern;
+                    }
+                }
+
                 layerStyle->setName(layer->name());
                 layerStyle->setResourcesInterface(resourceProxy.detachedResourcesInterface());
                 if (!layerStyle->uuid().isNull()) {

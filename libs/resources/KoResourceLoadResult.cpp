@@ -11,6 +11,7 @@
 
 struct KoResourceLoadResult::Private
 {
+    // XXX: this should take a monostate for null resources
     boost::variant<KoResourceSP, KoEmbeddedResource, KoResourceSignature> value;
 };
 

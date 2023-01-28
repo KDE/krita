@@ -280,6 +280,12 @@ QVector<KoPatternSP> KisAslLayerStyleSerializer::fetchAllPatterns(const KisPSDLa
         allPatterns << style->bevelAndEmboss()->texturePattern(style->resourcesInterface());
     }
 
+    KIS_SAFE_ASSERT_RECOVER(!allPatterns.contains(KoPatternSP()))
+    {
+        warnKrita << "WARNING: one or more patterns from the style is null";
+        allPatterns.removeAll(KoPatternSP());
+    }
+
     return allPatterns;
 }
 
@@ -765,6 +771,11 @@ QVector<KoResourceSP> KisAslLayerStyleSerializer::fetchEmbeddedResources(const K
         KIS_ASSERT(embeddedResources.last().data());
     }
 
+    KIS_SAFE_ASSERT_RECOVER(!embeddedResources.contains(KoResourceSP()))
+    {
+        embeddedResources.removeAll(KoResourceSP());
+    }
+
     return embeddedResources;
 }
 
@@ -932,9 +943,9 @@ void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid,
 {
     Q_UNUSED(patternName);
 
-    KoPatternSP pattern = m_patternsStore[patternUuid];
+    KoPatternSP pattern;
 
-    if (!pattern) {
+    if (!m_patternsStore.contains(patternUuid)) {
         warnKrita << "WARNING: ASL style contains non-existent pattern reference! Searching for uuid: "
                   << patternUuid << " (name: " << patternName << ")";
 
@@ -943,9 +954,8 @@ void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid,
         KoPatternSP dumbPattern(new KoPattern(dumbImage, "invalid", ""));
         registerPatternObject(dumbPattern, patternUuid + QString("_invalid"));
         pattern = dumbPattern;
-        m_isValid = false;
-
-        m_patternsStore.remove(patternUuid);
+    } else {
+        pattern = m_patternsStore[patternUuid];
     }
 
     setPattern(pattern);

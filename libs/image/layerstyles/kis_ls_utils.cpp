@@ -417,6 +417,8 @@ namespace KisLsUtils
         } else if (config->fillType() == psd_fill_pattern) {
             KoPatternSP pattern = config->pattern(resourcesInterface);
 
+            KIS_SAFE_ASSERT_RECOVER_RETURN(pattern);
+
             if (pattern->hasAlpha()) {
                 pattern = env->cachedFlattenedPattern(pattern);
             }

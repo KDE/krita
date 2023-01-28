@@ -33,6 +33,12 @@ void KisRequiredResourcesOperators::detail::addResourceOrWarnIfNotLoaded(KoResou
 {
     switch (loadedResource.type()) {
     case KoResourceLoadResult::ExistingResource:
+        KIS_SAFE_ASSERT_RECOVER(loadedResource.resource())
+        {
+            // XXX: remove once KoResourceLoadResult takes std::monostate
+            qWarning() << "Attempt to retrieve a resource that is null";
+            return;
+        }
         *resources << loadedResource.resource();
         break;
     case KoResourceLoadResult::EmbeddedResource: {

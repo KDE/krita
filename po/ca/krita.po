@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-25 00:55+0000\n"
+"POT-Creation-Date: 2023-01-28 00:56+0000\n"
 "PO-Revision-Date: 2023-01-19 14:17+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -16408,10 +16408,13 @@ msgstr "Red&ueix"
 #. i18n: ectx: property (text), widget (QToolButton, bnClear)
 #. i18n: ectx: property (text), widget (QToolButton, bnSave)
 #. i18n: ectx: property (text), widget (QToolButton, bnSettings)
+#. i18n: ectx: property (text), widget (QToolButton, bnSavePalette)
 #. i18n: ectx: property (text), widget (QToolButton, bnAdd)
 #. i18n: ectx: property (text), widget (QToolButton, bnRemove)
+#. i18n: ectx: property (text), widget (QToolButton, bnRedo)
+#. i18n: ectx: property (text), widget (QToolButton, bnLock)
+#. i18n: ectx: property (text), widget (QToolButton, bnUndo)
 #. i18n: ectx: property (text), widget (QToolButton, bnEditPalette)
-#. i18n: ectx: property (text), widget (QToolButton, bnSavePalette)
 #. i18n: ectx: property (text), widget (QToolButton, btnCreateScene)
 #. i18n: ectx: property (text), widget (QToolButton, btnDeleteScene)
 #. i18n: ectx: property (text), widget (QToolButton, btnDeleteField)
@@ -16461,10 +16464,13 @@ msgstr "Red&ueix"
 #: plugins/dockers/logdocker/WdgLogDocker.ui:78
 #: plugins/dockers/logdocker/WdgLogDocker.ui:104
 #: plugins/dockers/lut/wdglut.ui:200 plugins/dockers/lut/wdglut.ui:234
-#: plugins/dockers/palettedocker/wdgpalettedock.ui:78
-#: plugins/dockers/palettedocker/wdgpalettedock.ui:124
-#: plugins/dockers/palettedocker/wdgpalettedock.ui:144
+#: plugins/dockers/palettedocker/wdgpalettedock.ui:68
+#: plugins/dockers/palettedocker/wdgpalettedock.ui:85
+#: plugins/dockers/palettedocker/wdgpalettedock.ui:108
+#: plugins/dockers/palettedocker/wdgpalettedock.ui:128
+#: plugins/dockers/palettedocker/wdgpalettedock.ui:142
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:165
+#: plugins/dockers/palettedocker/wdgpalettedock.ui:203
 #: plugins/dockers/storyboarddocker/wdgcommentmenu.ui:118
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:97
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:117
@@ -16680,8 +16686,8 @@ msgstr "Mida"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:275
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:406
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:417
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:105
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:115
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:133
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:134
@@ -19312,10 +19318,10 @@ msgstr "Apropa"
 msgid "Out"
 msgstr "Allunya"
 
-#: libs/pigment/resources/KoColorSet.cpp:489
-#: libs/pigment/resources/KoColorSet.cpp:832
-#: libs/pigment/resources/KoColorSet.cpp:909
-#: libs/pigment/resources/KoColorSet.cpp:1121
+#: libs/pigment/resources/KoColorSet.cpp:1046
+#: libs/pigment/resources/KoColorSet.cpp:1387
+#: libs/pigment/resources/KoColorSet.cpp:1466
+#: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:352
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:348 libs/ui/KisView.cpp:1134
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -19579,7 +19585,7 @@ msgstr "md5sum"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1657
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1661
 #: libs/ui/forms/wdgdisplaysettings.ui:196 libs/ui/KoDocumentInfo.cpp:37
-#: libs/widgets/KisDlgInternalColorSelector.cpp:322
+#: libs/widgets/KisDlgInternalColorSelector.cpp:323
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:853
 #, kde-format
@@ -22657,7 +22663,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1320
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:45
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:52
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:124
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:123
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:971
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:987
 #, no-c-format, kde-format
@@ -23333,7 +23339,7 @@ msgstr "Columnes de mostres:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:108 libs/ui/KisPaletteEditor.cpp:222
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:108 libs/ui/KisPaletteEditor.cpp:229
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr "Files de mostres en el grup:"
@@ -30473,54 +30479,70 @@ msgstr "Paleta nova"
 msgid "New palette name:"
 msgstr "Nom nou de la paleta:"
 
-#: libs/ui/KisPaletteEditor.cpp:104
+#: libs/ui/KisPaletteEditor.cpp:102
+#, fuzzy, kde-format
+#| msgctxt "description of a file type"
+#| msgid "Krita Color Palette"
+msgctxt "Palette File Type"
+msgid "Krita Palette (KPL)"
+msgstr "Paleta de colors del Krita"
+
+#: libs/ui/KisPaletteEditor.cpp:103
+#, fuzzy, kde-format
+#| msgctxt "description of a file type"
+#| msgid "GIMP Patterns"
+msgctxt "Palette File Type"
+msgid "GIMP Palette (GPL)"
+msgstr "Patrons del GIMP"
+
+#: libs/ui/KisPaletteEditor.cpp:106
 #, kde-format
 msgid "Save Palette in the Current Document"
 msgstr "Desa la paleta al document actual"
 
 # skip-rule: barb-uns
-#: libs/ui/KisPaletteEditor.cpp:133
+#: libs/ui/KisPaletteEditor.cpp:140
 #, kde-format
 msgid "Import Palette"
 msgstr "Importa una paleta"
 
-#: libs/ui/KisPaletteEditor.cpp:144
+#: libs/ui/KisPaletteEditor.cpp:151
 #, kde-format
 msgid "Do you want to store this palette in your current image?"
 msgstr "Voleu emmagatzemar aquesta paleta a la imatge actual?"
 
-#: libs/ui/KisPaletteEditor.cpp:218 libs/ui/KisPaletteEditor.cpp:275
+#: libs/ui/KisPaletteEditor.cpp:225 libs/ui/KisPaletteEditor.cpp:282
 #, kde-format
 msgid "New swatch group name:"
 msgstr "Nom nou del grup de mostres:"
 
-#: libs/ui/KisPaletteEditor.cpp:246
+#: libs/ui/KisPaletteEditor.cpp:253
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "Eliminació del grup de mostres"
 
-#: libs/ui/KisPaletteEditor.cpp:250 libs/widgets/kis_palette_view.cpp:171
+#: libs/ui/KisPaletteEditor.cpp:257 libs/widgets/kis_palette_view.cpp:168
 #, kde-format
 msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
 msgstr "Mantén els colors"
 
-#: libs/ui/KisPaletteEditor.cpp:322 libs/ui/KisPaletteEditor.cpp:412
+#: libs/ui/KisPaletteEditor.cpp:329 libs/ui/KisPaletteEditor.cpp:419
 #, kde-format
 msgctxt "Default name for a color swatch"
 msgid "Color %1"
 msgstr "Color %1"
 
-#: libs/ui/KisPaletteEditor.cpp:355 libs/ui/KisPaletteEditor.cpp:400
-#: libs/widgets/kis_palette_view.cpp:103
+#: libs/ui/KisPaletteEditor.cpp:362 libs/ui/KisPaletteEditor.cpp:407
+#: libs/widgets/kis_palette_view.cpp:102
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "Afegeix un color de mostra nou"
 
-#: libs/ui/KisPaletteEditor.cpp:369 libs/ui/KisPaletteEditor.cpp:419
-#: libs/widgets/kis_palette_view.cpp:114
+#: libs/ui/KisPaletteEditor.cpp:376 libs/ui/KisPaletteEditor.cpp:426
+#: libs/widgets/kis_palette_view.cpp:113
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -30531,37 +30553,37 @@ msgstr ""
 "sense barrejar les pintures que té disponibles. El contrari s'anomena un "
 "color de procés («process»)."
 
-#: libs/ui/KisPaletteEditor.cpp:373 libs/ui/KisPaletteEditor.cpp:422
-#: libs/widgets/kis_palette_view.cpp:116
+#: libs/ui/KisPaletteEditor.cpp:380 libs/ui/KisPaletteEditor.cpp:429
+#: libs/widgets/kis_palette_view.cpp:115
 #, kde-format
 msgid "Swatch ID:"
 msgstr "ID de la mostra:"
 
-#: libs/ui/KisPaletteEditor.cpp:374 libs/ui/KisPaletteEditor.cpp:423
-#: libs/widgets/kis_palette_view.cpp:117
+#: libs/ui/KisPaletteEditor.cpp:381 libs/ui/KisPaletteEditor.cpp:430
+#: libs/widgets/kis_palette_view.cpp:116
 #, kde-format
 msgid "Color swatch name:"
 msgstr "Nom de la mostra de color:"
 
-#: libs/ui/KisPaletteEditor.cpp:375 libs/ui/KisPaletteEditor.cpp:424
-#: libs/widgets/kis_palette_view.cpp:118
+#: libs/ui/KisPaletteEditor.cpp:382 libs/ui/KisPaletteEditor.cpp:431
+#: libs/widgets/kis_palette_view.cpp:117
 #, kde-format
 msgctxt "Color as the Color of a Swatch in a Palette"
 msgid "Color:"
 msgstr "Color:"
 
-#: libs/ui/KisPaletteEditor.cpp:376 libs/ui/KisPaletteEditor.cpp:425
-#: libs/widgets/kis_palette_view.cpp:119
+#: libs/ui/KisPaletteEditor.cpp:383 libs/ui/KisPaletteEditor.cpp:432
+#: libs/widgets/kis_palette_view.cpp:118
 #, kde-format
 msgid "Spot color:"
 msgstr "Color directe:"
 
-#: libs/ui/KisPaletteEditor.cpp:421 libs/widgets/kis_palette_view.cpp:115
+#: libs/ui/KisPaletteEditor.cpp:428 libs/widgets/kis_palette_view.cpp:114
 #, kde-format
 msgid "Swatch Group:"
 msgstr "Grup de mostres:"
 
-#: libs/ui/KisPaletteEditor.cpp:552 libs/ui/KisPaletteEditor.cpp:555
+#: libs/ui/KisPaletteEditor.cpp:551 libs/ui/KisPaletteEditor.cpp:554
 #, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"
@@ -34380,37 +34402,37 @@ msgstr "Seleccioneu un fitxer a carregar..."
 msgid "Select a directory to load..."
 msgstr "Seleccioneu un directori a carregar..."
 
-#: libs/widgets/kis_palette_view.cpp:107
+#: libs/widgets/kis_palette_view.cpp:106
 #, kde-format
 msgctxt "Name for default swatch group"
 msgid "Default"
 msgstr "Predeterminat"
 
-#: libs/widgets/kis_palette_view.cpp:121
+#: libs/widgets/kis_palette_view.cpp:120
 #, kde-format
 msgctxt "Prefix of a color swatch default name, as in Color 1"
 msgid "Color"
 msgstr "Color"
 
-#: libs/widgets/kis_palette_view.cpp:147
+#: libs/widgets/kis_palette_view.cpp:146
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new group"
 msgstr "Afegeix en un grup nou"
 
-#: libs/widgets/kis_palette_view.cpp:150
+#: libs/widgets/kis_palette_view.cpp:149
 #, kde-format
 msgctxt "Part of default name for a new group"
 msgid "Color Group"
 msgstr "Grup de color"
 
-#: libs/widgets/kis_palette_view.cpp:151
+#: libs/widgets/kis_palette_view.cpp:150
 #, kde-format
 msgctxt "Name for a group"
 msgid "Name"
 msgstr "Nom"
 
-#: libs/widgets/kis_palette_view.cpp:168
+#: libs/widgets/kis_palette_view.cpp:165
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Group"
@@ -34455,7 +34477,7 @@ msgstr ""
 "Aquesta és una entrada de codis hexadecimals, per als colors web. Només pot "
 "contenir colors de l'espai sRGB."
 
-#: libs/widgets/KisDlgInternalColorSelector.cpp:310
+#: libs/widgets/KisDlgInternalColorSelector.cpp:311
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:65
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:74
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:67
@@ -34464,7 +34486,7 @@ msgid "HSV"
 msgstr "HSV"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsl)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:313
+#: libs/widgets/KisDlgInternalColorSelector.cpp:314
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:66
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:75
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:75
@@ -34474,7 +34496,7 @@ msgid "HSL"
 msgstr "HSL"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsi)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:316
+#: libs/widgets/KisDlgInternalColorSelector.cpp:317
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:67
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:76
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:85
@@ -34484,7 +34506,7 @@ msgid "HSI"
 msgstr "HSI"
 
 # skip-rule: t-apo_fim
-#: libs/widgets/KisDlgInternalColorSelector.cpp:319
+#: libs/widgets/KisDlgInternalColorSelector.cpp:320
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:68
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:77
 #, kde-format
@@ -34511,7 +34533,7 @@ msgstr "Importa una paleta nova des d'un fitxer"
 msgid "Export current palette to file"
 msgstr "Exporta la paleta actual a un fitxer"
 
-#: libs/widgets/KisPaletteModel.cpp:395
+#: libs/widgets/KisPaletteModel.cpp:358
 #, kde-format
 msgid "Empty slot"
 msgstr "Ranura buida"
@@ -34735,7 +34757,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, paletteLabel)
 #: libs/widgets/KoEditColorSetDialog.cpp:202
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:58
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:59
 #: plugins/filters/palettize/palettize.ui:39
 #, kde-format
 msgid "Palette"
@@ -38975,51 +38997,51 @@ msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Controls de navegació amb pins"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:67
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
 msgid "Add a new color swatch"
 msgstr "Afegeix un color de mostra nou"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRemove)
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
-#: plugins/dockers/palettedocker/wdgpalettedock.ui:121
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
+#: plugins/dockers/palettedocker/wdgpalettedock.ui:105
 #, kde-format
 msgid "Remove swatch or group"
 msgstr "Elimina la mostra o el grup"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:70
 #, kde-format
 msgid "Edit swatch or group"
 msgstr "Edita la mostra o el grup"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:70
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:71
 #, kde-format
 msgid "Edit current palette"
 msgstr "Edita la paleta actual"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:71
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:72
 #, kde-format
 msgid "Save current palette"
 msgstr "Desa la paleta actual"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:124
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:125
 #, kde-format
 msgid "Load a palette"
 msgstr "Carrega una paleta"
 
 # skip-rule: barb-uns
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:217
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:226
 #, kde-format
 msgid "Export Palette"
 msgstr "Exporta la paleta"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:230
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:239
 #, kde-format
 msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
 msgstr "La paleta s'ha exportat correctament"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:372
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:400
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -39028,17 +39050,24 @@ msgstr ""
 "Desa la paleta explícitament, també succeirà automàticament en sortir del "
 "Krita."
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:374
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:403
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."
 msgstr "El desament de les paletes de document es realitza desant el document."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnAdd)
-#: plugins/dockers/palettedocker/wdgpalettedock.ui:75
+#: plugins/dockers/palettedocker/wdgpalettedock.ui:82
 #, kde-format
 msgid "Add foreground color"
 msgstr "Afegeix un color de primer pla"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnLock)
+#: plugins/dockers/palettedocker/wdgpalettedock.ui:139
+#, fuzzy, kde-format
+#| msgid "Remove current palette"
+msgid "Lock the current palette."
+msgstr "Elimina la paleta actual"
 
 #: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
 #, kde-format
@@ -58808,12 +58837,12 @@ msgstr "Traç clau de la màscara d'acoloriment"
 msgid "Colorize Mask Editing Tool"
 msgstr "Eina d'edició de la màscara d'acoloriment"
 
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:107
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #, kde-format
 msgid "Edge detection: "
 msgstr "Detecció de les vores:"
 
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:110
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:109
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -58823,12 +58852,12 @@ msgstr ""
 "Activa per a les imatges amb àrees sòlides extenses. Establiu el valor de "
 "l'amplada de les línies més fines de la imatge"
 
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:117
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #, kde-format
 msgid "Gap close hint: "
 msgstr "Consell en el tancament de les separacions:"
 
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:120
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:119
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -58838,12 +58867,12 @@ msgstr ""
 "La màscara intentarà tancar els contorns sense tancar si la separació és més "
 "petita que el valor a «Consell en el tancament de les separacions»"
 
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:124
 #, kde-format
 msgid "Clean up: "
 msgstr "Neteja: "
 
-#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:128
+#: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""

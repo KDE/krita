@@ -101,7 +101,7 @@ public:
 
     QString defaultProfile() const override
     {
-        return QString();
+        return "ITU-R BT.709-6 YCbCr ICC V4 profile";
     }
 
     bool isHdr() const override

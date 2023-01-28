@@ -272,6 +272,17 @@ build_3rdparty_fixes(){
         ln -sf qmake "${KIS_INSTALL_DIR}/bin/qmake-qt5"
         error="false"
 
+    elif [[ "${pkg}" = "ext_fontconfig" ]]; then
+        log "fixing rpath on fc-cache"
+        log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_fontconfig/ext_fontconfig-prefix/src/ext_fontconfig-build/fc-cache/.libs/fc-cache
+        # rerun rebuild
+        if [[ ${OSXBUILD_X86_64_BUILD} -ne 1 && ${osxbuild_error} -ne 0 ]]; then
+            print_msg "Build Success! ${pkg}"
+        else
+            cmake_3rdparty ext_fontconfig "1"
+        fi
+        error="false"
+
     elif [[ "${pkg}" = "ext_poppler" && "${error}" = "true" ]]; then
         log "re-running poppler to avoid possible glitch"
         cmake_3rdparty ext_poppler "1"

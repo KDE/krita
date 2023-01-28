@@ -10,11 +10,3 @@ ExternalProject_Add( ext_fontconfig
 
     UPDATE_COMMAND ""
 )
-
-if(APPLE)
-ExternalProject_Add_Step( ext_fontconfig fix_rpath
-        COMMENT "Fixing <BINARY_DIR>/fc-cache/.libs/fc-cache rpath"
-        COMMAND install_name_tool -add_rpath ${PREFIX_ext_fontconfig}/lib <BINARY_DIR>/fc-cache/.libs/fc-cache
-        DEPENDEES build
-    )
-endif()

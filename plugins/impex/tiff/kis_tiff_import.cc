@@ -1663,10 +1663,11 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
             basicInfo.colorSpaceIdTag.second,
             profile);
     } else {
-        basicInfo.cs = KoColorSpaceRegistry::instance()->colorSpace(
-            basicInfo.colorSpaceIdTag.first,
-            basicInfo.colorSpaceIdTag.second,
-            nullptr);
+        // Ensure an empty profile name is supplied so that the fallback logic
+        // in KoColorSpaceRegistry is triggered. BUG:464848
+        basicInfo.cs = KoColorSpaceRegistry::instance()->colorSpace(basicInfo.colorSpaceIdTag.first,
+                                                                    basicInfo.colorSpaceIdTag.second,
+                                                                    "");
     }
 
     if (basicInfo.cs == nullptr) {

@@ -366,10 +366,12 @@ KisClipboard::askUserForSource(const QMimeData *cbData,
 
         bool local = false;
         bool remote = false;
+        bool isURI = false;
 
         std::for_each(urls.constBegin(), urls.constEnd(), [&](const QUrl &url) {
             local |= url.isLocalFile();
             remote |= !url.isLocalFile();
+            isURI |= url.scheme() == "data";
         });
 
         const bool hasMultipleFormatsAvailable = (remote && local)
@@ -387,8 +389,9 @@ KisClipboard::askUserForSource(const QMimeData *cbData,
         dbgUI << "\tHas multiple formats:" << hasMultipleFormatsAvailable;
         dbgUI << "\tDefault source preference" << choice;
         dbgUI << "\tDefault source available:" << !defaultOptionUnavailable;
+        dbgUI << "\tIs data URI:" << isURI;
 
-        if (hasMultipleFormatsAvailable && choice == PASTE_FORMAT_ASK) {
+        if (hasMultipleFormatsAvailable && choice == PASTE_FORMAT_ASK && !isURI) {
             KisDlgPasteFormat dlg(qApp->activeWindow());
 
             dlg.setSourceAvailable(PASTE_FORMAT_DOWNLOAD, remote);
@@ -412,6 +415,8 @@ KisClipboard::askUserForSource(const QMimeData *cbData,
             } else {
                 return {false, PASTE_FORMAT_ASK};
             }
+        } else if (isURI) {
+            choice = PASTE_FORMAT_DOWNLOAD;
         }
     }
 

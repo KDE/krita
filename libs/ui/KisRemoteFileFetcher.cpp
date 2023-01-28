@@ -31,12 +31,15 @@ bool KisRemoteFileFetcher::fetchFile(const QUrl &remote, QIODevice *io)
 {
     Q_ASSERT(!remote.isLocalFile());
 
-    {
+    if (remote.scheme() != "data") {
         QMessageBox msgBox;
         msgBox.setWindowTitle(i18nc("@title:window", "Krita"));
         msgBox.setIcon(QMessageBox::Question);
-        msgBox.setText(
-            i18nc("Fetching remote image", "Do you want to download the image at %1?").arg(remote.toDisplayString()));
+        msgBox.setText(i18nc("Fetching remote image",
+                             "Do you want to download the image from %1?\nClick \"Show Details\" to view the full link "
+                             "to the image.")
+                           .arg(remote.host()));
+        msgBox.setDetailedText(remote.toDisplayString());
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setDefaultButton(QMessageBox::No);
         const int res = msgBox.exec();

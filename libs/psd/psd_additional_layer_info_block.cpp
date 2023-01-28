@@ -233,6 +233,74 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
 
         } else if (key == "brst") {
         } else if (key == "vmsk" || key == "vsms") { // If key is "vsms" then we are writing for (Photoshop CS6) and the document will have a "vscg" key
+            quint32 version; // ( = 3 for Photoshop 6.0)
+            psdread<byteOrder>(io, version);
+
+            quint32 flags;
+            psdread<byteOrder>(io, flags);
+            // read the flags.
+            vectorMask.invert  = flags & 1? true: false;
+            vectorMask.notLink = flags & 2? true: false;
+            vectorMask.disable = flags & 3? true: false;
+
+            quint64 currentPos = 8;
+            psd_path_sub_path currentPath;
+            bool firstPath = true;
+
+            while (currentPos < blockSize) {
+                quint16 recordType;
+                psdread<byteOrder>(io, recordType);
+
+                if (recordType == 6) {
+                    io.skip(24);
+                    dbgFile << "\trecord" << recordType;
+                } else if (recordType == 7) {
+                    QRectF bounds;
+                    // unsure if there can be multiple clipboard records...
+                    bounds.setTop(psdreadFixedFloatingPoint<byteOrder>(io));
+                    bounds.setLeft(psdreadFixedFloatingPoint<byteOrder>(io));
+                    bounds.setBottom(psdreadFixedFloatingPoint<byteOrder>(io));
+                    bounds.setRight(psdreadFixedFloatingPoint<byteOrder>(io));
+                    vectorMask.path.clipBoardBounds = bounds;
+                    vectorMask.path.clipBoardResolution = psdreadFixedFloatingPoint<byteOrder>(io);
+                    dbgFile << "\trecord" << recordType << "top" << bounds << "res" << vectorMask.path.clipBoardResolution;
+                    io.skip(4);
+                } else if (recordType == 0 || recordType == 3) {
+                    quint16 length;
+                    psdread<byteOrder>(io, length);
+                    dbgFile << "\trecord" << recordType << "length" << length;
+                    if (firstPath) {
+                        currentPath.isClosed = (recordType == 0);
+                    } else {
+                        vectorMask.path.subPaths.append(currentPath);
+                        currentPath = psd_path_sub_path();
+                        currentPath.isClosed = (recordType == 0);
+                    }
+                    io.skip(22);
+                } else if (recordType == 8) {
+                    quint16 length;
+                    psdread<byteOrder>(io, length);
+                    vectorMask.path.initialFillRecord = (length > 0);
+                    io.skip(22);
+                } else {
+                    psd_path_node node;
+                    node.control1.setY(psdreadFixedFloatingPoint<byteOrder>(io));
+                    node.control1.setX(psdreadFixedFloatingPoint<byteOrder>(io));
+                    node.node.setY(psdreadFixedFloatingPoint<byteOrder>(io));
+                    node.node.setX(psdreadFixedFloatingPoint<byteOrder>(io));
+                    node.control2.setY(psdreadFixedFloatingPoint<byteOrder>(io));
+                    node.control2.setX(psdreadFixedFloatingPoint<byteOrder>(io));
+                    node.isSmooth = (recordType == 1 || recordType == 4);
+                    dbgFile << "\trecord" << recordType << "c1" << node.control1
+                             << "node" << node.node << "c2" << node.control2;
+                    currentPath.nodes.append(node);
+                }
+
+                currentPos += 26;
+            }
+            if (!currentPath.nodes.isEmpty()) {
+                vectorMask.path.subPaths.append(currentPath);
+            }
 
         } else if (key == "TySh") {
             textData = KisAslReader::readTypeToolObjectSettings(io, textTransform, byteOrder);

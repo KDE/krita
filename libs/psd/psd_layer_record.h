@@ -22,6 +22,7 @@
 #include "psd_header.h"
 
 class QIODevice;
+class KoPathShape;
 
 enum psd_layer_type {
     psd_layer_type_normal,
@@ -79,6 +80,16 @@ public:
     bool read(QIODevice &io);
     bool readPixelData(QIODevice &io, KisPaintDeviceSP device);
     bool readMask(QIODevice &io, KisPaintDeviceSP dev, ChannelInfo *channel);
+
+    /**
+     * @brief constructPathShape
+     * create a KoPathshape based on a psd_path struct, used in vector masks and path resources.
+     * @param path a psd path struct.
+     * @param shapeWidth the image width in points
+     * @param shapeHeight the image height in points
+     * @return a KoPathShape.
+     */
+    KoPathShape *constructPathShape(psd_path path, double shapeWidth, double shapeHeight);
 
     void write(QIODevice &io,
                KisPaintDeviceSP layerContentDevice,

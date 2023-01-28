@@ -29,6 +29,8 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
 
+#include <KoPathShape.h>
+
 #include <asl/kis_asl_reader_utils.h>
 #include <asl/kis_asl_writer_utils.h>
 #include <asl/kis_offset_keeper.h>
@@ -910,6 +912,40 @@ bool PSDLayerRecord::readMask(QIODevice &io, KisPaintDeviceSP dev, ChannelInfo *
     PsdPixelUtils::readAlphaMaskChannels(io, dev, pixelSize, maskRect, infoRecords);
 
     return true;
+}
+
+KoPathShape *PSDLayerRecord::constructPathShape(psd_path path, double shapeWidth, double shapeHeight)
+{
+    KoPathShape *shape = new KoPathShape();
+    // psd paths are stored normalized.
+    QTransform tf = QTransform::fromScale(shapeWidth, shapeHeight);
+
+    QString nodeTypes;
+    Q_FOREACH(psd_path_sub_path subPath, path.subPaths) {
+        for (int i = 0; i < subPath.nodes.size(); i++) {
+            psd_path_node node = subPath.nodes.at(i);
+            if (i == 0) {
+                shape->moveTo(tf.map(node.node));
+            } else {
+                psd_path_node previousNode = subPath.nodes.at(i-1);
+                shape->curveTo(tf.map(previousNode.control2), tf.map(node.control1), tf.map(node.node));
+            }
+            if (node.isSmooth) {
+                nodeTypes.append("s");
+            } else {
+                nodeTypes.append("c");
+            }
+        }
+        if (subPath.isClosed) {
+            shape->curveTo(tf.map(subPath.nodes.last().control2), tf.map(subPath.nodes.first().control1), tf.map(subPath.nodes.first().node));
+            shape->close();
+        }
+    }
+    if (shape->pointCount() > 0) {
+        shape->loadNodeTypes(nodeTypes);
+    }
+
+    return shape;
 }
 
 QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)

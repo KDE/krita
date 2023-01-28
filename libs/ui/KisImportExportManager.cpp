@@ -50,6 +50,7 @@
 #include <kis_painter.h>
 
 #include "KisDocument.h"
+#include "KisImportExportErrorCode.h"
 #include "KisImportExportFilter.h"
 #include "KisMainWindow.h"
 #include "KisReferenceImagesLayer.h"
@@ -378,6 +379,12 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         if (result.status().isOk()) {
             KisImageSP image = m_document->image().toStrongRef();
             if (image) {
+                KIS_SAFE_ASSERT_RECOVER(image->colorSpace() != nullptr && image->colorSpace()->profile() != nullptr)
+                {
+                    qWarning() << "Loaded a profile-less file without a fallback. Rejecting image "
+                                  "opening";
+                    return KisImportExportErrorCode(ImportExportCodes::InternalError);
+                }
                 KisUsageLogger::log(QString("Loaded image from %1. Size: %2 * %3 pixels, %4 dpi. Color "
                                             "model: %6 %5 (%7). Layers: %8")
                                         .arg(QString::fromLatin1(from), QString::number(image->width()),

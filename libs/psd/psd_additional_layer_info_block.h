@@ -659,12 +659,12 @@ struct KRITAPSD_EXPORT psd_path_node {
     QPointF control1;
     QPointF node;
     QPointF control2;
-    bool isSmooth;
+    bool isSmooth {false};
 };
 
 struct KRITAPSD_EXPORT psd_path_sub_path {
     QList<psd_path_node> nodes;
-    bool isClosed;
+    bool isClosed {false};
 };
 struct KRITAPSD_EXPORT psd_path {
     bool initialFillRecord;
@@ -674,9 +674,9 @@ struct KRITAPSD_EXPORT psd_path {
 };
 
 struct KRITAPSD_EXPORT psd_vector_mask {
-    bool invert;
-    bool notLink;
-    bool disable;
+    bool invert  {false};
+    bool notLink {false};
+    bool disable {false};
     psd_path path;
 };
 
@@ -706,6 +706,7 @@ public:
     void writeLclrBlockEx(QIODevice &io, const quint16 &labelColor);
 
     void writeFillLayerBlockEx(QIODevice &io, const QDomDocument &fillConfig, psd_fill_type type);
+    void writeVmskBlockEx(QIODevice &io, psd_vector_mask mask);
 
     bool valid();
 
@@ -750,6 +751,9 @@ private:
 
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void writeFillLayerBlockExImpl(QIODevice &io, const QDomDocument &fillConfig, psd_fill_type type);
+
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    void writeVectorMaskImpl(QIODevice &io, psd_vector_mask mask);
 
 private:
     ExtraLayerInfoBlockHandler m_layerInfoBlockHandler;

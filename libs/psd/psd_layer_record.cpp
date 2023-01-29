@@ -30,6 +30,7 @@
 #include <KoColorSpaceTraits.h>
 
 #include <KoPathShape.h>
+#include <KoPathPoint.h>
 
 #include <asl/kis_asl_reader_utils.h>
 #include <asl/kis_asl_writer_utils.h>
@@ -638,7 +639,10 @@ void PSDLayerRecord::writeImpl(QIODevice &io,
                 }
 
                 {
-                    const quint8 maskFlags = 0; // nothing serious
+                    quint8 maskFlags = 0; // nothing serious
+                    if (!vectorMask.path.subPaths.isEmpty()) {
+                        maskFlags |= 8; // bit 3 = indicates that the user mask actually came from rendering other data
+                    }
                     SAFE_WRITE_EX(byteOrder, io, maskFlags);
 
                     const quint16 padding = 0; // 2-byte padding
@@ -678,6 +682,11 @@ void PSDLayerRecord::writeImpl(QIODevice &io,
             // write SoCo, GdFl, PtFl data blocks.
             if (!fillConfig.isNull()) {
                 additionalInfoBlock.writeFillLayerBlockEx(io, fillConfig, fillType);
+            }
+
+            // write 'vmsk' data block
+            if (!vectorMask.path.subPaths.isEmpty()) {
+                additionalInfoBlock.writeVmskBlockEx(io, vectorMask);
             }
 
         }
@@ -938,7 +947,7 @@ KoPathShape *PSDLayerRecord::constructPathShape(psd_path path, double shapeWidth
         }
         if (subPath.isClosed) {
             shape->curveTo(tf.map(subPath.nodes.last().control2), tf.map(subPath.nodes.first().control1), tf.map(subPath.nodes.first().node));
-            shape->close();
+            shape->closeMerge();
         }
     }
     if (shape->pointCount() > 0) {
@@ -946,6 +955,29 @@ KoPathShape *PSDLayerRecord::constructPathShape(psd_path path, double shapeWidth
     }
 
     return shape;
+}
+
+void PSDLayerRecord::addPathShapeToPSDPath(psd_path &path, KoPathShape *shape, double shapeWidth, double shapeHeight)
+{
+    QTransform tf = QTransform::fromScale(shapeWidth, shapeHeight).inverted();
+    tf = shape->absoluteTransformation()*tf;
+
+    for (int i = 0; i < shape->subpathCount(); i++) {
+        psd_path_sub_path subPath;
+        subPath.isClosed = shape->isClosedSubpath(i);
+        while(subPath.nodes.size() < shape->subpathPointCount(i)) {
+            KoPathPoint *point = shape->pointByIndex(KoPathPointIndex(i, subPath.nodes.size()));
+            psd_path_node node;
+            node.control1 = tf.map(point->controlPoint1());
+            node.control2 = tf.map(point->controlPoint2());
+            node.node = tf.map(point->point());
+            node.isSmooth = (point->properties().testFlag(KoPathPoint::IsSmooth)
+                    || point->properties().testFlag(KoPathPoint::IsSymmetric));
+            subPath.nodes.append(node);
+        }
+
+        path.subPaths.append(subPath);
+    }
 }
 
 QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)

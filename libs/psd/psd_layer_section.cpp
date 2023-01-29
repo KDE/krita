@@ -20,6 +20,11 @@
 #include <kis_node.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
+#include <kis_selection.h>
+#include <kis_shape_selection.h>
+#include <kis_transparency_mask.h>
+
+#include <KoPathShape.h>
 
 #include "kis_dom_utils.h"
 
@@ -646,6 +651,9 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 QString nodeName;
                 KisPaintDeviceSP layerContentDevice;
                 psd_section_type sectionType;
+                psd_vector_mask vectorMask;
+                double vectorWidth = rootLayer->image()? rootLayer->image()->width() / rootLayer->image()->xRes(): 1;
+                double vectorHeight = rootLayer->image()? rootLayer->image()->height() / rootLayer->image()->yRes(): 1;
 
                 if (item.type == FlattenedNode::RASTER_LAYER) {
                     nodeIrrelevant = false;
@@ -659,9 +667,41 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                         bool transparency = KisPainter::checkDeviceHasTransparency(node->paintDevice());
                         bool semiOpacity = node->paintDevice()->defaultPixel().opacityU8() < OPACITY_OPAQUE_U8;
                         if (transparency || semiOpacity) {
+                            KisSelectionSP selection = fillLayer->internalSelection();
+                            if(selection) {
+                                if(selection->hasNonEmptyShapeSelection()) {
+                                    KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+                                    if (shapeSelection) {
+                                        Q_FOREACH(KoShape *shape, shapeSelection->shapes()) {
+                                            KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+                                            if (pathShape){
+                                                layerRecord->addPathShapeToPSDPath(vectorMask.path, pathShape, vectorWidth, vectorHeight);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             layerContentDevice = node->original();
                             onlyTransparencyMask = node;
                             maskRect = onlyTransparencyMask->paintDevice()->exactBounds();
+                        }
+                    } else {
+                        KisTransparencyMask *mask = qobject_cast<KisTransparencyMask*>(onlyTransparencyMask.data());
+                        if (mask) {
+                        KisSelectionSP selection = mask->selection();
+                        if(selection) {
+                            if(selection->hasNonEmptyShapeSelection()) {
+                                KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+                                if (shapeSelection) {
+                                    Q_FOREACH(KoShape *shape, shapeSelection->shapes()) {
+                                        KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+                                        if (pathShape){
+                                            layerRecord->addPathShapeToPSDPath(vectorMask.path, pathShape, vectorWidth, vectorHeight);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         }
                     }
                     sectionType = psd_other;
@@ -726,6 +766,8 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
 
                 layerRecord->fillType = fillType;
                 layerRecord->fillConfig = fillConfig;
+
+                layerRecord->vectorMask = vectorMask;
 
                 layerRecord->write(io, layerContentDevice, onlyTransparencyMask, maskRect, sectionType, stylesXmlDoc, node->inherits("KisGroupLayer"));
             }

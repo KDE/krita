@@ -241,7 +241,7 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
             // read the flags.
             vectorMask.invert  = flags & 1? true: false;
             vectorMask.notLink = flags & 2? true: false;
-            vectorMask.disable = flags & 3? true: false;
+            vectorMask.disable = flags & 4? true: false;
 
             quint64 currentPos = 8;
             psd_path_sub_path currentPath;
@@ -257,12 +257,12 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
                 } else if (recordType == 7) {
                     QRectF bounds;
                     // unsure if there can be multiple clipboard records...
-                    bounds.setTop(psdreadFixedFloatingPoint<byteOrder>(io));
-                    bounds.setLeft(psdreadFixedFloatingPoint<byteOrder>(io));
-                    bounds.setBottom(psdreadFixedFloatingPoint<byteOrder>(io));
-                    bounds.setRight(psdreadFixedFloatingPoint<byteOrder>(io));
+                    bounds.setTop(psdreadFixedPoint<byteOrder>(io));
+                    bounds.setLeft(psdreadFixedPoint<byteOrder>(io));
+                    bounds.setBottom(psdreadFixedPoint<byteOrder>(io));
+                    bounds.setRight(psdreadFixedPoint<byteOrder>(io));
                     vectorMask.path.clipBoardBounds = bounds;
-                    vectorMask.path.clipBoardResolution = psdreadFixedFloatingPoint<byteOrder>(io);
+                    vectorMask.path.clipBoardResolution = psdreadFixedPoint<byteOrder>(io);
                     dbgFile << "\trecord" << recordType << "top" << bounds << "res" << vectorMask.path.clipBoardResolution;
                     io.skip(4);
                 } else if (recordType == 0 || recordType == 3) {
@@ -284,12 +284,12 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
                     io.skip(22);
                 } else {
                     psd_path_node node;
-                    node.control1.setY(psdreadFixedFloatingPoint<byteOrder>(io));
-                    node.control1.setX(psdreadFixedFloatingPoint<byteOrder>(io));
-                    node.node.setY(psdreadFixedFloatingPoint<byteOrder>(io));
-                    node.node.setX(psdreadFixedFloatingPoint<byteOrder>(io));
-                    node.control2.setY(psdreadFixedFloatingPoint<byteOrder>(io));
-                    node.control2.setX(psdreadFixedFloatingPoint<byteOrder>(io));
+                    node.control1.setY(psdreadFixedPoint<byteOrder>(io));
+                    node.control1.setX(psdreadFixedPoint<byteOrder>(io));
+                    node.node.setY(psdreadFixedPoint<byteOrder>(io));
+                    node.node.setX(psdreadFixedPoint<byteOrder>(io));
+                    node.control2.setY(psdreadFixedPoint<byteOrder>(io));
+                    node.control2.setX(psdreadFixedPoint<byteOrder>(io));
                     node.isSmooth = (recordType == 1 || recordType == 4);
                     dbgFile << "\trecord" << recordType << "c1" << node.control1
                              << "node" << node.node << "c2" << node.control2;
@@ -466,6 +466,18 @@ void PsdAdditionalLayerInfoBlock::writeFillLayerBlockEx(QIODevice &io, const QDo
     }
 }
 
+void PsdAdditionalLayerInfoBlock::writeVmskBlockEx(QIODevice &io, psd_vector_mask mask)
+{
+    switch (m_header.byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        writeVectorMaskImpl<psd_byte_order::psdLittleEndian>(io, mask);
+        break;
+    default:
+        writeVectorMaskImpl(io, mask);
+        break;
+    }
+}
+
 template<psd_byte_order byteOrder>
 void PsdAdditionalLayerInfoBlock::writePattBlockExImpl(QIODevice &io, const QDomDocument &patternsXmlDoc)
 {
@@ -526,5 +538,90 @@ void PsdAdditionalLayerInfoBlock::writeFillLayerBlockExImpl(QIODevice &io, const
 
         // TODO: make this error recoverable!
         throw e;
+    }
+}
+
+template<psd_byte_order byteOrder>
+void PsdAdditionalLayerInfoBlock::writeVectorMaskImpl(QIODevice &io, psd_vector_mask mask)
+{
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+    KisAslWriterUtils::writeFixedString<byteOrder>("vmsk", io);
+
+    quint32 len = 8; //, 4 version, 4 flags
+    len += 52; // 26 path record, 26 initial fill rule.
+    Q_FOREACH(psd_path_sub_path subPath, mask.path.subPaths) {
+        len += 26; // subpath record;
+        len += subPath.nodes.size() * 26; //and one for each node.
+    }
+
+    SAFE_WRITE_EX(byteOrder, io, len);
+
+    quint32 version = 3;
+    SAFE_WRITE_EX(byteOrder, io, version);
+    quint32 flags = 0;
+    if (mask.invert) {
+        flags |= 1;
+    }
+    if (mask.notLink) {
+        flags |= 2;
+    }
+    if (mask.disable) {
+        flags |= 4;
+    }
+    SAFE_WRITE_EX(byteOrder, io, flags);
+
+    // start path records
+    quint16 recordType = 6;
+    quint32 zero = 0;
+    SAFE_WRITE_EX(byteOrder, io, recordType);
+    // 24 empty bits
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    // initial fill rule record
+    recordType = 8;
+    SAFE_WRITE_EX(byteOrder, io, recordType);
+    quint16 fillType = mask.path.initialFillRecord;
+    SAFE_WRITE_EX(byteOrder, io, fillType);
+    // 22 empty bits
+    const quint16 halfZero = 0;
+    SAFE_WRITE_EX(byteOrder, io, halfZero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    // write the subpaths.
+    Q_FOREACH(psd_path_sub_path subPath, mask.path.subPaths) {
+        recordType = subPath.isClosed? 0: 3;
+        quint16 length = subPath.nodes.size();
+        qDebug() << "writing subpath" << subPath.nodes.size();
+        SAFE_WRITE_EX(byteOrder, io, recordType);
+        SAFE_WRITE_EX(byteOrder, io, length);
+        // 22 empty bits
+        SAFE_WRITE_EX(byteOrder, io, halfZero);
+        SAFE_WRITE_EX(byteOrder, io, zero);
+        SAFE_WRITE_EX(byteOrder, io, zero);
+        SAFE_WRITE_EX(byteOrder, io, zero);
+        SAFE_WRITE_EX(byteOrder, io, zero);
+        SAFE_WRITE_EX(byteOrder, io, zero);
+
+        Q_FOREACH(psd_path_node node, subPath.nodes) {
+            if (subPath.isClosed) {
+                recordType = node.isSmooth? 1: 2;
+            } else {
+                recordType = node.isSmooth? 4: 5;
+            }
+            SAFE_WRITE_EX(byteOrder, io, recordType);
+            psdwriteFixedPoint<byteOrder>(io, node.control1.y());
+            psdwriteFixedPoint<byteOrder>(io, node.control1.x());
+            psdwriteFixedPoint<byteOrder>(io, node.node.y());
+            psdwriteFixedPoint<byteOrder>(io, node.node.x());
+            psdwriteFixedPoint<byteOrder>(io, node.control2.y());
+            psdwriteFixedPoint<byteOrder>(io, node.control2.x());
+        }
     }
 }

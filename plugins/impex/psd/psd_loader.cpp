@@ -399,22 +399,23 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
         Q_FOREACH (ChannelInfo *channelInfo, layerRecord->channelInfoRecords) {
             if (channelInfo->channelId < -1) {
                 const KisGeneratorLayer *fillLayer = qobject_cast<KisGeneratorLayer *>(newLayer.data());
-                KoPathShape *vectorMask;
+                KoPathShape *vectorMask = new KoPathShape();
                 if (layerRecord->infoBlocks.keys.contains("vmsk") || layerRecord->infoBlocks.keys.contains("vsms")) {
                     double width = m_image->width() / m_image->xRes();
                     double height = m_image->height() / m_image->yRes();
                     vectorMask = layerRecord->constructPathShape(layerRecord->infoBlocks.vectorMask.path, width, height);
                     vectorMask->setUserData(new KisShapeSelectionMarker);
                 }
+                bool hasVectorMask = vectorMask->pointCount() > 0 && layerRecord->infoBlocks.vectorMask.path.subPaths.size() > 0;
                 if (fillLayer) {
                     if (!layerRecord->readMask(io, fillLayer->paintDevice(), channelInfo)) {
                         dbgFile << "failed reading masks for generator layer: " << layerRecord->layerName << layerRecord->error;
                     }
-                    if (vectorMask) {
-                        KisShapeSelection* shapeSelection = new KisShapeSelection(m_doc->shapeController(), fillLayer->selection());
-                        fillLayer->selection()->convertToVectorSelectionNoUndo(shapeSelection);
+                    if (hasVectorMask) {
+                        KisShapeSelection* shapeSelection = new KisShapeSelection(m_doc->shapeController(), fillLayer->internalSelection());
+                        fillLayer->internalSelection()->convertToVectorSelectionNoUndo(shapeSelection);
                         shapeSelection->addShape(vectorMask);
-                        fillLayer->selection()->updateProjection();
+                        fillLayer->internalSelection()->updateProjection();
                     }
                 } else {
                     KisTransparencyMaskSP mask = new KisTransparencyMask(m_image, i18n("Transparency Mask"));
@@ -422,7 +423,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                     if (!layerRecord->readMask(io, mask->paintDevice(), channelInfo)) {
                         dbgFile << "failed reading masks for layer: " << layerRecord->layerName << layerRecord->error;
                     }
-                    if (vectorMask) {
+                    if (hasVectorMask) {
                         KisShapeSelection* shapeSelection = new KisShapeSelection(m_doc->shapeController(), mask->selection());
                         mask->selection()->convertToVectorSelectionNoUndo(shapeSelection);
                         shapeSelection->addShape(vectorMask);

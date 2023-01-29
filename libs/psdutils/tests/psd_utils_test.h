@@ -25,6 +25,7 @@ private Q_SLOTS:
     void test_psdread_quint16();
     void test_psdread_quint32();
     void test_psdread_pascalstring();
+    void test_psdread_fixedpoint();
 };
 
 #endif

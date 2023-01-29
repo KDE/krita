@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-28 02:48+0000\n"
+"POT-Creation-Date: 2023-01-29 02:52+0000\n"
 "PO-Revision-Date: 2022-12-11 07:39+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -29911,29 +29911,29 @@ msgstr ""
 "Brakuje pliku %1 w %2 i jest uszkodzony. Spróbuj zapisać ponownie w innym "
 "miejscu."
 
-#: libs/ui/KisImportExportManager.cpp:279
+#: libs/ui/KisImportExportManager.cpp:280
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Otwórz dźwięk"
 
-#: libs/ui/KisImportExportManager.cpp:373
+#: libs/ui/KisImportExportManager.cpp:374
 #, kde-format
 msgid "Opening document..."
 msgstr "Otwieranie dokumentu..."
 
-#: libs/ui/KisImportExportManager.cpp:435
+#: libs/ui/KisImportExportManager.cpp:442
 #, kde-format
 msgid "Saving document..."
 msgstr "Zapisywanie dokumentu..."
 
-#: libs/ui/KisImportExportManager.cpp:529
+#: libs/ui/KisImportExportManager.cpp:536
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr "Obraz zawiera <b>pomocników</b>. Pomocnicy nie zostaną zapisani."
 
-#: libs/ui/KisImportExportManager.cpp:532
+#: libs/ui/KisImportExportManager.cpp:539
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -29942,13 +29942,13 @@ msgid ""
 msgstr ""
 "Obraz zawiera <b>obrazy wzorcowe</b>. obrazy wzorcowe nie zostaną zapisane."
 
-#: libs/ui/KisImportExportManager.cpp:535
+#: libs/ui/KisImportExportManager.cpp:542
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "Obraz zawiera <b>prowadnice</b>. Prowadnice nie zostaną zapisane."
 
-#: libs/ui/KisImportExportManager.cpp:538
+#: libs/ui/KisImportExportManager.cpp:545
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -29958,24 +29958,24 @@ msgstr ""
 "Obraz zawiera <b>własne ustawienia siatki</b>. Ustawienia te nie zostaną "
 "zapisane."
 
-#: libs/ui/KisImportExportManager.cpp:543
+#: libs/ui/KisImportExportManager.cpp:550
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "Błąd: nie można zapisać obrazu jako %1."
 
-#: libs/ui/KisImportExportManager.cpp:544
-#: libs/ui/KisImportExportManager.cpp:587
+#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:594
 #, kde-format
 msgid "Reasons:"
 msgstr "Powody:"
 
-#: libs/ui/KisImportExportManager.cpp:552
+#: libs/ui/KisImportExportManager.cpp:559
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita: Błąd eksportu"
 
-#: libs/ui/KisImportExportManager.cpp:569
+#: libs/ui/KisImportExportManager.cpp:576
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
@@ -29983,31 +29983,31 @@ msgstr ""
 "Ostrzeżenie: zapisywanie jako %1 spowoduje utratę informacji z twojego "
 "obrazu.  "
 
-#: libs/ui/KisImportExportManager.cpp:581
+#: libs/ui/KisImportExportManager.cpp:588
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr "Utracisz informacje przy zapisywaniu tego obrazu jako %1."
 
-#: libs/ui/KisImportExportManager.cpp:584
+#: libs/ui/KisImportExportManager.cpp:591
 #, kde-format
 msgid "Reason:"
 msgstr "Powód:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
-#: libs/ui/KisImportExportManager.cpp:602
+#: libs/ui/KisImportExportManager.cpp:609
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
 #, kde-format
 msgid "Options"
 msgstr "Ustawienia"
 
 #. i18n: ectx: property (title), widget (QGroupBox, scale)
-#: libs/ui/KisImportExportManager.cpp:610
+#: libs/ui/KisImportExportManager.cpp:617
 #: plugins/impex/webp/dlg_webp_import.ui:173
 #, kde-format
 msgid "Resize"
 msgstr "Zmień rozmiar"
 
-#: libs/ui/KisImportExportManager.cpp:616
+#: libs/ui/KisImportExportManager.cpp:623
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Tak więc zapisz swój obraz jako plik Krity."

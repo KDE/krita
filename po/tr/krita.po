@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-28 02:48+0000\n"
+"POT-Creation-Date: 2023-01-29 02:52+0000\n"
 "PO-Revision-Date: 2023-01-28 00:41+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -29823,29 +29823,29 @@ msgstr ""
 "%1 dosyası %2 içinde kayıp ve bozulmuş. Lütfen başka bir konuma yeniden "
 "kaydetmeyi deneyin."
 
-#: libs/ui/KisImportExportManager.cpp:279
+#: libs/ui/KisImportExportManager.cpp:280
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Sesi Aç"
 
-#: libs/ui/KisImportExportManager.cpp:373
+#: libs/ui/KisImportExportManager.cpp:374
 #, kde-format
 msgid "Opening document..."
 msgstr "Belge açılıyor..."
 
-#: libs/ui/KisImportExportManager.cpp:435
+#: libs/ui/KisImportExportManager.cpp:442
 #, kde-format
 msgid "Saving document..."
 msgstr "Belge kaydediliyor..."
 
-#: libs/ui/KisImportExportManager.cpp:529
+#: libs/ui/KisImportExportManager.cpp:536
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr "Görsel, <b>yardımcılar</b> içeriyor. Yardımcılar kaydedilmeyecek."
 
-#: libs/ui/KisImportExportManager.cpp:532
+#: libs/ui/KisImportExportManager.cpp:539
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -29855,13 +29855,13 @@ msgstr ""
 "Görsel, <b>başvuru görselleri</b> içeriyor. Başvuru görselleri "
 "kaydedilmeyecek."
 
-#: libs/ui/KisImportExportManager.cpp:535
+#: libs/ui/KisImportExportManager.cpp:542
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "Görsel, <b>kılavuzlar</b> içeriyor. Kılavuzlar kaydedilmeyecek."
 
-#: libs/ui/KisImportExportManager.cpp:538
+#: libs/ui/KisImportExportManager.cpp:545
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -29871,55 +29871,55 @@ msgstr ""
 "Görsel, bir <b>özel ızgara yapılandırması</b> içeriyor. Yapılandırma "
 "kaydedilmeyecek."
 
-#: libs/ui/KisImportExportManager.cpp:543
+#: libs/ui/KisImportExportManager.cpp:550
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "Hata: Bu görsel, %1 olarak kaydedilemiyor."
 
-#: libs/ui/KisImportExportManager.cpp:544
-#: libs/ui/KisImportExportManager.cpp:587
+#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:594
 #, kde-format
 msgid "Reasons:"
 msgstr "Gerekçeler:"
 
-#: libs/ui/KisImportExportManager.cpp:552
+#: libs/ui/KisImportExportManager.cpp:559
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita: Dışa Aktarma Hatası"
 
-#: libs/ui/KisImportExportManager.cpp:569
+#: libs/ui/KisImportExportManager.cpp:576
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 "Uyarı: %1 olarak kaydetmek, görselinizden bilgi kaybına neden olacak.    "
 
-#: libs/ui/KisImportExportManager.cpp:581
+#: libs/ui/KisImportExportManager.cpp:588
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr "Bu görseli, %1 olarak kaydederken bilgi kaybedeceksiniz."
 
-#: libs/ui/KisImportExportManager.cpp:584
+#: libs/ui/KisImportExportManager.cpp:591
 #, kde-format
 msgid "Reason:"
 msgstr "Gerekçe:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
-#: libs/ui/KisImportExportManager.cpp:602
+#: libs/ui/KisImportExportManager.cpp:609
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
 #, kde-format
 msgid "Options"
 msgstr "Seçenekler"
 
 #. i18n: ectx: property (title), widget (QGroupBox, scale)
-#: libs/ui/KisImportExportManager.cpp:610
+#: libs/ui/KisImportExportManager.cpp:617
 #: plugins/impex/webp/dlg_webp_import.ui:173
 #, kde-format
 msgid "Resize"
 msgstr "Yeniden Boyutlandır"
 
-#: libs/ui/KisImportExportManager.cpp:616
+#: libs/ui/KisImportExportManager.cpp:623
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Ayrıca, görselinizi Krita dosyası olarak kaydedin."

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-28 02:48+0000\n"
+"POT-Creation-Date: 2023-01-29 02:52+0000\n"
 "PO-Revision-Date: 2004-05-25 15:34+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -29692,29 +29692,29 @@ msgid ""
 "different location."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:279
+#: libs/ui/KisImportExportManager.cpp:280
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Digeriñ er teuliooù &nevez"
 
-#: libs/ui/KisImportExportManager.cpp:373
+#: libs/ui/KisImportExportManager.cpp:374
 #, fuzzy, kde-format
 msgid "Opening document..."
 msgstr "Digeriñ er teuliooù &nevez"
 
-#: libs/ui/KisImportExportManager.cpp:435
+#: libs/ui/KisImportExportManager.cpp:442
 #, fuzzy, kde-format
 msgid "Saving document..."
 msgstr "Enrollañ an teul"
 
-#: libs/ui/KisImportExportManager.cpp:529
+#: libs/ui/KisImportExportManager.cpp:536
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:532
+#: libs/ui/KisImportExportManager.cpp:539
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -29722,13 +29722,13 @@ msgid ""
 "saved."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:535
+#: libs/ui/KisImportExportManager.cpp:542
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:538
+#: libs/ui/KisImportExportManager.cpp:545
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -29736,56 +29736,56 @@ msgid ""
 "will not be saved."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:543
+#: libs/ui/KisImportExportManager.cpp:550
 #, fuzzy, kde-format
 #| msgid "Could not add layer to image."
 msgid "Error: cannot save this image as a %1."
 msgstr "N'hellan ket ouzhpennañ ur gwisk d'ar skeudenn."
 
-#: libs/ui/KisImportExportManager.cpp:544
-#: libs/ui/KisImportExportManager.cpp:587
+#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:594
 #, fuzzy, kde-format
 msgid "Reasons:"
 msgstr "Mentoù ar &piksel"
 
-#: libs/ui/KisImportExportManager.cpp:552
+#: libs/ui/KisImportExportManager.cpp:559
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Fazi en ur enporzh MathML"
 
-#: libs/ui/KisImportExportManager.cpp:569
+#: libs/ui/KisImportExportManager.cpp:576
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:581
+#: libs/ui/KisImportExportManager.cpp:588
 #, fuzzy, kde-format
 #| msgid "Could not add layer to image."
 msgid "You will lose information when saving this image as a %1."
 msgstr "N'hellan ket ouzhpennañ ur gwisk d'ar skeudenn."
 
-#: libs/ui/KisImportExportManager.cpp:584
+#: libs/ui/KisImportExportManager.cpp:591
 #, fuzzy, kde-format
 msgid "Reason:"
 msgstr "Hed : "
 
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
-#: libs/ui/KisImportExportManager.cpp:602
+#: libs/ui/KisImportExportManager.cpp:609
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
 #, kde-format
 msgid "Options"
 msgstr "Dibarzhoù"
 
 #. i18n: ectx: property (title), widget (QGroupBox, scale)
-#: libs/ui/KisImportExportManager.cpp:610
+#: libs/ui/KisImportExportManager.cpp:617
 #: plugins/impex/webp/dlg_webp_import.ui:173
 #, fuzzy, kde-format
 msgid "Resize"
 msgstr "Adventañ"
 
-#: libs/ui/KisImportExportManager.cpp:616
+#: libs/ui/KisImportExportManager.cpp:623
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr ""

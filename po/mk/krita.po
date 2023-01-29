@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-28 02:48+0000\n"
+"POT-Creation-Date: 2023-01-29 02:52+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -29810,29 +29810,29 @@ msgid ""
 "different location."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:279
+#: libs/ui/KisImportExportManager.cpp:280
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Преглед на страна"
 
-#: libs/ui/KisImportExportManager.cpp:373
+#: libs/ui/KisImportExportManager.cpp:374
 #, fuzzy, kde-format
 msgid "Opening document..."
 msgstr "&Отвори документ"
 
-#: libs/ui/KisImportExportManager.cpp:435
+#: libs/ui/KisImportExportManager.cpp:442
 #, fuzzy, kde-format
 msgid "Saving document..."
 msgstr "Зачувај документ како"
 
-#: libs/ui/KisImportExportManager.cpp:529
+#: libs/ui/KisImportExportManager.cpp:536
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:532
+#: libs/ui/KisImportExportManager.cpp:539
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -29840,13 +29840,13 @@ msgid ""
 "saved."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:535
+#: libs/ui/KisImportExportManager.cpp:542
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:538
+#: libs/ui/KisImportExportManager.cpp:545
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -29854,61 +29854,61 @@ msgid ""
 "will not be saved."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:543
+#: libs/ui/KisImportExportManager.cpp:550
 #, fuzzy, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr ""
 "Не може да се извезе датотека од тип\n"
 "%1"
 
-#: libs/ui/KisImportExportManager.cpp:544
-#: libs/ui/KisImportExportManager.cpp:587
+#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:594
 #, fuzzy, kde-format
 msgid "Reasons:"
 msgstr ""
 "\n"
 "Ориентација:"
 
-#: libs/ui/KisImportExportManager.cpp:552
+#: libs/ui/KisImportExportManager.cpp:559
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Внесете име"
 
-#: libs/ui/KisImportExportManager.cpp:569
+#: libs/ui/KisImportExportManager.cpp:576
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:581
+#: libs/ui/KisImportExportManager.cpp:588
 #, fuzzy, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr ""
 "Не може да се извезе датотека од тип\n"
 "%1"
 
-#: libs/ui/KisImportExportManager.cpp:584
+#: libs/ui/KisImportExportManager.cpp:591
 #, fuzzy, kde-format
 #| msgid "Page Preview"
 msgid "Reason:"
 msgstr "Преглед на страна"
 
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
-#: libs/ui/KisImportExportManager.cpp:602
+#: libs/ui/KisImportExportManager.cpp:609
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
 #, fuzzy, kde-format
 msgid "Options"
 msgstr "Зачувај документ како"
 
 #. i18n: ectx: property (title), widget (QGroupBox, scale)
-#: libs/ui/KisImportExportManager.cpp:610
+#: libs/ui/KisImportExportManager.cpp:617
 #: plugins/impex/webp/dlg_webp_import.ui:173
 #, fuzzy, kde-format
 msgid "Resize"
 msgstr "&Да"
 
-#: libs/ui/KisImportExportManager.cpp:616
+#: libs/ui/KisImportExportManager.cpp:623
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr ""

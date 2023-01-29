@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-28 02:48+0000\n"
+"POT-Creation-Date: 2023-01-29 02:52+0000\n"
 "PO-Revision-Date: 2022-11-18 11:22+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -29800,29 +29800,29 @@ msgstr ""
 "Datoteka %1 manjka v %2 in je okvarjena. Poskusite jo znova shraniti na "
 "drugo mesto."
 
-#: libs/ui/KisImportExportManager.cpp:279
+#: libs/ui/KisImportExportManager.cpp:280
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Odpri zvok"
 
-#: libs/ui/KisImportExportManager.cpp:373
+#: libs/ui/KisImportExportManager.cpp:374
 #, kde-format
 msgid "Opening document..."
 msgstr "Odpiranje dokumenta ..."
 
-#: libs/ui/KisImportExportManager.cpp:435
+#: libs/ui/KisImportExportManager.cpp:442
 #, kde-format
 msgid "Saving document..."
 msgstr "Shranjevanje dokumenta ..."
 
-#: libs/ui/KisImportExportManager.cpp:529
+#: libs/ui/KisImportExportManager.cpp:536
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr "Slika vsebuje <b>pomočnike</b>. Pomočniki ne bodo shranjeni."
 
-#: libs/ui/KisImportExportManager.cpp:532
+#: libs/ui/KisImportExportManager.cpp:539
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -29831,13 +29831,13 @@ msgid ""
 msgstr ""
 "Slika vsebuje <b>referenčne slike</b>. Referenčne slike ne bodo shranjene."
 
-#: libs/ui/KisImportExportManager.cpp:535
+#: libs/ui/KisImportExportManager.cpp:542
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "Slika vsebuje <b>vodila</b>. Vodila ne bodo shranjena."
 
-#: libs/ui/KisImportExportManager.cpp:538
+#: libs/ui/KisImportExportManager.cpp:545
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -29847,55 +29847,55 @@ msgstr ""
 "Slika vsebuje <b>prilagoditev mreže po meri</b>. Prilagoditev ne bo "
 "shranjena."
 
-#: libs/ui/KisImportExportManager.cpp:543
+#: libs/ui/KisImportExportManager.cpp:550
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "Napaka: te slike ni mogoče shraniti kot %1."
 
-#: libs/ui/KisImportExportManager.cpp:544
-#: libs/ui/KisImportExportManager.cpp:587
+#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:594
 #, kde-format
 msgid "Reasons:"
 msgstr "Razlogi:"
 
-#: libs/ui/KisImportExportManager.cpp:552
+#: libs/ui/KisImportExportManager.cpp:559
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita: napaka pri izvozu"
 
-#: libs/ui/KisImportExportManager.cpp:569
+#: libs/ui/KisImportExportManager.cpp:576
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 "Opozorilo: pri shranjevanju kot %1 boste izgubili informacije slike.    "
 
-#: libs/ui/KisImportExportManager.cpp:581
+#: libs/ui/KisImportExportManager.cpp:588
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr "Pri shranjevanju te slike kot %1 boste izgubili informacije."
 
-#: libs/ui/KisImportExportManager.cpp:584
+#: libs/ui/KisImportExportManager.cpp:591
 #, kde-format
 msgid "Reason:"
 msgstr "Razlog:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
-#: libs/ui/KisImportExportManager.cpp:602
+#: libs/ui/KisImportExportManager.cpp:609
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
 #, kde-format
 msgid "Options"
 msgstr "Možnosti"
 
 #. i18n: ectx: property (title), widget (QGroupBox, scale)
-#: libs/ui/KisImportExportManager.cpp:610
+#: libs/ui/KisImportExportManager.cpp:617
 #: plugins/impex/webp/dlg_webp_import.ui:173
 #, kde-format
 msgid "Resize"
 msgstr "Spremeni velikost"
 
-#: libs/ui/KisImportExportManager.cpp:616
+#: libs/ui/KisImportExportManager.cpp:623
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Shrani sliko tudi kot datoteko Krita."

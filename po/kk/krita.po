@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-28 00:56+0000\n"
+"POT-Creation-Date: 2023-01-29 00:55+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -17374,7 +17374,7 @@ msgctxt "property of a filter layer, noun"
 msgid "Filter"
 msgstr "Сүзгі"
 
-#: libs/image/kis_asl_layer_style_serializer.cpp:1273
+#: libs/image/kis_asl_layer_style_serializer.cpp:1283
 #, fuzzy, kde-format
 #| msgid "Embedded svg shape"
 msgctxt "Auto-generated layer style name for embedded styles (style itself)"
@@ -30828,23 +30828,23 @@ msgid ""
 "different location."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:279
+#: libs/ui/KisImportExportManager.cpp:280
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Ашып өзгерту..."
 
-#: libs/ui/KisImportExportManager.cpp:373
+#: libs/ui/KisImportExportManager.cpp:374
 #, fuzzy, kde-format
 msgid "Opening document..."
 msgstr "Құжатты ашу"
 
-#: libs/ui/KisImportExportManager.cpp:435
+#: libs/ui/KisImportExportManager.cpp:442
 #, fuzzy, kde-format
 msgid "Saving document..."
 msgstr "Құжатты сақтау"
 
-#: libs/ui/KisImportExportManager.cpp:529
+#: libs/ui/KisImportExportManager.cpp:536
 #, fuzzy, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
@@ -30852,7 +30852,7 @@ msgstr ""
 "Бұл кескінде векторлы, клонды, не құрылған қабаттары бар.\n"
 "Бұл қабаттар нүктелі түрде сақталмақ."
 
-#: libs/ui/KisImportExportManager.cpp:532
+#: libs/ui/KisImportExportManager.cpp:539
 #, fuzzy, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30862,7 +30862,7 @@ msgstr ""
 "Бұл кескінде векторлы, клонды, не құрылған қабаттары бар.\n"
 "Бұл қабаттар нүктелі түрде сақталмақ."
 
-#: libs/ui/KisImportExportManager.cpp:535
+#: libs/ui/KisImportExportManager.cpp:542
 #, fuzzy, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
@@ -30870,7 +30870,7 @@ msgstr ""
 "Бұл кескінде векторлы, клонды, не құрылған қабаттары бар.\n"
 "Бұл қабаттар нүктелі түрде сақталмақ."
 
-#: libs/ui/KisImportExportManager.cpp:538
+#: libs/ui/KisImportExportManager.cpp:545
 #, fuzzy, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30880,58 +30880,58 @@ msgstr ""
 "Бұл кескінде векторлы, клонды, не құрылған қабаттары бар.\n"
 "Бұл қабаттар нүктелі түрде сақталмақ."
 
-#: libs/ui/KisImportExportManager.cpp:543
+#: libs/ui/KisImportExportManager.cpp:550
 #, fuzzy, kde-format
 #| msgid "Cannot export images in %1.\n"
 msgid "Error: cannot save this image as a %1."
 msgstr "%1 дегенге кескіндердің экспорты болмады.\n"
 
-#: libs/ui/KisImportExportManager.cpp:544
-#: libs/ui/KisImportExportManager.cpp:587
+#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:594
 #, fuzzy, kde-format
 #| msgid "Dimensions"
 msgid "Reasons:"
 msgstr "Өлшемдері"
 
-#: libs/ui/KisImportExportManager.cpp:552
+#: libs/ui/KisImportExportManager.cpp:559
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Тік жиегі:"
 
-#: libs/ui/KisImportExportManager.cpp:569
+#: libs/ui/KisImportExportManager.cpp:576
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:581
+#: libs/ui/KisImportExportManager.cpp:588
 #, fuzzy, kde-format
 #| msgid "Cannot export images in %1.\n"
 msgid "You will lose information when saving this image as a %1."
 msgstr "%1 дегенге кескіндердің экспорты болмады.\n"
 
-#: libs/ui/KisImportExportManager.cpp:584
+#: libs/ui/KisImportExportManager.cpp:591
 #, fuzzy, kde-format
 #| msgid "Ruler assistant"
 msgid "Reason:"
 msgstr "Көмекші өлшегіш"
 
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
-#: libs/ui/KisImportExportManager.cpp:602
+#: libs/ui/KisImportExportManager.cpp:609
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
 #, kde-format
 msgid "Options"
 msgstr "Параметрлері"
 
-#: libs/ui/KisImportExportManager.cpp:610
+#: libs/ui/KisImportExportManager.cpp:617
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Resize"
 msgid "Resize"
 msgstr "Өлшемін өзгерту"
 
-#: libs/ui/KisImportExportManager.cpp:616
+#: libs/ui/KisImportExportManager.cpp:623
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr ""

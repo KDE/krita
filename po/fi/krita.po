@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-28 00:56+0000\n"
+"POT-Creation-Date: 2023-01-29 00:55+0000\n"
 "PO-Revision-Date: 2022-09-14 16:45+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -17924,7 +17924,7 @@ msgctxt "property of a filter layer, noun"
 msgid "Filter"
 msgstr "Suodin"
 
-#: libs/image/kis_asl_layer_style_serializer.cpp:1273
+#: libs/image/kis_asl_layer_style_serializer.cpp:1283
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "Auto-generated layer style collection name for embedded styles "
@@ -31706,7 +31706,7 @@ msgid ""
 "different location."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:279
+#: libs/ui/KisImportExportManager.cpp:280
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Open and edit"
@@ -31714,24 +31714,24 @@ msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Avaa ja muokkaa"
 
-#: libs/ui/KisImportExportManager.cpp:373
+#: libs/ui/KisImportExportManager.cpp:374
 #, fuzzy, kde-format
 #| msgid "Opening Document"
 msgid "Opening document..."
 msgstr "Avataan tiedostoa"
 
-#: libs/ui/KisImportExportManager.cpp:435
+#: libs/ui/KisImportExportManager.cpp:442
 #, kde-format
 msgid "Saving document..."
 msgstr "Tiedostoa tallennetaan..."
 
-#: libs/ui/KisImportExportManager.cpp:529
+#: libs/ui/KisImportExportManager.cpp:536
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr "Tässä kuvassa on <b>avustajia</b>. Avustajia ei tallenneta."
 
-#: libs/ui/KisImportExportManager.cpp:532
+#: libs/ui/KisImportExportManager.cpp:539
 #, fuzzy, kde-format
 #| msgctxt "image conversion warning"
 #| msgid "The image contains <b>guides</b>. The guides will not be saved."
@@ -31741,13 +31741,13 @@ msgid ""
 "saved."
 msgstr "Kuva sisältää <b>apuviivoja</b>. Apuviivoja ei tallenneta"
 
-#: libs/ui/KisImportExportManager.cpp:535
+#: libs/ui/KisImportExportManager.cpp:542
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "Kuva sisältää <b>apuviivoja</b>. Apuviivoja ei tallenneta"
 
-#: libs/ui/KisImportExportManager.cpp:538
+#: libs/ui/KisImportExportManager.cpp:545
 #, fuzzy, kde-format
 #| msgctxt "image conversion warning"
 #| msgid ""
@@ -31759,24 +31759,24 @@ msgid ""
 "will not be saved."
 msgstr "Kuva sisältää<b>tasovedoksia</b>.Tasovedoksia ei tallenneta."
 
-#: libs/ui/KisImportExportManager.cpp:543
+#: libs/ui/KisImportExportManager.cpp:550
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "Virhe: kuvaa ei voi tallentaa muodossa %1."
 
-#: libs/ui/KisImportExportManager.cpp:544
-#: libs/ui/KisImportExportManager.cpp:587
+#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:594
 #, kde-format
 msgid "Reasons:"
 msgstr "Syyt:"
 
-#: libs/ui/KisImportExportManager.cpp:552
+#: libs/ui/KisImportExportManager.cpp:559
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Vakava virhe"
 
-#: libs/ui/KisImportExportManager.cpp:569
+#: libs/ui/KisImportExportManager.cpp:576
 #, fuzzy, kde-format
 #| msgctxt "Keep the extra space at the end of the sentence, please"
 #| msgid "Warning: saving as %1 will lose information from your image.    "
@@ -31784,24 +31784,24 @@ msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr "Varoitus: Talletaminen muodossa %1 hävittää kuvainformaatiota."
 
-#: libs/ui/KisImportExportManager.cpp:581
+#: libs/ui/KisImportExportManager.cpp:588
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr "Menetät informaatiota kun tallennat tämän kuvan muodossa %1."
 
-#: libs/ui/KisImportExportManager.cpp:584
+#: libs/ui/KisImportExportManager.cpp:591
 #, kde-format
 msgid "Reason:"
 msgstr "Syy:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
-#: libs/ui/KisImportExportManager.cpp:602
+#: libs/ui/KisImportExportManager.cpp:609
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
 #, kde-format
 msgid "Options"
 msgstr "Asetukset"
 
-#: libs/ui/KisImportExportManager.cpp:610
+#: libs/ui/KisImportExportManager.cpp:617
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Resize"
@@ -31810,7 +31810,7 @@ msgstr ""
 "Muuta kokoa\n"
 "koon muutos"
 
-#: libs/ui/KisImportExportManager.cpp:616
+#: libs/ui/KisImportExportManager.cpp:623
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Tallenna kuvasi myös Krita tiedostona."

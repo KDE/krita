@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-29 00:55+0000\n"
+"POT-Creation-Date: 2023-01-30 00:55+0000\n"
 "PO-Revision-Date: 2023-01-19 09:52+0000\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -19665,7 +19665,7 @@ msgstr "Recursos Locais"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:776
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:771
-#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:708
+#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
 #: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
@@ -19682,7 +19682,7 @@ msgstr "Recursos Locais"
 #: libs/ui/KisMainWindow.cpp:2148 libs/ui/KisMainWindow.cpp:2761
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
-#: libs/ui/KisRemoteFileFetcher.cpp:57 libs/ui/KisRemoteFileFetcher.cpp:87
+#: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:681 libs/ui/KisView.cpp:1137
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
@@ -28842,7 +28842,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Mudar a Camada de Ficheiro"
 
-#: libs/ui/kis_clipboard.cc:709 libs/ui/KisView.cpp:682
+#: libs/ui/kis_clipboard.cc:714 libs/ui/KisView.cpp:682
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -30908,22 +30908,24 @@ msgstr "Não foi possível carregar o %1."
 #: libs/ui/KisRemoteFileFetcher.cpp:39
 #, kde-format
 msgctxt "Fetching remote image"
-msgid "Do you want to download the image at %1?"
-msgstr "Deseja transferir a imagem em %1?"
+msgid ""
+"Do you want to download the image from %1?\n"
+"Click \"Show Details\" to view the full link to the image."
+msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:58
+#: libs/ui/KisRemoteFileFetcher.cpp:61
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "A transferir a imagem de %1..."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:72
+#: libs/ui/KisRemoteFileFetcher.cpp:75
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr "A transferir a imagem de %1... (%2 / %3)"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:89
+#: libs/ui/KisRemoteFileFetcher.cpp:92
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."
@@ -60178,3 +60180,7 @@ msgstr "Ferramenta de Ampliação"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta de Imagens de Referência"
+
+#~ msgctxt "Fetching remote image"
+#~ msgid "Do you want to download the image at %1?"
+#~ msgstr "Deseja transferir a imagem em %1?"

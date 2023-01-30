@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-29 00:55+0000\n"
-"PO-Revision-Date: 2023-01-20 19:03+0100\n"
+"POT-Creation-Date: 2023-01-30 00:55+0000\n"
+"PO-Revision-Date: 2023-01-29 11:02+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -19465,7 +19465,7 @@ msgstr "Ressources locales"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:776
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:771
-#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:708
+#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
 #: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
@@ -19482,7 +19482,7 @@ msgstr "Ressources locales"
 #: libs/ui/KisMainWindow.cpp:2148 libs/ui/KisMainWindow.cpp:2761
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
-#: libs/ui/KisRemoteFileFetcher.cpp:57 libs/ui/KisRemoteFileFetcher.cpp:87
+#: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:681 libs/ui/KisView.cpp:1137
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
@@ -28707,7 +28707,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Modifier le calque de fichier"
 
-#: libs/ui/kis_clipboard.cc:709 libs/ui/KisView.cpp:682
+#: libs/ui/kis_clipboard.cc:714 libs/ui/KisView.cpp:682
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -30670,19 +30670,16 @@ msgid "New palette name:"
 msgstr "Nouveau nom pour la palette :"
 
 #: libs/ui/KisPaletteEditor.cpp:102
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "Krita Color Palette"
+#, kde-format
 msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
-msgstr "Palette de couleurs de Krita"
+msgstr "Palette de Krita (KPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:103
-#, fuzzy, kde-format
-#| msgid "GIMP Patterns (*.pat)"
+#, kde-format
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
-msgstr "Motifs GIMP (*.pat)"
+msgstr "Palette de Gimp (GPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:106
 #, kde-format
@@ -30810,22 +30807,24 @@ msgstr "Impossible de lire %1."
 #: libs/ui/KisRemoteFileFetcher.cpp:39
 #, kde-format
 msgctxt "Fetching remote image"
-msgid "Do you want to download the image at %1?"
-msgstr "Voulez-vous vraiment télécharger l'image à %1 ?"
+msgid ""
+"Do you want to download the image from %1?\n"
+"Click \"Show Details\" to view the full link to the image."
+msgstr ""
 
-#: libs/ui/KisRemoteFileFetcher.cpp:58
+#: libs/ui/KisRemoteFileFetcher.cpp:61
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "Téléchargement en cours de l'image depuis %1..."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:72
+#: libs/ui/KisRemoteFileFetcher.cpp:75
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr "Téléchargement d'une image à partir de %1... (%2 / %3)"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:89
+#: libs/ui/KisRemoteFileFetcher.cpp:92
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."
@@ -39331,10 +39330,9 @@ msgstr "Ajouter une couleur du premier plan"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLock)
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:139
-#, fuzzy, kde-format
-#| msgid "Remove current palette"
+#, kde-format
 msgid "Lock the current palette."
-msgstr "Supprimer la palette en cours"
+msgstr "Verrouiller la palette courante"
 
 #: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
 #, kde-format
@@ -60288,6 +60286,10 @@ msgstr "Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Images de référence"
+
+#~ msgctxt "Fetching remote image"
+#~ msgid "Do you want to download the image at %1?"
+#~ msgstr "Voulez-vous vraiment télécharger l'image à %1 ?"
 
 #~ msgctxt "Heading for the list of Krita authors/developers"
 #~ msgid "Authors"

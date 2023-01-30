@@ -54,6 +54,7 @@
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisStorageModel.h>
 #include <KisResourceUserOperations.h>
+#include <KisResourceThumbnailCache.h>
 
 #include <KisWidgetConnectionUtils.h>
 
@@ -89,7 +90,10 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     const qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
 
     const QSize hidpiSize = itemRect.size() * devicePixelRatioF;
-    thumbnail = thumbnail.scaled(hidpiSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    thumbnail = KisResourceThumbnailCache::instance()->getImage(index,
+                                                                hidpiSize,
+                                                                Qt::KeepAspectRatio,
+                                                                Qt::SmoothTransformation);
     thumbnail.setDevicePixelRatio(devicePixelRatioF);
 
     painter->save();

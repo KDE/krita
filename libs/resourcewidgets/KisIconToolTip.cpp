@@ -11,12 +11,13 @@
 #include <QTextDocument>
 #include <QUrl>
 #include <QModelIndex>
-
-#include <KisResourceModel.h>
-#include "KoCheckerBoardPainter.h"
 #include <QPainter>
 
+#include <KisResourceModel.h>
+#include <KisResourceThumbnailCache.h>
 #include <klocalizedstring.h>
+
+#include "KoCheckerBoardPainter.h"
 #include "kis_assert.h"
 
 KisIconToolTip::KisIconToolTip()
@@ -57,9 +58,17 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
                 // this allows the pixel patterns to be displayed correctly,
                 // while the presets (which have 200x200 thumbnails) will still be pretty
                 // Fast Transformation == Nearest Neighbour
-                thumb = thumb.scaled(m_fixedToolTipThumbnailSize*devicePixelRatioF(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
+                thumb = KisResourceThumbnailCache::instance()->getImage(index,
+                                                                        m_fixedToolTipThumbnailSize
+                                                                            * devicePixelRatioF(),
+                                                                        Qt::IgnoreAspectRatio,
+                                                                        Qt::FastTransformation);
             } else {
-                thumb = thumb.scaled(m_fixedToolTipThumbnailSize*devicePixelRatioF(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                thumb = KisResourceThumbnailCache::instance()->getImage(index,
+                                                                        m_fixedToolTipThumbnailSize
+                                                                            * devicePixelRatioF(),
+                                                                        Qt::IgnoreAspectRatio,
+                                                                        Qt::SmoothTransformation);
             }
         }
     }

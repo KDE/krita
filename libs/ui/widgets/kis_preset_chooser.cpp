@@ -35,6 +35,7 @@
 #include <kis_icon.h>
 #include <KisResourceModelProvider.h>
 #include <KisTagFilterResourceProxyModel.h>
+#include <KisResourceThumbnailCache.h>
 
 
 /// The resource item delegate for rendering the resource preview
@@ -84,25 +85,31 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
     bool dirty = index.data(Qt::UserRole + KisAbstractResourceModel::Dirty).toBool();
 
-    QImage preview = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
+    QImage preview = KisResourceThumbnailCache::instance()->getImage(index);
 
     if (preview.isNull()) {
         preview = QImage(512, 512, QImage::Format_RGB32);
         preview.fill(Qt::red);
     }
 
-    QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
     qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
 
     QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
     if (!m_showText) {
-        QImage previewHighDpi = preview.scaled(paintRect.size()*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        QImage previewHighDpi =
+            KisResourceThumbnailCache::instance()->getImage(index,
+                                                             paintRect.size() * devicePixelRatioF,
+                                                             Qt::IgnoreAspectRatio,
+                                                             Qt::SmoothTransformation);
         previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
         painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
     }
     else {
         QSize pixSize(paintRect.height(), paintRect.height());
-        QImage previewHighDpi = preview.scaled(pixSize*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        QImage previewHighDpi = KisResourceThumbnailCache::instance()->getImage(index,
+                                                                                 pixSize * devicePixelRatioF,
+                                                                                 Qt::KeepAspectRatio,
+                                                                                 Qt::SmoothTransformation);
         previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
         painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
 
@@ -138,6 +145,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
 
     bool broken = false;
+    QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
     QStringList requiredBrushes = metaData["dependent_resources_filenames"].toStringList();
     if (!requiredBrushes.isEmpty()) {
         KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Brushes);

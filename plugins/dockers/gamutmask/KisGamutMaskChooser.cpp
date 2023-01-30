@@ -18,6 +18,7 @@
 #include <KisResourceItemChooser.h>
 #include <KisResourceItemListView.h>
 #include <KisResourceModel.h>
+#include <KisResourceThumbnailCache.h>
 #include <kis_icon_utils.h>
 #include <kis_config.h>
 #include "KisPopupButton.h"
@@ -66,7 +67,11 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
 
     if (m_mode == KisGamutMaskChooser::ViewMode::THUMBNAIL) {
-        QImage previewHighDPI = preview.scaled(paintRect.size()*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        QImage previewHighDPI =
+            KisResourceThumbnailCache::instance()->getImage(index,
+                                                            paintRect.size() * devicePixelRatioF,
+                                                            Qt::IgnoreAspectRatio,
+                                                            Qt::SmoothTransformation);
         previewHighDPI.setDevicePixelRatio(devicePixelRatioF);
         painter->drawImage(paintRect.x(), paintRect.y(), previewHighDPI);
 
@@ -83,7 +88,11 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     } else {
         QSize previewSize(paintRect.height(), paintRect.height());
 
-        QImage previewHighDPI = preview.scaled(previewSize*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        QImage previewHighDPI =
+            KisResourceThumbnailCache::instance()->getImage(index,
+                                                            previewSize * devicePixelRatioF,
+                                                            Qt::IgnoreAspectRatio,
+                                                            Qt::SmoothTransformation);
         previewHighDPI.setDevicePixelRatio(devicePixelRatioF);
 
         if (option.state & QStyle::State_Selected) {

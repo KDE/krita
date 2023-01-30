@@ -51,6 +51,8 @@ set(kritaresources_LIB_SRCS
     KoCanvasResourcesInterface.cpp
     KoLocalStrokeCanvasResources.cpp
     KisEmbeddedResourceStorageProxy.cpp
+
+    KisResourceThumbnailCache.cpp
 )
 
 qt5_add_resources(kritaresources_LIB_SRCS sql.qrc)

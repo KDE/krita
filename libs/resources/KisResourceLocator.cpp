@@ -40,6 +40,7 @@
 #include <KisStorageModel.h>
 #include <KoMD5Generator.h>
 #include <KoResourceLoadResult.h>
+#include <KisResourceThumbnailCache.h>
 
 #include "ResourceDebug.h"
 
@@ -50,7 +51,6 @@ public:
     QString resourceLocation;
     QMap<QString, KisResourceStorageSP> storages;
     QHash<QPair<QString, QString>, KoResourceSP> resourceCache;
-    QMap<QPair<QString, QString>, QImage> thumbnailCache;
     QMap<QPair<QString, QString>, KisTagSP> tagCache;
     QStringList errorMessages;
 };
@@ -149,24 +149,6 @@ bool KisResourceLocator::resourceCached(QString storageLocation, const QString &
     QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + filename);
 
     return d->resourceCache.contains(key);
-}
-
-void KisResourceLocator::cacheThumbnail(QString storageLocation, const QString &resourceType, const QString &filename,
-                                        const QImage &img) {
-    storageLocation = makeStorageLocationAbsolute(storageLocation);
-    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + filename);
-
-    d->thumbnailCache[key] = img;
-}
-
-QImage KisResourceLocator::thumbnailCached(QString storageLocation, const QString &resourceType, const QString &filename)
-{
-    storageLocation = makeStorageLocationAbsolute(storageLocation);
-    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + filename);
-    if (d->thumbnailCache.contains(key)) {
-        return d->thumbnailCache[key];
-    }
-    return QImage();
 }
 
 void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
@@ -425,8 +407,8 @@ bool KisResourceLocator::setResourceActive(int resourceId, bool active)
     QPair<QString, QString> key = QPair<QString, QString> (rs.storageLocation, rs.resourceType + "/" + rs.resourceFileName);
 
     d->resourceCache.remove(key);
-    if (!active && d->thumbnailCache.contains(key)) {
-        d->thumbnailCache.remove(key);
+    if (!active) {
+        KisResourceThumbnailCache::instance()->remove(key);
     }
 
     bool result = KisResourceCacheDb::setResourceActive(resourceId, active);
@@ -592,7 +574,7 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
         const QPair<QString, QString> key = {absoluteStorageLocation, resourceType + "/" + resource->filename()};
         // Add to the cache
         d->resourceCache[key] = resource;
-        d->thumbnailCache[key] = resource->thumbnail();
+        KisResourceThumbnailCache::instance()->insert(key, resource->thumbnail());
 
         return resource;
     }
@@ -676,7 +658,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     if (!storage->supportsVersioning()) return false;
 
     // remove older version
-    d->thumbnailCache.remove(QPair<QString, QString> (storageLocation, resourceType + "/" + resource->filename()));
+    KisResourceThumbnailCache::instance()->remove(storageLocation, resourceType, resource->filename());
 
     resource->updateThumbnail();
     resource->setVersion(resource->version() + 1);
@@ -705,7 +687,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     // Update the resource in the cache
     QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + resource->filename());
     d->resourceCache[key] = resource;
-    d->thumbnailCache[key] = resource->thumbnail();
+    KisResourceThumbnailCache::instance()->insert(key, resource->thumbnail());
 
     return true;
 }
@@ -778,8 +760,8 @@ void KisResourceLocator::purge(const QString &storageLocation)
 {
     Q_FOREACH(const auto key, d->resourceCache.keys()) {
         if (key.first == storageLocation) {
-            d->resourceCache.take(key);
-            d->thumbnailCache.take(key);
+            d->resourceCache.remove(key);
+            KisResourceThumbnailCache::instance()->remove(key);
         }
     }
 }

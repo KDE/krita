@@ -21,16 +21,21 @@
 #include "KisResourceLocator.h"
 #include "KisResourceModel.h"
 #include "KisResourceModelProvider.h"
+#include "KisResourceThumbnailCache.h"
 #include "KisTag.h"
 #include "kis_assert.h"
 
 QImage KisResourceQueryMapper::getThumbnailFromQuery(const QSqlQuery &query, bool useResourcePrefix)
 {
-    QString storageLocation = query.value("location").toString();
-    QString resourceType = query.value("resource_type").toString();
-    QString filename = query.value(useResourcePrefix ? "resource_filename" : "filename").toString();
+    const QString storageLocation =
+        KisResourceLocator::instance()->makeStorageLocationAbsolute(query.value("location").toString());
+    const QString resourceType = query.value("resource_type").toString();
+    const QString filename = query.value(useResourcePrefix ? "resource_filename" : "filename").toString();
 
-    QImage img = KisResourceLocator::instance()->thumbnailCached(storageLocation, resourceType, filename);
+    // NOTE: Only use the private methods of KisResourceThumbnailCache here to prevent any chances of
+    // recursion.
+    QImage img =
+        KisResourceThumbnailCache::instance()->originalImage(storageLocation, resourceType, filename);
     if (!img.isNull()) {
         return img;
     } else {
@@ -63,7 +68,8 @@ QImage KisResourceQueryMapper::getThumbnailFromQuery(const QSqlQuery &query, boo
         QBuffer buf(&ba);
         buf.open(QBuffer::ReadOnly);
         img.load(&buf, "PNG");
-        KisResourceLocator::instance()->cacheThumbnail(storageLocation, resourceType, filename, img);
+
+        KisResourceThumbnailCache::instance()->insert(storageLocation, resourceType, filename, img);
         return img;
     }
 }

@@ -27,8 +27,12 @@ public:
     //  (QPainter*, QModelIndex&, QRect, const QPalette&, bool)’
 
     QImage getReadyThumbnail(const QModelIndex& index, QSize rect, const QPalette& palette) const;
-    void paint(QPainter *painter, const QModelIndex& index, QRect rect, const QPalette& palette, bool selected, bool addMargin) const;
-    void paint(QPainter *painter, QImage thumbnail, QString resourceType, QString name, QRect rect, const QPalette& palette, bool selected, bool addMargin) const;
+    void paint(QPainter *painter,
+               const QModelIndex &index,
+               QRect rect,
+               const QPalette &palette,
+               bool selected,
+               bool addMargin) const;
 
 private:
     KoCheckerBoardPainter m_checkerPainter;

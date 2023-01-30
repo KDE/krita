@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-29 02:52+0000\n"
-"PO-Revision-Date: 2023-01-28 00:41+0300\n"
+"PO-Revision-Date: 2023-01-30 00:41+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -4227,7 +4227,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "i)_Wet_Bristles.kpp"
 msgid "i) Wet Bristles"
-msgstr "i) Islak Kıllar"
+msgstr "i) Kıllar Islak"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4236,7 +4236,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "i)_Wet_Bristles_Rough.kpp"
 msgid "i) Wet Bristles Rough"
-msgstr "i) Kaba Islak Kıllar"
+msgstr "i) Kıllar Kaba Islak"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4245,7 +4245,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "i)_Wet_Circle.kpp"
 msgid "i) Wet Circle"
-msgstr "i) Islak Çember"
+msgstr "i) Çember Islak"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4254,7 +4254,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "i)_Wet_Knife.kpp"
 msgid "i) Wet Knife"
-msgstr "i) Islak Bıçak"
+msgstr "i) Bıçak Islak"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4263,7 +4263,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "i)_Wet_Paint.kpp"
 msgid "i) Wet Paint"
-msgstr "i) Islak Boya"
+msgstr "i) Boya Islak"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4272,7 +4272,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "i)_Wet_Paint_Details.kpp"
 msgid "i) Wet Paint Details"
-msgstr "i) Ayrıntılı Islak Boya"
+msgstr "i) Boya Ayrıntısı Islak"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4281,7 +4281,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "i)_Wet_Smear.kpp"
 msgid "i) Wet Smear"
-msgstr "i) Islak Bulaşma"
+msgstr "i) Bulaşma Islak"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4290,7 +4290,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "i)_Wet_Textured_Soft.kpp"
 msgid "i) Wet Textured Soft"
-msgstr "i) Yumuşak Islak Doku"
+msgstr "i) Yumuşak Doku Islak"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -15137,7 +15137,7 @@ msgstr "Rıhtımcı Başlık Çubuklarını Göster"
 #, kde-format
 msgctxt "action"
 msgid "Configure Tool&bars..."
-msgstr "Araç Çu&buklarını Yapılandır..."
+msgstr "&Araç Çubuklarını Yapılandır..."
 
 #. i18n: context: toolTip @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
@@ -17963,7 +17963,7 @@ msgstr "L*a*b* (16 bit tamsayı/kanal, yönetilmeyen)"
 #, kde-format
 msgctxt "Lightness value in Lab color model"
 msgid "Lightness"
-msgstr "Aydınlanma"
+msgstr "Açıklık"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:34
@@ -18896,7 +18896,7 @@ msgstr "Doygunluk HSL"
 #, kde-format
 msgctxt "Blending mode - Lightness HSI"
 msgid "Lightness"
-msgstr "Aydınlanma"
+msgstr "Açıklık"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:164
 #, kde-format
@@ -22788,7 +22788,7 @@ msgstr "UYARI: Geçerli ekran HDR olarak sunmayı desteklemiyor"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1841
 #, kde-format
 msgid "Configure Krita"
-msgstr "Kritayı Yapılandır"
+msgstr "Krita'yı Yapılandır"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1858
 #, kde-format
@@ -23641,9 +23641,9 @@ msgid ""
 "sacrificed to maintain the perceived color. White point changed to result in "
 "neutral grays. Intended for images."
 msgstr ""
-"Renk tonu umut verici bir şekilde geliştirildi (ama gerekli değil), ışık ve "
-"doygunluk algılanan rengi geliştirmek için kurban edildi. Beyaz nokta nötr "
-"griye dönüşecek şekilde değişti. Görsellere yöneliktir."
+"Ton umarım korunur (ancak gerekli değildir), algılanan rengi korumak için "
+"açıklık ve doygunluk feda edilir. Beyaz nokta, nötr grilerle sonuçlanacak "
+"şekilde değiştirildi. Görseller için tasarlanmıştır."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
@@ -23683,9 +23683,9 @@ msgid ""
 "saturation. White point changed to result in neutral grays. Intended for "
 "business graphics (make it colorful charts, graphs, overheads, ...)"
 msgstr ""
-"Doygunluğu korumak için renk ve doygunluk hafiflikle korundu. Beyaz nokta "
-"nötr griye dönüşecek şekilde değişti. Ticari grafiklere yöneliktir (renkli "
-"grafikler, grafikler, genel giderler ...)"
+"Doygunluğu korumak için açıklıktan feda edilen ton ve doygunluk korunur. "
+"Beyaz nokta, nötr grilerle sonuçlanacak şekilde değiştirildi. İş grafikleri "
+"için tasarlanmıştır (renkli çizelgeler, grafikler, genel giderler, ... yapın)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
@@ -23710,9 +23710,10 @@ msgid ""
 "is sacrificed. White point for source and destination; unchanged. Intended "
 "for spot colors (Pantone, TruMatch, logo colors, ...)"
 msgstr ""
-"Hedef aygıt gamında; renk, açıklık ve doygunluk korunur. Gamın dışında; renk "
-"ve açıklık korunur, doygunluk feda edilir. Kaynak ve hedef için beyaz nokta; "
-"değişmez. Spot renklere yöneliktir (Pantone, TruMatch, logo renkleri, ...)"
+"Hedef aygıt gamı içinde; renk tonu, açıklık ve doygunluk korunur. Gamın "
+"dışında; ton ve açıklık korunur, doygunluk feda edilir. Kaynak ve hedef için "
+"beyaz nokta; değişmeden Spot renkler için tasarlanmıştır (Pantone, TruMatch, "
+"logo renkleri, ...)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:130
@@ -33719,7 +33720,7 @@ msgstr "Otomatik"
 #, kde-format
 msgctxt "Name of Dither pattern value mode - Lightness"
 msgid "Lightness"
-msgstr "Aydınlanma"
+msgstr "Açıklık"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #: libs/ui/widgets/KisDitherWidget.ui:129
@@ -34171,7 +34172,7 @@ msgstr "Değer:"
 #: libs/widgets/KisSpinboxHSXSelector.cpp:68
 #, kde-format
 msgid "Lightness:"
-msgstr "Hafiflik:"
+msgstr "Açıklık:"
 
 #: libs/widgets/KisSpinboxHSXSelector.cpp:71
 #, kde-format
@@ -34969,7 +34970,7 @@ msgstr "&Yapılandır %1..."
 #: libs/widgetutils/config/kstandardaction_p.h:91
 #, kde-format
 msgid "Configure Tool&bars..."
-msgstr "&Araç Çubuğunu Yapılandır..."
+msgstr "&Araç Çubuklarını Yapılandır..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:92
 #, kde-format
@@ -37009,7 +37010,7 @@ msgstr "Gösterilecek HSL Sürgüleri"
 #, kde-format
 msgctxt "Lightness HSI"
 msgid "Lightness"
-msgstr "Aydınlanma"
+msgstr "Açıklık"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupHsi)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1246
@@ -37045,13 +37046,13 @@ msgstr "Luma"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1324
 #, kde-format
 msgid "Lightness, Saturation and Hue hotkey steps"
-msgstr "Işık, Doygunluk ve Ton kısyol adımları"
+msgstr "Açıklık, Doygunluk ve Ton kısayol adımları"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1330
 #, kde-format
 msgid "Lightness: "
-msgstr "Aydınlanma: "
+msgstr "Açıklık: "
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, sb_lightness)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, sb_saturation)
@@ -40043,7 +40044,7 @@ msgid ""
 "result in neutral grays. Intended for images."
 msgstr ""
 "Renk tonu korunur (gerekli değil),\n"
-"Hafiflik ve doygunluk algılanan rengin korunması için\n"
+"Açıklık ve doygunluk algılanan rengin korunması için\n"
 "feda edilir. Beyaz nokta, nötr grilerde sonuca değiştirilir.\n"
 "Görseller içindir."
 
@@ -40084,14 +40085,13 @@ msgid ""
 "then, it is used. Else reverts to perceptual\n"
 "intent."
 msgstr ""
-"Doygunluğu korumak için renk ve doygunluk\n"
-"aydınlıkla korundu. Beyaz nokta nötr griye\n"
-"dönüşecek şekilde değişti. Ticari grafikler\n"
-"için tasarlanmıştır (renkli grafikler, grafikler,\n"
-"genel giderler, ...)\n"
-"Eğer yeterli tablo profilde gösterilirse\n"
-"bu kullanılır. Diğer türlü algısal amaca\n"
-"dönüştürülür."
+"Doygunluğu korumak için açıklıktan feda\n"
+"edilen ton ve doygunluk korunur. Beyaz\n"
+"nokta, nötr grilerle sonuçlanacak biçimde\n"
+"değiştirildi. İş grafikleri için tasarlanmıştır\n"
+"(renkli çizelgeler, grafikler, genel giderler, ...).\n"
+"Profilde yeterli tablo varsa kullanılır. Diğer türlü,\n"
+"algısal amaca geri döner."
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:99
@@ -40111,8 +40111,8 @@ msgid ""
 "colors (Pantone, TruMatch, logo colors, ...)"
 msgstr ""
 "Hedef araç gamının içinde; renk tonu,\n"
-"aydınlık ve doygunluk geliştirildi. Gamın dışında;\n"
-"renk tonu ve aydınlık geliştirildi,\n"
+"açıklık ve doygunluk geliştirildi. Gamın dışında;\n"
+"renk tonu ve açıklık geliştirildi,\n"
 "doygunluktan feda edildi. Kaynak ve hedef için\n"
 "beyaz nokta; değişmedi. Nokta renklere\n"
 "yöneliktir (Pantone, TruMatch, simge renkleri, ...)"
@@ -42880,7 +42880,7 @@ msgstr "Solgunlaştır"
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:229
 #, kde-format
 msgid "Lightness"
-msgstr "Aydınlanma"
+msgstr "Açıklık"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:232
 #, kde-format
@@ -42973,7 +42973,7 @@ msgstr "Soldurma yöntemi:"
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:51
 #, kde-format
 msgid "&Lightness"
-msgstr "&Aydınlanma"
+msgstr "&Açıklık"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioLuminosityBT709)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:61
@@ -43021,7 +43021,7 @@ msgstr "Ton/Doygunluk/Değer"
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:64
 #, kde-format
 msgid "Hue/Saturation/Lightness"
-msgstr "Renk/Doygunluk/Işıklılık"
+msgstr "Renk/Doygunluk/Açıklık"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:69
@@ -43687,7 +43687,7 @@ msgstr "Düzeyler"
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:49
 #, kde-format
 msgid "Modify lightness only"
-msgstr "Yalnızca aydınlatmayı değiştir"
+msgstr "Yalnızca açıklığı değiştir"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAllChannelsMode)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:71
@@ -44223,7 +44223,7 @@ msgstr "Miktar:"
 #: plugins/filters/unsharp/wdgunsharp.ui:88
 #, kde-format
 msgid "Lightness Only:"
-msgstr "Yalnızca Aydınlık:"
+msgstr "Yalnızca Açıklık:"
 
 #: plugins/filters/wavefilter/wavefilter.cpp:97
 #, kde-format
@@ -49414,7 +49414,7 @@ msgstr "Iptc"
 #: plugins/paintops/colorsmudge/colorsmudge_paintop_plugin.cpp:30
 #, kde-format
 msgid "Color Smudge"
-msgstr "Renk Lekeleme"
+msgstr "Renk Lekesi"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop.cpp:52
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:59
@@ -49428,7 +49428,7 @@ msgstr "Renk Oranı"
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:47
 #, kde-format
 msgid "Smudge Mode"
-msgstr "Lekeleme Kipi"
+msgstr "Leke Kipi"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:44
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:27
@@ -49450,7 +49450,7 @@ msgstr "Renk Oranı"
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:106
 #, kde-format
 msgid "Smear Alpha"
-msgstr "Alfaya Bulaşma"
+msgstr "Alfa Bulaştır"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:142
 #, kde-format
@@ -49582,31 +49582,31 @@ msgid ""
 "but uses all layers that are currently visible for smudge input\n"
 "NOTE: This mode is only able to work correctly with a fully opaque background"
 msgstr ""
-"Geçerli katmak üzerine boyar; ancak lekeleme\n"
-" girdisi için şu anda geçerli olan tüm katmanları kullanır\n"
+"Geçerli katmanda boyar; ancak leke\n"
+"girdisi için şu anda geçerli olan tüm katmanları kullanır\n"
 "NOT: Bu kip, yalnızca tümüyle mat bir arka planda düzgünce çalışabilir"
 
 #: plugins/paintops/colorsmudge/kis_overlay_mode_option.h:61
 #, kde-format
 msgid "Disabled: overlay mode is not supported in Lightness mode of the brush"
 msgstr ""
-"Devre dışı: Üzerine bindirme kipi, fırçanın aydınlanma kipinde desteklenmez"
+"Devre dışı: Üzerine bindirme kipi, fırçanın açıklık kipinde desteklenmez"
 
 #: plugins/paintops/colorsmudge/kis_smudge_option.cpp:18
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:197
 #, kde-format
 msgid "Smudge Length"
-msgstr "Lekeleme Uzunluğu"
+msgstr "Leke Uzunluğu"
 
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:36
 #, kde-format
 msgid "Smudge mode:"
-msgstr "Lekeleme kipi:"
+msgstr "Leke kipi:"
 
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:37
 #, kde-format
 msgid "Smear alpha:"
-msgstr "Alfaya bulaş:"
+msgstr "Alfa bulaştır:"
 
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:38
 #, kde-format
@@ -49617,7 +49617,7 @@ msgstr "Yeni lekeleme algoritmasını kullan:"
 #, kde-format
 msgid "(required for Color Image, Lightness Map, and Gradient Map brushes)"
 msgstr ""
-"(Renk Görseli, Aydınlanma Eşlemi ve Gradyan Eşlemi fırçaları için gereklidir)"
+"(Renk Görseli, Açıklık Eşlemi ve Gradyan Eşlemi fırçaları için gereklidir)"
 
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:94
 #, kde-format
@@ -51446,7 +51446,7 @@ msgstr "Renk Görseli"
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:222
 #, kde-format
 msgid "Lightness Map"
-msgstr "Aydınlanma Eşlemi"
+msgstr "Açıklık Eşlemi"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:224
 #, kde-format
@@ -51534,8 +51534,8 @@ msgid ""
 "The selected brush engine does not support \"Color\" or \"Lightness\" modes. "
 "The brush will work in \"Mask\" mode."
 msgstr ""
-"Seçili fırça işletkesi, \"Renk\" veya \"Aydınlanma\" kiplerini "
-"desteklemiyor. Fırça \"Maske\" kipinde çalışacak."
+"Seçili fırça işletkesi, \"Renk\" veya \"Açıklık\" kiplerini desteklemiyor. "
+"Fırça \"Maske\" kipinde çalışacak."
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:524
 #, kde-format
@@ -51629,15 +51629,14 @@ msgstr "Üst değer"
 #: plugins/paintops/libpaintop/kis_pressure_lightness_strength_option.cpp:9
 #, kde-format
 msgid "Lightness Strength"
-msgstr "Aydınlanma Gücü"
+msgstr "Açıklık Gücü"
 
 #: plugins/paintops/libpaintop/kis_pressure_lightness_strength_option_widget.cpp:22
 #: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option_widget.cpp:24
 #, kde-format
 msgid "Disabled: brush must be in Lightness mode for this option to apply"
 msgstr ""
-"Devre dışı: Bu seçeneğin uygulanabilmesi için fırça Aydınlanma kipinde "
-"olmalıdır"
+"Devre dışı: Bu seçeneğin uygulanabilmesi için fırça Açıklık kipinde olmalıdır"
 
 #: plugins/paintops/libpaintop/kis_pressure_mirror_option.cpp:17
 #, kde-format
@@ -51808,13 +51807,13 @@ msgstr "Dokuyu açıklaştır veya koyulaştır"
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:40
 #, kde-format
 msgid "Set gray value to be considered neutral for lightness mode"
-msgstr "Aydınlanma kipi için gri değerini nötr değer olarak ayarla"
+msgstr "Açıklık kipi için gri değerini nötr değer olarak ayarla"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:54
 #, kde-format
 msgctxt "Lightness Map blend mode for brush texture"
 msgid "Lightness Map"
-msgstr "Aydınlanma Eşlemi"
+msgstr "Açıklık Eşlemi"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:58
 #, kde-format
@@ -52146,7 +52145,7 @@ msgstr "İzleyen Gürültü"
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:194
 #, kde-format
 msgid "Smudge"
-msgstr "Lekele"
+msgstr "Leke"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:202
 #, kde-format
@@ -52212,7 +52211,7 @@ msgstr "İzleyen"
 #, kde-format
 msgctxt "Option Category"
 msgid "Smudge"
-msgstr "Lekele"
+msgstr "Leke"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:339
 #, kde-format

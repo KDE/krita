@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-29 02:52+0000\n"
-"PO-Revision-Date: 2023-01-12 10:13+0100\n"
+"PO-Revision-Date: 2023-01-29 08:43+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -12494,7 +12494,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Remove Layer"
-msgstr ""
+msgstr "&ფენის წაშლა"
 
 #. i18n: context: toolTip @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
@@ -12570,7 +12570,7 @@ msgstr ""
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:5
 #, kde-format
 msgid "&File"
-msgstr ""
+msgstr "&ფაილი"
 
 #: krita/krita5.xmlgui:46 libs/widgetutils/xmlgui/ui_standards.xmlgui:61
 #: plugins/extensions/resourcemanager/resourcemanager.xmlgui:4
@@ -12607,7 +12607,7 @@ msgstr ""
 #: plugins/extensions/shearimage/shearimage.xmlgui:4
 #, kde-format
 msgid "&Image"
-msgstr ""
+msgstr "&გამოსახულება"
 
 #: krita/krita5.xmlgui:161 krita/krita5.xmlgui:245 krita/krita5.xmlgui:261
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
@@ -12717,7 +12717,7 @@ msgstr "&დახმარება"
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
 #, kde-format
 msgid "File"
-msgstr ""
+msgstr "ფაილი"
 
 #: krita/krita5.xmlgui:411
 #, kde-format
@@ -12729,14 +12729,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "File"
-msgstr ""
+msgstr "ფაილი"
 
 #. i18n: context: text @ Action (file_new), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:7
 #, kde-format
 msgctxt "New document"
 msgid "&New..."
-msgstr ""
+msgstr "&ახალი..."
 
 #. i18n: context: toolTip @ Action (file_new), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:9
@@ -12750,14 +12750,14 @@ msgstr "ახალი დოკუმენტის შექმნა"
 #, kde-format
 msgctxt "action"
 msgid "New"
-msgstr ""
+msgstr "ახალი"
 
 #. i18n: context: text @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:19
 #, kde-format
 msgctxt "action"
 msgid "&Open..."
-msgstr ""
+msgstr "&გახსნა..."
 
 #. i18n: context: toolTip @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:21
@@ -12771,7 +12771,7 @@ msgstr "უკვე არსებული დოკუმენტის გ
 #, kde-format
 msgctxt "action"
 msgid "Open"
-msgstr ""
+msgstr "გახსნა"
 
 #. i18n: context: text @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:31
@@ -12799,7 +12799,7 @@ msgstr "ბოლოს გახსნილი ფაილების გა
 #, kde-format
 msgctxt "action"
 msgid "&Save"
-msgstr ""
+msgstr "&შენახვა"
 
 #. i18n: context: toolTip @ Action (file_save), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_save), Actions (File), ActionCollection (Menu)
@@ -12816,7 +12816,7 @@ msgstr "შენახვა"
 #, kde-format
 msgctxt "action"
 msgid "Save &As..."
-msgstr ""
+msgstr "შეინახვა &როგორც..."
 
 #. i18n: context: toolTip @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:57
@@ -12830,7 +12830,7 @@ msgstr "დოკუმენტის ახალი სახელით შ
 #, kde-format
 msgctxt "action"
 msgid "Save As"
-msgstr ""
+msgstr "შენახვა, როგორც"
 
 #. i18n: context: text @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:67
@@ -12844,7 +12844,7 @@ msgstr "სესიები..."
 #, kde-format
 msgctxt "action"
 msgid "Open session manager"
-msgstr ""
+msgstr "სესიების მმართველის გახსნა"
 
 #. i18n: context: iconText @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:70
@@ -13731,7 +13731,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Reset zoom"
-msgstr ""
+msgstr "&გადიდების საწყის მნიშვნელობაზე დაყენება"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
@@ -13755,7 +13755,7 @@ msgstr "შემცირება"
 #, kde-format
 msgctxt "action"
 msgid "Zoom In"
-msgstr ""
+msgstr "გადიდება"
 
 #. i18n: context: text @ Action (view_zoom_out), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:740
@@ -14168,7 +14168,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Image"
-msgstr ""
+msgstr "გამოსახულება"
 
 #. i18n: context: text @ Action (image_properties), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1053
@@ -14281,7 +14281,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Image..."
-msgstr ""
+msgstr "&გამოსახულების შებრუნება..."
 
 #. i18n: context: toolTip @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
@@ -14451,7 +14451,7 @@ msgstr "ტილოს ზომა"
 #, kde-format
 msgctxt "action"
 msgid "Im&age Split "
-msgstr ""
+msgstr "&გამოსახულების გაყოფა "
 
 #. i18n: context: toolTip @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
@@ -14461,14 +14461,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Image Split"
-msgstr ""
+msgstr "გამოსახულების გაყოფა"
 
 #. i18n: context: text @ Action (separate), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1257
 #, kde-format
 msgctxt "action"
 msgid "Separate Ima&ge..."
-msgstr ""
+msgstr "გამოსახულების &გაცალკევება..."
 
 #. i18n: context: toolTip @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
@@ -14478,7 +14478,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Separate Image"
-msgstr ""
+msgstr "გამოსახულების გაცალკევება"
 
 #. i18n: context: text @ Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1270
@@ -14492,7 +14492,7 @@ msgstr "_არჩევა"
 #, kde-format
 msgctxt "action"
 msgid "Select &All"
-msgstr ""
+msgstr "ყველაფრის &მონიშვნა"
 
 #. i18n: context: toolTip @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
@@ -14526,7 +14526,7 @@ msgstr "მონიშვნის მოხსნა"
 #, kde-format
 msgctxt "action"
 msgid "&Reselect"
-msgstr ""
+msgstr "&თავიდან არჩევა"
 
 #. i18n: context: toolTip @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
@@ -14536,7 +14536,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Reselect"
-msgstr ""
+msgstr "თავიდან არჩევა"
 
 #. i18n: context: text @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1309
@@ -14794,7 +14794,7 @@ msgstr "მონიშნულის საზღვარი"
 #, kde-format
 msgctxt "action"
 msgid "S&mooth"
-msgstr ""
+msgstr "&მოგლუვება"
 
 #. i18n: context: toolTip @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
@@ -14811,7 +14811,7 @@ msgstr "რბილი"
 #, kde-format
 msgctxt "action"
 msgid "Filter"
-msgstr ""
+msgstr "ფილტრი"
 
 #. i18n: context: text @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1505
@@ -15228,7 +15228,7 @@ msgstr "&ფანჯარა"
 #, kde-format
 msgctxt "action"
 msgid "Help"
-msgstr ""
+msgstr "დახმარება"
 
 #. i18n: context: text @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #: krita/kritamenu.action:1801
@@ -16048,7 +16048,7 @@ msgstr ""
 #: libs/widgets/KoZoomController_p.h:28 libs/widgets/KoZoomWidget.cpp:52
 #, kde-format
 msgid "Zoom"
-msgstr ""
+msgstr "გადიდება"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
 #: libs/flake/tools/KoZoomToolWidget.ui:24
@@ -16188,7 +16188,7 @@ msgstr "&დაპატარავება"
 #: plugins/python/tenscripts/uitenscripts.py:59
 #, kde-format
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #. i18n: ectx: property (text), widget (QPushButton, convertToPath)
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:235
@@ -16277,7 +16277,7 @@ msgstr "ნაგულისხმები"
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1412
 #, kde-format
 msgid "Size"
-msgstr ""
+msgstr "ზომა"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, intWidth)
 #. i18n: ectx: property (suffix), widget (QSpinBox, intHeight)
@@ -16586,7 +16586,7 @@ msgstr ""
 #, kde-format
 msgctxt "property of a filter layer, noun"
 msgid "Filter"
-msgstr ""
+msgstr "ფილტრი"
 
 #: libs/image/kis_asl_layer_style_serializer.cpp:1283
 #, kde-format
@@ -16870,7 +16870,7 @@ msgstr ""
 #: libs/widgets/KoZoomAction.cpp:226 libs/widgets/KoZoomMode.cpp:13
 #, kde-format
 msgid "%1%"
-msgstr ""
+msgstr "%1%"
 
 #. i18n: ectx: property (toolTip), widget (KisCompositeOpComboBox, cmbComposite)
 #: libs/image/kis_layer.cc:281 libs/ui/widgets/kis_cmb_composite.cc:66
@@ -16930,7 +16930,7 @@ msgstr ""
 #: libs/image/kis_layer_properties_icons.cpp:29
 #, kde-format
 msgid "Update Result"
-msgstr ""
+msgstr "განახლების შედეგი"
 
 #: libs/image/kis_layer_properties_icons.cpp:30
 #, kde-format
@@ -16953,7 +16953,7 @@ msgstr "ფაილის გახსნა"
 #: plugins/python/plugin_importer/plugin_importer_extension.py:79
 #, kde-format
 msgid "Error"
-msgstr ""
+msgstr "შეცდომა"
 
 #: libs/image/kis_layer_utils.cpp:598
 #, kde-format
@@ -17142,7 +17142,7 @@ msgstr "ფონი"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Group"
-msgstr ""
+msgstr "ჯგუფი"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:58
 #, kde-format
@@ -17184,7 +17184,7 @@ msgstr "დაჩრდილვა"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Filter"
-msgstr ""
+msgstr "ფილტრი"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:65
 #, kde-format
@@ -17238,7 +17238,7 @@ msgstr "ეფექტი"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Tones"
-msgstr ""
+msgstr "ტონები"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:74
 #, kde-format
@@ -17256,7 +17256,7 @@ msgstr "გიდები"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Balloons"
-msgstr ""
+msgstr "ბუშტები"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:77
 #, kde-format
@@ -18200,13 +18200,13 @@ msgstr "XOR"
 #, kde-format
 msgctxt "Blending mode - OR"
 msgid "OR"
-msgstr ""
+msgstr "ან"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:53
 #, kde-format
 msgctxt "Blending mode - AND"
 msgid "AND"
-msgstr ""
+msgstr "და"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:54
 #, kde-format
@@ -19148,7 +19148,7 @@ msgstr "საცავის ID"
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
 #, kde-format
 msgid "Name"
-msgstr ""
+msgstr "სახელი"
 
 #: libs/resources/KisResourceModel.cpp:131
 #, kde-format
@@ -19170,7 +19170,7 @@ msgstr "მინიშნება"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:400
 #, kde-format
 msgid "Image"
-msgstr ""
+msgstr "გამოსახულება"
 
 #: libs/resources/KisResourceModel.cpp:137
 #, kde-format
@@ -19212,7 +19212,7 @@ msgstr "md5sum"
 #: plugins/python/channels2layers/channels2layers.py:853
 #, kde-format
 msgid "Unknown"
-msgstr ""
+msgstr "უცნობი"
 
 #: libs/resources/KisResourceStorage.h:118
 #, kde-format
@@ -19813,7 +19813,7 @@ msgstr ""
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:49
 #, kde-format
 msgid "Search"
-msgstr ""
+msgstr "ძებნა"
 
 #: libs/resourcewidgets/KisTagFilterWidget.cpp:68
 #, kde-format
@@ -20068,7 +20068,7 @@ msgstr "  კადრი/წმ"
 #, kde-format
 msgctxt "Second as a unit following a value, like 60 s"
 msgid " s"
-msgstr ""
+msgstr " წმ"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:99
 #, kde-format
@@ -20717,7 +20717,7 @@ msgstr ""
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "none"
-msgstr ""
+msgstr "არცერთი"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:82
 #, kde-format
@@ -20730,7 +20730,7 @@ msgstr ""
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "none"
-msgstr ""
+msgstr "არცერთი"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:85
 #, kde-format
@@ -20772,7 +20772,7 @@ msgstr "ნაგულისხმები"
 #, kde-format
 msgctxt "webp preset option name"
 msgid "none"
-msgstr ""
+msgstr "არცერთი"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:93
 #, kde-format
@@ -20826,7 +20826,7 @@ msgstr ""
 #, kde-format
 msgctxt "paleteuse dither option name"
 msgid "none"
-msgstr ""
+msgstr "არცერთი"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
 #, kde-format
@@ -20862,7 +20862,7 @@ msgstr "sierra2_4a"
 #, kde-format
 msgctxt "paleteuse diff mode option name"
 msgid "none"
-msgstr ""
+msgstr "არცერთი"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:111
 #, kde-format
@@ -20921,7 +20921,7 @@ msgstr "ფანჯარა"
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:26
 #, kde-format
 msgid "Master Display:"
-msgstr ""
+msgstr "მთავარი ეკრანი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpCustomDisplay)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
@@ -20955,19 +20955,19 @@ msgstr "y"
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:68
 #, kde-format
 msgid "Red Primary:"
-msgstr ""
+msgstr "ძირითადი წითელი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:105
 #, kde-format
 msgid "Green Primary:"
-msgstr ""
+msgstr "ძირითადი მწვანე:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:142
 #, kde-format
 msgid "Blue Primary:"
-msgstr ""
+msgstr "ძირითადი ლურჯი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #. i18n: ectx: property (text), widget (QLabel, lblWhitepoint)
@@ -21510,7 +21510,7 @@ msgstr "ხელმისაწვდომი თვისებები:"
 #: libs/ui/forms/wdgpresetselectorstrip.ui:92
 #, kde-format
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #. i18n: ectx: property (text), widget (QPushButton, leftScrollBtn)
 #. i18n: ectx: property (text), widget (QToolButton, btnRemove)
@@ -21518,7 +21518,7 @@ msgstr ""
 #: libs/ui/forms/wdgpresetselectorstrip.ui:51
 #, kde-format
 msgid "<"
-msgstr ""
+msgstr "<"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:95
@@ -21562,7 +21562,7 @@ msgstr "გამორთული"
 #: libs/ui/canvas/kis_canvas_controller.cpp:290
 #, kde-format
 msgid "ON"
-msgstr ""
+msgstr "ჩართ"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:208
 #, kde-format
@@ -21889,7 +21889,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Filter"
-msgstr ""
+msgstr "ფილტრი"
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:140
 #, kde-format
@@ -21989,13 +21989,13 @@ msgstr "ანბანით დალაგებული"
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:66
 #, kde-format
 msgid "Numerical"
-msgstr ""
+msgstr "რიცხვითი"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:137
 #: libs/ui/KisMainWindow.cpp:1176
 #, kde-format
 msgid "Import Images"
-msgstr ""
+msgstr "გამოსახულებების შემოტანა"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:160
 #, kde-format
@@ -22005,7 +22005,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:78
 #, kde-format
 msgid "Layer Properties"
-msgstr ""
+msgstr "ფენის თვისებები"
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intChoke)
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intRange)
@@ -22098,7 +22098,7 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:375
 #, no-c-format, kde-format
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:128
 #, kde-format
@@ -22157,7 +22157,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Warning"
-msgstr ""
+msgstr "გაფრთხილება"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:368
 #, kde-format
@@ -22206,13 +22206,13 @@ msgstr ""
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:987
 #, no-c-format, kde-format
 msgid " %"
-msgstr ""
+msgstr " %"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:903
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
 #, kde-format
 msgid "Not Implemented Yet"
-msgstr ""
+msgstr "ჯერ განხორციელებული არაა"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:990
@@ -22894,7 +22894,7 @@ msgstr ""
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:53
 #, kde-format
 msgid "OK"
-msgstr ""
+msgstr "დიახ"
 
 #: libs/ui/dialogs/KisSessionManagerDialog.cpp:71
 #, kde-format
@@ -23189,13 +23189,13 @@ msgstr ""
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:173
 #, kde-format
 msgid "Description:"
-msgstr ""
+msgstr "აღწერა:"
 
 #. i18n: ectx: property (text), widget (QLabel, filePathInfoLabel)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:171
 #, kde-format
 msgid "Path:"
-msgstr ""
+msgstr "ბილიკი:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbReset)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:197
@@ -23962,7 +23962,7 @@ msgstr "&ფენის სახელი:"
 #: libs/ui/forms/wdgdlgfilelayer.ui:51
 #, kde-format
 msgid "File:"
-msgstr ""
+msgstr "ფაილი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWarning)
 #: libs/ui/forms/wdgdlgfilelayer.ui:87
@@ -24485,7 +24485,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:849
 #, kde-format
 msgid "~"
-msgstr ""
+msgstr "~"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/forms/wdggeneralsettings.ui:859
@@ -25314,7 +25314,7 @@ msgstr ""
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:135
 #, kde-format
 msgid "&Save"
-msgstr ""
+msgstr "&შენახვა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgnewimage.ui:414
@@ -25350,7 +25350,7 @@ msgstr "ფონი:"
 #: libs/ui/forms/wdgnewimage.ui:488
 #, kde-format
 msgid "&Description:"
-msgstr ""
+msgstr "&აღწერილობა:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsRaster)
 #: libs/ui/forms/wdgnewimage.ui:525
@@ -25903,7 +25903,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:452
 #, kde-format
 msgid "On-disk"
-msgstr ""
+msgstr "დისკზე"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: libs/ui/forms/wdgperformancesettings.ui:462
@@ -26469,7 +26469,7 @@ msgstr "დუიმი"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:441
 #, kde-format
 msgid "None"
-msgstr ""
+msgstr "არაფერი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:209
@@ -26719,7 +26719,7 @@ msgstr "X:"
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:99
 #, kde-format
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAnchor)
 #: libs/ui/imagesize/wdg_canvassize.ui:540
@@ -26862,7 +26862,7 @@ msgstr "სახელის გადარქმევა"
 #, kde-format
 msgctxt "No input for this button"
 msgid "None"
-msgstr ""
+msgstr "არაფერი"
 
 #: libs/ui/input/config/kis_input_button.cpp:128
 #: libs/ui/input/config/kis_input_button.cpp:190
@@ -27225,7 +27225,7 @@ msgstr "აირჩიეთ ბევრი ფენის რეჟიმი
 #, kde-format
 msgctxt "Separator in the list of mouse buttons for shortcut"
 msgid " + "
-msgstr ""
+msgstr " + "
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:266
 #, kde-format
@@ -27273,7 +27273,7 @@ msgstr "თაგუნას %1"
 #, kde-format
 msgctxt "No mouse buttons for shortcut"
 msgid "None"
-msgstr ""
+msgstr "არაფერი"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:326
 #, kde-format
@@ -27289,7 +27289,7 @@ msgstr[1] "%1 ღილაკი"
 #, kde-format
 msgctxt "Separator in the list of keys for shortcut"
 msgid " + "
-msgstr ""
+msgstr " + "
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:343
 #, kde-format
@@ -27319,7 +27319,7 @@ msgstr "წანაცვლება"
 #, kde-format
 msgctxt "No keys for shortcut"
 msgid "None"
-msgstr ""
+msgstr "არაფერი"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:377
 #, kde-format
@@ -27350,19 +27350,19 @@ msgstr ""
 #, kde-format
 msgctxt "No mouse wheel buttons for shortcut"
 msgid "None"
-msgstr ""
+msgstr "არაფერი"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:409
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse buttons in shortcut"
 msgid "%1 + %2"
-msgstr ""
+msgstr "%1 + %2"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:425
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse wheel buttons in shortcut"
 msgid "%1 + %2"
-msgstr ""
+msgstr "%1 + %2"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:439
 #, kde-format
@@ -27554,7 +27554,7 @@ msgstr ""
 #: libs/ui/input/kis_zoom_action.cpp:114
 #, kde-format
 msgid "Zoom In"
-msgstr ""
+msgstr "გადიდება"
 
 #: libs/ui/input/kis_zoom_action.cpp:115
 #, kde-format
@@ -28502,7 +28502,7 @@ msgstr "პროფილის გარეშე"
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
-msgstr ""
+msgstr "%1  %2"
 
 #: libs/ui/kis_zoom_manager.cc:318
 #, kde-format
@@ -29270,7 +29270,7 @@ msgstr "მიზეზი:"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
 #, kde-format
 msgid "Options"
-msgstr ""
+msgstr "გამართვა"
 
 #. i18n: ectx: property (title), widget (QGroupBox, scale)
 #: libs/ui/KisImportExportManager.cpp:617
@@ -29349,7 +29349,7 @@ msgstr "ფაილი არ არსებობს: %1."
 #: libs/ui/KisMainWindow.cpp:1176
 #, kde-format
 msgid "Open Images"
-msgstr ""
+msgstr "გამოსახულების გახსნა"
 
 #: libs/ui/KisMainWindow.cpp:1308
 #, kde-format
@@ -29453,7 +29453,7 @@ msgstr "%1(%2)"
 #: libs/ui/KisMainWindow.cpp:2612
 #, kde-format
 msgid "%1 %2"
-msgstr ""
+msgstr "%1 %2"
 
 #: libs/ui/KisMainWindow.cpp:2779
 #, kde-format
@@ -29667,7 +29667,7 @@ msgstr "&ჯგუფის დამატება..."
 #: libs/ui/KisTemplateCreateDia.cpp:123
 #, kde-format
 msgid "&Remove"
-msgstr ""
+msgstr "&წაშლა"
 
 #: libs/ui/KisTemplateCreateDia.cpp:129
 #, kde-format
@@ -29677,7 +29677,7 @@ msgstr "სურათი"
 #: libs/ui/KisTemplateCreateDia.cpp:132
 #, kde-format
 msgid "&Preview"
-msgstr ""
+msgstr "&მინიატურა"
 
 #: libs/ui/KisTemplateCreateDia.cpp:137
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:58
@@ -29688,7 +29688,7 @@ msgstr "ხელით:"
 #: libs/ui/KisTemplateCreateDia.cpp:141
 #, kde-format
 msgid "&Select..."
-msgstr ""
+msgstr "&მონიშნეთ..."
 
 #: libs/ui/KisTemplateCreateDia.cpp:150
 #, kde-format
@@ -30305,7 +30305,7 @@ msgstr ""
 #: libs/ui/layerstyles/wdgblendingoptions.ui:191
 #, kde-format
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:200
@@ -30324,7 +30324,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox Knockout option"
 msgid "None"
-msgstr ""
+msgstr "არცერთი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbKnockout)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:225
@@ -30786,7 +30786,7 @@ msgstr "გამოძრავება"
 #, kde-format
 msgctxt "Save as new layer style..."
 msgid "&Save as..."
-msgstr ""
+msgstr "&შენახვა, როგორც..."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnLoadStyle)
 #: libs/ui/layerstyles/wdglayerstyles.ui:163
@@ -30798,7 +30798,7 @@ msgstr "&შემოტანა..."
 #: libs/ui/layerstyles/wdglayerstyles.ui:170
 #, kde-format
 msgid "&Export..."
-msgstr ""
+msgstr "&გატანა..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPreview)
 #: libs/ui/layerstyles/wdglayerstyles.ui:177
@@ -31289,7 +31289,7 @@ msgstr ""
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:238
 #, kde-format
 msgid "Add..."
-msgstr ""
+msgstr "დამატება..."
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:243
 #, kde-format
@@ -31304,7 +31304,7 @@ msgstr ""
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:252
 #, kde-format
 msgid "Edit..."
-msgstr ""
+msgstr "ჩასწორება..."
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:490
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:499
@@ -32317,7 +32317,7 @@ msgstr "ესკიზები"
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:174
 #, kde-format
 msgid "Details"
-msgstr ""
+msgstr "დეტალები"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:96
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
@@ -32411,7 +32411,7 @@ msgstr "გადაკვეთა"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add"
-msgstr ""
+msgstr "დამატება"
 
 #: libs/ui/widgets/kis_selection_options.cc:217
 #: libs/ui/widgets/kis_selection_options.cc:437
@@ -32864,7 +32864,7 @@ msgstr "შეიყვანეთ გრადიენტის სახე�
 #, kde-format
 msgctxt "@title:window"
 msgid "Name Already Exists"
-msgstr ""
+msgstr "სახელი უკვე არსებობს"
 
 #: libs/ui/widgets/KoFillConfigWidget.cpp:656
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:205
@@ -33023,7 +33023,7 @@ msgstr ""
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, kde-format
 msgid "Line Style:"
-msgstr ""
+msgstr "ხაზის სტილი:"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:244
 #, kde-format
@@ -33060,7 +33060,7 @@ msgstr "სისქე:"
 #: libs/widgets/kis_color_input.cpp:50
 #, kde-format
 msgid "%1:"
-msgstr ""
+msgstr "%1:"
 
 #: libs/widgets/kis_color_input.cpp:372
 #: libs/widgets/KoEditColorSetDialog.cpp:159
@@ -33094,31 +33094,31 @@ msgstr "ფერი"
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new group"
-msgstr ""
+msgstr "ახალი ჯგუფის დამატება"
 
 #: libs/widgets/kis_palette_view.cpp:150
 #, kde-format
 msgctxt "Part of default name for a new group"
 msgid "Color Group"
-msgstr ""
+msgstr "ფერების ჯგუფი"
 
 #: libs/widgets/kis_palette_view.cpp:151
 #, kde-format
 msgctxt "Name for a group"
 msgid "Name"
-msgstr ""
+msgstr "სახელი"
 
 #: libs/widgets/kis_palette_view.cpp:168
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Group"
-msgstr ""
+msgstr "ჯგუფის წაშლა"
 
 #: libs/widgets/KisAngleSelector.cpp:214
 #, kde-format
 msgctxt "Degrees symbol"
 msgid "˚"
-msgstr ""
+msgstr "˚"
 
 #: libs/widgets/KisAngleSelector.cpp:222
 #, kde-format
@@ -33378,7 +33378,7 @@ msgstr "შეიცვალა"
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
-msgstr ""
+msgstr " – "
 
 #: libs/widgets/KoDialog.cpp:762
 #, kde-format
@@ -33465,7 +33465,7 @@ msgstr ""
 #: libs/widgets/KoShadowConfigWidget.ui:71
 #, kde-format
 msgid "Blur:"
-msgstr ""
+msgstr "ბუნდოვნება:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -33509,7 +33509,7 @@ msgstr ""
 #: libs/widgets/KoZoomWidget.cpp:124
 #, kde-format
 msgid "Pixel Size"
-msgstr ""
+msgstr "პიქსელის ზომა"
 
 #: libs/widgets/KoZoomWidget.cpp:128
 #, kde-format
@@ -33615,7 +33615,7 @@ msgstr "&ახალი"
 #: libs/widgetutils/config/kstandardaction_p.h:30
 #, kde-format
 msgid "&Open..."
-msgstr ""
+msgstr "&გახსნა..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:30
 #, kde-format
@@ -33640,7 +33640,7 @@ msgstr "დოკუმენტის შენახვა"
 #: libs/widgetutils/config/kstandardaction_p.h:33
 #, kde-format
 msgid "Save &As..."
-msgstr ""
+msgstr "შეინახვა &როგორც..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:33
 #, kde-format
@@ -33762,7 +33762,7 @@ msgstr "გასუ&ფთავება"
 #: libs/widgetutils/config/kstandardaction_p.h:48
 #, kde-format
 msgid "Select &All"
-msgstr ""
+msgstr "ყველაფრის &მონიშვნა"
 
 #: libs/widgetutils/config/kstandardaction_p.h:49
 #, kde-format
@@ -33842,7 +33842,7 @@ msgstr "გადიდება"
 #: libs/widgetutils/config/kstandardaction_p.h:61
 #, kde-format
 msgid "&Zoom..."
-msgstr ""
+msgstr "&გადიდება..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:61
 #, kde-format
@@ -34095,7 +34095,7 @@ msgstr "ნაბიჯით &დაბლა"
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
 #, kde-format
 msgid "Percent (%)"
-msgstr ""
+msgstr "პროცენტი (%)"
 
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
@@ -34616,7 +34616,7 @@ msgstr "ალტერნატული:"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:151
 #, kde-format
 msgid "Description"
-msgstr ""
+msgstr "აღწერა"
 
 #: libs/widgetutils/xmlgui/KisShortcutsEditorItem.cpp:28
 #, kde-format
@@ -36516,7 +36516,7 @@ msgstr ""
 #: plugins/python/palette_docker/palette_docker.py:68
 #, kde-format
 msgid "+"
-msgstr ""
+msgstr "+"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrevColor)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:169
@@ -37147,12 +37147,12 @@ msgstr "&დამატება"
 #: plugins/dockers/layerdocker/NodeDelegate.cpp:1180
 #, kde-format
 msgid "%1 %"
-msgstr ""
+msgstr "%1 %"
 
 #: plugins/dockers/layerdocker/NodeToolTip.cpp:46
 #, kde-format
 msgid "No"
-msgstr ""
+msgstr "არა"
 
 #: plugins/dockers/layerdocker/NodeToolTip.cpp:46
 #, kde-format
@@ -37384,7 +37384,7 @@ msgstr "ყველა არხი"
 #, kde-format
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"
-msgstr ""
+msgstr "არცერთი"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -39678,7 +39678,7 @@ msgstr ""
 #, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "None"
-msgstr ""
+msgstr "არცერთი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editGainControl)
 #: plugins/extensions/metadataeditor/editors/exif.ui:551
@@ -43484,7 +43484,7 @@ msgstr "ჩამოყალიბებული"
 #, kde-format
 msgctxt "The gradient will not repeat"
 msgid "None"
-msgstr ""
+msgstr "არცერთი"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:40
 #: plugins/tools/basictools/kis_tool_gradient.cc:256
@@ -43845,7 +43845,7 @@ msgstr ""
 #, kde-format
 msgctxt "Screentone equalization mode"
 msgid "None"
-msgstr ""
+msgstr "არცერთი"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonEqualizationFunctionBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:157
@@ -46829,7 +46829,7 @@ msgstr "ხმაურის შემცირება:"
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "None"
-msgstr ""
+msgstr "არცერთი"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:593
 #, kde-format
@@ -46946,7 +46946,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "None"
-msgstr ""
+msgstr "არცერთი"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:681
 #, kde-format
@@ -47134,7 +47134,7 @@ msgstr ""
 #, kde-format
 msgctxt "TIFF options"
 msgid "None"
-msgstr ""
+msgstr "არცერთი"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:40
 #, kde-format
@@ -47372,7 +47372,7 @@ msgstr "ძლიერი"
 #, kde-format
 msgctxt "WebP alpha plane compression"
 msgid "None"
-msgstr ""
+msgstr "არცერთი"
 
 #: plugins/impex/webp/dlg_webp_export.cpp:44
 #, kde-format
@@ -47384,7 +47384,7 @@ msgstr "კარგვის გარეშე"
 #, kde-format
 msgctxt "WebP preprocessing filters"
 msgid "None"
-msgstr ""
+msgstr "არცერთი"
 
 #: plugins/impex/webp/dlg_webp_export.cpp:47
 #, kde-format
@@ -53578,7 +53578,7 @@ msgstr "მანძილი:"
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
-msgstr ""
+msgstr "არცერთი"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:348
 #, kde-format

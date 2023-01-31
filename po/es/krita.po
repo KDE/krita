@@ -66,7 +66,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-30 00:55+0000\n"
-"PO-Revision-Date: 2023-01-23 18:14+0100\n"
+"PO-Revision-Date: 2023-01-30 20:55+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -30515,19 +30515,16 @@ msgid "New palette name:"
 msgstr "Nombre de la nueva paleta:"
 
 #: libs/ui/KisPaletteEditor.cpp:102
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "Krita Color Palette"
+#, kde-format
 msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
-msgstr "Paleta de colores de Krita"
+msgstr "Paleta de Krita (KPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:103
-#, fuzzy, kde-format
-#| msgid "GIMP Patterns (*.pat)"
+#, kde-format
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
-msgstr "Patrones de GIMP (*.pat)"
+msgstr "Paleta de GIMP (GPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:106
 #, kde-format
@@ -30659,6 +30656,8 @@ msgid ""
 "Do you want to download the image from %1?\n"
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
+"¿Desea descargar la imagen de %1?\n"
+"Pulse «Mostrar detalles» para ver el enlace completo a la imagen."
 
 #: libs/ui/KisRemoteFileFetcher.cpp:61
 #, kde-format
@@ -39125,10 +39124,9 @@ msgstr "Añadir color de primer plano"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLock)
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:139
-#, fuzzy, kde-format
-#| msgid "Remove current palette"
+#, kde-format
 msgid "Lock the current palette."
-msgstr "Eliminar la paleta actual"
+msgstr "Fijar la paleta actual."
 
 #: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
 #, kde-format

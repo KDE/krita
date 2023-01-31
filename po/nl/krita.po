@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-30 00:55+0000\n"
-"PO-Revision-Date: 2023-01-28 12:57+0100\n"
+"PO-Revision-Date: 2023-01-30 18:58+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -30691,6 +30691,9 @@ msgid ""
 "Do you want to download the image from %1?\n"
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
+"Wilt u de afbeelding uit %1 downloaden?\n"
+"Klik op \"Details tonen\" om de volledige koppeling vaan de afbeelding te "
+"bekijken."
 
 #: libs/ui/KisRemoteFileFetcher.cpp:61
 #, kde-format

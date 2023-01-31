@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-30 00:55+0000\n"
-"PO-Revision-Date: 2023-01-28 10:30+0100\n"
+"PO-Revision-Date: 2023-01-30 10:44+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -12553,7 +12553,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Remove Layer"
-msgstr ""
+msgstr "&ფენის წაშლა"
 
 #. i18n: context: toolTip @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
@@ -12909,7 +12909,7 @@ msgstr "სესიები..."
 #, kde-format
 msgctxt "action"
 msgid "Open session manager"
-msgstr ""
+msgstr "სესიების მმართველის გახსნა"
 
 #. i18n: context: iconText @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:70
@@ -14483,7 +14483,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Image..."
-msgstr ""
+msgstr "&გამოსახულების შებრუნება..."
 
 #. i18n: context: toolTip @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
@@ -14653,7 +14653,7 @@ msgstr "ტილოს ზომა"
 #, kde-format
 msgctxt "action"
 msgid "Im&age Split "
-msgstr ""
+msgstr "&გამოსახულების გაყოფა "
 
 #. i18n: context: toolTip @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
@@ -14663,14 +14663,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Image Split"
-msgstr ""
+msgstr "გამოსახულების გაყოფა"
 
 #. i18n: context: text @ Action (separate), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1353
 #, kde-format
 msgctxt "action"
 msgid "Separate Ima&ge..."
-msgstr ""
+msgstr "გამოსახულების &გაცალკევება..."
 
 #. i18n: context: toolTip @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
@@ -14680,7 +14680,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Separate Image"
-msgstr ""
+msgstr "გამოსახულების გაცალკევება"
 
 #. i18n: context: text @ Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1366
@@ -14728,7 +14728,7 @@ msgstr "მონიშვნის მოხსნა"
 #, kde-format
 msgctxt "action"
 msgid "&Reselect"
-msgstr ""
+msgstr "&თავიდან არჩევა"
 
 #. i18n: context: toolTip @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
@@ -14738,7 +14738,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Reselect"
-msgstr ""
+msgstr "თავიდან არჩევა"
 
 #. i18n: context: text @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1405
@@ -16698,7 +16698,7 @@ msgstr ""
 #: libs/image/commands/kis_reselect_global_selection_command.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Reselect"
-msgstr ""
+msgstr "თავიდან არჩევა"
 
 #: libs/image/commands/KisNodeRenameCommand.cpp:15
 msgctxt "(qtundo-format)"
@@ -17146,7 +17146,7 @@ msgstr ""
 #: libs/image/kis_layer_properties_icons.cpp:29
 #, kde-format
 msgid "Update Result"
-msgstr ""
+msgstr "განახლების შედეგი"
 
 #: libs/image/kis_layer_properties_icons.cpp:30
 #, kde-format
@@ -17477,7 +17477,7 @@ msgstr "გიდები"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Balloons"
-msgstr ""
+msgstr "ბუშტები"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:77
 #, kde-format
@@ -21161,7 +21161,7 @@ msgstr "ფანჯარა"
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:26
 #, kde-format
 msgid "Master Display:"
-msgstr ""
+msgstr "მთავარი ეკრანი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpCustomDisplay)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
@@ -21195,19 +21195,19 @@ msgstr "წლ"
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:68
 #, kde-format
 msgid "Red Primary:"
-msgstr ""
+msgstr "ძირითადი წითელი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:105
 #, kde-format
 msgid "Green Primary:"
-msgstr ""
+msgstr "ძირითადი მწვანე:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:142
 #, kde-format
 msgid "Blue Primary:"
-msgstr ""
+msgstr "ძირითადი ლურჯი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #. i18n: ectx: property (text), widget (QLabel, lblWhitepoint)
@@ -22158,13 +22158,13 @@ msgstr "ანბანით დალაგებული"
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:66
 #, kde-format
 msgid "Numerical"
-msgstr ""
+msgstr "რიცხვითი"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:137
 #: libs/ui/KisMainWindow.cpp:1181
 #, kde-format
 msgid "Import Images"
-msgstr ""
+msgstr "გამოსახულებების შემოტანა"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:160
 #, kde-format
@@ -22174,7 +22174,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:78
 #, kde-format
 msgid "Layer Properties"
-msgstr ""
+msgstr "ფენის თვისებები"
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intChoke)
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intRange)
@@ -22379,7 +22379,7 @@ msgstr " %"
 #: libs/ui/widgets/kis_cmb_contour.cpp:13
 #, kde-format
 msgid "Not Implemented Yet"
-msgstr ""
+msgstr "ჯერ განხორციელებული არაა"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:990
@@ -26155,7 +26155,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:452
 #, kde-format
 msgid "On-disk"
-msgstr ""
+msgstr "დისკზე"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: libs/ui/forms/wdgperformancesettings.ui:462
@@ -29602,7 +29602,7 @@ msgstr "ფაილი არ არსებობს: %1."
 #: libs/ui/KisMainWindow.cpp:1181
 #, kde-format
 msgid "Open Images"
-msgstr ""
+msgstr "გამოსახულების გახსნა"
 
 #: libs/ui/KisMainWindow.cpp:1313
 #, kde-format
@@ -33298,7 +33298,7 @@ msgstr ""
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, kde-format
 msgid "Line Style:"
-msgstr ""
+msgstr "ხაზის სტილი:"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:244
 #, kde-format
@@ -33369,13 +33369,13 @@ msgstr "ფერი"
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new group"
-msgstr ""
+msgstr "ახალი ჯგუფის დამატება"
 
 #: libs/widgets/kis_palette_view.cpp:149
 #, kde-format
 msgctxt "Part of default name for a new group"
 msgid "Color Group"
-msgstr ""
+msgstr "ფერების ჯგუფი"
 
 #: libs/widgets/kis_palette_view.cpp:150
 #, kde-format
@@ -33387,7 +33387,7 @@ msgstr "დასახელება"
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Group"
-msgstr ""
+msgstr "ჯგუფის წაშლა"
 
 #: libs/widgets/KisAngleSelector.cpp:214
 #, kde-format
@@ -33743,7 +33743,7 @@ msgstr ""
 #: libs/widgets/KoShadowConfigWidget.ui:71
 #, kde-format
 msgid "Blur:"
-msgstr ""
+msgstr "ბუნდოვნება:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -33787,7 +33787,7 @@ msgstr "ხედის სიმაღლის ჩატევა"
 #: libs/widgets/KoZoomWidget.cpp:124
 #, kde-format
 msgid "Pixel Size"
-msgstr ""
+msgstr "პიქსელის ზომა"
 
 #: libs/widgets/KoZoomWidget.cpp:128
 #, kde-format
@@ -34373,7 +34373,7 @@ msgstr "ნაბიჯით &დაბლა"
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
 #, kde-format
 msgid "Percent (%)"
-msgstr ""
+msgstr "პროცენტი (%)"
 
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
@@ -39455,7 +39455,7 @@ msgstr ""
 #: plugins/extensions/imagesplit/dlg_imagesplit.cpp:34
 #, kde-format
 msgid "Image Split"
-msgstr ""
+msgstr "გამოსახულების გაყოფა"
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
 #, kde-format
@@ -41509,12 +41509,12 @@ msgstr ""
 #: plugins/extensions/separate_channels/kis_separate_channels_plugin.cc:74
 #, kde-format
 msgid "Separate Image"
-msgstr ""
+msgstr "გამოსახულების გაცალკევება"
 
 #: plugins/extensions/separate_channels/kis_channel_separator.cc:192
 msgctxt "(qtundo-format)"
 msgid "Separate Image"
-msgstr ""
+msgstr "გამოსახულების გაცალკევება"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/extensions/separate_channels/wdg_separations.ui:23

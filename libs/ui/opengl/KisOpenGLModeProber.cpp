@@ -144,6 +144,9 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
 {
     const QSurfaceFormat &format = rendererConfig.format;
 
+    dbgOpenGL << "Probing format" << rendererConfig.rendererId() << rendererConfig.angleRenderer
+              << rendererConfig.format;
+
     QScopedPointer<AppAttributeSetter> sharedContextSetter;
     QScopedPointer<AppAttributeSetter> glSetter;
     QScopedPointer<AppAttributeSetter> glesSetter;
@@ -205,7 +208,11 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
     }
 #endif
 
-    return Result(context);
+    Result result(context);
+
+    dbgOpenGL << "Probe returned" << result.rendererString() << result.driverVersionString() << result.isOpenGLES();
+
+    return result;
 }
 
 bool KisOpenGLModeProber::fuzzyCompareColorSpaces(const KisSurfaceColorSpace &lhs, const KisSurfaceColorSpace &rhs)

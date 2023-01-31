@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-29 02:52+0000\n"
-"PO-Revision-Date: 2023-01-30 00:41+0300\n"
+"PO-Revision-Date: 2023-01-31 01:15+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -21979,8 +21979,8 @@ msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
 "and more.</i></p></body></html>"
 msgstr ""
-".</p><p><i>Krita geliştirmesini tavsiye, simgeler, fırça kümeleri ve daha "
-"fazlasıyla desteklemek için.</i></p></body></html>"
+".</p><p><i>Krita'nın geliştirme sürecini tavsiye, simgeler, fırça kümeleri "
+"ve daha fazlasıyla destekledikleri için.</i></p></body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:128
 #, kde-format
@@ -22007,17 +22007,17 @@ msgid ""
 msgstr ""
 "<html><head/><body><h1 align=\"center\"><b>Haklarınız</b></h1><p>Krita, GNU "
 "Genel Kamu Lisansı (sürüm 3 veya daha üstü) ile dağıtılmaktadır.</p><p>Bu "
-"lisans size bazı özgürlükler sağlar:</p><ul><li>Krita'yı her amaç için "
+"lisans size bazı özgürlükler sağlar:</p><ul><li>Krita'yı herhangi bir amaçla "
 "kullanabilirsiniz</li><li>Krita'yı özgürce dağıtabilirsiniz</"
 "li><li>Krita'nın nasıl çalıştığını öğrenebilir ve onu değiştirebilirsiniz</"
 "li><li>Krita'nın değiştirilmiş sürümlerini dağıtabilirsiniz</li></"
 "ul><p>Krita Vakfı ve krita.org üzerindeki projeler Krita'yı bir özgür "
 "yazılım olarak korumayı <b>taahhüt etmektedir</b>.</p><h1 align=\"center"
 "\">Eseriniz</h1><p>Krita ile oluşturduğunuz şeyler sizin mülkiyetinizdedir. "
-"Eserlerinizi istediğiniz gibi kullanmakta özgürsünüz.</p><p>Bu Krita'nın "
-"herhangi bir amaç için ticari olarak kullanılabileceği anlamına gelir. "
-"Bununla ilgili hiçbir kısıtlama yoktur.</p><p>Krita’nın GNU GPL lisansı "
-"sizin özgürlüğünüzü garanti eder. Ticari yazılımların deneme veya eğitim "
+"Eserlerinizi istediğiniz gibi kullanmakta özgürsünüz.</p><p>Bu, Krita'nın "
+"herhangi bir amaçla ticari olarak kullanılabileceği anlamına gelir. Bununla "
+"ilgili hiçbir kısıtlama yoktur.</p><p>Krita’nın GNU GPL lisansı, sizin "
+"özgürlüğünüzü garanti eder. Ticari yazılımların deneme veya eğitim "
 "sürümlerinin aksine kimse sizden ticari kullanım haklarınızı alamaz.</p><br/"
 "><hr/><pre>"
 
@@ -22659,7 +22659,7 @@ msgstr "Ekran %1 (%2):"
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, kde-format
 msgid "Install Color Profiles"
-msgstr "Renk Profillerini Yükle"
+msgstr "Renk Profilleri Kur"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1103
 #, kde-format
@@ -35807,7 +35807,7 @@ msgstr "Lütfen bu uygulama için kullanılacak dili seçin:"
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
 #, kde-format
 msgid "Add Fallback Language"
-msgstr "İkincil Dili Ekle"
+msgstr "Yedek Dil Ekle"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:168
 #, kde-format
@@ -35836,7 +35836,7 @@ msgstr ""
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
 #, kde-format
 msgid "Fallback language:"
-msgstr "İkincil dil:"
+msgstr "Yedek dil:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
 #, kde-format

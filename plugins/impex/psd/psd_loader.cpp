@@ -32,6 +32,7 @@
 #include <kis_transparency_mask.h>
 #include <kis_generator_layer.h>
 #include <kis_generator_registry.h>
+#include <kis_guides_config.h>
 
 #include <kis_asl_layer_style_serializer.h>
 #include <asl/kis_asl_xml_parser.h>
@@ -146,6 +147,21 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 m_image->setResolution(POINT_TO_INCH(resInfo->hRes), POINT_TO_INCH(resInfo->vRes));
             // let's skip the unit for now; we can only set that on the KisDocument, and krita doesn't use it.
             delete resourceSection.resources.take(PSDImageResourceSection::RESN_INFO);
+        }
+    }
+
+    if (resourceSection.resources.contains(PSDImageResourceSection::GRID_GUIDE)) {
+        GRID_GUIDE_1032 *gridGuidesInfo = dynamic_cast<GRID_GUIDE_1032*>(resourceSection.resources[PSDImageResourceSection::GRID_GUIDE]->resource);
+        if (gridGuidesInfo) {
+            KisGuidesConfig config = m_doc->guidesConfig();
+            Q_FOREACH(quint32 guide, gridGuidesInfo->verticalGuides) {
+                config.addGuideLine(Qt::Vertical, guide / m_image->xRes());
+            }
+            Q_FOREACH(quint32 guide, gridGuidesInfo->horizontalGuides) {
+                config.addGuideLine(Qt::Horizontal, guide / m_image->yRes());
+            }
+            config.setShowGuides(true);
+            m_doc->setGuidesConfig(config);
         }
     }
 

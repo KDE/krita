@@ -22,6 +22,7 @@
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
 #include <kis_debug.h>
+#include <kis_guides_config.h>
 
 #include "psd.h"
 #include "psd_header.h"
@@ -182,6 +183,25 @@ KisImportExportErrorCode PSDSaver::buildFile(QIODevice &io)
         block->identifier = PSDImageResourceSection::RESN_INFO;
         block->resource = resInfo;
         resourceSection.resources[PSDImageResourceSection::RESN_INFO] = block;
+    }
+
+    // Add grid/guides block
+    {
+        GRID_GUIDE_1032 *gridGuidesInfo = new GRID_GUIDE_1032;
+        QList<quint32> verticalGuides;
+        Q_FOREACH(qreal guide, m_doc->guidesConfig().verticalGuideLines()) {
+            verticalGuides.append(guide * m_image->xRes());
+        }
+        QList<quint32> horizontalGuides;
+        Q_FOREACH(qreal guide, m_doc->guidesConfig().horizontalGuideLines()) {
+            horizontalGuides.append(guide * m_image->xRes());
+        }
+        gridGuidesInfo->verticalGuides = verticalGuides;
+        gridGuidesInfo->horizontalGuides = horizontalGuides;
+        PSDResourceBlock *block = new PSDResourceBlock;
+        block->identifier = PSDImageResourceSection::GRID_GUIDE;
+        block->resource = gridGuidesInfo;
+        resourceSection.resources[PSDImageResourceSection::GRID_GUIDE] = block;
     }
 
     // Add icc block

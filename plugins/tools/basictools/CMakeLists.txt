@@ -23,8 +23,6 @@ set(kritadefaulttools_static_SRCS
 
 ki18n_wrap_ui(kritadefaulttools_static_SRCS wdgcolorsampler.ui wdgmovetool.ui wdgmultihandtool.ui)
 
-qt5_add_resources(kritadefaulttools_static_SRCS defaulttools.qrc )
-
 kis_add_library(kritadefaulttools_static STATIC ${kritadefaulttools_static_SRCS})
 
 target_link_libraries(kritadefaulttools_static 
@@ -37,6 +35,8 @@ target_link_libraries(kritadefaulttools_static
 set(kritadefaulttools_SOURCES
     default_tools.cc
 )
+
+qt5_add_resources(kritadefaulttools_SOURCES defaulttools.qrc )
 
 kis_add_library(kritadefaulttools MODULE ${kritadefaulttools_SOURCES})
 

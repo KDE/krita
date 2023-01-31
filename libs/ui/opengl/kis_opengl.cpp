@@ -504,7 +504,7 @@ RendererInfo getRendererInfo(KisOpenGL::OpenGLRenderer renderer)
     case KisOpenGL::RendererAuto:
         break;
     case KisOpenGL::RendererDesktopGL:
-        info = {QSurfaceFormat::OpenGL, KisOpenGL::AngleRendererD3d11};
+        info = {QSurfaceFormat::OpenGL, KisOpenGL::AngleRendererDefault};
         break;
     case KisOpenGL::RendererOpenGLES:
         info = {QSurfaceFormat::OpenGLES, KisOpenGL::AngleRendererD3d11};

@@ -689,6 +689,11 @@ void PSDLayerRecord::writeImpl(QIODevice &io,
                 additionalInfoBlock.writeVmskBlockEx(io, vectorMask);
             }
 
+            // write 'tysh' data block
+            if (!textShape.engineData.isEmpty()) {
+                additionalInfoBlock.writeTypeToolBlockEx(io, textShape);
+            }
+
         }
     } catch (KisAslWriterUtils::ASLWriteException &e) {
         throw KisAslWriterUtils::ASLWriteException(PREPEND_METHOD(e.what()));

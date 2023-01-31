@@ -23,6 +23,9 @@
 #include <kis_selection.h>
 #include <kis_shape_selection.h>
 #include <kis_transparency_mask.h>
+#include <kis_shape_layer.h>
+#include <KoSvgTextShape.h>
+#include <KoSvgTextShapeMarkupConverter.h>
 
 #include <KoPathShape.h>
 
@@ -639,6 +642,29 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                     // And if anything else, it cannot be stored as a PSD fill layer.
                 }
 
+                double vectorWidth = rootLayer->image()? rootLayer->image()->width() / rootLayer->image()->xRes(): 1;
+                double vectorHeight = rootLayer->image()? rootLayer->image()->height() / rootLayer->image()->yRes(): 1;
+                QTransform FlaketoPixels = QTransform::fromScale(rootLayer->image()->xRes(), rootLayer->image()->yRes());
+
+                const KisShapeLayer *shapeLayer = qobject_cast<KisShapeLayer*>(node.data());
+                psd_layer_type_shape textData;
+                if (shapeLayer) {
+                    // only store the first shape.
+                    if (shapeLayer->shapes().size() == 1) {
+                        KoSvgTextShape * text = dynamic_cast<KoSvgTextShape*>(shapeLayer->shapes().first());
+                        if (text) {
+                            KoSvgTextShapeMarkupConverter convert(text);
+                            QString svgtext;
+                            QString styles;
+                            convert.convertToSvg(&svgtext, &styles);
+                            convert.convertToPSDTextEngineData(svgtext, &textData.engineData, textData.text);
+                            textData.boundingBox = text->outlineRect();
+                            textData.textIndex = 0;
+                            textData.transform = text->absoluteTransformation() * FlaketoPixels;
+                        }
+                    }
+                }
+
                 QDomDocument stylesXmlDoc = fetchLayerStyleXmlData(node);
 
                 if (mergedPatternsXmlDoc.isNull() && !stylesXmlDoc.isNull()) {
@@ -652,8 +678,6 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 KisPaintDeviceSP layerContentDevice;
                 psd_section_type sectionType;
                 psd_vector_mask vectorMask;
-                double vectorWidth = rootLayer->image()? rootLayer->image()->width() / rootLayer->image()->xRes(): 1;
-                double vectorHeight = rootLayer->image()? rootLayer->image()->height() / rootLayer->image()->yRes(): 1;
 
                 if (item.type == FlattenedNode::RASTER_LAYER) {
                     nodeIrrelevant = false;
@@ -768,6 +792,8 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 layerRecord->fillConfig = fillConfig;
 
                 layerRecord->vectorMask = vectorMask;
+
+                layerRecord->textShape = textData;
 
                 layerRecord->write(io, layerContentDevice, onlyTransparencyMask, maskRect, sectionType, stylesXmlDoc, node->inherits("KisGroupLayer"));
             }

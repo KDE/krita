@@ -481,3 +481,13 @@ void KisAslXmlWriter::writeStopGradient(const QString &key, const KoStopGradient
 
     writeGradientImpl(key, gradient.name(), colors, transparencies, positions, types, middleOffsets);
 }
+
+void KisAslXmlWriter::writeRawData(const QString key, const QByteArray *rawData)
+{
+    QDomCDATASection dataSection = m_d->document.createCDATASection(rawData->toBase64());
+    QDomElement dataElement = m_d->document.createElement("node");
+    dataElement.setAttribute("type", "RawData");
+    dataElement.setAttribute("key", key);
+    dataElement.appendChild(dataSection);
+    m_d->currentElement.appendChild(dataElement);
+}

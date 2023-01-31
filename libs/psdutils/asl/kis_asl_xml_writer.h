@@ -52,6 +52,7 @@ public:
     void writePatternRef(const QString &key, const KoPatternSP pattern, const QString &uuid);
     void writeSegmentGradient(const QString &key, const KoSegmentGradient &gradient);
     void writeStopGradient(const QString &key, const KoStopGradient &gradient);
+    void writeRawData(const QString key, const QByteArray *rawData);
 
 private:
     QString getSegmentEndpointTypeString(KoGradientSegmentEndpointType segtype);

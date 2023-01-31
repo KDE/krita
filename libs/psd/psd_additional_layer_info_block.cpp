@@ -478,6 +478,18 @@ void PsdAdditionalLayerInfoBlock::writeVmskBlockEx(QIODevice &io, psd_vector_mas
     }
 }
 
+void PsdAdditionalLayerInfoBlock::writeTypeToolBlockEx(QIODevice &io, psd_layer_type_shape typeTool)
+{
+    switch (m_header.byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        writeTypeToolImpl<psd_byte_order::psdLittleEndian>(io, typeTool);
+        break;
+    default:
+        writeTypeToolImpl(io, typeTool);
+        break;
+    }
+}
+
 template<psd_byte_order byteOrder>
 void PsdAdditionalLayerInfoBlock::writePattBlockExImpl(QIODevice &io, const QDomDocument &patternsXmlDoc)
 {
@@ -623,5 +635,26 @@ void PsdAdditionalLayerInfoBlock::writeVectorMaskImpl(QIODevice &io, psd_vector_
             psdwriteFixedPoint<byteOrder>(io, node.control2.y());
             psdwriteFixedPoint<byteOrder>(io, node.control2.x());
         }
+    }
+}
+
+template<psd_byte_order byteOrder>
+void PsdAdditionalLayerInfoBlock::writeTypeToolImpl(QIODevice &io, psd_layer_type_shape tool)
+{
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+    KisAslWriterUtils::writeFixedString<byteOrder>("TySh", io);
+
+    KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> tyshSizeTag(io, 2);
+
+    try {
+        KisAslWriter writer(byteOrder);
+
+        writer.writeTypeToolObjectSettings(io, tool.textDataASLXML(), tool.textWarpXML(), tool.transform, tool.boundingBox);
+
+    } catch (KisAslWriterUtils::ASLWriteException &e) {
+        warnKrita << "WARNING: Couldn't save text layer block:" << PREPEND_METHOD(e.what());
+
+        // TODO: make this error recoverable!
+        throw e;
     }
 }

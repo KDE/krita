@@ -815,7 +815,7 @@ QDomDocument readTypeToolObjectSettingsImpl(QIODevice &device, QTransform &trans
     QDomDocument doc;
 
     if (device.isSequential()) {
-        warnKrita << "WARNING: *** KisAslReader::readFillLayerPsdSection: the supplied"
+        warnKrita << "WARNING: *** KisAslReader::readTypeToolObjectSettings: the supplied"
                   << "IO device is sequential. Chances are that"
                   << "the fill config will *not* be loaded correctly!";
     }

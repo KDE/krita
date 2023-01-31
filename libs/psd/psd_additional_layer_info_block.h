@@ -635,8 +635,13 @@ struct KRITAPSD_EXPORT psd_layer_type_tool {
 };
 
 struct KRITAPSD_EXPORT psd_layer_type_shape {
+    QTransform transform;
+
     QByteArray engineData;
-    QRectF bounds;
+    QRectF bounds; // textBounds;
+    QRectF boundingBox; //actual bounds
+    int textIndex;
+    QString text;
 
     void setEngineData(QByteArray ba) {
         engineData = ba;
@@ -653,6 +658,54 @@ struct KRITAPSD_EXPORT psd_layer_type_shape {
     void setBottom(float val) {
         bounds.setBottom(val);
     }
+
+    QDomDocument textDataASLXML() {
+        KisAslXmlWriter w;
+        w.enterDescriptor("", "", "TxLr");
+
+        w.writeText("Txt ", text);
+        w.writeEnum("textGridding", "textGridding", "none");
+        w.writeEnum("Ornt", "Ornt", "Hrzn");
+        w.writeEnum("AntA", "Annt", "AnCr");
+        if (!bounds.isEmpty()) {
+            w.enterDescriptor("bounds", "", "bounds");
+            w.writeUnitFloat("Left", "#Pnt", bounds.left());
+            w.writeUnitFloat("Top ", "#Pnt", bounds.top());
+            w.writeUnitFloat("Rght", "#Pnt", bounds.right());
+            w.writeUnitFloat("Btom", "#Pnt", bounds.bottom());
+            w.leaveDescriptor();
+        }
+        if (!boundingBox.isEmpty()) {
+            w.enterDescriptor("boundingBox", "", "boundingBox");
+            w.writeUnitFloat("Left", "#Pnt", boundingBox.left());
+            w.writeUnitFloat("Top ", "#Pnt", boundingBox.top());
+            w.writeUnitFloat("Rght", "#Pnt", boundingBox.right());
+            w.writeUnitFloat("Btom", "#Pnt", boundingBox.bottom());
+            w.leaveDescriptor();
+        }
+        w.writeInteger("TextIndex", textIndex);
+        w.writeRawData("EngineData", &engineData);
+
+        w.leaveDescriptor();
+
+        return w.document();
+    }
+
+    QDomDocument textWarpXML() {
+        KisAslXmlWriter w;
+        w.enterDescriptor("", "", "warp");
+
+        w.writeEnum("warpStyle", "warpStyle", "warpNone");
+        w.writeDouble("warpValue", 0);
+        w.writeDouble("warpPerspective", 0);
+        w.writeDouble("warpPerspectiveOther", 0);
+        w.writeEnum("warpRotate", "Ornt", "Hrzn");
+
+        w.leaveDescriptor();
+
+        return w.document();
+    }
+
 };
 
 struct KRITAPSD_EXPORT psd_path_node {
@@ -707,6 +760,7 @@ public:
 
     void writeFillLayerBlockEx(QIODevice &io, const QDomDocument &fillConfig, psd_fill_type type);
     void writeVmskBlockEx(QIODevice &io, psd_vector_mask mask);
+    void writeTypeToolBlockEx(QIODevice &io, psd_layer_type_shape typeTool);
 
     bool valid();
 
@@ -754,6 +808,9 @@ private:
 
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void writeVectorMaskImpl(QIODevice &io, psd_vector_mask mask);
+
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    void writeTypeToolImpl(QIODevice &io, psd_layer_type_shape tool);
 
 private:
     ExtraLayerInfoBlockHandler m_layerInfoBlockHandler;

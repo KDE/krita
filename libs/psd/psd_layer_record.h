@@ -136,6 +136,7 @@ public:
     QDomDocument fillConfig;
 
     psd_vector_mask vectorMask;
+    psd_layer_type_shape textShape;
 
     struct LayerMaskData {
         qint32 top {0};

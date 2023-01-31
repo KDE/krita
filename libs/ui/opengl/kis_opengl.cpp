@@ -874,10 +874,13 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
         Info info = it.value();
 
         if (!info) {
-            info = KisOpenGLModeProber::instance()->
-                    probeFormat(generateSurfaceConfig(it.key(),
-                                                      KisConfig::BT709_G22, false));
+            const RendererConfig config = generateSurfaceConfig(it.key(), KisConfig::BT709_G22, false);
+            dbgOpenGL << "Probing" << it.key() << "from default:" << config.format << config.angleRenderer
+                      << config.rendererId();
+            info = KisOpenGLModeProber::instance()->probeFormat(config);
             *it = info;
+        } else {
+            dbgOpenGL << "Already probed:" << it.key();
         }
 
         compareOp.setOpenGLBlacklisted(
@@ -885,6 +888,11 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
             isOpenGLRendererBlacklisted(info->rendererString(),
                                         info->driverVersionString(),
                                         &warningMessages));
+
+        if (info) {
+            dbgOpenGL << "Result:" << info->rendererString() << info->driverVersionString()
+                      << info->isSupportedVersion();
+        }
 
         if (info && info->isSupportedVersion()) {
             supportedRenderers |= it.key();

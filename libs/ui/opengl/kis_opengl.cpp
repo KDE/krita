@@ -999,14 +999,13 @@ void KisOpenGL::setDefaultSurfaceConfig(const KisOpenGL::RendererConfig &config)
     g_sanityDefaultFormatIsSet = true;
     QSurfaceFormat::setDefaultFormat(config.format);
 
-#ifdef Q_OS_WIN
-    // Force ANGLE to use Direct3D11. D3D9 doesn't support OpenGL ES 3 and WARP
-    //  might get weird crashes atm.
-    qputenv("QT_ANGLE_PLATFORM", KisOpenGLModeProber::angleRendererToString(config.angleRenderer).toLatin1());
-#endif
-
     if (config.format.renderableType() == QSurfaceFormat::OpenGLES) {
         QCoreApplication::setAttribute(Qt::AA_UseOpenGLES, true);
+#ifdef Q_OS_WIN
+        // Force ANGLE to use Direct3D11. D3D9 doesn't support OpenGL ES 3 and WARP
+        //  might get weird crashes atm.
+        qputenv("QT_ANGLE_PLATFORM", KisOpenGLModeProber::angleRendererToString(config.angleRenderer).toLatin1());
+#endif
     } else if (config.format.renderableType() == QSurfaceFormat::OpenGL) {
         QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL, true);
     }

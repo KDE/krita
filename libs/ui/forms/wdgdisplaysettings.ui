@@ -77,7 +77,7 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="1">
+          <item row="6" column="1">
            <widget class="QGroupBox" name="grpOpenGLWarnings">
             <property name="title">
              <string/>
@@ -220,7 +220,7 @@
             </property>
            </spacer>
           </item>
-          <item row="6" column="1">
+          <item row="5" column="1">
            <widget class="QCheckBox" name="chkLargePixmapCache">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">

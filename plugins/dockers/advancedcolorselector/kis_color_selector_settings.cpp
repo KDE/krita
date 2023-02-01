@@ -583,6 +583,8 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->colorSelectorTypeComboBox->setCurrentIndex(0);
 
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
+    Q_ASSERT(cstw);
+
     cstw->setConfiguration(KisColorSelectorConfiguration("3|0|5|0")); // triangle selector
 
     //luma//

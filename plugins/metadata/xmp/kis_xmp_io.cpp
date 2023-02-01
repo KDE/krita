@@ -306,6 +306,8 @@ bool KisXMPIO::loadFrom(KisMetaData::Store *store, QIODevice *ioDevice) const
                 v = KisMetaData::Value(array, vt);
             } else if (value->typeId() == Exiv2::langAlt) {
                 const Exiv2::LangAltValue *xav = dynamic_cast<const Exiv2::LangAltValue *>(value.get());
+                Q_ASSERT(xav);
+
                 QList<KisMetaData::Value> alt;
                 for (std::map<std::string, std::string>::const_iterator it = xav->value_.begin();
                      it != xav->value_.end();

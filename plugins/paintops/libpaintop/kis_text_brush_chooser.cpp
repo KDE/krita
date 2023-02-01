@@ -58,6 +58,8 @@ void KisTextBrushChooser::rebuildTextBrush()
     lblFont->setFont(m_font);
 
     KisTextBrush* textBrush = dynamic_cast<KisTextBrush*>(m_textBrush.data());
+    Q_ASSERT(textBrush);
+
     textBrush->setFont(m_font);
     textBrush->setText(lineEdit->text());
     textBrush->setPipeMode(pipeModeChbox->isChecked());
@@ -74,6 +76,7 @@ void KisTextBrushChooser::setBrush(KisBrushSP brush)
     m_textBrush = brush;
 
     KisTextBrush *textBrush = dynamic_cast<KisTextBrush*>(brush.data());
+    Q_ASSERT(textBrush);
 
     m_font = textBrush->font();
 

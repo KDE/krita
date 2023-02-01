@@ -138,6 +138,7 @@ void KisScreentoneConfigWidget::setConfiguration(const KisPropertiesConfiguratio
 {
     const KisScreentoneGeneratorConfiguration *generatorConfig =
         dynamic_cast<const KisScreentoneGeneratorConfiguration*>(config.data());
+    Q_ASSERT(generatorConfig);
         
     {
         KisSignalsBlocker blocker1(m_ui.buttonSizeModeResolutionBased, m_ui.buttonSizeModePixelBased,

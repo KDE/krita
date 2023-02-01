@@ -33,6 +33,8 @@ void KisGradientGenerator::generate(KisProcessingInformation dst,
     KIS_SAFE_ASSERT_RECOVER_RETURN(config);
     const KisGradientGeneratorConfiguration *generatorConfiguration =
         dynamic_cast<const KisGradientGeneratorConfiguration*>(config.data());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(generatorConfiguration);
+
 
     QSize imageSize = device->defaultBounds()->imageBorderRect().size();
     QPair<QPointF, QPointF> positions =

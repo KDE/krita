@@ -14,13 +14,6 @@ KisWdgOptionsJPEGXL::KisWdgOptionsJPEGXL(QWidget *parent)
     : KisConfigWidget(parent)
 {
     setupUi(this);
-    // HACK ALERT!
-    // QScrollArea contents are opaque at multiple levels
-    // The contents themselves AND the viewport widget
-    {
-        scrollAreaWidgetContents->setAutoFillBackground(false);
-        scrollAreaWidgetContents->parentWidget()->setAutoFillBackground(false);
-    }
 
     {
         resampling->addItem(i18nc("JPEG-XL encoder options", "Default (only for low quality)"), -1);
@@ -143,12 +136,21 @@ KisWdgOptionsJPEGXL::KisWdgOptionsJPEGXL(QWidget *parent)
             qOverload<int>(&QComboBox::currentIndexChanged),
             this,
             &KisWdgOptionsJPEGXL::toggleExtraHDROptions);
+
+    connect(modular, qOverload<int>(&QComboBox::currentIndexChanged), this, &KisWdgOptionsJPEGXL::toggleModularTabs);
 }
 
 void KisWdgOptionsJPEGXL::toggleExtraHDROptions(int index)
 {
     const QString option = cmbConversionPolicy->itemData(index).value<QString>();
     chkHLGOOTF->setEnabled(option.contains("HLG"));
+}
+
+void KisWdgOptionsJPEGXL::toggleModularTabs(int index)
+{
+    const int id = modular->itemData(index, Qt::UserRole).value<int>();
+    advancedParameters->setTabEnabled(1, id == -1 || id == 0); // vardct
+    advancedParameters->setTabEnabled(2, id == -1 || id == 1); // modular
 }
 
 void KisWdgOptionsJPEGXL::setConfiguration(const KisPropertiesConfigurationSP cfg)

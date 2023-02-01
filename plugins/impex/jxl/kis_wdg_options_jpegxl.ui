@@ -10,15 +10,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>410</width>
-    <height>435</height>
+    <width>480</width>
+    <height>432</height>
    </rect>
   </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
+  <property name="minimumSize">
+   <size>
+    <width>480</width>
+    <height>0</height>
+   </size>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -319,51 +319,16 @@ Default is 0.</string>
        <string>Advanced</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
        <item>
-        <widget class="QScrollArea" name="scrollArea">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="QTabWidget" name="advancedParameters">
+         <property name="currentIndex">
+          <number>0</number>
          </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Plain</enum>
-         </property>
-         <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
-         </property>
-         <property name="sizeAdjustPolicy">
-          <enum>QAbstractScrollArea::AdjustToContents</enum>
-         </property>
-         <property name="widgetResizable">
-          <bool>true</bool>
-         </property>
-         <widget class="QWidget" name="scrollAreaWidgetContents">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>380</width>
-            <height>740</height>
-           </rect>
-          </property>
-          <layout class="QFormLayout" name="formLayout_2">
+         <widget class="QWidget" name="encoderParameters">
+          <attribute name="title">
+           <string>Encoder parameters</string>
+          </attribute>
+          <layout class="QFormLayout" name="formLayout_11">
            <item row="0" column="0">
             <widget class="QLabel" name="lblResampling">
              <property name="text">
@@ -454,6 +419,18 @@ The default value is 0.</string>
            </item>
            <item row="5" column="1">
             <layout class="QGridLayout" name="gridLayout">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
              <item row="0" column="1">
               <widget class="QLabel" name="lblMax">
                <property name="text">
@@ -486,17 +463,17 @@ The default value is 0.</string>
              </item>
             </layout>
            </item>
-           <item row="6" column="0">
-            <widget class="QLabel" name="lblGaborishFilter">
-             <property name="text">
-              <string comment="JPEG-XL encoder options">Gaborish filter</string>
-             </property>
-            </widget>
-           </item>
            <item row="6" column="1">
             <widget class="QComboBox" name="gaborish">
              <property name="toolTip">
               <string>Enables or disables the gaborish filter.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="lblGaborishFilter">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Gaborish filter</string>
              </property>
             </widget>
            </item>
@@ -514,24 +491,10 @@ The default value is 0.</string>
              </property>
             </widget>
            </item>
-           <item row="8" column="0">
-            <widget class="QLabel" name="lblKeepInvisible">
-             <property name="text">
-              <string>Keep color of invisible pixels</string>
-             </property>
-            </widget>
-           </item>
            <item row="8" column="1">
             <widget class="QComboBox" name="keepInvisible">
              <property name="toolTip">
               <string>Enables or disables preserving color of invisible pixels.</string>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="0">
-            <widget class="QLabel" name="lblGroupOrder">
-             <property name="text">
-              <string comment="JPEG-XL encoder options">Group order</string>
              </property>
             </widget>
            </item>
@@ -542,6 +505,23 @@ The default value is 0.</string>
              </property>
             </widget>
            </item>
+           <item row="10" column="1">
+            <widget class="QComboBox" name="jpegReconCFL"/>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="lblKeepInvisible">
+             <property name="text">
+              <string>Keep color of invisible pixels</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0">
+            <widget class="QLabel" name="lblGroupOrder">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Group order</string>
+             </property>
+            </widget>
+           </item>
            <item row="10" column="0">
             <widget class="QLabel" name="lblJPEGReconCFL">
              <property name="text">
@@ -549,316 +529,309 @@ The default value is 0.</string>
              </property>
             </widget>
            </item>
-           <item row="11" column="0" colspan="2">
-            <widget class="QGroupBox" name="groupBox">
-             <property name="title">
-              <string>VarDCT parameters</string>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="varDCTParameters">
+          <attribute name="title">
+           <string>VarDCT parameters</string>
+          </attribute>
+          <layout class="QFormLayout" name="formLayout_12">
+           <item row="0" column="0">
+            <widget class="QLabel" name="lblProgressiveAC">
+             <property name="text">
+              <string>Spectral progression</string>
              </property>
-             <layout class="QFormLayout" name="formLayout_3">
-              <item row="0" column="0">
-               <widget class="QLabel" name="lblProgressiveAC">
-                <property name="text">
-                 <string>Spectral progression</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QComboBox" name="progressiveAC">
-                <property name="toolTip">
-                 <string>Set the progressive mode for the AC coefficients of VarDCT, using spectral progression from the DCT coefficients.</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="lblQProgressiveAC">
-                <property name="toolTip">
-                 <string/>
-                </property>
-                <property name="text">
-                 <string>Quantization</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QComboBox" name="qProgressiveAC">
-                <property name="toolTip">
-                 <string>Set the progressive mode for the AC coefficients of VarDCT, using spectral progression from the DCT coefficients.</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="lblProgressiveDC">
-                <property name="text">
-                 <string>Low resolution DC</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QComboBox" name="progressiveDC">
-                <property name="toolTip">
-                 <string>Set the progressive mode using lower-resolution DC images for VarDCT.</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
             </widget>
            </item>
-           <item row="12" column="0" colspan="2">
-            <widget class="QGroupBox" name="modularEncodingParameters">
-             <property name="title">
-              <string>Modular parameters</string>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="progressiveAC">
+             <property name="toolTip">
+              <string>Set the progressive mode for the AC coefficients of VarDCT, using spectral progression from the DCT coefficients.</string>
              </property>
-             <layout class="QFormLayout" name="formLayout_4">
-              <item row="2" column="0">
-               <widget class="QLabel" name="lblChannelColorsGlobalPercent">
-                <property name="text">
-                 <string>Global channel palette range</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <layout class="QGridLayout" name="gridLayout2">
-                <item row="1" column="0" colspan="2">
-                 <widget class="KisSliderSpinBox" name="channelColorsGlobalPercent">
-                  <property name="toolTip">
-                   <string>Use Global channel palette if the amount of colors is smaller than this percentage of range.
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="lblQProgressiveAC">
+             <property name="toolTip">
+              <string/>
+             </property>
+             <property name="text">
+              <string>Quantization</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="qProgressiveAC">
+             <property name="toolTip">
+              <string>Set the progressive mode for the AC coefficients of VarDCT, using spectral progression from the DCT coefficients.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="lblProgressiveDC">
+             <property name="text">
+              <string>Low resolution DC</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QComboBox" name="progressiveDC">
+             <property name="toolTip">
+              <string>Set the progressive mode using lower-resolution DC images for VarDCT.</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="modularEncodingParameters">
+          <attribute name="title">
+           <string>Modular parameters</string>
+          </attribute>
+          <layout class="QFormLayout" name="formLayout_3">
+           <item row="0" column="0">
+            <widget class="QLabel" name="lblResponsive">
+             <property name="text">
+              <string>Progressive encoding</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="responsive">
+             <property name="toolTip">
+              <string>Enables or disables progressive encoding for modular mode.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="lblChannelColorsGlobalPercent">
+             <property name="text">
+              <string>Global channel palette range</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <layout class="QGridLayout" name="gridLayout2">
+             <item row="1" column="0" colspan="2">
+              <widget class="KisSliderSpinBox" name="channelColorsGlobalPercent">
+               <property name="toolTip">
+                <string>Use Global channel palette if the amount of colors is smaller than this percentage of range.
 Use 0-100 to set an explicit percentage, -1 to use the encoder default.
 Used for modular encoding.</string>
-                  </property>
-                  <property name="suffix">
-                   <string>%</string>
-                  </property>
-                  <property name="minimum">
-                   <number>-1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>100</number>
-                  </property>
-                  <property name="value">
-                   <number>-1</number>
-                  </property>
-                  <property name="pageStep" stdset="0">
-                   <number>1</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="lblNone">
-                  <property name="text">
-                   <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QLabel" name="lblBest">
-                  <property name="text">
-                   <string>All</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="lblChannelColorsGroupPercent">
-                <property name="text">
-                 <string>Local channel palette range</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <layout class="QGridLayout" name="gridLayout3">
-                <item row="1" column="0" colspan="2">
-                 <widget class="KisSliderSpinBox" name="channelColorsGroupPercent">
-                  <property name="toolTip">
-                   <string>Use Local (per-group) channel palette if the amount of colors is smaller than this percentage of range.
+               </property>
+               <property name="suffix">
+                <string>%</string>
+               </property>
+               <property name="minimum">
+                <number>-1</number>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>-1</number>
+               </property>
+               <property name="pageStep" stdset="0">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="lblNone">
+               <property name="text">
+                <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="lblBest">
+               <property name="text">
+                <string>All</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="lblChannelColorsGroupPercent">
+             <property name="text">
+              <string>Local channel palette range</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <layout class="QGridLayout" name="gridLayout3">
+             <item row="1" column="0" colspan="2">
+              <widget class="KisSliderSpinBox" name="channelColorsGroupPercent">
+               <property name="toolTip">
+                <string>Use Local (per-group) channel palette if the amount of colors is smaller than this percentage of range.
 Use 0-100 to set an explicit percentage, -1 to use the encoder default.
 Used for modular encoding.</string>
-                  </property>
-                  <property name="suffix">
-                   <string>%</string>
-                  </property>
-                  <property name="minimum">
-                   <number>-1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>100</number>
-                  </property>
-                  <property name="value">
-                   <number>-1</number>
-                  </property>
-                  <property name="pageStep" stdset="0">
-                   <number>1</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="lblNone2">
-                  <property name="text">
-                   <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QLabel" name="lblBest2">
-                  <property name="text">
-                   <string>All</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="4" column="0">
-               <widget class="QLabel" name="lblPaletteColors">
-                <property name="text">
-                 <string>Use color palette for ... colors or less</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="1">
-               <widget class="QSpinBox" name="paletteColors">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="toolTip">
-                 <string>Use color palette if amount of colors is smaller than or equal to this amount, or -1 to use the encoder default.
+               </property>
+               <property name="suffix">
+                <string>%</string>
+               </property>
+               <property name="minimum">
+                <number>-1</number>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>-1</number>
+               </property>
+               <property name="pageStep" stdset="0">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="lblNone2">
+               <property name="text">
+                <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="lblBest2">
+               <property name="text">
+                <string>All</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="lblPaletteColors">
+             <property name="text">
+              <string>Use color palette for ... colors or less</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QSpinBox" name="paletteColors">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>Use color palette if amount of colors is smaller than or equal to this amount, or -1 to use the encoder default.
 Used for modular encoding.</string>
-                </property>
-                <property name="minimum">
-                 <number>-1</number>
-                </property>
-                <property name="maximum">
-                 <number>1000000000</number>
-                </property>
-                <property name="singleStep">
-                 <number>1</number>
-                </property>
-                <property name="value">
-                 <number>-1</number>
-                </property>
-                <property name="pageStep" stdset="0">
-                 <number>0</number>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="0">
-               <widget class="QLabel" name="lblLossyPalette">
-                <property name="text">
-                 <string comment="JPEG-XL encoder options">Delta palette</string>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="1">
-               <widget class="QComboBox" name="lossyPalette">
-                <property name="toolTip">
-                 <string>Enables or disables delta palette. Used in modular mode.</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="0">
-               <widget class="QLabel" name="lblModularGroupSize">
-                <property name="text">
-                 <string comment="JPEG-XL encoder options">Group size</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="1">
-               <widget class="QComboBox" name="modularGroupSize">
-                <property name="toolTip">
-                 <string>Group size for modular encoding.</string>
-                </property>
-               </widget>
-              </item>
-              <item row="7" column="0">
-               <widget class="QLabel" name="lblModularPredictor">
-                <property name="text">
-                 <string comment="JPEG-XL encoder options">Predictor</string>
-                </property>
-               </widget>
-              </item>
-              <item row="7" column="1">
-               <widget class="QComboBox" name="modularPredictor">
-                <property name="toolTip">
-                 <string>Predictor for modular encoding.</string>
-                </property>
-               </widget>
-              </item>
-              <item row="8" column="0">
-               <widget class="QLabel" name="lblModularMATreeLearningPercent">
-                <property name="text">
-                 <string>Pixels for MA tree learning</string>
-                </property>
-               </widget>
-              </item>
-              <item row="8" column="1">
-               <layout class="QGridLayout" name="gridLayout_2">
-                <item row="0" column="1">
-                 <widget class="QLabel" name="lblMaximumDegradation">
-                  <property name="text">
-                   <string>All</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="lblNoDegradation">
-                  <property name="text">
-                   <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0" colspan="2">
-                 <widget class="KisSliderSpinBox" name="modularMATreeLearningPercent">
-                  <property name="toolTip">
-                   <string>Fraction of pixels used to learn MA trees as a percentage.
+             </property>
+             <property name="minimum">
+              <number>-1</number>
+             </property>
+             <property name="maximum">
+              <number>1000000000</number>
+             </property>
+             <property name="singleStep">
+              <number>1</number>
+             </property>
+             <property name="value">
+              <number>-1</number>
+             </property>
+             <property name="pageStep" stdset="0">
+              <number>0</number>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="lblLossyPalette">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Delta palette</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QComboBox" name="lossyPalette">
+             <property name="toolTip">
+              <string>Enables or disables delta palette. Used in modular mode.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="lblModularGroupSize">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Group size</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QComboBox" name="modularGroupSize">
+             <property name="toolTip">
+              <string>Group size for modular encoding.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="QComboBox" name="modularPredictor">
+             <property name="toolTip">
+              <string>Predictor for modular encoding.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="lblModularPredictor">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Predictor</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="lblModularMATreeLearningPercent">
+             <property name="text">
+              <string>Pixels for MA tree learning</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="0" column="1">
+              <widget class="QLabel" name="lblMaximumDegradation">
+               <property name="text">
+                <string>All</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="lblNoDegradation">
+               <property name="text">
+                <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="2">
+              <widget class="KisSliderSpinBox" name="modularMATreeLearningPercent">
+               <property name="toolTip">
+                <string>Fraction of pixels used to learn MA trees as a percentage.
 -1 = default, 0 = no MA and fast decode, 50 = default value, 100 = all.
 Higher values use more encoder memory.</string>
-                  </property>
-                  <property name="suffix">
-                   <string>%</string>
-                  </property>
-                  <property name="minimum">
-                   <number>-1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>100</number>
-                  </property>
-                  <property name="value">
-                   <number>-1</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="0" column="1">
-               <widget class="QComboBox" name="responsive">
-                <property name="toolTip">
-                 <string>Enables or disables progressive encoding for modular mode.</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="lblResponsive">
-                <property name="text">
-                 <string>Progressive encoding</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="10" column="1">
-            <widget class="QComboBox" name="jpegReconCFL"/>
+               </property>
+               <property name="suffix">
+                <string>%</string>
+               </property>
+               <property name="minimum">
+                <number>-1</number>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>-1</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>

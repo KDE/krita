@@ -343,4 +343,6 @@ KisOpenGLModeProber::Result::Result(QOpenGLContext &context) {
     m_supportsLod = context.format().majorVersion() >= 3 || (m_isOpenGLES && context.hasExtension("GL_EXT_shader_texture_lod"));
 
     m_extensions = context.extensions();
+    // Remove empty name extension that sometimes appears on NVIDIA output
+    m_extensions.remove("");
 }

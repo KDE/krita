@@ -166,14 +166,17 @@ void KisOpenGL::initialize()
             debugOut.nospace() << "\n  GL version: " << openGLCheckResult->glMajorVersion() << "."
                                << openGLCheckResult->glMinorVersion();
         }
-        debugOut << "\n     Supports deprecated functions" << openGLCheckResult->supportsDeprecatedFunctions();
-        debugOut << "\n     is OpenGL ES:" << openGLCheckResult->isOpenGLES();
+        debugOut << "\n  Supports deprecated functions" << openGLCheckResult->supportsDeprecatedFunctions();
+        debugOut << "\n  Is OpenGL ES:" << openGLCheckResult->isOpenGLES();
         debugOut << "\n  supportsBufferMapping:" << openGLCheckResult->supportsBufferMapping();
         debugOut << "\n  supportsBufferInvalidation:" << openGLCheckResult->supportsBufferInvalidation();
         debugOut << "\n  forceDisableTextureBuffers:" << g_forceDisableTextureBuffers;
         debugOut << "\n  Extensions:";
-        for (const auto &i: openGLCheckResult->extensions()) {
-            debugOut << "\n    " << QString::fromLatin1(i);
+        {
+            QDebugStateSaver saver(debugOut);
+            Q_FOREACH (const QByteArray &i, openGLCheckResult->extensions()) {
+                debugOut.noquote() << "\n    " << QString::fromLatin1(i);
+            }
         }
     }
 

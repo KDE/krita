@@ -1,6 +1,6 @@
 add_subdirectory(tests)
 
-set(kritatooltransform_SOURCES
+set(kritatooltransform_static_SRCS
     tool_transform_args.cc
     kis_transform_mask_adapter.cpp
     kis_animated_transform_parameters.cpp
@@ -24,13 +24,17 @@ set(kritatooltransform_SOURCES
     strokes/inplace_transform_stroke_strategy.cpp
     )
 
-qt5_add_resources(kritatooltransform_SOURCES tool_transform.qrc)
-ki18n_wrap_ui(kritatooltransform_SOURCES wdg_tool_transform.ui)
+ki18n_wrap_ui(kritatooltransform_static_SRCS wdg_tool_transform.ui)
 
-kis_add_library(kritatooltransform_static STATIC ${kritatooltransform_SOURCES})
+kis_add_library(kritatooltransform_static STATIC ${kritatooltransform_static_SRCS})
 generate_export_header(kritatooltransform_static BASE_NAME kritatooltransform)
 
-kis_add_library(kritatooltransform MODULE tool_transform.cc)
+set(kritatooltransform_SOURCES
+  tool_transform.cc
+)
+
+qt5_add_resources(kritatooltransform_SOURCES tool_transform.qrc)
+kis_add_library(kritatooltransform MODULE ${kritatooltransform_SOURCES})
 
 target_link_libraries(kritatooltransform_static
   PUBLIC

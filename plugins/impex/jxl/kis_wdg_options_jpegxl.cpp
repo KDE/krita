@@ -147,9 +147,8 @@ KisWdgOptionsJPEGXL::KisWdgOptionsJPEGXL(QWidget *parent)
 
 void KisWdgOptionsJPEGXL::toggleExtraHDROptions(int index)
 {
-    Q_UNUSED(index)
-    bool toggle = cmbConversionPolicy->currentData(Qt::UserRole).value<QString>().contains("HLG");
-    chkHLGOOTF->setEnabled(toggle);
+    const QString option = cmbConversionPolicy->itemData(index).value<QString>();
+    chkHLGOOTF->setEnabled(option.contains("HLG"));
 }
 
 void KisWdgOptionsJPEGXL::setConfiguration(const KisPropertiesConfigurationSP cfg)

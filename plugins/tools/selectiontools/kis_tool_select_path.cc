@@ -239,12 +239,16 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 
 void __KisToolSelectPathLocalTool::beginShape()
 {
-    dynamic_cast<KisToolSelectPath*>(m_selectionTool)->beginSelectInteraction();
+    KisToolSelectPath* selectPathTool = dynamic_cast<KisToolSelectPath*>(m_selectionTool);
+    Q_ASSERT(selectPathTool);
+    selectPathTool->beginSelectInteraction();
 }
 
 void __KisToolSelectPathLocalTool::endShape()
 {
-    dynamic_cast<KisToolSelectPath*>(m_selectionTool)->endSelectInteraction();
+    KisToolSelectPath* selectPathTool = dynamic_cast<KisToolSelectPath*>(m_selectionTool);
+    Q_ASSERT(selectPathTool);
+    selectPathTool->endSelectInteraction();
 }
 
 void KisToolSelectPath::resetCursorStyle()

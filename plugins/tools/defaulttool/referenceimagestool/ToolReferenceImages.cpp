@@ -346,6 +346,7 @@ void ToolReferenceImages::copy() const
     if (!shapes.isEmpty()) {
         KoShape* shape = shapes.at(0);
         KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(reference);
         QClipboard *cb = QApplication::clipboard();
         cb->setImage(reference->getImage());
     }

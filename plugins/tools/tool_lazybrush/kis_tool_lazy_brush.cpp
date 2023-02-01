@@ -73,6 +73,7 @@ void KisToolLazyBrush::tryDisableKeyStrokesOnMask()
 void KisToolLazyBrush::activate(const QSet<KoShape*> &shapes)
 {
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kiscanvas);
     m_d->toolConnections.addUniqueConnection(
         kiscanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigNodeChanged(KisNodeSP)),
         this, SLOT(slotCurrentNodeChanged(KisNodeSP)));
@@ -345,6 +346,7 @@ void KisToolLazyBrush::explicitUserStrokeEndRequest()
 QWidget * KisToolLazyBrush::createOptionWidget()
 {
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kiscanvas);
 
     QWidget *optionsWidget = new KisToolLazyBrushOptionsWidget(kiscanvas->viewManager()->canvasResourceProvider(), 0);
     optionsWidget->setObjectName(toolId() + "option widget");

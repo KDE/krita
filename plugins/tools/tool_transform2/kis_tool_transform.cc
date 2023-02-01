@@ -846,6 +846,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         currentNode->inherits("KisCloneLayer")) {
 
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        Q_ASSERT(kisCanvas);
 
         if(currentNode->inherits("KisColorizeMask")){
             kisCanvas->viewManager()->
@@ -1010,6 +1011,7 @@ void KisToolTransform::slotPreviewDeviceGenerated(KisPaintDeviceSP device)
 {
     if (device && device->exactBounds().isEmpty()) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        KIS_SAFE_ASSERT_RECOVER(kisCanvas) { cancelStroke(); return; }
         kisCanvas->viewManager()->
             showFloatingMessage(
                 i18nc("floating message in transformation tool",

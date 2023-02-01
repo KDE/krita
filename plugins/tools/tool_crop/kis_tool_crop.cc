@@ -718,6 +718,7 @@ bool KisToolCrop::lockRatio() const
 void KisToolCrop::showSizeOnCanvas()
 {
     KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kisCanvas);
     if(m_mouseOnHandleType == 9) {
         kisCanvas->viewManager()->showFloatingMessage(i18n("X: %1\nY: %2"
                                                        , optionsWidget->intX->text(), optionsWidget->intY->text())

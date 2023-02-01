@@ -600,8 +600,6 @@ KisOpenGL::RendererConfig generateSurfaceConfig(KisOpenGL::OpenGLRenderer render
         // an OpenGL ES context.
         // NVIDIA's GLX implementation will not allow that and results
         // in a forced process exit through X11 (NVIDIA bug #3959482).
-        // Alternatively (if NoProfile or Core), it will cause the
-        // AppImage to crash because we don't ship GLES support.
         format.setVersion(3, 3);
         // Make sure to request a Compatibility profile to have NVIDIA
         // return the maximum supported GL version.

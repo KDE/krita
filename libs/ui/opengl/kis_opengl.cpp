@@ -157,13 +157,15 @@ void KisOpenGL::initialize()
     if (openGLCheckResult) {
         debugOut << "\n  Vendor: " << openGLCheckResult->vendorString();
         debugOut << "\n  Renderer: " << openGLCheckResult->rendererString();
-        debugOut << "\n  Version: " << openGLCheckResult->driverVersionString();
+        debugOut << "\n  Driver version: " << openGLCheckResult->driverVersionString();
         debugOut << "\n  Shading language: " << openGLCheckResult->shadingLanguageString();
         debugOut << "\n  Requested format: " << QSurfaceFormat::defaultFormat();
         debugOut << "\n  Current format: " << openGLCheckResult->format();
-        debugOut.nospace();
-        debugOut << "\n     Version: " << openGLCheckResult->glMajorVersion() << "." << openGLCheckResult->glMinorVersion();
-        debugOut.resetFormat();
+        {
+            QDebugStateSaver saver(debugOut);
+            debugOut.nospace() << "\n  GL version: " << openGLCheckResult->glMajorVersion() << "."
+                               << openGLCheckResult->glMinorVersion();
+        }
         debugOut << "\n     Supports deprecated functions" << openGLCheckResult->supportsDeprecatedFunctions();
         debugOut << "\n     is OpenGL ES:" << openGLCheckResult->isOpenGLES();
         debugOut << "\n  supportsBufferMapping:" << openGLCheckResult->supportsBufferMapping();

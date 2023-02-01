@@ -102,6 +102,7 @@ public:
         cmsSetAlarmCodes(alarm);
         cmsSetAdaptationState(adaptationState);
 
+        Q_ASSERT(dynamic_cast<const IccColorProfile *>(proofingSpace->profile()));
         m_transform = cmsCreateProofingTransform(srcProfile->lcmsProfile(),
                                                  srcColorSpaceType,
                                                  dstProfile->lcmsProfile(),
@@ -249,6 +250,8 @@ KoColorConversionTransformation *IccColorSpaceEngine::createColorTransformation(
 {
     Q_ASSERT(srcColorSpace);
     Q_ASSERT(dstColorSpace);
+    Q_ASSERT(dynamic_cast<const IccColorProfile *>(srcColorSpace->profile()));
+    Q_ASSERT(dynamic_cast<const IccColorProfile *>(dstColorSpace->profile()));
 
     return new KoLcmsColorConversionTransformation(
                 srcColorSpace, computeColorSpaceType(srcColorSpace),
@@ -267,6 +270,8 @@ KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofin
 {
     Q_ASSERT(srcColorSpace);
     Q_ASSERT(dstColorSpace);
+    Q_ASSERT(dynamic_cast<const IccColorProfile *>(srcColorSpace->profile()));
+    Q_ASSERT(dynamic_cast<const IccColorProfile *>(dstColorSpace->profile()));
 
     return new KoLcmsColorProofingConversionTransformation(
                 srcColorSpace, computeColorSpaceType(srcColorSpace),

@@ -232,6 +232,8 @@ void KisColorSelectorSettings::savePreferences() const
 
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
+    Q_ASSERT(cstw);
+
     cfg.writeEntry("colorSelectorConfiguration", cstw->configuration().toString());
 
     cfg.writeEntry("hsxSettingType", ui->colorSelectorTypeComboBox->currentIndex());
@@ -490,6 +492,7 @@ void KisColorSelectorSettings::loadPreferences()
 
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
+    Q_ASSERT(cstw);
     cstw->setConfiguration(KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", "3|0|5|0"))); // triangle selector
 
     //luma values//

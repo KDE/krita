@@ -58,6 +58,8 @@ public:
     void setSeparatorVisible(bool visible)
     {
         QBoxLayout *layoutMain = dynamic_cast<QBoxLayout*>(layout());
+        Q_ASSERT(layoutMain);
+
         const bool isVisible = layoutMain->count() > 1;
         if (isVisible == visible) {
             return;
@@ -74,7 +76,10 @@ public:
     void setOrientation(Qt::Orientation orientation)
     {
         QBoxLayout *layoutMain = dynamic_cast<QBoxLayout*>(layout());
+        Q_ASSERT(layoutMain);
         QBoxLayout *layoutWidget = dynamic_cast<QBoxLayout*>(layoutMain->itemAt(0)->layout());
+        Q_ASSERT(layoutWidget);
+
         if (orientation == Qt::Vertical) {
             if (layoutMain->direction() == QBoxLayout::TopToBottom) {
                 return;
@@ -165,6 +170,7 @@ struct KisOptionCollectionWidgetWithHeader::Private
     void adjustWidgetCollection()
     {
         QBoxLayout *layoutMain = dynamic_cast<QBoxLayout*>(q->layout());
+        Q_ASSERT(layoutMain);
         if (layoutMain->indexOf(layoutWidgets) == -1) {
             if (widgetCollection->numberOfVisibleWidgets() == 0) {
                 return;
@@ -203,6 +209,8 @@ struct KisOptionCollectionWidget::Private
         widgetWrappers.insert(index, widgetWrapper);
 
         QBoxLayout *layoutMain = dynamic_cast<QBoxLayout*>(q->layout());
+        Q_ASSERT(layoutMain);
+
         int indexLayout;
         for (indexLayout = 0; indexLayout < layoutMain->count(); ++indexLayout) {
             const QWidget *prevWidget = layoutMain->itemAt(indexLayout)->widget();

@@ -4,6 +4,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <tuple>
+
 #include <boost/optional.hpp>
 
 #include <QOpenGLContext>
@@ -64,6 +66,9 @@ namespace
     QString g_debugText("OpenGL Info\n  **OpenGL not initialized**");
 
     QVector<KLocalizedString> g_openglWarningStrings;
+
+    using DetectedRenderer = std::tuple<QString, QString, bool>;
+    QVector<DetectedRenderer> g_detectedRenderers;
     KisOpenGL::OpenGLRenderers g_supportedRenderers;
     KisOpenGL::OpenGLRenderer g_rendererPreferredByQt;
 
@@ -189,7 +194,14 @@ void KisOpenGL::initialize()
     debugOut << "\n  supportsOpenGLES:" << bool(g_supportedRenderers & RendererOpenGLES);
     debugOut << "\n  isQtPreferOpenGLES:" << bool(g_rendererPreferredByQt == RendererOpenGLES);
 #endif
-
+    debugOut << "\n  Detected renderers:";
+    {
+        QDebugStateSaver saver(debugOut);
+        Q_FOREACH (const DetectedRenderer &x, g_detectedRenderers) {
+            debugOut.noquote().nospace() << "\n    " << (std::get<2>(x) ? "(Supported)" : "(Unsupported)") << " "
+                                         << std::get<0>(x) << " (" << std::get<1>(x) << ") ";
+        }
+    }
 
 //    debugOut << "\n== log ==\n";
 //    debugOut.noquote();
@@ -897,6 +909,12 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
         if (info) {
             dbgOpenGL << "Result:" << info->rendererString() << info->driverVersionString()
                       << info->isSupportedVersion();
+        }
+
+        if (info) {
+            g_detectedRenderers << std::make_tuple(info->rendererString(),
+                                                   info->driverVersionString(),
+                                                   info->isSupportedVersion());
         }
 
         if (info && info->isSupportedVersion()) {

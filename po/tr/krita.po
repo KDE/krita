@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-30 00:55+0000\n"
-"PO-Revision-Date: 2023-01-31 01:15+0300\n"
+"PO-Revision-Date: 2023-01-31 21:44+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -37204,7 +37204,7 @@ msgstr "Her fırça vuruşunda güncelle"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1186
 #, kde-format
 msgid "HSV Sliders to Show"
-msgstr "Gösterilecek HSV sürgüleri"
+msgstr "Gösterilecek HSV Kaydırıcıları"
 
 #. i18n: ectx: property (text), widget (QCheckBox, csl_hsvH)
 #. i18n: ectx: property (text), widget (QCheckBox, csl_hslH)
@@ -37251,7 +37251,7 @@ msgstr "Değer"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1216
 #, kde-format
 msgid "HSL Sliders to Show"
-msgstr "Gösterilecek HSL Sürgüleri"
+msgstr "Gösterilecek HSL Kaydırıcıları"
 
 #. i18n: ectx: property (text), widget (QCheckBox, csl_hslL)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1236
@@ -37265,7 +37265,7 @@ msgstr "Açıklık"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1246
 #, kde-format
 msgid "HSI Sliders to Show"
-msgstr "Gösterilecek HSI Sürgüleri"
+msgstr "Gösterilecek HSI Kaydırıcıları"
 
 #. i18n: ectx: property (text), widget (QCheckBox, csl_hsiI)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1266
@@ -37281,7 +37281,7 @@ msgstr "Yoğunluk"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1276
 #, kde-format
 msgid "HSY' Sliders to Show"
-msgstr "Gösterilecek HSY' Sürgüleri"
+msgstr "Gösterilecek HSY' Kaydırıcıları"
 
 #. i18n: ectx: property (text), widget (QCheckBox, csl_hsyY)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1296

@@ -644,7 +644,8 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
 
                 double vectorWidth = rootLayer->image()? rootLayer->image()->width() / rootLayer->image()->xRes(): 1;
                 double vectorHeight = rootLayer->image()? rootLayer->image()->height() / rootLayer->image()->yRes(): 1;
-                QTransform FlaketoPixels = QTransform::fromScale(rootLayer->image()->xRes(), rootLayer->image()->yRes());
+                // TODO: Figure out whether this should be done or not.
+                // QTransform FlaketoPixels = QTransform::fromScale(rootLayer->image()->xRes(), rootLayer->image()->yRes());
 
                 const KisShapeLayer *shapeLayer = qobject_cast<KisShapeLayer*>(node.data());
                 psd_layer_type_shape textData;
@@ -660,7 +661,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                             convert.convertToPSDTextEngineData(svgtext, &textData.engineData, textData.text);
                             textData.boundingBox = text->outlineRect();
                             textData.textIndex = 0;
-                            textData.transform = text->absoluteTransformation() * FlaketoPixels;
+                            textData.transform = text->absoluteTransformation()/* * FlaketoPixels*/;
                         }
                     }
                 }

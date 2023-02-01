@@ -42,7 +42,7 @@
 #include <KoSvgTextShape.h>
 #include <KoXmlWriter.h>
 #include <KoDocumentResourceManager.h>
-#include <KoMarker.h>
+#include <KoFontRegistry.h>
 
 #include <SvgParser.h>
 #include <SvgWriter.h>
@@ -1363,7 +1363,18 @@ QString stylesForPSDParagraphSheet(QJsonObject PSDParagraphSheet) {
     return styles.join("; ");
 }
 
-QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, QString> fontNames) {
+struct font_info_psd {
+    font_info_psd() {
+        weight = 400;
+        width = 100;
+    }
+    QString familyName;
+    int weight;
+    int width {100};
+    bool italic {false};
+};
+
+QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, font_info_psd> fontNames) {
     QStringList styles;
 
     QStringList unsupportedStyles;
@@ -1372,18 +1383,26 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, QString> fon
     bool italic = false;
     QStringList textDecor;
     QStringList baselineShift;
+    QStringList fontVariantLigatures;
     for (int i=0; i < PSDStyleSheet.keys().size(); i++) {
         const QString key = PSDStyleSheet.keys().at(i);
         if (key == "Font") {
-            QString family = fontNames.value(PSDStyleSheet.value(key).toInt());
-            styles.append("font-family:"+family);
+            font_info_psd fontInfo = fontNames.value(PSDStyleSheet.value(key).toInt());
+            weight = fontInfo.weight;
+            italic = fontInfo.italic;
+            styles.append("font-family:"+fontInfo.familyName);
+            if (fontInfo.width != 100) {
+                styles.append("font-width:"+QString::number(fontInfo.width));
+            }
             continue;
         } else if (key == "FontSize") {
             // Note: FontSize might be in real points (72.27), but no idea where this is defined.
             styles.append("font-size:"+QString::number(PSDStyleSheet.value(key).toDouble()));
             continue;
         } else if (key == "AutoKerning") {
-            //
+            if (!PSDStyleSheet.value(key).toBool()) {
+                styles.append("font-kerning: none");
+            }
             continue;
         } else if (key == "Kerning") {
             // adjusts kerning value, we don't support this.
@@ -1444,6 +1463,8 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, QString> fon
             }
             continue;
         } else if (key == "FontBaseline") {
+            // NOTE: This might also be better done with font-variant-position, though
+            // we don't support synthetic font stuff, including super and sub script.
             switch (PSDStyleSheet.value(key).toInt()) {
             case 0:
                 break;
@@ -1469,9 +1490,15 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, QString> fon
             continue;
         } else if (key == "Ligatures") {
             // font-variant: common-ligatures
+            if (!PSDStyleSheet.value(key).toBool()) {
+                fontVariantLigatures.append("no-common-ligatures");
+            }
             continue;
         } else if (key == "DLigatures") {
             // font-variant: discretionary ligatures
+            if (PSDStyleSheet.value(key).toBool()) {
+                fontVariantLigatures.append("discretionary-ligatures");
+            }
             continue;
         } /* else if (key == "BaselineDirection") {
             // 1: vertical, 2: horizontal... but why is this a character style?
@@ -1551,6 +1578,9 @@ QString stylesForPSDStyleSheet(QJsonObject PSDStyleSheet, QMap<int, QString> fon
     if (!baselineShift.isEmpty()) {
         styles.append("baseline-shift:"+baselineShift.join(" "));
     }
+    if (!fontVariantLigatures.isEmpty()) {
+        styles.append("font-variant-ligatures:"+fontVariantLigatures.join(" "));
+    }
     qWarning() << "Unsupported styles" << unsupportedStyles;
     return styles.join("; ");
 }
@@ -1575,27 +1605,29 @@ bool KoSvgTextShapeMarkupConverter::convertPSDTextEngineDataToSVG(QByteArray ba,
     }
     qDebug() << "Parsed JSON Object" << root;
 
-    // This should proly be turned into a list of structs, where
-    // we search fontconfig on the name with FC_POSTSCRIPT_NAME,
-    // and we then note down the proper family name, slant, width and weight,
-    // so we can use that to set the proper svg values.
-    QMap<int, QString> fontNames;
-
     QJsonObject engineDict = root["EngineDict"].toObject();
     if (engineDict.isEmpty()) {
         d->errors << "No engine dict found in PSD engine data";
         return false;
     }
 
+    QMap<int, font_info_psd> fontNames;
     QJsonObject resourceDict = root["ResourceDict"].toObject();
     if (resourceDict.isEmpty()) {
         d->errors << "No engine dict found in PSD engine data";
         return false;
     } else {
+        // PSD only stores the postscript name, and we'll need a bit more information than that.
         QJsonArray fonts = resourceDict["FontSet"].toArray();
         for (int i = 0; i < fonts.size(); i++) {
             QJsonObject font = fonts.at(i).toObject();
-            fontNames.insert(i, font.value("Name").toString());
+            font_info_psd fontInfo;
+            KoFontRegistry::instance()->getCssDataForPostScriptName(font.value("Name").toString(),
+                                                                    &fontInfo.familyName,
+                                                                    fontInfo.weight,
+                                                                    fontInfo.width,
+                                                                    fontInfo.italic);
+            fontNames.insert(i, fontInfo);
         }
     }
     QString paragraphStyle;
@@ -1794,28 +1826,31 @@ void writeJsonValue(QIODevice &dev, QJsonObject object, int indent) {
     dev.write(">>\n");
 }
 
-QJsonObject styleToPSDStylesheet(const QString cssStyle, QJsonObject parentStyle, QJsonArray &fontSet) {
-    QJsonObject styleSheet = parentStyle;
+void gatherFonts(const QMap<QString, QString> cssStyles, const QString text, QJsonArray &fontSet,
+                 QVector<int> &lengths, QVector<int> &fontIndices) {
+    if (cssStyles.contains("font-family")) {
+        QStringList families = cssStyles.value("font-family").split(",");
+        qDebug() << families;
+        int fontSize = cssStyles.value("font-size", "10").toInt();
+        int fontWeight = cssStyles.value("font-weight", "400").toInt();
+        int fontWidth = cssStyles.value("font-stretch", "400").toInt();
 
-    QStringList dummy = cssStyle.split(";");
-    QMap<QString, QString> cssStyles;
-    Q_FOREACH(QString style, dummy) {
-        QString key = style.split(":").first().trimmed();
-        QString val = style.split(":").last().trimmed();
-        cssStyles.insert(key, val);
-    }
+        const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues(families, lengths,
+                                                      QMap<QString, qreal>(),
+                                                      text, 72, 72, fontSize, 1.0,
+                                                      fontWeight, fontWidth, false, 0, "");
+        for (int i = 0; i < faces.size(); i++) {
+            const FT_FaceUP &face = faces.at(static_cast<size_t>(i));
+            QString postScriptName = face->family_name;
+            if (FT_Get_Postscript_Name(face.data())) {
+                postScriptName = FT_Get_Postscript_Name(face.data());
+            }
+            qDebug() << postScriptName;
 
-    styleSheet["Leading"] = 0.0;
-
-    Q_FOREACH(QString key, cssStyles.keys()) {
-        QString val = cssStyles.value(key);
-
-        if (key == "font-family") {
             int fontIndex = -1;
-            QString postScriptName = val;
-            for(int i=0; i<fontSet.size(); i++) {
-                if (fontSet[i].toObject()["Name"] == postScriptName) {
-                    fontIndex = i;
+            for(int j=0; j<fontSet.size(); j++) {
+                if (fontSet[j].toObject()["Name"] == postScriptName) {
+                    fontIndex = j;
                     break;
                 }
             }
@@ -1828,9 +1863,35 @@ QJsonObject styleToPSDStylesheet(const QString cssStyle, QJsonObject parentStyle
                 fontSet.append(font);
                 fontIndex = fontSet.size()-1;
             }
-            styleSheet["Font"] = fontIndex;
-        } else if (key == "font-size") {
+            fontIndices << fontIndex;
+        }
+    }
+}
+
+QJsonObject styleToPSDStylesheet(const QMap<QString, QString> cssStyles,
+                                 QJsonObject parentStyle) {
+    QJsonObject styleSheet = parentStyle;
+
+    styleSheet["Leading"] = 0.0;
+
+    Q_FOREACH(QString key, cssStyles.keys()) {
+        QString val = cssStyles.value(key);
+
+        if (key == "font-size") {
             styleSheet["FontSize"] = val.toInt();
+        } else if (key == "font-kerning") {
+            if (val == "none") {
+                styleSheet["AutoKerning"] = false;
+            }
+        } else if (key == "text-decoration") {
+            QStringList decor = val.split(" ");
+            Q_FOREACH(QString param, decor) {
+                if (param == "underline") {
+                    styleSheet["Underline"] = true;
+                } else if (param == "line-through"){
+                    styleSheet["Strikethrough"] = true;
+                }
+            }
         } else {
             qDebug() << "Unsupported css-style:" << key << val;
         }
@@ -1871,22 +1932,48 @@ void gatherFills(QDomElement el, QJsonObject &styleDict) {
     }
 }
 
-void gatherStyles(QDomElement el, QString &text, QJsonObject parentStyle, QJsonArray &styles, QJsonArray &runs, QJsonArray &fontSet) {
+void gatherStyles(QDomElement el, QString &text, QJsonObject parentStyle, QMap<QString, QString> parentCssStyles, QJsonArray &styles, QJsonArray &runs, QJsonArray &fontSet) {
+    QMap<QString, QString> cssStyles = parentCssStyles;
+    if (el.hasAttribute("style")) {
+        QString style = el.attribute("style");
+        QStringList dummy = style.split(";");
+
+        Q_FOREACH(QString style, dummy) {
+            QString key = style.split(":").first().trimmed();
+            QString val = style.split(":").last().trimmed();
+            cssStyles.insert(key, val);
+        }
+        Q_FOREACH(QString attribute, KoSvgTextProperties::supportedXmlAttributes()) {
+            if (el.hasAttribute(attribute)) {
+                cssStyles.insert(attribute, el.attribute(attribute));
+            }
+        }
+    }
+
     if (el.firstChild().isText()) {
         QDomText textNode = el.firstChild().toText();
-        text += textNode.data();
-        runs.append(QJsonValue{textNode.data().size()});
-        QString style = el.attribute("style");
-        QJsonObject styleDict = styleToPSDStylesheet(style, parentStyle, fontSet);
+        QString currentText = textNode.data();
+        text += currentText;
+
+        QJsonObject styleDict = styleToPSDStylesheet(cssStyles, parentStyle);
         gatherFills(el, styleDict);
-        styles.append(styleDict);
+
+        QVector<int> lengths;
+        QVector<int> fontIndices;
+        gatherFonts(cssStyles, currentText, fontSet, lengths, fontIndices);
+        for (int i = 0; i< fontIndices.size(); i++) {
+            QJsonObject curDict = styleDict;
+            curDict["Font"] = fontIndices.at(i);
+            styles.append(curDict);
+            runs.append(QJsonValue{lengths.at(i)});
+        }
+
     } else if (el.childNodes().size()>0) {
-        QString style = el.attribute("style");
-        QJsonObject styleDict = styleToPSDStylesheet(style, parentStyle, fontSet);
+        QJsonObject styleDict = styleToPSDStylesheet(cssStyles, parentStyle);
         gatherFills(el, styleDict);
         QDomElement childEl = el.firstChildElement();
         while(!childEl.isNull()) {
-            gatherStyles(childEl, text, styleDict, styles, runs, fontSet);
+            gatherStyles(childEl, text, styleDict, cssStyles, styles, runs, fontSet);
             childEl = childEl.nextSiblingElement();
         }
     }
@@ -1928,21 +2015,16 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     QJsonObject engineDict;
     QJsonObject resourceDict;
 
-    // find children
     QString text;
     QJsonArray styles;
     QJsonArray styleRunArray;
     QJsonArray fontSet;
+
+    // default fonts.
     fontSet.append(QJsonObject{{"Name", "AdobeInvisFont"}, {"FontType", 0}, {"Script", 0}, {"Synthetic", 0}});
     fontSet.append(QJsonObject{{"Name", "MyriadPro-Regular"}, {"FontType", 0}, {"Script", 0}, {"Synthetic", 0}});
 
-    // The following is proly the same in all styleEngine data.
-    /*QStringList styleString;
-    QMap<QString, QString> styleMap = KoSvgTextProperties::defaultProperties().convertToSvgTextAttributes();
-    Q_FOREACH(QString key, styleMap.keys()) {
-        styleString.append(key+":"+styleMap.value(key));
-    }*/
-
+    // We're creating the default character and paragraph style sheets here.
     QJsonObject defaultStyle;
     defaultStyle["Font"] = 1;
     defaultStyle["FontSize"] = 12;
@@ -1967,7 +2049,7 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     defaultStyle["StyleRunAlignment"] = 2;
     defaultStyle["Language"] = 0;
     defaultStyle["NoBreak"] = false;
-    defaultStyle["FillColor"] = QJsonObject{{"Type", 1}, {"Values", QJsonArray({1, 0, 0, 0})}};
+    defaultStyle["FillColor"] =   QJsonObject{{"Type", 1}, {"Values", QJsonArray({1, 0, 0, 0})}};
     defaultStyle["StrokeColor"] = QJsonObject{{"Type", 1}, {"Values", QJsonArray({1, 0, 0, 0})}};
     defaultStyle["FillFlag"] = true;
     defaultStyle["StrokeFlag"] = false;
@@ -1978,11 +2060,18 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     defaultStyle["HindiNumbers"] = false;
     defaultStyle["Kashida"] = 1;
     defaultStyle["DiacriticPos"] = 2;
-    //defaultStyle = styleToPSDStylesheet(styleString.join(";"), defaultStyle, fontSet);
+    defaultStyle = styleToPSDStylesheet(KoSvgTextProperties::defaultProperties().convertToSvgTextAttributes(),
+                                        defaultStyle);
+    QVector<int> lengths;
+    QVector<int> fontIndices;
+    gatherFonts(KoSvgTextProperties::defaultProperties().convertToSvgTextAttributes(), "", fontSet, lengths, fontIndices);
+    if (!fontIndices.isEmpty()) {
+        defaultStyle["font"] = fontIndices.first();
+    }
 
-    QJsonObject defParagraph;
-    defParagraph["Name"] = "Default";
-    defParagraph["DefaultStyleSheet"] = 0;
+    QJsonObject defaultParagraph;
+    defaultParagraph["Name"] = "Default";
+    defaultParagraph["DefaultStyleSheet"] = 0;
     QJsonObject defaultParagraphProps = QJsonObject{
     {"Justification", 0},
     {"FirstLineIndent", 0},
@@ -2004,12 +2093,13 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     {"Burasagari", false},
     {"KinsokuOrder", 0},
     {"EveryLineComposer", false}};
-    defParagraph["Properties"] = defaultParagraphProps;
+    defaultParagraph["Properties"] = defaultParagraphProps;
 
+    // go down the document children to get the style.
     QDomDocument doc;
     doc.setContent(svgText);
-    gatherStyles(doc.firstChildElement(), text, QJsonObject(), styles, styleRunArray, fontSet);
-    QJsonObject paragraphStyle = gatherParagraphStyle(doc.firstChildElement(), defaultParagraphProps);
+    gatherStyles(doc.documentElement(), text, QJsonObject(), QMap<QString, QString>(), styles, styleRunArray, fontSet);
+    QJsonObject paragraphStyle = gatherParagraphStyle(doc.documentElement(), defaultParagraphProps);
 
     QJsonObject editor;
     editor["Text"] = text;
@@ -2064,6 +2154,34 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
 
     resourceDict["FontSet"] = fontSet;
 
+    QJsonObject rendered;
+    int shapeType = 0; // 0 point, 1 paragraph, but what does that make text-on-path?
+    int writingDirection = 0;
+    QJsonObject photoshop = QJsonObject {{"ShapeType", shapeType},
+    {"TransformPoint0", QJsonArray({1.0, 0.0})},
+    {"TransformPoint1", QJsonArray({0.0, 1.0})},
+    {"TransformPoint2", QJsonArray({0.0, 0.0})}};
+    if (shapeType == 0) {
+        photoshop["PointBase"] = QJsonArray({0.0, 0.0});
+    } else if (shapeType == 1) {
+        // this is the bounding box of the paragraph shape.
+        photoshop["BoxBounds"] = QJsonArray({0.0, 0.0, 100, 50});
+    }
+    QJsonObject renderChild = QJsonObject{
+    {"ShapeType", shapeType},
+    {"Procession", 0},
+    {"Lines", QJsonObject{{"WritingDirection", writingDirection}, {"Children", QJsonArray()}}},
+    {"Cookie", QJsonObject{{"Photoshop", photoshop}}}};
+    rendered["Version"] = 1;
+    rendered["Shapes"] = QJsonObject{{"WritingDirection", writingDirection}, {"Children", QJsonArray({renderChild})}};
+
+    engineDict["Rendered"] = rendered;
+    engineDict["UseFractionalGlyphWidths"] = true;
+    engineDict["AntiAlias"] = 1;
+    root["EngineDict"] = engineDict;
+
+    // default resoure dict
+
     QJsonObject kinsokuHard;
     kinsokuHard["Name"] = "PhotoshopKinsokuHard";
     kinsokuHard["Hanging"] = "、。.,";
@@ -2090,33 +2208,12 @@ bool KoSvgTextShapeMarkupConverter::convertToPSDTextEngineData(const QString &sv
     resourceDict["TheNormalParagraphSheet"] = 0;
     resourceDict["TheNormalStyleSheet"] = 0;
 
-    QJsonObject defStyleSheet = QJsonObject{{"Name", "Default"}, {"StyleSheetData", defaultStyle}};
-    resourceDict["StyleSheetSet"] = QJsonArray({defStyleSheet});
-    resourceDict["ParagraphSheetSet"] = QJsonArray({defParagraph});
-
-    QJsonObject rendered;
-    int shapeType = 0;
-    QJsonObject photoshop = QJsonObject {{"ShapeType", shapeType},
-    {"TransformPoint0", QJsonArray({1.0, 0.0})},
-    {"TransformPoint1", QJsonArray({0.0, 1.0})},
-    {"TransformPoint2", QJsonArray({0.0, 0.0})}};
-    if (shapeType == 0) {
-        photoshop["PointBase"] = QJsonArray({0.0, 0.0});
-    }
-    QJsonObject renderChild = QJsonObject{
-    {"ShapeType", shapeType},
-    {"Procession", 0},
-    {"Lines", QJsonObject{{"WritingDirection", 0}, {"Children", QJsonArray()}}},
-    {"Cookie", QJsonObject{{"Photoshop", photoshop}}}};
-    rendered["Version"] = 1;
-    rendered["Shapes"] = QJsonObject{{"WritingDirection", 0}, {"Children", QJsonArray({renderChild})}};
-
-    engineDict["Rendered"] = rendered;
-    engineDict["UseFractionalGlyphWidths"] = true;
-    engineDict["AntiAlias"] = 1;
-    root["EngineDict"] = engineDict;
+    QJsonObject resourceStyleSheet = QJsonObject{{"Name", "Default"}, {"StyleSheetData", defaultStyle}};
+    resourceDict["StyleSheetSet"] = QJsonArray({resourceStyleSheet});
+    resourceDict["ParagraphSheetSet"] = QJsonArray({defaultParagraph});
 
     // documentResources and ResourceDict always seem to be the same...?
+
     root["ResourceDict"] = resourceDict;
     root["DocumentResources"] = resourceDict;
 

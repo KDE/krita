@@ -112,6 +112,7 @@ void KisMyPaintCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sen
 void KisMyPaintCurveOptionWidget::updateRangeSpinBoxes(KisDynamicSensorSP sensor) const {
 
     KisMyPaintBrushOption* mySensor = dynamic_cast<KisMyPaintBrushOption*>(sensor.data());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(mySensor);
     m_curveOptionWidget->xMinBox->blockSignals(true);
     m_curveOptionWidget->xMaxBox->blockSignals(true);
     m_curveOptionWidget->yMinBox->blockSignals(true);
@@ -131,6 +132,7 @@ void KisMyPaintCurveOptionWidget::updateRangeSpinBoxes(KisDynamicSensorSP sensor
 float KisMyPaintCurveOptionWidget::getBaseValue(KisPropertiesConfigurationSP setting) {
 
     KisMyPaintCurveOption *curveOpt = dynamic_cast<KisMyPaintCurveOption*>(m_curveOption);
+    Q_ASSERT(curveOpt);
     if(curveOpt->currentSetting() == MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC)
         return log(setting->getFloat(MYPAINT_DIAMETER)/2);
 
@@ -169,6 +171,8 @@ void KisMyPaintCurveOptionWidget::setBaseValue(KisPropertiesConfigurationSP sett
     setting->setProperty(MYPAINT_JSON, doc2.toJson());
 
     KisMyPaintCurveOption *curveOpt = dynamic_cast<KisMyPaintCurveOption*>(m_curveOption);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(curveOpt);
+
     if(curveOpt->currentSetting() == MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC)
         setting->setProperty(MYPAINT_DIAMETER, exp(val)*2);
 

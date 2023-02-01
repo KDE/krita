@@ -38,6 +38,7 @@
 const KisCoordinatesConverter* getCoordinatesConverter(KoCanvasBase * canvas)
 {
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+    Q_ASSERT(kritaCanvas);
     return kritaCanvas->coordinatesConverter();
 }
 
@@ -279,6 +280,7 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
 
     if(event->modifiers() == Qt::AltModifier) {
         KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+        Q_ASSERT(kisCanvas);
         kisCanvas->viewManager()->showFloatingMessage(i18n("X: %1 px\nY: %2 px", QString::number(m_startPoint.x(), 'f',1)
                                                            , QString::number(m_startPoint.y(), 'f',1))
                                                            , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
@@ -427,6 +429,7 @@ void KisToolLine::updateGuideline()
 void KisToolLine::showSize()
 {
     KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kisCanvas);
     kisCanvas->viewManager()->showFloatingMessage(i18n("Length: %1 px", QString::number(QLineF(m_startPoint,m_endPoint).length(), 'f',1))
                                                         , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }

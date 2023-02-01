@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <qopenglcontext.h>
 #include <tuple>
 
 #include <boost/optional.hpp>

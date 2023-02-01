@@ -233,11 +233,6 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
 #if defined HAVE_X11
     qputenv("QT_QPA_PLATFORM", "xcb");
-    // NOTE: this is necessary on Ubuntu to skip a crash with NVIDIA
-    // GLX when requesting a core or > 3.0 context.
-    // But in 5.15 it will break Qt Quick:
-    // https://bugreports.qt.io/browse/QTBUG-91698
-    // qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
 #endif
 
     // Workaround a bug in QNetworkManager

@@ -1,9 +1,11 @@
 /*
  *  SPDX-FileCopyrightText: 2007 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2023 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <qopenglcontext.h>
 #include <tuple>
 
 #include <boost/optional.hpp>
@@ -534,6 +536,47 @@ RendererInfo getRendererInfo(KisOpenGL::OpenGLRenderer renderer)
     return info;
 }
 
+QOpenGLContext::OpenGLModuleType determineOpenGLImplementation(const RendererInfo &info)
+{
+    switch (info.first) {
+    case QSurfaceFormat::OpenGLES:
+#if defined(Q_OS_WINDOWS)
+        // https://invent.kde.org/szaman/qtbase/-/blob/krita/5.15/src/plugins/platforms/windows/qwindowsintegration.cpp#L425
+        switch (info.second) {
+        case KisOpenGL::AngleRendererD3d11:
+        case KisOpenGL::AngleRendererD3d9:
+        case KisOpenGL::AngleRendererD3d11Warp:
+            return QOpenGLContext::LibGLES;
+        // Assume system OpenGL -- QOpenGLStaticContext
+        default:
+            break;
+        }
+        return QOpenGLContext::LibGL;
+#else
+        // At least Manjaro Qt can perfectly call up a ES context,
+        // while Qt says via macros that it doesn't support that...
+        return QOpenGLContext::LibGLES;
+#endif
+    case QSurfaceFormat::DefaultRenderableType:
+#ifdef Q_OS_WIN
+    // https://invent.kde.org/szaman/qtbase/-/blob/krita/5.15/src/plugins/platforms/windows/qwindowsglcontext.cpp#L1117
+        return QOpenGLContext::LibGL;
+#else
+    // https://invent.kde.org/szaman/qtbase/-/blob/krita/5.15/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp#L246
+#if defined(QT_OPENGL_ES_2)
+    return QOpenGLContext::LibGLES;
+#else
+    return QOpenGLContext::LibGL;
+#endif
+#endif
+    case QSurfaceFormat::OpenGL:
+    default:
+        // https://invent.kde.org/szaman/qtbase/-/blob/krita/5.15/src/plugins/platforms/windows/qwindowsglcontext.cpp#L1117
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(info.first != QSurfaceFormat::OpenVG, QOpenGLContext::LibGL);
+        // https://invent.kde.org/szaman/qtbase/-/blob/krita/5.15/src/gui/kernel/qplatformintegration.cpp#L547
+        return QOpenGLContext::LibGL;
+    };
+}
 
 KisOpenGL::RendererConfig generateSurfaceConfig(KisOpenGL::OpenGLRenderer renderer,
                                                 KisConfig::RootSurfaceFormat rootSurfaceFormat,
@@ -544,16 +587,36 @@ KisOpenGL::RendererConfig generateSurfaceConfig(KisOpenGL::OpenGLRenderer render
     KisOpenGL::RendererConfig config;
     config.angleRenderer = info.second;
 
+    dbgOpenGL << "Requesting configuration for" << info.first << info.second;
+
     QSurfaceFormat &format = config.format;
-#ifdef Q_OS_MACOS
-    format.setVersion(3, 2);
-    format.setProfile(QSurfaceFormat::CoreProfile);
-#elif !defined(Q_OS_ANDROID)
-    // XXX This can be removed once we move to Qt5.7
-    format.setVersion(3, 0);
-    format.setProfile(QSurfaceFormat::CompatibilityProfile);
-    format.setOptions(QSurfaceFormat::DeprecatedFunctions);
+    const auto openGLModuleType = determineOpenGLImplementation(info);
+    switch (openGLModuleType) {
+    case QOpenGLContext::LibGL:
+#if defined Q_OS_MACOS
+        format.setVersion(4, 1);
+        format.setProfile(QSurfaceFormat::CoreProfile);
+#else
+        // If asked for 3.0 "Core", Qt will instead request
+        // an OpenGL ES context.
+        // NVIDIA's GLX implementation will not allow that and results
+        // in a forced process exit through X11 (NVIDIA bug #3959482).
+        // Alternatively (if NoProfile or Core), it will cause the
+        // AppImage to crash because we don't ship GLES support.
+        format.setVersion(3, 3);
+        // Make sure to request a Compatibility profile to have NVIDIA
+        // return the maximum supported GL version.
+        format.setProfile(QSurfaceFormat::CompatibilityProfile);
 #endif
+        break;
+    case QOpenGLContext::LibGLES:
+        format.setVersion(3, 0);
+        format.setProfile(QSurfaceFormat::NoProfile);
+        break;
+    }
+
+    dbgOpenGL << "Version selected:" << openGLModuleType << format.version();
+
     format.setDepthBufferSize(24);
     format.setStencilBufferSize(8);
 

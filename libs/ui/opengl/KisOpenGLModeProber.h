@@ -1,10 +1,10 @@
 /*
  *  SPDX-FileCopyrightText: 2017 Alvin Wong <alvinhochun@gmail.com>
  *  SPDX-FileCopyrightText: 2019 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2023 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-
 
 #ifndef KISOPENGLMODEPROBER_H
 #define KISOPENGLMODEPROBER_H
@@ -76,14 +76,12 @@ public:
     }
 
     bool isSupportedVersion() const {
-        return
-#ifdef Q_OS_MACOS
-                ((m_glMajorVersion * 100 + m_glMinorVersion) >= 302)
-#else
-                (m_glMajorVersion >= 3 && (m_supportsDeprecatedFunctions || m_isOpenGLES)) ||
-                ((m_glMajorVersion * 100 + m_glMinorVersion) == 201)
-#endif
-                ;
+        // Technically we could support GLES2 (I added the extensions for
+        // floating point surfaces). But given that Dmitry required VAOs
+        // on GLES, I've kept the check mostly as-is.
+        // Note:
+        //  - we've not supported OpenGL 2.1 for a Long time (commit e0d9a4feba0d4b5e70dddece8b76f38a6043fc88)
+        return (m_isOpenGLES && m_glMajorVersion >= 3) || ((m_glMajorVersion * 100 + m_glMinorVersion) >= 303);
     }
 
     bool supportsLoD() const {

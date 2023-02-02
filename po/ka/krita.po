@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-30 00:55+0000\n"
+"POT-Creation-Date: 2023-02-02 00:55+0000\n"
 "PO-Revision-Date: 2023-01-30 10:44+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -16410,7 +16410,7 @@ msgstr "..."
 msgid "Convert to Path"
 msgstr "ბილიკად გარდაქმნა"
 
-#: libs/global/kis_assert.cpp:82
+#: libs/global/kis_assert.cpp:83
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Internal Error"
@@ -19446,8 +19446,8 @@ msgstr "md5sum"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1657
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1661
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1647
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1651
 #: libs/ui/forms/wdgdisplaysettings.ui:196 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:323
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -21168,8 +21168,8 @@ msgstr "მთავარი ეკრანი:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:38
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1956
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1958
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1946
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:598
 #, kde-format
@@ -21267,8 +21267,8 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1926
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1916
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1918
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22638,145 +22638,145 @@ msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "ავტომატური (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1643
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1633
 #, kde-format
 msgid "Display Id: %1"
 msgstr "ეკრანის Id: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1644
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1634
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "საჩვენებელი სახელი: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1645
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1635
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1646
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1636
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1647
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1637
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1648
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1638
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1649
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1639
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1650
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1640
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1651
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1641
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1685
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1675
 #, kde-format
 msgid "Warning(s):"
 msgstr "გაფრთხილებები:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1834
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
 #, kde-format
 msgid "WARNING: current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1909
 #, kde-format
 msgid "Configure Krita"
 msgstr "Krita-ის მორგება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1926
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "კლავიატურის მალსახმობები"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "მალსახმობები"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "ტილოს შეყვანის მორგება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1949
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1939
 #, kde-format
 msgid "Canvas Input"
 msgstr "ტილოს შეყვანა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1966
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1956
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #, kde-format
 msgid "Color Management"
 msgstr "ფერების მართვა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1968
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1958
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "ფერი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1976
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1978
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1966
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1968
 #, kde-format
 msgid "Performance"
 msgstr "წარმადობა"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1986
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1976
 #, kde-format
 msgid "Tablet settings"
 msgstr "ტაბლეტის მორგება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1988
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1978
 #, kde-format
 msgid "Tablet"
 msgstr "ტაბლეტი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1996
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1986
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "მხოლოდ-ტილოს მორგება"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1998
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1988
 #, kde-format
 msgid "Canvas-only"
 msgstr "მხოლოდ-ტილო"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2006
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2008
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1996
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1998
 #, kde-format
 msgid "Pop-up Palette"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2016
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2006
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "ავტორი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2018
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2008
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "ავტორი"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2025
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2015
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -31198,19 +31198,19 @@ msgstr "&სიღრმე:"
 msgid "Li&nk with Layer"
 msgstr "Li&nk with Layer"
 
-#: libs/ui/opengl/kis_opengl.cpp:147
+#: libs/ui/opengl/kis_opengl.cpp:153
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:576
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:578
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31218,14 +31218,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:978
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:980
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -35708,107 +35708,107 @@ msgstr "Cr"
 msgid "ICC Engine"
 msgstr "ICC ძრავა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:157
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:156
 #, kde-format
 msgid "L*a*b*/8 Histogram"
 msgstr "L*a*b*/8 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:161
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:160
 #, kde-format
 msgid "L*a*b*/16 Histogram"
 msgstr "L*a*b*/16 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:165
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:164
 #, kde-format
 msgid "L*a*b*/32 Histogram"
 msgstr "L*a*b*/32 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:183
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:182
 #, kde-format
 msgid "RGBA/8 Histogram"
 msgstr "RGBA/8 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:187
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:186
 #, kde-format
 msgid "RGBA/16 Histogram"
 msgstr "RGBA/16 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:193
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:192
 #, kde-format
 msgid "RGBA/F16 Histogram"
 msgstr "RGBA/F16 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:199
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:198
 #, kde-format
 msgid "RGBA/F32 Histogram"
 msgstr "RGBA/F32 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:220
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:219
 #, kde-format
 msgid "GRAY/8 Histogram"
 msgstr "GRAY/8 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:224
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:223
 #, kde-format
 msgid "GRAY/16 Histogram"
 msgstr "GRAY/16 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:229
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:228
 #, kde-format
 msgid "GRAYF/F16 Histogram"
 msgstr "GRAYF/F16 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:235
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:234
 #, kde-format
 msgid "GRAY/F32 float Histogram"
 msgstr ""
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:245
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:244
 #, kde-format
 msgid "CMYK/8 Histogram"
 msgstr "CMYK/8 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:249
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:248
 #, kde-format
 msgid "CMYK/16 Histogram"
 msgstr "CMYK/16 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:253
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:252
 #, kde-format
 msgid "CMYK/F32 Histogram"
 msgstr "CMYK/F32 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:271
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:270
 #, kde-format
 msgid "XYZ/8 Histogram"
 msgstr "XYZ/8 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:275
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:274
 #, kde-format
 msgid "XYZ/16 Histogram"
 msgstr "XYZ/16 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:281
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:280
 #, kde-format
 msgid "XYZ/F16 Histogram"
 msgstr "XYZ/F16 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:287
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:286
 #, kde-format
 msgid "XYZF32 Histogram"
 msgstr "XYZF32 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:300
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:299
 #, kde-format
 msgid "YCbCr/8 Histogram"
 msgstr "YCbCr/8 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:304
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:303
 #, kde-format
 msgid "YCbCr/16 Histogram"
 msgstr "YCbCr/16 ჰისტოგრამა"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:308
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:307
 #, kde-format
 msgid "YCbCr/F32 Histogram"
 msgstr "YCbCr/F32 ჰისტოგრამა"

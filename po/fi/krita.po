@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-30 00:55+0000\n"
+"POT-Creation-Date: 2023-02-02 00:55+0000\n"
 "PO-Revision-Date: 2022-09-14 16:45+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -17494,7 +17494,7 @@ msgstr "…"
 msgid "Convert to Path"
 msgstr "Muunna poluksi"
 
-#: libs/global/kis_assert.cpp:82
+#: libs/global/kis_assert.cpp:83
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Internal Error"
@@ -20843,8 +20843,8 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1657
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1661
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1647
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1651
 #: libs/ui/forms/wdgdisplaysettings.ui:196 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:323
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -22725,8 +22725,8 @@ msgstr "Näkymä:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:38
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1956
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1958
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1946
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:598
 #, kde-format
@@ -22832,8 +22832,8 @@ msgstr "Poista animaatiotaso"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1926
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1916
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1918
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -24304,153 +24304,153 @@ msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Automaattinen"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1643
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1633
 #, fuzzy, kde-format
 #| msgid "Display:"
 msgid "Display Id: %1"
 msgstr "Näkymä:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1644
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1634
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1645
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1635
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Luminance:"
 msgid "Min Luminance: %1"
 msgstr "Luminanssi:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1646
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1636
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Luminance:"
 msgid "Max Luminance: %1"
 msgstr "Luminanssi:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1647
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1637
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1648
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1638
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1649
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1639
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1650
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1640
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1651
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1641
 #, fuzzy, kde-format
 #| msgid "White Point:"
 msgid "White Point: %1, %2"
 msgstr "Valkoinen piste:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1685
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1675
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Warning(s):"
 msgstr "Varoitus"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1834
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
 #, kde-format
 msgid "WARNING: current display doesn't support HDR rendering"
 msgstr "VAROITUS: nykyinen näyttö ei tue HDR-hahmonnusta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1909
 #, kde-format
 msgid "Configure Krita"
 msgstr "Kritan asetukset"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1926
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Näppäinoikotiet"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Pikanäppäimet"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
 #, fuzzy, kde-format
 msgid "Canvas Input Settings"
 msgstr "Väriasetukset"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1949
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1939
 #, fuzzy, kde-format
 msgid "Canvas Input"
 msgstr "Kangas 01"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1966
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1956
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #, kde-format
 msgid "Color Management"
 msgstr "Värien hallinta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1968
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1958
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Väri"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1976
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1978
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1966
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1968
 #, kde-format
 msgid "Performance"
 msgstr "Suorituskyky"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1986
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1976
 #, kde-format
 msgid "Tablet settings"
 msgstr "Piirtopöydän asetukset"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1988
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1978
 #, kde-format
 msgid "Tablet"
 msgstr "Piirtopöytä"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1996
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1986
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Vain kangas -tilan asetukset"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1998
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1988
 #, kde-format
 msgid "Canvas-only"
 msgstr "Vain kangas -tila"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2006
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2008
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1996
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1998
 #, fuzzy, kde-format
 #| msgid "Show Popup Palette"
 msgid "Pop-up Palette"
 msgstr "Näytä ponnahduspaletti"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2016
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2006
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Tekijä"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2018
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2008
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Tekijä"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2025
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2015
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -33557,19 +33557,19 @@ msgstr "S&yvyys:"
 msgid "Li&nk with Layer"
 msgstr "K&ytke tasoon"
 
-#: libs/ui/opengl/kis_opengl.cpp:147
+#: libs/ui/opengl/kis_opengl.cpp:153
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:576
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:578
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -33577,14 +33577,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:978
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:980
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -38412,126 +38412,126 @@ msgstr "Cr"
 msgid "ICC Engine"
 msgstr "ICC-moottori"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:157
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:156
 #, fuzzy, kde-format
 #| msgid "L*a*b* Histogram"
 msgid "L*a*b*/8 Histogram"
 msgstr "L*a*b -histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:161
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:160
 #, fuzzy, kde-format
 #| msgid "L*a*b* Histogram"
 msgid "L*a*b*/16 Histogram"
 msgstr "L*a*b -histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:165
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:164
 #, fuzzy, kde-format
 #| msgid "L*a*b* Histogram"
 msgid "L*a*b*/32 Histogram"
 msgstr "L*a*b -histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:183
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:182
 #, fuzzy, kde-format
 #| msgid "RGB8 Histogram"
 msgid "RGBA/8 Histogram"
 msgstr "RGB8-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:187
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:186
 #, fuzzy, kde-format
 #| msgid "RGB16 Histogram"
 msgid "RGBA/16 Histogram"
 msgstr "RGB16-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:193
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:192
 #, fuzzy, kde-format
 #| msgid "RGBF16 Histogram"
 msgid "RGBA/F16 Histogram"
 msgstr "RGBF16-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:199
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:198
 #, fuzzy, kde-format
 #| msgid "RGBF32 Histogram"
 msgid "RGBA/F32 Histogram"
 msgstr "RGBF32-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:220
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:219
 #, fuzzy, kde-format
 #| msgid "GRAY/Alpha8 Histogram"
 msgid "GRAY/8 Histogram"
 msgstr "HARMAA/Alfa8-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:224
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:223
 #, fuzzy, kde-format
 #| msgid "GRAYF16 Histogram"
 msgid "GRAY/16 Histogram"
 msgstr "HARMAAF16-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:229
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:228
 #, fuzzy, kde-format
 #| msgid "GRAYF16 Histogram"
 msgid "GRAYF/F16 Histogram"
 msgstr "HARMAAF16-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:235
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:234
 #, fuzzy, kde-format
 #| msgid "GRAY/Alpha 32 float Histogram"
 msgid "GRAY/F32 float Histogram"
 msgstr "HARMAA/Alfa32-liukulukuhistogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:245
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:244
 #, fuzzy, kde-format
 #| msgid "CMYK8 Histogram"
 msgid "CMYK/8 Histogram"
 msgstr "CMYK8-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:249
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:248
 #, fuzzy, kde-format
 #| msgid "CMYK16 Histogram"
 msgid "CMYK/16 Histogram"
 msgstr "CMYK16-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:253
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:252
 #, fuzzy, kde-format
 #| msgid "CMYK F32 Histogram"
 msgid "CMYK/F32 Histogram"
 msgstr "CMYK F32 -histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:271
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:270
 #, fuzzy, kde-format
 #| msgid "XYZ8 Histogram"
 msgid "XYZ/8 Histogram"
 msgstr "XYZ8-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:275
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:274
 #, fuzzy, kde-format
 #| msgid "XYZ16 Histogram"
 msgid "XYZ/16 Histogram"
 msgstr "XYZ16-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:281
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:280
 #, fuzzy, kde-format
 #| msgid "XYZF16 Histogram"
 msgid "XYZ/F16 Histogram"
 msgstr "XYZF16-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:287
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:286
 #, kde-format
 msgid "XYZF32 Histogram"
 msgstr "XYZF32-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:300
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:299
 #, fuzzy, kde-format
 #| msgid "YCBCR8 Histogram"
 msgid "YCbCr/8 Histogram"
 msgstr "YCBCR8-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:304
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:303
 #, fuzzy, kde-format
 #| msgid "YCBCR16 Histogram"
 msgid "YCbCr/16 Histogram"
 msgstr "YCBCR16-histogrammi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:308
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:307
 #, fuzzy, kde-format
 #| msgid "YCBCRF32 Histogram"
 msgid "YCbCr/F32 Histogram"

@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-30 00:55+0000\n"
-"PO-Revision-Date: 2023-01-31 21:44+0300\n"
+"POT-Creation-Date: 2023-02-02 00:55+0000\n"
+"PO-Revision-Date: 2023-02-02 01:06+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -9361,7 +9361,7 @@ msgstr "Ana Nakil"
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Blur..."
-msgstr "&Gaussian Bulanıklaştırması..."
+msgstr "&Gauss Bulanıklaştırması..."
 
 #. i18n: context: toolTip @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
@@ -9371,7 +9371,7 @@ msgstr "&Gaussian Bulanıklaştırması..."
 #, kde-format
 msgctxt "action"
 msgid "Gaussian Blur"
-msgstr "Gaussian Bulanıklığı"
+msgstr "Gauss Bulanıklaştırması"
 
 #. i18n: context: text @ Action (krita_filter_emboss all directions), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1036
@@ -9912,7 +9912,7 @@ msgstr "Rastgele Seç"
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Noise Reduction..."
-msgstr "&Gauss Gürültü Azaltma..."
+msgstr "&Gauss Gürültü Azaltması..."
 
 #. i18n: context: toolTip @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
@@ -16462,7 +16462,7 @@ msgstr "..."
 msgid "Convert to Path"
 msgstr "Yola Dönüştür"
 
-#: libs/global/kis_assert.cpp:82
+#: libs/global/kis_assert.cpp:83
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Internal Error"
@@ -16879,7 +16879,7 @@ msgstr "Yumuşak"
 #: libs/image/kis_base_mask_generator.h:24
 #, kde-format
 msgid "Gaussian"
-msgstr "Gaussian"
+msgstr "Gauss"
 
 #: libs/image/kis_clone_layer.cpp:320
 #, kde-format
@@ -19540,8 +19540,8 @@ msgstr "md5sum"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1657
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1661
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1647
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1651
 #: libs/ui/forms/wdgdisplaysettings.ui:196 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:323
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -21338,8 +21338,8 @@ msgstr "Ana Ekran:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:38
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1956
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1958
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1946
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:598
 #, kde-format
@@ -21437,8 +21437,8 @@ msgstr "Video Canlandırma İçe Aktar"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1926
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1916
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1918
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22896,145 +22896,145 @@ msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Otomatik (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1643
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1633
 #, kde-format
 msgid "Display Id: %1"
 msgstr "Ekran Kimliği: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1644
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1634
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Ekran Adı: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1645
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1635
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "En Az Renk Parlaklığı: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1646
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1636
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "En Fazla Renk Parlaklığı: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1647
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1637
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "En Yüksek Tam Renk Parlaklığı: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1648
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1638
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Kırmızı Öncelik: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1649
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1639
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Yeşil Öncelik: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1650
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1640
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Mavi Öncelik: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1651
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1641
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Beyaz Nokta: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1685
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1675
 #, kde-format
 msgid "Warning(s):"
 msgstr "Uyarılar:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1834
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
 #, kde-format
 msgid "WARNING: current display doesn't support HDR rendering"
 msgstr "UYARI: Geçerli ekran HDR olarak sunmayı desteklemiyor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1909
 #, kde-format
 msgid "Configure Krita"
 msgstr "Krita'yı Yapılandır"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1926
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Klavye Kısayolları"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Kısayollar"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Tuval Girdi Ayarları"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1949
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1939
 #, kde-format
 msgid "Canvas Input"
 msgstr "Tuval Girdi"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1966
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1956
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #, kde-format
 msgid "Color Management"
 msgstr "Renk Yönetimi"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1968
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1958
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Renk"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1976
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1978
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1966
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1968
 #, kde-format
 msgid "Performance"
 msgstr "Başarım"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1986
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1976
 #, kde-format
 msgid "Tablet settings"
 msgstr "Tablet Ayarları"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1988
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1978
 #, kde-format
 msgid "Tablet"
 msgstr "Tablet"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1996
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1986
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Yalnızca Tuval Ayarları"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1998
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1988
 #, kde-format
 msgid "Canvas-only"
 msgstr "Yalnızca Tuval"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2006
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2008
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1996
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1998
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Açılır Palet"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2016
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2006
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Çizer"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2018
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2008
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Çizer"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2025
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2015
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -31423,7 +31423,7 @@ msgstr "Gölge Düşür"
 #: libs/ui/layerstyles/wdgdropshadow.ui:40
 #, kde-format
 msgid "Use to obscure the shadow when fill is transparent"
-msgstr "Dolgu şeffaf olduğunda gölgeyi gizlemek için kullanın"
+msgstr "Dolgu saydamken gölgeyi gizlemek için kullanın"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLayerKnocksOutDropShadow)
 #: libs/ui/layerstyles/wdgdropshadow.ui:43
@@ -31856,7 +31856,7 @@ msgstr "&Derinlik:"
 msgid "Li&nk with Layer"
 msgstr "&Katman ile Bağlantı"
 
-#: libs/ui/opengl/kis_opengl.cpp:147
+#: libs/ui/opengl/kis_opengl.cpp:153
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
@@ -31865,14 +31865,14 @@ msgstr ""
 "Doku arabellekleri, başarım gerekçelerinden dolayı ANGLE sunucusunda "
 "kesinlikle devre dışı bırakılmıştır."
 
-#: libs/ui/opengl/kis_opengl.cpp:576
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Kullanılan Intel grafik sürücüsünün OpenGL ile ilgili sorunları olduğu "
 "bilinmektedir."
 
-#: libs/ui/opengl/kis_opengl.cpp:578
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31883,7 +31883,7 @@ msgstr ""
 "eğilimindedir, dolayısıyla ANGLE öntanımlı olarak kullanılır. OpenGL'e elle "
 "geçebilirsiniz, ancak düzgün çalışacağı garanti edilmez."
 
-#: libs/ui/opengl/kis_opengl.cpp:978
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -31892,7 +31892,7 @@ msgstr ""
 "Tercih edilen sunucu istenen yüzey biçimini desteklemiyor. Başka bir sunucu "
 "seçildi."
 
-#: libs/ui/opengl/kis_opengl.cpp:980
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -36675,107 +36675,107 @@ msgstr "Cr"
 msgid "ICC Engine"
 msgstr "ICC İşletkesi"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:157
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:156
 #, kde-format
 msgid "L*a*b*/8 Histogram"
 msgstr "L*a*b*/8 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:161
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:160
 #, kde-format
 msgid "L*a*b*/16 Histogram"
 msgstr "L*a*b*/16 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:165
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:164
 #, kde-format
 msgid "L*a*b*/32 Histogram"
 msgstr "L*a*b*/32 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:183
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:182
 #, kde-format
 msgid "RGBA/8 Histogram"
 msgstr "RGBA/8 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:187
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:186
 #, kde-format
 msgid "RGBA/16 Histogram"
 msgstr "RGBA/16 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:193
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:192
 #, kde-format
 msgid "RGBA/F16 Histogram"
 msgstr "RGBA/F16 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:199
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:198
 #, kde-format
 msgid "RGBA/F32 Histogram"
 msgstr "RGBA/F32 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:220
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:219
 #, kde-format
 msgid "GRAY/8 Histogram"
 msgstr "GRAY/8 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:224
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:223
 #, kde-format
 msgid "GRAY/16 Histogram"
 msgstr "GRAY/16 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:229
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:228
 #, kde-format
 msgid "GRAYF/F16 Histogram"
 msgstr "GRAYF/F16 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:235
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:234
 #, kde-format
 msgid "GRAY/F32 float Histogram"
 msgstr "GRAY/F32 float Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:245
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:244
 #, kde-format
 msgid "CMYK/8 Histogram"
 msgstr "CMYK/8 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:249
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:248
 #, kde-format
 msgid "CMYK/16 Histogram"
 msgstr "CMYK/16 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:253
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:252
 #, kde-format
 msgid "CMYK/F32 Histogram"
 msgstr "CMYK/F32 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:271
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:270
 #, kde-format
 msgid "XYZ/8 Histogram"
 msgstr "XYZ/8 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:275
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:274
 #, kde-format
 msgid "XYZ/16 Histogram"
 msgstr "XYZ/16 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:281
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:280
 #, kde-format
 msgid "XYZ/F16 Histogram"
 msgstr "XYZ/F16 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:287
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:286
 #, kde-format
 msgid "XYZF32 Histogram"
 msgstr "XYZF32 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:300
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:299
 #, kde-format
 msgid "YCbCr/8 Histogram"
 msgstr "YCbCr/8 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:304
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:303
 #, kde-format
 msgid "YCbCr/16 Histogram"
 msgstr "YCbCr/16 Histogram"
 
-#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:308
+#: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:307
 #, kde-format
 msgid "YCbCr/F32 Histogram"
 msgstr "YCbCr/F32 Histogram"
@@ -40091,12 +40091,12 @@ msgstr "Görev Kümeleri"
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:188
 #, kde-format
 msgid "Taskset"
-msgstr "Görevkümesi"
+msgstr "Görev Kümesi"
 
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:196
 #, kde-format
 msgid "Taskset Name"
-msgstr "Görevkümesi Adı"
+msgstr "Görev Kümesi Adı"
 
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:242
 #, kde-format
@@ -42479,7 +42479,7 @@ msgstr "(256 x 256)"
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:341
 #, kde-format
 msgid "Save to:"
-msgstr "Farklı kaydet:"
+msgstr "Şuraya kaydet:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEmbedTags)
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:396
@@ -42973,12 +42973,12 @@ msgstr "Bulanıklaştır"
 #: plugins/filters/blur/kis_gaussian_blur_filter.cpp:32
 #, kde-format
 msgid "&Gaussian Blur..."
-msgstr "&Gaussian Bulanıklaştırması..."
+msgstr "&Gauss Bulanıklaştırması..."
 
 #: plugins/filters/blur/kis_gaussian_blur_filter.h:28
 #, kde-format
 msgid "Gaussian Blur"
-msgstr "Gaussian Bulanıklığı"
+msgstr "Gauss Bulanıklaştırması"
 
 #: plugins/filters/blur/kis_lens_blur_filter.cpp:33
 #, kde-format
@@ -43682,7 +43682,7 @@ msgid ""
 "This will take a desaturated result and use it to determine what is "
 "transparent. This is useful for creating edge and fringe effects."
 msgstr ""
-"Bu doymamış bir sonuç alır ve şeffaf olanı belirlemek için kullanır. Kenar "
+"Bu doymamış bir sonuç alır ve saydam olanı belirlemek için kullanır. Kenar "
 "ve saçak efektleri oluşturmak için kullanışlıdır."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransparent)
@@ -43915,7 +43915,7 @@ msgstr "Yarım tonlama"
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.cpp:30
 #, kde-format
 msgid "&Gaussian Noise Reduction..."
-msgstr "&Gaussian Gürültüsü Azalt..."
+msgstr "&Gauss Gürültü Azaltması..."
 
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.cpp:44
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.cpp:40
@@ -46353,7 +46353,7 @@ msgstr "sRGB'ye dönüşüme zorla"
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:88
 #, kde-format
 msgid "Transparent pixel fill color:"
-msgstr "Şeffaf piksel doldurma rengi:"
+msgstr "Saydam piksel doldurma rengi:"
 
 #. i18n: ectx: property (toolTip), widget (KisColorButton, bnTransparencyFillColor)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:110
@@ -46396,25 +46396,25 @@ msgstr "Seyrek Örnekleme:"
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:203
 #, kde-format
 msgid "2x2, 1x1, 1x1 (smallest file)"
-msgstr "2x2, 1x1, 1x1 (en küçük dosya)"
+msgstr "2 x 2, 1 x 1, 1 x 1 (en küçük dosya)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, subsampling)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:208
 #, kde-format
 msgid "2x1, 1x1, 1x1"
-msgstr "2x1, 1x1, 1x1"
+msgstr "2 x 2, 1 x 1, 1 x 1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, subsampling)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:213
 #, kde-format
 msgid "1x2, 1x1, 1x1"
-msgstr "1x2, 1x1, 1x1"
+msgstr "1 x 2, 1 x 1, 1 x 1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, subsampling)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:218
 #, kde-format
 msgid "1x1, 1x1, 1x1 (best quality)"
-msgstr "1x1, 1x1, 1x1 (en iyi kalite)"
+msgstr "1 x 1, 1 x 1, 1 x 1 (en iyi kalite)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, baseLineJPEG)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:228
@@ -47824,7 +47824,7 @@ msgstr "PNG Seçenekleri"
 #: plugins/impex/png/kis_wdg_options_png.ui:44
 #, kde-format
 msgid "Transparent color: "
-msgstr "Şeffaf renk: "
+msgstr "Saydam renk: "
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, compressionLevelDeflate)

@@ -608,7 +608,6 @@ struct PixelWrapper<quint16, _impl> {
     {
     }
 
-    // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
     ALWAYS_INLINE void read(const void *src, float_v &dst_c1, float_v &dst_c2, float_v &dst_c3, float_v &dst_alpha)
     {
         // struct PackedPixel {
@@ -636,9 +635,7 @@ struct PixelWrapper<quint16, _impl> {
         dst_alpha *= uint16Rec1;
     }
 
-    ALWAYS_INLINE void
-    // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-    write(void *dst, const float_v &c1, const float_v &c2, const float_v &c3, const float_v &a)
+    ALWAYS_INLINE void write(void *dst, const float_v &c1, const float_v &c2, const float_v &c3, const float_v &a)
     {
         const auto alpha = a * uint16Max;
 
@@ -722,7 +719,6 @@ struct PixelWrapper<quint8, _impl> {
     {
     }
 
-    // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
     ALWAYS_INLINE void read(const void *src, float_v &dst_c1, float_v &dst_c2, float_v &dst_c3, float_v &dst_alpha)
     {
         dst_alpha = KoStreamedMath<_impl>::template fetch_alpha_32<false>(src);
@@ -798,7 +794,6 @@ struct PixelWrapper<float, _impl> {
 
     PixelWrapper() = default;
 
-    // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
     ALWAYS_INLINE void read(const void *src, float_v &dst_c1, float_v &dst_c2, float_v &dst_c3, float_v &dst_alpha)
     {
 #if XSIMD_VERSION_MAJOR < 10
@@ -818,7 +813,6 @@ struct PixelWrapper<float, _impl> {
     }
 
     ALWAYS_INLINE void
-    // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
     write(void *dst, const float_v &src_c1, const float_v &src_c2, const float_v &src_c3, const float_v &src_alpha)
     {
 #if XSIMD_VERSION_MAJOR < 10

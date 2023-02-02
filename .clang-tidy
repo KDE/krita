@@ -31,6 +31,7 @@ Checks:              '
     ,-readability-named-parameter
     ,-readability-magic-numbers
     ,-readability-uppercase-literal-suffix
+    ,-bugprone-easily-swappable-parameters
 '
 WarningsAsErrors: ''
 FormatStyle: 'file'

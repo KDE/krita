@@ -170,7 +170,6 @@ KisRawImport::convert(KisDocument *document, QIODevice * /*io*/, KisPropertiesCo
         KisPaintDeviceSP device = layer->paintDevice();
         KIS_ASSERT_RECOVER_RETURN_VALUE(!device.isNull(), ImportExportCodes::InternalError);
 
-        // NOLINTBEGIN(bugprone-easily-swappable-parameters, cppcoreguidelines-pro-type-reinterpret-cast)
         const auto readLayer = [](KisLayerSP layer,
                                   const QByteArray &imageData,
                                   int width,
@@ -221,7 +220,6 @@ KisRawImport::convert(KisDocument *document, QIODevice * /*io*/, KisPropertiesCo
                 updater->setProgress(static_cast<int>(original + step * float(y)));
             }
         };
-        // NOLINTEND(bugprone-easily-swappable-parameters, cppcoreguidelines-pro-type-reinterpret-cast)
 
         readLayer(layer, imageData, width, height, updater());
 

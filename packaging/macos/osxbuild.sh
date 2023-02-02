@@ -116,6 +116,7 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
 fi
 
 OSXBUILD_X86_64_BUILD=$(sysctl -n hw.optional.x86_64)
+OSXBUILD_GENERATOR="Unix Makefiles"
 
 if [[ $(arch) = "arm64" ]]; then
     OSX_ARCHITECTURES="arm64"
@@ -125,11 +126,6 @@ fi
 
 if [[ ${OSXBUILD_UNIVERSAL} ]]; then
     OSX_ARCHITECTURES="x86_64\;arm64"
-fi
-
-OSXBUILD_GENERATOR="Unix Makefiles"
-if [[ -e $(which ninja) ]]; then
-    OSXBUILD_GENERATOR="Ninja"
 fi
 
 # Prints stderr and stdout to log files
@@ -177,6 +173,16 @@ check_dir_path () {
         mkdir ${1}
     fi
     return 0
+}
+
+# this is needed now as ninja is compiled as 3rdparty
+# in universal build it is available at the start of
+# the arm step but missing after the x86_64 dir moves
+reset_cmake_generator() {
+    OSXBUILD_GENERATOR="Unix Makefiles"
+    if [[ -e $(which ninja) ]]; then
+        OSXBUILD_GENERATOR="Ninja"
+    fi
 }
 
 waiting_fixed() {
@@ -302,6 +308,8 @@ build_3rdparty () {
     log "$(check_dir_path ${KIS_DOWN_DIR})"
     log "$(check_dir_path ${KIS_INSTALL_DIR})"
 
+    reset_cmake_generator
+
     cd ${KIS_TBUILD_DIR}
 
     log_cmd cmake ${KIS_SRC_DIR}/3rdparty/ \
@@ -350,10 +358,7 @@ build_3rdparty () {
         ext_tiff \
         ext_openjpeg \
         ext_gsl \
-        ext_giflib \
-        ext_freetype \
-        ext_fontconfig \
-        ext_poppler
+        ext_giflib
 
     # Stop if qmake link was not created
     # this meant qt build fail and further builds will
@@ -375,6 +380,7 @@ build_3rdparty () {
         ext_pyqt
 
     cmake_3rdparty ext_libheif
+    cmake_3rdparty ext_ffmpeg
 
     cmake_3rdparty \
         ext_extra_cmake_modules \
@@ -397,6 +403,13 @@ build_3rdparty () {
     cmake_3rdparty ext_jpegxl
     cmake_3rdparty ext_xsimd
 
+    cmake_3rdparty \
+        ext_freetype \
+        ext_poppler \
+        ext_fribidi \
+        ext_raqm \
+        ext_unibreak \
+        ext_fontconfig
 
     ## All builds done, creating a new install onlydeps install dir
     dir_clean "${KIS_INSTALL_DIR}.onlydeps"
@@ -443,6 +456,8 @@ build_krita () {
             KRITA_BRANDING=""
         fi
     fi
+
+    reset_cmake_generator
 
     declare -a CMAKE_CMD
     CMAKE_CMD=(cmake "${KIS_SRC_DIR}"

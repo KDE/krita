@@ -570,6 +570,7 @@ echo.
 echo Creating base directories...
 mkdir %pkg_root% && ^
 mkdir %pkg_root%\bin && ^
+mkdir %pkg_root%\etc && ^
 mkdir %pkg_root%\lib && ^
 mkdir %pkg_root%\share
 if errorlevel 1 (
@@ -689,6 +690,9 @@ endlocal
 xcopy /Y %KRITA_INSTALL_DIR%\lib\kritaplugins\*.dll %pkg_root%\lib\kritaplugins\
 xcopy /Y /S /I %DEPS_INSTALL_DIR%\lib\krita-python-libs %pkg_root%\lib\krita-python-libs
 xcopy /Y /S /I %KRITA_INSTALL_DIR%\lib\krita-python-libs %pkg_root%\lib\krita-python-libs
+
+:: Fontconfig
+xcopy /Y /S /I %DEPS_INSTALL_DIR%\etc\fonts %pkg_root%\etc\fonts
 
 :: Share
 xcopy /Y /S /I %KRITA_INSTALL_DIR%\share\color %pkg_root%\share\color

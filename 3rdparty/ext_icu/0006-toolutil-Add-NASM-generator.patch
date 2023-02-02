@@ -1,0 +1,60 @@
+From bb6d58e74af591b9ffc632a0fed61ea4edd493d9 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sun, 20 Nov 2022 14:07:55 -0300
+Subject: [PATCH 6/9] toolutil: Add NASM generator
+
+---
+ source/tools/toolutil/pkg_genc.cpp | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/source/tools/toolutil/pkg_genc.cpp b/source/tools/toolutil/pkg_genc.cpp
+index 7962f8c..efcea32 100644
+--- a/source/tools/toolutil/pkg_genc.cpp
++++ b/source/tools/toolutil/pkg_genc.cpp
+@@ -228,6 +228,16 @@ static const struct AssemblyType {
+     },
+ /* align 16 bytes */
+ /*  http://msdn.microsoft.com/en-us/library/dwa9fwef.aspx */
++    {"nasm",
++        "global %s\n"
++#if defined(_WIN32)
++        "section .rdata align=16\n"
++#else
++        "section .rodata align=16\n"
++#endif
++        "%s:\n",
++        "  dd ","",HEX_0X
++    },
+ #if defined(_WIN64)
+     { "masm",
+       "\tTITLE %s\n"
+@@ -306,6 +316,17 @@ writeAssemblyCode(
+         exit(U_FILE_ACCESS_ERROR);
+     }
+ 
++    const char* newSuffix = nullptr;
++
++    if (uprv_strcmp(assemblyHeader[assemblyHeaderIndex].name, "masm") == 0) {
++        newSuffix = ".masm";
++    }
++    else if (uprv_strcmp(assemblyHeader[assemblyHeaderIndex].name, "nasm") == 0) {
++        newSuffix = ".asm";
++    } else {
++        newSuffix = ".S";
++    }
++
+     getOutFilename(
+         filename,
+         destdir,
+@@ -313,7 +334,7 @@ writeAssemblyCode(
+         sizeof(buffer.chars),
+         entry,
+         sizeof(entry),
+-        ".S",
++        newSuffix,
+         optFilename);
+     out=T_FileStream_open(buffer.chars, "w");
+     if(out==NULL) {
+-- 
+2.37.1.windows.1
+

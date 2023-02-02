@@ -1,0 +1,92 @@
+From f285f3949375e81a989fa804d168a0636c547027 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 16 Nov 2022 19:16:08 -0300
+Subject: [PATCH 3/9] Windows: enable C-code generation with overridden entry
+ point
+
+---
+ source/tools/genccode/genccode.c   |  1 +
+ source/tools/pkgdata/pkgdata.cpp   |  1 +
+ source/tools/toolutil/pkg_genc.cpp | 13 +++++++++++++
+ source/tools/toolutil/pkg_genc.h   |  3 ++-
+ 4 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/source/tools/genccode/genccode.c b/source/tools/genccode/genccode.c
+index 219335f..9fb7dbc 100644
+--- a/source/tools/genccode/genccode.c
++++ b/source/tools/genccode/genccode.c
+@@ -178,6 +178,7 @@ main(int argc, char* argv[]) {
+             switch (writeCode) {
+             case CALL_WRITECCODE:
+                 writeCCode(filename, options[kOptDestDir].value,
++                           options[kOptEntryPoint].doesOccur ? options[kOptEntryPoint].value : NULL,
+                            options[kOptName].doesOccur ? options[kOptName].value : NULL,
+                            options[kOptFilename].doesOccur ? options[kOptFilename].value : NULL,
+                            NULL,
+diff --git a/source/tools/pkgdata/pkgdata.cpp b/source/tools/pkgdata/pkgdata.cpp
+index e2c2b07..2687d47 100644
+--- a/source/tools/pkgdata/pkgdata.cpp
++++ b/source/tools/pkgdata/pkgdata.cpp
+@@ -1725,6 +1725,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
+             writeCCode(
+                 file,
+                 o->tmpDir,
++                NULL,
+                 dataName[0] != 0 ? dataName : o->shortName,
+                 newName[0] != 0 ? newName : NULL,
+                 gencmnFile,
+diff --git a/source/tools/toolutil/pkg_genc.cpp b/source/tools/toolutil/pkg_genc.cpp
+index 1f81bf9..96e3dc4 100644
+--- a/source/tools/toolutil/pkg_genc.cpp
++++ b/source/tools/toolutil/pkg_genc.cpp
+@@ -390,6 +390,7 @@ U_CAPI void U_EXPORT2
+ writeCCode(
+         const char *filename,
+         const char *destdir,
++        const char *optEntryPoint,
+         const char *optName,
+         const char *optFilename,
+         char *outFilePath,
+@@ -435,6 +436,18 @@ writeCCode(
+         uprv_strcpy(outFilePath, buffer);
+     }
+ 
++    if(optEntryPoint != NULL) {
++        uprv_strcpy(entry, optEntryPoint);
++        uprv_strcat(entry, "_dat");
++    }
++    /* turn dashes in the entry name into underscores */
++    length=uprv_strlen(entry);
++    for(i=0; i<length; ++i) {
++        if(entry[length+i]=='-') {
++            entry[length+i]='_';
++        }
++    }
++
+     out=T_FileStream_open(buffer, "w");
+     if(out==NULL) {
+         fprintf(stderr, "genccode: unable to open output file %s\n", buffer);
+diff --git a/source/tools/toolutil/pkg_genc.h b/source/tools/toolutil/pkg_genc.h
+index 652601c..0723e77 100644
+--- a/source/tools/toolutil/pkg_genc.h
++++ b/source/tools/toolutil/pkg_genc.h
+@@ -48,7 +48,7 @@
+  * the data to generate the final data library. This can
+  * increase the performance of the pkdata tool.
+  */
+-#if U_PLATFORM == U_PF_OS400
++#if U_PLATFORM == U_PF_OS400 || U_PLATFORM_HAS_WIN32_API
+ #define USE_SINGLE_CCODE_FILE
+ #endif
+ 
+@@ -78,6 +78,7 @@ U_CAPI void U_EXPORT2
+ writeCCode(
+     const char *filename,
+     const char *destdir,
++    const char *optEntryPoint,
+     const char *optName,
+     const char *optFilename,
+     char *outFilePath,
+-- 
+2.37.1.windows.1
+

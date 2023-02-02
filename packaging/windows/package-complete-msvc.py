@@ -209,6 +209,7 @@ print("\nCreating base directories...")
 try:
     os.makedirs(f"{pkg_root}", exist_ok=True)
     os.makedirs(f"{pkg_root}\\bin", exist_ok=True)
+    os.makedirs(f"{pkg_root}\\etc", exist_ok=True)
     os.makedirs(f"{pkg_root}\\lib", exist_ok=True)
     os.makedirs(f"{pkg_root}\\share", exist_ok=True)
 except:
@@ -284,6 +285,10 @@ if os.path.isdir(f"{KRITA_INSTALL_DIR}\\lib\\krita-python-libs"):
 if os.path.isdir(f"{DEPS_INSTALL_DIR}\\lib\\site-packages"):
     subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\lib\\site-packages".format(
         DEPS_INSTALL_DIR), f"{pkg_root}\\lib\\site-packages"], check=True)
+
+# Fontconfig
+subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\etc\\fonts".format(
+    DEPS_INSTALL_DIR), f"{pkg_root}\\etc\\fonts"], check=True)
 
 # Share
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\color".format(

@@ -1,0 +1,25 @@
+From 6eb1e7c9ad65f6dd298be2e32b1c51427b6e5874 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Thu, 24 Nov 2022 01:20:32 +0000
+Subject: [PATCH 1/3] lame: Add SOVERSION to the library for disambiguation
+
+---
+ libmp3lame/meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libmp3lame/meson.build b/libmp3lame/meson.build
+index a526796..ffd40e0 100644
+--- a/libmp3lame/meson.build
++++ b/libmp3lame/meson.build
+@@ -33,7 +33,7 @@ endif
+ 
+ lamelib = library('mp3lame',
+   lame_sources, vector_sources,
+-  version : '0.0.0',
++  version: meson.project_version(),
+   include_directories : [lameinc, confinc],
+   c_args : common_args,
+   dependencies : lame_deps,
+-- 
+2.37.1.windows.1
+

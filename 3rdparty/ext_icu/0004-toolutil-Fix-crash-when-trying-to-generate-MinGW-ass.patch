@@ -1,0 +1,44 @@
+From 468a8ab325b7e6da6038425d8e3204d97d87adb5 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 16 Nov 2022 19:16:08 -0300
+Subject: [PATCH 4/9] toolutil: Fix crash when trying to generate MinGW
+ assembly
+
+---
+ source/tools/toolutil/pkg_genc.cpp | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/source/tools/toolutil/pkg_genc.cpp b/source/tools/toolutil/pkg_genc.cpp
+index 96e3dc4..d9b2265 100644
+--- a/source/tools/toolutil/pkg_genc.cpp
++++ b/source/tools/toolutil/pkg_genc.cpp
+@@ -315,12 +315,11 @@ writeAssemblyCode(
+             exit(U_ILLEGAL_ARGUMENT_ERROR);
+         }
+         uprv_strcpy(outFilePath, buffer.chars);
+-    }
+-
+ #if defined (WINDOWS_WITH_GNUC) && U_PLATFORM != U_PF_CYGWIN
+-    /* Need to fix the file separator character when using MinGW. */
+-    swapFileSepChar(outFilePath, U_FILE_SEP_CHAR, '/');
++        /* Need to fix the file separator character when using MinGW. */
++        swapFileSepChar(outFilePath, U_FILE_SEP_CHAR, '/');
+ #endif
++    }
+ 
+     if(optEntryPoint != NULL) {
+         uprv_strcpy(entry, optEntryPoint);
+@@ -434,6 +433,10 @@ writeCCode(
+             exit(U_ILLEGAL_ARGUMENT_ERROR);
+         }
+         uprv_strcpy(outFilePath, buffer);
++#if defined (WINDOWS_WITH_GNUC) && U_PLATFORM != U_PF_CYGWIN
++        /* Need to fix the file separator character when using MinGW. */
++        swapFileSepChar(outFilePath, U_FILE_SEP_CHAR, '/');
++#endif
+     }
+ 
+     if(optEntryPoint != NULL) {
+-- 
+2.37.1.windows.1
+

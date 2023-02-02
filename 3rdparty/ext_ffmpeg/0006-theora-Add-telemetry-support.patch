@@ -1,0 +1,56 @@
+From 30a66745c2cfc3769872c6534935988d6d7ca862 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sat, 26 Nov 2022 00:39:20 +0000
+Subject: [PATCH 06/11] theora: Add telemetry support
+
+---
+ lib/meson.build   | 2 +-
+ meson.build       | 8 ++++++++
+ meson_options.txt | 1 +
+ 3 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/lib/meson.build b/lib/meson.build
+index abb7faf..22c4a02 100644
+--- a/lib/meson.build
++++ b/lib/meson.build
+@@ -168,7 +168,7 @@ endif
+ libtheoradec = library(
+   'theoradec',
+   decoder_sources + decoder_res,
+-  dependencies: [m_dep, libpng_dep, ogg_dep, config_dep],
++  dependencies: [m_dep, libpng_dep, ogg_dep, cairo_dep, config_dep],
+   include_directories: incdir,
+   vs_module_defs: '../win32/xmingw32/libtheoradec-all.def',
+   c_args: compile_args,
+diff --git a/meson.build b/meson.build
+index a2f61f1..6d36d81 100644
+--- a/meson.build
++++ b/meson.build
+@@ -93,6 +93,14 @@ else
+   unistd_dep = disabler()
+ endif
+ 
++telemetry = get_option('telemetry')
++
++cairo_dep = dependency('cairo', required: telemetry)
++
++if cairo_dep.found()
++  conf.set('HAVE_CAIRO', true)
++endif
++
+ asm = not get_option('asm').disabled()
+ if asm
+   if host_machine.cpu_family() == 'x86_64'
+diff --git a/meson_options.txt b/meson_options.txt
+index 73a0c8d..4700403 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -1,4 +1,5 @@
+ option('valgrind-testing', type: 'feature', value: 'disabled', description: 'Enable running of tests inside Valgrind')
+ option('asm', type: 'feature', value: 'enabled', description: 'Enable assembly optimizations')
++option('telemetry', type: 'feature', value: 'disabled', description: 'Enable debugging output controls')
+ option('examples', type: 'feature', value: 'disabled', description: 'Enable examples')
+ option('collect-metrics', type: 'boolean', value: 'false', description: 'Enable metrics collection for mode training')
+-- 
+2.37.1.windows.1
+

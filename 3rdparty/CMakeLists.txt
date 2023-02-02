@@ -274,9 +274,6 @@ if (ANDROID)
                      -DCMAKE_EXE_LINKER_FLAGS=${SECURITY_EXE_LINKER_FLAGS}
                      -DCMAKE_SHARED_LINKER_FLAGS=${SECURITY_SHARED_LINKER_FLAGS}
                      -DCMAKE_MODULE_LINKER_FLAGS=${SECURITY_MODULE_LINKER_FLAGS})
-
-  # see: https://github.com/android/ndk/issues/929
-  unset (CMAKE_SYSROOT)
 endif()
 
 function(TestCompileLinkPythonLibs OUTPUT_VARNAME)
@@ -346,14 +343,213 @@ elseif(UNIX)
     message(STATUS "Krita's PEP-0250 root: ${KRITA_PYTHONPATH}")
 endif ()
 
-# this list must be dependency-ordered
+# Prepare meson-compatible environment variables
+if (WIN32)
+    krita_to_native_path("${KRITA_PYTHONPATH}" _krita_pythonpath)
+    string(TOLOWER ${_krita_pythonpath} _krita_pythonpath)
+    krita_to_native_environment_path_list(${_krita_pythonpath} _krita_pythonpath)
+else()
+    set(_krita_pythonpath ${KRITA_PYTHONPATH})
+endif()
+
+message(STATUS "Python environment for Krita: ${_krita_pythonpath}")
+
+macro(mesonify VAR DEST)
+    set(${DEST} "${${VAR}}")
+    separate_arguments(${DEST})
+    if (MSVC) # Fix compiler flags
+        list(TRANSFORM ${DEST} REPLACE "^\/" "-")
+    endif()
+    list(TRANSFORM ${DEST} REPLACE "(.+)" "\'\\1\'")
+    list(FILTER ${DEST} EXCLUDE REGEX "^$")
+    list(JOIN ${DEST} "," ${DEST})
+    set(${DEST} "[${${DEST}}]")
+endmacro()
+
+if (ANDROID OR (CMAKE_CROSSCOMPILING AND NOT APPLE))
+    set(CROSS_COMPILE_FLAGS "--sysroot=${CMAKE_SYSROOT}")
+    set(CROSS_LINKER_FLAGS "--sysroot=${CMAKE_SYSROOT}")
+elseif (APPLE)
+    set(CROSS_COMPILE_FLAGS "-isysroot ${CMAKE_OSX_SYSROOT}")
+    set(CROSS_LINKER_FLAGS "-isysroot ${CMAKE_OSX_SYSROOT}")
+endif()
+
+if (ANDROID OR CMAKE_CROSSCOMPILING)
+    set(CROSS_COMPILE_FLAGS "${CROSS_COMPILE_FLAGS} --target=${CMAKE_C_COMPILER_TARGET}")
+    set(CROSS_LINKER_FLAGS "${CROSS_EXE_LINKER_FLAGS} --target=${CMAKE_C_COMPILER_TARGET}")
+endif()
+
+if (CMAKE_OSX_ARCHITECTURES)
+    set(CROSS_COMPILE_FLAGS "${CROSS_COMPILE_FLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}")
+endif()
+
+mesonify(SECURITY_C_FLAGS _security_c_flags)
+mesonify(SECURITY_CXX_FLAGS _security_cxx_flags)
+mesonify(SECURITY_EXE_LINKER_FLAGS _security_exe_linker_flags)
+mesonify(CROSS_COMPILE_FLAGS _cross_compile_flags)
+mesonify(CROSS_LINKER_FLAGS _cross_linker_flags)
+
+# Block any libraries not coming from our PATH when crosscompiling
+if (UNIX)
+    if (CMAKE_CROSSCOMPILING)
+        set(_pkg_config_libdir "pkg_config_libdir = ''")
+    else()
+        set(_pkg_config_libdir "pkg_config_libdir = '/usr/lib/pkgconfig:/usr/share/pkgconfig'")
+    endif()
+else()
+    # In Windows either we pick up the MSYS2 pkg-config
+    # or we ship our own, both use the correct architecture.
+    set(_pkg_config_libdir)
+endif()
+
+include(TestBigEndian)
+test_big_endian(IS_ENDIAN)
+set(CROSSCOMPILING REQUIRED)
+
+if (IS_ENDIAN)
+    set(_endian "big")
+else()
+    set(_endian "little")
+endif()
+
+string(TOLOWER ${CMAKE_SYSTEM_NAME} _system_name)
+
+if (ANDROID OR CMAKE_CROSSCOMPILING)
+    set(EXTRA_MESON_FLAGS
+        --cross-file=${CMAKE_CURRENT_BINARY_DIR}/meson-compiler.ini
+        --cross-file=${CMAKE_CURRENT_BINARY_DIR}/meson-host.ini
+    )
+    set(CROSSCOMPILING REQUIRED)
+else()
+    set(EXTRA_MESON_FLAGS
+        --native-file=${CMAKE_CURRENT_BINARY_DIR}/meson-compiler.ini
+    )
+    set(CROSSCOMPILING)
+endif()
+
+if (MSVC)
+    set(_c_ld "c_ld = ['${CMAKE_LINKER}'] + cross_link_args")
+    set(_cpp_ld "cpp_ld = ['${CMAKE_LINKER}'] + cross_link_args")
+endif()
+
+find_program(MESON_BINARY_PATH meson ${CROSSCOMPILING})
+find_program(NINJA_BINARY_PATH ninja ${CROSSCOMPILING})
+find_package(PkgConfig QUIET ${CROSSCOMPILING})
+
+if (NOT Python_EXECUTABLE)
+    set(Python_EXECUTABLE ${EXTPREFIX}/bin/python3)
+    if(NOT EXISTS "${Python_EXECUTABLE}")
+        message("WARNING: using system python3!")
+        SET(Python_EXECUTABLE python3)
+    endif()
+
+    set(PYTHON_DEP ext_python)
+endif()
+
+# python needs openssl
 if (NOT WIN32 OR OPENSSL_DEP)
     add_subdirectory( ext_openssl )
 endif()
 
-if (ENABLE_PYTHON_DEPS OR NOT MINGW)
-	add_subdirectory( ext_python )
-endif ()
+# Meson needs the sitecustomize.py to set the site-packages root
+add_subdirectory( ext_python )
+
+if (NOT NINJA_BINARY_PATH)
+    set(NINJA_DEP ext_ninja)
+    message(STATUS "Ninja not available, building 3rdparty version.")
+    add_subdirectory(ext_ninja)
+endif()
+
+if (NOT MESON_BINARY_PATH)
+    set(MESON_DEP ext_meson)
+    set(MESON_BINARY_PATH ${EXTPREFIX}/bin/meson)
+    message(STATUS "Meson not available, building 3rdparty version.")
+    add_subdirectory(ext_meson)
+endif()
+
+if (NOT PKG_CONFIG_FOUND)
+    set(PKG_CONFIG_DEP ext_pkgconfig)
+    if (NOT WIN32)
+        # TODO: should we just use pkgconf everywhere?
+        set(PKG_CONFIG_EXECUTABLE ${EXTPREFIX}/bin/pkg-config)
+    else()
+        set(PKG_CONFIG_EXECUTABLE ${EXTPREFIX}/bin/pkgconf)
+    endif()
+    message(STATUS "pkg-config not available, building 3rdparty version.")
+    add_subdirectory(ext_pkgconfig)
+endif()
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/meson-compiler.ini.in
+    ${CMAKE_CURRENT_BINARY_DIR}/meson-compiler.ini
+)
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/meson-host.ini.in
+    ${CMAKE_CURRENT_BINARY_DIR}/meson-host.ini
+)
+
+LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake/modules/avcodecs")
+
+include(FeatureSummary)
+
+# ======================== AUDIO ===========================
+
+find_package(FLAC 1.3.3 QUIET)
+set_package_properties(FLAC PROPERTIES
+    DESCRIPTION "libFLAC flac audio codec"
+    URL "https://xiph.org/flac/"
+)
+if (NOT FLAC_FOUND)
+    message(STATUS "FLAC not available, building 3rdparty version.")
+    set(FLAC_DEP ext_flac)
+endif()
+
+find_package(Ogg 1.3.2 QUIET)
+set_package_properties(Ogg PROPERTIES
+    DESCRIPTION "ogg is a library for manipulating ogg bitstreams"
+    URL "https://xiph.org/vorbis/"
+)
+if (NOT Ogg_FOUND)
+    message(STATUS "libogg not available, building 3rdparty version.")
+    set(OGG_DEP ext_libogg)
+endif()
+
+find_package(Opus 1.3.1 QUIET)
+set_package_properties(Opus PROPERTIES
+    DESCRIPTION "Opus IETF audio codec"
+    URL "https://opus-codec.org/"
+)
+if (NOT Opus_FOUND)
+    message(STATUS "Opus not available, building 3rdparty version.")
+    set(OPUS_DEP ext_opus)
+endif()
+
+# ======================== VIDEO ===========================
+
+find_package(VPX 1.7.0 QUIET)
+set_package_properties(VPX PROPERTIES
+    DESCRIPTION "libvpx vp8/vp9 video encoder."
+    URL "https://www.webmproject.org/"
+)
+if (NOT VPX_FOUND AND NOT WIN32)
+    message(STATUS "libvpx not available, building 3rdparty version.")
+    set(VPX_DEP ext_vpx)
+endif()
+
+find_package(SDL 2.24.0 QUIET)
+set_package_properties(SDL PROPERTIES
+    DESCRIPTION "Low-level access to audio, keyboard, mouse, joystick, and graphics"
+    URL "https://www.libsdl.org/"
+)
+if (NOT SDL_FOUND)
+    message(STATUS "SDL not available, building 3rdparty version.")
+    set(SDL_DEP ext_sdl2)
+endif()
+
+# ================== END OF FFMPEG DEPS =====================
+
+# this list must be dependency-ordered
 if (WIN32)
     add_subdirectory( ext_patch )
 endif ()
@@ -391,7 +587,6 @@ add_subdirectory( ext_gsl )
 add_subdirectory( ext_fftw3 )
 add_subdirectory( ext_ocio )
 add_subdirectory( ext_openjpeg )
-add_subdirectory( ext_fontconfig)
 
 if(WIN32)
     add_subdirectory(ext_googleangle)
@@ -400,6 +595,8 @@ endif()
 if (WIN32 AND NOT PERL_FOUND)
     add_subdirectory( ext_perl )
 endif()
+
+add_subdirectory(ext_icu)
 add_subdirectory( ext_qt )
 if (ANDROID)
   # gettext replacement
@@ -416,10 +613,6 @@ endif ()
 if (WIN32)
     add_subdirectory( ext_drmingw )
 endif ()
-
-if(UNIX)
-    add_subdirectory( ext_pkgconfig )
-endif()
 
 add_subdirectory( ext_heif )
 add_subdirectory(ext_giflib)
@@ -438,3 +631,9 @@ add_subdirectory(ext_xsimd)
 
 add_subdirectory(ext_freetype)
 add_subdirectory(ext_poppler)
+add_subdirectory(ext_fribidi)
+add_subdirectory(ext_raqm)
+add_subdirectory(ext_unibreak)
+add_subdirectory(ext_fontconfig)
+
+add_subdirectory(ext_ffmpeg)

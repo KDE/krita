@@ -1,0 +1,127 @@
+From a29c81248a8013a3449ec0b3903bd8db24a81929 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sat, 26 Nov 2022 14:45:22 +0000
+Subject: [PATCH 09/11] theora: Add doxygen support
+
+---
+ doc/doxyfile-patcher.py | 20 ++++++++++++++++++
+ doc/meson.build         | 46 +++++++++++++++++++++++++++++++++++++++++
+ meson.build             | 12 +++++++++++
+ meson_options.txt       |  1 +
+ 4 files changed, 79 insertions(+)
+ create mode 100644 doc/doxyfile-patcher.py
+ create mode 100644 doc/meson.build
+
+diff --git a/doc/doxyfile-patcher.py b/doc/doxyfile-patcher.py
+new file mode 100644
+index 0000000..f3a2613
+--- /dev/null
++++ b/doc/doxyfile-patcher.py
+@@ -0,0 +1,20 @@
++#!/usr/bin/env python3
++
++from argparse import ArgumentParser
++from pathlib import Path
++
++if __name__ == '__main__':
++    parser = ArgumentParser()
++    parser.add_argument('doxyfile_in', type=Path)
++    parser.add_argument('doxyfile_out', type=Path)
++    parser.add_argument('output_directory', type=Path)
++    args = parser.parse_args()
++
++    doxyfile_in: Path = args.doxyfile_in
++    src_contents = doxyfile_in \
++        .read_text(encoding='utf-8') \
++        .replace('OUTPUT_DIRECTORY       = libtheora',
++                 f'OUTPUT_DIRECTORY       = {args.output_directory}')
++
++    doxyfile_out: Path = args.doxyfile_out
++    doxyfile_out.write_text(src_contents, encoding='utf-8')
+diff --git a/doc/meson.build b/doc/meson.build
+new file mode 100644
+index 0000000..7bf9b50
+--- /dev/null
++++ b/doc/meson.build
+@@ -0,0 +1,46 @@
++static_docs = files(
++  'color.html',
++  'draft-ietf-avt-rtp-theora-00.txt',
++  'draft-ietf-avt-rtp-theora-00.xml',
++  'vp3-format.txt',
++)
++
++install_data(static_docs)
++
++if doxygen_exe.found()
++  doxygen_conf = configuration_data()
++
++  doxygen_conf.set('PACKAGE', meson.project_name())
++  doxygen_conf.set('VERSION', meson.project_version())
++  doxygen_conf.set('top_srcdir', doc_root_dir)
++
++  doxyfile_tmp = configure_file(
++    input: 'Doxyfile.in',
++    configuration: doxygen_conf,
++    output: 'Doxyfile.in',
++  )
++
++  doxyfile_patcher = find_program('doxyfile-patcher.py')
++
++  doxyfile = custom_target(
++    'doxyfile-patcher',
++    command: [
++      doxyfile_patcher,
++      '@INPUT@',
++      '@OUTPUT@',
++      meson.current_build_dir(),
++    ],
++    input: doxyfile_tmp,
++    output: 'Doxyfile',
++  )
++
++  custom_target(
++    'libtheora-docs',
++    input: doxyfile,
++    output: 'html',
++    command: [doxygen_exe, doxyfile],
++    console: true,
++    install: true,
++    install_dir: get_option('datadir') / 'doc' / meson.project_name(),
++  )
++endif
+diff --git a/meson.build b/meson.build
+index 2c83f8a..a2d5248 100644
+--- a/meson.build
++++ b/meson.build
+@@ -141,6 +141,18 @@ endif
+ 
+ subdir('tests')
+ 
++doc = get_option('doc')
++
++doc_root_dir = meson.current_source_dir()
++
++doxygen_exe = find_program(
++  'doxygen',
++  required: doc,
++  disabler: true,
++)
++
++subdir('doc')
++
+ spec = get_option('spec')
+ 
+ if spec.auto() or spec.enabled()
+diff --git a/meson_options.txt b/meson_options.txt
+index 5af886d..9f2900b 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -1,3 +1,4 @@
++option('doc', type: 'feature', value: 'auto', description: 'Build API documentation')
+ option('spec', type: 'feature', value: 'auto', description: 'Build the specification')
+ option('valgrind-testing', type: 'feature', value: 'disabled', description: 'Enable running of tests inside Valgrind')
+ option('asm', type: 'feature', value: 'enabled', description: 'Enable assembly optimizations')
+-- 
+2.37.1.windows.1
+

@@ -1,0 +1,29 @@
+From bf65001b903cb38641511b5457d3c58427988b9d Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sun, 20 Nov 2022 14:09:06 -0300
+Subject: [PATCH 8/9] meson: Work around Meson linking bug when there's no C
+ object present with MSVC
+
+---
+ source/data/meson.build | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/source/data/meson.build b/source/data/meson.build
+index 30238df..0cbb9b7 100644
+--- a/source/data/meson.build
++++ b/source/data/meson.build
+@@ -45,6 +45,11 @@ icudata_asm = custom_target(
+ 
+ sources = [icudata_asm]
+ 
++# Work around Meson bug -- https://github.com/mesonbuild/meson/issues/11083
++if cpp.get_argument_syntax() == 'msvc'
++  sources += files('dummy.c')
++endif
++
+ python_exe = import('python').find_installation('python3')
+ 
+ icudata_exports = custom_target(
+-- 
+2.37.1.windows.1
+

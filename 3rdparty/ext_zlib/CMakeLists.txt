@@ -10,6 +10,19 @@ ExternalProject_Add(
 
     UPDATE_COMMAND ""
 )
+
+if(WIN32 AND MINGW)
+    # Workaround for zlib's library naming bug:
+    # https://github.com/madler/zlib/issues/652
+
+    ExternalProject_Add_Step(
+        ext_zlib
+        post_install
+        COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_zlib}/lib/libzlib.dll.a ${PREFIX_ext_zlib}/lib/libz.dll.a
+        DEPENDEES install
+    )
+endif()
+
 else()
 ExternalProject_Add(
     ext_zlib

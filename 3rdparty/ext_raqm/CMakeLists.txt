@@ -1,32 +1,21 @@
-SET(PREFIX_pkgconfig "${EXTPREFIX}" )
+SET(EXTPREFIX_raqm "${EXTPREFIX}" ) 
 
-if (NOT WIN32)
-ExternalProject_Add( ext_pkgconfig
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+ExternalProject_Add(
+    ext_raqm
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz
-    URL_MD5 f6e931e319531b736fadc017f470e68a
-
-    BUILD_IN_SOURCE 1
-
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_pkgconfig} ${GLOBAL_AUTOMAKE_PROFILE} --with-internal-glib
-
-)
-else()
-
-ExternalProject_Add( ext_pkgconfig
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    GIT_REPOSITORY https://github.com/pkgconf/pkgconf.git
-    GIT_TAG pkgconf-1.9.3
+    URL https://github.com/therahedwig/libraqm/archive/793d7a5e89f3a2bdda8d9236d24294e48dc2e354.zip
+    URL_HASH SHA256=576e63009a26d613aab8dd3bd216be43a49979d26aa99cb186a0008a9f3af252
+    
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_utf_16.patch
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}
         PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
         ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
-            --prefix=${PREFIX_pkgconfig}
+            --prefix=${EXTPREFIX_raqm}
             --libdir=lib
+            --default-library=shared
             -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
-            -Dtests=false
             ${EXTRA_MESON_FLAGS}
 
     BUILD_COMMAND ${CMAKE_COMMAND} -E env
@@ -39,6 +28,5 @@ ExternalProject_Add( ext_pkgconfig
 
     UPDATE_COMMAND ""
 
-    DEPENDS ${MESON_DEP}
+    DEPENDS ext_freetype ext_harfbuzz ext_fribidi ${MESON_DEP} ${PKG_CONFIG_DEP}
 )
-endif()

@@ -112,7 +112,8 @@ cmake $KRITA_SOURCES/3rdparty \
     -DINSTALL_ROOT=$DEPS_INSTALL_PREFIX \
     -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOADS_DIR \
     -DQT_ENABLE_DEBUG_INFO=$QT_DEBUG \
-    -DSUBMAKE_JOBS=${SUBMAKE_JOBS}
+    -DSUBMAKE_JOBS=${SUBMAKE_JOBS} \
+    -G Ninja
 
 # Now start building everything we need, in the appropriate order
 #cmake --build . --config RelWithDebInfo --target ext_png
@@ -129,11 +130,9 @@ cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_openexr
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_giflib
 #cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_gsl
-cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_python
-#cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_freetype
 #cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_fontconfig
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_qt
-cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_poppler
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_python
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_libraw
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_kcrash
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_sip
@@ -150,3 +149,10 @@ cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_webp
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_jpegxl
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_xsimd
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_freetype
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_poppler
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_fribidi
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_raqm
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_unibreak
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_fontconfig
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_ffmpeg

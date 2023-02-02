@@ -1,0 +1,150 @@
+From 76661efd1137a3b12903677d9d3d7a8dd83b8c50 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 18 Jan 2023 12:55:09 -0300
+Subject: [PATCH 10/10] meson: Work around windeployqt expecting no ICU prefix
+
+---
+ meson.build                       | 7 +++++++
+ source/common/meson.build         | 2 ++
+ source/data/meson.build           | 1 +
+ source/i18n/meson.build           | 2 ++
+ source/io/meson.build             | 1 +
+ source/layoutex/meson.build       | 1 +
+ source/stubdata/meson.build       | 2 ++
+ source/tools/toolutil/meson.build | 2 ++
+ 8 files changed, 18 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index 5919318..50a4a96 100644
+--- a/meson.build
++++ b/meson.build
+@@ -62,4 +62,11 @@ else
+   library_suffix = ''
+ endif
+ 
++# Fix windeployqt expecting no prefix on Windows
++if host_machine.system() == 'windows' and cpp.get_argument_syntax() != 'msvc'
++  name_prefix = ''
++else
++  name_prefix = []
++endif
++
+ subdir('source')
+diff --git a/source/common/meson.build b/source/common/meson.build
+index 234f41c..49a16fe 100644
+--- a/source/common/meson.build
++++ b/source/common/meson.build
+@@ -209,6 +209,7 @@ common_lib = library(
+   link_with: stubdata_lib,
+   dependencies: dl_dep,
+   version: U_ICU_VERSION,
++  name_prefix: name_prefix,
+   install: true,
+ )
+ 
+@@ -224,6 +225,7 @@ else
+     link_with: stubdata_native_lib,
+     dependencies: dl_native_dep,
+     version: U_ICU_VERSION,
++    name_prefix: name_prefix,
+     native: true,
+   )
+ endif
+diff --git a/source/data/meson.build b/source/data/meson.build
+index 9e020d9..485526c 100644
+--- a/source/data/meson.build
++++ b/source/data/meson.build
+@@ -74,6 +74,7 @@ icudata = library(
+   include_directories: incdir,
+   version: U_ICU_VERSION,
+   vs_module_defs: icudata_exports,
++  name_prefix: name_prefix,
+   install: true,
+ )
+ 
+diff --git a/source/i18n/meson.build b/source/i18n/meson.build
+index fb30a2f..802d822 100644
+--- a/source/i18n/meson.build
++++ b/source/i18n/meson.build
+@@ -272,6 +272,7 @@ i18n_lib = library(
+   c_args: '-DU_I18N_IMPLEMENTATION',
+   cpp_args: '-DU_I18N_IMPLEMENTATION',
+   version: U_ICU_VERSION,
++  name_prefix: name_prefix,
+   install: true,
+ )
+ 
+@@ -286,6 +287,7 @@ else
+     c_args: '-DU_I18N_IMPLEMENTATION',
+     cpp_args: '-DU_I18N_IMPLEMENTATION',
+     version: U_ICU_VERSION,
++    name_prefix: name_prefix,
+     native: true,
+   )
+ endif
+diff --git a/source/io/meson.build b/source/io/meson.build
+index bbf9a75..4710d5a 100644
+--- a/source/io/meson.build
++++ b/source/io/meson.build
+@@ -28,6 +28,7 @@ io_lib = library(
+   cpp_args: '-DU_IO_IMPLEMENTATION',
+   link_with: [i18n_lib, common_lib],
+   version: U_ICU_VERSION,
++  name_prefix: name_prefix,
+   install: true,
+ )
+ 
+diff --git a/source/layoutex/meson.build b/source/layoutex/meson.build
+index 1afb2a0..ca1b6a4 100644
+--- a/source/layoutex/meson.build
++++ b/source/layoutex/meson.build
+@@ -23,6 +23,7 @@ layoutex_lib = library(
+   cpp_args: '-DU_LAYOUTEX_IMPLEMENTATION',
+   link_with: [common_lib],
+   version: U_ICU_VERSION,
++  name_prefix: name_prefix,
+   install: true,
+ )
+ 
+diff --git a/source/stubdata/meson.build b/source/stubdata/meson.build
+index 0bbb325..28a3b45 100644
+--- a/source/stubdata/meson.build
++++ b/source/stubdata/meson.build
+@@ -16,6 +16,7 @@ stubdata_lib = library(
+   cpp_args: '-DSTUBDATA_BUILD',
+   include_directories: incdir,
+   version: U_ICU_VERSION,
++  name_prefix: name_prefix,
+ )
+ 
+ if meson.can_run_host_binaries()
+@@ -29,5 +30,6 @@ else
+     include_directories: incdir,
+     version: U_ICU_VERSION,
+     native: true,
++    name_prefix: name_prefix,
+   )
+ endif
+diff --git a/source/tools/toolutil/meson.build b/source/tools/toolutil/meson.build
+index 0307b23..d554bd8 100644
+--- a/source/tools/toolutil/meson.build
++++ b/source/tools/toolutil/meson.build
+@@ -40,6 +40,7 @@ toolutil_lib = library(
+   c_args: toolutil_c_args,
+   cpp_args: toolutil_cpp_args,
+   link_with: [i18n_lib, common_lib],
++  name_prefix: name_prefix,
+ )
+ 
+ if meson.can_run_host_binaries()
+@@ -52,6 +53,7 @@ else
+     c_args: toolutil_c_args,
+     cpp_args: toolutil_cpp_args,
+     link_with: [i18n_native_lib, common_native_lib],
++    name_prefix: name_prefix,
+     native: true,
+   )
+ endif
+-- 
+2.37.1.windows.1
+

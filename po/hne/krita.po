@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-29 02:52+0000\n"
+"POT-Creation-Date: 2023-02-02 02:51+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -33026,7 +33026,7 @@ msgstr "नवा कान्फिगरेसन %1"
 msgid "No configuration options"
 msgstr "कोई कान्फिगरेसन विकल्प नइ."
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:138
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "The clipboard is empty or does not have an image in it."

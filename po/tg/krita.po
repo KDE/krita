@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-29 02:52+0000\n"
+"POT-Creation-Date: 2023-02-02 02:51+0000\n"
 "PO-Revision-Date: 2019-09-29 12:46+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
@@ -32337,7 +32337,7 @@ msgstr ""
 msgid "No configuration options"
 msgstr ""
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:138
 #, kde-format
 msgid "The clipboard is empty or does not have an image in it."
 msgstr ""

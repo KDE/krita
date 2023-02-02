@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-29 02:52+0000\n"
+"POT-Creation-Date: 2023-02-02 02:51+0000\n"
 "PO-Revision-Date: 2023-01-15 21:44-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -33225,7 +33225,7 @@ msgstr "フィルタ設定の XML"
 msgid "No configuration options"
 msgstr "設定オプションはありません。"
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:138
 #, fuzzy, kde-format
 #| msgid "The file does not contain an image."
 msgid "The clipboard is empty or does not have an image in it."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-29 02:52+0000\n"
+"POT-Creation-Date: 2023-02-02 02:51+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -32927,7 +32927,7 @@ msgstr "ការ​កំណត់​រចនាសម្ព័ន្ធ​ថ
 msgid "No configuration options"
 msgstr "គ្មាន​ជម្រើស​កំណត់​រចនាសម្ព័ន្ធ ។"
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:138
 #, fuzzy, kde-format
 msgid "The clipboard is empty or does not have an image in it."
 msgstr "ចំណាំ​បច្ចុប្បន្ន"

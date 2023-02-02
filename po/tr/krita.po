@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-29 02:52+0000\n"
-"PO-Revision-Date: 2023-01-31 21:44+0300\n"
+"POT-Creation-Date: 2023-02-02 02:51+0000\n"
+"PO-Revision-Date: 2023-02-02 01:06+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -9300,7 +9300,7 @@ msgstr "Ana Nakil"
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Blur..."
-msgstr "&Gaussian Bulanıklaştırması..."
+msgstr "&Gauss Bulanıklaştırması..."
 
 #. i18n: context: toolTip @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
@@ -9310,7 +9310,7 @@ msgstr "&Gaussian Bulanıklaştırması..."
 #, kde-format
 msgctxt "action"
 msgid "Gaussian Blur"
-msgstr "Gaussian Bulanıklığı"
+msgstr "Gauss Bulanıklaştırması"
 
 #. i18n: context: text @ Action (krita_filter_emboss all directions), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1004
@@ -9851,7 +9851,7 @@ msgstr "Rastgele Seç"
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Noise Reduction..."
-msgstr "&Gauss Gürültü Azaltma..."
+msgstr "&Gauss Gürültü Azaltması..."
 
 #. i18n: context: toolTip @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
@@ -16663,7 +16663,7 @@ msgstr "Yumuşak"
 #: libs/image/kis_base_mask_generator.h:24
 #, kde-format
 msgid "Gaussian"
-msgstr "Gaussian"
+msgstr "Gauss"
 
 #: libs/image/kis_clone_layer.cpp:320
 #, kde-format
@@ -31171,7 +31171,7 @@ msgstr "Gölge Düşür"
 #: libs/ui/layerstyles/wdgdropshadow.ui:40
 #, kde-format
 msgid "Use to obscure the shadow when fill is transparent"
-msgstr "Dolgu şeffaf olduğunda gölgeyi gizlemek için kullanın"
+msgstr "Dolgu saydamken gölgeyi gizlemek için kullanın"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLayerKnocksOutDropShadow)
 #: libs/ui/layerstyles/wdgdropshadow.ui:43
@@ -33123,7 +33123,7 @@ msgstr "Süzgeç yapılandırma XML'si"
 msgid "No configuration options"
 msgstr "Yapılandırma seçenekleri yok"
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:138
 #, kde-format
 msgid "The clipboard is empty or does not have an image in it."
 msgstr "Pano boş veya içinde bir görsel yok."
@@ -39711,12 +39711,12 @@ msgstr "Görev Kümeleri"
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:188
 #, kde-format
 msgid "Taskset"
-msgstr "Görevkümesi"
+msgstr "Görev Kümesi"
 
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:196
 #, kde-format
 msgid "Taskset Name"
-msgstr "Görevkümesi Adı"
+msgstr "Görev Kümesi Adı"
 
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:242
 #, kde-format
@@ -42097,7 +42097,7 @@ msgstr "(256 x 256)"
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:341
 #, kde-format
 msgid "Save to:"
-msgstr "Farklı kaydet:"
+msgstr "Şuraya kaydet:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEmbedTags)
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:396
@@ -42596,7 +42596,7 @@ msgstr "&Gaussian Bulanıklaştırması..."
 #: plugins/filters/blur/kis_gaussian_blur_filter.h:28
 #, kde-format
 msgid "Gaussian Blur"
-msgstr "Gaussian Bulanıklığı"
+msgstr "Gauss Bulanıklaştırması"
 
 #: plugins/filters/blur/kis_lens_blur_filter.cpp:33
 #, kde-format
@@ -43295,7 +43295,7 @@ msgid ""
 "This will take a desaturated result and use it to determine what is "
 "transparent. This is useful for creating edge and fringe effects."
 msgstr ""
-"Bu doymamış bir sonuç alır ve şeffaf olanı belirlemek için kullanır. Kenar "
+"Bu doymamış bir sonuç alır ve saydam olanı belirlemek için kullanır. Kenar "
 "ve saçak efektleri oluşturmak için kullanışlıdır."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransparent)
@@ -45967,7 +45967,7 @@ msgstr "sRGB'ye dönüşüme zorla"
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:88
 #, kde-format
 msgid "Transparent pixel fill color:"
-msgstr "Şeffaf piksel doldurma rengi:"
+msgstr "Saydam piksel doldurma rengi:"
 
 #. i18n: ectx: property (toolTip), widget (KisColorButton, bnTransparencyFillColor)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:110
@@ -46010,25 +46010,25 @@ msgstr "Seyrek Örnekleme:"
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:203
 #, kde-format
 msgid "2x2, 1x1, 1x1 (smallest file)"
-msgstr "2x2, 1x1, 1x1 (en küçük dosya)"
+msgstr "2 x 2, 1 x 1, 1 x 1 (en küçük dosya)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, subsampling)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:208
 #, kde-format
 msgid "2x1, 1x1, 1x1"
-msgstr "2x1, 1x1, 1x1"
+msgstr "2 x 2, 1 x 1, 1 x 1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, subsampling)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:213
 #, kde-format
 msgid "1x2, 1x1, 1x1"
-msgstr "1x2, 1x1, 1x1"
+msgstr "1 x 2, 1 x 1, 1 x 1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, subsampling)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:218
 #, kde-format
 msgid "1x1, 1x1, 1x1 (best quality)"
-msgstr "1x1, 1x1, 1x1 (en iyi kalite)"
+msgstr "1 x 1, 1 x 1, 1 x 1 (en iyi kalite)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, baseLineJPEG)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:228
@@ -47380,7 +47380,7 @@ msgstr "PNG Seçenekleri"
 #: plugins/impex/png/kis_wdg_options_png.ui:44
 #, kde-format
 msgid "Transparent color: "
-msgstr "Şeffaf renk: "
+msgstr "Saydam renk: "
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, compressionLevelDeflate)

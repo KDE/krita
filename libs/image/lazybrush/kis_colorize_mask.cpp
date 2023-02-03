@@ -261,7 +261,7 @@ void KisColorizeMask::setProfile(const KoColorProfile *profile, KUndo2Command *p
     m_d->fakePaintDevice->setProfile(profile, parentCommand);
     m_d->coloringProjection->setProfile(profile, parentCommand);
 
-    for (auto stroke : m_d->keyStrokes) {
+    for (auto & stroke : m_d->keyStrokes) {
         stroke.color.setProfile(profile);
     }
 }

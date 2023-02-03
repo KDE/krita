@@ -29757,7 +29757,7 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:166
 #, kde-format
 msgid "There is not enough disk space left to save the file."
-msgstr "No hi ha prou espai en el disc per que es guardarà el fitxer."
+msgstr "No hi ha prou espai en el disc per a guardar el fitxer."
 
 #: libs/ui/KisImportExportErrorCode.cpp:168
 #, kde-format
@@ -41959,7 +41959,7 @@ msgstr "Esteu segur/a de voler sobreescriure el paquet existent?"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:220
 #, kde-format
 msgid "Could not open '%1' for saving."
-msgstr "No s'ha pogut obrir «%1» per que es guardarà."
+msgstr "No s'ha pogut obrir «%1» per a guardar."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:463
 #, kde-format
@@ -47423,7 +47423,7 @@ msgstr "Document no vàlid, no existix el fitxer «maindoc.xml»."
 #: plugins/impex/libkra/kra_converter.cpp:150
 #, kde-format
 msgid "Could not create the file for saving"
-msgstr "No s'ha pogut crear el fitxer per que es guardarà-lo"
+msgstr "No s'ha pogut crear el fitxer per a guardar-lo"
 
 #: plugins/impex/libkra/kra_converter.cpp:223
 #, kde-format
@@ -47717,12 +47717,12 @@ msgid ""
 "html>"
 msgstr ""
 "<html><head/><body><p>Els fitxers <span style=\" font-weight:600;\">PNG</"
-"span> tenen <span style=\" font-style:italic;\">dues</span> opcions per que "
-"es guardarà la informació <span style=\" font-weight:600;\">sRGB</span>: com "
-"una etiqueta o com un perfil explícit. Per a utilitzar en llocs web, <span "
-"style=\"font-style:italic;\">desactiveu</span> esta opció. Per a intercanvi "
-"amb altres aplicacions, <span style=\" font-style:italic;\">activeu</span> "
-"esta opció.</p></body></html>"
+"span> tenen <span style=\" font-style:italic;\">dues</span> opcions per a "
+"guardar la informació <span style=\" font-weight:600;\">sRGB</span>: com una "
+"etiqueta o com un perfil explícit. Per a utilitzar en llocs web, <span style="
+"\"font-style:italic;\">desactiveu</span> esta opció. Per a intercanvi amb "
+"altres aplicacions, <span style=\" font-style:italic;\">activeu</span> esta "
+"opció.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSRGB)
 #: plugins/impex/png/kis_wdg_options_png.ui:197

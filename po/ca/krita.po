@@ -59445,15 +59445,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "Eines de &pintura"
-
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "Eines de pintura"
-
-#~ msgctxt "action"
-#~ msgid "Brush composite"
-#~ msgstr "Composició del pinzell"

@@ -65,7 +65,7 @@ ExternalProject_Add(
 
     UPDATE_COMMAND ""
 
-    DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ${OGG_DEP} ext_libvorbis
+    DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ${OGG_DEP} ext_png ext_libvorbis
 )
 
 ExternalProject_Add(

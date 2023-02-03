@@ -106,6 +106,9 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     // TODO(sh_zam): Opening a directory can cause a crash. A ContentProvider is needed for this.
     m_ui->btnOpenResourceFolder->setEnabled(false);
 #endif
+
+    // make sure the panel is properly cleared. -Amy
+    slotResourcesSelectionChanged({});
 }
 
 DlgResourceManager::~DlgResourceManager()

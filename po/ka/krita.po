@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 00:55+0000\n"
-"PO-Revision-Date: 2023-01-30 10:44+0100\n"
+"PO-Revision-Date: 2023-02-02 08:54+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -6672,7 +6672,7 @@ msgstr ""
 #, kde-format
 msgctxt "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/ps.gpl"
 msgid "Ps"
-msgstr ""
+msgstr "პწმ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-cmyk.gpl:2
@@ -7156,7 +7156,7 @@ msgstr ""
 #, kde-format
 msgctxt "./krita/data/palettes/ps.gpl"
 msgid "Ps"
-msgstr ""
+msgstr "პწმ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/palettes/swatch-cmyk.gpl:2
@@ -47458,7 +47458,7 @@ msgstr "sRGB"
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Adobe RGB"
-msgstr ""
+msgstr "Adobe RGB"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:742
 #, kde-format
@@ -51835,7 +51835,7 @@ msgstr "პარამეტრების გატანა"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:222
 msgid "Crop Settings"
-msgstr ""
+msgstr "ამოჭრის მორგება"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:225
 msgid "Crop to outmost guides"

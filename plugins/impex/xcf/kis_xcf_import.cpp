@@ -261,6 +261,7 @@ KisImportExportErrorCode KisXCFImport::convert(KisDocument *document, QIODevice 
                         }
                         it->nextRow();
                     }
+                    freeTile(tile);
                 }
             }
 

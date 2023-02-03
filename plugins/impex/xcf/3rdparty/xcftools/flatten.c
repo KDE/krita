@@ -539,6 +539,7 @@ flattenTopdown(struct FlattenSpec *spec, struct Tile *top,
             if( top->summary & TILESUMMARY_CRISP ) {
                 above = forkTile(top);
                 if(above == XCF_PTR_EMPTY) {
+                    freeTile(tile);
                     return XCF_PTR_EMPTY;
                 }
             } else {
@@ -554,10 +555,12 @@ flattenTopdown(struct FlattenSpec *spec, struct Tile *top,
             }
             below = flattenTopdown(spec, above, nlayers, where);
             if (below == XCF_PTR_EMPTY) {
+                freeTile(tile);
                 return XCF_PTR_EMPTY;
             }
             if( below->refcount > 1 ) {
                 if (below != top) {
+                    freeTile(tile);
                     return XCF_PTR_EMPTY;
                 }
                 /* This can only happen if 'below' is a copy of 'top'

@@ -17,8 +17,9 @@ public:
     typedef KisHLineIteratorSP IteratorTypeSP;
 
     WrappedHLineIteratorStrategy()
-        : m_iteratorRowStart(KisWrappedRect::TOPLEFT),
-          m_lastRowCoord(-1)
+        : m_splitRect(0)
+        , m_iteratorRowStart(KisWrappedRect::TOPLEFT)
+        , m_lastRowCoord(-1)
     {
     }
 

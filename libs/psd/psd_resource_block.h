@@ -87,6 +87,7 @@ public:
 
         if (!write(buffer)) {
             qWarning() << "Could not copy PSDResourceBlock" << error;
+            delete copied;
             return 0;
         }
         buffer.close();
@@ -94,7 +95,7 @@ public:
 
         if (!copied->read(buffer)) {
             qWarning() << "Could not copy PSDResourceBlock" << copied->error;
-            delete(copied);
+            delete copied;
             return 0;
         }
 

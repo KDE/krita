@@ -308,8 +308,9 @@ void KisMultiChannelConfigWidget::init() {
 
 KisMultiChannelConfigWidget::~KisMultiChannelConfigWidget()
 {
-    KIS_ASSERT_RECOVER_RETURN(m_histogram);
-    delete m_histogram;
+    if(m_histogram) { // should not happen otherwise, but let's not assert in the destructor
+        delete m_histogram;
+    }
 }
 
 void KisMultiChannelConfigWidget::resetCurves()

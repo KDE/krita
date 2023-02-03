@@ -248,6 +248,9 @@ KoConfigAuthorPage::KoConfigAuthorPage()
         d->cmbAuthorProfiles->insertItem(0, d->defaultAuthor);
         d->stack->insertWidget(0, w);
         d->profileUiList.insert(0, aUi);
+    } else {
+        delete aUi;
+        delete w;
     }
 
 

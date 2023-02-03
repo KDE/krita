@@ -199,14 +199,13 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
 
         QMap<QString, QVariant> metadata = model->data(idx, Qt::UserRole + KisAllResourcesModel::MetaData).toMap();
 
+        m_ui->lblMetadata->setDisabled(false);
         m_ui->lblFilename->setDisabled(false);
         m_ui->lblLocation->setDisabled(false);
         m_ui->lblThumbnail->setDisabled(false);
         m_ui->lneName->setDisabled(false);
         m_ui->lblId->setDisabled(false);
         m_ui->lblMetadata->setText(constructMetadata(metadata, getCurrentResourceType()));
-
-
     } else if (list.size() > 1) {
 
         QString commonLocation = model->data(list.first(), Qt::UserRole + KisAllResourcesModel::Location).toString();
@@ -230,6 +229,7 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         QPixmap pix;
         m_ui->lblThumbnail->setPixmap(pix);
 
+        m_ui->lblMetadata->setDisabled(true);
         m_ui->lblFilename->setDisabled(true);
         m_ui->lblLocation->setDisabled(!commonLocationFound);
         m_ui->lblThumbnail->setDisabled(true);
@@ -240,14 +240,14 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
                                              "when no resource is shown so there is no specific filename", "(None selected)");
 
         m_ui->lblId->setText(noneSelectedText);
-        m_ui->lblMetadata->setText("");
+        m_ui->lblMetadata->setText(noneSelectedText);
         m_ui->lblFilename->setText(noneSelectedText);
         m_ui->lblLocation->setText(noneSelectedText);
         m_ui->lneName->setText(noneSelectedText);
         m_ui->lblThumbnail->setText(noneSelectedText);
-        QPixmap pix;
-        m_ui->lblThumbnail->setPixmap(pix);
+        m_ui->lblThumbnail->setPixmap({});
 
+        m_ui->lblMetadata->setDisabled(true);
         m_ui->lblFilename->setDisabled(true);
         m_ui->lblLocation->setDisabled(true);
         m_ui->lblThumbnail->setDisabled(true);

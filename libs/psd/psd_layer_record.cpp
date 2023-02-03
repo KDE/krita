@@ -157,19 +157,7 @@ QString channelIdToChannelType(int channelId, psd_color_mode colormode)
 }
 
 PSDLayerRecord::PSDLayerRecord(const PSDHeader &header)
-    : top(0)
-    , left(0)
-    , bottom(0)
-    , right(0)
-    , nChannels(0)
-    , opacity(0)
-    , clipping(0)
-    , transparencyProtected(false)
-    , visible(true)
-    , irrelevant(false)
-    , layerName("UNINITIALIZED")
-    , infoBlocks(header)
-    , m_transparencyMaskSizeOffset(0)
+    : infoBlocks(header)
     , m_header(header)
 {
 }

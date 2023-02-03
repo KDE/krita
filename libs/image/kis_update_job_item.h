@@ -239,7 +239,7 @@ private:
     KisUpdaterContext *m_updaterContext {0};
     bool m_exclusive {false};
     std::atomic<Type> m_atomicType {Type::EMPTY};
-    volatile KisStrokeJobData::Sequentiality m_strokeJobSequentiality;
+    volatile KisStrokeJobData::Sequentiality m_strokeJobSequentiality {KisStrokeJobData::SEQUENTIAL};
 
     /**
      * Runnable jobs part

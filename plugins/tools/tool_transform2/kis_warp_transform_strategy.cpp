@@ -68,7 +68,7 @@ struct KisWarpTransformStrategy::Private
         SCALE_MODE,
         NOTHING
     };
-    Mode mode;
+    Mode mode {NOTHING};
 
     QVector<int> pointsInAction;
     int lastNumPoints {0};

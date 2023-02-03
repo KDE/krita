@@ -32,7 +32,8 @@ struct Q_DECL_HIDDEN KisGaussRectangleMaskGenerator::Private
 
     qreal xfade {0.0};
     qreal yfade {0.0};
-    qreal halfWidth, halfHeight;
+    qreal halfWidth {0.0};
+    qreal halfHeight {0.0};
     qreal alphafactor {0.0};
 
     KisAntialiasingFadeMaker2D <Private> fadeMaker;

@@ -55,7 +55,7 @@ public:
 
     KisAnimationPlayer *q {0};
 
-    KisAnimationPlayer::PlaybackState playbackState;
+    KisAnimationPlayer::PlaybackState playbackState {KisAnimationPlayer::STOPPED};
     QTimer *timer {0};
 
     /// The frame user started playback from

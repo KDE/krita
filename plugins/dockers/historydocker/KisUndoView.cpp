@@ -86,17 +86,13 @@
 class KisUndoViewPrivate
 {
 public:
-    KisUndoViewPrivate() :
-#ifndef QT_NO_UNDOGROUP
-        group(0),
-#endif
-        model(0) {}
+    KisUndoViewPrivate() {}
 
 #ifndef QT_NO_UNDOGROUP
-    QPointer<KUndo2Group> group;
+    QPointer<KUndo2Group> group {0};
 #endif
-    KisUndoModel *model;
-    KisUndoView* q;
+    KisUndoModel *model {0};
+    KisUndoView *q {0};
 
     void init(KisUndoView* view);
 };

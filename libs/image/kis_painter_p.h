@@ -61,8 +61,8 @@ struct Q_DECL_HIDDEN KisPainter::Private {
     bool                        mirrorVertically {false};
     bool                        isOpacityUnit {true}; // TODO: move into ParameterInfo
     KoCompositeOp::ParameterInfo paramInfo;
-    KoColorConversionTransformation::Intent renderingIntent;
-    KoColorConversionTransformation::ConversionFlags conversionFlags;
+    KoColorConversionTransformation::Intent renderingIntent {KoColorConversionTransformation::IntentPerceptual};
+    KoColorConversionTransformation::ConversionFlags conversionFlags {KoColorConversionTransformation::Empty};
     KisRunnableStrokeJobsInterface *runnableStrokeJobsInterface {nullptr};
     QScopedPointer<KisRunnableStrokeJobsInterface> fakeRunnableStrokeJobsInterface;
     QTransform                  patternTransform;

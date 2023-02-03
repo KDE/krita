@@ -74,14 +74,16 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_2">
-           <property name="text">
+          <widget class="QGroupBox" name="groupBox">
+           <property name="title">
             <string>Versions</string>
            </property>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <item>
+             <widget class="QTableView" name="tableVersions"/>
+            </item>
+           </layout>
           </widget>
-         </item>
-         <item>
-          <widget class="QTableView" name="tableVersions"/>
          </item>
         </layout>
        </item>

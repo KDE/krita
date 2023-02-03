@@ -687,7 +687,7 @@ public:
     {
         qint64 distance = 0;
         qint64 wsum = 0;
-        const qint64 ssdmax = nColors * 255 * 255;
+        const qint64 ssdmax = nColors * 255 * (qint64)255;
 
         //for each pixel in the source patch
         for (int dy = -patchSize; dy <= patchSize; dy++) {
@@ -737,6 +737,9 @@ public:
             }
         }
 
+        if (wsum == 0) {
+            return 0; // sanity check, to avoid undefined behaviour in code below
+        }
         return qFloor(MAX_DIST * (qreal(distance) / wsum));
     }
 

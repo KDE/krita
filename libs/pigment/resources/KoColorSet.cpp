@@ -2178,6 +2178,7 @@ bool KoColorSet::Private::loadAcb()
 
     quint16 numColors = readShort(&buf);
     quint16 numColumns = readShort(&buf);
+    numColumns = numColumns > 0 ? numColumns : 8; // overwrite with sane default in case of 0
     colorSet->setColumnCount(numColumns);
     quint16 numKeyColorPage = readShort(&buf);
     Q_UNUSED(numKeyColorPage);

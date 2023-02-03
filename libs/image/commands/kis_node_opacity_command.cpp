@@ -88,13 +88,14 @@ bool KisNodeOpacityCommand::canMergeWith(const KUndo2Command *command) const
 {
     const KisNodeOpacityCommand *other =
         dynamic_cast<const KisNodeOpacityCommand*>(command);
+    if (!other) return false;
 
 
     bool otherCreatedKeyframe = other->m_autokey;
     bool weCreatedKeyframe = m_autokey;
     bool canMergeKeyframe = ((otherCreatedKeyframe ^ weCreatedKeyframe) == true) || (!otherCreatedKeyframe && !weCreatedKeyframe);
 
-    return other && other->m_node == m_node && canMergeKeyframe;
+    return other->m_node == m_node && canMergeKeyframe;
 }
 
 bool KisNodeOpacityCommand::canAnnihilateWith(const KUndo2Command *command) const

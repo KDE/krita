@@ -241,8 +241,9 @@ void KisScratchPad::pointerRelease(KoPointerEvent *event)
 void KisScratchPad::pointerMove(KoPointerEvent *event)
 {
     if(!isEnabled()) return;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(event);
 
-    if(event && event->point.isNull() == false) {
+    if(event->point.isNull() == false) {
         m_helper->cursorMoved(documentToWidget().map(event->point));
     }
 

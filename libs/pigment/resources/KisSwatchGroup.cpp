@@ -101,7 +101,7 @@ bool KisSwatchGroup::removeSwatch(int column, int row)
 
 void KisSwatchGroup::setColumnCount(int columnCount)
 {
-    Q_ASSERT(columnCount >= 0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(columnCount >= 1);
 
 
     // Move 'removed' swatches into new row

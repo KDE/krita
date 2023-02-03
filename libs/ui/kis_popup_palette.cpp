@@ -281,7 +281,7 @@ void KisPopupPalette::reconfigure()
         m_presetSlotCount = m_maxPresetSlotCount;
     }
     m_popupPaletteSize = config.readEntry("popuppalette/size", 385);
-    qreal selectorRadius = config.readEntry("popuppalette/selectorSize", 140) / 2;
+    qreal selectorRadius = config.readEntry("popuppalette/selectorSize", 140) / 2.0;
     
     m_showColorHistory = config.readEntry("popuppalette/showColorHistory", true);
     m_showRotationTrack = config.readEntry("popuppalette/showRotationTrack", true);

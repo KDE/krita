@@ -101,7 +101,7 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
         layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
     }
 
-    if (layer && alphaDisabled) {
+    if (alphaDisabled) {
         new KisChangeChannelFlagsCommand(m_dstColorSpace->channelFlags(true, false),
                                          layer, parentConversionCommand);
     }

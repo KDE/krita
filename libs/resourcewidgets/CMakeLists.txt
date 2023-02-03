@@ -1,5 +1,3 @@
-add_subdirectory(dbexplorer)
-
 set(kritaresourcewidgets_LIB_SRCS
     KisIconToolTip.cpp
     KisResourceItemChooserContextMenu.cpp

@@ -1,6 +1,6 @@
-set(kritadbexplorer_SOURCES 
-    DbExplorer.cpp 
-    DlgDbExplorer.cpp       
+set(kritadbexplorer_SOURCES
+    DbExplorer.cpp
+    DlgDbExplorer.cpp
     TableModel.cpp
 )
 
@@ -8,7 +8,7 @@ ki18n_wrap_ui(kritadbexplorer_SOURCES WdgDbExplorer.ui )
 
 kis_add_library(kritadbexplorer MODULE ${kritadbexplorer_SOURCES})
 
-target_link_libraries(kritadbexplorer 
+target_link_libraries(kritadbexplorer
     PRIVATE
         kritaresources
         kritaresourcewidgets

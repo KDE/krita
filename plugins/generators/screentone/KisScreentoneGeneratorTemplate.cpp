@@ -446,7 +446,8 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
                     continue;
                 }
                 m_templateData[auxiliaryMicrocells[i].auxiliaryPoints[microcellPixelIndides[i]].templatePixelIndex] =
-                    static_cast<qreal>(macrocellPixelIndex) / static_cast<qreal>(totalNumberOfAuxiliaryPoints - 1);
+                    totalNumberOfAuxiliaryPoints - 1 == 0 ? 0 // to avoid UB from division by zero
+                                                          : static_cast<qreal>(macrocellPixelIndex) / static_cast<qreal>(totalNumberOfAuxiliaryPoints - 1);
                 ++microcellPixelIndides[i];
                 ++macrocellPixelIndex;
             }

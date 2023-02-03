@@ -33,6 +33,9 @@ qreal estimateImageAverage(const QImage &image) {
         }
     }
 
+    if (alphaSum == 0) {
+        return 0;
+    }
     return 255.0 * qreal(lightnessSum) / alphaSum;
 }
 

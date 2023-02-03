@@ -116,7 +116,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>Database Version</string>
+          <string>Database version:</string>
          </property>
         </widget>
        </item>
@@ -130,7 +130,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="label_5">
          <property name="text">
-          <string>Krita Version</string>
+          <string>Krita version:</string>
          </property>
         </widget>
        </item>
@@ -144,7 +144,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>Creation Date</string>
+          <string>Created:</string>
          </property>
         </widget>
        </item>

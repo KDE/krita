@@ -91,11 +91,12 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         versionModel->setHeaderData(2, Qt::Horizontal, "krita_version");
         versionModel->setHeaderData(3, Qt::Horizontal, "creation_date");
         versionModel->select();
-        QSqlRecord r = versionModel->record(0);
+        const QSqlRecord r = versionModel->record(0);
 
         m_page->lblDatabaseVersion->setText(r.value("database_version").toString());
         m_page->lblKritaVersion->setText(r.value("krita_version").toString());
-        m_page->lblCreationDate->setText(r.value("creation_date").toString());
+        m_page->lblCreationDate->setText(
+            QDateTime::fromSecsSinceEpoch(r.value("creation_date").value<int>()).toString());
     }
 
 

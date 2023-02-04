@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2020 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2023 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -597,8 +598,81 @@ QString KisAllTagResourceModel::createQuery(bool onlyActive, bool returnADbIndex
                             "                            AND   tag_translations.language   = :language\n");
 
     return query;
+}
 
+// Keep in sync with KisAllResourcesModel::headerData for sections 1-16
+// then KisAllTagResourceModel::data for 16-25
+QVariant KisAllTagResourceModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (orientation != Qt::Horizontal) {
+        return {};
+    }
+    if (role != Qt::DisplayRole) {
+        return {};
+    }
 
+    switch (section) {
+    case KisAbstractResourceModel::Id:
+        return i18n("Id");
+    case KisAbstractResourceModel::StorageId:
+        return i18n("Storage ID");
+    case KisAbstractResourceModel::Name:
+        return i18n("Name");
+    case KisAbstractResourceModel::Filename:
+        return i18n("File Name");
+    case KisAbstractResourceModel::Tooltip:
+        return i18n("Tooltip");
+    case KisAbstractResourceModel::Thumbnail:
+        return i18n("Image");
+    case KisAbstractResourceModel::Status:
+        return i18n("Status");
+    case KisAbstractResourceModel::Location:
+        return i18n("Location");
+    case KisAbstractResourceModel::ResourceType:
+        return i18n("Resource Type");
+    case KisAbstractResourceModel::ResourceActive:
+        return i18n("Active");
+    case KisAbstractResourceModel::StorageActive:
+        return i18n("Storage Active");
+    case KisAbstractResourceModel::MD5:
+        return i18n("md5sum");
+    case KisAbstractResourceModel::Tags:
+        return i18n("Tags");
+    case KisAbstractResourceModel::LargeThumbnail:
+        return i18n("Large Thumbnail");
+    case KisAbstractResourceModel::Dirty:
+        return i18n("Dirty");
+    case KisAbstractResourceModel::MetaData:
+        return i18n("Metadata");
+    default:
+        role = Qt::UserRole + section;
+        break;
+    }
+
+    switch (role) {
+    case Qt::UserRole + KisAllTagResourceModel::TagId:
+        return i18n("Tag ID");
+    case Qt::UserRole + KisAllTagResourceModel::ResourceId:
+        return i18n("Resource ID");
+    case Qt::UserRole + KisAllTagResourceModel::Tag:
+        return i18n("Tag Url");
+    case Qt::UserRole + KisAllTagResourceModel::Resource:
+        return i18n("Resource");
+    case Qt::UserRole + ResourceActive:
+        return i18n("Resource Active");
+    case Qt::UserRole + TagActive:
+        return i18n("Tag Active");
+    case Qt::UserRole + ResourceStorageActive:
+        return i18n("Storage Active");
+    case Qt::UserRole + ResourceName:
+        return i18n("Resource Name");
+    case Qt::UserRole + TagName:
+        return i18n("Tag File Name");
+    default:
+        break;
+    }
+
+    return {};
 }
 
 bool KisAllTagResourceModel::resetQuery()
@@ -891,4 +965,9 @@ bool KisTagResourceModel::setResourceMetaData(KoResourceSP resource, QMap<QStrin
 {
     KisResourceModel resourceModel(d->resourceType);
     return resourceModel.setResourceMetaData(resource, metadata);
+}
+
+QVariant KisTagResourceModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    return d->sourceModel->headerData(section, orientation, role);
 }

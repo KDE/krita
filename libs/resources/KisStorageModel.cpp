@@ -1,5 +1,6 @@
 /*
- * SPDX-FileCopyrightText: 2019 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2019 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2023 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,7 +17,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
-#include <QList>
 
 Q_GLOBAL_STATIC(KisStorageModel, s_instance)
 
@@ -138,7 +138,7 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
             case Location:
                 return query.value("location");
             case TimeStamp:
-                return query.value("timestamp");
+                return QDateTime::fromSecsSinceEpoch(query.value("timestamp").value<int>()).toString();
             case PreInstalled:
                 return query.value("pre_installed");
             case Active:
@@ -171,6 +171,24 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
             }
             default:
                 return v;
+            }
+        }
+        case Qt::CheckStateRole: {
+            switch (index.column()) {
+            case PreInstalled:
+                if (query.value("pre_installed").toInt() == 0) {
+                    return Qt::Unchecked;
+                } else {
+                    return Qt::Checked;
+                }
+            case Active:
+                if (query.value("active").toInt() == 0) {
+                    return Qt::Unchecked;
+                } else {
+                    return Qt::Checked;
+                }
+            default:
+                return {};
             }
         }
         case Qt::UserRole + Id:

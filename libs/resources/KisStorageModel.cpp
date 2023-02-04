@@ -87,6 +87,10 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
     if (index.row() > rowCount()) return v;
     if (index.column() > (int)MetaData) return v;
 
+    if (role == Qt::FontRole) {
+        return QFont();
+    }
+
     QString location = d->storages.at(index.row());
 
     QSqlQuery query;

@@ -115,12 +115,11 @@ QVariant KisAllResourcesModel::data(const QModelIndex &index, int role) const
 
 QVariant KisAllResourcesModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    QVariant v = QVariant();
     if (role != Qt::DisplayRole) {
-        return v;
+        return {};
     }
     if (orientation == Qt::Horizontal) {
-        switch(section) {
+        switch (section) {
         case Id:
             return i18n("Id");
         case StorageId:
@@ -145,11 +144,19 @@ QVariant KisAllResourcesModel::headerData(int section, Qt::Orientation orientati
             return i18n("Storage Active");
         case MD5:
             return i18n("md5sum");
+        case Tags:
+            return i18n("Tags");
+        case LargeThumbnail:
+            return i18n("Large Thumbnail");
+        case Dirty:
+            return i18n("Dirty");
+        case MetaData:
+            return i18n("Metadata");
         default:
             return QString::number(section);
         }
     }
-    return v;
+    return {};
 }
 
 bool KisAllResourcesModel::setData(const QModelIndex &index, const QVariant &value, int role)

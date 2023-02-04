@@ -69,11 +69,12 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         tagsModel->setHeaderData(2, Qt::Horizontal, i18n("Tag"));
         tagsModel->setHeaderData(3, Qt::Horizontal, i18n("Name"));
         tagsModel->setHeaderData(4, Qt::Horizontal, i18n("Comment"));
-        tagsModel->setHeaderData(5, Qt::Horizontal, i18n("Active"));
-        tagsModel->setHeaderData(6, Qt::Horizontal, i18n("Thumbnail"));
-        tagsModel->setHeaderData(7, Qt::Horizontal, i18n("Display Name"));
-        tagsModel->addBooleanColumn(5);
-        tagsDelegate->addBooleanColumn(5);
+        tagsModel->setHeaderData(5, Qt::Horizontal, i18n("File name"));
+        tagsModel->setHeaderData(6, Qt::Horizontal, i18n("Active"));
+        tagsModel->setHeaderData(7, Qt::Horizontal, i18n("Thumbnail"));
+        tagsModel->setHeaderData(8, Qt::Horizontal, i18n("Display Name"));
+        tagsModel->addBooleanColumn(6);
+        tagsDelegate->addBooleanColumn(6);
         tagsModel->select();
 
         m_page->tableTags->setModel(tagsModel);

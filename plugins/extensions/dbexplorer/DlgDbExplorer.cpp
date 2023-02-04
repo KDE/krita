@@ -69,6 +69,28 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     }
 
     {
+        TableModel *resourceVersionsModel = new TableModel(this, QSqlDatabase::database());
+        TableDelegate *versionsDelegate = new TableDelegate(m_page->tableVersions);
+        resourceVersionsModel->setTable("versioned_resources");
+        resourceVersionsModel->setHeaderData(0, Qt::Horizontal, i18n("Id"));
+        resourceVersionsModel->setHeaderData(1, Qt::Horizontal, i18n("Resource ID"));
+        resourceVersionsModel->setHeaderData(2, Qt::Horizontal, i18n("Storage ID"));
+        resourceVersionsModel->setHeaderData(3, Qt::Horizontal, i18n("Version"));
+        resourceVersionsModel->setHeaderData(4, Qt::Horizontal, i18n("File name"));
+        resourceVersionsModel->setHeaderData(5, Qt::Horizontal, i18n("md5sum"));
+        resourceVersionsModel->setHeaderData(6, Qt::Horizontal, i18n("Creation Date"));
+        resourceVersionsModel->addDateTimeColumn(6);
+        versionsDelegate->addDateTimeColumn(6);
+        resourceVersionsModel->select();
+
+        m_page->tableVersions->setModel(resourceVersionsModel);
+        m_page->tableVersions->hideColumn(0);
+        m_page->tableVersions->setItemDelegate(versionsDelegate);
+        m_page->tableVersions->setSelectionMode(QAbstractItemView::NoSelection);
+        m_page->tableVersions->resizeColumnsToContents();
+    }
+
+    {
         TableModel *tagsModel = new TableModel(this, QSqlDatabase::database());
         TableDelegate *tagsDelegate = new TableDelegate(m_page->tableStorages);
         tagsModel->setTable("tags");
@@ -205,7 +227,14 @@ void DlgDbExplorer::slotTbResourceItemSelected()
     } else {
         m_page->lblThumbnail->setPixmap(QPixmap());
     }
-    //If we could get a list of versions for a given resource, this would be the moment to add them...
+
+    TableModel *model = dynamic_cast<TableModel *>(m_page->tableVersions->model());
+
+    if (model) {
+        const QString md5 = idx.data(Qt::UserRole + KisAbstractResourceModel::MD5).value<QString>();
+        model->setFilter(QString("md5sum='%1'").arg(md5));
+        m_page->tableVersions->resizeColumnsToContents();
+    }
 }
 
 void DlgDbExplorer::slotTbTagSelected(const QModelIndex &index)

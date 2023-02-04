@@ -87,7 +87,7 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
             return QVariant::fromValue<QImage>(getThumbnailFromQuery(query, useResourcePrefix));
         }
         case KisAbstractResourceModel::Status:
-            return query.value(useResourcePrefix ? "resource_status" : "status");
+            return query.value(useResourcePrefix ? "resource_active" : "status");
         case KisAbstractResourceModel::Location:
             return query.value("location");
         case KisAbstractResourceModel::ResourceType:
@@ -146,7 +146,7 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
         return QVariant::fromValue<QImage>(getThumbnailFromQuery(query, useResourcePrefix));
     }
     case Qt::UserRole + KisAbstractResourceModel::Status:
-        return query.value(useResourcePrefix ? "resource_status" : "status");
+        return query.value(useResourcePrefix ? "resource_active" : "status");
     case Qt::UserRole + KisAbstractResourceModel::Location:
         return query.value("location");
     case Qt::UserRole + KisAbstractResourceModel::ResourceType:

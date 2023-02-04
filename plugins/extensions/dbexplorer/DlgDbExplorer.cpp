@@ -44,7 +44,13 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     m_tagModel = new KisTagModel("", this);
 
     {
-        m_page->tableStorages->setModel(new KisStorageModel(this));
+        KisStorageModel *model = new KisStorageModel(this);
+        TableDelegate *delegate = new TableDelegate(m_page->tableResources);
+        m_page->tableStorages->setModel(model);
+        delegate->addDateTimeColumn(3); // creation date
+        delegate->addBooleanColumn(4); // preinstalled
+        delegate->addBooleanColumn(5); // active
+        m_page->tableStorages->setItemDelegate(delegate);
         m_page->tableStorages->hideColumn(0);
         m_page->tableStorages->setSelectionMode(QAbstractItemView::SingleSelection);
         m_page->tableStorages->resizeColumnsToContents();

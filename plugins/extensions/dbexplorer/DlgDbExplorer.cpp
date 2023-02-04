@@ -52,7 +52,12 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
 
     {
         KisResourceModel *resourcesModel = new KisResourceModel(ResourceType::Brushes, this);
+        TableDelegate *resourcesDelegate = new TableDelegate(m_page->tableResources);
+        resourcesDelegate->addBooleanColumn(6); // Status
+        resourcesDelegate->addBooleanColumn(12); // Dirty
+        resourcesDelegate->addBooleanColumn(14); // Active
         m_page->tableResources->setModel(resourcesModel);
+        m_page->tableResources->setItemDelegate(resourcesDelegate);
         m_page->tableResources->hideColumn(0);
         m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);
 

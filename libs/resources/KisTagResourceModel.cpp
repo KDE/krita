@@ -100,7 +100,11 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     if (!pos) {return v;}
 
     if (role < Qt::UserRole + TagId && index.column() < TagId) {
-        v = KisResourceQueryMapper::variantFromResourceQuery(d->query, index.column(), role, true);
+        return KisResourceQueryMapper::variantFromResourceQuery(d->query, index.column(), role, true);
+    }
+
+    if (role == Qt::FontRole) {
+        return QFont();
     }
 
     if (index.column() >= TagId) {

@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2023 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -14,15 +15,18 @@
 #include <QtSql>
 #include <QStyledItemDelegate>
 
-#include <TableModel.h>
-#include <KisResourceModel.h>
-#include <KisTagFilterResourceProxyModel.h>
-#include <KisResourceTypeModel.h>
-#include <KisTagModel.h>
-#include <KisStorageModel.h>
 #include <KisResourceItemDelegate.h>
 #include <KisResourceItemListView.h>
+#include <KisResourceModel.h>
+#include <KisResourceTypeModel.h>
+#include <KisStorageModel.h>
+#include <KisTagFilterResourceProxyModel.h>
+#include <KisTagModel.h>
+#include <KisTagResourceModel.h>
 
+#include "KisResourceCacheDb.h"
+#include "KisResourceModelProvider.h"
+#include "TableModel.h"
 
 DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     : KoDialog(parent)
@@ -82,6 +86,25 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         m_page->tableTags->setItemDelegate(tagsDelegate);
         m_page->tableTags->setSelectionMode(QAbstractItemView::SingleSelection);
         m_page->tableTags->resizeColumnsToContents();
+
+        connect(m_page->tableTags, &QTableView::clicked, this, &DlgDbExplorer::slotTbTagSelected);
+    }
+
+    {
+        KisTagResourceModel *model = new KisTagResourceModel(ResourceType::Brushes, this);
+        TableDelegate *delegate = new TableDelegate(m_page->tableTaggedResources);
+        delegate->addBooleanColumn(6); // status
+        delegate->addBooleanColumn(12); // dirty
+        delegate->addBooleanColumn(14); // resource active
+        delegate->addBooleanColumn(15); // storage active
+        delegate->addBooleanColumn(20); // resource active
+        delegate->addBooleanColumn(21); // tag active
+        delegate->addBooleanColumn(22); // storage active
+
+        m_page->tableTaggedResources->setModel(model);
+        m_page->tableTaggedResources->setItemDelegate(delegate);
+        m_page->tableTaggedResources->setSelectionMode(QAbstractItemView::NoSelection);
+        m_page->tableTaggedResources->resizeColumnsToContents();
     }
 
     {
@@ -180,6 +203,22 @@ void DlgDbExplorer::slotTbResourceItemSelected()
     //If we could get a list of versions for a given resource, this would be the moment to add them...
 }
 
+void DlgDbExplorer::slotTbTagSelected(const QModelIndex &index)
+{
+    // 0 == tag ID
+    const QModelIndex idx = m_page->tableTags->model()->index(index.row(), 0);
+    // get tag's resource type
+    const QModelIndex idx2 = m_page->tableTags->model()->index(index.row(), 1);
+
+    KisTagResourceModel *newModel = new KisTagResourceModel(idx2.data().value<QString>(), this);
+    newModel->setResourceFilter(KisTagResourceModel::ShowAllResources);
+    newModel->setTagsFilter(QVector<int>{idx.data().value<int>()});
+    QAbstractItemModel *oldModel = m_page->tableTaggedResources->model();
+    m_page->tableTaggedResources->setModel(newModel);
+    m_page->tableTaggedResources->resizeColumnsToContents();
+    oldModel->deleteLater();
+}
+
 void DlgDbExplorer::slotRvTagSelected(int index)
 {
     qDebug() << "selected tag" << index;
@@ -188,5 +227,6 @@ void DlgDbExplorer::slotRvTagSelected(int index)
 
     if (m_filterProxyModel && !tag.isNull() && tag->valid()) {
         m_filterProxyModel->setTagFilter(tag);
+        m_page->tableTaggedResources->resizeColumnsToContents();
     }
 }

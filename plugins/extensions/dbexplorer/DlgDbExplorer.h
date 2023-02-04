@@ -16,7 +16,7 @@ class KisResourceModel;
 class KisTagModel;
 class KisResourceTypeModel;
 class KisTagFilterResourceProxyModel;
-
+class QModelIndex;
 
 class WdgDbExplorer : public QWidget, public Ui::WdgDbExplorer
 {
@@ -42,6 +42,8 @@ private Q_SLOTS:
 
     void slotRvResourceTypeSelected(int index);
     void slotRvTagSelected(int index);
+
+    void slotTbTagSelected(const QModelIndex &index);
 
 private:
     void updateTagModel(const QString& resourceType);

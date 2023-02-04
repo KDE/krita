@@ -2,27 +2,26 @@
  *  SPDX-FileCopyrightText: 2020 Boudewijn Rempt <boud@valdyas.org>
  *  SPDX-FileCopyrightText: 2021 Agata Cacko <cacko.azh@gmail.com>
  *  SPDX-FileCopyrightText: 2022 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2023 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include "KisResourceQueryMapper.h"
 
-#include "kis_assert.h"
+#include <QBuffer>
+#include <QByteArray>
+#include <QDebug>
+#include <QImage>
+#include <QSqlError>
 #include <QString>
 #include <QVariant>
-#include <QImage>
-#include <QByteArray>
-#include <QBuffer>
-#include <QDebug>
-#include <QSqlError>
 
-#include "KisResourceModel.h"
 #include "KisResourceLocator.h"
+#include "KisResourceModel.h"
 #include "KisResourceModelProvider.h"
 #include "KisTag.h"
-
-
+#include "kis_assert.h"
 
 QImage KisResourceQueryMapper::getThumbnailFromQuery(const QSqlQuery &query, bool useResourcePrefix)
 {
@@ -126,6 +125,44 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
             return QVariant::fromValue<QImage>(getThumbnailFromQuery(query, useResourcePrefix));
         }
         return QVariant();
+    }
+    case Qt::CheckStateRole: {
+        switch (column) {
+        case KisAbstractResourceModel::Status:
+            if (query.value(useResourcePrefix ? "resource_active" : "status").toInt() == 0) {
+                return Qt::Unchecked;
+            } else {
+                return Qt::Checked;
+            }
+        case KisAbstractResourceModel::Dirty: {
+            const QString storageLocation = query.value("location").toString();
+            const QString filename = query.value(useResourcePrefix ? "resource_filename" : "filename").toString();
+
+            // An uncached resource has not been loaded, so it cannot be dirty
+            if (!KisResourceLocator::instance()->resourceCached(storageLocation, resourceType, filename)) {
+                return Qt::Unchecked;
+            } else {
+                // Now we have to check the resource, but that's cheap since it's been loaded in any case
+                KoResourceSP resource = KisResourceLocator::instance()->resourceForId(
+                    query.value(useResourcePrefix ? "resource_id" : "id").toInt());
+                return resource->isDirty() ? Qt::Checked : Qt::Unchecked;
+            }
+        }
+        case KisAbstractResourceModel::ResourceActive:
+            if (query.value("resource_active").toInt() == 0) {
+                return Qt::Unchecked;
+            } else {
+                return Qt::Checked;
+            }
+        case KisAbstractResourceModel::StorageActive:
+            if (query.value(useResourcePrefix ? "resource_storage_active" : "storage_active").toInt() == 0) {
+                return Qt::Unchecked;
+            } else {
+                return Qt::Checked;
+            }
+        default:
+            return {};
+        };
     }
     case Qt::StatusTipRole:
         return QVariant();

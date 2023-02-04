@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 00:55+0000\n"
-"PO-Revision-Date: 2023-02-02 08:54+0100\n"
+"PO-Revision-Date: 2023-02-03 16:07+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -13886,7 +13886,7 @@ msgstr "გადიდება"
 #, kde-format
 msgctxt "action"
 msgid "Zoom Out"
-msgstr "და_პატარავება"
+msgstr "დაპატარავება"
 
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -16620,7 +16620,7 @@ msgstr " px"
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:54
 #, kde-format
 msgid "Opacity"
-msgstr "_გაუმჭირვალობა"
+msgstr "გაუმჭვირვალობა"
 
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:20
 #: plugins/paintops/libpaintop/kis_pressure_flow_option.cpp:12
@@ -18103,7 +18103,7 @@ msgstr ""
 #, kde-format
 msgctxt "Lightness value in Lab color model"
 msgid "Lightness"
-msgstr "სიკა_შკაშე"
+msgstr "სიკაშკაშე"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/pigment/colorspaces/KoLabColorSpace.cpp:34
@@ -19048,7 +19048,7 @@ msgstr "HSL გაჯერებულობა"
 #, kde-format
 msgctxt "Blending mode - Lightness HSI"
 msgid "Lightness"
-msgstr "სიკა_შკაშე"
+msgstr "სიკაშკაშე"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:166
 #, kde-format
@@ -22040,7 +22040,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:68
 #, kde-format
 msgid "Layer name:"
-msgstr "ფე_ნის სახელი:"
+msgstr "ფენის სახელი:"
 
 #: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:89
 #, kde-format
@@ -25325,7 +25325,7 @@ msgstr ""
 #: libs/ui/forms/wdglayerproperties.ui:109
 #, kde-format
 msgid "Color space:"
-msgstr "ფერთა _სივრცე:"
+msgstr "ფერების სივრცე:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileTitle)
 #: libs/ui/forms/wdglayerproperties.ui:138
@@ -27805,7 +27805,7 @@ msgstr "შემცირება"
 #: libs/ui/input/kis_zoom_action.cpp:115
 #, kde-format
 msgid "Zoom Out"
-msgstr "და_პატარავება"
+msgstr "დაპატარავება"
 
 #: libs/ui/input/kis_zoom_action.cpp:116 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
@@ -32669,7 +32669,7 @@ msgstr "ვექტორული მონიშნული"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Replace"
-msgstr "_გამოცვლა"
+msgstr "ჩანაცვლება"
 
 #: libs/ui/widgets/kis_selection_options.cc:224
 #: libs/ui/widgets/kis_selection_options.cc:473
@@ -33049,7 +33049,7 @@ msgstr "ავტომატური"
 #, kde-format
 msgctxt "Name of Dither pattern value mode - Lightness"
 msgid "Lightness"
-msgstr "სიკა_შკაშე"
+msgstr "სიკაშკაშე"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #: libs/ui/widgets/KisDitherWidget.ui:129
@@ -36285,7 +36285,7 @@ msgstr ""
 #, kde-format
 msgctxt "Lightness HSI"
 msgid "Lightness"
-msgstr "სიკა_შკაშე"
+msgstr "სიკაშკაშე"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupHsi)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1246
@@ -40715,7 +40715,7 @@ msgstr "მენიუ:"
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:254
 #, kde-format
 msgid "Icon:"
-msgstr "_ხატულა:"
+msgstr "ხატულა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/info.ui:137
@@ -50983,7 +50983,7 @@ msgstr ""
 #, kde-format
 msgctxt "Option Category"
 msgid "Opacity"
-msgstr "_გაუმჭირვალობა"
+msgstr "გაუმჭვირვალობა"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:333
 #, kde-format

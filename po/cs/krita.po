@@ -29903,12 +29903,10 @@ msgid "Krita Palette (KPL)"
 msgstr ""
 
 #: libs/ui/KisPaletteEditor.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "GIMP Patterns"
+#, kde-format
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
-msgstr "Vzorky GIMPu"
+msgstr ""
 
 #: libs/ui/KisPaletteEditor.cpp:106
 #, kde-format
@@ -38100,10 +38098,9 @@ msgstr "Přidat barvu popředí"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLock)
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:139
-#, fuzzy, kde-format
-#| msgid "Save the current script"
+#, kde-format
 msgid "Lock the current palette."
-msgstr "Uložit aktuální skript"
+msgstr ""
 
 #: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
 #, kde-format

@@ -100,13 +100,12 @@ TableModel::~TableModel()
 
 QVariant TableModel::data(const QModelIndex &index, int role) const
 {
-    QVariant d = QSqlRelationalTableModel::data(index, Qt::DisplayRole);
+    QVariant d = QSqlRelationalTableModel::data(index, role);
     if (role == Qt::DisplayRole) {
         if (m_dateTimeColumns.contains(index.column())) {
-            d = QVariant::fromValue<QString>(QDateTime::fromSecsSinceEpoch(d.toInt()).toString());
-        }
-        if (m_booleanColumns.contains(index.column())) {
-            return QVariant();
+            return QDateTime::fromSecsSinceEpoch(d.toInt()).toString();
+        } else if (m_booleanColumns.contains(index.column())) {
+            return {};
         }
     }
     else if (role == Qt::CheckStateRole) {
@@ -118,10 +117,9 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
                 return Qt::Checked;
             }
         }
-        return QVariant();
+        return {};
     }
     return d;
-
 }
 
 bool TableModel::setData(const QModelIndex & index, const QVariant & value, int role)

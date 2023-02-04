@@ -1,4 +1,8 @@
 /*
+ *  SPDX-FileCopyrightText: 2020 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 Agata Cacko <cacko.azh@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 Dmitry Kazakov <dimula73@gmail.com>
+ *
  *  SPDX-License-Identifier: GPL-3.0-or-later
  */
 

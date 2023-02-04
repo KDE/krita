@@ -12,6 +12,7 @@
 #include <QBuffer>
 #include <QByteArray>
 #include <QDebug>
+#include <QFont>
 #include <QImage>
 #include <QSqlError>
 #include <QString>
@@ -72,6 +73,8 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
     const QString resourceType = query.value("resource_type").toString();
 
     switch(role) {
+    case Qt::FontRole:
+        return QFont();
     case Qt::DisplayRole:
     {
         switch(column) {

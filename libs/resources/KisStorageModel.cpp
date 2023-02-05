@@ -79,6 +79,50 @@ int KisStorageModel::columnCount(const QModelIndex &parent) const
     return (int)MetaData;
 }
 
+QImage KisStorageModel::getThumbnailFromQuery(const QSqlQuery &query)
+{
+    const QString storageLocation = query.value("location").toString();
+    const QString storageType = query.value("storage_type").toString();
+    const QString storageIdAsString = query.value("id").toString();
+
+    QImage img = KisResourceLocator::instance()->thumbnailCached(storageLocation, storageType, storageIdAsString);
+    if (!img.isNull()) {
+        return img;
+    } else {
+        const int storageId = query.value("id").toInt();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(storageId >= 0, img);
+
+        bool result = false;
+        QSqlQuery thumbQuery;
+        result = thumbQuery.prepare("SELECT thumbnail FROM storages WHERE id = :id");
+        if (!result) {
+            qWarning() << "Failed to prepare query for thumbnail of" << storageId << thumbQuery.lastError();
+            return img;
+        }
+
+        thumbQuery.bindValue(":id", storageId);
+
+        result = thumbQuery.exec();
+
+        if (!result) {
+            qWarning() << "Failed to execute query for thumbnail of" << storageId << thumbQuery.lastError();
+            return img;
+        }
+
+        if (!thumbQuery.next()) {
+            qWarning() << "Failed to find thumbnail of" << storageId;
+            return img;
+        }
+
+        QByteArray ba = thumbQuery.value("thumbnail").toByteArray();
+        QBuffer buf(&ba);
+        buf.open(QBuffer::ReadOnly);
+        img.load(&buf, "PNG");
+        KisResourceLocator::instance()->cacheThumbnail(storageLocation, storageType, storageIdAsString, img);
+        return img;
+    }
+}
+
 QVariant KisStorageModel::data(const QModelIndex &index, int role) const
 {
     QVariant v;
@@ -95,17 +139,17 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
 
     QSqlQuery query;
 
-    bool r = query.prepare("SELECT storages.id as id\n"
-                           ",      storage_types.name as storage_type\n"
-                           ",      location\n"
-                           ",      timestamp\n"
-                           ",      pre_installed\n"
-                           ",      active\n"
-                           ",      thumbnail\n"
-                           "FROM   storages\n"
-                           ",      storage_types\n"
-                           "WHERE  storages.storage_type_id = storage_types.id\n"
-                           "AND    location = :location");
+    bool r = query.prepare(
+        "SELECT storages.id as id\n"
+        ",      storage_types.name as storage_type\n"
+        ",      location\n"
+        ",      timestamp\n"
+        ",      pre_installed\n"
+        ",      active\n"
+        "FROM   storages\n"
+        ",      storage_types\n"
+        "WHERE  storages.storage_type_id = storage_types.id\n"
+        "AND    location = :location");
 
     if (!r) {
         qWarning() << "Could not prepare KisStorageModel data query" << query.lastError();
@@ -128,10 +172,8 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
 
     if ((role == Qt::DisplayRole || role == Qt::EditRole) && index.column() == Active) {
         return query.value("active");
-    }
-    else
-    {
-        switch(role) {
+    } else {
+        switch (role) {
         case Qt::DisplayRole:
         {
             switch(index.column()) {
@@ -149,12 +191,7 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
                 return query.value("active");
             case Thumbnail:
             {
-                QByteArray ba = query.value("thumbnail").toByteArray();
-                QBuffer buf(&ba);
-                buf.open(QBuffer::ReadOnly);
-                QImage img;
-                img.load(&buf, "PNG");
-                return QVariant::fromValue<QImage>(img);
+                return getThumbnailFromQuery(query);
             }
             case DisplayName:
             {
@@ -195,6 +232,12 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
                 return {};
             }
         }
+        case Qt::DecorationRole: {
+            if (index.column() == Thumbnail) {
+                return getThumbnailFromQuery(query);
+            }
+            return {};
+        }
         case Qt::UserRole + Id:
             return query.value("id");
         case Qt::UserRole + DisplayName:
@@ -220,14 +263,7 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
         case Qt::UserRole + Active:
             return query.value("active");
         case Qt::UserRole + Thumbnail:
-        {
-            QByteArray ba = query.value("thumbnail").toByteArray();
-            QBuffer buf(&ba);
-            buf.open(QBuffer::ReadOnly);
-            QImage img;
-            img.load(&buf, "PNG");
-            return QVariant::fromValue<QImage>(img);
-        }
+            return getThumbnailFromQuery(query);
         case Qt::UserRole + MetaData:
         {
             QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(query.value("location").toString());

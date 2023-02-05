@@ -141,19 +141,27 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     }
 
     {
-        QSqlTableModel *versionModel = new QSqlTableModel(this, QSqlDatabase::database());
+        TableModel *versionModel = new TableModel(this, QSqlDatabase::database());
+        TableDelegate *delegate = new TableDelegate(m_page->tableSchema);
         versionModel->setTable("version_information");
-        versionModel->setHeaderData(0, Qt::Horizontal, "id");
-        versionModel->setHeaderData(1, Qt::Horizontal, "database_version");
-        versionModel->setHeaderData(2, Qt::Horizontal, "krita_version");
-        versionModel->setHeaderData(3, Qt::Horizontal, "creation_date");
+        versionModel->setHeaderData(0, Qt::Horizontal, i18n("Id"));
+        versionModel->setHeaderData(1, Qt::Horizontal, i18n("Database version"));
+        versionModel->setHeaderData(2, Qt::Horizontal, i18n("Krita version"));
+        versionModel->setHeaderData(3, Qt::Horizontal, i18n("Upgrade date"));
+        versionModel->addDateTimeColumn(3);
+        delegate->addDateTimeColumn(3);
         versionModel->select();
-        const QSqlRecord r = versionModel->record(0);
 
-        m_page->lblDatabaseVersion->setText(r.value("database_version").toString());
-        m_page->lblKritaVersion->setText(r.value("krita_version").toString());
-        m_page->lblCreationDate->setText(
-            QDateTime::fromSecsSinceEpoch(r.value("creation_date").value<int>()).toString());
+        const QSqlRecord r = versionModel->record(0);
+        m_page->lblDatabaseVersion->setText(r.value(1).toString());
+        m_page->lblKritaVersion->setText(r.value(2).toString());
+        m_page->lblCreationDate->setText(QDateTime::fromSecsSinceEpoch(r.value(3).value<int>()).toString());
+
+        m_page->tableSchema->setModel(versionModel);
+        m_page->tableSchema->hideColumn(0);
+        m_page->tableSchema->setItemDelegate(delegate);
+        m_page->tableSchema->setSelectionMode(QAbstractItemView::NoSelection);
+        m_page->tableSchema->resizeColumnsToContents();
     }
 
 

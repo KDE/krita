@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-03 19:36+0300\n"
+"PO-Revision-Date: 2023-02-04 20:03+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4407,7 +4407,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Dodge.kpp"
 msgid "l) Adjust Dodge"
-msgstr "l) Atlamayı Ayarla"
+msgstr "l) Soldurmayı Ayarla"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -9266,7 +9266,7 @@ msgstr "Keskinleştir"
 #, kde-format
 msgctxt "action"
 msgid "B&urn"
-msgstr "Ya&zdır"
+msgstr "Y&ak"
 
 #. i18n: context: toolTip @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
@@ -9276,7 +9276,7 @@ msgstr "Ya&zdır"
 #, kde-format
 msgctxt "action"
 msgid "Burn"
-msgstr "Yazdır"
+msgstr "Yak"
 
 #. i18n: context: text @ Action (krita_filter_mean removal), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:980
@@ -10027,7 +10027,7 @@ msgstr "Çoklayıcı Harmanlama Kipini Seç"
 #, kde-format
 msgctxt "action"
 msgid "Select Color Burn Blending Mode"
-msgstr "Renk Alevi Karıştırma Kipini Seç"
+msgstr "Renk Yakma Harmanlama Kipini Seç"
 
 #. i18n: context: text @ Action (Select Linear Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10039,7 +10039,7 @@ msgstr "Renk Alevi Karıştırma Kipini Seç"
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Burn Blending Mode"
-msgstr "Dikey Alev Karıştırma Modunu Seç"
+msgstr "Doğrusal Yakma Harmanlama Kipini Seç"
 
 #. i18n: context: text @ Action (Select Lighten Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Lighten Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10051,7 +10051,7 @@ msgstr "Dikey Alev Karıştırma Modunu Seç"
 #, kde-format
 msgctxt "action"
 msgid "Select Lighten Blending Mode"
-msgstr "Aydınlatma Karıştırma Modunu Seç"
+msgstr "Aydınlatma Harmanlama Kipini Seç"
 
 #. i18n: context: text @ Action (Select Screen Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Screen Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10063,7 +10063,7 @@ msgstr "Aydınlatma Karıştırma Modunu Seç"
 #, kde-format
 msgctxt "action"
 msgid "Select Screen Blending Mode"
-msgstr "Ekran Karıştırma Modunu Seç"
+msgstr "Ekran Harmanlama Kipini Seç"
 
 #. i18n: context: text @ Action (Select Color Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Color Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10075,7 +10075,7 @@ msgstr "Ekran Karıştırma Modunu Seç"
 #, kde-format
 msgctxt "action"
 msgid "Select Color Dodge Blending Mode"
-msgstr "Renk Oyunlarını Karıştırma Kipini Seç"
+msgstr "Renk Soldurma Harmanlama Kipini Seç"
 
 #. i18n: context: text @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10087,7 +10087,7 @@ msgstr "Renk Oyunlarını Karıştırma Kipini Seç"
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Dodge Blending Mode"
-msgstr "Renk Oyunlarını Karıştırma Kipini Seç"
+msgstr "Doğrusal Soldurma Harmanlama Kipini Seç"
 
 #. i18n: context: text @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10183,7 +10183,7 @@ msgstr "Sabitleme Ișığı Kipini Seç"
 #, kde-format
 msgctxt "action"
 msgid "Select Hard Mix Blending Mode"
-msgstr "Güçlü Karıșım Harmanlama Kipini Seç"
+msgstr "Sert Karıșım Harmanlama Kipini Seç"
 
 #. i18n: context: text @ Action (Select Difference Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Difference Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -18344,13 +18344,13 @@ msgstr "KARŞIT OLMAYAN/NOT CONVERSE"
 #, kde-format
 msgctxt "Blending mode - Burn"
 msgid "Burn"
-msgstr "Yanma"
+msgstr "Yakma"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:63
 #, kde-format
 msgctxt "Blending mode - Linear Burn"
 msgid "Linear Burn"
-msgstr "Doğrusal Yanma"
+msgstr "Doğrusal Yakma"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:64
 #, kde-format
@@ -18386,19 +18386,19 @@ msgstr "Sis Koyulaştır (IFS Yanılsama)"
 #, kde-format
 msgctxt "Blending mode - Easy Burn"
 msgid "Easy Burn"
-msgstr "Basit Yanma"
+msgstr "Basit Yakma"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:71
 #, kde-format
 msgctxt "Blending mode - Color Dodge"
 msgid "Color Dodge"
-msgstr "Renk Sıçraması"
+msgstr "Renk Soldurma"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
 msgctxt "Blending mode - Linear Dodge"
 msgid "Linear Dodge"
-msgstr "Çizgisel Sıçrama"
+msgstr "Doğrusal Soldurma"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -18518,7 +18518,7 @@ msgstr "Sis Açıklaştır (IFS Yanılsama)"
 #, kde-format
 msgctxt "Blending mode - Easy Dodge"
 msgid "Easy Dodge"
-msgstr "Basit Sıçrama"
+msgstr "Basit Soldurma"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:93
 #, kde-format
@@ -18632,19 +18632,19 @@ msgstr "Alfa Karart"
 #, kde-format
 msgctxt "Blending mode - Hard Mix"
 msgid "Hard Mix"
-msgstr "Katı Karışım"
+msgstr "Sert Karışım"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:116
 #, kde-format
 msgctxt "Blending mode - Hard Mix (Photoshop)"
 msgid "Hard Mix (Photoshop)"
-msgstr "Katı Karışım (Photoshop)"
+msgstr "Sert Karışım (Photoshop)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:117
 #, kde-format
 msgctxt "Blending mode - Hard Mix Softer (Photoshop)"
 msgid "Hard Mix Softer (Photoshop)"
-msgstr "Daha Yumuşak Katı Karışım (Photoshop)"
+msgstr "Yumuşakça Sert Karışım (Photoshop)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:118
 #, kde-format

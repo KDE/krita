@@ -208,32 +208,28 @@
       <attribute name="title">
        <string>Resource View</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
-       <item>
-        <layout class="QFormLayout" name="formLayout_2">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_7">
-           <property name="text">
-            <string>Resource Type:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="KComboBox" name="cmbRvResourceTypes"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_8">
-           <property name="text">
-            <string>Tag:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QComboBox" name="cmbRvTags"/>
-         </item>
-        </layout>
+      <layout class="QFormLayout" name="formLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Resource Type:</string>
+         </property>
+        </widget>
        </item>
-       <item>
+       <item row="0" column="1">
+        <widget class="KComboBox" name="cmbRvResourceTypes"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Tag:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="cmbRvTags"/>
+       </item>
+       <item row="2" column="0" colspan="2">
         <widget class="KisResourceItemListView" name="resourceItemView"/>
        </item>
       </layout>

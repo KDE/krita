@@ -379,6 +379,12 @@ if (ANDROID OR CMAKE_CROSSCOMPILING)
     set(CROSS_LINKER_FLAGS "${CROSS_EXE_LINKER_FLAGS} --target=${CMAKE_C_COMPILER_TARGET}")
 endif()
 
+if (ANDROID)
+# Meson injects -D_FILE_OFFSET_BITS=64 which triggers off_t functions.
+# Alternatively, increase API level to 24.
+    set(CROSS_COMPILE_FLAGS "${CROSS_COMPILE_FLAGS} -D_LIBCPP_HAS_NO_OFF_T_FUNCTIONS")
+endif()
+
 if (CMAKE_OSX_ARCHITECTURES)
     set(CROSS_COMPILE_FLAGS "${CROSS_COMPILE_FLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}")
 endif()

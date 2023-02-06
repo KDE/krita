@@ -143,6 +143,60 @@ void KisJPEGXLTest::testHDR()
     }
 }
 
+void KisJPEGXLTest::testSpecialChannels()
+{
+    const auto inputFileName = TestUtil::fetchDataFileLazy("/sources/extrachannels/JXL-extrachannels.jxl");
+
+    QScopedPointer<KisDocument> doc1(qobject_cast<KisDocument *>(KisPart::instance()->createDocument()));
+
+    KisImportExportManager manager(doc1.data());
+    doc1->setFileBatchMode(true);
+
+    const auto status = manager.importDocument(inputFileName, {});
+    QVERIFY(status.isOk());
+
+    KisImageSP image = doc1->image();
+
+    const KisNodeSP depthLayer = KisLayerUtils::findNodeByName(image->root(), "JXL-Depth");
+    const KisNodeSP thermalLayer = KisLayerUtils::findNodeByName(image->root(), "JXL-Thermal");
+
+    QVERIFY(depthLayer);
+    QVERIFY(thermalLayer);
+
+    {
+        const auto outputFileName = TestUtil::fetchDataFileLazy("/results/JXL-extrachannels.kra");
+
+        KisDocument *doc2 = KisPart::instance()->createDocument();
+        doc2->setFileBatchMode(true);
+        const auto r = doc2->importDocument(outputFileName);
+
+        QVERIFY(r);
+        QVERIFY(doc2->errorMessage().isEmpty());
+        QVERIFY(doc2->image());
+
+        KisImageSP imageOut = doc2->image();
+
+        const KisNodeSP depthLayerOut = KisLayerUtils::findNodeByName(imageOut->root(), "JXL-Depth");
+        const KisNodeSP thermalLayerOut = KisLayerUtils::findNodeByName(imageOut->root(), "JXL-Thermal");
+
+        QVERIFY(depthLayerOut);
+        QVERIFY(thermalLayerOut);
+
+        QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(doc1->image()->root()->firstChild()->paintDevice(),
+                                                             doc2->image()->root()->firstChild()->paintDevice(),
+                                                             0));
+
+        QVERIFY(
+            TestUtil::comparePaintDevicesClever<uint8_t>(depthLayer->paintDevice(), depthLayerOut->paintDevice(), 0));
+
+        QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(thermalLayer->paintDevice(),
+                                                             thermalLayerOut->paintDevice(),
+                                                             0));
+
+        delete doc2;
+    }
+}
+
 inline void testSaveColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
 {
     const KoColorSpace *space = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, colorProfile);

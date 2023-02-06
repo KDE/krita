@@ -59,6 +59,7 @@ public:
     int m_durationFrameInTicks{0};
     KoID m_colorID;
     KoID m_depthID;
+    bool haveSpecialChannels = false;
     bool isCMYK = false;
     bool applyOOTF = true;
     float displayGamma = 1.2f;
@@ -67,6 +68,19 @@ public:
     const KoColorSpace *cs = nullptr;
     std::vector<quint8> kPlane;
     QVector<qreal> lCoef;
+};
+
+struct JxlImpSpcChannels {
+    uint32_t index;
+    std::vector<quint8> rawData;
+    QString chName;
+    KisLayerSP chLayer{nullptr};
+
+    JxlImpSpcChannels(uint32_t index, QString chName)
+        : index(index)
+        , chName(std::move(chName))
+    {
+    }
 };
 
 template<LinearizePolicy policy>
@@ -292,6 +306,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
     KisImageSP image{nullptr};
     KisLayerSP layer{nullptr};
     std::multimap<QByteArray, QByteArray> metadataBoxes;
+    std::vector<JxlImpSpcChannels> specialChannels;
     QByteArray boxType(5, 0x0);
     QByteArray box(16384, 0x0);
     auto boxSize = box.size();
@@ -311,14 +326,69 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 return ImportExportCodes::ErrorWhileReading;
             }
 
+            dbgFile << "Extra Channel[s] info:";
             for (uint32_t i = 0; i < d.m_info.num_extra_channels; i++) {
                 if (JXL_DEC_SUCCESS != JxlDecoderGetExtraChannelInfo(dec.get(), i, &d.m_extra)) {
                     errFile << "JxlDecoderGetExtraChannelInfo failed";
                     break;
                 }
+                // Channel name references taken from libjxl repo:
+                // https://github.com/libjxl/libjxl/blob/v0.8.0/lib/extras/enc/pnm.cc#L262
+                // With added "JXL-" prefix to indicate that it comes from JXL image.
+                const QString channelTypeString = [&]() {
+                    switch (d.m_extra.type) {
+                    case JXL_CHANNEL_ALPHA:
+                        return QString("JXL-Alpha");
+                    case JXL_CHANNEL_DEPTH:
+                        return QString("JXL-Depth");
+                    case JXL_CHANNEL_SPOT_COLOR:
+                        return QString("JXL-SpotColor");
+                    case JXL_CHANNEL_SELECTION_MASK:
+                        return QString("JXL-SelectionMask");
+                    case JXL_CHANNEL_BLACK:
+                        return QString("JXL-Black");
+                    case JXL_CHANNEL_CFA:
+                        return QString("JXL-CFA");
+                    case JXL_CHANNEL_THERMAL:
+                        return QString("JXL-Thermal");
+                    default:
+                        return QString("JXL-UNKNOWN");
+                    }
+                }();
+
+                // List all extra channels
+                dbgFile << "index:" << i << " | type:" << channelTypeString;
                 if (d.m_extra.type == JXL_CHANNEL_BLACK) {
                     d.isCMYK = true;
                     d.cmykChannelID = i;
+                }
+                if (d.m_extra.type != JXL_CHANNEL_BLACK && d.m_extra.type != JXL_CHANNEL_ALPHA) {
+                    // Get channel name as well if it exists
+                    if (d.m_extra.name_length) {
+                        KIS_SAFE_ASSERT_RECOVER(d.m_extra.name_length < std::numeric_limits<int>::max())
+                        {
+                            document->setErrorMessage(i18nc("JPEG-XL", "Invalid length for extra channel %1 of type %2")
+                                                          .arg(i)
+                                                          .arg(channelTypeString));
+                            return ImportExportCodes::FormatFeaturesUnsupported;
+                        }
+                        QByteArray rawNameExtra;
+                        rawNameExtra.resize(static_cast<int>(d.m_extra.name_length + 1));
+                        if (JXL_DEC_SUCCESS
+                            != JxlDecoderGetExtraChannelName(dec.get(),
+                                                             i,
+                                                             rawNameExtra.data(),
+                                                             static_cast<size_t>(rawNameExtra.size()))) {
+                            errFile << "JxlDecoderGetExtraChannelName failed";
+                            break;
+                        }
+                        dbgFile << "\tname:" << QString(rawNameExtra);
+                        const QString fullNameString = channelTypeString + "/" + QString(rawNameExtra);
+                        specialChannels.emplace_back(i, fullNameString);
+                    } else {
+                        specialChannels.emplace_back(i, channelTypeString);
+                    }
+                    d.haveSpecialChannels = true;
                 }
             }
 
@@ -531,6 +601,14 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                                  "JPEG-XL image");
 
             layer = new KisPaintLayer(image, image->nextLayerName(), UCHAR_MAX);
+            // Prepare layers for special channels
+            for (auto &spc : specialChannels) {
+                spc.chLayer = new KisPaintLayer(image, spc.chName, UCHAR_MAX);
+                // Set special channels to be hidden by default,
+                // to make sure that the base image is displayed first when
+                // opening a JXL file, just to prevent confusion.
+                spc.chLayer->setVisible(false);
+            }
         } else if (status == JXL_DEC_NEED_IMAGE_OUT_BUFFER) {
             d.m_currentFrame = new KisPaintDevice(image->colorSpace());
             const JxlImageOutCallback callback = generateCallback(d);
@@ -556,6 +634,27 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                                                        d.kPlane.data(),
                                                        bufferSize,
                                                        d.cmykChannelID)) {
+                    errFile << "JxlDecoderSetExtraChannelBuffer failed";
+                    return ImportExportCodes::ErrorWhileReading;
+                    break;
+                }
+            }
+
+            for (auto &spc : specialChannels) {
+                size_t bufferSize = 0;
+                if (JXL_DEC_SUCCESS
+                    != JxlDecoderExtraChannelBufferSize(dec.get(), &d.m_pixelFormat, &bufferSize, spc.index)) {
+                    errFile << "JxlDecoderExtraChannelBufferSize failed";
+                    return ImportExportCodes::ErrorWhileReading;
+                    break;
+                }
+                spc.rawData.resize(bufferSize);
+                if (JXL_DEC_SUCCESS
+                    != JxlDecoderSetExtraChannelBuffer(dec.get(),
+                                                       &d.m_pixelFormat,
+                                                       spc.rawData.data(),
+                                                       bufferSize,
+                                                       spc.index)) {
                     errFile << "JxlDecoderSetExtraChannelBuffer failed";
                     return ImportExportCodes::ErrorWhileReading;
                     break;
@@ -638,6 +737,35 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     KIS_ASSERT(kfc);
                     f->process(d.m_currentFrame, {0, 0, static_cast<int>(d.m_info.xsize), static_cast<int>(d.m_info.ysize)}, kfc->cloneWithResourcesSnapshot());
                 }
+                if (d.haveSpecialChannels) {
+                    const quint8 *alphaRef =
+                        d.m_currentFrame
+                            ->readPlanarBytes(0, 0, static_cast<int>(d.m_info.xsize), static_cast<int>(d.m_info.ysize))
+                            .last();
+                    QVector<quint8 *> planes(static_cast<int>(image->colorSpace()->channelCount()));
+                    for (auto &spc : specialChannels) {
+                        if (d.m_colorID == RGBAColorModelID) {
+                            planes[0] = reinterpret_cast<quint8 *>(spc.rawData.data());
+                            planes[1] = reinterpret_cast<quint8 *>(spc.rawData.data());
+                            planes[2] = reinterpret_cast<quint8 *>(spc.rawData.data());
+                            planes[3] = const_cast<quint8 *>(alphaRef); /* inherit alpha */
+                        } else if (d.m_colorID == GrayAColorModelID) {
+                            planes[0] = reinterpret_cast<quint8 *>(spc.rawData.data());
+                            planes[1] = const_cast<quint8 *>(alphaRef); /* inherit alpha */
+                        } else if (d.m_colorID == CMYKAColorModelID) {
+                            planes[0] = reinterpret_cast<quint8 *>(spc.rawData.data());
+                            planes[1] = reinterpret_cast<quint8 *>(spc.rawData.data());
+                            planes[2] = reinterpret_cast<quint8 *>(spc.rawData.data());
+                            planes[3] = reinterpret_cast<quint8 *>(spc.rawData.data());
+                            planes[4] = const_cast<quint8 *>(alphaRef); /* inherit alpha */
+                        }
+                        spc.chLayer->paintDevice()->writePlanarBytes(planes,
+                                                                     0,
+                                                                     0,
+                                                                     static_cast<int>(d.m_info.xsize),
+                                                                     static_cast<int>(d.m_info.ysize));
+                    }
+                }
                 layer->paintDevice()->makeCloneFrom(d.m_currentFrame, image->bounds());
             }
         } else if (status == JXL_DEC_SUCCESS || status == JXL_DEC_BOX) {
@@ -693,6 +821,10 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 // It's not required to call JxlDecoderReleaseInput(dec.get()) here since
                 // the decoder will be destroyed.
                 image->addNode(layer, image->rootLayer().data());
+                // Slip special channel layers into layer stack
+                for (const JxlImpSpcChannels &spc : specialChannels) {
+                    image->addNode(spc.chLayer, image->rootLayer().data());
+                }
                 document->setCurrentImage(image);
                 return ImportExportCodes::OK;
             } else {

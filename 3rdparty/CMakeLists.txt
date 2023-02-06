@@ -438,6 +438,14 @@ if (MSVC)
     set(_cpp_ld "cpp_ld = ['${CMAKE_LINKER}'] + cross_link_args")
 endif()
 
+if (CMAKE_CROSSCOMPILING AND NOT APPLE)
+find_package(Python 3.0 COMPONENTS Interpreter REQUIRED)
+set_package_properties(Python PROPERTIES
+    DESCRIPTION "Python Library"
+    URL "https://www.python.org"
+    TYPE REQUIRED
+    PURPOSE "Required to run Meson when crosscompiling")
+endif()
 find_program(MESON_BINARY_PATH meson)
 find_program(NINJA_BINARY_PATH ninja)
 find_package(PkgConfig QUIET ${CROSSCOMPILING})

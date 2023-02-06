@@ -129,7 +129,7 @@ if (WIN32)
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
       GIT_TAG ${QT_GIT_TAG}
-      GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtwinextras qttranslations
+      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtmultimedia qtsvg qtwinextras qttranslations
       GIT_SUBMODULES_RECURSE false
       GIT_PROGRESS true
       GIT_REMOTE_UPDATE_STRATEGY REBASE
@@ -152,7 +152,7 @@ elseif (ANDROID)
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
       GIT_TAG ${QT_GIT_TAG}
-      GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qttranslations qtandroidextras
+      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtmultimedia qtsvg qttranslations qtandroidextras
       GIT_SUBMODULES_RECURSE false
       GIT_PROGRESS true
       GIT_REMOTE_UPDATE_STRATEGY REBASE
@@ -196,7 +196,7 @@ elseif (NOT APPLE)
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
       GIT_TAG ${QT_GIT_TAG}
-      GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtx11extras qttranslations
+      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtmultimedia qtsvg qtx11extras qttranslations
       GIT_SUBMODULES_RECURSE false
       GIT_PROGRESS true
       GIT_REMOTE_UPDATE_STRATEGY REBASE
@@ -225,7 +225,7 @@ else( APPLE )
         ext_qt
         GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
         GIT_TAG ${QT_GIT_TAG}
-        GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtmacextras qttranslations
+        GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtmultimedia qtsvg qtmacextras qttranslations
         GIT_SUBMODULES_RECURSE false
         GIT_PROGRESS true
         GIT_REMOTE_UPDATE_STRATEGY REBASE

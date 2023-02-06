@@ -223,6 +223,7 @@ void KisWdgOptionsJPEGXL::setConfiguration(const KisPropertiesConfigurationSP cf
     spnGamma->setValue(cfg->getDouble("HLGgamma", 1.2));
     chkHLGOOTF->setChecked(cfg->getBool("removeHGLOOTF", true));
 
+    chkSpcChannels->setChecked(cfg->getBool("spcChannels", false));
     resampling->setCurrentIndex(resampling->findData(cfg->getInt("resampling", -1)));
     extraChannelResampling->setCurrentIndex(
         extraChannelResampling->findData(cfg->getInt("extraChannelResampling", -1)));
@@ -272,6 +273,7 @@ KisPropertiesConfigurationSP KisWdgOptionsJPEGXL::configuration() const
     cfg->setProperty("HLGgamma", spnGamma->value());
     cfg->setProperty("removeHGLOOTF", chkHLGOOTF->isChecked());
 
+    cfg->setProperty("spcChannels", chkSpcChannels->isChecked());
     cfg->setProperty("resampling", resampling->currentData());
     cfg->setProperty("extraChannelResampling", extraChannelResampling->currentData());
     cfg->setProperty("photonNoise", photonNoise->value());

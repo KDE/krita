@@ -23,7 +23,7 @@ if (WIN32)
 
         DEPENDS ext_python ${NINJA_DEP}
     )
-else()
+elif(NOT CMAKE_CROSSCOMPILING OR APPLE)
     set(_meson_prefix "${PREFIX_ext_meson}")
 
     ExternalProject_Add( ext_meson
@@ -48,5 +48,20 @@ else()
         UPDATE_COMMAND ""
 
         DEPENDS ext_python ${NINJA_DEP}
+    )
+else()
+    set(_meson_prefix "${PREFIX_ext_meson}")
+    # Meson needs to be brought manually when crosscompiling.
+    ExternalProject_Add(ext_meson
+        DOWNLOAD_COMMAND ""
+
+        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E echo "Installing meson natively"
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
+            ${Python_EXECUTABLE} -m pip install --upgrade meson==0.63.0 --prefix=${_meson_prefix} --ignore-installed
+
+        UPDATE_COMMAND ""
+
+        DEPENDS ${NINJA_DEP}
     )
 endif()

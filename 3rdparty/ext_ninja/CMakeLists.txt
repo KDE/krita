@@ -1,4 +1,6 @@
 SET(PREFIX_ext_ninja "${EXTPREFIX}" )
+
+if (NOT CMAKE_CROSSCOMPILING OR APPLE)
 ExternalProject_Add(ext_ninja
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://github.com/ninja-build/ninja/archive/v1.11.0.tar.gz
@@ -9,3 +11,17 @@ ExternalProject_Add(ext_ninja
 
     UPDATE_COMMAND ""
 )
+else()
+    # Ninja needs to be brought manually.
+    ExternalProject_Add(ext_ninja
+        DOWNLOAD_COMMAND ""
+
+        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E echo "Installing ninja natively"
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
+                PYTHONPATH=${_krita_pythonpath}
+                ${Python_EXECUTABLE} -m pip install --upgrade ninja==1.11.1 --prefix=${PREFIX_ext_ninja} --ignore-installed
+
+        UPDATE_COMMAND ""
+    )
+endif()

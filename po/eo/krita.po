@@ -12416,7 +12416,7 @@ msgstr "Tondi Ĉiujn Tavolojn"
 #, kde-format
 msgctxt "action"
 msgid "&Offset Layer..."
-msgstr ""
+msgstr "&Deŝova Tavolo..."
 
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
@@ -12426,14 +12426,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Offset Layer"
-msgstr ""
+msgstr "Deŝova Tavolo"
 
 #. i18n: context: text @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3328
 #, kde-format
 msgctxt "action"
 msgid "Clones &Array..."
-msgstr ""
+msgstr "Klonoj T&abelo..."
 
 #. i18n: context: toolTip @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
@@ -12443,14 +12443,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Clones Array"
-msgstr ""
+msgstr "Klonoj Array"
 
 #. i18n: context: text @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3340
 #, kde-format
 msgctxt "action"
 msgid "&Edit metadata..."
-msgstr ""
+msgstr "R&edakti metadatumojn..."
 
 #. i18n: context: toolTip @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
@@ -12460,14 +12460,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Edit metadata"
-msgstr ""
+msgstr "Redaktu metadatenojn"
 
 #. i18n: context: text @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3352
 #, kde-format
 msgctxt "action"
 msgid "&Histogram..."
-msgstr ""
+msgstr "&Histogramo..."
 
 #. i18n: context: toolTip @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (histogram), Actions (Layers), ActionCollection (Krita)
@@ -12477,14 +12477,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Histogram"
-msgstr ""
+msgstr "Histogramo"
 
 #. i18n: context: text @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3364
 #, kde-format
 msgctxt "action"
 msgid "&Convert Layer Color Space..."
-msgstr ""
+msgstr "&Konverti Tavolan Kolorspacon..."
 
 #. i18n: context: toolTip @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
@@ -12494,14 +12494,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert Layer Color Space"
-msgstr ""
+msgstr "Konverti Tavola Kolora Spaco"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3376
 #, kde-format
 msgctxt "action"
 msgid "&Merge with Layer Below"
-msgstr ""
+msgstr "Kunfandi kun Tavolo &Malsupra"
 
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
@@ -12511,14 +12511,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Merge with Layer Below"
-msgstr ""
+msgstr "Kunfandi kun Tavolo Malsupra"
 
 #. i18n: context: text @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3388
 #, kde-format
 msgctxt "action"
 msgid "&Flatten Layer"
-msgstr ""
+msgstr "&Platigi Tavolon"
 
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
@@ -12528,14 +12528,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Flatten Layer"
-msgstr ""
+msgstr "Platigi Tavolon"
 
 #. i18n: context: text @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3400
 #, kde-format
 msgctxt "action"
 msgid "Flatten ima&ge"
-msgstr ""
+msgstr "Plati&gi bildon"
 
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
@@ -12545,14 +12545,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Flatten image"
-msgstr ""
+msgstr "Platigi bildon"
 
 #. i18n: context: text @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3412
 #, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
-msgstr ""
+msgstr "Ta&vola stilo..."
 
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
@@ -12562,7 +12562,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Layer Style"
-msgstr ""
+msgstr "Tavola Stilo"
 
 #. i18n: context: text @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
@@ -12574,7 +12574,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Move into previous group"
-msgstr ""
+msgstr "Movu al la antaŭa grupo"
 
 #. i18n: context: text @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
@@ -12586,7 +12586,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Move into next group"
-msgstr ""
+msgstr "Movu al la sekva grupo"
 
 #. i18n: context: text @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
@@ -12598,14 +12598,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rename current layer"
-msgstr ""
+msgstr "Alinomi nunan tavolon"
 
 #. i18n: context: text @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3460
 #, kde-format
 msgctxt "action"
 msgid "&Remove Layer"
-msgstr ""
+msgstr "Fo&rigi Tavolon"
 
 #. i18n: context: toolTip @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
@@ -12615,7 +12615,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Remove Layer"
-msgstr ""
+msgstr "Forigi Tavolon"
 
 #. i18n: context: text @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
@@ -12625,7 +12625,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Up"
-msgstr ""
+msgstr "Movu Tavolon aŭ Maskon Supren"
 
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
@@ -12635,14 +12635,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Down"
-msgstr ""
+msgstr "Movu Tavolon aŭ Maskon Suben"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492
 #, kde-format
 msgctxt "action"
 msgid "&Properties..."
-msgstr ""
+msgstr "&Propraĵoj..."
 
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
@@ -12652,28 +12652,28 @@ msgstr ""
 #, kde-format
 msgctxt "Layer Properties"
 msgid "Properties"
-msgstr ""
+msgstr "Trajtoj"
 
 #. i18n: context: text @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3504
 #, kde-format
 msgctxt "action"
 msgid "Set Copy F&rom..."
-msgstr ""
+msgstr "Ago&rdi Kopiadon De..."
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3506
 #, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layer(s)."
-msgstr ""
+msgstr "Agordu la fonton por la elektita(j) klonaj tavoloj."
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3507
 #, kde-format
 msgctxt "action"
 msgid "Set Copy From"
-msgstr ""
+msgstr "Agordi Kopiadon De"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -12689,33 +12689,33 @@ msgstr "&Dosiero"
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:11
 #, kde-format
 msgid "&Edit"
-msgstr "&Redakti"
+msgstr "R&edakti"
 
 #: krita/krita5.xmlgui:68
 #, kde-format
 msgid "Fill Special"
-msgstr ""
+msgstr "Plenigu Speciala"
 
 #: krita/krita5.xmlgui:83 libs/widgetutils/xmlgui/ui_standards.xmlgui:101
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:28
 #, kde-format
 msgid "&View"
-msgstr "&Rigardi"
+msgstr "&Vido"
 
 #: krita/krita5.xmlgui:89
 #, kde-format
 msgid "Wrap Around Mode Direction"
-msgstr ""
+msgstr "Envolvu Ĉirkaŭ Mode Direkton"
 
 #: krita/krita5.xmlgui:99
 #, kde-format
 msgid "&Zoom, Rotate, and Mirror"
-msgstr ""
+msgstr "&Zomi, Rotacii kaj Speguli"
 
 #: krita/krita5.xmlgui:131
 #, kde-format
 msgid "&Snap To"
-msgstr ""
+msgstr "&Alklaki Al"
 
 #: krita/krita5.xmlgui:154
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.xmlgui:4
@@ -12737,30 +12737,30 @@ msgstr "&Rotacii"
 #: plugins/extensions/waveletdecompose/waveletdecompose.xmlgui:4
 #, kde-format
 msgid "&Layer"
-msgstr "&Ebeno"
+msgstr "Tavo&lo"
 
 #: krita/krita5.xmlgui:197
 #, kde-format
 msgctxt "New layer"
 msgid "&New"
-msgstr ""
+msgstr "&Nova"
 
 #: krita/krita5.xmlgui:207
 #, kde-format
 msgid "&Import/Export"
-msgstr ""
+msgstr "&Importi/Eksporti"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
 #: krita/krita5.xmlgui:214
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, kde-format
 msgid "Import"
-msgstr ""
+msgstr "Importi"
 
 #: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1236
 #, kde-format
 msgid "&Convert"
-msgstr ""
+msgstr "&Konverti"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
@@ -12770,38 +12770,38 @@ msgstr ""
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
-msgstr "&Elekti"
+msgstr "&Selekti"
 
 #: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1216
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
-msgstr ""
+msgstr "&Grupo"
 
 #: krita/krita5.xmlgui:247
 #, kde-format
 msgid "&Transform"
-msgstr ""
+msgstr "&Transformi"
 
 #: krita/krita5.xmlgui:264
 #, kde-format
 msgid "Transform &All Layers"
-msgstr ""
+msgstr "Tr&ansformi Ĉiujn Tavolojn"
 
 #: krita/krita5.xmlgui:279
 #, kde-format
 msgid "S&plit"
-msgstr ""
+msgstr "Di&vidi"
 
 #: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1243
 #, kde-format
 msgid "S&plit Alpha"
-msgstr ""
+msgstr "Di&vidi Alfa"
 
 #: krita/krita5.xmlgui:326
 #, kde-format
 msgid "Select &Opaque"
-msgstr ""
+msgstr "Elekti &Opakon"
 
 #: krita/krita5.xmlgui:341
 #, kde-format
@@ -12816,51 +12816,51 @@ msgstr "&Iloj"
 #: krita/krita5.xmlgui:363
 #, kde-format
 msgid "Scripts"
-msgstr ""
+msgstr "Skriptoj"
 
 #: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
 #, kde-format
 msgid "Setti&ngs"
-msgstr ""
+msgstr "Agordoj"
 
 #: krita/krita5.xmlgui:392 libs/widgetutils/xmlgui/khelpmenu.cpp:132
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"
-msgstr ""
+msgstr "&Helpo"
 
 #: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:126
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
 #, kde-format
 msgid "File"
-msgstr ""
+msgstr "Dosiero"
 
 #: krita/krita5.xmlgui:419
 #, kde-format
 msgid "Brushes and Stuff"
-msgstr ""
+msgstr "Penikloj kaj Aĵoj"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
 #, kde-format
 msgctxt "action"
 msgid "File"
-msgstr ""
+msgstr "Dosiero"
 
 #. i18n: context: text @ Action (file_new), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:7
 #, kde-format
 msgctxt "New document"
 msgid "&New..."
-msgstr ""
+msgstr "&Nova..."
 
 #. i18n: context: toolTip @ Action (file_new), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:9
 #, kde-format
 msgctxt "action"
 msgid "Create new document"
-msgstr ""
+msgstr "Krei novan dokumenton"
 
 #. i18n: context: iconText @ Action (file_new), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:10
@@ -12874,49 +12874,49 @@ msgstr "Nova"
 #, kde-format
 msgctxt "action"
 msgid "&Open..."
-msgstr ""
+msgstr "Malferm&o..."
 
 #. i18n: context: toolTip @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:21
 #, kde-format
 msgctxt "action"
 msgid "Open an existing document"
-msgstr ""
+msgstr "Malfermi ekzistantan dokumenton"
 
 #. i18n: context: iconText @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:22
 #, kde-format
 msgctxt "action"
 msgid "Open"
-msgstr ""
+msgstr "Malfermi"
 
 #. i18n: context: text @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:31
 #, kde-format
 msgctxt "action"
 msgid "Open &Recent"
-msgstr ""
+msgstr "Malfe&rmi Lastatempajn"
 
 #. i18n: context: toolTip @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:33
 #, kde-format
 msgctxt "action"
 msgid "Open a document which was recently opened"
-msgstr ""
+msgstr "Malfermu dokumenton kiu estis lastatempe malfermita"
 
 #. i18n: context: iconText @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:34
 #, kde-format
 msgctxt "action"
 msgid "Open Recent"
-msgstr ""
+msgstr "Malfermu Lastatempaj"
 
 #. i18n: context: text @ Action (file_save), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:43
 #, kde-format
 msgctxt "action"
 msgid "&Save"
-msgstr ""
+msgstr "Kon&servi"
 
 #. i18n: context: toolTip @ Action (file_save), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_save), Actions (File), ActionCollection (Menu)
@@ -12933,49 +12933,49 @@ msgstr "Konservi"
 #, kde-format
 msgctxt "action"
 msgid "Save &As..."
-msgstr ""
+msgstr "Konserv&ado kiel..."
 
 #. i18n: context: toolTip @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:57
 #, kde-format
 msgctxt "action"
 msgid "Save document under a new name"
-msgstr ""
+msgstr "Konservi dokumenton sub nova nomo"
 
 #. i18n: context: iconText @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:58
 #, kde-format
 msgctxt "action"
 msgid "Save As"
-msgstr ""
+msgstr "Konservi kiel"
 
 #. i18n: context: text @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:67
 #, kde-format
 msgctxt "action"
 msgid "Sessions..."
-msgstr ""
+msgstr "Sesioj..."
 
 #. i18n: context: toolTip @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:69
 #, kde-format
 msgctxt "action"
 msgid "Open session manager"
-msgstr ""
+msgstr "Malfermi seancan administranton"
 
 #. i18n: context: iconText @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:70
 #, kde-format
 msgctxt "action"
 msgid "Sessions"
-msgstr ""
+msgstr "Sesioj"
 
 #. i18n: context: text @ Action (file_import_file), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:80
 #, kde-format
 msgctxt "action"
 msgid "Open ex&isting Document as Untitled Document..."
-msgstr ""
+msgstr "Malfermi ekz&istantan Dokumenton kiel Sentitola Dokumento..."
 
 #. i18n: context: toolTip @ Action (file_import_file), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_file), Actions (File), ActionCollection (Menu)
@@ -12985,14 +12985,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Open existing Document as Untitled Document"
-msgstr ""
+msgstr "Malfermi ekzistantan Dokumenton kiel Sentitola Dokumento"
 
 #. i18n: context: text @ Action (file_export_file), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:92
 #, kde-format
 msgctxt "action"
 msgid "E&xport..."
-msgstr ""
+msgstr "E&ksporti..."
 
 #. i18n: context: toolTip @ Action (file_export_file), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_export_file), Actions (File), ActionCollection (Menu)
@@ -13005,28 +13005,28 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Export"
-msgstr ""
+msgstr "Eksporto"
 
 #. i18n: context: text @ Action (file_export_advanced), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:104
 #, kde-format
 msgctxt "action"
 msgid "Export Advanced..."
-msgstr ""
+msgstr "Eksporti Altnivelan..."
 
 #. i18n: context: toolTip @ Action (file_export_advanced), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:106
 #, kde-format
 msgctxt "action"
 msgid "Advanced Export"
-msgstr ""
+msgstr "Altnivela Eksporto"
 
 #. i18n: context: text @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:117
 #, kde-format
 msgctxt "action"
 msgid "Import animation frames..."
-msgstr ""
+msgstr "Importi animaciajn kadrojn..."
 
 #. i18n: context: toolTip @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
@@ -13036,14 +13036,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Import animation frames"
-msgstr ""
+msgstr "Importi kuraĝigajn kadrojn"
 
 #. i18n: context: text @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:129
 #, kde-format
 msgctxt "action"
 msgid "Import video animation..."
-msgstr ""
+msgstr "Importi videoan animacion..."
 
 #. i18n: context: toolTip @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
@@ -13053,21 +13053,21 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Import video animation"
-msgstr ""
+msgstr "Importi videoan kuraĝigon"
 
 #. i18n: context: text @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:141
 #, kde-format
 msgctxt "action"
 msgid "&Render Animation..."
-msgstr ""
+msgstr "&Redoni Animacion..."
 
 #. i18n: context: toolTip @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:143
 #, kde-format
 msgctxt "action"
 msgid "Render Animation to GIF, Image Sequence or Video"
-msgstr ""
+msgstr "Bildigi Animacion al GIF, Bilda Sekvenco aŭ Video"
 
 #. i18n: context: iconText @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
@@ -13077,28 +13077,28 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Render Animation"
-msgstr ""
+msgstr "Bildigi Animacion"
 
 #. i18n: context: text @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:153
 #, kde-format
 msgctxt "action"
 msgid "&Render Animation Again"
-msgstr ""
+msgstr "Bildigi Animacion &Refoje"
 
 #. i18n: context: toolTip @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:155
 #, kde-format
 msgctxt "action"
 msgid "Render Animation Again"
-msgstr ""
+msgstr "Bildigi Animacion Refoje"
 
 #. i18n: context: text @ Action (save_incremental_version), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:165
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental &Version"
-msgstr ""
+msgstr "Konservi Alkrementan &Version"
 
 #. i18n: context: toolTip @ Action (save_incremental_version), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (save_incremental_version), Actions (File), ActionCollection (Menu)
@@ -13108,14 +13108,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental Version"
-msgstr ""
+msgstr "Konservi Alkrementan Version"
 
 #. i18n: context: text @ Action (save_incremental_backup), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:177
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental &Backup"
-msgstr ""
+msgstr "Konservi Krementan &Sekurkopion"
 
 #. i18n: context: toolTip @ Action (save_incremental_backup), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (save_incremental_backup), Actions (File), ActionCollection (Menu)
@@ -13125,14 +13125,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental Backup"
-msgstr ""
+msgstr "Konservi Alkrementan Rezervon"
 
 #. i18n: context: text @ Action (create_template), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:189
 #, kde-format
 msgctxt "action"
 msgid "&Create Template From Image..."
-msgstr ""
+msgstr "&Krei Ŝablonon el Bildo..."
 
 #. i18n: context: toolTip @ Action (create_template), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (create_template), Actions (File), ActionCollection (Menu)
@@ -13142,14 +13142,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Create Template From Image"
-msgstr ""
+msgstr "Krei Ŝablonon El Bildo"
 
 #. i18n: context: text @ Action (create_copy), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:201
 #, kde-format
 msgctxt "action"
 msgid "Create Copy &From Current Image"
-msgstr ""
+msgstr "Krei Kopion &El Nuna Bildo"
 
 #. i18n: context: toolTip @ Action (create_copy), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (create_copy), Actions (File), ActionCollection (Menu)
@@ -13159,14 +13159,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Create Copy From Current Image"
-msgstr ""
+msgstr "Krei Kopion de Nuna Bildo"
 
 #. i18n: context: text @ Action (file_documentinfo), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:213
 #, kde-format
 msgctxt "action"
 msgid "&Document Information"
-msgstr ""
+msgstr "&Dokumenta Informo"
 
 #. i18n: context: toolTip @ Action (file_documentinfo), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_documentinfo), Actions (File), ActionCollection (Menu)
@@ -13176,14 +13176,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Document Information"
-msgstr ""
+msgstr "Dokumentaj Informoj"
 
 #. i18n: context: text @ Action (file_close_all), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:225
 #, kde-format
 msgctxt "action"
 msgid "&Close All"
-msgstr ""
+msgstr "&Fermi Ĉion"
 
 #. i18n: context: toolTip @ Action (file_close_all), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_close_all), Actions (File), ActionCollection (Menu)
@@ -13193,14 +13193,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Close All"
-msgstr ""
+msgstr "Fermi Ĉion"
 
 #. i18n: context: text @ Action (file_close), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:237
 #, kde-format
 msgctxt "action"
 msgid "C&lose"
-msgstr ""
+msgstr "Fer&mi"
 
 #. i18n: context: toolTip @ Action (file_close), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_close), Actions (File), ActionCollection (Menu)
@@ -13210,35 +13210,35 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Close"
-msgstr ""
+msgstr "Fermi"
 
 #. i18n: context: text @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:249
 #, kde-format
 msgctxt "action"
 msgid "&Quit"
-msgstr ""
+msgstr "&Forlasi"
 
 #. i18n: context: toolTip @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:251
 #, kde-format
 msgctxt "action"
 msgid "Quit application"
-msgstr ""
+msgstr "Forlasi la aplikaĵon"
 
 #. i18n: context: iconText @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:252
 #, kde-format
 msgctxt "action"
 msgid "Quit"
-msgstr ""
+msgstr "Forlasi"
 
 #. i18n: context: text @ Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:262
 #, kde-format
 msgctxt "action"
 msgid "Edit"
-msgstr ""
+msgstr "Redakti"
 
 #. i18n: context: text @ Action (edit_undo), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_undo), Actions (Edit), ActionCollection (Menu)
@@ -13248,14 +13248,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Undo"
-msgstr ""
+msgstr "Malfari"
 
 #. i18n: context: toolTip @ Action (edit_undo), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:267
 #, kde-format
 msgctxt "action"
 msgid "Undo last action"
-msgstr ""
+msgstr "Malfaru lastan agon"
 
 #. i18n: context: text @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
@@ -13265,63 +13265,63 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Redo"
-msgstr ""
+msgstr "Refari"
 
 #. i18n: context: toolTip @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:279
 #, kde-format
 msgctxt "action"
 msgid "Redo last undone action"
-msgstr ""
+msgstr "Refari la lastan nefaritan agon"
 
 #. i18n: context: text @ Action (edit_cut), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:289
 #, kde-format
 msgctxt "action"
 msgid "Cu&t"
-msgstr ""
+msgstr "&Tondi"
 
 #. i18n: context: toolTip @ Action (edit_cut), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:291
 #, kde-format
 msgctxt "action"
 msgid "Cut selection to clipboard"
-msgstr ""
+msgstr "Tranĉi elekton al tondujo"
 
 #. i18n: context: iconText @ Action (edit_cut), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:292
 #, kde-format
 msgctxt "action"
 msgid "Cut"
-msgstr ""
+msgstr "Tondi"
 
 #. i18n: context: text @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:301
 #, kde-format
 msgctxt "action"
 msgid "&Copy"
-msgstr ""
+msgstr "&Kopii"
 
 #. i18n: context: toolTip @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:303
 #, kde-format
 msgctxt "action"
 msgid "Copy selection to clipboard"
-msgstr ""
+msgstr "Kopii elekton al tondujo"
 
 #. i18n: context: iconText @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:304
 #, kde-format
 msgctxt "action"
 msgid "Copy"
-msgstr ""
+msgstr "Kopii"
 
 #. i18n: context: text @ Action (copy_sharp), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:313
 #, kde-format
 msgctxt "action"
 msgid "C&opy (sharp)"
-msgstr ""
+msgstr "K&opii (akre)"
 
 #. i18n: context: toolTip @ Action (copy_sharp), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (copy_sharp), Actions (Edit), ActionCollection (Menu)
@@ -13331,14 +13331,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Copy (sharp)"
-msgstr ""
+msgstr "Kopii (akre)"
 
 #. i18n: context: text @ Action (cut_sharp), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:325
 #, kde-format
 msgctxt "action"
 msgid "Cut (&sharp)"
-msgstr ""
+msgstr "Tondi (&akre)"
 
 #. i18n: context: toolTip @ Action (cut_sharp), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (cut_sharp), Actions (Edit), ActionCollection (Menu)
@@ -13348,14 +13348,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Cut (sharp)"
-msgstr ""
+msgstr "Tondi (akre)"
 
 #. i18n: context: text @ Action (copy_merged), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:337
 #, kde-format
 msgctxt "action"
 msgid "Copy &merged"
-msgstr ""
+msgstr "Kopii &kunfandite"
 
 #. i18n: context: toolTip @ Action (copy_merged), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (copy_merged), Actions (Edit), ActionCollection (Menu)
@@ -13365,7 +13365,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Copy merged"
-msgstr ""
+msgstr "Kopii kunfandite"
 
 #. i18n: context: text @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
@@ -13375,42 +13375,42 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Copy Layer Style"
-msgstr ""
+msgstr "Kopii Tavolstilon"
 
 #. i18n: context: toolTip @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:351
 #, kde-format
 msgctxt "action"
 msgid "Copy Layer Style from the Current Node"
-msgstr ""
+msgstr "Kopiu Tavola Stilo de la Nuna Nodo"
 
 #. i18n: context: text @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:361
 #, kde-format
 msgctxt "action"
 msgid "&Paste"
-msgstr ""
+msgstr "&Alglui"
 
 #. i18n: context: toolTip @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:363
 #, kde-format
 msgctxt "action"
 msgid "Paste clipboard content"
-msgstr ""
+msgstr "Alglui enhavon de la tondujo"
 
 #. i18n: context: iconText @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:364
 #, kde-format
 msgctxt "action"
 msgid "Paste"
-msgstr ""
+msgstr "Alglui"
 
 #. i18n: context: text @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:373
 #, kde-format
 msgctxt "action"
 msgid "Paste at Cursor"
-msgstr ""
+msgstr "Alglui ĉe Kursoro"
 
 #. i18n: context: toolTip @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_at), Actions (Edit), ActionCollection (Menu)
@@ -13420,7 +13420,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste at cursor"
-msgstr ""
+msgstr "Alglui ĉe kursoro"
 
 #. i18n: context: text @ Action (paste_into), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_into), Actions (Edit), ActionCollection (Menu)
@@ -13433,14 +13433,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste into Active Layer"
-msgstr ""
+msgstr "Alglui en Aktivan Tavolon"
 
 #. i18n: context: text @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:397
 #, kde-format
 msgctxt "action"
 msgid "Paste into &New Image"
-msgstr ""
+msgstr "Alglui en &Novan Bildon"
 
 #. i18n: context: toolTip @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
@@ -13453,7 +13453,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste into New Image"
-msgstr ""
+msgstr "Alglui en Novan Bildon"
 
 #. i18n: context: text @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
@@ -13463,14 +13463,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste Shape Style"
-msgstr ""
+msgstr "Alglui Formstilon"
 
 #. i18n: context: text @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:421
 #, kde-format
 msgctxt "action"
 msgid "Paste as R&eference Image"
-msgstr ""
+msgstr "Alglui kiel R&eferencbildo"
 
 #. i18n: context: toolTip @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
@@ -13480,7 +13480,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste as Reference Image"
-msgstr ""
+msgstr "Alglui kiel Referenca Bildo"
 
 #. i18n: context: text @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
@@ -13490,21 +13490,21 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste Layer Style"
-msgstr ""
+msgstr "Alglui Tavola Stilo"
 
 #. i18n: context: toolTip @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:435
 #, kde-format
 msgctxt "action"
 msgid "Paste Layer Style into the Current Node"
-msgstr ""
+msgstr "Alglui Tavolstilon en la Nunan Nodon"
 
 #. i18n: context: text @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:446
 #, kde-format
 msgctxt "action"
 msgid "C&lear"
-msgstr ""
+msgstr "Malp&lenigi"
 
 #. i18n: context: toolTip @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (clear), Actions (Edit), ActionCollection (Menu)
@@ -13514,14 +13514,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Clear"
-msgstr ""
+msgstr "Malplenigi"
 
 #. i18n: context: text @ Action (fill_selection_foreground_color), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:459
 #, kde-format
 msgctxt "action"
 msgid "&Fill with Foreground Color"
-msgstr ""
+msgstr "Plenigi per Mal&fona Koloro"
 
 #. i18n: context: toolTip @ Action (fill_selection_foreground_color), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (fill_selection_foreground_color), Actions (Edit), ActionCollection (Menu)
@@ -13531,14 +13531,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fill with Foreground Color"
-msgstr ""
+msgstr "Plenigi per Malfona Koloro"
 
 #. i18n: context: text @ Action (fill_selection_background_color), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:471
 #, kde-format
 msgctxt "action"
 msgid "Fill &with Background Color"
-msgstr ""
+msgstr "Plenigi &per Fona Koloro"
 
 #. i18n: context: toolTip @ Action (fill_selection_background_color), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (fill_selection_background_color), Actions (Edit), ActionCollection (Menu)
@@ -13548,14 +13548,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fill with Background Color"
-msgstr ""
+msgstr "Plenigi kun Fona Koloro"
 
 #. i18n: context: text @ Action (fill_selection_pattern), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:484
 #, kde-format
 msgctxt "action"
 msgid "F&ill with Pattern"
-msgstr ""
+msgstr "Plen&igi kun Skemo"
 
 #. i18n: context: toolTip @ Action (fill_selection_pattern), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (fill_selection_pattern), Actions (Edit), ActionCollection (Menu)
@@ -13565,21 +13565,21 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fill with Pattern"
-msgstr ""
+msgstr "Plenigi kun Ŝablono"
 
 #. i18n: context: text @ Actions (EditFill), ActionCollection (Menu)
 #: krita/kritamenu.action:495
 #, kde-format
 msgctxt "action"
 msgid "Fill Special"
-msgstr ""
+msgstr "Plenigi Speciala"
 
 #. i18n: context: text @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
 #: krita/kritamenu.action:535
 #, kde-format
 msgctxt "action"
 msgid "Stro&ke selected shapes"
-msgstr ""
+msgstr "Stre&ki elektitajn formojn"
 
 #. i18n: context: toolTip @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
@@ -13589,14 +13589,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Stroke selected shapes"
-msgstr ""
+msgstr "Traki elektitajn formojn"
 
 #. i18n: context: text @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
 #: krita/kritamenu.action:547
 #, kde-format
 msgctxt "action"
 msgid "Stroke Selec&tion..."
-msgstr ""
+msgstr "Elekto de S&treko..."
 
 #. i18n: context: toolTip @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
@@ -13606,7 +13606,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Stroke selection"
-msgstr ""
+msgstr "Selektado de streko"
 
 #. i18n: context: text @ Action (delete_keyframe), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (delete_keyframe), Actions (EditFill), ActionCollection (Menu)
@@ -13619,7 +13619,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Delete keyframe"
-msgstr ""
+msgstr "Forigi ŝlosilkadron"
 
 #. i18n: context: text @ Actions (Window), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (window), Actions (Settings), ActionCollection (Menu)
@@ -13632,14 +13632,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Window"
-msgstr ""
+msgstr "Fenestro"
 
 #. i18n: context: text @ Action (view_newwindow), Actions (Window), ActionCollection (Menu)
 #: krita/kritamenu.action:578
 #, kde-format
 msgctxt "action"
 msgid "&New Window"
-msgstr ""
+msgstr "&Nova Fenestro"
 
 #. i18n: context: toolTip @ Action (view_newwindow), Actions (Window), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_newwindow), Actions (Window), ActionCollection (Menu)
@@ -13649,14 +13649,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "New Window"
-msgstr ""
+msgstr "Nova Fenestro"
 
 #. i18n: context: text @ Action (windows_next), Actions (Window), ActionCollection (Menu)
 #: krita/kritamenu.action:590
 #, kde-format
 msgctxt "action"
 msgid "N&ext"
-msgstr ""
+msgstr "S&ekva"
 
 #. i18n: context: toolTip @ Action (windows_next), Actions (Window), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (windows_next), Actions (Window), ActionCollection (Menu)
@@ -13666,7 +13666,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Next"
-msgstr ""
+msgstr "Poste"
 
 #. i18n: context: text @ Action (windows_previous), Actions (Window), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (windows_previous), Actions (Window), ActionCollection (Menu)
@@ -13679,56 +13679,56 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Previous"
-msgstr ""
+msgstr "Antaŭa"
 
 #. i18n: context: text @ Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:613
 #, kde-format
 msgctxt "action"
 msgid "View"
-msgstr ""
+msgstr "Vido"
 
 #. i18n: context: text @ Action (view_show_canvas_only), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:616
 #, kde-format
 msgctxt "action"
 msgid "&Show Canvas Only"
-msgstr ""
+msgstr "Montri Nur Kanva&son"
 
 #. i18n: context: toolTip @ Action (view_show_canvas_only), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:618
 #, kde-format
 msgctxt "action"
 msgid "Show just the canvas or the whole window"
-msgstr ""
+msgstr "Montri nur la kanvason aŭ la tutan fenestron"
 
 #. i18n: context: iconText @ Action (view_show_canvas_only), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:619
 #, kde-format
 msgctxt "action"
 msgid "Show Canvas Only"
-msgstr ""
+msgstr "Montri Nur Kanvason"
 
 #. i18n: context: text @ Action (fullscreen), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:628
 #, kde-format
 msgctxt "action"
 msgid "F&ull Screen Mode"
-msgstr ""
+msgstr "T&utekrana Reĝimo"
 
 #. i18n: context: toolTip @ Action (fullscreen), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:630
 #, kde-format
 msgctxt "action"
 msgid "Display the window in full screen"
-msgstr ""
+msgstr "Montri la fenestron en plena ekrano"
 
 #. i18n: context: iconText @ Action (fullscreen), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:631
 #, kde-format
 msgctxt "action"
 msgid "Full Screen Mode"
-msgstr ""
+msgstr "Plena Ekrana Reĝimo"
 
 #. i18n: context: text @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
@@ -13738,21 +13738,21 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Detach Canvas"
-msgstr ""
+msgstr "Forigi Kanvason"
 
 #. i18n: context: toolTip @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:642
 #, kde-format
 msgctxt "action"
 msgid "Show the canvas on a separate window"
-msgstr ""
+msgstr "Montri la kanvason sur aparta fenestro"
 
 #. i18n: context: text @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:652
 #, kde-format
 msgctxt "action"
 msgid "&Wrap Around Mode"
-msgstr ""
+msgstr "Ĉirkaŭ&flua Reĝimo"
 
 #. i18n: context: toolTip @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
@@ -13762,7 +13762,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Mode"
-msgstr ""
+msgstr "Envolvi Reĝimon"
 
 #. i18n: context: text @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
@@ -13775,7 +13775,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Both Directions"
-msgstr ""
+msgstr "Envolvi Ĉirkaŭ Ambaŭ Direktoj"
 
 #. i18n: context: text @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
@@ -13788,7 +13788,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr ""
+msgstr "Envolvi Horizontale"
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -13801,14 +13801,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Wrap Around Vertically"
-msgstr ""
+msgstr "Envolvi Vertike"
 
 #. i18n: context: text @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:700
 #, kde-format
 msgctxt "action"
 msgid "&Instant Preview Mode"
-msgstr ""
+msgstr "Tuja Antaŭr&igarda Reĝimo"
 
 #. i18n: context: toolTip @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
@@ -13818,14 +13818,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Instant Preview Mode"
-msgstr ""
+msgstr "Tuja Antaŭrigarda Reĝimo"
 
 #. i18n: context: text @ Action (softProof), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:712
 #, kde-format
 msgctxt "action"
 msgid "Soft Proofing"
-msgstr ""
+msgstr "Mola Pruvo"
 
 #. i18n: context: toolTip @ Action (softProof), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (softProof), Actions (View), ActionCollection (Menu)
@@ -13835,14 +13835,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Turns on Soft Proofing"
-msgstr ""
+msgstr "Ŝaltas Soft Proofing"
 
 #. i18n: context: text @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:722
 #, kde-format
 msgctxt "action"
 msgid "Out of Gamut Warnings"
-msgstr ""
+msgstr "El Gamut Avertoj"
 
 #. i18n: context: toolTip @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
@@ -13855,6 +13855,8 @@ msgid ""
 "Turns on warnings for colors out of proofed gamut, needs soft proofing to be "
 "turned on."
 msgstr ""
+"Enŝaltas avertojn por koloroj el pruvita gamo, bezonas mildan pruvadon por "
+"esti ŝaltita."
 
 #. i18n: context: text @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
@@ -13867,7 +13869,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror View"
-msgstr ""
+msgstr "Spegula Vido"
 
 #. i18n: context: text @ Action (mirror_canvas_around_cursor), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas_around_cursor), Actions (View), ActionCollection (Menu)
@@ -13880,7 +13882,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror View Around Cursor"
-msgstr ""
+msgstr "Spegula Vido Ĉirkaŭ Kursoro"
 
 #. i18n: context: text @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
@@ -13893,14 +13895,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr ""
+msgstr "Spegula Vido Ĉirkaŭ Kanvaso"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr ""
+msgstr "&Zomi al 100%"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
@@ -13910,35 +13912,35 @@ msgstr ""
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
-msgstr ""
+msgstr "Zomi al 100%"
 
 #. i18n: context: text @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:774
 #, kde-format
 msgctxt "action"
 msgid "Zoom &In"
-msgstr ""
+msgstr "Zom&i"
 
 #. i18n: context: toolTip @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:776
 #, kde-format
 msgctxt "action"
 msgid "Zoom In"
-msgstr ""
+msgstr "Zomi"
 
 #. i18n: context: text @ Action (view_zoom_out), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:786
 #, kde-format
 msgctxt "action"
 msgid "Zoom &Out"
-msgstr ""
+msgstr "Malz&omi"
 
 #. i18n: context: toolTip @ Action (view_zoom_out), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:788
 #, kde-format
 msgctxt "action"
 msgid "Zoom Out"
-msgstr ""
+msgstr "Malzomi"
 
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -13948,14 +13950,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fit to View"
-msgstr ""
+msgstr "Adapti al Vido"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
 #, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View"
-msgstr ""
+msgstr "Adapti Kanvason al Vido"
 
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
@@ -13965,14 +13967,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr ""
+msgstr "Adapti al Vida Larĝo"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
 #, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Width"
-msgstr ""
+msgstr "Adapti Kanvason al Vida Larĝo"
 
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
@@ -13982,14 +13984,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
-msgstr ""
+msgstr "Adapti al Vida Alteco"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
 #, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Height"
-msgstr ""
+msgstr "Adapti Kanvason al Vida Alteco"
 
 #. i18n: context: text @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -14002,14 +14004,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle Fit to View"
-msgstr ""
+msgstr "Baskuligi Adapton al Vido"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:838
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Canvas Right"
-msgstr ""
+msgstr "Rota&cii Kanvason Dekstren"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
@@ -14019,14 +14021,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas Right"
-msgstr ""
+msgstr "Rotacii Kanvason Dekstre"
 
 #. i18n: context: text @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:850
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas &Left"
-msgstr ""
+msgstr "Rotacii Kanvason Ma&ldekstren"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
@@ -14036,7 +14038,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas Left"
-msgstr ""
+msgstr "Rotacii Kanvason Maldekstren"
 
 #. i18n: context: text @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
@@ -14049,7 +14051,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Reset Canvas Rotation"
-msgstr ""
+msgstr "Restarigi Kanvasan Rotacion"
 
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
@@ -14059,14 +14061,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Reset Display"
-msgstr ""
+msgstr "Restarigi Montron"
 
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
 #, kde-format
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
-msgstr ""
+msgstr "Restarigi zomon, rotacion kaj spegulon al siaj defaŭltaj statoj."
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
@@ -14076,7 +14078,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "View Print Size"
-msgstr ""
+msgstr "Vidi Presan Grandecon"
 
 #. i18n: context: toolTip @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:886
@@ -14084,13 +14086,14 @@ msgstr ""
 msgctxt "action"
 msgid "Map the canvas display to print size, based on the image resolution."
 msgstr ""
+"Mapu la kanvasan ekranon por presi grandecon, surbaze de la bilda rezolucio."
 
 #. i18n: context: text @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:894
 #, kde-format
 msgctxt "action"
 msgid "Show &Rulers"
-msgstr ""
+msgstr "Montri Mezu&rilojn"
 
 #. i18n: context: whatsThis @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:895
@@ -14101,6 +14104,9 @@ msgid ""
 "image and can be used to position your mouse at the right place on the "
 "canvas. <p>Uncheck this to hide the rulers.</p>"
 msgstr ""
+"La mezuriloj montras la horizontalajn kaj vertikalajn poziciojn de la muso "
+"sur la bildo kaj povas esti uzataj por poziciigi vian muson en la ĝusta loko "
+"sur la kanvaso. <p>Malmarku ĉi tion por kaŝi la regulojn.</p>"
 
 #. i18n: context: toolTip @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_ruler), Actions (View), ActionCollection (Menu)
@@ -14110,7 +14116,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Rulers"
-msgstr ""
+msgstr "Montri Regulojn"
 
 #. i18n: context: text @ Action (rulers_track_mouse), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rulers_track_mouse), Actions (View), ActionCollection (Menu)
@@ -14123,7 +14129,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rulers Track Pointer"
-msgstr ""
+msgstr "Regantoj Track Montrilo"
 
 #. i18n: context: whatsThis @ Action (rulers_track_mouse), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:907
@@ -14133,6 +14139,8 @@ msgid ""
 "The rulers will track current mouse position and show it on screen. It can "
 "cause subtle performance slowdown"
 msgstr ""
+"La regantoj spuros la nunan muspozicion kaj montros ĝin sur ekrano. Ĝi povas "
+"kaŭzi subtilan rendimenton malrapidiĝon"
 
 #. i18n: context: text @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
@@ -14142,14 +14150,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Guides"
-msgstr ""
+msgstr "Montri Gvidilojn"
 
 #. i18n: context: toolTip @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:920
 #, kde-format
 msgctxt "action"
 msgid "Show or hide guides"
-msgstr ""
+msgstr "Montri aŭ kaŝu gvidojn"
 
 #. i18n: context: text @ Action (view_lock_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_lock_guides), Actions (View), ActionCollection (Menu)
@@ -14159,14 +14167,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Lock Guides"
-msgstr ""
+msgstr "Ŝlosi Gvidilojn"
 
 #. i18n: context: toolTip @ Action (view_lock_guides), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:932
 #, kde-format
 msgctxt "action"
 msgid "Lock or unlock guides"
-msgstr ""
+msgstr "Ŝlosi aŭ malŝlosu gvidojn"
 
 #. i18n: context: text @ Action (view_snap_to_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_snap_to_guides), Actions (View), ActionCollection (Menu)
@@ -14176,35 +14184,35 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap to Guides"
-msgstr ""
+msgstr "Alklaki al Gvidiloj"
 
 #. i18n: context: toolTip @ Action (view_snap_to_guides), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:944
 #, kde-format
 msgctxt "action"
 msgid "Snap cursor to guides position"
-msgstr ""
+msgstr "Alklaki kursoron al gvida pozicio"
 
 #. i18n: context: text @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:954
 #, kde-format
 msgctxt "action"
 msgid "Show Status &Bar"
-msgstr ""
+msgstr "Montri Stato&breton"
 
 #. i18n: context: toolTip @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:956
 #, kde-format
 msgctxt "action"
 msgid "Show or hide the status bar"
-msgstr ""
+msgstr "Montri aŭ kaŝi la statobreton"
 
 #. i18n: context: iconText @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:957
 #, kde-format
 msgctxt "action"
 msgid "Show Status Bar"
-msgstr ""
+msgstr "Montri Statobreton"
 
 #. i18n: context: text @ Action (view_pixel_grid), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_pixel_grid), Actions (View), ActionCollection (Menu)

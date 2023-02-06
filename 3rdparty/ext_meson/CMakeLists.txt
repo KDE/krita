@@ -56,9 +56,12 @@ else()
         DOWNLOAD_COMMAND ""
 
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E echo "Installing meson natively"
-        BUILD_COMMAND ""
+        BUILD_COMMAND ${CMAKE_COMMAND} -E env 
+            PYTHONUSERBASE=${_meson_prefix}
+            ${Python_EXECUTABLE} -m pip install --upgrade meson==0.63.0 --user --ignore-installed --verbose
         INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
-            ${Python_EXECUTABLE} -m pip install --upgrade meson==0.63.0 --prefix=${_meson_prefix} --ignore-installed
+            PYTHONPATH=${_krita_pythonpath}
+            ${Python_EXECUTABLE} -m pip show -f meson
 
         UPDATE_COMMAND ""
 

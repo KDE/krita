@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-04 20:03+0300\n"
+"PO-Revision-Date: 2023-02-06 19:29+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -37266,12 +37266,12 @@ msgstr "Canlandırma Zaman Akışı"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
 #, kde-format
 msgid "AutoKey Blank"
-msgstr "OtoDüğme Boş"
+msgstr "Boş Otomatik Anahtar"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:169
 #, kde-format
 msgid "AutoKey Duplicate"
-msgstr "OtoDüğme Yinelenmiş"
+msgstr "Yinelenmiş Otomatik Anahtar"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:443
 #, kde-format
@@ -57912,7 +57912,7 @@ msgstr "&Kırp"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:430
 #, kde-format
 msgid "Applies to:"
-msgstr "Uygula:"
+msgstr "Şuna Uygulanır:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:446

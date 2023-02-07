@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-02 00:55+0000\n"
+"POT-Creation-Date: 2023-02-07 00:57+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -19988,9 +19988,9 @@ msgstr "Рабови на страна"
 #: libs/resources/KisTagModel.cpp:121 libs/resources/KisTagModel.cpp:300
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:629
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:655
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:707
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:806
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:648
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:700
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:799
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:220
 #, kde-format
 msgid "All"
@@ -21753,7 +21753,7 @@ msgstr ""
 #: libs/ui/animation/VideoImportDialog.ui:197
 #: plugins/dockers/logdocker/LogDockerDock.cpp:187
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:871
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:844
 #: plugins/impex/webp/kis_wdg_options_webp.ui:791
 #, fuzzy, kde-format
 msgid "Metadata"
@@ -22665,9 +22665,9 @@ msgstr "Рабови на страна"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
 #: plugins/impex/jpeg/kis_jpeg_export.cc:217
 #: plugins/impex/jpeg/kis_jpeg_export.cc:219
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:629
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:681
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:828
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:622
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:674
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:821
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:277
 #: plugins/impex/webp/kis_wdg_options_webp.ui:82
 #: plugins/impex/webp/kis_wdg_options_webp.ui:305
@@ -41378,7 +41378,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, exif)
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:162
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:274
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:892
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:867
 #: plugins/impex/webp/kis_wdg_options_webp.ui:812
 #: plugins/metadata/exif/kis_exif_io.h:28
 #, kde-format
@@ -45838,21 +45838,21 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:544
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:182
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:183
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:544
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:175
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:176
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:545
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:177
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:178
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45862,7 +45862,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:547
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:185
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45872,14 +45872,14 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:553
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:191
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:192
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:554
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:194
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45889,14 +45889,14 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:558
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:199
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:200
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:559
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:202
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -45905,14 +45905,14 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:563
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:207
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:564
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:209
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46305,7 +46305,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:268
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:886
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:861
 #: plugins/impex/webp/kis_wdg_options_webp.ui:806
 #, fuzzy, kde-format
 msgid "Formats:"
@@ -46313,14 +46313,14 @@ msgstr "Формат на страна"
 
 #. i18n: ectx: property (text), widget (QCheckBox, iptc)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:284
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:899
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:874
 #, kde-format
 msgid "IPTC"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, xmp)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:294
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:906
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:881
 #: plugins/impex/webp/kis_wdg_options_webp.ui:819
 #: plugins/metadata/xmp/kis_xmp_io.h:26
 #, kde-format
@@ -46338,7 +46338,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, chkMetadata)
 #. i18n: ectx: property (text), widget (QCheckBox, chkMetaData)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:336
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:877
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:850
 #: plugins/impex/webp/kis_wdg_options_webp.ui:797
 #, fuzzy, kde-format
 msgid "Store Document Metadata"
@@ -46361,6 +46361,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuthor)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:358
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:905
 #, fuzzy, kde-format
 msgid "Sign with Author Profile Data"
 msgstr "Одбери..."
@@ -46385,15 +46386,15 @@ msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:32
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:19
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (only for low quality)"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:33
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:20
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "No downsampling"
@@ -46401,8 +46402,8 @@ msgstr ""
 "\n"
 "Ориентација:"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:28
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:34
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:21
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
@@ -46410,8 +46411,8 @@ msgstr ""
 "\n"
 "Ориентација:"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:35
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:22
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:28
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
@@ -46419,8 +46420,8 @@ msgstr ""
 "\n"
 "Ориентација:"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:23
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
@@ -46432,83 +46433,83 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
 #. i18n: ectx: property (text), widget (QLabel, lblNone2)
 #. i18n: ectx: property (text), widget (QLabel, lblNoDegradation)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:40
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:46
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:52
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:58
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:64
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:70
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:76
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:82
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:88
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:33
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:39
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:45
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:51
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:57
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:63
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:69
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:75
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:81
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:87
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:94
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:101
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:107
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:115
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:135
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:470
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:648
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:700
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:816
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:100
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:108
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:128
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:447
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:641
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:693
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:809
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (encoder chooses)"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:41
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:47
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:53
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:65
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:77
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:83
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:89
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:34
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:40
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:46
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:58
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:70
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:76
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:82
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:88
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:95
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:102
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:136
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:129
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Disabled"
 msgstr "&Додади група..."
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:42
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:48
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:54
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:66
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:78
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:84
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:103
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:137
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:35
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:41
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:47
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:59
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:71
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:77
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:83
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:96
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:130
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Enabled"
 msgstr "Наслов :"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:59
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:52
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "VarDCT mode (e.g. for photographic images)"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:60
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:53
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular mode (e.g. for lossless images)"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:71
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:64
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Scanline order"
 msgstr "Рабови на страна"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:72
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:65
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Center-first order"
 msgstr "Коментар"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:96
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:89
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
@@ -46516,123 +46517,123 @@ msgstr ""
 "\n"
 "Ориентација:"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:97
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512x512 + 64x64 lower resolution passes"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:108
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:101
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "128"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:109
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:102
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "256"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:110
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:103
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:111
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:104
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "1024"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:116
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:109
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Zero"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:117
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:110
 #, fuzzy, kde-format
 #| msgid "Left:"
 msgctxt "JPEG-XL encoder options"
 msgid "Left"
 msgstr "Лево:"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:118
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:111
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top"
 msgstr "Горе:"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:119
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:112
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg0"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:120
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:113
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Select"
 msgstr "Одбери..."
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:121
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:114
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gradient"
 msgstr "Отстрани приказ"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:122
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:115
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Weighted"
 msgstr "Висина:"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:123
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:116
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top right"
 msgstr "Десно:"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:124
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:117
 #, fuzzy, kde-format
 #| msgid "Left:"
 msgctxt "JPEG-XL encoder options"
 msgid "Top left"
 msgstr "Лево:"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:125
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:118
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Left left"
 msgstr "inch"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:126
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:119
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg1"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:127
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:120
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg2"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:128
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:121
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg3"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:129
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:122
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Toptop predictive average"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:130
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:123
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gradient + Weighted"
@@ -46640,19 +46641,19 @@ msgstr ""
 "\n"
 "Ориентација:"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:131
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:124
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Use all predictors"
 msgstr "Одбери..."
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:170
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:171
 #, fuzzy, kde-format
 msgctxt "Color space option"
 msgid "Save as is"
 msgstr "Преглед на страна"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:172
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:173
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -46794,15 +46795,21 @@ msgid ""
 "profile as CICP values. You can adjust the ICC profile conversion below."
 msgstr ""
 
+#. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:329
+#, fuzzy, kde-format
+msgid "Encoder parameters"
+msgstr "Отстрани табулатор"
+
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:370
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:335
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Color channel resampling"
 msgstr "Избери"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, resampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:377
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:342
 #, kde-format
 msgid ""
 "Sets resampling option. If enabled, the image's color channels are "
@@ -46811,7 +46818,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:384
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:349
 #, fuzzy, kde-format
 msgid "Alpha channel resampling"
 msgstr ""
@@ -46819,7 +46826,7 @@ msgstr ""
 "Ориентација:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, extraChannelResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:391
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:356
 #, kde-format
 msgid ""
 "Sets resampling option. If enabled, the image's alpha channel is downsampled "
@@ -46827,14 +46834,14 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:398
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:363
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Photon noise"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, photonNoise)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:413
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:378
 #, kde-format
 msgid ""
 "Adds noise to the image emulating photographic film noise, the higher the "
@@ -46845,33 +46852,33 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:423
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:388
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Generate dots"
 msgstr "Распоред на страна"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, dots)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:430
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:395
 #, kde-format
 msgid "Enables or disables dots generation."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:437
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:402
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Generate patches"
 msgstr "Отстрани група"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patches)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:444
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:409
 #, kde-format
 msgid "Enables or disables patches generation."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:451
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:416
 #, fuzzy, kde-format
 msgid "Edge preserving filter"
 msgstr ""
@@ -46879,59 +46886,67 @@ msgstr ""
 "Ориентација:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMax)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:460
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:437
 #, fuzzy, kde-format
 msgid "Maximum strength"
 msgstr "Десно:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:477
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:454
 #, kde-format
 msgid ""
 "Edge preserving filter level, -1 to 3. Use -1 for the default (encoder "
 "chooses), 0 to 3 to set a strength."
 msgstr ""
 
+#. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:469
+#, kde-format
+msgid "Enables or disables the gaborish filter."
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:492
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:476
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
 msgstr ""
 
-#. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:499
-#, kde-format
-msgid "Enables or disables the gaborish filter."
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:506
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:483
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular encoding"
 msgstr "Зачувај документ како"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modular)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:513
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:490
 #, fuzzy, kde-format
 msgid "Enables modular encoding."
 msgstr "inch"
 
-#. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:520
-#, kde-format
-msgid "Keep color of invisible pixels"
-msgstr ""
-
 #. i18n: ectx: property (toolTip), widget (QComboBox, keepInvisible)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:527
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:497
 #, kde-format
 msgid "Enables or disables preserving color of invisible pixels."
 msgstr ""
 
+#. i18n: ectx: property (toolTip), widget (QComboBox, groupOrder)
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:504
+#, kde-format
+msgid ""
+"Determines the order in which 256x256 regions are stored in the codestream "
+"for progressive rendering."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514
+#, kde-format
+msgid "Keep color of invisible pixels"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:534
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:521
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group order"
@@ -46939,29 +46954,21 @@ msgstr ""
 "\n"
 "Ориентација:"
 
-#. i18n: ectx: property (toolTip), widget (QComboBox, groupOrder)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:541
-#, kde-format
-msgid ""
-"Determines the order in which 256x256 regions are stored in the codestream "
-"for progressive rendering."
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:548
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:528
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Chroma-from-luma"
 msgstr ""
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:555
+#. i18n: ectx: attribute (title), widget (QWidget, varDCTParameters)
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:536
 #, fuzzy, kde-format
 msgid "VarDCT parameters"
 msgstr "Отстрани табулатор"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:561
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:542
 #, fuzzy, kde-format
 msgid "Spectral progression"
 msgstr ""
@@ -46970,8 +46977,8 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveAC)
 #. i18n: ectx: property (toolTip), widget (QComboBox, qProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:568
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:585
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:549
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:566
 #, kde-format
 msgid ""
 "Set the progressive mode for the AC coefficients of VarDCT, using spectral "
@@ -46979,13 +46986,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:578
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:559
 #, fuzzy, kde-format
 msgid "Quantization"
 msgstr "&Додади група..."
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveDC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:592
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:573
 #, fuzzy, kde-format
 msgid "Low resolution DC"
 msgstr ""
@@ -46993,25 +47000,37 @@ msgstr ""
 "Ориентација:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveDC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:599
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:580
 #, kde-format
 msgid "Set the progressive mode using lower-resolution DC images for VarDCT."
 msgstr ""
 
-#. i18n: ectx: property (title), widget (QGroupBox, modularEncodingParameters)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:609
+#. i18n: ectx: attribute (title), widget (QWidget, modularEncodingParameters)
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:588
 #, fuzzy, kde-format
 msgid "Modular parameters"
 msgstr "Отстрани табулатор"
 
+#. i18n: ectx: property (text), widget (QLabel, lblResponsive)
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:594
+#, fuzzy, kde-format
+msgid "Progressive encoding"
+msgstr "&Да"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, responsive)
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:601
+#, kde-format
+msgid "Enables or disables progressive encoding for modular mode."
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGlobalPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:615
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:608
 #, fuzzy, kde-format
 msgid "Global channel palette range"
 msgstr "Отстрани шаблон"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGlobalPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:626
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:619
 #, kde-format
 msgid ""
 "Use Global channel palette if the amount of colors is smaller than this "
@@ -47021,13 +47040,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:667
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:660
 #, fuzzy, kde-format
 msgid "Local channel palette range"
 msgstr "Автор"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:678
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:671
 #, kde-format
 msgid ""
 "Use Local (per-group) channel palette if the amount of colors is smaller "
@@ -47037,13 +47056,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:719
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:712
 #, kde-format
 msgid "Use color palette for ... colors or less"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, paletteColors)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:733
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:726
 #, kde-format
 msgid ""
 "Use color palette if amount of colors is smaller than or equal to this "
@@ -47052,30 +47071,36 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:755
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:748
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Delta palette"
 msgstr "Преглед на страна"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, lossyPalette)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:762
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:755
 #, kde-format
 msgid "Enables or disables delta palette. Used in modular mode."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:769
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:762
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group size"
 msgstr "Име :"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modularGroupSize)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:776
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:769
 #, kde-format
 msgid "Group size for modular encoding."
 msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, modularPredictor)
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:776
+#, fuzzy, kde-format
+msgid "Predictor for modular encoding."
+msgstr "Отстрани шаблон"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:783
@@ -47084,20 +47109,14 @@ msgctxt "JPEG-XL encoder options"
 msgid "Predictor"
 msgstr "Слика:"
 
-#. i18n: ectx: property (toolTip), widget (QComboBox, modularPredictor)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:790
-#, fuzzy, kde-format
-msgid "Predictor for modular encoding."
-msgstr "Отстрани шаблон"
-
 #. i18n: ectx: property (text), widget (QLabel, lblModularMATreeLearningPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:797
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:790
 #, kde-format
 msgid "Pixels for MA tree learning"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, modularMATreeLearningPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:825
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:818
 #, kde-format
 msgid ""
 "Fraction of pixels used to learn MA trees as a percentage.\n"
@@ -47105,20 +47124,8 @@ msgid ""
 "Higher values use more encoder memory."
 msgstr ""
 
-#. i18n: ectx: property (toolTip), widget (QComboBox, responsive)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:846
-#, kde-format
-msgid "Enables or disables progressive encoding for modular mode."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lblResponsive)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:853
-#, fuzzy, kde-format
-msgid "Progressive encoding"
-msgstr "&Да"
-
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:916
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:891
 #, fuzzy, kde-format
 msgctxt "JPEG-XL metadata options"
 msgid "Filters:"

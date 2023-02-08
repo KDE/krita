@@ -119,12 +119,13 @@ struct KisVideoExportOptionsDialog::Private
     QVector<KoID> tuningXH264;
     QVector<KoID> tuningXH265;
     QVector<KoID> presetsWEBP;
-    bool supportsHDR = false;
-    ContainerType containerType;
 
     QString currentCustomLine;
 
     KisHDRMetadataOptions hdrMetadataOptions;
+
+    ContainerType containerType;
+    bool supportsHDR = false;
 };
 
 void populateComboWithKoIds(QComboBox *combo, const QVector<KoID> &ids, int defaultIndex)

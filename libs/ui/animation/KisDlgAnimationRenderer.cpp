@@ -442,7 +442,7 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
             }
         }
 
-        m_page->lblFFMpegVersion->setText(i18n("FFmpeg Version: ") + ffmpegVersion);
+        m_page->lblFFMpegVersion->setText(ffmpegVersion);
 
         // Store configuration..
         cfg.setFFMpegLocation(ffmpegJsonObj["path"].toString());

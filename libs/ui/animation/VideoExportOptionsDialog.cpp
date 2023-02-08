@@ -167,7 +167,6 @@ KisVideoExportOptionsDialog::KisVideoExportOptionsDialog(ContainerType container
     ui->intBitrate->setValue(5000);
     ui->intBitrate->setSuffix(i18nc("kilo-bits-per-second, video bitrate suffix", "kbps"));
 
-    ui->gifAutoPalette->setChecked(true);
     ui->gifReserveTransparent->setChecked(true);
     ui->gifLoop->setChecked(true);
     ui->gifTransDiff->setChecked(true);

@@ -72,7 +72,7 @@ set(kritawidgets_LIB_SRCS
     KisPaletteComboBox.cpp
 
     kis_color_button.cpp
-    
+
     KisAngleGauge.cpp
     KisAngleSelector.cpp
 
@@ -81,6 +81,7 @@ set(kritawidgets_LIB_SRCS
     kis_warning_block.cpp
     KisWidgetConnectionUtils.cpp
     kis_spacing_selection_widget.cpp
+    kis_stacked_widget.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS

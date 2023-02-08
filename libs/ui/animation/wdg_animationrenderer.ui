@@ -218,7 +218,7 @@
            <item>
             <widget class="QToolButton" name="bnRenderOptions">
              <property name="toolTip">
-              <string>Select the ffmpeg render options.</string>
+              <string>Select the FFmpeg render options.</string>
              </property>
              <property name="text">
               <string>...</string>
@@ -247,7 +247,7 @@
          <item row="3" column="0">
           <widget class="QLabel" name="label_9">
            <property name="text">
-            <string>FF&amp;Mpeg: </string>
+            <string>FFmpeg location:</string>
            </property>
           </widget>
          </item>

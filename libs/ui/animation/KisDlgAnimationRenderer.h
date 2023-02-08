@@ -25,7 +25,7 @@ class QHBoxLayout;
 class KisAnimationVideoSaver;
 class KisAnimationRenderingOptions;
 
-class WdgAnimationRenderer : public QWidget, public Ui::WdgAnimaterionRenderer
+class WdgAnimationRenderer : public QWidget, public Ui::WdgAnimationRenderer
 {
     Q_OBJECT
 

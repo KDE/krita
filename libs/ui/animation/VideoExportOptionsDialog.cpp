@@ -134,6 +134,7 @@ void populateComboWithKoIds(QComboBox *combo, const QVector<KoID> &ids, int defa
         combo->insertItem(combo->count(), id.name());
     }
     combo->setCurrentIndex(defaultIndex);
+    combo->setEnabled(combo->count() > 1);
 }
 
 KisVideoExportOptionsDialog::KisVideoExportOptionsDialog(ContainerType containerType, const QStringList& validEncoders, QWidget *parent)

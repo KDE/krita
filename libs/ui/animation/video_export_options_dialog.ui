@@ -27,6 +27,18 @@
        <widget class="KisStackedWidget" name="stackedWidget">
         <widget class="QWidget" name="pgOpenH264">
          <layout class="QFormLayout" name="formLayout_7">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="lblOpenH264bitrate">
             <property name="text">
@@ -48,6 +60,18 @@
         </widget>
         <widget class="QWidget" name="pgH264">
          <layout class="QFormLayout" name="formLayout_0">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="lblCRFH264">
             <property name="text">
@@ -99,6 +123,18 @@
         </widget>
         <widget class="QWidget" name="pgH265">
          <layout class="QFormLayout" name="formLayout_1">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="lblCRFH265">
             <property name="text">
@@ -146,24 +182,41 @@
           <item row="3" column="1">
            <widget class="QComboBox" name="cmbTuneH265"/>
           </item>
-          <item row="4" column="0">
-           <widget class="QCheckBox" name="chkUseHDRMetadata">
-            <property name="text">
+          <item row="4" column="0" colspan="2">
+           <widget class="QGroupBox" name="chkUseHDRMetadata">
+            <property name="title">
              <string>HDR Mode</string>
             </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QPushButton" name="btnHdrMetadata">
-            <property name="text">
-             <string>HDR Metadata...</string>
+            <property name="checkable">
+             <bool>true</bool>
             </property>
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <item>
+              <widget class="QPushButton" name="btnHdrMetadata">
+               <property name="text">
+                <string>HDR Metadata...</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
         </widget>
         <widget class="QWidget" name="pgTheora">
          <layout class="QFormLayout" name="formLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="label_3">
             <property name="text">
@@ -172,23 +225,28 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="KisSliderSpinBox" name="intBitrate">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
+           <widget class="KisSliderSpinBox" name="intBitrate"/>
           </item>
          </layout>
         </widget>
         <widget class="QWidget" name="pgVP9">
          <layout class="QFormLayout" name="formLayout_3">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>Bitrate (MBit/s)</string>
+             <string>Bitrate (MBit/s):</string>
             </property>
            </widget>
           </item>
@@ -199,7 +257,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="1" column="1">
            <widget class="QCheckBox" name="vp9Lossless">
             <property name="text">
              <string>Lossless</string>
@@ -210,14 +268,26 @@
         </widget>
         <widget class="QWidget" name="pgGIF">
          <layout class="QFormLayout" name="formLayout_4">
-          <item row="0" column="0">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item row="0" column="1">
            <widget class="QCheckBox" name="gifLoop">
             <property name="text">
              <string>Loop Animation</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="1" column="1">
            <widget class="QCheckBox" name="gifTransDiff">
             <property name="text">
              <string>Transparency Difference</string>
@@ -227,7 +297,7 @@
           <item row="2" column="0">
            <widget class="QRadioButton" name="gifAutoPalette">
             <property name="text">
-             <string>Auto-generate 8bit Palette</string>
+             <string>Auto-generate 8bit Palette:</string>
             </property>
            </widget>
           </item>
@@ -271,7 +341,7 @@
           <item row="5" column="1">
            <widget class="QComboBox" name="cmbPaletteuseDiffModeGIF"/>
           </item>
-          <item row="6" column="0">
+          <item row="6" column="1">
            <widget class="QCheckBox" name="gifReserveTransparent">
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;GIF format supports up to 256 colors per frame/image. This option enables transparency at the cost of 1 color, thus only 255 colors will be used for GIFs with this option enabled. Disabling this option gives you the entire 256 colors for your GIF for better quality output.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Note 1: For transparency to work properly, you need to make sure that the image sequence is exporting with transparency enabled, and that FFMpeg version is at least 4.2+. If your GIF output shows signs of screen tearing, FFMpeg version 4.4+ is highly recommended.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Note 2: GIF format only supports 100% transparency, or 0% transparency. Partial transparency is &lt;/span&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline;&quot;&gt;not&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt; supported. If you need partial transparency, consider APNG or WEBP.&lt;/span&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -318,7 +388,19 @@
         </widget>
         <widget class="QWidget" name="pgWEBP">
          <layout class="QFormLayout" name="formLayout_6">
-          <item row="0" column="0">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item row="0" column="1">
            <widget class="QCheckBox" name="webpLossless">
             <property name="text">
              <string>Lossless</string>
@@ -333,14 +415,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="KisSliderSpinBox" name="intCompressWEBP">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
+           <widget class="KisSliderSpinBox" name="intCompressWEBP"/>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="lblQscaleWEBP">
@@ -350,14 +425,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="KisSliderSpinBox" name="intQscaleWEBP">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
+           <widget class="KisSliderSpinBox" name="intQscaleWEBP"/>
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="lblPresetWEBP">
@@ -369,7 +437,7 @@
           <item row="3" column="1">
            <widget class="QComboBox" name="cmbPresetWEBP"/>
           </item>
-          <item row="4" column="0">
+          <item row="4" column="1">
            <widget class="QCheckBox" name="webpLoop">
             <property name="text">
              <string>Loop Animation</string>

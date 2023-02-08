@@ -752,15 +752,15 @@ void KisDlgAnimationRenderer::slotExportTypeChanged()
     }
 
     // show all options
-     if (m_page->shouldExportAll->isChecked() ) {
-         m_page->imageSequenceOptionsGroup->setVisible(true);
-         m_page->videoOptionsGroup->setVisible(true);
-     }
+    if (m_page->shouldExportAll->isChecked()) {
+        m_page->imageSequenceOptionsGroup->setVisible(true);
+        m_page->videoOptionsGroup->setVisible(true);
+    }
 
-
-     // for the resize to work as expected, try to hide elements first before displaying other ones.
-     // if the widget gets bigger at any point, the resize will use that, even if elements are hidden later to make it smaller
-     resize(m_page->sizeHint());
+    // for the resize to work as expected, try to hide elements first before displaying other ones.
+    // if the widget gets bigger at any point, the resize will use that, even if elements are hidden later to make it
+    // smaller
+    resize(m_page->sizeHint());
 }
 
 void KisDlgAnimationRenderer::frameRateChanged(int framerate)

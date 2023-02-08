@@ -454,10 +454,41 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
 void KisDlgAnimationRenderer::ffmpegWarningCheck() {
     const QString mimeType = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
 
-    QRegularExpression minVerFFMpegRX("^n{0,1}(?:[0-3]|4\\.[01])[\\.\\-]");
-    QRegularExpressionMatch minVerFFMpegMatch = minVerFFMpegRX.match(ffmpegVersion);
+    const QRegularExpression minVerFFMpegRX(R"(^n{0,1}(?:[0-3]|4\.[01])[\.\-])");
+    const QRegularExpressionMatch minVerFFMpegMatch = minVerFFMpegRX.match(ffmpegVersion);
 
-    m_page->lblGifWarningFFMpeg->setVisible((mimeType == "image/gif" && minVerFFMpegMatch.hasMatch() ));
+    QStringList warnings;
+
+    if (mimeType == "image/gif" && minVerFFMpegMatch.hasMatch()) {
+        warnings << i18nc("ffmpeg warning checks", "FFmpeg must be at least version 4.2+ for GIF transparency to work");
+    }
+
+    // m_page->bnRenderOptions->setEnabled(mimeType != "image/gif" && mimeType != "image/webp" && mimeType !=
+    // "image/png" );
+    if (mimeType == "image/gif" && m_page->intFramesPerSecond->value() > 50) {
+        warnings << i18nc("ffmpeg warning checks",
+                          "Animated GIF images cannot have a framerate higher than 50. The framerate will be reduced "
+                          "to 50 frames per second");
+    }
+
+    m_page->lblWarnings->setVisible(!warnings.isEmpty());
+
+    if (!warnings.isEmpty()) {
+        QString text = QString("<p><b>%1</b>").arg(i18n("Warning(s):"));
+        text.append("<ul>");
+        Q_FOREACH (const QString &warning, warnings) {
+            text.append("<li>");
+            text.append(warning.toHtmlEscaped());
+            text.append("</li>");
+        }
+        text.append("</ul></p>");
+        m_page->lblWarnings->setText(text);
+
+        m_page->lblWarnings->setPixmap(
+            m_page->lblWarnings->style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(QSize(32, 32)));
+    }
+
+    m_page->adjustSize();
 }
 
 QString KisDlgAnimationRenderer::defaultVideoFileName(KisDocument *doc, const QString &mimeType)
@@ -480,10 +511,9 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
 
     const QString mimeType = m_page->cmbRenderType->itemData(index).toString();
 
-    if (mimeType.isEmpty()) return;
-
-    // m_page->bnRenderOptions->setEnabled(mimeType != "image/gif" && mimeType != "image/webp" && mimeType != "image/png" );
-    m_page->lblGifWarningFPS->setVisible((mimeType == "image/gif" && m_page->intFramesPerSecond->value() > 50));
+    /*
+    m_page->bnRenderOptions->setEnabled(mimeType != "image/gif" && mimeType != "image/webp" && mimeType != "image/png");
+    */
 
     ffmpegWarningCheck();
 
@@ -765,8 +795,8 @@ void KisDlgAnimationRenderer::slotExportTypeChanged()
 
 void KisDlgAnimationRenderer::frameRateChanged(int framerate)
 {
-    const QString mimeType = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
-    m_page->lblGifWarningFPS->setVisible((mimeType == "image/gif" && framerate > 50));
+    Q_UNUSED(framerate);
+    ffmpegWarningCheck();
 }
 
 void KisDlgAnimationRenderer::slotLockAspectRatioDimensionsWidth(int width)

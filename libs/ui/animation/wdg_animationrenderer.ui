@@ -269,26 +269,6 @@
           </widget>
          </item>
          <item row="5" column="0" colspan="2">
-          <widget class="QLabel" name="lblGifWarningFPS">
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Warning:&lt;/span&gt; animated gif images cannot have a framerate higher than 50. The framerate will be reduced to 50 frames per second.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0" colspan="2">
-          <widget class="QLabel" name="lblGifWarningFFMpeg">
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Warning:&lt;/span&gt; FFMpeg must be at least version 4.2+ for gif transparency to work&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0" colspan="2">
           <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -402,6 +382,19 @@
      </layout>
     </widget>
    </item>
+   <item>
+    <widget class="KisWarningBlock" name="lblWarnings">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string/>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -409,6 +402,12 @@
    <class>KisFileNameRequester</class>
    <extends>QWidget</extends>
    <header>kis_file_name_requester.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisWarningBlock</class>
+   <extends>QGroupBox</extends>
+   <header location="global">kis_warning_block.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

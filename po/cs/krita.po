@@ -49,7 +49,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-07 00:57+0000\n"
-"PO-Revision-Date: 2023-01-13 09:38+0100\n"
+"PO-Revision-Date: 2023-02-08 13:50+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -57,7 +57,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -13727,7 +13727,7 @@ msgstr "Celoobrazovkový režim"
 #, kde-format
 msgctxt "action"
 msgid "Detach Canvas"
-msgstr ""
+msgstr "Oddělit plátno"
 
 #. i18n: context: toolTip @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:642
@@ -13889,7 +13889,7 @@ msgstr ""
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr ""
+msgstr "&Zvětšení na 100%"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
@@ -13899,7 +13899,7 @@ msgstr ""
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
-msgstr ""
+msgstr "Zvětšení na 100%"
 
 #. i18n: context: text @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:774
@@ -13937,7 +13937,7 @@ msgstr "Oddálit"
 #, kde-format
 msgctxt "action"
 msgid "Fit to View"
-msgstr ""
+msgstr "Vyplnit pohled"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
@@ -16979,7 +16979,7 @@ msgstr "Maska Výběru"
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
-msgstr ""
+msgstr "Pozadí"
 
 #: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:618
 #, kde-format
@@ -17987,7 +17987,7 @@ msgstr ""
 #, kde-format
 msgctxt "description of a file type"
 msgid "CSV Document"
-msgstr ""
+msgstr "Dokument CSV"
 
 #: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2058
 #: libs/ui/KisMainWindow.cpp:2141
@@ -27929,7 +27929,7 @@ msgstr "Zvětšení na 100%"
 #: libs/ui/input/kis_zoom_action.cpp:117
 #, kde-format
 msgid "Fit to View"
-msgstr ""
+msgstr "Vyplnit pohled"
 
 #: libs/ui/input/kis_zoom_action.cpp:118
 #, kde-format
@@ -29257,7 +29257,7 @@ msgstr ""
 #: libs/ui/KisDocument.cpp:934
 #, kde-format
 msgid "Could not save %1."
-msgstr ""
+msgstr "Nelze uložit %1."
 
 #: libs/ui/KisDocument.cpp:948
 #, kde-format
@@ -29325,7 +29325,7 @@ msgstr "Otevírá se dokument"
 #: libs/ui/KisDocument.cpp:1897
 #, kde-format
 msgid "Could not open %1."
-msgstr ""
+msgstr "Nelze otevřít %1."
 
 #: libs/ui/KisDocument.cpp:1907
 #, kde-format
@@ -29439,7 +29439,7 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:139
 #, kde-format
 msgid "Unexpected error."
-msgstr ""
+msgstr "Neočekávaná chyba."
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format
@@ -29900,13 +29900,13 @@ msgstr ""
 #, kde-format
 msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
-msgstr ""
+msgstr "Paleta Krita (KPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:103
 #, kde-format
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
-msgstr ""
+msgstr "Paleta GIMPu (GPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:106
 #, kde-format
@@ -33914,7 +33914,7 @@ msgstr "Možnosti nástrojů"
 #: libs/widgets/KoZoomMode.cpp:14
 #, kde-format
 msgid "Fit View"
-msgstr ""
+msgstr "Vyplnit pohled"
 
 #: libs/widgets/KoZoomMode.cpp:15
 #, kde-format
@@ -37614,25 +37614,25 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
-msgstr ""
+msgstr "Žádný"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
-msgstr ""
+msgstr "Jednoduchý"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:377
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
-msgstr ""
+msgstr "Vyvážený"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
-msgstr ""
+msgstr "Podrobný"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:391
 #, kde-format
@@ -37644,7 +37644,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
-msgstr ""
+msgstr "Vloženě"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:411
 #, kde-format
@@ -45931,11 +45931,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:329
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
+#, kde-format
 msgid "Encoder parameters"
-msgstr "Změnit parametr"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:335
@@ -47843,7 +47841,7 @@ msgstr ""
 #, kde-format
 msgctxt "TIFF options"
 msgid "None"
-msgstr ""
+msgstr "Žádný"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:40
 #, kde-format
@@ -47855,13 +47853,13 @@ msgstr ""
 #, kde-format
 msgctxt "TIFF options"
 msgid "Deflate (ZIP)"
-msgstr ""
+msgstr "Deflate (ZIP)"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:45
 #, kde-format
 msgctxt "TIFF options"
 msgid "Lempel-Ziv & Welch"
-msgstr ""
+msgstr "Lempel-Ziv & Welch"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:47
 #, kde-format
@@ -48532,7 +48530,7 @@ msgstr ""
 #, kde-format
 msgctxt "WebP metadata options"
 msgid "Filters:"
-msgstr ""
+msgstr "Filtry:"
 
 #: plugins/impex/webp/kis_webp_import.cpp:104
 #, kde-format
@@ -48852,13 +48850,13 @@ msgstr "Těžká"
 #, kde-format
 msgctxt "Background painting color"
 msgid "Background"
-msgstr ""
+msgstr "Pozadí"
 
 #: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:68
 #, kde-format
 msgctxt "Foreground painting color"
 msgid "Foreground"
-msgstr ""
+msgstr "Popředí"
 
 #: plugins/paintops/defaultpaintops/defaultpaintops_plugin.cc:35
 #, kde-format
@@ -53965,7 +53963,7 @@ msgstr "Rozsah"
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
 msgctxt "Value in DebuggerTable"
 msgid "Value"
-msgstr ""
+msgstr "Hodnota"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:22
 msgid "Step Over"
@@ -56967,7 +56965,7 @@ msgstr "Odkaz"
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
-msgstr ""
+msgstr "Vše"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:717
 #, kde-format
@@ -56975,11 +56973,13 @@ msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr ""
 
+# Přechod sklouznutí má posunovače, kde vlevo (žádný výběr) znamená průhlednost a vpravo (výběr 100 %) znamená neprůhlednost.
+# Opačně to nedává smysl.
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:720
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
-msgstr ""
+msgstr "Průhlednost"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:723
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-07 00:57+0000\n"
-"PO-Revision-Date: 2023-02-03 16:07+0100\n"
+"PO-Revision-Date: 2023-02-08 07:24+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -23893,7 +23893,7 @@ msgstr "პროფილი"
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:151
 #, kde-format
 msgid "Profile Properties"
-msgstr ""
+msgstr "პროფილის თვისებები"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
@@ -23906,7 +23906,7 @@ msgstr "წყარო:"
 #: libs/ui/forms/wdgcustompattern.ui:43
 #, kde-format
 msgid "Current Layer"
-msgstr ""
+msgstr "მიმდინარე ფენა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSource)
 #: libs/ui/forms/wdgcustompattern.ui:48
@@ -27115,7 +27115,7 @@ msgstr "არცერთი"
 #, kde-format
 msgctxt "Waiting for user input"
 msgid "Input..."
-msgstr ""
+msgstr "შეყვანა..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/input/config/kis_input_configuration_page.ui:48
@@ -27132,7 +27132,7 @@ msgstr ""
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:38
 #, kde-format
 msgid "Delete Shortcut"
-msgstr ""
+msgstr "მალსახმობის წაშლა"
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:83
 #, kde-format
@@ -45731,11 +45731,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:329
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
+#, kde-format
 msgid "Encoder parameters"
-msgstr "პარამეტრის შეცვლა"
+msgstr "ენკოდერის მორგება"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:335
@@ -48862,7 +48860,7 @@ msgstr "გამოცვლა"
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:181
 #, kde-format
 msgid "Winding Fill"
-msgstr ""
+msgstr "სრული შევსება"
 
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:205
 #, kde-format
@@ -49306,7 +49304,7 @@ msgstr ""
 #: plugins/paintops/hatching/wdghatchingoptions.ui:72
 #, kde-format
 msgid "Separation:"
-msgstr ""
+msgstr "გაცალკევება:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:148

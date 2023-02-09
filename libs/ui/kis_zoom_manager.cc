@@ -92,6 +92,7 @@ void KisZoomManager::updateScreenResolution(QWidget *parentWidget)
 
     KisCoordinatesConverter *converter =
         dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);
+    KIS_ASSERT_RECOVER_RETURN(converter);
 
     converter->setDevicePixelRatio(m_devicePixelRatio);
 

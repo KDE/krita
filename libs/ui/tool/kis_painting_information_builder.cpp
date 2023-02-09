@@ -242,17 +242,20 @@ qreal KisToolFreehandPaintingInformationBuilder::calculatePerspective(const QPoi
 qreal KisToolFreehandPaintingInformationBuilder::canvasRotation() const
 {
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(m_tool->canvas());
+    KIS_ASSERT_RECOVER_RETURN_VALUE(canvas, 0.0);
     return canvas->coordinatesConverter()->rotationAngle();
 }
 
 bool KisToolFreehandPaintingInformationBuilder::canvasMirroredX() const
 {
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(m_tool->canvas());
+    KIS_ASSERT_RECOVER_RETURN_VALUE(canvas, false);
     return canvas->coordinatesConverter()->xAxisMirrored();
 }
 
 bool KisToolFreehandPaintingInformationBuilder::canvasMirroredY() const
 {
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(m_tool->canvas());
+    KIS_ASSERT_RECOVER_RETURN_VALUE(canvas, false);
     return canvas->coordinatesConverter()->yAxisMirrored();
 }

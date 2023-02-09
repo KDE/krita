@@ -88,6 +88,7 @@ void KisZoomAction::Private::zoomTo(bool zoomIn, const QPoint &point)
         KoCanvasControllerWidget *controller =
             dynamic_cast<KoCanvasControllerWidget*>(
                 q->inputManager()->canvas()->canvasController());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(controller);
 
         controller->zoomRelativeToPoint(point, newZoom / oldZoom);
     } else {
@@ -315,6 +316,7 @@ void KisZoomAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &
             KoCanvasControllerWidget *controller =
                 dynamic_cast<KoCanvasControllerWidget*>(
                     inputManager()->canvas()->canvasController());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(controller);
 
             controller->zoomRelativeToPoint(startPos.toPoint(), coeff);
         }

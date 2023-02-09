@@ -848,6 +848,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
 
             KisCanvasController *canvasController =
                 dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
+            KIS_ASSERT_RECOVER_RETURN(canvasController);
             canvasController->rotateCanvas(angleDifference);
             m_canvasRotationIndicatorRect = rotationIndicatorRect(finalAngle);
 
@@ -933,6 +934,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
                 qreal angleDifference = -m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs
                 KisCanvasController *canvasController =
                         dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
+                KIS_ASSERT_RECOVER_RETURN(canvasController);
                 canvasController->rotateCanvas(angleDifference);
                 m_canvasRotationIndicatorRect = rotationIndicatorRect(0);
 

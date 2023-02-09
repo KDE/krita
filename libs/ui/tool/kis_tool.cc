@@ -205,6 +205,7 @@ QPointF KisTool::convertToPixelCoord(const QPointF& pt)
 QPointF KisTool::convertToPixelCoordAndAlignOnWidget(const QPointF &pt)
 {
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    Q_ASSERT(canvas2);
     const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
     const QPointF imagePos = converter->widgetToImage(QPointF(converter->documentToWidget(pt).toPoint()));
     return imagePos;
@@ -303,6 +304,7 @@ QPainterPath KisTool::pixelToView(const QPainterPath &pixelPolygon) const
 KisOptimizedBrushOutline KisTool::pixelToView(const KisOptimizedBrushOutline &path) const
 {
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    Q_ASSERT(canvas2);
     const KisCoordinatesConverter *coordsConverter = canvas2->coordinatesConverter();
     return path.mapped(coordsConverter->imageToDocumentTransform() * coordsConverter->documentToFlakeTransform());
 }

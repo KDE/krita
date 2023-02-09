@@ -71,8 +71,11 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_flac
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/xiph/flac/releases/download/1.4.2/flac-1.4.2.tar.xz
-    URL_HASH SHA256=e322d58a1f48d23d9dd38f432672865f6f79e73a6f9cc5a5f57fcaa83eb5a8e4
+    # the official .tar.xz cannot be unpacked by CMake on macOS due to usage
+    # of UTF-8 internationalized filenames in
+    # test/flac-to-flac-metadata-test-files.
+    GIT_REPOSITORY https://github.com/xiph/flac.git
+    GIT_TAG 1.4.2
 
     # Emmet: if you need metaflac, please add:
     # -DIconv_IS_BUILT_IN=TRUE

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-01-29 08:43+0100\n"
+"PO-Revision-Date: 2023-02-08 10:28+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -14485,7 +14485,7 @@ msgstr "გამოსახულების გაცალკევებ�
 #, kde-format
 msgctxt "action"
 msgid "Select"
-msgstr "_არჩევა"
+msgstr "აირჩიეთ"
 
 #. i18n: context: text @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1273
@@ -19428,7 +19428,7 @@ msgstr "იარლიყი"
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:196
 #, kde-format
 msgid "Comment"
-msgstr "კომე_ნტარი"
+msgstr "კომენტარი"
 
 #: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:74
 #, kde-format
@@ -21871,7 +21871,7 @@ msgstr "დახურე, არ შეინახო"
 #: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:68
 #, kde-format
 msgid "Layer name:"
-msgstr "ფე_ნის სახელი:"
+msgstr "ფენის სახელი:"
 
 #: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:89
 #, kde-format
@@ -25067,7 +25067,7 @@ msgstr ""
 #: libs/ui/forms/wdglayerproperties.ui:109
 #, kde-format
 msgid "Color space:"
-msgstr "ფერთა _სივრცე:"
+msgstr "ფერების სივრცე:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileTitle)
 #: libs/ui/forms/wdglayerproperties.ui:138
@@ -38834,7 +38834,7 @@ msgstr ""
 #: plugins/extensions/colorrange/colorrange.xmlgui:4
 #, kde-format
 msgid "Select"
-msgstr "_არჩევა"
+msgstr "აირჩიეთ"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgColorRange)
 #: plugins/extensions/colorrange/dlg_colorrange.cc:49
@@ -40583,7 +40583,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:column"
 msgid "Comment"
-msgstr "კომე_ნტარი"
+msgstr "კომენტარი"
 
 #: plugins/extensions/qmic/kis_qmic_interface.cpp:239
 msgctxt "(qtundo-format)"
@@ -45103,7 +45103,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Select"
-msgstr "_არჩევა"
+msgstr "აირჩიეთ"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:121
 #, kde-format
@@ -53882,7 +53882,7 @@ msgstr ""
 #, kde-format
 msgctxt "The 'fill with' section label in fill tool options"
 msgid "Fill with"
-msgstr "_შევსება"
+msgstr "შევსება"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:469
 #, kde-format
@@ -56249,7 +56249,7 @@ msgstr ""
 #, kde-format
 msgctxt "The 'fill with' section label in enclose and fill tool options"
 msgid "Fill with"
-msgstr "_შევსება"
+msgstr "შეივსება"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:476
 #, kde-format

@@ -49,7 +49,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-01-13 09:38+0100\n"
+"PO-Revision-Date: 2023-02-08 13:50+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -57,7 +57,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -17757,7 +17757,7 @@ msgstr ""
 #, kde-format
 msgctxt "description of a file type"
 msgid "CSV Document"
-msgstr ""
+msgstr "Dokument CSV"
 
 #: libs/libkis/Document.cpp:936 libs/ui/KisMainWindow.cpp:2053
 #: libs/ui/KisMainWindow.cpp:2136
@@ -47380,7 +47380,7 @@ msgstr ""
 #, kde-format
 msgctxt "TIFF options"
 msgid "None"
-msgstr ""
+msgstr "Žádný"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:40
 #, kde-format
@@ -47392,13 +47392,13 @@ msgstr ""
 #, kde-format
 msgctxt "TIFF options"
 msgid "Deflate (ZIP)"
-msgstr ""
+msgstr "Deflate (ZIP)"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:45
 #, kde-format
 msgctxt "TIFF options"
 msgid "Lempel-Ziv & Welch"
-msgstr ""
+msgstr "Lempel-Ziv & Welch"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:47
 #, kde-format
@@ -53556,7 +53556,7 @@ msgstr "Rozsah"
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
 msgctxt "Value in DebuggerTable"
 msgid "Value"
-msgstr ""
+msgstr "Hodnota"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:22
 msgid "Step Over"

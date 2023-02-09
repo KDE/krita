@@ -32,6 +32,8 @@ if(UNIX)
         URL https://pypi.python.org/packages/source/P/PyQt5/PyQt5-5.15.7.tar.gz
         URL_HASH SHA256=755121a52b3a08cb07275c10ebb96576d36e320e572591db16cfdbc558101594
 
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-Qt-composite-module-lacking-a-platform-tag-on-ma.patch
+
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${KRITA_PYTHONPATH}"
             ${PREFIX_ext_pyqt}/bin/sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --jobs ${SUBMAKE_JOBS} ${_extra_pyqt_config}
@@ -132,6 +134,8 @@ elseif(WIN32)
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://pypi.python.org/packages/source/P/PyQt5/PyQt5-5.15.7.tar.gz
         URL_HASH SHA256=755121a52b3a08cb07275c10ebb96576d36e320e572591db16cfdbc558101594
+
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-Qt-composite-module-lacking-a-platform-tag-on-ma.patch
 
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env 
             PYTHONPATH=${_krita_pythonpath}

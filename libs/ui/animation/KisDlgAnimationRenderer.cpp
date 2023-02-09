@@ -256,7 +256,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
     // Initialize these settings based on last used configuration when possible..
     if (!lastUsedOptions.lastDocuemntPath.isEmpty() &&
-            lastUsedOptions.lastDocuemntPath == documentPath) {
+        lastUsedOptions.lastDocuemntPath == documentPath) {
 
         // If the file is the same as last time, we use the last used basename.
         m_page->txtBasename->setText(lastUsedOptions.basename);
@@ -339,7 +339,6 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     cfg.setFFMpegLocation(ffmpegPath);
     
     connect(m_page->ffmpegLocation, SIGNAL(fileSelected(QString)), SLOT(slotFFmpegChangeAndValidate(QString)));
-    
 
     // Initialize these settings based on the current document context..
     m_page->intStart->setValue(doc.image()->animationInterface()->playbackRange().start());
@@ -412,9 +411,18 @@ void KisDlgAnimationRenderer::slotFFMpegChanged(const QString& path) {
 
             m_page->cmbRenderType->addItem(description, mime);
         }
-        selectRenderType(m_page->cmbRenderType->currentIndex());
 
-        connect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), this, SLOT(selectRenderType(int)));
+        // When no FFMpeg is available we don't have anything to populate this with.
+        // There are probably more graceful ways of handling this.
+        if (m_page->cmbRenderType->count() == 0) {
+            m_page->cmbRenderType->addItem(i18nc("No ffmpeg render types available.","None"));
+            m_page->cmbRenderType->setCurrentIndex(0);
+            m_page->cmbRenderType->setDisabled(true);
+        } else {
+            m_page->cmbRenderType->setDisabled(false);
+            selectRenderType(m_page->cmbRenderType->currentIndex());
+            connect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), this, SLOT(selectRenderType(int)));
+        }
     }
 
     m_page->lblFFMpegVersion->setText(i18n("FFmpeg Version:") + " " + ffmpegVersion);

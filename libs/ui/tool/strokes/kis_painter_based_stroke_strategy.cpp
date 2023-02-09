@@ -380,6 +380,8 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
             KisIndirectPaintingSupport *indirect =
                 dynamic_cast<KisIndirectPaintingSupport*>(node.data());
             KIS_ASSERT_RECOVER_RETURN(hasIndirectPainting || m_strokeInfos.first()->painter->selection());
+            // when hasIndirectPainting is true, indirect cannot be null
+            KIS_ASSERT_RECOVER_RETURN(!hasIndirectPainting || indirect);
             KIS_ASSERT_RECOVER_RETURN(!hasIndirectPainting || !indirect->temporarySelection() || !m_strokeInfos.first()->painter->selection());
         }
     });

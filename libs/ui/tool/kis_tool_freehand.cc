@@ -347,6 +347,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
     QPointF offset = actualWidgetPosition - lastWidgetPosition;
 
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(canvas2);
     QRect screenRect = QGuiApplication::primaryScreen()->availableVirtualGeometry();
 
     qreal scaleX = 0;

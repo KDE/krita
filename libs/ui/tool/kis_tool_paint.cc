@@ -87,6 +87,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     }
 
     KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
+    Q_ASSERT(kiscanvas);
     connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->canvasResourceProvider(), SLOT(slotPainting()));
 
     connect(&m_colorSamplerHelper, SIGNAL(sigRequestCursor(QCursor)), this, SLOT(slotColorPickerRequestedCursor(QCursor)));
@@ -566,6 +567,7 @@ void KisToolPaint::decreaseBrushSize()
 void KisToolPaint::showBrushSize()
 {
      KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+     KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
      kisCanvas->viewManager()->showFloatingMessage(i18n("Brush Size: %1 px", currentPaintOpPreset()->settings()->paintOpSize())
                                                    , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
@@ -681,6 +683,7 @@ KisOptimizedBrushOutline KisToolPaint::getOutlinePath(const QPointF &documentPos
     Q_UNUSED(event);
 
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    Q_ASSERT(canvas2);
     const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
 
     KisPaintInformation info(convertToPixelCoord(documentPos));

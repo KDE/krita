@@ -269,6 +269,7 @@ void KisTagSelectionWidget::setTagList(bool editable, QList<KoID> &selected, QLi
 
 
     WdgAddTagButton* addTagButton = dynamic_cast<WdgAddTagButton*>(m_addTagButton);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(addTagButton);
     addTagButton->setAvailableTagsList(notSelected);
 
     Q_FOREACH(KoID tag, selected) {

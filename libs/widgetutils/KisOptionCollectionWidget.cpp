@@ -108,6 +108,7 @@ public:
         QBoxLayout *layoutMain = dynamic_cast<QBoxLayout*>(layout());
         if (layoutMain->direction() == QBoxLayout::TopToBottom) {
             QBoxLayout *layoutWidget = dynamic_cast<QBoxLayout*>(layoutMain->itemAt(0)->layout());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(layoutWidget);
             layoutWidget->setContentsMargins(margin, 0, margin, 0);
         }
     }
@@ -379,6 +380,7 @@ void KisOptionCollectionWidget::setWidgetVisible(int index, bool visible)
     KisOptionCollectionWidgetWrapper *widgetWrapper = m_d->widgetWrappers[index];
 
     QBoxLayout *layoutMain = dynamic_cast<QBoxLayout*>(layout());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(layoutMain);
 
     if (visible) {
         if (layoutMain->indexOf(widgetWrapper) != -1) {

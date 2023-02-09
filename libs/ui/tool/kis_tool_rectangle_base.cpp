@@ -91,6 +91,7 @@ void KisToolRectangleBase::roundCornersChanged(int rx, int ry)
 void KisToolRectangleBase::showSize()
 {
     KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
     kisCanvas->viewManager()->showFloatingMessage(i18n("Width: %1 px\nHeight: %2 px"
                                                        , createRect(m_dragStart, m_dragEnd).width()
                                                        , createRect(m_dragStart, m_dragEnd).height()), QIcon(), 1000
@@ -289,6 +290,7 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
     }
     else {
         KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+        Q_ASSERT(kisCanvas);
         kisCanvas->viewManager()->showFloatingMessage(i18n("X: %1 px\nY: %2 px"
                                                            , QString::number(m_dragStart.x(), 'f', 1)
                                                            , QString::number(m_dragStart.y(), 'f', 1)), QIcon(), 1000

@@ -151,7 +151,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
 
     // editor specific controls display
-    if (canvas->paintingAssistantsDecoration()->isEditingAssistants()) {
+    if (canvas && canvas->paintingAssistantsDecoration()->isEditingAssistants()) {
 
         // draws a circle around the vanishing point node while editing
         QTransform initialTransform = converter->documentToWidgetTransform();

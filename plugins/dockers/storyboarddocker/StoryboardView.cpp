@@ -213,6 +213,7 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
                 int thumbnailheight = thumbnailIsVisible() ? 120 : 0;
                 if (m_itemOrientation == Qt::Vertical) {
                     const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
+                    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(Model, QRect());
                     parentRect.setTop(parentRect.top() + thumbnailheight + fontHeight + Model->visibleCommentsUpto(index) * 100);
                     parentRect.setHeight(100);
                     return parentRect;

@@ -472,16 +472,16 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_HEIGH
 template <typename channels_type>
 struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_HEIGHT_PHOTOSHOP, true> : public StrengthCompositeFunctionBase<channels_type>
 {
-    const typename KoColorSpaceMathsTraits<channels_type>::compositetype weight;
+    using composite_type = typename KoColorSpaceMathsTraits<channels_type>::compositetype;
+    const composite_type weight;
 
     CompositeFunction(qreal strength)
         : StrengthCompositeFunctionBase<channels_type>(strength)
-        , weight(10 * StrengthCompositeFunctionBase<channels_type>::strength)
+        , weight(composite_type(10) * StrengthCompositeFunctionBase<channels_type>::strength)
     {}
     
     channels_type apply(channels_type src, channels_type dst)
     {
-        using composite_type = typename KoColorSpaceMathsTraits<channels_type>::compositetype;
         using namespace Arithmetic;
         return qBound(composite_type(KoColorSpaceMathsTraits<channels_type>::zeroValue),
                       dst * weight / unitValue<channels_type>() - src,

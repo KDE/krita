@@ -351,8 +351,8 @@ void KisPopupPalette::reconfigure()
     // the margin in degrees between buttons
     qreal margin = 10.0; 
     // visual center
-    qreal center = m_popupPaletteSize/2 - auxButtonSize/2;
-    qreal length = m_popupPaletteSize/2 + auxButtonSize/2 + 5;
+    qreal center = m_popupPaletteSize/2 - auxButtonSize/2.0;
+    qreal length = m_popupPaletteSize/2 + auxButtonSize/2.0 + 5;
     {
         int buttonCount = 2;
         int arcLength = 90;

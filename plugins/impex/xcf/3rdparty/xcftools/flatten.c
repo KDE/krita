@@ -497,6 +497,7 @@ flattenTopdown(struct FlattenSpec *spec, struct Tile *top,
         if( !spec->layers[nlayers].isVisible )
             continue ;
 
+        freeTile(tile);
         tile = getLayerTile(&spec->layers[nlayers],where);
         if (tile == XCF_PTR_EMPTY) {
             return XCF_PTR_EMPTY;
@@ -568,6 +569,7 @@ flattenTopdown(struct FlattenSpec *spec, struct Tile *top,
                  * this is visible after all. So just free it and return 'top'.
                  */
                 freeTile(below);
+                freeTile(top);
                 return top ;
             }
             if (merge_exotic(below,tile,spec->layers[nlayers].mode) != XCF_OK) {
@@ -579,6 +581,7 @@ flattenTopdown(struct FlattenSpec *spec, struct Tile *top,
         }
         }
     }
+    freeTile(tile);
     return top ;
 }
 

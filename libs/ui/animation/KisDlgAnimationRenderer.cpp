@@ -142,7 +142,6 @@ KisDlgAnimationRenderer::~KisDlgAnimationRenderer()
 
 void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions)
 {
-    ENTER_FUNCTION();
     const QString documentPath = m_doc->localFilePath();
 
     // Initialize these settings based on last used configuration when possible..
@@ -365,7 +364,6 @@ void KisDlgAnimationRenderer::saveLastUsedConfiguration(QString configurationID,
 }
 
 void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
-    ENTER_FUNCTION() << ppVar(path);
     // Let's START with the assumption that user-specified ffmpeg path is invalid
     // and clear out all of the ffmpeg-specific fields to fill post-validation...
     m_page->cmbRenderType->setDisabled(true);
@@ -377,8 +375,6 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
         QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg(path);
         ffmpegVersion = ffmpegJsonObj["enabled"].toBool() ? ffmpegJsonObj["version"].toString() : i18n("No valid FFmpeg binary supplied...");
         ffmpegCodecs = KisFFMpegWrapper::getSupportedCodecs(ffmpegJsonObj);
-
-        ENTER_FUNCTION() << ppVar(ffmpegVersion) << ppVar(ffmpegCodecs);
 
         // Build map of encoding types to their specific encoder support (e.g. h264 => libopenh264, h264, h264_vaapi or whatever)
         Q_FOREACH(const QString& codec, ffmpegCodecs) {
@@ -639,8 +635,6 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
 
 bool KisDlgAnimationRenderer::validateFFmpeg(bool warn)
 {
-    ENTER_FUNCTION();
-
     QString ffmpeg = m_page->ffmpegLocation->fileName();
 
     if (!ffmpeg.isEmpty()) {

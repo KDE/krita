@@ -8,29 +8,29 @@
 # This file is distributed under the same license as the Krita package.
 #
 #
+#
 # Marko Samastur <markos@elite.org>, 2000.
 # Gregor Rakar <gregor.rakar@kiss.si>, 2002, 2003, 2004, 2005.
 # Andrej Vernekar <andrej.vernekar@gmail.com>, 2002,2003, 2005, 2006, 2007, 2008, 2010, 2011, 2012, 2013.
 # Andrej Vernekar <andrej.vernekar@moj.net>, 2005, 2006, 2007, 2008, 2010, 2011, 2012, 2013.
 # Andrej Mernik <andrejm@ubuntu.si>, 2012, 2013.
 # Jure Repinc <jlp@holodeck1.com>, 2006, 2012.
-# Matjaž Jeran <matjaz.jeran@amis.net>, 2020, 2021, 2022.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2020, 2021, 2022, 2023.
 # Martin Srebotnjak <miles@filmsi.net>, 2020, 2021, 2022.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-07 00:57+0000\n"
-"PO-Revision-Date: 2023-01-31 20:03+0100\n"
-"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
+"PO-Revision-Date: 2023-02-09 08:37+0100\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "X-Generator: Poedit 3.2.2\n"
 
@@ -2338,7 +2338,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Move_tool.kpp"
 msgid "Move tool"
-msgstr " Premakni, orodje"
+msgstr "Premakni, orodje"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8204,7 +8204,7 @@ msgstr "Preklopi razhroščevalnik grafične tablice"
 #, kde-format
 msgctxt "action"
 msgid "Show Krita log for bug reports."
-msgstr "Pokaži dnevnik programa Krita za poročila o napaki"
+msgstr "Pokaži dnevnik programa Krita za poročila o napaki."
 
 #. i18n: context: text @ Action (sysinfo), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (sysinfo), Actions (General), ActionCollection (Krita)
@@ -8216,7 +8216,7 @@ msgstr "Pokaži dnevnik programa Krita za poročila o napaki"
 #, kde-format
 msgctxt "action"
 msgid "Show system information for bug reports."
-msgstr "Pokaži sistemske podatke za poročila o napaki"
+msgstr "Pokaži sistemske podatke za poročila o napaki."
 
 #. i18n: context: text @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
@@ -10686,7 +10686,7 @@ msgctxt "action"
 msgid ""
 "Insert column to the left of selection, moving the tail of animation to the "
 "right"
-msgstr "Vstavi stolpec levo od izbora, s premikom repa animacije v desno."
+msgstr "Vstavi stolpec levo od izbora, s premikom repa animacije v desno"
 
 #. i18n: context: text @ Action (insert_column_right), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2077
@@ -10702,7 +10702,7 @@ msgctxt "action"
 msgid ""
 "Insert column to the right of selection, moving the tail of animation to the "
 "right"
-msgstr "Vstavi stolpec desno od izbora, s premikom repa animacije v desno."
+msgstr "Vstavi stolpec desno od izbora, s premikom repa animacije v desno"
 
 #. i18n: context: text @ Action (insert_multiple_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2089
@@ -14908,7 +14908,7 @@ msgstr "Iz&beri iz barvnega obsega ..."
 #, kde-format
 msgctxt "action"
 msgid "Select from Color Range"
-msgstr "Izberi iz barvnega obsega ..."
+msgstr "Izberi iz barvnega obsega"
 
 #. i18n: context: text @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1501
@@ -16160,12 +16160,12 @@ msgstr "Odstrani podpot"
 #: libs/flake/html/HtmlWriter.cpp:70
 #, kde-format
 msgid "Saving KoShapeLayer to html is not implemented yet!"
-msgstr "Oprostite, shranjevanje KoShapeLayer v HTML še ni podprta."
+msgstr "Oprostite, shranjevanje KoShapeLayer v HTML še ni podprta!"
 
 #: libs/flake/html/HtmlWriter.cpp:74
 #, kde-format
 msgid "KoShapeGroup to html is not implemented yet!"
-msgstr "Oprostite, podpora KoShapeGroup v html še ni podprta."
+msgstr "Oprostite, podpora KoShapeGroup v html še ni podprta!"
 
 #: libs/flake/html/HtmlWriter.cpp:80
 #, kde-format
@@ -19425,7 +19425,7 @@ msgstr "2. Na mesto vira (%1) ni možno pisati."
 #: libs/resources/KisResourceLocator.cpp:817
 #, kde-format
 msgid "Could not add %1 to the database"
-msgstr "%1 ni mogoče dodati plasti k zbirki podatkov."
+msgstr "%1 ni mogoče dodati plasti k zbirki podatkov"
 
 #: libs/resources/KisResourceLocator.cpp:861
 #: libs/resources/KisResourceLocator.cpp:1208
@@ -20015,7 +20015,7 @@ msgstr "Dodajanje vira ni uspelo."
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to overwrite the resource"
-msgstr "Vira ni bilo mogoče prepisati."
+msgstr "Vira ni bilo mogoče prepisati"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:193
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:226
@@ -20241,7 +20241,7 @@ msgstr "Kopiraj združeno"
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
-msgstr "Izbor je že v vektorski obliki"
+msgstr "Izbor je že v vektorski obliki "
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:474
 #: libs/ui/actions/kis_selection_action_factories.cpp:494
@@ -20253,7 +20253,7 @@ msgstr "Pretvori v vektorski izbor"
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
-msgstr "Izbor je že v rastrski obliki"
+msgstr "Izbor je že v rastrski obliki "
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:535
 #, kde-format
@@ -20384,7 +20384,7 @@ msgstr ""
 "ffmpeg.org</a>).</i><br><br>               Če želite izvedeti več o "
 "nastavitvah Krite za upodabljanje animacij, obiščite <a href=\"https://docs."
 "krita.org/en/reference_manual/render_animation.html#setting-up-krita-for-"
-"exporting-animations\">ta razdelek našega Uporabniškega priročnika</a>."
+"exporting-animations\">ta razdelek našega Uporabniškega priročnika.</a>"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:534
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:554
@@ -20878,7 +20878,7 @@ msgid ""
 "destination streams of the ffmpeg"
 msgstr ""
 "Tukaj dodajte vse možnosti filtriranja ffmpeg. Vstavi se med izvorne in "
-"ciljne tokove ffmpega."
+"ciljne tokove ffmpega"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -21554,7 +21554,7 @@ msgstr "Interval preskoka:"
 #: libs/ui/animation/VideoImportDialog.ui:391
 #, kde-format
 msgid "Start at: "
-msgstr "Prični pri:"
+msgstr "Prični pri: "
 
 #. i18n: ectx: property (text), widget (QLabel, exportDurationLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
@@ -21979,7 +21979,7 @@ msgstr ""
 #, kde-format
 msgctxt "floating message about mirroring"
 msgid "Horizontal mirroring: %1 "
-msgstr "Vodoravno zrcaljenje: %1"
+msgstr "Vodoravno zrcaljenje: %1 "
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
 #: libs/ui/canvas/kis_canvas_controller.cpp:347
@@ -26702,7 +26702,7 @@ msgstr "Uporabi predogled s sklada v orodju Preoblikuj"
 #: libs/ui/forms/wdgperformancesettings.ui:557
 #, kde-format
 msgid "Force Instant Preview"
-msgstr " Vsili sprotni predogled"
+msgstr "Vsili sprotni predogled"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFiltersForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:563
@@ -26921,7 +26921,7 @@ msgstr "Vodoravni polmer pravokotnih kotov"
 #: libs/ui/forms/wdgrectangleconstraints.ui:181
 #, kde-format
 msgid "Round X: "
-msgstr "Zaobljeni X:"
+msgstr "Zaobljeni X: "
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intRoundCornersY)
 #: libs/ui/forms/wdgrectangleconstraints.ui:197
@@ -26933,7 +26933,7 @@ msgstr "Navpični polmer pravokotnih kotov"
 #: libs/ui/forms/wdgrectangleconstraints.ui:203
 #, kde-format
 msgid "Round Y: "
-msgstr "Zaobljeni Y:"
+msgstr "Zaobljeni Y: "
 
 #. i18n: ectx: property (text), widget (QLabel, newBrushNameLabel)
 #: libs/ui/forms/wdgsavebrushpreset.ui:35
@@ -29781,7 +29781,7 @@ msgstr "Odpiranje dokumenta"
 #: libs/ui/KisDocument.cpp:1897
 #, kde-format
 msgid "Could not open %1."
-msgstr "Ni mogoče odpreti %1"
+msgstr "Ni mogoče odpreti %1."
 
 #: libs/ui/KisDocument.cpp:1907
 #, kde-format
@@ -32340,7 +32340,7 @@ msgstr "Prekrivnost:"
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:164
 #, kde-format
 msgid "Position: "
-msgstr "Položaj:"
+msgstr "Položaj: "
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:39
 #, kde-format
@@ -33392,7 +33392,7 @@ msgstr "Prilagoditev XML za filter"
 #: libs/ui/widgets/kis_filter_selector_widget.cc:214
 #, kde-format
 msgid "No configuration options"
-msgstr "Ni možnosti nastavitev."
+msgstr "Ni možnosti nastavitev"
 
 #: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:138
 #, kde-format
@@ -33968,7 +33968,7 @@ msgstr "Šum"
 #: plugins/filters/palettize/palettize.ui:211
 #, kde-format
 msgid "Amount:  "
-msgstr "Količina:"
+msgstr "Količina: "
 
 #. i18n: ectx: property (text), widget (QLabel, patternValueModeLabel)
 #: libs/ui/widgets/KisDitherWidget.ui:108
@@ -34558,7 +34558,7 @@ msgstr "Novi kontaktni podatki"
 #: libs/widgets/KoConfigAuthorPage.ui:78
 #, kde-format
 msgid "Given Name:"
-msgstr " Ime:"
+msgstr "Ime:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
 #: libs/widgets/KoConfigAuthorPage.ui:101
@@ -34649,7 +34649,7 @@ msgstr "Dodaj barvo k paleti"
 #: libs/widgets/KoEditColorSetDialog.cpp:202
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only. "
-msgstr "V datoteko palete %1 ni mogoče pisati. Mogoče je samo za branje."
+msgstr "V datoteko palete %1 ni mogoče pisati. Mogoče je samo za branje. "
 
 #. i18n: ectx: property (text), widget (QLabel, paletteLabel)
 #: libs/widgets/KoEditColorSetDialog.cpp:202
@@ -36438,7 +36438,7 @@ msgstr "Shrani pomočnika"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1543
 #, kde-format
 msgid "Density: "
-msgstr "Gostota:"
+msgstr "Gostota: "
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1548
 #, kde-format
@@ -37004,7 +37004,7 @@ msgstr ""
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:297
 #, kde-format
 msgid "Use custom color for selector background."
-msgstr "Uporabi barvo po meri za ozadje izbirnika"
+msgstr "Uporabi barvo po meri za ozadje izbirnika."
 
 #. i18n: ectx: property (title), widget (QGroupBox, useDifferentColorSpaceCheckbox)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:325
@@ -46995,10 +46995,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:329
-#, fuzzy, kde-format
-#| msgid "Modular parameters"
+#, kde-format
 msgid "Encoder parameters"
-msgstr "Modularni parametri"
+msgstr "Parametri kodirnika"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:335
@@ -51859,13 +51858,13 @@ msgstr "Nevtralna točka: "
 #, kde-format
 msgctxt "@label:slider"
 msgid "Brightness: "
-msgstr "Svetlost:"
+msgstr "Svetlost: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:215
 #, kde-format
 msgctxt "@label:slider"
 msgid "Contrast: "
-msgstr "Kontrast:"
+msgstr "Kontrast: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:217
 #, kde-format
@@ -52669,7 +52668,7 @@ msgstr "Poteza"
 #, kde-format
 msgctxt "Option Category"
 msgid "Custom"
-msgstr "Po meri ..."
+msgstr "Po meri"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLbl)
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:110
@@ -52919,7 +52918,7 @@ msgstr ""
 #: plugins/paintops/spray/kis_sprayop_option.cpp:91
 #, kde-format
 msgid "Clustering amount: "
-msgstr "Količina kopičenja:"
+msgstr "Količina kopičenja: "
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:95
 #, kde-format
@@ -56428,7 +56427,7 @@ msgstr "Vrednost"
 #: plugins/tools/basictools/wdgcolorsampler.ui:164
 #, kde-format
 msgid "Radius: "
-msgstr "Polmer:"
+msgstr "Polmer: "
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, radius)
 #: plugins/tools/basictools/wdgcolorsampler.ui:183
@@ -56671,7 +56670,7 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:747
 #, kde-format
 msgid "Click and drag to shear selection."
-msgstr "Kliknite in povlecite za striženje oz. nagib"
+msgstr "Kliknite in povlecite za striženje oz. nagib."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:752
 #, kde-format
@@ -57437,7 +57436,7 @@ msgstr "Magnetni izbor"
 #, kde-format
 msgctxt "Filter radius in Magnetic Select Tool settings"
 msgid "Filter Radius: "
-msgstr "Polmer filtra:"
+msgstr "Polmer filtra: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:741
 #, kde-format

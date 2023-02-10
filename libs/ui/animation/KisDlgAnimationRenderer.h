@@ -63,8 +63,7 @@ private Q_SLOTS:
     void slotLockAspectRatioDimensionsHeight(int height);
 
     void slotExportTypeChanged();
-    void slotFFMpegChanged(const QString& path);
-    void slotFFmpegChangeAndValidate(const QString& path);
+    void setFFmpegPath(const QString& path);
 
     void frameRateChanged(int framerate);
 
@@ -77,7 +76,7 @@ protected Q_SLOTS:
 private: 
     void initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions);
     void ffmpegWarningCheck();
-    bool ffmpegValidate();
+    bool validateFFmpeg(bool warn = false);
 
     static QString defaultVideoFileName(KisDocument *doc, const QString &mimeType);
 
@@ -97,15 +96,16 @@ private:
 private:
     KisImageSP m_image;
     KisDocument *m_doc;
-    WdgAnimationRenderer *m_page {0};
 
     QString m_customFFMpegOptionsString;
     QString ffmpegVersion = "None";
-    // List of all supported output formats.
-    QStringList ffmpegCodecs = QStringList();
-    // Maps supported output format to available list of encoder(s)
-    QMap<QString, QStringList> ffmpegEncoderTypes;
+
+    QStringList ffmpegCodecs = QStringList(); // List of all supported output formats.
+    QMap<QString, QStringList> ffmpegEncoderTypes; // Maps supported output format to available list of encoder(s)
+
     bool m_wantsRenderWithHDR = false;
+
+    WdgAnimationRenderer *m_page {0};
 };
 
 #endif // DLG_ANIMATIONRENDERERIMAGE

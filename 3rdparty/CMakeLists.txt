@@ -151,6 +151,7 @@ if (WIN32)
 elseif (APPLE OR ANDROID)
     set (ZLIB_DEP ext_zlib)
     set (ICONV_DEP ext_iconv)
+    set (GETTEXT_DEP ext_gettext)
 else()
     # In Linux we require system versions for compatibility reasons.
     find_package(ZLIB REQUIRED)

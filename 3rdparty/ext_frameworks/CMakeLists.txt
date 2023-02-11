@@ -115,7 +115,7 @@ ExternalProject_Add(
 if (ANDROID)
     set (KI18N_DEP ext_libintl-lite)
 elseif (APPLE)
-    set (KI18N_DEP ext_gettext)
+    set (KI18N_DEP ${GETTEXT_DEP})
 endif()
 
 ExternalProject_Add(

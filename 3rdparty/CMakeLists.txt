@@ -126,7 +126,6 @@ if (WIN32)
         find_package(Iconv)
         find_package(EXPAT)
         find_package(Gettext)
-        find_package(OpenSSL)
     endif()
 
     if (NOT ZLIB_FOUND)
@@ -143,10 +142,6 @@ if (WIN32)
     
     if (NOT Gettext_FOUND)
         set (GETTEXT_DEP ext_gettext)
-    endif()
-    
-    if (NOT OpenSSL_FOUND)
-        set (OPENSSL_DEP ext_openssl)
     endif()
 elseif (APPLE OR ANDROID)
     set (ZLIB_DEP ext_zlib)

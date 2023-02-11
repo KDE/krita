@@ -408,15 +408,12 @@ mesonify(CROSS_COMPILE_FLAGS _cross_compile_flags)
 mesonify(CROSS_LINKER_FLAGS _cross_linker_flags)
 
 # Block any libraries not coming from our PATH when crosscompiling
-if (UNIX)
-    if (CMAKE_CROSSCOMPILING)
-        set(_pkg_config_libdir "pkg_config_libdir = ''")
-    else()
-        set(_pkg_config_libdir "pkg_config_libdir = '/usr/lib/pkgconfig:/usr/share/pkgconfig'")
-    endif()
+if (UNIX AND CMAKE_CROSSCOMPILING)
+    set(_pkg_config_libdir "pkg_config_libdir = ''")
 else()
     # In Windows either we pick up the MSYS2 pkg-config
     # or we ship our own, both use the correct architecture.
+    # Linux also uses the correct architecture.
     set(_pkg_config_libdir)
 endif()
 

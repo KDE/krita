@@ -150,6 +150,14 @@ if (WIN32)
     endif()
 elseif (APPLE OR ANDROID)
     set (ZLIB_DEP ext_zlib)
+else()
+    # In Linux we require system versions for compatibility reasons.
+    find_package(ZLIB REQUIRED)
+    set_package_properties(ZLIB PROPERTIES
+        DESCRIPTION "Compression library"
+        URL "https://www.zlib.net/"
+        TYPE REQUIRED
+        PURPOSE "Needed for building libpng from source.")
 endif (WIN32)
 
 set(SECURITY_EXE_LINKER_FLAGS "")

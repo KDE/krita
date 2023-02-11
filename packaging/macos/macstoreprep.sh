@@ -72,6 +72,9 @@ findEntitlementsFile() {
 modifyInfoPlistContents() {
     local LAST_LOC=$(pwd)
     cd "${KRITADMG_WDIR}/krita.app/Contents"
+    if [[ -n "${KIS_VERSION}" ]]; then
+        sed -i '' -e "s:$(./MacOS/krita --version 2> /dev/null | awk '{print $2}'):${KIS_VERSION}:" Info.plist
+    fi
     sed -i '' -e 's/org.krita/org.kde.krita/g' Info.plist
     sed -i '' -e "s/org.krita.quicklook/org.kde.krita.quicklook/g" Library/QuickLook/kritaquicklook.qlgenerator/Contents/Info.plist
     sed -i '' -e "s/org.krita.spotlight/org.kde.krita.spotlight/g" Library/Spotlight/kritaspotlight.mdimporter/Contents/Info.plist
@@ -143,6 +146,9 @@ print_usage () {
     printf "USAGE:
   macstoreprep.sh -f=<krita.dmg> [-s=<identity>] [-notarize-ac=<apple-account>]
 
+    -v \t\t\t app version (when the app needs to be resubmited this changes
+    \t\t\t krita --version with the string given [M.m.p]
+
     -s \t\t\t Sign Identity for 3rd party application
 
     -sins \t\t\t Sign Identity for 3rd party Dev installer
@@ -181,6 +187,10 @@ SCRIPT_SOURCE_DIR="$(get_script_dir)"
 # -- Parse input args
 for arg in "${@}"; do
     # If string starts with -sign
+    if [[ ${arg} = -v=* ]]; then
+        KIS_VERSION="${arg#*=}"
+    fi
+
     if [[ ${arg} = -s=* ]]; then
         CODE_SIGNATURE="${arg#*=}"
     fi

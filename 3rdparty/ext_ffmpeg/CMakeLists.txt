@@ -80,7 +80,7 @@ ExternalProject_Add(
     # Emmet: if you need metaflac, please add:
     # -DIconv_IS_BUILT_IN=TRUE
     # -DBUILD_PROGRAMS=FALSE
-    # and add ext_iconv to DEPENDS.
+    # and add ${ICONV_DEP} to DEPENDS.
     # otherwise CMake's FindIconv gets confused due to libiconv having
     # its headers in the include path
 

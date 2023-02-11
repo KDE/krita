@@ -150,6 +150,7 @@ if (WIN32)
     endif()
 elseif (APPLE OR ANDROID)
     set (ZLIB_DEP ext_zlib)
+    set (ICONV_DEP ext_iconv)
 else()
     # In Linux we require system versions for compatibility reasons.
     find_package(ZLIB REQUIRED)
@@ -158,6 +159,13 @@ else()
         URL "https://www.zlib.net/"
         TYPE REQUIRED
         PURPOSE "Needed for building libpng from source.")
+    find_package(Iconv REQUIRED)
+    set_package_properties(Iconv PROPERTIES
+        URL "https://www.gnu.org/software/libiconv/"
+        DESCRIPTION "Conversion library"
+        TYPE REQUIRED
+        PURPOSE "Needed for building exiv2 and gettext from source."
+    )
 endif (WIN32)
 
 set(SECURITY_EXE_LINKER_FLAGS "")

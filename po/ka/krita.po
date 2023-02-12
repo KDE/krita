@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-08 10:28+0100\n"
+"PO-Revision-Date: 2023-02-11 07:13+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -26773,7 +26773,7 @@ msgstr "მალსახმობის დამატება..."
 #, kde-format
 msgctxt "Shortcut type"
 msgid "Key Combination"
-msgstr "კლავიშების მიმდევრობა"
+msgstr "ღილაკების მიმდევრობა"
 
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:70
 #, kde-format
@@ -26914,7 +26914,7 @@ msgstr "ქმედების სახელი"
 #: libs/ui/input/config/kis_input_type_delegate.cpp:35
 #, kde-format
 msgid "Key Combination"
-msgstr "კლავიშების მიმდევრობა"
+msgstr "ღილაკების მიმდევრობა"
 
 #. i18n: ectx: property (text), widget (QLabel, mouseLabel)
 #: libs/ui/input/config/kis_input_type_delegate.cpp:36
@@ -34551,7 +34551,7 @@ msgid ""
 "Search interactively for shortcut names (e.g. Copy) or combination of keys "
 "(e.g. Ctrl+C) by typing them here."
 msgstr ""
-"მალსახმობებს სახელების (მაგალითად, კოპირება) ან თავად კლავიშთა კომბინაციების "
+"მალსახმობებს სახელების (მაგალითად, კოპირება) ან ღილაკების კომბინაციების "
 "(მაგალითად, Ctrl+C) ინტერაქტიული მოძებნა მათი ველში მითითებით."
 
 #. i18n: ectx: property (whatsThis), widget (QTreeWidget, list)
@@ -34562,9 +34562,9 @@ msgid ""
 "(e.g. 'Copy') shown in the left column and keys or combination of keys (e.g. "
 "Ctrl+V) shown in the right column."
 msgstr ""
-"აქ მოტანილია <i>კლავიშთა ბმულების</i> სია, ე.ი. შესაბამისობები მარცხენა "
-"სვეტში მითითებულ ქმედებებსა (მაგალითად, 'კოპირება') და კლავიშთა ბმულებს "
-"(მაგალითად, CTRL-V), შორის მარჯვნივ."
+"აქ მოყვანილია <i>ღილაკის ბმულების</i> სია, ე.ი. შესაბამისობები მარცხენა "
+"სვეტში მითითებულ ქმედებებსა (მაგალითად, 'კოპირება') და ღილაკებს (მაგალითად, "
+"CTRL-V), შორის, მარჯვნივ."
 
 #. i18n: ectx: property (text), widget (QTreeWidget, list)
 #: libs/widgetutils/xmlgui/KisShortcutsDialog.ui:38
@@ -34698,8 +34698,8 @@ msgid ""
 "some applications use.\n"
 "Do you really want to use it as a global shortcut as well?"
 msgstr ""
-"კლავიშების ბმული %1 უკვე გამოიყენება \"%2\" სტანდარტული ქმედებისთვის.\n"
-"გადმოვამისამართო იგი ახალ ქმედებაზე?"
+"ღილაკი %1 უკვე გამოიყენება \"%2\" სტანდარტული ქმედებისთვის.\n"
+"გადმოვამისამართო ახალ ქმედებაზე?"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:585
 #, kde-format

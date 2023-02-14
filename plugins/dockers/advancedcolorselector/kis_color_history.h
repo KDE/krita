@@ -29,7 +29,6 @@ public Q_SLOTS:
     void clearColorHistory();
 private:
     QToolButton* m_clearButton;
-    QList<KoColor> m_colorHistory;
     KisCanvasResourceProvider  *m_resourceProvider; // to disconnect...
 };
 

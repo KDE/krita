@@ -62,6 +62,7 @@ ${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_triangle.cpp
 ${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_simple.cpp
 ${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_wheel.cpp
 ${KRITA_COLORSELECTORNG_SOURCE_DIR}/kis_color_selector_combo_box.cpp
+${KRITA_COLORSELECTORNG_SOURCE_DIR}/KisColorPatchesTableView.cpp
 )
 
 if (WIN32)

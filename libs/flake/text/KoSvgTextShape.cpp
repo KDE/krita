@@ -61,6 +61,8 @@
 
 #include <QSharedData>
 
+using raqm_t_up = KisLibraryResourcePointer<raqm_t, raqm_destroy>;
+
 enum BreakType {
     NoBreak,
     SoftBreak,

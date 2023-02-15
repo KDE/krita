@@ -16,8 +16,6 @@
 #include <hb-ot.h>
 #include <hb.h>
 
-#include <raqm.h>
-
 #include <QSharedPointer>
 
 // Helper to clean up only if the pointer is non-null.
@@ -91,6 +89,5 @@ using FT_LibraryUP = KisFreeTypeResourcePointer<std::remove_pointer_t<FT_Library
 using FT_FaceUP = KisFreeTypeResourcePointer<std::remove_pointer_t<FT_Face>, FT_Done_Face>;
 
 using hb_font_t_up = KisLibraryResourcePointer<hb_font_t, hb_font_destroy>;
-using raqm_t_up = KisLibraryResourcePointer<raqm_t, raqm_destroy>;
 
 #endif // KOFONTLIBRARYRESOURCEUTILS_H

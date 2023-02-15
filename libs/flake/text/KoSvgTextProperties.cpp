@@ -213,14 +213,15 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "word-spacing") {
         setProperty(WordSpacingId, KoSvgText::fromAutoValue(KoSvgText::parseAutoValueXY(value, context, "normal")));
     } else if (command == "font-family") {
-        QStringList familiesList = value.split(',', QString::SkipEmptyParts);
-        Q_FOREACH (const QString &fam, familiesList) {
+        QStringList familiesList;
+        Q_FOREACH (const QString &fam, value.split(',', QString::SkipEmptyParts)) {
             QString family = fam.trimmed();
             if ((family.startsWith('\"') && family.endsWith('\"')) ||
                 (family.startsWith('\'') && family.endsWith('\''))) {
 
                 family = family.mid(1, family.size() - 2);
             }
+            familiesList.append(family);
         }
         setProperty(FontFamiliesId, familiesList);
 

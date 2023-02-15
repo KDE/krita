@@ -3,12 +3,12 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include "KisDynamicSensor2.h"
+#include "KisDynamicSensor.h"
 
 #include <kis_algebra_2d.h>
-#include <KisCurveOption2.h>
+#include <KisSensorData.h>
 
-KisDynamicSensor2::KisDynamicSensor2(const KoID &id,
+KisDynamicSensor::KisDynamicSensor(const KoID &id,
                                      const KisSensorData &data,
                                      std::optional<KisCubicCurve> curveOverride)
     : m_id(id),
@@ -23,16 +23,16 @@ KisDynamicSensor2::KisDynamicSensor2(const KoID &id,
     }
 }
 
-KisDynamicSensor2::~KisDynamicSensor2()
+KisDynamicSensor::~KisDynamicSensor()
 {
 }
 
-KoID KisDynamicSensor2::id() const
+KoID KisDynamicSensor::id() const
 {
     return m_id;
 }
 
-qreal KisDynamicSensor2::parameter(const KisPaintInformation &info) const
+qreal KisDynamicSensor::parameter(const KisPaintInformation &info) const
 {
     const qreal val = value(info);
     if (m_curve) {
@@ -50,12 +50,12 @@ qreal KisDynamicSensor2::parameter(const KisPaintInformation &info) const
     }
 }
 
-bool KisDynamicSensor2::isAdditive() const
+bool KisDynamicSensor::isAdditive() const
 {
     return false;
 }
 
-bool KisDynamicSensor2::isAbsoluteRotation() const
+bool KisDynamicSensor::isAbsoluteRotation() const
 {
     return false;
 }

@@ -6,12 +6,12 @@
 #ifndef KISLIGHTNESSSTRENGTHOPTIONWIDGET_H
 #define KISLIGHTNESSSTRENGTHOPTIONWIDGET_H
 
-#include <KisCurveOptionWidget2.h>
+#include <KisCurveOptionWidget.h>
 
 struct KisLightnessStrengthOptionData;
 
 
-class PAINTOP_EXPORT KisLightnessStrengthOptionWidget : public KisCurveOptionWidget2
+class PAINTOP_EXPORT KisLightnessStrengthOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT
 public:

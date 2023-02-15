@@ -6,11 +6,11 @@
 #ifndef KISSHARPNESSOPTION_H
 #define KISSHARPNESSOPTION_H
 
-#include <KisCurveOption2.h>
+#include <KisCurveOption.h>
 
 struct KisSharpnessOptionData;
 
-class PAINTOP_EXPORT KisSharpnessOption : public KisCurveOption2
+class PAINTOP_EXPORT KisSharpnessOption : public KisCurveOption
 {
 public:
     KisSharpnessOption(const KisPropertiesConfiguration *setting);

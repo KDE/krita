@@ -23,7 +23,7 @@ KisSizeOptionWidget::KisSizeOptionWidget(lager::cursor<KisSizeOptionData> option
 }
 
 KisSizeOptionWidget::KisSizeOptionWidget(lager::cursor<KisSizeOptionData> optionData, PaintopCategory categoryOverride)
-    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), categoryOverride)
+    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), categoryOverride)
     , m_d(new Private(optionData))
 {
 }

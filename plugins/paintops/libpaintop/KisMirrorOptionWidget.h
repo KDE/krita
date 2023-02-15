@@ -6,11 +6,11 @@
 #ifndef KISMIRROROPTIONWIDGET_H
 #define KISMIRROROPTIONWIDGET_H
 
-#include <KisCurveOptionWidget2.h>
+#include <KisCurveOptionWidget.h>
 #include <KisMirrorOptionData.h>
 
 
-class PAINTOP_EXPORT KisMirrorOptionWidget : public KisCurveOptionWidget2
+class PAINTOP_EXPORT KisMirrorOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT
 public:

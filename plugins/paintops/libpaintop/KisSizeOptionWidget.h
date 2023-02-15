@@ -6,10 +6,10 @@
 #ifndef KISSIZEOPTIONWIDGET_H
 #define KISSIZEOPTIONWIDGET_H
 
-#include <KisCurveOptionWidget2.h>
+#include <KisCurveOptionWidget.h>
 #include <KisSizeOptionData.h>
 
-class PAINTOP_EXPORT KisSizeOptionWidget : public KisCurveOptionWidget2
+class PAINTOP_EXPORT KisSizeOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT
 public:

@@ -35,7 +35,7 @@ KisScatterOptionWidget::KisScatterOptionWidget(lager::cursor<KisScatterOptionDat
 }
 
 KisScatterOptionWidget::KisScatterOptionWidget(lager::cursor<KisScatterOptionData> optionData, PaintopCategory categoryOverride)
-    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), categoryOverride)
+    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), categoryOverride)
     , m_d(new Private(optionData))
 {
     using namespace KisWidgetConnectionUtils;
@@ -71,7 +71,7 @@ KisScatterOptionWidget::~KisScatterOptionWidget()
 
 void KisScatterOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    KisCurveOptionWidget2::writeOptionSetting(setting);
+    KisCurveOptionWidget::writeOptionSetting(setting);
     m_d->model.scatterOptionData->write(setting.data());
 }
 
@@ -81,5 +81,5 @@ void KisScatterOptionWidget::readOptionSetting(const KisPropertiesConfigurationS
     data.read(setting.data());
     m_d->model.scatterOptionData.set(data);
 
-    KisCurveOptionWidget2::readOptionSetting(setting);
+    KisCurveOptionWidget::readOptionSetting(setting);
 }

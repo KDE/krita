@@ -28,7 +28,7 @@ struct KisSpacingOptionWidget::Private
 };
 
 KisSpacingOptionWidget::KisSpacingOptionWidget(lager::cursor<KisSpacingOptionData> optionData)
-    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL)
+    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL)
     , m_d(new Private(optionData))
 {
     using namespace KisWidgetConnectionUtils;
@@ -61,7 +61,7 @@ KisSpacingOptionWidget::~KisSpacingOptionWidget()
 
 void KisSpacingOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    KisCurveOptionWidget2::writeOptionSetting(setting);
+    KisCurveOptionWidget::writeOptionSetting(setting);
     m_d->model.spacingOptionData->write(setting.data());
 }
 
@@ -71,5 +71,5 @@ void KisSpacingOptionWidget::readOptionSetting(const KisPropertiesConfigurationS
     data.read(setting.data());
     m_d->model.spacingOptionData.set(data);
 
-    KisCurveOptionWidget2::readOptionSetting(setting);
+    KisCurveOptionWidget::readOptionSetting(setting);
 }

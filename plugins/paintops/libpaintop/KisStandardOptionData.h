@@ -129,30 +129,30 @@ struct KisLightnessStrengthOptionData : KisCurveOptionData
 };
 
 
-class KisCurveOptionWidget2;
+class KisCurveOptionWidget;
 
 namespace KisPaintOpOptionWidgetUtils {
 
-PAINTOP_EXPORT KisCurveOptionWidget2* createOpacityOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createFlowOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createRatioOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createSoftnessOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createRotationOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createDarkenOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createMixOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createHueOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createSaturationOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createValueOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createRateOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createStrengthOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createOpacityOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createFlowOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createRatioOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createSoftnessOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createRotationOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createDarkenOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createMixOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createHueOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createSaturationOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createValueOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createRateOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createStrengthOptionWidget();
 
-PAINTOP_EXPORT KisCurveOptionWidget2* createMaskingOpacityOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createMaskingSizeOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createMaskingFlowOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createMaskingRatioOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createMaskingRotationOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createMaskingMirrorOptionWidget();
-PAINTOP_EXPORT KisCurveOptionWidget2* createMaskingScatterOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createMaskingOpacityOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createMaskingSizeOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createMaskingFlowOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createMaskingRatioOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createMaskingRotationOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createMaskingMirrorOptionWidget();
+PAINTOP_EXPORT KisCurveOptionWidget* createMaskingScatterOptionWidget();
 
 }
 

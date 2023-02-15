@@ -6,14 +6,14 @@
 #ifndef KISDARKENOPTION_H
 #define KISDARKENOPTION_H
 
-#include <KisCurveOption2.h>
+#include <KisCurveOption.h>
 
 struct KisDarkenOptionData;
 class KisPainter;
 class KisColorSource;
 
 
-class PAINTOP_EXPORT KisDarkenOption : public KisCurveOption2
+class PAINTOP_EXPORT KisDarkenOption : public KisCurveOption
 {
 public:
     KisDarkenOption(const KisPropertiesConfiguration *setting);

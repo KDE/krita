@@ -39,7 +39,7 @@ struct KisSmudgeLengthOptionWidget::Private
 KisSmudgeLengthOptionWidget::KisSmudgeLengthOptionWidget(lager::cursor<KisSmudgeLengthOptionData> optionData,
                                                          lager::reader<bool> isBrushPierced,
                                                          lager::reader<bool> forceNewEngine)
-    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL)
+    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL)
     , m_d(new Private(optionData, isBrushPierced, forceNewEngine))
 {
     using namespace KisWidgetConnectionUtils;
@@ -84,7 +84,7 @@ KisSmudgeLengthOptionWidget::~KisSmudgeLengthOptionWidget()
 
 void KisSmudgeLengthOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    KisCurveOptionWidget2::writeOptionSetting(setting);
+    KisCurveOptionWidget::writeOptionSetting(setting);
     m_d->model.backedOptionData().write(setting.data());
 }
 
@@ -94,7 +94,7 @@ void KisSmudgeLengthOptionWidget::readOptionSetting(const KisPropertiesConfigura
     data.read(setting.data());
     m_d->model.optionData.set(data);
 
-    KisCurveOptionWidget2::readOptionSetting(setting);
+    KisCurveOptionWidget::readOptionSetting(setting);
 }
 
 lager::reader<bool> KisSmudgeLengthOptionWidget::useNewEngine() const

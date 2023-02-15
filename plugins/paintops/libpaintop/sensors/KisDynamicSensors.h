@@ -5,26 +5,26 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef KISDYNAMICSENSORS2_H
-#define KISDYNAMICSENSORS2_H
+#ifndef KISDYNAMICSENSORS_H
+#define KISDYNAMICSENSORS_H
 
-#include "KisDynamicSensor2.h"
+#include "KisDynamicSensor.h"
 #include <brushengine/kis_paint_information.h>
 
-class KisDynamicSensorSpeed2 : public KisDynamicSensor2
+class KisDynamicSensorSpeed : public KisDynamicSensor
 {
 public:
-    KisDynamicSensorSpeed2(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
+    KisDynamicSensorSpeed(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
 
     qreal value(const KisPaintInformation& info) const override {
         return info.drawingSpeed();
     }
 };
 
-class KisDynamicSensorRotation2 : public KisDynamicSensor2
+class KisDynamicSensorRotation : public KisDynamicSensor
 {
 public:
-    KisDynamicSensorRotation2(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
+    KisDynamicSensorRotation(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
 
     bool isAdditive() const override {
         return true;
@@ -35,48 +35,48 @@ public:
     }
 };
 
-class KisDynamicSensorPressure2 : public KisDynamicSensor2
+class KisDynamicSensorPressure : public KisDynamicSensor
 {
 public:
-    KisDynamicSensorPressure2(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
+    KisDynamicSensorPressure(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
     qreal value(const KisPaintInformation& info) const override {
         return info.pressure();
     }
 };
 
-class KisDynamicSensorPressureIn2 : public KisDynamicSensor2
+class KisDynamicSensorPressureIn : public KisDynamicSensor
 {
 public:
-    KisDynamicSensorPressureIn2(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
+    KisDynamicSensorPressureIn(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
 
     qreal value(const KisPaintInformation& info) const override {
         return !info.isHoveringMode() ? info.maxPressure() : 0.0;
     }
 };
 
-class KisDynamicSensorXTilt2 : public KisDynamicSensor2
+class KisDynamicSensorXTilt : public KisDynamicSensor
 {
 public:
-    KisDynamicSensorXTilt2(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
+    KisDynamicSensorXTilt(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
 
     qreal value(const KisPaintInformation& info) const override {
         return 1.0 - fabs(info.xTilt()) / 60.0;
     }
 };
 
-class KisDynamicSensorYTilt2 : public KisDynamicSensor2
+class KisDynamicSensorYTilt : public KisDynamicSensor
 {
 public:
-    KisDynamicSensorYTilt2(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
+    KisDynamicSensorYTilt(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
     qreal value(const KisPaintInformation& info) const override {
         return 1.0 - fabs(info.yTilt()) / 60.0;
     }
 };
 
-class KisDynamicSensorTiltDirection2 : public KisDynamicSensor2
+class KisDynamicSensorTiltDirection : public KisDynamicSensor
 {
 public:
-    KisDynamicSensorTiltDirection2(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
+    KisDynamicSensorTiltDirection(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
 
     bool isAdditive() const override {
         return true;
@@ -87,34 +87,34 @@ public:
     }
 };
 
-class KisDynamicSensorTiltElevation2 : public KisDynamicSensor2
+class KisDynamicSensorTiltElevation : public KisDynamicSensor
 {
 public:
-    KisDynamicSensorTiltElevation2(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
+    KisDynamicSensorTiltElevation(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
 
     qreal value(const KisPaintInformation& info) const override {
         return KisPaintInformation::tiltElevation(info, 60.0, 60.0, true);
     }
 };
 
-class KisDynamicSensorPerspective2 : public KisDynamicSensor2
+class KisDynamicSensorPerspective : public KisDynamicSensor
 {
 public:
-    KisDynamicSensorPerspective2(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
+    KisDynamicSensorPerspective(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
 
     qreal value(const KisPaintInformation& info) const override {
         return info.perspective();
     }
 };
 
-class KisDynamicSensorTangentialPressure2 : public KisDynamicSensor2
+class KisDynamicSensorTangentialPressure : public KisDynamicSensor
 {
 public:
-    KisDynamicSensorTangentialPressure2(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
+    KisDynamicSensorTangentialPressure(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride);
 
     qreal value(const KisPaintInformation& info) const override {
         return info.tangentialPressure();
     }
 };
 
-#endif // KISDYNAMICSENSORS2_H
+#endif // KISDYNAMICSENSORS_H

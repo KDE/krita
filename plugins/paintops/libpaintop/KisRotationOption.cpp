@@ -21,7 +21,7 @@ KisRotationOption::KisRotationOption(const KisPropertiesConfiguration *setting)
 }
 
 KisRotationOption::KisRotationOption(const KisRotationOptionData &data)
-    : KisCurveOption2(data)
+    : KisCurveOption(data)
 {
     if (data.sensorStruct().sensorDrawingAngle.isActive) {
         m_fanCornersEnabled =

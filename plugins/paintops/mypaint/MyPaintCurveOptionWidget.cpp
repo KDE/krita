@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "MyPaintCurveOptionWidget2.h"
+#include "MyPaintCurveOptionWidget.h"
 #include "KisZug.h"
 #include "kis_paintop_option.h"
 #include "MyPaintCurveRangeModel.h"
@@ -26,7 +26,7 @@ KisPaintopLodLimitations calcGeneralMyPaintLodLimitations(const MyPaintCurveOpti
 }
 } // namespace
 
-struct MyPaintCurveOptionWidget2::Private
+struct MyPaintCurveOptionWidget::Private
 {
     Private(lager::cursor<MyPaintCurveOptionData> optionData)
         : lodLimitations(optionData.map(&calcGeneralMyPaintLodLimitations))
@@ -35,10 +35,10 @@ struct MyPaintCurveOptionWidget2::Private
     lager::reader<KisPaintopLodLimitations> lodLimitations;
 };
 
-MyPaintCurveOptionWidget2::MyPaintCurveOptionWidget2(lager::cursor<MyPaintCurveOptionData> optionData,
+MyPaintCurveOptionWidget::MyPaintCurveOptionWidget(lager::cursor<MyPaintCurveOptionData> optionData,
                                                      qreal maxYRange,
                                                      const QString &yValueSuffix)
-    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>),
+    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>),
                             KisPaintOpOption::GENERAL,
                             i18n("Base Value: "), yValueSuffix, 1.0,
                             lager::make_constant(true),
@@ -51,11 +51,11 @@ MyPaintCurveOptionWidget2::MyPaintCurveOptionWidget2(lager::cursor<MyPaintCurveO
 {
 }
 
-MyPaintCurveOptionWidget2::~MyPaintCurveOptionWidget2()
+MyPaintCurveOptionWidget::~MyPaintCurveOptionWidget()
 {
 }
 
-KisPaintOpOption::OptionalLodLimitationsReader MyPaintCurveOptionWidget2::lodLimitationsReader() const
+KisPaintOpOption::OptionalLodLimitationsReader MyPaintCurveOptionWidget::lodLimitationsReader() const
 {
     return m_d->lodLimitations;
 }

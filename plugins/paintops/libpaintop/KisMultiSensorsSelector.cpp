@@ -4,28 +4,28 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include "KisMultiSensorsSelector2.h"
+#include "KisMultiSensorsSelector.h"
 
 #include "KisCurveOptionData.h"
 #include "ui_wdgmultisensorsselector.h"
-#include "KisMultiSensorsModel2.h"
+#include "KisMultiSensorsModel.h"
 #include <KisDynamicSensorFactoryRegistry.h>
 
 
-struct KisMultiSensorsSelector2::Private {
+struct KisMultiSensorsSelector::Private {
     lager::cursor<KisCurveOptionDataCommon> optionData;
 
     Ui_WdgMultiSensorsSelector form;
-    KisMultiSensorsModel2* model;
+    KisMultiSensorsModel* model;
     QWidget* currentConfigWidget;
     QHBoxLayout* layout;
 };
 
 auto sensorsLens = lager::lenses::getset(
-    [](const KisCurveOptionDataCommon &data) -> KisMultiSensorsModel2::MultiSensorData {
+    [](const KisCurveOptionDataCommon &data) -> KisMultiSensorsModel::MultiSensorData {
         std::vector<const KisSensorData*> srcSensors = data.sensors();
 
-        KisMultiSensorsModel2::MultiSensorData sensors;
+        KisMultiSensorsModel::MultiSensorData sensors;
         sensors.reserve(srcSensors.size());
 
         Q_FOREACH(const KisSensorData* srcSensor, srcSensors) {
@@ -33,7 +33,7 @@ auto sensorsLens = lager::lenses::getset(
         }
         return sensors;
     },
-    [](KisCurveOptionDataCommon data, KisMultiSensorsModel2::MultiSensorData sensors) -> KisCurveOptionDataCommon {
+    [](KisCurveOptionDataCommon data, KisMultiSensorsModel::MultiSensorData sensors) -> KisCurveOptionDataCommon {
         std::vector<KisSensorData*> parentSensors = data.sensors();
 
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(parentSensors.size() == sensors.size(), data);
@@ -53,7 +53,7 @@ auto sensorsLens = lager::lenses::getset(
 
 
 
-KisMultiSensorsSelector2::KisMultiSensorsSelector2(QWidget* parent)
+KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent)
     : QWidget(parent)
     , d(new Private)
 {
@@ -69,21 +69,21 @@ KisMultiSensorsSelector2::KisMultiSensorsSelector2(QWidget* parent)
     d->form.sensorsList->viewport()->installEventFilter(this);
 }
 
-KisMultiSensorsSelector2::~KisMultiSensorsSelector2()
+KisMultiSensorsSelector::~KisMultiSensorsSelector()
 {
     delete d;
 }
 
-void KisMultiSensorsSelector2::setOptionDataCursor(lager::cursor<KisCurveOptionDataCommon> optionData)
+void KisMultiSensorsSelector::setOptionDataCursor(lager::cursor<KisCurveOptionDataCommon> optionData)
 {
     d->optionData = optionData;
-    d->model = new KisMultiSensorsModel2(optionData.zoom(sensorsLens), this);
+    d->model = new KisMultiSensorsModel(optionData.zoom(sensorsLens), this);
     d->form.sensorsList->setModel(d->model);
 
     // TODO: verify that at least one sensor is always active!
 }
 
-void KisMultiSensorsSelector2::setCurrent(const QString &id)
+void KisMultiSensorsSelector::setCurrent(const QString &id)
 {
     const QModelIndex index = d->model->sensorIndex(id);
     KIS_SAFE_ASSERT_RECOVER_RETURN(index.isValid());
@@ -94,17 +94,17 @@ void KisMultiSensorsSelector2::setCurrent(const QString &id)
     Q_EMIT highlightedSensorChanged(id);
 }
 
-void KisMultiSensorsSelector2::setCurrent(const QModelIndex& index)
+void KisMultiSensorsSelector::setCurrent(const QModelIndex& index)
 {
     setCurrent(d->model->getSensorId(index));
 }
 
-QString KisMultiSensorsSelector2::currentHighlighted()
+QString KisMultiSensorsSelector::currentHighlighted()
 {
     return d->model->getSensorId(d->form.sensorsList->currentIndex());
 }
 
-void KisMultiSensorsSelector2::sensorActivated(const QModelIndex& index)
+void KisMultiSensorsSelector::sensorActivated(const QModelIndex& index)
 {
     delete d->currentConfigWidget;
 
@@ -118,7 +118,7 @@ void KisMultiSensorsSelector2::sensorActivated(const QModelIndex& index)
     }
 }
 
-bool KisMultiSensorsSelector2::eventFilter(QObject *obj, QEvent *event)
+bool KisMultiSensorsSelector::eventFilter(QObject *obj, QEvent *event)
 {
     /**
      * This filter makes it possibe to select a sensor by click+drag gesture.

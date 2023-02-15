@@ -3,17 +3,17 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef KISDYNAMICSENSORDRAWINGANGLE2_H
-#define KISDYNAMICSENSORDRAWINGANGLE2_H
+#ifndef KISDYNAMICSENSORDRAWINGANGLE_H
+#define KISDYNAMICSENSORDRAWINGANGLE_H
 
-#include "KisDynamicSensor2.h"
+#include "KisDynamicSensor.h"
 
 struct KisDrawingAngleSensorData;
 
-class KisDynamicSensorDrawingAngle2 : public KisDynamicSensor2
+class KisDynamicSensorDrawingAngle : public KisDynamicSensor
 {
 public:
-    KisDynamicSensorDrawingAngle2(const KisDrawingAngleSensorData &data, std::optional<KisCubicCurve> curveOverride);
+    KisDynamicSensorDrawingAngle(const KisDrawingAngleSensorData &data, std::optional<KisCubicCurve> curveOverride);
 
     qreal value(const KisPaintInformation& info) const override;
     bool isAbsoluteRotation() const override;
@@ -23,4 +23,4 @@ private:
     const bool m_angleOffset;
 };
 
-#endif // KISDYNAMICSENSORDRAWINGANGLE2_H
+#endif // KISDYNAMICSENSORDRAWINGANGLE_H

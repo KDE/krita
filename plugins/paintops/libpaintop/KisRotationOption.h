@@ -6,11 +6,11 @@
 #ifndef KISROTATIONOPTION_H
 #define KISROTATIONOPTION_H
 
-#include <KisCurveOption2.h>
+#include <KisCurveOption.h>
 
 struct KisRotationOptionData;
 
-class PAINTOP_EXPORT KisRotationOption : public KisCurveOption2
+class PAINTOP_EXPORT KisRotationOption : public KisCurveOption
 {
 public:
     KisRotationOption(const KisPropertiesConfiguration *setting);

@@ -6,10 +6,10 @@
 #ifndef KISSHARPNESSOPTIONWIDGET_H
 #define KISSHARPNESSOPTIONWIDGET_H
 
-#include <KisCurveOptionWidget2.h>
+#include <KisCurveOptionWidget.h>
 #include <KisSharpnessOptionData.h>
 
-class PAINTOP_EXPORT KisSharpnessOptionWidget : public KisCurveOptionWidget2
+class PAINTOP_EXPORT KisSharpnessOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT
 public:

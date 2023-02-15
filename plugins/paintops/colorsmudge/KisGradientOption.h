@@ -6,14 +6,14 @@
 #ifndef KISGRADIENTOPTION_H
 #define KISGRADIENTOPTION_H
 
-#include <KisCurveOption2.h>
+#include <KisCurveOption.h>
 
 class KoAbstractGradient;
 typedef QSharedPointer<KoAbstractGradient> KoAbstractGradientSP;
 
 struct KisGradientOptionData;
 
-class KisGradientOption : public KisCurveOption2
+class KisGradientOption : public KisCurveOption
 {
 public:
     KisGradientOption(const KisPropertiesConfiguration *setting);

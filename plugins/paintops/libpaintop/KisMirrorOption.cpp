@@ -22,7 +22,7 @@ KisMirrorOption::KisMirrorOption(const KisPropertiesConfiguration *setting)
 }
 
 KisMirrorOption::KisMirrorOption(const KisMirrorOptionData &data)
-    : KisCurveOption2(data)
+    : KisCurveOption(data)
     , m_enableHorizontalMirror(data.enableHorizontalMirror)
     , m_enableVerticalMirror(data.enableVerticalMirror)
 {

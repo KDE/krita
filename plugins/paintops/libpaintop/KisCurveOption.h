@@ -5,19 +5,19 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef KISCURVEOPTION2_H
-#define KISCURVEOPTION2_H
+#ifndef KISCURVEOPTION_H
+#define KISCURVEOPTION_H
 
 #include <vector>
 #include <memory>
 
 #include <KisCurveOptionData.h>
-#include "sensors2/KisDynamicSensor2.h"
+#include "sensors/KisDynamicSensor.h"
 
-class PAINTOP_EXPORT KisCurveOption2
+class PAINTOP_EXPORT KisCurveOption
 {
 public:
-    KisCurveOption2(const KisCurveOptionData &data);
+    KisCurveOption(const KisCurveOptionData &data);
 
     struct ValueComponents {
         qreal constant {1.0};
@@ -66,7 +66,7 @@ private:
     qreal m_strengthValue;
     qreal m_strengthMinValue;
     qreal m_strengthMaxValue;
-    std::vector<std::unique_ptr<KisDynamicSensor2>> m_sensors;
+    std::vector<std::unique_ptr<KisDynamicSensor>> m_sensors;
 };
 
-#endif // KISCURVEOPTION2_H
+#endif // KISCURVEOPTION_H

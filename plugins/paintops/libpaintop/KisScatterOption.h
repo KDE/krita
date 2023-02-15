@@ -6,11 +6,11 @@
 #ifndef KISSCATTEROPTION_H
 #define KISSCATTEROPTION_H
 
-#include <KisCurveOption2.h>
+#include <KisCurveOption.h>
 
 struct KisScatterOptionData;
 
-class PAINTOP_EXPORT KisScatterOption : public KisCurveOption2
+class PAINTOP_EXPORT KisScatterOption : public KisCurveOption
 {
 public:
     KisScatterOption(const KisPropertiesConfiguration *setting);

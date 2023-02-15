@@ -16,7 +16,7 @@ KisSmudgeLengthOption::KisSmudgeLengthOption(const KisPropertiesConfiguration *s
 }
 
 KisSmudgeLengthOption::KisSmudgeLengthOption(const KisSmudgeLengthOptionData &data)
-    : KisCurveOption2(data)
+    : KisCurveOption(data)
     , m_useNewEngine(data.useNewEngine)
     , m_smearAlpha(data.smearAlpha)
     , m_mode(data.mode)

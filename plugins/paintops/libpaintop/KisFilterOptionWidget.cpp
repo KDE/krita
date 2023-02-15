@@ -35,7 +35,7 @@ public:
 }
 
 
-struct KisFilterOptionWidget2::Private
+struct KisFilterOptionWidget::Private
 {
     Private(lager::cursor<KisFilterOptionData> optionData)
         : model(optionData)
@@ -55,7 +55,7 @@ struct KisFilterOptionWidget2::Private
 };
 
 
-KisFilterOptionWidget2::KisFilterOptionWidget2(lager::cursor<KisFilterOptionData> optionData)
+KisFilterOptionWidget::KisFilterOptionWidget(lager::cursor<KisFilterOptionData> optionData)
     : KisPaintOpOption(i18n("Filter"), KisPaintOpOption::COLOR, true)
     , m_d(new Private(optionData))
 {
@@ -83,29 +83,29 @@ KisFilterOptionWidget2::KisFilterOptionWidget2(lager::cursor<KisFilterOptionData
 
     m_d->model.LAGER_QT(effectiveFilterState).bind(
                 kismpl::unzip_wrapper(
-                    std::bind(&KisFilterOptionWidget2::updateFilterState,
+                    std::bind(&KisFilterOptionWidget::updateFilterState,
                               this,
                               std::placeholders::_1,
                               std::placeholders::_2,
                               false)));
 
-    connect(m_d->page->filtersList, &KisCmbIDList::activated, this, &KisFilterOptionWidget2::slotFilterIdChangedInGui);
+    connect(m_d->page->filtersList, &KisCmbIDList::activated, this, &KisFilterOptionWidget::slotFilterIdChangedInGui);
 
     connectControl(m_d->page->checkBoxSmudgeMode, &m_d->model, "smudgeMode");
 
-    m_d->model.optionData.bind(std::bind(&KisFilterOptionWidget2::emitSettingChanged, this));
+    m_d->model.optionData.bind(std::bind(&KisFilterOptionWidget::emitSettingChanged, this));
 }
 
-KisFilterOptionWidget2::~KisFilterOptionWidget2()
+KisFilterOptionWidget::~KisFilterOptionWidget()
 {
 }
 
-void KisFilterOptionWidget2::writeOptionSetting(KisPropertiesConfigurationSP setting) const
+void KisFilterOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     m_d->model.bakedOptionData().write(setting.data());
 }
 
-void KisFilterOptionWidget2::readOptionSetting(const KisPropertiesConfigurationSP setting)
+void KisFilterOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisFilterOptionData data = m_d->model.bakedOptionData();
     data.read(setting.data());
@@ -113,13 +113,13 @@ void KisFilterOptionWidget2::readOptionSetting(const KisPropertiesConfigurationS
 
 }
 
-void KisFilterOptionWidget2::setImage(KisImageWSP image)
+void KisFilterOptionWidget::setImage(KisImageWSP image)
 {
     m_d->image = image;
     m_d->model.LAGER_QT(effectiveFilterState).nudge();
 }
 
-void KisFilterOptionWidget2::setNode(KisNodeWSP node)
+void KisFilterOptionWidget::setNode(KisNodeWSP node)
 {
     m_d->paintDevice = node && node->paintDevice() ? node->paintDevice() : nullptr;
 
@@ -129,7 +129,7 @@ void KisFilterOptionWidget2::setNode(KisNodeWSP node)
     updateFilterState(filterId, filterConfig, true);
 }
 
-void KisFilterOptionWidget2::updateFilterState(const QString &filterId, const QString &filterConfig, bool forceResetWidget)
+void KisFilterOptionWidget::updateFilterState(const QString &filterId, const QString &filterConfig, bool forceResetWidget)
 {
     if (!m_d->currentFilter ||
         m_d->page->filtersList->currentItem().id() != filterId) {
@@ -184,7 +184,7 @@ void KisFilterOptionWidget2::updateFilterState(const QString &filterId, const QS
     }
 }
 
-void KisFilterOptionWidget2::slotFilterIdChangedInGui(const KoID &filterId)
+void KisFilterOptionWidget::slotFilterIdChangedInGui(const KoID &filterId)
 {
     if (m_d->currentFilter && m_d->currentFilter->id() == filterId.id()) return;
 
@@ -195,7 +195,7 @@ void KisFilterOptionWidget2::slotFilterIdChangedInGui(const KoID &filterId)
     m_d->model.seteffectiveFilterState(std::make_tuple(filterId.id(), filterConfig->toXML()));
 }
 
-void KisFilterOptionWidget2::slotFilterConfigChangedInGui()
+void KisFilterOptionWidget::slotFilterConfigChangedInGui()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->currentFilter);
 

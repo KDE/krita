@@ -13,7 +13,7 @@
 
 
 KisHSVOption::KisHSVOption(const KisCurveOptionData &data)
-    : KisCurveOption2(data),
+    : KisCurveOption(data),
       m_id(data.id)
 {
 }

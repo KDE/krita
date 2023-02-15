@@ -10,7 +10,7 @@
 
 #include <kis_paintop_settings_widget.h>
 
-class MyPaintCurveOptionWidget2;
+class MyPaintCurveOptionWidget;
 
 class KisMyPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
@@ -29,7 +29,7 @@ protected:
     void addPaintOpOption(KisPaintOpOption *option, MyPaintPaintopCategory id);
 
 private:
-    MyPaintCurveOptionWidget2 *m_radiusWidget {nullptr};
+    MyPaintCurveOptionWidget *m_radiusWidget {nullptr};
 };
 
 #endif

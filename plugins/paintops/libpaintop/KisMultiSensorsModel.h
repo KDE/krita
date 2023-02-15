@@ -4,8 +4,8 @@
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef KISMULTISENSORSMODEL2_H_
-#define KISMULTISENSORSMODEL2_H_
+#ifndef KisMultiSensorsModel_H_
+#define KisMultiSensorsModel_H_
 
 #include <QScopedPointer>
 #include <QAbstractListModel>
@@ -16,7 +16,7 @@ class KisCubicCurve;
 class KisCurveOption;
 
 
-class KisMultiSensorsModel2 : public QAbstractListModel
+class KisMultiSensorsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
@@ -24,10 +24,10 @@ public:
     using MultiSensorData = std::vector<SensorData>;
 public:
 
-    explicit KisMultiSensorsModel2(lager::cursor<MultiSensorData> sensorsData,
+    explicit KisMultiSensorsModel(lager::cursor<MultiSensorData> sensorsData,
                                    QObject* parent = 0);
 
-    ~KisMultiSensorsModel2() override;
+    ~KisMultiSensorsModel() override;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 

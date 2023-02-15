@@ -4,23 +4,23 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef MYPAINTCURVEOPTIONWIDGET2_H
-#define MYPAINTCURVEOPTIONWIDGET2_H
+#ifndef MYPAINTCURVEOPTIONWIDGET_H
+#define MYPAINTCURVEOPTIONWIDGET_H
 
-#include <KisCurveOptionWidget2.h>
+#include <KisCurveOptionWidget.h>
 #include <MyPaintCurveOptionData.h>
 
-class MyPaintCurveOptionWidget2 : public KisCurveOptionWidget2
+class MyPaintCurveOptionWidget : public KisCurveOptionWidget
 {
 public:
     using data_type = MyPaintCurveOptionData;
 
 public:
-    MyPaintCurveOptionWidget2(lager::cursor<MyPaintCurveOptionData> optionData,
+    MyPaintCurveOptionWidget(lager::cursor<MyPaintCurveOptionData> optionData,
                               qreal maxYRange, const QString &yValueSuffix);
-    ~MyPaintCurveOptionWidget2();
+    ~MyPaintCurveOptionWidget();
 
-    using KisCurveOptionWidget2::strengthValueDenorm;
+    using KisCurveOptionWidget::strengthValueDenorm;
 
     OptionalLodLimitationsReader lodLimitationsReader() const override;
 
@@ -29,4 +29,4 @@ private:
     const QScopedPointer<Private> m_d;
 };
 
-#endif // MYPAINTCURVEOPTIONWIDGET2_H
+#endif // MYPAINTCURVEOPTIONWIDGET_H

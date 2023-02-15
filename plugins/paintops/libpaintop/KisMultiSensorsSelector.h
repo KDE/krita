@@ -3,8 +3,8 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef KISMULTISENSORSSELECTOR2_H
-#define KISMULTISENSORSSELECTOR2_H
+#ifndef KisMultiSensorsSelector_H
+#define KisMultiSensorsSelector_H
 
 class KisCubicCurve;
 class QModelIndex;
@@ -14,13 +14,13 @@ class KisCurveOption;
 #include <KisCurveOptionData.h>
 #include <lager/cursor.hpp>
 
-class KisMultiSensorsSelector2 : public QWidget
+class KisMultiSensorsSelector : public QWidget
 {
     Q_OBJECT
 public:
 
-    KisMultiSensorsSelector2(QWidget* parent);
-    ~KisMultiSensorsSelector2() override;
+    KisMultiSensorsSelector(QWidget* parent);
+    ~KisMultiSensorsSelector() override;
 
     void setOptionDataCursor(lager::cursor<KisCurveOptionDataCommon> optionData);
 
@@ -43,4 +43,4 @@ private:
     Private* const d;
 };
 
-#endif // KISMULTISENSORSSELECTOR2_H
+#endif // KisMultiSensorsSelector_H

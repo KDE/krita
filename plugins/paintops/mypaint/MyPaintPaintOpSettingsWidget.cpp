@@ -13,7 +13,7 @@
 #include <KisPaintOpOptionWidgetUtils.h>
 
 #include <MyPaintCurveOptionData.h>
-#include <MyPaintCurveOptionWidget2.h>
+#include <MyPaintCurveOptionWidget.h>
 #include <MyPaintBasicOptionWidget.h>
 #include <MyPaintStandardOptionData.h>
 
@@ -22,17 +22,17 @@
 namespace KisPaintOpOptionWidgetUtils {
 
 template <typename Data>
-MyPaintCurveOptionWidget2* createMyPaintCurveOptionWidget(Data data, const QString &yValueSuffix = "")
+MyPaintCurveOptionWidget* createMyPaintCurveOptionWidget(Data data, const QString &yValueSuffix = "")
 {
     const qreal yLimit = qAbs(data.strengthMaxValue - data.strengthMinValue);
-    return createOptionWidget<MyPaintCurveOptionWidget2>(std::move(data), yLimit, yValueSuffix);
+    return createOptionWidget<MyPaintCurveOptionWidget>(std::move(data), yLimit, yValueSuffix);
 }
 
 template <typename Data>
-MyPaintCurveOptionWidget2* createMyPaintCurveOptionWidgetWithLodLimitations(Data data, const QString &yValueSuffix = "")
+MyPaintCurveOptionWidget* createMyPaintCurveOptionWidgetWithLodLimitations(Data data, const QString &yValueSuffix = "")
 {
     const qreal yLimit = qAbs(data.strengthMaxValue - data.strengthMinValue);
-    return createOptionWidgetWithLodLimitations<MyPaintCurveOptionWidget2>(std::move(data), yLimit, yValueSuffix);
+    return createOptionWidgetWithLodLimitations<MyPaintCurveOptionWidget>(std::move(data), yLimit, yValueSuffix);
 }
 
 } // namespace KisPaintOpOptionWidgetUtils
@@ -48,9 +48,9 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
 
     m_radiusWidget =
         kpowu::createMyPaintCurveOptionWidget(MyPaintRadiusLogarithmicData());
-    MyPaintCurveOptionWidget2 *hardnessWidget =
+    MyPaintCurveOptionWidget *hardnessWidget =
         kpowu::createMyPaintCurveOptionWidget(MyPaintHardnessData());
-    MyPaintCurveOptionWidget2 *opacityWidget =
+    MyPaintCurveOptionWidget *opacityWidget =
         kpowu::createMyPaintCurveOptionWidget(MyPaintOpacityData());
 
     KisPaintOpSettingsWidget::addPaintOpOption(

@@ -3,7 +3,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include "KisDynamicSensorFade2.h"
+#include "KisDynamicSensorFade.h"
 
 #include <KisDynamicSensorIds.h>
 
@@ -11,14 +11,14 @@
 #include <KisCurveOptionData.h>
 
 
-KisDynamicSensorFade2::KisDynamicSensorFade2(const KisSensorWithLengthData &data, std::optional<KisCubicCurve> curveOverride)
-    : KisDynamicSensor2(FadeId, data, curveOverride)
+KisDynamicSensorFade::KisDynamicSensorFade(const KisSensorWithLengthData &data, std::optional<KisCubicCurve> curveOverride)
+    : KisDynamicSensor(FadeId, data, curveOverride)
     , m_periodic(data.isPeriodic)
     , m_length(data.length)
 {
 }
 
-qreal KisDynamicSensorFade2::value(const KisPaintInformation &pi) const
+qreal KisDynamicSensorFade::value(const KisPaintInformation &pi) const
 {
     if (pi.isHoveringMode()) return 1.0;
 

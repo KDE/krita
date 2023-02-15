@@ -13,14 +13,14 @@
 namespace KisPaintOpOptionWidgetUtils {
 
 namespace detail {
-KisCurveOptionWidget2 *createOpacityOptionWidgetImpl(bool isCheckable, KisPaintOpOption::PaintopCategory category, const QString &prefix)
+KisCurveOptionWidget *createOpacityOptionWidgetImpl(bool isCheckable, KisPaintOpOption::PaintopCategory category, const QString &prefix)
 {
     return createCurveOptionWidget(KisOpacityOptionData(isCheckable, prefix),
                                    category,
                                    i18n("Transparent"),
                                    i18n("Opaque"));
 }
-KisCurveOptionWidget2 *createRotationOptionWidgetImpl(KisPaintOpOption::PaintopCategory category, const QString &prefix)
+KisCurveOptionWidget *createRotationOptionWidgetImpl(KisPaintOpOption::PaintopCategory category, const QString &prefix)
 {
     return createCurveOptionWidget(KisRotationOptionData(prefix),
                                    category,
@@ -29,24 +29,24 @@ KisCurveOptionWidget2 *createRotationOptionWidgetImpl(KisPaintOpOption::PaintopC
 }
 }
 
-KisCurveOptionWidget2 *createOpacityOptionWidget()
+KisCurveOptionWidget *createOpacityOptionWidget()
 {
     return detail::createOpacityOptionWidgetImpl(false, KisPaintOpOption::GENERAL, "");
 }
 
-KisCurveOptionWidget2 *createFlowOptionWidget()
+KisCurveOptionWidget *createFlowOptionWidget()
 {
     return createCurveOptionWidget(KisFlowOptionData(),
                                    KisPaintOpOption::GENERAL);
 }
 
-KisCurveOptionWidget2 *createRatioOptionWidget()
+KisCurveOptionWidget *createRatioOptionWidget()
 {
     return createCurveOptionWidget(KisRatioOptionData(),
                                    KisPaintOpOption::GENERAL);
 }
 
-KisCurveOptionWidget2 *createSoftnessOptionWidget()
+KisCurveOptionWidget *createSoftnessOptionWidget()
 {
     return createCurveOptionWidget(KisSoftnessOptionData(),
                                    KisPaintOpOption::GENERAL,
@@ -54,12 +54,12 @@ KisCurveOptionWidget2 *createSoftnessOptionWidget()
                                    i18n("Hard"));
 }
 
-KisCurveOptionWidget2 *createRotationOptionWidget()
+KisCurveOptionWidget *createRotationOptionWidget()
 {
     return detail::createRotationOptionWidgetImpl(KisPaintOpOption::GENERAL, "");
 }
 
-KisCurveOptionWidget2 *createDarkenOptionWidget()
+KisCurveOptionWidget *createDarkenOptionWidget()
 {
     return createCurveOptionWidget(KisDarkenOptionData(),
                                    KisPaintOpOption::COLOR,
@@ -67,7 +67,7 @@ KisCurveOptionWidget2 *createDarkenOptionWidget()
                                    i18n("1.0"));
 }
 
-KisCurveOptionWidget2 *createMixOptionWidget()
+KisCurveOptionWidget *createMixOptionWidget()
 {
     return createCurveOptionWidget(KisMixOptionData(),
                                    KisPaintOpOption::COLOR,
@@ -147,7 +147,7 @@ QString valueMaxLabel()
 }
 }
 
-KisCurveOptionWidget2 *createHueOptionWidget()
+KisCurveOptionWidget *createHueOptionWidget()
 {
     return createCurveOptionWidget(KisHueOptionData(), KisPaintOpOption::COLOR,
                                    detail::hueMinLabel(),
@@ -155,14 +155,14 @@ KisCurveOptionWidget2 *createHueOptionWidget()
                                    -180, 180, i18n("°"));
 }
 
-KisCurveOptionWidget2 *createSaturationOptionWidget()
+KisCurveOptionWidget *createSaturationOptionWidget()
 {
     return createCurveOptionWidget(KisSaturationOptionData(), KisPaintOpOption::COLOR,
                                    detail::saturationMinLabel(),
                                    detail::saturationMaxLabel());
 }
 
-KisCurveOptionWidget2 *createValueOptionWidget()
+KisCurveOptionWidget *createValueOptionWidget()
 {
     return createCurveOptionWidget(KisValueOptionData(),
                                    KisPaintOpOption::COLOR,
@@ -170,36 +170,36 @@ KisCurveOptionWidget2 *createValueOptionWidget()
                                    detail::valueMaxLabel());
 }
 
-KisCurveOptionWidget2 *createRateOptionWidget()
+KisCurveOptionWidget *createRateOptionWidget()
 {
     return createCurveOptionWidget(KisRateOptionData(),
                                    KisPaintOpOption::COLOR);
 }
 
-KisCurveOptionWidget2 *createStrengthOptionWidget()
+KisCurveOptionWidget *createStrengthOptionWidget()
 {
     return createCurveOptionWidget(KisStrengthOptionData(),
                                    KisPaintOpOption::TEXTURE);
 }
 
-KisCurveOptionWidget2 *createMaskingOpacityOptionWidget()
+KisCurveOptionWidget *createMaskingOpacityOptionWidget()
 {
     return detail::createOpacityOptionWidgetImpl(true, KisPaintOpOption::MASKING_BRUSH, KisPaintOpUtils::MaskingBrushPresetPrefix);
 }
 
-KisCurveOptionWidget2 *createMaskingFlowOptionWidget()
+KisCurveOptionWidget *createMaskingFlowOptionWidget()
 {
     return createCurveOptionWidget(KisFlowOptionData(true, KisPaintOpUtils::MaskingBrushPresetPrefix),
                                    KisPaintOpOption::MASKING_BRUSH);
 }
 
-KisCurveOptionWidget2 *createMaskingRatioOptionWidget()
+KisCurveOptionWidget *createMaskingRatioOptionWidget()
 {
     return createCurveOptionWidget(KisRatioOptionData(KisPaintOpUtils::MaskingBrushPresetPrefix),
                                    KisPaintOpOption::MASKING_BRUSH);
 }
 
-KisCurveOptionWidget2 *createMaskingRotationOptionWidget()
+KisCurveOptionWidget *createMaskingRotationOptionWidget()
 {
     return detail::createRotationOptionWidgetImpl(KisPaintOpOption::MASKING_BRUSH, KisPaintOpUtils::MaskingBrushPresetPrefix);
 }

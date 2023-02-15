@@ -6,12 +6,12 @@
 #ifndef KISMIRROROPTION_H
 #define KISMIRROROPTION_H
 
-#include <KisCurveOption2.h>
+#include <KisCurveOption.h>
 
 struct KisMirrorOptionData;
 struct MirrorProperties;
 
-class PAINTOP_EXPORT KisMirrorOption : public KisCurveOption2
+class PAINTOP_EXPORT KisMirrorOption : public KisCurveOption
 {
 public:
     KisMirrorOption(const KisPropertiesConfiguration *setting);

@@ -6,13 +6,13 @@
 #ifndef KISHSVOPTION_H
 #define KISHSVOPTION_H
 
-#include <KisCurveOption2.h>
+#include <KisCurveOption.h>
 
 class KoColorTransformation;
 struct KisHSVOptionData;
 
 
-class PAINTOP_EXPORT KisHSVOption : public KisCurveOption2
+class PAINTOP_EXPORT KisHSVOption : public KisCurveOption
 {
 public:
     static KisHSVOption* createHueOption(const KisPropertiesConfiguration *setting);

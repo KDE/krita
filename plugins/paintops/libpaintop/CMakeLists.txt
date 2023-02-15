@@ -24,10 +24,10 @@ set(kritalibpaintop_LIB_SRCS
     KisCurveRangeModelInterface.cpp
     KisCurveRangeModel.cpp
     KisCurveOptionModel.cpp
-    KisCurveOptionWidget2.cpp
-    KisCurveOption2.cpp
-    KisMultiSensorsSelector2.cpp
-    KisMultiSensorsModel2.cpp
+    KisCurveOptionWidget.cpp
+    KisCurveOption.cpp
+    KisMultiSensorsSelector.cpp
+    KisMultiSensorsModel.cpp
     KisDynamicSensorFactory.cpp
     KisDynamicSensorFactoryRegistry.cpp
     KisSimpleDynamicSensorFactory.cpp
@@ -92,13 +92,13 @@ set(kritalibpaintop_LIB_SRCS
     kis_linked_pattern_manager.cpp
     KisMaskingBrushOption.cpp
     KisMaskingBrushOptionProperties.cpp
-    sensors2/KisDynamicSensor2.cpp
-    sensors2/KisDynamicSensors2.cpp
-    sensors2/KisDynamicSensorDrawingAngle2.cpp
-    sensors2/KisDynamicSensorFuzzy2.cpp
-    sensors2/KisDynamicSensorDistance2.cpp
-    sensors2/KisDynamicSensorFade2.cpp
-    sensors2/KisDynamicSensorTime2.cpp
+    sensors/KisDynamicSensor.cpp
+    sensors/KisDynamicSensors.cpp
+    sensors/KisDynamicSensorDrawingAngle.cpp
+    sensors/KisDynamicSensorFuzzy.cpp
+    sensors/KisDynamicSensorDistance.cpp
+    sensors/KisDynamicSensorFade.cpp
+    sensors/KisDynamicSensorTime.cpp
     KisDynamicSensorFactoryTime.cpp
     KisDynamicSensorFactoryFade.cpp
     KisDynamicSensorFactoryDistance.cpp

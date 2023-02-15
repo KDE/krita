@@ -6,11 +6,11 @@
 #ifndef KISSMUDGELENGTHOPTIONWIDGET_H
 #define KISSMUDGELENGTHOPTIONWIDGET_H
 
-#include <KisCurveOptionWidget2.h>
+#include <KisCurveOptionWidget.h>
 #include <KisSmudgeLengthOptionData.h>
 
 
-class KisSmudgeLengthOptionWidget : public KisCurveOptionWidget2
+class KisSmudgeLengthOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT
 public:

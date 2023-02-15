@@ -33,7 +33,7 @@ KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
     addPaintOpOption(kpowu::createOptionWidget<KisSizeOptionWidget>());
     addPaintOpOption(kpowu::createRotationOptionWidget());
     addPaintOpOption(kpowu::createOptionWidget<KisMirrorOptionWidget>());
-    addPaintOpOption(kpowu::createOptionWidget<KisFilterOptionWidget2>());
+    addPaintOpOption(kpowu::createOptionWidget<KisFilterOptionWidget>());
 }
 
 KisFilterOpSettingsWidget::~KisFilterOpSettingsWidget()

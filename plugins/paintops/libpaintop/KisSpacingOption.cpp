@@ -18,7 +18,7 @@ KisSpacingOption::KisSpacingOption(const KisPropertiesConfiguration *setting)
 }
 
 KisSpacingOption::KisSpacingOption(const KisSpacingOptionData &data)
-    : KisCurveOption2(data)
+    : KisCurveOption(data)
     , m_isotropicSpacing(data.isotropicSpacing)
     , m_useSpacingUpdates(data.useSpacingUpdates)
 {

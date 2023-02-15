@@ -6,11 +6,11 @@
 #ifndef KISSCATTEROPTIONWIDGET_H
 #define KISSCATTEROPTIONWIDGET_H
 
-#include <KisCurveOptionWidget2.h>
+#include <KisCurveOptionWidget.h>
 #include <KisScatterOptionData.h>
 
 
-class PAINTOP_EXPORT KisScatterOptionWidget : public KisCurveOptionWidget2
+class PAINTOP_EXPORT KisScatterOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT
 public:

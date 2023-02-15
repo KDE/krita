@@ -6,10 +6,10 @@
 #ifndef KISSMUDGELENGTHOPTION_H
 #define KISSMUDGELENGTHOPTION_H
 
-#include <KisCurveOption2.h>
+#include <KisCurveOption.h>
 #include <KisSmudgeLengthOptionData.h>
 
-class KisSmudgeLengthOption : public KisCurveOption2
+class KisSmudgeLengthOption : public KisCurveOption
 {
 public:
     KisSmudgeLengthOption(const KisPropertiesConfiguration *setting);

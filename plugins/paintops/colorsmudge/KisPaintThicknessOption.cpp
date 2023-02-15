@@ -15,7 +15,7 @@ KisPaintThicknessOption::KisPaintThicknessOption(const KisPropertiesConfiguratio
 }
 
 KisPaintThicknessOption::KisPaintThicknessOption(const KisPaintThicknessOptionData &data)
-    : KisCurveOption2(data),
+    : KisCurveOption(data),
       m_mode(data.mode)
 {
 }

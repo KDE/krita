@@ -5,30 +5,30 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include "KisCurveOption2.h"
+#include "KisCurveOption.h"
 #include "KisCurveOptionData.h"
 #include "kis_algebra_2d.h"
 
-#include <sensors2/KisDynamicSensors2.h>
-#include <sensors2/KisDynamicSensorDrawingAngle2.h>
-#include <sensors2/KisDynamicSensorDistance2.h>
-#include <sensors2/KisDynamicSensorFade2.h>
-#include <sensors2/KisDynamicSensorTime2.h>
-#include <sensors2/KisDynamicSensorFuzzy2.h>
+#include <sensors/KisDynamicSensors.h>
+#include <sensors/KisDynamicSensorDrawingAngle.h>
+#include <sensors/KisDynamicSensorDistance.h>
+#include <sensors/KisDynamicSensorFade.h>
+#include <sensors/KisDynamicSensorTime.h>
+#include <sensors/KisDynamicSensorFuzzy.h>
 
 namespace {
 template <typename Sensor, typename Data, typename... Args>
-void addSensor(std::vector<std::unique_ptr<KisDynamicSensor2>> &sensors,
+void addSensor(std::vector<std::unique_ptr<KisDynamicSensor>> &sensors,
                const Data &data, std::optional<KisCubicCurve> commonCurve, Args... args)
 {
     if (data.isActive) {
-        sensors.push_back(std::unique_ptr<KisDynamicSensor2>(new Sensor(data, commonCurve, args...)));
+        sensors.push_back(std::unique_ptr<KisDynamicSensor>(new Sensor(data, commonCurve, args...)));
     }
 }
 
-std::vector<std::unique_ptr<KisDynamicSensor2>> generateSensors(const KisCurveOptionData &data)
+std::vector<std::unique_ptr<KisDynamicSensor>> generateSensors(const KisCurveOptionData &data)
 {
-    std::vector<std::unique_ptr<KisDynamicSensor2>> result;
+    std::vector<std::unique_ptr<KisDynamicSensor>> result;
 
     std::optional<KisCubicCurve> commonCurve;
     if (data.useSameCurve) {
@@ -37,34 +37,34 @@ std::vector<std::unique_ptr<KisDynamicSensor2>> generateSensors(const KisCurveOp
 
     const KisKritaSensorData &sensorStruct = data.sensorStruct();
 
-    addSensor<KisDynamicSensorPressure2>(result, sensorStruct.sensorPressure, commonCurve);
-    addSensor<KisDynamicSensorPressureIn2>(result, sensorStruct.sensorPressureIn, commonCurve);
-    addSensor<KisDynamicSensorTangentialPressure2>(result, sensorStruct.sensorTangentialPressure, commonCurve);
-    addSensor<KisDynamicSensorDrawingAngle2>(result, sensorStruct.sensorDrawingAngle, commonCurve);
-    addSensor<KisDynamicSensorXTilt2>(result, sensorStruct.sensorXTilt, commonCurve);
-    addSensor<KisDynamicSensorYTilt2>(result, sensorStruct.sensorYTilt, commonCurve);
-    addSensor<KisDynamicSensorTiltDirection2>(result, sensorStruct.sensorTiltDirection, commonCurve);
-    addSensor<KisDynamicSensorTiltElevation2>(result, sensorStruct.sensorTiltElevation, commonCurve);
-    addSensor<KisDynamicSensorRotation2>(result, sensorStruct.sensorRotation, commonCurve);
-    addSensor<KisDynamicSensorFuzzyPerDab2>(result, sensorStruct.sensorFuzzyPerDab, commonCurve);
-    addSensor<KisDynamicSensorFuzzyPerStroke2>(result, sensorStruct.sensorFuzzyPerStroke, commonCurve, data.id.id());
-    addSensor<KisDynamicSensorSpeed2>(result, sensorStruct.sensorSpeed, commonCurve);
-    addSensor<KisDynamicSensorFade2>(result, sensorStruct.sensorFade, commonCurve);
-    addSensor<KisDynamicSensorDistance2>(result, sensorStruct.sensorDistance, commonCurve);
-    addSensor<KisDynamicSensorTime2>(result, sensorStruct.sensorTime, commonCurve);
-    addSensor<KisDynamicSensorPerspective2>(result, sensorStruct.sensorPerspective, commonCurve);
+    addSensor<KisDynamicSensorPressure>(result, sensorStruct.sensorPressure, commonCurve);
+    addSensor<KisDynamicSensorPressureIn>(result, sensorStruct.sensorPressureIn, commonCurve);
+    addSensor<KisDynamicSensorTangentialPressure>(result, sensorStruct.sensorTangentialPressure, commonCurve);
+    addSensor<KisDynamicSensorDrawingAngle>(result, sensorStruct.sensorDrawingAngle, commonCurve);
+    addSensor<KisDynamicSensorXTilt>(result, sensorStruct.sensorXTilt, commonCurve);
+    addSensor<KisDynamicSensorYTilt>(result, sensorStruct.sensorYTilt, commonCurve);
+    addSensor<KisDynamicSensorTiltDirection>(result, sensorStruct.sensorTiltDirection, commonCurve);
+    addSensor<KisDynamicSensorTiltElevation>(result, sensorStruct.sensorTiltElevation, commonCurve);
+    addSensor<KisDynamicSensorRotation>(result, sensorStruct.sensorRotation, commonCurve);
+    addSensor<KisDynamicSensorFuzzyPerDab>(result, sensorStruct.sensorFuzzyPerDab, commonCurve);
+    addSensor<KisDynamicSensorFuzzyPerStroke>(result, sensorStruct.sensorFuzzyPerStroke, commonCurve, data.id.id());
+    addSensor<KisDynamicSensorSpeed>(result, sensorStruct.sensorSpeed, commonCurve);
+    addSensor<KisDynamicSensorFade>(result, sensorStruct.sensorFade, commonCurve);
+    addSensor<KisDynamicSensorDistance>(result, sensorStruct.sensorDistance, commonCurve);
+    addSensor<KisDynamicSensorTime>(result, sensorStruct.sensorTime, commonCurve);
+    addSensor<KisDynamicSensorPerspective>(result, sensorStruct.sensorPerspective, commonCurve);
 
     return result;
 }
 }
 
-qreal KisCurveOption2::ValueComponents::rotationLikeValue(qreal normalizedBaseAngle, bool absoluteAxesFlipped, qreal scalingPartCoeff, bool disableScalingPart) const {
+qreal KisCurveOption::ValueComponents::rotationLikeValue(qreal normalizedBaseAngle, bool absoluteAxesFlipped, qreal scalingPartCoeff, bool disableScalingPart) const {
     const qreal offset =
             !hasAbsoluteOffset ? normalizedBaseAngle :
                                  absoluteAxesFlipped ? 0.5 - absoluteOffset :
                                                        absoluteOffset;
 
-    const qreal realScalingPart = hasScaling && !disableScalingPart ? KisDynamicSensor2::scalingToAdditive(scaling) : 0.0;
+    const qreal realScalingPart = hasScaling && !disableScalingPart ? KisDynamicSensor::scalingToAdditive(scaling) : 0.0;
     const qreal realAdditivePart = hasAdditive ? additive : 0;
 
     qreal value = KisAlgebra2D::wrapValue(2 * offset + constant * (scalingPartCoeff * realScalingPart + realAdditivePart), -1.0, 1.0);
@@ -75,12 +75,12 @@ qreal KisCurveOption2::ValueComponents::rotationLikeValue(qreal normalizedBaseAn
     return value;
 }
 
-qreal KisCurveOption2::ValueComponents::sizeLikeValue() const {
+qreal KisCurveOption::ValueComponents::sizeLikeValue() const {
     const qreal offset =
             hasAbsoluteOffset ? absoluteOffset : 1.0;
 
     const qreal realScalingPart = hasScaling ? scaling : 1.0;
-    const qreal realAdditivePart = hasAdditive ? KisDynamicSensor2::additiveToScaling(additive) : 1.0;
+    const qreal realAdditivePart = hasAdditive ? KisDynamicSensor::additiveToScaling(additive) : 1.0;
 
     return qBound(minSizeLikeValue,
                   constant * offset * realScalingPart * realAdditivePart,
@@ -88,7 +88,7 @@ qreal KisCurveOption2::ValueComponents::sizeLikeValue() const {
 }
 
 
-KisCurveOption2::KisCurveOption2(const KisCurveOptionData &data)
+KisCurveOption::KisCurveOption(const KisCurveOptionData &data)
     : m_isChecked(data.isChecked)
     , m_useCurve(data.useCurve)
     , m_curveMode(data.curveMode)
@@ -99,14 +99,14 @@ KisCurveOption2::KisCurveOption2(const KisCurveOptionData &data)
 {
 }
 
-KisCurveOption2::ValueComponents KisCurveOption2::computeValueComponents(const KisPaintInformation& info, bool useStrengthValue) const
+KisCurveOption::ValueComponents KisCurveOption::computeValueComponents(const KisPaintInformation& info, bool useStrengthValue) const
 {
     ValueComponents components;
 
     if (m_useCurve) {
         QList<double> sensorValues;
         for (auto i = m_sensors.cbegin(); i != m_sensors.cend(); ++i) {
-            KisDynamicSensor2 *s(i->get());
+            KisDynamicSensor *s(i->get());
 
             qreal valueFromCurve = s->parameter(info);
             if (s->isAdditive()) {
@@ -162,42 +162,42 @@ KisCurveOption2::ValueComponents KisCurveOption2::computeValueComponents(const K
     return components;
 }
 
-qreal KisCurveOption2::computeSizeLikeValue(const KisPaintInformation& info, bool useStrengthValue) const
+qreal KisCurveOption::computeSizeLikeValue(const KisPaintInformation& info, bool useStrengthValue) const
 {
     const ValueComponents components = computeValueComponents(info, useStrengthValue);
     return components.sizeLikeValue();
 }
 
-qreal KisCurveOption2::computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue, bool absoluteAxesFlipped, qreal scalingPartCoeff, bool disableScalingPart) const
+qreal KisCurveOption::computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue, bool absoluteAxesFlipped, qreal scalingPartCoeff, bool disableScalingPart) const
 {
     const ValueComponents components = computeValueComponents(info, true);
     return components.rotationLikeValue(baseValue, absoluteAxesFlipped, scalingPartCoeff, disableScalingPart);
 }
 
-qreal KisCurveOption2::strengthValue() const
+qreal KisCurveOption::strengthValue() const
 {
     return m_strengthValue;
 }
 
-qreal KisCurveOption2::strengthMinValue() const
+qreal KisCurveOption::strengthMinValue() const
 {
     return m_strengthMinValue;
 }
 
-qreal KisCurveOption2::strengthMaxValue() const
+qreal KisCurveOption::strengthMaxValue() const
 {
     return m_strengthMaxValue;
 }
 
-bool KisCurveOption2::isChecked() const
+bool KisCurveOption::isChecked() const
 {
     return m_isChecked;
 }
 
-bool KisCurveOption2::isRandom() const
+bool KisCurveOption::isRandom() const
 {
     for (auto it = m_sensors.begin(); it != m_sensors.end(); ++it) {
-        const KisDynamicSensor2 *sensor = it->get();
+        const KisDynamicSensor *sensor = it->get();
         if (sensor->id() == FuzzyPerDabId || sensor->id() == FuzzyPerStrokeId) return true;
     }
     return false;

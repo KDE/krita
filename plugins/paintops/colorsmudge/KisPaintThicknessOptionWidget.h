@@ -6,11 +6,11 @@
 #ifndef KISPAINTTHICKNESSOPTIONWIDGET_H
 #define KISPAINTTHICKNESSOPTIONWIDGET_H
 
-#include <KisCurveOptionWidget2.h>
+#include <KisCurveOptionWidget.h>
 #include <KisPaintThicknessOptionData.h>
 
 
-class KisPaintThicknessOptionWidget : public KisCurveOptionWidget2
+class KisPaintThicknessOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT
 public:

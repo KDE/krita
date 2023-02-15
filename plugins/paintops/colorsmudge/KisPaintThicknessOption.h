@@ -6,11 +6,11 @@
 #ifndef KISPAINTTHICKNESSOPTION_H
 #define KISPAINTTHICKNESSOPTION_H
 
-#include <KisCurveOption2.h>
+#include <KisCurveOption.h>
 #include <KisPaintThicknessOptionData.h>
 
 
-class KisPaintThicknessOption : public KisCurveOption2
+class KisPaintThicknessOption : public KisCurveOption
 {
 public:
     KisPaintThicknessOption(const KisPropertiesConfiguration *setting);

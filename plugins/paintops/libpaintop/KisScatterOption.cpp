@@ -23,7 +23,7 @@ KisScatterOption::KisScatterOption(const KisPropertiesConfiguration *setting)
 }
 
 KisScatterOption::KisScatterOption(const KisScatterOptionData &data)
-    : KisCurveOption2(data)
+    : KisCurveOption(data)
     , m_axisX(data.axisX)
     , m_axisY(data.axisY)
 {

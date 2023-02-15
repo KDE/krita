@@ -6,11 +6,11 @@
 #ifndef KISSPACINGOPTION_H
 #define KISSPACINGOPTION_H
 
-#include <KisCurveOption2.h>
+#include <KisCurveOption.h>
 
 struct KisSpacingOptionData;
 
-class PAINTOP_EXPORT KisSpacingOption : public KisCurveOption2
+class PAINTOP_EXPORT KisSpacingOption : public KisCurveOption
 {
 public:
     KisSpacingOption(const KisPropertiesConfiguration *setting);

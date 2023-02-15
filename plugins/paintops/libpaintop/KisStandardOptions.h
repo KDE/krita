@@ -6,7 +6,7 @@
 #ifndef KISSTANDARDOPTIONS_H
 #define KISSTANDARDOPTIONS_H
 
-#include <KisCurveOption2.h>
+#include <KisCurveOption.h>
 #include "kis_properties_configuration.h"
 
 #include <KisStandardOptionData.h>
@@ -16,11 +16,11 @@
 namespace kpou = KisPaintOpOptionUtils;
 
 template <typename Data>
-class KisStandardOption : public KisCurveOption2
+class KisStandardOption : public KisCurveOption
 {
 public:
     KisStandardOption(const KisPropertiesConfiguration *setting)
-        : KisCurveOption2(kpou::loadOptionData<Data>(setting))
+        : KisCurveOption(kpou::loadOptionData<Data>(setting))
     {
     }
 
@@ -32,11 +32,11 @@ public:
 };
 
 template <typename Data>
-class KisStandardOptionNoApply : public KisCurveOption2
+class KisStandardOptionNoApply : public KisCurveOption
 {
 public:
     KisStandardOptionNoApply(const KisPropertiesConfiguration *setting)
-        : KisCurveOption2(kpou::loadOptionData<Data>(setting))
+        : KisCurveOption(kpou::loadOptionData<Data>(setting))
     {
     }
 };

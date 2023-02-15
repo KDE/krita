@@ -3,8 +3,8 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef KISDYNAMICSENSOR2_H
-#define KISDYNAMICSENSOR2_H
+#ifndef KISDYNAMICSENSOR_H
+#define KISDYNAMICSENSOR_H
 
 #include <optional>
 #include <kis_cubic_curve.h>
@@ -13,13 +13,13 @@
 class KisPaintInformation;
 struct KisSensorData;
 
-class KisDynamicSensor2
+class KisDynamicSensor
 {
 public:
-    KisDynamicSensor2(const KoID &id,
+    KisDynamicSensor(const KoID &id,
                       const KisSensorData &data,
                       std::optional<KisCubicCurve> curveOverride);
-    virtual ~KisDynamicSensor2();
+    virtual ~KisDynamicSensor();
 
     KoID id() const;
     qreal parameter(const KisPaintInformation &info) const;
@@ -46,4 +46,4 @@ private:
     std::optional<KisCubicCurve> m_curve;
 };
 
-#endif // KISDYNAMICSENSOR2_H
+#endif // KISDYNAMICSENSOR_H

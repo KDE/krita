@@ -18,7 +18,7 @@ namespace kpou = KisPaintOpOptionUtils;
 
 
 KisDarkenOption::KisDarkenOption(const KisPropertiesConfiguration *setting)
-    : KisCurveOption2(kpou::loadOptionData<KisDarkenOptionData>(setting))
+    : KisCurveOption(kpou::loadOptionData<KisDarkenOptionData>(setting))
 {
 }
 

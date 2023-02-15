@@ -31,7 +31,7 @@ struct KisSharpnessOptionWidget::Private
 };
 
 KisSharpnessOptionWidget::KisSharpnessOptionWidget(lager::cursor<KisSharpnessOptionData> optionData)
-    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL)
+    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL)
     , m_d(new Private(optionData))
 {
     using namespace KisWidgetConnectionUtils;
@@ -74,7 +74,7 @@ KisSharpnessOptionWidget::~KisSharpnessOptionWidget()
 
 void KisSharpnessOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    KisCurveOptionWidget2::writeOptionSetting(setting);
+    KisCurveOptionWidget::writeOptionSetting(setting);
     m_d->model.sharpnessOptionData->write(setting.data());
 }
 
@@ -84,5 +84,5 @@ void KisSharpnessOptionWidget::readOptionSetting(const KisPropertiesConfiguratio
     data.read(setting.data());
     m_d->model.sharpnessOptionData.set(data);
 
-    KisCurveOptionWidget2::readOptionSetting(setting);
+    KisCurveOptionWidget::readOptionSetting(setting);
 }

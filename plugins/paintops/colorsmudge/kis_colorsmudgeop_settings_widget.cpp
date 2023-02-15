@@ -75,7 +75,7 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent, 
                                        useNewEngine ? 1.0 : 3.0);
             });
 
-    KisCurveOptionWidget2 *smudgeRadiusWidget =
+    KisCurveOptionWidget *smudgeRadiusWidget =
         kpowu::createCurveOptionWidget(KisSmudgeRadiusOptionData(),
                                       KisPaintOpOption::GENERAL,
                                       lager::make_constant(true),

@@ -5,10 +5,10 @@
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#include "KisMultiSensorsModel2.h"
+#include "KisMultiSensorsModel.h"
 #include <KoID.h>
 
-struct KisMultiSensorsModel2::Private
+struct KisMultiSensorsModel::Private
 {
     Private(lager::cursor<MultiSensorData> _sensorsData)
         : sensorsData(_sensorsData)
@@ -17,24 +17,24 @@ struct KisMultiSensorsModel2::Private
     lager::cursor<MultiSensorData> sensorsData;
 };
 
-KisMultiSensorsModel2::KisMultiSensorsModel2(lager::cursor<MultiSensorData> sensorsData,
+KisMultiSensorsModel::KisMultiSensorsModel(lager::cursor<MultiSensorData> sensorsData,
                                              QObject* parent)
     : QAbstractListModel(parent),
       m_d(new Private(sensorsData))
 {
-    m_d->sensorsData.bind(std::bind(&KisMultiSensorsModel2::slotSensorModelChanged, this));
+    m_d->sensorsData.bind(std::bind(&KisMultiSensorsModel::slotSensorModelChanged, this));
 }
 
-KisMultiSensorsModel2::~KisMultiSensorsModel2()
+KisMultiSensorsModel::~KisMultiSensorsModel()
 {
 }
 
-int KisMultiSensorsModel2::rowCount(const QModelIndex &/*parent*/) const
+int KisMultiSensorsModel::rowCount(const QModelIndex &/*parent*/) const
 {
     return m_d->sensorsData->size();
 }
 
-QVariant KisMultiSensorsModel2::data(const QModelIndex &index, int role) const
+QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) return QVariant();
 
@@ -47,7 +47,7 @@ QVariant KisMultiSensorsModel2::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-bool KisMultiSensorsModel2::setData(const QModelIndex &index, const QVariant &value, int role)
+bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     bool result = false;
 
@@ -71,18 +71,18 @@ bool KisMultiSensorsModel2::setData(const QModelIndex &index, const QVariant &va
     return result;
 }
 
-Qt::ItemFlags KisMultiSensorsModel2::flags(const QModelIndex & /*index */) const
+Qt::ItemFlags KisMultiSensorsModel::flags(const QModelIndex & /*index */) const
 {
     return Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
 }
 
-QString KisMultiSensorsModel2::getSensorId(const QModelIndex& index)
+QString KisMultiSensorsModel::getSensorId(const QModelIndex& index)
 {
     if (!index.isValid()) return 0;
     return m_d->sensorsData->at(index.row()).first.id();
 }
 
-QModelIndex KisMultiSensorsModel2::sensorIndex(const QString &id)
+QModelIndex KisMultiSensorsModel::sensorIndex(const QString &id)
 {
     const size_t foundIndex =
             std::distance(m_d->sensorsData->begin(),
@@ -95,7 +95,7 @@ QModelIndex KisMultiSensorsModel2::sensorIndex(const QString &id)
                 index(foundIndex) : QModelIndex();
 }
 
-void KisMultiSensorsModel2::slotSensorModelChanged()
+void KisMultiSensorsModel::slotSensorModelChanged()
 {
     emit dataChanged(index(0), index(rowCount() - 1));
 }

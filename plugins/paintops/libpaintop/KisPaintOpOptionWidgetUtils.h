@@ -10,7 +10,7 @@
 #include <boost/tti/has_member_function.hpp>
 #include <lager/state.hpp>
 #include <KisZug.h>
-#include <KisCurveOptionWidget2.h>
+#include <KisCurveOptionWidget.h>
 #include "kis_paintop_lod_limitations.h"
 
 namespace KisPaintOpOptionWidgetUtils
@@ -190,9 +190,9 @@ Widget* createOptionWidgetWithLodLimitations()
  * widget's constructor right after the cursor to the data.
  */
 template <typename Data, typename... Args>
-KisCurveOptionWidget2* createCurveOptionWidget(Data&& data, Args... args)
+KisCurveOptionWidget* createCurveOptionWidget(Data&& data, Args... args)
 {
-    return createOptionWidget<KisCurveOptionWidget2>(std::forward<Data>(data), std::forward<Args>(args)...);
+    return createOptionWidget<KisCurveOptionWidget>(std::forward<Data>(data), std::forward<Args>(args)...);
 }
 
 }

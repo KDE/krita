@@ -28,7 +28,7 @@ struct KisPaintThicknessOptionWidget::Private
 
 KisPaintThicknessOptionWidget::KisPaintThicknessOptionWidget(lager::cursor<KisPaintThicknessOptionData> optionData,
                                                              lager::reader<bool> lightnessModeEnabled)
-    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL, lightnessModeEnabled)
+    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL, lightnessModeEnabled)
     , m_d(new Private(optionData, lightnessModeEnabled))
 {
     using namespace KisWidgetConnectionUtils;
@@ -68,7 +68,7 @@ KisPaintThicknessOptionWidget::~KisPaintThicknessOptionWidget()
 
 void KisPaintThicknessOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    KisCurveOptionWidget2::writeOptionSetting(setting);
+    KisCurveOptionWidget::writeOptionSetting(setting);
     m_d->model.optionData->write(setting.data());
 }
 
@@ -78,5 +78,5 @@ void KisPaintThicknessOptionWidget::readOptionSetting(const KisPropertiesConfigu
     data.read(setting.data());
     m_d->model.optionData.set(data);
 
-    KisCurveOptionWidget2::readOptionSetting(setting);
+    KisCurveOptionWidget::readOptionSetting(setting);
 }

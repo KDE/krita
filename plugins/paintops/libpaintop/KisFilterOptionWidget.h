@@ -10,14 +10,14 @@
 #include <KisFilterOptionData.h>
 #include <lager/cursor.hpp>
 
-class PAINTOP_EXPORT KisFilterOptionWidget2 : public KisPaintOpOption
+class PAINTOP_EXPORT KisFilterOptionWidget : public KisPaintOpOption
 {
     Q_OBJECT
 public:
     using data_type = KisFilterOptionData;
 
-    KisFilterOptionWidget2(lager::cursor<KisFilterOptionData> optionData);
-    ~KisFilterOptionWidget2();
+    KisFilterOptionWidget(lager::cursor<KisFilterOptionData> optionData);
+    ~KisFilterOptionWidget();
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;

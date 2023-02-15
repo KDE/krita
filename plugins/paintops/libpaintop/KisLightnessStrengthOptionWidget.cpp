@@ -22,7 +22,7 @@ struct KisLightnessStrengthOptionWidget::Private
 };
 
 KisLightnessStrengthOptionWidget::KisLightnessStrengthOptionWidget(lager::cursor<KisLightnessStrengthOptionData> optionData, lager::reader<bool> lightnessModeEnabled)
-    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL, lightnessModeEnabled)
+    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL, lightnessModeEnabled)
     , m_d(new Private(lightnessModeEnabled))
 {
     QWidget* page = new QWidget;

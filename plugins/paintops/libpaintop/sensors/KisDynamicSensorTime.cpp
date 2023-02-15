@@ -3,7 +3,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include "KisDynamicSensorTime2.h"
+#include "KisDynamicSensorTime.h"
 
 #include <KisDynamicSensorIds.h>
 
@@ -11,14 +11,14 @@
 #include <KisCurveOptionData.h>
 
 
-KisDynamicSensorTime2::KisDynamicSensorTime2(const KisSensorWithLengthData &data, std::optional<KisCubicCurve> curveOverride)
-    : KisDynamicSensor2(TimeId, data, curveOverride)
+KisDynamicSensorTime::KisDynamicSensorTime(const KisSensorWithLengthData &data, std::optional<KisCubicCurve> curveOverride)
+    : KisDynamicSensor(TimeId, data, curveOverride)
     , m_periodic(data.isPeriodic)
     , m_length(data.length)
 {
 }
 
-qreal KisDynamicSensorTime2::value(const KisPaintInformation &pi) const
+qreal KisDynamicSensorTime::value(const KisPaintInformation &pi) const
 {
     if (pi.isHoveringMode()) return 1.0;
 

@@ -6,10 +6,10 @@
 #ifndef KISSPACINGOPTIONWIDGET_H
 #define KISSPACINGOPTIONWIDGET_H
 
-#include <KisCurveOptionWidget2.h>
+#include <KisCurveOptionWidget.h>
 #include <KisSpacingOptionData.h>
 
-class PAINTOP_EXPORT KisSpacingOptionWidget : public KisCurveOptionWidget2
+class PAINTOP_EXPORT KisSpacingOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT
 public:

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-07 00:57+0000\n"
+"POT-Creation-Date: 2023-02-15 00:57+0000\n"
 "PO-Revision-Date: 2023-02-07 20:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -8077,10 +8077,16 @@ msgstr "Dosya Araç Çubuğunu Göster"
 #. i18n: context: text @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: text @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
 #: krita/krita.action:65 krita/krita.action:67 krita/krita.action:68
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:9
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:10
 #, kde-format
 msgctxt "action"
 msgid "Show color selector"
@@ -8089,10 +8095,13 @@ msgstr "Renk seçicisini göster"
 #. i18n: context: text @ Action (show_mypaint_shade_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_mypaint_shade_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_mypaint_shade_selector), Actions (General), ActionCollection (Krita)
+#. i18n: context: text @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: text @ Action (show_mypaint_shade_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_mypaint_shade_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_mypaint_shade_selector), Actions (General), ActionCollection (Krita)
+#. i18n: context: text @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #: krita/krita.action:75 krita/krita.action:77 krita/krita.action:78
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:27
 #, kde-format
 msgctxt "action"
 msgid "Show MyPaint shade selector"
@@ -8113,10 +8122,19 @@ msgstr "En küçük gölge seçicisini göster"
 #. i18n: context: text @ Action (show_color_history), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_history), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_color_history), Actions (General), ActionCollection (Krita)
+#. i18n: context: text @ Action (show_wg_color_history), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (show_wg_color_history), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (show_wg_color_history), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: text @ Action (show_color_history), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_history), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_color_history), Actions (General), ActionCollection (Krita)
+#. i18n: context: text @ Action (show_wg_color_history), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (show_wg_color_history), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (show_wg_color_history), Actions (Krita), ActionCollection (Krita)
 #: krita/krita.action:95 krita/krita.action:97 krita/krita.action:98
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:37
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:39
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:40
 #, kde-format
 msgctxt "action"
 msgid "Show color history"
@@ -15714,13 +15732,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Çalışma alanları"
 
-#: krita/main.cc:512
+#: krita/main.cc:518
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Ölümcül Hata"
 
-#: krita/main.cc:513
+#: krita/main.cc:519
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15729,14 +15747,14 @@ msgstr ""
 "Krita, Wayland platformunu desteklemiyor. Krita'yi Wayland üzerinde "
 "çalıştırmak için XWayland kullanın. Krita şimdi kapanacak."
 
-#: krita/main.cc:609 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:615 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Uyarı"
 
-#: krita/main.cc:610
+#: krita/main.cc:616
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15750,12 +15768,12 @@ msgstr ""
 "Windows işletim sisteminin yalnızca şu sürümleri desteklenmektedir: Windows "
 "7, 8, 8.1 ve 10."
 
-#: krita/main.cc:632 krita/main.cc:637
+#: krita/main.cc:638 krita/main.cc:643
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita Tablet Desteği"
 
-#: krita/main.cc:633
+#: krita/main.cc:639
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15766,7 +15784,7 @@ msgstr ""
 "tabletiniz varsa lütfen tablet sürücüsünün doğru şekilde kurulduğundan emin "
 "olun."
 
-#: krita/main.cc:638
+#: krita/main.cc:644
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -15926,7 +15944,7 @@ msgstr "Parametreyi değiştir"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:360
+#: libs/flake/tools/KoPathTool.cpp:362
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Yola Dönüştür"
@@ -16210,25 +16228,25 @@ msgstr ""
 "metin nesnesi Krita 5 biçimine dönüştürülür ve Krita 4.x ile uyumlu olmaktan "
 "çıkar."
 
-#: libs/flake/text/KoSvgTextShape.cpp:566
+#: libs/flake/text/KoSvgTextShape.cpp:2685
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:568
-#: libs/flake/text/KoSvgTextShape.cpp:576
+#: libs/flake/text/KoSvgTextShape.cpp:2687
+#: libs/flake/text/KoSvgTextShape.cpp:2695
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Metin Şekli"
 
-#: libs/flake/text/KoSvgTextShape.cpp:574
+#: libs/flake/text/KoSvgTextShape.cpp:2693
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:588
-#: libs/flake/text/KoSvgTextShape.cpp:603
+#: libs/flake/text/KoSvgTextShape.cpp:2707
+#: libs/flake/text/KoSvgTextShape.cpp:2722
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16260,41 +16278,41 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Bölütü Değiştir"
 
-#: libs/flake/tools/KoPathTool.cpp:185
+#: libs/flake/tools/KoPathTool.cpp:187
 #, kde-format
 msgid "Edit Shape"
 msgstr "Şekli Düzenle"
 
-#: libs/flake/tools/KoPathTool.cpp:661
+#: libs/flake/tools/KoPathTool.cpp:660
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Tutacı taşımak için sürükleyin."
 
-#: libs/flake/tools/KoPathTool.cpp:715
+#: libs/flake/tools/KoPathTool.cpp:714
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Noktayı taşımak için sürükleyin. Nokta türünü değiştirmek için Shift "
 "düğmesini basılı tutarak tıklayın."
 
-#: libs/flake/tools/KoPathTool.cpp:717
+#: libs/flake/tools/KoPathTool.cpp:716
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Denetim noktasını taşımak için sürükleyin."
 
-#: libs/flake/tools/KoPathTool.cpp:740
+#: libs/flake/tools/KoPathTool.cpp:739
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Eğriyi doğrudan değiştirmek için sürükleyin. Yeni yol noktası eklemek için "
 "çift tıklayın."
 
-#: libs/flake/tools/KoPathTool.cpp:748
+#: libs/flake/tools/KoPathTool.cpp:747
 #, kde-format
 msgid "Press B to break path at selected point."
 msgstr "Seçili noktada yolu kesmek için B'ye basın."
 
-#: libs/flake/tools/KoPathTool.cpp:750
+#: libs/flake/tools/KoPathTool.cpp:749
 #, kde-format
 msgid "Press B to break path at selected segments."
 msgstr "Seçili bölütlerdeki yolu sonlandırmak için B'ye basın."
@@ -16561,6 +16579,7 @@ msgstr "Boyut"
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intVSpacing)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intXOffset)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intYOffset)
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbShadeLineHeight)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, popupSize)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, minimalShadeSelectorLineHeight)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, lastUsedColorsWidth)
@@ -16603,6 +16622,7 @@ msgstr "Boyut"
 #: plugins/dockers/griddocker/grid_config_widget.ui:489
 #: plugins/dockers/recorder/recorder_export.ui:448
 #: plugins/dockers/recorder/recorder_export.ui:486
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:472
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:36
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:44
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:40
@@ -19498,7 +19518,9 @@ msgstr "Araç İpucu"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: libs/resources/KisResourceModel.cpp:135 libs/ui/imagesize/imagesize.xmlgui:4
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:156
 #: plugins/extensions/imagesplit/imagesplit.xmlgui:4
 #: plugins/extensions/separate_channels/imageseparate.xmlgui:4
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:401
@@ -19543,7 +19565,7 @@ msgstr "md5sum"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1647
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1651
 #: libs/ui/forms/wdgdisplaysettings.ui:196 libs/ui/KoDocumentInfo.cpp:37
-#: libs/widgets/KisDlgInternalColorSelector.cpp:323
+#: libs/widgets/KisDlgInternalColorSelector.cpp:326
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:853
 #, kde-format
@@ -21308,7 +21330,9 @@ msgstr "Rec. 2100 PQ"
 msgid "DCI-P3 D65"
 msgstr "DCI-P3 D65"
 
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:28
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:161
 #: plugins/paintops/mypaint/MyPaintBrushOption.h:38
 #, kde-format
 msgid "Custom"
@@ -21443,6 +21467,7 @@ msgstr "Video Canlandırma İçe Aktar"
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
 #: plugins/dockers/logdocker/LogDockerDock.cpp:119
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:103
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:31
 #: plugins/impex/webp/kis_wdg_options_webp.ui:31
@@ -21639,6 +21664,9 @@ msgstr "Belge"
 #. i18n: ectx: property (text), widget (QLabel, widthLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_width)
 #. i18n: ectx: property (text), widget (QLabel, intWidthzqffs)
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#. i18n: ectx: property (text), widget (QLabel, label_13)
+#. i18n: ectx: property (text), widget (QLabel, label_19)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/VideoImportDialog.ui:546
@@ -21651,6 +21679,9 @@ msgstr "Belge"
 #: libs/ui/imagesize/wdg_layersize.ui:62
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:81
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1015
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:328
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:660
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:867
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:89
 #: plugins/generators/pattern/wdgpatternoptions.ui:80
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:165
@@ -21676,7 +21707,9 @@ msgstr "Genişlik:"
 #. i18n: ectx: property (text), widget (QLabel, heightLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_height)
 #. i18n: ectx: property (text), widget (QLabel, intHeightqsdfq)
+#. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
+#. i18n: ectx: property (text), widget (QLabel, label_20)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/animation/VideoImportDialog.ui:559
@@ -21690,6 +21723,9 @@ msgstr "Genişlik:"
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:118
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:757
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:992
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:342
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:680
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:887
 #: plugins/generators/pattern/wdgpatternoptions.ui:106
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:112
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:199
@@ -26762,8 +26798,12 @@ msgstr "Taşıma Aracında"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPopupPaletteSettings)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WGConfigWidget)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:6
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:14
+#: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:14
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:14
 #, kde-format
 msgid "Form"
 msgstr "Biçim"
@@ -26800,6 +26840,7 @@ msgstr "sRGB Üçgen Seçici"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:93
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:69
 #, kde-format
 msgid "Wide Gamut Selector"
 msgstr "Geniş Gam Seçici"
@@ -27185,9 +27226,15 @@ msgstr "inç"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbGradientRepeat)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
+#. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
+#. i18n: ectx: property (text), item, widget (QComboBox, cbCommonColorsScrolling)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:204
 #: libs/ui/widgets/KoFillConfigWidget.ui:41
 #: libs/ui/widgets/KoFillConfigWidget.ui:275
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:284
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:623
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:830
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:36
 #: plugins/impex/webp/kis_wdg_options_webp.ui:424
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:441
@@ -29096,7 +29143,7 @@ msgstr "%​100"
 msgid "Fit Canvas to View"
 msgstr "Tuvali Görünüme Sığdır"
 
-#: libs/ui/kis_popup_palette.cpp:868
+#: libs/ui/kis_popup_palette.cpp:871
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -29105,7 +29152,7 @@ msgstr ""
 "Ön plan ve arka plan renklerini yer değiştirmek için tıklayın.\n"
 "Siyah ve beyaz olarak ayarlamak için sağ tıklayın."
 
-#: libs/ui/kis_popup_palette.cpp:1005
+#: libs/ui/kis_popup_palette.cpp:1008
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -30139,7 +30186,11 @@ msgid "Reason:"
 msgstr "Gerekçe:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
+#. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: libs/ui/KisImportExportManager.cpp:609
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
 #, kde-format
 msgid "Options"
@@ -33464,16 +33515,20 @@ msgid "x%1"
 msgstr "x%1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, labelHue)
 #: libs/ui/widgets/kis_paintop_preset_icon_library.cpp:23
 #: libs/widgets/KisSpinboxHSXSelector.cpp:34
+#: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:84
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:42
 #, kde-format
 msgid "Hue:"
 msgstr "Ton:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, labelSaturation)
 #: libs/ui/widgets/kis_paintop_preset_icon_library.cpp:27
 #: libs/widgets/KisSpinboxHSXSelector.cpp:35
+#: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:139
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:62
 #, kde-format
 msgid "Saturation:"
@@ -34153,9 +34208,15 @@ msgstr "BasılırDüğme"
 
 #. i18n: ectx: property (text), widget (QLabel, rowsLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblNumRows)
+#. i18n: ectx: property (text), widget (QLabel, label_17)
+#. i18n: ectx: property (text), widget (QLabel, lblHistoryRows)
+#. i18n: ectx: property (text), widget (QLabel, lblCommonColorsRows)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/widgets/KoFillConfigWidget.ui:376
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:159
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:309
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:602
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:809
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:219
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2169
 #, kde-format
@@ -34345,7 +34406,7 @@ msgctxt "Reset the angle to a predefined value"
 msgid "Reset angle"
 msgstr "Açıyı sıfırla"
 
-#: libs/widgets/KisDlgInternalColorSelector.cpp:143
+#: libs/widgets/KisDlgInternalColorSelector.cpp:146
 #, kde-format
 msgid ""
 "This is a hexcode input, for webcolors. It can only get colors in the sRGB "
@@ -34354,37 +34415,51 @@ msgstr ""
 "Bu web renkleri için bir onaltılık koddur. Yalnızca sRGB uzayından renkler "
 "alabilir."
 
-#: libs/widgets/KisDlgInternalColorSelector.cpp:311
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
+#: libs/widgets/KisDlgInternalColorSelector.cpp:314
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:65
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:74
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:67
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:79
 #, kde-format
 msgid "HSV"
 msgstr "HSV"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsl)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:314
+#. i18n: ectx: property (text), widget (QRadioButton, btnHSL)
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
+#: libs/widgets/KisDlgInternalColorSelector.cpp:317
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:66
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:75
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:75
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:68
+#: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:33
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:84
 #, kde-format
 msgid "HSL"
 msgstr "HSL"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsi)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:317
+#. i18n: ectx: property (text), widget (QRadioButton, btnHSI)
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
+#: libs/widgets/KisDlgInternalColorSelector.cpp:320
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:67
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:76
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:85
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:69
+#: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:43
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:89
 #, kde-format
 msgid "HSI"
 msgstr "HSI"
 
-#: libs/widgets/KisDlgInternalColorSelector.cpp:320
+#. i18n: ectx: property (text), widget (QRadioButton, btnHSY)
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
+#: libs/widgets/KisDlgInternalColorSelector.cpp:323
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:68
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:77
+#: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:53
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:94
 #, kde-format
 msgid "HSY'"
 msgstr "HSY'"
@@ -34415,23 +34490,25 @@ msgid "Empty slot"
 msgstr "Boş yuva"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/widgets/KisSpinboxHSXSelector.cpp:65
+#. i18n: ectx: property (text), widget (QLabel, labelValue)
+#: libs/widgets/KisSpinboxHSXSelector.cpp:74
+#: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:61
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:82
 #, kde-format
 msgid "Value:"
 msgstr "Değer:"
 
-#: libs/widgets/KisSpinboxHSXSelector.cpp:68
+#: libs/widgets/KisSpinboxHSXSelector.cpp:77
 #, kde-format
 msgid "Lightness:"
 msgstr "Açıklık:"
 
-#: libs/widgets/KisSpinboxHSXSelector.cpp:71
+#: libs/widgets/KisSpinboxHSXSelector.cpp:80
 #, kde-format
 msgid "Intensity:"
 msgstr "Yoğunluk:"
 
-#: libs/widgets/KisSpinboxHSXSelector.cpp:74
+#: libs/widgets/KisSpinboxHSXSelector.cpp:83
 #, kde-format
 msgid "Luma:"
 msgstr "Luma:"
@@ -36906,8 +36983,10 @@ msgstr "Kaydır: "
 msgid "Docker:"
 msgstr "Rıhtımcı:"
 
+#. i18n: ectx: attribute (title), widget (QWidget, tabSelector)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_typeshape)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:64
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:36
 #, kde-format
 msgid "Color Selector"
 msgstr "Renk Seçici"
@@ -37011,6 +37090,7 @@ msgstr "Açılır Pencereyi tıklamada gizle."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabShadeSelector)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:477
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:406
 #, kde-format
 msgid "Shade Selector"
 msgstr "Gölge Seçici"
@@ -37096,8 +37176,10 @@ msgstr "Çizgi Yüksekliği: "
 msgid "Patches Per Line: "
 msgstr "Satır Başına Yama: "
 
+#. i18n: ectx: property (title), widget (QGroupBox, historyGroupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_ColorHistory)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:734
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:545
 #, kde-format
 msgid "Color History"
 msgstr "Renk Geçmişi"
@@ -37124,10 +37206,16 @@ msgstr "Yama Seçenekleri"
 msgid "Max Patches: "
 msgstr "En Fazla Yama: "
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: property (title), widget (QGroupBox, formGroupBox)
+#. i18n: ectx: property (title), widget (QGroupBox, formGroupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:836
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1071
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:227
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:554
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:761
 #, kde-format
 msgid "Layout"
 msgstr "Yerleşim"
@@ -37909,7 +37997,9 @@ msgid "HS&Y"
 msgstr "HS&Y"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsv)
+#. i18n: ectx: property (text), widget (QRadioButton, btnHSV)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:65
+#: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:26
 #, kde-format
 msgid "HS&V"
 msgstr "HS&V"
@@ -40135,6 +40225,498 @@ msgstr "İşlemci Kısma"
 #, kde-format
 msgid "Touch Docker"
 msgstr "Dokunma Rıhtımı"
+
+#. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
+#: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
+#, fuzzy, kde-format
+#| msgid "Color Mode"
+msgid "Color Model"
+msgstr "Renk Kipi"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
+#, fuzzy, kde-format
+#| msgid "Selector Appearance"
+msgid "Hue Ring Appearance:"
+msgstr "Seçici Görünüşü"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
+#, fuzzy, kde-format
+#| msgid "Status"
+msgid "Static"
+msgstr "Durum"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
+#, kde-format
+msgid "Dynamic"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
+#, kde-format
+msgid "Dynamic + Static Edge"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpQuickSettingsMenu)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
+#, fuzzy, kde-format
+#| msgid "Quick Settings Docker"
+msgid "Show &Quick Settings Menu"
+msgstr "Hızlı Ayarlar Rıhtımı"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:124
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select layout"
+msgid "Favorite Selector Layouts:"
+msgstr "Düzen Seç"
+
+#. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
+#, fuzzy, kde-format
+#| msgid "&Select..."
+msgid "Select..."
+msgstr "&Seç..."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
+#, fuzzy, kde-format
+#| msgid "Select a Color Space"
+msgid "Selection Color Space:"
+msgstr "Renk Uzayı Seç"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
+#, fuzzy, kde-format
+#| msgid "Layers/Masks"
+msgid "Layer/Mask"
+msgstr "Katmanlar/Maskeler"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Projection Color Space"
+msgid "Proof Colors to Painting Color Space"
+msgstr "Yansıma Renk Uzayını Dönüştür"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
+#, kde-format
+msgid "Pop-ups"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
+#, fuzzy, kde-format
+#| msgctxt "JPEG-XL encoder options"
+#| msgid "Group size"
+msgid "Pop-up size:"
+msgstr "Grup boyutu"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:221
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:539
+#, fuzzy, kde-format
+#| msgid "Colo&r Patches"
+msgid "Color Patches"
+msgstr "Ren&k Yamaları"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#. i18n: ectx: property (text), widget (QLabel, label_11)
+#. i18n: ectx: property (text), widget (QLabel, label_22)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:560
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:767
+#, fuzzy, kde-format
+#| msgid "Orientation"
+msgid "Orientation:"
+msgstr "Yönelim"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbPopupHorizontal)
+#. i18n: ectx: property (text), widget (QRadioButton, rbHistoryHorizontal)
+#. i18n: ectx: property (text), widget (QRadioButton, rbCommonColorsHorizontal)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:260
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:582
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
+#, fuzzy, kde-format
+#| msgid "Hori&zontal"
+msgid "hori&zontal"
+msgstr "&Yatay"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbPopupVertical)
+#. i18n: ectx: property (text), widget (QRadioButton, rbHistoryVertical)
+#. i18n: ectx: property (text), widget (QRadioButton, rbCommonColorsVertical)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:270
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:592
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
+#, fuzzy, kde-format
+#| msgid "&Vertical"
+msgid "&vertical"
+msgstr "&Dikey"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
+#. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
+#. i18n: ectx: property (text), item, widget (QComboBox, cbCommonColorsScrolling)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:289
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:628
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:835
+#, fuzzy, kde-format
+#| msgid "Orientation"
+msgid "Along Orientation"
+msgstr "Yönelim"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
+#. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
+#. i18n: ectx: property (text), item, widget (QComboBox, cbCommonColorsScrolling)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:294
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:633
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:840
+#, fuzzy, kde-format
+#| msgid "Vertically"
+msgid "Laterally"
+msgstr "Dikey"
+
+#. i18n: ectx: property (text), widget (QLabel, label_16)
+#. i18n: ectx: property (text), widget (QLabel, label_12)
+#. i18n: ectx: property (text), widget (QLabel, label_23)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:302
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:641
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
+#, fuzzy, kde-format
+#| msgid "Spacing:"
+msgid "Scrolling:"
+msgstr "Boşluklandırma:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:322
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:651
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:858
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatche.gpl"
+#| msgid "Swatches"
+msgid "Patches"
+msgstr "Örnekler"
+
+#. i18n: ectx: property (text), widget (QLabel, label_18)
+#. i18n: ectx: property (text), widget (QLabel, label_15)
+#. i18n: ectx: property (text), widget (QLabel, label_21)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:356
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:687
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:894
+#, fuzzy, kde-format
+#| msgid "Max Patches: "
+msgid "Max Patches:"
+msgstr "En Fazla Yama: "
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
+#, fuzzy, kde-format
+#| msgid "Update Selector When:"
+msgid "Update Base Color When:"
+msgstr "Seçiciyi Şu Zamanda Güncelle:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
+#, fuzzy, kde-format
+#| msgid "Color channels in color"
+msgid "Color changes externally"
+msgstr "Renklerdeki renk kanalları"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateOnRightClick)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
+#, fuzzy, kde-format
+#| msgid "Right clicking on shade selector"
+msgid "Right-clicking on shade selector"
+msgstr "Gölge seçiciye sağ tıklayarak"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
+#, fuzzy, kde-format
+#| msgid "Iterations"
+msgid "Interaction ends"
+msgstr "Yinelemeler"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
+#, fuzzy, kde-format
+#| msgid "Line Count: "
+msgid "Line Count:"
+msgstr "Satır Sayısı: "
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
+#, fuzzy, kde-format
+#| msgid "Line Height: "
+msgid "Line Height:"
+msgstr "Çizgi Yüksekliği: "
+
+#. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
+#, fuzzy, kde-format
+#| msgctxt "left mouse button"
+#| msgid "left button"
+msgid "Clear Button"
+msgstr "sol düğme"
+
+#. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
+#, fuzzy, kde-format
+#| msgid "Colors from Image"
+msgid "Colors fro&m Image"
+msgstr "Görselin Renkleri"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
+#, fuzzy, kde-format
+#| msgid "Auto updates"
+msgid "Auto Update"
+msgstr "Otomatik güncellemeler"
+
+#. i18n: ectx: property (text), widget (QLabel, labelRange)
+#: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
+#, fuzzy, kde-format
+#| msgid "&Range:"
+msgid "Range:"
+msgstr "&Aralık:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblOffset)
+#. i18n: ectx: property (text), widget (QLabel, labelOffset)
+#. i18n: ectx: property (title), widget (QGroupBox, gbOffset)
+#: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:146
+#: plugins/filters/asccdl/wdg_asccdl.ui:35
+#: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:42
+#: plugins/generators/pattern/wdgpatternoptions.ui:153
+#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:36
+#, kde-format
+msgid "Offset:"
+msgstr "Ofset:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelDisplay)
+#: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:157
+#, fuzzy, kde-format
+#| msgid "Display"
+msgid "Display:"
+msgstr "Ekran"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
+#: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
+#, kde-format
+msgid "S&lider"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
+#: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
+#, fuzzy, kde-format
+#| msgid "Colo&r Patches"
+msgid "Color Pa&tches"
+msgstr "Ren&k Yamaları"
+
+#. i18n: ectx: property (text), widget (QLabel, labelPreview)
+#: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
+#, fuzzy, kde-format
+#| msgid "Preview"
+msgid "Preview:"
+msgstr "Önizleme"
+
+#. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:4
+#, fuzzy, kde-format
+#| msgid "Color Selector Settings"
+msgctxt "action"
+msgid "WG Color Selector Actions"
+msgstr "Renk Seçici Ayarları"
+
+#. i18n: context: text @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:7
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Show color selector"
+msgctxt "action"
+msgid "Show wide-gamut color selector"
+msgstr "Renk seçicisini göster"
+
+#. i18n: context: text @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:17
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Show MyPaint shade selector"
+msgctxt "action"
+msgid "Show wide-gamut shade selector"
+msgstr "MyPaint gölge seçicisini göster"
+
+#. i18n: context: toolTip @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:19
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:20
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Show MyPaint shade selector"
+msgctxt "action"
+msgid "Show shade selector"
+msgstr "MyPaint gölge seçicisini göster"
+
+#. i18n: context: toolTip @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:29
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:30
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Show MyPaint shade selector"
+msgctxt "action"
+msgid "Show MyPaint selector"
+msgstr "MyPaint gölge seçicisini göster"
+
+#. i18n: context: text @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: text @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:47
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:50
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Make brush color lighter"
+msgctxt "action"
+msgid "Make color lighter"
+msgstr "Fırça rengini açıklaştır"
+
+#. i18n: context: toolTip @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:49
+#, kde-format
+msgctxt "action"
+msgid ""
+"Increse value, lightness, intensity or luma of the selected color, depending "
+"on selected color model"
+msgstr ""
+
+#. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:57
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:60
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Make brush color darker"
+msgctxt "action"
+msgid "Make color darker"
+msgstr "Fırça rengini koyulaştır"
+
+#. i18n: context: toolTip @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:59
+#, kde-format
+msgctxt "action"
+msgid ""
+"Decreases value, lightness, intensity or luma of the selected color, "
+"depending on selected color model"
+msgstr ""
+
+#. i18n: context: text @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: text @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:67
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:70
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Increase Saturation HSY"
+#| msgid "Increase Saturation"
+msgctxt "action"
+msgid "Increase color saturation"
+msgstr "Doygunluğu Artır"
+
+#. i18n: context: toolTip @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:69
+#, kde-format
+msgctxt "action"
+msgid "Increase saturation of the selected color"
+msgstr ""
+
+#. i18n: context: text @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: text @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:77
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:80
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Decrease Saturation HSY"
+#| msgid "Decrease Saturation"
+msgctxt "action"
+msgid "Decrease color saturation"
+msgstr "Doygunluğu Azalt"
+
+#. i18n: context: toolTip @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:79
+#, kde-format
+msgctxt "action"
+msgid "Decrease saturation of the selected color"
+msgstr ""
+
+#. i18n: context: text @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: text @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:87
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:90
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Shift brush color hue clockwise"
+msgctxt "action"
+msgid "Shift hue clockwise"
+msgstr "Fırça renk tonunu saat yönünde kaydır"
+
+#. i18n: context: toolTip @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:89
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Shift brush color hue clockwise"
+msgctxt "action"
+msgid "Shift hue of the selected color clockwise"
+msgstr "Fırça renk tonunu saat yönünde kaydır"
+
+#. i18n: context: text @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: text @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:97
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:100
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Shift brush color hue counter-clockwise"
+msgctxt "action"
+msgid "Shift hue counter-clockwise"
+msgstr "Fırça renk tonunu saat yönünün tersine kaydır"
+
+#. i18n: context: toolTip @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
+#: plugins/dockers/widegamutcolorselector/WGColorSelector.action:99
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Shift brush color hue counter-clockwise"
+msgctxt "action"
+msgid "Shift hue of the selected color counter-clockwise"
+msgstr "Fırça renk tonunu saat yönünün tersine kaydır"
+
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
+#, fuzzy, kde-format
+#| msgid "Wide Gamut Selector"
+msgid "Wide Gamut Color Selector"
+msgstr "Geniş Gam Seçici"
+
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
+#, fuzzy, kde-format
+#| msgid "Color Selector Settings"
+msgid "Wide Gamut Color Selector Settings"
+msgstr "Renk Seçici Ayarları"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:35
 #, kde-format
@@ -42931,16 +43513,6 @@ msgstr "&Eğim, Yerleşim, Güç..."
 #, kde-format
 msgid "Slope, Offset, Power(ASC-CDL)"
 msgstr "Eğim, Yerleşim, Güç (ASC-CDL)"
-
-#. i18n: ectx: property (text), widget (QLabel, lblOffset)
-#. i18n: ectx: property (title), widget (QGroupBox, gbOffset)
-#: plugins/filters/asccdl/wdg_asccdl.ui:35
-#: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:42
-#: plugins/generators/pattern/wdgpatternoptions.ui:153
-#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:36
-#, kde-format
-msgid "Offset:"
-msgstr "Ofset:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblBase)
 #: plugins/filters/asccdl/wdg_asccdl.ui:42

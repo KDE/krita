@@ -46,7 +46,7 @@
       <icon></icon>
       <text>Make color lighter</text>
       <whatsThis></whatsThis>
-      <toolTip>Increse value, lightness, intensity or luma of the selected color, depending on selected color model</toolTip>
+      <toolTip>Increase value, lightness, intensity or luma of the selected color, depending on selected color model</toolTip>
       <iconText>Make color lighter</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>

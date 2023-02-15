@@ -12,7 +12,6 @@
 
 #include <KisStandardOptionData.h>
 #include <KisSizeOptionWidget.h>
-#include <kis_curve_option_widget.h>
 #include <KisAirbrushOptionWidget.h>
 #include <KisPaintOpOptionWidgetUtils.h>
 #include <KisCompositeOpOptionWidget.h>

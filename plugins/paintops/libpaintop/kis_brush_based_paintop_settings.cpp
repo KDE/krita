@@ -7,7 +7,6 @@
 #include "kis_brush_based_paintop_settings.h"
 
 #include <KisPaintingModeOptionData.h>
-#include <kis_airbrush_option_widget.h>
 #include "kis_brush_based_paintop_options_widget.h"
 #include <kis_boundary.h>
 #include "KisBrushServerProvider.h"

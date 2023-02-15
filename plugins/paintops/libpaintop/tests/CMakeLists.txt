@@ -4,8 +4,7 @@ include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 include(KritaAddBrokenUnitTest)
 
 
-kis_add_tests(kis_sensors_test.cpp
-    KisCurveOptionDataTest.cpp
+kis_add_tests(KisCurveOptionDataTest.cpp
     KisCurveOptionModelTest.cpp
     NAME_PREFIX "plugins-libpaintop-"
     LINK_LIBRARIES kritaimage kritalibpaintop Qt5::Test)

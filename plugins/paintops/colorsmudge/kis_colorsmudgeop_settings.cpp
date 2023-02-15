@@ -25,7 +25,6 @@ KisColorSmudgeOpSettings::~KisColorSmudgeOpSettings()
 #include <brushengine/kis_combo_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "KisPaintOpPresetUpdateProxy.h"
-#include "kis_curve_option_uniform_property.h"
 #include "KisSmudgeLengthOptionData.h"
 #include "KisPaintThicknessOptionData.h"
 #include "KisColorSmudgeStandardOptionData.h"

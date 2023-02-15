@@ -31,7 +31,7 @@ protected:
 
     virtual qreal value(const KisPaintInformation &info) const = 0;
 
-protected:
+public:
 
     static inline qreal scalingToAdditive(qreal x) {
         return -1.0 + 2.0 * x;

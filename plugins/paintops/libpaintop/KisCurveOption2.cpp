@@ -64,7 +64,7 @@ qreal KisCurveOption2::ValueComponents::rotationLikeValue(qreal normalizedBaseAn
                                  absoluteAxesFlipped ? 0.5 - absoluteOffset :
                                                        absoluteOffset;
 
-    const qreal realScalingPart = hasScaling && !disableScalingPart ? KisDynamicSensor::scalingToAdditive(scaling) : 0.0;
+    const qreal realScalingPart = hasScaling && !disableScalingPart ? KisDynamicSensor2::scalingToAdditive(scaling) : 0.0;
     const qreal realAdditivePart = hasAdditive ? additive : 0;
 
     qreal value = KisAlgebra2D::wrapValue(2 * offset + constant * (scalingPartCoeff * realScalingPart + realAdditivePart), -1.0, 1.0);
@@ -80,7 +80,7 @@ qreal KisCurveOption2::ValueComponents::sizeLikeValue() const {
             hasAbsoluteOffset ? absoluteOffset : 1.0;
 
     const qreal realScalingPart = hasScaling ? scaling : 1.0;
-    const qreal realAdditivePart = hasAdditive ? KisDynamicSensor::additiveToScaling(additive) : 1.0;
+    const qreal realAdditivePart = hasAdditive ? KisDynamicSensor2::additiveToScaling(additive) : 1.0;
 
     return qBound(minSizeLikeValue,
                   constant * offset * realScalingPart * realAdditivePart,
@@ -192,4 +192,13 @@ qreal KisCurveOption2::strengthMaxValue() const
 bool KisCurveOption2::isChecked() const
 {
     return m_isChecked;
+}
+
+bool KisCurveOption2::isRandom() const
+{
+    for (auto it = m_sensors.begin(); it != m_sensors.end(); ++it) {
+        const KisDynamicSensor2 *sensor = it->get();
+        if (sensor->id() == FuzzyPerDabId || sensor->id() == FuzzyPerStrokeId) return true;
+    }
+    return false;
 }

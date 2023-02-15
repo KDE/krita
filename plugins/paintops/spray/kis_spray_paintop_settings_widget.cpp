@@ -12,11 +12,6 @@
 
 #include <KisPaintingModeOptionWidget.h>
 #include <KisPaintOpOptionWidgetUtils.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
-#include <kis_pressure_rate_option.h>
-#include <kis_curve_option_widget.h>
 #include <kis_brush_option_widget.h>
 #include <KisAirbrushOptionWidget.h>
 #include <KisPaintOpOptionWidgetUtils.h>

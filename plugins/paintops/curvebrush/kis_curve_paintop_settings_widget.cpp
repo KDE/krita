@@ -10,8 +10,6 @@
 #include <KisPaintingModeOptionWidget.h>
 #include <KisCurveOpOptionWidget.h>
 #include <KisPaintOpOptionWidgetUtils.h>
-#include <kis_curve_option_widget.h>
-#include <kis_pressure_opacity_option.h>
 #include <KisCompositeOpOptionWidget.h>
 #include <KisStandardOptionData.h>
 #include <KisCurveStandardOptionData.h>

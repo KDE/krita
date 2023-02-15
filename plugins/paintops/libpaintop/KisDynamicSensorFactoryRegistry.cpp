@@ -5,8 +5,7 @@
  */
 #include "KisDynamicSensorFactoryRegistry.h"
 
-// TODO: mode ids into a sepatate header
-#include <kis_dynamic_sensor.h>
+#include <KisDynamicSensorIds.h>
 
 #include <KisSimpleDynamicSensorFactory.h>
 #include <KisDynamicSensorFactoryTime.h>

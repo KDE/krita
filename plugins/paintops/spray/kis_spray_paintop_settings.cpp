@@ -11,7 +11,6 @@
 
 #include "kis_spray_paintop_settings.h"
 #include "KisSprayShapeOptionData.h"
-#include <kis_airbrush_option_widget.h>
 #include <KisOptimizedBrushOutline.h>
 #include <KisSprayOpOptionData.h>
 

@@ -9,7 +9,6 @@
 #include "KisParticleOpOptionData.h"
 
 #include <KisPaintingModeOptionData.h>
-#include <kis_airbrush_option_widget.h>
 
 struct KisParticlePaintOpSettings::Private
 {

@@ -9,9 +9,6 @@
 
 #include <kis_properties_configuration.h>
 #include <kis_paintop_settings_widget.h>
-#include <kis_pressure_size_option.h>
-#include <kis_curve_option_widget.h>
-#include <kis_pressure_spacing_option_widget.h>
 #include "kis_roundmarkerop_settings.h"
 #include <KisRoundMarkerOpOptionWidget.h>
 #include <KisPaintOpOptionWidgetUtils.h>

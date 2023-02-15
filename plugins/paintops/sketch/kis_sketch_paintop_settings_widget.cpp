@@ -7,7 +7,6 @@
 #include "kis_sketch_paintop_settings_widget.h"
 #include "kis_sketch_paintop_settings.h"
 
-#include <kis_curve_option_widget.h>
 #include <kis_paintop_settings_widget.h>
 #include <KisPaintOpOptionWidgetUtils.h>
 

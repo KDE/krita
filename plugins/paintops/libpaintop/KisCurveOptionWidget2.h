@@ -12,7 +12,6 @@ class Ui_WdgCurveOption2;
 class KisCurveOption;
 class QComboBox;
 
-#include <kis_dynamic_sensor.h>
 #include <KisCurveOptionData.h>
 #include <KisCurveRangeModelInterface.h>
 #include <KisCurveOptionInputControlsStrategyInterface.h>

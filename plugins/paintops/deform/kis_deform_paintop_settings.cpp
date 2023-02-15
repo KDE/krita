@@ -10,7 +10,6 @@
 
 #include "KisBrushSizeOptionData.h"
 
-#include <kis_airbrush_option_widget.h>
 #include "KisDeformOptionData.h"
 
 struct KisDeformPaintOpSettings::Private

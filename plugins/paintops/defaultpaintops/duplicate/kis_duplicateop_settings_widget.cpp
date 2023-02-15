@@ -12,7 +12,6 @@
 #include "KisDuplicateOptionData.h"
 #include "kis_duplicateop_settings.h"
 
-#include "kis_pressure_texture_strength_option.h"
 #include <KisCompositeOpOptionWidget.h>
 #include <KisDuplicateOptionWidget.h>
 #include <KisMirrorOptionWidget.h>
@@ -21,13 +20,8 @@
 #include <KisStandardOptionData.h>
 #include <KisTextureOptionWidget.h>
 #include <brushengine/kis_paintop_lod_limitations.h>
-#include <kis_curve_option_widget.h>
 #include <kis_image.h>
 #include <kis_paintop_settings_widget.h>
-#include <kis_pressure_mirror_option_widget.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_size_option.h>
 #include <kis_properties_configuration.h>
 
 KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)

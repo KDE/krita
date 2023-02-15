@@ -13,11 +13,9 @@
 #include "spray_brush.h"
 #include "kis_spray_paintop_settings.h"
 #include "kis_brush_option.h"
-#include <kis_airbrush_option_widget.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
-#include <kis_pressure_rate_option.h>
+#include <KisAirbrushOptionData.h>
+#include <KisOpacityOption.h>
+#include <KisRotationOption.h>
 #include <KisSprayShapeDynamicsOptionData.h>
 #include "KisSprayOpOption.h"
 #include "KisSprayShapeOptionData.h"
@@ -58,11 +56,12 @@ private:
     SprayBrush m_sprayBrush;
     qreal m_xSpacing, m_ySpacing, m_spacing;
     bool m_isPresetValid;
-    KisAirbrushOptionProperties m_airbrushOption;
-    KisPressureRotationOption m_rotationOption;
-    KisPressureSizeOption m_sizeOption;
-    KisPressureOpacityOption m_opacityOption;
-    KisPressureRateOption m_rateOption;
+    KisAirbrushOptionData m_airbrushData;
+
+    KisRotationOption m_rotationOption;
+    KisSizeOption m_sizeOption;
+    KisOpacityOption m_opacityOption;
+    KisRateOption m_rateOption;
     KisNodeSP m_node;
 };
 

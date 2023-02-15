@@ -19,10 +19,12 @@
 #include "kis_types.h"
 #include "kis_spacing_information.h"
 #include <kis_lod_transform.h>
+#include <kis_paintop_settings.h>
 
 
 KisCurvePaintOp::KisCurvePaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
+    , m_opacityOption(settings.data())
     , m_lineWidthOption(settings.data())
     , m_curvesOpacityOption(settings.data())
     , m_painter(0)
@@ -32,7 +34,6 @@ KisCurvePaintOp::KisCurvePaintOp(const KisPaintOpSettingsSP settings, KisPainter
     Q_UNUSED(node);
 
     m_curveOpOption.read(settings.data());
-    m_opacityOption.readOptionSetting(settings);
 }
 
 KisCurvePaintOp::~KisCurvePaintOp()

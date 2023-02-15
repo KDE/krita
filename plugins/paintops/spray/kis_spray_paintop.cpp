@@ -17,9 +17,6 @@
 #include <brushengine/kis_paintop.h>
 #include <kis_node.h>
 
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_brush_option.h>
 #include <kis_lod_transform.h>
@@ -29,26 +26,20 @@
 
 KisSprayPaintOp::KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
-    , m_isPresetValid(true)
-    , m_node(node)
     , m_sprayOpOption(settings.data())
+    , m_isPresetValid(true)
+    , m_rotationOption(settings.data())
+    , m_sizeOption(settings.data())
+    , m_opacityOption(settings.data())
+    , m_rateOption(settings.data())
+    , m_node(node)
     
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     Q_UNUSED(image);
 
-    m_airbrushOption.readOptionSetting(settings);
-
-    m_rotationOption.readOptionSetting(settings);
-    m_opacityOption.readOptionSetting(settings);
-    m_sizeOption.readOptionSetting(settings);
-    m_rateOption.readOptionSetting(settings);
-
-    m_rotationOption.resetAllSensors();
-    m_opacityOption.resetAllSensors();
-    m_sizeOption.resetAllSensors();
-    m_rateOption.resetAllSensors();
+    m_airbrushData.read(settings.data());
 
     m_brushOption.readOptionSetting(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
 
@@ -136,7 +127,7 @@ KisSpacingInformation KisSprayPaintOp::updateSpacingImpl(const KisPaintInformati
 
 KisTimingInformation KisSprayPaintOp::updateTimingImpl(const KisPaintInformation &info) const
 {
-    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushData, &m_rateOption, info);
 }
 
 KisSpacingInformation KisSprayPaintOp::computeSpacing(const KisPaintInformation &info,
@@ -144,5 +135,5 @@ KisSpacingInformation KisSprayPaintOp::computeSpacing(const KisPaintInformation 
 {
     return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false,
                                                    m_spacing * lodScale, false, 1.0, lodScale,
-                                                   &m_airbrushOption, nullptr, info);
+                                                   &m_airbrushData, nullptr, info);
 }

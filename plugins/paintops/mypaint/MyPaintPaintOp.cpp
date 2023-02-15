@@ -45,7 +45,7 @@ KisMyPaintPaintOp::KisMyPaintPaintOp(const KisPaintOpSettingsSP settings, KisPai
     }
 
     m_settings = settings;
-    m_airBrushOption.readOptionSetting(m_settings);
+    m_airBrushData.read(m_settings.data());
 
     m_dtime = -1;
     m_isStrokeStarted = false;
@@ -95,12 +95,12 @@ KisSpacingInformation KisMyPaintPaintOp::updateSpacingImpl(const KisPaintInforma
 
 KisTimingInformation KisMyPaintPaintOp::updateTimingImpl(const KisPaintInformation &info) const {
 
-    return KisPaintOpPluginUtils::effectiveTiming(&m_airBrushOption, static_cast<KisPressureRateOption*>(nullptr), info);
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airBrushData, nullptr, info);
 }
 
 KisSpacingInformation KisMyPaintPaintOp::computeSpacing(const KisPaintInformation &info, qreal lodScale) const {
 
     return KisPaintOpPluginUtils::effectiveSpacing(m_radius*2, m_radius*2,
                                                    false, 0.0, false, m_radius*2,
-                                                   true, 1, lodScale, &m_airBrushOption, nullptr, info);
+                                                   true, 1, lodScale, &m_airBrushData, nullptr, info);
 }

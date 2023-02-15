@@ -14,9 +14,7 @@
 #include "kis_brush.h"
 
 class KisColorSource;
-class KisPressureSharpnessOption;
 class KisTextureOption;
-class KisPressureMirrorOption;
 class KisPrecisionOption;
 struct MirrorProperties;
 

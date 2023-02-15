@@ -6,8 +6,7 @@
 
 #include "KisSensorData.h"
 
-// TODO: remove this incude
-#include "kis_dynamic_sensor.h"
+#include <KisDynamicSensorIds.h>
 
 #include <QDomDocument>
 #include <QDomElement>

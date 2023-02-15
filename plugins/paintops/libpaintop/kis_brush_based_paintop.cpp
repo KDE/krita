@@ -165,29 +165,6 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal 
 }
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation,
-                                                             const KisAirbrushOptionProperties *airbrushOption,
-                                                             const KisPressureSpacingOption *spacingOption,
-                                                             const KisPaintInformation &pi) const
-{
-    bool isotropicSpacing = spacingOption && spacingOption->isotropicSpacing();
-
-    MirrorProperties prop = m_mirrorOption.apply(pi);
-    const bool implicitFlipped = prop.horizontalMirror != prop.verticalMirror;
-
-    // we parse dab rotation separately, so don't count it
-    QSizeF metric = m_brush->characteristicSize(KisDabShape(scale, 1.0, 0));
-
-    return KisPaintOpPluginUtils::effectiveSpacing(metric.width(), metric.height(),
-                                                   isotropicSpacing, rotation, implicitFlipped,
-                                                   m_brush->spacing(),
-                                                   m_brush->autoSpacingActive(),
-                                                   m_brush->autoSpacingCoeff(),
-                                                   KisLodTransform::lodToScale(painter()->device()),
-                                                   airbrushOption, spacingOption,
-                                                   pi);
-}
-
-KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation,
                                                              const KisAirbrushOptionData *airbrushOption,
                                                              const KisSpacingOption *spacingOption,
                                                              const KisPaintInformation &pi) const

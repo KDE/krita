@@ -142,7 +142,6 @@ protected:
     KisPaintDeviceSP source() const;
 
 private:
-    friend class KisPressureRotationOption;
     friend class KisRotationOption;
     void setFanCornersInfo(bool fanCornersEnabled, qreal fanCornersStep);
 

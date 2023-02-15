@@ -13,8 +13,8 @@
 #include <kis_canvas_resource_provider.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <brushengine/kis_paintop_settings.h>
-#include <kis_pressure_mirror_option.h>
-#include <kis_pressure_rotation_option.h>
+#include <KisMirrorOptionData.h>
+#include <KisStandardOptionData.h>
 
 class TestBrushOp : public TestUtil::QImageBasedTest
 {
@@ -79,16 +79,16 @@ public:
         if (mirrorDabX || mirrorDabY) {
             KisPaintOpSettingsSP settings = preset->settings()->clone();
 
-            KisPressureMirrorOption mirrorOption;
-            mirrorOption.readOptionSetting(settings);
+            KisMirrorOptionData mirrorData;
+            mirrorData.read(settings.data());
 
-            mirrorOption.setChecked(true);
-            mirrorOption.setCurveUsed(false);
+            mirrorData.isChecked = true;
+            mirrorData.useCurve = false;
 
-            mirrorOption.enableHorizontalMirror(mirrorDabX);
-            mirrorOption.enableVerticalMirror(mirrorDabY);
+            mirrorData.enableHorizontalMirror = mirrorDabX;
+            mirrorData.enableVerticalMirror = mirrorDabY;
 
-            mirrorOption.writeOptionSetting(settings.data());
+            mirrorData.write(settings.data());
 
             preset->setSettings(settings);
         }
@@ -96,15 +96,15 @@ public:
         if (dabRotation != 0.0) {
             KisPaintOpSettingsSP settings = preset->settings()->clone();
 
-            KisPressureRotationOption rotationOption;
-            rotationOption.readOptionSetting(settings);
+            KisRotationOptionData rotationData;
+            rotationData.read(settings.data());
 
-            rotationOption.setChecked(true);
-            rotationOption.setCurveUsed(false);
+            rotationData.isChecked = true;
+            rotationData.useCurve = false;
 
-            rotationOption.setValue(dabRotation / 360.0);
+            rotationData.strengthValue = dabRotation / 360.0;
 
-            rotationOption.writeOptionSetting(settings.data());
+            rotationData.write(settings.data());
 
             preset->setSettings(settings);
         }

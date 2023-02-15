@@ -25,6 +25,8 @@ public:
     */
     void applyThreshold(KisFixedPaintDeviceSP dab, const KisPaintInformation &info);
 
+    bool alignOutlineToPixels() const;
+
 private:
     KisSharpnessOption(const KisSharpnessOptionData &data);
 private:

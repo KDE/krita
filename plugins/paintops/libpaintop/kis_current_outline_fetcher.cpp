@@ -6,10 +6,11 @@
 
 #include "kis_current_outline_fetcher.h"
 
-#include "kis_pressure_size_option.h"
-#include "kis_pressure_rotation_option.h"
-#include "kis_pressure_mirror_option.h"
-#include "kis_pressure_sharpness_option.h"
+#include <KisOpacityOption.h>
+#include <KisRotationOption.h>
+#include <KisMirrorOption.h>
+#include <KisSharpnessOption.h>
+#include <KisMirrorProperties.h>
 #include <brushengine/kis_paintop_settings.h>
 #include <kis_properties_configuration.h>
 #include "kis_paintop_settings.h"
@@ -20,29 +21,18 @@
 #define NOISY_UPDATE_SPEED 50  // Time in ms for outline updates to noisy brushes
 
 struct KisCurrentOutlineFetcher::Private {
-    Private(Options optionsAvailable)
-        : isDirty(true) {
-        if (optionsAvailable & SIZE_OPTION) {
-            sizeOption.reset(new KisPressureSizeOption());
-        }
-
-        if (optionsAvailable & ROTATION_OPTION) {
-            rotationOption.reset(new KisPressureRotationOption());
-        }
-
-        if (optionsAvailable & MIRROR_OPTION) {
-            mirrorOption.reset(new KisPressureMirrorOption());
-        }
-
-        if (optionsAvailable & SHARPNESS_OPTION) {
-            sharpnessOption.reset(new KisPressureSharpnessOption());
-        }
+    Private(Options _optionsAvailable)
+        : optionsAvailable(_optionsAvailable)
+        , isDirty(true)
+    {
     }
 
-    QScopedPointer<KisPressureSizeOption> sizeOption;
-    QScopedPointer<KisPressureRotationOption> rotationOption;
-    QScopedPointer<KisPressureMirrorOption> mirrorOption;
-    QScopedPointer<KisPressureSharpnessOption> sharpnessOption;
+    Options optionsAvailable;
+
+    QScopedPointer<KisSizeOption> sizeOption;
+    QScopedPointer<KisRotationOption> rotationOption;
+    QScopedPointer<KisMirrorOption> mirrorOption;
+    QScopedPointer<KisSharpnessOption> sharpnessOption;
 
     bool isDirty {false};
     QElapsedTimer lastUpdateTime;
@@ -70,24 +60,20 @@ void KisCurrentOutlineFetcher::setDirty()
 KisOptimizedBrushOutline KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &info, const KisPaintOpSettingsSP settings, const KisOptimizedBrushOutline &originalOutline, const KisPaintOpSettings::OutlineMode &mode, qreal alignForZoom, qreal additionalScale, qreal additionalRotation, bool tilt, qreal tiltcenterx, qreal tiltcentery) const
 {
     if (d->isDirty) {
-        if (d->sizeOption) {
-            d->sizeOption->readOptionSetting(settings);
-            d->sizeOption->resetAllSensors();
+        if (d->optionsAvailable & SIZE_OPTION) {
+            d->sizeOption.reset(new KisSizeOption(settings.data()));
         }
 
-        if (d->rotationOption) {
-            d->rotationOption->readOptionSetting(settings);
-            d->rotationOption->resetAllSensors();
+        if (d->optionsAvailable & ROTATION_OPTION) {
+            d->rotationOption.reset(new KisRotationOption(settings.data()));
         }
 
-        if (d->mirrorOption) {
-            d->mirrorOption->readOptionSetting(settings);
-            d->mirrorOption->resetAllSensors();
+        if (d->optionsAvailable & MIRROR_OPTION) {
+            d->mirrorOption.reset(new KisMirrorOption(settings.data()));
         }
 
-        if (d->sharpnessOption) {
-            d->sharpnessOption->readOptionSetting(settings);
-            d->sharpnessOption->resetAllSensors();
+        if (d->optionsAvailable & SHARPNESS_OPTION) {
+            d->sharpnessOption.reset(new KisSharpnessOption(settings.data()));
         }
 
         d->isDirty = false;

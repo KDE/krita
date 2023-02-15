@@ -91,3 +91,8 @@ void KisSharpnessOption::applyThreshold(KisFixedPaintDeviceSP dab, const KisPain
         dabPointer += pixelSize;
     }
 }
+
+bool KisSharpnessOption::alignOutlineToPixels() const
+{
+    return m_alignOutlinePixels;
+}

@@ -10,7 +10,6 @@
 #include "kis_particle_paintop_settings.h"
 
 #include <kis_paintop_settings_widget.h>
-#include <kis_curve_option_widget.h>
 #include <KisPaintingModeOptionWidget.h>
 #include <KisPaintOpOptionWidgetUtils.h>
 #include <KisAirbrushOptionWidget.h>

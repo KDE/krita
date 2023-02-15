@@ -15,10 +15,7 @@
 #include <kis_threaded_text_rendering_workaround.h>
 #include <KisMirrorOption.h>
 
-class KisAirbrushOptionProperties;
 class KisPropertiesConfiguration;
-class KisPressureSpacingOption;
-class KisPressureRateOption;
 class KisDabCache;
 class KisResourcesInterface;
 struct KisAirbrushOptionData;
@@ -61,11 +58,6 @@ public:
     KisSpacingInformation effectiveSpacing(qreal scale) const;
     KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisPaintInformation &pi) const;
     KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisSpacingOption &spacingOption, const KisPaintInformation &pi) const;
-    KisSpacingInformation effectiveSpacing(qreal scale,
-                                           qreal rotation,
-                                           const KisAirbrushOptionProperties *airbrushOption,
-                                           const KisPressureSpacingOption *spacingOption,
-                                           const KisPaintInformation &pi) const;
     KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation,
                                            const KisAirbrushOptionData *airbrushOption,
                                            const KisSpacingOption *spacingOption,

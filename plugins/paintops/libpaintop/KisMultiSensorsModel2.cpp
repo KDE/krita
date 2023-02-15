@@ -6,6 +6,7 @@
  */
 
 #include "KisMultiSensorsModel2.h"
+#include <KoID.h>
 
 struct KisMultiSensorsModel2::Private
 {

@@ -21,9 +21,6 @@
 #include <kis_image.h>
 #include <kis_brush_option_widget.h>
 #include <kis_paintop_settings_widget.h>
-#include <kis_pressure_darken_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
 #include <kis_dom_utils.h>
 #include <KisOptimizedBrushOutline.h>
 

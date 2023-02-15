@@ -57,6 +57,7 @@ public:
     qreal strengthMaxValue() const;
 
     bool isChecked() const;
+    bool isRandom() const;
 
 private:
     bool m_isChecked;

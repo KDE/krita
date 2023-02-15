@@ -7,8 +7,7 @@
  */
 #include "KisDynamicSensors2.h"
 
-// TODO: move enums into a separate file!
-#include <kis_dynamic_sensor.h>
+#include <KisDynamicSensorIds.h>
 
 
 KisDynamicSensorSpeed2::KisDynamicSensorSpeed2(const KisSensorData &data, std::optional<KisCubicCurve> curveOverride)

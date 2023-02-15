@@ -12,7 +12,6 @@
 #include "KisHatchingStandardOptions.h"
 
 #include <kis_brush_option_widget.h>
-#include <kis_curve_option_widget.h>
 #include <kis_paintop_settings_widget.h>
 #include <KisPaintOpOptionWidgetUtils.h>
 

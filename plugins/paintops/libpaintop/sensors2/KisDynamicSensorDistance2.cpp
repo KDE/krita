@@ -5,8 +5,7 @@
  */
 #include "KisDynamicSensorDistance2.h"
 
-// TODO: remove!
-#include <kis_dynamic_sensor.h>
+#include <KisDynamicSensorIds.h>
 
 #include <kis_paint_information.h>
 #include <KisCurveOptionData.h>

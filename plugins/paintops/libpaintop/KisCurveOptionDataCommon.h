@@ -10,7 +10,7 @@
 
 #include "kis_assert.h"
 #include "kis_paintop_option.h"
-#include "kis_dynamic_sensor.h"
+#include "KisDynamicSensorIds.h"
 #include "kritapaintop_export.h"
 
 #include <KisSensorPackInterface.h>

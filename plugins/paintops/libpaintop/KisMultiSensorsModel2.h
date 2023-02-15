@@ -9,7 +9,6 @@
 
 #include <QScopedPointer>
 #include <QAbstractListModel>
-#include <kis_dynamic_sensor.h>
 #include <lager/cursor.hpp>
 
 

@@ -416,7 +416,7 @@
  <customwidgets>
   <customwidget>
    <class>KisSliderSpinBox</class>
-   <extends>QWidget</extends>
+   <extends>QSpinBox</extends>
    <header>kis_slider_spin_box.h</header>
   </customwidget>
  </customwidgets>

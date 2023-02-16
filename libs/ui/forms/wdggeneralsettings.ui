@@ -1561,7 +1561,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
  <customwidgets>
   <customwidget>
    <class>KisSliderSpinBox</class>
-   <extends>QWidget</extends>
+   <extends>QSpinBox</extends>
    <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>

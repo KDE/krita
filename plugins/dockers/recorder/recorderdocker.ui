@@ -396,7 +396,7 @@ Only &quot;RGB/Alpha 8-bit&quot; is supported.</string>
  <customwidgets>
   <customwidget>
    <class>KisSliderSpinBox</class>
-   <extends>QWidget</extends>
+   <extends>QSpinBox</extends>
    <header location="global">kis_slider_spin_box.h</header>
   </customwidget>
  </customwidgets>

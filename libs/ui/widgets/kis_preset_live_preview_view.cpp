@@ -263,6 +263,11 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                 if (width * scale > 25.0) {
                     diameterToBrushRatio = diameter / (width * scale);
                     scale = 25.0 / width;
+
+                    if (!settings->getBool("SprayShape/proportional")) {
+                        settings->setProperty("SprayShape/width", qRound(scale * settings->getInt("SprayShape/width")));
+                        settings->setProperty("SprayShape/height", qRound(scale * settings->getInt("SprayShape/height")));
+                    }
                 }
             }
             settings->setProperty("Spray/diameter", int(25.0 * diameterToBrushRatio));

@@ -240,14 +240,14 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 void __KisToolSelectPathLocalTool::beginShape()
 {
     KisToolSelectPath* selectPathTool = dynamic_cast<KisToolSelectPath*>(m_selectionTool);
-    Q_ASSERT(selectPathTool);
+    KIS_ASSERT(selectPathTool);
     selectPathTool->beginSelectInteraction();
 }
 
 void __KisToolSelectPathLocalTool::endShape()
 {
     KisToolSelectPath* selectPathTool = dynamic_cast<KisToolSelectPath*>(m_selectionTool);
-    Q_ASSERT(selectPathTool);
+    KIS_ASSERT(selectPathTool);
     selectPathTool->endSelectInteraction();
 }
 

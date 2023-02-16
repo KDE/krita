@@ -78,7 +78,7 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
         saveLayer(layerElement, FILE_LAYER, layer);
 
         KisFileLayer *fileLayer = dynamic_cast<KisFileLayer*>(layer);
-        Q_ASSERT(fileLayer);
+        KIS_ASSERT(fileLayer);
 
         QString path = fileLayer->path();
 

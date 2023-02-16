@@ -102,7 +102,7 @@ public:
         cmsSetAlarmCodes(alarm);
         cmsSetAdaptationState(adaptationState);
 
-        Q_ASSERT(dynamic_cast<const IccColorProfile *>(proofingSpace->profile()));
+        KIS_ASSERT(dynamic_cast<const IccColorProfile *>(proofingSpace->profile()));
         m_transform = cmsCreateProofingTransform(srcProfile->lcmsProfile(),
                                                  srcColorSpaceType,
                                                  dstProfile->lcmsProfile(),
@@ -248,10 +248,10 @@ KoColorConversionTransformation *IccColorSpaceEngine::createColorTransformation(
                                                                                 KoColorConversionTransformation::Intent renderingIntent,
                                                                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
-    Q_ASSERT(srcColorSpace);
-    Q_ASSERT(dstColorSpace);
-    Q_ASSERT(dynamic_cast<const IccColorProfile *>(srcColorSpace->profile()));
-    Q_ASSERT(dynamic_cast<const IccColorProfile *>(dstColorSpace->profile()));
+    KIS_ASSERT(srcColorSpace);
+    KIS_ASSERT(dstColorSpace);
+    KIS_ASSERT(dynamic_cast<const IccColorProfile *>(srcColorSpace->profile()));
+    KIS_ASSERT(dynamic_cast<const IccColorProfile *>(dstColorSpace->profile()));
 
     return new KoLcmsColorConversionTransformation(
                 srcColorSpace, computeColorSpaceType(srcColorSpace),
@@ -268,10 +268,10 @@ KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofin
                                                                                                 quint8 *gamutWarning,
                                                                                                 double adaptationState) const
 {
-    Q_ASSERT(srcColorSpace);
-    Q_ASSERT(dstColorSpace);
-    Q_ASSERT(dynamic_cast<const IccColorProfile *>(srcColorSpace->profile()));
-    Q_ASSERT(dynamic_cast<const IccColorProfile *>(dstColorSpace->profile()));
+    KIS_ASSERT(srcColorSpace);
+    KIS_ASSERT(dstColorSpace);
+    KIS_ASSERT(dynamic_cast<const IccColorProfile *>(srcColorSpace->profile()));
+    KIS_ASSERT(dynamic_cast<const IccColorProfile *>(dstColorSpace->profile()));
 
     return new KoLcmsColorProofingConversionTransformation(
                 srcColorSpace, computeColorSpaceType(srcColorSpace),

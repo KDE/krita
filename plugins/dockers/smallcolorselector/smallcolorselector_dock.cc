@@ -52,7 +52,7 @@ void SmallColorSelectorDock::setCanvas(KoCanvasBase * canvas)
                 this, SLOT(canvasResourceChanged(int,QVariant)));
 
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
-        Q_ASSERT(kisCanvas);
+        KIS_ASSERT(kisCanvas);
 
         m_smallColorWidget->setDisplayColorConverter(kisCanvas->displayColorConverter());
         m_smallColorWidget->setColor(m_canvas->resourceManager()->foregroundColor());

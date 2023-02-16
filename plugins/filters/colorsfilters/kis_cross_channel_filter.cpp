@@ -165,7 +165,7 @@ KisCrossChannelConfigWidget::~KisCrossChannelConfigWidget()
 void KisCrossChannelConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     const auto *cfg = dynamic_cast<const KisCrossChannelFilterConfiguration*>(config.data());
-    Q_ASSERT(cfg);
+    KIS_ASSERT(cfg);
 
     m_driverChannels = cfg->driverChannels();
 

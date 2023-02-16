@@ -64,7 +64,7 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
     Q_FOREACH(KisDynamicSensorSP val, m_sensorMap.values()) {
 
         KisMyPaintBrushOption *option = dynamic_cast<KisMyPaintBrushOption*>(val.data());
-        Q_ASSERT(option);
+        KIS_ASSERT(option);
 
         QVariantList pointsList;
         QList<QPointF> curve_points = option->getControlPoints();

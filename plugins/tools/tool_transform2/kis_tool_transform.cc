@@ -846,7 +846,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         currentNode->inherits("KisCloneLayer")) {
 
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        Q_ASSERT(kisCanvas);
+        KIS_ASSERT(kisCanvas);
 
         if(currentNode->inherits("KisColorizeMask")){
             kisCanvas->viewManager()->
@@ -999,7 +999,7 @@ void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties t
 
     if (m_transaction.hasInvisibleNodes()) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        Q_ASSERT(kisCanvas);
+        KIS_ASSERT(kisCanvas);
         kisCanvas->viewManager()->
             showFloatingMessage(
                 i18nc("floating message in transformation tool",

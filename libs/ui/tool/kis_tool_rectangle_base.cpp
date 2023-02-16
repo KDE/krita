@@ -290,7 +290,7 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
     }
     else {
         KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
-        Q_ASSERT(kisCanvas);
+        KIS_ASSERT(kisCanvas);
         kisCanvas->viewManager()->showFloatingMessage(i18n("X: %1 px\nY: %2 px"
                                                            , QString::number(m_dragStart.x(), 'f', 1)
                                                            , QString::number(m_dragStart.y(), 'f', 1)), QIcon(), 1000

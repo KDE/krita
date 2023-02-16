@@ -172,7 +172,7 @@ void KisToolBasicBrushBase::continueAlternateAction(KoPointerEvent *event, Alter
     QPointF offset = actualWidgetPosition - lastWidgetPosition;
 
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-    Q_ASSERT(canvas2);
+    KIS_ASSERT(canvas2);
     QRect screenRect = QGuiApplication::primaryScreen()->availableVirtualGeometry();
 
     qreal scaleX = 0;

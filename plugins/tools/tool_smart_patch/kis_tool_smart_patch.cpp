@@ -265,7 +265,7 @@ void KisToolSmartPatch::paint(QPainter &painter, const KoViewConverter &converte
 QWidget * KisToolSmartPatch::createOptionWidget()
 {
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kiscanvas);
+    KIS_ASSERT(kiscanvas);
 
     m_d->optionsWidget = new KisToolSmartPatchOptionsWidget(kiscanvas->viewManager()->canvasResourceProvider(), 0);
     m_d->optionsWidget->setObjectName(toolId() + "option widget");

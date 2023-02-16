@@ -132,7 +132,7 @@ void KisMyPaintCurveOptionWidget::updateRangeSpinBoxes(KisDynamicSensorSP sensor
 float KisMyPaintCurveOptionWidget::getBaseValue(KisPropertiesConfigurationSP setting) {
 
     KisMyPaintCurveOption *curveOpt = dynamic_cast<KisMyPaintCurveOption*>(m_curveOption);
-    Q_ASSERT(curveOpt);
+    KIS_ASSERT(curveOpt);
     if(curveOpt->currentSetting() == MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC)
         return log(setting->getFloat(MYPAINT_DIAMETER)/2);
 

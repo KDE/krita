@@ -50,7 +50,7 @@ void ToolReferenceImages::activate(const QSet<KoShape*> &shapes)
     DefaultTool::activate(shapes);
 
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
+    KIS_ASSERT(kisCanvas);
     connect(kisCanvas->image(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));
     connect(kisCanvas->imageView()->document(), &KisDocument::sigReferenceImagesLayerChanged, this, &ToolReferenceImages::slotNodeAdded);
 
@@ -361,7 +361,7 @@ bool ToolReferenceImages::paste()
 KisDocument *ToolReferenceImages::document() const
 {
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
+    KIS_ASSERT(kisCanvas);
     return kisCanvas->imageView()->document();
 }
 

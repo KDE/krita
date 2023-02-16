@@ -93,7 +93,7 @@ void KisToolColorSampler::slotColorPickerSelectionFinished(const KoColor &color)
                 palette->addSwatch(swatch);
                 if (!KoResourceServerProvider::instance()->paletteServer()->updateResource(palette)) {
                     KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(this->canvas());
-                    Q_ASSERT(canvas);
+                    KIS_ASSERT(canvas);
                     canvas->viewManager()->showFloatingMessage(i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()), koIcon("object-locked"));
                 }
             }
@@ -248,7 +248,7 @@ void KisToolColorSampler::displaySampledColor(const KoColor &color)
 
         if (qEnvironmentVariableIsSet("KRITA_DEBUG_DISPLAY_COLOR")) {
             KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
-            Q_ASSERT(kritaCanvas);
+            KIS_ASSERT(kritaCanvas);
             KoColor newColor = kritaCanvas->displayColorConverter()->applyDisplayFiltering(color, Float32BitsColorDepthID);
             KIS_SAFE_ASSERT_RECOVER_RETURN(newColor.colorSpace()->colorModelId() == RGBAColorModelID);
 

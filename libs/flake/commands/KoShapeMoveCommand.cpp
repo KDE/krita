@@ -10,6 +10,7 @@
 #include <KoShape.h>
 #include <klocalizedstring.h>
 #include "kis_command_ids.h"
+#include <kis_assert.h>
 
 class Q_DECL_HIDDEN KoShapeMoveCommand::Private
 {
@@ -84,6 +85,7 @@ int KoShapeMoveCommand::id() const
 bool KoShapeMoveCommand::mergeWith(const KUndo2Command *command)
 {
     const KoShapeMoveCommand *other = dynamic_cast<const KoShapeMoveCommand*>(command);
+    KIS_ASSERT(other);
 
     if (other->d->shapes != d->shapes ||
         other->d->anchor != d->anchor) {

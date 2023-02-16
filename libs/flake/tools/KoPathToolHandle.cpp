@@ -92,6 +92,7 @@ KoInteractionStrategy * PointHandle::handleMousePress(KoPointerEvent *event)
         return 0;
     if ((event->modifiers() & Qt::ControlModifier) == 0) { // no shift pressed.
         KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(selection, 0);
 
         // control select adds/removes points to/from the selection
         if (event->modifiers() & Qt::ShiftModifier) {
@@ -155,6 +156,7 @@ KoPathPoint::PointType PointHandle::activePointType() const
 void PointHandle::trySelectHandle()
 {
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(selection);
 
     if (!selection->contains(m_activePoint) && m_activePointType == KoPathPoint::Node) {
         selection->clear();

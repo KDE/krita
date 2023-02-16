@@ -30,7 +30,7 @@ set(kritawidgetutils_LIB_SRCS
     KisPopupButton.cpp
     kis_cursor.cc
     kis_cursor_cache.cpp
-    
+
     kis_double_parse_spin_box.cpp
     kis_double_parse_unit_spin_box.cpp
     kis_int_parse_spin_box.cpp

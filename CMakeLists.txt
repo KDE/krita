@@ -785,6 +785,9 @@ target_link_libraries(Boost::boost
         Boost::disable_autolinking
 )
 
+# remove this definition after updating to Boost 1.81
+target_compile_definitions(Boost::boost INTERFACE BOOST_NO_CXX98_FUNCTION_BASE)
+
 find_package(Immer REQUIRED)
 find_package(Zug REQUIRED)
 find_package(Lager REQUIRED)

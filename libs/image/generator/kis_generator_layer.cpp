@@ -128,8 +128,6 @@ void KisGeneratorLayer::requestUpdateJobsWithStroke(KisStrokeId strokeId, KisFil
     KisGeneratorSP f = KisGeneratorRegistry::instance()->value(filterConfig->name());
     KIS_SAFE_ASSERT_RECOVER_RETURN(f);
 
-    KisProcessingVisitor::ProgressHelper helper(this);
-
     KisPaintDeviceSP originalDevice = original();
 
     QSharedPointer<bool> cookie(new bool(true));

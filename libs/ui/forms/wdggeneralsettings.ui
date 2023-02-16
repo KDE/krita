@@ -1384,8 +1384,8 @@
              <property name="title">
               <string>Animation</string>
              </property>
-             <layout class="QFormLayout" name="formLayout_15">
-              <item row="0" column="0">
+             <layout class="QVBoxLayout" name="verticalLayout_9">
+              <item>
                <widget class="QCheckBox" name="m_chkAutoPin">
                 <property name="enabled">
                  <bool>true</bool>
@@ -1398,7 +1398,7 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="0">
+              <item>
                <widget class="QCheckBox" name="m_chkAdaptivePlaybackRange">
                 <property name="text">
                  <string>Adapt playback range to keyframes</string>
@@ -1453,15 +1453,15 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
              <property name="title">
               <string>Automatic layer suffixes</string>
              </property>
-             <layout class="QFormLayout" name="formLayout_151">
-              <item row="0" column="0">
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <item>
                <widget class="QCheckBox" name="chkRenameMergedLayers">
                 <property name="text">
                  <string>Add &quot;Merged&quot; to merged group layers</string>
                 </property>
                </widget>
               </item>
-              <item row="1" column="0">
+              <item>
                <widget class="QCheckBox" name="chkRenamePastedLayers">
                 <property name="text">
                  <string>Add &quot;(pasted)&quot; to pasted layers</string>
@@ -1470,6 +1470,13 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
               </item>
              </layout>
             </widget>
+           </item>
+           <item row="11" column="0" colspan="2">
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </spacer>
            </item>
           </layout>
          </widget>

@@ -22,7 +22,7 @@ public:
 
     KisPaintOp *createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image) override;
     KisPaintOpSettingsSP createSettings(KisResourcesInterfaceSP resourcesInterface) override;
-    KisPaintOpConfigWidget* createConfigWidget(QWidget* parent) override;
+    KisPaintOpConfigWidget* createConfigWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) override;
     QString id() const override;
     QString name() const override;
     QIcon icon() override;
@@ -30,7 +30,7 @@ public:
 
     QList<KoResourceLoadResult> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override;
     QList<KoResourceLoadResult> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override;
-
+    bool lodSizeThresholdSupported() const override;
 
 private:
 

@@ -59,4 +59,9 @@ void KisFilterRegistry::add(const QString &id, KisFilterSP item)
     emit(filterAdded(id));
 }
 
+KisFilterSP KisFilterRegistry::fallbackFilter() const
+{
+    return value("gaussian blur");
+}
+
 

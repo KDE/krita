@@ -11,6 +11,9 @@
 #include "kis_brush_option.h"
 #include <kritapaintop_export.h>
 #include "kis_brush.h"
+#include <KisBrushOptionWidgetFlags.h>
+#include <lager/reader.hpp>
+#include <KisBrushModel.h>
 
 class KisBrushSelectionWidget;
 
@@ -23,7 +26,7 @@ class PAINTOP_EXPORT KisBrushOptionWidget : public KisPaintOpOption
     Q_OBJECT
 public:
 
-    KisBrushOptionWidget();
+    KisBrushOptionWidget(KisBrushOptionWidgetFlags flags);
 
     /**
      * @return the currently selected brush
@@ -32,24 +35,24 @@ public:
 
     void setImage(KisImageWSP image) override;
 
-    void setPrecisionEnabled(bool value);
-    void setHSLBrushTipEnabled(bool value);
-
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
-    void lodLimitations(KisPaintopLodLimitations *l) const override;
-
     void hideOptions(const QStringList &options);
 
-private Q_SLOTS:
-    void brushChanged();
+    lager::reader<bool> lightnessModeEnabled() const;
+    lager::reader<qreal> effectiveBrushSize() const;
+    lager::reader<KisBrushModel::BrushData> bakedBrushData() const;
+
+protected:
+    OptionalLodLimitationsReader lodLimitationsReader() const override;
 
 private:
 
     KisBrushSelectionWidget * m_brushSelectionWidget;
-    KisBrushOptionProperties m_brushOption;
 
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif

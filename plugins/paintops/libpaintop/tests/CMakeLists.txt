@@ -1,7 +1,8 @@
 ########### next target ###############
 
 
-kis_add_test(kis_sensors_test.cpp
+kis_add_tests(KisCurveOptionDataTest.cpp
+    KisCurveOptionModelTest.cpp
     NAME_PREFIX "plugins-libpaintop-"
     LINK_LIBRARIES kritaimage kritalibpaintop kritatestsdk)
 

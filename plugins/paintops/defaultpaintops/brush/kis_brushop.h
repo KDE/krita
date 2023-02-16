@@ -12,19 +12,14 @@
 #define KIS_BRUSHOP_H_
 
 #include "kis_brush_based_paintop.h"
-#include <kis_airbrush_option_widget.h>
-#include <kis_pressure_flow_opacity_option.h>
-#include <kis_pressure_size_option.h>
-#include <kis_pressure_ratio_option.h>
-#include <kis_pressure_flow_option.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_scatter_option.h>
-#include <kis_pressure_softness_option.h>
-#include <kis_pressure_lightness_strength_option.h>
-#include <kis_pressure_sharpness_option.h>
-#include <kis_pressure_spacing_option.h>
-#include <kis_pressure_rate_option.h>
 #include <kis_brush_based_paintop_settings.h>
+#include <KisStandardOptions.h>
+#include <KisAirbrushOptionData.h>
+#include <KisSpacingOption.h>
+#include <KisScatterOption.h>
+#include <KisSharpnessOption.h>
+#include <KisRotationOption.h>
+#include <KisFlowOpacityOption.h>
 
 #include <KisRollingMeanAccumulatorWrapper.h>
 
@@ -67,18 +62,19 @@ protected:
 
 
 private:
-    KisAirbrushOptionProperties m_airbrushOption;
-    KisPressureSizeOption m_sizeOption;
-    KisPressureRatioOption m_ratioOption;
-    KisPressureSpacingOption m_spacingOption;
-    KisPressureRateOption m_rateOption;
-    KisPressureFlowOption m_flowOption;
-    KisFlowOpacityOption m_opacityOption;
-    KisPressureSoftnessOption m_softnessOption;
-    KisPressureSharpnessOption m_sharpnessOption;
-    KisPressureRotationOption m_rotationOption;
-    KisPressureScatterOption m_scatterOption;
-    KisPressureLightnessStrengthOption m_lightnessStrengthOption;
+    KisAirbrushOptionData m_airbrushData;
+
+    KisSizeOption m_sizeOption;
+    KisRatioOption m_ratioOption;
+    KisRateOption m_rateOption;
+    KisSoftnessOption m_softnessOption;
+    KisLightnessStrengthOption m_lightnessStrengthOption;
+    KisSpacingOption m_spacingOption;
+    KisScatterOption m_scatterOption;
+    KisSharpnessOption m_sharpnessOption;
+    KisRotationOption m_rotationOption;
+    KisFlowOpacityOption2 m_opacityOption;
+
 
     KisPaintDeviceSP m_lineCacheDevice;
 

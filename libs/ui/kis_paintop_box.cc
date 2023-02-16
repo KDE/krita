@@ -66,7 +66,7 @@
 #include "widgets/kis_workspace_chooser.h"
 #include "widgets/kis_paintop_list_widget.h"
 #include "kis_slider_spin_box.h"
-#include "widgets/kis_multipliers_double_slider_spinbox.h"
+#include "kis_multipliers_double_slider_spinbox.h"
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_widget_chooser.h"
 #include "tool/kis_tool.h"
@@ -647,9 +647,11 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
     }
 
     if (!m_paintopOptionWidgets.contains(paintop)) {
-        m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createConfigWidget(this);
-        m_paintopOptionWidgets[paintop]->setResourcesInterface(KisGlobalResourcesInterface::instance());
-        m_paintopOptionWidgets[paintop]->setCanvasResourcesInterface(m_viewManager->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
+        m_paintopOptionWidgets[paintop] =
+                KisPaintOpRegistry::instance()->get(paintop.id())
+                ->createConfigWidget(this,
+                                     KisGlobalResourcesInterface::instance(),
+                                     m_viewManager->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
     }
 
     m_optionWidget = m_paintopOptionWidgets[paintop];
@@ -661,9 +663,8 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
     m_optionWidget->setImage(m_viewManager->image());
     m_optionWidget->setNode(m_viewManager->activeNode());
 
-    m_optionWidget->setConfigurationSafe(preset->settings());
-
     m_presetsEditor->setPaintOpSettingsWidget(m_optionWidget);
+    m_presetsEditor->readOptionSetting(preset->settings());
 
     m_resourceProvider->setPaintOpPreset(preset);
 
@@ -730,8 +731,7 @@ void KisPaintopBox::slotUpdateOptionsWidgetPopup()
     KIS_SAFE_ASSERT_RECOVER_RETURN(preset);
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_optionWidget);
 
-    m_optionWidget->setConfigurationSafe(preset->settings());
-
+    m_presetsEditor->readOptionSetting(preset->settings());
     m_presetsEditor->resourceSelected(preset);
     m_presetsEditor->updateViewSettings();
 
@@ -947,10 +947,8 @@ void KisPaintopBox::slotCreatePresetFromScratch(QString paintop)
         m_presetsEditor->setCreatingBrushFromScratch(true); // disable UI elements while creating from scratch
         preset = m_resourceProvider->currentPreset();
     } else {
+        m_presetsEditor->readOptionSetting(preset->settings());
         m_resourceProvider->setPaintOpPreset(preset);
-        if (m_optionWidget) {
-            m_optionWidget->setConfigurationSafe(preset->settings());
-        }
     }
     m_presetsEditor->resourceSelected(preset);  // this helps update the UI on the brush editor
 }
@@ -1028,9 +1026,8 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
 void KisPaintopBox::slotSetupDefaultPreset()
 {
     KisPaintOpPresetSP preset = defaultPreset(m_resourceProvider->currentPreset()->paintOp());
-    if (m_optionWidget) {
-        m_optionWidget->setConfigurationSafe(preset->settings());
-    }
+
+    m_presetsEditor->readOptionSetting(preset->settings());
     m_resourceProvider->setPaintOpPreset(preset);
 
     // tell the brush editor that the resource has changed
@@ -1174,7 +1171,7 @@ void KisPaintopBox::sliderChanged(int n)
         propertiesProxy->setProperty("OpacityValue", opacity);
         propertiesProxy->setProperty("FlowValue", flow);
         propertiesProxy->setProperty("Texture/Pattern/Scale", patternsize);
-        m_optionWidget->setConfigurationSafe(m_resourceProvider->currentPreset()->settings().data());
+        m_presetsEditor->readOptionSetting(m_resourceProvider->currentPreset()->settings());
     } else {
         m_resourceProvider->setOpacity(opacity);
     }
@@ -1365,18 +1362,13 @@ void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is chan
 
         KisPaintOpPreset::UpdatedPostponer postponer(preset);
 
-
-        QStringList preserveProperties;
-        preserveProperties << "lodUserAllowed";
-        preserveProperties << "lodSizeThreshold";
-
         // clear all the properties before dumping the stuff into the preset,
         // some of the options add the values incrementally
         // (e.g. KisPaintOpUtils::RequiredBrushFilesListTag), therefore they
         // may add up if we pass the same preset multiple times
-        preset->settings()->resetSettings(preserveProperties);
+        preset->settings()->resetSettings();
 
-        m_optionWidget->writeConfigurationSafe(const_cast<KisPaintOpSettings*>(preset->settings().data()));
+        m_presetsEditor->writeOptionSetting(const_cast<KisPaintOpSettings*>(preset->settings().data()));
     }
 
     // we should also update the preset strip to update the status of the "dirty" mark

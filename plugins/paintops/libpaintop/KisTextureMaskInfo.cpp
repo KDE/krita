@@ -8,7 +8,7 @@
 
 #include <kis_paintop_settings.h>
 #include <resources/KoPattern.h>
-#include "kis_linked_pattern_manager.h"
+#include "KisTextureOptionData.h"
 #include <KoResourceLoadResult.h>
 
 #include <KoColorSpace.h>
@@ -107,27 +107,30 @@ QRect KisTextureMaskInfo::maskBounds() const {
     return m_maskBounds;
 }
 
-bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
+bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface)
 {
-    if (!setting->hasProperty("Texture/Pattern/PatternMD5")) {
+    KisTextureOptionData data;
+    data.read(setting);
+
+    if (!data.isEnabled || data.textureData.isNull()) {
         return false;
     }
 
-    m_pattern = KisLinkedPatternManager::loadLinkedPattern(setting, resourcesInterface).resource<KoPattern>();
+    m_pattern = data.textureData.loadLinkedPattern(resourcesInterface).resource<KoPattern>();
 
     if (!m_pattern) {
         qWarning() << "WARNING: Couldn't load the pattern for a stroke (KisTextureMaskInfo)";
         return false;
     }
 
-    m_scale = setting->getDouble("Texture/Pattern/Scale", 1.0);
-    m_brightness = setting->getDouble("Texture/Pattern/Brightness");
-    m_contrast = setting->getDouble("Texture/Pattern/Contrast", 1.0);
-    m_neutralPoint = setting->getDouble("Texture/Pattern/NeutralPoint", 0.5);
-    m_invert = setting->getBool("Texture/Pattern/Invert");
-    m_cutoffLeft = setting->getInt("Texture/Pattern/CutoffLeft", 0);
-    m_cutoffRight = setting->getInt("Texture/Pattern/CutoffRight", 255);
-    m_cutoffPolicy = setting->getInt("Texture/Pattern/CutoffPolicy", 0);
+    m_scale = data.scale;
+    m_brightness = data.brightness;
+    m_contrast = data.contrast;
+    m_neutralPoint = data.neutralPoint;
+    m_invert = data.invert;
+    m_cutoffLeft = data.cutOffLeft;
+    m_cutoffRight = data.cutOffRight;
+    m_cutoffPolicy = data.cutOffPolicy;
 
     return true;
 }

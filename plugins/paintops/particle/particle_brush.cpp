@@ -38,7 +38,7 @@ void ParticleBrush::setInitialPosition(const QPointF &pos)
     for (int i = 0; i < m_properties->particleCount; i++) {
         m_particlePos[i] = pos;
         m_particleNextPos[i] = pos;
-        m_accelaration[i] = (i + m_properties->iterations) * 0.5;
+        m_accelaration[i] = (i + m_properties->particleIterations) * 0.5;
     }
 }
 
@@ -86,11 +86,11 @@ void ParticleBrush::draw(KisPaintDeviceSP dab, const KoColor& color, const QPoin
 
     QRect boundingRect;
 
-    if (m_properties->scale.x() < 0 || m_properties->scale.y() < 0 || m_properties->gravity < 0) {
+    if (m_properties->particleScaleX < 0 || m_properties->particleScaleY < 0 || m_properties->particleGravity < 0) {
         boundingRect = dab->defaultBounds()->bounds();
     }
 
-    for (int i = 0; i < m_properties->iterations; i++) {
+    for (int i = 0; i < m_properties->particleIterations; i++) {
         for (int j = 0; j < m_properties->particleCount; j++) {
             /*
                 m_time = 0.01;
@@ -111,11 +111,11 @@ void ParticleBrush::draw(KisPaintDeviceSP dab, const KoColor& color, const QPoin
 
 
             QPointF dist = pos - m_particlePos[j];
-            dist.setX(dist.x() * m_properties->scale.x());
-            dist.setY(dist.y() * m_properties->scale.y());
+            dist.setX(dist.x() * m_properties->particleScaleX);
+            dist.setY(dist.y() * m_properties->particleScaleY);
             dist = dist * m_accelaration[j];
             m_particleNextPos[j] = m_particleNextPos[j] + dist;
-            m_particleNextPos[j] *= m_properties->gravity;
+            m_particleNextPos[j] *= m_properties->particleGravity;
             m_particlePos[j] = m_particlePos[j] + (m_particleNextPos[j] * TIME);
 
             /**
@@ -140,7 +140,7 @@ void ParticleBrush::draw(KisPaintDeviceSP dab, const KoColor& color, const QPoin
             bool inside = boundingRect.contains(m_particlePos[j].toPoint());
 
             if (boundingRect.isEmpty() || (inside && !nearInfinity)) {
-                paintParticle(accessor, cs, m_particlePos[j], color, m_properties->weight, true);
+                paintParticle(accessor, cs, m_particlePos[j], color, m_properties->particleWeight, true);
             }
 
         }//for j

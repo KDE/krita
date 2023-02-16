@@ -47,36 +47,36 @@ KisTextureChooser::KisTextureChooser(KisBrushTextureFlags flags, QWidget *parent
     QVector<std::pair<QString, int>> texturingModes;
 
     texturingModes
-        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_MULT).name(), KisTextureProperties::MULTIPLY)
-        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_SUBTRACT).name(), KisTextureProperties::SUBTRACT);
+        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_MULT).name(), KisTextureOptionData::MULTIPLY)
+        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_SUBTRACT).name(), KisTextureOptionData::SUBTRACT);
 
     if (flags & SupportsLightnessMode) {
-        texturingModes << std::make_pair(i18nc("Lightness Map blend mode for brush texture", "Lightness Map"), KisTextureProperties::LIGHTNESS);
+        texturingModes << std::make_pair(i18nc("Lightness Map blend mode for brush texture", "Lightness Map"), KisTextureOptionData::LIGHTNESS);
     }
 
     if (flags & SupportsGradientMode) {
-        texturingModes << std::make_pair(i18nc("Gradient Map blend mode for brush texture", "Gradient Map"), KisTextureProperties::GRADIENT);
+        texturingModes << std::make_pair(i18nc("Gradient Map blend mode for brush texture", "Gradient Map"), KisTextureOptionData::GRADIENT);
     }
 
     texturingModes
-        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_DARKEN).name(), KisTextureProperties::DARKEN)
-        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_OVERLAY).name(), KisTextureProperties::OVERLAY)
-        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_DODGE).name(), KisTextureProperties::COLOR_DODGE)
-        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_BURN).name(), KisTextureProperties::COLOR_BURN)
-        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_LINEAR_DODGE).name(), KisTextureProperties::LINEAR_DODGE)
-        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_LINEAR_BURN).name(), KisTextureProperties::LINEAR_BURN)
-        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_HARD_MIX_PHOTOSHOP).name(), KisTextureProperties::HARD_MIX_PHOTOSHOP)
-        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP).name(), KisTextureProperties::HARD_MIX_SOFTER_PHOTOSHOP)
-        << std::make_pair(i18nc("Height blend mode for brush texture", "Height"), KisTextureProperties::HEIGHT)
-        << std::make_pair(i18nc("Linear Height blend mode for brush texture", "Linear Height"), KisTextureProperties::LINEAR_HEIGHT)
-        << std::make_pair(i18nc("Height (Photoshop) blend mode for brush texture", "Height (Photoshop)"), KisTextureProperties::HEIGHT_PHOTOSHOP)
-        << std::make_pair(i18nc("Linear Height (Photoshop) blend mode for brush texture", "Linear Height (Photoshop)"), KisTextureProperties::LINEAR_HEIGHT_PHOTOSHOP);
+        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_DARKEN).name(), KisTextureOptionData::DARKEN)
+        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_OVERLAY).name(), KisTextureOptionData::OVERLAY)
+        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_DODGE).name(), KisTextureOptionData::COLOR_DODGE)
+        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_BURN).name(), KisTextureOptionData::COLOR_BURN)
+        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_LINEAR_DODGE).name(), KisTextureOptionData::LINEAR_DODGE)
+        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_LINEAR_BURN).name(), KisTextureOptionData::LINEAR_BURN)
+        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_HARD_MIX_PHOTOSHOP).name(), KisTextureOptionData::HARD_MIX_PHOTOSHOP)
+        << std::make_pair(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP).name(), KisTextureOptionData::HARD_MIX_SOFTER_PHOTOSHOP)
+        << std::make_pair(i18nc("Height blend mode for brush texture", "Height"), KisTextureOptionData::HEIGHT)
+        << std::make_pair(i18nc("Linear Height blend mode for brush texture", "Linear Height"), KisTextureOptionData::LINEAR_HEIGHT)
+        << std::make_pair(i18nc("Height (Photoshop) blend mode for brush texture", "Height (Photoshop)"), KisTextureOptionData::HEIGHT_PHOTOSHOP)
+        << std::make_pair(i18nc("Linear Height (Photoshop) blend mode for brush texture", "Linear Height (Photoshop)"), KisTextureOptionData::LINEAR_HEIGHT_PHOTOSHOP);
 
     for (auto it = texturingModes.begin(); it != texturingModes.end(); ++it) {
         cmbTexturingMode->addItem(it->first, it->second);
     }
 
-    cmbTexturingMode->setCurrentIndex(KisTextureProperties::SUBTRACT);
+    cmbTexturingMode->setCurrentIndex(KisTextureOptionData::SUBTRACT);
 
     QStringList cutOffPolicies;
     cutOffPolicies << i18n("Cut Off Disabled") << i18n("Cut Off Brush") << i18n("Cut Off Pattern");
@@ -95,7 +95,7 @@ KisTextureChooser::~KisTextureChooser()
 
 }
 
-bool KisTextureChooser::selectTexturingMode(KisTextureProperties::TexturingMode mode)
+bool KisTextureChooser::selectTexturingMode(KisTextureOptionData::TexturingMode mode)
 {
     int i = 0;
     for (; i < cmbTexturingMode->count(); i++) {
@@ -107,7 +107,7 @@ bool KisTextureChooser::selectTexturingMode(KisTextureProperties::TexturingMode 
     return i < cmbTexturingMode->count();
 }
 
-KisTextureProperties::TexturingMode KisTextureChooser::texturingMode() const
+KisTextureOptionData::TexturingMode KisTextureChooser::texturingMode() const
 {
-    return KisTextureProperties::TexturingMode(cmbTexturingMode->currentData().value<int>());
+    return KisTextureOptionData::TexturingMode(cmbTexturingMode->currentData().value<int>());
 }

@@ -12,6 +12,8 @@
 #include "kis_debug.h"
 #include <QPointF>
 
+#include "KisParticleOpOptionData.h"
+
 
 class KisParticleBrushProperties
 {
@@ -38,7 +40,7 @@ public:
     void draw(KisPaintDeviceSP dab, const KoColor& color, const QPointF &pos);
 
     void setInitialPosition(const QPointF &pos);
-    void setProperties(KisParticleBrushProperties * properties) {
+    void setProperties(KisParticleOpOptionData * properties) {
         m_properties = properties;
     }
 
@@ -51,7 +53,7 @@ private:
     QVector<QPointF> m_particleNextPos;
     QVector<qreal> m_accelaration;
 
-    KisParticleBrushProperties * m_properties;
+    KisParticleOpOptionData * m_properties;
 };
 
 #endif

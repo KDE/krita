@@ -22,6 +22,7 @@
 #include "virtual_channel_info.h"
 
 #include "kis_multichannel_filter_base.h"
+#include <KisCurveWidgetControlsManager.h>
 
 /**
  * Filter which applies a relative adjustment to a (virtual) color channel based on the value of another.
@@ -91,6 +92,7 @@ private Q_SLOTS:
 
 private:
     QVector<int> m_driverChannels;
+    QScopedPointer<KisCurveWidgetControlsManagerInt> m_curveControlsManager;
 };
 
 #endif

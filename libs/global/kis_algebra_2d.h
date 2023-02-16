@@ -143,6 +143,26 @@ T inwardUnitNormal(const T &a, int polygonDirection)
 }
 
 /**
+ * Helper function to convert a qreal to int lazily. If the
+ * passed type is an integer, then the value is rounded.
+ * Otherwise it is just passed forward.
+ */
+template<typename R>
+R lazyRound(qreal value);
+
+template<>
+inline int lazyRound<int>(qreal value)
+{
+    return qRound(value);
+}
+
+template<>
+inline qreal lazyRound<qreal>(qreal value)
+{
+    return value;
+}
+
+/**
  * \return 1 if the polygon is counterclockwise
  *        -1 if the polygon is clockwise
  *

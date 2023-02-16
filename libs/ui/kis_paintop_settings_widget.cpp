@@ -27,15 +27,21 @@
 #include <brushengine/kis_locked_properties.h>
 #include <brushengine/kis_paintop_lod_limitations.h>
 
+#include <lager/constant.hpp>
+#include <KisLager.h>
 
 
 struct KisPaintOpSettingsWidget::Private
 {
+    Private()
+    {
+    }
+
     QList<KisPaintOpOption*>    paintOpOptions;
     KisCategorizedListView*     optionsList;
     KisPaintOpOptionListModel*  model;
     QStackedWidget*             optionsStack;
-
+    std::optional<lager::reader<KisPaintopLodLimitations>> lodLimitations;
 };
 
 KisPaintOpSettingsWidget::KisPaintOpSettingsWidget(QWidget * parent)
@@ -94,11 +100,7 @@ void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option)
 
 void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, KisPaintOpOption::PaintopCategory category)
 {
-    if (!option->configurationPage()) return;
-    m_d->model->addPaintOpOption(option, m_d->optionsStack->count(), option->label(), category);
-    connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
-    m_d->optionsStack->addWidget(option->configurationPage());
-    m_d->paintOpOptions << option;
+    addPaintOpOption(option, m_d->model->categoryName(category));
 }
 
 void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, QString category)
@@ -108,6 +110,10 @@ void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, QStrin
     connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
     m_d->optionsStack->addWidget(option->configurationPage());
     m_d->paintOpOptions << option;
+
+    m_d->lodLimitations =
+        kislager::fold_optional_cursors(std::bit_or{}, m_d->lodLimitations,
+                                      option->effectiveLodLimitations());
 }
 
 void KisPaintOpSettingsWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
@@ -156,6 +162,16 @@ KisPaintopLodLimitations KisPaintOpSettingsWidget::lodLimitations() const
     return l;
 }
 
+lager::reader<KisPaintopLodLimitations> KisPaintOpSettingsWidget::lodLimitationsReader() const
+{
+    return m_d->lodLimitations.value_or(lager::make_constant(KisPaintopLodLimitations()));
+}
+
+lager::reader<qreal> KisPaintOpSettingsWidget::effectiveBrushSize() const
+{
+    return lager::make_constant(1.0);
+}
+
 void KisPaintOpSettingsWidget::setImage(KisImageWSP image)
 {
     KisPaintOpConfigWidget::setImage(image);
@@ -201,15 +217,6 @@ void KisPaintOpSettingsWidget::changePage(const QModelIndex& index)
 
     if(m_d->model->entryAt(info, index)) {
         m_d->optionsStack->setCurrentIndex(info.index);
-
-        // disable the widget if a setting area is not active and not being used
-       if (info.option->isCheckable() ) {
-            m_d->optionsStack->setEnabled(info.option->isChecked());
-       } else {
-           m_d->optionsStack->setEnabled(true); // option is not checkable, so always enable
-       }
-
-
     }
 
     notifyPageChanged();

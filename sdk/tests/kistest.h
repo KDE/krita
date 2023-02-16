@@ -170,6 +170,12 @@ void registerResources()
 
 #if defined(TESTRESOURCES) || defined(TESTPIGMENT) || defined (TESTFLAKE) || defined(TESTIMAGE) || defined(TESTBRUSH) || defined(TESTUI)
 
+    QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    if (dir.exists("resourcecache.sqlite")) {
+        bool result = dir.removeRecursively();
+        qDebug() << "result" << (result);
+    }
+
     addResourceTypes();
 
     KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();

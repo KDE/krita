@@ -6,8 +6,7 @@
 
 #include "kis_brush_based_paintop_settings.h"
 
-#include <kis_paint_action_type_option.h>
-#include <kis_airbrush_option_widget.h>
+#include <KisPaintingModeOptionData.h>
 #include "kis_brush_based_paintop_options_widget.h"
 #include <kis_boundary.h>
 #include "KisBrushServerProvider.h"
@@ -68,10 +67,9 @@ KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings(KisResourcesInterface
 
 bool KisBrushBasedPaintOpSettings::paintIncremental()
 {
-    if (hasProperty("PaintOpAction")) {
-        return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
-    }
-    return true;
+    KisPaintingModeOptionData data;
+    data.read(this);
+    return !data.hasPaintingModeProperty || data.paintingMode == enumPaintingMode::BUILDUP;
 }
 
 KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
@@ -330,7 +328,7 @@ QList<int> KisBrushBasedPaintOpSettings::requiredCanvasResources() const
     QList<int> result;
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), result);
 
-    if (brush()->applyingGradient() || KisTextureProperties::applyingGradient(this)) {
+    if (brush()->applyingGradient() || KisTextureOption::applyingGradient(this)) {
         result << KoCanvasResource::CurrentGradient;
         result << KoCanvasResource::ForegroundColor;
         result << KoCanvasResource::BackgroundColor;

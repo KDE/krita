@@ -98,8 +98,7 @@ public:
                     }
                 case CIRC_SOFT:
                     {
-                    KisCubicCurve pointsCurve;
-                    pointsCurve.fromString(QString("0,1;1,0"));
+                    const KisCubicCurve pointsCurve(QString("0,1;1,0"));
                     KisCurveCircleMaskGenerator bCircVectr(499.5, k/100.f, i/100.f, j/100.f, 2, pointsCurve, true);
                     bCircVectr.setDiameter(499.5);
                     KisCurveCircleMaskGenerator bCircScalar(bCircVectr);
@@ -133,8 +132,7 @@ public:
                     }
                 case RECT_SOFT:
                     {
-                    KisCubicCurve pointsCurve;
-                    pointsCurve.fromString(QString("0,1;1,0"));
+                    const KisCubicCurve pointsCurve(QString("0,1;1,0"));
                     KisCurveRectangleMaskGenerator bCircVectr(499.5, k/100.f, i/100.f, j/100.f, 2, pointsCurve, true);
                     KisCurveRectangleMaskGenerator bCircScalar(bCircVectr);
                     bCircScalar.setMaskScalarApplicator(); // Force usage of
@@ -227,8 +225,7 @@ void KisMaskSimilarityTest::testGaussCircleMask()
 
 void KisMaskSimilarityTest::testSoftCircleMask()
 {
-    KisCubicCurve pointsCurve;
-    pointsCurve.fromString(QString("0,1;1,0"));
+    const KisCubicCurve pointsCurve(QString("0,1;1,0"));
     KisCurveCircleMaskGenerator generator(499.5, 0.2, 0.5, 0.5, 2, pointsCurve,true);
     KisMaskSimilarityTester::runMaskGenTest(generator,CIRC_SOFT);
 }
@@ -247,8 +244,7 @@ void KisMaskSimilarityTest::testGaussRectMask()
 
 void KisMaskSimilarityTest::testSoftRectMask()
 {
-    KisCubicCurve pointsCurve;
-    pointsCurve.fromString(QString("0,1;1,0"));
+    const KisCubicCurve pointsCurve(QString("0,1;1,0"));
     KisCurveRectangleMaskGenerator generator(499.5, 0.2, 0.5, 0.2, 2, pointsCurve, true);
     KisMaskSimilarityTester::runMaskGenTest(generator,RECT_SOFT);
 }

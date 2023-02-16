@@ -47,6 +47,7 @@ public:
 
 private Q_SLOTS:
     void slotSliderChanged(int value);
+    void slotRangeChanged();
 
 private:
     QWidget *m_slider;
@@ -62,6 +63,7 @@ public:
 
 private Q_SLOTS:
     void slotSliderChanged(qreal value);
+    void slotRangeChanged();
 
 private:
     QWidget *m_slider;

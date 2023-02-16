@@ -13,6 +13,8 @@
 #include <KisCppQuirks.h>
 #include <KoResourceLoadResult.h>
 
+class QWidget;
+
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 
 namespace detail {
@@ -117,6 +119,36 @@ KisInterstrokeDataFactory* createInterstrokeDataFactory(const KisPaintOpSettings
     return 0;
 }
 
+template< class, class = std::void_t<> >
+struct supports_extended_initilization : std::false_type { };
+
+template< class T >
+struct supports_extended_initilization<T,
+        std::void_t<decltype(T(std::declval<QWidget*>(),
+                               std::declval<KisResourcesInterfaceSP>(),
+                               std::declval<KoCanvasResourcesInterfaceSP>()))> > : std::true_type { };
+
+template <typename T>
+KisPaintOpConfigWidget* createConfigWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface,
+                                           std::enable_if_t<supports_extended_initilization<T>::value> * = 0)
+{
+    T* widget = new T(parent, resourcesInterface, canvasResourcesInterface);
+    widget->setResourcesInterface(resourcesInterface);
+    widget->setCanvasResourcesInterface(canvasResourcesInterface);
+    return widget;
+}
+
+template <typename T>
+KisPaintOpConfigWidget* createConfigWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface,
+                                           std::enable_if_t<!supports_extended_initilization<T>::value> * = 0)
+{
+    // TODO: remove this constructor and pass everything into the constructor
+    T* widget = new T(parent);
+    widget->setResourcesInterface(resourcesInterface);
+    widget->setCanvasResourcesInterface(canvasResourcesInterface);
+    return widget;
+}
+
 }
 
 /**
@@ -129,13 +161,16 @@ public:
 
     KisSimplePaintOpFactory(const QString& id, const QString& name, const QString& category,
                             const QString& pixmap, const QString& model = QString(),
-                            const QStringList& whiteListedCompositeOps = QStringList(), int priority = 100)
+                            const QStringList& whiteListedCompositeOps = QStringList(), int priority = 100,
+                            bool lodSizeThresholdSupported = true)
         : KisPaintOpFactory(whiteListedCompositeOps)
         , m_id(id)
         , m_name(name)
         , m_category(category)
         , m_pixmap(pixmap)
-        , m_model(model) {
+        , m_model(model)
+        , m_lodSizeThresholdSupported(lodSizeThresholdSupported)
+    {
         setPriority(priority);
     }
 
@@ -172,8 +207,8 @@ public:
         return settings;
     }
 
-    KisPaintOpConfigWidget* createConfigWidget(QWidget* parent) override {
-        return new OpSettingsWidget(parent);
+    KisPaintOpConfigWidget* createConfigWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) override {
+        return detail::createConfigWidget<OpSettingsWidget>(parent, resourcesInterface, canvasResourcesInterface);
     }
 
     QString id() const override {
@@ -191,12 +226,18 @@ public:
     QString category() const override {
         return m_category;
     }
+
+    bool lodSizeThresholdSupported() const override {
+        return m_lodSizeThresholdSupported;
+    }
+
 private:
     QString m_id;
     QString m_name;
     QString m_category;
     QString m_pixmap;
     QString m_model;
+    bool m_lodSizeThresholdSupported;
 };
 
 #endif // KIS_SIMPLE_PAINTOP_FACTORY_H

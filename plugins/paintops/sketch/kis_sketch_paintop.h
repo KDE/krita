@@ -10,18 +10,16 @@
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 
-#include "kis_density_option.h"
-#include "kis_sketchop_option.h"
+#include "KisSketchStandardOptions.h"
+#include "KisSketchOpOptionData.h"
 #include "kis_sketch_paintop_settings.h"
 
 #include "kis_painter.h"
-#include <kis_airbrush_option_widget.h>
-#include <kis_pressure_size_option.h>
 #include <kis_brush_option.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_rate_option.h>
-#include "kis_linewidth_option.h"
-#include "kis_offset_scale_option.h"
+#include <KisStandardOptions.h>
+#include "KisRotationOption.h"
+#include "KisOpacityOption.h"
+#include "KisAirbrushOptionData.h"
 
 class KisDabCache;
 
@@ -57,17 +55,17 @@ private:
     // simple mode
     qreal m_radius {1.0};
 
-    KisPressureOpacityOption m_opacityOption;
-    KisPressureSizeOption m_sizeOption;
-    KisPressureRotationOption m_rotationOption;
-    KisPressureRateOption m_rateOption;
+    KisOpacityOption m_opacityOption;
+    KisSizeOption m_sizeOption;
+    KisRotationOption m_rotationOption;
+    KisRateOption m_rateOption;
     KisDensityOption m_densityOption;
     KisLineWidthOption m_lineWidthOption;
     KisOffsetScaleOption m_offsetScaleOption;
-    KisAirbrushOptionProperties m_airbrushOption;
+    KisAirbrushOptionData m_airbrushOption;
 
     KisBrushOptionProperties m_brushOption;
-    SketchProperties m_sketchProperties;
+    KisSketchOpOptionData m_sketchProperties;
 
     QVector<QPointF> m_points;
     int m_count {0};

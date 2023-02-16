@@ -53,7 +53,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KisDoubleSliderSpinBox" name="diameterSpinBox" native="true"/>
+       <widget class="KisSliderSpinBox" name="diameterSpinBox" native="true"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="aspectLabel">
@@ -170,7 +170,7 @@
         <item>
          <widget class="KisDoubleSliderSpinBox" name="jitterMovementSpin" native="true">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -220,7 +220,7 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="KisDoubleSliderSpinBox" name="particlesSpinBox" native="true"/>
+           <widget class="KisSliderSpinBox" name="particlesSpinBox" native="true"/>
           </item>
           <item>
            <widget class="KisDoubleSliderSpinBox" name="coverageSpin" native="true"/>

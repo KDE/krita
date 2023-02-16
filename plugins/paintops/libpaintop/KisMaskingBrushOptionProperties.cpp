@@ -6,83 +6,69 @@
 
 #include "KisMaskingBrushOptionProperties.h"
 
-#include <KoResourceLoadResult.h>
-#include "kis_brush_option.h"
 #include <brushengine/KisPaintopSettingsIds.h>
 
-#include <KoCompositeOpRegistry.h>
 #include <kis_image_config.h>
 
-KisMaskingBrushOptionProperties::KisMaskingBrushOptionProperties()
-    : compositeOpId(COMPOSITE_MULT)
-
+bool KisBrushModel::operator==(const KisBrushModel::MaskingBrushData &lhs, const KisBrushModel::MaskingBrushData &rhs)
 {
+    return lhs.isEnabled == rhs.isEnabled &&
+            lhs.brush == rhs.brush &&
+            lhs.compositeOpId == rhs.compositeOpId &&
+            lhs.useMasterSize == rhs.useMasterSize &&
+            qFuzzyCompare(lhs.masterSizeCoeff, rhs.masterSizeCoeff);
 }
 
-void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting, qreal masterBrushSize) const
+KisBrushModel::MaskingBrushData KisBrushModel::MaskingBrushData::read(const KisPropertiesConfiguration *config, qreal masterBrushSize, KisResourcesInterfaceSP resourcesInterface)
 {
-    setting->setProperty(KisPaintOpUtils::MaskingBrushEnabledTag, isEnabled);
-    setting->setProperty(KisPaintOpUtils::MaskingBrushCompositeOpTag, compositeOpId);
-    setting->setProperty(KisPaintOpUtils::MaskingBrushUseMasterSizeTag, useMasterSize);
+    KisBrushModel::MaskingBrushData data;
 
-    const qreal currentSize =
-        theoreticalMaskingBrushSize ?
-        *theoreticalMaskingBrushSize :
-        brush ? brush->userEffectiveSize() : 1.0;
-
-    const qreal masterSizeCoeff =
-        masterBrushSize > 0 ? currentSize / masterBrushSize : 1.0;
-
-    setting->setProperty(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, masterSizeCoeff);
-
-    // TODO: skip saving in some cases?
-    // if (!isEnabled) return;
-
-    if (brush) {
-        KisPropertiesConfigurationSP embeddedConfig = new KisPropertiesConfiguration();
-
-        {
-            KisBrushOptionProperties option;
-            option.setBrush(brush);
-            option.writeOptionSetting(embeddedConfig);
-        }
-
-        setting->setPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, embeddedConfig);
-    }
-}
-
-QList<KoResourceLoadResult> KisMaskingBrushOptionProperties::prepareLinkedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface)
-{
-    KisBrushOptionProperties option;
-    return option.prepareLinkedResources(settings, resourcesInterface);
-}
-
-void KisMaskingBrushOptionProperties::read(const KisPropertiesConfiguration *setting, qreal masterBrushSize, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
-{
-    isEnabled = setting->getBool(KisPaintOpUtils::MaskingBrushEnabledTag);
-    compositeOpId = setting->getString(KisPaintOpUtils::MaskingBrushCompositeOpTag, COMPOSITE_MULT);
-    useMasterSize = setting->getBool(KisPaintOpUtils::MaskingBrushUseMasterSizeTag, true);
+    data.isEnabled = config->getBool(KisPaintOpUtils::MaskingBrushEnabledTag);
+    data.compositeOpId = config->getString(KisPaintOpUtils::MaskingBrushCompositeOpTag, COMPOSITE_MULT);
+    data.useMasterSize = config->getBool(KisPaintOpUtils::MaskingBrushUseMasterSizeTag, true);
 
     KisPropertiesConfigurationSP embeddedConfig = new KisPropertiesConfiguration();
-    setting->getPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, embeddedConfig);
+    config->getPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, embeddedConfig);
 
-    KisBrushOptionProperties option;
-    option.readOptionSetting(embeddedConfig, resourcesInterface, canvasResourcesInterface);
+    std::optional<BrushData> embeddedBrush = BrushData::read(embeddedConfig.constData(), resourcesInterface);
 
-    brush = option.brush();
-    theoreticalMaskingBrushSize = boost::none;
+    if (embeddedBrush) {
+        data.brush = *embeddedBrush;
+    }
 
-    if (brush && useMasterSize) {
-        const qreal masterSizeCoeff = setting->getDouble(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, 1.0);
-        qreal size = masterSizeCoeff * masterBrushSize;
+    if (data.useMasterSize) {
+        data.masterSizeCoeff = config->getDouble(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, 1.0);
+        qreal size = data.masterSizeCoeff * masterBrushSize;
 
         const qreal maxMaskingBrushSize = KisImageConfig(true).maxMaskingBrushSize();
 
         if (size > maxMaskingBrushSize) {
-            theoreticalMaskingBrushSize = size;
             size = maxMaskingBrushSize;
         }
 
-        brush->setUserEffectiveSize(size);
+        KisBrushModel::setEffectiveSizeForBrush(data.brush.type,
+                                                data.brush.autoBrush,
+                                                data.brush.predefinedBrush,
+                                                data.brush.textBrush,
+                                                size);
+    }
+
+    return data;
+}
+
+void KisBrushModel::MaskingBrushData::write(KisPropertiesConfiguration *config) const
+{
+    config->setProperty(KisPaintOpUtils::MaskingBrushEnabledTag, isEnabled);
+    config->setProperty(KisPaintOpUtils::MaskingBrushCompositeOpTag, compositeOpId);
+    config->setProperty(KisPaintOpUtils::MaskingBrushUseMasterSizeTag, useMasterSize);
+    config->setProperty(KisPaintOpUtils::MaskingBrushMasterSizeCoeffTag, masterSizeCoeff);
+
+    // TODO: skip saving in some cases?
+    // if (!isEnabled) return;
+
+    {
+        KisPropertiesConfigurationSP embeddedConfig = new KisPropertiesConfiguration();
+        brush.write(embeddedConfig.data());
+        config->setPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, embeddedConfig);
     }
 }

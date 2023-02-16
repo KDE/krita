@@ -11,9 +11,10 @@
 
 #include <kis_paintop.h>
 #include <kis_types.h>
-#include <kis_pressure_size_option.h>
-#include <kis_pressure_spacing_option.h>
-#include "kis_roundmarker_option.h"
+#include <KisStandardOptions.h>
+#include <KisSpacingOption.h>
+#include "KisRoundMarkerOpOptionData.h"
+
 
 class QPointF;
 class KisPaintOpSettings;
@@ -37,11 +38,11 @@ private:
 private:
     bool                      m_firstRun;
     KisPaintDeviceSP          m_tempDev;
-    KisPressureSizeOption     m_sizeOption;
-    KisPressureSpacingOption  m_spacingOption;
+    KisSizeOption             m_sizeOption;
+    KisSpacingOption          m_spacingOption;
     QPointF                   m_lastPaintPos;
     qreal                     m_lastRadius;
-    RoundMarkerOption         m_markerOption;
+    KisRoundMarkerOpOptionData   m_markerOption;
 };
 
 #endif // _KIS_ROUNDMARKEROP_H_

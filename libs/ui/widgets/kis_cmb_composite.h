@@ -23,11 +23,15 @@ class KisActionManager;
 
 class KRITAUI_EXPORT KisCompositeOpListWidget: public KisCategorizedListView
 {
+    Q_OBJECT
 public:
      KisCompositeOpListWidget(QWidget* parent = 0);
      ~KisCompositeOpListWidget() override;
 
     KoID selectedCompositeOp() const;
+
+public Q_SLOTS:
+    void setCompositeOp(const KoID &id);
 
 private:
     KisSortedCompositeOpListModel *m_model;

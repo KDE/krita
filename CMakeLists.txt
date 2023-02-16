@@ -12,7 +12,7 @@ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 set(MIN_QT_VERSION 5.12.0)
 set(MIN_FRAMEWORKS_VERSION 5.44.0)
 
-set( CMAKE_CXX_STANDARD 14 )
+set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
 if (POLICY CMP0002)
@@ -774,6 +774,7 @@ if (MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         KRITA_boost_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
     set(Boost_COMPILER "mgw${KRITA_boost_COMPILER_VERSION}")
 endif()
+
 find_package(Boost 1.65 REQUIRED COMPONENTS system)
 set_package_properties(Boost PROPERTIES
     DESCRIPTION "Boost provides free peer-reviewed portable C++ source libraries."
@@ -783,6 +784,11 @@ target_link_libraries(Boost::boost
     INTERFACE
         Boost::disable_autolinking
 )
+
+find_package(Immer REQUIRED)
+find_package(Zug REQUIRED)
+find_package(Lager REQUIRED)
+
 ##
 ## Test for GNU Scientific Library
 ##

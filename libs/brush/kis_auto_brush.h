@@ -52,9 +52,7 @@ public:
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace*,
             KisDabShape const&,
             const KisPaintInformation&,
-            double = 0, double = 0) const override {
-        return 0; // The autobrush does NOT support images!
-    }
+            double = 0, double = 0) const override;
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         KisBrush::ColoringInformation* src,

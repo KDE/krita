@@ -13,10 +13,14 @@
 #include "kis_painter.h"
 
 #include <brushengine/kis_random_source.h>
-#include "kis_color_option.h"
-#include "kis_spray_shape_option.h"
-#include "kis_spray_shape_dynamics.h"
-#include "kis_sprayop_option.h"
+#include "KisColorOptionData.h"
+#include "KisSprayOpOptionData.h"
+#include "KisSprayOpOption.h"
+#include "KisSprayShapeDynamicsOptionData.h"
+#include "KisSprayShapeOptionData.h"
+
+
+
 
 
 #include <QImage>
@@ -39,10 +43,10 @@ public:
                qreal additionalScale,
                const KoColor &color,
                const KoColor &bgColor);
-    void setProperties(KisSprayOptionProperties * properties,
-                       KisColorProperties * colorProperties,
-                       KisShapeProperties * shapeProperties,
-                       KisShapeDynamicsProperties * shapeDynamicsProperties,
+    void setProperties(KisSprayOpOptionData * properties,
+                       KisColorOptionData * colorProperties,
+                       KisSprayShapeOptionData * shapeProperties,
+                       KisSprayShapeDynamicsOptionData * shapeDynamicsProperties,
                        KisBrushSP brush);
 
     void setFixedDab(KisFixedPaintDeviceSP dab);
@@ -61,10 +65,11 @@ private:
 
     KoColorTransformation* m_transfo {nullptr};
 
-    const KisSprayOptionProperties * m_properties {nullptr};
-    const KisColorProperties * m_colorProperties {nullptr};
-    const KisShapeProperties * m_shapeProperties {nullptr};
-    const KisShapeDynamicsProperties * m_shapeDynamicsProperties {nullptr};
+    const KisSprayOpOptionData * m_sprayOpOptionData {nullptr};
+    KisSprayOpOption * m_sprayOpOption {nullptr};
+    const KisColorOptionData * m_colorProperties {nullptr};
+    const KisSprayShapeOptionData * m_shapeProperties {nullptr};
+    const KisSprayShapeDynamicsOptionData * m_shapeDynamicsProperties {nullptr};
 
     KisBrushSP m_brush;
     KisFixedPaintDeviceSP m_fixedDab;

@@ -77,6 +77,9 @@ set(kritawidgets_LIB_SRCS
     KisAngleSelector.cpp
 
     KisTagSelectionWidget.cpp
+
+    KisWidgetConnectionUtils.cpp
+    kis_spacing_selection_widget.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS

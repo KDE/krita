@@ -332,127 +332,69 @@
          <property name="title">
           <string>General</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
-           <widget class="QCheckBox" name="m_chkRubberBand">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+         <layout class="QFormLayout" name="formLayout_17">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Don't show contents when moving sub-windows</string>
+             <string>Multiple Document Mode:</string>
             </property>
            </widget>
           </item>
-          <item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="m_cmbMDIType">
+            <property name="currentIndex">
+             <number>1</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Subwindows</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Tabs</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="1">
            <widget class="QCheckBox" name="m_chkCanvasMessages">
             <property name="text">
              <string>Show on-canvas popup messages</string>
             </property>
            </widget>
           </item>
-          <item>
-           <layout class="QFormLayout" name="formLayout_16">
-            <item row="0" column="0">
-             <widget class="QLabel" name="lblZoomMarginSize">
-              <property name="text">
-               <string>Zoom Margin Size:</string>
-              </property>
-              <property name="buddy">
-               <cstring>intZoomMarginSize</cstring>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="KisIntParseSpinBox" name="intZoomMarginSize">
-              <property name="toolTip">
-               <string>Spacing between the image and the page when zoomed to fit, in pixels</string>
-              </property>
-              <property name="suffix">
-               <string> px</string>
-              </property>
-              <property name="maximum">
-               <number>1024</number>
-              </property>
-              <property name="value">
-               <number>0</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
+          <item row="2" column="0">
+           <widget class="QLabel" name="lblZoomMarginSize">
+            <property name="text">
+             <string>Zoom Margin Size:</string>
+            </property>
+            <property name="buddy">
+             <cstring>intZoomMarginSize</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="KisIntParseSpinBox" name="intZoomMarginSize">
+            <property name="toolTip">
+             <string>Spacing between the image and the page when zoomed to fit, in pixels</string>
+            </property>
+            <property name="suffix">
+             <string> px</string>
+            </property>
+            <property name="maximum">
+             <number>1024</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
        </item>
        <item row="1" column="0" colspan="2">
-        <widget class="QGroupBox" name="m_chkHiDPI">
-         <property name="title">
-          <string>Enable HiDPI support</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <layout class="QFormLayout" name="formLayout_14">
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="m_chkHiDPIFractionalScaling">
-            <property name="text">
-             <string>Enable fractional scale factor</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="2">
-           <widget class="QLabel" name="label_16">
-            <property name="text">
-             <string>&lt;b&gt;Note: Krita will need to be restarted for changes to take effect&lt;/b&gt;</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Multiple Document Mode:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QComboBox" name="m_cmbMDIType">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="currentIndex">
-          <number>1</number>
-         </property>
-         <item>
-          <property name="text">
-           <string>Subwindows</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Tabs</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="3" column="0" colspan="2">
-        <widget class="QWidget" name="group_subWinMode" native="true">
+        <widget class="QGroupBox" name="group_subWinMode">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -462,35 +404,90 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <property name="horizontalSpacing">
-           <number>0</number>
-          </property>
-          <property name="verticalSpacing">
-           <number>9</number>
-          </property>
-          <item row="0" column="3">
-           <widget class="QToolButton" name="m_bnFileName">
+         <property name="title">
+          <string>Subwindow mode</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_16">
+          <item row="0" column="1">
+           <widget class="QWidget" name="widget" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="m_backgroundimage">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>200</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Sunken</enum>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="m_bnFileName">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="clearBgImageButton">
+               <property name="text">
+                <string>Clear</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_5">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
             <property name="text">
-             <string>...</string>
+             <string>Background Image (overrides color):</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Window Background:</string>
             </property>
            </widget>
           </item>
@@ -507,84 +504,23 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="4">
-           <widget class="QPushButton" name="clearBgImageButton">
-            <property name="text">
-             <string>Clear</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QLabel" name="label_5">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Background Image (overrides color):</string>
-            </property>
-            <property name="scaledContents">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="m_backgroundimage">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>200</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Sunken</enum>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>Window Background:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="1">
-           <spacer name="verticalSpacer_4">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+           <widget class="QCheckBox" name="m_chkRubberBand">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::MinimumExpanding</enum>
+            <property name="text">
+             <string>Don't show contents when moving sub-windows</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>9</height>
-             </size>
-            </property>
-           </spacer>
+           </widget>
           </item>
          </layout>
         </widget>
        </item>
-       <item row="4" column="0" colspan="2">
+       <item row="2" column="0" colspan="2">
         <widget class="QGroupBox" name="chkUseCustomFont">
          <property name="title">
           <string>Use custom interface font</string>
@@ -634,8 +570,68 @@
          </layout>
         </widget>
        </item>
-       <item row="5" column="0" colspan="2">
-        <spacer name="verticalSpacer">
+       <item row="3" column="0" colspan="2">
+        <widget class="QGroupBox" name="m_chkHiDPI">
+         <property name="title">
+          <string>Enable HiDPI support</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QWidget" name="m_wdgHiDPIFractionalScaling" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QCheckBox" name="m_chkHiDPIFractionalScaling">
+               <property name="text">
+                <string>Enable fractional scale factor</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_16">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>(needs restart)</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>

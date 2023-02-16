@@ -295,7 +295,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 #ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
     m_chkHiDPIFractionalScaling->setChecked(kritarc.value("EnableHiDPIFractionalScaling", false).toBool());
 #else
-    m_chkHiDPIFractionalScaling->setVisible(false);
+    m_wdgHiDPIFractionalScaling->setEnabled(false);
 #endif
     chkUsageLogging->setChecked(kritarc.value("LogUsage", true).toBool());
 
@@ -549,7 +549,6 @@ void GeneralTab::setDefault()
     m_chkTrimKra->setChecked(cfg.trimKra(true));
     m_chkTrimFramesImport->setChecked(cfg.trimFramesImport(true));
     chkZip64->setChecked(cfg.useZip64(true));
-    m_chkHiDPI->setChecked(false);
     m_chkHiDPI->setChecked(true);
 #ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
     m_chkHiDPIFractionalScaling->setChecked(true);

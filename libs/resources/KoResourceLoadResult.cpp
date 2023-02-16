@@ -5,14 +5,16 @@
  */
 #include "KoResourceLoadResult.h"
 
-#include <boost/variant.hpp>
+#include <variant>
+#include <KisMpl.h>
 
 #include <KoResource.h>
 
 struct KoResourceLoadResult::Private
 {
     // XXX: this should take a monostate for null resources
-    boost::variant<KoResourceSP, KoEmbeddedResource, KoResourceSignature> value;
+    // AAA: no, it shouldn't, null resource must be a KoResourceSignature only
+    std::variant<KoResourceSP, KoEmbeddedResource, KoResourceSignature> value;
 };
 
 KoResourceLoadResult::KoResourceLoadResult(KoResourceSP resource)
@@ -50,53 +52,30 @@ KoResourceLoadResult::~KoResourceLoadResult()
 
 KoResourceSP KoResourceLoadResult::resource() const
 {
-    return m_d->value.which() == 0 ? boost::get<KoResourceSP>(m_d->value) : KoResourceSP();
+    return std::holds_alternative<KoResourceSP>(m_d->value) ? std::get<KoResourceSP>(m_d->value) : KoResourceSP();
 }
 
 KoEmbeddedResource KoResourceLoadResult::embeddedResource() const
 {
-    return m_d->value.which() == 1 ? boost::get<KoEmbeddedResource>(m_d->value) : KoEmbeddedResource();
+    return std::holds_alternative<KoEmbeddedResource>(m_d->value) ? std::get<KoEmbeddedResource>(m_d->value) : KoEmbeddedResource();
 }
 
 KoResourceSignature KoResourceLoadResult::signature() const
 {
-    class SignatureVisitor : public boost::static_visitor<KoResourceSignature>
-    {
-    public:
-        KoResourceSignature operator()(KoResourceSP resource) const
-        {
-            return resource->signature();
-        }
-
-        KoResourceSignature operator()(const KoEmbeddedResource &embeddedResource) const
-        {
-            return embeddedResource.signature();
-        }
-
-        KoResourceSignature operator()(const KoResourceSignature &signature) const
-        {
-            return signature;
-        }
-    };
-
-    return boost::apply_visitor(SignatureVisitor(), m_d->value);
+    return std::visit(
+        kismpl::overloaded {
+            [](const KoResourceSignature &signature) { return signature; },
+            [](const KoResourceSP &resource) { return resource->signature(); },
+            [](const KoEmbeddedResource &resource) { return resource.signature(); }
+        }, m_d->value);
 }
 
 KoResourceLoadResult::Type KoResourceLoadResult::type() const
 {
-    Type result = FailedLink;
-
-    switch (m_d->value.which())
-    {
-    case 0:
-        result = ExistingResource;
-        break;
-    case 1:
-        result = EmbeddedResource;
-        break;
-    default:
-        result = FailedLink;
-    }
-
-    return result;
+    return std::visit(
+        kismpl::overloaded {
+            [](auto) { return FailedLink; },
+            [](const KoResourceSP &) { return ExistingResource; },
+            [](const KoEmbeddedResource &) { return EmbeddedResource; }
+        }, m_d->value);
 }

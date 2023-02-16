@@ -176,6 +176,12 @@ std::optional<T> fold_optional(Fun &&fun, Args &&...args) {
     return detail::fold_optional_impl<Fun, T>{std::forward<Fun>(fun)}.fold(args...);
 }
 
+/**
+ * A helper class for creation of a visitor for an std::visit
+ */
+template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
+template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+
 } // namespace kismpl
 
 #endif // KISMPL_H

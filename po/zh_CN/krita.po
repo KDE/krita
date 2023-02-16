@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-15 00:57+0000\n"
-"PO-Revision-Date: 2023-02-07 11:01\n"
+"POT-Creation-Date: 2023-02-16 00:56+0000\n"
+"PO-Revision-Date: 2023-02-15 11:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -16192,25 +16192,25 @@ msgstr ""
 "此图像包含在 Krita 4.x 中创建的矢量文字对象。它们将在保存时转换为 Krita 5 格"
 "式。转换后的文字对象将不再兼容 Krita 4.x。"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2685
+#: libs/flake/text/KoSvgTextShape.cpp:2687
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2687
-#: libs/flake/text/KoSvgTextShape.cpp:2695
+#: libs/flake/text/KoSvgTextShape.cpp:2689
+#: libs/flake/text/KoSvgTextShape.cpp:2697
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文字形状"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2693
+#: libs/flake/text/KoSvgTextShape.cpp:2695
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2707
-#: libs/flake/text/KoSvgTextShape.cpp:2722
+#: libs/flake/text/KoSvgTextShape.cpp:2709
+#: libs/flake/text/KoSvgTextShape.cpp:2724
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -29732,12 +29732,12 @@ msgstr "无法复制文件。"
 #: libs/ui/KisImportExportErrorCode.cpp:65
 #, kde-format
 msgid "Cannot open file for reading. Reason: %1"
-msgstr "无法打开文件进行读取。原因如下：%1"
+msgstr "无法打开文件进行读取。原因：%1"
 
 #: libs/ui/KisImportExportErrorCode.cpp:81
 #, kde-format
 msgid "Cannot open file for writing. Reason: %1"
-msgstr "无法打开文件进行写入。原因如下：%1"
+msgstr "无法打开文件进行写入。原因：%1"
 
 #: libs/ui/KisImportExportErrorCode.cpp:139
 #, kde-format
@@ -40205,8 +40205,8 @@ msgstr "提高笔刷颜色亮度"
 #, kde-format
 msgctxt "action"
 msgid ""
-"Increse value, lightness, intensity or luma of the selected color, depending "
-"on selected color model"
+"Increase value, lightness, intensity or luma of the selected color, "
+"depending on selected color model"
 msgstr ""
 
 #. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
@@ -42387,7 +42387,7 @@ msgstr "您想要覆盖已有资源包吗？"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:220
 #, kde-format
 msgid "Could not open '%1' for saving."
-msgstr "无法打开“%1”以进行保存。"
+msgstr "无法打开“%1”进行保存。"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:463
 #, kde-format
@@ -47044,10 +47044,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:329
-#, fuzzy, kde-format
-#| msgid "Modular parameters"
+#, kde-format
 msgid "Encoder parameters"
-msgstr "模块化参数"
+msgstr "编码器参数"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:335

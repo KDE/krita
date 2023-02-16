@@ -3,10 +3,8 @@ SET(EXTPREFIX_raqm "${EXTPREFIX}" )
 ExternalProject_Add(
     ext_raqm
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/therahedwig/libraqm/archive/793d7a5e89f3a2bdda8d9236d24294e48dc2e354.zip
-    URL_HASH SHA256=576e63009a26d613aab8dd3bd216be43a49979d26aa99cb186a0008a9f3af252
-    
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_utf_16.patch
+    URL https://github.com/HOST-Oman/libraqm/releases/download/v0.10.0/raqm-0.10.0.tar.xz
+    URL_HASH SHA256=5eb7de71b3d1dca34103860f3e8c55ebc184a3dbdfdd573c21a258e46982f1e6
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}

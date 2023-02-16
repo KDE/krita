@@ -1134,7 +1134,7 @@ endif()
 ##
 ## Check for raqm
 ##
-find_package(Raqm 0.9.0 REQUIRED)
+find_package(Raqm 0.10.0 REQUIRED)
 set_package_properties(Raqm PROPERTIES
     DESCRIPTION "Raqm is a small library that encapsulates the logic for complex text layout and provides a convenient API."
     URL "https://github.com/HOST-Oman/libraqm"

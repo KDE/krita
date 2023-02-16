@@ -718,39 +718,22 @@
          </property>
         </widget>
        </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="lblZoomSteps">
+         <property name="text">
+          <string>Zoom steps between powers of 2</string>
+         </property>
+        </widget>
+       </item>
        <item row="5" column="1">
-        <layout class="QHBoxLayout" name="layoutZoom">
-         <item>
-          <widget class="QSpinBox" name="spnZoomSteps">
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="maximum">
-            <number>32</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="lblZoomSteps">
-           <property name="text">
-            <string>Zoom steps between powers of 2</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="spacerZoom">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
+        <widget class="QSpinBox" name="spnZoomSteps">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>32</number>
+         </property>
+        </widget>
        </item>
        <item row="6" column="0" colspan="2">
         <widget class="QGroupBox" name="m_groupBoxKineticScrollingSettings">
@@ -775,16 +758,57 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="KisSliderSpinBox" name="m_kineticScrollingSensitivitySlider" native="true"/>
+           <widget class="KisSliderSpinBox" name="m_kineticScrollingSensitivitySlider"/>
           </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QCheckBox" name="m_chkKineticScrollingHideScrollbars">
-            <property name="text">
-             <string>Hide docker scrollbars if kinetic scrolling is enabled (needs restart)</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
+          <item row="2" column="1">
+           <widget class="QWidget" name="widget_3" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_9">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QCheckBox" name="m_chkKineticScrollingHideScrollbars">
+               <property name="text">
+                <string>Hide docker scrollbars if kinetic scrolling is enabled</string>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_14">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>(needs restart)</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>

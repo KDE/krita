@@ -786,10 +786,12 @@ target_link_libraries(Boost::boost
 # Disallow usage of std::unary_function. 
 # See https://github.com/boostorg/container_hash/issues/22
 # and https://releases.llvm.org/15.0.0/projects/libcxx/docs/ReleaseNotes.html#deprecations-and-removals
+if(Boost_VERSION VERSION_LESS "1.81.0")
 target_compile_definitions(Boost::boost
     INTERFACE
         BOOST_NO_CXX98_FUNCTION_BASE
 )
+endif()
 ##
 ## Test for GNU Scientific Library
 ##

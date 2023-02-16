@@ -1499,7 +1499,14 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
        <item row="0" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_1">
          <item>
-          <widget class="KisFileNameRequester" name="m_urlResourceFolder" native="true"/>
+          <widget class="KisFileNameRequester" name="m_urlResourceFolder" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="m_resourceFolderResetButton">

@@ -277,6 +277,7 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
             newLayer->enableAnimation();
             KisKeyframeChannel *channel = newLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
             KisRasterKeyframeChannel *rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(channel);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(rasterChannel);
             rasterChannel->importFrame(range.start(), clip, nullptr);
 
             if (!range.isInfinite()) {
@@ -335,6 +336,7 @@ void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
     KisImportCatcher::adaptClipToImageColorSpace(clip, image);
 
     KisTool* tool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(viewManager->canvasBase(), "KisToolTransform"));
+    KIS_ASSERT(tool);
     tool->newActivationWithExternalSource(clip);
 }
 

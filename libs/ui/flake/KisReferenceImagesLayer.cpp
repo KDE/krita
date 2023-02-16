@@ -137,7 +137,10 @@ KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeControllerBase* shapeCon
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs)
     : KisShapeLayer(rhs, rhs.shapeController(),
-                    [&] () { return new ReferenceImagesCanvas(*dynamic_cast<const ReferenceImagesCanvas*>(rhs.canvas()), this); })
+                    [&] () {
+                            const ReferenceImagesCanvas* referenceImagesCanvas = dynamic_cast<const ReferenceImagesCanvas*>(rhs.canvas());
+                            KIS_ASSERT(referenceImagesCanvas);
+                            return new ReferenceImagesCanvas(*referenceImagesCanvas, this); })
 {}
 
 KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *document, const QList<KoShape*> referenceImages)

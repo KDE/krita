@@ -93,7 +93,9 @@ bool DeformBrush::setupAction(
         else {
             factor = (1.0 + sign * (m_properties->deform_amount));
         }
-        dynamic_cast<DeformScale*>(m_deformAction)->setFactor(factor);
+        DeformScale* deformScale = dynamic_cast<DeformScale*>(m_deformAction);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(deformScale, false);
+        deformScale->setFactor(factor);
         break;
     }
     case SWIRL_CW:
@@ -107,14 +109,18 @@ bool DeformBrush::setupAction(
         else {
             factor = (360 * m_properties->deform_amount * 0.5) * sign * degToRad;
         }
-        dynamic_cast<DeformRotation*>(m_deformAction)->setAlpha(factor);
+        DeformRotation* deformRotation = dynamic_cast<DeformRotation*>(m_deformAction);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(deformRotation, false);
+        deformRotation->setAlpha(factor);
         break;
     }
     case MOVE: {
         if (m_firstPaint == false) {
             m_prevX = pos.x();
             m_prevY = pos.y();
-            static_cast<DeformMove*>(m_deformAction)->setDistance(0.0, 0.0);
+            DeformMove* deformMove = static_cast<DeformMove*>(m_deformAction);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(deformMove, false);
+            deformMove->setDistance(0.0, 0.0);
             m_firstPaint = true;
             return false;
         }
@@ -122,7 +128,9 @@ bool DeformBrush::setupAction(
             qreal xDistance = pos.x() - m_prevX;
             qreal yDistance = pos.y() - m_prevY;
             rotation.map(xDistance, yDistance, &xDistance, &yDistance);
-            static_cast<DeformMove*>(m_deformAction)->setDistance(xDistance, yDistance);
+            DeformMove* deformMove = static_cast<DeformMove*>(m_deformAction);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(deformMove, false);
+            deformMove->setDistance(xDistance, yDistance);
             m_prevX = pos.x();
             m_prevY = pos.y();
         }
@@ -130,7 +138,9 @@ bool DeformBrush::setupAction(
     }
     case LENS_IN:
     case LENS_OUT: {
-        static_cast<DeformLens*>(m_deformAction)->setMaxDistance(m_sizeProperties->brush_diameter * 0.5, m_sizeProperties->brush_diameter * 0.5);
+        DeformLens* deformLens = static_cast<DeformLens*>(m_deformAction);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(deformLens, false);
+        deformLens->setMaxDistance(m_sizeProperties->brush_diameter * 0.5, m_sizeProperties->brush_diameter * 0.5);
         break;
     }
     case DEFORM_COLOR: {

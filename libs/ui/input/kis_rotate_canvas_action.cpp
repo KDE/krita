@@ -80,6 +80,7 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
 
     KisCanvasController *canvasController =
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(canvasController);
 
     switch(shortcut) {
         case RotateModeShortcut:
@@ -129,6 +130,7 @@ void KisRotateCanvasAction::cursorMovedAbsolute(const QPointF &startPos, const Q
 
     KisCanvasController *canvasController =
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(canvasController);
     canvasController->rotateCanvas(newRotation - d->previousRotation);
     d->previousRotation = newRotation;
 }

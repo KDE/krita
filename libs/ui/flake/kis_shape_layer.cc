@@ -141,7 +141,10 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& rhs)
 KisShapeLayer::KisShapeLayer(const KisShapeLayer& rhs, KoShapeControllerBase* controller)
     : KisShapeLayer(rhs,
                     controller,
-                    [&] () {return new KisShapeLayerCanvas(*dynamic_cast<const KisShapeLayerCanvas*>(rhs.m_d->canvas), this);})
+                    [&] () {
+                            const KisShapeLayerCanvas* shapeLayerCanvas = dynamic_cast<const KisShapeLayerCanvas*>(rhs.m_d->canvas);
+                            KIS_ASSERT(shapeLayerCanvas);
+                            return new KisShapeLayerCanvas(*shapeLayerCanvas, this);})
 {
 }
 
@@ -179,8 +182,9 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
     // Make sure our new layer is visible otherwise the shapes cannot be painted.
     setVisible(true);
 
-    initShapeLayerImpl(_rhs.m_d->controller,
-                       new KisShapeLayerCanvas(*dynamic_cast<const KisShapeLayerCanvas*>(_rhs.canvas()), this));
+    const KisShapeLayerCanvas* shapeLayerCanvas = dynamic_cast<const KisShapeLayerCanvas*>(_rhs.canvas());
+    KIS_ASSERT(shapeLayerCanvas);
+    initShapeLayerImpl(_rhs.m_d->controller, new KisShapeLayerCanvas(*shapeLayerCanvas, this));
 
     /**
      * With current implementation this matrix will always be an identity, because
@@ -667,6 +671,7 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform)
      * signal to transform them in the GUI thread and then return.
      */
     const KisImageViewConverter *converter = dynamic_cast<const KisImageViewConverter*>(this->converter());
+    KIS_ASSERT(converter);
     QTransform docSpaceTransform = converter->documentToView() *
         transform * converter->viewToDocument();
 

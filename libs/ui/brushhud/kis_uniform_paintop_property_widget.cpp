@@ -110,6 +110,7 @@ void KisUniformPaintOpPropertyIntSlider::setValue(const QVariant &value)
     if (dynamic_cast<KisAngleSelector*>(m_slider)) {
         dynamic_cast<KisAngleSelector*>(m_slider)->setAngle(static_cast<qreal>(value.toInt()));
     } else {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(dynamic_cast<KisSliderSpinBox*>(m_slider));
         dynamic_cast<KisSliderSpinBox*>(m_slider)->setValue(value.toInt());
     }
 }
@@ -167,6 +168,7 @@ void KisUniformPaintOpPropertyDoubleSlider::setValue(const QVariant &value)
     if (dynamic_cast<KisAngleSelector*>(m_slider)) {
         dynamic_cast<KisAngleSelector*>(m_slider)->setAngle(value.toInt());
     } else {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(dynamic_cast<KisDoubleSliderSpinBox*>(m_slider));
         dynamic_cast<KisDoubleSliderSpinBox*>(m_slider)->setValue(value.toInt());
     }
 }

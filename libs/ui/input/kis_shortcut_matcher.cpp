@@ -493,7 +493,9 @@ void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event, const QPointF &loc
         QScopedPointer<QEvent> dstEvent;
         KoPointerEvent::copyQtPointerEvent(event, dstEvent);
         // HACK: Because TouchEvents in KoPointerEvent need to contain at least one touchpoint
-        dynamic_cast<QTouchEvent *>(dstEvent.data())->setTouchPoints(m_d->lastTouchPoints);
+        QTouchEvent* touchEvent = dynamic_cast<QTouchEvent *>(dstEvent.data());
+        KIS_ASSERT(touchEvent);
+        touchEvent->setTouchPoints(m_d->lastTouchPoints);
         touchShortcut->action()->end(dstEvent.data());
         touchShortcut->action()->deactivate(touchShortcut->shortcutIndex());
     }

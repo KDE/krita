@@ -172,6 +172,11 @@ print_usage () {
 ### Script starts
 SCRIPT_SOURCE_DIR="$(get_script_dir)"
 
+DIR_CURRENT="$(pwd)"
+cd "$(get_script_dir)"
+SCRIPT_SOURCE_DIR="$(pwd)"
+cd "${DIR_CURRENT}"
+
 # Attempt to detach previous mouted DMG
 # if [[ -d "/Volumes/${DMG_title}" ]]; then
 #     echo "WARNING: Another Krita DMG is mounted!"

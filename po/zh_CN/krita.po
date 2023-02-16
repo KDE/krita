@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-07 11:05\n"
+"PO-Revision-Date: 2023-02-15 11:07\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -29432,12 +29432,12 @@ msgstr "无法复制文件。"
 #: libs/ui/KisImportExportErrorCode.cpp:65
 #, kde-format
 msgid "Cannot open file for reading. Reason: %1"
-msgstr "无法打开文件进行读取。原因如下：%1"
+msgstr "无法打开文件进行读取。原因：%1"
 
 #: libs/ui/KisImportExportErrorCode.cpp:81
 #, kde-format
 msgid "Cannot open file for writing. Reason: %1"
-msgstr "无法打开文件进行写入。原因如下：%1"
+msgstr "无法打开文件进行写入。原因：%1"
 
 #: libs/ui/KisImportExportErrorCode.cpp:139
 #, kde-format
@@ -41397,7 +41397,7 @@ msgstr "您想要覆盖已有资源包吗？"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:220
 #, kde-format
 msgid "Could not open '%1' for saving."
-msgstr "无法打开“%1”以进行保存。"
+msgstr "无法打开“%1”进行保存。"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:463
 #, kde-format

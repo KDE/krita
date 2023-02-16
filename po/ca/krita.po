@@ -1,5 +1,5 @@
 # Translation of krita.po to Catalan
-# Copyright (C) 2000-2022 This_file_is_part_of_KDE
+# Copyright (C) 2000-2023 This_file_is_part_of_KDE
 #
 # Sebastià Pla <sastia@retemail.es>, 2000.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
@@ -7,15 +7,15 @@
 # Pau Tallada Crespí <pau_tallada@telefonica.net>, 2006, 2007.
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2022-11-30 21:46+0100\n"
-"Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
+"PO-Revision-Date: 2023-02-15 15:39+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -26575,7 +26575,7 @@ msgstr "Nombre màxim de pinzells predefinits:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:47
 #, kde-format
 msgid "Dynamically Adjust Slot Count"
-msgstr "Ajusta dinàmicament el recompte de ranures"
+msgstr "Ajusta dinàmicament el comptador de ranures"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:57
@@ -26599,7 +26599,7 @@ msgstr "Selector de Triangle sRGB"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:93
 #, kde-format
 msgid "Wide Gamut Selector"
-msgstr "Selector de Gamma àmplia"
+msgstr "Selector de gamma àmplia"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:101
@@ -37021,7 +37021,7 @@ msgstr "Permet el desplaçament"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:946
 #, kde-format
 msgid "Colors from Image"
-msgstr "Colors des de la imatge"
+msgstr "Colors a partir de la imatge"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsShow)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:955

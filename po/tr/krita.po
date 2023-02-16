@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-06 19:29+0300\n"
+"PO-Revision-Date: 2023-02-16 00:29+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -13689,7 +13689,7 @@ msgstr "Anında Önizleme Kipi"
 #, kde-format
 msgctxt "action"
 msgid "Soft Proofing"
-msgstr "Yazılımsal Prova"
+msgstr "Ekran Provası"
 
 #. i18n: context: toolTip @ Action (softProof), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (softProof), Actions (View), ActionCollection (Menu)
@@ -13699,7 +13699,7 @@ msgstr "Yazılımsal Prova"
 #, kde-format
 msgctxt "action"
 msgid "Turns on Soft Proofing"
-msgstr "Yazılımsal Provayı Açar"
+msgstr "Ekran Provasını Açar"
 
 #. i18n: context: text @ Action (gamutCheck), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:686
@@ -13719,7 +13719,7 @@ msgid ""
 "Turns on warnings for colors out of proofed gamut, needs soft proofing to be "
 "turned on."
 msgstr ""
-"Prova edilmiş gam dıșındaki renkler için uyarıları açar, yazılımsal provanın "
+"Prova edilmiş gam dıșındaki renkler için uyarıları açar, ekran provasının "
 "açık olması gereklidir."
 
 #. i18n: context: text @ Action (mirror_canvas), Actions (View), ActionCollection (Menu)
@@ -23869,7 +23869,7 @@ msgstr "Profil içe aktar"
 #: libs/ui/forms/wdgcolorsettings.ui:243
 #, kde-format
 msgid "Soft Proofing"
-msgstr "Yazılımsal Prova"
+msgstr "Ekran Provası"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgcolorsettings.ui:249
@@ -25288,13 +25288,13 @@ msgstr "Görsel katmanlarının renk uzayını dönüştür"
 #: libs/ui/forms/wdgimageproperties.ui:272
 #, kde-format
 msgid "Softproofing"
-msgstr "Yazılımsal Prova"
+msgstr "Ekran Provası"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveProofing)
 #: libs/ui/forms/wdgimageproperties.ui:278
 #, kde-format
 msgid "Store Softproofing configuration in the image"
-msgstr "Yazılımsal Prova yapılandırmasını görselde depola"
+msgstr "Ekran Provası yapılandırmasını görselde depola"
 
 #. i18n: ectx: property (toolTip), widget (QSlider, sldAdaptationState)
 #: libs/ui/forms/wdgimageproperties.ui:336
@@ -28244,7 +28244,7 @@ msgstr ""
 #: libs/ui/kis_composite_ops_model.cc:22
 #, kde-format
 msgid "Favorites"
-msgstr "Yer İmleri"
+msgstr "Sık Kullanılanlar"
 
 #: libs/ui/kis_control_frame.cpp:62
 #, kde-format
@@ -30455,17 +30455,17 @@ msgstr ""
 #: libs/ui/KisView.cpp:1152
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
-msgstr "Yazılımsal Prova kayan noktalı sayılarda çalışmaz."
+msgstr "Ekran Provası, kayan noktalı sayılarda çalışmaz."
 
 #: libs/ui/KisView.cpp:1157
 #, kde-format
 msgid "Soft Proofing turned on."
-msgstr "Yazılımsal Prova açık."
+msgstr "Ekran Provası açık."
 
 #: libs/ui/KisView.cpp:1159
 #, kde-format
 msgid "Soft Proofing turned off."
-msgstr "Yazılımsal Prova kapalı."
+msgstr "Ekran Provası kapalı."
 
 #: libs/ui/KisView.cpp:1171
 #, kde-format
@@ -30480,7 +30480,7 @@ msgstr "Gam Uyarıları açık."
 #: libs/ui/KisView.cpp:1179
 #, kde-format
 msgid "But Soft Proofing is still off."
-msgstr "Ancak Yazılımsal Prova hâlâ kapalı."
+msgstr "Ancak Ekran Provası hâlâ kapalı."
 
 #: libs/ui/KisView.cpp:1182
 #, kde-format
@@ -47231,7 +47231,7 @@ msgstr "Görsel profili kaydedilemedi."
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save softproofing color profile."
-msgstr "Yazılımsal prova renk profili kaydedilemedi."
+msgstr "Ekran provası renk profili kaydedilemedi."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:560
 #, kde-format
@@ -47612,7 +47612,7 @@ msgstr ""
 #: plugins/impex/psd/psd_loader.cpp:152
 #, kde-format
 msgid "Duotone Colormode Block"
-msgstr "İki tonlu Renk kipi Birimi"
+msgstr "İki Tonlu Renk Kipi Bloku"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18
@@ -55364,7 +55364,7 @@ msgstr "Çizgiyi pürüzsüzleştirmek için fırça darbesini geciktir"
 #: plugins/tools/basictools/kis_tool_brush.cc:387
 #, kde-format
 msgid "Radius where the brush is blocked"
-msgstr "Fırçanın bloklandığı yarıçap"
+msgstr "Fırçanın engellendiği yarıçap"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:394
 #, kde-format

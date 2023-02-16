@@ -134,6 +134,7 @@ void KisMergeLabeledLayersCommand::mergeLabeledLayers()
 
             if (copy->inherits("KisLayer")) {
                 KisLayer* layerCopy = dynamic_cast<KisLayer*>(copy.data());
+                KIS_ASSERT(layerCopy);
                 layerCopy->setChannelFlags(QBitArray());
             }
 

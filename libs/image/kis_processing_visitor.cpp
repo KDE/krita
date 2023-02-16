@@ -15,6 +15,7 @@
 
 KisProcessingVisitor::ProgressHelper::ProgressHelper(const KisNode *node)
 {
+    KIS_ASSERT(node);
     KisNodeProgressProxy *progressProxy = node->nodeProgressProxy();
 
     if(progressProxy) {

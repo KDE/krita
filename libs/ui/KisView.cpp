@@ -336,7 +336,8 @@ void KisView::setViewManager(KisViewManager *view)
 
     KoToolManager::instance()->addController(&d->canvasController);
     KoToolManager::instance()->registerToolActions(d->actionCollection, &d->canvasController);
-    dynamic_cast<KisShapeController*>(d->document->shapeController())->setInitialShapeForCanvas(&d->canvas);
+    KisShapeController* shapeController = dynamic_cast<KisShapeController*>(d->document->shapeController());
+    shapeController->setInitialShapeForCanvas(&d->canvas);
 
     if (resourceProvider()) {
         resourceProvider()->slotImageSizeChanged();

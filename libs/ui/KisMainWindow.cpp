@@ -829,6 +829,7 @@ void KisMainWindow::slotPreferences()
                 // because nodes are not QObjects (because only one base class
                 // can be a QObject).
                 KisNode* node = dynamic_cast<KisNode*>(view->image()->rootLayer().data());
+                KIS_SAFE_ASSERT_RECOVER_RETURN(node);
                 node->updateSettings();
             }
 

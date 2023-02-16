@@ -130,7 +130,9 @@ KisResourceStorage &KisResourceStorage::operator=(const KisResourceStorage &rhs)
         d->location = rhs.d->location;
         d->storageType = rhs.d->storageType;
         if (d->storageType == StorageType::Memory) {
-            d->storagePlugin = QSharedPointer<KisMemoryStorage>(new KisMemoryStorage(*dynamic_cast<KisMemoryStorage*>(rhs.d->storagePlugin.data())));
+            const QSharedPointer<KisMemoryStorage> memoryStorage = rhs.d->storagePlugin.dynamicCast<KisMemoryStorage>();
+            KIS_ASSERT(memoryStorage);
+            d->storagePlugin = QSharedPointer<KisMemoryStorage>(new KisMemoryStorage(*memoryStorage));
         }
         else {
             d->storagePlugin = rhs.d->storagePlugin;

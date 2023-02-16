@@ -138,7 +138,7 @@ struct KisOptionTupleImpl<false, true, Data...>
  * operator== methods for the resulting class.
  *
  * You may later access the merged types via
- * kiszug::lenses::to_base<BaseData> lens.
+ * kislager::lenses::to_base<BaseData> lens.
  *
  * Restrictions:
  *

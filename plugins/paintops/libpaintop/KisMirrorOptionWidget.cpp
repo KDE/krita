@@ -5,7 +5,7 @@
  */
 #include "KisMirrorOptionWidget.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 
 #include <QWidget>
 #include <QCheckBox>
@@ -20,7 +20,7 @@ struct KisMirrorOptionWidget::Private
 {
     Private(lager::cursor<KisMirrorOptionData> optionData)
         : model(optionData.zoom(
-                    kiszug::lenses::to_base<KisMirrorOptionMixIn>)
+                    kislager::lenses::to_base<KisMirrorOptionMixIn>)
                 )
     {
     }
@@ -34,7 +34,7 @@ KisMirrorOptionWidget::KisMirrorOptionWidget(lager::cursor<KisMirrorOptionData> 
 }
 
 KisMirrorOptionWidget::KisMirrorOptionWidget(lager::cursor<KisMirrorOptionData> optionData, PaintopCategory categoryOverride)
-    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), categoryOverride)
+    : KisCurveOptionWidget(optionData.zoom(kislager::lenses::to_base<KisCurveOptionDataCommon>), categoryOverride)
     , m_d(new Private(optionData))
 {
     using namespace KisWidgetConnectionUtils;

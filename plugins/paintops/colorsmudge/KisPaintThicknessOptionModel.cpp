@@ -5,8 +5,6 @@
  */
 #include "KisPaintThicknessOptionModel.h"
 
-#include <KisZug.h>
-
 namespace {
 
 auto paintThicknessLens = lager::lenses::getset (

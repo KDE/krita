@@ -6,7 +6,6 @@
 #ifndef KISPREDEFINEDBRUSHMODEL_H
 #define KISPREDEFINEDBRUSHMODEL_H
 
-#include <KisZug.h>
 #include <lager/cursor.hpp>
 #include <lager/constant.hpp>
 #include <lager/lenses.hpp>

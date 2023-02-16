@@ -5,7 +5,7 @@
  */
 #include "KisSmudgeLengthOptionModel.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 
 namespace {
 CheckBoxState calcUseNewEngineState(bool useNewEngine, bool forceUseNewEngine) {
@@ -16,7 +16,7 @@ CheckBoxState calcUseNewEngineState(bool useNewEngine, bool forceUseNewEngine) {
 KisSmudgeLengthOptionModel::KisSmudgeLengthOptionModel(lager::cursor<KisSmudgeLengthOptionMixIn> optionData,
                                                        lager::reader<bool> forceUseNewEngine)
     : optionData(optionData)
-    , LAGER_QT(mode) {optionData[&KisSmudgeLengthOptionMixIn::mode].zoom(kiszug::lenses::do_static_cast<KisSmudgeLengthOptionMixIn::Mode, int>)}
+    , LAGER_QT(mode) {optionData[&KisSmudgeLengthOptionMixIn::mode].zoom(kislager::lenses::do_static_cast<KisSmudgeLengthOptionMixIn::Mode, int>)}
     , LAGER_QT(smearAlpha) {optionData[&KisSmudgeLengthOptionMixIn::smearAlpha]}
     , LAGER_QT(useNewEngine) {optionData[&KisSmudgeLengthOptionMixIn::useNewEngine]}
     , LAGER_QT(useNewEngineState) {

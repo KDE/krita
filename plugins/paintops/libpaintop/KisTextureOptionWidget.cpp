@@ -5,9 +5,6 @@
  */
 #include "KisTextureOptionWidget.h"
 
-
-#include <KisZug.h>
-
 #include <kis_paintop_lod_limitations.h>
 #include <KisTextureOptionModel.h>
 #include <KisWidgetConnectionUtils.h>

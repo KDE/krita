@@ -5,7 +5,7 @@
  */
 #include "KisAutoBrushModel.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 #include <lager/constant.hpp>
 #include <lager/lenses.hpp>
 
@@ -21,16 +21,16 @@ KisAutoBrushModel::KisAutoBrushModel(lager::cursor<CommonData> commonData, lager
       LAGER_QT(spikes) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::spikes]},
       LAGER_QT(antialiasEdges) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::antialiasEdges]},
       LAGER_QT(shape) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::shape]
-                  .zoom(kiszug::lenses::do_static_cast<AutoBrushGeneratorShape, int>)},
+                  .zoom(kislager::lenses::do_static_cast<AutoBrushGeneratorShape, int>)},
       LAGER_QT(type) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::type]
-                  .zoom(kiszug::lenses::do_static_cast<AutoBrushGeneratorType, int>)},
+                  .zoom(kislager::lenses::do_static_cast<AutoBrushGeneratorType, int>)},
       LAGER_QT(curveString) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::curveString]},
       LAGER_QT(randomness) {m_autoBrushData[&AutoBrushData::randomness]
-                  .zoom(kiszug::lenses::scale<qreal>(100.0))},
+                  .zoom(kislager::lenses::scale<qreal>(100.0))},
       LAGER_QT(density) {m_autoBrushData[&AutoBrushData::density]
-                  .zoom(kiszug::lenses::scale<qreal>(100.0))},
+                  .zoom(kislager::lenses::scale<qreal>(100.0))},
       LAGER_QT(angle) {m_commonData[&CommonData::angle]
-                  .zoom(kiszug::lenses::scale<qreal>(180.0 / M_PI))},
+                  .zoom(kislager::lenses::scale<qreal>(180.0 / M_PI))},
       LAGER_QT(spacing) {m_commonData[&CommonData::spacing]},
       LAGER_QT(useAutoSpacing) {m_commonData[&CommonData::useAutoSpacing]},
       LAGER_QT(autoSpacingCoeff) {m_commonData[&CommonData::autoSpacingCoeff]},

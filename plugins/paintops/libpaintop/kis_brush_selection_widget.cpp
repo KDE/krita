@@ -32,6 +32,7 @@
 #include "kis_text_brush_chooser.h"
 #include "KisWidgetConnectionUtils.h"
 #include <KisZug.h>
+#include <KisLager.h>
 #include <lager/constant.hpp>
 
 using namespace KisBrushModel;
@@ -147,7 +148,7 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(int maxBrushSize,
     m_textBrushWidget = new KisTextBrushChooser(textBrushModel, this);
     addChooser(i18nc("Text Brush tip mode", "Text"), m_textBrushWidget, TEXTBRUSH, KoGroupButton::GroupRight);
 
-    m_d->brushType = brushType.zoom(kiszug::lenses::do_static_cast<BrushType, int>);
+    m_d->brushType = brushType.zoom(kislager::lenses::do_static_cast<BrushType, int>);
 
     m_d->brushType.bind([this](int value) {m_stackedWidget->setCurrentIndex(value); });
     m_d->brushType.bind([this](int value) {m_buttonGroup->button(value)->setChecked(true); });

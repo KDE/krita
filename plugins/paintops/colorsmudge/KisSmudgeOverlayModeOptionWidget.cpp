@@ -5,8 +5,6 @@
  */
 #include "KisSmudgeOverlayModeOptionWidget.h"
 
-#include <KisZug.h>
-
 #include <QWidget>
 #include <QLabel>
 #include <QCheckBox>

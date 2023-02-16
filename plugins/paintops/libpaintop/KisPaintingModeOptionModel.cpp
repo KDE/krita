@@ -5,7 +5,7 @@
  */
 #include "KisPaintingModeOptionModel.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 
 using ToControlState = KisWidgetConnectionUtils::ToControlState;
 
@@ -18,7 +18,7 @@ int calcEffectivePaintingMode(enumPaintingMode mode, bool maskingBrushEnabled) {
 KisPaintingModeOptionModel::KisPaintingModeOptionModel(lager::cursor<KisPaintingModeOptionData> _optionData, lager::reader<bool> _maskingBrushEnabled)
     : optionData(_optionData)
     , maskingBrushEnabled(_maskingBrushEnabled)
-    , LAGER_QT(paintingMode) {optionData[&KisPaintingModeOptionData::paintingMode].zoom(kiszug::lenses::do_static_cast<enumPaintingMode, int>)}
+    , LAGER_QT(paintingMode) {optionData[&KisPaintingModeOptionData::paintingMode].zoom(kislager::lenses::do_static_cast<enumPaintingMode, int>)}
     , LAGER_QT(effectivePaintingMode) {
         lager::with(optionData[&KisPaintingModeOptionData::paintingMode],
                     maskingBrushEnabled)

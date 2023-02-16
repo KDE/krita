@@ -5,7 +5,7 @@
  */
 #include "KisSketchOpOptionModel.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 
 using namespace KisWidgetConnectionUtils;
 
@@ -13,7 +13,7 @@ KisSketchOpOptionModel::KisSketchOpOptionModel(lager::cursor<KisSketchOpOptionDa
     : optionData(_optionData)
     , LAGER_QT(offset) {_optionData[&KisSketchOpOptionData::offset]}
     , LAGER_QT(probability) {_optionData[&KisSketchOpOptionData::probability]
-                .zoom(kiszug::lenses::scale<qreal>(100.0))}
+                .zoom(kislager::lenses::scale<qreal>(100.0))}
     , LAGER_QT(simpleMode) {_optionData[&KisSketchOpOptionData::simpleMode]}
     , LAGER_QT(makeConnection) {_optionData[&KisSketchOpOptionData::makeConnection]}
     , LAGER_QT(magnetify) {_optionData[&KisSketchOpOptionData::magnetify]}

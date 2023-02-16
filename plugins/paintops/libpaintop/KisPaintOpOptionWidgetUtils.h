@@ -9,7 +9,7 @@
 #include <boost/tti/has_type.hpp>
 #include <boost/tti/has_member_function.hpp>
 #include <lager/state.hpp>
-#include <KisZug.h>
+#include <KisLager.h>
 #include <KisCurveOptionWidget.h>
 #include "kis_paintop_lod_limitations.h"
 
@@ -46,7 +46,7 @@ struct WidgetWrapperConversionChecker<true, Widget, Data, Args...> : public Data
 {
     WidgetWrapperConversionChecker(Data &&data, Args... args)
         : DataStorage<Data, Args...>(std::forward<Data>(data)),
-          Widget(DataStorage<Data, Args...>::m_data.zoom(kiszug::lenses::to_base<typename Widget::data_type>), std::forward<Args>(args)...)
+          Widget(DataStorage<Data, Args...>::m_data.zoom(kislager::lenses::to_base<typename Widget::data_type>), std::forward<Args>(args)...)
     {
     }
 };
@@ -97,7 +97,7 @@ struct WidgetWrapperWithLodLimitations : WidgetWrapper<Widget, Data, Args...>
 
     KisPaintOpOption::OptionalLodLimitationsReader
     lodLimitationsReader() const override {
-        return kiszug::fold_optional_cursors(std::bit_or{},
+        return kislager::fold_optional_cursors(std::bit_or{},
                                              BaseClass::lodLimitationsReader(),
                                              KisPaintOpOption::OptionalLodLimitationsReader(
                                                  this->m_data.map(&Data::lodLimitations)));

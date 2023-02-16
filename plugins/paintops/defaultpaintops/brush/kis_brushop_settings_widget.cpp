@@ -12,7 +12,6 @@
 #include <KisBrushOpSettings.h>
 
 #include <lager/state.hpp>
-#include <KisZug.h>
 
 #include <KisMaskingBrushOption.h>
 #include <KisPaintopSettingsIds.h>

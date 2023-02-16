@@ -5,7 +5,7 @@
  */
 #include "KisBrushSizeOptionModel.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 
 using namespace KisWidgetConnectionUtils;
 
@@ -17,7 +17,7 @@ KisBrushSizeOptionModel::KisBrushSizeOptionModel(lager::cursor<KisBrushSizeOptio
     , LAGER_QT(brushScale) {_optionData[&KisBrushSizeOptionData::brushScale]}
     , LAGER_QT(brushSpacing) {_optionData[&KisBrushSizeOptionData::brushSpacing]}
     , LAGER_QT(brushDensity) {_optionData[&KisBrushSizeOptionData::brushDensity]
-                .zoom(kiszug::lenses::scale<qreal>(100.0))}
+                .zoom(kislager::lenses::scale<qreal>(100.0))}
     , LAGER_QT(brushJitterMovement) {_optionData[&KisBrushSizeOptionData::brushJitterMovement]}
     , LAGER_QT(brushJitterMovementEnabled) {_optionData[&KisBrushSizeOptionData::brushJitterMovementEnabled]}
 {

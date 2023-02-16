@@ -5,7 +5,7 @@
  */
 
 #include "MyPaintCurveOptionWidget.h"
-#include "KisZug.h"
+#include "KisLager.h"
 #include "kis_paintop_option.h"
 #include "MyPaintCurveRangeModel.h"
 #include "MyPaintCurveOptionRangeControlsStrategy.h"
@@ -38,7 +38,7 @@ struct MyPaintCurveOptionWidget::Private
 MyPaintCurveOptionWidget::MyPaintCurveOptionWidget(lager::cursor<MyPaintCurveOptionData> optionData,
                                                      qreal maxYRange,
                                                      const QString &yValueSuffix)
-    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>),
+    : KisCurveOptionWidget(optionData.zoom(kislager::lenses::to_base<KisCurveOptionDataCommon>),
                             KisPaintOpOption::GENERAL,
                             i18n("Base Value: "), yValueSuffix, 1.0,
                             lager::make_constant(true),

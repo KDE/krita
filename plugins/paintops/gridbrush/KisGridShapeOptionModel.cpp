@@ -5,8 +5,6 @@
  */
 #include "KisGridShapeOptionModel.h"
 
-#include <KisZug.h>
-
 
 KisGridShapeOptionModel::KisGridShapeOptionModel(lager::cursor<KisGridShapeOptionData> _optionData)
     : optionData(_optionData)

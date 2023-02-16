@@ -6,7 +6,7 @@
 #include "KisTextureOptionModel.h"
 
 #include <kis_assert.h>
-#include <KisZug.h>
+#include <KisLager.h>
 
 #include <KoResourceLoadResult.h>
 #include <KisResourcesInterface.h>
@@ -54,12 +54,12 @@ KisTextureOptionModel::KisTextureOptionModel(lager::cursor<KisTextureOptionData>
     , LAGER_QT(isRandomOffsetX) {optionData[&KisTextureOptionData::isRandomOffsetX]}
     , LAGER_QT(isRandomOffsetY) {optionData[&KisTextureOptionData::isRandomOffsetY]}
     , LAGER_QT(texturingMode) {optionData[&KisTextureOptionData::texturingMode]
-            .zoom(kiszug::lenses::do_static_cast<KisTextureOptionData::TexturingMode, int>)}
+            .zoom(kislager::lenses::do_static_cast<KisTextureOptionData::TexturingMode, int>)}
     , LAGER_QT(cutOffPolicy) {optionData[&KisTextureOptionData::cutOffPolicy]}
     , LAGER_QT(cutOffLeftNormalized) {optionData[&KisTextureOptionData::cutOffLeft]
-            .zoom(kiszug::lenses::scale_int_to_real(1.0/255.0))}
+            .zoom(kislager::lenses::scale_int_to_real(1.0/255.0))}
     , LAGER_QT(cutOffRightNormalized) {optionData[&KisTextureOptionData::cutOffRight]
-            .zoom(kiszug::lenses::scale_int_to_real(1.0/255.0))}
+            .zoom(kislager::lenses::scale_int_to_real(1.0/255.0))}
     , LAGER_QT(invert) {optionData[&KisTextureOptionData::invert]}
 {
     LAGER_QT(textureResource).bind(std::bind(&KisTextureOptionModel::updateOffsetLimits, this, std::placeholders::_1));

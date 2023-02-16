@@ -6,7 +6,7 @@
 #include "KisSharpnessOptionWidget.h"
 
 
-#include <KisZug.h>
+#include <KisLager.h>
 
 #include <QWidget>
 #include <QCheckBox>
@@ -22,7 +22,7 @@ struct KisSharpnessOptionWidget::Private
 {
     Private(lager::cursor<KisSharpnessOptionData> optionData)
         : model(optionData.zoom(
-                    kiszug::lenses::to_base<KisSharpnessOptionMixIn>)
+                    kislager::lenses::to_base<KisSharpnessOptionMixIn>)
                 )
     {
     }
@@ -31,7 +31,7 @@ struct KisSharpnessOptionWidget::Private
 };
 
 KisSharpnessOptionWidget::KisSharpnessOptionWidget(lager::cursor<KisSharpnessOptionData> optionData)
-    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL)
+    : KisCurveOptionWidget(optionData.zoom(kislager::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL)
     , m_d(new Private(optionData))
 {
     using namespace KisWidgetConnectionUtils;

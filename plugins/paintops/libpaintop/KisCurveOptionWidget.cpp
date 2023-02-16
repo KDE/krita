@@ -17,7 +17,6 @@
 #include <KisCurveOptionModel.h>
 #include <KisWidgetConnectionUtils.h>
 
-#include <KisZug.h>
 #include <kis_algebra_2d.h>
 
 #include <KisMultiSensorsSelector.h>

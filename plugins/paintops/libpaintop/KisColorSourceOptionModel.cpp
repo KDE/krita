@@ -5,12 +5,12 @@
  */
 #include "KisColorSourceOptionModel.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 
 KisColorSourceOptionModel::KisColorSourceOptionModel(lager::cursor<KisColorSourceOptionData> optionData)
     : optionData(optionData)
     , LAGER_QT(type) {optionData[&KisColorSourceOptionData::type]
-            .zoom(kiszug::lenses::do_static_cast<
+            .zoom(kislager::lenses::do_static_cast<
                   KisColorSourceOptionData::Type, int>)}
 {
 }

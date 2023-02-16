@@ -5,9 +5,6 @@
  */
 #include "KisGridOpOptionModel.h"
 
-#include <KisZug.h>
-
-
 KisGridOpOptionModel::KisGridOpOptionModel(lager::cursor<KisGridOpOptionData> _optionData)
     : optionData(_optionData)
     , LAGER_QT(diameter) {_optionData[&KisGridOpOptionData::diameter]}

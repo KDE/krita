@@ -28,7 +28,7 @@
 #include <brushengine/kis_paintop_lod_limitations.h>
 
 #include <lager/constant.hpp>
-#include <KisZug.h>
+#include <KisLager.h>
 
 
 struct KisPaintOpSettingsWidget::Private
@@ -112,7 +112,7 @@ void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, QStrin
     m_d->paintOpOptions << option;
 
     m_d->lodLimitations =
-        kiszug::fold_optional_cursors(std::bit_or{}, m_d->lodLimitations,
+        kislager::fold_optional_cursors(std::bit_or{}, m_d->lodLimitations,
                                       option->effectiveLodLimitations());
 }
 

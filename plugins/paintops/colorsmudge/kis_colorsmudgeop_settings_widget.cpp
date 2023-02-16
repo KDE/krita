@@ -27,6 +27,7 @@
 #include <KisBrushPropertiesModel.h>
 #include <KisColorSmudgeStandardOptionData.h>
 #include <KisSmudgeRadiusOptionData.h>
+#include <KisZug.h>
 
 
 struct KisColorSmudgeOpSettingsWidget::Private

@@ -6,7 +6,7 @@
  */
 #include "KisHatchingOptionsModel.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 
 using namespace KisWidgetConnectionUtils;
 
@@ -17,7 +17,7 @@ KisHatchingOptionsModel::KisHatchingOptionsModel(lager::cursor<KisHatchingOption
     , LAGER_QT(thickness) {_optionData[&KisHatchingOptionsData::thickness]}
     , LAGER_QT(originX) {_optionData[&KisHatchingOptionsData::originX]}
     , LAGER_QT(originY) {_optionData[&KisHatchingOptionsData::originY]}
-    , LAGER_QT(crosshatchingStyle) {_optionData[&KisHatchingOptionsData::crosshatchingStyle].zoom(kiszug::lenses::do_static_cast<CrosshatchingType, int>)}
+    , LAGER_QT(crosshatchingStyle) {_optionData[&KisHatchingOptionsData::crosshatchingStyle].zoom(kislager::lenses::do_static_cast<CrosshatchingType, int>)}
     , LAGER_QT(separationIntervals) {_optionData[&KisHatchingOptionsData::separationIntervals]}
 {
 }

@@ -9,7 +9,7 @@
 #include <QComboBox>
 #include <QFormLayout>
 #include <QVBoxLayout>
-#include <KisZug.h>
+#include <KisLager.h>
 #include <KisPaintThicknessOptionModel.h>
 #include <KisWidgetConnectionUtils.h>
 
@@ -17,7 +17,7 @@ struct KisPaintThicknessOptionWidget::Private
 {
     Private(lager::cursor<KisPaintThicknessOptionData> optionData,
             lager::reader<bool> lightnessModeEnabled)
-        : model{optionData.zoom(kiszug::lenses::to_base<KisPaintThicknessOptionMixIn>)},
+        : model{optionData.zoom(kislager::lenses::to_base<KisPaintThicknessOptionMixIn>)},
           warningLabelVisible{lightnessModeEnabled.map(std::logical_not{})}
     {
     }
@@ -28,7 +28,7 @@ struct KisPaintThicknessOptionWidget::Private
 
 KisPaintThicknessOptionWidget::KisPaintThicknessOptionWidget(lager::cursor<KisPaintThicknessOptionData> optionData,
                                                              lager::reader<bool> lightnessModeEnabled)
-    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL, lightnessModeEnabled)
+    : KisCurveOptionWidget(optionData.zoom(kislager::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL, lightnessModeEnabled)
     , m_d(new Private(optionData, lightnessModeEnabled))
 {
     using namespace KisWidgetConnectionUtils;

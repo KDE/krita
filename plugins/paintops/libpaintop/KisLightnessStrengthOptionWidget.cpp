@@ -7,7 +7,7 @@
 
 #include <QLabel>
 #include <QVBoxLayout>
-#include <KisZug.h>
+#include <KisLager.h>
 #include <KisStandardOptionData.h>
 
 
@@ -22,7 +22,7 @@ struct KisLightnessStrengthOptionWidget::Private
 };
 
 KisLightnessStrengthOptionWidget::KisLightnessStrengthOptionWidget(lager::cursor<KisLightnessStrengthOptionData> optionData, lager::reader<bool> lightnessModeEnabled)
-    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL, lightnessModeEnabled)
+    : KisCurveOptionWidget(optionData.zoom(kislager::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL, lightnessModeEnabled)
     , m_d(new Private(lightnessModeEnabled))
 {
     QWidget* page = new QWidget;

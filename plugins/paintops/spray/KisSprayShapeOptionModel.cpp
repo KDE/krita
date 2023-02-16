@@ -5,7 +5,7 @@
  */
 #include "KisSprayShapeOptionModel.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 #include <klocalizedstring.h>
 
 namespace {
@@ -80,7 +80,7 @@ KisSprayShapeOptionModel::KisSprayShapeOptionModel(lager::cursor<KisSprayShapeOp
                    diameter,
                    scale
                    ).zoom(makeSizePack)}
-    , LAGER_QT(shape) {_optionData[&KisSprayShapeOptionData::shape].zoom(kiszug::lenses::do_static_cast<quint8, int>)}
+    , LAGER_QT(shape) {_optionData[&KisSprayShapeOptionData::shape].zoom(kislager::lenses::do_static_cast<quint8, int>)}
     , LAGER_QT(effectiveSize) {sizePack.zoom(calcEffectiveSize)}
     , LAGER_QT(effectiveProportional) {sizePack[&SprayShapeSizePack::isProportional]}
     , LAGER_QT(enabled) {_optionData[&KisSprayShapeOptionData::enabled]}

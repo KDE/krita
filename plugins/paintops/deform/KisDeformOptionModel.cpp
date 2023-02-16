@@ -5,7 +5,7 @@
  */
 #include "KisDeformOptionModel.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 
 using namespace KisWidgetConnectionUtils;
 
@@ -15,6 +15,6 @@ KisDeformOptionModel::KisDeformOptionModel(lager::cursor<KisDeformOptionData> _o
     , LAGER_QT(deformUseBilinear) {_optionData[&KisDeformOptionData::deformUseBilinear]}
     , LAGER_QT(deformUseCounter) {_optionData[&KisDeformOptionData::deformUseCounter]}
     , LAGER_QT(deformUseOldData) {_optionData[&KisDeformOptionData::deformUseOldData]}
-    , LAGER_QT(deformAction) {_optionData[&KisDeformOptionData::deformAction].zoom(kiszug::lenses::do_static_cast<DeformModes, int>)}
+    , LAGER_QT(deformAction) {_optionData[&KisDeformOptionData::deformAction].zoom(kislager::lenses::do_static_cast<DeformModes, int>)}
 {
 }

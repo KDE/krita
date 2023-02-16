@@ -5,8 +5,6 @@
  */
 #include "KisRoundMarkerOpOptionModel.h"
 
-#include <KisZug.h>
-
 using namespace KisWidgetConnectionUtils;
 
 KisRoundMarkerOpOptionModel::KisRoundMarkerOpOptionModel(lager::cursor<KisRoundMarkerOpOptionData> _optionData)

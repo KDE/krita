@@ -5,8 +5,6 @@
  */
 #include "KisColorOptionModel.h"
 
-#include <KisZug.h>
-
 
 KisColorOptionModel::KisColorOptionModel(lager::cursor<KisColorOptionData> _optionData)
     : optionData(_optionData)

@@ -5,7 +5,7 @@
  */
 #include "KisSprayOpOptionModel.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 
 
 namespace {
@@ -36,7 +36,7 @@ auto angularDistributionTypeToInt = lager::lenses::getset(
 
 KisSprayOpOptionModel::KisSprayOpOptionModel(lager::cursor<KisSprayOpOptionData> _optionData)
     : optionData(_optionData)
-    , LAGER_QT(diameter) {_optionData[&KisSprayOpOptionData::diameter].zoom(kiszug::lenses::do_static_cast<quint16, int>)}
+    , LAGER_QT(diameter) {_optionData[&KisSprayOpOptionData::diameter].zoom(kislager::lenses::do_static_cast<quint16, int>)}
     , LAGER_QT(aspect) {_optionData[&KisSprayOpOptionData::aspect]}
     , LAGER_QT(brushRotation) {_optionData[&KisSprayOpOptionData::brushRotation]}
     , LAGER_QT(scale) {_optionData[&KisSprayOpOptionData::scale]}
@@ -45,7 +45,7 @@ KisSprayOpOptionModel::KisSprayOpOptionModel(lager::cursor<KisSprayOpOptionData>
     , LAGER_QT(jitterAmount) {_optionData[&KisSprayOpOptionData::jitterAmount]}
     , LAGER_QT(useDensity) {_optionData[&KisSprayOpOptionData::useDensity]}
     , LAGER_QT(isNumParticlesVisible) {LAGER_QT(useDensity).map(std::logical_not<>{})}
-    , LAGER_QT(particleCount) {_optionData[&KisSprayOpOptionData::particleCount].zoom(kiszug::lenses::do_static_cast<quint16, int>)}
+    , LAGER_QT(particleCount) {_optionData[&KisSprayOpOptionData::particleCount].zoom(kislager::lenses::do_static_cast<quint16, int>)}
     , LAGER_QT(coverage) {_optionData[&KisSprayOpOptionData::coverage]}
     
     , LAGER_QT(angularDistributionType) {_optionData[&KisSprayOpOptionData::angularDistributionType]
@@ -53,7 +53,7 @@ KisSprayOpOptionModel::KisSprayOpOptionModel(lager::cursor<KisSprayOpOptionData>
     , LAGER_QT(angularDistributionCurve) {_optionData[&KisSprayOpOptionData::angularDistributionCurve]}
     , LAGER_QT(angularDistributionCurveRepeat) {_optionData[&KisSprayOpOptionData::angularDistributionCurveRepeat]}
     , LAGER_QT(radialDistributionType) {_optionData[&KisSprayOpOptionData::radialDistributionType]
-		.zoom(kiszug::lenses::do_static_cast<KisSprayOpOptionData::ParticleDistribution, int>)}
+		.zoom(kislager::lenses::do_static_cast<KisSprayOpOptionData::ParticleDistribution, int>)}
     , LAGER_QT(radialDistributionStdDeviation) {_optionData[&KisSprayOpOptionData::radialDistributionStdDeviation]}
     , LAGER_QT(radialDistributionClusteringAmount) {_optionData[&KisSprayOpOptionData::radialDistributionClusteringAmount]}
     , LAGER_QT(radialDistributionCurve) {_optionData[&KisSprayOpOptionData::radialDistributionCurve]}

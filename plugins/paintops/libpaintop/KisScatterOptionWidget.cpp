@@ -5,7 +5,7 @@
  */
 #include "KisScatterOptionWidget.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 
 #include <QWidget>
 #include <QLabel>
@@ -21,7 +21,7 @@ struct KisScatterOptionWidget::Private
 {
     Private(lager::cursor<KisScatterOptionData> optionData)
         : model(optionData.zoom(
-                    kiszug::lenses::to_base<KisScatterOptionMixIn>)
+                    kislager::lenses::to_base<KisScatterOptionMixIn>)
                 )
     {
     }
@@ -35,7 +35,7 @@ KisScatterOptionWidget::KisScatterOptionWidget(lager::cursor<KisScatterOptionDat
 }
 
 KisScatterOptionWidget::KisScatterOptionWidget(lager::cursor<KisScatterOptionData> optionData, PaintopCategory categoryOverride)
-    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), categoryOverride)
+    : KisCurveOptionWidget(optionData.zoom(kislager::lenses::to_base<KisCurveOptionDataCommon>), categoryOverride)
     , m_d(new Private(optionData))
 {
     using namespace KisWidgetConnectionUtils;

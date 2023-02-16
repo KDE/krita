@@ -5,7 +5,7 @@
  */
 #include "KisSprayShapeDynamicsOptionModel.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 
 
 KisSprayShapeDynamicsOptionModel::KisSprayShapeDynamicsOptionModel(lager::cursor<KisSprayShapeDynamicsOptionData> _optionData)
@@ -16,7 +16,7 @@ KisSprayShapeDynamicsOptionModel::KisSprayShapeDynamicsOptionModel(lager::cursor
     , LAGER_QT(randomRotation) {_optionData[&KisSprayShapeDynamicsOptionData::randomRotation]}
     , LAGER_QT(followCursor) {_optionData[&KisSprayShapeDynamicsOptionData::followCursor]}
     , LAGER_QT(followDrawingAngle) {_optionData[&KisSprayShapeDynamicsOptionData::followDrawingAngle]}
-    , LAGER_QT(fixedAngle) {_optionData[&KisSprayShapeDynamicsOptionData::fixedAngle].zoom(kiszug::lenses::do_static_cast<quint16, qreal>)}
+    , LAGER_QT(fixedAngle) {_optionData[&KisSprayShapeDynamicsOptionData::fixedAngle].zoom(kislager::lenses::do_static_cast<quint16, qreal>)}
     , LAGER_QT(randomRotationWeight) {_optionData[&KisSprayShapeDynamicsOptionData::randomRotationWeight]}
     , LAGER_QT(followCursorWeight) {_optionData[&KisSprayShapeDynamicsOptionData::followCursorWeight]}
     , LAGER_QT(followDrawingAngleWeight) {_optionData[&KisSprayShapeDynamicsOptionData::followDrawingAngleWeight]}

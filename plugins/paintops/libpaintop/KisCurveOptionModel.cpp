@@ -8,6 +8,7 @@
 
 #include <lager/lenses/tuple.hpp>
 #include <KisZug.h>
+#include <KisLager.h>
 
 auto activeCurveLens = lager::lenses::getset(
     [](const std::tuple<KisCurveOptionDataCommon, QString> &data) -> QString {
@@ -124,7 +125,7 @@ KisCurveOptionModel::KisCurveOptionModel(lager::cursor<KisCurveOptionDataCommon>
                   .map(&qBound<qreal>)}
     , LAGER_QT(strengthValueDenorm) {
           optionData[&KisCurveOptionDataCommon::strengthValue]
-                  .zoom(kiszug::lenses::scale<qreal>(strengthDisplayMultiplier))}
+                  .zoom(kislager::lenses::scale<qreal>(strengthDisplayMultiplier))}
     , LAGER_QT(effectiveStrengthStateDenorm) {
           lager::with(LAGER_QT(effectiveStrengthValueNorm),
                       strengthRangeNorm.zoom(lager::lenses::first),

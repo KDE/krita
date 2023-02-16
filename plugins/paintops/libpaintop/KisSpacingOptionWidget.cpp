@@ -5,7 +5,7 @@
  */
 #include "KisSpacingOptionWidget.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 
 #include <QWidget>
 #include <QCheckBox>
@@ -19,7 +19,7 @@ struct KisSpacingOptionWidget::Private
 {
     Private(lager::cursor<KisSpacingOptionData> optionData)
         : model(optionData.zoom(
-                    kiszug::lenses::to_base<KisSpacingOptionMixIn>)
+                    kislager::lenses::to_base<KisSpacingOptionMixIn>)
                 )
     {
     }
@@ -28,7 +28,7 @@ struct KisSpacingOptionWidget::Private
 };
 
 KisSpacingOptionWidget::KisSpacingOptionWidget(lager::cursor<KisSpacingOptionData> optionData)
-    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL)
+    : KisCurveOptionWidget(optionData.zoom(kislager::lenses::to_base<KisCurveOptionDataCommon>), KisPaintOpOption::GENERAL)
     , m_d(new Private(optionData))
 {
     using namespace KisWidgetConnectionUtils;

@@ -5,7 +5,7 @@
  */
 #include "KisSizeOptionWidget.h"
 
-#include <KisZug.h>
+#include <KisLager.h>
 #include <kis_paintop_lod_limitations.h>
 
 struct KisSizeOptionWidget::Private
@@ -23,7 +23,7 @@ KisSizeOptionWidget::KisSizeOptionWidget(lager::cursor<KisSizeOptionData> option
 }
 
 KisSizeOptionWidget::KisSizeOptionWidget(lager::cursor<KisSizeOptionData> optionData, PaintopCategory categoryOverride)
-    : KisCurveOptionWidget(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionDataCommon>), categoryOverride)
+    : KisCurveOptionWidget(optionData.zoom(kislager::lenses::to_base<KisCurveOptionDataCommon>), categoryOverride)
     , m_d(new Private(optionData))
 {
 }

@@ -788,7 +788,7 @@
   </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
+   <extends>QDoubleSpinBox</extends>
    <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>

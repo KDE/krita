@@ -32,7 +32,7 @@
  *    lead to an infinite loop.
  */
 
-void kis_assert_common(const char *assertion, const char *file, int line, bool throwException, bool isIgnorable)
+void kis_assert_common(const char *assertion, const char *file, int line, bool abort, bool isIgnorable)
 {
     QString shortMessage =
         QString("%4ASSERT (krita): \"%1\" in file %2, line %3")
@@ -86,14 +86,12 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
                                   QMessageBox::Ignore);
     }
 
-    if (button == QMessageBox::Abort) {
+    if (button == QMessageBox::Abort || abort) {
         qFatal("%s", shortMessage.toLatin1().data());
     } else if (isIgnorable) {
         // Assert is a bug! Please don't change this line to warnKrita,
         // the user must see it!
         qWarning("%s", shortMessage.toLatin1().data());
-    } else if (throwException) {
-        throw KisAssertException(shortMessage.toLatin1().data());
     }
 }
 

@@ -443,36 +443,36 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
         const QDir privateResourceDir(folderInPrivateAppData);
         const QDir appDataDir(folderInStandardAppData);
-        lblWindowsAppDataIcon->setPixmap(lblWindowsAppDataIcon->style()->standardIcon(QStyle::SP_MessageBoxInformation).pixmap(QSize(32, 32)));
+        grpWindowsAppData->setPixmap(
+            grpWindowsAppData->style()->standardIcon(QStyle::SP_MessageBoxInformation).pixmap(QSize(32, 32)));
         // Similar text is also used in KisViewManager.cpp
-
-        lblWindowsAppDataNote->setText(i18nc("@info resource folder",
-            "<p>You are using the Microsoft Store package version of Krita. "
-            "Even though Krita can be configured to place resources under the "
-            "user AppData location, Windows may actually store the files "
-            "inside a private app location.</p>\n"
-            "<p>You should check both locations to determine where "
-            "the files are located.</p>\n"
-            "<p><b>User AppData</b> (<a href=\"copyuser\">Copy</a>):<br/>\n"
-            "%1</p>\n"
-            "<p><b>Private app location</b> (<a href=\"copyprivate\">Copy</a>):<br/>\n"
-            "%2</p>",
-            pathToDisplay(appDataDir.absolutePath()),
-            pathToDisplay(privateResourceDir.absolutePath())
-        ));
+        grpWindowsAppData->setText(i18nc("@info resource folder",
+                                         "<p>You are using the Microsoft Store package version of Krita. "
+                                         "Even though Krita can be configured to place resources under the "
+                                         "user AppData location, Windows may actually store the files "
+                                         "inside a private app location.</p>\n"
+                                         "<p>You should check both locations to determine where "
+                                         "the files are located.</p>\n"
+                                         "<p><b>User AppData</b> (<a href=\"copyuser\">Copy</a>):<br/>\n"
+                                         "%1</p>\n"
+                                         "<p><b>Private app location</b> (<a href=\"copyprivate\">Copy</a>):<br/>\n"
+                                         "%2</p>",
+                                         pathToDisplay(appDataDir.absolutePath()),
+                                         pathToDisplay(privateResourceDir.absolutePath())));
         grpWindowsAppData->setVisible(true);
 
-        connect(lblWindowsAppDataNote, &QLabel::linkActivated,
-            [userPath = appDataDir.absolutePath(), privatePath = privateResourceDir.absolutePath()]
-            (const QString &link) {
-                if (link == QStringLiteral("copyuser")) {
-                    qApp->clipboard()->setText(QDir::toNativeSeparators(userPath));
-                } else if (link == QStringLiteral("copyprivate")) {
-                    qApp->clipboard()->setText(QDir::toNativeSeparators(privatePath));
-                } else {
-                    qWarning() << "Unexpected link activated in lblWindowsAppDataNote:" << link;
-                }
-            });
+        connect(grpWindowsAppData,
+                &KisWarningBlock::linkActivated,
+                [userPath = appDataDir.absolutePath(),
+                 privatePath = privateResourceDir.absolutePath()](const QString &link) {
+                    if (link == QStringLiteral("copyuser")) {
+                        qApp->clipboard()->setText(QDir::toNativeSeparators(userPath));
+                    } else if (link == QStringLiteral("copyprivate")) {
+                        qApp->clipboard()->setText(QDir::toNativeSeparators(privatePath));
+                    } else {
+                        qWarning() << "Unexpected link activated in lblWindowsAppDataNote:" << link;
+                    }
+                });
     }
 #endif
 
@@ -782,12 +782,15 @@ void GeneralTab::clearBackgroundImage()
 
 void GeneralTab::checkResourcePath()
 {
-    QFileInfo fi(m_urlResourceFolder->fileName());
+    const QFileInfo fi(m_urlResourceFolder->fileName());
     if (!fi.isWritable()) {
-        m_lblWritableWarning->setVisible(true);
-    }
-    else {
-        m_lblWritableWarning->setVisible(false);
+        grpNonWritableLocation->setPixmap(
+            grpNonWritableLocation->style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(QSize(32, 32)));
+        grpNonWritableLocation->setText(
+            i18nc("@info resource folder", "<b>Warning:</b> this location is not writable."));
+        grpNonWritableLocation->setVisible(true);
+    } else {
+        grpNonWritableLocation->setVisible(false);
     }
 }
 
@@ -1679,11 +1682,9 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
             text.append("</li>");
         }
         text.append("</ul></p>");
-        lblOpenGLWarnings->setText(text);
-        lblOpenGLWarningsIcon->setPixmap(
-            lblOpenGLWarningsIcon->style()
-                ->standardIcon(QStyle::SP_MessageBoxWarning)
-                .pixmap(QSize(32, 32)));
+        grpOpenGLWarnings->setText(text);
+        grpOpenGLWarnings->setPixmap(
+            grpOpenGLWarnings->style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(QSize(32, 32)));
         grpOpenGLWarnings->setVisible(true);
     }
 
@@ -1817,10 +1818,9 @@ void DisplaySettingsTab::slotPreferredSurfaceFormatChanged(int index)
                 if (cmbPreferedRootSurfaceFormat->currentIndex() != formatToIndex(KisConfig::BT709_G22) &&
                     info.colorSpace == KisSurfaceColorSpace::sRGBColorSpace) {
                     grpHDRWarning->setVisible(true);
-                    lblHDRWarningIcon->setPixmap(lblHDRWarningIcon->style()
-                                                     ->standardIcon(QStyle::SP_MessageBoxWarning)
-                                                     .pixmap(QSize(32, 32)));
-                    lblHDRWarning->setText(i18n("WARNING: current display doesn't support HDR rendering"));
+                    grpHDRWarning->setPixmap(
+                        grpHDRWarning->style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(QSize(32, 32)));
+                    grpHDRWarning->setText(i18n("<b>Warning:</b> current display doesn't support HDR rendering"));
                 } else {
                     grpHDRWarning->setVisible(false);
                 }

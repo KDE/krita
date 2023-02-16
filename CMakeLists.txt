@@ -783,6 +783,13 @@ target_link_libraries(Boost::boost
     INTERFACE
         Boost::disable_autolinking
 )
+# Disallow usage of std::unary_function. 
+# See https://github.com/boostorg/container_hash/issues/22
+# and https://releases.llvm.org/15.0.0/projects/libcxx/docs/ReleaseNotes.html#deprecations-and-removals
+target_compile_definitions(Boost::boost
+    INTERFACE
+        BOOST_NO_CXX98_FUNCTION_BASE
+)
 ##
 ## Test for GNU Scientific Library
 ##

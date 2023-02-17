@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-16 00:56+0000\n"
+"POT-Creation-Date: 2023-02-17 00:56+0000\n"
 "PO-Revision-Date: 2023-02-09 08:37+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -7991,10 +7991,7 @@ msgid "Smooth point"
 msgstr "Gladka točka"
 
 #. i18n: context: text @ Actions (General), ActionCollection (Krita)
-#. i18n: context: text @ Actions (General), ActionCollection (Krita)
-#. i18n: context: text @ Actions (General), ActionCollection (Krita)
-#. i18n: context: text @ Actions (General), ActionCollection (Krita)
-#: krita/krita.action:4 libs/resourcewidgets/dbexplorer/dbexplorer.action:4
+#: krita/krita.action:4
 #, kde-format
 msgctxt "action"
 msgid "General"
@@ -15245,9 +15242,13 @@ msgstr "Znova uveljavi zadnje dejanje G’Mic-Qt"
 
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
-#: krita/kritamenu.action:1736 plugins/tools/svgtexttool/SvgTextTool.action:236
+#. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
+#: krita/kritamenu.action:1736
+#: plugins/extensions/dbexplorer/dbexplorer.action:4
+#: plugins/tools/svgtexttool/SvgTextTool.action:236
 #, kde-format
 msgctxt "action"
 msgid "Settings"
@@ -17221,9 +17222,10 @@ msgid "Onion Skins"
 msgstr "Folije"
 
 #: libs/image/kis_layer_properties_icons.cpp:27
-#: libs/resources/KisResourceModel.cpp:143
-#: libs/resources/KisStorageModel.cpp:425
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:72
+#: libs/resources/KisResourceModel.cpp:142
+#: libs/resources/KisStorageModel.cpp:483
+#: libs/resources/KisTagResourceModel.cpp:638
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:110
 #, kde-format
 msgid "Active"
 msgstr "Dejaven"
@@ -19491,33 +19493,41 @@ msgstr "Začasni viri"
 msgid "Could not synchronize %1 with the database"
 msgstr "%1 ni bilo mogoče uskladiti z zbirko podatkov"
 
-#: libs/resources/KisResourceModel.cpp:125
-#: libs/resources/KisStorageModel.cpp:415
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:66
+#: libs/resources/KisResourceModel.cpp:124
+#: libs/resources/KisStorageModel.cpp:473
+#: libs/resources/KisTagResourceModel.cpp:620
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:81
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:103
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:147
 #, kde-format
 msgid "Id"
 msgstr "Id"
 
-#: libs/resources/KisResourceModel.cpp:127
+#: libs/resources/KisResourceModel.cpp:126
+#: libs/resources/KisTagResourceModel.cpp:622
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:83
 #, kde-format
 msgid "Storage ID"
 msgstr "ID shrambe"
 
-#: libs/resources/KisResourceModel.cpp:129
-#: libs/resources/KisStorageModel.cpp:429
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:70
+#: libs/resources/KisResourceModel.cpp:128
+#: libs/resources/KisStorageModel.cpp:487
+#: libs/resources/KisTagResourceModel.cpp:624
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:107
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
 #, kde-format
 msgid "Name"
 msgstr "Ime"
 
-#: libs/resources/KisResourceModel.cpp:131
+#: libs/resources/KisResourceModel.cpp:130
+#: libs/resources/KisTagResourceModel.cpp:626
 #, kde-format
 msgid "File Name"
 msgstr "Ime datoteke"
 
-#: libs/resources/KisResourceModel.cpp:133
+#: libs/resources/KisResourceModel.cpp:132
+#: libs/resources/KisTagResourceModel.cpp:628
 #, kde-format
 msgid "Tooltip"
 msgstr "Namig"
@@ -19525,7 +19535,9 @@ msgstr "Namig"
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
-#: libs/resources/KisResourceModel.cpp:135 libs/ui/imagesize/imagesize.xmlgui:4
+#: libs/resources/KisResourceModel.cpp:134
+#: libs/resources/KisTagResourceModel.cpp:630
+#: libs/ui/imagesize/imagesize.xmlgui:4
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:156
 #: plugins/extensions/imagesplit/imagesplit.xmlgui:4
 #: plugins/extensions/separate_channels/imageseparate.xmlgui:4
@@ -19536,34 +19548,77 @@ msgstr "Namig"
 msgid "Image"
 msgstr "Slika"
 
-#: libs/resources/KisResourceModel.cpp:137
+#: libs/resources/KisResourceModel.cpp:136
+#: libs/resources/KisTagResourceModel.cpp:632
 #, kde-format
 msgid "Status"
 msgstr "Stanje"
 
-#: libs/resources/KisResourceModel.cpp:139
-#: libs/resources/KisStorageModel.cpp:419
+#: libs/resources/KisResourceModel.cpp:138
+#: libs/resources/KisStorageModel.cpp:477
+#: libs/resources/KisTagResourceModel.cpp:634
 #: libs/resourcewidgets/KisIconToolTip.cpp:104
 #, kde-format
 msgid "Location"
 msgstr "Mesto"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/resources/KisResourceModel.cpp:141
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:49
+#: libs/resources/KisResourceModel.cpp:140
+#: libs/resources/KisTagResourceModel.cpp:636
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:43
 #, kde-format
 msgid "Resource Type"
 msgstr "Vrsta vira"
 
-#: libs/resources/KisResourceModel.cpp:145
+#: libs/resources/KisResourceModel.cpp:144
+#: libs/resources/KisTagResourceModel.cpp:640
+#: libs/resources/KisTagResourceModel.cpp:670
 #, kde-format
 msgid "Storage Active"
 msgstr "Shramba je dejavna"
 
-#: libs/resources/KisResourceModel.cpp:147
+#: libs/resources/KisResourceModel.cpp:146
+#: libs/resources/KisTagResourceModel.cpp:642
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:86
 #, kde-format
 msgid "md5sum"
 msgstr "md5sum"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabTags)
+#: libs/resources/KisResourceModel.cpp:148
+#: libs/resources/KisTagResourceModel.cpp:644
+#: libs/resourcewidgets/KisIconToolTip.cpp:95
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
+#, kde-format
+msgid "Tags"
+msgstr "Značke"
+
+#: libs/resources/KisResourceModel.cpp:150
+#: libs/resources/KisTagResourceModel.cpp:646
+#, fuzzy, kde-format
+#| msgid "Clear Thumbnail"
+msgid "Large Thumbnail"
+msgstr "Počisti predogledne sličice"
+
+#: libs/resources/KisResourceModel.cpp:152
+#: libs/resources/KisTagResourceModel.cpp:648
+#, kde-format
+msgid "Dirty"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: attribute (title), widget (QWidget, metadata)
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#: libs/resources/KisResourceModel.cpp:154
+#: libs/resources/KisTagResourceModel.cpp:650
+#: libs/ui/animation/VideoImportDialog.ui:197
+#: plugins/dockers/logdocker/LogDockerDock.cpp:187
+#: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:844
+#: plugins/impex/webp/kis_wdg_options_webp.ui:791
+#, kde-format
+msgid "Metadata"
+msgstr "Metapodatki"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
@@ -19694,9 +19749,9 @@ msgctxt "resource type"
 msgid "Layer Styles"
 msgstr "Slogi plasti"
 
-#: libs/resources/KisStorageModel.cpp:417
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:67
+#: libs/resources/KisStorageModel.cpp:475
 #: libs/widgets/KoConfigAuthorPage.cpp:90
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:104
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:97
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
@@ -19704,20 +19759,23 @@ msgstr "Slogi plasti"
 msgid "Type"
 msgstr "Vrsta"
 
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/resources/KisStorageModel.cpp:421
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:147
+#: libs/resources/KisStorageModel.cpp:479
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:87
 #, kde-format
 msgid "Creation Date"
 msgstr "Datum nastanka"
 
-#: libs/resources/KisStorageModel.cpp:423
+#: libs/resources/KisStorageModel.cpp:481
 #, kde-format
 msgid "Preinstalled"
 msgstr "Vnaprej nameščeno"
 
-#: libs/resources/KisStorageModel.cpp:427
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:73
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#. i18n: ectx: property (title), widget (QGroupBox, iconPanel)
+#: libs/resources/KisStorageModel.cpp:485
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:111
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:185
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #, kde-format
 msgid "Thumbnail"
@@ -19754,130 +19812,52 @@ msgstr "Vsi viri"
 msgid "All Untagged Resources"
 msgstr "Vsi neoznačeni viri"
 
-#. i18n: context: text @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#: libs/resourcewidgets/dbexplorer/dbexplorer.action:7
+#: libs/resources/KisTagResourceModel.cpp:658
 #, kde-format
-msgctxt "action"
-msgid "&Explore Resources Cache Database..."
-msgstr "&Razišči zbirko podatkov predpomnilnika virov ..."
+msgid "Tag ID"
+msgstr ""
 
-#. i18n: context: whatsThis @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: whatsThis @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#: libs/resourcewidgets/dbexplorer/dbexplorer.action:8
-#: libs/resourcewidgets/dbexplorer/dbexplorer.action:9
-#: libs/resourcewidgets/dbexplorer/dbexplorer.action:10
-#, kde-format
-msgctxt "action"
-msgid "Resources Cache Database"
-msgstr "Zbirka podatkov predpomnilnika virov"
-
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:30
-#, kde-format
-msgid "Resources Cache Database Explorer"
-msgstr "Raziskovalec zbirke podatkov predpomnilnika virov"
-
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:69
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
-#: libs/resourcewidgets/KisTagToolButton.cpp:54
-#, kde-format
-msgid "Tag"
-msgstr "Značka"
-
-#. i18n: ectx: property (text), widget (QLabel, colorComment_2)
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:71
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:196
-#, kde-format
-msgid "Comment"
-msgstr "Komentar"
-
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:74
-#, kde-format
-msgid "Display Name"
-msgstr "Pojavno ime"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:25
-#, kde-format
-msgid "Storages"
-msgstr "Shrambe"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:39
-#: libs/ui/forms/wdggeneralsettings.ui:1467
-#, kde-format
-msgid "Resources"
+#: libs/resources/KisTagResourceModel.cpp:660
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
+#, fuzzy, kde-format
+#| msgid "Resources"
+msgid "Resource ID"
 msgstr "Viri"
 
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:79
+#: libs/resources/KisTagResourceModel.cpp:662
 #, kde-format
-msgid "Versions"
-msgstr "Različica"
+msgid "Tag Url"
+msgstr ""
 
-#. i18n: ectx: attribute (title), widget (QWidget, tabTags)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:92
-#: libs/resourcewidgets/KisIconToolTip.cpp:95
-#, kde-format
-msgid "Tags"
-msgstr "Značke"
+#: libs/resources/KisTagResourceModel.cpp:664
+#, fuzzy, kde-format
+#| msgid "Resources"
+msgid "Resource"
+msgstr "Viri"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tabSchema)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:113
-#, kde-format
-msgid "Schema Information"
-msgstr "Informacije o shemi"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:119
-#, kde-format
-msgid "Database Version"
-msgstr "Različica zbirke podatkov"
-
-#. i18n: ectx: property (text), widget (QLabel, lblDatabaseVersion)
-#. i18n: ectx: property (text), widget (QLabel, lblKritaVersion)
-#. i18n: ectx: property (text), widget (QLabel, lblCreationDate)
-#. i18n: ectx: property (text), widget (QLabel, lblDescription)
-#. i18n: ectx: property (text), widget (QLabel, lblHDRWarningIcon)
-#. i18n: ectx: property (text), widget (QLabel, m_lblOcioVersion)
-#. i18n: ectx: property (text), widget (QLabel, lblSaveLocation)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:126
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:140
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:154
-#: libs/ui/forms/wdgdisplaysettings.ui:299
-#: libs/ui/forms/wdgimageproperties.ui:414 plugins/dockers/lut/wdglut.ui:364
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:374
-#, kde-format
-msgid "TextLabel"
-msgstr "BesedilnaOznaka"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:133
-#, kde-format
-msgid "Krita Version"
-msgstr "Različica Krite"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:162
-#, kde-format
-msgid "Resource View"
+#: libs/resources/KisTagResourceModel.cpp:666
+#, fuzzy, kde-format
+#| msgid "Resource View"
+msgid "Resource Active"
 msgstr "Pogled virov"
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:170
-#, kde-format
-msgid "Resource Type:"
-msgstr "Vrsta vira:"
+#: libs/resources/KisTagResourceModel.cpp:668
+#, fuzzy, kde-format
+#| msgid "Storage Active"
+msgid "Tag Active"
+msgstr "Shramba je dejavna"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:180
-#, kde-format
-msgid "Tag:"
-msgstr "Značka:"
+#: libs/resources/KisTagResourceModel.cpp:672
+#, fuzzy, kde-format
+#| msgid "Resource Type"
+msgid "Resource Name"
+msgstr "Vrsta vira"
+
+#: libs/resources/KisTagResourceModel.cpp:674
+#, fuzzy, kde-format
+#| msgid "File Name"
+msgid "Tag File Name"
+msgstr "Ime datoteke"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:101
 #, kde-format
@@ -20073,6 +20053,13 @@ msgstr ""
 "\n"
 "Virov vrste %1 ni na voljo. Omogočite vsaj en sveženj."
 
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
+#: libs/resourcewidgets/KisTagToolButton.cpp:54
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
+#, kde-format
+msgid "Tag"
+msgstr "Značka"
+
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:74
 #, kde-format
 msgid "Tag options"
@@ -20192,7 +20179,7 @@ msgstr "<p>Vnesite iskalne izraze za filtriranje po imenu</p>"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lneFilterText)
 #: libs/resourcewidgets/KisTagFilterWidget.cpp:53
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:49
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:75
 #, kde-format
 msgid "Search"
 msgstr "Išči"
@@ -21544,18 +21531,6 @@ msgstr "Brez predogleda"
 #, kde-format
 msgid "0"
 msgstr "0"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#. i18n: ectx: attribute (title), widget (QWidget, metadata)
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/ui/animation/VideoImportDialog.ui:197
-#: plugins/dockers/logdocker/LogDockerDock.cpp:187
-#: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:844
-#: plugins/impex/webp/kis_wdg_options_webp.ui:791
-#, kde-format
-msgid "Metadata"
-msgstr "Metapodatki"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLoadedDetails)
 #: libs/ui/animation/VideoImportDialog.ui:231
@@ -23636,6 +23611,7 @@ msgstr "Dovoljenje/pravice:"
 #. i18n: ectx: property (text), widget (QLabel, typeDescLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, label_16)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:82
@@ -23644,9 +23620,10 @@ msgstr "Dovoljenje/pravice:"
 #: libs/ui/widgets/KoFillConfigWidget.ui:222
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:487
 #: plugins/dockers/griddocker/grid_config_widget.ui:90
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:170
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:254
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:134
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:58
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:248
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.ui:39
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:24
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:76
@@ -23671,7 +23648,8 @@ msgstr "Številka različice:"
 #. i18n: ectx: property (text), widget (QLabel, lblCreatedDesc)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:128
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:479
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:200
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:387
 #, kde-format
 msgid "Created:"
 msgstr "Ustvarjeno:"
@@ -24415,6 +24393,23 @@ msgstr "Trenutna izhodna oblika:"
 msgid "Preferred Output Format:"
 msgstr "Želeni izhodni zapis:"
 
+#. i18n: ectx: property (text), widget (QLabel, lblDescription)
+#. i18n: ectx: property (text), widget (QLabel, lblHDRWarningIcon)
+#. i18n: ectx: property (text), widget (QLabel, m_lblOcioVersion)
+#. i18n: ectx: property (text), widget (QLabel, lblDatabaseVersion)
+#. i18n: ectx: property (text), widget (QLabel, lblKritaVersion)
+#. i18n: ectx: property (text), widget (QLabel, lblCreationDate)
+#. i18n: ectx: property (text), widget (QLabel, lblSaveLocation)
+#: libs/ui/forms/wdgdisplaysettings.ui:299
+#: libs/ui/forms/wdgimageproperties.ui:414 plugins/dockers/lut/wdglut.ui:364
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:179
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:193
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:207
+#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:374
+#, kde-format
+msgid "TextLabel"
+msgstr "BesedilnaOznaka"
+
 #. i18n: ectx: property (text), widget (QLabel, lblHDRWarning)
 #: libs/ui/forms/wdgdisplaysettings.ui:315
 #, kde-format
@@ -24628,12 +24623,10 @@ msgstr "Profil:"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnPreviewMask)
 #. i18n: ectx: property (text), widget (QCheckBox, checkPreview)
-#. i18n: ectx: property (text), widget (QLabel, lblThumbnail)
 #: libs/ui/forms/wdgfilterdialog.ui:67
 #: libs/widgetutils/KisPreviewFileDialog.cpp:50
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:219
 #: plugins/dockers/recorder/recorder_profile_settings.ui:177
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:98
 #: plugins/impex/raw/wdgrawimport.ui:49
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:50
 #, kde-format
@@ -25386,6 +25379,14 @@ msgstr "Dodaj »Spojeno« k imenu spojenih skupin plasti"
 msgid "Add \"(pasted)\" to pasted layers"
 msgstr "Dodaj »(prilepljeno)« k imenu prilepljenih plasti"
 
+#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
+#. i18n: ectx: attribute (title), widget (QWidget, tabResources)
+#: libs/ui/forms/wdggeneralsettings.ui:1467
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
+#, kde-format
+msgid "Resources"
+msgstr "Viri"
+
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/ui/forms/wdggeneralsettings.ui:1473
 #, kde-format
@@ -26106,7 +26107,7 @@ msgstr "Shrani novo postavitev okna"
 #: libs/ui/forms/wdgstopgradienteditor.ui:41
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:197
 #: plugins/extensions/pykrita/plugin/info.ui:217
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:160
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:262
 #: plugins/impex/brush/wdg_export_gih.ui:41
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
@@ -26422,7 +26423,7 @@ msgstr "Omejitev velikosti:"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgperformancesettings.ui:224
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:167
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:269
 #, kde-format
 msgid "Location:"
 msgstr "Mesto:"
@@ -33574,9 +33575,11 @@ msgstr "Pokaži"
 msgid "Thumbnails"
 msgstr "Predogledne sličice"
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:172
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:174
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:228
 #, kde-format
 msgid "Details"
 msgstr "Podrobnosti"
@@ -33826,7 +33829,7 @@ msgstr "Preskoči naprej"
 #. i18n: ectx: property (title), widget (QGroupBox, BundleSelectedGroupBox)
 #: libs/ui/widgets/kis_utility_title_bar.cpp:18
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:137
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:162
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:144
 #, kde-format
 msgid "Title"
 msgstr "Naslov"
@@ -41156,6 +41159,138 @@ msgstr ""
 "podlagi informacij, ki jih lahko dobi iz profila, iz katerega pretvarjate, "
 "in profila, v katerega pretvarjate."
 
+#. i18n: context: text @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#: plugins/extensions/dbexplorer/dbexplorer.action:7
+#, kde-format
+msgctxt "action"
+msgid "&Explore Resources Cache Database..."
+msgstr "&Razišči zbirko podatkov predpomnilnika virov ..."
+
+#. i18n: context: whatsThis @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: whatsThis @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#: plugins/extensions/dbexplorer/dbexplorer.action:8
+#: plugins/extensions/dbexplorer/dbexplorer.action:9
+#: plugins/extensions/dbexplorer/dbexplorer.action:10
+#, kde-format
+msgctxt "action"
+msgid "Resources Cache Database"
+msgstr "Zbirka podatkov predpomnilnika virov"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:34
+#, kde-format
+msgid "Resources Cache Database Explorer"
+msgstr "Raziskovalec zbirke podatkov predpomnilnika virov"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
+#, fuzzy, kde-format
+#| msgid "Versions"
+msgid "Version"
+msgstr "Različica"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
+#, fuzzy, kde-format
+#| msgid "File Name"
+msgid "File name"
+msgstr "Ime datoteke"
+
+#. i18n: ectx: property (text), widget (QLabel, colorComment_2)
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:196
+#, kde-format
+msgid "Comment"
+msgstr "Komentar"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:112
+#, kde-format
+msgid "Display Name"
+msgstr "Pojavno ime"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
+#, fuzzy, kde-format
+#| msgid "Database Version"
+msgid "Database version"
+msgstr "Različica zbirke podatkov"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
+#, fuzzy, kde-format
+#| msgid "Krita Version"
+msgid "Krita version"
+msgstr "Različica Krite"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
+#, fuzzy, kde-format
+#| msgid "Update"
+msgid "Upgrade date"
+msgstr "Posodobi"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
+#, kde-format
+msgid "Storages"
+msgstr "Shrambe"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:119
+#, kde-format
+msgid "Versions"
+msgstr "Različica"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabSchema)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:160
+#, kde-format
+msgid "Schema Information"
+msgstr "Informacije o shemi"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
+#, fuzzy, kde-format
+#| msgid "Quantization"
+msgid "Initialization"
+msgstr "Kvantizacija"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
+#, fuzzy, kde-format
+#| msgid "Database Version"
+msgid "Database version:"
+msgstr "Različica zbirke podatkov"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
+#, fuzzy, kde-format
+#| msgid "Krita Version"
+msgid "Krita version:"
+msgstr "Različica Krite"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
+#, kde-format
+msgid "Schema upgrades"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
+#, kde-format
+msgid "Resource View"
+msgstr "Pogled virov"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:236
+#, kde-format
+msgid "Resource Type:"
+msgstr "Vrsta vira:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:246
+#, kde-format
+msgid "Tag:"
+msgstr "Značka:"
+
 #: plugins/extensions/imagesplit/dlg_imagesplit.cpp:34
 #, kde-format
 msgid "Image Split"
@@ -42890,7 +43025,7 @@ msgstr "Prednastavitve čopiča"
 msgid "Manage Resources"
 msgstr "Upravljaj vire"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:219
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:221
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -42899,7 +43034,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "(več izbranih)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:237
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:240
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -42907,19 +43042,19 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "(nič ni izbrano)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:376
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:379
 #, kde-format
 msgid "Undelete Resources"
 msgstr "Prekliči brisanje virov"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:378
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:221
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, kde-format
 msgid "Delete Resources"
 msgstr "Izbriši vire"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:396
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:399
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "
@@ -43016,26 +43151,26 @@ msgid "&Resources"
 msgstr "&Viri"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnAdd)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:98
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:86
 #, kde-format
 msgid "Import a resource library"
 msgstr "Uvozi knjižnico virov"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnToggle)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:118
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:106
 #, kde-format
 msgid "Delete a resource library"
 msgstr "Izbriši knjižnico virov"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:138
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:126
 #, kde-format
 msgid "Create a resource library"
 msgstr "Ustvari knjižnico virov"
 
 #. i18n: ectx: property (text), widget (QLabel, author)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:348
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:280
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:190
 #, kde-format
 msgid "Author:"
@@ -43043,7 +43178,7 @@ msgstr "Avtor:"
 
 #. i18n: ectx: property (text), widget (QLabel, license)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:383
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:309
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:234
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
 #, kde-format
@@ -43052,7 +43187,7 @@ msgstr "Dovoljenje:"
 
 #. i18n: ectx: property (text), widget (QLabel, website)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:415
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:335
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:220
 #, kde-format
 msgid "Website:"
@@ -43060,14 +43195,14 @@ msgstr "Spletišče:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:447
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:361
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:210
 #, kde-format
 msgid "Email:"
 msgstr "E-pošta:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:511
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:413
 #, kde-format
 msgid "Updated:"
 msgstr "Posodobljeno:"
@@ -43125,49 +43260,31 @@ msgid "Embed tags..."
 msgstr "Vdelaj značke ..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowDeleted)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:39
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:82
 #, kde-format
 msgid "Show deleted resources"
 msgstr "Pokaži izbrisane vire"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:110
-#, kde-format
-msgid "ID:"
-msgstr "ID:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:153
-#, kde-format
-msgid "Filename:"
-msgstr "Ime datoteke:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:174
-#, kde-format
-msgid "Tags:"
-msgstr "Značke:"
-
 #. i18n: ectx: property (text), widget (QPushButton, btnImportResources)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:250
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:114
 #, kde-format
 msgid "Import Resources"
 msgstr "Uvozi vire"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnOpenResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:257
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:121
 #, kde-format
 msgid "Open Resource Folder"
 msgstr "Odpri mapo z viri"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnCreateBundle)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:264
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:128
 #, kde-format
 msgid "Create a Bundle"
 msgstr "Ustvari sveženj"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnExtractTagsToResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:274
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:138
 #, kde-format
 msgid ""
 "Make a backup of all your tags in the resource folder so they won't get lost "
@@ -43177,10 +43294,28 @@ msgstr ""
 "bodo izgubile pri nadgradnji Krite"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnExtractTagsToResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:277
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:141
 #, kde-format
 msgid "Save Tags to Folder"
 msgstr "Shrani značke v mapo"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:234
+#, kde-format
+msgid "ID:"
+msgstr "ID:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:255
+#, kde-format
+msgid "Filename:"
+msgstr "Ime datoteke:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:276
+#, kde-format
+msgid "Tags:"
+msgstr "Značke:"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:244
 #, kde-format

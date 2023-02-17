@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-16 00:56+0000\n"
-"PO-Revision-Date: 2023-02-07 09:55+0100\n"
+"POT-Creation-Date: 2023-02-17 00:56+0000\n"
+"PO-Revision-Date: 2023-02-16 10:00+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -7989,10 +7989,7 @@ msgid "Smooth point"
 msgstr "Punt suau"
 
 #. i18n: context: text @ Actions (General), ActionCollection (Krita)
-#. i18n: context: text @ Actions (General), ActionCollection (Krita)
-#. i18n: context: text @ Actions (General), ActionCollection (Krita)
-#. i18n: context: text @ Actions (General), ActionCollection (Krita)
-#: krita/krita.action:4 libs/resourcewidgets/dbexplorer/dbexplorer.action:4
+#: krita/krita.action:4
 #, kde-format
 msgctxt "action"
 msgid "General"
@@ -8116,7 +8113,7 @@ msgstr "Mostra el selector de color"
 #, kde-format
 msgctxt "action"
 msgid "Show MyPaint shade selector"
-msgstr "Mostra el selector d'ombres del MyPaint"
+msgstr "Mostra el selector d'ombres de MyPaint"
 
 #. i18n: context: text @ Action (show_minimal_shade_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_minimal_shade_selector), Actions (General), ActionCollection (Krita)
@@ -15275,9 +15272,13 @@ msgstr "Torna a aplicar l'última acció del G'MIC de les Qt"
 
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
-#: krita/kritamenu.action:1736 plugins/tools/svgtexttool/SvgTextTool.action:236
+#. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
+#: krita/kritamenu.action:1736
+#: plugins/extensions/dbexplorer/dbexplorer.action:4
+#: plugins/tools/svgtexttool/SvgTextTool.action:236
 #, kde-format
 msgctxt "action"
 msgid "Settings"
@@ -17249,9 +17250,10 @@ msgid "Onion Skins"
 msgstr "Pells de ceba"
 
 #: libs/image/kis_layer_properties_icons.cpp:27
-#: libs/resources/KisResourceModel.cpp:143
-#: libs/resources/KisStorageModel.cpp:425
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:72
+#: libs/resources/KisResourceModel.cpp:142
+#: libs/resources/KisStorageModel.cpp:483
+#: libs/resources/KisTagResourceModel.cpp:638
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:110
 #, kde-format
 msgid "Active"
 msgstr "Activa"
@@ -19528,33 +19530,41 @@ msgstr "Recursos temporals"
 msgid "Could not synchronize %1 with the database"
 msgstr "No s'ha pogut sincronitzar %1 amb la base de dades"
 
-#: libs/resources/KisResourceModel.cpp:125
-#: libs/resources/KisStorageModel.cpp:415
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:66
+#: libs/resources/KisResourceModel.cpp:124
+#: libs/resources/KisStorageModel.cpp:473
+#: libs/resources/KisTagResourceModel.cpp:620
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:81
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:103
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:147
 #, kde-format
 msgid "Id"
 msgstr "ID"
 
-#: libs/resources/KisResourceModel.cpp:127
+#: libs/resources/KisResourceModel.cpp:126
+#: libs/resources/KisTagResourceModel.cpp:622
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:83
 #, kde-format
 msgid "Storage ID"
 msgstr "ID de l'emmagatzematge"
 
-#: libs/resources/KisResourceModel.cpp:129
-#: libs/resources/KisStorageModel.cpp:429
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:70
+#: libs/resources/KisResourceModel.cpp:128
+#: libs/resources/KisStorageModel.cpp:487
+#: libs/resources/KisTagResourceModel.cpp:624
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:107
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
 #, kde-format
 msgid "Name"
 msgstr "Nom"
 
-#: libs/resources/KisResourceModel.cpp:131
+#: libs/resources/KisResourceModel.cpp:130
+#: libs/resources/KisTagResourceModel.cpp:626
 #, kde-format
 msgid "File Name"
 msgstr "Nom del fitxer"
 
-#: libs/resources/KisResourceModel.cpp:133
+#: libs/resources/KisResourceModel.cpp:132
+#: libs/resources/KisTagResourceModel.cpp:628
 #, kde-format
 msgid "Tooltip"
 msgstr "Consell"
@@ -19562,7 +19572,9 @@ msgstr "Consell"
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
-#: libs/resources/KisResourceModel.cpp:135 libs/ui/imagesize/imagesize.xmlgui:4
+#: libs/resources/KisResourceModel.cpp:134
+#: libs/resources/KisTagResourceModel.cpp:630
+#: libs/ui/imagesize/imagesize.xmlgui:4
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:156
 #: plugins/extensions/imagesplit/imagesplit.xmlgui:4
 #: plugins/extensions/separate_channels/imageseparate.xmlgui:4
@@ -19573,34 +19585,77 @@ msgstr "Consell"
 msgid "Image"
 msgstr "Imatge"
 
-#: libs/resources/KisResourceModel.cpp:137
+#: libs/resources/KisResourceModel.cpp:136
+#: libs/resources/KisTagResourceModel.cpp:632
 #, kde-format
 msgid "Status"
 msgstr "Estat"
 
-#: libs/resources/KisResourceModel.cpp:139
-#: libs/resources/KisStorageModel.cpp:419
+#: libs/resources/KisResourceModel.cpp:138
+#: libs/resources/KisStorageModel.cpp:477
+#: libs/resources/KisTagResourceModel.cpp:634
 #: libs/resourcewidgets/KisIconToolTip.cpp:104
 #, kde-format
 msgid "Location"
 msgstr "Ubicació"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/resources/KisResourceModel.cpp:141
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:49
+#: libs/resources/KisResourceModel.cpp:140
+#: libs/resources/KisTagResourceModel.cpp:636
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:43
 #, kde-format
 msgid "Resource Type"
 msgstr "Tipus de recurs"
 
-#: libs/resources/KisResourceModel.cpp:145
+#: libs/resources/KisResourceModel.cpp:144
+#: libs/resources/KisTagResourceModel.cpp:640
+#: libs/resources/KisTagResourceModel.cpp:670
 #, kde-format
 msgid "Storage Active"
 msgstr "Emmagatzematge actiu"
 
-#: libs/resources/KisResourceModel.cpp:147
+#: libs/resources/KisResourceModel.cpp:146
+#: libs/resources/KisTagResourceModel.cpp:642
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:86
 #, kde-format
 msgid "md5sum"
 msgstr "md5sum"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabTags)
+#: libs/resources/KisResourceModel.cpp:148
+#: libs/resources/KisTagResourceModel.cpp:644
+#: libs/resourcewidgets/KisIconToolTip.cpp:95
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
+#, kde-format
+msgid "Tags"
+msgstr "Etiquetes"
+
+#: libs/resources/KisResourceModel.cpp:150
+#: libs/resources/KisTagResourceModel.cpp:646
+#, fuzzy, kde-format
+#| msgid "Clear Thumbnail"
+msgid "Large Thumbnail"
+msgstr "Neteja la miniatura"
+
+#: libs/resources/KisResourceModel.cpp:152
+#: libs/resources/KisTagResourceModel.cpp:648
+#, kde-format
+msgid "Dirty"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: attribute (title), widget (QWidget, metadata)
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#: libs/resources/KisResourceModel.cpp:154
+#: libs/resources/KisTagResourceModel.cpp:650
+#: libs/ui/animation/VideoImportDialog.ui:197
+#: plugins/dockers/logdocker/LogDockerDock.cpp:187
+#: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:844
+#: plugins/impex/webp/kis_wdg_options_webp.ui:791
+#, kde-format
+msgid "Metadata"
+msgstr "Metadades"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
@@ -19731,9 +19786,9 @@ msgctxt "resource type"
 msgid "Layer Styles"
 msgstr "Estils de capa"
 
-#: libs/resources/KisStorageModel.cpp:417
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:67
+#: libs/resources/KisStorageModel.cpp:475
 #: libs/widgets/KoConfigAuthorPage.cpp:90
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:104
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:97
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
@@ -19741,20 +19796,23 @@ msgstr "Estils de capa"
 msgid "Type"
 msgstr "Tipus"
 
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/resources/KisStorageModel.cpp:421
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:147
+#: libs/resources/KisStorageModel.cpp:479
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:87
 #, kde-format
 msgid "Creation Date"
 msgstr "Data de creació"
 
-#: libs/resources/KisStorageModel.cpp:423
+#: libs/resources/KisStorageModel.cpp:481
 #, kde-format
 msgid "Preinstalled"
 msgstr "Preinstal·lat"
 
-#: libs/resources/KisStorageModel.cpp:427
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:73
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#. i18n: ectx: property (title), widget (QGroupBox, iconPanel)
+#: libs/resources/KisStorageModel.cpp:485
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:111
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:185
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #, kde-format
 msgid "Thumbnail"
@@ -19791,130 +19849,52 @@ msgstr "Tots els recursos"
 msgid "All Untagged Resources"
 msgstr "Tots els recursos sense etiquetar"
 
-#. i18n: context: text @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#: libs/resourcewidgets/dbexplorer/dbexplorer.action:7
+#: libs/resources/KisTagResourceModel.cpp:658
 #, kde-format
-msgctxt "action"
-msgid "&Explore Resources Cache Database..."
-msgstr "&Explora els recursos al cau de la base de dades..."
+msgid "Tag ID"
+msgstr ""
 
-#. i18n: context: whatsThis @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: whatsThis @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#: libs/resourcewidgets/dbexplorer/dbexplorer.action:8
-#: libs/resourcewidgets/dbexplorer/dbexplorer.action:9
-#: libs/resourcewidgets/dbexplorer/dbexplorer.action:10
-#, kde-format
-msgctxt "action"
-msgid "Resources Cache Database"
-msgstr "Recursos al cau de la base de dades"
-
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:30
-#, kde-format
-msgid "Resources Cache Database Explorer"
-msgstr "Explorador de recursos al cau de la base de dades"
-
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:69
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
-#: libs/resourcewidgets/KisTagToolButton.cpp:54
-#, kde-format
-msgid "Tag"
-msgstr "Etiqueta"
-
-#. i18n: ectx: property (text), widget (QLabel, colorComment_2)
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:71
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:196
-#, kde-format
-msgid "Comment"
-msgstr "Comentari"
-
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:74
-#, kde-format
-msgid "Display Name"
-msgstr "Nom que s'ha de mostrar"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:25
-#, kde-format
-msgid "Storages"
-msgstr "Emmagatzematges"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:39
-#: libs/ui/forms/wdggeneralsettings.ui:1467
-#, kde-format
-msgid "Resources"
+#: libs/resources/KisTagResourceModel.cpp:660
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
+#, fuzzy, kde-format
+#| msgid "Resources"
+msgid "Resource ID"
 msgstr "Recursos"
 
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:79
+#: libs/resources/KisTagResourceModel.cpp:662
 #, kde-format
-msgid "Versions"
-msgstr "Versions"
+msgid "Tag Url"
+msgstr ""
 
-#. i18n: ectx: attribute (title), widget (QWidget, tabTags)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:92
-#: libs/resourcewidgets/KisIconToolTip.cpp:95
-#, kde-format
-msgid "Tags"
-msgstr "Etiquetes"
+#: libs/resources/KisTagResourceModel.cpp:664
+#, fuzzy, kde-format
+#| msgid "Resources"
+msgid "Resource"
+msgstr "Recursos"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tabSchema)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:113
-#, kde-format
-msgid "Schema Information"
-msgstr "Informació de l'esquema"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:119
-#, kde-format
-msgid "Database Version"
-msgstr "Versió de la base de dades"
-
-#. i18n: ectx: property (text), widget (QLabel, lblDatabaseVersion)
-#. i18n: ectx: property (text), widget (QLabel, lblKritaVersion)
-#. i18n: ectx: property (text), widget (QLabel, lblCreationDate)
-#. i18n: ectx: property (text), widget (QLabel, lblDescription)
-#. i18n: ectx: property (text), widget (QLabel, lblHDRWarningIcon)
-#. i18n: ectx: property (text), widget (QLabel, m_lblOcioVersion)
-#. i18n: ectx: property (text), widget (QLabel, lblSaveLocation)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:126
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:140
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:154
-#: libs/ui/forms/wdgdisplaysettings.ui:299
-#: libs/ui/forms/wdgimageproperties.ui:414 plugins/dockers/lut/wdglut.ui:364
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:374
-#, kde-format
-msgid "TextLabel"
-msgstr "EtiquetaDeText"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:133
-#, kde-format
-msgid "Krita Version"
-msgstr "Versió de Krita"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:162
-#, kde-format
-msgid "Resource View"
+#: libs/resources/KisTagResourceModel.cpp:666
+#, fuzzy, kde-format
+#| msgid "Resource View"
+msgid "Resource Active"
 msgstr "Vista del recurs"
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:170
-#, kde-format
-msgid "Resource Type:"
-msgstr "Tipus de recurs:"
+#: libs/resources/KisTagResourceModel.cpp:668
+#, fuzzy, kde-format
+#| msgid "Storage Active"
+msgid "Tag Active"
+msgstr "Emmagatzematge actiu"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:180
-#, kde-format
-msgid "Tag:"
-msgstr "Etiqueta:"
+#: libs/resources/KisTagResourceModel.cpp:672
+#, fuzzy, kde-format
+#| msgid "Resource Type"
+msgid "Resource Name"
+msgstr "Tipus de recurs"
+
+#: libs/resources/KisTagResourceModel.cpp:674
+#, fuzzy, kde-format
+#| msgid "File Name"
+msgid "Tag File Name"
+msgstr "Nom del fitxer"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:101
 #, kde-format
@@ -20114,6 +20094,13 @@ msgstr ""
 "No hi ha disponible cap recurs de tipus %1. Per favor, habiliteu almenys un "
 "paquet."
 
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
+#: libs/resourcewidgets/KisTagToolButton.cpp:54
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
+#, kde-format
+msgid "Tag"
+msgstr "Etiqueta"
+
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:74
 #, kde-format
 msgid "Tag options"
@@ -20234,7 +20221,7 @@ msgstr "<p>Introduïu ací els termes de busca per a filtrar per nom</p>"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lneFilterText)
 #: libs/resourcewidgets/KisTagFilterWidget.cpp:53
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:49
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:75
 #, kde-format
 msgid "Search"
 msgstr "Busca"
@@ -21591,18 +21578,6 @@ msgstr "Sense vista prèvia"
 #, kde-format
 msgid "0"
 msgstr "0"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#. i18n: ectx: attribute (title), widget (QWidget, metadata)
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/ui/animation/VideoImportDialog.ui:197
-#: plugins/dockers/logdocker/LogDockerDock.cpp:187
-#: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:844
-#: plugins/impex/webp/kis_wdg_options_webp.ui:791
-#, kde-format
-msgid "Metadata"
-msgstr "Metadades"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLoadedDetails)
 #: libs/ui/animation/VideoImportDialog.ui:231
@@ -23697,6 +23672,7 @@ msgstr "Llicència/Drets:"
 #. i18n: ectx: property (text), widget (QLabel, typeDescLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, label_16)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:82
@@ -23705,9 +23681,10 @@ msgstr "Llicència/Drets:"
 #: libs/ui/widgets/KoFillConfigWidget.ui:222
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:487
 #: plugins/dockers/griddocker/grid_config_widget.ui:90
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:170
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:254
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:134
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:58
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:248
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.ui:39
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:24
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:76
@@ -23732,7 +23709,8 @@ msgstr "Número de revisió:"
 #. i18n: ectx: property (text), widget (QLabel, lblCreatedDesc)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:128
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:479
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:200
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:387
 #, kde-format
 msgid "Created:"
 msgstr "Creat:"
@@ -24484,6 +24462,23 @@ msgstr "Format d'eixida actual:"
 msgid "Preferred Output Format:"
 msgstr "Format d'eixida preferit:"
 
+#. i18n: ectx: property (text), widget (QLabel, lblDescription)
+#. i18n: ectx: property (text), widget (QLabel, lblHDRWarningIcon)
+#. i18n: ectx: property (text), widget (QLabel, m_lblOcioVersion)
+#. i18n: ectx: property (text), widget (QLabel, lblDatabaseVersion)
+#. i18n: ectx: property (text), widget (QLabel, lblKritaVersion)
+#. i18n: ectx: property (text), widget (QLabel, lblCreationDate)
+#. i18n: ectx: property (text), widget (QLabel, lblSaveLocation)
+#: libs/ui/forms/wdgdisplaysettings.ui:299
+#: libs/ui/forms/wdgimageproperties.ui:414 plugins/dockers/lut/wdglut.ui:364
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:179
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:193
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:207
+#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:374
+#, kde-format
+msgid "TextLabel"
+msgstr "EtiquetaDeText"
+
 #. i18n: ectx: property (text), widget (QLabel, lblHDRWarning)
 #: libs/ui/forms/wdgdisplaysettings.ui:315
 #, kde-format
@@ -24699,12 +24694,10 @@ msgstr "Perfil:"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnPreviewMask)
 #. i18n: ectx: property (text), widget (QCheckBox, checkPreview)
-#. i18n: ectx: property (text), widget (QLabel, lblThumbnail)
 #: libs/ui/forms/wdgfilterdialog.ui:67
 #: libs/widgetutils/KisPreviewFileDialog.cpp:50
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:219
 #: plugins/dockers/recorder/recorder_profile_settings.ui:177
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:98
 #: plugins/impex/raw/wdgrawimport.ui:49
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:50
 #, kde-format
@@ -25460,6 +25453,14 @@ msgstr "Afig «Fusionades» a les capes de grup fusionades"
 msgid "Add \"(pasted)\" to pasted layers"
 msgstr "Afig «(apegat)» a les capes enganxades"
 
+#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
+#. i18n: ectx: attribute (title), widget (QWidget, tabResources)
+#: libs/ui/forms/wdggeneralsettings.ui:1467
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
+#, kde-format
+msgid "Resources"
+msgstr "Recursos"
+
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/ui/forms/wdggeneralsettings.ui:1473
 #, kde-format
@@ -26183,7 +26184,7 @@ msgstr "Guarda la disposició nova de la finestra"
 #: libs/ui/forms/wdgstopgradienteditor.ui:41
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:197
 #: plugins/extensions/pykrita/plugin/info.ui:217
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:160
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:262
 #: plugins/impex/brush/wdg_export_gih.ui:41
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
@@ -26499,7 +26500,7 @@ msgstr "Límit de la mida:"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgperformancesettings.ui:224
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:167
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:269
 #, kde-format
 msgid "Location:"
 msgstr "Ubicació:"
@@ -26894,7 +26895,7 @@ msgstr "Nombre màxim de pinzells predefinits:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:47
 #, kde-format
 msgid "Dynamically Adjust Slot Count"
-msgstr "Ajusta dinàmicament el recompte de ranures"
+msgstr "Ajusta dinàmicament el comptador de ranures"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:57
@@ -26919,7 +26920,7 @@ msgstr "Selector de Triangle sRGB"
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:69
 #, kde-format
 msgid "Wide Gamut Selector"
-msgstr "Selector de Gamma àmplia"
+msgstr "Selector de gamma àmplia"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:101
@@ -32136,7 +32137,7 @@ msgstr ""
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
-"El motor de pinzells del MyPaint no està disponible per a este espai de color"
+"El motor de pinzells de MyPaint no està disponible per a este espai de color"
 
 #: libs/ui/tool/kis_tool_paint.cc:569
 #, kde-format
@@ -33675,9 +33676,11 @@ msgstr "Visualitza"
 msgid "Thumbnails"
 msgstr "Miniatures"
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:172
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:174
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:228
 #, kde-format
 msgid "Details"
 msgstr "Detalls"
@@ -33928,7 +33931,7 @@ msgstr "Salta cap avant"
 #. i18n: ectx: property (title), widget (QGroupBox, BundleSelectedGroupBox)
 #: libs/ui/widgets/kis_utility_title_bar.cpp:18
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:137
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:162
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:144
 #, kde-format
 msgid "Title"
 msgstr "Títol"
@@ -37408,7 +37411,7 @@ msgstr "Permet el desplaçament"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:946
 #, kde-format
 msgid "Colors from Image"
-msgstr "Colors des de la imatge"
+msgstr "Colors a partir de la imatge"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsShow)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:955
@@ -40390,103 +40393,89 @@ msgstr "Acoblador Tàctil"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Mode"
+#, kde-format
 msgid "Color Model"
-msgstr "Mode de color"
+msgstr "Model de color"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
-#, fuzzy, kde-format
-#| msgid "Selector Appearance"
+#, kde-format
 msgid "Hue Ring Appearance:"
-msgstr "Aparença del selector"
+msgstr "Aparença de l'anell de to:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgid "Static"
-msgstr "Estat"
+msgstr "Estàtic"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
 #, kde-format
 msgid "Dynamic"
-msgstr ""
+msgstr "Dinàmic"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
 #, kde-format
 msgid "Dynamic + Static Edge"
-msgstr ""
+msgstr "Dinàmic + vora estàtica"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpQuickSettingsMenu)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
-#, fuzzy, kde-format
-#| msgid "Quick Settings Docker"
+#, kde-format
 msgid "Show &Quick Settings Menu"
-msgstr "Acoblador Configuració ràpida"
+msgstr "Mostra el menú de configuració &ràpida"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:124
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select layout"
+#, kde-format
 msgid "Favorite Selector Layouts:"
-msgstr "Seleccioneu la disposició"
+msgstr "Disposicions preferides del selector:"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
-#, fuzzy, kde-format
-#| msgid "&Select..."
+#, kde-format
 msgid "Select..."
-msgstr "&Selecciona..."
+msgstr "Selecció..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
-#, fuzzy, kde-format
-#| msgid "Select a Color Space"
+#, kde-format
 msgid "Selection Color Space:"
-msgstr "Seleccioneu un espai de color"
+msgstr "Seleccioneu l'espai de color:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
-#, fuzzy, kde-format
-#| msgid "Layers/Masks"
+#, kde-format
 msgid "Layer/Mask"
-msgstr "Capes i màscares"
+msgstr "Capa/màscara"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Projection Color Space"
+#, kde-format
 msgid "Proof Colors to Painting Color Space"
-msgstr "Convertix l'espai de color de la projecció"
+msgstr "Colors de prova a l'espai de color del pintat"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
 #, kde-format
 msgid "Pop-ups"
-msgstr ""
+msgstr "Finestres emergents"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Group size"
+#, kde-format
 msgid "Pop-up size:"
-msgstr "Mida del grup"
+msgstr "Mida de la finestra emergent:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:221
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:539
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Patches"
-msgstr "Patrons de colo&r"
+msgstr "Patrons de color"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -40494,10 +40483,9 @@ msgstr "Patrons de colo&r"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:560
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:767
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Orientation:"
-msgstr "Orientació"
+msgstr "Orientació:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryHorizontal)
@@ -40505,10 +40493,9 @@ msgstr "Orientació"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:260
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:582
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
-#, fuzzy, kde-format
-#| msgid "Hori&zontal"
+#, kde-format
 msgid "hori&zontal"
-msgstr "Horit&zontal"
+msgstr "horit&zontal"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryVertical)
@@ -40516,10 +40503,9 @@ msgstr "Horit&zontal"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:270
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:592
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
-#, fuzzy, kde-format
-#| msgid "&Vertical"
+#, kde-format
 msgid "&vertical"
-msgstr "&Vertical"
+msgstr "&vertical"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -40527,10 +40513,9 @@ msgstr "&Vertical"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:289
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:628
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:835
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Along Orientation"
-msgstr "Orientació"
+msgstr "Al llarg de l'orientació"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -40538,10 +40523,9 @@ msgstr "Orientació"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:294
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:633
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:840
-#, fuzzy, kde-format
-#| msgid "Vertically"
+#, kde-format
 msgid "Laterally"
-msgstr "Verticalment"
+msgstr "Lateralment"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
@@ -40549,10 +40533,9 @@ msgstr "Verticalment"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:302
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:641
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Scrolling:"
-msgstr "Espaiat:"
+msgstr "Desplaçament:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -40560,12 +40543,9 @@ msgstr "Espaiat:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:322
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:651
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:858
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatche.gpl"
-#| msgid "Swatches"
+#, kde-format
 msgid "Patches"
-msgstr "Mostres"
+msgstr "Pedaços"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #. i18n: ectx: property (text), widget (QLabel, label_15)
@@ -40573,81 +40553,69 @@ msgstr "Mostres"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:356
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:687
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:894
-#, fuzzy, kde-format
-#| msgid "Max Patches: "
+#, kde-format
 msgid "Max Patches:"
-msgstr "Patrons màx.: "
+msgstr "Patrons màx.:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
-#, fuzzy, kde-format
-#| msgid "Update Selector When:"
+#, kde-format
 msgid "Update Base Color When:"
-msgstr "Actualitza el selector quan:"
+msgstr "Actualitza el color de base quan:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
-#, fuzzy, kde-format
-#| msgid "Color channels in color"
+#, kde-format
 msgid "Color changes externally"
-msgstr "Canals de color en color"
+msgstr "El color canvie externament"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateOnRightClick)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
-#, fuzzy, kde-format
-#| msgid "Right clicking on shade selector"
+#, kde-format
 msgid "Right-clicking on shade selector"
 msgstr "Es clica el selector d'ombres amb el botó dret"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Interaction ends"
-msgstr "Iteracions"
+msgstr "La interacció acaba"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
-#, fuzzy, kde-format
-#| msgid "Line Count: "
+#, kde-format
 msgid "Line Count:"
-msgstr "Nombre de línies: "
+msgstr "Nombre de línies:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgid "Line Height:"
-msgstr "Alçària de la línia: "
+msgstr "Alçària de la línia:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
-#, fuzzy, kde-format
-#| msgctxt "left mouse button"
-#| msgid "left button"
+#, kde-format
 msgid "Clear Button"
-msgstr "botó esquerre"
+msgstr "Botó de neteja"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
-#, fuzzy, kde-format
-#| msgid "Colors from Image"
+#, kde-format
 msgid "Colors fro&m Image"
-msgstr "Colors des de la imatge"
+msgstr "Colors a partir de la i&matge"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
-#, fuzzy, kde-format
-#| msgid "Auto updates"
+#, kde-format
 msgid "Auto Update"
-msgstr "Actualitza automàticament"
+msgstr "Actualització automàtica"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRange)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
-#, fuzzy, kde-format
-#| msgid "&Range:"
+#, kde-format
 msgid "Range:"
-msgstr "Inte&rval:"
+msgstr "Interval:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOffset)
 #. i18n: ectx: property (text), widget (QLabel, labelOffset)
@@ -40663,56 +40631,48 @@ msgstr "Desplaçament:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDisplay)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:157
-#, fuzzy, kde-format
-#| msgid "Display"
+#, kde-format
 msgid "Display:"
-msgstr "Pantalla"
+msgstr "Pantalla:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
 #, kde-format
 msgid "S&lider"
-msgstr ""
+msgstr "Control &lliscant"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Pa&tches"
-msgstr "Patrons de colo&r"
+msgstr "Pa&trons de color"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Preview:"
-msgstr "Vista prèvia"
+msgstr "Vista prèvia:"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:4
-#, fuzzy, kde-format
-#| msgid "Color Selector Settings"
+#, kde-format
 msgctxt "action"
 msgid "WG Color Selector Actions"
-msgstr "Configuració per al selector de color"
+msgstr "Accions del selector de color WG"
 
 #. i18n: context: text @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:7
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color selector"
+#, kde-format
 msgctxt "action"
 msgid "Show wide-gamut color selector"
-msgstr "Mostra el selector de color"
+msgstr "Mostra el selector de color de gamma àmplia (WG)"
 
 #. i18n: context: text @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:17
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show wide-gamut shade selector"
-msgstr "Mostra el selector d'ombres del MyPaint"
+msgstr "Mostra el selector d'ombres de gamma àmplia"
 
 #. i18n: context: toolTip @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
@@ -40720,12 +40680,10 @@ msgstr "Mostra el selector d'ombres del MyPaint"
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:19
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:20
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show shade selector"
-msgstr "Mostra el selector d'ombres del MyPaint"
+msgstr "Mostra el selector d'ombres"
 
 #. i18n: context: toolTip @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
@@ -40733,12 +40691,10 @@ msgstr "Mostra el selector d'ombres del MyPaint"
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:29
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show MyPaint selector"
-msgstr "Mostra el selector d'ombres del MyPaint"
+msgstr "Mostra el selector de MyPaint"
 
 #. i18n: context: text @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
@@ -40746,12 +40702,10 @@ msgstr "Mostra el selector d'ombres del MyPaint"
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:47
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:50
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color lighter"
+#, kde-format
 msgctxt "action"
 msgid "Make color lighter"
-msgstr "Aclarix el color del pinzell"
+msgstr "Aclarix el color"
 
 #. i18n: context: toolTip @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:49
@@ -40761,6 +40715,8 @@ msgid ""
 "Increase value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
+"Augmenta el valor, claredat, intensitat o luma del color seleccionat, "
+"depenent del model de color seleccionat"
 
 #. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
@@ -40768,12 +40724,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:57
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color darker"
+#, kde-format
 msgctxt "action"
 msgid "Make color darker"
-msgstr "Enfosquix el color del pinzell"
+msgstr "Enfosquix el color"
 
 #. i18n: context: toolTip @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:59
@@ -40783,6 +40737,8 @@ msgid ""
 "Decreases value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
+"Disminuïx el valor, claredat, intensitat o luma del color seleccionat, "
+"depenent del model de color seleccionat"
 
 #. i18n: context: text @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
@@ -40790,19 +40746,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:67
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:70
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Saturation HSY"
-#| msgid "Increase Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Increase color saturation"
-msgstr "Augmenta la saturació"
+msgstr "Augmenta la saturació del color"
 
 #. i18n: context: toolTip @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:69
 #, kde-format
 msgctxt "action"
 msgid "Increase saturation of the selected color"
-msgstr ""
+msgstr "Augmenta la saturació del color seleccionat"
 
 #. i18n: context: text @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
@@ -40810,19 +40764,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:77
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:80
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Decrease color saturation"
-msgstr "Disminuïx la saturació"
+msgstr "Disminuïx la saturació del color"
 
 #. i18n: context: toolTip @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:79
 #, kde-format
 msgctxt "action"
 msgid "Decrease saturation of the selected color"
-msgstr ""
+msgstr "Disminuïx la saturació del color seleccionat"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
@@ -40830,21 +40782,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:87
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:90
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue clockwise"
-msgstr "Desplaça el to del color del pinzell en sentit horari"
+msgstr "Desplaça el to en sentit horari"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:89
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color clockwise"
-msgstr "Desplaça el to del color del pinzell en sentit horari"
+msgstr "Desplaça el to del color seleccionat en sentit horari"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
@@ -40852,33 +40800,27 @@ msgstr "Desplaça el to del color del pinzell en sentit horari"
 #. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:97
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:100
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue counter-clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue counter-clockwise"
-msgstr "Desplaça el to del color del pinzell en sentit antihorari"
+msgstr "Desplaça el to en sentit antihorari"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue counter-clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color counter-clockwise"
-msgstr "Desplaça el to del color del pinzell en sentit antihorari"
+msgstr "Desplaça el to del color seleccionat en sentit antihorari"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
-#, fuzzy, kde-format
-#| msgid "Wide Gamut Selector"
+#, kde-format
 msgid "Wide Gamut Color Selector"
-msgstr "Selector de Gamma àmplia"
+msgstr "Selector de color de gamma àmplia"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
-#, fuzzy, kde-format
-#| msgid "Color Selector Settings"
+#, kde-format
 msgid "Wide Gamut Color Selector Settings"
-msgstr "Configuració per al selector de color"
+msgstr "Configureu el selector de color de gamma àmplia"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:35
 #, kde-format
@@ -41262,6 +41204,138 @@ msgstr ""
 "Krita intenta activar o desactivar açò basant-se en la informació que pot "
 "aconseguir del perfil que s'està convertint i del perfil al qual s'està "
 "convertint."
+
+#. i18n: context: text @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#: plugins/extensions/dbexplorer/dbexplorer.action:7
+#, kde-format
+msgctxt "action"
+msgid "&Explore Resources Cache Database..."
+msgstr "&Explora els recursos al cau de la base de dades..."
+
+#. i18n: context: whatsThis @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: whatsThis @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#: plugins/extensions/dbexplorer/dbexplorer.action:8
+#: plugins/extensions/dbexplorer/dbexplorer.action:9
+#: plugins/extensions/dbexplorer/dbexplorer.action:10
+#, kde-format
+msgctxt "action"
+msgid "Resources Cache Database"
+msgstr "Recursos al cau de la base de dades"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:34
+#, kde-format
+msgid "Resources Cache Database Explorer"
+msgstr "Explorador de recursos al cau de la base de dades"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
+#, fuzzy, kde-format
+#| msgid "Versions"
+msgid "Version"
+msgstr "Versions"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
+#, fuzzy, kde-format
+#| msgid "File Name"
+msgid "File name"
+msgstr "Nom del fitxer"
+
+#. i18n: ectx: property (text), widget (QLabel, colorComment_2)
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:196
+#, kde-format
+msgid "Comment"
+msgstr "Comentari"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:112
+#, kde-format
+msgid "Display Name"
+msgstr "Nom que s'ha de mostrar"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
+#, fuzzy, kde-format
+#| msgid "Database Version"
+msgid "Database version"
+msgstr "Versió de la base de dades"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
+#, fuzzy, kde-format
+#| msgid "Krita Version"
+msgid "Krita version"
+msgstr "Versió de Krita"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
+#, fuzzy, kde-format
+#| msgid "Update"
+msgid "Upgrade date"
+msgstr "Actualitza"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
+#, kde-format
+msgid "Storages"
+msgstr "Emmagatzematges"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:119
+#, kde-format
+msgid "Versions"
+msgstr "Versions"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabSchema)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:160
+#, kde-format
+msgid "Schema Information"
+msgstr "Informació de l'esquema"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
+#, fuzzy, kde-format
+#| msgid "Quantization"
+msgid "Initialization"
+msgstr "Quantificació"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
+#, fuzzy, kde-format
+#| msgid "Database Version"
+msgid "Database version:"
+msgstr "Versió de la base de dades"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
+#, fuzzy, kde-format
+#| msgid "Krita Version"
+msgid "Krita version:"
+msgstr "Versió de Krita"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
+#, kde-format
+msgid "Schema upgrades"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
+#, kde-format
+msgid "Resource View"
+msgstr "Vista del recurs"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:236
+#, kde-format
+msgid "Resource Type:"
+msgstr "Tipus de recurs:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:246
+#, kde-format
+msgid "Tag:"
+msgstr "Etiqueta:"
 
 #: plugins/extensions/imagesplit/dlg_imagesplit.cpp:34
 #, kde-format
@@ -43001,7 +43075,7 @@ msgstr "Pinzells predefinits"
 msgid "Manage Resources"
 msgstr "Gestiona els recursos"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:219
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:221
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -43010,7 +43084,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "(Selecció múltiple)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:237
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:240
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -43018,19 +43092,19 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "(Res seleccionat)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:376
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:379
 #, kde-format
 msgid "Undelete Resources"
 msgstr "Recupera els recursos"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:378
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:221
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, kde-format
 msgid "Delete Resources"
 msgstr "Suprimix els recursos"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:396
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:399
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "
@@ -43128,26 +43202,26 @@ msgid "&Resources"
 msgstr "&Recursos"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnAdd)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:98
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:86
 #, kde-format
 msgid "Import a resource library"
 msgstr "Importa una biblioteca de recursos"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnToggle)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:118
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:106
 #, kde-format
 msgid "Delete a resource library"
 msgstr "Suprimix la biblioteca de recursos"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:138
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:126
 #, kde-format
 msgid "Create a resource library"
 msgstr "Crea una biblioteca de recursos"
 
 #. i18n: ectx: property (text), widget (QLabel, author)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:348
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:280
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:190
 #, kde-format
 msgid "Author:"
@@ -43155,7 +43229,7 @@ msgstr "Autoria:"
 
 #. i18n: ectx: property (text), widget (QLabel, license)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:383
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:309
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:234
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
 #, kde-format
@@ -43164,7 +43238,7 @@ msgstr "Llicència:"
 
 #. i18n: ectx: property (text), widget (QLabel, website)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:415
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:335
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:220
 #, kde-format
 msgid "Website:"
@@ -43172,14 +43246,14 @@ msgstr "Lloc web:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:447
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:361
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:210
 #, kde-format
 msgid "Email:"
 msgstr "Correu electrònic:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:511
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:413
 #, kde-format
 msgid "Updated:"
 msgstr "Actualitzat:"
@@ -43237,49 +43311,31 @@ msgid "Embed tags..."
 msgstr "Incrusta les etiquetes..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowDeleted)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:39
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:82
 #, kde-format
 msgid "Show deleted resources"
 msgstr "Mostra els recursos suprimits"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:110
-#, kde-format
-msgid "ID:"
-msgstr "ID:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:153
-#, kde-format
-msgid "Filename:"
-msgstr "Nom de fitxer:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:174
-#, kde-format
-msgid "Tags:"
-msgstr "Etiquetes:"
-
 #. i18n: ectx: property (text), widget (QPushButton, btnImportResources)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:250
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:114
 #, kde-format
 msgid "Import Resources"
 msgstr "Importa els recursos"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnOpenResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:257
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:121
 #, kde-format
 msgid "Open Resource Folder"
 msgstr "Obri la carpeta del recurs"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnCreateBundle)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:264
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:128
 #, kde-format
 msgid "Create a Bundle"
 msgstr "Crea un paquet"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnExtractTagsToResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:274
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:138
 #, kde-format
 msgid ""
 "Make a backup of all your tags in the resource folder so they won't get lost "
@@ -43289,10 +43345,28 @@ msgstr ""
 "recursos perquè no es perden en actualitzar Krita"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnExtractTagsToResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:277
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:141
 #, kde-format
 msgid "Save Tags to Folder"
 msgstr "Guarda les etiquetes a una carpeta"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:234
+#, kde-format
+msgid "ID:"
+msgstr "ID:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:255
+#, kde-format
+msgid "Filename:"
+msgstr "Nom de fitxer:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:276
+#, kde-format
+msgid "Tags:"
+msgstr "Etiquetes:"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:244
 #, kde-format
@@ -53194,7 +53268,7 @@ msgstr "Bàsica"
 #: plugins/paintops/mypaint/MyPaintPaintOpPlugin.cpp:32
 #, kde-format
 msgid "MyPaint Brush Presets"
-msgstr "Pinzells predefinits del MyPaint"
+msgstr "Pinzells predefinits de MyPaint"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:25
 #, kde-format

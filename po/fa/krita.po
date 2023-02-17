@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-16 00:56+0000\n"
+"POT-Creation-Date: 2023-02-17 00:56+0000\n"
 "PO-Revision-Date: 2011-09-26 14:11+0330\n"
 "Last-Translator: Mohamad Reza Mirdamadi <mohi@ubuntu.ir>\n"
 "Language-Team: Farsi (Persian) <>\n"
@@ -8162,10 +8162,7 @@ msgid "Smooth point"
 msgstr "صاف"
 
 #. i18n: context: text @ Actions (General), ActionCollection (Krita)
-#. i18n: context: text @ Actions (General), ActionCollection (Krita)
-#. i18n: context: text @ Actions (General), ActionCollection (Krita)
-#. i18n: context: text @ Actions (General), ActionCollection (Krita)
-#: krita/krita.action:4 libs/resourcewidgets/dbexplorer/dbexplorer.action:4
+#: krita/krita.action:4
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "General"
@@ -15441,9 +15438,13 @@ msgstr "دوباره پالایه را اعمال کنید"
 
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
+#. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
-#: krita/kritamenu.action:1736 plugins/tools/svgtexttool/SvgTextTool.action:236
+#. i18n: context: text @ Actions (Settings), ActionCollection (Krita)
+#: krita/kritamenu.action:1736
+#: plugins/extensions/dbexplorer/dbexplorer.action:4
+#: plugins/tools/svgtexttool/SvgTextTool.action:236
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Settings"
@@ -17488,9 +17489,10 @@ msgid "Onion Skins"
 msgstr "&تحمیل ویژگیها‌"
 
 #: libs/image/kis_layer_properties_icons.cpp:27
-#: libs/resources/KisResourceModel.cpp:143
-#: libs/resources/KisStorageModel.cpp:425
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:72
+#: libs/resources/KisResourceModel.cpp:142
+#: libs/resources/KisStorageModel.cpp:483
+#: libs/resources/KisTagResourceModel.cpp:638
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:110
 #, kde-format
 msgid "Active"
 msgstr "فعال"
@@ -19812,21 +19814,27 @@ msgstr "واردات سند"
 msgid "Could not synchronize %1 with the database"
 msgstr "نتوانست لایه را به تصویر اضافه کند."
 
-#: libs/resources/KisResourceModel.cpp:125
-#: libs/resources/KisStorageModel.cpp:415
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:66
+#: libs/resources/KisResourceModel.cpp:124
+#: libs/resources/KisStorageModel.cpp:473
+#: libs/resources/KisTagResourceModel.cpp:620
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:81
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:103
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:147
 #, kde-format
 msgid "Id"
 msgstr ""
 
-#: libs/resources/KisResourceModel.cpp:127
+#: libs/resources/KisResourceModel.cpp:126
+#: libs/resources/KisTagResourceModel.cpp:622
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:83
 #, kde-format
 msgid "Storage ID"
 msgstr ""
 
-#: libs/resources/KisResourceModel.cpp:129
-#: libs/resources/KisStorageModel.cpp:429
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:70
+#: libs/resources/KisResourceModel.cpp:128
+#: libs/resources/KisStorageModel.cpp:487
+#: libs/resources/KisTagResourceModel.cpp:624
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:107
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
 #, fuzzy, kde-format
@@ -19834,13 +19842,15 @@ msgstr ""
 msgid "Name"
 msgstr "نام:"
 
-#: libs/resources/KisResourceModel.cpp:131
+#: libs/resources/KisResourceModel.cpp:130
+#: libs/resources/KisTagResourceModel.cpp:626
 #, fuzzy, kde-format
 #| msgid "Filename"
 msgid "File Name"
 msgstr "نام پرونده"
 
-#: libs/resources/KisResourceModel.cpp:133
+#: libs/resources/KisResourceModel.cpp:132
+#: libs/resources/KisTagResourceModel.cpp:628
 #, fuzzy, kde-format
 msgid "Tooltip"
 msgstr "&ابزارها‌"
@@ -19848,7 +19858,9 @@ msgstr "&ابزارها‌"
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
-#: libs/resources/KisResourceModel.cpp:135 libs/ui/imagesize/imagesize.xmlgui:4
+#: libs/resources/KisResourceModel.cpp:134
+#: libs/resources/KisTagResourceModel.cpp:630
+#: libs/ui/imagesize/imagesize.xmlgui:4
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:156
 #: plugins/extensions/imagesplit/imagesplit.xmlgui:4
 #: plugins/extensions/separate_channels/imageseparate.xmlgui:4
@@ -19859,13 +19871,15 @@ msgstr "&ابزارها‌"
 msgid "Image"
 msgstr "تصویر"
 
-#: libs/resources/KisResourceModel.cpp:137
+#: libs/resources/KisResourceModel.cpp:136
+#: libs/resources/KisTagResourceModel.cpp:632
 #, fuzzy, kde-format
 msgid "Status"
 msgstr "نمایش لایه اصلی"
 
-#: libs/resources/KisResourceModel.cpp:139
-#: libs/resources/KisStorageModel.cpp:419
+#: libs/resources/KisResourceModel.cpp:138
+#: libs/resources/KisStorageModel.cpp:477
+#: libs/resources/KisTagResourceModel.cpp:634
 #: libs/resourcewidgets/KisIconToolTip.cpp:104
 #, fuzzy, kde-format
 #| msgid "Rotation"
@@ -19873,22 +19887,63 @@ msgid "Location"
 msgstr "چرخش"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/resources/KisResourceModel.cpp:141
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:49
+#: libs/resources/KisResourceModel.cpp:140
+#: libs/resources/KisTagResourceModel.cpp:636
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:43
 #, fuzzy, kde-format
 msgid "Resource Type"
 msgstr "&منابع‌"
 
-#: libs/resources/KisResourceModel.cpp:145
+#: libs/resources/KisResourceModel.cpp:144
+#: libs/resources/KisTagResourceModel.cpp:640
+#: libs/resources/KisTagResourceModel.cpp:670
 #, fuzzy, kde-format
 #| msgid "For images"
 msgid "Storage Active"
 msgstr "برای تصاویر"
 
-#: libs/resources/KisResourceModel.cpp:147
+#: libs/resources/KisResourceModel.cpp:146
+#: libs/resources/KisTagResourceModel.cpp:642
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:86
 #, kde-format
 msgid "md5sum"
 msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabTags)
+#: libs/resources/KisResourceModel.cpp:148
+#: libs/resources/KisTagResourceModel.cpp:644
+#: libs/resourcewidgets/KisIconToolTip.cpp:95
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
+#, kde-format
+msgid "Tags"
+msgstr ""
+
+#: libs/resources/KisResourceModel.cpp:150
+#: libs/resources/KisTagResourceModel.cpp:646
+#, fuzzy, kde-format
+#| msgid "Import Image"
+msgid "Large Thumbnail"
+msgstr "واردات تصویر"
+
+#: libs/resources/KisResourceModel.cpp:152
+#: libs/resources/KisTagResourceModel.cpp:648
+#, kde-format
+msgid "Dirty"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: attribute (title), widget (QWidget, metadata)
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#: libs/resources/KisResourceModel.cpp:154
+#: libs/resources/KisTagResourceModel.cpp:650
+#: libs/ui/animation/VideoImportDialog.ui:197
+#: plugins/dockers/logdocker/LogDockerDock.cpp:187
+#: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:844
+#: plugins/impex/webp/kis_wdg_options_webp.ui:791
+#, fuzzy, kde-format
+msgid "Metadata"
+msgstr "&ویرایش فراداده‌"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
@@ -20025,9 +20080,9 @@ msgctxt "resource type"
 msgid "Layer Styles"
 msgstr "اندازه لایه"
 
-#: libs/resources/KisStorageModel.cpp:417
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:67
+#: libs/resources/KisStorageModel.cpp:475
 #: libs/widgets/KoConfigAuthorPage.cpp:90
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:104
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:97
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
@@ -20035,20 +20090,23 @@ msgstr "اندازه لایه"
 msgid "Type"
 msgstr "&نوع‌"
 
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/resources/KisStorageModel.cpp:421
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:147
+#: libs/resources/KisStorageModel.cpp:479
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:87
 #, fuzzy, kde-format
 msgid "Creation Date"
 msgstr "ایجاد"
 
-#: libs/resources/KisStorageModel.cpp:423
+#: libs/resources/KisStorageModel.cpp:481
 #, fuzzy, kde-format
 msgid "Preinstalled"
 msgstr "متغیر"
 
-#: libs/resources/KisStorageModel.cpp:427
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:73
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#. i18n: ectx: property (title), widget (QGroupBox, iconPanel)
+#: libs/resources/KisStorageModel.cpp:485
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:111
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:185
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #, fuzzy, kde-format
 #| msgid "Import Image"
@@ -20086,134 +20144,48 @@ msgstr "&منابع‌"
 msgid "All Untagged Resources"
 msgstr "&منابع‌"
 
-#. i18n: context: text @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#: libs/resourcewidgets/dbexplorer/dbexplorer.action:7
+#: libs/resources/KisTagResourceModel.cpp:658
 #, kde-format
-msgctxt "action"
-msgid "&Explore Resources Cache Database..."
+msgid "Tag ID"
 msgstr ""
 
-#. i18n: context: whatsThis @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: whatsThis @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (dbexplorer), Actions (General), ActionCollection (Krita)
-#: libs/resourcewidgets/dbexplorer/dbexplorer.action:8
-#: libs/resourcewidgets/dbexplorer/dbexplorer.action:9
-#: libs/resourcewidgets/dbexplorer/dbexplorer.action:10
+#: libs/resources/KisTagResourceModel.cpp:660
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
+#, fuzzy, kde-format
+msgid "Resource ID"
+msgstr "&منابع‌"
+
+#: libs/resources/KisTagResourceModel.cpp:662
 #, kde-format
-msgctxt "action"
-msgid "Resources Cache Database"
+msgid "Tag Url"
 msgstr ""
 
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:30
-#, kde-format
-msgid "Resources Cache Database Explorer"
-msgstr ""
-
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:69
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
-#: libs/resourcewidgets/KisTagToolButton.cpp:54
+#: libs/resources/KisTagResourceModel.cpp:664
 #, fuzzy, kde-format
-msgid "Tag"
-msgstr "تب"
+msgid "Resource"
+msgstr "&منابع‌"
 
-#. i18n: ectx: property (text), widget (QLabel, colorComment_2)
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:71
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:196
+#: libs/resources/KisTagResourceModel.cpp:666
 #, fuzzy, kde-format
-msgid "Comment"
-msgstr "توضیحات:"
+msgid "Resource Active"
+msgstr "&منابع‌"
 
-#: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:74
-#, fuzzy, kde-format
-#| msgid "Display"
-msgid "Display Name"
-msgstr "نمایش"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:25
+#: libs/resources/KisTagResourceModel.cpp:668
 #, fuzzy, kde-format
 #| msgid "For images"
-msgid "Storages"
+msgid "Tag Active"
 msgstr "برای تصاویر"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:39
-#: libs/ui/forms/wdggeneralsettings.ui:1467
+#: libs/resources/KisTagResourceModel.cpp:672
 #, fuzzy, kde-format
-#| msgid "&Resources"
-msgid "Resources"
+msgid "Resource Name"
 msgstr "&منابع‌"
 
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:79
+#: libs/resources/KisTagResourceModel.cpp:674
 #, fuzzy, kde-format
-msgid "Versions"
-msgstr "نسخه"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tabTags)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:92
-#: libs/resourcewidgets/KisIconToolTip.cpp:95
-#, kde-format
-msgid "Tags"
-msgstr ""
-
-#. i18n: ectx: attribute (title), widget (QWidget, tabSchema)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:113
-#, fuzzy, kde-format
-#| msgid "Document Information"
-msgid "Schema Information"
-msgstr "اطلاعات سند"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:119
-#, fuzzy, kde-format
-msgid "Database Version"
-msgstr "ایجاد شکل"
-
-#. i18n: ectx: property (text), widget (QLabel, lblDatabaseVersion)
-#. i18n: ectx: property (text), widget (QLabel, lblKritaVersion)
-#. i18n: ectx: property (text), widget (QLabel, lblCreationDate)
-#. i18n: ectx: property (text), widget (QLabel, lblDescription)
-#. i18n: ectx: property (text), widget (QLabel, lblHDRWarningIcon)
-#. i18n: ectx: property (text), widget (QLabel, m_lblOcioVersion)
-#. i18n: ectx: property (text), widget (QLabel, lblSaveLocation)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:126
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:140
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:154
-#: libs/ui/forms/wdgdisplaysettings.ui:299
-#: libs/ui/forms/wdgimageproperties.ui:414 plugins/dockers/lut/wdglut.ui:364
-#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:374
-#, fuzzy, kde-format
-msgid "TextLabel"
-msgstr "متن"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:133
-#, fuzzy, kde-format
-msgid "Krita Version"
-msgstr "توازن سفید:"
-
-#. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:162
-#, fuzzy, kde-format
-msgid "Resource View"
-msgstr "&منابع‌"
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:170
-#, fuzzy, kde-format
-msgid "Resource Type:"
-msgstr "&منابع‌"
-
-#. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:180
-#, kde-format
-msgid "Tag:"
-msgstr ""
+#| msgid "Filename"
+msgid "Tag File Name"
+msgstr "نام پرونده"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:101
 #, fuzzy, kde-format
@@ -20400,6 +20372,13 @@ msgid ""
 "bundle."
 msgstr ""
 
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
+#: libs/resourcewidgets/KisTagToolButton.cpp:54
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
+#, fuzzy, kde-format
+msgid "Tag"
+msgstr "تب"
+
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:74
 #, fuzzy, kde-format
 msgid "Tag options"
@@ -20519,7 +20498,7 @@ msgstr ""
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, lneFilterText)
 #: libs/resourcewidgets/KisTagFilterWidget.cpp:53
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:49
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:75
 #, fuzzy, kde-format
 msgid "Search"
 msgstr "شکل قلم‌موها"
@@ -21840,18 +21819,6 @@ msgstr "پیش‌نمایش"
 #, fuzzy, kde-format
 msgid "0"
 msgstr "٪"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#. i18n: ectx: attribute (title), widget (QWidget, metadata)
-#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/ui/animation/VideoImportDialog.ui:197
-#: plugins/dockers/logdocker/LogDockerDock.cpp:187
-#: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:844
-#: plugins/impex/webp/kis_wdg_options_webp.ui:791
-#, fuzzy, kde-format
-msgid "Metadata"
-msgstr "&ویرایش فراداده‌"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLoadedDetails)
 #: libs/ui/animation/VideoImportDialog.ui:231
@@ -23868,6 +23835,7 @@ msgstr "ارتفاع تصویردانه"
 #. i18n: ectx: property (text), widget (QLabel, typeDescLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, label_16)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:82
@@ -23876,9 +23844,10 @@ msgstr "ارتفاع تصویردانه"
 #: libs/ui/widgets/KoFillConfigWidget.ui:222
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:487
 #: plugins/dockers/griddocker/grid_config_widget.ui:90
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:170
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:254
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:134
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:58
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:248
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.ui:39
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:24
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:76
@@ -23904,7 +23873,8 @@ msgstr "شماره بازبینی:"
 #. i18n: ectx: property (text), widget (QLabel, lblCreatedDesc)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:128
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:479
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:200
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:387
 #, fuzzy, kde-format
 msgid "Created:"
 msgstr "ایجاد"
@@ -24649,6 +24619,23 @@ msgstr "لایه جاری"
 msgid "Preferred Output Format:"
 msgstr "لایه جاری"
 
+#. i18n: ectx: property (text), widget (QLabel, lblDescription)
+#. i18n: ectx: property (text), widget (QLabel, lblHDRWarningIcon)
+#. i18n: ectx: property (text), widget (QLabel, m_lblOcioVersion)
+#. i18n: ectx: property (text), widget (QLabel, lblDatabaseVersion)
+#. i18n: ectx: property (text), widget (QLabel, lblKritaVersion)
+#. i18n: ectx: property (text), widget (QLabel, lblCreationDate)
+#. i18n: ectx: property (text), widget (QLabel, lblSaveLocation)
+#: libs/ui/forms/wdgdisplaysettings.ui:299
+#: libs/ui/forms/wdgimageproperties.ui:414 plugins/dockers/lut/wdglut.ui:364
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:179
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:193
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:207
+#: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:374
+#, fuzzy, kde-format
+msgid "TextLabel"
+msgstr "متن"
+
 #. i18n: ectx: property (text), widget (QLabel, lblHDRWarning)
 #: libs/ui/forms/wdgdisplaysettings.ui:315
 #, kde-format
@@ -24861,12 +24848,10 @@ msgstr "profile"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnPreviewMask)
 #. i18n: ectx: property (text), widget (QCheckBox, checkPreview)
-#. i18n: ectx: property (text), widget (QLabel, lblThumbnail)
 #: libs/ui/forms/wdgfilterdialog.ui:67
 #: libs/widgetutils/KisPreviewFileDialog.cpp:50
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:219
 #: plugins/dockers/recorder/recorder_profile_settings.ui:177
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:98
 #: plugins/impex/raw/wdgrawimport.ui:49
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:50
 #, kde-format
@@ -25591,6 +25576,15 @@ msgstr ""
 msgid "Add \"(pasted)\" to pasted layers"
 msgstr ""
 
+#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
+#. i18n: ectx: attribute (title), widget (QWidget, tabResources)
+#: libs/ui/forms/wdggeneralsettings.ui:1467
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
+#, fuzzy, kde-format
+#| msgid "&Resources"
+msgid "Resources"
+msgstr "&منابع‌"
+
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/ui/forms/wdggeneralsettings.ui:1473
 #, fuzzy, kde-format
@@ -26289,7 +26283,7 @@ msgstr "اندازه کاشی"
 #: libs/ui/forms/wdgstopgradienteditor.ui:41
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:197
 #: plugins/extensions/pykrita/plugin/info.ui:217
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:160
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:262
 #: plugins/impex/brush/wdg_export_gih.ui:41
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
@@ -26599,7 +26593,7 @@ msgstr "اندازه کاشی"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgperformancesettings.ui:224
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:167
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:269
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Location:"
@@ -33393,9 +33387,11 @@ msgstr "نمایش"
 msgid "Thumbnails"
 msgstr "واردات تصویر"
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:172
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:174
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:228
 #, fuzzy, kde-format
 msgid "Details"
 msgstr "پیش‌فرض"
@@ -33654,7 +33650,7 @@ msgstr "پیش‌سو"
 #. i18n: ectx: property (title), widget (QGroupBox, BundleSelectedGroupBox)
 #: libs/ui/widgets/kis_utility_title_bar.cpp:18
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:137
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:162
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:144
 #, fuzzy, kde-format
 msgid "Title"
 msgstr "عنوان:"
@@ -40882,6 +40878,134 @@ msgid ""
 "converting to."
 msgstr ""
 
+#. i18n: context: text @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#: plugins/extensions/dbexplorer/dbexplorer.action:7
+#, kde-format
+msgctxt "action"
+msgid "&Explore Resources Cache Database..."
+msgstr ""
+
+#. i18n: context: whatsThis @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: whatsThis @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
+#: plugins/extensions/dbexplorer/dbexplorer.action:8
+#: plugins/extensions/dbexplorer/dbexplorer.action:9
+#: plugins/extensions/dbexplorer/dbexplorer.action:10
+#, kde-format
+msgctxt "action"
+msgid "Resources Cache Database"
+msgstr ""
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:34
+#, kde-format
+msgid "Resources Cache Database Explorer"
+msgstr ""
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
+#, fuzzy, kde-format
+msgid "Version"
+msgstr "نسخه"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
+#, fuzzy, kde-format
+#| msgid "Filename"
+msgid "File name"
+msgstr "نام پرونده"
+
+#. i18n: ectx: property (text), widget (QLabel, colorComment_2)
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:196
+#, fuzzy, kde-format
+msgid "Comment"
+msgstr "توضیحات:"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:112
+#, fuzzy, kde-format
+#| msgid "Display"
+msgid "Display Name"
+msgstr "نمایش"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
+#, fuzzy, kde-format
+msgid "Database version"
+msgstr "ایجاد شکل"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
+#, fuzzy, kde-format
+msgid "Krita version"
+msgstr "توازن سفید:"
+
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
+#, fuzzy, kde-format
+msgid "Upgrade date"
+msgstr "به‌روزرسانی پیش‌نمایش"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
+#, fuzzy, kde-format
+#| msgid "For images"
+msgid "Storages"
+msgstr "برای تصاویر"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:119
+#, fuzzy, kde-format
+msgid "Versions"
+msgstr "نسخه"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabSchema)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:160
+#, fuzzy, kde-format
+#| msgid "Document Information"
+msgid "Schema Information"
+msgstr "اطلاعات سند"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
+#, fuzzy, kde-format
+msgid "Initialization"
+msgstr "تجسم تری"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
+#, fuzzy, kde-format
+msgid "Database version:"
+msgstr "ایجاد شکل"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
+#, fuzzy, kde-format
+msgid "Krita version:"
+msgstr "توازن سفید:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
+#, kde-format
+msgid "Schema upgrades"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
+#, fuzzy, kde-format
+msgid "Resource View"
+msgstr "&منابع‌"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:236
+#, fuzzy, kde-format
+msgid "Resource Type:"
+msgstr "&منابع‌"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: plugins/extensions/dbexplorer/WdgDbExplorer.ui:246
+#, kde-format
+msgid "Tag:"
+msgstr ""
+
 #: plugins/extensions/imagesplit/dlg_imagesplit.cpp:34
 #, fuzzy, kde-format
 msgid "Image Split"
@@ -42653,7 +42777,7 @@ msgstr "پیش تنظیمها:"
 msgid "Manage Resources"
 msgstr "&منابع‌"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:219
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:221
 #, fuzzy, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -42662,7 +42786,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "تکثیر نقاب"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:237
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:240
 #, fuzzy, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -42670,19 +42794,19 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "مقیاس‌بندی گزینش"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:376
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:379
 #, fuzzy, kde-format
 msgid "Undelete Resources"
 msgstr "حذف"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:378
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:221
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, fuzzy, kde-format
 msgid "Delete Resources"
 msgstr "حذف"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:396
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:399
 #, fuzzy, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "
@@ -42778,26 +42902,26 @@ msgid "&Resources"
 msgstr "&منابع‌"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnAdd)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:98
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:86
 #, fuzzy, kde-format
 msgid "Import a resource library"
 msgstr "واردات سند"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnToggle)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:118
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:106
 #, fuzzy, kde-format
 msgid "Delete a resource library"
 msgstr "حذف"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:138
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:126
 #, fuzzy, kde-format
 msgid "Create a resource library"
 msgstr "پرونده‌های متن:"
 
 #. i18n: ectx: property (text), widget (QLabel, author)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:348
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:280
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:190
 #, fuzzy, kde-format
 #| msgid "Author"
@@ -42806,7 +42930,7 @@ msgstr "نویسنده"
 
 #. i18n: ectx: property (text), widget (QLabel, license)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:383
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:309
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:234
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
 #, fuzzy, kde-format
@@ -42815,7 +42939,7 @@ msgstr "ارتفاع تصویردانه"
 
 #. i18n: ectx: property (text), widget (QLabel, website)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:415
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:335
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:220
 #, fuzzy, kde-format
 msgid "Website:"
@@ -42823,14 +42947,14 @@ msgstr "توازن سفید:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:447
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:361
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:210
 #, kde-format
 msgid "Email:"
 msgstr "رایانامه:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:511
+#: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:413
 #, fuzzy, kde-format
 msgid "Updated:"
 msgstr "به‌روزرسانی پیش‌نمایش"
@@ -42888,50 +43012,31 @@ msgid "Embed tags..."
 msgstr "افزودن تصویر"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowDeleted)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:39
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:82
 #, fuzzy, kde-format
 msgid "Show deleted resources"
 msgstr "حذف"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:110
-#, kde-format
-msgid "ID:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:153
-#, fuzzy, kde-format
-#| msgid "Filename"
-msgid "Filename:"
-msgstr "نام پرونده"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:174
-#, kde-format
-msgid "Tags:"
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QPushButton, btnImportResources)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:250
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:114
 #, fuzzy, kde-format
 msgid "Import Resources"
 msgstr "واردات سند"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnOpenResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:257
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:121
 #, fuzzy, kde-format
 msgid "Open Resource Folder"
 msgstr "پرونده‌های متن:"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnCreateBundle)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:264
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:128
 #, fuzzy, kde-format
 msgid "Create a Bundle"
 msgstr "پرونده‌های متن:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnExtractTagsToResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:274
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:138
 #, kde-format
 msgid ""
 "Make a backup of all your tags in the resource folder so they won't get lost "
@@ -42939,10 +43044,29 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnExtractTagsToResourceFolder)
-#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:277
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:141
 #, fuzzy, kde-format
 msgid "Save Tags to Folder"
 msgstr "حالت گزینش:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:234
+#, kde-format
+msgid "ID:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:255
+#, fuzzy, kde-format
+#| msgid "Filename"
+msgid "Filename:"
+msgstr "نام پرونده"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:276
+#, kde-format
+msgid "Tags:"
+msgstr ""
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:244
 #, fuzzy, kde-format
@@ -62591,10 +62715,6 @@ msgstr "تصویر مرجع:"
 #~ msgstr "طرح کلی ستاره"
 
 #, fuzzy
-#~ msgid "Capitalization:"
-#~ msgstr "تجسم تری"
-
-#, fuzzy
 #~ msgctxt "Character position"
 #~ msgid "Position:"
 #~ msgstr "موقعیت:"
@@ -63469,11 +63589,6 @@ msgstr "تصویر مرجع:"
 #, fuzzy
 #~ msgid "Colorsets"
 #~ msgstr "رنگها"
-
-#, fuzzy
-#~| msgid "Filename"
-#~ msgid "File name"
-#~ msgstr "نام پرونده"
 
 #, fuzzy
 #~| msgid "Smeary Brush"
@@ -81196,11 +81311,6 @@ msgstr "تصویر مرجع:"
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Manage Resource Bundles"
-#~ msgstr "&منابع‌"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Resource"
 #~ msgstr "&منابع‌"
 
 #, fuzzy

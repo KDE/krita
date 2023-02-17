@@ -359,9 +359,6 @@
          <property name="text">
           <string>When Docker Resizes: </string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
         </widget>
        </item>
        <item row="0" column="1">
@@ -382,9 +379,6 @@
          <property name="text">
           <string>Show Zoom Selector UI: </string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
         </widget>
        </item>
        <item row="1" column="1">
@@ -394,9 +388,6 @@
         <widget class="QLabel" name="label_11">
          <property name="text">
           <string>Zoom Selector Size: </string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -436,15 +427,6 @@
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::MinimumExpanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
          </property>
         </spacer>
        </item>

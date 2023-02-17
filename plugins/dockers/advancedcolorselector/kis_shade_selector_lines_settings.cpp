@@ -24,13 +24,12 @@ KisShadeSelectorLinesSettings::KisShadeSelectorLinesSettings(QWidget *parent) :
 
 QString KisShadeSelectorLinesSettings::toString() const
 {
-    QString result;
-    for(auto *i : m_lineList) {
+    QStringList result;
+    Q_FOREACH (const KisShadeSelectorLineComboBox *const &i, m_lineList) {
         result.append(i->configuration());
-        result.append(';');
     }
 
-    return result;
+    return result.join(';');
 }
 
 void KisShadeSelectorLinesSettings::fromString(const QString &stri)
@@ -47,7 +46,7 @@ void KisShadeSelectorLinesSettings::updateSettings()
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     fromString(cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0"));
 
-    for(auto *i : m_lineList) {
+    Q_FOREACH (KisShadeSelectorLineComboBox *const &i, m_lineList) {
         i->updateSettings();
     }
 }
@@ -65,7 +64,7 @@ void KisShadeSelectorLinesSettings::setLineCount(int count)
         delete m_lineList.takeLast();
     }
 
-    for(auto *i : m_lineList) {
+    Q_FOREACH (const KisShadeSelectorLineComboBox *const &i, m_lineList) {
         connect(this, SIGNAL(setGradient(bool)),  i, SLOT(setGradient(bool)),  Qt::UniqueConnection);
         connect(this, SIGNAL(setPatches(bool)),   i, SLOT(setPatches(bool)),   Qt::UniqueConnection);
         connect(this, SIGNAL(setLineHeight(int)), i, SLOT(setLineHeight(int)), Qt::UniqueConnection);

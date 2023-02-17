@@ -1110,7 +1110,8 @@ void TestSvgParser::testIccColor()
     struct ScopedProfileRemover
     {
         ScopedProfileRemover()
-            : m_profile(KoColorSpaceRegistry::instance()->profileByUniqueId(QByteArray::fromHex("133a66607cffeebdd64dd433ada9bf4e")))
+            : m_profile(KoColorSpaceRegistry::instance()->profileByUniqueId(
+                QByteArray::fromHex("84f64878faf21217362594685be031d5")))
         {
             if (m_profile) {
                 qWarning() << "Profile already loaded, removing profile before test";
@@ -1133,21 +1134,21 @@ void TestSvgParser::testIccColor()
     // This test works because the icc-color won't be loaded unless there's a profile for it,
     // and the fill will be red if the icc-color is not loaded (it should be cyan).
     const QString data =
-            "<svg width=\"30px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+        "<svg width=\"30px\" height=\"30px\""
+        "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
-            "<g xml:base=\"icc\">"
-            "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
-            "        local=\"133a66607cffeebdd64dd433ada9bf4e\" name=\"default-profile\"/>"
+        "<g xml:base=\"icc\">"
+        "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
+        "        local=\"84f64878faf21217362594685be031d5\" name=\"default-profile\"/>"
 
-            "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
-            "        local=\"133a66607cffeebdd64dd433ada9bf4e\" name=\"some-other-name\"/>"
+        "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
+        "        local=\"84f64878faf21217362594685be031d5\" name=\"some-other-name\"/>"
 
-            "    <rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
-            "        style = \"fill: red icc-color(default-profile, 0, 1, 1); stroke :blue; stroke-width:2;\"/>"
-            "</g>"
+        "    <rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+        "        style = \"fill: red icc-color(default-profile, 0, 1, 1); stroke :blue; stroke-width:2;\"/>"
+        "</g>"
 
-            "</svg>";
+        "</svg>";
 
     SvgRenderTester t (data);
 

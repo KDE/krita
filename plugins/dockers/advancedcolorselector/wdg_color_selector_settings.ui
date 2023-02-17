@@ -454,109 +454,83 @@
       <attribute name="title">
        <string>Shade Selector</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_9">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_11">
-         <item>
-          <layout class="QFormLayout" name="formLayout_5">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_16">
-             <property name="text">
-              <string>Type:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QComboBox" name="ACSShadeSelectorTypeComboBox"/>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="myPaintColorModelLabel">
-             <property name="text">
-              <string>Color model:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QComboBox" name="ACSshadeSelectorMyPaintColorModelComboBox"/>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_7">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="label_7">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Update Selector When:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="shadeSelectorUpdateOnRightClick">
-             <property name="text">
-              <string>Right clicking on shade selector</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="shadeSelectorUpdateOnLeftClick">
-             <property name="text">
-              <string>Left clicking on shade selector</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="shadeSelectorUpdateOnForeground">
-             <property name="toolTip">
-              <string>this doesn't include a color change by the shade selector</string>
-             </property>
-             <property name="text">
-              <string>Foreground color changes</string>
-             </property>
-             <property name="checked">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="shadeSelectorUpdateOnBackground">
-             <property name="toolTip">
-              <string>this doesn't include a color change by the shade selector</string>
-             </property>
-             <property name="text">
-              <string>Background color change</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
+      <layout class="QFormLayout" name="formLayout_21">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_16">
+         <property name="text">
+          <string>Type:</string>
+         </property>
+        </widget>
        </item>
-       <item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="ACSShadeSelectorTypeComboBox"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="myPaintColorModelLabel">
+         <property name="text">
+          <string>Color model:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="ACSshadeSelectorMyPaintColorModelComboBox"/>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_7">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Update Selector When:</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="shadeSelectorUpdateOnBackground">
+            <property name="toolTip">
+             <string>this doesn't include a color change by the shade selector</string>
+            </property>
+            <property name="text">
+             <string>Background color change</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="shadeSelectorUpdateOnForeground">
+            <property name="toolTip">
+             <string>this doesn't include a color change by the shade selector</string>
+            </property>
+            <property name="text">
+             <string>Foreground color changes</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="shadeSelectorUpdateOnLeftClick">
+            <property name="text">
+             <string>Left clicking on shade selector</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="shadeSelectorUpdateOnRightClick">
+            <property name="text">
+             <string>Right clicking on shade selector</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
         <widget class="QGroupBox" name="minimalShadeSelectorGroup">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">

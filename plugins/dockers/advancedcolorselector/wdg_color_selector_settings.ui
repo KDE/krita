@@ -1165,71 +1165,99 @@
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QLabel" name="label_8">
-           <property name="text">
-            <string>Lightness: </string>
-           </property>
+          <widget class="QWidget" name="widget_6" native="true">
+           <layout class="QFormLayout" name="formLayout_15">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Lightness: </string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="KisIntParseSpinBox" name="sb_lightness">
+              <property name="suffix">
+               <string> steps</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
-          <widget class="KisIntParseSpinBox" name="sb_lightness">
-           <property name="suffix">
-            <string> steps</string>
-           </property>
+          <widget class="QWidget" name="widget_5" native="true">
+           <layout class="QFormLayout" name="formLayout_16">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_13">
+              <property name="text">
+               <string>Saturation: </string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="KisIntParseSpinBox" name="sb_saturation">
+              <property name="suffix">
+               <string> steps</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_13">
-           <property name="text">
-            <string>Saturation: </string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KisIntParseSpinBox" name="sb_saturation">
-           <property name="suffix">
-            <string> steps</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_17">
-           <property name="text">
-            <string>Hue: </string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KisIntParseSpinBox" name="sb_hue">
-           <property name="suffix">
-            <string> steps</string>
-           </property>
+          <widget class="QWidget" name="widget_7" native="true">
+           <layout class="QFormLayout" name="formLayout_17">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_17">
+              <property name="text">
+               <string>Hue: </string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="KisIntParseSpinBox" name="sb_hue">
+              <property name="suffix">
+               <string> steps</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>

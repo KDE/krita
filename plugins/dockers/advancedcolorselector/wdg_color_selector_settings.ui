@@ -9,7 +9,7 @@
   <property name="windowTitle">
    <string>Color Selector Settings</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_16">
+  <layout class="QFormLayout" name="formLayout_18">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -22,40 +22,18 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item>
-    <layout class="QFormLayout" name="dockerSelectForm">
-     <property name="labelAlignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   <item row="0" column="0">
+    <widget class="QLabel" name="dockerColorSettingsLabel">
+     <property name="text">
+      <string>Docker:</string>
      </property>
-     <property name="verticalSpacing">
-      <number>6</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="dockerColorSettingsLabel">
-       <property name="text">
-        <string>Docker:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="dockerColorSettingsComboBox"/>
-     </item>
-    </layout>
+    </widget>
    </item>
-   <item>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="dockerColorSettingsComboBox"/>
+   </item>
+   <item row="1" column="0" colspan="2">
     <widget class="QTabWidget" name="advancedColorSelectorOptions">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>280</height>
-      </size>
-     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -1165,7 +1143,7 @@
      </widget>
     </widget>
    </item>
-   <item>
+   <item row="2" column="0" colspan="2">
     <widget class="QWidget" name="hotKeyOptions" native="true">
      <layout class="QVBoxLayout" name="hotkeyOptions">
       <property name="leftMargin">

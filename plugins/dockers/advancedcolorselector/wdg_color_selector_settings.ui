@@ -1337,22 +1337,5 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>minimalShadeSelectorAsColorPatches</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>minimalShadeSelectorPatchesPerLine</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>194</x>
-     <y>393</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>520</x>
-     <y>463</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

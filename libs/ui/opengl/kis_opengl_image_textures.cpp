@@ -783,6 +783,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 if (ctx->hasExtension("GL_EXT_texture_norm16")) {
                     m_texturesInfo.internalFormat = GL_RGBA16_EXT;
                     m_texturesInfo.type = GL_UNSIGNED_SHORT;
+                    m_texturesInfo.format = GL_RGBA;
                     destinationColorDepthId = Integer16BitsColorDepthID;
                     dbgUI << "Using 16 bits rgba (GLES v2)";
                 }
@@ -822,6 +823,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 if (ctx->hasExtension("GL_EXT_texture_norm16")) {
                     m_texturesInfo.internalFormat = GL_RGBA16_EXT;
                     m_texturesInfo.type = GL_UNSIGNED_SHORT;
+                    m_texturesInfo.format = GL_RGBA;
                     destinationColorDepthId = Integer16BitsColorDepthID;
                     dbgUI << "Using conversion to 16 bits rgba (GLES v2)";
                 }

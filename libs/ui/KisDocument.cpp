@@ -748,6 +748,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
                                         .arg(job.filePath, backupDir.isEmpty()
                                                                ? "the same location as the file"
                                                                : backupDir));
+                slotCompleteSavingDocument(job, ImportExportCodes::ErrorWhileWriting, i18nc("Saving error message", "Failed to create a backup file"), "");
                 return false;
             }
             else {
@@ -764,6 +765,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
                                         .arg(job.filePath, backupDir.isEmpty()
                                                                ? "the same location as the file"
                                                                : backupDir));
+                slotCompleteSavingDocument(job, ImportExportCodes::ErrorWhileWriting, i18nc("Saving error message", "Failed to create a numbered backup file"), "");
                 return false;
             }
             else {

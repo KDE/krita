@@ -17,8 +17,7 @@
 KisShadeSelectorLinesSettings::KisShadeSelectorLinesSettings(QWidget *parent) :
     QWidget(parent)
 {
-    QVBoxLayout* l = new QVBoxLayout(this);
-    l->setSpacing(0);
+    QVBoxLayout *l = new QVBoxLayout(this);
     l->setMargin(0);
 }
 

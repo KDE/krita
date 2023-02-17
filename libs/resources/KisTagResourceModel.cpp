@@ -57,7 +57,7 @@ int KisAllTagResourceModel::rowCount(const QModelIndex &parent) const
 
     if (d->cachedRowCount < 0) {
         QSqlQuery q;
-        q.prepare("SELECT COUNT(DISTINCT resource_tags.tag_id || resources.name || resources.filename || resources.md5sum)\n"
+        const bool r = q.prepare("SELECT COUNT(DISTINCT resource_tags.tag_id || resources.name || resources.filename || resources.md5sum)\n"
                   "FROM   resource_tags\n"
                   ",      resources\n"
                   ",      resource_types\n"
@@ -66,10 +66,16 @@ int KisAllTagResourceModel::rowCount(const QModelIndex &parent) const
                   "AND    resource_types.name = :resource_type\n"
                   "AND    resource_tags.active = 1\n");
 
+        if (!r) {
+            qWarning() << "Could not execute resource/tags rowcount query" << q.lastError();
+            return 0;
+        }
+
         q.bindValue(":resource_type", d->resourceType);
 
         if (!q.exec()) {
             qWarning() << "Could not execute resource/tags rowcount query" << q.lastError();
+            return 0;
         }
 
         q.first();

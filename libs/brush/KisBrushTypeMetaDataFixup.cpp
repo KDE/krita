@@ -20,10 +20,14 @@ QStringList KisBrushTypeMetaDataFixup::executeFix()
     QStringList errorMessages;
 
     QSqlQuery q;
-    q.prepare("SELECT resources.id FROM resources "
+    const bool r = q.prepare("SELECT resources.id FROM resources "
               "INNER JOIN resource_types ON resources.resource_type_id = resource_types.id "
               "LEFT JOIN metadata ON metadata.foreign_id = resources.id AND metadata.key = :metadata_key "
               "WHERE resource_types.name = :resource_type AND metadata.value IS Null;");
+    if (!r) {
+        errorMessages.append(i18n("Could not access brush tip metadata"));
+        return errorMessages;
+    }
     q.bindValue(":resource_type", ResourceType::Brushes);
     q.bindValue(":metadata_key", KisBrush::brushTypeMetaDataKey);
 

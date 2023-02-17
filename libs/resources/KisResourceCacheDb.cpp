@@ -66,7 +66,10 @@ bool updateSchemaVersion()
     if (f.open(QFile::ReadOnly)) {
         QString sql = f.readAll();
         QSqlQuery q;
-        q.prepare(sql);
+        if (!q.prepare(sql)) {
+            qWarning() << "Could not prepare the schema information query" << q.lastError() << q.boundValues();
+            return false;
+        }
         q.addBindValue(KisResourceCacheDb::databaseVersion);
         q.addBindValue(KritaVersionWrapper::versionString());
         q.addBindValue(QDateTime::currentDateTimeUtc().toSecsSinceEpoch());

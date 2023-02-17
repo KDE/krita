@@ -607,13 +607,21 @@ int KisAllResourcesModel::rowCount(const QModelIndex &parent) const
          */
 
         QSqlQuery q;
-        q.prepare("SELECT COUNT(DISTINCT resources.name || resources.filename || resources.md5sum)\n"
+        bool r = q.prepare("SELECT COUNT(DISTINCT resources.name || resources.filename || resources.md5sum)\n"
                   "FROM   resources\n"
                   ",      resource_types\n"
                   "WHERE  resources.resource_type_id = resource_types.id\n"
                   "AND    resource_types.name = :resource_type\n");
+        if (!r) {
+            qWarning() << "Could not prepare all resources rowcount query" << q.lastError();
+            return 0;
+        }
         q.bindValue(":resource_type", d->resourceType);
-        q.exec();
+        r = q.exec();
+        if (!r) {
+            qWarning() << "Could not execute all resources rowcount query" << q.lastError() << q.boundValues();
+            return 0;
+        }
         q.first();
 
         const_cast<KisAllResourcesModel*>(this)->d->cachedRowCount = q.value(0).toInt();

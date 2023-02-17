@@ -75,12 +75,16 @@ int KisAllTagsModel::rowCount(const QModelIndex &parent) const
 
     if (d->cachedRowCount < 0) {
         QSqlQuery q;
-        q.prepare("SELECT count(*)\n"
+        const bool r = q.prepare("SELECT count(*)\n"
                   "FROM   tags\n"
                   ",      resource_types\n"
                   "LEFT JOIN tag_translations ON tag_translations.tag_id = tags.id AND tag_translations.language = :language\n"
                   "WHERE  tags.resource_type_id = resource_types.id\n"
                   "AND    resource_types.name = :resource_type\n");
+        if (!r) {
+            qWarning() << "Could not execute tags rowcount query" << q.lastError();
+            return 0;
+        }
         q.bindValue(":resource_type", d->resourceType);
         q.bindValue(":language", KisTag::currentLocale());
         if (!q.exec()) {
@@ -678,12 +682,16 @@ bool KisTagModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
     {
         if (tagId > 0) {
             QSqlQuery q;
-            q.prepare("SELECT count(*)\n"
+            const bool r = q.prepare("SELECT count(*)\n"
                       "FROM   tags_storages\n"
                       ",      storages\n"
                       "WHERE  tags_storages.tag_id = :tag_id\n"
                       "AND    tags_storages.storage_id = storages.id\n"
                       "AND    storages.active = 1\n");
+            if (!r) {
+                qWarning() << "Could not execute tags in storages query" << q.lastError();
+                return true;
+            }
 
             q.bindValue(":tag_id", tagId);
 

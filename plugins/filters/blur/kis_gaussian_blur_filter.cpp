@@ -64,11 +64,8 @@ void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
 
     KisLodTransformScalar t(device);
 
-    QVariant value;
-    config->getProperty("horizRadius", value);
-    float horizontalRadius = t.scale(value.toFloat());
-    config->getProperty("vertRadius", value);
-    float verticalRadius = t.scale(value.toFloat());
+    const float horizontalRadius = t.scale(config->getFloat("horizRadius", 5));
+    const float verticalRadius = t.scale(config->getFloat("vertRadius", 5));
 
     QBitArray channelFlags;
     if (config) {

@@ -902,14 +902,6 @@ set_package_properties(OpenJPEG PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita JP2000 filter")
 
-set(LIBRAW_MIN_VERSION  "0.16")
-find_package(LibRaw ${LIBRAW_MIN_VERSION})
-set_package_properties(LibRaw PROPERTIES
-    DESCRIPTION "Library to decode RAW images"
-    URL "https://www.libraw.org/"
-    TYPE OPTIONAL
-    PURPOSE "Required to build the raw import plugin")
-
 find_package(JPEGXL 0.7.0)
 set_package_properties(JPEGXL PROPERTIES
     DESCRIPTION "JPEG XL is a royalty-free raster-graphics file format that supports both lossy and lossless compression and is experimentally supported by Chrome, Firefox, and Edge."

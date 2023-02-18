@@ -61,8 +61,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-17 00:56+0000\n"
-"PO-Revision-Date: 2023-02-16 10:23+0100\n"
+"POT-Creation-Date: 2023-02-18 00:56+0000\n"
+"PO-Revision-Date: 2023-02-17 11:05+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16320,25 +16320,25 @@ msgstr ""
 "document opslaat, dan zal het tekstobject naar Krita 5 formaat worden "
 "geconverteerd die niet compatibel is met Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2687
+#: libs/flake/text/KoSvgTextShape.cpp:2685
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2689
-#: libs/flake/text/KoSvgTextShape.cpp:2697
+#: libs/flake/text/KoSvgTextShape.cpp:2687
+#: libs/flake/text/KoSvgTextShape.cpp:2695
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG-tekstvorm"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2695
+#: libs/flake/text/KoSvgTextShape.cpp:2693
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2709
-#: libs/flake/text/KoSvgTextShape.cpp:2724
+#: libs/flake/text/KoSvgTextShape.cpp:2707
+#: libs/flake/text/KoSvgTextShape.cpp:2722
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16950,7 +16950,7 @@ msgctxt "The category of filters that do not fit in a category. Noun."
 msgid "Other"
 msgstr "Overige"
 
-#: libs/image/generator/kis_generator_layer.cpp:194
+#: libs/image/generator/kis_generator_layer.cpp:192
 #, kde-format
 msgid "Generator"
 msgstr "Generator"
@@ -17101,7 +17101,7 @@ msgstr "Geïmporteerde afbeelding"
 msgid "Selection Mask"
 msgstr "Selectiemasker"
 
-#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2487
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2489
 #: plugins/impex/psd/psd_loader.cpp:189
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19465,9 +19465,9 @@ msgstr "Lokale hulpbronnen"
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
 #: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
 #: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
-#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:933
-#: libs/ui/KisDocument.cpp:945 libs/ui/KisDocument.cpp:1853
-#: libs/ui/KisDocument.cpp:1896 libs/ui/KisDocument.cpp:1906
+#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:935
+#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:1855
+#: libs/ui/KisDocument.cpp:1898 libs/ui/KisDocument.cpp:1908
 #: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1087
 #: libs/ui/KisMainWindow.cpp:1213 libs/ui/KisMainWindow.cpp:1312
 #: libs/ui/KisMainWindow.cpp:1918 libs/ui/KisMainWindow.cpp:1927
@@ -19689,16 +19689,15 @@ msgstr "Tags"
 
 #: libs/resources/KisResourceModel.cpp:150
 #: libs/resources/KisTagResourceModel.cpp:646
-#, fuzzy, kde-format
-#| msgid "Clear Thumbnail"
+#, kde-format
 msgid "Large Thumbnail"
-msgstr "Miniatuur wissen"
+msgstr "Grote miniatuur"
 
 #: libs/resources/KisResourceModel.cpp:152
 #: libs/resources/KisTagResourceModel.cpp:648
 #, kde-format
 msgid "Dirty"
-msgstr ""
+msgstr "Vuil"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
@@ -19909,49 +19908,43 @@ msgstr "Alle hulpbronnen zonder tags"
 #: libs/resources/KisTagResourceModel.cpp:658
 #, kde-format
 msgid "Tag ID"
-msgstr ""
+msgstr "Tag-ID"
 
 #: libs/resources/KisTagResourceModel.cpp:660
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
-#, fuzzy, kde-format
-#| msgid "Resource"
+#, kde-format
 msgid "Resource ID"
-msgstr "Hulpbron"
+msgstr "Hulpbron-ID"
 
 #: libs/resources/KisTagResourceModel.cpp:662
 #, kde-format
 msgid "Tag Url"
-msgstr ""
+msgstr "Tag-Url"
 
 #: libs/resources/KisTagResourceModel.cpp:664
-#, fuzzy, kde-format
-#| msgid "Resource"
+#, kde-format
 msgid "Resource"
 msgstr "Hulpbron"
 
 #: libs/resources/KisTagResourceModel.cpp:666
-#, fuzzy, kde-format
-#| msgid "Resource View"
+#, kde-format
 msgid "Resource Active"
-msgstr "Hulpbronweergave"
+msgstr "Hulpbron actief"
 
 #: libs/resources/KisTagResourceModel.cpp:668
-#, fuzzy, kde-format
-#| msgid "Storage Active"
+#, kde-format
 msgid "Tag Active"
-msgstr "Opslag actief"
+msgstr "Tag actief"
 
 #: libs/resources/KisTagResourceModel.cpp:672
-#, fuzzy, kde-format
-#| msgid "Resource Type"
+#, kde-format
 msgid "Resource Name"
-msgstr "Type hulpbron"
+msgstr "Naam van hulpbron"
 
 #: libs/resources/KisTagResourceModel.cpp:674
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "Tag File Name"
-msgstr "Bestandsnaam"
+msgstr "Bestandsnaam van tag"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:101
 #, kde-format
@@ -29883,17 +29876,33 @@ msgstr "Document klonen"
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "Naar %1 kan niet geschreven worden. Sla het op onder een andere naam."
 
-#: libs/ui/KisDocument.cpp:788
+#: libs/ui/KisDocument.cpp:751
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Failed to create an action."
+msgctxt "Saving error message"
+msgid "Failed to create a backup file"
+msgstr "Actie aanmaken is mislukt."
+
+#: libs/ui/KisDocument.cpp:768
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Failed to create an action."
+msgctxt "Saving error message"
+msgid "Failed to create a numbered backup file"
+msgstr "Actie aanmaken is mislukt."
+
+#: libs/ui/KisDocument.cpp:790
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Document wordt geëxporteerd..."
 
-#: libs/ui/KisDocument.cpp:789
+#: libs/ui/KisDocument.cpp:791
 #, kde-format
 msgid "Saving Document..."
 msgstr "Document wordt opgeslagen..."
 
-#: libs/ui/KisDocument.cpp:799
+#: libs/ui/KisDocument.cpp:801
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -29902,18 +29911,18 @@ msgstr ""
 "Beginnen met opslaan van %1 lukt niet. Wacht totdat de huidige "
 "opslagoperatie is geëindigd."
 
-#: libs/ui/KisDocument.cpp:928
+#: libs/ui/KisDocument.cpp:930
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Fout tijdens het opslaan van %1: %2"
 
-#: libs/ui/KisDocument.cpp:934
+#: libs/ui/KisDocument.cpp:936
 #, kde-format
 msgid "Could not save %1."
 msgstr "Kon %1 niet opslaan."
 
-#: libs/ui/KisDocument.cpp:948
+#: libs/ui/KisDocument.cpp:950
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -29921,45 +29930,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 is opgeslagen maar is niet compleet."
 
-#: libs/ui/KisDocument.cpp:954
+#: libs/ui/KisDocument.cpp:956
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "Er zijn enige problemen opgetreden bij opslaan."
 
-#: libs/ui/KisDocument.cpp:971
+#: libs/ui/KisDocument.cpp:973
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Opslaan van %1 beëindigd"
 
-#: libs/ui/KisDocument.cpp:1374
+#: libs/ui/KisDocument.cpp:1376
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Bezig met automatisch opslaan... %1"
 
-#: libs/ui/KisDocument.cpp:1382
+#: libs/ui/KisDocument.cpp:1384
 #, kde-format
 msgid "Autosaving..."
 msgstr "Bezig met automatisch opslaan..."
 
-#: libs/ui/KisDocument.cpp:1388
+#: libs/ui/KisDocument.cpp:1390
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Automatisch opslaan uitgesteld: document is bezig..."
 
-#: libs/ui/KisDocument.cpp:1531
+#: libs/ui/KisDocument.cpp:1533
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Fout tijdens het automatisch opslaan van %1: %2"
 
-#: libs/ui/KisDocument.cpp:1545
+#: libs/ui/KisDocument.cpp:1547
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Automatisch opslaan van %1 beëindigd"
 
-#: libs/ui/KisDocument.cpp:1787
+#: libs/ui/KisDocument.cpp:1789
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -29968,38 +29977,38 @@ msgstr ""
 "Misvormd pad\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1853
+#: libs/ui/KisDocument.cpp:1855
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Bestand %1 bestaat niet."
 
-#: libs/ui/KisDocument.cpp:1882
+#: libs/ui/KisDocument.cpp:1884
 #, kde-format
 msgid "Opening document"
 msgstr "Bezig met document te openen"
 
-#: libs/ui/KisDocument.cpp:1897
+#: libs/ui/KisDocument.cpp:1899
 #, kde-format
 msgid "Could not open %1."
 msgstr "Kon '%1' niet openen."
 
-#: libs/ui/KisDocument.cpp:1907
+#: libs/ui/KisDocument.cpp:1909
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Er waren problemen om %1 te openen."
 
-#: libs/ui/KisDocument.cpp:2036
+#: libs/ui/KisDocument.cpp:2038
 #, kde-format
 msgid "Not Saved"
 msgstr "Niet opgeslagen"
 
-#: libs/ui/KisDocument.cpp:2494
+#: libs/ui/KisDocument.cpp:2496
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Gekleurde achtergrond"
 
-#: libs/ui/KisDocument.cpp:2548
+#: libs/ui/KisDocument.cpp:2550
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -41289,10 +41298,9 @@ msgid "Resources Cache Database Explorer"
 msgstr "Verkenner van cachedatabase van hulpbronnen"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
-#, fuzzy, kde-format
-#| msgid "Versions"
+#, kde-format
 msgid "Version"
-msgstr "Versies"
+msgstr "Versie"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
@@ -41313,22 +41321,19 @@ msgid "Display Name"
 msgstr "Schermnaam"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version"
 msgstr "Databaseversie"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version"
-msgstr "Krita versie"
+msgstr "Krita-versie"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Upgrade date"
-msgstr "Bijwerken"
+msgstr "Datum opwaardering"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
@@ -41350,30 +41355,27 @@ msgstr "Schema-informatie"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
-#, fuzzy, kde-format
-#| msgid "Capitalization:"
+#, kde-format
 msgid "Initialization"
-msgstr "Hoofdlettergebruik:"
+msgstr "Initialisatie"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version:"
-msgstr "Databaseversie"
+msgstr "Databaseversie:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version:"
-msgstr "Krita versie"
+msgstr "Krita-versie:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
 #, kde-format
 msgid "Schema upgrades"
-msgstr ""
+msgstr "Opwaarderingen van schema"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
@@ -85312,10 +85314,6 @@ msgstr "Referentie-afbeeldingen"
 #~ msgstr ""
 #~ "De locatie van FFmpeg is ongeldig. Selecteer de juiste locatie van het "
 #~ "uitvoerbare programma FFmpeg op uw systeem."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Failed to create an action."
-#~ msgstr "Actie aanmaken is mislukt."
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "No editor for current action."

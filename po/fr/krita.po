@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-17 00:56+0000\n"
-"PO-Revision-Date: 2023-02-07 20:08+0100\n"
+"POT-Creation-Date: 2023-02-18 00:56+0000\n"
+"PO-Revision-Date: 2023-02-16 19:56+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -111,7 +111,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -16351,25 +16351,25 @@ msgstr ""
 "enregistrez le document, l'objet de texte sera converti au format de Krita 5 "
 "et ne sera plus compatible avec Krita 4.x."
 
-#: libs/flake/text/KoSvgTextShape.cpp:2687
+#: libs/flake/text/KoSvgTextShape.cpp:2685
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texte"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2689
-#: libs/flake/text/KoSvgTextShape.cpp:2697
+#: libs/flake/text/KoSvgTextShape.cpp:2687
+#: libs/flake/text/KoSvgTextShape.cpp:2695
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Objet textuel SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2695
+#: libs/flake/text/KoSvgTextShape.cpp:2693
 #, kde-format
 msgid "SVG Text"
 msgstr "Texte SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2709
-#: libs/flake/text/KoSvgTextShape.cpp:2724
+#: libs/flake/text/KoSvgTextShape.cpp:2707
+#: libs/flake/text/KoSvgTextShape.cpp:2722
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16981,7 +16981,7 @@ msgctxt "The category of filters that do not fit in a category. Noun."
 msgid "Other"
 msgstr "Autre"
 
-#: libs/image/generator/kis_generator_layer.cpp:194
+#: libs/image/generator/kis_generator_layer.cpp:192
 #, kde-format
 msgid "Generator"
 msgstr "Générateur"
@@ -17132,7 +17132,7 @@ msgstr "Importer une image"
 msgid "Selection Mask"
 msgstr "Masque de sélection"
 
-#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2487
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2489
 #: plugins/impex/psd/psd_loader.cpp:189
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19494,9 +19494,9 @@ msgstr "Ressources locales"
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
 #: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
 #: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
-#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:933
-#: libs/ui/KisDocument.cpp:945 libs/ui/KisDocument.cpp:1853
-#: libs/ui/KisDocument.cpp:1896 libs/ui/KisDocument.cpp:1906
+#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:935
+#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:1855
+#: libs/ui/KisDocument.cpp:1898 libs/ui/KisDocument.cpp:1908
 #: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1087
 #: libs/ui/KisMainWindow.cpp:1213 libs/ui/KisMainWindow.cpp:1312
 #: libs/ui/KisMainWindow.cpp:1918 libs/ui/KisMainWindow.cpp:1927
@@ -19955,8 +19955,7 @@ msgid "Tag Url"
 msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:664
-#, fuzzy, kde-format
-#| msgid "Resource"
+#, kde-format
 msgid "Resource"
 msgstr "Ressource"
 
@@ -29994,17 +29993,31 @@ msgstr ""
 "Impossible d'écrire dans %1. Veuillez choisir un nom différent pour "
 "l'enregistrement."
 
-#: libs/ui/KisDocument.cpp:788
+#: libs/ui/KisDocument.cpp:751
+#, fuzzy, kde-format
+#| msgid "Failed to create an action."
+msgctxt "Saving error message"
+msgid "Failed to create a backup file"
+msgstr "Impossible de créer une nouvelle action."
+
+#: libs/ui/KisDocument.cpp:768
+#, fuzzy, kde-format
+#| msgid "Failed to create an action."
+msgctxt "Saving error message"
+msgid "Failed to create a numbered backup file"
+msgstr "Impossible de créer une nouvelle action."
+
+#: libs/ui/KisDocument.cpp:790
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Exporter le document"
 
-#: libs/ui/KisDocument.cpp:789
+#: libs/ui/KisDocument.cpp:791
 #, kde-format
 msgid "Saving Document..."
 msgstr "Enregistrer le document."
 
-#: libs/ui/KisDocument.cpp:799
+#: libs/ui/KisDocument.cpp:801
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30013,18 +30026,18 @@ msgstr ""
 "Impossible de démarrer l'enregistrement de %1. Veuillez attendre que "
 "l'opération actuelle d'enregistrement ait terminé."
 
-#: libs/ui/KisDocument.cpp:928
+#: libs/ui/KisDocument.cpp:930
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Erreur durant l'enregistrement de %1 : %2"
 
-#: libs/ui/KisDocument.cpp:934
+#: libs/ui/KisDocument.cpp:936
 #, kde-format
 msgid "Could not save %1."
 msgstr "Impossible d'enregistrer %1."
 
-#: libs/ui/KisDocument.cpp:948
+#: libs/ui/KisDocument.cpp:950
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30032,47 +30045,47 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 a été enregistrée mais est incomplet."
 
-#: libs/ui/KisDocument.cpp:954
+#: libs/ui/KisDocument.cpp:956
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "Certains problèmes ont été rencontrés lors de l'enregistrement."
 
-#: libs/ui/KisDocument.cpp:971
+#: libs/ui/KisDocument.cpp:973
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Enregistrement de %1 terminé."
 
-#: libs/ui/KisDocument.cpp:1374
+#: libs/ui/KisDocument.cpp:1376
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Enregistrement automatique...%1"
 
-#: libs/ui/KisDocument.cpp:1382
+#: libs/ui/KisDocument.cpp:1384
 #, kde-format
 msgid "Autosaving..."
 msgstr "Enregistrement automatique..."
 
-#: libs/ui/KisDocument.cpp:1388
+#: libs/ui/KisDocument.cpp:1390
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 "Enregistrement automatique reporté : le document est en cours "
 "d'utilisation..."
 
-#: libs/ui/KisDocument.cpp:1531
+#: libs/ui/KisDocument.cpp:1533
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Erreur lors de l'enregistrement automatique de %1 : %2"
 
-#: libs/ui/KisDocument.cpp:1545
+#: libs/ui/KisDocument.cpp:1547
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Enregistrement automatique de %1 terminé."
 
-#: libs/ui/KisDocument.cpp:1787
+#: libs/ui/KisDocument.cpp:1789
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30081,38 +30094,38 @@ msgstr ""
 "Emplacement mal formé\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1853
+#: libs/ui/KisDocument.cpp:1855
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Le fichier %1 n'existe pas."
 
-#: libs/ui/KisDocument.cpp:1882
+#: libs/ui/KisDocument.cpp:1884
 #, kde-format
 msgid "Opening document"
 msgstr "Ouverture du document"
 
-#: libs/ui/KisDocument.cpp:1897
+#: libs/ui/KisDocument.cpp:1899
 #, kde-format
 msgid "Could not open %1."
 msgstr "Impossible d'ouvrir %1."
 
-#: libs/ui/KisDocument.cpp:1907
+#: libs/ui/KisDocument.cpp:1909
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Des problèmes sont survenus lors de l'ouverture de %1."
 
-#: libs/ui/KisDocument.cpp:2036
+#: libs/ui/KisDocument.cpp:2038
 #, kde-format
 msgid "Not Saved"
 msgstr "Non enregistré"
 
-#: libs/ui/KisDocument.cpp:2494
+#: libs/ui/KisDocument.cpp:2496
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Remplissage de l'arrière-plan"
 
-#: libs/ui/KisDocument.cpp:2548
+#: libs/ui/KisDocument.cpp:2550
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -40663,10 +40676,9 @@ msgstr "Panneau tactile"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Mode"
+#, kde-format
 msgid "Color Model"
-msgstr "Mode de couleurs"
+msgstr "Modèle de couleurs"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
@@ -40677,17 +40689,15 @@ msgstr "Apparence du sélecteur"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Static"
-msgstr "Statistiques"
+msgstr "Statique"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
-#, fuzzy, kde-format
-#| msgid "Dyna"
+#, kde-format
 msgid "Dynamic"
-msgstr "Dyna"
+msgstr "Dynamique"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
@@ -40712,10 +40722,9 @@ msgstr "Préréglages préférées :"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
-#, fuzzy, kde-format
-#| msgid "&Select..."
+#, kde-format
 msgid "Select..."
-msgstr "&Sélectionner..."
+msgstr "Sélectionner..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
@@ -40726,10 +40735,9 @@ msgstr "Sélectionner une espace colorimétrique."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
-#, fuzzy, kde-format
-#| msgid "Layers/Masks"
+#, kde-format
 msgid "Layer/Mask"
-msgstr "Calques / Masques"
+msgstr "Calque / Masque"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
@@ -40743,24 +40751,21 @@ msgstr "Convertir l'espace de couleur de projection"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
 #, kde-format
 msgid "Pop-ups"
-msgstr ""
+msgstr "Infobulles"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Group size"
+#, kde-format
 msgid "Pop-up size:"
-msgstr "Taille des groupes"
+msgstr "Taille des infobulles :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:221
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:539
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Patches"
-msgstr "Nuancie&rs"
+msgstr "Tâches de couleur"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -40778,10 +40783,9 @@ msgstr "Orientation : "
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:260
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:582
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
-#, fuzzy, kde-format
-#| msgid "Hori&zontal"
+#, kde-format
 msgid "hori&zontal"
-msgstr "Horizontal"
+msgstr "hori&zontal"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryVertical)
@@ -40789,10 +40793,9 @@ msgstr "Horizontal"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:270
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:592
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
-#, fuzzy, kde-format
-#| msgid "&Vertical"
+#, kde-format
 msgid "&vertical"
-msgstr "Vertical"
+msgstr "&vertical"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -40800,10 +40803,9 @@ msgstr "Vertical"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:289
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:628
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:835
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Along Orientation"
-msgstr "Orientation"
+msgstr "Selon l'orientation"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -40811,10 +40813,9 @@ msgstr "Orientation"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:294
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:633
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:840
-#, fuzzy, kde-format
-#| msgid "Trilateral"
+#, kde-format
 msgid "Laterally"
-msgstr "Trilatéral"
+msgstr "Latéralement"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
@@ -40822,10 +40823,9 @@ msgstr "Trilatéral"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:302
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:641
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Scrolling:"
-msgstr "Espacement : "
+msgstr "Défilement :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -40833,12 +40833,9 @@ msgstr "Espacement : "
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:322
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:651
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:858
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatche.gpl"
-#| msgid "Swatches"
+#, kde-format
 msgid "Patches"
-msgstr "Échantillons"
+msgstr "Tâches"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #. i18n: ectx: property (text), widget (QLabel, label_15)
@@ -40873,10 +40870,9 @@ msgstr "Clic droit sur le sélecteur d'ombres"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Interaction ends"
-msgstr "Itérations :"
+msgstr "L'interaction se termine"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
@@ -40886,39 +40882,33 @@ msgstr "Nombre de lignes :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgid "Line Height:"
 msgstr "Hauteur de ligne :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
-#, fuzzy, kde-format
-#| msgctxt "left mouse button"
-#| msgid "left button"
+#, kde-format
 msgid "Clear Button"
-msgstr "bouton gauche"
+msgstr "Bouton d'effacement"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
-#, fuzzy, kde-format
-#| msgid "Colors from Image"
+#, kde-format
 msgid "Colors fro&m Image"
-msgstr "Couleurs à partir de l'image"
+msgstr "Couleurs à partir de l'i&mage"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
-#, fuzzy, kde-format
-#| msgid "Auto updates"
+#, kde-format
 msgid "Auto Update"
-msgstr "Mises à jour automatiques"
+msgstr "Mise à jour automatique"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRange)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
-#, fuzzy, kde-format
-#| msgid "&Range:"
+#, kde-format
 msgid "Range:"
-msgstr "&Intervalle :"
+msgstr "Intervalle :"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOffset)
 #. i18n: ectx: property (text), widget (QLabel, labelOffset)
@@ -40940,24 +40930,21 @@ msgstr "Affichage :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
-#, fuzzy, kde-format
-#| msgid "Slider widget"
+#, kde-format
 msgid "S&lider"
-msgstr "Composant graphique de curseur"
+msgstr "Cu&rseur"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Pa&tches"
-msgstr "Nuancie&rs"
+msgstr "&Tâches de couleur"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Preview:"
-msgstr "Aperçu"
+msgstr "Aperçu :"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:4
@@ -40990,11 +40977,10 @@ msgstr "cacher l'outil de sélection de l'ombre"
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:19
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:20
-#, fuzzy, kde-format
-#| msgid "hide shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show shade selector"
-msgstr "cacher l'outil de sélection de l'ombre"
+msgstr "Afficher le sélecteur d'ombre"
 
 #. i18n: context: toolTip @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
@@ -41015,12 +41001,10 @@ msgstr "Afficher le sélecteur d'ombre MyPaint"
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:47
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:50
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color lighter"
+#, kde-format
 msgctxt "action"
 msgid "Make color lighter"
-msgstr "Rendre la couleur de la brosse plus claire"
+msgstr "Rendre la couleur plus claire"
 
 #. i18n: context: toolTip @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:49
@@ -41037,12 +41021,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:57
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color darker"
+#, kde-format
 msgctxt "action"
 msgid "Make color darker"
-msgstr "Rendre la couleur de la brosse plus sombre"
+msgstr "Rendre une couleur plus sombre"
 
 #. i18n: context: toolTip @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:59
@@ -92682,12 +92664,6 @@ msgstr "Images de référence"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Please enter a file name to render to."
 #~ msgstr "Veuillez saisir un nom pour l'effet de filtre"
-
-#, fuzzy
-#~| msgid "Failed to create an action."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Failed to create an action."
-#~ msgstr "Impossible de créer une nouvelle action."
 
 #, fuzzy
 #~| msgid "No editor for current action."

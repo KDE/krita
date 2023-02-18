@@ -48,8 +48,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-17 00:56+0000\n"
-"PO-Revision-Date: 2023-02-08 13:50+0100\n"
+"POT-Creation-Date: 2023-02-18 00:56+0000\n"
+"PO-Revision-Date: 2023-02-17 14:16+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -16138,7 +16138,7 @@ msgstr "Nastavit tah"
 #: libs/flake/commands/KoShapeTransparencyCommand.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Set opacity"
-msgstr ""
+msgstr "Nastavit krytí"
 
 #: libs/flake/commands/KoShapeUnclipCommand.cpp:83
 msgctxt "(qtundo-format)"
@@ -16226,25 +16226,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:2687
+#: libs/flake/text/KoSvgTextShape.cpp:2685
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2689
-#: libs/flake/text/KoSvgTextShape.cpp:2697
+#: libs/flake/text/KoSvgTextShape.cpp:2687
+#: libs/flake/text/KoSvgTextShape.cpp:2695
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Tvar textu SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2695
+#: libs/flake/text/KoSvgTextShape.cpp:2693
 #, kde-format
 msgid "SVG Text"
 msgstr "Text SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2709
-#: libs/flake/text/KoSvgTextShape.cpp:2724
+#: libs/flake/text/KoSvgTextShape.cpp:2707
+#: libs/flake/text/KoSvgTextShape.cpp:2722
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16853,7 +16853,7 @@ msgctxt "The category of filters that do not fit in a category. Noun."
 msgid "Other"
 msgstr "Jiné"
 
-#: libs/image/generator/kis_generator_layer.cpp:194
+#: libs/image/generator/kis_generator_layer.cpp:192
 #, kde-format
 msgid "Generator"
 msgstr "Generátor"
@@ -16995,7 +16995,7 @@ msgstr "Importovaný obrázek"
 msgid "Selection Mask"
 msgstr "Maska Výběru"
 
-#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2487
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2489
 #: plugins/impex/psd/psd_loader.cpp:189
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19319,9 +19319,9 @@ msgstr ""
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
 #: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
 #: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
-#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:933
-#: libs/ui/KisDocument.cpp:945 libs/ui/KisDocument.cpp:1853
-#: libs/ui/KisDocument.cpp:1896 libs/ui/KisDocument.cpp:1906
+#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:935
+#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:1855
+#: libs/ui/KisDocument.cpp:1898 libs/ui/KisDocument.cpp:1908
 #: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1087
 #: libs/ui/KisMainWindow.cpp:1213 libs/ui/KisMainWindow.cpp:1312
 #: libs/ui/KisMainWindow.cpp:1918 libs/ui/KisMainWindow.cpp:1927
@@ -19541,16 +19541,15 @@ msgstr "Značky"
 
 #: libs/resources/KisResourceModel.cpp:150
 #: libs/resources/KisTagResourceModel.cpp:646
-#, fuzzy, kde-format
-#| msgid "Thumbnail"
+#, kde-format
 msgid "Large Thumbnail"
-msgstr "Náhled"
+msgstr "Velký náhled"
 
 #: libs/resources/KisResourceModel.cpp:152
 #: libs/resources/KisTagResourceModel.cpp:648
 #, kde-format
 msgid "Dirty"
-msgstr ""
+msgstr "Špinavé"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
@@ -19592,12 +19591,12 @@ msgstr "Skupina"
 #: libs/resources/KisResourceStorage.h:122
 #, kde-format
 msgid "Adobe Brush Library"
-msgstr ""
+msgstr "Knihovna štětců Adobe"
 
 #: libs/resources/KisResourceStorage.h:124
 #, kde-format
 msgid "Adobe Style Library"
-msgstr ""
+msgstr "Knihovna stylů Adobe"
 
 #: libs/resources/KisResourceStorage.h:126
 #, kde-format
@@ -19761,49 +19760,43 @@ msgstr ""
 #: libs/resources/KisTagResourceModel.cpp:658
 #, kde-format
 msgid "Tag ID"
-msgstr ""
+msgstr "ID značky"
 
 #: libs/resources/KisTagResourceModel.cpp:660
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource ID"
-msgstr "Zdroje"
+msgstr "ID zdroje"
 
 #: libs/resources/KisTagResourceModel.cpp:662
 #, kde-format
 msgid "Tag Url"
-msgstr ""
+msgstr "URL značky"
 
 #: libs/resources/KisTagResourceModel.cpp:664
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource"
-msgstr "Zdroje"
+msgstr "Zdroj"
 
 #: libs/resources/KisTagResourceModel.cpp:666
-#, fuzzy, kde-format
-#| msgid "Resource Type"
+#, kde-format
 msgid "Resource Active"
-msgstr "Typ zdroje"
+msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:668
-#, fuzzy, kde-format
-#| msgid "Active"
+#, kde-format
 msgid "Tag Active"
-msgstr "Aktivní"
+msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:672
-#, fuzzy, kde-format
-#| msgid "Resource Type"
+#, kde-format
 msgid "Resource Name"
-msgstr "Typ zdroje"
+msgstr "Název zdroje"
 
 #: libs/resources/KisTagResourceModel.cpp:674
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "Tag File Name"
-msgstr "Název souboru"
+msgstr ""
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:101
 #, kde-format
@@ -24555,7 +24548,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:174
 #, kde-format
 msgid "Use separate settings for eraser"
-msgstr ""
+msgstr "Použít oddělená nastavení pro gumu"
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: libs/ui/forms/wdggeneralsettings.ui:213
@@ -25215,7 +25208,7 @@ msgstr "Štětec"
 #: libs/ui/forms/wdggeometryoptions.ui:106
 #, kde-format
 msgid "Brush (Background Color)"
-msgstr ""
+msgstr "Štětec (barva pozadí)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPatternTransform)
 #: libs/ui/forms/wdggeometryoptions.ui:114
@@ -29279,35 +29272,47 @@ msgstr ""
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "Do souboru %1 nelze zapisovat. Prosím zvolte jiný název souboru."
 
-#: libs/ui/KisDocument.cpp:788
+#: libs/ui/KisDocument.cpp:751
+#, kde-format
+msgctxt "Saving error message"
+msgid "Failed to create a backup file"
+msgstr ""
+
+#: libs/ui/KisDocument.cpp:768
+#, kde-format
+msgctxt "Saving error message"
+msgid "Failed to create a numbered backup file"
+msgstr ""
+
+#: libs/ui/KisDocument.cpp:790
 #, kde-format
 msgid "Exporting Document..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:789
+#: libs/ui/KisDocument.cpp:791
 #, kde-format
 msgid "Saving Document..."
 msgstr "Ukládám dokument..."
 
-#: libs/ui/KisDocument.cpp:799
+#: libs/ui/KisDocument.cpp:801
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:928
+#: libs/ui/KisDocument.cpp:930
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:934
+#: libs/ui/KisDocument.cpp:936
 #, kde-format
 msgid "Could not save %1."
 msgstr "Nelze uložit %1."
 
-#: libs/ui/KisDocument.cpp:948
+#: libs/ui/KisDocument.cpp:950
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -29315,83 +29320,83 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:954
+#: libs/ui/KisDocument.cpp:956
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:971
+#: libs/ui/KisDocument.cpp:973
 #, kde-format
 msgid "Finished saving %1"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1374
+#: libs/ui/KisDocument.cpp:1376
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Probíhá automatické ukládání... %1"
 
-#: libs/ui/KisDocument.cpp:1382
+#: libs/ui/KisDocument.cpp:1384
 #, kde-format
 msgid "Autosaving..."
 msgstr "Probíhá automatické ukládání..."
 
-#: libs/ui/KisDocument.cpp:1388
+#: libs/ui/KisDocument.cpp:1390
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1531
+#: libs/ui/KisDocument.cpp:1533
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1545
+#: libs/ui/KisDocument.cpp:1547
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1787
+#: libs/ui/KisDocument.cpp:1789
 #, kde-format
 msgid ""
 "Malformed Path\n"
 "%1"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1853
+#: libs/ui/KisDocument.cpp:1855
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Soubor %1 neexistuje."
 
-#: libs/ui/KisDocument.cpp:1882
+#: libs/ui/KisDocument.cpp:1884
 #, kde-format
 msgid "Opening document"
 msgstr "Otevírá se dokument"
 
-#: libs/ui/KisDocument.cpp:1897
+#: libs/ui/KisDocument.cpp:1899
 #, kde-format
 msgid "Could not open %1."
 msgstr "Nelze otevřít %1."
 
-#: libs/ui/KisDocument.cpp:1907
+#: libs/ui/KisDocument.cpp:1909
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Při otevírání došlo k problémům %1."
 
-#: libs/ui/KisDocument.cpp:2036
+#: libs/ui/KisDocument.cpp:2038
 #, kde-format
 msgid "Not Saved"
 msgstr "Neuloženo"
 
-#: libs/ui/KisDocument.cpp:2494
+#: libs/ui/KisDocument.cpp:2496
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2548
+#: libs/ui/KisDocument.cpp:2550
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -35808,7 +35813,7 @@ msgstr ""
 #: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:637
 #, kde-format
 msgid "Perspective Ellipse"
-msgstr ""
+msgstr "Perspektivní elipsa"
 
 #: plugins/assistants/Assistants/RulerAssistant.cc:25
 #, kde-format
@@ -39396,13 +39401,13 @@ msgstr "Dynamický"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
 #, kde-format
 msgid "Dynamic + Static Edge"
-msgstr ""
+msgstr "Dynamický + statický okraj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpQuickSettingsMenu)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
 #, kde-format
 msgid "Show &Quick Settings Menu"
-msgstr ""
+msgstr "Zobrazit na&bídku rychlého nastavení"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:124
@@ -39426,7 +39431,7 @@ msgstr ""
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
 #, kde-format
 msgid "Layer/Mask"
-msgstr ""
+msgstr "Vrstva/maska"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
@@ -39472,7 +39477,7 @@ msgstr "Orientace:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
 #, kde-format
 msgid "hori&zontal"
-msgstr ""
+msgstr "vodor&ovně"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryVertical)
@@ -39482,7 +39487,7 @@ msgstr ""
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
 #, kde-format
 msgid "&vertical"
-msgstr ""
+msgstr "s&visle"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -39550,7 +39555,7 @@ msgstr ""
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
 #, kde-format
 msgid "Right-clicking on shade selector"
-msgstr ""
+msgstr "Pravým kliknutím na paletu odstínů"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
@@ -39580,7 +39585,7 @@ msgstr ""
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
 #, kde-format
 msgid "Colors fro&m Image"
-msgstr ""
+msgstr "Barvy z obrázk&u"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
@@ -39616,13 +39621,13 @@ msgstr "Zobrazení:"
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
 #, kde-format
 msgid "S&lider"
-msgstr ""
+msgstr "P&osuvník"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
 #, kde-format
 msgid "Color Pa&tches"
-msgstr ""
+msgstr "Barevné díl&ky"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
@@ -39682,7 +39687,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Make color lighter"
-msgstr ""
+msgstr "Zesvětlit barvu"
 
 #. i18n: context: toolTip @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:49
@@ -39702,7 +39707,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Make color darker"
-msgstr ""
+msgstr "Ztmavit barvu"
 
 #. i18n: context: toolTip @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:59
@@ -39722,7 +39727,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Increase color saturation"
-msgstr ""
+msgstr "Zvýšit barevné nasycení"
 
 #. i18n: context: toolTip @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:69
@@ -39740,7 +39745,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Decrease color saturation"
-msgstr ""
+msgstr "Snížit barevné nasycení"
 
 #. i18n: context: toolTip @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:79
@@ -40196,15 +40201,13 @@ msgid "Resources Cache Database Explorer"
 msgstr ""
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
-#, fuzzy, kde-format
-#| msgid "Versions"
+#, kde-format
 msgid "Version"
 msgstr "Verze"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "File name"
 msgstr "Název souboru"
 
@@ -40221,22 +40224,19 @@ msgid "Display Name"
 msgstr "Zobrazované jméno"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
-#, fuzzy, kde-format
-#| msgid "Database:"
+#, kde-format
 msgid "Database version"
-msgstr "Databáze:"
+msgstr "Verze databáze"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version"
 msgstr "Verze Krita"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Upgrade date"
-msgstr "Aktualizovat"
+msgstr "Datum aktualizace"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
@@ -40258,30 +40258,27 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
-#, fuzzy, kde-format
-#| msgid "Equalization:"
+#, kde-format
 msgid "Initialization"
-msgstr "Vyrovnání hladin:"
+msgstr "Inicializace"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
-#, fuzzy, kde-format
-#| msgid "Database:"
+#, kde-format
 msgid "Database version:"
-msgstr "Databáze:"
+msgstr "Verze databáze:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version:"
-msgstr "Verze Krita"
+msgstr "Verze Krita:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
 #, kde-format
 msgid "Schema upgrades"
-msgstr ""
+msgstr "Aktualizace schématu"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
@@ -43558,7 +43555,7 @@ msgstr "Nejbližší"
 #: plugins/filters/palettize/palettize.ui:191
 #, kde-format
 msgid "Dither"
-msgstr ""
+msgstr "Dither"
 
 #. i18n: context: text @ Action (krita_filter_halftone), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_halftone), Actions (Filters), ActionCollection (Krita)
@@ -49372,7 +49369,7 @@ msgstr ""
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:197
 #, kde-format
 msgid "Smudge Length"
-msgstr ""
+msgstr "Délka rozmazání"
 
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:36
 #, kde-format
@@ -51364,7 +51361,7 @@ msgstr "Mix"
 #: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option.cpp:9
 #, kde-format
 msgid "Paint Thickness"
-msgstr ""
+msgstr "Tloušťka malby"
 
 #: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option_widget.cpp:29
 #, kde-format

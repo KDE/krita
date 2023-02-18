@@ -49,7 +49,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-08 13:50+0100\n"
+"PO-Revision-Date: 2023-02-17 14:16+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -15911,7 +15911,7 @@ msgstr "Nastavit tah"
 #: libs/flake/commands/KoShapeTransparencyCommand.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Set opacity"
-msgstr ""
+msgstr "Nastavit krytí"
 
 #: libs/flake/commands/KoShapeUnclipCommand.cpp:83
 msgctxt "(qtundo-format)"
@@ -19273,12 +19273,12 @@ msgstr "Skupina"
 #: libs/resources/KisResourceStorage.h:122
 #, kde-format
 msgid "Adobe Brush Library"
-msgstr ""
+msgstr "Knihovna štětců Adobe"
 
 #: libs/resources/KisResourceStorage.h:124
 #, kde-format
 msgid "Adobe Style Library"
-msgstr ""
+msgstr "Knihovna stylů Adobe"
 
 #: libs/resources/KisResourceStorage.h:126
 #, kde-format
@@ -24290,7 +24290,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:174
 #, kde-format
 msgid "Use separate settings for eraser"
-msgstr ""
+msgstr "Použít oddělená nastavení pro gumu"
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: libs/ui/forms/wdggeneralsettings.ui:213
@@ -24493,7 +24493,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:688
 #, kde-format
 msgid "Enable Smooth Zooming"
-msgstr ""
+msgstr "Povolit plynulé přiblížení"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:698
@@ -24918,7 +24918,7 @@ msgstr "Štětec"
 #: libs/ui/forms/wdggeometryoptions.ui:106
 #, kde-format
 msgid "Brush (Background Color)"
-msgstr ""
+msgstr "Štětec (barva pozadí)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPatternTransform)
 #: libs/ui/forms/wdggeometryoptions.ui:114
@@ -35452,7 +35452,7 @@ msgstr ""
 #: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:724
 #, kde-format
 msgid "Perspective Ellipse"
-msgstr ""
+msgstr "Perspektivní elipsa"
 
 #: plugins/assistants/Assistants/RulerAssistant.cc:25
 #, kde-format
@@ -42504,7 +42504,7 @@ msgstr "Nejbližší"
 #: plugins/filters/palettize/palettize.ui:191
 #, kde-format
 msgid "Dither"
-msgstr ""
+msgstr "Dither"
 
 #. i18n: context: text @ Action (krita_filter_halftone), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_halftone), Actions (Filters), ActionCollection (Krita)
@@ -48323,7 +48323,7 @@ msgstr ""
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:197
 #, kde-format
 msgid "Smudge Length"
-msgstr ""
+msgstr "Délka rozmazání"
 
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:36
 #, kde-format
@@ -50315,7 +50315,7 @@ msgstr "Mix"
 #: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option.cpp:9
 #, kde-format
 msgid "Paint Thickness"
-msgstr ""
+msgstr "Tloušťka malby"
 
 #: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option_widget.cpp:29
 #, kde-format

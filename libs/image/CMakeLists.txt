@@ -386,9 +386,7 @@ if(OpenEXR_FOUND)
   target_link_libraries(kritaimage PUBLIC ${LINK_OPENEXR_LIB})
 endif()
 
-if(FFTW3_FOUND)
-  target_link_libraries(kritaimage PRIVATE ${FFTW3_LIBRARIES})
-endif()
+target_link_libraries(kritaimage PRIVATE ${FFTW3_LIBRARIES})
 
 target_link_libraries(kritaimage PUBLIC kritamultiarch)
 

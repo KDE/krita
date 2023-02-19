@@ -24,6 +24,7 @@
 #include <kis_signal_auto_connection.h>
 #include <kis_resources_snapshot.h>
 #include <commands_new/KisMergeLabeledLayersCommand.h>
+#include <KoCompositeOpRegistry.h>
 
 class KisOptionCollectionWidget;
 class KoGroupButton;
@@ -35,6 +36,7 @@ class KisColorLabelSelectorWidget;
 class QPushButton;
 class KisColorButton;
 class QToolButton;
+class KisCompositeOpComboBox;
 
 class KisToolFill : public KisToolPaint
 {
@@ -106,6 +108,9 @@ private:
     FillType m_fillType {FillType_FillWithForegroundColor};
     qreal m_patternScale {100.0};
     qreal m_patternRotation {0.0};
+    bool m_useCustomBlendingOptions {false};
+    int m_customOpacity {100};
+    QString m_customCompositeOp {COMPOSITE_OVER};
 
     ContiguousFillMode m_contiguousFillMode {ContiguousFillMode_FloodFill};
     KoColor m_contiguousFillBoundaryColor;
@@ -138,6 +143,7 @@ private:
     KisSignalCompressor m_compressorFillUpdate;
     QVector<QPoint> m_seedPoints;
     KisStrokeId m_fillStrokeId;
+    KisNodeSP m_previousNode {nullptr};
 
     KConfigGroup m_configGroup;
 
@@ -152,6 +158,9 @@ private:
     KoGroupButton *m_buttonFillWithPattern {nullptr};
     KisDoubleSliderSpinBox *m_sliderPatternScale {nullptr};
     KisAngleSelector *m_angleSelectorPatternRotation {nullptr};
+    QCheckBox *m_checkBoxCustomBlendingOptions {nullptr};
+    KisSliderSpinBox *m_sliderCustomOpacity {nullptr};
+    KisCompositeOpComboBox *m_comboBoxCustomCompositeOp {nullptr};
 
     KoGroupButton *m_buttonContiguousFillModeFloodFill {nullptr};
     KoGroupButton *m_buttonContiguousFillModeBoundaryFill {nullptr};
@@ -189,6 +198,9 @@ private Q_SLOTS:
                                                       bool checked);
     void slot_sliderPatternScale_valueChanged(double value);
     void slot_angleSelectorPatternRotation_angleChanged(double value);
+    void slot_checkBoxUseCustomBlendingOptions_toggled(bool checked);
+    void slot_sliderCustomOpacity_valueChanged(int value);
+    void slot_comboBoxCustomCompositeOp_currentIndexChanged(int index);
     void slot_optionButtonStripContiguousFillMode_buttonToggled(KoGroupButton *button,
                                                                 bool checked);
     void slot_buttonContiguousFillBoundaryColor_changed(const KoColor &color);
@@ -205,6 +217,9 @@ private Q_SLOTS:
     void slot_optionButtonStripDragFill_buttonToggled(KoGroupButton *button,
                                                           bool checked);
     void slot_buttonReset_clicked();
+
+    void slot_currentNodeChanged(const KisNodeSP node);
+    void slot_colorSpaceChanged(const KoColorSpace *colorSpace);
 };
 
 

@@ -12,6 +12,7 @@
 #include "lazybrush/kis_colorize_mask.h"
 #include <kis_assert.h>
 #include <KisImageResolutionProxy.h>
+#include <KoCompositeOpRegistry.h>
 
 FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
                                              KisSelectionSP selection,
@@ -35,6 +36,9 @@ FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
     , m_continuousFillReferenceColor(nullptr)
     , m_unmerged(false)
     , m_useBgColor(false)
+    , m_useCustomBlendingOptions(false)
+    , m_customOpacity(OPACITY_OPAQUE_U8)
+    , m_customCompositeOp(COMPOSITE_OVER)
     , m_progressHelper(nullptr)
 {}
 
@@ -123,6 +127,11 @@ void FillProcessingVisitor::selectionFill(KisPaintDeviceSP device, const QRect &
 
     m_resources->setupPainter(&painter);
 
+    if (m_useCustomBlendingOptions) {
+        painter.setOpacity(m_customOpacity);
+        painter.setCompositeOpId(m_customCompositeOp);
+    }
+
     Q_FOREACH (const QRect &rc, dirtyRect) {
         painter.bitBlt(rc.topLeft(), filledDevice, rc);
     }
@@ -156,6 +165,10 @@ void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fil
     fillPainter.setWidth(fillRect.width());
     fillPainter.setHeight(fillRect.height());
     fillPainter.setUseCompositioning(!m_useFastMode);
+    if (m_useCustomBlendingOptions) {
+        fillPainter.setOpacity(m_customOpacity);
+        fillPainter.setCompositeOpId(m_customCompositeOp);
+    }
 
     KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_refPaintDevice;
 
@@ -366,6 +379,21 @@ void FillProcessingVisitor::setUnmerged(bool unmerged)
 void FillProcessingVisitor::setUseBgColor(bool useBgColor)
 {
     m_useBgColor = useBgColor;
+}
+
+void FillProcessingVisitor::setUseCustomBlendingOptions(bool useCustomBlendingOptions)
+{
+    m_useCustomBlendingOptions = useCustomBlendingOptions;
+}
+
+void FillProcessingVisitor::setCustomOpacity(int customOpacity)
+{
+    m_customOpacity = customOpacity;
+}
+
+void FillProcessingVisitor::setCustomCompositeOp(const QString &customCompositeOp)
+{
+    m_customCompositeOp = customCompositeOp;
 }
 
 void FillProcessingVisitor::setProgressHelper(QSharedPointer<ProgressHelper> progressHelper)

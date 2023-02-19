@@ -48,6 +48,9 @@ public:
     void setContinuousFillReferenceColor(const QSharedPointer<KoColor> continuousFillReferenceColor);
     void setUnmerged(bool unmerged);
     void setUseBgColor(bool useBgColor);
+    void setUseCustomBlendingOptions(bool useCustomBlendingOptions);
+    void setCustomOpacity(int customOpacity);
+    void setCustomCompositeOp(const QString &customCompositeOp);
     void setProgressHelper(QSharedPointer<ProgressHelper> progressHelper);
 
 private:
@@ -86,6 +89,10 @@ private:
 
     bool m_unmerged;
     bool m_useBgColor;
+
+    bool m_useCustomBlendingOptions;
+    int m_customOpacity;
+    QString m_customCompositeOp;
 
     QSharedPointer<ProgressHelper> m_progressHelper {nullptr};
 };

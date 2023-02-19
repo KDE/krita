@@ -41,6 +41,7 @@
 #include <KisAngleSelector.h>
 #include <kis_color_label_selector_widget.h>
 #include <kis_color_button.h>
+#include <kis_cmb_composite.h>
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_command_utils.h>
@@ -58,6 +59,7 @@
 #include <KoShapeControllerBase.h>
 #include <kis_shape_controller.h>
 #include <kis_image_animation_interface.h>
+#include <kis_canvas_resource_provider.h>
 
 #include "kis_icon_utils.h"
 
@@ -89,12 +91,30 @@ void KisToolFill::activate(const QSet<KoShape*> &shapes)
 {
     KisToolPaint::activate(shapes);
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
+    KisCanvas2 *kisCanvas = static_cast<KisCanvas2*>(canvas());
+    KisCanvasResourceProvider *resourceProvider = kisCanvas->viewManager()->canvasResourceProvider();
+    if (resourceProvider) {
+        connect(resourceProvider,
+                SIGNAL(sigNodeChanged(const KisNodeSP)),
+                this,
+                SLOT(slot_currentNodeChanged(const KisNodeSP)));
+        slot_currentNodeChanged(currentNode());
+    }
 }
 
 void KisToolFill::deactivate()
 {
     m_referencePaintDevice = nullptr;
     m_referenceNodeList = nullptr;
+    KisCanvas2 *kisCanvas = static_cast<KisCanvas2*>(canvas());
+    KisCanvasResourceProvider *resourceProvider = kisCanvas->viewManager()->canvasResourceProvider();
+    if (resourceProvider) {
+        disconnect(resourceProvider,
+                   SIGNAL(sigNodeChanged(const KisNodeSP)),
+                   this,
+                   SLOT(slot_currentNodeChanged(const KisNodeSP)));
+    }
+    slot_currentNodeChanged(nullptr);
     KisToolPaint::deactivate();
 }
 
@@ -312,14 +332,21 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_fillStrokeId);
 
+    const int customOpacity = m_customOpacity * OPACITY_OPAQUE_U8 / 100;
+
     if (m_effectiveFillMode != FillMode_FillSimilarRegions) {
         FillProcessingVisitor *visitor =  new FillProcessingVisitor(m_referencePaintDevice,
                                                                     m_resourcesSnapshot->activeSelection(),
                                                                     m_resourcesSnapshot);
 
+        const bool blendingOptionsAreNoOp = m_useCustomBlendingOptions
+                                            ? (customOpacity == OPACITY_OPAQUE_U8 &&
+                                               m_customCompositeOp == COMPOSITE_OVER)
+                                            : (m_resourcesSnapshot->opacity() == OPACITY_OPAQUE_U8 &&
+                                               m_resourcesSnapshot->compositeOpId() == COMPOSITE_OVER);
+
         const bool useFastMode = !m_resourcesSnapshot->activeSelection() &&
-                                 m_resourcesSnapshot->opacity() == OPACITY_OPAQUE_U8 &&
-                                 m_resourcesSnapshot->compositeOpId() == COMPOSITE_OVER &&
+                                 blendingOptionsAreNoOp &&
                                  m_fillType != FillType_FillWithPattern &&
                                  m_opacitySpread == 100 &&
                                  m_useSelectionAsBoundary == false &&
@@ -331,6 +358,11 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
         visitor->setSelectionOnly(m_effectiveFillMode == FillMode_FillSelection);
         visitor->setUseBgColor(m_fillType == FillType_FillWithBackgroundColor);
         visitor->setUsePattern(m_fillType == FillType_FillWithPattern);
+        visitor->setUseCustomBlendingOptions(m_useCustomBlendingOptions);
+        if (m_useCustomBlendingOptions) {
+            visitor->setCustomOpacity(customOpacity);
+            visitor->setCustomCompositeOp(m_customCompositeOp);
+        }
         visitor->setRegionFillingMode(
             m_contiguousFillMode == ContiguousFillMode_FloodFill
             ? KisFillPainter::RegionFillingMode_FloodFill
@@ -405,6 +437,11 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
             visitor->setSelectionOnly(true);
             visitor->setUseBgColor(m_fillType == FillType_FillWithBackgroundColor);
             visitor->setUsePattern(m_fillType == FillType_FillWithPattern);
+            visitor->setUseCustomBlendingOptions(m_useCustomBlendingOptions);
+            if (m_useCustomBlendingOptions) {
+                visitor->setCustomOpacity(customOpacity);
+                visitor->setCustomCompositeOp(m_customCompositeOp);
+            }
             visitor->setProgressHelper(progressHelper);
 
             image()->addJob(
@@ -491,6 +528,12 @@ QWidget* KisToolFill::createOptionWidget()
     m_angleSelectorPatternRotation = new KisAngleSelector;
     m_angleSelectorPatternRotation->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
     m_angleSelectorPatternRotation->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
+    m_checkBoxCustomBlendingOptions = new QCheckBox(i18n("Use custom blending options"));
+    m_sliderCustomOpacity = new KisSliderSpinBox;
+    m_sliderCustomOpacity->setRange(0, 100);
+    m_sliderCustomOpacity->setPrefix(i18n("Opacity: "));
+    m_sliderCustomOpacity->setSuffix(i18n("%"));
+    m_comboBoxCustomCompositeOp = new KisCompositeOpComboBox;
 
     KisOptionButtonStrip *optionButtonStripContiguousFillMode = new KisOptionButtonStrip;
     m_buttonContiguousFillModeFloodFill = optionButtonStripContiguousFillMode->addButton(
@@ -566,6 +609,9 @@ QWidget* KisToolFill::createOptionWidget()
     m_buttonFillWithPattern->setToolTip(i18n("Pattern"));
     m_sliderPatternScale->setToolTip(i18n("Set the scale of the pattern"));
     m_angleSelectorPatternRotation->setToolTip(i18n("Set the rotation of the pattern"));
+    m_checkBoxCustomBlendingOptions->setToolTip(i18n("Set custom blending options instead of using the brush ones"));
+    m_sliderCustomOpacity->setToolTip(i18n("Set a custom opacity for the fill"));
+    m_comboBoxCustomCompositeOp->setToolTip(i18n("Set a custom blend mode for the fill"));
 
     m_buttonContiguousFillModeFloodFill->setToolTip(i18n("Fill regions similar in color to the clicked region"));
     m_buttonContiguousFillModeBoundaryFill->setToolTip(i18n("Fill all regions until a specific boundary color"));
@@ -607,6 +653,9 @@ QWidget* KisToolFill::createOptionWidget()
     sectionFillWith->setPrimaryWidget(optionButtonStripFillWith);
     sectionFillWith->appendWidget("sliderPatternScale", m_sliderPatternScale);
     sectionFillWith->appendWidget("angleSelectorPatternRotation", m_angleSelectorPatternRotation);
+    sectionFillWith->appendWidget("checkBoxCustomBlendingOptions", m_checkBoxCustomBlendingOptions);
+    sectionFillWith->appendWidget("sliderCustomOpacity", m_sliderCustomOpacity);
+    sectionFillWith->appendWidget("comboBoxCustomCompositeOp", m_comboBoxCustomCompositeOp);
     sectionFillWith->setWidgetVisible("sliderPatternScale", false);
     sectionFillWith->setWidgetVisible("angleSelectorPatternRotation", false);
     m_optionWidget->appendWidget("sectionFillWith", sectionFillWith);
@@ -672,6 +721,16 @@ QWidget* KisToolFill::createOptionWidget()
     }
     m_sliderPatternScale->setValue(m_patternScale);
     m_angleSelectorPatternRotation->setAngle(m_patternRotation);
+    m_checkBoxCustomBlendingOptions->setChecked(m_useCustomBlendingOptions);
+    m_sliderCustomOpacity->setValue(m_customOpacity);
+    slot_colorSpaceChanged(currentNode() && currentNode()->paintDevice()
+                           ? currentNode()->paintDevice()->colorSpace()
+                           : nullptr);
+    m_comboBoxCustomCompositeOp->selectCompositeOp(KoID(m_customCompositeOp));
+    if (!m_useCustomBlendingOptions) {
+        sectionFillWith->setWidgetVisible("sliderCustomOpacity", false);
+        sectionFillWith->setWidgetVisible("comboBoxCustomCompositeOp", false);
+    }
     if (m_contiguousFillMode == ContiguousFillMode_BoundaryFill) {
         m_buttonContiguousFillModeBoundaryFill->setChecked(true);
         sectionRegionExtent->setWidgetVisible("buttonContiguousFillBoundaryColor",
@@ -699,38 +758,50 @@ QWidget* KisToolFill::createOptionWidget()
     // Make connections
     connect(optionButtonStripWhatToFill,
             SIGNAL(buttonToggled(KoGroupButton *, bool)),
-            SLOT(slot_optionButtonStripWhatToFill_buttonToggled(KoGroupButton *,
-                                                                bool)));
+            SLOT(slot_optionButtonStripWhatToFill_buttonToggled(KoGroupButton *, bool)));
     connect(optionButtonStripFillWith,
             SIGNAL(buttonToggled(KoGroupButton *, bool)),
-            SLOT(slot_optionButtonStripFillWith_buttonToggled(KoGroupButton *,
-                                                              bool)));
-    connect(m_sliderPatternScale, SIGNAL(valueChanged(double)), SLOT(slot_sliderPatternScale_valueChanged(double)));
-    connect(m_angleSelectorPatternRotation, SIGNAL(angleChanged(double)), SLOT(slot_angleSelectorPatternRotation_angleChanged(double)));
+            SLOT(slot_optionButtonStripFillWith_buttonToggled(KoGroupButton *, bool)));
+    connect(m_sliderPatternScale,
+            SIGNAL(valueChanged(double)),
+            SLOT(slot_sliderPatternScale_valueChanged(double)));
+    connect(m_angleSelectorPatternRotation,
+            SIGNAL(angleChanged(double)),
+            SLOT(slot_angleSelectorPatternRotation_angleChanged(double)));
+    connect(m_checkBoxCustomBlendingOptions,
+            SIGNAL(toggled(bool)),
+            SLOT(slot_checkBoxUseCustomBlendingOptions_toggled(bool)));
+    connect(m_sliderCustomOpacity,
+            SIGNAL(valueChanged(int)),
+            SLOT(slot_sliderCustomOpacity_valueChanged(int)));
+    connect(m_comboBoxCustomCompositeOp,
+            SIGNAL(currentIndexChanged(int)),
+            SLOT(slot_comboBoxCustomCompositeOp_currentIndexChanged(int)));
     connect(optionButtonStripContiguousFillMode,
             SIGNAL(buttonToggled(KoGroupButton *, bool)),
-            SLOT(slot_optionButtonStripContiguousFillMode_buttonToggled(KoGroupButton *,
-                                                                        bool)));
+            SLOT(slot_optionButtonStripContiguousFillMode_buttonToggled(KoGroupButton *, bool)));
     connect(m_buttonContiguousFillBoundaryColor,
             SIGNAL(changed(const KoColor&)),
             SLOT(slot_buttonContiguousFillBoundaryColor_changed(const KoColor&)));
     connect(m_sliderThreshold, SIGNAL(valueChanged(int)), SLOT(slot_sliderThreshold_valueChanged(int)));
     connect(m_sliderSpread, SIGNAL(valueChanged(int)), SLOT(slot_sliderSpread_valueChanged(int)));
-    connect(m_checkBoxSelectionAsBoundary, SIGNAL(toggled(bool)), SLOT(slot_checkBoxSelectionAsBoundary_toggled(bool)));
+    connect(m_checkBoxSelectionAsBoundary,
+            SIGNAL(toggled(bool)),
+            SLOT(slot_checkBoxSelectionAsBoundary_toggled(bool)));
     connect(m_checkBoxAntiAlias, SIGNAL(toggled(bool)), SLOT(slot_checkBoxAntiAlias_toggled(bool)));
     connect(m_sliderGrow, SIGNAL(valueChanged(int)), SLOT(slot_sliderGrow_valueChanged(int)));
-    connect(m_buttonStopGrowingAtDarkestPixel, SIGNAL(toggled(bool)), SLOT(slot_buttonStopGrowingAtDarkestPixel_toogled(bool)));
+    connect(m_buttonStopGrowingAtDarkestPixel,
+            SIGNAL(toggled(bool)),
+            SLOT(slot_buttonStopGrowingAtDarkestPixel_toogled(bool)));
     connect(m_sliderFeather, SIGNAL(valueChanged(int)), SLOT(slot_sliderFeather_valueChanged(int)));
     connect(optionButtonStripReference,
             SIGNAL(buttonToggled(KoGroupButton *, bool)),
-            SLOT(slot_optionButtonStripReference_buttonToggled(KoGroupButton *,
-                                                               bool)));
+            SLOT(slot_optionButtonStripReference_buttonToggled(KoGroupButton *, bool)));
     connect(m_widgetLabels, SIGNAL(selectionChanged()), SLOT(slot_widgetLabels_selectionChanged()));
     connect(
         optionButtonStripDragFill,
         SIGNAL(buttonToggled(KoGroupButton *, bool)),
-        SLOT(slot_optionButtonStripDragFill_buttonToggled(KoGroupButton *,
-                                                              bool)));
+        SLOT(slot_optionButtonStripDragFill_buttonToggled(KoGroupButton *, bool)));
     connect(buttonReset, SIGNAL(clicked()), SLOT(slot_buttonReset_clicked()));
     
     return m_optionWidget;
@@ -772,6 +843,12 @@ void KisToolFill::loadConfiguration()
     }
     m_patternScale = m_configGroup.readEntry<qreal>("patternScale", 100.0);
     m_patternRotation = m_configGroup.readEntry<qreal>("patternRotate", 0.0);
+    m_useCustomBlendingOptions = m_configGroup.readEntry<bool>("useCustomBlendingOptions", false);
+    m_customOpacity = qBound(0, m_configGroup.readEntry<int>("customOpacity", 100), 100);
+    m_customCompositeOp = m_configGroup.readEntry<QString>("customCompositeOp", COMPOSITE_OVER);
+    if (KoCompositeOpRegistry::instance().getKoID(m_customCompositeOp).id().isNull()) {
+        m_customCompositeOp = COMPOSITE_OVER;
+    }
     {
         const QString contiguousFillModeStr = m_configGroup.readEntry<QString>("contiguousFillMode", "");
         m_contiguousFillMode = contiguousFillModeStr == "boundaryFill"
@@ -926,6 +1003,36 @@ void KisToolFill::slot_angleSelectorPatternRotation_angleChanged(double value)
     }
     m_patternRotation = value;
     m_configGroup.writeEntry("patternRotate", value);
+}
+
+void KisToolFill::slot_checkBoxUseCustomBlendingOptions_toggled(bool checked)
+{
+    KisOptionCollectionWidgetWithHeader *sectionFillWith =
+        m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionFillWith");
+    sectionFillWith->setWidgetVisible("sliderCustomOpacity", checked);
+    sectionFillWith->setWidgetVisible("comboBoxCustomCompositeOp", checked);
+    m_useCustomBlendingOptions = checked;
+    m_configGroup.writeEntry("useCustomBlendingOptions", checked);
+}
+
+void KisToolFill::slot_sliderCustomOpacity_valueChanged(int value)
+{
+    if (value == m_customOpacity) {
+        return;
+    }
+    m_customOpacity = value;
+    m_configGroup.writeEntry("customOpacity", value);
+}
+
+void KisToolFill::slot_comboBoxCustomCompositeOp_currentIndexChanged(int index)
+{
+    Q_UNUSED(index);
+    const QString compositeOpId = m_comboBoxCustomCompositeOp->selectedCompositeOp().id();
+    if (compositeOpId == m_customCompositeOp) {
+        return;
+    }
+    m_customCompositeOp = compositeOpId;
+    m_configGroup.writeEntry("customCompositeOp", compositeOpId);
 }
 
 void KisToolFill::slot_optionButtonStripContiguousFillMode_buttonToggled(
@@ -1088,6 +1195,9 @@ void KisToolFill::slot_buttonReset_clicked()
     m_buttonFillWithFG->setChecked(true);
     m_sliderPatternScale->setValue(100.0);
     m_angleSelectorPatternRotation->setAngle(0.0);
+    m_checkBoxCustomBlendingOptions->setChecked(false);
+    m_sliderCustomOpacity->setValue(100);
+    m_comboBoxCustomCompositeOp->selectCompositeOp(KoID(COMPOSITE_OVER));
     m_sliderThreshold->setValue(8);
     m_sliderSpread->setValue(100);
     m_checkBoxSelectionAsBoundary->setChecked(true);
@@ -1098,4 +1208,37 @@ void KisToolFill::slot_buttonReset_clicked()
     m_buttonReferenceCurrent->setChecked(true);
     m_widgetLabels->setSelection({});
     m_buttonDragFillAny->setChecked(true);
+}
+
+void KisToolFill::slot_currentNodeChanged(const KisNodeSP node)
+{
+    if (m_previousNode && m_previousNode->paintDevice()) {
+        disconnect(m_previousNode->paintDevice().data(),
+                   SIGNAL(colorSpaceChanged(const KoColorSpace*)),
+                   this,
+                   SLOT(slot_colorSpaceChanged(const KoColorSpace*)));
+    }
+    if (node && node->paintDevice()) {
+        connect(node->paintDevice().data(),
+                SIGNAL(colorSpaceChanged(const KoColorSpace*)),
+                this,
+                SLOT(slot_colorSpaceChanged(const KoColorSpace*)));
+        slot_colorSpaceChanged(node->paintDevice()->colorSpace());
+    }
+    m_previousNode = node;
+}
+
+void KisToolFill::slot_colorSpaceChanged(const KoColorSpace *colorSpace)
+{
+    if (!m_comboBoxCustomCompositeOp) {
+        return;
+    }
+    const KoColorSpace *compositionSpace = colorSpace;
+    if (currentNode() && currentNode()->paintDevice()) {
+        // Currently, composition source is enough to determine the available blending mode,
+        // because either destination is the same (paint layers), or composition happens
+        // in source space (masks).
+        compositionSpace = currentNode()->paintDevice()->compositionSourceColorSpace();
+    }
+    m_comboBoxCustomCompositeOp->validate(compositionSpace);
 }

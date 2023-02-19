@@ -1,10 +1,5 @@
 project(kritapigment)
 
-set(LINK_OPENEXR_LIB)
-if(OpenEXR_FOUND)
-    set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
-endif()
-
 if(HAVE_XSIMD)
     ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
     ko_compile_for_all_implementations(__per_arch_alpha_applicator_factory_objs KoAlphaMaskApplicatorFactoryImpl.cpp)
@@ -82,8 +77,6 @@ set(kritapigment_SRCS
     resources/KisUniqueColorSet.cpp
 )
 
-set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB} kritamultiarch)
-
 if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   # avoid "cannot open file 'LIBC.lib'" error
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
@@ -106,7 +99,8 @@ target_link_libraries( kritapigment
         kritaglobal
         kritaresources
         kritacommand
-        ${EXTRA_LIBRARIES}
+        ${LINK_OPENEXR_LIB}
+        kritamultiarch
         KF5::I18n 
         KF5::ConfigCore
         Qt5::Core

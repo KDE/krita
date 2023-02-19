@@ -703,8 +703,9 @@ if(APPLE)
     target_link_libraries(kritaui PRIVATE ${APPKIT_LIBRARY})
 endif ()
 
-
-target_link_libraries(kritaui PUBLIC ${OPENEXR_LIBRARIES})
+if(OpenEXR_FOUND)
+  target_link_libraries(kritaui PUBLIC ${LINK_OPENEXR_LIB})
+endif()
 
 # Add VSync disable workaround
 if(NOT WIN32 AND NOT APPLE AND NOT ANDROID)

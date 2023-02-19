@@ -384,7 +384,7 @@ if(HAVE_CXX_ATOMICS_WITH_LIB OR HAVE_CXX_ATOMICS64_WITH_LIB)
 endif()
 
 if(OpenEXR_FOUND)
-  target_link_libraries(kritaimage PUBLIC ${OPENEXR_LIBRARIES})
+  target_link_libraries(kritaimage PUBLIC ${LINK_OPENEXR_LIB})
 endif()
 
 if(FFTW3_FOUND)

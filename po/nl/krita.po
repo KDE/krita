@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-18 00:56+0000\n"
-"PO-Revision-Date: 2023-02-17 11:05+0100\n"
+"PO-Revision-Date: 2023-02-18 10:53+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -29877,20 +29877,16 @@ msgid "%1 cannot be written to. Please save under a different name."
 msgstr "Naar %1 kan niet geschreven worden. Sla het op onder een andere naam."
 
 #: libs/ui/KisDocument.cpp:751
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Failed to create an action."
+#, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "Actie aanmaken is mislukt."
+msgstr "Een reservekopiebestand aanmaken is mislukt."
 
 #: libs/ui/KisDocument.cpp:768
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Failed to create an action."
+#, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr "Actie aanmaken is mislukt."
+msgstr "Een genummerd reservekopiebestand aanmaken is mislukt."
 
 #: libs/ui/KisDocument.cpp:790
 #, kde-format

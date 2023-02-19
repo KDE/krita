@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-18 00:56+0000\n"
-"PO-Revision-Date: 2023-02-16 05:51+0100\n"
+"PO-Revision-Date: 2023-02-18 07:15+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -19495,16 +19495,15 @@ msgstr "ჭდეები"
 
 #: libs/resources/KisResourceModel.cpp:150
 #: libs/resources/KisTagResourceModel.cpp:646
-#, fuzzy, kde-format
-#| msgid "Thumbnail"
+#, kde-format
 msgid "Large Thumbnail"
-msgstr "მინიატურა"
+msgstr "დიდი მინიატურა"
 
 #: libs/resources/KisResourceModel.cpp:152
 #: libs/resources/KisTagResourceModel.cpp:648
 #, kde-format
 msgid "Dirty"
-msgstr ""
+msgstr "ბინძური"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
@@ -19719,10 +19718,9 @@ msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:660
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource ID"
-msgstr "რესურსები"
+msgstr "რესურსის ID"
 
 #: libs/resources/KisTagResourceModel.cpp:662
 #, kde-format
@@ -19730,34 +19728,29 @@ msgid "Tag Url"
 msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:664
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource"
-msgstr "რესურსები"
+msgstr "რესურსი"
 
 #: libs/resources/KisTagResourceModel.cpp:666
-#, fuzzy, kde-format
-#| msgid "Resource View"
+#, kde-format
 msgid "Resource Active"
-msgstr "რესურსის ხედი"
+msgstr "რესურსი აქტიურია"
 
 #: libs/resources/KisTagResourceModel.cpp:668
-#, fuzzy, kde-format
-#| msgid "Storage Active"
+#, kde-format
 msgid "Tag Active"
-msgstr "საცავი აქტიურია"
+msgstr "ჭდე აქტიურია"
 
 #: libs/resources/KisTagResourceModel.cpp:672
-#, fuzzy, kde-format
-#| msgid "Resource Type"
+#, kde-format
 msgid "Resource Name"
-msgstr "რესურსის ტიპი"
+msgstr "რესურსის სახელი"
 
 #: libs/resources/KisTagResourceModel.cpp:674
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "Tag File Name"
-msgstr "ფაილის სახელი"
+msgstr "ჭდის ფაილის სახელი"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:101
 #, kde-format
@@ -29138,12 +29131,10 @@ msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 
 #: libs/ui/KisDocument.cpp:751
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Failed to rename the resource"
+#, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "რესურსის სახელის გადარქმევის შეცდომა"
+msgstr "მარქაფის ფაილის შექმნის შეცდომა"
 
 #: libs/ui/KisDocument.cpp:768
 #, kde-format
@@ -40013,15 +40004,13 @@ msgid "Resources Cache Database Explorer"
 msgstr ""
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
-#, fuzzy, kde-format
-#| msgid "Versions"
+#, kde-format
 msgid "Version"
-msgstr "ვერსიები"
+msgstr "ვერსია"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "File name"
 msgstr "ფაილის სახელი"
 
@@ -40038,22 +40027,19 @@ msgid "Display Name"
 msgstr "საჩვენებელი სახელი"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version"
 msgstr "ბაზის ვერსია"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version"
 msgstr "Krita-ის ვერსია"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Upgrade date"
-msgstr "განახლება"
+msgstr "განახლების თარიღი"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
@@ -40075,24 +40061,21 @@ msgstr "სქემის ინფორმაცია"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
-#, fuzzy, kde-format
-#| msgid "Quantization"
+#, kde-format
 msgid "Initialization"
-msgstr "ქვანტიზაცია"
+msgstr "ინიციალიზაცია"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version:"
-msgstr "ბაზის ვერსია"
+msgstr "ბაზის ვერსია:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version:"
-msgstr "Krita-ის ვერსია"
+msgstr "Krita-ის ვერსია:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217

@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-18 00:56+0000\n"
-"PO-Revision-Date: 2023-02-17 20:02+0300\n"
+"PO-Revision-Date: 2023-02-18 11:17+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -29721,18 +29721,16 @@ msgid "%1 cannot be written to. Please save under a different name."
 msgstr "%1 yazılamadı. Lütfen başka bir adla kaydedin."
 
 #: libs/ui/KisDocument.cpp:751
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL errors"
-#| msgid "Unable to read the image profile."
+#, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "Görsel profili okunamadı."
+msgstr "Bir yedek dosyası oluşturulamadı"
 
 #: libs/ui/KisDocument.cpp:768
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr ""
+msgstr "Numaralandırılmış bir yedek dosyası oluşturulamadı"
 
 #: libs/ui/KisDocument.cpp:790
 #, kde-format

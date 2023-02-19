@@ -809,6 +809,13 @@ void KisView::dropEvent(QDropEvent *event)
                 fillMode = "fillContiguousRegion";
             }
         }
+        const bool useCustomBlendingOptions = configGroup.readEntry<bool>("useCustomBlendingOptions", false);
+        const int customOpacity =
+            qBound(0, configGroup.readEntry<int>("customOpacity", 100), 100) * OPACITY_OPAQUE_U8 / 100;
+        QString customCompositeOp = configGroup.readEntry<QString>("customCompositeOp", COMPOSITE_OVER);
+        if (KoCompositeOpRegistry::instance().getKoID(customCompositeOp).id().isNull()) {
+            customCompositeOp = COMPOSITE_OVER;
+        }
             
         if (event->keyboardModifiers() == Qt::ShiftModifier) {
             if (fillMode == "fillSimilarRegions") {
@@ -830,6 +837,11 @@ void KisView::dropEvent(QDropEvent *event)
                                                                         resources);
             visitor->setSeedPoint(imgCursorPos);
             visitor->setSelectionOnly(true);
+            visitor->setUseCustomBlendingOptions(useCustomBlendingOptions);
+            if (useCustomBlendingOptions) {
+                visitor->setCustomOpacity(customOpacity);
+                visitor->setCustomCompositeOp(customCompositeOp);
+            }
             image()->addJob(
                 fillStrokeId,
                 new KisStrokeStrategyUndoCommandBased::Data(
@@ -934,7 +946,13 @@ void KisView::dropEvent(QDropEvent *event)
                     }
                 }
                 const bool useSelectionAsBoundary = configGroup.readEntry("useSelectionAsBoundary", false);
+                const bool blendingOptionsAreNoOp = useCustomBlendingOptions
+                                                    ? (customOpacity == OPACITY_OPAQUE_U8 &&
+                                                       customCompositeOp == COMPOSITE_OVER)
+                                                    : (resources->opacity() == OPACITY_OPAQUE_U8 &&
+                                                       resources->compositeOpId() == COMPOSITE_OVER);
                 const bool useFastMode = !resources->activeSelection() &&
+                                         blendingOptionsAreNoOp &&
                                          opacitySpread == 100 &&
                                          useSelectionAsBoundary == false &&
                                          !antiAlias && grow == 0 && feather == 0 &&
@@ -956,6 +974,11 @@ void KisView::dropEvent(QDropEvent *event)
                 visitor->setFillThreshold(threshold);
                 visitor->setOpacitySpread(opacitySpread);
                 visitor->setAntiAlias(antiAlias);
+                visitor->setUseCustomBlendingOptions(useCustomBlendingOptions);
+                if (useCustomBlendingOptions) {
+                    visitor->setCustomOpacity(customOpacity);
+                    visitor->setCustomCompositeOp(customCompositeOp);
+                }
                 
                 image()->addJob(
                     fillStrokeId,

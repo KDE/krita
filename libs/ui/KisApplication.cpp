@@ -460,10 +460,14 @@ bool KisApplication::start(const KisApplicationArguments &args)
     processEvents();
     addResourceTypes();
 
+    setSplashScreenLoadingText(i18n("Loading plugins..."));
+    processEvents();
     // Load the plugins
     loadPlugins();
 
     // Load all resources
+    setSplashScreenLoadingText(i18n("Loading resources..."));
+    processEvents();
     if (!registerResources()) {
         return false;
     }
@@ -502,6 +506,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 windowLayout->applyLayout();
             }
         }
+
+        setSplashScreenLoadingText(i18n("Launching..."));
 
         if (showmainWindow) {
             d->mainWindow = kisPart->currentMainwindow();

@@ -10,6 +10,7 @@
 #include <kis_image.h>
 #include <kis_wrapped_rect.h>
 #include <lazybrush/kis_colorize_mask.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "KisEncloseAndFillProcessingVisitor.h"
 
@@ -32,7 +33,10 @@ KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(
         bool useSelectionAsBoundary,
         bool usePattern,
         bool unmerged,
-        bool useBgColor
+        bool useBgColor,
+        bool useCustomBlendingOptions,
+        int customOpacity,
+        const QString &customCompositeOp
 )
     : m_referencePaintDevice(referencePaintDevice)
     , m_enclosingMask(enclosingMask)
@@ -53,6 +57,9 @@ KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(
     , m_usePattern(usePattern)
     , m_unmerged(unmerged)
     , m_useBgColor(useBgColor)
+    , m_useCustomBlendingOptions(useCustomBlendingOptions)
+    , m_customOpacity(customOpacity)
+    , m_customCompositeOp(customCompositeOp)
 {}
 
 void KisEncloseAndFillProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
@@ -97,6 +104,10 @@ void KisEncloseAndFillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device
     painter.setSizemod(m_expand);
     painter.setStopGrowingAtDarkestPixel(m_stopGrowingAtDarkestPixel);
     painter.setFeather(m_feather);
+    if (m_useCustomBlendingOptions) {
+        painter.setOpacity(m_customOpacity);
+        painter.setCompositeOpId(m_customCompositeOp);
+    }
 
     KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_referencePaintDevice;
 

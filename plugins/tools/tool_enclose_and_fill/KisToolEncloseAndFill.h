@@ -20,6 +20,7 @@
 #include <kconfiggroup.h>
 #include <KisEncloseAndFillPainter.h>
 #include <commands_new/KisMergeLabeledLayersCommand.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "subtools/KisDynamicDelegatedTool.h"
 
@@ -34,6 +35,7 @@ class KisColorLabelSelectorWidget;
 class QPushButton;
 class QToolButton;
 class QComboBox;
+class KisCompositeOpComboBox;
 
 class KisToolEncloseAndFill : public KisDynamicDelegatedTool<KisToolShape>
 {
@@ -94,6 +96,9 @@ private:
     FillType m_fillType {FillWithForegroundColor};
     qreal m_patternScale {100.0};
     qreal m_patternRotation {0.0};
+    bool m_useCustomBlendingOptions {false};
+    int m_customOpacity {100};
+    QString m_customCompositeOp {COMPOSITE_OVER};
 
     int m_fillThreshold {8};
     int m_fillOpacitySpread {100};
@@ -110,6 +115,7 @@ private:
     KisPaintDeviceSP m_referencePaintDevice {nullptr};
     KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP m_referenceNodeList {nullptr};
     int m_previousTime {0};
+    KisNodeSP m_previousNode {nullptr};
 
     KisOptionCollectionWidget *m_optionWidget {nullptr};
 
@@ -129,6 +135,9 @@ private:
     KoGroupButton *m_buttonFillWithPattern{nullptr};
     KisDoubleSliderSpinBox *m_sliderPatternScale {nullptr};
     KisAngleSelector *m_angleSelectorPatternRotation {nullptr};
+    QCheckBox *m_checkBoxCustomBlendingOptions {nullptr};
+    KisSliderSpinBox *m_sliderCustomOpacity {nullptr};
+    KisCompositeOpComboBox *m_comboBoxCustomCompositeOp {nullptr};
 
     KisSliderSpinBox *m_sliderFillThreshold {nullptr};
     KisSliderSpinBox *m_sliderFillOpacitySpread {nullptr};
@@ -189,6 +198,9 @@ private Q_SLOTS:
                                                       bool checked);
     void slot_sliderPatternScale_valueChanged(double value);
     void slot_angleSelectorPatternRotation_angleChanged(double value);
+    void slot_checkBoxUseCustomBlendingOptions_toggled(bool checked);
+    void slot_sliderCustomOpacity_valueChanged(int value);
+    void slot_comboBoxCustomCompositeOp_currentIndexChanged(int index);
     void slot_sliderFillThreshold_valueChanged(int value);
     void slot_sliderFillOpacitySpread_valueChanged(int value);
     void slot_checkBoxSelectionAsBoundary_toggled(bool checked);
@@ -200,6 +212,9 @@ private Q_SLOTS:
                                                        bool checked);
     void slot_widgetLabels_selectionChanged();
     void slot_buttonReset_clicked();
+
+    void slot_currentNodeChanged(const KisNodeSP node);
+    void slot_colorSpaceChanged(const KoColorSpace *colorSpace);
 
     void slot_delegateTool_enclosingMaskProduced(KisPixelSelectionSP enclosingMask);
 

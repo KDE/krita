@@ -39,7 +39,10 @@ public:
         bool useSelectionAsBoundary,
         bool usePattern,
         bool unmerged,
-        bool useBgColor
+        bool useBgColor,
+        bool useCustomBlendingOptions,
+        int customOpacity,
+        const QString &customCompositeOp
     );
 
 private:
@@ -69,6 +72,9 @@ private:
     bool m_usePattern {false};
     bool m_unmerged {false};
     bool m_useBgColor {false};
+    bool m_useCustomBlendingOptions;
+    int m_customOpacity;
+    QString m_customCompositeOp;
 };
 
 #endif

@@ -182,22 +182,23 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
     QModelIndexList list = m_ui->resourceItemView->selectionModel()->selection().indexes();
     KisTagFilterResourceProxyModel* model = m_resourceProxyModelsForResourceType[getCurrentResourceType()];
     if (list.size() == 1) {
-        QModelIndex idx = list[0];
+        const QModelIndex idx = list[0];
         m_ui->lblFilename->setText(model->data(idx, Qt::UserRole + KisAllResourcesModel::Filename).toString());
         m_ui->lneName->setText(model->data(idx, Qt::UserRole + KisAllResourcesModel::Name).toString());
         m_ui->lblLocation->setText(model->data(idx, Qt::UserRole + KisAllResourcesModel::Location).toString());
         m_ui->lblId->setText(model->data(idx, Qt::UserRole + KisAllResourcesModel::Id).toString());
 
-        QSize thumbSize = m_ui->lblThumbnail->size();
+        const QSize thumbSize = m_ui->lblThumbnail->size();
 
         QImage thumbLabel = m_thumbnailPainter.getReadyThumbnail(idx, thumbSize*devicePixelRatioF(), palette());
         thumbLabel.setDevicePixelRatio(devicePixelRatioF());
 
-        QPixmap pix = QPixmap::fromImage(thumbLabel);
+        const QPixmap pix = QPixmap::fromImage(thumbLabel);
         m_ui->lblThumbnail->setScaledContents(true);
         m_ui->lblThumbnail->setPixmap(pix);
 
-        QMap<QString, QVariant> metadata = model->data(idx, Qt::UserRole + KisAllResourcesModel::MetaData).toMap();
+        const QMap<QString, QVariant> metadata =
+            model->data(idx, Qt::UserRole + KisAllResourcesModel::MetaData).toMap();
 
         m_ui->lblMetadata->setDisabled(false);
         m_ui->lblFilename->setDisabled(false);
@@ -383,7 +384,7 @@ void DlgResourceManager::updateDeleteButtonState(const QModelIndexList &list)
     }
 }
 
-QString DlgResourceManager::constructMetadata(QMap<QString, QVariant> metadata, QString resourceType)
+QString DlgResourceManager::constructMetadata(const QMap<QString, QVariant> &metadata, const QString &resourceType)
 {
     QString response;
     if (resourceType == ResourceType::PaintOpPresets) {

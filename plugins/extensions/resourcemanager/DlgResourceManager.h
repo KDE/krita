@@ -26,7 +26,7 @@ class KisWdgTagSelectionControllerOneResource;
 namespace Ui
 {
 class WdgDlgResourceManager;
-}
+} // namespace Ui
 
 class DlgResourceManager : public KoDialog
 {
@@ -34,9 +34,6 @@ class DlgResourceManager : public KoDialog
 public:
     DlgResourceManager(KisActionManager* actionMgr, QWidget *parent = 0);
     ~DlgResourceManager() override;
-
-
-
 
 private Q_SLOTS:
     void slotResourceTypeSelected(int);
@@ -58,7 +55,7 @@ private:
     QSharedPointer<KisTag> getCurrentTag();
     void updateDeleteButtonState(const QModelIndexList &list);
 
-    QString constructMetadata(QMap<QString, QVariant> metadata, QString resourceType);
+    static QString constructMetadata(const QMap<QString, QVariant> &metadata, const QString &resourceType);
 
 private:
     QWidget *m_page {nullptr};

@@ -29,23 +29,32 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add(
+    ext_libtheora_meson
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://wrapdb.mesonbuild.com/v2/theora_1.1.1-3/get_patch
+    URL_HASH SHA256=a3cd07c8e81abbfd693a35c296ecceeed0990ae86f5dc2b75043eaec6603cc59
+
+    DOWNLOAD_NAME "theora_1.1.1-3_patch.zip"
+
+    BUILD_COMMAND ""
+    CONFIGURE_COMMAND ""
+    INSTALL_COMMAND ""
+    UPDATE_COMMAND ""
+
+    SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/theora_meson"
+)
+
+ExternalProject_Add(
     ext_libtheora
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     GIT_REPOSITORY https://gitlab.xiph.org/xiph/theora.git
     # gitlab-ci: Add scons build. Latest commit as of Nov 26, 2022
     GIT_TAG 7180717276af1ebc7da15c83162d6c5d6203aabf
 
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-theora-Add-Meson-build-system.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-theora-Add-support-for-hidden-frame-dumping-flag.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-theora-Add-missing-libtheora-module-definition-file.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-theora-Add-tests.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-theora-Add-examples.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-theora-Add-telemetry-support.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-theora-Add-memory-constraint-fuzzer.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-theora-Add-specification-building.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0009-theora-Add-doxygen-support.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0010-theora-Update-to-1.2.0.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0011-theora-Add-Arm-support.patch
+    PATCH_COMMAND ${CMAKE_COMMAND} -E echo Deploying Meson wrap
+        COMMAND ${CMAKE_COMMAND} -E copy_directory 
+            ${CMAKE_CURRENT_BINARY_DIR}/theora_meson
+            <SOURCE_DIR>
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}
@@ -65,7 +74,7 @@ ExternalProject_Add(
 
     UPDATE_COMMAND ""
 
-    DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ${OGG_DEP} ext_png ext_libvorbis
+    DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ${OGG_DEP} ext_png ext_libvorbis ext_libtheora_meson
 )
 
 ExternalProject_Add(
@@ -158,7 +167,7 @@ ExternalProject_Add(
     INSTALL_COMMAND ""
     UPDATE_COMMAND ""
 
-    SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/meson"
+    SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/lame_meson"
 )
 
 ExternalProject_Add(
@@ -169,7 +178,7 @@ ExternalProject_Add(
 
     PATCH_COMMAND ${CMAKE_COMMAND} -E echo Deploying Meson wrap
         COMMAND ${CMAKE_COMMAND} -E copy_directory 
-            ${CMAKE_CURRENT_BINARY_DIR}/meson
+            ${CMAKE_CURRENT_BINARY_DIR}/lame_meson
             <SOURCE_DIR>
         COMMAND ${CMAKE_COMMAND} -E echo Deploying patches
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-lame-Add-SOVERSION-to-the-library-for-disambiguation.patch

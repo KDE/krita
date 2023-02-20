@@ -21,9 +21,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-18 00:56+0000\n"
-"PO-Revision-Date: 2023-02-17 09:02+0100\n"
-"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"POT-Creation-Date: 2023-02-20 00:55+0000\n"
+"PO-Revision-Date: 2023-02-19 10:17+0100\n"
+"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -29725,18 +29725,16 @@ msgid "%1 cannot be written to. Please save under a different name."
 msgstr "V %1 ni možno pisati. Shranite pod drugim imenom."
 
 #: libs/ui/KisDocument.cpp:751
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL errors"
-#| msgid "Unable to read the image profile."
+#, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "Profila slike ni mogoče prebrati."
+msgstr "Datoteke varnostne kopije ni mogoče ustvariti."
 
 #: libs/ui/KisDocument.cpp:768
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr ""
+msgstr "Oštevilčene datoteke varnostne kopije ni mogoče ustvariti."
 
 #: libs/ui/KisDocument.cpp:790
 #, kde-format
@@ -40350,7 +40348,7 @@ msgstr "Plast/maska"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
-#, fuzzy, kde-format
+#, kde-format
 msgid "Proof Colors to Painting Color Space"
 msgstr "Preveri videz barv v barvnem prostoru slikanja"
 
@@ -42963,7 +42961,7 @@ msgstr "Prednastavitve čopiča"
 msgid "Manage Resources"
 msgstr "Upravljaj vire"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:221
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -42972,7 +42970,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "(več izbranih)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:240
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -42980,19 +42978,19 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "(nič ni izbrano)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:379
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
 #, kde-format
 msgid "Undelete Resources"
 msgstr "Prekliči brisanje virov"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, kde-format
 msgid "Delete Resources"
 msgstr "Izbriši vire"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:399
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "

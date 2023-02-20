@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-18 00:56+0000\n"
+"POT-Creation-Date: 2023-02-20 00:55+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -44285,7 +44285,7 @@ msgstr "Dostupne četke"
 msgid "Manage Resources"
 msgstr "Upravljaj Resursima"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:221
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
 #, fuzzy, kde-format
 #| msgid "Duplicate layer or mask"
 msgctxt ""
@@ -44295,7 +44295,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "Dupliciraj novu masku ili sloj"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:240
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
 #, fuzzy, kde-format
 #| msgid "No action is selected."
 msgctxt ""
@@ -44304,7 +44304,7 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "Nije odabrana akcija"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:379
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Delete resource"
@@ -44312,7 +44312,7 @@ msgid "Undelete Resources"
 msgstr "Izbriši resurs"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
@@ -44320,7 +44320,7 @@ msgstr "Izbriši resurs"
 msgid "Delete Resources"
 msgstr "Izbriši resurs"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:399
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
 #, fuzzy, kde-format
 #| msgid "ICC Engine"
 msgctxt "Brush engine type, in resource manager"

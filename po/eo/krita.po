@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-18 00:56+0000\n"
+"POT-Creation-Date: 2023-02-20 00:55+0000\n"
 "PO-Revision-Date: 2023-02-12 16:17+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -42980,7 +42980,7 @@ msgstr "Brush Presets"
 msgid "Manage Resources"
 msgstr "Administri Rimedojn"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:221
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -42989,7 +42989,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "(Multobla elektita)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:240
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -42997,19 +42997,19 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "(Neniu elektita)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:379
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
 #, kde-format
 msgid "Undelete Resources"
 msgstr "Malforigi Rimedojn"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, kde-format
 msgid "Delete Resources"
 msgstr "Forigi Rimedojn"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:399
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "

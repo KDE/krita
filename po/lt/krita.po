@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-18 00:56+0000\n"
+"POT-Creation-Date: 2023-02-20 00:55+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -43335,7 +43335,7 @@ msgstr "Teptuko ruošiniai"
 msgid "Manage Resources"
 msgstr "&Ištekliai"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:221
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
 #, fuzzy, kde-format
 #| msgid "Duplicate layer or mask"
 msgctxt ""
@@ -43345,7 +43345,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "Dubliuoti sluoksnį ar kaukę"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:240
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
 #, fuzzy, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -43353,7 +43353,7 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "Štačiakampis žymėjimas"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:379
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Delete resource"
@@ -43361,7 +43361,7 @@ msgid "Undelete Resources"
 msgstr "Trinti resursą"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
@@ -43369,7 +43369,7 @@ msgstr "Trinti resursą"
 msgid "Delete Resources"
 msgstr "Trinti resursą"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:399
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
 #, fuzzy, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "

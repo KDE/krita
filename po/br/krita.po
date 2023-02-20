@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-18 00:56+0000\n"
+"POT-Creation-Date: 2023-02-20 00:55+0000\n"
 "PO-Revision-Date: 2004-05-25 15:34+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -42451,7 +42451,7 @@ msgstr "Perzhioù ..."
 msgid "Manage Resources"
 msgstr "&Danvezioù"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:221
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
 #, fuzzy, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -42460,7 +42460,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "Eilañ"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:240
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
 #, fuzzy, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -42468,19 +42468,19 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "Diuzadenn"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:379
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
 #, fuzzy, kde-format
 msgid "Undelete Resources"
 msgstr "Dilemel"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, fuzzy, kde-format
 msgid "Delete Resources"
 msgstr "Dilemel"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:399
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
 #, fuzzy, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "

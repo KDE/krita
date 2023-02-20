@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-18 00:56+0000\n"
-"PO-Revision-Date: 2023-02-18 11:17+0300\n"
+"POT-Creation-Date: 2023-02-20 00:55+0000\n"
+"PO-Revision-Date: 2023-02-20 00:35+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -13337,7 +13337,7 @@ msgstr "Kes (Keskin)"
 #, kde-format
 msgctxt "action"
 msgid "Copy &merged"
-msgstr "Birleştiril&mişi Kopyala"
+msgstr "Birleştiril&miş Kopyala"
 
 #. i18n: context: toolTip @ Action (copy_merged), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (copy_merged), Actions (Edit), ActionCollection (Menu)
@@ -13347,7 +13347,7 @@ msgstr "Birleştiril&mişi Kopyala"
 #, kde-format
 msgctxt "action"
 msgid "Copy merged"
-msgstr "Birleştirilmişi kopyala"
+msgstr "Birleştirilmiş kopyala"
 
 #. i18n: context: text @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
@@ -13452,7 +13452,7 @@ msgstr "Şekil Biçemini Yapıştır"
 #, kde-format
 msgctxt "action"
 msgid "Paste as R&eference Image"
-msgstr "Başvuru Görseli Ol&arak Yapıştır"
+msgstr "Başvuru Görsel Ol&arak Yapıştır"
 
 #. i18n: context: toolTip @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
@@ -13462,7 +13462,7 @@ msgstr "Başvuru Görseli Ol&arak Yapıştır"
 #, kde-format
 msgctxt "action"
 msgid "Paste as Reference Image"
-msgstr "Başvuru Görseli Olarak Yapıştır"
+msgstr "Başvuru Görsel Olarak Yapıştır"
 
 #. i18n: context: text @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
@@ -14398,7 +14398,7 @@ msgstr "Yardımcı Önizlemelerini Göster"
 #, kde-format
 msgctxt "action"
 msgid "S&how Reference Images"
-msgstr "Başvuru Gö&rsellerini Göster"
+msgstr "Başvuru Gö&rselleri Göster"
 
 #. i18n: context: toolTip @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
@@ -14408,7 +14408,7 @@ msgstr "Başvuru Gö&rsellerini Göster"
 #, kde-format
 msgctxt "action"
 msgid "Show Reference Images"
-msgstr "Başvuru Görsellerini Göster"
+msgstr "Başvuru Görselleri Göster"
 
 #. i18n: context: text @ Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1146
@@ -17981,7 +17981,7 @@ msgstr "Krita Görev Kümesi"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Krita Reference Image Collection"
-msgstr "Krita Başvuru Görseli Koleksiyonu"
+msgstr "Krita Başvuru Görsel Koleksiyonu"
 
 #: libs/koplugin/KisMimeDatabase.cpp:289
 #, kde-format
@@ -30138,8 +30138,7 @@ msgid ""
 "The image contains <b>reference images</b>. The reference images will not be "
 "saved."
 msgstr ""
-"Görsel, <b>başvuru görselleri</b> içeriyor. Başvuru görselleri "
-"kaydedilmeyecek."
+"Görsel, <b>başvuru görseller</b> içeriyor. Başvuru görseller kaydedilmeyecek."
 
 #: libs/ui/KisImportExportManager.cpp:542
 #, kde-format
@@ -42902,7 +42901,7 @@ msgstr "Fırça Önayarları"
 msgid "Manage Resources"
 msgstr "Özkaynakları Yönet"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:221
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -42911,7 +42910,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "(Birden çok seçili)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:240
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -42919,19 +42918,19 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "(Seçili yok)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:379
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
 #, kde-format
 msgid "Undelete Resources"
 msgstr "Özkaynakları Kurtar"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, kde-format
 msgid "Delete Resources"
 msgstr "Özkaynakları Sil"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:399
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "
@@ -47942,7 +47941,7 @@ msgstr "Süzgeçler:"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:139
 #, kde-format
 msgid "Could not load embedded reference image %1 "
-msgstr "%1 gömülü başvuru görseli yüklenemedi"
+msgstr "%1 gömülü başvuru görsel yüklenemedi"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:144
 #, kde-format
@@ -57475,12 +57474,12 @@ msgstr ""
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:96
 #, kde-format
 msgid "Select a Reference Image"
-msgstr "Başvuru Görsel Seç"
+msgstr "Bir başvuru görsel seç"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:129
 #, kde-format
 msgid "Could not load reference image from clipboard"
-msgstr "Panodan başvuru görseli yüklenemedi"
+msgstr "Panodan başvuru görsel yüklenemedi"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:151
 #, kde-format
@@ -57500,7 +57499,7 @@ msgstr "Başvuru görseller, '%1' konumundan yüklenemedi."
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:202
 #, kde-format
 msgid "Save Reference Images"
-msgstr "Başvuru Görsel Kaydet"
+msgstr "Başvuru Görselleri Kaydet"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:231
 #, kde-format
@@ -57545,7 +57544,7 @@ msgstr "Başvuru Görsel Kümelerini Dışa Aktar"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:78
 #, kde-format
 msgid "Paste Reference Image From System Clipboard"
-msgstr "Sistem Panosundan Başvuru Görselini Yapıştır"
+msgstr "Sistem Panosundan Başvuru Görseli Yapıştır"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:102
 #, kde-format

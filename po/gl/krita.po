@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-18 00:56+0000\n"
+"POT-Creation-Date: 2023-02-20 00:55+0000\n"
 "PO-Revision-Date: 2020-01-12 12:14+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -45331,7 +45331,7 @@ msgstr "Predefinicións de pinceis"
 msgid "Manage Resources"
 msgstr "Xestionar os recursos"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:221
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
 #, fuzzy, kde-format
 #| msgid "Duplicate selected mask"
 msgctxt ""
@@ -45341,7 +45341,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "Duplicar a máscara seleccionada"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:240
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
 #, fuzzy, kde-format
 #| msgid "No action is selected."
 msgctxt ""
@@ -45350,7 +45350,7 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "Non hai acción seleccionadas."
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:379
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Delete resource"
@@ -45358,7 +45358,7 @@ msgid "Undelete Resources"
 msgstr "Eliminar o recurso"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
@@ -45366,7 +45366,7 @@ msgstr "Eliminar o recurso"
 msgid "Delete Resources"
 msgstr "Eliminar o recurso"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:399
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
 #, fuzzy, kde-format
 #| msgid "Engine:"
 msgctxt "Brush engine type, in resource manager"

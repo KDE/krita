@@ -416,9 +416,9 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
                 KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(outerGlow->gradient(style->resourcesInterface()).data());
 
                 if (segmentGradient && segmentGradient->valid()) {
-                    w.writeSegmentGradient("Grad", segmentGradient);
+                    w.writeSegmentGradient("Grad", *segmentGradient);
                 } else if (stopGradient  && stopGradient->valid()) {
-                    w.writeStopGradient("Grad", stopGradient);
+                    w.writeStopGradient("Grad", *stopGradient);
                 } else {
                     warnKrita << "WARNING: OG: Unknown gradient type!";
                     w.writeColor("Clr ", outerGlow->color());
@@ -463,9 +463,9 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
                 KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(innerGlow->gradient(style->resourcesInterface()).data());
 
                 if (segmentGradient  && innerGlow->gradient(style->resourcesInterface())->valid()) {
-                    w.writeSegmentGradient("Grad", segmentGradient);
+                    w.writeSegmentGradient("Grad", *segmentGradient);
                 } else if (stopGradient  && innerGlow->gradient(style->resourcesInterface())->valid()) {
-                    w.writeStopGradient("Grad", stopGradient);
+                    w.writeStopGradient("Grad", *stopGradient);
                 } else {
                     warnKrita << "WARNING: IG: Unknown gradient type!";
                     w.writeColor("Clr ", innerGlow->color());
@@ -612,9 +612,9 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
             w.writeUnitFloat("Opct", "#Prc", gradientOverlay->opacity());
 
             if (segmentGradient && segmentGradient->valid()) {
-                w.writeSegmentGradient("Grad", segmentGradient);
+                w.writeSegmentGradient("Grad", *segmentGradient);
             } else if (stopGradient && stopGradient->valid()) {
-                w.writeStopGradient("Grad", stopGradient);
+                w.writeStopGradient("Grad", *stopGradient);
             }
 
             w.writeUnitFloat("Angl", "#Ang", gradientOverlay->angle());
@@ -673,9 +673,9 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
                 KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(stroke->gradient(style->resourcesInterface()).data());
 
                 if (segmentGradient && segmentGradient->valid()) {
-                    w.writeSegmentGradient("Grad", segmentGradient);
+                    w.writeSegmentGradient("Grad", *segmentGradient);
                 } else if (stopGradient && stopGradient->valid()) {
-                    w.writeStopGradient("Grad", stopGradient);
+                    w.writeStopGradient("Grad", *stopGradient);
                 } else {
                     warnKrita << "WARNING: Stroke: Unknown gradient type!";
                     w.writeColor("Clr ", stroke->color());

@@ -430,13 +430,13 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
             if (!gradientElement.isNull()) {
                 const QString gradientType = gradientElement.attribute("type");
                 if (gradientType == "stop") {
-                    const KoStopGradient *grad = new KoStopGradient(KoStopGradient::fromXML(gradientElement));
-                    if (grad && grad->valid()) {
+                    const KoStopGradient grad = KoStopGradient::fromXML(gradientElement);
+                    if (grad.valid()) {
                         w.writeStopGradient("Grad", grad);
                     }
                 } else if (gradientType == "segment") {
-                    const KoSegmentGradient *grad = new KoSegmentGradient(KoSegmentGradient::fromXML(gradientElement));
-                    if (grad && grad->valid()) {
+                    const KoSegmentGradient grad = KoSegmentGradient::fromXML(gradientElement);
+                    if (grad.valid()) {
                         w.writeSegmentGradient("Grad", grad);
                     }
                 }

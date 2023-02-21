@@ -50,8 +50,8 @@ public:
     void writeCurve(const QString &key, const QString &name, const QVector<QPointF> &points);
     QString writePattern(const QString &key, const KoPatternSP pattern);
     void writePatternRef(const QString &key, const KoPatternSP pattern, const QString &uuid);
-    void writeSegmentGradient(const QString &key, const KoSegmentGradient *gradient);
-    void writeStopGradient(const QString &key, const KoStopGradient *gradient);
+    void writeSegmentGradient(const QString &key, const KoSegmentGradient &gradient);
+    void writeStopGradient(const QString &key, const KoStopGradient &gradient);
 
 private:
     QString getSegmentEndpointTypeString(KoGradientSegmentEndpointType segtype);

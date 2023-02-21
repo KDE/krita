@@ -13,8 +13,10 @@
 #include <QApplication>
 #include <QMetaClassInfo>
 #include <QKeySequence>
+#include <QMessageBox>
 
 #include "kis_icon_utils.h"
+#include <QApplication>
 
 #include "input/kis_abstract_input_action.h"
 #include "input/kis_input_profile.h"
@@ -251,6 +253,23 @@ bool KisActionShortcutsModel::setData(const QModelIndex &index, const QVariant &
         KisShortcutConfiguration *oldData = d->shortcuts.at(index.row());
 
         if (newData == oldData) {
+            const QList<KisShortcutConfiguration *> conflictingShortcuts =
+                KisInputProfileManager::instance()->getConflictingShortcuts(
+                    KisInputProfileManager::instance()->currentProfile());
+
+            // check if this shortcut resulted in a conflict
+            const bool isConflictingShortcut = std::find_if(conflictingShortcuts.begin(),
+                                                            conflictingShortcuts.end(),
+                                                            [&oldData](KisShortcutConfiguration *shortcut) {
+                                                                return *oldData == *shortcut;
+                                                            })
+                != conflictingShortcuts.end();
+
+            if (isConflictingShortcut) {
+                QMessageBox::warning(qApp->activeWindow(),
+                                     "Warning",
+                                     i18n("A conflict exists between two or more shortcuts."));
+            }
             // change was done on the object
             emit dataChanged(index, index);
             return true;

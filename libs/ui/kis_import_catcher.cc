@@ -96,9 +96,9 @@ void KisImportCatcher::slotLoadingFinished()
         if (m_d->layerType == "KisPaintLayer") {
             QStringList list;
             list << "KisLayer";
-            KoProperties *props = new KoProperties();
+            KoProperties props;
 
-            Q_FOREACH(KisNodeSP node, importedImage->rootLayer()->childNodes(list, *props)) {
+            Q_FOREACH(KisNodeSP node, importedImage->rootLayer()->childNodes(list, props)) {
                 // we need to pass a copied device to make sure it is not reset
                 // on image's destruction
                 KisPaintDeviceSP dev = new KisPaintDevice(*node->projection());

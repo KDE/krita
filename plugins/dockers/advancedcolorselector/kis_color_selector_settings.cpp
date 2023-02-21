@@ -41,7 +41,6 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
 
     /* color docker selector drop down */
     ui->dockerColorSettingsComboBox->addItem(i18n("Advanced Color Selector"));
-    //ui->dockerColorSettingsComboBox->addItem(i18n("Color Sliders"));
     ui->dockerColorSettingsComboBox->addItem(i18n("Color Hotkeys"));
     ui->dockerColorSettingsComboBox->setCurrentIndex(0); // start off seeing advanced color selector properties
 
@@ -244,20 +243,6 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("lumaB", ui->l_lumaB->value());
     cfg.writeEntry("gamma", ui->SP_Gamma->value());
 
-    //slider//
-    hsxcfg.writeEntry("hsvH", ui->csl_hsvH->isChecked());
-    hsxcfg.writeEntry("hsvS", ui->csl_hsvS->isChecked());
-    hsxcfg.writeEntry("hsvV", ui->csl_hsvV->isChecked());
-    hsxcfg.writeEntry("hslH", ui->csl_hslH->isChecked());
-    hsxcfg.writeEntry("hslS", ui->csl_hslS->isChecked());
-    hsxcfg.writeEntry("hslL", ui->csl_hslL->isChecked());
-    hsxcfg.writeEntry("hsiH", ui->csl_hsiH->isChecked());
-    hsxcfg.writeEntry("hsiS", ui->csl_hsiS->isChecked());
-    hsxcfg.writeEntry("hsiI", ui->csl_hsiI->isChecked());
-    hsxcfg.writeEntry("hsyH", ui->csl_hsyH->isChecked());
-    hsxcfg.writeEntry("hsyS", ui->csl_hsyS->isChecked());
-    hsxcfg.writeEntry("hsyY", ui->csl_hsyY->isChecked());
-
     //hotkeys//
     hotkeycfg.writeEntry("steps_lightness", ui->sb_lightness->value());
     hotkeycfg.writeEntry("steps_saturation", ui->sb_saturation->value());
@@ -270,25 +255,17 @@ void KisColorSelectorSettings::savePreferences() const
 
 void KisColorSelectorSettings::changedColorDocker(int index)
 {
-    // having a situation where too many sections are visible makes the window too large. turn all off before turning more on
-    ui->colorSliderOptions->hide();
+    // having a situation where too many sections are visible makes the window too large. turn all off before turning
+    // more on
     ui->advancedColorSelectorOptions->hide();
     ui->hotKeyOptions->hide();
 
     if (index == 0)     { // advanced color selector options selected
         ui->advancedColorSelectorOptions->show();
-        ui->colorSliderOptions->hide();
         ui->hotKeyOptions->hide();
-    }
-//    else if (index == 1) {  // color slider options selected
-//        ui->advancedColorSelectorOptions->hide();
-//        ui->hotKeyOptions->hide();
-//        ui->colorSliderOptions->show();
-//    }
-    else {
-       ui->colorSliderOptions->hide();
-       ui->advancedColorSelectorOptions->hide();
-       ui->hotKeyOptions->show();
+    } else {
+        ui->advancedColorSelectorOptions->hide();
+        ui->hotKeyOptions->show();
     }
 }
 
@@ -488,20 +465,6 @@ void KisColorSelectorSettings::loadPreferences()
     ui->l_lumaB->setValue(cfg.readEntry("lumaB", 0.0722));
     ui->SP_Gamma->setValue(cfg.readEntry("gamma", 2.2));
 
-    //color sliders//
-    ui->csl_hsvH->setChecked(hsxcfg.readEntry("hsvH", false));
-    ui->csl_hsvS->setChecked(hsxcfg.readEntry("hsvS", false));
-    ui->csl_hsvV->setChecked(hsxcfg.readEntry("hsvV", false));
-    ui->csl_hslH->setChecked(hsxcfg.readEntry("hslH", true));
-    ui->csl_hslS->setChecked(hsxcfg.readEntry("hslS", true));
-    ui->csl_hslL->setChecked(hsxcfg.readEntry("hslL", true));
-    ui->csl_hsiH->setChecked(hsxcfg.readEntry("hsiH", false));
-    ui->csl_hsiS->setChecked(hsxcfg.readEntry("hsiS", false));
-    ui->csl_hsiI->setChecked(hsxcfg.readEntry("hsiI", false));
-    ui->csl_hsyH->setChecked(hsxcfg.readEntry("hsyH", false));
-    ui->csl_hsyS->setChecked(hsxcfg.readEntry("hsyS", false));
-    ui->csl_hsyY->setChecked(hsxcfg.readEntry("hsyY", false));
-
     //hotkeys//
     ui->sb_lightness->setValue(hotkeycfg.readEntry("steps_lightness", 10));
     ui->sb_saturation->setValue(hotkeycfg.readEntry("steps_saturation", 10));
@@ -582,20 +545,6 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->l_lumaG->setValue(0.7152);
     ui->l_lumaB->setValue(0.0722);
     ui->SP_Gamma->setValue(2.2);
-
-    //color sliders//
-    ui->csl_hsvH->setChecked(false);
-    ui->csl_hsvS->setChecked(false);
-    ui->csl_hsvV->setChecked(false);
-    ui->csl_hslH->setChecked(true);
-    ui->csl_hslS->setChecked(true);
-    ui->csl_hslL->setChecked(true);
-    ui->csl_hsiH->setChecked(false);
-    ui->csl_hsiS->setChecked(false);
-    ui->csl_hsiI->setChecked(false);
-    ui->csl_hsyH->setChecked(false);
-    ui->csl_hsyS->setChecked(false);
-    ui->csl_hsyY->setChecked(false);
 
     //hotkeys//
     ui->sb_lightness->setValue(10);

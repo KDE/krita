@@ -268,19 +268,6 @@ void KisColorSelectorSettings::savePreferences() const
     emit settingsChanged();
 }
 
-//void KisColorSelectorSettings::changeEvent(QEvent *e)
-//{
-//    QDialog::changeEvent(e);
-//    switch (e->type()) {
-//    case QEvent::LanguageChange:
-//        ui->retranslateUi(this);
-//        break;
-//    default:
-//        break;
-//    }
-//}
-
-
 void KisColorSelectorSettings::changedColorDocker(int index)
 {
     // having a situation where too many sections are visible makes the window too large. turn all off before turning more on

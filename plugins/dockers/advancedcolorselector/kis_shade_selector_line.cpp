@@ -168,7 +168,7 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
             value=baseValue;
         }
 
-        QRect patchRect(z * (patchWidth + patchSpacing), 0, patchWidth, m_lineHeight);
+        const QRect patchRect(z * (patchWidth + patchSpacing), 0, patchWidth, m_lineHeight);
         KoColor patchColor = m_parentProxy->converter()->fromHsvF(hue, saturation, value);
 
         patchColor.convertTo(m_realPixelCache->colorSpace());
@@ -189,12 +189,11 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
         wpainter.setPen(QColor(75,75,75));
         wpainter.drawRect(renderedImage.width()/2-4,0,8,renderedImage.height()-1);
         wpainter.setPen(QColor(175,175,175));
-        qreal mouseX = (qBound(5.0,m_mouseX,m_width-5));
+        const int mouseX = qBound(5, m_mouseX, m_width - 5);
         wpainter.drawRect(mouseX-5,0,10,renderedImage.height()-1);
         wpainter.setPen(QColor(75,75,75));
         wpainter.drawRect(mouseX-4,0,8,renderedImage.height()-1);
     }
-    m_width=width();
 
     if(m_displayHelpText) {
         QString helpText(i18n("delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6",
@@ -237,7 +236,7 @@ void KisShadeSelectorLine::mouseMoveEvent(QMouseEvent *e)
 {
     if ((m_isDown) && (e->buttons() & Qt::LeftButton)) {
         m_mouseX=e->x();
-        const QPoint mouseEv ((qBound(5.0,m_mouseX,m_width-5)),5);
+        const QPoint mouseEv(qBound(5, m_mouseX, m_width - 5), 5);
         KoColor color(Acs::sampleColor(m_realPixelCache, mouseEv));
         m_parentProxy->updateColorPreview(color);
         update();
@@ -251,7 +250,7 @@ void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent * e)
         return;
     }
     m_mouseX=e->x();
-    const QPoint mouseEv ((qBound(5.0,m_mouseX,m_width-5)),5);
+    const QPoint mouseEv(qBound(5, m_mouseX, m_width - 5), 5);
     KoColor color(Acs::sampleColor(m_realPixelCache, mouseEv));
     m_parentProxy->updateColorPreview(color);
     Acs::ColorRole role = Acs::buttonToRole(e->button());

@@ -42,11 +42,13 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
     /* color docker selector drop down */
     ui->dockerColorSettingsComboBox->addItem(i18n("Advanced Color Selector"));
     ui->dockerColorSettingsComboBox->addItem(i18n("Color Hotkeys"));
-    ui->dockerColorSettingsComboBox->setCurrentIndex(0); // start off seeing advanced color selector properties
 
-    connect( ui->dockerColorSettingsComboBox, SIGNAL(currentIndexChanged(int)),this, SLOT(changedColorDocker(int)));
-    changedColorDocker(0);
-
+    connect(ui->dockerColorSettingsComboBox,
+            qOverload<int>(&QComboBox::currentIndexChanged),
+            this,
+            &KisColorSelectorSettings::changedColorDocker);
+    // start off seeing advanced color selector properties
+    ui->dockerColorSettingsComboBox->setCurrentIndex(0);
 
     /* advanced color docker options */
     ui->dockerResizeOptionsComboBox->addItem(i18n("Change to a Horizontal Layout"));
@@ -255,18 +257,7 @@ void KisColorSelectorSettings::savePreferences() const
 
 void KisColorSelectorSettings::changedColorDocker(int index)
 {
-    // having a situation where too many sections are visible makes the window too large. turn all off before turning
-    // more on
-    ui->advancedColorSelectorOptions->hide();
-    ui->hotKeyOptions->hide();
-
-    if (index == 0)     { // advanced color selector options selected
-        ui->advancedColorSelectorOptions->show();
-        ui->hotKeyOptions->hide();
-    } else {
-        ui->advancedColorSelectorOptions->hide();
-        ui->hotKeyOptions->show();
-    }
+    ui->dockerOptionsPanel->setCurrentIndex(index);
 }
 
 void KisColorSelectorSettings::changedACSColorSelectorType(int index)

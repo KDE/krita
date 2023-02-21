@@ -10,6 +10,8 @@
 #include <QColor>
 #include <QMouseEvent>
 
+#include <cmath>
+
 #include <ksharedconfig.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -115,18 +117,20 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
         m_realPixelCache->clear();
     }
 
-    int patchCount;
-    int patchSpacing;
+    int patchCount = 0;
+    int patchSpacing = 0;
+    int patchWidth = 0;
 
     if(m_gradient) {
         patchCount = width();
         patchSpacing = 0;
+        patchWidth = 1;
     }
     else {
         patchCount = m_patchCount;
         patchSpacing = 3;
+        patchWidth = std::lround((width() - patchSpacing * patchCount) / qreal(patchCount));
     }
-    qreal patchWidth = (width()-patchSpacing*patchCount)/qreal(patchCount);
     qreal hueStep;
     qreal saturationStep;
     qreal valueStep;

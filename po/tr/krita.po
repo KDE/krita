@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:55+0000\n"
-"PO-Revision-Date: 2023-02-20 00:35+0300\n"
+"POT-Creation-Date: 2023-02-21 00:57+0000\n"
+"PO-Revision-Date: 2023-02-20 20:42+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -5774,14 +5774,14 @@ msgstr "Craig 02"
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:brushes/DA_RGBA bluegreen_small.png"
 msgid "DA RGBA bluegreen small"
-msgstr "DA RGBA mavi yeşil küçük"
+msgstr "DA KYMA mavi yeşil küçük"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:brushes/DA_RGBA bluegreen_small1.png"
 msgid "DA RGBA bluegreen small1"
-msgstr "DA RGBA mavi yeşil küçük1"
+msgstr "DA KYMA mavi yeşil küçük1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5802,7 +5802,7 @@ msgstr "Dağ Fırçası 01"
 #, kde-format
 msgctxt "./krita/data/bundles/RGBA_brushes.bundle:brushes/RGBA anim 01.gih"
 msgid "RGBA anim 01"
-msgstr "RGBA canlandırma 01"
+msgstr "KYMA canlandırma 01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5811,7 +5811,7 @@ msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_01_Thick-dry."
 "kpp"
 msgid "m) RGBA 01 Thick-dry"
-msgstr "m) RGBA Kalın kuru"
+msgstr "m) KYMA Kalın kuru"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5820,7 +5820,7 @@ msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/"
 "m)_RGBA_02_Thickpaint.kpp"
 msgid "m) RGBA 02 Thickpaint"
-msgstr "m) RGBA 02 Kalın boya"
+msgstr "m) KYMA 02 Kalın boya"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5828,7 +5828,7 @@ msgstr "m) RGBA 02 Kalın boya"
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_03_Rake.kpp"
 msgid "m) RGBA 03 Rake"
-msgstr "m) RGBA 03 Tırmık"
+msgstr "m) KYMA 03 Tırmık"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5837,7 +5837,7 @@ msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_04_Impasto."
 "kpp"
 msgid "m) RGBA 04 Impasto"
-msgstr "m) RGBA 04 İmpasto"
+msgstr "m) KYMA 04 İmpasto"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5846,7 +5846,7 @@ msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_05_Impasto-"
 "details.kpp"
 msgid "m) RGBA 05 Impasto-details"
-msgstr "m) RGBA 05 İmpasto ayrıntıları"
+msgstr "m) KYMA 05 İmpasto ayrıntıları"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5854,7 +5854,7 @@ msgstr "m) RGBA 05 İmpasto ayrıntıları"
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_06_Rock.kpp"
 msgid "m) RGBA 06 Rock"
-msgstr "m) RGBA 06 Kaya"
+msgstr "m) KYMA 06 Kaya"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -6702,7 +6702,7 @@ msgstr "Gri renkli örnek"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-rgb.gpl"
 msgid "Swatch RGB"
-msgstr "RGB örneği"
+msgstr "KYM örneği"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatche.gpl:2
@@ -7181,7 +7181,7 @@ msgstr "Gri renkli örnek"
 #, kde-format
 msgctxt "./krita/data/palettes/swatch-rgb.gpl"
 msgid "Swatch RGB"
-msgstr "RGB örneği"
+msgstr "KYM örneği"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/palettes/swatche.gpl:2
@@ -8311,21 +8311,21 @@ msgstr "Piksel ölçeği için 2'nin katlarını kullan"
 #, kde-format
 msgctxt "action"
 msgid "&Invert Selection"
-msgstr "Seçimi &Tersine Çevir"
+msgstr "Seçimi &Ters Çevir"
 
 #. i18n: context: toolTip @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:245
 #, kde-format
 msgctxt "action"
 msgid "Invert current selection"
-msgstr "Geçerli seçimi tersine çevir"
+msgstr "Geçerli seçimi ters çevir"
 
 #. i18n: context: iconText @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:246
 #, kde-format
 msgctxt "action"
 msgid "Invert Selection"
-msgstr "Seçimi Tersine Çevir"
+msgstr "Seçimi Ters Çevir"
 
 #. i18n: context: text @ Action (create_snapshot), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_snapshot), Actions (General), ActionCollection (Krita)
@@ -9180,7 +9180,7 @@ msgstr "Şekle Dönüştür"
 #, kde-format
 msgctxt "action"
 msgid "&Show Global Selection Mask"
-msgstr "&Genel Seçim Maskesini Göster"
+msgstr "&Global Seçim Maskesini Göster"
 
 #. i18n: context: toolTip @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:915
@@ -9495,7 +9495,7 @@ msgstr "Hareket Bulanıklaştırması"
 #, kde-format
 msgctxt "action"
 msgid "&Invert"
-msgstr "&Tersine Çevir"
+msgstr "&Ters Çevir"
 
 #. i18n: context: toolTip @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
@@ -9505,7 +9505,7 @@ msgstr "&Tersine Çevir"
 #, kde-format
 msgctxt "action"
 msgid "Invert"
-msgstr "Tersine Çevir"
+msgstr "Ters Çevir"
 
 #. i18n: context: text @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1120
@@ -9978,7 +9978,7 @@ msgstr "Dalgacık Gürültüsü Azaltıcı"
 #, kde-format
 msgctxt "action"
 msgid "&HSV Adjustment..."
-msgstr "&HSV Ayarlamaları..."
+msgstr "&TDD Ayarlamaları..."
 
 #. i18n: context: toolTip @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
@@ -9988,7 +9988,7 @@ msgstr "&HSV Ayarlamaları..."
 #, kde-format
 msgctxt "action"
 msgid "HSV Adjustment"
-msgstr "HSV Ayarlamaları"
+msgstr "TDD Ayarlamaları"
 
 #. i18n: context: text @ Actions (Blending Modes), ActionCollection (Krita)
 #: krita/krita.action:1456
@@ -14790,7 +14790,7 @@ msgstr "Yeniden Seç"
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Vector Selection"
-msgstr "Vektör Seçimi&ne Dönüştür"
+msgstr "Vektör Seçim&e Dönüştür"
 
 #. i18n: context: toolTip @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
@@ -14800,14 +14800,14 @@ msgstr "Vektör Seçimi&ne Dönüştür"
 #, kde-format
 msgctxt "action"
 msgid "Convert to Vector Selection"
-msgstr "Vektör Seçimine Dönüştür"
+msgstr "Vektör Seçime Dönüştür"
 
 #. i18n: context: text @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1417
 #, kde-format
 msgctxt "action"
 msgid "&Convert to Raster Selection"
-msgstr "&Raster Seçimine Dönüştür"
+msgstr "&Raster Seçime Dönüştür"
 
 #. i18n: context: toolTip @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
@@ -14817,7 +14817,7 @@ msgstr "&Raster Seçimine Dönüştür"
 #, kde-format
 msgctxt "action"
 msgid "Convert to Raster Selection"
-msgstr "Raster Seçimine Dönüştür"
+msgstr "Raster Seçime Dönüştür"
 
 #. i18n: context: text @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
@@ -14837,7 +14837,7 @@ msgstr "Seçimi Düzenle"
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to &Vector Selection"
-msgstr "Şekilleri &Vektör Seçimine Dönüştür"
+msgstr "Şekilleri &Vektör Seçime Dönüştür"
 
 #. i18n: context: toolTip @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
@@ -14847,7 +14847,7 @@ msgstr "Şekilleri &Vektör Seçimine Dönüştür"
 #, kde-format
 msgctxt "action"
 msgid "Convert Shapes to Vector Selection"
-msgstr "Șekilleri Vektör Seçimine Dönüștür"
+msgstr "Șekilleri Vektör Seçime Dönüștür"
 
 #. i18n: context: text @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1453
@@ -14888,7 +14888,7 @@ msgstr "Seçimi Görüntüle"
 #, kde-format
 msgctxt "action"
 msgid "Sca&le..."
-msgstr "&Ölçeklendir..."
+msgstr "&Ölçekle..."
 
 #. i18n: context: toolTip @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
@@ -14898,7 +14898,7 @@ msgstr "&Ölçeklendir..."
 #, kde-format
 msgctxt "action"
 msgid "Scale"
-msgstr "Ölçeklendir"
+msgstr "Ölçekle"
 
 #. i18n: context: text @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1489
@@ -17371,7 +17371,7 @@ msgstr "Seçimi Pürüzsüzleştir"
 #: libs/image/kis_selection_filters.cpp:885
 msgctxt "(qtundo-format)"
 msgid "Invert Selection"
-msgstr "Seçimi Tersine Çevir"
+msgstr "Seçimi Ters Çevir"
 
 #: libs/image/kis_selection_filters.cpp:904
 msgctxt "(qtundo-format)"
@@ -17784,7 +17784,7 @@ msgstr "Dönüşüm Maskesi"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:379
 #: plugins/impex/tiff/kis_tiff_import.cc:562
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
+#: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
 msgid "Transparency Mask"
 msgstr "Saydamlık Maskesi"
@@ -18245,13 +18245,13 @@ msgstr "b*"
 #: libs/pigment/colorspaces/KoRgbU16ColorSpace.h:55
 #, kde-format
 msgid "RGB (16-bit integer/channel, unmanaged)"
-msgstr "RGB (16 bit tamsayı/kanal, yönetilmeyen)"
+msgstr "KYM (16 bit tamsayı/kanal, yönetilmeyen)"
 
 #: libs/pigment/colorspaces/KoRgbU8ColorSpace.cpp:30
 #: libs/pigment/colorspaces/KoRgbU8ColorSpace.h:55
 #, kde-format
 msgid "RGB (8-bit integer/channel, unmanaged)"
-msgstr "RGB (8 bit tamsayı/kanal, yönetilmeyen)"
+msgstr "KYM (8 bit tamsayı/kanal, yönetilmeyen)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/pigment/colorspaces/KoRgbU8ColorSpace.cpp:35
@@ -18321,7 +18321,7 @@ msgstr "Basit Renk Dönüşüm İşletkesi"
 #: libs/pigment/KoBasicHistogramProducers.cpp:427
 #, kde-format
 msgid "Generic RGB Histogram"
-msgstr "Genel RGB Sütun Grafiği"
+msgstr "Genel KYM Sütun Grafiği"
 
 #: libs/pigment/KoBasicHistogramProducers.cpp:364
 #, kde-format
@@ -18363,7 +18363,7 @@ msgstr "Alpha maskesi"
 #: libs/pigment/KoColorModelStandardIds.cpp:13
 #, kde-format
 msgid "RGB/Alpha"
-msgstr "RGB/Alfa"
+msgstr "KYM/Alfa"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:14
 #, kde-format
@@ -18484,19 +18484,19 @@ msgstr "HSY"
 #, kde-format
 msgctxt "Blending mode - category HSI"
 msgid "HSI"
-msgstr "HSI"
+msgstr "TDY"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:41
 #, kde-format
 msgctxt "Blending mode - category HSL"
 msgid "HSL"
-msgstr "HSL"
+msgstr "TDA"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:42
 #, kde-format
 msgctxt "Blending mode - category HSV"
 msgid "HSV"
-msgstr "HSV"
+msgstr "TDD"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:43
 #, kde-format
@@ -19096,19 +19096,19 @@ msgstr "Parlaklığı Artır"
 #, kde-format
 msgctxt "Blending mode - Color HSI"
 msgid "Color HSI"
-msgstr "Renk HSI"
+msgstr "Renk TDY"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:154
 #, kde-format
 msgctxt "Blending mode - Hue HSI"
 msgid "Hue HSI"
-msgstr "Ton HSI"
+msgstr "Ton TDY"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:155
 #, kde-format
 msgctxt "Blending mode - Saturation HSI"
 msgid "Saturation HSI"
-msgstr "Doygunluk HSI"
+msgstr "Doygunluk TDY"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:156
 #, kde-format
@@ -19120,13 +19120,13 @@ msgstr "Yoğunluk"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSI"
 msgid "Decrease Saturation HSI"
-msgstr "Doygunluk HSI Azalt"
+msgstr "Doygunluk TDY Azalt"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:158
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSI"
 msgid "Increase Saturation HSI"
-msgstr "Doygunluk HSI Artır"
+msgstr "Doygunluk TDY Artır"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:159
 #, kde-format
@@ -19144,19 +19144,19 @@ msgstr "Yoğunluğu Artır"
 #, kde-format
 msgctxt "Blending mode - Color HSL"
 msgid "Color HSL"
-msgstr "Renk HSL"
+msgstr "Renk TDA"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:163
 #, kde-format
 msgctxt "Blending mode - Hue HSL"
 msgid "Hue HSL"
-msgstr "Renk HSL"
+msgstr "Renk TDA"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:164
 #, kde-format
 msgctxt "Blending mode - Saturation HSL"
 msgid "Saturation HSL"
-msgstr "Doygunluk HSL"
+msgstr "Doygunluk TDA"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:165
 #, kde-format
@@ -19168,13 +19168,13 @@ msgstr "Açıklık"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSL"
 msgid "Decrease Saturation HSL"
-msgstr "Doygunluk HSL Azalt"
+msgstr "Doygunluk TDA Azalt"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:167
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSL"
 msgid "Increase Saturation HSL"
-msgstr "Doygunluk HSL Artır"
+msgstr "Doygunluk TDA Artır"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:168
 #, kde-format
@@ -19192,19 +19192,19 @@ msgstr "Açıklığı Artır"
 #, kde-format
 msgctxt "Blending mode - Color HSV"
 msgid "Color HSV"
-msgstr "Renk HSV"
+msgstr "Renk TDD"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:172
 #, kde-format
 msgctxt "Blending mode - Hue HSV"
 msgid "Hue HSV"
-msgstr "Renk HSV"
+msgstr "Renk TDD"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:173
 #, kde-format
 msgctxt "Blending mode - Saturation HSV"
 msgid "Saturation HSV"
-msgstr "Doygunluk HSV"
+msgstr "Doygunluk TDD"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:174
 #, kde-format
@@ -19216,13 +19216,13 @@ msgstr "Değer"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSV"
 msgid "Decrease Saturation HSV"
-msgstr "Doygunluk HSV Azalt"
+msgstr "Doygunluk TDD Azalt"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:176
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSV"
 msgid "Increase Saturation HSV"
-msgstr "Doygunluk HSV Artır"
+msgstr "Doygunluk TDD Artır"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:177
 #, kde-format
@@ -19327,7 +19327,7 @@ msgstr "Arka Plan"
 msgid "Unnamed Layer"
 msgstr "Adsız Katman"
 
-#: libs/psd/psd_resource_block.h:109
+#: libs/psd/psd_resource_block.h:110
 #, kde-format
 msgid "Unparsed Resource Block"
 msgstr "Ayrıştırılmamış Özkaynak Bloku"
@@ -19407,11 +19407,11 @@ msgstr "Yerel Özkaynaklar"
 #: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:352
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:129
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:164
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:185
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:220
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:231
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:130
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:165
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:186
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:232
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1120
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
@@ -20244,19 +20244,19 @@ msgstr "Birleştirileni Kopyala"
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
-msgstr "Seçim zaten vektör biçiminde "
+msgstr "Seçim zaten vektör biçimde "
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:474
 #: libs/ui/actions/kis_selection_action_factories.cpp:494
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
-msgstr "Vektör Seçimine Dönüştür"
+msgstr "Vektör Seçime Dönüştür"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:489
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
-msgstr "Seçim zaten raster biçiminde "
+msgstr "Seçim zaten raster biçimde "
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:535
 #, kde-format
@@ -20267,7 +20267,7 @@ msgstr "Şekil zaten bir seçime ait"
 #: libs/ui/actions/kis_selection_action_factories.cpp:541
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
-msgstr "Şekilleri vektör seçimine dönüştür"
+msgstr "Şekilleri vektör seçime dönüştür"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:594
 #: libs/ui/actions/kis_selection_action_factories.cpp:653
@@ -22508,7 +22508,7 @@ msgstr "Katman Özellikleri"
 #: plugins/paintops/spray/kis_sprayop_option.cpp:60
 #: plugins/paintops/tangentnormal/kis_tangent_tilt_option.cpp:39
 #: plugins/paintops/tangentnormal/kis_tangent_tilt_option.cpp:43
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:279
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:281
 #: plugins/tools/basictools/kis_tool_fill.cc:490
 #: plugins/tools/basictools/kis_tool_fill.cc:507
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:370
@@ -24041,7 +24041,7 @@ msgstr "Siyah Nokta Karşılaması Kullan"
 msgid ""
 "Allow Little CMS optimizations (uncheck when using linear light RGB or XYZ)"
 msgstr ""
-"Küçük CMS iyileştirmelerine izin ver (doğrusal ışık RGB veya XYZ kullanırkan "
+"Küçük CMS iyileştirmelerine izin ver (doğrusal ışık KYM veya XYZ kullanırkan "
 "işaretleme)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkForcePaletteColor)
@@ -27090,19 +27090,19 @@ msgstr "Sphere Dec."
 #: plugins/filters/palettize/palettize.ui:72
 #, kde-format
 msgid "RGB"
-msgstr "RGB"
+msgstr "KYM"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, segmentColorInterpolationTypeComboBox)
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:385
 #, kde-format
 msgid "HSV CW"
-msgstr "HSV CW"
+msgstr "TDD CW"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, segmentColorInterpolationTypeComboBox)
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:390
 #, kde-format
 msgid "HSV CCW"
-msgstr "HSV CCW"
+msgstr "TDD CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
 #: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:352
@@ -27246,7 +27246,7 @@ msgstr "Çizgi rengi"
 #: libs/ui/forms/wdgtabletsettings.ui:28
 #, kde-format
 msgid "Input Pressure Global Curve"
-msgstr "Basınç Genel Eğrisi Gir"
+msgstr "Girdi Basıncı Global Eğrisi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgtabletsettings.ui:61
@@ -28300,62 +28300,62 @@ msgstr "Komşu Seçim Aracını Etkinleştir"
 msgid "Activate Freehand Selection Tool"
 msgstr "Serbest Seçim Aracını Etkinleştir"
 
-#: libs/ui/input/kis_zoom_action.cpp:106
+#: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
 msgid "Zoom Canvas"
 msgstr "Tuvali Yakınlaştır"
 
-#: libs/ui/input/kis_zoom_action.cpp:107
+#: libs/ui/input/kis_zoom_action.cpp:108
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr "<i>Tuvali Yakınlaştır</i> eylemi tuvali yakınlaştırır."
 
-#: libs/ui/input/kis_zoom_action.cpp:110
+#: libs/ui/input/kis_zoom_action.cpp:111
 #, kde-format
 msgid "Zoom Mode"
 msgstr "Yakınlaştırma Kipi"
 
-#: libs/ui/input/kis_zoom_action.cpp:111
+#: libs/ui/input/kis_zoom_action.cpp:112
 #, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "Kesikli Yakınlaştırma Kipi"
 
-#: libs/ui/input/kis_zoom_action.cpp:112
+#: libs/ui/input/kis_zoom_action.cpp:113
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "Göreceli Yakınlaştırma Kipi"
 
-#: libs/ui/input/kis_zoom_action.cpp:113
+#: libs/ui/input/kis_zoom_action.cpp:114
 #, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "Göreceli Soyut Yakınlaştırma Kipi"
 
-#: libs/ui/input/kis_zoom_action.cpp:114
+#: libs/ui/input/kis_zoom_action.cpp:115
 #, kde-format
 msgid "Zoom In"
 msgstr "Yakınlaştır"
 
-#: libs/ui/input/kis_zoom_action.cpp:115
+#: libs/ui/input/kis_zoom_action.cpp:116
 #, kde-format
 msgid "Zoom Out"
 msgstr "Uzaklaştır"
 
-#: libs/ui/input/kis_zoom_action.cpp:116 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "%​100'e Yakınlaştır"
 
-#: libs/ui/input/kis_zoom_action.cpp:117
+#: libs/ui/input/kis_zoom_action.cpp:118
 #, kde-format
 msgid "Fit to View"
 msgstr "Görünüme Sığdır"
 
-#: libs/ui/input/kis_zoom_action.cpp:118
+#: libs/ui/input/kis_zoom_action.cpp:119
 #, kde-format
 msgid "Fit to View Width"
 msgstr "Görünüm Genişliğine Sığdır"
 
-#: libs/ui/input/kis_zoom_action.cpp:119
+#: libs/ui/input/kis_zoom_action.cpp:120
 #, kde-format
 msgid "Fit to View Height"
 msgstr "Görünüm Yüksekliğine Sığdır"
@@ -28421,13 +28421,13 @@ msgstr "Ekranı Sıfırla"
 #: libs/ui/input/wintab/drawpile_tablettester/tablettester.cpp:16
 #, kde-format
 msgid "Tablet Tester"
-msgstr "Tablet Test Aracı"
+msgstr "Tablet Sınayıcı"
 
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.cpp:22
 #, kde-format
 msgctxt "Screen rect when choosing Wintab/Qt settings"
 msgid "%1x%2 offset: %3,%4"
-msgstr "%1x%2 yerleşimi: %3,%4"
+msgstr "%1 x %2 ofset: %3, %4"
 
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.cpp:48
 #, kde-format
@@ -28632,7 +28632,7 @@ msgstr "%1 süzgeci, %2 verinizi 16 bit L*a*b*'ye veya tam tersine dönüştür�
 #, kde-format
 msgid "The %1 filter will convert your %2 data to 16-bit RGBA and vice versa. "
 msgstr ""
-"%1 süzgeci, %2 verinizi 16 bit RGBA'ya veya tam tersine dönüştürecektir. "
+"%1 süzgeci, %2 verinizi 16 bit KYMA'ya veya tam tersine dönüştürecektir. "
 
 #: libs/ui/kis_filter_manager.cc:355
 #, kde-format
@@ -29137,7 +29137,7 @@ msgstr "%​100"
 msgid "Fit Canvas to View"
 msgstr "Tuvali Görünüme Sığdır"
 
-#: libs/ui/kis_popup_palette.cpp:871
+#: libs/ui/kis_popup_palette.cpp:872
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -29146,7 +29146,7 @@ msgstr ""
 "Ön plan ve arka plan renklerini yer değiştirmek için tıklayın.\n"
 "Siyah ve beyaz olarak ayarlamak için sağ tıklayın."
 
-#: libs/ui/kis_popup_palette.cpp:1008
+#: libs/ui/kis_popup_palette.cpp:1010
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -29347,7 +29347,7 @@ msgctxt "<color space> <image profile>"
 msgid "%1  %2"
 msgstr "%1  %2"
 
-#: libs/ui/kis_zoom_manager.cc:318
+#: libs/ui/kis_zoom_manager.cc:319
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
@@ -29601,7 +29601,7 @@ msgid ""
 msgstr ""
 "Yeni bir görsel oluştur.\n"
 "Renk uzayı olası değerleri:\n"
-"    * RGBA\n"
+"    * KYMA\n"
 "    * XYZA\n"
 "    * LABA\n"
 "    * CMYKA\n"
@@ -30731,17 +30731,17 @@ msgstr "Bu Şablonu Kullan"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Seçili katman türüne renkleri sürükleyip bırakamazsınız."
 
-#: libs/ui/KisView.cpp:758 libs/ui/tool/kis_tool.cc:671
+#: libs/ui/KisView.cpp:758 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Katman kilitlendi ve görünmez."
 
-#: libs/ui/KisView.cpp:760 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:760 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "Katman kilitli."
 
-#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Katman görünmez."
@@ -31831,7 +31831,7 @@ msgstr "Katmanla bağlantıla"
 #, kde-format
 msgctxt "@option:check In Layer Style"
 msgid "&Invert"
-msgstr "&Tersine Çevir"
+msgstr "&Ters Çevir"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/layerstyles/WdgStroke.ui:53
@@ -31992,27 +31992,27 @@ msgstr "Seçim Eylemleri"
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1834
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:309
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:310
 #, kde-format
 msgid "Transform"
 msgstr "Dönüştür"
 
-#: libs/ui/tool/kis_tool.cc:573
+#: libs/ui/tool/kis_tool.cc:575
 #, kde-format
 msgid "No options"
 msgstr "Seçenek yok"
 
-#: libs/ui/tool/kis_tool.cc:677
+#: libs/ui/tool/kis_tool.cc:679
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr "Katman yalnızca Yıkama kipinde boyanabilir."
 
-#: libs/ui/tool/kis_tool.cc:679
+#: libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Group not editable."
 msgstr "Grup düzenlenebilir değil."
 
-#: libs/ui/tool/kis_tool.cc:694
+#: libs/ui/tool/kis_tool.cc:696
 #, kde-format
 msgid "Local selection is locked."
 msgstr "Yerel seçim kilitli."
@@ -32027,9 +32027,9 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_freehand.cc:212
 #: libs/ui/tool/kis_tool_polyline_base.cpp:119
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:163
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:162
-#: plugins/tools/basictools/kis_tool_line.cc:201
+#: plugins/tools/basictools/kis_tool_line.cc:202
 #: plugins/tools/basictools/kis_tool_path.cc:78
 #: plugins/tools/basictools/kis_tool_pencil.cc:53
 #: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:113
@@ -32038,13 +32038,13 @@ msgstr ""
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr "Bu renk uzayı için MyPaint Fırça İşletkesi kullanılabilir değil"
 
-#: libs/ui/tool/kis_tool_paint.cc:569
+#: libs/ui/tool/kis_tool_paint.cc:571
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr "Fırça Boyutu: %1 pks"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:113
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:157
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:156
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:66
 #, kde-format
@@ -32055,7 +32055,7 @@ msgstr ""
 "Bu araç, klon katmanlar üzerinde boyayamaz. Lütfen bir boya veya vektör "
 "katman veya maske seçin."
 
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:94
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:95
 #, kde-format
 msgid ""
 "Width: %1 px\n"
@@ -32064,8 +32064,8 @@ msgstr ""
 "Genişlik: %1 pks\n"
 "Yükseklik: %2 pks"
 
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:292
-#: plugins/tools/basictools/kis_tool_line.cc:282
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:294
+#: plugins/tools/basictools/kis_tool_line.cc:284
 #: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #, kde-format
 msgid ""
@@ -32710,12 +32710,12 @@ msgid ""
 "convert to other spaces. RGB is also the recommended colorspace for HDR "
 "editing."
 msgstr ""
-"<b><a href=\"https://en.wikipedia.org/wiki/RGB_color_space\">RGB (Kırmızı, "
+"<b><a href=\"https://en.wikipedia.org/wiki/KYM_color_space\">KYM (Kırmızı, "
 "Yeşil, Mavi)</a></b>, ekranlar ve diğer ışık tabanlı ortamlar tarafından "
-"kullanılan renk modelidir.<br/>RGB bir katma renk modelidir: Renkleri bir "
+"kullanılan renk modelidir.<br/>KYM bir katma renk modelidir: Renkleri bir "
 "araya getirmek onları daha parlak yapar. Bu renk modeli, tüm renk "
 "modellerinin en kapsamlısıdır ve boyama için daha sonra diğer alanlara "
-"dönüştürebileceğiniz bir model olarak önerilir. RGB, HDR düzenleme için "
+"dönüştürebileceğiniz bir model olarak önerilir. KYM, HDR düzenleme için "
 "önerilen renk aralığıdır."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:408
@@ -32735,7 +32735,7 @@ msgstr ""
 "göbeği, Macenta, Sarı, Anahtar)</a></b>, yazıcılar ve diğer mürekkep tabanlı "
 "medyalar tarafından kullanılan modeldir.<br/>CMYK, renkleri bir araya "
 "getirmenin onları daha koyu hale getireceği, çıkarımcı bir modeldir. CMYK "
-"profilleri yazıcı başına çok spesifik olduğundan, RGB alanında çalışılması "
+"profilleri yazıcı başına çok spesifik olduğundan, KYM alanında çalışılması "
 "ve daha sonra tercihen CMYK profiline, tercihen yazıcınız tarafından "
 "gönderilen bir profile dönüştürülmesi önerilir.<br/>CMYK boyama için "
 "<b>önerilmez</b>. Maalesef, Krita bu alan için renklendiriciler veya TRC'yi "
@@ -32771,9 +32771,9 @@ msgid ""
 msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/Grayscale\">Gri tonlama</a></b> "
 "yalnızca gri değerlere ve saydam değerlere izin verir. Gri tonlamalı "
-"görseller, aynı bit derinlikli bir RGB görseline kıyasla bellek ve disk "
+"görseller, aynı bit derinlikli bir KYM görseline kıyasla bellek ve disk "
 "alanının yarısını kullanır.<br/> Gri tonlama, mürekkep püskürtme ve gri "
-"tonlamalı görseller için kullanışlıdır. Krita'da, Gri Tonlama ve RGB "
+"tonlamalı görseller için kullanışlıdır. Krita'da, Gri Tonlama ve KYM "
 "katmanlarını aynı görselde karıştırabilirsiniz."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:431
@@ -32998,17 +32998,16 @@ msgid ""
 "to some of today's high-end wide gamut monitors.</p>"
 msgstr ""
 "<p>Olası telif hakkı ihlali sorunlarından kaçınmak için bu profillerin temel "
-"adı olarak 'ClayRGB' (ArgyllCMS'yi takip ettim) kullandım. Aşağıda "
-"kullanılan 'Adobe RGB 1998 ile uyumlu' terimi, AdobeRGB 1998 renk uzayı "
-"özelliklerinin başlangıcında önerilen terminolojidir.</p><p>Adobe RGB 1998 "
-"renk gamı, sRGB'den daha fazla gerçek dünya camgöbeği renklerini, yeşil ve "
-"sarı yeşillikleri kapsar, ancak günümüzün en üst sınıf geniş menzil, "
-"mürekkep püskürtmeli yazıcılar kullanarak yazdırırken, özellikle "
-"yazdırılabilir camgöbeği renklerini, yeşil, sarı-yeşili içermez. BetaRGB "
-"(profil paketine dahil değildir) ve Rec.2020, bugünün geniş gam "
-"yazıcılarının renk gamları için daha iyi eşleşmelerdir.</p><p>Adobe RGB 1998 "
-"renk yelpazesi, günümüzün ileri düzey geniş gam monitörlerinin makul bir "
-"yaklaşımıdır.</p>"
+"adı olarak 'ClayRGB (ArgyllCMS'yi takip ettim) kullandım. Aşağıda kullanılan "
+"'Adobe RGB 1998 ile uyumlu' terimi, Adobe RGB 1998 renk uzayı özelliklerinin "
+"başlangıcında önerilen terminolojidir.</p><p>Adobe RGB 1998 renk gamı, "
+"sRGB'den daha fazla gerçek dünya camgöbeği renklerini, yeşil ve sarı "
+"yeşillikleri kapsar, ancak günümüzün en üst sınıf geniş menzil, mürekkep "
+"püskürtmeli yazıcılar kullanarak yazdırırken, özellikle yazdırılabilir "
+"camgöbeği renklerini, yeşil, sarı-yeşili içermez. BetaKYM (profil paketine "
+"dahil değildir) ve Rec.2020, bugünün geniş gam yazıcılarının renk gamları "
+"için daha iyi eşleşmelerdir.</p><p>Adobe RGB 1998 renk yelpazesi, günümüzün "
+"ileri düzey geniş gam monitörlerinin makul bir yaklaşımıdır.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:550
 #, kde-format
@@ -33035,7 +33034,7 @@ msgstr ""
 "kullanır.</p><p>ACES renk uzayında olduğu gibi, AllColorsRGB da yüksek "
 "oranda hayali renk tutar. Hayali renkler için Tamamen <a href=\"http://"
 "ninedegreesbelow.com/photography/xyz-rgb.html\">Acısız Programcıların XYZ, "
-"RGB, ICC, xyY ve TRCs Kılavuzu</a>na bakınız.</p><p>Eğer birisinin renk "
+"KYM, ICC, xyY ve TRCs Kılavuzu</a>na bakınız.</p><p>Eğer birisinin renk "
 "uzayının gerçekten olası tüm gerçek renkleri taşıyıp taşımadığından emin "
 "olması gerekmiyorsa birinin neden bu profili düzenlemek için kullanmak "
 "isteyeceğinin belirli bir gerekçesi yoktur.</p>"
@@ -33055,9 +33054,9 @@ msgid ""
 msgstr ""
 "<p>Bu profil, çoğunlukla tarihsel önemi için eklenmiştir. Özgün renk "
 "eşleştirme denemelerinde XYZ başvuru renk uzayının oluşturulmasına yol açan "
-"renk uzayı budur.</p><p>ASTM E beyaz nokta, büyük olasılıkla CIERGB renk "
+"renk uzayı budur.</p><p>ASTM E beyaz nokta, büyük olasılıkla CIEKYM renk "
 "alanı profilini oluştururken kullanmak için doğru E beyaz noktadır. Doğru "
-"CIERGB birincillerinin gerçekten ne olduğu benim için açık değil. Lindbloom "
+"CIEKYM birincillerinin gerçekten ne olduğu benim için açık değil. Lindbloom "
 "bir küme verir. LCMS sürüm 1 öğreticisi farklı bir küme sunar. Alanındaki "
 "uzmanlar, gerçek önceliklerin, tayfsal dalga boylarından hesaplanması "
 "gerektiğini iddia ediyorlardı.</p>"
@@ -33074,8 +33073,8 @@ msgid ""
 msgstr ""
 "<p>ACES ve AllColorsRGB renk alanlarından daha yüksek bir sanal renk "
 "yüzdesine sahip olsa da, olası tüm görünür renkleri dahil etmek için "
-"matematiksel açıdan açık bir yoldur çünkü IdentityRGB çalışma alanı profil "
-"paketinde bulunur. IdentityRGB çalışma alanındaki görüntüleri neden "
+"matematiksel açıdan açık bir yoldur çünkü IdentityKYM çalışma alanı profil "
+"paketinde bulunur. IdentityKYM çalışma alanındaki görüntüleri neden "
 "gerçekten düzenlemeyi istediğinizi bilemiyorum.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:586
@@ -33100,18 +33099,18 @@ msgid ""
 msgstr ""
 "<p>Olası telif hakkı ihlali sorunlarından kaçınmak için, bu profillerin "
 "temel adı olarak 'LargeRGB' (aşağıdaki RawTherapee'yi kullandım) kullandım.</"
-"p><p>Kodak, RIMM / ROMM (ProPhotoRGB) renk gamını yazdırılabilir ve en "
+"p><p>Kodak, RIMM / ROMM (ProPhotoKYM) renk gamını yazdırılabilir ve en "
 "gerçek dünya renklerini içerecek şekilde tasarladı. Bazı hayali renkleri "
 "içerir ve sayısal kameralar tarafından yakalanabilecek gerçek dünya mavileri "
 "ve mor renklerinden bazılarını dışlar. Ayrıca, bazı (ve muhtemelen çok "
 "sayıda) kamera matrisi giriş profilleri tarafından yorumlandığı şekliyle, "
 "bazı çok doymuş \"kamera tarafından yakalanan\" sarıları hariç tutuyor.</"
-"p><p>ProPhotoRGB ana renkleri, Lightroom ve Dng-DCP kamera 'profilleri' gibi "
+"p><p>ProPhotoKYM ana renkleri, Lightroom ve Dng-DCP kamera 'profilleri' gibi "
 "Adobe ürünlerine kodlanmış. Bununla birlikte, çok renk tutabilecek kadar "
-"büyük olmanın ötesinde, ProPhotoRGB, RGB çalışma alanı olarak herhangi bir "
-"özelliğe sahip değildir. Şahsen BetaRGB, Rec2020 veya ACEScg profilleri "
-"ProPhotoRGB öneririm. Ancak, ProPhotoRGB kullanarak önceden belirlenmiş bir "
-"iş akışınız varsa en azından ilk başta başka bir RGB çalışma alanına geçişi "
+"büyük olmanın ötesinde, ProPhotoKYM, KYM çalışma alanı olarak herhangi bir "
+"özelliğe sahip değildir. Şahsen BetaKYM, Rec2020 veya ACEScg profilleri "
+"ProPhotoKYM öneririm. Ancak, ProPhotoKYM kullanarak önceden belirlenmiş bir "
+"iş akışınız varsa en azından ilk başta başka bir KYM çalışma alanına geçişi "
 "garip bulabilirsiniz. İş akışınızı değiştirmenin artılarını ve eksilerini "
 "değerlendirmeniz gerekir.</p>"
 
@@ -33133,7 +33132,7 @@ msgstr ""
 "görüntüleyebilir. Bununla birlikte, ekran teknolojisi Rec.2020'de kapanıyor, "
 "filmler zaten Rec.2020 için yapılmış ve çeşitli kameralar Rec.2020 için "
 "destek sunuyor. Ve sayısal karanlık oda Rec.2020, son derece küçük sRGB renk "
-"alanına kıyasla genel bir RGB çalışma alanı olarak çok daha uygundur.</p>"
+"alanına kıyasla genel bir KYM çalışma alanı olarak çok daha uygundur.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:613
 #, kde-format
@@ -33156,9 +33155,9 @@ msgid ""
 "profile, and matrix profiles don't have perceptual intent tables.</p>"
 msgstr ""
 "<p>Hewlett-Packard ve Microsoft, 1990'lı yıllardan gelen tüketici dereceli "
-"CRT'lerin renk gamıyla eşleştirmek için sRGB'yi tasarladılar. SRGB, dünya "
+"CRT'lerin renk gamıyla eşleştirmek için sRGB'yi tasarladılar. SKYM, dünya "
 "çapında web için standart renk alanıdır ve halen görüntüleri internete "
-"aktarmak için en iyi seçimdir.</p><p>SRGB renk gamı, kalibre edilmiş iyi "
+"aktarmak için en iyi seçimdir.</p><p>SKYM renk gamı, kalibre edilmiş iyi "
 "kalite CRT'lerle iyi bir eşleşme oluşturuyordu. Ancak sRGB, daha doymuş sRGB "
 "blues ve magentalarını sık sık görüntüleyemeyen tüketici sınıfı LCD "
 "monitörlerle iyi bir uyum oluşturmaz (iyi haber: teknoloji ilerledikçe, daha "
@@ -33168,7 +33167,7 @@ msgstr ""
 "genellikle sRGB renk gamını da aşar.</p><p>Algılama amacı sRGB'ye "
 "dönüştürülürken sihirli bir şekilde gam renklerinin dışına çıkarmamasını "
 "sRGB renk gamına dahil etmemektedir! Standart sRGB renk alanı (profil "
-"paketinde sağlanan diğer tüm RGB profilleri ile birlikte) bir matris "
+"paketinde sağlanan diğer tüm KYM profilleri ile birlikte) bir matris "
 "profilidir ve matris profilleri algılama amaçlı tablolara sahip değildir.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:629
@@ -33184,11 +33183,11 @@ msgid ""
 "color space.</p>"
 msgstr ""
 "<p>Olası telif hakkı ihlali sorunlarından kaçınmak için bu profillerin temel "
-"adı olarak 'WideRGB' kullandım.</p><p>WideGamutRGB, tayfsal renkleri "
+"adı olarak 'WideRGB' kullandım.</p><p>WideGamutKYM, tayfsal renkleri "
 "birincil alanlar olarak kullanan geniş bir renk gama alanı olarak Adobe "
 "tarafından tasarlandı. Pascale'ın temel değerleri, Adobe ve Canon'un eski V2 "
 "Widegamut profilleriyle eşleşen bir profil oluşturuyor. İlginç bir renk "
-"alanı; ancak tanıtımından kısa süre sonra Adobe, vurgularını ProPhotoRGB "
+"alanı; ancak tanıtımından kısa süre sonra Adobe, vurgularını ProPhotoKYM "
 "renk alanına değiştirdi.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:637
@@ -33203,8 +33202,8 @@ msgid ""
 "images does save some kilobytes.  For grayscale images uploaded to the "
 "internet, convert the image to the V2 Gray profile with the sRGB TRC.</p>"
 msgstr ""
-"<p>Bu profiller, monoton griye (siyah beyaz) dönüştürülen RGB görüntüleriyle "
-"kullanılır. RGB'den Gri'ye dönüştürmenin başlıca nedeni, görseli kodlamak "
+"<p>Bu profiller, monoton griye (siyah beyaz) dönüştürülen KYM görüntüleriyle "
+"kullanılır. KYM'den Gri'ye dönüştürmenin başlıca nedeni, görseli kodlamak "
 "için gereken dosya alanını kurtarmaktır. Google, hızlı yüklenen web "
 "sayfalarına prim yüklemektedir ve görseller bir web sayfasının yavaş "
 "yükleyen unsurlarından biridir. Bu nedenle siyah beyaz görselleri Gri "
@@ -33236,7 +33235,7 @@ msgid ""
 "Make sure you use the V4 versions for editing high bit depth images.</p>"
 msgstr ""
 "<p>'-labl.icc' ile biten profillerin algısal olarak tek biçimli TRC'leri "
-"var. Algısal olarak tekdüze RGB üzerinde birkaç düzenleme işlemi "
+"var. Algısal olarak tekdüze KYM üzerinde birkaç düzenleme işlemi "
 "yapılmalıdır. Yüksek bit derinlikli görüntüleri düzenlemek için V4 "
 "sürümlerini kullandığınızdan emin olun.</p>"
 
@@ -33249,7 +33248,7 @@ msgid ""
 "gamma=1.8 TRC is not quite as close to being perceptually uniform.</p>"
 msgstr ""
 "<p>'-srgbtrc.icc', '-g22.icc' ve '-rec709.icc' ile biten profillerin "
-"yaklaşık olarak algısal olarak tekdüze TRC'leri yoktur. ProPhotoRGB'ın gama "
+"yaklaşık olarak algısal olarak tekdüze TRC'leri yoktur. ProPhotoKYM'ın gama "
 "= 1,8 TRC, algısal olarak tek biçimli olma kadar yakın değildir.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
@@ -33267,7 +33266,7 @@ msgstr ""
 "<p>8 bitlik görüntüleri düzenlerken, küçük bir renk gamı ve yaklaşık veya "
 "tamamen algısal olarak üniform TRC olan bir profil kullanmalısınız. Profil "
 "paketinde verilen profillerden yalnızca 8-bit düzenleme için sRGB ve "
-"AdobeRGB1998 (ClayRGB) renk alanları yeterince küçük. AdobeRGB1998 renk "
+"AdobeKYM1998 (ClayKYM) renk alanları yeterince küçük. AdobeKYM1998 renk "
 "alanıyla bile, posterizasyona neden olmamak için dikkatli olmanız gerekir. "
 "Ve tabii ki 8 bit düzenleme için bu profillerin doğrusal gama sürümlerini "
 "kullanamazsınız.</p>"
@@ -33400,11 +33399,11 @@ msgid ""
 "Press \"Ok\" to create a 8-bit integer linear RGB color space or \"Cancel\" "
 "to return to the settings dialog."
 msgstr ""
-"Doğrusal gama RGB renk uzaylarının 8 bitlik tamsayı kiplerinde kullanılması "
+"Doğrusal gama KYM renk uzaylarının 8 bitlik tamsayı kiplerinde kullanılması "
 "beklenmemektedir. Doğrusal profiller için 16 bitlik tamsayı veya herhangi "
 "bir kayan noktalı renk alanı kullanmanız önerilir.\n"
 "\n"
-"8 bit tamsayılı doğrusal RGB renk alanı oluşturmak için \"Sürdür\"e basın "
+"8 bit tamsayılı doğrusal KYM renk alanı oluşturmak için \"Sürdür\"e basın "
 "veya ayarlar diyaloğuna dönmek için \"İptal\" düğmesine basın."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:534
@@ -34430,7 +34429,7 @@ msgstr ""
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:79
 #, kde-format
 msgid "HSV"
-msgstr "HSV"
+msgstr "TDD"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsl)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSL)
@@ -34444,7 +34443,7 @@ msgstr "HSV"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:84
 #, kde-format
 msgid "HSL"
-msgstr "HSL"
+msgstr "TDA"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsi)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSI)
@@ -34458,7 +34457,7 @@ msgstr "HSL"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:89
 #, kde-format
 msgid "HSI"
-msgstr "HSI"
+msgstr "TDY"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSY)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
@@ -34601,17 +34600,17 @@ msgstr "Ülke"
 msgid "Anonymous"
 msgstr "Anonim"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:278
+#: libs/widgets/KoConfigAuthorPage.cpp:281
 #, kde-format
 msgid "Name (not duplicate or blank name):"
 msgstr "Ad (yineli veya boş ad değil):"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:278
+#: libs/widgets/KoConfigAuthorPage.cpp:281
 #, kde-format
 msgid "Name of Profile"
 msgstr "Profil adı"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:331
+#: libs/widgets/KoConfigAuthorPage.cpp:334
 #, kde-format
 msgid "New Contact Info"
 msgstr "İletişim Bilgisi Ekle"
@@ -36389,7 +36388,7 @@ msgstr "Sabit Uzunluk"
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:160
 #, kde-format
 msgid "Global Color:"
-msgstr "Genel Renk:"
+msgstr "Global Renk:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useCustomAssistantColor)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:209
@@ -36754,7 +36753,7 @@ msgstr "Cb"
 msgid "Cr"
 msgstr "Cr"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:139
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:140
 #, kde-format
 msgid "ICC Engine"
 msgstr "ICC İşletkesi"
@@ -36777,22 +36776,22 @@ msgstr "L*a*b*/32 Histogram"
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:182
 #, kde-format
 msgid "RGBA/8 Histogram"
-msgstr "RGBA/8 Histogram"
+msgstr "KYMA/8 Histogram"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:186
 #, kde-format
 msgid "RGBA/16 Histogram"
-msgstr "RGBA/16 Histogram"
+msgstr "KYMA/16 Histogram"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:192
 #, kde-format
 msgid "RGBA/F16 Histogram"
-msgstr "RGBA/F16 Histogram"
+msgstr "KYMA/F16 Histogram"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:198
 #, kde-format
 msgid "RGBA/F32 Histogram"
-msgstr "RGBA/F32 Histogram"
+msgstr "KYMA/F32 Histogram"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:219
 #, kde-format
@@ -36933,7 +36932,7 @@ msgstr "Gösterme"
 msgid "Color Selector Settings"
 msgstr "Renk Seçici Ayarları"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:311
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:313
 #, kde-format
 msgid ""
 "Values goes from black to white, or black to the most saturated color. "
@@ -36943,19 +36942,19 @@ msgstr ""
 "Değerler siyahtan beyaza değişir veya en doygun renk için siyah olur. "
 "Doygunluk, sırasıyla, beyaz, gri veya en doygun renk siyaha gider."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:314
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:316
 #, kde-format
 msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
 "saturated color."
 msgstr "Açıklık siyahtan beyaza gider, orta gri en doygun renge eşittir."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:317
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:319
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
-msgstr "Yoğunluk RGB bileşenlerinin toplamına eşleşir"
+msgstr "Yoğunluk KYM bileşenlerinin toplamına eşleşir"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:320
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:322
 #, kde-format
 msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
@@ -37299,7 +37298,7 @@ msgstr "Her fırça vuruşunda güncelle"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1186
 #, kde-format
 msgid "HSV Sliders to Show"
-msgstr "Gösterilecek HSV Kaydırıcıları"
+msgstr "Gösterilecek TDD Kaydırıcıları"
 
 #. i18n: ectx: property (text), widget (QCheckBox, csl_hsvH)
 #. i18n: ectx: property (text), widget (QCheckBox, csl_hslH)
@@ -37346,7 +37345,7 @@ msgstr "Değer"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1216
 #, kde-format
 msgid "HSL Sliders to Show"
-msgstr "Gösterilecek HSL Kaydırıcıları"
+msgstr "Gösterilecek TDA Kaydırıcıları"
 
 #. i18n: ectx: property (text), widget (QCheckBox, csl_hslL)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1236
@@ -37360,7 +37359,7 @@ msgstr "Açıklık"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1246
 #, kde-format
 msgid "HSI Sliders to Show"
-msgstr "Gösterilecek HSI Kaydırıcıları"
+msgstr "Gösterilecek TDY Kaydırıcıları"
 
 #. i18n: ectx: property (text), widget (QCheckBox, csl_hsiI)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1266
@@ -38057,7 +38056,7 @@ msgstr "Doygunluk Halkaları"
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:117
 #, kde-format
 msgid "Value Scale Steps"
-msgstr "Katman Boyutlandırma Adımları"
+msgstr "Katman Ölçeklendirme Adımları"
 
 #. i18n: ectx: property (toolTip), widget (KisPopupButton, bnWheelPrefs)
 #: plugins/dockers/artisticcolorselector/forms/wdgArtisticColorSelector.ui:67
@@ -38075,7 +38074,7 @@ msgstr "Rıhtım ayarları"
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:134
 #, kde-format
 msgid "Invert Saturation"
-msgstr "Doygunluğu Tersine Çevir"
+msgstr "Doygunluğu Ters Çevir"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDefault)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:157
@@ -38379,7 +38378,7 @@ msgstr "Ana Biçem:"
 #: plugins/dockers/griddocker/grid_config_widget.ui:424
 #, kde-format
 msgid "Grid Offset"
-msgstr "Izgara Yerleşimi"
+msgstr "Izgara Ofseti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGuides)
 #: plugins/dockers/griddocker/grid_config_widget.ui:546
@@ -38477,7 +38476,7 @@ msgstr "Katmanlar"
 #: plugins/dockers/layerdocker/LayerBox.cpp:250
 #, kde-format
 msgid "&Show Global Selection Mask"
-msgstr "&Genel Seçim Maskesini Göster"
+msgstr "&Global Seçim Maskesini Göster"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:253
 #, kde-format
@@ -38485,7 +38484,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
-"<b>Katmanlar</b> sabitleyicisinde genel seçimleri her zamanki seçim "
+"<b>Katmanlar</b> sabitleyicisinde global seçimleri her zamanki seçim "
 "maskeleri olarak gösterir"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:317
@@ -39654,7 +39653,7 @@ msgid ""
 "Only \"RGB/Alpha 8-bit\" is supported."
 msgstr ""
 "⚠ Desteklenmeyen renk uzayı.\n"
-"Yalnızca \"RGB/Alfa 8 bit\" desteklenir."
+"Yalnızca \"KYM/Alfa 8 bit\" desteklenir."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:110
 #, kde-format
@@ -39917,7 +39916,7 @@ msgid "Edit Storyboard Child"
 msgstr "Görsel Taslak Alt Ögesi Düzenle"
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:137
-#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:311
+#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:312
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:923
 #, kde-format
 msgctxt "suffix in spin box in storyboard that means 'seconds'"
@@ -39925,7 +39924,7 @@ msgid "s"
 msgstr "sn"
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:142
-#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:318
+#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:319
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:926
 #, kde-format
 msgctxt "suffix in spin box in storyboard that means 'frames'"
@@ -39957,14 +39956,14 @@ msgid "Freeze Keyframe Data"
 msgstr "Anahtar Kare Verisini Dondur"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:236
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:290
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:291
 #, kde-format
 msgctxt "Add new scene as the last storyboard"
 msgid "Add Scene"
 msgstr "Sahne Ekle"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:252
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:309
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:310
 #, kde-format
 msgctxt "Remove current scene from storyboards"
 msgid "Remove Scene"
@@ -39984,19 +39983,19 @@ msgctxt "default name for storyboard item"
 msgid "scene "
 msgstr "sahne"
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:297
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:298
 #, kde-format
 msgctxt "Add scene after active scene"
 msgid "Add Scene After"
 msgstr "Sonrasında Sahne Ekle"
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:299
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:300
 #, kde-format
 msgctxt "Add scene before active scene"
 msgid "Add Scene Before"
 msgstr "Öncesinde Sahne Ekle"
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:302
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:303
 #, kde-format
 msgctxt "Duplicate current scene from storyboard docker"
 msgid "Duplicate Scene"
@@ -40779,13 +40778,13 @@ msgstr "+ Ögeler"
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:64
 #, kde-format
 msgid "X offset"
-msgstr "X yerleşimi"
+msgstr "X ofseti"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:80
 #, kde-format
 msgid "Y offset"
-msgstr "Y yerleşimi"
+msgstr "Y ofseti"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:96
@@ -40888,7 +40887,7 @@ msgstr "Gölgeler"
 #: plugins/filters/example/example.cpp:42
 #, kde-format
 msgid "&Invert"
-msgstr "&Tersine Çevir"
+msgstr "&Ters Çevir"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:82
@@ -42871,7 +42870,7 @@ msgid "Do you want to overwrite the existing bundle?"
 msgstr "Var olan demetin üzerine yazmak istiyor musunuz?"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:414
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:220
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #, kde-format
 msgid "Could not open '%1' for saving."
 msgstr "'%1' kaydetmek için açılamadı."
@@ -43334,7 +43333,7 @@ msgstr "Ayırmadan önce 8 bite aşağı ölçekle"
 #: plugins/extensions/separate_channels/wdg_separations.ui:130
 #, kde-format
 msgid "Output to color, not grayscale"
-msgstr "Renk çıktısı ver, gri ölçek değil"
+msgstr "Gri tonlu olmayan renkli çıktı ver"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkActivateCurrentChannel)
 #: plugins/extensions/separate_channels/wdg_separations.ui:137
@@ -43577,12 +43576,12 @@ msgstr "Eğim, Ofset, Güç Süzgeci"
 #: plugins/filters/asccdl/kis_asccdl_filter.cpp:31
 #, kde-format
 msgid "&Slope, Offset, Power..."
-msgstr "&Eğim, Yerleşim, Güç..."
+msgstr "&Eğim, Ofset, Güç..."
 
 #: plugins/filters/asccdl/kis_asccdl_filter.h:28
 #, kde-format
 msgid "Slope, Offset, Power(ASC-CDL)"
-msgstr "Eğim, Yerleşim, Güç (ASC-CDL)"
+msgstr "Eğim, Ofset, Güç (ASC-CDL)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblBase)
 #: plugins/filters/asccdl/wdg_asccdl.ui:42
@@ -43881,7 +43880,7 @@ msgstr "&Renk Dengesi..."
 msgid "Color Balance"
 msgstr "Renk Dengesi"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:227
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:229
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "&Çapraz Kanal Ayarlama Eğrileri..."
@@ -43919,12 +43918,12 @@ msgstr "Yeşil-Kırmızı"
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:254
 #, kde-format
 msgid "&HSV Adjustment..."
-msgstr "&HSV Ayarlamaları..."
+msgstr "&TDD Ayarlamaları..."
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.h:38
 #, kde-format
 msgid "HSV/HSL Adjustment"
-msgstr "HSV/HSL Ayarlaması"
+msgstr "TDD/TDA Ayarlaması"
 
 #: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:352
 #, kde-format
@@ -44364,7 +44363,7 @@ msgstr "Değişken Derinliği ile Kabart"
 #: plugins/filters/example/example.h:33
 #, kde-format
 msgid "Invert"
-msgstr "Tersine Çevir"
+msgstr "Ters Çevir"
 
 #: plugins/filters/fastcolortransfer/fastcolortransfer.cpp:48
 #, kde-format
@@ -44521,7 +44520,7 @@ msgstr "Sertlik:"
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:130
 #, kde-format
 msgid "Invert:"
-msgstr "Tersine Çevir:"
+msgstr "Ters Çevir:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelForeground)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:144
@@ -44890,7 +44889,7 @@ msgstr "Süzgeci Paletleştir"
 #: plugins/filters/palettize/palettize.cpp:110
 #, kde-format
 msgid "Offset Scale:"
-msgstr "Yerleşim Ölçeği:"
+msgstr "Ofset Ölçeği:"
 
 #: plugins/filters/palettize/palettize.cpp:119
 #, kde-format
@@ -44923,7 +44922,7 @@ msgstr "Lab"
 #: plugins/filters/palettize/palettize.ui:90
 #, kde-format
 msgid "Per Channel Offset"
-msgstr "Her Kanal Yerleşimi"
+msgstr "Kanal Başına Ofset"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, colorModeComboBox)
 #: plugins/filters/palettize/palettize.ui:95
@@ -45947,7 +45946,7 @@ msgstr "Y: "
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text arfet as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:360
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:361
 #, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -45960,7 +45959,7 @@ msgstr[1] "Yatay olarak her bir {n} hücre"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text arfet as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:376
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:377
 #, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -45970,25 +45969,25 @@ msgid_plural "Every {n} cells vertically"
 msgstr[0] "Dikey olarak her bir {n} hücre"
 msgstr[1] "Dikey olarak her bir {n} hücre"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:468
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
 msgstr "piksel/inç"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:470
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
 msgstr "piksel/cm"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:472
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:473
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
 msgstr " çizgi/inç"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:473
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:474
 #, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
@@ -46102,7 +46101,7 @@ msgstr "Konum:"
 #, kde-format
 msgctxt "Swapping FG and BG color in the screentone pattern"
 msgid "Invert:"
-msgstr "Tersine Çevir:"
+msgstr "Ters Çevir:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #. i18n: ectx: property (text), widget (QLabel, labelContrast)
@@ -48657,7 +48656,7 @@ msgid ""
 "html>"
 msgstr ""
 "<html><head/><body><p><span style=\"font-weight:600;\"> PNG</span> "
-"dosyaları, <span style=\" font-weight:600;\">aRGB</span> bilgisini kaydetmek "
+"dosyaları, <span style=\" font-weight:600;\">aKYM</span> bilgisini kaydetmek "
 "için <span style=\" font-style:italic;\">iki</span> seçeneğe sahiptir: "
 "etiket olarak veya harici bir profil olarak. Websiteleri ile kullanmak için, "
 "bu seçeneği <span style=\"font-style:italic;\">devre dışı bırakın</span>. "
@@ -48778,7 +48777,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Interpolate RGB as four colors"
-msgstr "RGB dört renk olarak aradeğerle"
+msgstr "KYM dört renk olarak aradeğerle"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:285
 #, kde-format
@@ -48792,7 +48791,7 @@ msgid ""
 "it eliminates false 2x2 mesh patterns with VNG quality method or mazes with "
 "AHD quality method.</p>"
 msgstr ""
-"<title>RGB'yi dört renk olarak ekle</title><p>Tüm yeşil piksellerin aynı "
+"<title>KYM'yi dört renk olarak ekle</title><p>Tüm yeşil piksellerin aynı "
 "olduğunu varsaymak öntanımlıdır. Çift satır yeşil pikselleri bile "
 "ultraviyole ışınlara tek satırdan daha hassassa bu fark çıktıda kafes deseni "
 "oluşmasına yol açar; bu seçeneği kullanmak bu problemi en az ayrıntı "
@@ -49587,7 +49586,7 @@ msgstr ""
 "çıktı renk uzayını seçin.</p><p><ul><li><emphasis strong='true'>Ham "
 "(doğrusal)</emphasis>: Bu kipte, RAW çözme sırasında hiçbir çıktı renk uzayı "
 "kullanılmaz.</li><li><emphasis strong='true'>sRGB</emphasis>: bu Hewlett-"
-"Packard ve Microsoft tarafından ortak oluşturulan bir RGB renk uzayıdır. Bu "
+"Packard ve Microsoft tarafından ortak oluşturulan bir KYM renk uzayıdır. Bu "
 "Web ve portre fotoğrafçılığı için amaçlanmış görseller için en iyi "
 "seçenektir.</li><li><emphasis strong='true'>Adobe RGB</emphasis>: Bu renk "
 "uzayı, Adobe tarafından geliştirilen, genişletilmiş bir renk uzayıdır. "
@@ -49596,7 +49595,7 @@ msgstr ""
 "renk uzayının genişletilmiş bir sürümüdür.</li><li><emphasis "
 "strong='true'>Pro-Photo</emphasis>: Bu renk uzayı, Kodak tarafından "
 "geliştirilmiş, fotoğrafsal çıktılar düşünülerek tasarlanmış özellikle geniş "
-"bir aralık sunan bir RGB renk uzayıdır.</li><li><emphasis "
+"bir aralık sunan bir KYM renk uzayıdır.</li><li><emphasis "
 "strong='true'>Özel</emphasis>: Özel bir çıktı renk uzayı profili kullan.</"
 "li></ul></p>"
 
@@ -50356,8 +50355,8 @@ msgid ""
 "Otherwise, discard this invisible RGB information for better compression. "
 "The default is disabled."
 msgstr ""
-"Etkinleştirilmişse tam RGB değerini saydam alanlar altında koru. Aksi "
-"takdirde bu görünmez RGB bilgisini daha iyi sıkıştırmak için at. Öntanımlı "
+"Etkinleştirilmişse tam KYM değerini saydam alanlar altında koru. Aksi "
+"takdirde bu görünmez KYM bilgisini daha iyi sıkıştırmak için at. Öntanımlı "
 "olarak devre dışıdır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblExact)
@@ -50373,7 +50372,7 @@ msgstr "Tam"
 #, kde-format
 msgid "If enabled, allows use of the sharp (and slow) RGB to YUV conversion."
 msgstr ""
-"Etkinleştirilmişse keskin (ve yavaş) RGB-YUV dönüştürmesine izin verir."
+"Etkinleştirilmişse keskin (ve yavaş) KYM-YUV dönüştürmesine izin verir."
 
 #. i18n: ectx: property (text), widget (QLabel, lblUseSharpYUV)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:720
@@ -51069,7 +51068,7 @@ msgstr "Doldurma Biçemi"
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:166
 #, kde-format
 msgid "Global Pattern"
-msgstr "Genel Desen"
+msgstr "Global Desen"
 
 #: plugins/paintops/filterop/filterop.cpp:31
 #, kde-format
@@ -51286,7 +51285,7 @@ msgstr "Deneysel Parametreler"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:194
 #, kde-format
 msgid "Scale factor"
-msgstr "Ölçekleme katsayısı"
+msgstr "Ölçek çarpanı"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:214
@@ -51298,7 +51297,7 @@ msgstr "Kayma çarpanı"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:234
 #, kde-format
 msgid "Random offset"
-msgstr "Rastgele yerleşim"
+msgstr "Rastgele ofset"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:269
@@ -51644,7 +51643,7 @@ msgstr "Alfayı koru"
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:33
 #, kde-format
 msgid "Random HSV"
-msgstr "Rastgele HSV"
+msgstr "Rastgele TDD"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomOpacityCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, randomOpacityCHbox)
@@ -51995,13 +51994,13 @@ msgstr "Nötr Nokta:"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:222
 #, kde-format
 msgid "Horizontal Offset:"
-msgstr "Yatay Yerleşim:"
+msgstr "Yatay Ofset:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInvert)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:238
 #, kde-format
 msgid "Invert Pattern"
-msgstr "Deseni Tersine Çevir"
+msgstr "Deseni Ters Çevir"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomOffsetY)
 #. i18n: ectx: property (text), widget (QCheckBox, randomOffsetX)
@@ -52009,13 +52008,13 @@ msgstr "Deseni Tersine Çevir"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:277
 #, kde-format
 msgid "Random Offset"
-msgstr "Rastgele Yerleşim"
+msgstr "Rastgele Ofset"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:261
 #, kde-format
 msgid "Vertical Offset:"
-msgstr "Dikey Yerleşim:"
+msgstr "Dikey Ofset:"
 
 #: plugins/paintops/libpaintop/kis_airbrush_option_widget.cpp:49
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:318
@@ -52978,20 +52977,20 @@ msgctxt "Pen tilt ascension"
 msgid "Ascension"
 msgstr "Artan"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:187
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:189
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active, consider disabling Instant Preview"
 msgstr ""
 "Rastgele Algılayıcı Etkin; Anında Önizleme'yi devre dışı bırakmayı düşünün"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:191
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:193
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Offset by Random, consider disabling Instant Preview"
 msgstr "Rastgele Ofset; Anında Önizleme'yi devre dışı bırakmayı düşünün"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:195
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:197
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Radius by Random, consider disabling Instant Preview"
@@ -53077,12 +53076,12 @@ msgstr "Renk V Değiştir"
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:100
 #, kde-format
 msgid "Change Color HSL S"
-msgstr "Renk HSL S Değiştir"
+msgstr "Renk TDA S Değiştir"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:105
 #, kde-format
 msgid "Change Color HSV S"
-msgstr "Renk HSV S Değiştir"
+msgstr "Renk TDD S Değiştir"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:110
 #, kde-format
@@ -53344,7 +53343,7 @@ msgstr "Yoğunluk"
 #: plugins/paintops/sketch/kis_offset_scale_option.cpp:11
 #, kde-format
 msgid "Offset scale"
-msgstr "Yerleşim ölçeği"
+msgstr "Ofset ölçeği"
 
 #: plugins/paintops/sketch/kis_sketchop_option.cpp:96
 #, kde-format
@@ -53362,7 +53361,7 @@ msgstr "Eskiz"
 #: plugins/paintops/sketch/wdgsketchoptions.ui:64
 #, kde-format
 msgid "Offset scale:"
-msgstr "Yerleşim ölçeği:"
+msgstr "Ofset ölçeği:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, distanceDensityCHBox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:114
@@ -53386,7 +53385,7 @@ msgstr "Mıknatısla"
 #: plugins/paintops/sketch/wdgsketchoptions.ui:162
 #, kde-format
 msgid "Random RGB"
-msgstr "Rastgele RGB"
+msgstr "Rastgele KYM"
 
 #. i18n: ectx: property (text), widget (QCheckBox, distanceOpacityCHbox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:169
@@ -53967,7 +53966,7 @@ msgstr "Katmanlar kanallara"
 
 #: plugins/python/channels2layers/channels2layers.py:67
 msgid "RGB Colors"
-msgstr "RGB Renkleri"
+msgstr "KYM Renkleri"
 
 #: plugins/python/channels2layers/channels2layers.py:68
 msgid "CMY Colors"
@@ -53979,7 +53978,7 @@ msgstr "CMYK Renkleri"
 
 #: plugins/python/channels2layers/channels2layers.py:70
 msgid "RGB Grayscale levels"
-msgstr "RGB Gri Tonlu Düzeyleri"
+msgstr "KYM Gri Tonlu Düzeyleri"
 
 #: plugins/python/channels2layers/channels2layers.py:71
 msgid "CMY Grayscale levels"
@@ -53987,7 +53986,7 @@ msgstr "CMY Gri Tonlu Düzeyleri"
 
 #: plugins/python/channels2layers/channels2layers.py:72
 msgid "CMYK Grayscale levels"
-msgstr "CMYK gri tonlama düzeyleri"
+msgstr "CMYK Gri Tonlu düzeyleri"
 
 #: plugins/python/channels2layers/channels2layers.py:77
 msgid "Unchanged"
@@ -55523,7 +55522,7 @@ msgstr "Derece:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1839
 #, kde-format
 msgid "Scale"
-msgstr "Ölçeklendir"
+msgstr "Ölçekle"
 
 #: plugins/python/documenttools/uidocumenttools.py:104
 msgid "The selected documents has been modified."
@@ -56424,7 +56423,7 @@ msgid "Scalable Distance"
 msgstr "Ölçeklenebilir Uzaklık"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:451
-#: plugins/tools/basictools/kis_tool_line.cc:100
+#: plugins/tools/basictools/kis_tool_line.cc:101
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Yardımcılara Tuttur"
@@ -56460,7 +56459,7 @@ msgstr ""
 "yardımcılar kullanılırken sığdırma karmaşasını önler."
 
 #: plugins/tools/basictools/kis_tool_brush.cc:475
-#: plugins/tools/basictools/kis_tool_line.cc:103
+#: plugins/tools/basictools/kis_tool_line.cc:104
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Silgi Tuttur"
@@ -56476,7 +56475,7 @@ msgstr "Silgiler kullanırken tutturmayı etkinleştir"
 msgid "Freehand Brush Tool"
 msgstr "Serbest Fırça Aracı"
 
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:96
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:97
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only."
 msgstr "%1 palet dosyasına yazılamıyor. Saltokunur olabilir."
@@ -56746,32 +56745,32 @@ msgstr "Titret"
 msgid "Gradient Tool"
 msgstr "Geçiş Aracı"
 
-#: plugins/tools/basictools/kis_tool_line.cc:52
+#: plugins/tools/basictools/kis_tool_line.cc:53
 msgctxt "(qtundo-format)"
 msgid "Draw Line"
 msgstr "Çizgi Çiz"
 
-#: plugins/tools/basictools/kis_tool_line.cc:91
+#: plugins/tools/basictools/kis_tool_line.cc:92
 #, kde-format
 msgid "Use sensors"
 msgstr "Algılayıcı kullan"
 
-#: plugins/tools/basictools/kis_tool_line.cc:94
+#: plugins/tools/basictools/kis_tool_line.cc:95
 #, kde-format
 msgid "Show Preview"
 msgstr "Önizleme göster"
 
-#: plugins/tools/basictools/kis_tool_line.cc:97
+#: plugins/tools/basictools/kis_tool_line.cc:98
 #, kde-format
 msgid "Show Guideline"
 msgstr "Kılavuz çizgisi göster"
 
-#: plugins/tools/basictools/kis_tool_line.cc:430
+#: plugins/tools/basictools/kis_tool_line.cc:433
 #, kde-format
 msgid "Length: %1 px"
 msgstr "Uzunluk: %1 pks"
 
-#: plugins/tools/basictools/kis_tool_line.cc:448
+#: plugins/tools/basictools/kis_tool_line.cc:451
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -57116,8 +57115,7 @@ msgstr "Taşı Kısayolu"
 #, kde-format
 msgid "When holding shift, move keyboard shortcuts scale up by this amount."
 msgstr ""
-"Shift butonuna basarken, taşıma klavye kısayollarını bu miktarda "
-"ölçeklendirin."
+"Shift düğmesine basarken, klavye kısayolları ölçeğini bu miktarda taşıyın."
 
 #. i18n: ectx: property (text), widget (QLabel, scaleLabel)
 #: plugins/tools/basictools/wdgmovetool.ui:112
@@ -57392,10 +57390,10 @@ msgid ""
 "fields show the shape's &quot;local&quot; size, before application of any "
 "transformations.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>&quot;Genel Koordinatlar&quot; kipinde, Genişlik ve "
+"<html><head/><body><p>&quot;Global Koordinatlar&quot; kipinde, Genişlik ve "
 "Yükseklik alanları şekil döndürülmüş veya diğer herhangi bir dönüşüme sahip "
 "olsa bile görsel yerleşim koordinatları türünden şekli saran kutunun "
-"boyutunu gösterir. </p><p>Eğer &quot;Genel Koordinatlar&quot; kipi devre "
+"boyutunu gösterir. </p><p>Eğer &quot;Global Koordinatlar&quot; kipi devre "
 "dışı ise Genişlik ve Yükseklik alanları, herhangi bir dönüşüm uygulanmadan "
 "önceki şeklin &quot;yerel&quot; boyutunu gösterir.</p></body></html>"
 
@@ -57447,7 +57445,7 @@ msgstr "Değişiklikleri Sıfırla"
 msgid "Press Shift to hold x- or y-position."
 msgstr "x- veya y- konumunu tutmak için Shift'e basın."
 
-#: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:97
+#: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:96
 #, kde-format
 msgid "Press CTRL to resize from center."
 msgstr "Merkezden başlayarak yeniden boyutlandırmak için CTRL düğmesine basın."
@@ -57471,42 +57469,42 @@ msgstr ""
 "Aşağıdaki başvuru görseller yüklenemedi:\n"
 "%1"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:96
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:97
 #, kde-format
 msgid "Select a Reference Image"
 msgstr "Bir başvuru görsel seç"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:129
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:130
 #, kde-format
 msgid "Could not load reference image from clipboard"
 msgstr "Panodan başvuru görsel yüklenemedi"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:151
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:152
 #, kde-format
 msgid "Load Reference Images"
 msgstr "Başvuru Görseller Yükle"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:164
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:165
 #, kde-format
 msgid "Could not open '%1'."
 msgstr "'%1' açılamadı."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:185
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:186
 #, kde-format
 msgid "Could not load reference images from '%1'."
 msgstr "Başvuru görseller, '%1' konumundan yüklenemedi."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:202
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:203
 #, kde-format
 msgid "Save Reference Images"
 msgstr "Başvuru Görselleri Kaydet"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:231
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:232
 #, kde-format
 msgid "Failed to save reference images."
 msgstr "Başvuru görseller kaydedilemedi."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:306
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:307
 #, kde-format
 msgid "Reference Image Actions"
 msgstr "Başvuru Görsel Eylemleri"
@@ -58833,7 +58831,7 @@ msgstr "Kilit Oranı"
 msgid "Crop Tool Actions"
 msgstr "Kırpma Aracı Eylemleri"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:722
+#: plugins/tools/tool_crop/kis_tool_crop.cc:723
 #, kde-format
 msgid ""
 "X: %1\n"
@@ -58842,7 +58840,7 @@ msgstr ""
 "X: %1\n"
 "Y: %2"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:727
+#: plugins/tools/tool_crop/kis_tool_crop.cc:728
 #, kde-format
 msgid ""
 "Width: %1\n"
@@ -59028,7 +59026,7 @@ msgstr "Çevrele ve Doldur"
 #, kde-format
 msgctxt "The 'invert' checkbox in enclose and fill tool"
 msgid "Invert"
-msgstr "Tersine Çevir"
+msgstr "Ters Çevir"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:366
 #, kde-format
@@ -59477,13 +59475,13 @@ msgstr "Uygula"
 msgid "Transform Tool Actions"
 msgstr "Dönüştürme Aracı Eylemleri"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:854
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:855
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Katman türü dönüşüm aracı için kullanılamaz"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:862
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -59491,7 +59489,7 @@ msgstr ""
 "Katman türü, dönüşüm maskesini kullanamaz. Yerine, dönüşüm maskesini "
 "kullanın."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:881
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:882
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59501,20 +59499,20 @@ msgstr ""
 "Katmanın dönüşüm maskeli alt katmanları var. Dönüşüm yapmadan önce lütfen "
 "onları devre dışı bırakın."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:898
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:899
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Dönüşüm maskeleri düzenlenirken seçimler kullanılmaz "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:979
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1016
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Boş kayman dönüştürülemez "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1004
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59639,7 +59637,7 @@ msgstr "Döndür: Görseli imlecin altında döndür"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Offset: shift the image to the right of the stroke direction"
-msgstr "Yerleşim: Vuruş yönünün sağına doğru görseli kaydır"
+msgstr "Ofset: Vuruş yönünün sağına doğru görseli kaydır"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:276
 #, kde-format

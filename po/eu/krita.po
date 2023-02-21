@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:55+0000\n"
+"POT-Creation-Date: 2023-02-21 00:57+0000\n"
 "PO-Revision-Date: 2023-02-10 21:36+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -18037,7 +18037,7 @@ msgstr "Eraldatze maskara"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:379
 #: plugins/impex/tiff/kis_tiff_import.cc:562
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
+#: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
 msgid "Transparency Mask"
 msgstr "Gardentasun-maskara"
@@ -19583,7 +19583,7 @@ msgstr "Atzeko planoa"
 msgid "Unnamed Layer"
 msgstr "Izenik gabeko geruza"
 
-#: libs/psd/psd_resource_block.h:109
+#: libs/psd/psd_resource_block.h:110
 #, kde-format
 msgid "Unparsed Resource Block"
 msgstr "Aztertu gabeko baliabide blokea"
@@ -19663,11 +19663,11 @@ msgstr "Baliabide lokalak"
 #: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:352
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:129
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:164
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:185
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:220
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:231
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:130
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:165
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:186
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:232
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1120
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
@@ -22789,7 +22789,7 @@ msgstr "Geruzaren propietateak"
 #: plugins/paintops/spray/kis_sprayop_option.cpp:60
 #: plugins/paintops/tangentnormal/kis_tangent_tilt_option.cpp:39
 #: plugins/paintops/tangentnormal/kis_tangent_tilt_option.cpp:43
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:279
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:281
 #: plugins/tools/basictools/kis_tool_fill.cc:490
 #: plugins/tools/basictools/kis_tool_fill.cc:507
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:370
@@ -28575,64 +28575,64 @@ msgstr "Aktibatu ondokoaren hautapen-tresna"
 msgid "Activate Freehand Selection Tool"
 msgstr "Aktibatu esku-hutsezko hautapen-tresna"
 
-#: libs/ui/input/kis_zoom_action.cpp:106
+#: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
 msgid "Zoom Canvas"
 msgstr "Egin zoom oihalari"
 
-#: libs/ui/input/kis_zoom_action.cpp:107
+#: libs/ui/input/kis_zoom_action.cpp:108
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr "<i>Zoom oihalari</i> ekintzak oihalean zoom egiten du."
 
-#: libs/ui/input/kis_zoom_action.cpp:110
+#: libs/ui/input/kis_zoom_action.cpp:111
 #, kde-format
 msgid "Zoom Mode"
 msgstr "Zoom modua"
 
-#: libs/ui/input/kis_zoom_action.cpp:111
+#: libs/ui/input/kis_zoom_action.cpp:112
 #, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "Zoom modu diskretua"
 
-#: libs/ui/input/kis_zoom_action.cpp:112
+#: libs/ui/input/kis_zoom_action.cpp:113
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "Zoom modu erlatiboa"
 
-#: libs/ui/input/kis_zoom_action.cpp:113
+#: libs/ui/input/kis_zoom_action.cpp:114
 #, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "Zoom modu erlatibo diskretua"
 
-#: libs/ui/input/kis_zoom_action.cpp:114
+#: libs/ui/input/kis_zoom_action.cpp:115
 #, kde-format
 msgid "Zoom In"
 msgstr "Zooma handiagotu"
 
-#: libs/ui/input/kis_zoom_action.cpp:115
+#: libs/ui/input/kis_zoom_action.cpp:116
 #, kde-format
 msgid "Zoom Out"
 msgstr "Zooma txikiagotu"
 
-#: libs/ui/input/kis_zoom_action.cpp:116 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "Zooma % 100"
 
-#: libs/ui/input/kis_zoom_action.cpp:117
+#: libs/ui/input/kis_zoom_action.cpp:118
 #, fuzzy, kde-format
 #| msgid "Fit to Page"
 msgid "Fit to View"
 msgstr "Doitu orriari"
 
-#: libs/ui/input/kis_zoom_action.cpp:118
+#: libs/ui/input/kis_zoom_action.cpp:119
 #, fuzzy, kde-format
 #| msgid "Fit to Width"
 msgid "Fit to View Width"
 msgstr "Doitu zabalerari"
 
-#: libs/ui/input/kis_zoom_action.cpp:119
+#: libs/ui/input/kis_zoom_action.cpp:120
 #, fuzzy, kde-format
 #| msgid "Fit to Height"
 msgid "Fit to View Height"
@@ -29427,7 +29427,7 @@ msgstr "% 100"
 msgid "Fit Canvas to View"
 msgstr "Oihalaren tamaina"
 
-#: libs/ui/kis_popup_palette.cpp:871
+#: libs/ui/kis_popup_palette.cpp:872
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -29436,7 +29436,7 @@ msgstr ""
 "Egin klik aurreko eta atzeko planoetako koloreak trukatzeko.\n"
 " Eskuineko klik zuri-beltza ezartzeko."
 
-#: libs/ui/kis_popup_palette.cpp:1008
+#: libs/ui/kis_popup_palette.cpp:1010
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -29644,7 +29644,7 @@ msgctxt "<color space> <image profile>"
 msgid "%1  %2"
 msgstr "%1  %2"
 
-#: libs/ui/kis_zoom_manager.cc:318
+#: libs/ui/kis_zoom_manager.cc:319
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
@@ -31053,17 +31053,17 @@ msgstr "Erabili txantiloi hau"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Ezin duzu erabili tresna hau hautatutako geruza motarekin"
 
-#: libs/ui/KisView.cpp:758 libs/ui/tool/kis_tool.cc:671
+#: libs/ui/KisView.cpp:758 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Geruza blokeatuta eta ikusezin dago."
 
-#: libs/ui/KisView.cpp:760 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:760 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "Geruza blokeatuta dago."
 
-#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Geruza ikusezin dago."
@@ -32303,27 +32303,27 @@ msgstr "Hautapen-ekintzak"
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1834
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:309
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:310
 #, kde-format
 msgid "Transform"
 msgstr "Eraldatu"
 
-#: libs/ui/tool/kis_tool.cc:573
+#: libs/ui/tool/kis_tool.cc:575
 #, kde-format
 msgid "No options"
 msgstr "Aukerarik ez"
 
-#: libs/ui/tool/kis_tool.cc:677
+#: libs/ui/tool/kis_tool.cc:679
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr "Geruza Garbitzeko moduan bakarrik margotu daiteke."
 
-#: libs/ui/tool/kis_tool.cc:679
+#: libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Group not editable."
 msgstr "Taldea ezin da editatu."
 
-#: libs/ui/tool/kis_tool.cc:694
+#: libs/ui/tool/kis_tool.cc:696
 #, kde-format
 msgid "Local selection is locked."
 msgstr "Hautapen lokala blokeatuta dago."
@@ -32339,9 +32339,9 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_freehand.cc:212
 #: libs/ui/tool/kis_tool_polyline_base.cpp:119
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:163
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:162
-#: plugins/tools/basictools/kis_tool_line.cc:201
+#: plugins/tools/basictools/kis_tool_line.cc:202
 #: plugins/tools/basictools/kis_tool_path.cc:78
 #: plugins/tools/basictools/kis_tool_pencil.cc:53
 #: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:113
@@ -32351,14 +32351,14 @@ msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
 "«MyPaint»eko pintzel motorra ez dago erabilgarri kolore-eremu honetarako"
 
-#: libs/ui/tool/kis_tool_paint.cc:569
+#: libs/ui/tool/kis_tool_paint.cc:571
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush Size: %1 px"
 msgstr "Pintzelaren tamaina"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:113
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:157
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:156
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:66
 #, kde-format
@@ -32369,7 +32369,7 @@ msgstr ""
 "Tresna honek ezin du margotu klonatutako geruzetan. Mesedez, hautatu margo "
 "edo bektore geruza bat edo maskara bat."
 
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:94
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:95
 #, kde-format
 msgid ""
 "Width: %1 px\n"
@@ -32378,8 +32378,8 @@ msgstr ""
 "Zabalera: %1 px\n"
 "Altuera: %2 px"
 
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:292
-#: plugins/tools/basictools/kis_tool_line.cc:282
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:294
+#: plugins/tools/basictools/kis_tool_line.cc:284
 #: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #, kde-format
 msgid ""
@@ -34818,17 +34818,17 @@ msgstr "Sarrera"
 msgid "Anonymous"
 msgstr "Anonimoa"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:278
+#: libs/widgets/KoConfigAuthorPage.cpp:281
 #, kde-format
 msgid "Name (not duplicate or blank name):"
 msgstr "Izena (ez bikoiztua ez hutsa):"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:278
+#: libs/widgets/KoConfigAuthorPage.cpp:281
 #, kde-format
 msgid "Name of Profile"
 msgstr "Profilaren izena"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:331
+#: libs/widgets/KoConfigAuthorPage.cpp:334
 #, kde-format
 msgid "New Contact Info"
 msgstr "Kontaktu berriaren informazioa"
@@ -36969,7 +36969,7 @@ msgstr "Cb"
 msgid "Cr"
 msgstr "Cr"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:139
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:140
 #, kde-format
 msgid "ICC Engine"
 msgstr "ICC motorra"
@@ -37149,7 +37149,7 @@ msgstr "Ez erakutsi"
 msgid "Color Selector Settings"
 msgstr "Kolore-hautatzailearen ezarpenak"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:311
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:313
 #, kde-format
 msgid ""
 "Values goes from black to white, or black to the most saturated color. "
@@ -37160,7 +37160,7 @@ msgstr ""
 "Asetasuna, txandaka, asetasun handieneko koloretik zurira, grisera edo "
 "beltzera doa."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:314
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:316
 #, kde-format
 msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
@@ -37169,12 +37169,12 @@ msgstr ""
 "Argitasuna beltzetik zurira doa, erdiko grisa asetasun handieneko kolorearen "
 "berdina delarik."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:317
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:319
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
 msgstr "Intentsitateak RGB osagaien batura mapatzen du"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:320
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:322
 #, kde-format
 msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
@@ -40156,7 +40156,7 @@ msgid "Edit Storyboard Child"
 msgstr "Editatu gidoi grafiko umea"
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:137
-#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:311
+#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:312
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:923
 #, kde-format
 msgctxt "suffix in spin box in storyboard that means 'seconds'"
@@ -40164,7 +40164,7 @@ msgid "s"
 msgstr "s"
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:142
-#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:318
+#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:319
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:926
 #, kde-format
 msgctxt "suffix in spin box in storyboard that means 'frames'"
@@ -40196,14 +40196,14 @@ msgid "Freeze Keyframe Data"
 msgstr "Izoztu gako-fotogramen datuak"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:236
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:290
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:291
 #, kde-format
 msgctxt "Add new scene as the last storyboard"
 msgid "Add Scene"
 msgstr "Gehitu eszena"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:252
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:309
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:310
 #, kde-format
 msgctxt "Remove current scene from storyboards"
 msgid "Remove Scene"
@@ -40224,19 +40224,19 @@ msgctxt "default name for storyboard item"
 msgid "scene "
 msgstr "eszena"
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:297
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:298
 #, kde-format
 msgctxt "Add scene after active scene"
 msgid "Add Scene After"
 msgstr "Gehitu eszena ondoren"
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:299
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:300
 #, kde-format
 msgctxt "Add scene before active scene"
 msgid "Add Scene Before"
 msgstr "Gehitu eszena aurretik"
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:302
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:303
 #, fuzzy, kde-format
 #| msgid "Duplicate Segment"
 msgctxt "Duplicate current scene from storyboard docker"
@@ -43223,7 +43223,7 @@ msgid "Do you want to overwrite the existing bundle?"
 msgstr "Lehendik dagoen fardela gainidatzi nahi duzu?"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:414
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:220
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #, kde-format
 msgid "Could not open '%1' for saving."
 msgstr "Ezin izan da «%1» gordetzeko ireki."
@@ -44231,7 +44231,7 @@ msgstr "&Kolore orekatzea..."
 msgid "Color Balance"
 msgstr "Kolore oreka"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:227
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:229
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "&Kanal arteko doikuntza kurbak..."
@@ -46327,7 +46327,7 @@ msgstr "Y: "
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text arfet as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:360
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:361
 #, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -46340,7 +46340,7 @@ msgstr[1] "{n} gelaxkaro horizontalki"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text arfet as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:376
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:377
 #, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -46350,25 +46350,25 @@ msgid_plural "Every {n} cells vertically"
 msgstr[0] "{n} gelaxkaro bertikalki"
 msgstr[1] "{n} gelaxkaro bertikalki"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:468
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
 msgstr " pixels/hazbete"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:470
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
 msgstr " pixel/cm"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:472
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:473
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
 msgstr " lerro/hazbete"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:473
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:474
 #, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
@@ -53183,21 +53183,21 @@ msgctxt "Pen tilt ascension"
 msgid "Ascension"
 msgstr "Igoera"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:187
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:189
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active, consider disabling Instant Preview"
 msgstr ""
 "Ausazko sentsore aktiboa, hausnartu bat-bateko aurreikuspegia desgaitzea"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:191
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:193
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Offset by Random, consider disabling Instant Preview"
 msgstr ""
 "Ausazko jatorri-aldaketa , hausnartu bat-bateko aurreikuspegia desgaitzea"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:195
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:197
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Radius by Random, consider disabling Instant Preview"
@@ -56608,7 +56608,7 @@ msgid "Scalable Distance"
 msgstr "Distantzia eskalagarria"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:451
-#: plugins/tools/basictools/kis_tool_line.cc:100
+#: plugins/tools/basictools/kis_tool_line.cc:101
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Atxiki laguntzaileetara"
@@ -56649,7 +56649,7 @@ msgstr ""
 "erabiltzean atxikitze nahasmena gertatzea saihesten du."
 
 #: plugins/tools/basictools/kis_tool_brush.cc:475
-#: plugins/tools/basictools/kis_tool_line.cc:103
+#: plugins/tools/basictools/kis_tool_line.cc:104
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Ahokatu ezabagoma"
@@ -56665,7 +56665,7 @@ msgstr "Ahokatzea gaitu, ezabatzekoa erabiltzean"
 msgid "Freehand Brush Tool"
 msgstr "Esku hutsezko pintzel tresna"
 
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:96
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:97
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only."
 msgstr "Ezin da idatzi %1 paleta-fitxategian. Beharbada irakurtzeko soilik da."
@@ -56935,32 +56935,32 @@ msgstr "Bilbatu"
 msgid "Gradient Tool"
 msgstr "Gradiente tresna"
 
-#: plugins/tools/basictools/kis_tool_line.cc:52
+#: plugins/tools/basictools/kis_tool_line.cc:53
 msgctxt "(qtundo-format)"
 msgid "Draw Line"
 msgstr "Marraztu lerroa"
 
-#: plugins/tools/basictools/kis_tool_line.cc:91
+#: plugins/tools/basictools/kis_tool_line.cc:92
 #, kde-format
 msgid "Use sensors"
 msgstr "Erabili sentsoreak"
 
-#: plugins/tools/basictools/kis_tool_line.cc:94
+#: plugins/tools/basictools/kis_tool_line.cc:95
 #, kde-format
 msgid "Show Preview"
 msgstr "Erakutsi aurreikuspegia"
 
-#: plugins/tools/basictools/kis_tool_line.cc:97
+#: plugins/tools/basictools/kis_tool_line.cc:98
 #, kde-format
 msgid "Show Guideline"
 msgstr "Erakutsi gidalerroak"
 
-#: plugins/tools/basictools/kis_tool_line.cc:430
+#: plugins/tools/basictools/kis_tool_line.cc:433
 #, kde-format
 msgid "Length: %1 px"
 msgstr "Luzera: %1 px"
 
-#: plugins/tools/basictools/kis_tool_line.cc:448
+#: plugins/tools/basictools/kis_tool_line.cc:451
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -57640,7 +57640,7 @@ msgstr "Berrezarri eraldaketak"
 msgid "Press Shift to hold x- or y-position."
 msgstr "Sakatu Maius x edo y posizioari eusteko."
 
-#: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:97
+#: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:96
 #, kde-format
 msgid "Press CTRL to resize from center."
 msgstr "Sakatu KTRL erdigunetik neurria aldatzeko."
@@ -57664,42 +57664,42 @@ msgstr ""
 "Ondoko erreferentzia-irudiak ezin izan dira zamatu:\n"
 "%1"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:96
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:97
 #, kde-format
 msgid "Select a Reference Image"
 msgstr "Hautatu erreferentzia-irudi bat"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:129
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:130
 #, kde-format
 msgid "Could not load reference image from clipboard"
 msgstr "Ezin izan da erreferentzia-irudia arbeletik zamatu"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:151
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:152
 #, kde-format
 msgid "Load Reference Images"
 msgstr "Zamatu erreferentzia-irudiak"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:164
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:165
 #, kde-format
 msgid "Could not open '%1'."
 msgstr "Ezin izan da «%1» ireki."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:185
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:186
 #, kde-format
 msgid "Could not load reference images from '%1'."
 msgstr "Ezin izan dira «%1»(e)ko erreferentzia-irudiak zamatu."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:202
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:203
 #, kde-format
 msgid "Save Reference Images"
 msgstr "Gorde erreferentzia-irudiak"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:231
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:232
 #, kde-format
 msgid "Failed to save reference images."
 msgstr "Erreferentzia-irudia gordetzea huts egin du."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:306
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:307
 #, kde-format
 msgid "Reference Image Actions"
 msgstr "Erreferentzia-irudi ekintzak"
@@ -59026,7 +59026,7 @@ msgstr "Giltzatu proportzioa"
 msgid "Crop Tool Actions"
 msgstr "Mozteko tresnaren ekintzak"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:722
+#: plugins/tools/tool_crop/kis_tool_crop.cc:723
 #, kde-format
 msgid ""
 "X: %1\n"
@@ -59035,7 +59035,7 @@ msgstr ""
 "X: %1\n"
 "Y: %2"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:727
+#: plugins/tools/tool_crop/kis_tool_crop.cc:728
 #, kde-format
 msgid ""
 "Width: %1\n"
@@ -59671,13 +59671,13 @@ msgstr "Ezarri"
 msgid "Transform Tool Actions"
 msgstr "Eraldatze-tresnaren ekintzak"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:854
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:855
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Geruza motak ezin du eraldatze-tresna erabili"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:862
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -59685,7 +59685,7 @@ msgstr ""
 "Geruza motak ezin du erabili eraldatze-tresna. Horren ordez erabili "
 "eraldatze-maskara."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:881
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:882
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59695,20 +59695,20 @@ msgstr ""
 "Geruzak eraldatzeko maskarak dituzten haurrak ditu. Mesedez, ezgaitu itzazu "
 "eraldatu aurretik."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:898
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:899
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Hautapenak ez dira erabiltzen eraldatze maskarak editatzean"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:979
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1016
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Ezin eraldatu hutsik dauden geruzak "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1004
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

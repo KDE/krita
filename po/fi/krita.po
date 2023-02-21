@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:55+0000\n"
+"POT-Creation-Date: 2023-02-21 00:57+0000\n"
 "PO-Revision-Date: 2022-09-14 16:45+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -18960,7 +18960,7 @@ msgstr "Muunnosmaski"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:379
 #: plugins/impex/tiff/kis_tiff_import.cc:562
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
+#: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
 msgid "Transparency Mask"
 msgstr "Läpinäkyvyysmaski"
@@ -20615,7 +20615,7 @@ msgstr "Tausta"
 msgid "Unnamed Layer"
 msgstr "&Kopiotaso"
 
-#: libs/psd/psd_resource_block.h:109
+#: libs/psd/psd_resource_block.h:110
 #, fuzzy, kde-format
 msgid "Unparsed Resource Block"
 msgstr "&Resurssit"
@@ -20696,11 +20696,11 @@ msgstr "Ladataan resursseja…"
 #: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:352
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:129
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:164
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:185
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:220
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:231
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:130
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:165
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:186
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:232
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1120
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
@@ -23914,7 +23914,7 @@ msgstr "Tason ominaisuudet"
 #: plugins/paintops/spray/kis_sprayop_option.cpp:60
 #: plugins/paintops/tangentnormal/kis_tangent_tilt_option.cpp:39
 #: plugins/paintops/tangentnormal/kis_tangent_tilt_option.cpp:43
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:279
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:281
 #: plugins/tools/basictools/kis_tool_fill.cc:490
 #: plugins/tools/basictools/kis_tool_fill.cc:507
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:370
@@ -29832,65 +29832,65 @@ msgstr "Yhtenäisen alueen valintatyökalu"
 msgid "Activate Freehand Selection Tool"
 msgstr "Siveltimen valintatyökalu"
 
-#: libs/ui/input/kis_zoom_action.cpp:106
+#: libs/ui/input/kis_zoom_action.cpp:107
 #, fuzzy, kde-format
 msgid "Zoom Canvas"
 msgstr "Lähennä"
 
-#: libs/ui/input/kis_zoom_action.cpp:107
+#: libs/ui/input/kis_zoom_action.cpp:108
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr ""
 
-#: libs/ui/input/kis_zoom_action.cpp:110
+#: libs/ui/input/kis_zoom_action.cpp:111
 #, fuzzy, kde-format
 msgid "Zoom Mode"
 msgstr "Määrä:"
 
-#: libs/ui/input/kis_zoom_action.cpp:111
+#: libs/ui/input/kis_zoom_action.cpp:112
 #, fuzzy, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "Kiertotilan käyttö"
 
-#: libs/ui/input/kis_zoom_action.cpp:112
+#: libs/ui/input/kis_zoom_action.cpp:113
 #, fuzzy, kde-format
 msgid "Relative Zoom Mode"
 msgstr "Kiertotilan käyttö"
 
-#: libs/ui/input/kis_zoom_action.cpp:113
+#: libs/ui/input/kis_zoom_action.cpp:114
 #, fuzzy, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "Kiertotilan käyttö"
 
-#: libs/ui/input/kis_zoom_action.cpp:114
+#: libs/ui/input/kis_zoom_action.cpp:115
 #, kde-format
 msgid "Zoom In"
 msgstr "Lähennä"
 
-#: libs/ui/input/kis_zoom_action.cpp:115
+#: libs/ui/input/kis_zoom_action.cpp:116
 #, kde-format
 msgid "Zoom Out"
 msgstr "Loitonna"
 
-#: libs/ui/input/kis_zoom_action.cpp:116 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
 #, fuzzy, kde-format
 #| msgid "Reset Zoom to 100%"
 msgid "Zoom to 100%"
 msgstr "Alusta lähennystaso 100 %:iin"
 
-#: libs/ui/input/kis_zoom_action.cpp:117
+#: libs/ui/input/kis_zoom_action.cpp:118
 #, fuzzy, kde-format
 #| msgid "Fit to Page"
 msgid "Fit to View"
 msgstr "Sovita sivulle"
 
-#: libs/ui/input/kis_zoom_action.cpp:118
+#: libs/ui/input/kis_zoom_action.cpp:119
 #, fuzzy, kde-format
 #| msgid "Fit to Width"
 msgid "Fit to View Width"
 msgstr "Sovita leveyteen"
 
-#: libs/ui/input/kis_zoom_action.cpp:119
+#: libs/ui/input/kis_zoom_action.cpp:120
 #, fuzzy, kde-format
 #| msgid "Fit to Page &Height"
 msgid "Fit to View Height"
@@ -30750,7 +30750,7 @@ msgstr "100 %"
 msgid "Fit Canvas to View"
 msgstr "Kankaan koko"
 
-#: libs/ui/kis_popup_palette.cpp:871
+#: libs/ui/kis_popup_palette.cpp:872
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Reset Foreground and Background Color"
@@ -30759,7 +30759,7 @@ msgid ""
 "Right click to set to black and white."
 msgstr "Alusta piirto- ja taustavärit"
 
-#: libs/ui/kis_popup_palette.cpp:1008
+#: libs/ui/kis_popup_palette.cpp:1010
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -30972,7 +30972,7 @@ msgctxt "<color space> <image profile>"
 msgid "%1  %2"
 msgstr ""
 
-#: libs/ui/kis_zoom_manager.cc:318
+#: libs/ui/kis_zoom_manager.cc:319
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
@@ -32420,17 +32420,17 @@ msgstr "Käytä tätä pohjaa"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Tätä työkalua ei voi käyttää valitun tason tyypin kanssa"
 
-#: libs/ui/KisView.cpp:758 libs/ui/tool/kis_tool.cc:671
+#: libs/ui/KisView.cpp:758 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Taso on lukittu ja näkymätön."
 
-#: libs/ui/KisView.cpp:760 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:760 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "Taso on lukittu."
 
-#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Taso on näkymätön."
@@ -33694,27 +33694,27 @@ msgstr "Täytä koko valinta"
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1834
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:309
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:310
 #, fuzzy, kde-format
 msgid "Transform"
 msgstr "Muunna"
 
-#: libs/ui/tool/kis_tool.cc:573
+#: libs/ui/tool/kis_tool.cc:575
 #, kde-format
 msgid "No options"
 msgstr "Ei valintoja"
 
-#: libs/ui/tool/kis_tool.cc:677
+#: libs/ui/tool/kis_tool.cc:679
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr ""
 
-#: libs/ui/tool/kis_tool.cc:679
+#: libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Group not editable."
 msgstr "Ryhmää ei voi muokata."
 
-#: libs/ui/tool/kis_tool.cc:694
+#: libs/ui/tool/kis_tool.cc:696
 #, kde-format
 msgid "Local selection is locked."
 msgstr "Paikallinen valinta on lukittu."
@@ -33730,9 +33730,9 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_freehand.cc:212
 #: libs/ui/tool/kis_tool_polyline_base.cpp:119
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:163
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:162
-#: plugins/tools/basictools/kis_tool_line.cc:201
+#: plugins/tools/basictools/kis_tool_line.cc:202
 #: plugins/tools/basictools/kis_tool_path.cc:78
 #: plugins/tools/basictools/kis_tool_pencil.cc:53
 #: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:113
@@ -33741,14 +33741,14 @@ msgstr ""
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_paint.cc:569
+#: libs/ui/tool/kis_tool_paint.cc:571
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush Size: %1 px"
 msgstr "Siveltimen koko"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:113
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:157
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:156
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:66
 #, fuzzy, kde-format
@@ -33762,7 +33762,7 @@ msgstr ""
 "Sivellintyökalu ei toimi tällä tasolla. Ole hyvä ja valitse maalitaso tai "
 "maski."
 
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:94
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:95
 #, fuzzy, kde-format
 #| msgctxt "floating message in move tool"
 #| msgid "X: %1 px, Y: %2 px"
@@ -33771,8 +33771,8 @@ msgid ""
 "Height: %2 px"
 msgstr "X: %1 px, Y: %2 px"
 
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:292
-#: plugins/tools/basictools/kis_tool_line.cc:282
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:294
+#: plugins/tools/basictools/kis_tool_line.cc:284
 #: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #, fuzzy, kde-format
 #| msgctxt "floating message in move tool"
@@ -36298,17 +36298,17 @@ msgstr "Maa:"
 msgid "Anonymous"
 msgstr "Nimetön"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:278
+#: libs/widgets/KoConfigAuthorPage.cpp:281
 #, kde-format
 msgid "Name (not duplicate or blank name):"
 msgstr "Nimi (ei saa olla kaksoiskappale tai tyhjä):"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:278
+#: libs/widgets/KoConfigAuthorPage.cpp:281
 #, kde-format
 msgid "Name of Profile"
 msgstr "Profiilin nimi"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:331
+#: libs/widgets/KoConfigAuthorPage.cpp:334
 #, fuzzy, kde-format
 #| msgid "Add caption"
 msgid "New Contact Info"
@@ -38494,7 +38494,7 @@ msgstr "Cb"
 msgid "Cr"
 msgstr "Cr"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:139
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:140
 #, kde-format
 msgid "ICC Engine"
 msgstr "ICC-moottori"
@@ -38693,7 +38693,7 @@ msgstr "Älä näytä"
 msgid "Color Selector Settings"
 msgstr "Värivalitsimen asetukset"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:311
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:313
 #, fuzzy, kde-format
 #| msgid ""
 #| "Values goes from black to white, or black to the most saturated colour. "
@@ -38708,7 +38708,7 @@ msgstr ""
 "Kylläisyys vuorostaan kulkee kylläisimmästä väristä valkoiseen, harmaaseen "
 "tai mustaan."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:314
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:316
 #, fuzzy, kde-format
 #| msgid ""
 #| "Lightness goes from black to white, with middle grey being equal to the "
@@ -38720,12 +38720,12 @@ msgstr ""
 "Vaaleus kulkee mustasta valkoiseen niin, että keskiharmaa vastaa kylläisintä "
 "väriä."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:317
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:319
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
 msgstr "Intensiteetti kuvautuu RGB-osatekijöiden summaksi"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:320
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:322
 #, kde-format
 msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
@@ -41883,7 +41883,7 @@ msgid "Edit Storyboard Child"
 msgstr "Valitse kansio"
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:137
-#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:311
+#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:312
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:923
 #, fuzzy, kde-format
 #| msgid "0 s"
@@ -41892,7 +41892,7 @@ msgid "s"
 msgstr "0 s"
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:142
-#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:318
+#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:319
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:926
 #, kde-format
 msgctxt "suffix in spin box in storyboard that means 'frames'"
@@ -41931,7 +41931,7 @@ msgstr "Poista avainkuva"
 
 # @title:window
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:236
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:290
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:291
 #, fuzzy, kde-format
 #| msgid "Add Shape"
 msgctxt "Add new scene as the last storyboard"
@@ -41939,7 +41939,7 @@ msgid "Add Scene"
 msgstr "Muodon lisäys"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:252
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:309
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:310
 #, fuzzy, kde-format
 #| msgid "Remove Segment"
 msgctxt "Remove current scene from storyboards"
@@ -41960,20 +41960,20 @@ msgctxt "default name for storyboard item"
 msgid "scene "
 msgstr ""
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:297
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:298
 #, kde-format
 msgctxt "Add scene after active scene"
 msgid "Add Scene After"
 msgstr ""
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:299
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:300
 #, fuzzy, kde-format
 #| msgid "Add new keyframe"
 msgctxt "Add scene before active scene"
 msgid "Add Scene Before"
 msgstr "Lisää avainruutu"
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:302
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:303
 #, fuzzy, kde-format
 #| msgid "Duplicate Segment"
 msgctxt "Duplicate current scene from storyboard docker"
@@ -45013,7 +45013,7 @@ msgid "Do you want to overwrite the existing bundle?"
 msgstr "Haluatko varmasti korvata pohjan ”%1”?"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:414
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:220
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not open '%1' for saving."
@@ -46085,7 +46085,7 @@ msgstr "&Väritasapaino…"
 msgid "Color Balance"
 msgstr "Väritasapaino"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:227
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:229
 #, fuzzy, kde-format
 #| msgid "&Color Adjustment curves..."
 msgid "&Cross-channel adjustment curves..."
@@ -48230,7 +48230,7 @@ msgstr "Y:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text arfet as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:360
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:361
 #, fuzzy, kde-format
 #| msgid "Sobel horizontally"
 msgctxt ""
@@ -48244,7 +48244,7 @@ msgstr[1] "Vaakasuuntainen sobel"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text arfet as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:376
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:377
 #, fuzzy, kde-format
 #| msgid "Sobel vertically"
 msgctxt ""
@@ -48255,28 +48255,28 @@ msgid_plural "Every {n} cells vertically"
 msgstr[0] "Pystysuuntainen sobel"
 msgstr[1] "Pystysuuntainen sobel"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:468
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
 #, fuzzy, kde-format
 #| msgid "Pixels/Inch"
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
 msgstr "kuvapistettä/tuuma"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:470
 #, fuzzy, kde-format
 #| msgid "Pixels/Inch"
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
 msgstr "kuvapistettä/tuuma"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:472
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:473
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
 msgstr ""
 
 # Konteksti on sisällysluettelon sisennys.
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:473
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:474
 #, fuzzy, kde-format
 #| msgid "Use outline"
 msgctxt "Screentone generator line units - lines/cm"
@@ -55400,7 +55400,7 @@ msgctxt "Pen tilt ascension"
 msgid "Ascension"
 msgstr "Ulottuvuus &pikseleinä"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:187
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:189
 #, fuzzy, kde-format
 #| msgctxt "PaintOp instant preview limitation"
 #| msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -55408,7 +55408,7 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active, consider disabling Instant Preview"
 msgstr "Välistys > 0,5, harkitse välittömän esikatselun ottamista käytöstä"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:191
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:193
 #, fuzzy, kde-format
 #| msgctxt "PaintOp instant preview limitation"
 #| msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -55416,7 +55416,7 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Offset by Random, consider disabling Instant Preview"
 msgstr "Välistys > 0,5, harkitse välittömän esikatselun ottamista käytöstä"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:195
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:197
 #, fuzzy, kde-format
 #| msgctxt "PaintOp instant preview limitation"
 #| msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -58995,7 +58995,7 @@ msgid "Scalable Distance"
 msgstr "Etäisyys kohteeseen:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:451
-#: plugins/tools/basictools/kis_tool_line.cc:100
+#: plugins/tools/basictools/kis_tool_line.cc:101
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Kiinnity avustajiin"
@@ -59029,7 +59029,7 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:475
-#: plugins/tools/basictools/kis_tool_line.cc:103
+#: plugins/tools/basictools/kis_tool_line.cc:104
 #, fuzzy, kde-format
 #| msgid "Eraser"
 msgid "Snap Eraser"
@@ -59046,7 +59046,7 @@ msgstr ""
 msgid "Freehand Brush Tool"
 msgstr "Vapaan käden sivellintyökalu"
 
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:96
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:97
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only."
 msgstr ""
@@ -59339,35 +59339,35 @@ msgstr "Muu"
 msgid "Gradient Tool"
 msgstr "Liukuvärityökalu"
 
-#: plugins/tools/basictools/kis_tool_line.cc:52
+#: plugins/tools/basictools/kis_tool_line.cc:53
 msgctxt "(qtundo-format)"
 msgid "Draw Line"
 msgstr ""
 "Piirrä viiva\n"
 "viivan piirto"
 
-#: plugins/tools/basictools/kis_tool_line.cc:91
+#: plugins/tools/basictools/kis_tool_line.cc:92
 #, fuzzy, kde-format
 msgid "Use sensors"
 msgstr "Väri"
 
-#: plugins/tools/basictools/kis_tool_line.cc:94
+#: plugins/tools/basictools/kis_tool_line.cc:95
 #, kde-format
 msgid "Show Preview"
 msgstr "Näytä esikatselu"
 
-#: plugins/tools/basictools/kis_tool_line.cc:97
+#: plugins/tools/basictools/kis_tool_line.cc:98
 #, fuzzy, kde-format
 msgid "Show Guideline"
 msgstr "Näytä apuviivat"
 
-#: plugins/tools/basictools/kis_tool_line.cc:430
+#: plugins/tools/basictools/kis_tool_line.cc:433
 #, fuzzy, kde-format
 #| msgid "Length: "
 msgid "Length: %1 px"
 msgstr "Pituus: "
 
-#: plugins/tools/basictools/kis_tool_line.cc:448
+#: plugins/tools/basictools/kis_tool_line.cc:451
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -60049,7 +60049,7 @@ msgstr ""
 msgid "Press Shift to hold x- or y-position."
 msgstr "Säilytä x- tai y-sijainti painamalla Alt."
 
-#: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:97
+#: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:96
 #, kde-format
 msgid "Press CTRL to resize from center."
 msgstr "Muuta kokoa keskeltä painamalla Ctrl."
@@ -60075,44 +60075,44 @@ msgid ""
 "%1"
 msgstr "Seuraavat automaattitallennustiedostot voi palauttaa:"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:96
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:97
 #, kde-format
 msgid "Select a Reference Image"
 msgstr "Valitse viitekuva"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:129
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:130
 #, kde-format
 msgid "Could not load reference image from clipboard"
 msgstr "Viitekuvaa ei voitu ladata leikepöydältä."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:151
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:152
 #, kde-format
 msgid "Load Reference Images"
 msgstr "Lataa viitekuvat"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:164
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:165
 #, kde-format
 msgid "Could not open '%1'."
 msgstr "Ei voitu avata: ”%1”."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:185
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:186
 #, fuzzy, kde-format
 msgid "Could not load reference images from '%1'."
 msgstr "Tason %1 metatietoja ei voitu ladata."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:202
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:203
 #, fuzzy, kde-format
 #| msgid "Reference Images"
 msgid "Save Reference Images"
 msgstr "Mallikuvat"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:231
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:232
 #, fuzzy, kde-format
 #| msgid "Reference image:"
 msgid "Failed to save reference images."
 msgstr "Mallikuva:"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:306
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:307
 #, fuzzy, kde-format
 #| msgid "Reference Images"
 msgid "Reference Image Actions"
@@ -61492,7 +61492,7 @@ msgstr "Lukitse suhde"
 msgid "Crop Tool Actions"
 msgstr "Rajaustyökalun toiminnot"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:722
+#: plugins/tools/tool_crop/kis_tool_crop.cc:723
 #, kde-format
 msgid ""
 "X: %1\n"
@@ -61501,7 +61501,7 @@ msgstr ""
 "X: %1\n"
 "Y: %2"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:727
+#: plugins/tools/tool_crop/kis_tool_crop.cc:728
 #, kde-format
 msgid ""
 "Width: %1\n"
@@ -62192,21 +62192,21 @@ msgstr "Käytä"
 msgid "Transform Tool Actions"
 msgstr "Muunnostyökalu"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:854
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:855
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Aktivoi viivatyökalu"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:862
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "Aktivoi viivatyökalu"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:881
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:882
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -62214,20 +62214,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:898
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:899
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:979
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1016
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Tyhjää tasoa ei voi muuntaa"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1004
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

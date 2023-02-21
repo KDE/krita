@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:55+0000\n"
+"POT-Creation-Date: 2023-02-21 00:57+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -18488,7 +18488,7 @@ msgstr "قناع تحويل"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:379
 #: plugins/impex/tiff/kis_tiff_import.cc:562
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
+#: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
 msgid "Transparency Mask"
 msgstr "قناع شفافيّة"
@@ -20094,7 +20094,7 @@ msgstr "الخلفيّة"
 msgid "Unnamed Layer"
 msgstr "الطّبقات غير المقفلة"
 
-#: libs/psd/psd_resource_block.h:109
+#: libs/psd/psd_resource_block.h:110
 #, fuzzy, kde-format
 #| msgid "Manage Resource Bundles"
 msgid "Unparsed Resource Block"
@@ -20176,11 +20176,11 @@ msgstr "يحمّل حزم الموارد..."
 #: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:352
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:129
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:164
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:185
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:220
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:231
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:130
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:165
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:186
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:232
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1120
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
@@ -23330,7 +23330,7 @@ msgstr "خصائص الطّبقة"
 #: plugins/paintops/spray/kis_sprayop_option.cpp:60
 #: plugins/paintops/tangentnormal/kis_tangent_tilt_option.cpp:39
 #: plugins/paintops/tangentnormal/kis_tangent_tilt_option.cpp:43
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:279
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:281
 #: plugins/tools/basictools/kis_tool_fill.cc:490
 #: plugins/tools/basictools/kis_tool_fill.cc:507
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:370
@@ -29183,67 +29183,67 @@ msgstr "أداة التّحديد المضلّعيّ"
 msgid "Activate Freehand Selection Tool"
 msgstr "أداة التّحديد المساريّ"
 
-#: libs/ui/input/kis_zoom_action.cpp:106
+#: libs/ui/input/kis_zoom_action.cpp:107
 #, fuzzy, kde-format
 msgid "Zoom Canvas"
 msgstr "غيّر مستوى تقريب رقعة الرّسم"
 
-#: libs/ui/input/kis_zoom_action.cpp:107
+#: libs/ui/input/kis_zoom_action.cpp:108
 #, fuzzy, kde-format
 #| msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr "يدوّر إجراء <i>دوّر رقعة الرّسم</i> رقعةَ الرّسم."
 
-#: libs/ui/input/kis_zoom_action.cpp:110
+#: libs/ui/input/kis_zoom_action.cpp:111
 #, kde-format
 msgid "Zoom Mode"
 msgstr "وضع تغيير التّقريب"
 
-#: libs/ui/input/kis_zoom_action.cpp:111
+#: libs/ui/input/kis_zoom_action.cpp:112
 #, fuzzy, kde-format
 #| msgid "Discrete Rotate Mode"
 msgid "Discrete Zoom Mode"
 msgstr "أهمل وضع التّدوير"
 
-#: libs/ui/input/kis_zoom_action.cpp:112
+#: libs/ui/input/kis_zoom_action.cpp:113
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "وضع تغيير التّقريب النّسبيّ"
 
-#: libs/ui/input/kis_zoom_action.cpp:113
+#: libs/ui/input/kis_zoom_action.cpp:114
 #, fuzzy, kde-format
 #| msgid "Relative Zoom Mode"
 msgid "Relative Discrete Zoom Mode"
 msgstr "وضع تغيير التّقريب النّسبيّ"
 
-#: libs/ui/input/kis_zoom_action.cpp:114
+#: libs/ui/input/kis_zoom_action.cpp:115
 #, kde-format
 msgid "Zoom In"
 msgstr "قرب"
 
-#: libs/ui/input/kis_zoom_action.cpp:115
+#: libs/ui/input/kis_zoom_action.cpp:116
 #, kde-format
 msgid "Zoom Out"
 msgstr "بعّد"
 
-#: libs/ui/input/kis_zoom_action.cpp:116 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "قرّب إلى ١٠٠٪"
 
-#: libs/ui/input/kis_zoom_action.cpp:117
+#: libs/ui/input/kis_zoom_action.cpp:118
 #, fuzzy, kde-format
 #| msgid "Fit to Page"
 msgid "Fit to View"
 msgstr "لائم إلى الصّفحة"
 
-#: libs/ui/input/kis_zoom_action.cpp:118
+#: libs/ui/input/kis_zoom_action.cpp:119
 #, fuzzy, kde-format
 #| msgid "Fit to Width"
 msgid "Fit to View Width"
 msgstr "لائم إلى العرض"
 
-#: libs/ui/input/kis_zoom_action.cpp:119
+#: libs/ui/input/kis_zoom_action.cpp:120
 #, fuzzy, kde-format
 #| msgid "Fit to Height"
 msgid "Fit to View Height"
@@ -30073,7 +30073,7 @@ msgstr ""
 msgid "Fit Canvas to View"
 msgstr "مقاس رقعة الرّسم"
 
-#: libs/ui/kis_popup_palette.cpp:871
+#: libs/ui/kis_popup_palette.cpp:872
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Reset Foreground and Background Color"
@@ -30082,7 +30082,7 @@ msgid ""
 "Right click to set to black and white."
 msgstr "صفّر لوني المقدّمة والخلفيّة"
 
-#: libs/ui/kis_popup_palette.cpp:1008
+#: libs/ui/kis_popup_palette.cpp:1010
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -30290,7 +30290,7 @@ msgctxt "<color space> <image profile>"
 msgid "%1  %2"
 msgstr ""
 
-#: libs/ui/kis_zoom_manager.cc:318
+#: libs/ui/kis_zoom_manager.cc:319
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
@@ -31707,17 +31707,17 @@ msgstr "استخدم هذا القالب"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "لا يمكنك سحب وإسقاط الألوان على نوع الطّبقة المحدّدة"
 
-#: libs/ui/KisView.cpp:758 libs/ui/tool/kis_tool.cc:671
+#: libs/ui/KisView.cpp:758 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "الطّبقة مقفلة ومخفيّة."
 
-#: libs/ui/KisView.cpp:760 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:760 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "الطّبقة مقفلة."
 
-#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "الطّبقة مخفيّة."
@@ -32962,27 +32962,27 @@ msgstr "قناع تحديد"
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1834
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:309
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:310
 #, kde-format
 msgid "Transform"
 msgstr "التّحويل"
 
-#: libs/ui/tool/kis_tool.cc:573
+#: libs/ui/tool/kis_tool.cc:575
 #, kde-format
 msgid "No options"
 msgstr "لا خيارات"
 
-#: libs/ui/tool/kis_tool.cc:677
+#: libs/ui/tool/kis_tool.cc:679
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr ""
 
-#: libs/ui/tool/kis_tool.cc:679
+#: libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Group not editable."
 msgstr "لا تقبل المجموعة التّحرير."
 
-#: libs/ui/tool/kis_tool.cc:694
+#: libs/ui/tool/kis_tool.cc:696
 #, kde-format
 msgid "Local selection is locked."
 msgstr "التّحديد المحليّ مقفل."
@@ -32997,9 +32997,9 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_freehand.cc:212
 #: libs/ui/tool/kis_tool_polyline_base.cpp:119
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:163
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:162
-#: plugins/tools/basictools/kis_tool_line.cc:201
+#: plugins/tools/basictools/kis_tool_line.cc:202
 #: plugins/tools/basictools/kis_tool_path.cc:78
 #: plugins/tools/basictools/kis_tool_pencil.cc:53
 #: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:113
@@ -33008,14 +33008,14 @@ msgstr ""
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_paint.cc:569
+#: libs/ui/tool/kis_tool_paint.cc:571
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush Size: %1 px"
 msgstr "حجم الفرشاة"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:113
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:157
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:156
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:66
 #, fuzzy, kde-format
@@ -33028,15 +33028,15 @@ msgid ""
 msgstr ""
 "لا يمكن لأداة الفرشاة الطّلاء على هذه الطّبقة. من فضلك اختر طبقة تلوين أو قناع."
 
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:94
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:95
 #, kde-format
 msgid ""
 "Width: %1 px\n"
 "Height: %2 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:292
-#: plugins/tools/basictools/kis_tool_line.cc:282
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:294
+#: plugins/tools/basictools/kis_tool_line.cc:284
 #: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #, kde-format
 msgid ""
@@ -35418,17 +35418,17 @@ msgstr "المدخلة"
 msgid "Anonymous"
 msgstr "مجهّلة"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:278
+#: libs/widgets/KoConfigAuthorPage.cpp:281
 #, kde-format
 msgid "Name (not duplicate or blank name):"
 msgstr ""
 
-#: libs/widgets/KoConfigAuthorPage.cpp:278
+#: libs/widgets/KoConfigAuthorPage.cpp:281
 #, kde-format
 msgid "Name of Profile"
 msgstr "اسم اللاحة"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:331
+#: libs/widgets/KoConfigAuthorPage.cpp:334
 #, fuzzy, kde-format
 #| msgid "Add contact info"
 msgid "New Contact Info"
@@ -37586,7 +37586,7 @@ msgstr " 1986 CB2"
 msgid "Cr"
 msgstr " 1997 CR28"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:139
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:140
 #, kde-format
 msgid "ICC Engine"
 msgstr "محرّك ICC"
@@ -37787,7 +37787,7 @@ msgstr "لا تعرض"
 msgid "Color Selector Settings"
 msgstr "إعدادات منتقي الألوان"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:311
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:313
 #, kde-format
 msgid ""
 "Values goes from black to white, or black to the most saturated color. "
@@ -37795,19 +37795,19 @@ msgid ""
 "black."
 msgstr ""
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:314
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:316
 #, kde-format
 msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
 "saturated color."
 msgstr ""
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:317
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:319
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
 msgstr ""
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:320
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:322
 #, kde-format
 msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
@@ -40934,7 +40934,7 @@ msgid "Edit Storyboard Child"
 msgstr "اختر دليلًا"
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:137
-#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:311
+#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:312
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:923
 #, kde-format
 msgctxt "suffix in spin box in storyboard that means 'seconds'"
@@ -40942,7 +40942,7 @@ msgid "s"
 msgstr "ث"
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:142
-#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:318
+#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:319
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:926
 #, kde-format
 msgctxt "suffix in spin box in storyboard that means 'frames'"
@@ -40979,14 +40979,14 @@ msgid "Freeze Keyframe Data"
 msgstr "إزالة الإطار المفتاحيّ"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:236
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:290
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:291
 #, kde-format
 msgctxt "Add new scene as the last storyboard"
 msgid "Add Scene"
 msgstr "أضف مشهد"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:252
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:309
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:310
 #, kde-format
 msgctxt "Remove current scene from storyboards"
 msgid "Remove Scene"
@@ -41006,20 +41006,20 @@ msgctxt "default name for storyboard item"
 msgid "scene "
 msgstr "مشهد "
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:297
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:298
 #, kde-format
 msgctxt "Add scene after active scene"
 msgid "Add Scene After"
 msgstr ""
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:299
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:300
 #, fuzzy, kde-format
 #| msgid "Add new keyframe"
 msgctxt "Add scene before active scene"
 msgid "Add Scene Before"
 msgstr "أضف إطارًا مفتاحيًّا جديدًا"
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:302
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:303
 #, kde-format
 msgctxt "Duplicate current scene from storyboard docker"
 msgid "Duplicate Scene"
@@ -43987,7 +43987,7 @@ msgid "Do you want to overwrite the existing bundle?"
 msgstr "أمتأكّد من الكتابة فوق القالب ’%1‘ الموجود؟"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:414
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:220
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not open '%1' for saving."
@@ -45032,7 +45032,7 @@ msgstr "توا&زن الألوان..."
 msgid "Color Balance"
 msgstr "توازن الألوان"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:227
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:229
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr ""
@@ -47174,7 +47174,7 @@ msgstr "ص: "
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text arfet as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:360
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:361
 #, fuzzy, kde-format
 #| msgid "Horizontal"
 msgctxt ""
@@ -47192,7 +47192,7 @@ msgstr[5] "أفقيًّا"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text arfet as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:376
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:377
 #, fuzzy, kde-format
 #| msgid "Flip selection vertically"
 msgctxt ""
@@ -47207,25 +47207,25 @@ msgstr[3] "اعكس رأسيًّا"
 msgstr[4] "اعكس رأسيًّا"
 msgstr[5] "اعكس رأسيًّا"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:468
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
 msgstr " بكسل/بوصة"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:470
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
 msgstr " بكسل/سم"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:472
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:473
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
 msgstr " سطر/بوصة"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:473
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:474
 #, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
@@ -54073,7 +54073,7 @@ msgctxt "Pen tilt ascension"
 msgid "Ascension"
 msgstr "الصعود"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:187
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:189
 #, fuzzy, kde-format
 #| msgctxt "PaintOp instant preview limitation"
 #| msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -54081,7 +54081,7 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active, consider disabling Instant Preview"
 msgstr "التّباعد > ٠٫٥، من الأفضل تعطيل المعاينة اللحظيّة"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:191
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:193
 #, fuzzy, kde-format
 #| msgctxt "PaintOp instant preview limitation"
 #| msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -54089,7 +54089,7 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Offset by Random, consider disabling Instant Preview"
 msgstr "التّباعد > ٠٫٥، من الأفضل تعطيل المعاينة اللحظيّة"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:195
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:197
 #, fuzzy, kde-format
 #| msgctxt "PaintOp instant preview limitation"
 #| msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -57805,7 +57805,7 @@ msgid "Scalable Distance"
 msgstr "المسافة"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:451
-#: plugins/tools/basictools/kis_tool_line.cc:100
+#: plugins/tools/basictools/kis_tool_line.cc:101
 #, fuzzy, kde-format
 #| msgid "Save Assistant"
 msgid "Snap to Assistants"
@@ -57842,7 +57842,7 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:475
-#: plugins/tools/basictools/kis_tool_line.cc:103
+#: plugins/tools/basictools/kis_tool_line.cc:104
 #, fuzzy, kde-format
 msgid "Snap Eraser"
 msgstr "ممحاة"
@@ -57858,7 +57858,7 @@ msgstr ""
 msgid "Freehand Brush Tool"
 msgstr "أداة الفرشاة بيدٍ حرّة"
 
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:96
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:97
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only."
 msgstr "تعذّرت الكتابة في ملفّ اللوحة %1. قد يكون للقراءة فقط."
@@ -58135,36 +58135,36 @@ msgstr "محاكاة"
 msgid "Gradient Tool"
 msgstr "أداة التّدرّجات"
 
-#: plugins/tools/basictools/kis_tool_line.cc:52
+#: plugins/tools/basictools/kis_tool_line.cc:53
 msgctxt "(qtundo-format)"
 msgid "Draw Line"
 msgstr "رسم الخطّ"
 
-#: plugins/tools/basictools/kis_tool_line.cc:91
+#: plugins/tools/basictools/kis_tool_line.cc:92
 #, fuzzy, kde-format
 #| msgid "Use styles"
 msgid "Use sensors"
 msgstr "استخدم الأنماط"
 
-#: plugins/tools/basictools/kis_tool_line.cc:94
+#: plugins/tools/basictools/kis_tool_line.cc:95
 #, kde-format
 msgid "Show Preview"
 msgstr "أظهر معاينة"
 
-#: plugins/tools/basictools/kis_tool_line.cc:97
+#: plugins/tools/basictools/kis_tool_line.cc:98
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Show Guides"
 msgid "Show Guideline"
 msgstr "اعرض الأدلة"
 
-#: plugins/tools/basictools/kis_tool_line.cc:430
+#: plugins/tools/basictools/kis_tool_line.cc:433
 #, fuzzy, kde-format
 #| msgid "Length:"
 msgid "Length: %1 px"
 msgstr "الطّول:"
 
-#: plugins/tools/basictools/kis_tool_line.cc:448
+#: plugins/tools/basictools/kis_tool_line.cc:451
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -58827,7 +58827,7 @@ msgstr "تصفير التّحويلات"
 msgid "Press Shift to hold x- or y-position."
 msgstr "اضغط Shift لعدم تغيير مقاس هذا"
 
-#: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:97
+#: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:96
 #, fuzzy, kde-format
 msgid "Press CTRL to resize from center."
 msgstr "اضغط CTRL لتغيير المقاس من المنتصف."
@@ -58850,48 +58850,48 @@ msgid ""
 "%1"
 msgstr "يمكن استرجاع ملفّات الحفظ الآليّ الآتية:"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:96
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:97
 #, fuzzy, kde-format
 #| msgid "Reference Images"
 msgid "Select a Reference Image"
 msgstr "الصّور المرجع"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:129
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:130
 #, fuzzy, kde-format
 #| msgid "Could not load keyframes from %1."
 msgid "Could not load reference image from clipboard"
 msgstr "تعذّر تحميل إطارات المفاتيح من %1."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:151
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:152
 #, fuzzy, kde-format
 #| msgid "Reference Images"
 msgid "Load Reference Images"
 msgstr "الصّور المرجع"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:164
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:165
 #, kde-format
 msgid "Could not open '%1'."
 msgstr "لم أتمكن من فتح '%1'."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:185
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:186
 #, fuzzy, kde-format
 #| msgid "Could not load keyframes from %1."
 msgid "Could not load reference images from '%1'."
 msgstr "تعذّر تحميل إطارات المفاتيح من %1."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:202
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:203
 #, fuzzy, kde-format
 #| msgid "Reference Images"
 msgid "Save Reference Images"
 msgstr "الصّور المرجع"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:231
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:232
 #, fuzzy, kde-format
 #| msgid "Reference image:"
 msgid "Failed to save reference images."
 msgstr "الصّورة المرجع:"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:306
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:307
 #, fuzzy, kde-format
 #| msgid "Reference Images"
 msgid "Reference Image Actions"
@@ -60288,7 +60288,7 @@ msgstr "مكان الڤديو:"
 msgid "Crop Tool Actions"
 msgstr "اقتصاص التّحديدات"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:722
+#: plugins/tools/tool_crop/kis_tool_crop.cc:723
 #, kde-format
 msgid ""
 "X: %1\n"
@@ -60297,7 +60297,7 @@ msgstr ""
 "س: %1\n"
 "ص: %2"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:727
+#: plugins/tools/tool_crop/kis_tool_crop.cc:728
 #, kde-format
 msgid ""
 "Width: %1\n"
@@ -60975,21 +60975,21 @@ msgstr "طبّق"
 msgid "Transform Tool Actions"
 msgstr "أداة التّحويل"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:854
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:855
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "فعّل أداة رسم الخطوط"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:862
 #, fuzzy, kde-format
 #| msgid "Activate Line Tool"
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "فعّل أداة رسم الخطوط"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:881
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:882
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60997,20 +60997,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:898
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:899
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:979
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1016
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1004
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

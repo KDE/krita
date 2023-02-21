@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:55+0000\n"
-"PO-Revision-Date: 2023-02-16 10:00+0100\n"
+"POT-Creation-Date: 2023-02-21 00:57+0000\n"
+"PO-Revision-Date: 2023-02-18 11:06+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -17821,7 +17821,7 @@ msgstr "Màscara de transformació"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
 #: plugins/impex/psd/psd_loader.cpp:379
 #: plugins/impex/tiff/kis_tiff_import.cc:562
-#: plugins/impex/xcf/kis_xcf_import.cpp:273
+#: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
 msgid "Transparency Mask"
 msgstr "Màscara de transparència"
@@ -19368,7 +19368,7 @@ msgstr "Fons"
 msgid "Unnamed Layer"
 msgstr "capa sense nom"
 
-#: libs/psd/psd_resource_block.h:109
+#: libs/psd/psd_resource_block.h:110
 #, kde-format
 msgid "Unparsed Resource Block"
 msgstr "Bloc de recursos sense analitzar"
@@ -19448,11 +19448,11 @@ msgstr "Recursos locals"
 #: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:352
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:129
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:164
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:185
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:220
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:231
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:130
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:165
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:186
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:232
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1120
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
@@ -19632,16 +19632,15 @@ msgstr "Etiquetes"
 
 #: libs/resources/KisResourceModel.cpp:150
 #: libs/resources/KisTagResourceModel.cpp:646
-#, fuzzy, kde-format
-#| msgid "Clear Thumbnail"
+#, kde-format
 msgid "Large Thumbnail"
-msgstr "Neteja la miniatura"
+msgstr "Miniatura gran"
 
 #: libs/resources/KisResourceModel.cpp:152
 #: libs/resources/KisTagResourceModel.cpp:648
 #, kde-format
 msgid "Dirty"
-msgstr ""
+msgstr "Brut"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
@@ -19852,49 +19851,43 @@ msgstr "Tots els recursos sense etiquetar"
 #: libs/resources/KisTagResourceModel.cpp:658
 #, kde-format
 msgid "Tag ID"
-msgstr ""
+msgstr "ID de l'etiqueta"
 
 #: libs/resources/KisTagResourceModel.cpp:660
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource ID"
-msgstr "Recursos"
+msgstr "ID del recurs"
 
 #: libs/resources/KisTagResourceModel.cpp:662
 #, kde-format
 msgid "Tag Url"
-msgstr ""
+msgstr "URL de l'etiqueta"
 
 #: libs/resources/KisTagResourceModel.cpp:664
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource"
-msgstr "Recursos"
+msgstr "Recurs"
 
 #: libs/resources/KisTagResourceModel.cpp:666
-#, fuzzy, kde-format
-#| msgid "Resource View"
+#, kde-format
 msgid "Resource Active"
-msgstr "Vista del recurs"
+msgstr "Recurs actiu"
 
 #: libs/resources/KisTagResourceModel.cpp:668
-#, fuzzy, kde-format
-#| msgid "Storage Active"
+#, kde-format
 msgid "Tag Active"
-msgstr "Emmagatzematge actiu"
+msgstr "Etiqueta activa"
 
 #: libs/resources/KisTagResourceModel.cpp:672
-#, fuzzy, kde-format
-#| msgid "Resource Type"
+#, kde-format
 msgid "Resource Name"
-msgstr "Tipus de recurs"
+msgstr "Nom del recurs"
 
 #: libs/resources/KisTagResourceModel.cpp:674
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "Tag File Name"
-msgstr "Nom del fitxer"
+msgstr "Nom del fitxer d'etiquetes"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:101
 #, kde-format
@@ -22566,7 +22559,7 @@ msgstr "Propietats de la capa"
 #: plugins/paintops/spray/kis_sprayop_option.cpp:60
 #: plugins/paintops/tangentnormal/kis_tangent_tilt_option.cpp:39
 #: plugins/paintops/tangentnormal/kis_tangent_tilt_option.cpp:43
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:279
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:281
 #: plugins/tools/basictools/kis_tool_fill.cc:490
 #: plugins/tools/basictools/kis_tool_fill.cc:507
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:370
@@ -28394,62 +28387,62 @@ msgstr "Activa l'eina de selecció d'àrees contigües"
 msgid "Activate Freehand Selection Tool"
 msgstr "Activa l'eina de selecció a mà alçada"
 
-#: libs/ui/input/kis_zoom_action.cpp:106
+#: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
 msgid "Zoom Canvas"
 msgstr "Zoom del llenç"
 
-#: libs/ui/input/kis_zoom_action.cpp:107
+#: libs/ui/input/kis_zoom_action.cpp:108
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr "L'acció <i>Zoom del llenç</i> acosta/allunya el llenç."
 
-#: libs/ui/input/kis_zoom_action.cpp:110
+#: libs/ui/input/kis_zoom_action.cpp:111
 #, kde-format
 msgid "Zoom Mode"
 msgstr "Mode de zoom"
 
-#: libs/ui/input/kis_zoom_action.cpp:111
+#: libs/ui/input/kis_zoom_action.cpp:112
 #, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "Mode de zoom discret"
 
-#: libs/ui/input/kis_zoom_action.cpp:112
+#: libs/ui/input/kis_zoom_action.cpp:113
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "Mode de zoom relatiu"
 
-#: libs/ui/input/kis_zoom_action.cpp:113
+#: libs/ui/input/kis_zoom_action.cpp:114
 #, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "Mode de zoom discret relatiu"
 
-#: libs/ui/input/kis_zoom_action.cpp:114
+#: libs/ui/input/kis_zoom_action.cpp:115
 #, kde-format
 msgid "Zoom In"
 msgstr "Acosta"
 
-#: libs/ui/input/kis_zoom_action.cpp:115
+#: libs/ui/input/kis_zoom_action.cpp:116
 #, kde-format
 msgid "Zoom Out"
 msgstr "Allunya"
 
-#: libs/ui/input/kis_zoom_action.cpp:116 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "Zoom al 100%"
 
-#: libs/ui/input/kis_zoom_action.cpp:117
+#: libs/ui/input/kis_zoom_action.cpp:118
 #, kde-format
 msgid "Fit to View"
 msgstr "Ajusta a la vista"
 
-#: libs/ui/input/kis_zoom_action.cpp:118
+#: libs/ui/input/kis_zoom_action.cpp:119
 #, kde-format
 msgid "Fit to View Width"
 msgstr "Ajusta a l'amplària de la vista"
 
-#: libs/ui/input/kis_zoom_action.cpp:119
+#: libs/ui/input/kis_zoom_action.cpp:120
 #, kde-format
 msgid "Fit to View Height"
 msgstr "Ajusta a l'alçària de la vista"
@@ -29231,7 +29224,7 @@ msgstr "100%"
 msgid "Fit Canvas to View"
 msgstr "Ajusta el llenç a la vista"
 
-#: libs/ui/kis_popup_palette.cpp:871
+#: libs/ui/kis_popup_palette.cpp:872
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -29240,7 +29233,7 @@ msgstr ""
 "Feu clic per a intercanviar els colors de primer pla i de fons.\n"
 "Feu clic dret per a establir-ho a blanc i negre."
 
-#: libs/ui/kis_popup_palette.cpp:1008
+#: libs/ui/kis_popup_palette.cpp:1010
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -29442,7 +29435,7 @@ msgctxt "<color space> <image profile>"
 msgid "%1  %2"
 msgstr "%1 %2"
 
-#: libs/ui/kis_zoom_manager.cc:318
+#: libs/ui/kis_zoom_manager.cc:319
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
@@ -29819,18 +29812,16 @@ msgid "%1 cannot be written to. Please save under a different name."
 msgstr "No es pot escriure a %1. Guardeu-ho amb un nom diferent."
 
 #: libs/ui/KisDocument.cpp:751
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL errors"
-#| msgid "Unable to read the image profile."
+#, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "No s'ha pogut llegir el perfil de la imatge."
+msgstr "No s'ha pogut crear un fitxer de còpia de seguretat"
 
 #: libs/ui/KisDocument.cpp:768
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr ""
+msgstr "No s'ha pogut crear un fitxer de còpia de seguretat numerat"
 
 #: libs/ui/KisDocument.cpp:790
 #, kde-format
@@ -30842,17 +30833,17 @@ msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 "No podeu arrossegar i deixar anar colors sobre el tipus de capa seleccionat."
 
-#: libs/ui/KisView.cpp:758 libs/ui/tool/kis_tool.cc:671
+#: libs/ui/KisView.cpp:758 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "La capa està bloquejada i és invisible."
 
-#: libs/ui/KisView.cpp:760 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:760 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "La capa està bloquejada."
 
-#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "La capa és invisible."
@@ -32105,27 +32096,27 @@ msgstr "Accions de selecció"
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1834
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:309
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:310
 #, kde-format
 msgid "Transform"
 msgstr "Transforma"
 
-#: libs/ui/tool/kis_tool.cc:573
+#: libs/ui/tool/kis_tool.cc:575
 #, kde-format
 msgid "No options"
 msgstr "Sense opcions"
 
-#: libs/ui/tool/kis_tool.cc:677
+#: libs/ui/tool/kis_tool.cc:679
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr "La capa només es pot pintar en el mode Rentatge."
 
-#: libs/ui/tool/kis_tool.cc:679
+#: libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Group not editable."
 msgstr "Grup no editable."
 
-#: libs/ui/tool/kis_tool.cc:694
+#: libs/ui/tool/kis_tool.cc:696
 #, kde-format
 msgid "Local selection is locked."
 msgstr "La selecció local està bloquejada."
@@ -32141,9 +32132,9 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_freehand.cc:212
 #: libs/ui/tool/kis_tool_polyline_base.cpp:119
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:163
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:162
-#: plugins/tools/basictools/kis_tool_line.cc:201
+#: plugins/tools/basictools/kis_tool_line.cc:202
 #: plugins/tools/basictools/kis_tool_path.cc:78
 #: plugins/tools/basictools/kis_tool_pencil.cc:53
 #: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:113
@@ -32153,13 +32144,13 @@ msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
 "El motor de pinzells de MyPaint no està disponible per a este espai de color"
 
-#: libs/ui/tool/kis_tool_paint.cc:569
+#: libs/ui/tool/kis_tool_paint.cc:571
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr "Mida del pinzell: %1 px"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:113
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:157
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:156
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:66
 #, kde-format
@@ -32170,7 +32161,7 @@ msgstr ""
 "Esta eina no pot pintar sobre capes clonades. Seleccioneu una pintura, una "
 "capa vectorial o una màscara."
 
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:94
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:95
 #, kde-format
 msgid ""
 "Width: %1 px\n"
@@ -32179,8 +32170,8 @@ msgstr ""
 "Amplària: %1 px\n"
 "Alçària: %2 px"
 
-#: libs/ui/tool/kis_tool_rectangle_base.cpp:292
-#: plugins/tools/basictools/kis_tool_line.cc:282
+#: libs/ui/tool/kis_tool_rectangle_base.cpp:294
+#: plugins/tools/basictools/kis_tool_line.cc:284
 #: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #, kde-format
 msgid ""
@@ -34736,17 +34727,17 @@ msgstr "Entrada"
 msgid "Anonymous"
 msgstr "Anònim"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:278
+#: libs/widgets/KoConfigAuthorPage.cpp:281
 #, kde-format
 msgid "Name (not duplicate or blank name):"
 msgstr "Nom (nom no duplicat o en blanc):"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:278
+#: libs/widgets/KoConfigAuthorPage.cpp:281
 #, kde-format
 msgid "Name of Profile"
 msgstr "Nom del perfil"
 
-#: libs/widgets/KoConfigAuthorPage.cpp:331
+#: libs/widgets/KoConfigAuthorPage.cpp:334
 #, kde-format
 msgid "New Contact Info"
 msgstr "Informació de contacte nova"
@@ -36902,7 +36893,7 @@ msgstr "Cb"
 msgid "Cr"
 msgstr "Cr"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:139
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:140
 #, kde-format
 msgid "ICC Engine"
 msgstr "Motor ICC"
@@ -37081,7 +37072,7 @@ msgstr "No mostres"
 msgid "Color Selector Settings"
 msgstr "Configuració per al selector de color"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:311
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:313
 #, kde-format
 msgid ""
 "Values goes from black to white, or black to the most saturated color. "
@@ -37091,7 +37082,7 @@ msgstr ""
 "Els valors van del negre al blanc, o del negre al color més saturat. La "
 "saturació, a la vegada, va del color més saturat al blanc, gris o negre."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:314
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:316
 #, kde-format
 msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
@@ -37100,12 +37091,12 @@ msgstr ""
 "La claredat va del negre al blanc, amb el gris mig igual que el color més "
 "saturat."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:317
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:319
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
 msgstr "Els mapes d'intensitat són la suma dels components RGB"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:320
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:322
 #, kde-format
 msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
@@ -40086,7 +40077,7 @@ msgid "Edit Storyboard Child"
 msgstr "Edita el fill del guió gràfic"
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:137
-#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:311
+#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:312
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:923
 #, kde-format
 msgctxt "suffix in spin box in storyboard that means 'seconds'"
@@ -40094,7 +40085,7 @@ msgid "s"
 msgstr "s"
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:142
-#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:318
+#: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:319
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:926
 #, kde-format
 msgctxt "suffix in spin box in storyboard that means 'frames'"
@@ -40126,14 +40117,14 @@ msgid "Freeze Keyframe Data"
 msgstr "Congela les dades dels fotogrames clau"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:236
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:290
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:291
 #, kde-format
 msgctxt "Add new scene as the last storyboard"
 msgid "Add Scene"
 msgstr "Afig una escena"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:252
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:309
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:310
 #, kde-format
 msgctxt "Remove current scene from storyboards"
 msgid "Remove Scene"
@@ -40155,19 +40146,19 @@ msgctxt "default name for storyboard item"
 msgid "scene "
 msgstr "escena "
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:297
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:298
 #, kde-format
 msgctxt "Add scene after active scene"
 msgid "Add Scene After"
 msgstr "Afig una escena després"
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:299
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:300
 #, kde-format
 msgctxt "Add scene before active scene"
 msgid "Add Scene Before"
 msgstr "Afig una escena abans"
 
-#: plugins/dockers/storyboarddocker/StoryboardView.cpp:302
+#: plugins/dockers/storyboarddocker/StoryboardView.cpp:303
 #, kde-format
 msgctxt "Duplicate current scene from storyboard docker"
 msgid "Duplicate Scene"
@@ -41246,15 +41237,13 @@ msgid "Resources Cache Database Explorer"
 msgstr "Explorador de recursos al cau de la base de dades"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
-#, fuzzy, kde-format
-#| msgid "Versions"
+#, kde-format
 msgid "Version"
-msgstr "Versions"
+msgstr "Versió"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "File name"
 msgstr "Nom del fitxer"
 
@@ -41271,22 +41260,19 @@ msgid "Display Name"
 msgstr "Nom que s'ha de mostrar"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version"
 msgstr "Versió de la base de dades"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version"
 msgstr "Versió de Krita"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Upgrade date"
-msgstr "Actualitza"
+msgstr "Actualitza la data"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
@@ -41308,30 +41294,27 @@ msgstr "Informació de l'esquema"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
-#, fuzzy, kde-format
-#| msgid "Quantization"
+#, kde-format
 msgid "Initialization"
-msgstr "Quantificació"
+msgstr "Inicialització"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version:"
-msgstr "Versió de la base de dades"
+msgstr "Versió de la base de dades:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version:"
-msgstr "Versió de Krita"
+msgstr "Versió de Krita:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
 #, kde-format
 msgid "Schema upgrades"
-msgstr ""
+msgstr "Actualitzacions dels esquemes"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
@@ -43059,7 +43042,7 @@ msgid "Do you want to overwrite the existing bundle?"
 msgstr "Esteu segur/a de voler sobreescriure el paquet existent?"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:414
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:220
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #, kde-format
 msgid "Could not open '%1' for saving."
 msgstr "No s'ha pogut obrir «%1» per a guardar."
@@ -44070,7 +44053,7 @@ msgstr "Equilibri de &color..."
 msgid "Color Balance"
 msgstr "Equilibri de color"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:227
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:229
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "Corbes d'ajust entre &canals..."
@@ -46138,7 +46121,7 @@ msgstr "Y: "
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text arfet as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:360
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:361
 #, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -46151,7 +46134,7 @@ msgstr[1] "Cada {n} cel·les horitzontalment"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text arfet as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:376
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:377
 #, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -46161,25 +46144,25 @@ msgid_plural "Every {n} cells vertically"
 msgstr[0] "Cada {n} cel·la verticalment"
 msgstr[1] "Cada {n} cel·les verticalment"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:468
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
 msgstr " píxels/polzada"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:470
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
 msgstr " píxels/cm"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:472
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:473
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
 msgstr " línies/polzada"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:473
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:474
 #, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
@@ -53245,14 +53228,14 @@ msgctxt "Pen tilt ascension"
 msgid "Ascension"
 msgstr "Ascensió"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:187
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:189
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active, consider disabling Instant Preview"
 msgstr ""
 "Sensor aleatori actiu, considereu desactivar la vista prèvia instantània"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:191
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:193
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Offset by Random, consider disabling Instant Preview"
@@ -53260,7 +53243,7 @@ msgstr ""
 "Compensat per l'aleatorietat, considereu desactivar la vista prèvia "
 "instantània"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:195
+#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:197
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Radius by Random, consider disabling Instant Preview"
@@ -56708,7 +56691,7 @@ msgid "Scalable Distance"
 msgstr "Distància escalable"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:451
-#: plugins/tools/basictools/kis_tool_line.cc:100
+#: plugins/tools/basictools/kis_tool_line.cc:101
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Ajusta als assistents"
@@ -56744,7 +56727,7 @@ msgstr ""
 "desordre d'ajust emprant els assistents infinits."
 
 #: plugins/tools/basictools/kis_tool_brush.cc:475
-#: plugins/tools/basictools/kis_tool_line.cc:103
+#: plugins/tools/basictools/kis_tool_line.cc:104
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Ajusta l'esborrador"
@@ -56760,7 +56743,7 @@ msgstr "Habilita l'ajust quan s'utilitzen esborradors"
 msgid "Freehand Brush Tool"
 msgstr "Eina de pinzell a mà alçada"
 
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:96
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:97
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only."
 msgstr ""
@@ -57033,32 +57016,32 @@ msgstr "Tramat"
 msgid "Gradient Tool"
 msgstr "Eina de degradat"
 
-#: plugins/tools/basictools/kis_tool_line.cc:52
+#: plugins/tools/basictools/kis_tool_line.cc:53
 msgctxt "(qtundo-format)"
 msgid "Draw Line"
 msgstr "Dibuixa una línia"
 
-#: plugins/tools/basictools/kis_tool_line.cc:91
+#: plugins/tools/basictools/kis_tool_line.cc:92
 #, kde-format
 msgid "Use sensors"
 msgstr "Utilitza els sensors"
 
-#: plugins/tools/basictools/kis_tool_line.cc:94
+#: plugins/tools/basictools/kis_tool_line.cc:95
 #, kde-format
 msgid "Show Preview"
 msgstr "Mostra la vista prèvia"
 
-#: plugins/tools/basictools/kis_tool_line.cc:97
+#: plugins/tools/basictools/kis_tool_line.cc:98
 #, kde-format
 msgid "Show Guideline"
 msgstr "Mostra les línies guia"
 
-#: plugins/tools/basictools/kis_tool_line.cc:430
+#: plugins/tools/basictools/kis_tool_line.cc:433
 #, kde-format
 msgid "Length: %1 px"
 msgstr "Llargària: %1 px"
 
-#: plugins/tools/basictools/kis_tool_line.cc:448
+#: plugins/tools/basictools/kis_tool_line.cc:451
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -57734,7 +57717,7 @@ msgstr "Reinicia les transformacions"
 msgid "Press Shift to hold x- or y-position."
 msgstr "Premeu «Majús» per a mantindre les posicions X o Y."
 
-#: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:97
+#: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:96
 #, kde-format
 msgid "Press CTRL to resize from center."
 msgstr "Premeu «Ctrl» per a redimensionar des del centre."
@@ -57758,42 +57741,42 @@ msgstr ""
 "No s'han pogut carregar les imatges de referència següents:\n"
 "%1"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:96
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:97
 #, kde-format
 msgid "Select a Reference Image"
 msgstr "Seleccioneu una imatge de referència"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:129
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:130
 #, kde-format
 msgid "Could not load reference image from clipboard"
 msgstr "No s'han pogut carregar la imatge de referència des del porta-retalls"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:151
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:152
 #, kde-format
 msgid "Load Reference Images"
 msgstr "Carrega les imatges de referència"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:164
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:165
 #, kde-format
 msgid "Could not open '%1'."
 msgstr "No s'ha pogut obrir «%1»."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:185
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:186
 #, kde-format
 msgid "Could not load reference images from '%1'."
 msgstr "No s'han pogut carregar les imatges de referència des de «%1»."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:202
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:203
 #, kde-format
 msgid "Save Reference Images"
 msgstr "Guarda les imatges de referència"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:231
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:232
 #, kde-format
 msgid "Failed to save reference images."
 msgstr "No s'han pogut guardar les imatges de referència."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:306
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:307
 #, kde-format
 msgid "Reference Image Actions"
 msgstr "Accions en la imatge de referència"
@@ -59120,7 +59103,7 @@ msgstr "Bloqueja la relació d'aspecte"
 msgid "Crop Tool Actions"
 msgstr "Accions de l'eina per a escapçar"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:722
+#: plugins/tools/tool_crop/kis_tool_crop.cc:723
 #, kde-format
 msgid ""
 "X: %1\n"
@@ -59129,7 +59112,7 @@ msgstr ""
 "X: %1\n"
 "Y: %2"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:727
+#: plugins/tools/tool_crop/kis_tool_crop.cc:728
 #, kde-format
 msgid ""
 "Width: %1\n"
@@ -59765,13 +59748,13 @@ msgstr "Aplica"
 msgid "Transform Tool Actions"
 msgstr "Accions de l'eina de transformació"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:854
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:855
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "El tipus de capa no pot utilitzar l'eina de transformació"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:862
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -59779,7 +59762,7 @@ msgstr ""
 "El tipus de capa no pot utilitzar l'eina de transformació. En el seu lloc "
 "utilitzeu la màscara de transformació."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:881
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:882
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59789,20 +59772,20 @@ msgstr ""
 "La capa té fills amb màscares de transformació. Per favor, inhabiliteu-los "
 "abans de fer la transformació."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:898
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:899
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Les seleccions no s'utilitzen en editar les màscares de transformació "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:979
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1016
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "No es pot transformar una capa buida "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1004
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

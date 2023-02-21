@@ -602,8 +602,6 @@ if(WIN32)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Oi")
         # Favor fast code
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ot")
-        # -ffast-math (fused multiply-add if the arch allows)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fp:fast")
         # Function-level linking
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Gy")
 

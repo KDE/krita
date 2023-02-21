@@ -206,7 +206,7 @@ template <typename Functor>
 void MoveStrokeStrategy::recursiveApplyNodes(KisNodeList nodes, Functor &&func) {
     Q_FOREACH(KisNodeSP subtree, nodes) {
         KisLayerUtils::recursiveApplyNodes(subtree,
-            [this, func = std::forward<Functor>(func)] (KisNodeSP node) {
+            [&] (KisNodeSP node) {
                 if (!m_blacklistedNodes.contains(node)) {
                     func(node);
                 }

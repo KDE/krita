@@ -104,8 +104,10 @@ struct KisAnimTimelineFramesModel::Private
         return (primaryChannel && primaryChannel->keyframeAt(column));
     }
 
-    bool frameHasContent(int row, int column) {
+    bool frameHasContent(int row, int column) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
+
+        if (!dummy) return false;
 
         KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Raster.id());
         if (!primaryChannel) return false;
@@ -238,19 +240,29 @@ KisNodeSP KisAnimTimelineFramesModel::nodeAt(QModelIndex index) const
      * active layer and the list of the nodes in m_d->converter will change.
      */
     KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
-    return dummy ? dummy->node() : 0;
+    return dummy ? dummy->node() : nullptr;
 }
 
 QMap<QString, KisKeyframeChannel*> KisAnimTimelineFramesModel::channelsAt(QModelIndex index) const
 {
-    KisNodeDummy *srcDummy = m_d->converter->dummyFromRow(index.row());
-    return srcDummy->node()->keyframeChannels();
+    KisNodeSP srcDummy = nodeAt(index);
+
+    if (!srcDummy) {
+        return {};
+    }
+
+    return srcDummy->keyframeChannels();
 }
 
 KisKeyframeChannel *KisAnimTimelineFramesModel::channelByID(QModelIndex index, const QString &id) const
 {
-    KisNodeDummy *srcDummy = m_d->converter->dummyFromRow(index.row());
-    return srcDummy->node()->getKeyframeChannel(id);
+    KisNodeSP srcDummy = nodeAt(index);
+
+    if (!srcDummy) {
+        return nullptr;
+    }
+
+    return srcDummy->getKeyframeChannel(id);
 }
 
 void KisAnimTimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
@@ -898,9 +910,10 @@ void KisAnimTimelineFramesModel::makeClonesUnique(const QModelIndexList &indices
 {
     KisAnimUtils::FrameItemList frameItems;
 
-    foreach (const QModelIndex &index, indices) {
+    Q_FOREACH (const QModelIndex &index, indices) {
         const int time = index.column();
         KisKeyframeChannel *channel = channelByID(index, KisKeyframeChannel::Raster.id());
+        if (!channel) continue;
         frameItems << KisAnimUtils::FrameItem(channel->node(), channel->id(), time);
     }
 

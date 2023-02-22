@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-21 00:57+0000\n"
+"POT-Creation-Date: 2023-02-22 00:56+0000\n"
 "PO-Revision-Date: 2022-11-24 09:58+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -31759,7 +31759,7 @@ msgstr "首選繪製器不支援請求的表面格式。已選用另一個繪製
 msgid "Preferred output format is not supported by available renderers"
 msgstr "可用繪製器不支援首選輸出格式"
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:843
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:845
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "已停用 OpenColorIO：不支援影像色彩空間"
@@ -36603,7 +36603,7 @@ msgstr "不顯示"
 msgid "Color Selector Settings"
 msgstr "選色器設定"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:313
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:300
 #, kde-format
 msgid ""
 "Values goes from black to white, or black to the most saturated color. "
@@ -36613,19 +36613,19 @@ msgstr ""
 "明度的範圍由黑色過渡到白色或者最飽和的色彩；飽和度的範圍則是由最飽和的色彩過"
 "渡到白色、灰色、黑色。"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:316
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:303
 #, kde-format
 msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
 "saturated color."
 msgstr "亮度的範圍由黑色過渡到白色，最飽和色彩的亮度視作與中間灰的亮度相同。"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:319
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:306
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
 msgstr "強度數值為 RGB 各分量總和"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:322
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:309
 #, kde-format
 msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
@@ -36639,7 +36639,7 @@ msgstr ""
 msgid "Create a list of colors from the image"
 msgstr "建立此影像的色彩列表"
 
-#: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:196
+#: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:200
 #, kde-format
 msgid "delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6"
 msgstr "增量 色相=%1 飽和=%2 明度=%3 偏移 色相=%4 飽和=%5 明度=%6"

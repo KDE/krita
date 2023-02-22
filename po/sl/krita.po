@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-21 00:57+0000\n"
+"POT-Creation-Date: 2023-02-22 00:56+0000\n"
 "PO-Revision-Date: 2023-02-19 10:17+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -31967,7 +31967,7 @@ msgstr ""
 msgid "Preferred output format is not supported by available renderers"
 msgstr "Razpoložljivi upodobljevalniki ne podpirajo želene oblike izhoda"
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:843
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:845
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "OpenColorIO je onemogočen: barvni prostor slike ni podprt"
@@ -36966,7 +36966,7 @@ msgstr "Ne kaži"
 msgid "Color Selector Settings"
 msgstr "Nastavitve izbirnika barv"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:313
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:300
 #, kde-format
 msgid ""
 "Values goes from black to white, or black to the most saturated color. "
@@ -36976,7 +36976,7 @@ msgstr ""
 "Vrednosti gredo od črne do bele oziroma črne do najbolj nasičene barve. "
 "Zasičenost pa gre iz najbolj nasičene barve v belo, sivo ali črno."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:316
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:303
 #, kde-format
 msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
@@ -36984,12 +36984,12 @@ msgid ""
 msgstr ""
 "Svetlost gre iz črne v belo, srednje siva pa je enaka najbolj nasičeni barvi."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:319
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:306
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
 msgstr "Intenzivnost preslika do vsote komponent RGB"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:322
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:309
 #, kde-format
 msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
@@ -37003,7 +37003,7 @@ msgstr ""
 msgid "Create a list of colors from the image"
 msgstr "Ustvari seznam barv iz slike"
 
-#: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:196
+#: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:200
 #, kde-format
 msgid "delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6"
 msgstr "delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6"

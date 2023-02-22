@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-21 00:57+0000\n"
+"POT-Creation-Date: 2023-02-22 00:56+0000\n"
 "PO-Revision-Date: 2022-09-14 16:45+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -33648,7 +33648,7 @@ msgstr ""
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:843
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:845
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""
@@ -38693,7 +38693,7 @@ msgstr "Älä näytä"
 msgid "Color Selector Settings"
 msgstr "Värivalitsimen asetukset"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:313
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:300
 #, fuzzy, kde-format
 #| msgid ""
 #| "Values goes from black to white, or black to the most saturated colour. "
@@ -38708,7 +38708,7 @@ msgstr ""
 "Kylläisyys vuorostaan kulkee kylläisimmästä väristä valkoiseen, harmaaseen "
 "tai mustaan."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:316
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:303
 #, fuzzy, kde-format
 #| msgid ""
 #| "Lightness goes from black to white, with middle grey being equal to the "
@@ -38720,12 +38720,12 @@ msgstr ""
 "Vaaleus kulkee mustasta valkoiseen niin, että keskiharmaa vastaa kylläisintä "
 "väriä."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:319
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:306
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
 msgstr "Intensiteetti kuvautuu RGB-osatekijöiden summaksi"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:322
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:309
 #, kde-format
 msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
@@ -38737,7 +38737,7 @@ msgstr ""
 msgid "Create a list of colors from the image"
 msgstr "Luo kuvasta värien luettelon"
 
-#: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:196
+#: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:200
 #, kde-format
 msgid "delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6"
 msgstr "delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6"

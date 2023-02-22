@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-21 00:57+0000\n"
+"POT-Creation-Date: 2023-02-22 00:56+0000\n"
 "PO-Revision-Date: 2022-05-15 22:38+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -32956,7 +32956,7 @@ msgstr ""
 msgid "Preferred output format is not supported by available renderers"
 msgstr "사용 가능한 렌더러에서 선호하는 출력 형식을 지원하지 않음"
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:843
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:845
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "OpenColorIO가 비활성화됨: 이미지 색 공간이 지원되지 않습니다"
@@ -37944,7 +37944,7 @@ msgstr "표시 안 함"
 msgid "Color Selector Settings"
 msgstr "색상 선택기 설정"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:313
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:300
 #, kde-format
 msgid ""
 "Values goes from black to white, or black to the most saturated color. "
@@ -37954,7 +37954,7 @@ msgstr ""
 "명도 값은 검은색에서 흰색, 또는 검은색에서 가장 채도가 높은 색상으로 이동합니"
 "다. 채도는 채도가 가장 높은 색상에서 흰색, 회색 또는 검은색으로 바뀝니다."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:316
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:303
 #, kde-format
 msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
@@ -37963,12 +37963,12 @@ msgstr ""
 "광도는 검은색에서 흰색으로 바뀌며, 중간 회색은 가장 채도가 높은 색과 동일합니"
 "다."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:319
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:306
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
 msgstr "RGB 구성 요소의 합계에 대한 강도 맵"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:322
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:309
 #, kde-format
 msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
@@ -37982,7 +37982,7 @@ msgstr ""
 msgid "Create a list of colors from the image"
 msgstr "이미지에서 색상 목록 생성"
 
-#: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:196
+#: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:200
 #, kde-format
 msgid "delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6"
 msgstr "삼각형 h=%1 s=%2 v=%3 이동 h=%4 s=%5 v=%6"

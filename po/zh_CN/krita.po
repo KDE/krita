@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-21 00:57+0000\n"
+"POT-Creation-Date: 2023-02-22 00:56+0000\n"
 "PO-Revision-Date: 2023-02-15 11:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -31730,7 +31730,7 @@ msgstr "首选渲染器不支持请求的表面格式。已选择另一个渲染
 msgid "Preferred output format is not supported by available renderers"
 msgstr "可用渲染器不支持首选输出格式"
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:843
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:845
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "OpenColorIO 已被禁用：图像的色彩空间不受支持"
@@ -36578,7 +36578,7 @@ msgstr "不显示"
 msgid "Color Selector Settings"
 msgstr "拾色器设置"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:313
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:300
 #, kde-format
 msgid ""
 "Values goes from black to white, or black to the most saturated color. "
@@ -36590,7 +36590,7 @@ msgstr ""
 "0 (白色/灰色/黑色)，100 (全饱和色)。HSV 模型的明度/饱和度概念最容易理解，它也"
 "是调整颜色数值时最常用的一种色彩模型。"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:316
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:303
 #, kde-format
 msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
@@ -36599,7 +36599,7 @@ msgstr ""
 "HSL 模型的亮度 (Lightness) 数值范围为：0 (黑色)，100 (白色)。它的饱和度数值范"
 "围为：0 (亮度为 0/100 的颜色)，100 (亮度为 50 的颜色，含中间灰/全饱和色)。"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:319
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:306
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
 msgstr ""
@@ -36607,7 +36607,7 @@ msgstr ""
 "型的亮度相近。在 HSI 模型下某种颜色的强度数值为它 R/G/B 各分量数值的总和，因"
 "此黄色 (1,1,0) 被视为比蓝色 (0,0,1) 更亮。"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:322
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:309
 #, kde-format
 msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
@@ -36624,7 +36624,7 @@ msgstr ""
 msgid "Create a list of colors from the image"
 msgstr "生成此图像的颜色列表"
 
-#: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:196
+#: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:200
 #, kde-format
 msgid "delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6"
 msgstr "增量:色相%1,饱和%2,明度%3|偏移:色相%4,饱和%5,明度%6"

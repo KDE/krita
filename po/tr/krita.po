@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-21 00:57+0000\n"
+"POT-Creation-Date: 2023-02-22 00:56+0000\n"
 "PO-Revision-Date: 2023-02-20 20:42+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -2038,7 +2038,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Clone_tool.kpp"
 msgid "Clone tool"
-msgstr "Klon aracı"
+msgstr "Klonlama aracı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -11697,7 +11697,7 @@ msgstr "Seçili katmanları grupla ve kırpılmış alfa kanalıyla bir katman e
 #, kde-format
 msgctxt "action"
 msgid "All Layers"
-msgstr "Bütün Katmanlar"
+msgstr "Tüm Katmanlar"
 
 #. i18n: context: toolTip @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
@@ -11707,7 +11707,7 @@ msgstr "Bütün Katmanlar"
 #, kde-format
 msgctxt "action"
 msgid "Select all layers"
-msgstr "Bütün katmanları seç"
+msgstr "Tüm katmanları seç"
 
 #. i18n: context: text @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2836
@@ -12415,7 +12415,7 @@ msgstr "Katmanı Ofsetle"
 #, kde-format
 msgctxt "action"
 msgid "Clones &Array..."
-msgstr "Dizileri &Çoklar..."
+msgstr "Klonlar &Dizilişi..."
 
 #. i18n: context: toolTip @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
@@ -12425,7 +12425,7 @@ msgstr "Dizileri &Çoklar..."
 #, kde-format
 msgctxt "action"
 msgid "Clones Array"
-msgstr "Dizileri Çoklar"
+msgstr "Klonlar Dizilişi"
 
 #. i18n: context: text @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3340
@@ -14114,7 +14114,7 @@ msgstr "Cetvelleri Göster"
 #, kde-format
 msgctxt "action"
 msgid "Rulers Track Pointer"
-msgstr "Cetvel Parça İşaretçisi"
+msgstr "Cetveller İşaretçiyi İzler"
 
 #. i18n: context: whatsThis @ Action (rulers_track_mouse), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:907
@@ -31954,7 +31954,7 @@ msgid "Preferred output format is not supported by available renderers"
 msgstr ""
 "Tercih edilen çıktı biçimi, geçerli sunucular tarafından desteklenmiyor"
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:843
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:845
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "OpenColorIO devre dışı bırakıldı: görüntü renk uzayı desteklenmiyor"
@@ -36932,7 +36932,7 @@ msgstr "Gösterme"
 msgid "Color Selector Settings"
 msgstr "Renk Seçici Ayarları"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:313
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:300
 #, kde-format
 msgid ""
 "Values goes from black to white, or black to the most saturated color. "
@@ -36942,19 +36942,19 @@ msgstr ""
 "Değerler siyahtan beyaza değişir veya en doygun renk için siyah olur. "
 "Doygunluk, sırasıyla, beyaz, gri veya en doygun renk siyaha gider."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:316
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:303
 #, kde-format
 msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
 "saturated color."
 msgstr "Açıklık siyahtan beyaza gider, orta gri en doygun renge eşittir."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:319
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:306
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
 msgstr "Yoğunluk KYM bileşenlerinin toplamına eşleşir"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:322
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:309
 #, kde-format
 msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
@@ -36968,7 +36968,7 @@ msgstr ""
 msgid "Create a list of colors from the image"
 msgstr "Görselden renklerin listesini oluştur"
 
-#: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:196
+#: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:200
 #, kde-format
 msgid "delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6"
 msgstr "delta h=%1 s=%2 v=%3 kaydırma h=%4 s=%5 v=%6"
@@ -40733,22 +40733,22 @@ msgstr "&Katman"
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:31
 #, kde-format
 msgid "Create Clones Array"
-msgstr "Klonlar Dizisi Oluştur"
+msgstr "Klonlar Dizilişi Oluştur"
 
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:219
 #, kde-format
 msgid "+ Array of %1"
-msgstr "+ %1 dizisi"
+msgstr "+ %1 dizilişi"
 
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:226
 #, kde-format
 msgid "- Array of %1"
-msgstr "- %1 dizisi"
+msgstr "- %1 dizilişi"
 
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:239
 #, kde-format
 msgid "Clone %1, %2"
-msgstr "Çoğaltma %1, %2"
+msgstr "Klonla: %1, %2"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgRotateImage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgClonesArray)
@@ -42226,27 +42226,27 @@ msgstr "Değişken (%1)"
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:64
 #, kde-format
 msgid "Ordered array"
-msgstr "Sıralı dizi"
+msgstr "Sıralı diziliş"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:66
 #, kde-format
 msgid "Unordered array"
-msgstr "Sıralanmamış dizi"
+msgstr "Sırasız diziliş"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:68
 #, kde-format
 msgid "Alternative array"
-msgstr "Alternatif dizi"
+msgstr "Alternatif diziliş"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:70
 #, kde-format
 msgid "Language array"
-msgstr "Dil dizisi"
+msgstr "Dil dizilişi"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:74
 #, kde-format
 msgid "Rational"
-msgstr "Rasyonel"
+msgstr "Oransal"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:95
 #, kde-format
@@ -46509,7 +46509,7 @@ msgid ""
 "This option will merge all layers. It is advisable to check this option, "
 "otherwise other applications might not be able to read your file correctly."
 msgstr ""
-"Bu seçenek bütün katmanları birleştirir. Bunu işaretlemeniz önerilir, aksi "
+"Bu seçenek, tüm katmanları birleştirir. Bunu işaretlemeniz önerilir, aksi "
 "halde diğer uygulamalar dosyanızı doğru okuyamayabilirler."
 
 #. i18n: ectx: property (text), widget (QCheckBox, flatten)
@@ -50760,7 +50760,7 @@ msgstr "Piksel"
 #, kde-format
 msgctxt "clone paintbrush (previously \"Duplicate\")"
 msgid "Clone"
-msgstr "Çoğalt"
+msgstr "Klonla"
 
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_option.cpp:32
 #: plugins/paintops/libpaintop/kis_paint_action_type_option.cpp:25
@@ -50833,14 +50833,14 @@ msgid ""
 "When checked, clone from all visible layers. Otherwise, clone from the "
 "active layer."
 msgstr ""
-"Seçilirse bütün görünür katmanlardan çoğaltılır. Diğer türlü, etkin "
-"katmandan çoğaltılır."
+"Seçilirse bütün görünür katmanlardan klonlanır. Diğer türlü, etkin katmandan "
+"klonlanır."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCloneProjection)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:71
 #, kde-format
 msgid "Clone From All Visible Layers"
-msgstr "Tüm Görünür Katmanlardan Çoğalt"
+msgstr "Tüm Görünür Katmanlardan Klonla"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:99

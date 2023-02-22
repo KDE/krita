@@ -12,6 +12,8 @@
 #include <QStandardItemModel>
 #include <QStyledItemDelegate>
 
+#include <utility>
+
 #include "kis_color_patches.h"
 
 class KisColorPatchesTableDelegate : public QStyledItemDelegate
@@ -40,7 +42,7 @@ struct KisColorPatchesTableView::Private {
     QScopedPointer<QStandardItemModel> model;
     QList<KoColor> colorPatches;
     const QString configPrefix;
-    KisColorPatches::Direction direction;
+    KisColorPatches::Direction direction{KisColorPatches::Horizontal};
     int numRows {0};
     int numCols {0};
     int patchWidth {1};
@@ -48,8 +50,8 @@ struct KisColorPatchesTableView::Private {
     int patchCount {1};
     bool wasScrollingDisabled {false};
 
-    Private(const QString &configPrefix)
-        : configPrefix(configPrefix)
+    Private(QString configPrefix)
+        : configPrefix(std::move(configPrefix))
     {
     }
 };

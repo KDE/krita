@@ -355,7 +355,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         using namespace KoSvgText;
 
         TextDecorations deco = propertyOrDefault(TextDecorationLineId).value<KoSvgText::TextDecorations>();
-        if (command == "text-decoration" || "text-decoration-line") {
+        if (command == "text-decoration" || command == "text-decoration-line") {
             // reset deco when those values are being set..
             deco = KoSvgText::DecorationNone;
         }
@@ -486,7 +486,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "overflow-wrap" || command == "word-wrap") {
         setProperty(OverflowWrapId,
                     value == "break-word" ? KoSvgText::OverflowWrapBreakWord
-                        : "anywhere"      ? KoSvgText::OverflowWrapAnywhere
+                        : value == "anywhere"      ? KoSvgText::OverflowWrapAnywhere
                                           : KoSvgText::OverflowWrapNormal);
     } else if (command == "tab-size") {
         setProperty(TabSizeId, QVariant::fromValue(KoSvgText::parseTabSize(value, context)));

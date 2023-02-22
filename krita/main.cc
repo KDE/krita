@@ -32,7 +32,7 @@
 #include <QThread>
 #include <QTranslator>
 
-#include <ctime>
+#include <random>
 
 #include <KisApplication.h>
 #include <KisMainWindow.h>
@@ -228,7 +228,10 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 #endif
 
     // The global initialization of the random generator
-    qsrand(static_cast<uint>(std::time(nullptr)));
+    {
+        std::random_device urandom;
+        qsrand(urandom());
+    }
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
 
 #if defined HAVE_X11

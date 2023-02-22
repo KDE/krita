@@ -34,7 +34,9 @@ void KisTextureTile::setTextureParameters()
     f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, m_numMipmapLevels);
 
     if ((m_texturesInfo->internalFormat == GL_RGBA8 && m_texturesInfo->format == GL_RGBA)
+#ifndef QT_OPENGL_ES_2
         || (m_texturesInfo->internalFormat == GL_RGBA16 && m_texturesInfo->format == GL_RGBA)
+#endif
         || (m_texturesInfo->internalFormat == GL_RGBA16_EXT && m_texturesInfo->format == GL_RGBA)
     ) {
         // If image format is RGBA8, swap the red and blue channels for the proper color

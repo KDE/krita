@@ -1828,8 +1828,6 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
         }
     }
 
-    textChunk->normalizeCharTransformations();
-
     if (rootTextShape) {
         textChunk->simplifyFillStrokeInheritance();
         if (e.hasAttribute("text-rendering")) {

@@ -137,6 +137,7 @@ public:
     QVector<CharacterResult> result;
 
     void clearAssociatedOutlines(const KoShape *rootShape);
+    void resolveTransforms(const KoShape *rootShape, int &currentIndex, bool isHorizontal, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars);
     static QPainterPath convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot);
     static QImage convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyphSlot);
     static void breakLines(const KoSvgTextProperties &properties,
@@ -391,7 +392,7 @@ void KoSvgTextShape::relayout() const
     KoSvgText::TextWrap wrap = KoSvgText::TextWrap(this->textProperties().propertyOrDefault(KoSvgTextProperties::TextWrapId).toInt());
     KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(this->textProperties().propertyOrDefault(KoSvgTextProperties::TextCollapseId).toInt());
     KoSvgText::LineBreak linebreakStrictness = KoSvgText::LineBreak(this->textProperties().property(KoSvgTextProperties::LineBreakId).toInt());
-    QVector<bool> collapseChars = KoCssTextUtils::collapseSpaces(text, collapse);
+    QVector<bool> collapseChars = KoCssTextUtils::collapseSpaces(&text, collapse);
     if (!lang.isEmpty()) {
         // Libunibreak currently only has support for strict, and even then only
         // for very specific cases.
@@ -408,18 +409,19 @@ void KoSvgTextShape::relayout() const
         set_graphemebreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), lang.toUtf8().data(), graphemeBreaks.data());
     }
 
+
     int globalIndex = 0;
     QVector<CharacterResult> result(text.size());
-    // 3. Resolve character positioning.
-    // This is done earlier so it's possible to get preresolved transforms from
-    // the subchunks.
-    QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
-    if (!resolvedTransforms.empty()) {
-        // Ensure the first entry defaults to 0.0 for x and y, otherwise textAnchoring
-        // will not work for text that has been bidi-reordered.
-        resolvedTransforms[0].xPos = 0.0;
-        resolvedTransforms[0].yPos = 0.0;
+    // HACK ALERT!
+    // Apparantly feeding a bidi algorithm a hardbreak makes it go 'ok, not doing any
+    // bidi', which makes sense, Bidi is supossed to be done 'after' line breaking.
+    // Without replacing hardbreaks with spaces, hardbreaks in rtl will break the bidi.
+    for (int i = 0; i < text.size(); i++) {
+        if (lineBreaks[i] == LINEBREAK_MUSTBREAK) {
+            text[i] = QChar::Space;
+        }
     }
+
     QMap<int, KoSvgText::TabSizeInfo> tabSizeInfo;
 
     // pass everything to a css-compatible text-layout algortihm.
@@ -472,7 +474,10 @@ void KoSvgTextShape::relayout() const
                         cr.lineStart = Collapse;
                     }
                 }
-                if (wordBreakStrictness == KoSvgText::WordBreakBreakAll || linebreakStrictness == KoSvgText::LineBreakAnywhere) {
+
+                if ((wordBreakStrictness == KoSvgText::WordBreakBreakAll ||
+                     linebreakStrictness == KoSvgText::LineBreakAnywhere)
+                        && wrap != KoSvgText::NoWrap) {
                     if (graphemeBreaks[start + i] == GRAPHEMEBREAK_BREAK && cr.breakType == NoBreak) {
                         cr.breakType = SoftBreak;
                     }
@@ -497,37 +502,6 @@ void KoSvgTextShape::relayout() const
                     cr.anchored_chunk = true;
                 }
                 result[start + i] = cr;
-                // TODO: figure out how to use addressability to only set
-                // transforms on addressable chars.
-                //! collapseChars.at(i);
-
-                if (i < chunk.transformation.size()) {
-                    KoSvgText::CharTransformation newTransform = chunk.transformation.at(i);
-
-                    if (chunk.textInPath) {
-                        // Unset the perpendicular absolute transform for textPaths as suggested by the SVG 2 algorithm.
-                        if (isHorizontal) {
-                            newTransform.yPos.reset();
-                        } else {
-                            newTransform.xPos.reset();
-                        }
-                    }
-                    resolvedTransforms[start + i] = newTransform;
-                } else if (start > 0) {
-                    resolvedTransforms[start + i].rotate = resolvedTransforms[start + i - 1].rotate;
-                }
-                if (chunk.firstTextInPath && i == 0) {
-                    if (chunk.textInPath) {
-                        //  Also unset the first transform on a textPath to avoid breakage with rtl text.
-                        if (isHorizontal) {
-                            resolvedTransforms[start + i].yPos.reset();
-                            resolvedTransforms[start + i].xPos = 0.0;
-                        } else {
-                            resolvedTransforms[start + i].xPos.reset();
-                            resolvedTransforms[start + i].yPos = 0.0;
-                        }
-                    }
-                }
             }
 
             QVector<int> lengths;
@@ -631,11 +605,11 @@ void KoSvgTextShape::relayout() const
         const raqm_glyph_t currentGlyph = glyphs[i];
         KIS_ASSERT(currentGlyph.cluster <= INT32_MAX);
         const int cluster = static_cast<int>(currentGlyph.cluster);
-        CharacterResult charResult = result[cluster];
-        charResult.addressable = !collapseChars.at(cluster);
-        if (!charResult.addressable) {
+        result[cluster].addressable = !collapseChars.at(cluster);
+        if (!result[cluster].addressable) {
             continue;
         }
+        CharacterResult charResult = result[cluster];
 
         FT_Int32 faceLoadFlags = loadFlags;
         if (!isHorizontal && FT_HAS_VERTICAL(currentGlyph.ftface)) {
@@ -655,7 +629,7 @@ void KoSvgTextShape::relayout() const
             continue;
         }
 
-        debugFlake << "glyph" << i << "cluster" << cluster << currentGlyph.index;
+        debugFlake << "glyph" << i << "cluster" << cluster << currentGlyph.index << text.at(cluster).unicode();
 
         FT_Matrix matrix;
         FT_Vector delta;
@@ -789,22 +763,49 @@ void KoSvgTextShape::relayout() const
 
     // fix it so that characters that are in the 'middle' due to either being
     // surrogates or part of a ligature, are marked as such.
+    // Also ensure that anchored chunks get set to the first addressable non-middle characters.
     int firstCluster = 0;
+    bool setAnchoredChunk = false;
     for (int i = 0; i < result.size(); i++) {
-        if (result.at(i).visualIndex != -1) {
+        if (result[i].addressable && result.at(i).visualIndex != -1) {
             firstCluster = i;
+            if (setAnchoredChunk) {
+                result[i].anchored_chunk = true;
+                setAnchoredChunk = false;
+
+            }
         } else {
-            result[firstCluster].breakType = result.at(i).breakType;
-            result[firstCluster].lineStart = result.at(i).lineStart;
-            result[firstCluster].lineEnd = result.at(i).lineEnd;
+            if (result[firstCluster].breakType != HardBreak) {
+                result[firstCluster].breakType = result.at(i).breakType;
+            }
+            if (result[firstCluster].lineStart == NoChange) {
+                result[firstCluster].lineStart = result.at(i).lineStart;
+            }
+            if (result[firstCluster].lineEnd == NoChange) {
+                result[firstCluster].lineEnd = result.at(i).lineEnd;
+            }
+            if (result[i].anchored_chunk) {
+                setAnchoredChunk = true;
+            }
             result[i].middle = true;
             result[i].addressable = false;
         }
     }
     debugFlake << "Glyphs retreived";
 
+    // 3. Resolve character positioning.
+    QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
+    if (!resolvedTransforms.empty()) {
+        // Ensure the first entry defaults to 0.0 for x and y, otherwise textAnchoring
+        // will not work for text that has been bidi-reordered.
+        resolvedTransforms[0].xPos = 0.0;
+        resolvedTransforms[0].yPos = 0.0;
+    }
+    globalIndex = 0;
+    d->resolveTransforms(this, globalIndex, isHorizontal, false, resolvedTransforms, collapseChars);
+
     // Handle linebreaking.
-    QPointF startPos = inlineSize.isAuto ? QPointF() : resolvedTransforms[0].absolutePos();
+    QPointF startPos = resolvedTransforms[0].absolutePos();
     d->breakLines(this->textProperties(), logicalToVisual, result, startPos);
 
     // Handle baseline alignment.
@@ -849,7 +850,6 @@ void KoSvgTextShape::relayout() const
         debugFlake << "6. Adjust positions: x, y";
         // https://github.com/w3c/svgwg/issues/617
         shift = QPointF();
-        // bool setNextAnchor = false;
         for (int i = 0; i < result.size(); i++) {
             if (result.at(i).addressable) {
                 KoSvgText::CharTransformation transform = resolvedTransforms[i];
@@ -863,21 +863,6 @@ void KoSvgTextShape::relayout() const
                     shift.setY(*transform.yPos + (delta - charResult.finalPosition.y()));
                 }
                 charResult.finalPosition += shift;
-
-                /*
-            if (setNextAnchor) {
-                charResult.anchored_chunk = true;
-            }
-
-            if (charResult.middle && charResult.anchored_chunk) {
-                charResult.anchored_chunk = false;
-                if (i + 1 < result.size()) {
-                    setNextAnchor = true;
-                } else {
-                    setNextAnchor = false;
-                }
-            }
-            */
 
                 result[i] = charResult;
             }
@@ -951,6 +936,74 @@ void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
         clearAssociatedOutlines(child);
     }
+}
+
+void KoSvgTextShape::Private::resolveTransforms(const KoShape *rootShape, int &currentIndex, bool isHorizontal, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars) {
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
+
+    QVector<KoSvgText::CharTransformation> local = chunkShape->layoutInterface()->localCharTransformations();
+
+    int i = 0;
+
+    int index = currentIndex;
+    int j = index + chunkShape->layoutInterface()->numChars(true);
+
+    if (chunkShape->layoutInterface()->textPath()) {
+        textInPath = true;
+    } else {
+        for (int k = index; k < j; k++ ) {
+            if (collapsedChars[k]) {
+                continue;
+            }
+
+            if (i < local.size()) {
+                KoSvgText::CharTransformation newTransform = local.at(i);
+                newTransform.mergeInParentTransformation(resolved[k]);
+                resolved[k] = newTransform;
+                i += 1;
+            } else if (k > 0) {
+                if (resolved[k - 1].rotate) {
+                    resolved[k].rotate = resolved[k - 1].rotate;
+                }
+            }
+        }
+    }
+
+    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+        resolveTransforms(child, currentIndex, isHorizontal, textInPath, resolved, collapsedChars);
+
+    }
+
+    if (chunkShape->layoutInterface()->textPath()) {
+        bool first = true;
+        for (int k = index; k < j; k++ ) {
+
+            if (collapsedChars[k]) {
+                continue;
+            }
+
+            //  Also unset the first transform on a textPath to avoid breakage with rtl text.
+            if (first) {
+                if (isHorizontal) {
+                    resolved[k].xPos = 0.0;
+                } else {
+                    resolved[k].yPos = 0.0;
+                }
+                first = false;
+            }
+            // x and y attributes are officially 'ignored' for text on path, though the algorithm
+            // suggests this is only if a child of a path... In reality, not resetting this will
+            // break text-on-path with rtl.
+            if (isHorizontal) {
+                resolved[k].yPos.reset();
+            } else {
+                resolved[k].xPos.reset();
+            }
+        }
+    }
+
+    currentIndex = j;
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
@@ -1097,10 +1150,6 @@ void addWordToLine(QVector<CharacterResult> &result,
                    bool firstLine)
 {
     QPointF lineAdvance = currentPos;
-
-    if (lineBox.isEmpty()) {
-        lineIndices.clear();
-    }
 
     Q_FOREACH (int j, wordIndices) {
         CharacterResult cr = result.at(j);
@@ -1348,6 +1397,7 @@ void finalizeLine(QVector<CharacterResult> &result,
         }
     }
     lineBox = QRectF();
+    lineIndices.clear();
     firstLine = false;
 }
 
@@ -1398,16 +1448,9 @@ void KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &properties,
 
     QVector<int> lineIndices; ///< Indices of characters in line.
 
-    // The following is because we want to do line-length calculations on the
-    // 'visual order' instead of the 'logical' order. For rtl, we'll need to
-    // count backwards.
-
     QListIterator<int> it(logicalToVisual.keys());
     while (it.hasNext()) {
         int index = it.next();
-        if (index < 0) {
-            continue;
-        }
         CharacterResult charResult = result.at(index);
         if (!charResult.addressable) {
             continue;
@@ -1426,9 +1469,16 @@ void KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &properties,
         }
         wordIndices.append(index);
         bool atEnd = !it.hasNext();
+        bool alsoSoftBreak = false; /// sometimes a word that ends in a hardbreak is also still too large for the previous line.
 
         if (charResult.breakType == HardBreak) {
             breakLine = true;
+            wordToNextLine = false;
+
+            qreal lineLength = isHorizontal ? (currentPos - startPos + wordAdvance).x() : (currentPos - startPos + wordAdvance).y();
+            if (!inlineSize.isAuto && qRound((abs(lineLength) - inlineSize.customValue)) > 0) {
+                    alsoSoftBreak = true;
+            }
         } else if (charResult.breakType == SoftBreak || atEnd || overflowWrap == KoSvgText::OverflowWrapAnywhere) {
             qreal lineLength = isHorizontal ? (currentPos - startPos + wordAdvance).x() : (currentPos - startPos + wordAdvance).y();
             if (!inlineSize.isAuto) {
@@ -1507,6 +1557,24 @@ void KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &properties,
                 addWordToLine(result, currentPos, wordIndices, lineBox, lineIndices, ltr, firstLine);
 
             } else {
+                if (alsoSoftBreak) {
+                    finalizeLine(result,
+                                 currentPos,
+                                 lineBox,
+                                 lineIndices,
+                                 lineOffset,
+                                 startPos,
+                                 endPos,
+                                 anchor,
+                                 firstLine,
+                                 lineHeight,
+                                 writingMode,
+                                 ltr,
+                                 !inlineSize.isAuto,
+                                 false,
+                                 textIndentInfo.hanging,
+                                 textIndent);
+                }
                 addWordToLine(result, currentPos, wordIndices, lineBox, lineIndices, ltr, firstLine);
 
                 finalizeLine(result,
@@ -1529,6 +1597,9 @@ void KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &properties,
             firstLine = false;
         }
         if (atEnd) {
+            if (!wordIndices.isEmpty()) {
+                addWordToLine(result, currentPos, wordIndices, lineBox, lineIndices, ltr, firstLine);
+            }
             finalizeLine(result,
                          currentPos,
                          lineBox,
@@ -2479,14 +2550,18 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                 Qt::yellow; pen.setColor(penColor); pen.setWidthF(72./xRes);
                 painter.setPen(pen);
                 painter.drawPolygon(tf.map(result.at(i).boundingBox));
-                painter.setPen(Qt::blue);
-                if (result.at(i).breakType != NoBreak){
+                if (result.at(i).breakType == SoftBreak){
+                    painter.setPen(Qt::blue);
+                    painter.drawPoint(tf.mapRect(result.at(i).boundingBox).center());
+                }
+                if (result.at(i).breakType == HardBreak){
+                    painter.setPen(Qt::red);
                     painter.drawPoint(tf.mapRect(result.at(i).boundingBox).center());
                 }
                 painter.setPen(Qt::red);
                 painter.drawPoint(result.at(i).finalPosition);
                 painter.restore();
-                */
+                //*/
                 /**
                  * There's an annoying problem here that officially speaking
                  * the chunks need to be unified into one single path before

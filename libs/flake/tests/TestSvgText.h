@@ -47,6 +47,7 @@ private Q_SLOTS:
 
     void testEmptyTextChunk();
     void testTrailingWhitespace();
+    void testWhiteSpaceRules();
 
     void testConvertHtmlToSvg();
     void testTextWithMultipleRelativeOffsets();

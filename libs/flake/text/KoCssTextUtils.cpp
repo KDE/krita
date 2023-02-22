@@ -136,35 +136,44 @@ QString KoCssTextUtils::transformTextFullSizeKana(const QString &text)
     return transformedText;
 }
 
-QVector<bool> KoCssTextUtils::collapseSpaces(QString &text, KoSvgText::TextSpaceCollapse collapseMethod)
+QVector<bool> KoCssTextUtils::collapseSpaces(QString *text, KoSvgText::TextSpaceCollapse collapseMethod)
 {
-    QVector<bool> collapseList(text.size());
+    QString modifiedText = *text;
+    QVector<bool> collapseList(modifiedText.size());
     collapseList.fill(false);
     int spaceSequenceCount = 0;
-    for (int i = 0; i < text.size(); i++) {
+    for (int i = 0; i < modifiedText.size(); i++) {
+        bool firstOrLast = (i == 0 || i == modifiedText.size() - 1);
         bool collapse = false;
-        const QChar c = text.at(i);
+        const QChar c = modifiedText.at(i);
+        if (c == QChar::LineFeed || c == QChar::Tabulation) {
+            if (collapseMethod == KoSvgText::Collapse ||
+                    collapseMethod == KoSvgText::PreserveSpaces) {
+                modifiedText[i] = QChar::Space;
+                spaceSequenceCount += 1;
+                collapseList[i] = spaceSequenceCount > 1 || firstOrLast? true: false;
+                continue;
+            }
+        }
         if (c.isSpace()) {
             bool isSegmentBreak = c == QChar::LineFeed;
             bool isTab = c == QChar::Tabulation;
             spaceSequenceCount += 1;
-            if (spaceSequenceCount > 1) {
+            if (spaceSequenceCount > 1 || firstOrLast) {
                 switch (collapseMethod) {
                 case KoSvgText::Collapse:
                 case KoSvgText::Discard:
                     collapse = true;
                     break;
                 case KoSvgText::Preserve:
+                case KoSvgText::PreserveSpaces:
                     collapse = false;
                     break;
                 case KoSvgText::PreserveBreaks:
                     collapse = !isSegmentBreak;
                     if (isTab) {
-                        text[i] = QChar::Space;
+                        modifiedText[i] = QChar::Space;
                     }
-                    break;
-                case KoSvgText::PreserveSpaces:
-                    collapse = isSegmentBreak;
                     break;
                 }
             }
@@ -173,6 +182,17 @@ QVector<bool> KoCssTextUtils::collapseSpaces(QString &text, KoSvgText::TextSpace
         }
         collapseList[i] = collapse;
     }
+    // go backward to ensure any dangling space characters are marked as collapsed.
+    for (int i = modifiedText.size()-1; i>=0; i--) {
+        if (modifiedText.at(i).isSpace()) {
+            if (collapseMethod == KoSvgText::Collapse) {
+                collapseList[i] = true;
+            }
+        } else {
+            break;
+        }
+    }
+    *text = modifiedText;
     return collapseList;
 }
 

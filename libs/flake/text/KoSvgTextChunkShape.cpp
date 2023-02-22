@@ -271,10 +271,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
     }
 
     QVector<KoSvgText::CharTransformation> localCharTransformations() const override {
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(isTextNode(), QVector<KoSvgText::CharTransformation>());
-
-        const QVector<KoSvgText::CharTransformation> t = q->s->localTransformations;
-        return t.mid(0, qMin(t.size(), q->s->text.size()));
+        return q->s->localTransformations;
     }
 
     static QString getBidiOpening(bool ltr, KoSvgText::UnicodeBidi bidi)
@@ -714,7 +711,7 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
         }
     }
 
-    if (layoutInterface()->isTextNode()) {
+    if (!s->localTransformations.isEmpty()) {
 
         QVector<qreal> xPos;
         QVector<qreal> yPos;
@@ -995,14 +992,9 @@ bool KoSvgTextChunkShape::loadSvgTextNode(const QDomText &text, SvgLoadingContex
 
     //ENTER_FUNCTION() << text.data() << "-->" << data;
 
-    s->text = data;
+    s->text = text.data();
 
     return !data.isEmpty();
-}
-
-void KoSvgTextChunkShape::normalizeCharTransformations()
-{
-    applyParentCharTransformations(s->localTransformations);
 }
 
 void KoSvgTextChunkShape::simplifyFillStrokeInheritance()
@@ -1232,35 +1224,4 @@ KoSvgText::KoSvgCharChunkFormat KoSvgTextChunkShape::fetchCharFormat() const
     format.setAssociatedShape(const_cast<KoSvgTextChunkShape*>(this));
 
     return format;
-}
-
-void KoSvgTextChunkShape::applyParentCharTransformations(const QVector<KoSvgText::CharTransformation> transformations)
-{
-    if (shapeCount()) {
-        int numCharsPassed = 0;
-
-        Q_FOREACH (KoShape *shape, shapes()) {
-            KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
-
-            const int numCharsInSubtree = chunkShape->layoutInterface()->numChars();
-            QVector<KoSvgText::CharTransformation> t = transformations.mid(numCharsPassed, numCharsInSubtree);
-            if (t.isEmpty()) break;
-
-            chunkShape->applyParentCharTransformations(t);
-            numCharsPassed += numCharsInSubtree;
-
-            if (numCharsPassed >= transformations.size()) break;
-        }
-    } else {
-        for (int i = 0; i < qMin(transformations.size(), s->text.size()); i++) {
-            KIS_SAFE_ASSERT_RECOVER_RETURN(s->localTransformations.size() >= i);
-
-            if (s->localTransformations.size() == i) {
-                s->localTransformations.append(transformations[i]);
-            } else {
-                s->localTransformations[i].mergeInParentTransformation(transformations[i]);
-            }
-        }
-    }
 }

@@ -71,17 +71,6 @@ public:
     bool loadSvgTextNode(const QDomText &text, SvgLoadingContext &context);
 
     /**
-     * Normalize the SVG character transformations
-     *
-     * In SVG x,y,dx,dy,rotate attributes are inherited from the parent shapes
-     * in a curious ways. We do not want to unwind the links on the fly, so we
-     * just parse and adjust them right when the loading completed. After
-     * normalizeCharTransformations() is finished, all the child shapes will
-     * have local transformations set according to the parent's lists.
-     */
-    void normalizeCharTransformations();
-
-    /**
      * Compress the inheritance of 'fill' and 'stroke'.
      *
      * The loading code makes no difference if the fill or stroke was inherited
@@ -174,8 +163,6 @@ protected:
 
 private:
     KoSvgText::KoSvgCharChunkFormat fetchCharFormat() const;
-
-    void applyParentCharTransformations(const QVector<KoSvgText::CharTransformation> transformations);
 
 private:
     class Private;

@@ -358,8 +358,10 @@ void TestSvgText::testSimpleText()
     QCOMPARE(chunkShape->shapeCount(), 0);
     QCOMPARE(chunkShape->layoutInterface()->isTextNode(), true);
 
-    QCOMPARE(chunkShape->layoutInterface()->numChars(), 17);
-    QCOMPARE(chunkShape->layoutInterface()->nodeText(), QString("Hello, out there!"));
+    QString text = chunkShape->layoutInterface()->nodeText();
+    QVector<bool> collapse = KoCssTextUtils::collapseSpaces(&text, KoSvgText::Collapse);
+    QCOMPARE(collapse.count(false), 17);
+    QCOMPARE(text, QString("         Hello, out there!         "));
 
     QVector<KoSvgText::CharTransformation> transform = chunkShape->layoutInterface()->localCharTransformations();
     QCOMPARE(transform.size(), 1);
@@ -376,7 +378,7 @@ void TestSvgText::testSimpleText()
     QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks = chunkShape->layoutInterface()->collectSubChunks(false, dummy);
 
     QCOMPARE(subChunks.size(), 1);
-    QCOMPARE(subChunks[0].text.size(), 17);
+    QCOMPARE(subChunks[0].text.size(), 35);
     //qDebug() << ppVar(subChunks[0].text);
     //qDebug() << ppVar(subChunks[0].transformation);
     //qDebug() << ppVar(subChunks[0].format);
@@ -415,7 +417,22 @@ void TestSvgText::testComplexText()
 
     QCOMPARE(baseShape->shapeCount(), 4);
     QCOMPARE(baseShape->layoutInterface()->isTextNode(), false);
-    QCOMPARE(baseShape->layoutInterface()->numChars(), 41);
+    QCOMPARE(baseShape->layoutInterface()->numChars(), 55);
+
+    QVector<KoSvgText::CharTransformation> baseTransform = baseShape->layoutInterface()->localCharTransformations();
+    QCOMPARE(baseTransform.size(), 9);
+    QVERIFY(bool(baseTransform[0].xPos));
+    QVERIFY(!bool(baseTransform[1].xPos));
+    QCOMPARE(baseTransform.at(0).xPos, 7.0);
+    QVERIFY(baseTransform.at(0).xPos); // if there's a value it's always set.
+
+    for (int i = 0; i < 9; i++) {
+        QVERIFY(!i || bool(baseTransform[i].dxPos));
+
+        if (i) {
+            QCOMPARE(*baseTransform[i].dxPos, qreal(i));
+        }
+    }
 
     {   // chunk 0: "Hello, "
         KoSvgTextChunkShape *chunk = toChunkShape(baseShape->shapes()[0]);
@@ -423,29 +440,20 @@ void TestSvgText::testComplexText()
         QCOMPARE(chunk->shapeCount(), 0);
         QCOMPARE(chunk->layoutInterface()->isTextNode(), true);
 
-        QCOMPARE(chunk->layoutInterface()->numChars(), 7);
-        QCOMPARE(chunk->layoutInterface()->nodeText(), QString("Hello, "));
+        QString text = chunk->layoutInterface()->nodeText();
+        QVector<bool> collapse = KoCssTextUtils::collapseSpaces(&text, KoSvgText::Collapse);
+
+        QCOMPARE(collapse.count(false), 6);
+        QCOMPARE(text, QString("             Hello, "));
 
         QVector<KoSvgText::CharTransformation> transform = chunk->layoutInterface()->localCharTransformations();
-        QCOMPARE(transform.size(), 7);
-        QVERIFY(bool(transform[0].xPos));
-        QVERIFY(!bool(transform[1].xPos));
-
-        for (int i = 0; i < 7; i++) {
-            QVERIFY(!i || bool(transform[i].dxPos));
-
-            if (i) {
-                QCOMPARE(*transform[i].dxPos, qreal(i));
-            }
-        }
+        QCOMPARE(transform.size(), 0);
 
         bool dummy = false;
         QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks = chunk->layoutInterface()->collectSubChunks(false, dummy);
 
         QCOMPARE(subChunks.size(), 1); // used to be 7, but we got rid of aggresive subchunking.
-        QCOMPARE(subChunks[0].text.size(), 7);
-        QCOMPARE(*subChunks[0].transformation.at(0).xPos, 7.0);
-        QVERIFY(subChunks[0].transformation.at(0).xPos); // if there's a value it's always set.
+        QCOMPARE(subChunks[0].text.size(), 20);
     }
 
     {   // chunk 1: "out"
@@ -454,24 +462,18 @@ void TestSvgText::testComplexText()
         QCOMPARE(chunk->shapeCount(), 0);
         QCOMPARE(chunk->layoutInterface()->isTextNode(), true);
 
-        QCOMPARE(chunk->layoutInterface()->numChars(), 3);
-        QCOMPARE(chunk->layoutInterface()->nodeText(), QString("out"));
+        QCOMPARE(chunk->layoutInterface()->numChars(), 4);
+        QCOMPARE(chunk->layoutInterface()->nodeText(), QString("ou\nt"));
 
         QVector<KoSvgText::CharTransformation> transform = chunk->layoutInterface()->localCharTransformations();
-        QCOMPARE(transform.size(), 2);
+        QCOMPARE(transform.size(), 1);
         QVERIFY(bool(transform[0].xPos));
-        QVERIFY(!bool(transform[1].xPos));
-
-        for (int i = 0; i < 2; i++) {
-            QVERIFY(bool(transform[i].dxPos));
-            QCOMPARE(*transform[i].dxPos, qreal(i + 7));
-        }
 
         bool dummy = false;
         QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks = chunk->layoutInterface()->collectSubChunks(false, dummy);
 
         QCOMPARE(subChunks.size(), 1);
-        QCOMPARE(subChunks[0].text.size(), 3);
+        QCOMPARE(subChunks[0].text.size(), 4);
     }
 
     {   // chunk 2: " there "
@@ -959,12 +961,12 @@ void TestSvgText::testConvertToStrippedSvg()
     QCOMPARE(stylesText, QString("<defs/>"));
     QCOMPARE(svgText,
              QString("<text text-rendering=\"auto\" fill=\"#0000ff\" stroke-opacity=\"0\" stroke=\"#000000\" stroke-width=\"0\" stroke-linecap=\"square\" "
-                     "stroke-linejoin=\"bevel\" style=\"font-family: DejaVu Sans;font-size: 15;\"><tspan x=\"2\" y=\"24\">S</tspan><tspan "
+                     "stroke-linejoin=\"bevel\" x=\"2\" y=\"24\" style=\"font-family: DejaVu Sans;font-size: 15;\"><tspan>        S</tspan><tspan "
                      "fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
 
     // test loading
 
-    svgText = "<text fill=\"#00ff00\" font-family=\"DejaVu Sans\" font-size=\"19\"><tspan x=\"2\" y=\"24\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>";
+    svgText = "<text fill=\"#00ff00\" x=\"2\" y=\"24\" font-family=\"DejaVu Sans\" font-size=\"19\"><tspan>        S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>";
 
     QVERIFY(converter.convertFromSvg(svgText, stylesText, QRectF(0,0,30,30), 72.0));
 
@@ -1021,7 +1023,7 @@ void TestSvgText::testConvertToStrippedSvgNullOrigin()
     QCOMPARE(stylesText, QString("<defs/>"));
     QCOMPARE(svgText,
              QString("<text text-rendering=\"auto\" fill=\"#0000ff\" stroke-opacity=\"0\" stroke=\"#000000\" stroke-width=\"0\" stroke-linecap=\"square\" "
-                     "stroke-linejoin=\"bevel\" style=\"font-family: DejaVu Sans;font-size: 15;\"><tspan x=\"0\" y=\"0\">S</tspan><tspan "
+                     "stroke-linejoin=\"bevel\" x=\"0\" y=\"0\" style=\"font-family: DejaVu Sans;font-size: 15;\"><tspan>        S</tspan><tspan "
                      "fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
 }
 
@@ -1143,6 +1145,23 @@ void TestSvgText::testTrailingWhitespace()
             }
         }
     }
+}
+
+void TestSvgText::testWhiteSpaceRules()
+{
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-white-space.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+    QXmlInputSource data;
+    data.setData(file.readAll());
+
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
+
+    SvgRenderTester t(data.data());
+    t.setFuzzyThreshold(5);
+    t.test_standard("text-test-white-space", QSize(400, 320), 72.0);
 }
 
 void TestSvgText::testConvertHtmlToSvg()

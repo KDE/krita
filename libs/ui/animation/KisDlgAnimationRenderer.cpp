@@ -9,6 +9,7 @@
 #include <QStandardPaths>
 #include <QPluginLoader>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QMessageBox>
 #include <QStringList>
 #include <QProcess>

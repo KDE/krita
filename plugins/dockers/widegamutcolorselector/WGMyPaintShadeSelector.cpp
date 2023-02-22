@@ -123,19 +123,17 @@ void WGMyPaintShadeSelector::paintEvent(QPaintEvent *)
     QRect pickRectHighDPI = QRect(QPoint(0, 0), size()*devicePixelRatioF());
     KisSequentialIterator it(m_realPixelCache, pickRectHighDPI);
     KisSequentialIterator borderIt(m_realCircleBorder, pickRectHighDPI);
-    QVector4D values, values2;
+    QVector4D values;
+    QVector4D values2;
 
-
-    while (it.nextPixel()) {
-        borderIt.nextPixel();
-
-        int x = it.x();
-        int y = it.y();
+    while (it.nextPixel() && borderIt.nextPixel()) {
+        const int x = it.x();
+        const int y = it.y();
 
         bool needsBlending = getChannelValues(QPoint(x, y), values, values2);
 
         if (needsBlending) {
-            qreal aaFactor = values2[3];
+            const qreal aaFactor = static_cast<qreal>(values2[3]);
             KoColor color = m_model->convertChannelValuesToKoColor(values2);
             color.setOpacity(aaFactor);
             setColorWithIterator(borderIt, color, pixelSize);

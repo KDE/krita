@@ -49,13 +49,18 @@ ExternalProject_Add(
     DEPENDS ext_qt ext_extra_cmake_modules
 )
 
+set (_karchive_extra_flags "")
+if (ANDROID)
+    set(_karchive_extra_flags "-DCMAKE_DISABLE_FIND_PACKAGE_PkgConfig=1")
+endif()
+
 ExternalProject_Add(
     ext_karchive
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://download.kde.org/stable/frameworks/5.101/karchive-5.101.0.tar.xz
     URL_HASH SHA256=58bcb6c61bc4a3fe48a0cbeaf392d42b6b8d33e1bc4c51faf24db0912ecfa9b0
 
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE} ${_karchive_extra_flags}
 
     UPDATE_COMMAND ""
     DEPENDS ext_qt ext_extra_cmake_modules

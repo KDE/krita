@@ -51,10 +51,11 @@ public:
 
     void reset();
 
-    void allocateMoreBuffers(uint numBuffers);
+    void allocateMoreBuffers();
 
 private:
-    void addBuffersImpl(int buffersToAdd, int bufferSize);
+    void addBuffersImpl(size_t buffersToAdd, int bufferSize);
+
 
 private:
     struct Private;

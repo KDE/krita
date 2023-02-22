@@ -326,5 +326,18 @@ private:
     T *m_lock;
 };
 
+#include <type_traits>
+
+// Makes compilers happy because Linux and macOS differ on how they define
+// quint64 (unsigned long long) vs. size_t (unsigned long (int)).
+template <typename T>
+inline T nextPowerOfTwo(T v)
+{
+    static_assert(std::is_integral<T>::value, "Value has to be an integral number");
+    using base_type = typename std::conditional<sizeof(T) == sizeof(quint64), quint64, quint32>::type;
+    using common_type = typename std::conditional<std::is_signed<T>::value, typename std::make_signed<base_type>::type, typename std::make_unsigned<base_type>::type>::type;
+    return static_cast<T>(qNextPowerOfTwo(static_cast<common_type>(v)));
+}
+
 #endif // KISGLOBAL_H_
 

@@ -2596,6 +2596,10 @@ QList<KoShape *> KoSvgTextShape::Private::collectPaths(const KoShape *rootShape,
 {
     const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
 
+    QList<KoShape *> shapes;
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(chunkShape, shapes);
+
     QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations = chunkShape->layoutInterface()->textDecorations();
     QColor textDecorationColor = chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::TextDecorationColorId).value<QColor>();
     QSharedPointer<KoShapeBackground> decorationColor = chunkShape->background();
@@ -2603,7 +2607,6 @@ QList<KoShape *> KoSvgTextShape::Private::collectPaths(const KoShape *rootShape,
         decorationColor = QSharedPointer<KoColorBackground>(new KoColorBackground(textDecorationColor));
     }
 
-    QList<KoShape *> shapes;
     if (textDecorations.contains(KoSvgText::DecorationUnderline)) {
         KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationUnderline));
         shape->setBackground(decorationColor);

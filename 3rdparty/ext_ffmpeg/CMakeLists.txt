@@ -55,6 +55,8 @@ ExternalProject_Add(
         COMMAND ${CMAKE_COMMAND} -E copy_directory 
             ${CMAKE_CURRENT_BINARY_DIR}/theora_meson
             <SOURCE_DIR>
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0010-theora-Update-to-1.2.0.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0011-theora-Add-Arm-support.patch
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}

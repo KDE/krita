@@ -1940,6 +1940,7 @@ void KoSvgTextShape::Private::computeTextDecorations( // NOLINT(readability-func
         if (chunkShape->layoutInterface()->textPath()) {
             textPathSide = chunkShape->layoutInterface()->textOnPathInfo().side == TextPathSideRight;
             if (chunkShape->layoutInterface()->textOnPathInfo().startOffsetIsPercentage) {
+                KIS_ASSERT(currentTextPath);
                 currentTextPathOffset = currentTextPath->outline().length() * (0.01 * chunkShape->layoutInterface()->textOnPathInfo().startOffset);
             } else {
                 currentTextPathOffset = chunkShape->layoutInterface()->textOnPathInfo().startOffset;

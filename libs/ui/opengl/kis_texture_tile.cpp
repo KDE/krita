@@ -18,6 +18,10 @@
 #define GL_BGRA 0x814F
 #endif
 
+#ifndef GL_RGBA16_EXT
+#define GL_RGBA16_EXT 0x805B
+#endif
+
 
 void KisTextureTile::setTextureParameters()
 {

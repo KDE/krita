@@ -11,13 +11,12 @@
 #include "kis_assert.h"
 #include "kis_opengl.h"
 
-
 KisOpenGLBufferCircularStorage::BufferBinder::BufferBinder(KisOpenGLBufferCircularStorage *bufferStorage, const void **dataPtr, int dataSize) {
     if (bufferStorage) {
         m_buffer = bufferStorage->getNextBuffer();
         m_buffer->bind();
         m_buffer->write(0, *dataPtr, dataSize);
-        *dataPtr = 0;
+        *dataPtr = nullptr;
     }
 
 }
@@ -32,13 +31,12 @@ KisOpenGLBufferCircularStorage::BufferBinder::~BufferBinder() {
     }
 }
 
-
-struct KisOpenGLBufferCircularStorage::Private
+struct Q_DECL_HIDDEN KisOpenGLBufferCircularStorage::Private
 {
-    int nextBuffer = 0;
+    std::vector<QOpenGLBuffer> buffers;
+    decltype(buffers)::size_type nextBuffer = 0;
     int bufferSize = 0;
     QOpenGLBuffer::Type type = QOpenGLBuffer::QOpenGLBuffer::VertexBuffer;
-    std::vector<QOpenGLBuffer> buffers;
 };
 
 
@@ -53,9 +51,7 @@ KisOpenGLBufferCircularStorage::KisOpenGLBufferCircularStorage(QOpenGLBuffer::Ty
     m_d->type = type;
 }
 
-KisOpenGLBufferCircularStorage::~KisOpenGLBufferCircularStorage()
-{
-}
+KisOpenGLBufferCircularStorage::~KisOpenGLBufferCircularStorage() = default;
 
 void KisOpenGLBufferCircularStorage::allocate(int numBuffers, int bufferSize)
 {
@@ -97,7 +93,11 @@ void KisOpenGLBufferCircularStorage::allocateMoreBuffers()
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->buffers.empty());
 
-    std::rotate(m_d->buffers.begin(), m_d->buffers.begin() + m_d->nextBuffer, m_d->buffers.end());
+    QOpenGLBuffer *const begin = &(*m_d->buffers.begin());
+    QOpenGLBuffer *const middle = begin + m_d->nextBuffer;
+    QOpenGLBuffer *const end = &(*m_d->buffers.end());
+
+    std::rotate(begin, middle, end);
 
     m_d->nextBuffer = m_d->buffers.size();
 

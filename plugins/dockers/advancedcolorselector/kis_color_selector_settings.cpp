@@ -515,9 +515,8 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->shadeSelectorUpdateOnForeground->setChecked(true);
     ui->shadeSelectorUpdateOnBackground->setChecked(true);
 
-    bool asGradient = true;
-    if(asGradient) ui->minimalShadeSelectorAsGradient->setChecked(true);
-    else ui->minimalShadeSelectorAsColorPatches->setChecked(true);
+    ui->minimalShadeSelectorAsGradient->setChecked(true);
+    ui->minimalShadeSelectorAsColorPatches->setChecked(false);
 
     ui->minimalShadeSelectorPatchesPerLine->setValue(10);
     ui->minimalShadeSelectorLineSettings->fromString("0|0.2|0|0|0|0|0;1|0|1|1|0|0|0;2|0|-1|1|0|0|0;");

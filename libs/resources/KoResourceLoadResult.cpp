@@ -48,12 +48,12 @@ KoResourceLoadResult::~KoResourceLoadResult()
 {
 }
 
-KoResourceSP KoResourceLoadResult::resource() const
+KoResourceSP KoResourceLoadResult::resource() const noexcept
 {
     return m_d->value.which() == 0 ? boost::get<KoResourceSP>(m_d->value) : KoResourceSP();
 }
 
-KoEmbeddedResource KoResourceLoadResult::embeddedResource() const
+KoEmbeddedResource KoResourceLoadResult::embeddedResource() const noexcept
 {
     return m_d->value.which() == 1 ? boost::get<KoEmbeddedResource>(m_d->value) : KoEmbeddedResource();
 }

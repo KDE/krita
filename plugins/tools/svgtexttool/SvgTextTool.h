@@ -87,7 +87,7 @@ private:
     QDoubleSpinBox *m_defLetterSpacing {nullptr};
     KConfigGroup m_configGroup;
 
-    QRectF m_hoveredShapeHighlightRect;
+    QPainterPath m_hoveredShapeHighlightRect;
     boost::optional<KoColor> m_originalColor { boost::none };
 };
 

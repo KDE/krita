@@ -78,6 +78,32 @@ public:
 
     QString textRenderingString() const override;
 
+    /**
+     * @brief setShapesInside
+     * @param shapesInside the list of shapes to make up the content area.
+     */
+    void setShapesInside(QList<KoShape*> shapesInside);
+
+    /**
+     * @brief shapesInside
+     * @return the list of shapes that make up the content area.
+     */
+    QList<KoShape*> shapesInside() const;
+
+    /**
+     * @brief setShapesSubtract
+     * @param shapesSubtract the list of shapes that subtract from the wrapping area.
+     */
+    void setShapesSubtract(QList<KoShape*> shapesSubtract);
+
+    /**
+     * @brief shapesSubtract
+     * @return list of subtract shapes.
+     */
+    QList<KoShape*> shapesSubtract() const;
+
+    QMap<QString, QString> shapeTypeSpecificStyles(SvgSavingContext &context) const override;
+
 protected:
     /**
      * Show if the shape is a root of the text hierarchy. Always true for

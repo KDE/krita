@@ -1753,6 +1753,18 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
     m_context.pushGraphicsContext(e);
     uploadStyleToContext(e);
 
+    if (rootTextShape) {
+        if (!m_context.currentGC()->shapeInsideValue.isEmpty()) {
+            QList<KoShape*> shapesInside = createListOfShapesFromCSS(e, m_context.currentGC()->shapeInsideValue, m_context);
+            rootTextShape->setShapesInside(shapesInside);
+        }
+
+        if (!m_context.currentGC()->shapeSubtractValue.isEmpty()) {
+            QList<KoShape*> shapesSubtract = createListOfShapesFromCSS(e, m_context.currentGC()->shapeSubtractValue, m_context);
+            rootTextShape->setShapesSubtract(shapesSubtract);
+        }
+    }
+
     if (e.hasAttribute("krita:textVersion")) {
         m_context.currentGC()->textProperties.setProperty(KoSvgTextProperties::KraTextVersionId, e.attribute("krita:textVersion", "1").toInt());
 
@@ -2146,6 +2158,79 @@ KoShape * SvgParser::createShapeFromElement(const QDomElement &element, SvgLoadi
     }
 
     return object;
+}
+
+KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context)
+{
+    if (value.isEmpty()) {
+        return 0;
+    }
+    unsigned int start = value.indexOf('(') + 1;
+    unsigned int end = value.indexOf(')', start);
+
+    QString val = value.mid(start, end - start);
+    QString fillRule;
+    if (val.startsWith("evenodd")) {
+        start += QString("evenodd").size();
+        fillRule = "evenodd";
+    } else if (val.startsWith("nonzero")) {
+        start += QString("nonzero").size();
+        fillRule = "nonzero";
+    }
+    val = value.mid(start, end - start);
+
+    QDomElement el;
+    if (value.startsWith("url(")) {
+        start = value.indexOf('#') + 1;
+        KoShape *s = m_context.shapeById(value.mid(start, end - start));
+        if (s) {
+            return s->cloneShape();
+        }
+    } else if (value.startsWith("circle(")) {
+        el = e.ownerDocument().createElement("circle");
+        QStringList params = val.split(" ");
+        el.setAttribute("r", params.first());
+        if (params.contains("at")) {
+            // 1 == "at"
+            el.setAttribute("cx", params.at(2));
+            el.setAttribute("cy", params.at(3));
+        }
+    } else if (value.startsWith("ellipse(")) {
+        el = e.ownerDocument().createElement("ellipse");
+        QStringList params = val.split(" ");
+        el.setAttribute("rx", params.at(0));
+        el.setAttribute("ry", params.at(1));
+        if (params.contains("at")) {
+            // 2 == "at"
+            el.setAttribute("cx", params.at(3));
+            el.setAttribute("cy", params.at(4));
+        }
+    } else if (value.startsWith("polygon(")) {
+        el = e.ownerDocument().createElement("polygon");
+        el.setAttribute("points", val);
+    } else if (value.startsWith("path(")) {
+        el = e.ownerDocument().createElement("path");
+        el.setAttribute("d", val);
+    }
+
+    el.setAttribute("fill-rule", fillRule);
+    return createShapeFromElement(el, context);
+}
+
+QList<KoShape *> SvgParser::createListOfShapesFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context)
+{
+    QList<KoShape*> shapeList;
+    if (value == "auto" || value == "none") {
+        return shapeList;
+    }
+    QStringList params = value.split(")");
+    Q_FOREACH(const QString param, params) {
+        KoShape *s = createShapeFromCSS(e, param.trimmed()+")", context);
+        if (s) {
+            shapeList.append(s);
+        }
+    }
+    return shapeList;
 }
 
 KoShape *SvgParser::createShape(const QString &shapeID)

@@ -2430,6 +2430,43 @@ void TestSvgText::testTextBaselineAlignment()
     t.test_standard("test-text-baseline-alignment", QSize(100, 30), 72.0);
 }
 
+/**
+ * Tests the loading of CSS shapes by comparing the loaded shapes with their reference shapes.
+ */
+void TestSvgText::testCssShapeParsing()
+{
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/textShape-test-css-basic-shapes.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+    QXmlInputSource data;
+    data.setData(file.readAll());
+
+    SvgTester t(data.data());
+    t.parser.setResolution(QRectF(0, 0, 380, 380) /* px */, 72 /* ppi */);
+    t.run();
+
+    QStringList tests = {"circle" , "ellipse", "polygon", "path", "uri"};
+
+    Q_FOREACH(const QString test, tests) {
+        KoPathShape *refShape = dynamic_cast<KoPathShape*>(t.findShape("ref-"+test));
+        if (!refShape) {
+            // there's an oddity with <use> elements right now that results in their id being lost, so as a work-around, we
+            // instead check the shape that is being referenced.
+            refShape = dynamic_cast<KoPathShape*>(t.findShape("bubble"));
+        }
+        QVERIFY(refShape);
+        KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(t.findShape("test-"+test));
+        QVERIFY(textShape);
+
+        KoPathShape *testShape = dynamic_cast<KoPathShape*>(textShape->shapesInside().at(0));
+        QVERIFY(testShape);
+
+        QVERIFY2(refShape->outline() == testShape->outline(), QString("Outline mismatch for CSS Shape type %1").arg(test).toLatin1());
+    }
+
+}
+
 #include "kistest.h"
 
 

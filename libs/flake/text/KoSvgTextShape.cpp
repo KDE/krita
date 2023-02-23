@@ -42,6 +42,7 @@
 #include <SvgLoadingContext.h>
 #include <SvgGraphicContext.h>
 #include <SvgUtil.h>
+#include <SvgStyleWriter.h>
 
 #include <QApplication>
 #include <QFileInfo>
@@ -128,11 +129,30 @@ public:
 
     Private() = default;
 
-    Private(const Private &rhs) = default;
+    Private(const Private &rhs) {
+        Q_FOREACH (KoShape *shape, rhs.shapesInside) {
+            KoShape *clonedShape = shape->cloneShape();
+            KIS_ASSERT_RECOVER(clonedShape) { continue; }
+
+            shapesInside.append(clonedShape);
+        }
+        Q_FOREACH (KoShape *shape, rhs.shapesSubtract) {
+            KoShape *clonedShape = shape->cloneShape();
+            KIS_ASSERT_RECOVER(clonedShape) { continue; }
+
+            shapesSubtract.append(clonedShape);
+        }
+        textRendering = rhs.textRendering;
+        yRes = rhs.yRes;
+        xRes = rhs.xRes;
+        result = rhs.result;
+    };
 
     TextRendering textRendering = Auto;
     int xRes = 72;
     int yRes = 72;
+    QList<KoShape*> shapesInside;
+    QList<KoShape*> shapesSubtract;
 
     QVector<CharacterResult> result;
 
@@ -273,6 +293,19 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
         }
     }
     */
+    /* Debug
+    Q_FOREACH (KoShape *shapeInside, d->shapesInside) {
+        QPainterPath p = shapeInside->outline();
+        p = shapeInside->transformation().map(p);
+        painter.strokePath(p, QPen(Qt::green));
+    }
+    Q_FOREACH (KoShape *shapeInside, d->shapesSubtract) {
+        QPainterPath p = shapeInside->outline();
+        p = shapeInside->transformation().map(p);
+        painter.strokePath(p, QPen(Qt::red));
+    }
+    //*/
+
     painter.restore();
 }
 
@@ -317,6 +350,49 @@ QString KoSvgTextShape::textRenderingString() const
     } else {
         return "auto";
     }
+}
+
+void KoSvgTextShape::setShapesInside(QList<KoShape *> shapesInside)
+{
+    d->shapesInside = shapesInside;
+}
+
+QList<KoShape *> KoSvgTextShape::shapesInside() const
+{
+    return d->shapesInside;
+}
+
+void KoSvgTextShape::setShapesSubtract(QList<KoShape *> shapesSubtract)
+{
+    d->shapesSubtract = shapesSubtract;
+}
+
+QList<KoShape *> KoSvgTextShape::shapesSubtract() const
+{
+    return d->shapesSubtract;
+}
+
+QMap<QString, QString> KoSvgTextShape::shapeTypeSpecificStyles(SvgSavingContext &context) const
+{
+    QMap<QString, QString> map;
+    if (!d->shapesInside.isEmpty()) {
+        QStringList shapesInsideList;
+        Q_FOREACH(KoShape* shape, d->shapesInside) {
+            QString id = SvgStyleWriter::embedShape(shape, context);
+            shapesInsideList.append(QString("url(#%1)").arg(id));
+        }
+        map.insert("shape-inside", shapesInsideList.join(" "));
+    }
+    if (!d->shapesSubtract.isEmpty()) {
+        QStringList shapesInsideList;
+        Q_FOREACH(KoShape* shape, d->shapesSubtract) {
+            QString id = SvgStyleWriter::embedShape(shape, context);
+            shapesInsideList.append(QString("url(#%1)").arg(id));
+        }
+        map.insert("shape-subtract", shapesInsideList.join(" "));
+    }
+
+    return map;
 }
 
 void KoSvgTextShape::resetTextShape()

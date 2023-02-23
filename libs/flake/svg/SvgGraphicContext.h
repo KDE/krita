@@ -65,6 +65,8 @@ public:
     bool autoFillMarkers {false};
 
     KoSvgTextProperties textProperties;
+    QString shapeInsideValue; ///< String of value shape-inside, will be parsed later.
+    QString shapeSubtractValue; ///< String of value shape-subtract, will be parsed later.
 private:
     SvgGraphicsContext& operator=(const SvgGraphicsContext &gc) = default; ///< used by copy constructor, shouldn't be public
 };

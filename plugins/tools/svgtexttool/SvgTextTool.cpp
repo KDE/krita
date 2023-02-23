@@ -42,6 +42,7 @@
 #include "KoToolManager.h"
 #include <KoShapeFillWrapper.h>
 #include "KoCanvasResourceProvider.h"
+#include <KoPathShape.h>
 
 #include "KisHandlePainterHelper.h"
 #include <commands/KoKeepShapesSelectedCommand.h>
@@ -109,13 +110,13 @@ void SvgTextTool::deactivate()
         canvas()->resourceManager()->setForegroundColor(*m_originalColor);
     }
 
-    QRectF updateRect = m_hoveredShapeHighlightRect;
+    QRectF updateRect = m_hoveredShapeHighlightRect.boundingRect();
 
     KoSvgTextShape *shape = selectedShape();
     if (shape) {
         updateRect |= shape->boundingRect();
     }
-    m_hoveredShapeHighlightRect = QRectF();
+    m_hoveredShapeHighlightRect = QPainterPath();
 
     canvas()->updateCanvas(updateRect);
 }
@@ -339,7 +340,7 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
     if (!m_hoveredShapeHighlightRect.isEmpty()) {
         handlePainter.setHandleStyle(KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline());
         QPainterPath path;
-        path.addRect(m_hoveredShapeHighlightRect);
+        path.addPath(m_hoveredShapeHighlightRect);
         handlePainter.drawPath(path);
     }
 }
@@ -364,20 +365,29 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
 
 void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    QRectF updateRect = m_hoveredShapeHighlightRect;
+    QRectF updateRect = m_hoveredShapeHighlightRect.boundingRect();
 
     if (m_dragging) {
         m_dragEnd = event->point;
-        m_hoveredShapeHighlightRect = QRectF();
+        m_hoveredShapeHighlightRect = QPainterPath();
         updateRect |= QRectF(m_dragStart, m_dragEnd).normalized().toAlignedRect();
         event->accept();
     } else {
         KoSvgTextShape *hoveredShape = dynamic_cast<KoSvgTextShape *>(canvas()->shapeManager()->shapeAt(event->point));
         if (hoveredShape) {
-            m_hoveredShapeHighlightRect = hoveredShape->boundingRect();
-            updateRect |= m_hoveredShapeHighlightRect;
+            if (hoveredShape->shapesInside().isEmpty()) {
+                m_hoveredShapeHighlightRect.addRect(hoveredShape->boundingRect());
+            } else {
+                Q_FOREACH(KoShape *shape, hoveredShape->shapesInside()) {
+                    KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
+                    if (path) {
+                        m_hoveredShapeHighlightRect.addPath(hoveredShape->transformation().map(path->transformation().map(path->outline())));
+                    }
+                }
+            }
+            updateRect |= m_hoveredShapeHighlightRect.boundingRect();
         } else {
-            m_hoveredShapeHighlightRect = QRect();
+            m_hoveredShapeHighlightRect = QPainterPath();
         }
         event->ignore();
     }

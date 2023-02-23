@@ -163,6 +163,12 @@ protected:
     /// Creates shape from specified svg element
     KoShape * createShapeFromElement(const QDomElement &element, SvgLoadingContext &context);
 
+    /// Creates a shape from a CSS shapes definition.
+    KoShape * createShapeFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context);
+
+    /// Create a list of shapes from a CSS shapes definition with potentially multiple shapes.
+    QList<KoShape*> createListOfShapesFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context);
+
     /// Builds the document from the given shapes list
     void buildDocument(QList<KoShape*> shapes);
 

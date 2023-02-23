@@ -83,6 +83,7 @@ public:
         styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
         styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit";
         styleAttributes << "opacity" << "filter" << "clip-path" << "clip-rule" << "mask";
+        styleAttributes << "shape-inside" << "shape-subtract";
         styleAttributes << "marker" << "marker-start" << "marker-mid" << "marker-end" << "krita:marker-fill-method";
     }
 
@@ -281,6 +282,10 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             unsigned int end = params.indexOf(')', start);
             gc->clipPathId = params.mid(start, end - start);
         }
+    } else if (command == "shape-inside") {
+        gc->shapeInsideValue = params;
+    } else if (command == "shape-subtract") {
+        gc->shapeSubtractValue = params;
     } else if (command == "clip-rule") {
         if (params == "nonzero")
             gc->clipRule = Qt::WindingFill;

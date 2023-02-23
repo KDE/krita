@@ -760,8 +760,13 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
     }
 
     QMap<QString, QString> attributes = ownProperties.convertToSvgTextAttributes();
+    QMap<QString, QString> shapeSpecificAttributes = shapeTypeSpecificStyles(context);
     QStringList allowedAttributes = textProperties().supportedXmlAttributes();
     QString styleString;
+
+    for (auto it = shapeSpecificAttributes.constBegin(); it != shapeSpecificAttributes.constEnd(); ++it) {
+        styleString.append(it.key().toLatin1().data()).append(": ").append(it.value()).append(";");
+    }
     for (auto it = attributes.constBegin(); it != attributes.constEnd(); ++it) {
         if (allowedAttributes.contains(it.key())) {
             context.shapeWriter().addAttribute(it.key().toLatin1().data(), it.value());

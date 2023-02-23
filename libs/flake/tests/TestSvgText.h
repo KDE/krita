@@ -85,6 +85,8 @@ private Q_SLOTS:
     void testTextWrap();
 
     void testTextBaselineAlignment();
+
+    void testCssShapeParsing();
 };
 
 #endif // TESTSVGTEXT_H

@@ -149,7 +149,19 @@ public:
 
     virtual QString textRenderingString() const
     {
-        return {};
+        return QString();
+    }
+
+    /**
+     * @brief chunkSpecificStyles
+     * Some properties are only applied to the rootshape,
+     * this includes inline-size, text-align, shape-inside, and so forth.
+     * @return list of styls for only this text.
+     */
+    virtual QMap<QString, QString> shapeTypeSpecificStyles(SvgSavingContext &context) const
+    {
+        Q_UNUSED(context);
+        return QMap<QString, QString>();
     }
 
 protected:

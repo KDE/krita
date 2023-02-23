@@ -49,7 +49,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-17 14:16+0100\n"
+"PO-Revision-Date: 2023-02-22 14:10+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -31833,7 +31833,7 @@ msgctxt ""
 "What is the copyright? These are from embedded strings from the icc profile, "
 "so they default to english."
 msgid "Copyright: %1"
-msgstr "Copyright: %1"
+msgstr "Autorská práva: %1"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:389
 #, kde-format
@@ -51539,15 +51539,15 @@ msgstr "Kanály na vrstvy"
 
 #: plugins/python/channels2layers/channels2layers.py:67
 msgid "RGB Colors"
-msgstr ""
+msgstr "Barvy RGB"
 
 #: plugins/python/channels2layers/channels2layers.py:68
 msgid "CMY Colors"
-msgstr ""
+msgstr "Barvy CMY"
 
 #: plugins/python/channels2layers/channels2layers.py:69
 msgid "CMYK Colors"
-msgstr ""
+msgstr "Barvy CMYK"
 
 #: plugins/python/channels2layers/channels2layers.py:70
 msgid "RGB Grayscale levels"

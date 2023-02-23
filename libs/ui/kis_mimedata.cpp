@@ -171,7 +171,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
 
         QScopedPointer<KisDocument> doc(createDocument(m_nodes, m_image, m_copiedBounds));
 
-        return doc->image()->projection()->convertToQImage(cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow())),
+        return doc->image()->projection()->convertToQImage(cfg.displayProfile(QApplication::desktop()->screenNumber(QApplication::activeWindow())),
                                                            KoColorConversionTransformation::internalRenderingIntent(),
                                                            KoColorConversionTransformation::internalConversionFlags());
     }

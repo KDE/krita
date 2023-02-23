@@ -160,7 +160,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint &topLeft, const Ki
     QImage qimage;
     KisConfig cfg(true);
     const KoColorProfile *monitorProfile =
-        cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
+        cfg.displayProfile(QApplication::desktop()->screenNumber(QApplication::activeWindow()));
     qimage = dev->convertToQImage(monitorProfile,
                                   KoColorConversionTransformation::internalRenderingIntent(),
                                   KoColorConversionTransformation::internalConversionFlags());
@@ -489,7 +489,7 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(
         const KoColorSpace *cs = nullptr;
         const KoColorProfile *profile = nullptr;
         if (!profile && behaviour == PASTE_ASSUME_MONITOR)
-            profile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
+            profile = cfg.displayProfile(QApplication::desktop()->screenNumber(QApplication::activeWindow()));
 
         cs = KoColorSpaceRegistry::instance()->rgb8(profile);
         if (!cs) {

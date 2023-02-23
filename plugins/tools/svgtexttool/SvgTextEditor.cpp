@@ -270,7 +270,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
         restoreGeometry(QByteArray::fromBase64(ba));
     }
     else {
-        const int scnum = QApplication::desktop()->screenNumber(parent);
+        const int scnum = QApplication::desktop()->screenNumber(QApplication::activeWindow());
         QRect desk = QGuiApplication::screens().at(scnum)->availableGeometry();
 
         quint32 x = desk.x();

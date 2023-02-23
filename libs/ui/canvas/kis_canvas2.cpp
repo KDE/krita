@@ -570,8 +570,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     m_d->frameCache = 0;
 
     KisConfig cfg(true);
-    QDesktopWidget dw;
-    const KoColorProfile *profile = cfg.displayProfile(dw.screenNumber(imageView()));
+    const KoColorProfile *profile = cfg.displayProfile(QApplication::desktop()->screenNumber(QApplication::activeWindow()));
     m_d->displayColorConverter.notifyOpenGLCanvasIsActive(useOpenGL && KisOpenGL::hasOpenGL());
     m_d->displayColorConverter.setMonitorProfile(profile);
 
@@ -1225,12 +1224,9 @@ void KisCanvas2::slotConfigChanged()
 
     resetCanvas(cfg.useOpenGL());
 
-    // HACK: Sometimes screenNumber(this->canvasWidget()) is not able to get the
-    //       proper screenNumber when moving the window across screens. Using
-    //       the coordinates should be able to work around this.
     // FIXME: We should change to associate the display profiles with the screen
     //        model and serial number instead. See https://bugs.kde.org/show_bug.cgi?id=407498
-    int canvasScreenNumber = QApplication::desktop()->screenNumber(this->canvasWidget());
+    const int canvasScreenNumber = QApplication::desktop()->screenNumber(QApplication::activeWindow());
     if (canvasScreenNumber != -1) {
         setDisplayProfile(cfg.displayProfile(canvasScreenNumber));
     } else {

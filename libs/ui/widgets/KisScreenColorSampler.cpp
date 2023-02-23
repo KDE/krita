@@ -181,7 +181,7 @@ KoColor KisScreenColorSampler::grabScreenColor(const QPoint &p)
      }
 
     const QDesktopWidget *desktop = QApplication::desktop();
-    const QPixmap pixmap = QGuiApplication::screens().at(desktop->screenNumber())->grabWindow(desktop->winId(),
+    const QPixmap pixmap = QGuiApplication::screens().at(desktop->screenNumber(QApplication::activeWindow()))->grabWindow(desktop->winId(),
                                                                                               p.x(), p.y(), 1, 1);
     QImage i = pixmap.toImage();
     KoColor col = KoColor();

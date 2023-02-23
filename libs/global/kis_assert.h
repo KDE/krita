@@ -62,7 +62,7 @@ KRITAGLOBAL_EXPORT void kis_safe_assert_recoverable(const char *assertion, const
  * }
  *
  */
-#define KIS_ASSERT_RECOVER_BREAK(cond) do { KIS_ASSERT_RECOVER(cond) { break; } } while (0)
+#define KIS_ASSERT_RECOVER_BREAK(cond) KIS_ASSERT_RECOVER(cond) { break; }
 
 /**
  * Equivalent of the following:
@@ -124,7 +124,7 @@ KRITAGLOBAL_EXPORT void kis_safe_assert_recoverable(const char *assertion, const
  */
 
 #define KIS_SAFE_ASSERT_RECOVER(cond) if (!(cond) && (kis_safe_assert_recoverable(#cond,__FILE__,__LINE__), true))
-#define KIS_SAFE_ASSERT_RECOVER_BREAK(cond) do { KIS_SAFE_ASSERT_RECOVER(cond) { break; } } while (0)
+#define KIS_SAFE_ASSERT_RECOVER_BREAK(cond) KIS_SAFE_ASSERT_RECOVER(cond) { break; }
 #define KIS_SAFE_ASSERT_RECOVER_RETURN(cond) do { KIS_SAFE_ASSERT_RECOVER(cond) { return; } } while (0)
 #define KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cond, val) do { KIS_SAFE_ASSERT_RECOVER(cond) { return (val); } } while (0)
 #define KIS_SAFE_ASSERT_RECOVER_NOOP(cond) do { KIS_SAFE_ASSERT_RECOVER(cond) { qt_noop(); } } while (0)

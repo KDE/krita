@@ -237,7 +237,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
      */
     m_d->bootstrapLodBlocked = true;
     connect(mainWindow, SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
-    connect(mainWindow, SIGNAL(screenChanged()), SLOT(slotConfigChanged()));
+    connect(mainWindow, &KisMainWindow::screenChanged, this, &KisCanvas2::slotConfigChanged);
 
     KisImageConfig config(false);
 

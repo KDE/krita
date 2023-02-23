@@ -625,7 +625,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     this->winId(); // Ensures the native window has been created.
     QWindow *window = this->windowHandle();
-    connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
+    connect(window, &QWindow::screenChanged, this, &KisMainWindow::windowScreenChanged);
 
 #ifdef Q_OS_ANDROID
     // HACK: This prevents the mainWindow from going beyond the screen with no
@@ -3036,8 +3036,8 @@ void KisMainWindow::windowScreenChanged(QScreen *screen)
 {
     emit screenChanged();
     d->screenConnectionsStore.clear();
-    d->screenConnectionsStore.addConnection(screen, SIGNAL(physicalDotsPerInchChanged(qreal)),
-                                            this, SIGNAL(screenChanged()));
+    d->screenConnectionsStore.addConnection(screen, &QScreen::physicalDotsPerInchChanged,
+                                            this, &KisMainWindow::screenChanged);
 }
 
 void KisMainWindow::showDockerTitleBars(bool show)

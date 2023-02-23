@@ -69,13 +69,13 @@ KisColorPatchesTableView::KisColorPatchesTableView(const QString &configPrefix, 
     reloadWidgetConfig();
 
     QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
-    QScrollerProperties props;
-    props.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy,
-                          QScrollerProperties::OvershootAlwaysOff);
-    props.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy,
-                          QScrollerProperties::OvershootAlwaysOff);
-    scroller->setScrollerProperties(props);
     if (scroller) {
+        QScrollerProperties props;
+        props.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy,
+                              QScrollerProperties::OvershootAlwaysOff);
+        props.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy,
+                              QScrollerProperties::OvershootAlwaysOff);
+        scroller->setScrollerProperties(props);
         connect(scroller,
                 SIGNAL(stateChanged(QScroller::State)),
                 this,

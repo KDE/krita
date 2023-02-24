@@ -44,7 +44,11 @@ QString KisWarningBlock::text() const
 
 QPixmap KisWarningBlock::pixmap() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     return m_d->lblIcon->pixmap(Qt::ReturnByValue);
+#else
+    return QPixmap(*m_d->lblIcon->pixmap());
+#endif
 }
 
 void KisWarningBlock::setText(const QString &text)

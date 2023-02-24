@@ -97,7 +97,9 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
 
     m_page->ffmpegLocation->setMode(KoFileDialog::OpenFile);
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     m_page->cmbRenderType->setPlaceholderText(i18nc("Not applicable. No render types without valid ffmpeg path.", "N/A"));
+#endif
 
     QFileInfo audioFileInfo(doc->image()->animationInterface()->audioChannelFileName());
     const bool hasAudio = audioFileInfo.exists();

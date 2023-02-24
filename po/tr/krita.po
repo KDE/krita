@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-20 16:39+0300\n"
+"PO-Revision-Date: 2023-02-23 18:59+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -11107,28 +11107,28 @@ msgstr "Yeni bir klon katman ekle"
 #, kde-format
 msgctxt "action"
 msgid "Clone Layer"
-msgstr "Klon Katman"
+msgstr "Katmanı Klonla"
 
 #. i18n: context: text @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2468
 #, kde-format
 msgctxt "action"
 msgid "Add &Vector Layer"
-msgstr "&Vektör Katman Ekle"
+msgstr "&Vektör Katmanı Ekle"
 
 #. i18n: context: toolTip @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2470
 #, kde-format
 msgctxt "action"
 msgid "Add a new Vector Layer"
-msgstr "Yeni Bir Vektör Katman Ekle"
+msgstr "Yeni Bir Vektör Katmanı Ekle"
 
 #. i18n: context: iconText @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2471
 #, kde-format
 msgctxt "action"
 msgid "Vector Layer"
-msgstr "Vektör Katman"
+msgstr "Vektör Katmanı"
 
 #. i18n: context: text @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2480
@@ -11723,7 +11723,7 @@ msgstr "Katmanı/Maskeyi Kaydet"
 #, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG..."
-msgstr "Vektör Katmanı SVG Olarak Kaydet..."
+msgstr "Vektör Katmanını SVG Olarak Kaydet..."
 
 #. i18n: context: toolTip @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
@@ -11733,7 +11733,7 @@ msgstr "Vektör Katmanı SVG Olarak Kaydet..."
 #, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG"
-msgstr "Vektör Katmanı SVG Olarak Kaydet"
+msgstr "Vektör Katmanını SVG Olarak Kaydet"
 
 #. i18n: context: text @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2876
@@ -16668,7 +16668,7 @@ msgstr "Gauss"
 #: libs/image/kis_clone_layer.cpp:320
 #, kde-format
 msgid "Copy From"
-msgstr "Buradan Kopyala"
+msgstr "Kopyalanma Yeri"
 
 #: libs/image/kis_filter_strategy.h:60
 #, kde-format
@@ -17497,7 +17497,7 @@ msgstr "Dosya Katman"
 #: plugins/impex/svg/kis_svg_import.cc:80
 #, kde-format
 msgid "Vector Layer"
-msgstr "Vektör Katman"
+msgstr "Vektör Katmanı"
 
 #: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:682
 #, kde-format
@@ -23201,7 +23201,7 @@ msgstr "Yeni ad:"
 #: libs/ui/flake/kis_shape_controller.cpp:196
 #, kde-format
 msgid "Vector Layer %1"
-msgstr "Vektör Katman %1"
+msgstr "Vektör Katmanı %1"
 
 #: libs/ui/flake/kis_take_all_shapes_command.cpp:15
 msgctxt "(qtundo-format)"
@@ -23745,7 +23745,7 @@ msgstr "Sil"
 #: libs/ui/forms/wdgchangeclonesource.ui:34
 #, kde-format
 msgid "Copy from:"
-msgstr "Buradan kopyala:"
+msgstr "Kopyalanma yeri:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgTabletSettings)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgColorSettings)
@@ -25766,7 +25766,7 @@ msgstr ""
 #: libs/ui/forms/wdgnewimage.ui:528
 #, kde-format
 msgid "As &raster layer"
-msgstr "&Raster katman olarak"
+msgstr "&Raster katmanı olarak"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:541
@@ -29426,7 +29426,7 @@ msgstr ""
 #: libs/ui/KisCloneDocumentStroke.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Clone Document"
-msgstr "Belgeyi Çoğalt"
+msgstr "Belgeyi Klonla"
 
 #: libs/ui/KisDocument.cpp:713
 #, kde-format
@@ -37875,8 +37875,8 @@ msgid ""
 "one or more vector shapes on the 'maskShapesLayer'</li></ul></p>"
 msgstr ""
 "<p>Maske şablonu geçersiz.</p><p>Lütfen şunları denetleyin:<ul><li>Şablonu "
-"'maskShapesLayer' adlı bir vektör katman adı içeriyor mu</"
-"li><li>'maskShapesLayer'da bir veya birden çok vektör şekil var mı</li></"
+"'maskShapesLayer' adlı bir vektör katmanı adı içeriyor mu</"
+"li><li>'maskShapesLayer'da bir veya birden çok vektör şekli var mı</li></"
 "ul></p>"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:309
@@ -46898,7 +46898,7 @@ msgid ""
 "layer will be converted into a paint layer."
 msgstr ""
 "Bu dosyada, yanlış bir kaynak düğüme sahip bir klon katman var. Bu katman, "
-"bir boya katmana dönüştürülecek."
+"bir boya katmanına dönüştürülecek."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:393
 #, kde-format
@@ -56241,8 +56241,8 @@ msgstr ""
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
-"Bu araç yalnızca vektör katmanlarda çalışır. Büyük olasılıkla taşıma aracını "
-"istiyorsunuz."
+"Bu araç yalnızca vektör katmanlarında çalışır. Büyük olasılıkla taşıma "
+"aracını istiyorsunuz."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
 msgctxt "(qtundo-format)"
@@ -56297,7 +56297,7 @@ msgstr "Şekilleri Ayır"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1831
 #, kde-format
 msgid "Vector Shape Actions"
-msgstr "Vektör Şekil Eylemleri"
+msgstr "Vektör Şekli Eylemleri"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1850
 #, kde-format

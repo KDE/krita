@@ -283,7 +283,6 @@ QString KisReferenceImage::internalFile() const
 void KisReferenceImage::setFilename(const QString &filename)
 {
     d->externalFilename = filename;
-    d->embed = false;
 }
 
 QColor KisReferenceImage::getPixel(QPointF position)

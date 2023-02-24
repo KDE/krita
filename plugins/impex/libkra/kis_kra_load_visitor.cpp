@@ -159,6 +159,7 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
                         break;
                     } else {
                         reference->setFilename(url);
+                        reference->setEmbed(false);
                     }
                 }
             }

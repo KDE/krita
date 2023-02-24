@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-22 00:56+0000\n"
+"POT-Creation-Date: 2023-02-23 00:56+0000\n"
 "PO-Revision-Date: 2023-02-19 21:29+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -15774,13 +15774,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Arbeidsflate"
 
-#: krita/main.cc:518
+#: krita/main.cc:521
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Kritisk feil"
 
-#: krita/main.cc:519
+#: krita/main.cc:522
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15789,14 +15789,14 @@ msgstr ""
 "Krita støttar ikkje Wayland-plattforma. Bruk XWayland for å køyra Krita på "
 "Wayland. Krita vert no lukka."
 
-#: krita/main.cc:615 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:618 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: åtvaring"
 
-#: krita/main.cc:616
+#: krita/main.cc:619
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15807,12 +15807,12 @@ msgstr ""
 "Dette er ikkje tilrådd. Ikkje meld frå om eventuelle feil du opplever.\n"
 "Du bør oppdatera til ein versjon som er støtta: Windows 7, 8, 8.1 eller 10."
 
-#: krita/main.cc:638 krita/main.cc:643
+#: krita/main.cc:641 krita/main.cc:646
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Teikneplate-støtte i Krita"
 
-#: krita/main.cc:639
+#: krita/main.cc:642
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15823,7 +15823,7 @@ msgstr ""
 "penneeining. Viss du har ei teikneplate, sjå til at drivaren til teikneplata "
 "er rett installert."
 
-#: krita/main.cc:644
+#: krita/main.cc:647
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16647,12 +16647,12 @@ msgstr "Storleik"
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:73
 #: libs/ui/widgets/kis_selection_options.cc:186
 #: libs/ui/widgets/kis_selection_options.cc:200
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:434
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:674
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:767
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:790
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1002
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1025
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:317
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:546
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:658
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:678
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:874
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:894
 #: plugins/dockers/griddocker/grid_config_widget.cpp:49
 #: plugins/dockers/griddocker/grid_config_widget.ui:198
 #: plugins/dockers/griddocker/grid_config_widget.ui:230
@@ -19360,7 +19360,7 @@ msgstr "Ut"
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:352
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:348 libs/ui/KisView.cpp:1134
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:451 libs/ui/KisView.cpp:1134
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19396,22 +19396,18 @@ msgstr "Lokale ressursar"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:526
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:534
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:538
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:544
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:547
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:554
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:568
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:648
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:675
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:579
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:600
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:607
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:676
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:716
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:776
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:674
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:714
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:774
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:771
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
@@ -20388,93 +20384,74 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr ""
 "Klarte ikkje teikna opp animasjonsbilete. Utdatafilene er ufullstendige."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:52
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
 #: libs/ui/KisMainWindow.cpp:2168
 #, kde-format
 msgid "Render Animation"
 msgstr "Teikn opp animasjon"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:101
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:90
 #, kde-format
 msgctxt "bicubic filtering"
 msgid "bicubic"
 msgstr "Bikubisk"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:102
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:91
 #, kde-format
 msgctxt "bilinear filtering"
 msgid "bilinear"
 msgstr "Bilineær"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:103
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:92
 #, kde-format
 msgctxt "lanczos3 filtering"
 msgid "lanczos3"
 msgstr "Lanczos3"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:104
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:93
 #, kde-format
 msgctxt "nearest neighbor filtering"
 msgid "neighbor"
 msgstr "Næraste nabo"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:105
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:94
 #, kde-format
 msgctxt "spline filtering"
 msgid "spline"
 msgstr "Spline"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:526
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:100
+#, kde-format
+msgctxt "Not applicable. No render types without valid ffmpeg path."
+msgid "N/A"
+msgstr ""
+
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:377
+#, kde-format
+msgid "No valid FFmpeg binary supplied..."
+msgstr ""
+
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:431
+#, kde-format
+msgid "FFmpeg Version: "
+msgstr ""
+
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:648
 #, kde-format
 msgid ""
-"<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on another "
-"free program called FFmpeg to turn frame-by-frame animations into video "
-"files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-"i><br><br>            To learn more about setting up Krita for rendering "
-"animations, <a href=\"https://docs.krita.org/en/reference_manual/"
-"render_animation.html#setting-up-krita-for-exporting-animations\">please "
-"visit this section of our User Manual.</a>"
+"The FFmpeg that you've given us appears to be compressed. Please try to "
+"extract FFmpeg from the archive first."
 msgstr ""
-"<b>Finn ikkje programmet FFmpeg</b><br>                <i>Krita brukar eit "
-"eksternt program, FFmpeg (òg fri programvare), til å gjera animasjonar om "
-"til videofiler. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-"i><br><br>               Du kan lesa meir om korleis du set opp eksport av "
-"animasjonar til videofiler <a href=\"https://docs.krita.org/en/"
-"reference_manual/render_animation.html#setting-up-krita-for-exporting-"
-"animations\">i brukar­handboka vår</a>."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:534
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:554
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
 #, kde-format
 msgid ""
-"The location of FFmpeg is invalid. Please select the correct location of the "
-"FFmpeg executable on your system."
+"The FFmpeg that you've given us appears to be "
+"invalid.                                                     Please select "
+"the correct location of an FFmpeg executable on your system."
 msgstr ""
-"Adressa til FFmpeg er ugyldig. Vel rett mappe der FFmpeg-programfila er "
-"installert."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:538
-#, kde-format
-msgid "Please extract ffmpeg from the archive first."
-msgstr "Pakk ut «ffmpeg» frå arkivfila først."
-
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:545
-#, kde-format
-msgid ""
-"This is a source code archive. Please download the application archive "
-"('Windows Builds'), unpack it and then provide the path to the extracted "
-"ffmpeg file."
-msgstr ""
-"Dette er ei arkivfil med kjeldekode. Du må lasta ned arkivfila som inneheld "
-"programfila («Windows Builds»), pakka ut programfila frå arkivfila og så "
-"oppgje adressa til programfila du pakka ut."
-
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:548
-#, kde-format
-msgid "This is a source code archive. Please install ffmpeg instead."
-msgstr "Dette er ei arkivfil med kjeldekode. Installer heller «ffmpeg»."
-
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:568
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:675
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Vel namn på fila som animasjonen skal lagrast til."
@@ -20500,7 +20477,7 @@ msgstr " b/s"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:87
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:93
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:663
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:661
 #, kde-format
 msgctxt "Second as a unit following a value, like 60 s"
 msgid " s"
@@ -20705,27 +20682,27 @@ msgstr "FFmpeg er ugyldig"
 msgid "No FFMpeg found!"
 msgstr "Fann ikkje FFmpeg."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:676
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:674
 #, kde-format
 msgid "Your FFMpeg version does not support this format"
 msgstr "FFmpeg-versjonen din støttar ikkje dette formatet"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:716
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:714
 #, kde-format
 msgid "No video stream could be found!"
 msgstr "Fann ikkje nokon videostraum."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:776
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:774
 #, kde-format
 msgid "Failed to load video information"
 msgstr "Klarte ikkje henta videoinformasjon"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:332
+#: libs/ui/animation/KisFFMpegWrapper.cpp:352
 #, kde-format
 msgid "FFMpeg Crashed"
 msgstr "FFmpeg krasja"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:538
+#: libs/ui/animation/KisFFMpegWrapper.cpp:614
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -20736,13 +20713,13 @@ msgstr "Lastar inn videodata … %1 animasjonsbilete er undersøkte."
 msgid "ffmpeg could not be found at %1"
 msgstr "Fann ikkje «ffmpeg» i %1"
 
-#: libs/ui/animation/KisVideoSaver.cpp:137
+#: libs/ui/animation/KisVideoSaver.cpp:136
 #, kde-format
 msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
 msgstr "Lagra palett for filformatet %1."
 
-#: libs/ui/animation/KisVideoSaver.cpp:196
+#: libs/ui/animation/KisVideoSaver.cpp:195
 #, kde-format
 msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "
@@ -20750,10 +20727,18 @@ msgctxt ""
 msgid "Creating desired %1 file: %2/%3 frames."
 msgstr "Lagrar %1-fil: %2/%3 animasjonsbilete."
 
+#. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: libs/ui/animation/video_export_options_dialog.ui:31
+#: libs/ui/animation/video_export_options_dialog.ui:168
+#, kde-format
+msgid "Bitrate:"
+msgstr "Bitrate:"
+
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH264)
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH265)
-#: libs/ui/animation/video_export_options_dialog.ui:31
-#: libs/ui/animation/video_export_options_dialog.ui:82
+#: libs/ui/animation/video_export_options_dialog.ui:52
+#: libs/ui/animation/video_export_options_dialog.ui:103
 #, kde-format
 msgid "Constant Rate Factor:"
 msgstr "Konstantrate-faktor (CRF):"
@@ -20762,16 +20747,16 @@ msgstr "Konstantrate-faktor (CRF):"
 #. i18n: ectx: property (text), widget (QLabel, lblPresetH265)
 #. i18n: ectx: property (text), widget (QLabel, lblPresetWEBP)
 #. i18n: ectx: property (text), widget (QLabel, presetLabel)
-#: libs/ui/animation/video_export_options_dialog.ui:48
-#: libs/ui/animation/video_export_options_dialog.ui:99
-#: libs/ui/animation/video_export_options_dialog.ui:330
+#: libs/ui/animation/video_export_options_dialog.ui:69
+#: libs/ui/animation/video_export_options_dialog.ui:120
+#: libs/ui/animation/video_export_options_dialog.ui:351
 #: libs/ui/widgets/KoFillConfigWidget.ui:297
 #, kde-format
 msgid "Preset:"
 msgstr "Ferdigoppsett:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileH264)
-#: libs/ui/animation/video_export_options_dialog.ui:58
+#: libs/ui/animation/video_export_options_dialog.ui:79
 #, kde-format
 msgctxt "Label of H.264 encoder profiles"
 msgid "Profile:"
@@ -20779,47 +20764,41 @@ msgstr "Profil:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTuneH264)
 #. i18n: ectx: property (text), widget (QLabel, lblTuneH265)
-#: libs/ui/animation/video_export_options_dialog.ui:68
-#: libs/ui/animation/video_export_options_dialog.ui:119
+#: libs/ui/animation/video_export_options_dialog.ui:89
+#: libs/ui/animation/video_export_options_dialog.ui:140
 #, kde-format
 msgid "Tune:"
 msgstr "Juster:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileH265)
-#: libs/ui/animation/video_export_options_dialog.ui:109
+#: libs/ui/animation/video_export_options_dialog.ui:130
 #, kde-format
 msgctxt "Label of H.265 encoder profiles"
 msgid "Profile:"
 msgstr "Profil:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseHDRMetadata)
-#: libs/ui/animation/video_export_options_dialog.ui:129
+#: libs/ui/animation/video_export_options_dialog.ui:150
 #, kde-format
 msgid "HDR Mode"
 msgstr "HDR-modus"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnHdrMetadata)
-#: libs/ui/animation/video_export_options_dialog.ui:136
+#: libs/ui/animation/video_export_options_dialog.ui:157
 #, kde-format
 msgid "HDR Metadata..."
 msgstr "HDR-metadata …"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/animation/video_export_options_dialog.ui:147
-#, kde-format
-msgid "Bitrate:"
-msgstr "Bitrate:"
-
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/video_export_options_dialog.ui:168
+#: libs/ui/animation/video_export_options_dialog.ui:189
 #, kde-format
 msgid "Bitrate (MBit/s)"
 msgstr "Bitrate (megabit/s)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
-#: libs/ui/animation/video_export_options_dialog.ui:182
-#: libs/ui/animation/video_export_options_dialog.ui:289
+#: libs/ui/animation/video_export_options_dialog.ui:203
+#: libs/ui/animation/video_export_options_dialog.ui:310
 #, kde-format
 msgid "Lossless"
 msgstr "Tapsfri"
@@ -20827,53 +20806,47 @@ msgstr "Tapsfri"
 #. i18n: ectx: property (text), widget (QCheckBox, gifLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, apngLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLoop)
-#: libs/ui/animation/video_export_options_dialog.ui:193
-#: libs/ui/animation/video_export_options_dialog.ui:268
-#: libs/ui/animation/video_export_options_dialog.ui:340
+#: libs/ui/animation/video_export_options_dialog.ui:214
+#: libs/ui/animation/video_export_options_dialog.ui:289
+#: libs/ui/animation/video_export_options_dialog.ui:361
 #, kde-format
 msgid "Loop Animation"
 msgstr "Køyr animasjonen i sløyfe"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifTransDiff)
-#: libs/ui/animation/video_export_options_dialog.ui:200
+#: libs/ui/animation/video_export_options_dialog.ui:221
 #, kde-format
 msgid "Transparency Difference"
 msgstr "Gjennomsikts­differanse"
 
 #. i18n: ectx: property (text), widget (QRadioButton, gifAutoPalette)
-#: libs/ui/animation/video_export_options_dialog.ui:207
+#: libs/ui/animation/video_export_options_dialog.ui:228
 #, kde-format
 msgid "Auto-generate 8bit Palette"
 msgstr "Autogenerer 8-bit-palett"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
-#: libs/ui/animation/video_export_options_dialog.ui:217
+#: libs/ui/animation/video_export_options_dialog.ui:238
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:129
 #, kde-format
 msgid "Dithering:"
 msgstr "Mønsterspreiing:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseBayerScaleGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:227
+#: libs/ui/animation/video_export_options_dialog.ui:248
 #, kde-format
 msgid "Bayer Scale:"
 msgstr "Bayer-skalering:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDiffModeGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:244
+#: libs/ui/animation/video_export_options_dialog.ui:265
 #, kde-format
 msgid "Difference Mode:"
 msgstr "Differanse-modus:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, gifReserveTransparent)
-#: libs/ui/animation/video_export_options_dialog.ui:254
-#, kde-format
-msgid "Preserve Transparency"
-msgstr "Ta vare på gjennomsikt"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, gifReserveTransparent)
-#: libs/ui/animation/video_export_options_dialog.ui:257
+#: libs/ui/animation/video_export_options_dialog.ui:275
 #, no-c-format, kde-format
 msgid ""
 "<html><head/><body><p>GIF format supports up to 256 colors per frame/image. "
@@ -20906,32 +20879,38 @@ msgstr ""
 "støtta. Viss du treng dette, kan du bruka formata APNG eller WEBP.</span><br/"
 "></p></body></html>"
 
+#. i18n: ectx: property (text), widget (QCheckBox, gifReserveTransparent)
+#: libs/ui/animation/video_export_options_dialog.ui:278
+#, kde-format
+msgid "Preserve Transparency"
+msgstr "Ta vare på gjennomsikt"
+
 #. i18n: ectx: property (text), widget (QLabel, lblPredAPNG)
-#: libs/ui/animation/video_export_options_dialog.ui:275
+#: libs/ui/animation/video_export_options_dialog.ui:296
 #, kde-format
 msgid "Prediction Mode:"
 msgstr "Prediksjonsmodus:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCompressWEBP)
-#: libs/ui/animation/video_export_options_dialog.ui:296
+#: libs/ui/animation/video_export_options_dialog.ui:317
 #, kde-format
 msgid "Compression Level:"
 msgstr "Komprimeringsnivå:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQscaleWEBP)
-#: libs/ui/animation/video_export_options_dialog.ui:313
+#: libs/ui/animation/video_export_options_dialog.ui:334
 #, kde-format
 msgid "Image Quality:"
 msgstr "Biletkvalitet:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCustomLine)
-#: libs/ui/animation/video_export_options_dialog.ui:353
+#: libs/ui/animation/video_export_options_dialog.ui:374
 #, kde-format
 msgid "Custom Options:"
 msgstr "Tilpassa innstillingar:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
-#: libs/ui/animation/video_export_options_dialog.ui:362
+#: libs/ui/animation/video_export_options_dialog.ui:383
 #, kde-format
 msgid ""
 "Add any ffmpeg filtering options here. It will be put between source and "
@@ -20945,7 +20924,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
-#: libs/ui/animation/video_export_options_dialog.ui:369
+#: libs/ui/animation/video_export_options_dialog.ui:390
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:668
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:141
@@ -20957,239 +20936,196 @@ msgstr ""
 msgid "Reset"
 msgstr "Tilbakestill"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:25
-#, kde-format
-msgctxt ""
-"theora codec name, check simplescreenrecorder for standard translations"
-msgid "Theora"
-msgstr "Theora"
-
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:28
-#, kde-format
-msgctxt "VP9 codec name"
-msgid "VP9"
-msgstr "VP9"
-
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:31
-#, kde-format
-msgctxt "GIF codec name"
-msgid "GIF"
-msgstr "GIF"
-
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:34
-#, kde-format
-msgctxt "APNG codec name"
-msgid "APNG"
-msgstr "APNG"
-
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:37
-#, kde-format
-msgctxt "WEBP codec name"
-msgid "WEBP"
-msgstr "WEBP"
-
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:40
-#, kde-format
-msgctxt "h264 codec name, check simplescreenrecorder for standard translations"
-msgid "H.264, MPEG-4 Part 10"
-msgstr "H.264, MPEG-4 del 10"
-
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:41
-#, kde-format
-msgctxt "h265 codec name, check simplescreenrecorder for standard translations"
-msgid "H.265, MPEG-H Part 2 (HEVC)"
-msgstr "H.265, MPEG-H del 2 (HEVC)"
-
 # Er nok enklast for sluttbrukaren om desse forblir uomsette.
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:45
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:39
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "ultrafast"
 msgstr "ultrafast"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:46
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:40
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "superfast"
 msgstr "superfast"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:47
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:41
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "veryfast"
 msgstr "veryfast"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:48
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:42
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "faster"
 msgstr "faster"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:49
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:43
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "fast"
 msgstr "fast"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:50
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:44
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "medium"
 msgstr "medium"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:51
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:45
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "slow"
 msgstr "slow"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:52
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:46
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "slower"
 msgstr "slower"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:53
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:47
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "veryslow"
 msgstr "veryslow"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:54
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:48
 #, kde-format
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "placebo"
 msgstr "placebo"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:56
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:50
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "baseline"
 msgstr "baseline"
 
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:51
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:57
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:63
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "main"
 msgstr "main"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:58
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:52
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high"
 msgstr "high"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:59
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:53
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high10"
 msgstr "high10"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:60
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:54
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high422"
 msgstr "high422"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:61
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:55
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "high444"
 msgstr "high444"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:64
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:58
 #, kde-format
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "main10 (HDR)"
 msgstr "main10 (HDR)"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:67
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:61
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "film"
 msgstr "film"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:68
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:77
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:62
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:71
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "animation"
 msgstr "animation"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:69
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:78
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:63
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:72
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "grain"
 msgstr "grain"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:70
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:64
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "stillimage"
 msgstr "stillimage"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:71
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:79
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:65
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:73
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "psnr"
 msgstr "psnr"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:72
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:80
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:66
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:74
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "ssim"
 msgstr "ssim"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:73
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:81
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:67
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:75
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "fastdecode"
 msgstr "fastdecode"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:74
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:68
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "zerolatency"
 msgstr "zerolatency"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:76
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:70
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "none"
 msgstr "none"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:82
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:76
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
@@ -21197,163 +21133,213 @@ msgid "zero-latency"
 msgstr "zero-latency"
 
 # Utanom «none» og «default» lèt eg namna på prediksjonsmetodar for apng stå uomsett. Dei viser jo til tekniske namn, som eigentleg ikkje har noko omsetting (sjølv om dei *kan* tolkast, for eksempel til at «avg» viser til ein algortime basert på gjennomsnittsverdiar).
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:84
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:78
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "none"
 msgstr "ingen"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:85
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:79
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "sub"
 msgstr "sub"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:86
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:80
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "up"
 msgstr "up"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:87
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:81
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "avg"
 msgstr "avg"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:88
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:82
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "paeth"
 msgstr "paeth"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:89
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:83
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "mixed"
 msgstr "mixed"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:91
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:85
 #, kde-format
 msgctxt "webp preset option name"
 msgid "default"
 msgstr "standard"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:92
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:86
 #, kde-format
 msgctxt "webp preset option name"
 msgid "none"
 msgstr "ingen"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:93
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:87
 #, kde-format
 msgctxt "webp preset option name"
 msgid "drawing"
 msgstr "teikning"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:94
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:88
 #, kde-format
 msgctxt "webp preset option name"
 msgid "icon"
 msgstr "ikon"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:95
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:89
 #, kde-format
 msgctxt "webp preset option name"
 msgid "photo"
 msgstr "foto"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:96
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:90
 #, kde-format
 msgctxt "webp preset option name"
 msgid "picture"
 msgstr "bilete"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:97
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:91
 #, kde-format
 msgctxt "webp preset option name"
 msgid "text"
 msgstr "tekst"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:99
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:93
 #, kde-format
 msgctxt "paletegen status mode option name"
 msgid "Global/Full"
 msgstr "Global/full"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:100
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:94
 #, kde-format
 msgctxt "paletegen status mode option name"
 msgid "Difference"
 msgstr "Differanse"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:101
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:95
 #, kde-format
 msgctxt "paletegen status mode option name"
 msgid "Per Single Frame"
 msgstr "Per einskildbilete"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:103
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:97
 #, kde-format
 msgctxt "paleteuse dither option name"
 msgid "none"
 msgstr "ingen"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:104
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:98
 #, kde-format
 msgctxt "paleteuse dither option name"
 msgid "bayer"
 msgstr "bayer"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:105
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:99
 #, kde-format
 msgctxt "paleteuse dither option name"
 msgid "floyd_steinberg"
 msgstr "floyd_steinberg"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:106
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:100
 #, kde-format
 msgctxt "paleteuse dither option name"
 msgid "heckbert"
 msgstr "heckbert"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:107
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:101
 #, kde-format
 msgctxt "paleteuse dither option name"
 msgid "sierra2"
 msgstr "sierra2"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:108
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:102
 #, kde-format
 msgctxt "paleteuse dither option name"
 msgid "sierra2_4a"
 msgstr "sierra2_4a"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:110
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:104
 #, kde-format
 msgctxt "paleteuse diff mode option name"
 msgid "none"
 msgstr "ingen"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:111
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:105
 #, kde-format
 msgctxt "paleteuse diff mode option name"
 msgid "rectangle"
 msgstr "rektangel"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:168
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:147
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:166
 #, kde-format
 msgctxt "kilo-bits-per-second, video bitrate suffix"
 msgid "kbps"
 msgstr "kb/s"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:533
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:291
+#, kde-format
+msgctxt "openh264 codec name"
+msgid "OpenH264"
+msgstr ""
+
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:292
+#, kde-format
+msgctxt "h264 codec name, check simplescreenrecorder for standard translations"
+msgid "H.264, MPEG-4 Part 10"
+msgstr "H.264, MPEG-4 del 10"
+
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:293
+#, kde-format
+msgctxt "h265 codec name, check simplescreenrecorder for standard translations"
+msgid "H.265, MPEG-H Part 2 (HEVC)"
+msgstr "H.265, MPEG-H del 2 (HEVC)"
+
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:296
+#, kde-format
+msgctxt "VP9 codec name"
+msgid "VP9"
+msgstr "VP9"
+
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:301
+#, kde-format
+msgctxt ""
+"theora codec name, check simplescreenrecorder for standard translations"
+msgid "Theora"
+msgstr "Theora"
+
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:304
+#, kde-format
+msgctxt "WEBP codec name"
+msgid "WEBP"
+msgstr "WEBP"
+
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:307
+#, kde-format
+msgctxt "APNG codec name"
+msgid "APNG"
+msgstr "APNG"
+
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:310
+#, kde-format
+msgctxt "GIF codec name"
+msgid "GIF"
+msgstr "GIF"
+
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:580
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Exported animation format does not support HDR"
 msgstr "Eksporteringsformatet støttar ikkje HDR"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:535
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:582
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
@@ -21404,7 +21390,7 @@ msgstr "Hovudvising:"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1946
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1948
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:598
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:450
 #, kde-format
 msgid "Display"
 msgstr "Skjerm"
@@ -21706,7 +21692,7 @@ msgstr "Dokument"
 #: libs/ui/imagesize/wdg_canvassize.ui:55 libs/ui/imagesize/wdg_imagesize.ui:71
 #: libs/ui/imagesize/wdg_layersize.ui:62
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:81
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1015
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:887
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:328
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:660
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:867
@@ -21749,8 +21735,8 @@ msgstr "Breidd:"
 #: libs/ui/imagesize/wdg_imagesize.ui:101
 #: libs/ui/imagesize/wdg_layersize.ui:129
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:118
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:757
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:992
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:651
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:867
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:342
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:680
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:887
@@ -22401,7 +22387,7 @@ msgstr "Bruk HLG OOTF"
 #. i18n: ectx: property (text), widget (QLabel, m_lblGamma)
 #. i18n: ectx: property (text), widget (QLabel, gamma_label)
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:37
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:278
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:176
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:225
 #: plugins/dockers/lut/wdglut.ui:270 plugins/impex/heif/WdgHeifExport.ui:89
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:275
@@ -23690,7 +23676,7 @@ msgstr "Lisens/opphavsrett:"
 #: libs/ui/forms/wdgimageproperties.ui:401
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:40
 #: libs/ui/widgets/KoFillConfigWidget.ui:222
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:487
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:363
 #: plugins/dockers/griddocker/grid_config_widget.ui:90
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:254
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:134
@@ -26996,7 +26982,7 @@ msgstr "Breidd"
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, intWidth)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgrectangleconstraints.ui:62
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:780
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:671
 #, kde-format
 msgid "Width: "
 msgstr "Breidd: "
@@ -31990,7 +31976,7 @@ msgstr "Fyll"
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #: libs/ui/layerstyles/WdgStroke.ui:163
 #: libs/ui/widgets/KoFillConfigWidget.ui:176
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:306
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:220
 #: plugins/filters/colors/wdgcolortoalphabase.ui:44
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:462
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:558
@@ -32061,7 +32047,7 @@ msgid "Preferred output format is not supported by available renderers"
 msgstr ""
 "Det føretrekte utformatet er ikkje støtta av alle tilgjengelege oppteiknarar."
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:845
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:844
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "OpenColorIO er slått av: Biletfargerom er ikkje støtta"
@@ -34333,8 +34319,12 @@ msgstr "Trykk-knapp"
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #. i18n: ectx: property (text), widget (QLabel, lblHistoryRows)
 #. i18n: ectx: property (text), widget (QLabel, lblCommonColorsRows)
+#. i18n: ectx: property (text), widget (QLabel, lbl_lastUsedNumRows)
+#. i18n: ectx: property (text), widget (QLabel, lbl_commonColorsNumRows)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/widgets/KoFillConfigWidget.ui:376
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:755
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:965
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:159
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:309
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:602
@@ -34347,8 +34337,12 @@ msgstr "Rader:"
 
 #. i18n: ectx: property (text), widget (QLabel, columnsLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblNumColumns)
+#. i18n: ectx: property (text), widget (QLabel, lbl_lastUsedNumCols)
+#. i18n: ectx: property (text), widget (QLabel, lbl_commonColorsNumCols)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/widgets/KoFillConfigWidget.ui:394
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:775
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:985
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:185
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:122
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2159
@@ -34540,8 +34534,8 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
 #: libs/widgets/KisDlgInternalColorSelector.cpp:314
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:65
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:74
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:66
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:75
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:67
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:79
 #, kde-format
@@ -34552,8 +34546,8 @@ msgstr "HSV"
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSL)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
 #: libs/widgets/KisDlgInternalColorSelector.cpp:317
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:66
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:75
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:67
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:76
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:75
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:68
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:33
@@ -34566,8 +34560,8 @@ msgstr "HSL"
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSI)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
 #: libs/widgets/KisDlgInternalColorSelector.cpp:320
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:67
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:76
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:68
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:77
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:85
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:69
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:43
@@ -34579,8 +34573,8 @@ msgstr "HSI"
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSY)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
 #: libs/widgets/KisDlgInternalColorSelector.cpp:323
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:68
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:77
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:69
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:78
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:53
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:94
 #, kde-format
@@ -36984,66 +36978,65 @@ msgstr "Tøm fargeloggen"
 msgid "Advanced Color Selector"
 msgstr "Avansert fargeveljar"
 
-#. i18n("Color Sliders"));
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:45
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:44
 #, kde-format
 msgid "Color Hotkeys"
 msgstr "Fargesnøggtastar"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:53
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:54
 #, kde-format
 msgid "Change to a Horizontal Layout"
 msgstr "Byt til vassrett utforming"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:54
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:55
 #, kde-format
 msgid "Hide Shade Selector"
 msgstr "Gøym fargetoneveljaren"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:55
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:56
 #, kde-format
 msgid "Do Nothing"
 msgstr "Ikkje gjer noko"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:59
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:60
 #, kde-format
 msgid "When Pressing Middle Mouse Button"
 msgstr "Ved midtklikk"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:60
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:61
 #, kde-format
 msgid "On Mouse Over"
 msgstr "Når peikaren er over"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:61
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
 #, kde-format
 msgid "Never"
 msgstr "Aldri"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:81
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:82
 #, kde-format
 msgid "MyPaint"
 msgstr "MyPaint"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:82
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:83
 #, kde-format
 msgid "Minimal"
 msgstr "Minimal"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:83
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:84
 #, kde-format
 msgid "Do Not Show"
 msgstr "Ikkje vis"
 
 # Unødvendig og stygt med «Innstillingar for» her, då det er namnet på ein kategori i innstillingane.
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisColorSelectorSettings)
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:141
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:10
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:142
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:24
 #, kde-format
 msgid "Color Selector Settings"
 msgstr "Fargeveljar"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:300
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:268
 #, kde-format
 msgid ""
 "Values goes from black to white, or black to the most saturated color. "
@@ -37053,7 +37046,7 @@ msgstr ""
 "Verdiane går frå svart til kvitt, eller frå svart til den mest metta fargen. "
 "Fargemettinga går frå den mest metta fargen til kvitt, grått eller svart."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:303
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:271
 #, kde-format
 msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
@@ -37062,12 +37055,12 @@ msgstr ""
 "Lysstyrken går frå svart til kvitt, der mellom­grått svarar til den mest "
 "metta fargen."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:306
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:274
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
 msgstr "Intensitet svarar til summen av RGB-komponentane."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:309
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:277
 #, kde-format
 msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
@@ -37081,7 +37074,7 @@ msgstr ""
 msgid "Create a list of colors from the image"
 msgstr "Lag ei liste over hovudfargane i biletet"
 
-#: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:200
+#: plugins/dockers/advancedcolorselector/kis_shade_selector_line.cpp:199
 #, kde-format
 msgid "delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6"
 msgstr "delta h=%1 s=%2 v=%3 skift h=%4 s=%5 v=%6"
@@ -37097,55 +37090,55 @@ msgid "Shift: "
 msgstr "Skift: "
 
 #. i18n: ectx: property (text), widget (QLabel, dockerColorSettingsLabel)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:36
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:42
 #, kde-format
 msgid "Docker:"
 msgstr "Dokkpanel:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSelector)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_typeshape)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:64
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:66
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:36
 #, kde-format
 msgid "Color Selector"
 msgstr "Fargeveljar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkShowColorSelector)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:70
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:72
 #, kde-format
 msgid "Show color selector"
 msgstr "Vis fargeveljar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:96
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:97
 #, kde-format
 msgid "Color Model Type"
 msgstr "Type fargemodell"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lumaCoefficientBox)
 #. i18n: ectx: property (title), widget (QGroupBox, lumaCoefficientGroupbox)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:140
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:128
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:103
 #, kde-format
 msgid "Luma Coefficients"
 msgstr "Luma-koeffisientar"
 
 #. i18n: ectx: property (text), widget (QLabel, redlabel)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:163
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:134
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:238
 #, kde-format
 msgid "Red':"
 msgstr "Raud’:"
 
 #. i18n: ectx: property (text), widget (QLabel, greenlabel)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:198
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:148
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:145
 #, kde-format
 msgid "Green':"
 msgstr "Grøn’:"
 
 #. i18n: ectx: property (text), widget (QLabel, bluelabel)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:211
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:162
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:158
 #, kde-format
 msgid "Blue':"
@@ -37153,7 +37146,7 @@ msgstr "Blå’:"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spLumaGamma)
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, SP_Gamma)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:256
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:183
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:203
 #, kde-format
 msgid ""
@@ -37166,150 +37159,150 @@ msgstr ""
 "standardverdi.</p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, useCustomColorForBackground)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:297
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:211
 #, kde-format
 msgid "Use custom color for selector background."
 msgstr "Bruk tilpassa farge for veljarbakgrunn."
 
 #. i18n: ectx: property (title), widget (QGroupBox, useDifferentColorSpaceCheckbox)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:325
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:233
 #, kde-format
 msgid "Color Selector Uses Different Color Space than Ima&ge"
 msgstr "&Fargeveljaren brukar anna fargerom enn biletet"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_general)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:367
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:259
 #, kde-format
 msgid "Behavior"
 msgstr "Åtferd"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:382
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:274
 #, kde-format
 msgid "When Docker Resizes: "
 msgstr "Ved endring av storleik på dokkpanel: "
 
 # Rar tekst på engelsk. Gjeld ei forstørra vising av fargeveljaren, ikkje eit UI for forstørring.
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:405
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:294
 #, kde-format
 msgid "Show Zoom Selector UI: "
 msgstr "Vis forstørra fargeveljar: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:418
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:304
 #, kde-format
 msgid "Zoom Selector Size: "
 msgstr "Storleik på forstørra fargeveljar: "
 
 # Skal ikkje vera punktum på slutten her.
 #. i18n: ectx: property (text), widget (QCheckBox, hidePopupOnClickCheck)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:453
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:336
 #, kde-format
 msgid "Hide Popup on click."
 msgstr "Gøym forstørra fargeveljar ved klikk"
 
 # Gjeld ikkje berre lys/skugge, men val av fargetonar/fargenyansar generelt.
 #. i18n: ectx: attribute (title), widget (QWidget, tabShadeSelector)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:477
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:357
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:406
 #, kde-format
 msgid "Shade Selector"
 msgstr "Fargetoneveljar"
 
 #. i18n: ectx: property (text), widget (QLabel, myPaintColorModelLabel)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:497
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:373
 #: plugins/python/colorspace/uicolorspace.py:60
 #, kde-format
 msgid "Color model:"
 msgstr "Fargemodell:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:533
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_7)
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:389
 #, kde-format
 msgid "Update Selector When:"
 msgstr "Oppdater fargeveljar ved:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnRightClick)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:540
-#, kde-format
-msgid "Right clicking on shade selector"
-msgstr "Høgreklikk på fargetoneveljar"
-
-#. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnLeftClick)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:547
-#, kde-format
-msgid "Left clicking on shade selector"
-msgstr "Venstreklikk på fargetoneveljar"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnForeground)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnBackground)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:554
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:567
+#. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnForeground)
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:395
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:408
 #, kde-format
 msgid "this doesn't include a color change by the shade selector"
 msgstr "Dette omfattar ikkje fargeendring ved fargetoneveljaren"
 
+#. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:398
+#, kde-format
+msgid "Background color changes"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnForeground)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:557
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:411
 #, kde-format
 msgid "Foreground color changes"
 msgstr "Endring av framgrunnsfarge"
 
-#. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:570
+#. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnLeftClick)
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:421
 #, kde-format
-msgid "Background color change"
-msgstr "Endring av bakgrunnsfarge"
+msgid "Left clicking on shade selector"
+msgstr "Venstreklikk på fargetoneveljar"
+
+#. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnRightClick)
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:428
+#, kde-format
+msgid "Right clicking on shade selector"
+msgstr "Høgreklikk på fargetoneveljar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, minimalShadeSelectorGroup)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:590
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
 msgid "Minimal Shade Selector"
 msgstr "Minimal farge"
 
 # Diskrete fargeprøvar i staden ein kontinuerleg fargeskala.
 #. i18n: ectx: property (text), widget (QRadioButton, minimalShadeSelectorAsColorPatches)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:604
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:456
 #, kde-format
 msgid "Colo&r Patches"
 msgstr "Farge&prøvar"
 
 # Bør vera fleirtal her, sidan det er vist fleire fargeovergangar, og for samsvar med neste tekst («Fargeprøvar»).
 #. i18n: ectx: property (text), widget (QRadioButton, minimalShadeSelectorAsGradient)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:611
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:463
 #, kde-format
 msgid "&Gradient"
 msgstr "&Fargeovergangar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:641
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:519
 #, kde-format
 msgid "Line Count: "
 msgstr "Kor mange linjer: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:664
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:539
 #, kde-format
 msgid "Line Height: "
 msgstr "Linjehøgd: "
 
 #. i18n: ectx: property (text), widget (QLabel, patchesPerLineLabel)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:690
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:562
 #, kde-format
 msgid "Patches Per Line: "
 msgstr "Prøvar per linje: "
 
 #. i18n: ectx: property (title), widget (QGroupBox, historyGroupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_ColorHistory)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:734
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:609
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:545
 #, kde-format
 msgid "Color History"
 msgstr "Fargelogg"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lastUsedColorsShow)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:740
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:615
 #, kde-format
 msgid "Show Color Histor&y"
 msgstr "Vis &fargelogg"
@@ -37317,16 +37310,16 @@ msgstr "Vis &fargelogg"
 # Er snakk om høgd og breidd, så rimeleg å kalla det «eigenskapar».
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:751
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:986
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:645
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:861
 #, kde-format
 msgid "Patch Options"
 msgstr "Eigenskapar for fargeprøvar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:800
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1035
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:688
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:904
 #, kde-format
 msgid "Max Patches: "
 msgstr "Kor mange fargeprøvar: "
@@ -37336,8 +37329,8 @@ msgstr "Kor mange fargeprøvar: "
 #. i18n: ectx: property (title), widget (QGroupBox, formGroupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:836
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1071
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:714
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:924
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:227
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:554
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:761
@@ -37348,170 +37341,63 @@ msgstr "Utforming"
 #. i18n: ectx: property (text), widget (QRadioButton, lastUsedColorsAlignVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, commonColorsAlignVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, chkVertical)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:842
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1090
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:735
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:945
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:97
 #, kde-format
 msgid "&Vertical"
 msgstr "&Loddrett"
 
-#. i18n: ectx: property (text), widget (QLabel, lbl_lastUsedNumCols)
-#. i18n: ectx: property (text), widget (QLabel, lbl_commonColorsNumCols)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:865
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1110
-#, kde-format
-msgid "Colu&mns:"
-msgstr "&Kolonnar:"
-
 #. i18n: ectx: property (text), widget (QRadioButton, lastUsedColorsAlignHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, commonColorsAlignHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, chkHorizontal)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:878
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1133
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:745
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:952
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:85
 #, kde-format
 msgid "Hori&zontal"
 msgstr "&Vassrett:"
 
-#. i18n: ectx: property (text), widget (QLabel, lbl_lastUsedNumRows)
-#. i18n: ectx: property (text), widget (QLabel, lbl_commonColorsNumRows)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:885
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1097
-#, kde-format
-msgid "&Rows:"
-msgstr "&Rader:"
-
 #. i18n: ectx: property (text), widget (QCheckBox, lastUsedColorsAllowScrolling)
 #. i18n: ectx: property (text), widget (QCheckBox, commonColorsAllowScrolling)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:916
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:974
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:801
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1011
 #, kde-format
 msgid "Allow scrolling"
 msgstr "Tillat rulling"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_colorsFromImage)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:946
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:828
 #, kde-format
 msgid "Colors from Image"
 msgstr "Fargar frå biletet"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsShow)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:955
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:837
 #, kde-format
 msgid "Show Colors from the ima&ge"
 msgstr "Vis fargar frå &biletet"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, commonColorsAutoUpdate)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:964
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1021
 #, kde-format
 msgid "this can be slow on big images"
 msgstr "Det kan gå tregt ved store bilete"
 
 #. i18n: ectx: property (text), widget (QCheckBox, commonColorsAutoUpdate)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:967
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1024
 #, kde-format
 msgid "Update after every stroke"
 msgstr "Oppdater etter kvart strøk"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupHsv)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1186
-#, kde-format
-msgid "HSV Sliders to Show"
-msgstr "HSV-glidebrytarar som skal visast"
-
-#. i18n: ectx: property (text), widget (QCheckBox, csl_hsvH)
-#. i18n: ectx: property (text), widget (QCheckBox, csl_hslH)
-#. i18n: ectx: property (text), widget (QCheckBox, csl_hsiH)
-#. i18n: ectx: property (text), widget (QCheckBox, csl_hsyH)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1192
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1222
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1252
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1282
-#: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:226
-#: plugins/filters/colorsfilters/virtual_channel_info.cpp:29
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:11
-#, kde-format
-msgid "Hue"
-msgstr "Kulør"
-
-#. i18n: ectx: property (text), widget (QCheckBox, saturationCBox)
-#. i18n: ectx: property (text), widget (QCheckBox, csl_hsvS)
-#. i18n: ectx: property (text), widget (QCheckBox, csl_hslS)
-#. i18n: ectx: property (text), widget (QCheckBox, csl_hsiS)
-#. i18n: ectx: property (text), widget (QCheckBox, csl_hsyS)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1199
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1229
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1259
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1289
-#: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:227
-#: plugins/filters/colorsfilters/virtual_channel_info.cpp:33
-#: plugins/paintops/hairy/wdghairyeoptions.ui:314
-#: plugins/paintops/hairy/wdgInkOptions.ui:75
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:37
-#, kde-format
-msgid "Saturation"
-msgstr "Metting"
-
-#. i18n: ectx: property (text), widget (QCheckBox, csl_hsvV)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1206
-#: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:228
-#, kde-format
-msgctxt "Brightness level of HSV model"
-msgid "Value"
-msgstr "Verdi"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupHsl)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1216
-#, kde-format
-msgid "HSL Sliders to Show"
-msgstr "HSL-glidebrytarar som skal visast"
-
-#. i18n: ectx: property (text), widget (QCheckBox, csl_hslL)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1236
-#: plugins/filters/colorsfilters/virtual_channel_info.cpp:37
-#, kde-format
-msgctxt "Lightness HSI"
-msgid "Lightness"
-msgstr "Lysstyrke"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupHsi)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1246
-#, kde-format
-msgid "HSI Sliders to Show"
-msgstr "HSI-glidebrytarar som skal visast"
-
-#. i18n: ectx: property (text), widget (QCheckBox, csl_hsiI)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1266
-#: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:231
-#: plugins/filters/halftone/KisHalftoneConfigWidget.cpp:36
-#: plugins/filters/halftone/KisHalftoneConfigWidget.cpp:222
-#, kde-format
-msgctxt "Brightness in HSI color model"
-msgid "Intensity"
-msgstr "Intensitet"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupHsy)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1276
-#, kde-format
-msgid "HSY' Sliders to Show"
-msgstr "HSY’-glidebrytarar som skal visast"
-
-#. i18n: ectx: property (text), widget (QCheckBox, csl_hsyY)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1296
-#: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:230
-#: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:234
-#, kde-format
-msgid "Luma"
-msgstr "Luma"
-
 #. i18n: ectx: property (title), widget (QGroupBox, hsy)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1324
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1064
 #, kde-format
 msgid "Lightness, Saturation and Hue hotkey steps"
 msgstr "Endringssteg ved snøggtastar for lysstyrke, fargemetting og kulør"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1330
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1070
 #, kde-format
 msgid "Lightness: "
 msgstr "Lysstyrke: "
@@ -37521,43 +37407,43 @@ msgstr "Lysstyrke: "
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, sb_hue)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, sb_rg)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, sb_by)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1337
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1364
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1391
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1414
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1441
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1077
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1091
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1098
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1128
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1142
 #, kde-format
 msgid " steps"
 msgstr " steg"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1357
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1084
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:51
 #, kde-format
 msgid "Saturation: "
 msgstr "Fargemetting: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1384
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1105
 #, kde-format
 msgid "Hue: "
 msgstr "Kulør: "
 
 # Er to talfelt her, eitt for raudare/grønare og eitt for blåare/gulare.
 #. i18n: ectx: property (title), widget (QGroupBox, horizontalGroupBox_2)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1401
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1115
 #, kde-format
 msgid "YUV Redder/Greener/Bluer/Yellower hotkey steps"
 msgstr "Endringssteg ved snøggtastar for YUV raudare/grønare og blåare/gulare"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1407
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1121
 #, kde-format
 msgid "Redder/Greener: "
 msgstr "Raudare/grønare: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1434
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1135
 #, kde-format
 msgid "Bluer/Yellower: "
 msgstr "Blåare/gulare: "
@@ -42474,25 +42360,25 @@ msgstr "Forskyv lag"
 msgid "Offset by x/2, y/2"
 msgstr "Forskyv 50 % vassrett og loddrett"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:73
+#: plugins/extensions/pykrita/kritarunner/main.cpp:77
 #: plugins/extensions/pykrita/plugin/plugin.cpp:33
 #, kde-format
 msgid "Cannot load Python library"
 msgstr "Klarte ikkje lasta Python-bibliotek"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:76
+#: plugins/extensions/pykrita/kritarunner/main.cpp:80
 #: plugins/extensions/pykrita/plugin/plugin.cpp:36
 #, kde-format
 msgid "Cannot set Python paths"
 msgstr "Klarte ikkje definera Python-adresser"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:79
+#: plugins/extensions/pykrita/kritarunner/main.cpp:83
 #: plugins/extensions/pykrita/plugin/plugin.cpp:39
 #, kde-format
 msgid "Cannot load built-in pykrita module"
 msgstr "Klarte ikkje lasta innebygd pykrita-modul"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:82
+#: plugins/extensions/pykrita/kritarunner/main.cpp:86
 #: plugins/extensions/pykrita/plugin/plugin.cpp:42
 #, kde-format
 msgid "Unexpected error initializing python plugin."
@@ -44036,10 +43922,47 @@ msgstr "A&vmetting …"
 msgid "Desaturate"
 msgstr "Avmetting"
 
+#: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:226
+#: plugins/filters/colorsfilters/virtual_channel_info.cpp:29
+#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:11
+#, kde-format
+msgid "Hue"
+msgstr "Kulør"
+
+#. i18n: ectx: property (text), widget (QCheckBox, saturationCBox)
+#: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:227
+#: plugins/filters/colorsfilters/virtual_channel_info.cpp:33
+#: plugins/paintops/hairy/wdghairyeoptions.ui:314
+#: plugins/paintops/hairy/wdgInkOptions.ui:75
+#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:37
+#, kde-format
+msgid "Saturation"
+msgstr "Metting"
+
+#: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:228
+#, kde-format
+msgctxt "Brightness level of HSV model"
+msgid "Value"
+msgstr "Verdi"
+
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:229
 #, kde-format
 msgid "Lightness"
 msgstr "Lysstyrke"
+
+#: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:230
+#: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:234
+#, kde-format
+msgid "Luma"
+msgstr "Luma"
+
+#: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:231
+#: plugins/filters/halftone/KisHalftoneConfigWidget.cpp:36
+#: plugins/filters/halftone/KisHalftoneConfigWidget.cpp:222
+#, kde-format
+msgctxt "Brightness in HSI color model"
+msgid "Intensity"
+msgstr "Intensitet"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:232
 #, kde-format
@@ -44080,6 +44003,12 @@ msgstr "Farge&justeringskurver …"
 #, kde-format
 msgid "Color Adjustment"
 msgstr "Fargejustering"
+
+#: plugins/filters/colorsfilters/virtual_channel_info.cpp:37
+#, kde-format
+msgctxt "Lightness HSI"
+msgid "Lightness"
+msgstr "Lysstyrke"
 
 # Er snakk om ekte nullstilling (dvs. til verdien 0), ikkje berre tilbakestilling. Og ingen grunn til ekstra mellomrom på slutten her.
 #. i18n: ectx: property (text), widget (QPushButton, pushResetShadows)

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-23 00:56+0000\n"
-"PO-Revision-Date: 2023-02-18 11:06+0100\n"
+"PO-Revision-Date: 2023-02-23 11:51+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -20407,24 +20407,20 @@ msgid "spline"
 msgstr "Spline"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:100
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Not Applicable, used where there's no colorants or gamma curve found"
-#| msgid "N/A"
+#, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
-msgstr "N/D"
+msgstr "N/A"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:377
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
-msgstr ""
+msgstr "No s'ha proporcionat un binari vàlid del FFmpeg..."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:431
-#, fuzzy, kde-format
-#| msgid "FFMpeg Version: None"
+#, kde-format
 msgid "FFmpeg Version: "
-msgstr "Versió FFMpeg: Cap"
+msgstr "Versió del FFMpeg: "
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:648
 #, kde-format
@@ -20432,19 +20428,19 @@ msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
+"El FFmpeg indicat sembla que està comprimit. Primer intenteu extreure el "
+"FFmpeg de l'arxiu."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
-#, fuzzy, kde-format
-#| msgid ""
-#| "The location of FFmpeg is invalid. Please select the correct location of "
-#| "the FFmpeg executable on your system."
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be "
 "invalid.                                                     Please select "
 "the correct location of an FFmpeg executable on your system."
 msgstr ""
-"La ubicació del FFmpeg no és vàlida. Si us plau, seleccioneu la ubicació "
-"correcta de l'executable del FFmpeg en aquest sistema."
+"El FFmpeg indicat sembla que no és "
+"valid.                                                     Seleccioneu la "
+"ubicació correcta de l'executable del FFmpeg en aquest sistema."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:675
 #, kde-format
@@ -21279,11 +21275,10 @@ msgid "kbps"
 msgstr "kbps"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:291
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
-msgstr "Obre"
+msgstr "OpenH264"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
 #, kde-format
@@ -37268,16 +37263,15 @@ msgstr "això no inclou un canvi de color per part del selector d'ombres"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:398
-#, fuzzy, kde-format
-#| msgid "Background color change"
+#, kde-format
 msgid "Background color changes"
-msgstr "Canviï el color de fons"
+msgstr "Canvi del color de fons"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnForeground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:411
 #, kde-format
 msgid "Foreground color changes"
-msgstr "Canviï del color de primer pla"
+msgstr "Canvi del color de primer pla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnLeftClick)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:421
@@ -60500,56 +60494,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid ""
-#~ "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on "
-#~ "another free program called FFmpeg to turn frame-by-frame animations into "
-#~ "video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-#~ "i><br><br>            To learn more about setting up Krita for rendering "
-#~ "animations, <a href=\"https://docs.krita.org/en/reference_manual/"
-#~ "render_animation.html#setting-up-krita-for-exporting-animations\">please "
-#~ "visit this section of our User Manual.</a>"
-#~ msgstr ""
-#~ "<b>El Krita no ha trobat el FFmpeg!</b><br>             <i>El Krita depèn "
-#~ "d'un altre programa lliure anomenat FFmpeg per a convertir les animacions "
-#~ "fotograma a fotograma en fitxers de vídeo. (<a href=\"https://www.ffmpeg."
-#~ "org\">www.ffmpeg.org</a>)</i><br><br>            Per a aprendre més quant "
-#~ "a configurar el Krita per a renderitzar animacions, <a href=\"https://"
-#~ "docs.krita.org/en/reference_manual/render_animation.html#setting-up-krita-"
-#~ "for-exporting-animations\">visiteu aquesta secció del manual de l'usuari."
-#~ "</a>"
-
-#~ msgid "Please extract ffmpeg from the archive first."
-#~ msgstr "Si us plau, primer extraieu el «ffmpeg» de l'arxiu."
-
-#~ msgid ""
-#~ "This is a source code archive. Please download the application archive "
-#~ "('Windows Builds'), unpack it and then provide the path to the extracted "
-#~ "ffmpeg file."
-#~ msgstr ""
-#~ "Aquest és un arxiu de codi font. Baixeu l'arxiu de l'aplicació («Windows "
-#~ "Builds»), desempaqueteu-lo i proporcioneu el camí al fitxer «ffmpeg» "
-#~ "extret."
-
-#~ msgid "This is a source code archive. Please install ffmpeg instead."
-#~ msgstr ""
-#~ "Aquest és un arxiu de codi font. En el seu lloc instal·leu el «ffmpeg»."
-
-#~ msgid "Colu&mns:"
-#~ msgstr "Colu&mnes:"
-
-#~ msgid "&Rows:"
-#~ msgstr "&Files:"
-
-#~ msgid "HSV Sliders to Show"
-#~ msgstr "Controls lliscants d'HSV a mostrar"
-
-#~ msgid "HSL Sliders to Show"
-#~ msgstr "Controls lliscants d'HSL a mostrar"
-
-#~ msgid "HSI Sliders to Show"
-#~ msgstr "Controls lliscants d'HSI a mostrar"
-
-# skip-rule: t-apo_fin
-#~ msgid "HSY' Sliders to Show"
-#~ msgstr "Controls lliscants d'HSY' a mostrar"

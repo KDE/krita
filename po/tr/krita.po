@@ -1,6 +1,7 @@
 # Copyright (C) licensed under the GNU Free Documentation License 1.3+ unless stated otherwise
 # This file is distributed under the same license as the Krita package.
 #
+#
 # Görkem Çetin <gorkem@kde.org>, 2002-2003.
 # Serdar Cevher <scevher@gsl.gsu.edu.tr>, 2001-2002.
 # obsoleteman <tulliana@gmail.com>, 2008-2012.
@@ -9,14 +10,12 @@
 # Anıl Özbek <ozbekanil@gmail.com>, 2012-2013.
 # Özer Kavak <ozerkavak@gmail.com>, 2008.
 # Emir SARI <emir_sari@icloud.com>, 2022, 2023.
-#
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-23 00:56+0000\n"
-"PO-Revision-Date: 2023-02-20 20:42+0300\n"
+"PO-Revision-Date: 2023-02-23 19:25+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -11187,28 +11186,28 @@ msgstr "Yeni bir klon katman ekle"
 #, kde-format
 msgctxt "action"
 msgid "Clone Layer"
-msgstr "Klon Katman"
+msgstr "Katmanı Klonla"
 
 #. i18n: context: text @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2500
 #, kde-format
 msgctxt "action"
 msgid "Add &Vector Layer"
-msgstr "&Vektör Katman Ekle"
+msgstr "&Vektör Katmanı Ekle"
 
 #. i18n: context: toolTip @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2502
 #, kde-format
 msgctxt "action"
 msgid "Add a new Vector Layer"
-msgstr "Yeni Bir Vektör Katman Ekle"
+msgstr "Yeni Bir Vektör Katmanı Ekle"
 
 #. i18n: context: iconText @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2503
 #, kde-format
 msgctxt "action"
 msgid "Vector Layer"
-msgstr "Vektör Katman"
+msgstr "Vektör Katmanı"
 
 #. i18n: context: text @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2512
@@ -11493,7 +11492,7 @@ msgstr "Katman alfasını aç/kapat"
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha &inheritance"
-msgstr "Katman alfası &mirasını aç/kapat"
+msgstr "Katman alfası &devrini aç/kapat"
 
 #. i18n: context: toolTip @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
@@ -11503,7 +11502,7 @@ msgstr "Katman alfası &mirasını aç/kapat"
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha inheritance"
-msgstr "Katman alfası mirasını aç/kapat"
+msgstr "Katman alfası devrini aç/kapat"
 
 #. i18n: context: text @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2692
@@ -11803,7 +11802,7 @@ msgstr "Katmanı/Maskeyi Kaydet"
 #, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG..."
-msgstr "Vektör Katmanı SVG Olarak Kaydet..."
+msgstr "Vektör Katmanını SVG Olarak Kaydet..."
 
 #. i18n: context: toolTip @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
@@ -11813,7 +11812,7 @@ msgstr "Vektör Katmanı SVG Olarak Kaydet..."
 #, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG"
-msgstr "Vektör Katmanı SVG Olarak Kaydet"
+msgstr "Vektör Katmanını SVG Olarak Kaydet"
 
 #. i18n: context: text @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2908
@@ -16909,7 +16908,7 @@ msgstr "Gauss"
 #: libs/image/kis_clone_layer.cpp:320
 #, kde-format
 msgid "Copy From"
-msgstr "Buradan Kopyala"
+msgstr "Kopyalanma Yeri"
 
 #: libs/image/kis_filter_strategy.h:60
 #, kde-format
@@ -17201,7 +17200,7 @@ msgstr "Katman Biçemi"
 #: libs/image/kis_layer_properties_icons.cpp:23
 #, kde-format
 msgid "Inherit Alpha"
-msgstr "Alfayı Miras al"
+msgstr "Alfayı Devral"
 
 #: libs/image/kis_layer_properties_icons.cpp:24
 #: libs/image/kis_paint_layer.cc:200
@@ -17755,7 +17754,7 @@ msgstr "Dosya Katman"
 #: plugins/impex/svg/kis_svg_import.cc:90
 #, kde-format
 msgid "Vector Layer"
-msgstr "Vektör Katman"
+msgstr "Vektör Katmanı"
 
 #: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:682
 #, kde-format
@@ -19886,7 +19885,7 @@ msgstr "Etikete Ata"
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:94
 #, kde-format
 msgid "Remove from this tag"
-msgstr "Bu etiketten kaldır"
+msgstr "Bu Etiketten Kaldır"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:103
 #, kde-format
@@ -20370,24 +20369,20 @@ msgid "spline"
 msgstr "şerit"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:100
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Not Applicable, used where there's no colorants or gamma curve found"
-#| msgid "N/A"
+#, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
-msgstr "UYGULANMAZ"
+msgstr "KULLANILAMIYOR"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:377
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
-msgstr ""
+msgstr "Geçerli bir FFmpeg ikilisi verilmedi..."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:431
-#, fuzzy, kde-format
-#| msgid "FFMpeg Version: None"
+#, kde-format
 msgid "FFmpeg Version: "
-msgstr "FFmpeg Sürümü: Yok"
+msgstr "FFmpeg Sürümü: "
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:648
 #, kde-format
@@ -20395,19 +20390,19 @@ msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
+"Bize verdiğiniz FFmpeg ikilisi sıkıştırılmış gibi görünüyor. Lütfen önce "
+"FFmpeg'i arşivden çıkarmayı deneyin."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
-#, fuzzy, kde-format
-#| msgid ""
-#| "The location of FFmpeg is invalid. Please select the correct location of "
-#| "the FFmpeg executable on your system."
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be "
 "invalid.                                                     Please select "
 "the correct location of an FFmpeg executable on your system."
 msgstr ""
-"FFmpeg'in konumu geçersiz. Lütfen FFmpeg çalıştırılabilir dosyasının sistem "
-"üzerindeki doğru yerini seçin."
+"Bize verdiğiniz FFmped geçersiz gibi "
+"görünüyor.                                                     Lütfen "
+"sisteminizdeki FFmpeg yürütülebilirinin doğru konumunu seçin."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:675
 #, kde-format
@@ -20967,7 +20962,7 @@ msgstr "plasebo"
 msgctxt ""
 "h264 profile name, check simplescreenrecorder for standard translations"
 msgid "baseline"
-msgstr "taban çizgisi"
+msgstr "temel"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:51
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:57
@@ -21239,11 +21234,10 @@ msgid "kbps"
 msgstr "kbps"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:291
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
-msgstr "Aç"
+msgstr "OpenH264"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
 #, kde-format
@@ -23378,7 +23372,7 @@ msgstr "Yeni ad:"
 #: libs/ui/flake/kis_shape_controller.cpp:196
 #, kde-format
 msgid "Vector Layer %1"
-msgstr "Vektör Katman %1"
+msgstr "Vektör Katmanı %1"
 
 #: libs/ui/flake/kis_take_all_shapes_command.cpp:15
 msgctxt "(qtundo-format)"
@@ -23979,7 +23973,7 @@ msgstr "Kapat"
 #: libs/ui/forms/wdgchangeclonesource.ui:34
 #, kde-format
 msgid "Copy from:"
-msgstr "Buradan kopyala:"
+msgstr "Kopyalanma yeri:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgTabletSettings)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgColorSettings)
@@ -24854,7 +24848,7 @@ msgstr "HiDPI desteğini etkinleştir"
 #: libs/ui/forms/wdggeneralsettings.ui:401
 #, kde-format
 msgid "Enable fractional scale factor"
-msgstr "Kesirli ölçek katsayısını etkinleştir"
+msgstr "Kesirli ölçek çarpanını etkinleştir"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #: libs/ui/forms/wdggeneralsettings.ui:408
@@ -26050,7 +26044,7 @@ msgstr ""
 #: libs/ui/forms/wdgnewimage.ui:554
 #, kde-format
 msgid "As &raster layer"
-msgstr "&Raster katman olarak"
+msgstr "&Raster katmanı olarak"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:567
@@ -27319,7 +27313,7 @@ msgstr "Gelişmiş..."
 #: libs/ui/forms/wdgtabletsettings.ui:167
 #, kde-format
 msgid "Windows 8+ Pointer Input (Windows Ink)"
-msgstr "Windows 8+ İşaretçi Girdisi (Windows Ink)"
+msgstr "Windows 8+ İşaretçi Girişi (Windows Ink)"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseRightMiddleClickWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:177
@@ -29713,7 +29707,7 @@ msgstr ""
 #: libs/ui/KisCloneDocumentStroke.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Clone Document"
-msgstr "Belgeyi Çoğalt"
+msgstr "Belgeyi Klonla"
 
 #: libs/ui/KisDocument.cpp:713
 #, kde-format
@@ -37131,8 +37125,7 @@ msgstr "bu gölge seçici tarafından yapılan renk değişikliklerini içermez"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:398
-#, fuzzy, kde-format
-#| msgid "Background color change"
+#, kde-format
 msgid "Background color changes"
 msgstr "Arka plan renk değişiklikleri"
 
@@ -38140,8 +38133,8 @@ msgid ""
 "one or more vector shapes on the 'maskShapesLayer'</li></ul></p>"
 msgstr ""
 "<p>Maske şablonu geçersiz.</p><p>Lütfen şunları denetleyin:<ul><li>Şablonu "
-"'maskShapesLayer' adlı bir vektör katman adı içeriyor mu</"
-"li><li>'maskShapesLayer'da bir veya birden çok vektör şekil var mı</li></"
+"'maskShapesLayer' adlı bir vektör katmanı adı içeriyor mu</"
+"li><li>'maskShapesLayer'da bir veya birden çok vektör şekli var mı</li></"
 "ul></p>"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:310
@@ -47005,7 +46998,7 @@ msgstr "1 x 1, 1 x 1, 1 x 1 (en iyi kalite)"
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:228
 #, kde-format
 msgid "Force baseline JPEG"
-msgstr "Taban JPEG zorla"
+msgstr "Temel JPEG zorla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, optimize)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:238
@@ -47926,7 +47919,7 @@ msgid ""
 "layer will be converted into a paint layer."
 msgstr ""
 "Bu dosyada, yanlış bir kaynak düğüme sahip bir klon katman var. Bu katman, "
-"bir boya katmana dönüştürülecek."
+"bir boya katmanına dönüştürülecek."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:393
 #, kde-format
@@ -48604,8 +48597,8 @@ msgstr ""
 "için <span style=\" font-style:italic;\">iki</span> seçeneğe sahiptir: "
 "etiket olarak veya harici bir profil olarak. Websiteleri ile kullanmak için, "
 "bu seçeneği <span style=\"font-style:italic;\">devre dışı bırakın</span>. "
-"Diğer uygulamalarla değiş tokuş etmek için bu seçeneği <span style=\"font-"
-"style:italic;\">devreye alın</span>.</p></body></html>"
+"Diğer uygulamalarla değişim yapmak için bu seçeneği <span style=\"font-style:"
+"italic;\">devreye alın</span>.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSRGB)
 #: plugins/impex/png/kis_wdg_options_png.ui:197
@@ -57221,8 +57214,8 @@ msgstr ""
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
-"Bu araç yalnızca vektör katmanlarda çalışır. Büyük olasılıkla taşıma aracını "
-"istiyorsunuz."
+"Bu araç yalnızca vektör katmanlarında çalışır. Büyük olasılıkla taşıma "
+"aracını istiyorsunuz."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
 msgctxt "(qtundo-format)"
@@ -57277,7 +57270,7 @@ msgstr "Şekilleri Ayır"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1831
 #, kde-format
 msgid "Vector Shape Actions"
-msgstr "Vektör Şekil Eylemleri"
+msgstr "Vektör Şekli Eylemleri"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1850
 #, kde-format
@@ -60230,58 +60223,3 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
-
-#~ msgid ""
-#~ "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on "
-#~ "another free program called FFmpeg to turn frame-by-frame animations into "
-#~ "video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-#~ "i><br><br>            To learn more about setting up Krita for rendering "
-#~ "animations, <a href=\"https://docs.krita.org/en/reference_manual/"
-#~ "render_animation.html#setting-up-krita-for-exporting-animations\">please "
-#~ "visit this section of our User Manual.</a>"
-#~ msgstr ""
-#~ "<b>Krita, FFmpeg'i bulamıyor!</b><br>             <i>Krita, kare "
-#~ "canlandırmalarını video dosyalarına dönüştürmek için FFmpeg adındaki "
-#~ "başka bir ücretsiz programa gereksinim duyar. (<a href=\"https:/www."
-#~ "ffmpeg.org\">www.ffmpeg.org</a>)</i><br><br>            Krita'yı "
-#~ "kullanarak canlandırma dokuma hakkında daha fazla bilgi almak "
-#~ "istiyorsanız <a href=\"https://docs.krita.org/en/reference_manual/"
-#~ "render_animation.html#setting-up-krita-for-exporting-animations"
-#~ "\">Kullanıcı Kılavuzu'nun bu bölümünü ziyaret edin.</a>"
-
-#~ msgid "Please extract ffmpeg from the archive first."
-#~ msgstr "Lütfen önce arşivden ffmpeg'i çıkarın."
-
-#~ msgid ""
-#~ "This is a source code archive. Please download the application archive "
-#~ "('Windows Builds'), unpack it and then provide the path to the extracted "
-#~ "ffmpeg file."
-#~ msgstr ""
-#~ "Bu bir kaynak kodu arşividir. Lütfen, uygulama arşivini (\"Windows "
-#~ "Yapıları\") indirin, paketini açın ve çıkarılan ffmpeg dosyasına yolu "
-#~ "sağlayın."
-
-#~ msgid "This is a source code archive. Please install ffmpeg instead."
-#~ msgstr "Bu bir kaynak kodu arşividir. Lütfen bunun yerine FFmpeg'i kurun."
-
-#~ msgid "Colu&mns:"
-#~ msgstr "Sütu&nlar:"
-
-#~ msgid "&Rows:"
-#~ msgstr "&Satırlar:"
-
-#~ msgid "HSV Sliders to Show"
-#~ msgstr "Gösterilecek TDD Kaydırıcıları"
-
-#~ msgid "HSL Sliders to Show"
-#~ msgstr "Gösterilecek TDA Kaydırıcıları"
-
-#~ msgid "HSI Sliders to Show"
-#~ msgstr "Gösterilecek TDY Kaydırıcıları"
-
-#~ msgid "HSY' Sliders to Show"
-#~ msgstr "Gösterilecek HSY' Kaydırıcıları"
-
-#~ msgctxt "Fetching remote image"
-#~ msgid "Do you want to download the image at %1?"
-#~ msgstr "%1 konumundaki görseli indirmek istiyor musunuz?"

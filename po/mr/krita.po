@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-23 00:56+0000\n"
+"POT-Creation-Date: 2023-02-25 00:57+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -16659,28 +16659,28 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:2685
+#: libs/flake/text/KoSvgTextShape.cpp:2689
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "मजकूर"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2687
-#: libs/flake/text/KoSvgTextShape.cpp:2695
+#: libs/flake/text/KoSvgTextShape.cpp:2691
+#: libs/flake/text/KoSvgTextShape.cpp:2699
 #, fuzzy, kde-format
 #| msgid "Type and Shape"
 msgid "SVG Text Shape"
 msgstr "प्रकार व आकार"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2693
+#: libs/flake/text/KoSvgTextShape.cpp:2697
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " मजकूर :"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2707
-#: libs/flake/text/KoSvgTextShape.cpp:2722
+#: libs/flake/text/KoSvgTextShape.cpp:2711
+#: libs/flake/text/KoSvgTextShape.cpp:2726
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -37984,12 +37984,12 @@ msgstr ""
 msgid "Frames dropped:\t%1%"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:689
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:701
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:870
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:882
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -37997,8 +37997,8 @@ msgid_plural "Add %1 blank frames"
 msgstr[0] "नाव अंतर्भूत करा"
 msgstr[1] "नाव अंतर्भूत करा"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:915
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:963
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:928
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:976
 #, fuzzy, kde-format
 #| msgid "Insert name"
 msgctxt "(qtundo-format)"

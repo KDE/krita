@@ -1,7 +1,6 @@
 # Copyright (C) licensed under the GNU Free Documentation License 1.3+ unless stated otherwise
 # This file is distributed under the same license as the Krita package.
 #
-#
 # Görkem Çetin <gorkem@kde.org>, 2002-2003.
 # Serdar Cevher <scevher@gsl.gsu.edu.tr>, 2001-2002.
 # obsoleteman <tulliana@gmail.com>, 2008-2012.
@@ -14,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-23 00:56+0000\n"
+"POT-Creation-Date: 2023-02-25 00:57+0000\n"
 "PO-Revision-Date: 2023-02-23 19:25+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -10607,7 +10606,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Insert Keyframe Left"
-msgstr "Sola Anahtarkare Ekle"
+msgstr "Sola Anahtar Kare Ekle"
 
 #. i18n: context: toolTip @ Action (insert_keyframe_left), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2007
@@ -10625,7 +10624,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Insert Keyframe Right"
-msgstr "Sağa Anahtarkare Ekle"
+msgstr "Sağa Anahtar Kare Ekle"
 
 #. i18n: context: toolTip @ Action (insert_keyframe_right), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2019
@@ -10643,14 +10642,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Insert Multiple Keyframes"
-msgstr "Çoklu Anahtarkare Ekle"
+msgstr "Birden Çok Anahtar Kare Ekle"
 
 #. i18n: context: toolTip @ Action (insert_multiple_keyframes), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2031
 #, kde-format
 msgctxt "action"
 msgid "Insert several keyframes based on user parameters."
-msgstr "Kullanıcı parametrelerine göre birkaç anahtarkare ekle."
+msgstr "Kullanıcı parametrelerine göre birkaç anahtar kare ekle."
 
 #. i18n: context: text @ Action (remove_frames_and_pull), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2041
@@ -10671,14 +10670,14 @@ msgstr "Anahtar kareleri kaldırıp canlandırmanın kuyruğunu sola taşı"
 #, kde-format
 msgctxt "action"
 msgid "Remove Keyframe"
-msgstr "Anahtarkare Kaldır"
+msgstr "Anahtar Kareyi Kaldır"
 
 #. i18n: context: toolTip @ Action (remove_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2055
 #, kde-format
 msgctxt "action"
 msgid "Remove keyframes without moving anything around"
-msgstr "Anahtarkareleri hiçbir şeyi hareket ettirmeden kaldır"
+msgstr "Anahtar kareleri hiçbir şeyi hareket ettirmeden kaldır"
 
 #. i18n: context: text @ Action (insert_column_left), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2065
@@ -10759,126 +10758,126 @@ msgstr "Hiçbir şeyi taşımadan sütunları sil"
 #, kde-format
 msgctxt "action"
 msgid "Insert Hold Frame"
-msgstr "Tut Karesi Ekle"
+msgstr "Bekletme Karesi Ekle"
 
 #. i18n: context: toolTip @ Action (insert_hold_frame), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2127
 #, kde-format
 msgctxt "action"
 msgid "Insert a hold frame after every keyframe"
-msgstr "Her anahtarkareden sonra tut karesi ekle"
+msgstr "Her anahtar kareden sonra bir bekletme karesi ekle"
 
 #. i18n: context: text @ Action (insert_multiple_hold_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2137
 #, kde-format
 msgctxt "action"
 msgid "Insert Multiple Hold Frames"
-msgstr "Çoklu Tut Karesi Ekle"
+msgstr "Birden Çok Bekletme Karesi Ekle"
 
 #. i18n: context: toolTip @ Action (insert_multiple_hold_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2139
 #, kde-format
 msgctxt "action"
 msgid "Insert N hold frames after every keyframe"
-msgstr "Her anahtarkareden sonra N tut karesi ekle"
+msgstr "Her anahtar kareden sonra N bekletme karesi ekle"
 
 #. i18n: context: text @ Action (remove_hold_frame), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2149
 #, kde-format
 msgctxt "action"
 msgid "Remove Hold Frame"
-msgstr "Tut Karesi Kaldır"
+msgstr "Bekletme Karesini Kaldır"
 
 #. i18n: context: toolTip @ Action (remove_hold_frame), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2151
 #, kde-format
 msgctxt "action"
 msgid "Remove a hold frame after every keyframe"
-msgstr "Her anahtarkareden sonra tut karesini kaldır"
+msgstr "Her anahtar kareden sonra bekletme karesini kaldır"
 
 #. i18n: context: text @ Action (remove_multiple_hold_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2161
 #, kde-format
 msgctxt "action"
 msgid "Remove Multiple Hold Frames"
-msgstr "Çoklu Tut Karesini Kaldır"
+msgstr "Birden Çok Bekletme Karesini Kaldır"
 
 #. i18n: context: toolTip @ Action (remove_multiple_hold_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2163
 #, kde-format
 msgctxt "action"
 msgid "Remove N hold frames after every keyframe"
-msgstr "Her anahtarkareden sonra N tut karesini kaldır"
+msgstr "Her anahtar kareden sonra N bekletme karesini kaldır"
 
 #. i18n: context: text @ Action (insert_hold_column), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2173
 #, kde-format
 msgctxt "action"
 msgid "Insert Hold Column"
-msgstr "Tut Sütunu Ekle"
+msgstr "Bekletme Sütunu Ekle"
 
 #. i18n: context: toolTip @ Action (insert_hold_column), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2175
 #, kde-format
 msgctxt "action"
 msgid "Insert a hold column into the frame at the current position"
-msgstr "Kareye geçerli konumda bir tut sütunu ekle"
+msgstr "Kareye geçerli konumda bir bekletme sütunu ekle"
 
 #. i18n: context: text @ Action (insert_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2185
 #, kde-format
 msgctxt "action"
 msgid "Insert Multiple Hold Columns"
-msgstr "Çoklu Tut Sütunu Ekle"
+msgstr "Birden Çok Bekletme Sütunu Ekle"
 
 #. i18n: context: toolTip @ Action (insert_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2187
 #, kde-format
 msgctxt "action"
 msgid "Insert N hold columns into the frame at the current position"
-msgstr "Kareye geçerli konumda N tut sütunu ekle"
+msgstr "Kareye geçerli konumda N bekletme sütunu ekle"
 
 #. i18n: context: text @ Action (remove_hold_column), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2197
 #, kde-format
 msgctxt "action"
 msgid "Remove Hold Column"
-msgstr "Tut Sütununu Kaldır"
+msgstr "Bekletme Sütununu Kaldır"
 
 #. i18n: context: toolTip @ Action (remove_hold_column), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2199
 #, kde-format
 msgctxt "action"
 msgid "Remove a hold column from the frame at the current position"
-msgstr "Kareden geçerli konumda bir tut sütunu kaldır"
+msgstr "Kareden geçerli konumda bir bekletme sütununu kaldır"
 
 #. i18n: context: text @ Action (remove_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2209
 #, kde-format
 msgctxt "action"
 msgid "Remove Multiple Hold Columns"
-msgstr "Çoklu Tut Sütunu Kaldır"
+msgstr "Çoklu Bekletme Sütununu Kaldır"
 
 #. i18n: context: toolTip @ Action (remove_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2211
 #, kde-format
 msgctxt "action"
 msgid "Remove N hold columns from the frame at the current position"
-msgstr "Kareden geçerli konumda N tut sütunu kaldır"
+msgstr "Kareden geçerli konumda N bekletme sütununu kaldır"
 
 #. i18n: context: text @ Action (add_scalar_keyframes), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2221
 #, kde-format
 msgctxt "action"
 msgid "Add scalar keyframes"
-msgstr "Tayfsal anahtar kareler ekle"
+msgstr "Sayıl anahtar kareler ekle"
 
 #. i18n: context: toolTip @ Action (add_scalar_keyframes), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2223
 #, kde-format
 msgctxt "action"
 msgid "Adds keyframe to control scalar property"
-msgstr "Tayfsal özelliği denetlemek için anahtar kare ekler"
+msgstr "Sayıl özelliği denetlemek için anahtar kare ekler"
 
 #. i18n: context: text @ Action (remove_scalar_keyframe), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2233
@@ -16232,25 +16231,25 @@ msgstr ""
 "metin nesnesi Krita 5 biçimine dönüştürülür ve Krita 4.x ile uyumlu olmaktan "
 "çıkar."
 
-#: libs/flake/text/KoSvgTextShape.cpp:2685
+#: libs/flake/text/KoSvgTextShape.cpp:2689
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2687
-#: libs/flake/text/KoSvgTextShape.cpp:2695
+#: libs/flake/text/KoSvgTextShape.cpp:2691
+#: libs/flake/text/KoSvgTextShape.cpp:2699
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Metin Şekli"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2693
+#: libs/flake/text/KoSvgTextShape.cpp:2697
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2707
-#: libs/flake/text/KoSvgTextShape.cpp:2722
+#: libs/flake/text/KoSvgTextShape.cpp:2711
+#: libs/flake/text/KoSvgTextShape.cpp:2726
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -25653,7 +25652,7 @@ msgstr ""
 #: libs/ui/forms/wdgimportimagesequence.ui:75
 #, kde-format
 msgid "Add hold frames automatically"
-msgstr "Tutma karelerini kendiliğinden ekle"
+msgstr "Bekletme karelerini kendiliğinden ekle"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, beginFromZeroIndexBox)
 #: libs/ui/forms/wdgimportimagesequence.ui:82
@@ -37452,7 +37451,7 @@ msgstr "Pürüzsüz aradeğerleme tanjantları."
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:503
 #, kde-format
 msgid "Zoom view to fit channel range."
-msgstr "Görünümü, kanal aralığına sığacak biçimde yakınlaştır."
+msgstr "Görünümü kanal aralığına sığacak biçimde yakınlaştır."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:510
 #, kde-format
@@ -37530,12 +37529,12 @@ msgstr "Gerçek FPS:\t%1"
 msgid "Frames dropped:\t%1%"
 msgstr "Bırakılan kareler:\t%​%1"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:689
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:701
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr "Silinen kareler, bu Krita örneğinde kullanılabilir değil"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:870
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:882
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -37543,8 +37542,8 @@ msgid_plural "Add %1 blank frames"
 msgstr[0] "Boş kare ekle"
 msgstr[1] "%1 boş kare ekle"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:915
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:963
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:928
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:976
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -37608,7 +37607,7 @@ msgstr "Ses değiştir (%1)..."
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
-msgstr "Tutma Kareleri Ekle veya Kaldır"
+msgstr "Bekletme Kareleri Ekle veya Kaldır"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1581
 #, kde-format
@@ -37625,13 +37624,13 @@ msgstr "Kareleri Düzenle:"
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
-msgstr "Anahtarkareler"
+msgstr "Anahtar Kareler"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1723
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
-msgstr "Kareleri Tut"
+msgstr "Bekletme Kareleri"
 
 #: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:494
 #, kde-format
@@ -37642,7 +37641,7 @@ msgstr "Sütunları Düzenle:"
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframe Columns"
-msgstr "Anahtarkare Sütunları"
+msgstr "Anahtar Kare Sütunları"
 
 #: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:512
 #, kde-format
@@ -37796,7 +37795,7 @@ msgstr "Kareleri Yansıt"
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert Keyframes"
-msgstr "Anahtarkare Ekle"
+msgstr "Anahtar Kareler Ekle"
 
 #: plugins/dockers/animation/timeline_insert_keyframe_dialog.cpp:45
 #, kde-format

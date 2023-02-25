@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-23 00:56+0000\n"
+"POT-Creation-Date: 2023-02-25 00:57+0000\n"
 "PO-Revision-Date: 2022-05-15 22:38+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17109,25 +17109,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:2685
+#: libs/flake/text/KoSvgTextShape.cpp:2689
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "텍스트"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2687
-#: libs/flake/text/KoSvgTextShape.cpp:2695
+#: libs/flake/text/KoSvgTextShape.cpp:2691
+#: libs/flake/text/KoSvgTextShape.cpp:2699
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 텍스트 모양"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2693
+#: libs/flake/text/KoSvgTextShape.cpp:2697
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 텍스트"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2707
-#: libs/flake/text/KoSvgTextShape.cpp:2722
+#: libs/flake/text/KoSvgTextShape.cpp:2711
+#: libs/flake/text/KoSvgTextShape.cpp:2726
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -38539,12 +38539,12 @@ msgstr "실제 FPS:\t%1"
 msgid "Frames dropped:\t%1%"
 msgstr "손실된 프레임:\t%1\\%"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:689
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:701
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr "이 Krita 인스턴스에서는 손실된 프레임을 사용할 수 없습니다"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:870
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:882
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Add blank frame"
@@ -38553,8 +38553,8 @@ msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
 msgstr[0] "빈 프레임 추가"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:915
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:963
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:928
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:976
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"

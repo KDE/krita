@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-23 00:56+0000\n"
-"PO-Revision-Date: 2023-02-15 11:03\n"
+"POT-Creation-Date: 2023-02-25 00:57+0000\n"
+"PO-Revision-Date: 2023-02-24 12:42\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -16193,25 +16193,25 @@ msgstr ""
 "此图像包含在 Krita 4.x 中创建的矢量文字对象。它们将在保存时转换为 Krita 5 格"
 "式。转换后的文字对象将不再兼容 Krita 4.x。"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2685
+#: libs/flake/text/KoSvgTextShape.cpp:2689
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2687
-#: libs/flake/text/KoSvgTextShape.cpp:2695
+#: libs/flake/text/KoSvgTextShape.cpp:2691
+#: libs/flake/text/KoSvgTextShape.cpp:2699
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文字形状"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2693
+#: libs/flake/text/KoSvgTextShape.cpp:2697
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2707
-#: libs/flake/text/KoSvgTextShape.cpp:2722
+#: libs/flake/text/KoSvgTextShape.cpp:2711
+#: libs/flake/text/KoSvgTextShape.cpp:2726
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -19524,16 +19524,15 @@ msgstr "标签"
 
 #: libs/resources/KisResourceModel.cpp:150
 #: libs/resources/KisTagResourceModel.cpp:646
-#, fuzzy, kde-format
-#| msgid "Clear Thumbnail"
+#, kde-format
 msgid "Large Thumbnail"
-msgstr "清除缩略图"
+msgstr "大缩略图"
 
 #: libs/resources/KisResourceModel.cpp:152
 #: libs/resources/KisTagResourceModel.cpp:648
 #, kde-format
 msgid "Dirty"
-msgstr ""
+msgstr "有未保存修改"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
@@ -19744,49 +19743,43 @@ msgstr "所有无标签资源"
 #: libs/resources/KisTagResourceModel.cpp:658
 #, kde-format
 msgid "Tag ID"
-msgstr ""
+msgstr "标签 ID"
 
 #: libs/resources/KisTagResourceModel.cpp:660
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource ID"
-msgstr "资源"
+msgstr "资源ID"
 
 #: libs/resources/KisTagResourceModel.cpp:662
 #, kde-format
 msgid "Tag Url"
-msgstr ""
+msgstr "标签 URL"
 
 #: libs/resources/KisTagResourceModel.cpp:664
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource"
 msgstr "资源"
 
 #: libs/resources/KisTagResourceModel.cpp:666
-#, fuzzy, kde-format
-#| msgid "Resource View"
+#, kde-format
 msgid "Resource Active"
-msgstr "资源视图"
+msgstr "资源已激活"
 
 #: libs/resources/KisTagResourceModel.cpp:668
-#, fuzzy, kde-format
-#| msgid "Storage Active"
+#, kde-format
 msgid "Tag Active"
-msgstr "存储激活"
+msgstr "标签已激活"
 
 #: libs/resources/KisTagResourceModel.cpp:672
-#, fuzzy, kde-format
-#| msgid "Resource Type"
+#, kde-format
 msgid "Resource Name"
-msgstr "资源类型"
+msgstr "资源名称"
 
 #: libs/resources/KisTagResourceModel.cpp:674
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "Tag File Name"
-msgstr "文件名："
+msgstr "标签文件名"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:101
 #, kde-format
@@ -20301,24 +20294,20 @@ msgid "spline"
 msgstr "样条曲线"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:100
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Not Applicable, used where there's no colorants or gamma curve found"
-#| msgid "N/A"
+#, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
-msgstr "不可用"
+msgstr "不适用"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:377
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
-msgstr ""
+msgstr "没有提供有效的 FFmpeg 可执行程序..."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:431
-#, fuzzy, kde-format
-#| msgid "FFMpeg Version: None"
+#, kde-format
 msgid "FFmpeg Version: "
-msgstr "FFmpeg 版本：无"
+msgstr "FFmpeg 版本："
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:648
 #, kde-format
@@ -20326,17 +20315,17 @@ msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
+"您给 Krita 提供的 FFmpeg 似乎是一个压缩包。请先将把该压缩包中的内容解压出来。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
-#, fuzzy, kde-format
-#| msgid ""
-#| "The location of FFmpeg is invalid. Please select the correct location of "
-#| "the FFmpeg executable on your system."
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be "
 "invalid.                                                     Please select "
 "the correct location of an FFmpeg executable on your system."
-msgstr "指定的 FFmpeg 的位置无效。请在系统中选择 FFmpeg 可执行文件的正确位置。"
+msgstr ""
+"您给 Krita 提供的 FFmpeg 似乎无效。\n"
+"请选择 FFmpeg 可执行文件在本机中的正确位置。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:675
 #, kde-format
@@ -20400,7 +20389,7 @@ msgstr "样条曲线"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
 #, kde-format
 msgid "Failed to create a work directory, make sure you have write permission"
-msgstr "无法创建工作目录。请确保您具备写入权限。"
+msgstr "创建工作目录失败。请确保您有写入权限。"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:188
 #, kde-format
@@ -20434,7 +20423,7 @@ msgstr "从 %2 视频中提取了 %1 帧。"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
 #, kde-format
 msgid "Failed to export frames from video"
-msgstr "无法从视频导出动画帧"
+msgstr "导出视频的动画帧失败"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:357
 #, kde-format
@@ -20570,7 +20559,7 @@ msgstr "未找到视频流。"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:774
 #, kde-format
 msgid "Failed to load video information"
-msgstr "无法加载视频信息"
+msgstr "加载视频信息失败"
 
 #: libs/ui/animation/KisFFMpegWrapper.cpp:352
 #, kde-format
@@ -21152,11 +21141,10 @@ msgid "kbps"
 msgstr "kbps"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:291
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
-msgstr "打开"
+msgstr "OpenH264"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
 #, kde-format
@@ -21956,7 +21944,7 @@ msgid ""
 "\n"
 "%1"
 msgstr ""
-"无法启用快速预渲染。\n"
+"快速预渲染模式激活失败。\n"
 "\n"
 "%1"
 
@@ -22997,7 +22985,7 @@ msgid ""
 "\n"
 "Rendering cancelled."
 msgstr ""
-"无法删除旧的帧输出文件：\n"
+"删除旧的帧输出文件失败：\n"
 "\n"
 "%1\n"
 "\n"
@@ -26665,7 +26653,7 @@ msgstr "基本三角形拾色器 (sRGB 色域)"
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:69
 #, kde-format
 msgid "Wide Gamut Selector"
-msgstr "多功能拾色器 (宽色域)"
+msgstr "宽色域拾色器"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:101
@@ -28431,7 +28419,7 @@ msgstr "无法找到链接的文件：%1"
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot load its linked file"
 msgid "Failed to load linked file: %1"
-msgstr "无法加载链接的文件：%1"
+msgstr "加载链接的文件失败：%1"
 
 #: libs/ui/kis_filter_manager.cc:190
 #, kde-format
@@ -29531,18 +29519,16 @@ msgid "%1 cannot be written to. Please save under a different name."
 msgstr "无法写入 %1 。请换一个文件名保存。"
 
 #: libs/ui/KisDocument.cpp:751
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL errors"
-#| msgid "Unable to read the image profile."
+#, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "无法读取图像配置文件。"
+msgstr "创建备份文件失败"
 
 #: libs/ui/KisDocument.cpp:768
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr ""
+msgstr "创建数字文件名序列的备份文件失败"
 
 #: libs/ui/KisDocument.cpp:790
 #, kde-format
@@ -30159,7 +30145,7 @@ msgstr ""
 #: libs/ui/KisMainWindow.cpp:2127
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
-msgstr "无法创建新图像。动画导入已中止。"
+msgstr "创建新图像失败。动画导入已中止。"
 
 #: libs/ui/KisMainWindow.cpp:2551
 #, kde-format
@@ -36771,7 +36757,7 @@ msgstr "色彩模型："
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:389
 #, kde-format
 msgid "Update Selector When:"
-msgstr "混色区颜色在以下情况更新："
+msgstr "更新渐变混色区的颜色，如果："
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnForeground)
@@ -36783,28 +36769,27 @@ msgstr "不包含通过混色区引起的前景色/背景色变化"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:398
-#, fuzzy, kde-format
-#| msgid "Background color change"
+#, kde-format
 msgid "Background color changes"
-msgstr "背景色变化"
+msgstr "背景色发生了变化"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnForeground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:411
 #, kde-format
 msgid "Foreground color changes"
-msgstr "前景色变化"
+msgstr "前景色发生了变化"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnLeftClick)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:421
 #, kde-format
 msgid "Left clicking on shade selector"
-msgstr "左键点击混色区"
+msgstr "左键点击了混色区"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnRightClick)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:428
 #, kde-format
 msgid "Right clicking on shade selector"
-msgstr "右键点击混色区"
+msgstr "右键点击了渐变混色区"
 
 #. i18n: ectx: property (title), widget (QGroupBox, minimalShadeSelectorGroup)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
@@ -37187,20 +37172,20 @@ msgstr "真实帧频：%1"
 msgid "Frames dropped:\t%1%"
 msgstr "跳过帧数：%1%"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:689
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:701
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr "跳帧在此 Krita 实例中不可用。"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:870
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:882
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
 msgstr[0] "添加 %1 空白关键帧"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:915
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:963
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:928
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:976
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -39752,103 +39737,89 @@ msgstr "触摸屏辅助按钮"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Mode"
+#, kde-format
 msgid "Color Model"
-msgstr "颜色过渡方式："
+msgstr "色彩模型"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
-#, fuzzy, kde-format
-#| msgid "Selector Appearance"
+#, kde-format
 msgid "Hue Ring Appearance:"
-msgstr "拾色器外观"
+msgstr "色相环外观："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgid "Static"
-msgstr "状态"
+msgstr "静态"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
 #, kde-format
 msgid "Dynamic"
-msgstr ""
+msgstr "动态"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
 #, kde-format
 msgid "Dynamic + Static Edge"
-msgstr ""
+msgstr "动态 + 静态边缘"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpQuickSettingsMenu)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
-#, fuzzy, kde-format
-#| msgid "Quick Settings Docker"
+#, kde-format
 msgid "Show &Quick Settings Menu"
-msgstr "笔刷常用数值一键切换面板"
+msgstr "显示快速设置菜单(&Q)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:124
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select layout"
+#, kde-format
 msgid "Favorite Selector Layouts:"
-msgstr "选择布局"
+msgstr "常用拾色器布局："
 
 #. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
-#, fuzzy, kde-format
-#| msgid "&Select..."
+#, kde-format
 msgid "Select..."
-msgstr "导入(&S)..."
+msgstr "选择 (可选择多种)..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
-#, fuzzy, kde-format
-#| msgid "Select a Color Space"
+#, kde-format
 msgid "Selection Color Space:"
-msgstr "选择色彩空间"
+msgstr "拾取色的色彩空间"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
-#, fuzzy, kde-format
-#| msgid "Layers/Masks"
+#, kde-format
 msgid "Layer/Mask"
 msgstr "图层/蒙版"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Projection Color Space"
+#, kde-format
 msgid "Proof Colors to Painting Color Space"
-msgstr "转换视图色彩空间"
+msgstr "色彩校样到绘制色彩空间"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
 #, kde-format
 msgid "Pop-ups"
-msgstr ""
+msgstr "悬浮窗口"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Group size"
+#, kde-format
 msgid "Pop-up size:"
-msgstr "组块大小"
+msgstr "悬浮窗口大小："
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:221
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:539
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Patches"
-msgstr "色块(&R)"
+msgstr "色块"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -39856,10 +39827,9 @@ msgstr "色块(&R)"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:560
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:767
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Orientation:"
-msgstr "方向"
+msgstr "方向："
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryHorizontal)
@@ -39867,8 +39837,7 @@ msgstr "方向"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:260
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:582
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
-#, fuzzy, kde-format
-#| msgid "Hori&zontal"
+#, kde-format
 msgid "hori&zontal"
 msgstr "水平(&Z)"
 
@@ -39878,8 +39847,7 @@ msgstr "水平(&Z)"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:270
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:592
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
-#, fuzzy, kde-format
-#| msgid "&Vertical"
+#, kde-format
 msgid "&vertical"
 msgstr "垂直(&V)"
 
@@ -39889,10 +39857,9 @@ msgstr "垂直(&V)"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:289
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:628
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:835
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Along Orientation"
-msgstr "方向"
+msgstr "平滑滚动"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -39900,10 +39867,9 @@ msgstr "方向"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:294
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:633
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:840
-#, fuzzy, kde-format
-#| msgid "Vertically"
+#, kde-format
 msgid "Laterally"
-msgstr "垂直"
+msgstr "逐版跳跃"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
@@ -39911,10 +39877,9 @@ msgstr "垂直"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:302
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:641
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Scrolling:"
-msgstr "间距："
+msgstr "滚动："
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -39922,12 +39887,9 @@ msgstr "间距："
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:322
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:651
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:858
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatche.gpl"
-#| msgid "Swatches"
+#, kde-format
 msgid "Patches"
-msgstr "典型色板 - 常规"
+msgstr "色块"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #. i18n: ectx: property (text), widget (QLabel, label_15)
@@ -39935,81 +39897,69 @@ msgstr "典型色板 - 常规"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:356
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:687
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:894
-#, fuzzy, kde-format
-#| msgid "Max Patches: "
+#, kde-format
 msgid "Max Patches:"
 msgstr "最大色块数："
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
-#, fuzzy, kde-format
-#| msgid "Update Selector When:"
+#, kde-format
 msgid "Update Base Color When:"
-msgstr "混色区颜色在以下情况更新："
+msgstr "更新基础颜色，如果："
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
-#, fuzzy, kde-format
-#| msgid "Color channels in color"
+#, kde-format
 msgid "Color changes externally"
-msgstr "用原色显示通道"
+msgstr "颜色在拾色器外发生了改变"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateOnRightClick)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
-#, fuzzy, kde-format
-#| msgid "Right clicking on shade selector"
+#, kde-format
 msgid "Right-clicking on shade selector"
-msgstr "右键点击混色区"
+msgstr "右键点击了渐变混色区"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Interaction ends"
-msgstr "迭代"
+msgstr "操作交互结束"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
-#, fuzzy, kde-format
-#| msgid "Line Count: "
+#, kde-format
 msgid "Line Count:"
 msgstr "渐变色条数："
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgid "Line Height:"
 msgstr "颜色条高度："
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
-#, fuzzy, kde-format
-#| msgctxt "left mouse button"
-#| msgid "left button"
+#, kde-format
 msgid "Clear Button"
-msgstr "左键"
+msgstr "清除按钮"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
-#, fuzzy, kde-format
-#| msgid "Colors from Image"
+#, kde-format
 msgid "Colors fro&m Image"
 msgstr "图像颜色区"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
-#, fuzzy, kde-format
-#| msgid "Auto updates"
+#, kde-format
 msgid "Auto Update"
 msgstr "自动更新"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRange)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
-#, fuzzy, kde-format
-#| msgid "&Range:"
+#, kde-format
 msgid "Range:"
-msgstr "范围(&R)："
+msgstr "范围："
 
 #. i18n: ectx: property (text), widget (QLabel, lblOffset)
 #. i18n: ectx: property (text), widget (QLabel, labelOffset)
@@ -40025,56 +39975,48 @@ msgstr "偏移："
 
 #. i18n: ectx: property (text), widget (QLabel, labelDisplay)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:157
-#, fuzzy, kde-format
-#| msgid "Display"
+#, kde-format
 msgid "Display:"
-msgstr "显示"
+msgstr "显示方式："
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
 #, kde-format
 msgid "S&lider"
-msgstr ""
+msgstr "渐变(&L)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Pa&tches"
-msgstr "色块(&R)"
+msgstr "色块(&T)"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Preview:"
-msgstr "预览"
+msgstr "预览："
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:4
-#, fuzzy, kde-format
-#| msgid "Color Selector Settings"
+#, kde-format
 msgctxt "action"
 msgid "WG Color Selector Actions"
-msgstr "拾色器设置"
+msgstr "宽色域拾色器操作"
 
 #. i18n: context: text @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:7
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color selector"
+#, kde-format
 msgctxt "action"
 msgid "Show wide-gamut color selector"
-msgstr "显示拾色器"
+msgstr "显示宽色域拾色器"
 
 #. i18n: context: text @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:17
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show wide-gamut shade selector"
-msgstr "显示 MyPaint 渐变色拾色器"
+msgstr "显示宽色域渐变混色区"
 
 #. i18n: context: toolTip @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
@@ -40082,12 +40024,10 @@ msgstr "显示 MyPaint 渐变色拾色器"
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:19
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:20
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show shade selector"
-msgstr "显示 MyPaint 渐变色拾色器"
+msgstr "显示渐变混色区"
 
 #. i18n: context: toolTip @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
@@ -40095,12 +40035,10 @@ msgstr "显示 MyPaint 渐变色拾色器"
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:29
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show MyPaint selector"
-msgstr "显示 MyPaint 渐变色拾色器"
+msgstr "显示 MyPaint 渐变色混色区"
 
 #. i18n: context: text @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
@@ -40108,12 +40046,10 @@ msgstr "显示 MyPaint 渐变色拾色器"
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:47
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:50
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color lighter"
+#, kde-format
 msgctxt "action"
 msgid "Make color lighter"
-msgstr "提高笔刷颜色亮度"
+msgstr "提高颜色亮度"
 
 #. i18n: context: toolTip @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:49
@@ -40122,7 +40058,7 @@ msgctxt "action"
 msgid ""
 "Increase value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
-msgstr ""
+msgstr "提高所选颜色的亮度/明度，具体情况取决于所选的色彩模型。"
 
 #. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
@@ -40130,12 +40066,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:57
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color darker"
+#, kde-format
 msgctxt "action"
 msgid "Make color darker"
-msgstr "降低笔刷颜色亮度"
+msgstr "降低颜色亮度"
 
 #. i18n: context: toolTip @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:59
@@ -40144,7 +40078,7 @@ msgctxt "action"
 msgid ""
 "Decreases value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
-msgstr ""
+msgstr "降低所选颜色的亮度/明度，具体情况取决于所选的色彩模型。"
 
 #. i18n: context: text @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
@@ -40152,19 +40086,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:67
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:70
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Saturation HSY"
-#| msgid "Increase Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Increase color saturation"
-msgstr "提高饱和度"
+msgstr "提高颜色饱和度"
 
 #. i18n: context: toolTip @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:69
 #, kde-format
 msgctxt "action"
 msgid "Increase saturation of the selected color"
-msgstr ""
+msgstr "提高所选颜色的饱和度，具体情况取决于所选的色彩模型。"
 
 #. i18n: context: text @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
@@ -40172,19 +40104,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:77
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:80
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Decrease color saturation"
-msgstr "降低饱和度"
+msgstr "降低颜色饱和度"
 
 #. i18n: context: toolTip @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:79
 #, kde-format
 msgctxt "action"
 msgid "Decrease saturation of the selected color"
-msgstr ""
+msgstr "降低所选颜色的饱和度，具体情况取决于所选的色彩模型。"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
@@ -40192,21 +40122,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:87
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:90
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue clockwise"
-msgstr "笔刷颜色顺时针旋转色相"
+msgstr "顺时针偏移色相"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:89
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color clockwise"
-msgstr "笔刷颜色顺时针旋转色相"
+msgstr "顺时针偏移所选颜色的色相"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
@@ -40214,33 +40140,27 @@ msgstr "笔刷颜色顺时针旋转色相"
 #. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:97
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:100
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue counter-clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue counter-clockwise"
-msgstr "笔刷颜色逆时针旋转色相"
+msgstr "逆时针偏移色相"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue counter-clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color counter-clockwise"
-msgstr "笔刷颜色逆时针旋转色相"
+msgstr "逆时针偏移所选颜色的色相"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
-#, fuzzy, kde-format
-#| msgid "Wide Gamut Selector"
+#, kde-format
 msgid "Wide Gamut Color Selector"
-msgstr "多功能拾色器 (宽色域)"
+msgstr "宽色域拾色器"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
-#, fuzzy, kde-format
-#| msgid "Color Selector Settings"
+#, kde-format
 msgid "Wide Gamut Color Selector Settings"
-msgstr "拾色器设置"
+msgstr "宽色域拾色器设置"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:35
 #, kde-format
@@ -40638,17 +40558,15 @@ msgid "Resources Cache Database Explorer"
 msgstr "资源缓存数据库浏览器"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
-#, fuzzy, kde-format
-#| msgid "Versions"
+#, kde-format
 msgid "Version"
 msgstr "版本"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "File name"
-msgstr "文件名："
+msgstr "文件名"
 
 #. i18n: ectx: property (text), widget (QLabel, colorComment_2)
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
@@ -40663,22 +40581,19 @@ msgid "Display Name"
 msgstr "显示名称"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version"
 msgstr "数据库版本"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version"
 msgstr "Krita 版本"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Upgrade date"
-msgstr "更新填色结果"
+msgstr "升级日期"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
@@ -40700,30 +40615,27 @@ msgstr "数据库结构纲要信息"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
-#, fuzzy, kde-format
-#| msgid "Quantization"
+#, kde-format
 msgid "Initialization"
-msgstr "定量化"
+msgstr "初始化"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version:"
-msgstr "数据库版本"
+msgstr "数据库版本："
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version:"
-msgstr "Krita 版本"
+msgstr "Krita 版本："
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
 #, kde-format
 msgid "Schema upgrades"
-msgstr ""
+msgstr "数据库纲目结构升级"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
@@ -42528,7 +42440,7 @@ msgstr "您想要将这些 %1 文件导入为何种资源？"
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
 msgid "Import of some files failed"
-msgstr "无法导入某些文件"
+msgstr "部分文件导入失败"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:54
 #, kde-format
@@ -42544,7 +42456,7 @@ msgctxt ""
 "Warning message after failed attempt to import resources, after this label "
 "there is a box with a list of files"
 msgid "The resource type of following files is unknown:"
-msgstr "下列文件的资源类型未知："
+msgstr "以下文件的资源类型未知："
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:60
 #, kde-format
@@ -42552,7 +42464,7 @@ msgctxt ""
 "Warning message after failed attempt to import resources, after this label "
 "there is a box with a list of files"
 msgid "The import of following files has been cancelled:"
-msgstr "下列文件的导入已被取消："
+msgstr "以下文件的导入已被取消："
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:63
 #, kde-format
@@ -47708,7 +47620,7 @@ msgstr "保存参考图像 %1 失败。"
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:189
 #, kde-format
 msgid "Failed to save the metadata for layer %1."
-msgstr "为图层 %1 保存元数据失败。"
+msgstr "保存图层 %1 的元数据失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:107
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:270
@@ -47719,12 +47631,12 @@ msgstr "打开 %1 失败。"
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:124
 #, kde-format
 msgid "Failed to save the pixel data for layer %1."
-msgstr "为图层 %1保存像素数据失败。"
+msgstr "保存图层 %1 的像素数据失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:128
 #, kde-format
 msgid "Failed to save the annotations for layer %1."
-msgstr "为图层 %1保存注释失败。"
+msgstr "保存图层 %1 的注释失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:150
 #, kde-format
@@ -47734,22 +47646,22 @@ msgstr "保存滤镜图层 %1 失败：它不包含滤镜。"
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:154
 #, kde-format
 msgid "Failed to save the selection for filter layer %1."
-msgstr "为滤镜图层 %1 保存选区失败。"
+msgstr "保存滤镜图层 %1 的选区失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:158
 #, kde-format
 msgid "Failed to save the filter configuration for filter layer %1."
-msgstr "为滤镜图层 %1 保存滤镜选项时失败。"
+msgstr "保存滤镜图层 %1 的滤镜选项时失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:171
 #, kde-format
 msgid "Failed to save the selection for layer %1."
-msgstr "为图层 %1 保存选区失败。"
+msgstr "保存图层 %1 的选区失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:175
 #, kde-format
 msgid "Failed to save the generator configuration for layer %1."
-msgstr "为图层 %1 保存图像生成器设置失败。"
+msgstr "保存图层 %1 的图像生成器设置失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:198
 #, kde-format
@@ -47759,37 +47671,37 @@ msgstr "保存滤镜蒙版 %1 失败：它不包含滤镜。"
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:202
 #, kde-format
 msgid "Failed to save the selection for filter mask %1."
-msgstr "为滤镜蒙版 %1 保存选区失败。"
+msgstr "保存滤镜蒙版 %1 的选区失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:206
 #, kde-format
 msgid "Failed to save the filter configuration for filter mask %1."
-msgstr "为滤镜蒙版 %1 保存滤镜选项失败。"
+msgstr "保存滤镜蒙版 %1 的滤镜选项失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:248
 #, kde-format
 msgid "Failed to save the selection for transparency mask %1."
-msgstr "为透明度蒙版 %1 保存选区失败。"
+msgstr "保存透明度蒙版 %1 的选区失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:257
 #, kde-format
 msgid "Failed to save the selection for local selection %1."
-msgstr "为局部选区蒙版 %1 保存选区失败。"
+msgstr "保存局部选区蒙版 %1 的选区失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:452
 #, kde-format
 msgid "Failed to save the pixel selection data for layer %1."
-msgstr "为图层 %1 保存像素选区数据失败。"
+msgstr "保存图层 %1 的像素选区数据失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:466
 #, kde-format
 msgid "Failed to save the vector selection data for layer %1."
-msgstr "为图层 %1 保存矢量选区数据失败。"
+msgstr "保存图层 %1 的矢量选区数据失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:520
 #, kde-format
 msgid "The metadata backend failed to save the metadata for %1"
-msgstr "元数据后台程序为 %1 保存元数据失败"
+msgstr "元数据后台程序保存 %1 的元数据失败"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:531
 #, kde-format
@@ -59583,52 +59495,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgid ""
-#~ "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on "
-#~ "another free program called FFmpeg to turn frame-by-frame animations into "
-#~ "video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-#~ "i><br><br>            To learn more about setting up Krita for rendering "
-#~ "animations, <a href=\"https://docs.krita.org/en/reference_manual/"
-#~ "render_animation.html#setting-up-krita-for-exporting-animations\">please "
-#~ "visit this section of our User Manual.</a>"
-#~ msgstr ""
-#~ "<b>Krita 无法找到 FFmpeg 软件包。</b><br>                Krita 需要调用一"
-#~ "款名为 FFmpeg 的自由软件来把逐帧动画转换为视频文件。 (FFmpeg 官方网站: "
-#~ "<i><a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a></"
-#~ "i>)<br><br>               如需了解如何配置 Krita 进行动画导出，请<a href="
-#~ "\"https://docs.krita.org/zh_CN/reference_manual/render_animation."
-#~ "html#setting-up-krita-for-exporting-animations\">点此阅读 Krita 使用手册的"
-#~ "相关章节。</a>"
-
-#~ msgid "Please extract ffmpeg from the archive first."
-#~ msgstr "请先把 FFmpeg 从压缩包中解压出来。"
-
-#~ msgid ""
-#~ "This is a source code archive. Please download the application archive "
-#~ "('Windows Builds'), unpack it and then provide the path to the extracted "
-#~ "ffmpeg file."
-#~ msgstr ""
-#~ "这是一个源代码压缩包。请点击网站的 Windows 按钮，下载名为“Windows "
-#~ "builds”应用程序压缩包，再把路径指向解压后的 FFmpeg 文件。"
-
-#~ msgid "This is a source code archive. Please install ffmpeg instead."
-#~ msgstr "这是一个源代码压缩包。请改为安装 FFmpeg 应用软件包。"
-
-#~ msgid "Colu&mns:"
-#~ msgstr "列数(&M)："
-
-#~ msgid "&Rows:"
-#~ msgstr "行数(&R)："
-
-#~ msgid "HSV Sliders to Show"
-#~ msgstr "要显示的 HSV 滑动条"
-
-#~ msgid "HSL Sliders to Show"
-#~ msgstr "要显示的 HSL 滑动条"
-
-#~ msgid "HSI Sliders to Show"
-#~ msgstr "要显示的 HSI 滑动条"
-
-#~ msgid "HSY' Sliders to Show"
-#~ msgstr "要显示的 HSY' 滑动条"

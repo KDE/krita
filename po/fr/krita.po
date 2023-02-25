@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-23 00:56+0000\n"
+"POT-Creation-Date: 2023-02-25 00:57+0000\n"
 "PO-Revision-Date: 2023-02-17 20:15+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
@@ -16351,25 +16351,25 @@ msgstr ""
 "enregistrez le document, l'objet de texte sera converti au format de Krita 5 "
 "et ne sera plus compatible avec Krita 4.x."
 
-#: libs/flake/text/KoSvgTextShape.cpp:2685
+#: libs/flake/text/KoSvgTextShape.cpp:2689
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texte"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2687
-#: libs/flake/text/KoSvgTextShape.cpp:2695
+#: libs/flake/text/KoSvgTextShape.cpp:2691
+#: libs/flake/text/KoSvgTextShape.cpp:2699
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Objet textuel SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2693
+#: libs/flake/text/KoSvgTextShape.cpp:2697
 #, kde-format
 msgid "SVG Text"
 msgstr "Texte SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2707
-#: libs/flake/text/KoSvgTextShape.cpp:2722
+#: libs/flake/text/KoSvgTextShape.cpp:2711
+#: libs/flake/text/KoSvgTextShape.cpp:2726
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -37935,13 +37935,13 @@ msgstr "« FPS » réelles :\t%1"
 msgid "Frames dropped:\t%1%"
 msgstr "Images perdues : \t%1 %"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:689
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:701
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr ""
 "Les trames perdues ne sont pas disponibles dans cette instance de Krita."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:870
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:882
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -37949,8 +37949,8 @@ msgid_plural "Add %1 blank frames"
 msgstr[0] "Ajouter une image vide"
 msgstr[1] "Ajouter %1 images vides"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:915
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:963
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:928
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:976
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"

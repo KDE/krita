@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-23 00:56+0000\n"
-"PO-Revision-Date: 2023-02-19 10:17+0100\n"
+"POT-Creation-Date: 2023-02-25 00:57+0000\n"
+"PO-Revision-Date: 2023-02-24 09:05+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -16239,25 +16239,25 @@ msgstr ""
 "dokument, bo besedilni predmet pretvorjen v obliko Krita 5, ki ne bo več "
 "združljiv s Krito 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2685
+#: libs/flake/text/KoSvgTextShape.cpp:2689
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Besedilo"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2687
-#: libs/flake/text/KoSvgTextShape.cpp:2695
+#: libs/flake/text/KoSvgTextShape.cpp:2691
+#: libs/flake/text/KoSvgTextShape.cpp:2699
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Besedilna oblika SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2693
+#: libs/flake/text/KoSvgTextShape.cpp:2697
 #, kde-format
 msgid "SVG Text"
 msgstr "Besedilo SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2707
-#: libs/flake/text/KoSvgTextShape.cpp:2722
+#: libs/flake/text/KoSvgTextShape.cpp:2711
+#: libs/flake/text/KoSvgTextShape.cpp:2726
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20366,10 +20366,7 @@ msgid "spline"
 msgstr "zlepek"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:100
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Not Applicable, used where there's no colorants or gamma curve found"
-#| msgid "N/A"
+#, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "ni na voljo"
@@ -20377,13 +20374,12 @@ msgstr "ni na voljo"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:377
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
-msgstr ""
+msgstr "Veljavna izvršljiva datoteka FFmpeg ni podana …"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:431
-#, fuzzy, kde-format
-#| msgid "FFMpeg Version: None"
+#, kde-format
 msgid "FFmpeg Version: "
-msgstr "Različica FFMpeg: Brez"
+msgstr "Različica FFMpeg: "
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:648
 #, kde-format
@@ -20391,19 +20387,19 @@ msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
+"FFmpeg, ki ste nam ga podali, je stisnjen. Poskusite najprej izvleči FFmpeg "
+"iz arhiva."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
-#, fuzzy, kde-format
-#| msgid ""
-#| "The location of FFmpeg is invalid. Please select the correct location of "
-#| "the FFmpeg executable on your system."
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be "
 "invalid.                                                     Please select "
 "the correct location of an FFmpeg executable on your system."
 msgstr ""
-"Mesto FFmpeg ni veljavno. Izberite pravo mesto izvršilne datoteke FFmpeg na "
-"svojem sistemu."
+"Podano mesto FFmpeg ni "
+"veljavno.                                                     Izberite pravo "
+"mesto izvršilne datoteke FFmpeg na svojem sistemu."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:675
 #, kde-format
@@ -21235,11 +21231,10 @@ msgid "kbps"
 msgstr "kb/s"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:291
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
-msgstr "Odpri"
+msgstr "OpenH264"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
 #, kde-format
@@ -37163,8 +37158,7 @@ msgstr "to ne vključuje spremembe barve s strani izbirnika sence"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:398
-#, fuzzy, kde-format
-#| msgid "Background color change"
+#, kde-format
 msgid "Background color changes"
 msgstr "spremembi barve ozadja"
 
@@ -37570,12 +37564,12 @@ msgstr "Realne sl/s:\t%1"
 msgid "Frames dropped:\t%1%"
 msgstr "Izpuščene sličice:\t%1%"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:689
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:701
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr "Izpuščene sličice niso na voljo v tem primerku Krita"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:870
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:882
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -37585,8 +37579,8 @@ msgstr[1] "Dodaj %1 prazni sličici"
 msgstr[2] "Dodaj %1 prazne sličice"
 msgstr[3] "Dodaj %1 praznih sličic"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:915
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:963
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:928
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:976
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -60287,53 +60281,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid ""
-#~ "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on "
-#~ "another free program called FFmpeg to turn frame-by-frame animations into "
-#~ "video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-#~ "i><br><br>            To learn more about setting up Krita for rendering "
-#~ "animations, <a href=\"https://docs.krita.org/en/reference_manual/"
-#~ "render_animation.html#setting-up-krita-for-exporting-animations\">please "
-#~ "visit this section of our User Manual.</a>"
-#~ msgstr ""
-#~ "<b>Krita ne najde FFmpeg-a!</b><br>                <i>Krita je odvisna od "
-#~ "drugega prostega programa, imenovanega FFmpeg, da bi animacije sličico po "
-#~ "sličico spremenili v videodatoteke (<a href=\"https://www.ffmpeg.org"
-#~ "\">www.ffmpeg.org</a>).</i><br><br>               Če želite izvedeti več "
-#~ "o nastavitvah Krite za upodabljanje animacij, obiščite <a href=\"https://"
-#~ "docs.krita.org/en/reference_manual/render_animation.html#setting-up-krita-"
-#~ "for-exporting-animations\">ta razdelek našega Uporabniškega priročnika.</"
-#~ "a>"
-
-#~ msgid "Please extract ffmpeg from the archive first."
-#~ msgstr "Najprej izvlecite ffmpeg iz arhiva."
-
-#~ msgid ""
-#~ "This is a source code archive. Please download the application archive "
-#~ "('Windows Builds'), unpack it and then provide the path to the extracted "
-#~ "ffmpeg file."
-#~ msgstr ""
-#~ "To je arhiv izvorne kode. Prenesite arhiv programa (»Windows Builds«), ga "
-#~ "razpakirajte in nato navedite pot do izvlečene datoteke ffmpeg."
-
-#~ msgid "This is a source code archive. Please install ffmpeg instead."
-#~ msgstr "To je arhiv izvorne kode. Namesto tega namestite ffmpeg."
-
-#~ msgid "Colu&mns:"
-#~ msgstr "Stol&pci:"
-
-#~ msgid "&Rows:"
-#~ msgstr "V&rstice:"
-
-#~ msgid "HSV Sliders to Show"
-#~ msgstr "Prikazani drsniki HSV"
-
-#~ msgid "HSL Sliders to Show"
-#~ msgstr "Prikazani drsniki HSL"
-
-#~ msgid "HSI Sliders to Show"
-#~ msgstr "Prikazani drsniki HSI"
-
-#~ msgid "HSY' Sliders to Show"
-#~ msgstr "Prikazani drsniki HSY’"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-23 00:56+0000\n"
-"PO-Revision-Date: 2023-02-18 07:15+0100\n"
+"POT-Creation-Date: 2023-02-25 00:57+0000\n"
+"PO-Revision-Date: 2023-02-24 04:57+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16181,25 +16181,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:2685
+#: libs/flake/text/KoSvgTextShape.cpp:2689
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2687
-#: libs/flake/text/KoSvgTextShape.cpp:2695
+#: libs/flake/text/KoSvgTextShape.cpp:2691
+#: libs/flake/text/KoSvgTextShape.cpp:2699
 #, kde-format
 msgid "SVG Text Shape"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:2693
+#: libs/flake/text/KoSvgTextShape.cpp:2697
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2707
-#: libs/flake/text/KoSvgTextShape.cpp:2722
+#: libs/flake/text/KoSvgTextShape.cpp:2711
+#: libs/flake/text/KoSvgTextShape.cpp:2726
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20243,13 +20243,10 @@ msgid "spline"
 msgstr "სპლაინი"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:100
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Not Applicable, used where there's no colorants or gamma curve found"
-#| msgid "N/A"
+#, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
-msgstr "არარსებული"
+msgstr "N/A"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:377
 #, kde-format
@@ -20257,10 +20254,9 @@ msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:431
-#, fuzzy, kde-format
-#| msgid "FFMpeg Version: None"
+#, kde-format
 msgid "FFmpeg Version: "
-msgstr "FFMpeg -ის ვერსია: არცერთ"
+msgstr "FFMpeg-ის ვერსია: "
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:648
 #, kde-format
@@ -20730,7 +20726,7 @@ msgstr "დაბრუნება"
 msgctxt ""
 "h264 preset name, check simplescreenrecorder for standard translations"
 msgid "ultrafast"
-msgstr ""
+msgstr "ულტრასწრაფი"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:40
 #, kde-format
@@ -21072,11 +21068,10 @@ msgid "kbps"
 msgstr "კბ/წმ"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:291
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
-msgstr "&გახსნა"
+msgstr "OpenH264"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
 #, kde-format
@@ -36162,10 +36157,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:398
-#, fuzzy, kde-format
-#| msgid "Background color"
+#, kde-format
 msgid "Background color changes"
-msgstr "ფონის ფერი"
+msgstr "ფონის ფერის ცვლილებები"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnForeground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:411
@@ -36567,12 +36561,12 @@ msgstr ""
 msgid "Frames dropped:\t%1%"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:689
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:701
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:870
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:882
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -36580,8 +36574,8 @@ msgid_plural "Add %1 blank frames"
 msgstr[0] "ცარიელი კადრის დამატება"
 msgstr[1] "ცარიელი %1 კადრის დამატება"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:915
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:963
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:928
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:976
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -37178,7 +37172,7 @@ msgstr ""
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:311
 #, kde-format
 msgid "Do you want to save it?"
-msgstr ""
+msgstr "გნებავთ შენახვა?"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:563
 #, kde-format
@@ -38167,7 +38161,7 @@ msgstr ""
 #: plugins/dockers/recorder/recorder_export.ui:259
 #, kde-format
 msgid "Video FPS:"
-msgstr ""
+msgstr "ვიდეოს კადრი/წმ:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonEditProfile)
 #: plugins/dockers/recorder/recorder_export.ui:290
@@ -52419,7 +52413,7 @@ msgstr "მეთოდი:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:67
 msgid "Percentage:"
-msgstr ""
+msgstr "პროცენტულობა:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:209
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:265

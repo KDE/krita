@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-15 11:07\n"
+"PO-Revision-Date: 2023-02-24 12:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -20160,7 +20160,7 @@ msgstr "样条曲线"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
 #, kde-format
 msgid "Failed to create a work directory, make sure you have write permission"
-msgstr "无法创建工作目录。请确保您具备写入权限。"
+msgstr "创建工作目录失败。请确保您有写入权限。"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:188
 #, kde-format
@@ -20194,7 +20194,7 @@ msgstr "从 %2 视频中提取了 %1 帧。"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
 #, kde-format
 msgid "Failed to export frames from video"
-msgstr "无法从视频导出动画帧"
+msgstr "导出视频的动画帧失败"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:357
 #, kde-format
@@ -20330,7 +20330,7 @@ msgstr "未找到视频流。"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:776
 #, kde-format
 msgid "Failed to load video information"
-msgstr "无法加载视频信息"
+msgstr "加载视频信息失败"
 
 #: libs/ui/animation/KisFFMpegWrapper.cpp:329
 #, kde-format
@@ -21718,7 +21718,7 @@ msgid ""
 "\n"
 "%1"
 msgstr ""
-"无法启用快速预渲染。\n"
+"快速预渲染模式激活失败。\n"
 "\n"
 "%1"
 
@@ -22820,7 +22820,7 @@ msgid ""
 "\n"
 "Rendering cancelled."
 msgstr ""
-"无法删除旧的帧输出文件：\n"
+"删除旧的帧输出文件失败：\n"
 "\n"
 "%1\n"
 "\n"
@@ -26372,7 +26372,7 @@ msgstr "基本三角形拾色器 (sRGB 色域)"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:93
 #, kde-format
 msgid "Wide Gamut Selector"
-msgstr "多功能拾色器 (宽色域)"
+msgstr "宽色域拾色器"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:101
@@ -28133,7 +28133,7 @@ msgstr "无法找到链接的文件：%1"
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot load its linked file"
 msgid "Failed to load linked file: %1"
-msgstr "无法加载链接的文件：%1"
+msgstr "加载链接的文件失败：%1"
 
 #: libs/ui/kis_filter_manager.cc:190
 #, kde-format
@@ -29845,7 +29845,7 @@ msgstr ""
 #: libs/ui/KisMainWindow.cpp:2122
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
-msgstr "无法创建新图像。动画导入已中止。"
+msgstr "创建新图像失败。动画导入已中止。"
 
 #: libs/ui/KisMainWindow.cpp:2546
 #, kde-format
@@ -36393,19 +36393,19 @@ msgstr "色彩模型："
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:533
 #, kde-format
 msgid "Update Selector When:"
-msgstr "混色区颜色在以下情况更新："
+msgstr "更新渐变混色区的颜色，如果："
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnRightClick)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:540
 #, kde-format
 msgid "Right clicking on shade selector"
-msgstr "右键点击混色区"
+msgstr "右键点击了渐变混色区"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnLeftClick)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:547
 #, kde-format
 msgid "Left clicking on shade selector"
-msgstr "左键点击混色区"
+msgstr "左键点击了混色区"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnForeground)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, shadeSelectorUpdateOnBackground)
@@ -36419,13 +36419,13 @@ msgstr "不包含通过混色区引起的前景色/背景色变化"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:557
 #, kde-format
 msgid "Foreground color changes"
-msgstr "前景色变化"
+msgstr "前景色发生了变化"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:570
 #, kde-format
 msgid "Background color change"
-msgstr "背景色变化"
+msgstr "背景色发生了变化"
 
 #. i18n: ectx: property (title), widget (QGroupBox, minimalShadeSelectorGroup)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:590
@@ -41491,7 +41491,7 @@ msgstr "您想要将这些 %1 文件导入为何种资源？"
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
 msgid "Import of some files failed"
-msgstr "无法导入某些文件"
+msgstr "部分文件导入失败"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:54
 #, kde-format
@@ -41507,7 +41507,7 @@ msgctxt ""
 "Warning message after failed attempt to import resources, after this label "
 "there is a box with a list of files"
 msgid "The resource type of following files is unknown:"
-msgstr "下列文件的资源类型未知："
+msgstr "以下文件的资源类型未知："
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:60
 #, kde-format
@@ -41515,7 +41515,7 @@ msgctxt ""
 "Warning message after failed attempt to import resources, after this label "
 "there is a box with a list of files"
 msgid "The import of following files has been cancelled:"
-msgstr "下列文件的导入已被取消："
+msgstr "以下文件的导入已被取消："
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:63
 #, kde-format
@@ -46571,7 +46571,7 @@ msgstr "保存参考图像 %1 失败。"
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:189
 #, kde-format
 msgid "Failed to save the metadata for layer %1."
-msgstr "为图层 %1 保存元数据失败。"
+msgstr "保存图层 %1 的元数据失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:107
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:270
@@ -46582,12 +46582,12 @@ msgstr "打开 %1 失败。"
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:124
 #, kde-format
 msgid "Failed to save the pixel data for layer %1."
-msgstr "为图层 %1保存像素数据失败。"
+msgstr "保存图层 %1 的像素数据失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:128
 #, kde-format
 msgid "Failed to save the annotations for layer %1."
-msgstr "为图层 %1保存注释失败。"
+msgstr "保存图层 %1 的注释失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:150
 #, kde-format
@@ -46597,22 +46597,22 @@ msgstr "保存滤镜图层 %1 失败：它不包含滤镜。"
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:154
 #, kde-format
 msgid "Failed to save the selection for filter layer %1."
-msgstr "为滤镜图层 %1 保存选区失败。"
+msgstr "保存滤镜图层 %1 的选区失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:158
 #, kde-format
 msgid "Failed to save the filter configuration for filter layer %1."
-msgstr "为滤镜图层 %1 保存滤镜选项时失败。"
+msgstr "保存滤镜图层 %1 的滤镜选项时失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:171
 #, kde-format
 msgid "Failed to save the selection for layer %1."
-msgstr "为图层 %1 保存选区失败。"
+msgstr "保存图层 %1 的选区失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:175
 #, kde-format
 msgid "Failed to save the generator configuration for layer %1."
-msgstr "为图层 %1 保存图像生成器设置失败。"
+msgstr "保存图层 %1 的图像生成器设置失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:198
 #, kde-format
@@ -46622,37 +46622,37 @@ msgstr "保存滤镜蒙版 %1 失败：它不包含滤镜。"
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:202
 #, kde-format
 msgid "Failed to save the selection for filter mask %1."
-msgstr "为滤镜蒙版 %1 保存选区失败。"
+msgstr "保存滤镜蒙版 %1 的选区失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:206
 #, kde-format
 msgid "Failed to save the filter configuration for filter mask %1."
-msgstr "为滤镜蒙版 %1 保存滤镜选项失败。"
+msgstr "保存滤镜蒙版 %1 的滤镜选项失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:248
 #, kde-format
 msgid "Failed to save the selection for transparency mask %1."
-msgstr "为透明度蒙版 %1 保存选区失败。"
+msgstr "保存透明度蒙版 %1 的选区失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:257
 #, kde-format
 msgid "Failed to save the selection for local selection %1."
-msgstr "为局部选区蒙版 %1 保存选区失败。"
+msgstr "保存局部选区蒙版 %1 的选区失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:452
 #, kde-format
 msgid "Failed to save the pixel selection data for layer %1."
-msgstr "为图层 %1 保存像素选区数据失败。"
+msgstr "保存图层 %1 的像素选区数据失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:466
 #, kde-format
 msgid "Failed to save the vector selection data for layer %1."
-msgstr "为图层 %1 保存矢量选区数据失败。"
+msgstr "保存图层 %1 的矢量选区数据失败。"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:520
 #, kde-format
 msgid "The metadata backend failed to save the metadata for %1"
-msgstr "元数据后台程序为 %1 保存元数据失败"
+msgstr "元数据后台程序保存 %1 的元数据失败"
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:531
 #, kde-format

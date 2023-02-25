@@ -79,7 +79,9 @@ void KisInputConfigurationPageItem::setWarningEnabled(bool enabled, QString addi
         ui->warningConflictButton->setToolTip(m_defaultToolTipText);
     } else if (!additionalToolTipText.isEmpty()) {
         const QString toolTipText =
-            ui->warningConflictButton->toolTip() + "\n" + i18n("Conflicting Input: ") + additionalToolTipText;
+            "<html>" +
+            ui->warningConflictButton->toolTip() + "<br>" + additionalToolTipText +
+            "</html>";
         ui->warningConflictButton->setToolTip(toolTipText);
     }
 }

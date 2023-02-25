@@ -95,12 +95,20 @@ void KisInputConfigurationPage::checkForConflicts()
     if (conflictingShortcuts.isEmpty()) {
         return;
     }
+
+    struct ShortcutInfo {
+        QVector<KisShortcutConfiguration *> shortcutObjects;
+        QStringList actionTexts;
+    };
+    QMap<QString, ShortcutInfo> conflictingShortcutsMap;
+
     Q_FOREACH (KisShortcutConfiguration *shortcut, conflictingShortcuts) {
         if (shortcut->action()) {
             if (m_d->actionInputConfigurationMap.contains(shortcut->action())) {
-                m_d->actionInputConfigurationMap[shortcut->action()]->setWarningEnabled(
-                    true,
-                    shortcut->getInputText());
+                ShortcutInfo &shortcutInfo = conflictingShortcutsMap[shortcut->getInputText()];
+                shortcutInfo.shortcutObjects.append(shortcut);
+                const QString subActionName = shortcut->action()->shortcutIndexes().key(shortcut->mode());
+                shortcutInfo.actionTexts.append(shortcut->action()->name() + " → " + subActionName);
             } else {
                 qWarning() << "KisInputConfigurationPageItem does not exist for the specified action:"
                            << shortcut->action()->name();
@@ -108,6 +116,30 @@ void KisInputConfigurationPage::checkForConflicts()
         } else {
             qWarning() << "Action not set for the given shortcut.";
         }
+    }
+
+    QMap<KisAbstractInputAction *, QSet<QString>> infoTexts;
+    Q_FOREACH (const ShortcutInfo &shortcutInfo, conflictingShortcutsMap) {
+        const QString text = "<b>" + shortcutInfo.shortcutObjects.first()->getInputText() + "</b>" + "<br>&nbsp;&nbsp;"
+            + shortcutInfo.actionTexts.join("<br>&nbsp;&nbsp;");
+        Q_FOREACH (KisShortcutConfiguration *shortcut, shortcutInfo.shortcutObjects) {
+            infoTexts[shortcut->action()] << text;
+        }
+    }
+
+    QMapIterator<KisAbstractInputAction *, QSet<QString>> it(infoTexts);
+    while (it.hasNext()) {
+        it.next();
+        QSetIterator<QString> it2(it.value());
+        if (!it2.hasNext()) {
+            continue;
+        }
+        QString text = "<ul> <li>" + it2.next() + "</li>";
+        while (it2.hasNext()) {
+            text += "<li>" + it2.next() + "</li>";
+        }
+        text += "</ul>";
+        m_d->actionInputConfigurationMap[it.key()]->setWarningEnabled(true, text);
     }
 }
 

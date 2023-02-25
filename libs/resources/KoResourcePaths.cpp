@@ -38,7 +38,18 @@ static QStringList cleanup(const QStringList &pathList)
     QStringList cleanedPathList;
 
     bool getRidOfAppDataLocation = KoResourcePaths::getAppDataLocation() != QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    const QString writableLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    const QString writableLocation = []() {
+        QString location = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        // we have to ensure that the location has a trailing separator, because otherwise when we'll do startsWith
+        // check it will skip paths that start have the same path but different directory name. E.g:
+        // ~/.local/share/krita -> AppDataLocation
+        // ~/.local/share/krita3 -> custom location, but this will be skipped in getRidOfAppDataLocation.
+        if (location.back() == '/') {
+            return location;
+        } else {
+            return QString(location + "/");
+        }
+    }();
 
      Q_FOREACH(const QString &path, pathList) {
         QString cleanPath = cleanup(path);

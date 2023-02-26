@@ -37,14 +37,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="fileLocationLabel">
          <property name="text">
-          <string>Choose a video file</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QToolButton" name="filePickerButton">
-         <property name="text">
-          <string>...</string>
+          <string>Video file:</string>
          </property>
         </widget>
        </item>
@@ -509,6 +502,9 @@ The higher the sensitivity, the more frames are added to Krita.</string>
          </layout>
         </widget>
        </item>
+       <item row="0" column="1">
+        <widget class="KisFileNameRequester" name="fileLocation" native="true"/>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabOptions">
@@ -679,6 +675,12 @@ The higher the sensitivity, the more frames are added to Krita.</string>
    <class>KisWarningBlock</class>
    <extends>QGroupBox</extends>
    <header location="global">kis_warning_block.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisFileNameRequester</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_file_name_requester.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

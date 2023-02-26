@@ -60,7 +60,7 @@ public:
     QStringList documentInfo();
 
 protected Q_SLOTS:
-    void slotAddFile();
+    void loadVideoFile(const QString &filename);
     void slotNextFrame();
     void slotPrevFrame();
     void slotFrameNumberChanged(int frame);
@@ -70,15 +70,11 @@ protected Q_SLOTS:
     
     void slotDocumentHandlerChanged(int selectedIndex);
 
-    
     void slotFFProbeFile();
     void slotFFMpegFile();
 
-
-
 private:
     void toggleInputControls(bool toggleBool);
-    void loadVideoFile(const QString &filename);
     void CurrentFrameChanged(int frame);
     void updateVideoPreview();
     QStringList makeVideoMimeTypesList();

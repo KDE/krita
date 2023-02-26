@@ -72,7 +72,8 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
 
     m_ui.cmbFFProbeLocation->addItem("[Disabled]",QJsonObject({{"path",""},{"enabled",false}}));
 
-    m_ui.filePickerButton->setIcon(KisIconUtils::loadIcon("folder"));
+    m_ui.fileLocation->setMode(KoFileDialog::OpenFile);
+    m_ui.fileLocation->setMimeTypeFilters(makeVideoMimeTypesList());
     m_ui.nextFrameButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
     m_ui.prevFrameButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
 
@@ -138,7 +139,7 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
     m_currentFrame = 0;
     CurrentFrameChanged(0);
 
-    connect(m_ui.filePickerButton, SIGNAL(clicked()), SLOT(slotAddFile()));
+    connect(m_ui.fileLocation, &KisFileNameRequester::fileSelected, this, &KisDlgImportVideoAnimation::loadVideoFile);
     connect(m_ui.nextFrameButton, SIGNAL(clicked()), SLOT(slotNextFrame()));
     connect(m_ui.prevFrameButton, SIGNAL(clicked()), SLOT(slotPrevFrame()));
     connect(m_ui.currentFrameNumberInput, SIGNAL(valueChanged(int)), SLOT(slotFrameNumberChanged(int)));
@@ -323,15 +324,6 @@ QStringList KisDlgImportVideoAnimation::documentInfo() {
     return documentInfoList;
 }
 
-void KisDlgImportVideoAnimation::slotAddFile()
-{
-    QStringList urls = showOpenFileDialog();
-
-    if (!urls.isEmpty())
-        loadVideoFile( urls[0] );
-
-}
-
 QStringList KisDlgImportVideoAnimation::makeVideoMimeTypesList()
 {
     QStringList supportedMimeTypes = QStringList();
@@ -376,13 +368,6 @@ void KisDlgImportVideoAnimation::loadVideoFile(const QString &filename)
     const QFileInfo resultFileInfo(filename);
     const QDir videoDir(resultFileInfo.absolutePath());
 
-    QFontMetrics metrics(m_ui.fileLocationLabel->font());
-    const int fileLabelWidth = m_ui.fileLocationLabel->width() > 400 ? m_ui.fileLocationLabel->width():400;
-
-    QString elidedFileString = metrics.elidedText(resultFileInfo.absolutePath(), Qt::ElideMiddle, qFloor(fileLabelWidth*0.6))
-                             + "/" + metrics.elidedText(resultFileInfo.fileName(), Qt::ElideMiddle, qFloor(fileLabelWidth*0.4));
-
-    m_ui.fileLocationLabel->setText(elidedFileString);
     m_videoInfo = loadVideoInfo(filename);
 
     if ( m_videoInfo.file.isEmpty() ) return;

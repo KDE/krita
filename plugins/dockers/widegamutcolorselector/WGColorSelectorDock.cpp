@@ -297,7 +297,7 @@ void WGColorSelectorDock::slotConfigurationChanged()
             m_quickSettingAction->setDefaultWidget(m_quickSettings);
 
             configureMenu->addAction(m_quickSettingAction);
-            QAction *cfgAction = configureMenu->addAction("Configure...");
+            QAction *cfgAction = configureMenu->addAction(i18nc("Wide Gamut Color Selector", "Configure..."));
             connect(cfgAction, SIGNAL(triggered(bool)), SLOT(slotOpenSettings()));
             m_configButton->setMenu(configureMenu);
         } else {

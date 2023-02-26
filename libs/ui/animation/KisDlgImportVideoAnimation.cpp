@@ -148,9 +148,6 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
     connect(m_ui.ffmpegPickerButton, SIGNAL(clicked()), SLOT(slotFFMpegFile()));
 
     connect(m_ui.exportDurationSpinbox, SIGNAL(valueChanged(qreal)), SLOT(slotImportDurationChanged(qreal)));
-
-    slotAddFile();
-
 }
 
 KisPropertiesConfigurationSP KisDlgImportVideoAnimation::loadLastUsedConfiguration(QString configurationID) {

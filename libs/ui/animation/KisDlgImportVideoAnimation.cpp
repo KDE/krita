@@ -128,9 +128,6 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
 
     m_ui.tabWidget->setCurrentIndex(0);
 
-    mainWidget()->setMinimumSize( page->size() );
-    mainWidget()->adjustSize();
-
     m_videoSliderTimer = new QTimer(this);
     m_videoSliderTimer->setSingleShot(true);
 
@@ -449,15 +446,13 @@ void KisDlgImportVideoAnimation::updateVideoPreview()
         QPixmap thumbnailPixmap;
         thumbnailPixmap.loadFromData(byteImage,"JFIF");
 
-        m_ui.thumbnailImageHolder->setText("");
-        m_ui.thumbnailImageHolder->setPixmap(thumbnailPixmap.scaled(m_ui.thumbnailImageHolder->width()
-                                                                    , m_ui.thumbnailImageHolder->height()
-                                                                    , Qt::KeepAspectRatio
-                                                                    , Qt::SmoothTransformation));
+        m_ui.thumbnailImageHolder->clear();
+        const QSize previewSize =
+            m_ui.thumbnailImageHolder->contentsRect().size() * m_ui.thumbnailImageHolder->devicePixelRatioF();
+        QPixmap img = thumbnailPixmap.scaled(previewSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        img.setDevicePixelRatio(m_ui.thumbnailImageHolder->devicePixelRatioF());
+        m_ui.thumbnailImageHolder->setPixmap(img);
     }
-
-    m_ui.thumbnailImageHolder->show();
-
 }
 
 

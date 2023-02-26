@@ -370,6 +370,7 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
     // Let's START with the assumption that user-specified ffmpeg path is invalid
     // and clear out all of the ffmpeg-specific fields to fill post-validation...
     m_page->cmbRenderType->setDisabled(true);
+    m_page->bnRenderOptions->setDisabled(true);
     m_page->cmbRenderType->clear();
     ffmpegEncoderTypes.clear();
 
@@ -426,6 +427,7 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
                 m_page->cmbRenderType->setCurrentIndex(desiredIndex % indexCount); // ;P
                 selectRenderType(m_page->cmbRenderType->currentIndex());
                 m_page->cmbRenderType->setDisabled(false);
+                m_page->bnRenderOptions->setDisabled(false);
                 connect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), this, SLOT(selectRenderType(int)));
             }
         }

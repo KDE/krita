@@ -506,8 +506,8 @@ void KisDlgImportVideoAnimation::slotImportDurationChanged(qreal time)
 
     QStringList warnings;
 
-    QString text_frames = i18nc("part of warning in video importer."
-                                , "WARNING, you are trying to import %1 frames, the maximum amount you can import is %2."
+    const QString text_frames = i18nc("part of warning in video importer."
+                                , "<b>Warning:</b> you are trying to import %1 frames, the maximum amount you can import is %2."
                                 , frames
                                 , maxFrames);
 

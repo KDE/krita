@@ -382,6 +382,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
 
 void KisPresetLivePreviewView::changeEvent(QEvent *event)
 {
+    QWidget::changeEvent(event);
     if (event->type() == QEvent::PaletteChange) {
         if (m_currentPreset) {
             requestUpdateStroke();

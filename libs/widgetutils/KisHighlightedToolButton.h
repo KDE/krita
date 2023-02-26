@@ -21,6 +21,7 @@ public:
     }
 
     void changeEvent(QEvent *event) override {
+        QWidget::changeEvent(event);
         if (event->type() == QEvent::PaletteChange) {
             updatePalette();
         }

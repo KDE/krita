@@ -219,8 +219,18 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
     // Initialize FFmpeg location... (!)
     KisConfig cfg(false);
-    QString cfgFFmpegPath = cfg.ffmpegLocation();
-    QString likelyFFmpegPath = cfgFFmpegPath.isEmpty() ? lastUsedOptions.ffmpegPath : cfgFFmpegPath;
+    const QString cfgFFmpegPath = cfg.ffmpegLocation();
+    const QString likelyFFmpegPath = [&]() {
+        if (!cfgFFmpegPath.isEmpty()) {
+            return cfgFFmpegPath;
+        }
+
+        if (!lastUsedOptions.ffmpegPath.isEmpty()) {
+            return lastUsedOptions.ffmpegPath;
+        }
+
+        return QStandardPaths::findExecutable("ffmpeg");
+    }();
 
     m_page->ffmpegLocation->setFileName(likelyFFmpegPath);
     m_page->ffmpegLocation->setStartDir(QFileInfo(m_doc->localFilePath()).path());

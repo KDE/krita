@@ -65,8 +65,8 @@ if(PERL_FOUND OR USE_STRAWBERRYPERL)
         ext_libaom
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-        URL https://storage.googleapis.com/aom-releases/libaom-3.5.0.tar.gz
-        URL_HASH SHA256=d37dbee372e2430a7efde813984ae6d78bdf1fc4080ebe32457c9115408b0738
+        URL https://storage.googleapis.com/aom-releases/libaom-3.6.0.tar.gz
+        URL_HASH SHA256=a4a6c0fab685da743b796662a928fcdf7ae60594edc306efb73e78a17ea6cde6
 
         # Shared libraries cause a race condition in MSVC because
         # both export and static targets output the same file.

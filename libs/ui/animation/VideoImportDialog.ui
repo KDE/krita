@@ -10,12 +10,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>512</width>
-    <height>675</height>
+    <width>554</width>
+    <height>559</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -33,101 +33,58 @@
       <attribute name="title">
        <string>General</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout">
+      <layout class="QFormLayout" name="formLayout_5">
        <item row="0" column="0">
-        <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,6,4">
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_1">
-           <property name="spacing">
-            <number>10</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="fileLocationLabel">
-             <property name="text">
-              <string>Choose a video file</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="filePickerButton">
-             <property name="text">
-              <string>...</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QLabel" name="lblWarning">
-           <property name="text">
-            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:10pt; font-weight:500; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt; font-weight:600; color:#ff692e;&quot;&gt;WARNING: &lt;/span&gt;&lt;span style=&quot; font-size:16pt; font-weight:400; color:#ff692e;&quot;&gt;This video contains more than 100 frames. Loading too many frames can overload your computer. Use a&lt;/span&gt;&lt;span style=&quot; font-size:16pt; font-weight:400; color:#ff1500;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;https://kdenlive.org&quot;&gt;&lt;span style=&quot; font-size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;&quot;&gt;video editor &lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:16pt; font-weight:400; color:#ff692e;&quot;&gt;instead!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::RichText</enum>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-           <property name="openExternalLinks">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <property name="spacing">
-            <number>10</number>
-           </property>
-           <item>
+        <widget class="QLabel" name="fileLocationLabel">
+         <property name="text">
+          <string>Choose a video file</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QToolButton" name="filePickerButton">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="KisWarningBlock" name="lblWarning"/>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QWidget" name="widget_6" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QGroupBox" name="groupBox_2">
             <layout class="QVBoxLayout" name="verticalLayout_2">
              <item>
               <widget class="QLabel" name="thumbnailImageHolder">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
                <property name="minimumSize">
                 <size>
-                 <width>300</width>
-                 <height>200</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>300</width>
-                 <height>200</height>
+                 <width>320</width>
+                 <height>240</height>
                 </size>
                </property>
                <property name="frameShape">
-                <enum>QFrame::Box</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
+                <enum>QFrame::StyledPanel</enum>
                </property>
                <property name="text">
                 <string>No Preview</string>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -135,91 +92,77 @@ p, li { white-space: pre-wrap; }
               </widget>
              </item>
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_2">
-               <property name="spacing">
-                <number>10</number>
-               </property>
-               <item>
-                <widget class="QSlider" name="videoPreviewSlider">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="maximum">
-                  <number>1</number>
-                 </property>
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="videoPreviewSliderValueLabel">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>50</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>50</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>0</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <item>
-              <widget class="QLabel" name="label">
-               <property name="font">
-                <font>
-                 <bold>true</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string>Metadata</string>
-               </property>
-               <property name="margin">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="fileLoadedDetails">
+              <widget class="QWidget" name="widget_5" native="true">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>140</width>
-                 <height>16777215</height>
-                </size>
+               <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QSlider" name="videoPreviewSlider">
+                  <property name="maximum">
+                   <number>1</number>
+                  </property>
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="videoPreviewSliderValueLabel">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>50</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>0</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox">
+            <property name="title">
+             <string>Metadata</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QLabel" name="fileLoadedDetails">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
                </property>
                <property name="font">
                 <font>
@@ -242,23 +185,7 @@ p, li { white-space: pre-wrap; }
               </widget>
              </item>
              <item>
-              <spacer name="verticalSpacer">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>10</width>
-                 <height>10</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
               <layout class="QHBoxLayout" name="horizontalLayout_5">
-               <property name="spacing">
-                <number>0</number>
-               </property>
                <item>
                 <widget class="QPushButton" name="prevFrameButton">
                  <property name="sizePolicy">
@@ -333,23 +260,205 @@ p, li { white-space: pre-wrap; }
               </layout>
              </item>
             </layout>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_4">
-           <item>
-            <widget class="QGroupBox" name="exportOptionsGroup">
-             <property name="title">
-              <string>Import Options</string>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QGroupBox" name="exportOptionsGroup">
+         <property name="title">
+          <string>Import Options</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_2">
+          <item row="1" column="0" colspan="2">
+           <widget class="QGroupBox" name="optionFilterDuplicates">
+            <property name="toolTip">
+             <string>Use ffmpeg to detect similar frames and reduce the total number of frames imported.</string>
+            </property>
+            <property name="title">
+             <string>Filter duplicate frames</string>
+            </property>
+            <property name="flat">
+             <bool>false</bool>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+            <layout class="QFormLayout" name="formLayout">
+             <property name="fieldGrowthPolicy">
+              <enum>QFormLayout::ExpandingFieldsGrow</enum>
              </property>
-             <layout class="QGridLayout" name="gridLayout_6">
-              <item row="0" column="0">
-               <layout class="QGridLayout" name="gridLayout_2">
-                <property name="sizeConstraint">
-                 <enum>QLayout::SetMinimumSize</enum>
+             <item row="0" column="0">
+              <widget class="QLabel" name="sensitivityLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Sensitivity</string>
+               </property>
+               <property name="indent">
+                <number>-1</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="KisDoubleSliderSpinBox" name="sensitivitySpinbox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>How sensitive should the duplicate frame filter be when determining
+which frames are added to Krita.
+The higher the sensitivity, the more frames are added to Krita.</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="importDocumentLabel">
+            <property name="text">
+             <string>Import into:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="cmbDocumentHandler">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QWidget" name="widget" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QWidget" name="widget_4" native="true">
+               <layout class="QFormLayout" name="formLayout_7">
+                <property name="leftMargin">
+                 <number>0</number>
                 </property>
-                <item row="0" column="4">
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="fpsLabel">
+                  <property name="text">
+                   <string>FPS:</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QSpinBox" name="fpsSpinbox"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="frameSkipLabel">
+                  <property name="text">
+                   <string>Skip Interval:</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QSpinBox" name="frameSkipSpinbox"/>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_2" native="true">
+               <layout class="QFormLayout" name="formLayout_9">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item row="0" column="0" colspan="2">
+                 <widget class="QLabel" name="fpsDocumentLabel">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_3" native="true">
+               <layout class="QFormLayout" name="formLayout_8">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="startExportingAtLabel">
+                  <property name="text">
+                   <string>Start at: </string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
                  <widget class="QDoubleSpinBox" name="startExportingAtSpinbox">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -366,36 +475,6 @@ p, li { white-space: pre-wrap; }
                  </widget>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QLabel" name="frameSkipLabel">
-                  <property name="text">
-                   <string>Skip Interval:</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QLabel" name="fpsDocumentLabel">
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QLabel" name="startExportingAtLabel">
-                  <property name="text">
-                   <string>Start at: </string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3">
                  <widget class="QLabel" name="exportDurationLabel">
                   <property name="text">
                    <string>Duration:</string>
@@ -405,23 +484,7 @@ p, li { white-space: pre-wrap; }
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="fpsLabel">
-                  <property name="text">
-                   <string>FPS:</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QSpinBox" name="fpsSpinbox"/>
-                </item>
                 <item row="1" column="1">
-                 <widget class="QSpinBox" name="frameSkipSpinbox"/>
-                </item>
-                <item row="1" column="4">
                  <widget class="QDoubleSpinBox" name="exportDurationSpinbox">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -438,92 +501,13 @@ p, li { white-space: pre-wrap; }
                  </widget>
                 </item>
                </layout>
-              </item>
-              <item row="2" column="0">
-               <layout class="QHBoxLayout" name="horizontalLayout">
-                <item>
-                 <widget class="QLabel" name="importDocumentLabel">
-                  <property name="text">
-                   <string>Import into:</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="cmbDocumentHandler">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="1" column="0">
-               <widget class="QGroupBox" name="optionFilterDuplicates">
-                <property name="toolTip">
-                 <string>Use ffmpeg to detect similar frames and reduce the total number of frames imported.</string>
-                </property>
-                <property name="title">
-                 <string>Filter duplicate frames</string>
-                </property>
-                <property name="flat">
-                 <bool>true</bool>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-                <property name="checked">
-                 <bool>false</bool>
-                </property>
-                <layout class="QFormLayout" name="formLayout">
-                 <property name="fieldGrowthPolicy">
-                  <enum>QFormLayout::ExpandingFieldsGrow</enum>
-                 </property>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="sensitivityLabel">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>Sensitivity</string>
-                   </property>
-                   <property name="indent">
-                    <number>-1</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="KisDoubleSliderSpinBox" name="sensitivitySpinbox" native="true">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="toolTip">
-                    <string>How sensitive should the duplicate frame filter be when determining
-which frames are added to Krita.
-The higher the sensitivity, the more frames are added to Krita.</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -531,168 +515,152 @@ The higher the sensitivity, the more frames are added to Krita.</string>
       <attribute name="title">
        <string>Advanced</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_8">
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_5" stretch="3,2,2">
-         <item>
-          <widget class="QGroupBox" name="optionsDocumentGroup">
-           <property name="title">
-            <string>Document</string>
-           </property>
-           <layout class="QFormLayout" name="formLayout1">
-            <item row="0" column="0">
-             <widget class="QLabel" name="documentWidthLabel">
-              <property name="text">
-               <string>Width:</string>
+      <layout class="QFormLayout" name="formLayout_6">
+       <item row="0" column="0" colspan="2">
+        <widget class="QGroupBox" name="optionsDocumentGroup">
+         <property name="title">
+          <string>Document</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout1">
+          <item row="0" column="0">
+           <widget class="QLabel" name="documentWidthLabel">
+            <property name="text">
+             <string>Width:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="documentWidthSpinbox"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="documentHeightLabel">
+            <property name="text">
+             <string>Height:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="documentHeightSpinbox"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QGroupBox" name="optionsImportVideoScaleGroup">
+         <property name="title">
+          <string>Import Video Scale</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_3">
+          <item row="0" column="0">
+           <widget class="QLabel" name="videoWidthLabel">
+            <property name="text">
+             <string>Width:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="videoWidthSpinbox"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="videoHeightLabel">
+            <property name="text">
+             <string>Height:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="videoHeightSpinbox"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="videoScaleFilterLabel">
+            <property name="text">
+             <string comment="Resize intepolation method list label">Filter:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="cmbVideoScaleFilter"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QGroupBox" name="optionsFFMpegGroup">
+         <property name="title">
+          <string>FFmpeg</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_4">
+          <item row="0" column="0">
+           <widget class="QLabel" name="ffmpegLocationLabel">
+            <property name="text">
+             <string>FFmpeg path:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QComboBox" name="cmbFFMpegLocation"/>
+            </item>
+            <item>
+             <widget class="QToolButton" name="ffmpegPickerButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <property name="text">
+               <string>...</string>
               </property>
              </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QSpinBox" name="documentWidthSpinbox"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="documentHeightLabel">
-              <property name="text">
-               <string>Height:</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QSpinBox" name="documentHeightSpinbox"/>
             </item>
            </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="optionsImportVideoScaleGroup">
-           <property name="title">
-            <string>Import Video Scale</string>
-           </property>
-           <widget class="QWidget" name="layoutWidget_4">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>30</y>
-              <width>441</width>
-              <height>92</height>
-             </rect>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="ffprobeLocationLabel">
+            <property name="text">
+             <string>FFprobe path:</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,0,0">
-             <property name="sizeConstraint">
-              <enum>QLayout::SetMinimumSize</enum>
-             </property>
-             <item row="0" column="2">
-              <widget class="QLabel" name="videoScaleFilterLabel">
-               <property name="text">
-                <string comment="Resize intepolation method list label">Filter:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="videoWidthLabel">
-               <property name="text">
-                <string>Width:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="videoHeightLabel">
-               <property name="text">
-                <string>Height:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QSpinBox" name="videoWidthSpinbox"/>
-             </item>
-             <item row="1" column="1">
-              <widget class="QSpinBox" name="videoHeightSpinbox"/>
-             </item>
-             <item row="0" column="3">
-              <widget class="QComboBox" name="cmbVideoScaleFilter"/>
-             </item>
-            </layout>
            </widget>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="optionsFFMpegGroup">
-           <property name="title">
-            <string>FFMpeg</string>
-           </property>
-           <widget class="QWidget" name="gridLayoutWidget_3">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>40</y>
-              <width>441</width>
-              <height>84</height>
-             </rect>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,0,0,0" columnminimumwidth="0,0,0,0,0">
-             <property name="sizeConstraint">
-              <enum>QLayout::SetMinimumSize</enum>
-             </property>
-             <item row="0" column="0">
-              <widget class="QLabel" name="ffmpegLocationLabel">
-               <property name="text">
-                <string>FFMpeg Path:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QComboBox" name="cmbFFMpegLocation"/>
-             </item>
-             <item row="0" column="4">
-              <widget class="QToolButton" name="ffmpegPickerButton">
-               <property name="text">
-                <string>...</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="ffprobeLocationLabel">
-               <property name="text">
-                <string>FFProbe Path:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QComboBox" name="cmbFFProbeLocation"/>
-             </item>
-             <item row="1" column="4">
-              <widget class="QToolButton" name="ffprobePickerButton">
-               <property name="text">
-                <string>...</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </widget>
-         </item>
-        </layout>
+          </item>
+          <item row="1" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QComboBox" name="cmbFFProbeLocation"/>
+            </item>
+            <item>
+             <widget class="QToolButton" name="ffprobePickerButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -705,6 +673,12 @@ The higher the sensitivity, the more frames are added to Krita.</string>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisWarningBlock</class>
+   <extends>QGroupBox</extends>
+   <header location="global">kis_warning_block.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

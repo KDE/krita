@@ -333,6 +333,7 @@ subprocess.run(["windeployqt.exe", *QMLDIR_ARGS, "--release", "-gui", "-core", "
 # ffmpeg
 if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg.exe"):
     shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg.exe", f"{pkg_root}\\bin")
+    shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\ffprobe.exe", f"{pkg_root}\\bin")
     shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg_LICENSE.txt",
                 f"{pkg_root}\\bin")
     shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg_README.txt",

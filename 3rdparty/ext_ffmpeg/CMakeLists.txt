@@ -279,8 +279,8 @@ ExternalProject_Add(
             -Ddefault_library=shared
             -Dcli=enabled
             -Dtests=disabled
-            -Dffprobe=disabled
-            -Dffplay=enabled
+            -Dffprobe=enabled
+            -Dffplay=disabled
             -Davdevice=disabled
             -Davcodec=enabled
             -Davformat=enabled

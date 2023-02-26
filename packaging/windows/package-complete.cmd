@@ -740,6 +740,7 @@ if errorlevel 1 (
 
 :: ffmpeg
 copy %DEPS_INSTALL_DIR%\bin\ffmpeg.exe %pkg_root%\bin
+copy %DEPS_INSTALL_DIR%\bin\ffprobe.exe %pkg_root%\bin
 copy %DEPS_INSTALL_DIR%\bin\ffmpeg_LICENSE.txt %pkg_root%\bin
 copy %DEPS_INSTALL_DIR%\bin\ffmpeg_README.txt %pkg_root%\bin
 

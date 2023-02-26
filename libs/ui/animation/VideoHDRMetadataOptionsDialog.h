@@ -7,7 +7,7 @@
 #ifndef VIDEOHDRMETADATAOPTIONSDIALOG_H
 #define VIDEOHDRMETADATAOPTIONSDIALOG_H
 
-#include <QDialog>
+#include <KoDialog.h>
 
 #include "kis_types.h"
 
@@ -16,15 +16,15 @@ struct KisHDRMetadataOptions;
 
 namespace Ui {
 class VideoHDRMetadataOptionsDialog;
-}
+} // namespace Ui
 
-class VideoHDRMetadataOptionsDialog : public QDialog
+class VideoHDRMetadataOptionsDialog : public KoDialog
 {
     Q_OBJECT
 
 public:
     explicit VideoHDRMetadataOptionsDialog(QWidget *parent = nullptr);
-    ~VideoHDRMetadataOptionsDialog();
+    ~VideoHDRMetadataOptionsDialog() override;
 
     void setHDRMetadataOptions(const KisHDRMetadataOptions &options);
     KisHDRMetadataOptions hdrMetadataOptions() const;

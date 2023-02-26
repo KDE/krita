@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
     SPDX-License-Identifier: GPL-3.0-or-later
   </author>
  <class>VideoHDRMetadataOptionsDialog</class>
- <widget class="QDialog" name="VideoHDRMetadataOptionsDialog">
+ <widget class="QWidget" name="VideoHDRMetadataOptionsDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -335,16 +335,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item>
-    <widget class="QDialogButtonBox" name="btnBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

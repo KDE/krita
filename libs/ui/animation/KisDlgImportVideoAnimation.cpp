@@ -486,24 +486,23 @@ void KisDlgImportVideoAnimation::slotVideoTimerTimeout()
 
 void KisDlgImportVideoAnimation::slotImportDurationChanged(qreal time)
 {
-
-    KisMemoryStatisticsServer::Statistics stats =
+    const KisMemoryStatisticsServer::Statistics stats =
             KisMemoryStatisticsServer::instance()
             ->fetchMemoryStatistics(m_activeView ? m_activeView->image() : 0);
     const KFormat format;
 
-    int resolution = m_videoInfo.width * m_videoInfo.height;
-    int pixelSize = 4; //how do we even go about getting the bitdepth???
+    const int resolution = m_videoInfo.width * m_videoInfo.height;
+    quint32 pixelSize = 4; //how do we even go about getting the bitdepth???
     if (m_activeView && m_ui.cmbDocumentHandler->currentIndex() > 0) {
         pixelSize = m_activeView->image()->colorSpace()->pixelSize() * 4;
     } else if (m_videoInfo.colorDepth == "U16"){
         pixelSize = 8;
     }
-    int frames = m_videoInfo.fps * time + 2;
+    const qint64 frames = std::lround(qreal(m_videoInfo.fps) * time + 2);
     // Sometimes, the potential size of the file is so big (a feature length film taking easily 970 gib), that we cannot put it into a number.
     // It's more efficient therefore to calculate the maximum amount of frames possible.
 
-    int maxFrames = stats.totalMemoryLimit / resolution / pixelSize;
+    const qint64 maxFrames = stats.totalMemoryLimit / resolution / pixelSize;
 
     QStringList warnings;
 
@@ -511,15 +510,14 @@ void KisDlgImportVideoAnimation::slotImportDurationChanged(qreal time)
                                 , "WARNING, you are trying to import %1 frames, the maximum amount you can import is %2."
                                 , frames
                                 , maxFrames);
-    warnings.append(text_frames);
+
     QString text_memory;
 
-    QString text_video_editor = i18nc("part of warning in video importer.",
+    const QString text_video_editor = i18nc("part of warning in video importer.",
                                       "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!");
 
-
-
     if (maxFrames < frames) {
+        warnings.append(text_frames);
         text_memory = i18nc("part of warning in video importer."
                             , "You do not have enough memory to load this many frames, the computer will be overloaded.");
         warnings.insert(0, "<span style=\"color:#ff692e;\">");
@@ -527,6 +525,7 @@ void KisDlgImportVideoAnimation::slotImportDurationChanged(qreal time)
         warnings.append(text_video_editor);
         m_ui.lblWarning->setVisible(true);
     } else if (maxFrames < frames * 2) {
+        warnings.append(text_frames);
         text_memory = i18nc("part of warning in video importer."
                             , "This will take over half the available memory, editing will be difficult.");
         warnings.insert(0, "<span style=\"color:#ffee00;\">");
@@ -535,18 +534,21 @@ void KisDlgImportVideoAnimation::slotImportDurationChanged(qreal time)
         m_ui.lblWarning->setVisible(true);
     } else if (m_videoInfo.colorTransfer == TRC_ITU_R_BT_2100_0_HLG
                || m_videoInfo.colorTransfer == TRC_SMPTE_ST_428_1) {
-
+        warnings.append(text_frames);
         QString text_trc =  i18nc("part of warning in video importer."
-                                  , "Krita does not support the video transfer curve (%1), it will be loaded as linear"
+                                  , "Krita does not support the video transfer curve (%1), it will be loaded as linear."
                                   , KoColorProfile::getTransferCharacteristicName(m_videoInfo.colorTransfer));
         warnings.append(text_trc);
-    } else {
-        m_ui.lblWarning->setVisible(false);
     }
 
-    warnings.append("</span>");
-    m_ui.lblWarning->setText(warnings.join(" "));
-
+    if (warnings.isEmpty()) {
+        m_ui.lblWarning->setVisible(false);
+    } else {
+        m_ui.lblWarning->setText(warnings.join(" "));
+        m_ui.lblWarning->setPixmap(
+            m_ui.lblWarning->style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(QSize(32, 32)));
+        m_ui.lblWarning->setVisible(true);
+    }
 }
 
 void KisDlgImportVideoAnimation::slotNextFrame()

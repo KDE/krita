@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>WdgPopupPaletteSettings</class>
  <widget class="QWidget" name="WdgPopupPaletteSettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>342</width>
+    <height>173</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -27,12 +35,6 @@
    </item>
    <item row="0" column="1">
     <widget class="QSpinBox" name="sbNumPresets">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="minimum">
       <number>1</number>
      </property>
@@ -59,17 +61,17 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="KisSliderSpinBox" name="sbPaletteSize" native="true">
-     <property name="suffix" stdset="0">
+    <widget class="KisSliderSpinBox" name="sbPaletteSize">
+     <property name="suffix">
       <string>px</string>
      </property>
-     <property name="minimum" stdset="0">
+     <property name="minimum">
       <number>380</number>
      </property>
-     <property name="maximum" stdset="0">
+     <property name="maximum">
       <number>550</number>
      </property>
-     <property name="value" stdset="0">
+     <property name="value">
       <number>385</number>
      </property>
     </widget>
@@ -103,17 +105,17 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="KisSliderSpinBox" name="sbSelectorSize" native="true">
-     <property name="suffix" stdset="0">
+    <widget class="KisSliderSpinBox" name="sbSelectorSize">
+     <property name="suffix">
       <string>px</string>
      </property>
-     <property name="minimum" stdset="0">
+     <property name="minimum">
       <number>100</number>
      </property>
-     <property name="maximum" stdset="0">
+     <property name="maximum">
       <number>240</number>
      </property>
-     <property name="value" stdset="0">
+     <property name="value">
       <number>144</number>
      </property>
     </widget>

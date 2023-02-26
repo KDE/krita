@@ -715,13 +715,23 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
             return {};       
         } 
 
-        QJsonObject ffprobeSelectedStream = ffprobeStreams[videoInfoData.stream].toObject();
+        const QJsonObject ffprobeSelectedStream = ffprobeStreams[videoInfoData.stream].toObject();
 
-        if (!ffmpegInfo.value("decoder").toObject()[ffprobeSelectedStream["codec_name"].toString()].toBool()) {
+        const QJsonObject decoders = ffmpegInfo.value("codecs").toObject();
+
+        const QString codecName = ffprobeSelectedStream["codec_name"].toString();
+
+        const auto decoder = decoders.constFind(codecName);
+
+        if (decoder == decoders.constEnd() ) {
+            dbgFile << "Codec missing or unsupported:" << codecName;
+            warnFFmpegFormatSupport();
+            return {};
+        } else if (!decoder->toObject().value("decoding").toBool()) {
+            dbgFile << "Codec not supported for decoding:" << codecName;
             warnFFmpegFormatSupport();
             return {};
         }
-
 
         videoInfoData.width = ffprobeSelectedStream["width"].toInt();
         videoInfoData.height = ffprobeSelectedStream["height"].toInt();

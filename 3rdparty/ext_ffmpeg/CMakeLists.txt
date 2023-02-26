@@ -291,6 +291,7 @@ ExternalProject_Add(
             -Dpostproc=disabled
             -Dsdl2=enabled
             -Dlibaom=enabled
+            -Dzlib=enabled
             -Dimage2_demuxer=enabled
             -Dimage2_alias_pix_demuxer=enabled
             -Dimage2_brender_pix_demuxer=enabled
@@ -298,6 +299,7 @@ ExternalProject_Add(
             -Dwebm_muxer=enabled
             -Dmatroska_muxer=enabled
             -Dogg_muxer=enabled
+            -Dapng_muxer=enabled
             # ===================== Image Formats
             -Dlibwebp=enabled
             -Dpng_encoder=enabled

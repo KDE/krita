@@ -42,62 +42,62 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
     QWidget *page = new QWidget(this);
     m_ui.setupUi(page);
     setMainWidget(page);
-    
+
     toggleInputControls(false);
-    
+
     KisPropertiesConfigurationSP config = loadLastUsedConfiguration("ANIMATION_EXPORT");
     QFileInfo ffmpegFileInfo(config->getPropertyLazy("ffmpeg_path",""));
     QFileInfo ffprobeFileInfo(config->getPropertyLazy("ffprobe_path",""));
-    
+
     dbgFile << "Config data =" << "ffmpeg:" << ffmpegFileInfo.absoluteFilePath() << "ffprobe:" << ffprobeFileInfo.absoluteFilePath();
-    
+
     QJsonObject ffmpegInfo = KisFFMpegWrapper::findFFMpeg(ffmpegFileInfo.absoluteFilePath());
 
     if (ffmpegInfo["enabled"].toBool()) {
         m_ui.cmbFFMpegLocation->addItem(ffmpegInfo["path"].toString(),ffmpegInfo);
-        
+
         if (ffprobeFileInfo.filePath().isEmpty())
             ffprobeFileInfo.setFile(ffmpegFileInfo.absoluteDir().filePath("ffprobe"));
-        
+
     } else {
         enableButtonOk(false);
         m_ui.tabGeneral->setEnabled(false);
         QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("FFMpeg not found! Please add a path to FFMpeg in the \"Advanced\" tab"));
     }
 
-    QJsonObject ffprobeInfo = KisFFMpegWrapper::findFFProbe(ffprobeFileInfo.absoluteFilePath());    
-    
+    QJsonObject ffprobeInfo = KisFFMpegWrapper::findFFProbe(ffprobeFileInfo.absoluteFilePath());
+
     if (ffprobeInfo["enabled"].toBool())
         m_ui.cmbFFProbeLocation->addItem(ffprobeInfo["path"].toString(),ffprobeInfo);
-    
+
     m_ui.cmbFFProbeLocation->addItem("[Disabled]",QJsonObject({{"path",""},{"enabled",false}}));
-    
+
     m_ui.filePickerButton->setIcon(KisIconUtils::loadIcon("folder"));
     m_ui.nextFrameButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
     m_ui.prevFrameButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
-    
+
     m_ui.fpsSpinbox->setValue(24.0);
     m_ui.fpsSpinbox->setSuffix(i18nc("FPS as a unit following a value, like 60 FPS", " FPS"));
 
     m_ui.frameSkipSpinbox->setValue(1);
     m_ui.frameSkipSpinbox->setRange(1,20);
-    
+
     m_ui.startExportingAtSpinbox->setValue(0.0);
     m_ui.startExportingAtSpinbox->setRange(0.0, 9999.0);
     m_ui.startExportingAtSpinbox->setSuffix(i18nc("Second as a unit following a value, like 60 s", " s"));
-    
+
     m_ui.videoPreviewSlider->setTickInterval(1);
     m_ui.videoPreviewSlider->setValue(0);
-    
+
     m_ui.exportDurationSpinbox->setValue(3.0);
     m_ui.exportDurationSpinbox->setSuffix(i18nc("Second as a unit following a value, like 60 s", " s"));
-    
+
     m_ui.lblWarning->hide();
 
-    connect(m_ui.cmbDocumentHandler, SIGNAL(currentIndexChanged(int)), SLOT(slotDocumentHandlerChanged(int)));    
+    connect(m_ui.cmbDocumentHandler, SIGNAL(currentIndexChanged(int)), SLOT(slotDocumentHandlerChanged(int)));
 
     m_ui.cmbDocumentHandler->addItem(i18nc("Import video to New Document", "New Document"), "0");
-    
+
     if (m_activeView && m_activeView->document()) {
         m_ui.cmbDocumentHandler->addItem(i18nc("Import video to Current Document", "Current Document"), "1");
         m_ui.cmbDocumentHandler->setCurrentIndex(1);
@@ -110,21 +110,21 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
     m_ui.documentWidthSpinbox->setValue(0);
     m_ui.documentHeightSpinbox->setValue(0);
     m_ui.documentWidthSpinbox->setRange(1,100000);
-    m_ui.documentHeightSpinbox->setRange(1,100000);    
-    
+    m_ui.documentHeightSpinbox->setRange(1,100000);
+
     m_ui.videoWidthSpinbox->setValue(0);
     m_ui.videoHeightSpinbox->setValue(0);
     m_ui.videoWidthSpinbox->setRange(1,100000);
     m_ui.videoHeightSpinbox->setRange(1,100000);
 
     m_ui.sensitivitySpinbox->setValue(50.0f);
-    
+
     m_ui.cmbVideoScaleFilter->addItem(i18n("Bicubic"), "bicubic");
     m_ui.cmbVideoScaleFilter->addItem(i18n("Bilinear"), "bilinear");
     m_ui.cmbVideoScaleFilter->addItem(i18n("Lanczos3"), "lanczos");
     m_ui.cmbVideoScaleFilter->addItem(i18n("Nearest Neighbor"), "neighbor");
     m_ui.cmbVideoScaleFilter->addItem(i18nc("An interpolation method", "Spline"), "spline");
-  
+
     m_ui.tabWidget->setCurrentIndex(0);
 
     mainWidget()->setMinimumSize( page->size() );
@@ -150,7 +150,7 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
     connect(m_ui.exportDurationSpinbox, SIGNAL(valueChanged(qreal)), SLOT(slotImportDurationChanged(qreal)));
 
     slotAddFile();
-     
+
 }
 
 KisPropertiesConfigurationSP KisDlgImportVideoAnimation::loadLastUsedConfiguration(QString configurationID) {
@@ -340,7 +340,7 @@ QStringList KisDlgImportVideoAnimation::makeVideoMimeTypesList()
     QStringList supportedMimeTypes = QStringList();
     supportedMimeTypes << "video/x-matroska";
     supportedMimeTypes << "image/gif";
-    supportedMimeTypes << "image/apng"; 
+    supportedMimeTypes << "image/apng";
     supportedMimeTypes << "image/png";
     supportedMimeTypes << "video/quicktime"; // MOV
     supportedMimeTypes << "video/ogg";
@@ -365,13 +365,13 @@ QStringList KisDlgImportVideoAnimation::showOpenFileDialog()
 }
 
 
-void KisDlgImportVideoAnimation::toggleInputControls(bool toggleBool) 
+void KisDlgImportVideoAnimation::toggleInputControls(bool toggleBool)
 {
     enableButtonOk(toggleBool);
     m_ui.videoPreviewSlider->setEnabled(toggleBool);
     m_ui.currentFrameNumberInput->setEnabled(toggleBool);
     m_ui.nextFrameButton->setEnabled(toggleBool);
-    m_ui.prevFrameButton->setEnabled(toggleBool);    
+    m_ui.prevFrameButton->setEnabled(toggleBool);
 }
 
 void KisDlgImportVideoAnimation::loadVideoFile(const QString &filename)
@@ -443,7 +443,7 @@ void KisDlgImportVideoAnimation::loadVideoFile(const QString &filename)
 }
 
 
-void KisDlgImportVideoAnimation::updateVideoPreview() 
+void KisDlgImportVideoAnimation::updateVideoPreview()
 {
     float currentDurration = ( m_videoInfo.stream != -1 ) ?  (m_currentFrame / m_videoInfo.fps):0;
     QStringList args;
@@ -455,7 +455,7 @@ void KisDlgImportVideoAnimation::updateVideoPreview()
          << "-vcodec" << "mjpeg"
          << "-f" << "image2pipe"
          << "pipe:1";
-             
+
     struct KisFFMpegWrapperSettings ffmpegSettings;
 
     QJsonObject ffmpegInfo = m_ui.cmbFFMpegLocation->currentData().toJsonObject();
@@ -466,7 +466,7 @@ void KisDlgImportVideoAnimation::updateVideoPreview()
     } else {
         QPixmap thumbnailPixmap;
         thumbnailPixmap.loadFromData(byteImage,"JFIF");
-       
+
         m_ui.thumbnailImageHolder->setText("");
         m_ui.thumbnailImageHolder->setPixmap(thumbnailPixmap.scaled(m_ui.thumbnailImageHolder->width()
                                                                     , m_ui.thumbnailImageHolder->height()
@@ -479,7 +479,7 @@ void KisDlgImportVideoAnimation::updateVideoPreview()
 }
 
 
-void KisDlgImportVideoAnimation::slotVideoTimerTimeout() 
+void KisDlgImportVideoAnimation::slotVideoTimerTimeout()
 {
     updateVideoPreview();
 }
@@ -620,7 +620,7 @@ void KisDlgImportVideoAnimation::slotDocumentHandlerChanged(int selectedIndex)
 
     if (toggleDocumentOptions) {
         m_ui.fpsDocumentLabel->setText(" ");
-        
+
         if (m_videoInfo.stream != -1) {
             m_ui.documentWidthSpinbox->setValue(m_videoInfo.width);
             m_ui.documentHeightSpinbox->setValue(m_videoInfo.height);
@@ -659,10 +659,10 @@ void KisDlgImportVideoAnimation::CurrentFrameChanged(int frame)
     // update UI components if they are out of sync
     if (m_currentFrame != m_ui.currentFrameNumberInput->value())
         m_ui.currentFrameNumberInput->setValue(m_currentFrame);
-        
+
     if (m_currentFrame != m_ui.videoPreviewSlider->value())
         m_ui.videoPreviewSlider->setValue(m_currentFrame);
-            
+
     m_ui.videoPreviewSliderValueLabel->setText( QString::number(currentSeconds, 'f', 2).append(i18nc("Second as a unit following a value, like 60 s", " s")) );
 }
 
@@ -717,8 +717,8 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
 
         if ( videoInfoData.stream == -1 ) {
             QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("No video stream could be found!"));
-            return {};       
-        } 
+            return {};
+        }
 
         const QJsonObject ffprobeSelectedStream = ffprobeStreams[videoInfoData.stream].toObject();
 
@@ -751,30 +751,30 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
             videoInfoData.colorDepth = Integer8BitsColorDepthID.id();
         }
 
-        // frame rate comes back in odd format...so we need to do a bit of work so it is more usable. 
+        // frame rate comes back in odd format...so we need to do a bit of work so it is more usable.
         // data will come back like "50/3"
         QStringList rawFrameRate = ffprobeSelectedStream["r_frame_rate"].toString().split('/');
-        
+
         if (!rawFrameRate.isEmpty())
             videoInfoData.fps = qCeil(rawFrameRate[0].toFloat() / rawFrameRate[1].toFloat());
-            
+
         if ( !ffprobeSelectedStream["nb_frames"].isNull() ) {
             videoInfoData.frames = ffprobeSelectedStream["nb_frames"].toString().toInt();
         }
-            
+
         // Get duration from stream, if it doesn't exist such as on VP8 and VP9, try to get it out of format
         if ( !ffprobeSelectedStream["duration"].isNull() ) {
             videoInfoData.duration = ffprobeSelectedStream["duration"].toString().toFloat();
         } else if ( !ffprobeFormat["duration"].isNull() ) {
-            videoInfoData.duration = ffprobeFormat["duration"].toString().toFloat();  
+            videoInfoData.duration = ffprobeFormat["duration"].toString().toFloat();
         } else if ( videoInfoData.frames ) {
             videoInfoData.duration = videoInfoData.frames / videoInfoData.fps;
         }
 
         dbgFile << "Initial video info from probe: "
                 << "stream:" << videoInfoData.stream
-                << "frames:" << videoInfoData.frames 
-                << "duration:" << videoInfoData.duration 
+                << "frames:" << videoInfoData.frames
+                << "duration:" << videoInfoData.duration
                 << "fps:" << videoInfoData.fps
                 << "encoding:" << videoInfoData.encoding;
 
@@ -813,15 +813,15 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
 
     dbgFile << "Final video info from probe: "
             << "stream:" << videoInfoData.stream
-            << "frames:" << videoInfoData.frames 
-            << "duration:" << videoInfoData.duration 
+            << "frames:" << videoInfoData.frames
+            << "duration:" << videoInfoData.duration
             << "fps:" << videoInfoData.fps
             << "encoding:" << videoInfoData.encoding;
 
     const float calculatedFrameRateByDuration = videoInfoData.frames / videoInfoData.duration;
     const int frameRateDifference = qAbs(videoInfoData.fps - calculatedFrameRateByDuration);
 
-    if (frameRateDifference > 1) { 
+    if (frameRateDifference > 1) {
         // something is not right with the frame rate with this file, so let's use our calculated value
         // to make  sure we get the whole duration
         videoInfoData.hasOverriddenFPS = true;

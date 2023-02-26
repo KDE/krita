@@ -30,6 +30,7 @@
 #include <text/KoSvgTextShapeMarkupConverter.h>
 
 #include "kis_debug.h"
+#include <kis_global.h>
 
 #include <KoClipMaskPainter.h>
 #include <KoColorBackground.h>
@@ -164,6 +165,9 @@ public:
                            const QMap<int, int> &logicalToVisual,
                            QVector<CharacterResult> &result,
                            QPointF startPos);
+    static void flowTextInShapes(const KoSvgTextProperties &properties,
+                                 const QMap<int, int> &logicalToVisual,
+                                 QVector<CharacterResult> &result, QList<QPainterPath> shapes);
     void applyTextLength(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal);
     static void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal);
     static qreal
@@ -882,7 +886,21 @@ void KoSvgTextShape::relayout() const
 
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms[0].absolutePos();
-    d->breakLines(this->textProperties(), logicalToVisual, result, startPos);
+
+    if (!d->shapesInside.isEmpty()) {
+        QList<QPainterPath> shapes;
+        Q_FOREACH(KoShape *shape, d->shapesInside) {
+            KoPathShape *path = dynamic_cast<KoPathShape*>(shape);
+            if (path) {
+                QPainterPath p = path->transformation().map(path->outline());
+                p.setFillRule(path->fillRule());
+                shapes.append(p);
+            }
+        }
+        d->flowTextInShapes(this->textProperties(), logicalToVisual, result, shapes);
+    } else {
+        d->breakLines(this->textProperties(), logicalToVisual, result, startPos);
+    }
 
     // Handle baseline alignment.
     globalIndex = 0;
@@ -892,7 +910,7 @@ void KoSvgTextShape::relayout() const
     // If we're doing text-wrapping we should skip the other positioning steps
     // of the algorithm.
 
-    if (inlineSize.isAuto) {
+    if (inlineSize.isAuto && d->shapesInside.isEmpty()) {
         debugFlake << "Starting with SVG 1.1 specific portion";
         debugFlake << "4. Adjust positions: dx, dy";
         // 4. Adjust positions: dx, dy
@@ -1246,6 +1264,7 @@ void addWordToLine(QVector<CharacterResult> &result,
             }
         }
         cr.cssPosition = currentPos;
+        cr.finalPosition = cr.cssPosition;
         currentPos += cr.advance;
         lineAdvance = currentPos;
 
@@ -1266,7 +1285,8 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
                          QVector<int> lineIndices,
                          QRectF lineBox,
                          QPointF currentPos,
-                         KoSvgText::AutoValue lineHeight)
+                         KoSvgText::AutoValue lineHeight,
+                         bool firstLine)
 {
     QPointF offset;
     if (lineHeight.isAuto) {
@@ -1282,7 +1302,7 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
         : writingMode == KoSvgText::VerticalLR                 ? abs(lineBox.left() - currentPos.x()) / lineBox.width()
                                                                : abs(lineBox.right() - currentPos.x()) / lineBox.width();
     QPointF ascent = offset * ascentRatio;
-    bool returnDescent = lineIndices.isEmpty() ? false : lineIndices.first() == 0;
+    bool returnDescent = lineIndices.isEmpty() ? false : firstLine;
     if (!returnDescent) {
         Q_FOREACH (int j, lineIndices) {
             result[j].cssPosition += ascent;
@@ -1465,7 +1485,7 @@ void finalizeLine(QVector<CharacterResult> &result,
     if (inlineSize) {
         applyInlineSizeAnchoring(result, lineIndices, startPos, endPos, anchor, ltr, isHorizontal, firstLine, hangTextIndent, textIndent);
     }
-    lineOffset += lineHeightOffset(writingMode, result, lineIndices, lineBox, currentPos, lineHeight);
+    lineOffset += lineHeightOffset(writingMode, result, lineIndices, lineBox, currentPos, lineHeight, firstLine);
     currentPos = lineOffset;
     if (inlineSize) {
         if (hangTextIndent) {
@@ -1670,7 +1690,6 @@ void KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &properties,
                              textIndentInfo.hanging,
                              textIndent);
             }
-            firstLine = false;
         }
         if (atEnd) {
             if (!wordIndices.isEmpty()) {
@@ -1695,6 +1714,409 @@ void KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &properties,
         }
     }
     debugFlake << "Linebreaking finished";
+}
+
+bool getFirstPosition(QPointF &firstPoint,
+                      QPainterPath p,
+                      QRectF wordBox,
+                      QPointF terminator,
+                      KoSvgText::WritingMode writingMode,
+                      bool ltr) {
+    QVector<QPointF> candidatePositions;
+    QRectF word = wordBox.normalized();
+    qreal precision = 1.0; // floating point maths can be imprecise. TODO: make smaller?.
+    word.translate(-wordBox.topLeft());
+    QPointF terminatorAdjusted = terminator;
+    Q_FOREACH(QPolygonF polygon, p.toFillPolygons()) {
+        QVector<QLineF> offsetPoly;
+        for(int i = 0; i < polygon.size()-1; i++) {
+            QLineF line;
+            line.setP1(polygon.at(i));
+            line.setP2(polygon.at(i+1));
+
+            if (line.angle() == 0.0 || line.angle() == 180.0) {
+                qreal offset = word.center().y() + precision;
+                offsetPoly.append(line.translated(0, offset));
+                offsetPoly.append(line.translated(0, -offset));
+            } else if (line.angle() == 90.0 || line.angle() == 270.0) {
+                qreal offset = word.center().x() + precision;
+                offsetPoly.append(line.translated(offset, 0));
+                offsetPoly.append(line.translated(-offset, 0));
+            } else {
+                qreal tAngle = fmod(line.angle(), 180.0);
+                QPointF cPos = tAngle > 90? line.center() + QPointF(-word.center().x(), word.center().y()): line.center() + word.center();
+                qreal offset = kisDistanceToLine(cPos, line) + precision;
+                const QPointF vectorT(qCos(qDegreesToRadians(tAngle)), -qSin(qDegreesToRadians(tAngle)));
+                QPointF vectorN(-vectorT.y(), vectorT.x());
+                QPointF offsetP = QPointF() - (0.0 * vectorT) + (offset * vectorN);
+                offsetPoly.append(line.translated(offsetP));
+                offsetPoly.append(line.translated(-offsetP));
+            }
+        }
+        if (writingMode == KoSvgText::HorizontalTB) {
+            terminatorAdjusted = terminator + word.center();
+            QLineF top(polygon.boundingRect().topLeft(), polygon.boundingRect().topRight());
+            offsetPoly.append(top.translated(0, terminatorAdjusted.y()));
+        } else if (writingMode == KoSvgText::VerticalRL) {
+            terminatorAdjusted = terminator - word.center();
+            QLineF top(terminatorAdjusted.x(), polygon.boundingRect().top(),
+                       terminatorAdjusted.x(), polygon.boundingRect().bottom());
+            offsetPoly.append(top);
+        } else{
+            terminatorAdjusted = terminator + word.center();
+            QLineF top(terminatorAdjusted.x(), polygon.boundingRect().top(),
+                       terminatorAdjusted.x(), polygon.boundingRect().bottom());
+            offsetPoly.append(top);
+        }
+        for (int i=0; i < offsetPoly.size(); i++) {
+            QLineF line = offsetPoly.at(i);
+            for (int j=i; j< offsetPoly.size(); j++){
+                QLineF line2 = offsetPoly.at(j);
+                QPointF intersectPoint;
+                QLineF::IntersectType intersect = line.intersects(line2, &intersectPoint);
+                if (intersect != QLineF::NoIntersection) {
+                    // should proly handle 'reflex' vertices better.
+                    if (!p.contains(intersectPoint)) {
+                        continue;
+                    }
+                    if(!p.contains(word.translated(intersectPoint-word.center()))) {
+                        continue;
+                    }
+                    if (!candidatePositions.contains(intersectPoint)) {
+                        candidatePositions.append(intersectPoint);
+                    }
+                }
+            }
+        }
+    }
+    if (candidatePositions.isEmpty()) {
+        return false;
+    }
+
+    QPointF firstPointC = writingMode == KoSvgText::VerticalRL? p.boundingRect().bottomLeft(): p.boundingRect().bottomRight();
+    Q_FOREACH(const QPointF candidate, candidatePositions) {
+        if (writingMode == KoSvgText::HorizontalTB) {
+            if (terminatorAdjusted.y() - candidate.y() < precision) {
+
+                if (firstPointC.y() - candidate.y() > precision) {
+                    firstPointC = candidate;
+                } else if (firstPointC.y() - candidate.y() > -precision) {
+                    if (ltr) {
+                        if (candidate.x() < firstPointC.x()) {
+                            firstPointC = candidate;
+                        }
+                    } else {
+                        if (candidate.x() > firstPointC.x()) {
+                            firstPointC = candidate;
+                        }
+                    }
+                }
+            }
+        } else if (writingMode == KoSvgText::VerticalRL) {
+            if (terminatorAdjusted.x() - candidate.x() >= -precision) {
+
+                if (firstPointC.x() - candidate.x() < -precision) {
+                    firstPointC = candidate;
+                } else if (firstPointC.x() - candidate.x() < precision) {
+                    if (ltr) {
+                        if (candidate.y() < firstPointC.y()) {
+                            firstPointC = candidate;
+                        }
+                    } else {
+                        if (candidate.y() > firstPointC.y()) {
+                            firstPointC = candidate;
+                        }
+                    }
+                }
+            }
+        } else {
+            if (terminatorAdjusted.x() - candidate.x() < precision) {
+
+                if (firstPointC.x() - candidate.x() > precision) {
+                    firstPointC = candidate;
+                } else if (firstPointC.x() - candidate.x() > -precision) {
+                    if (ltr) {
+                        if (candidate.y() < firstPointC.y()) {
+                            firstPointC = candidate;
+                        }
+                    } else {
+                        if (candidate.y() > firstPointC.y()) {
+                            firstPointC = candidate;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (!p.contains(firstPointC)) {
+        return false;
+    }
+    firstPointC -= word.center();
+    firstPointC -= wordBox.topLeft();
+    firstPoint = firstPointC;
+
+    return true;
+}
+
+static bool pointLessThan(const QPointF &a, const QPointF &b)
+{
+    return a.x() < b.x();
+}
+
+static bool pointLessThanVertical(const QPointF &a, const QPointF &b)
+{
+    return a.y() < b.y();
+}
+
+QVector<QLineF> findLineBoxesForFirstPos(QPainterPath shape, QPointF firstPos, QRectF wordBox, KoSvgText::WritingMode writingMode) {
+    QVector<QLineF> lines;
+
+    QLineF baseLine;
+    QPointF lineTop;
+    QPointF lineBottom;
+
+    if (writingMode == KoSvgText::HorizontalTB) {
+        baseLine = QLineF(shape.boundingRect().left()-5, firstPos.y(), shape.boundingRect().right()+5, firstPos.y());
+        lineTop = QPointF(0, wordBox.top());
+        lineBottom = QPointF(0, wordBox.bottom());
+    } else {
+        baseLine = QLineF(firstPos.x(), shape.boundingRect().top()-5, firstPos.x(), shape.boundingRect().bottom()+5);
+        if (writingMode == KoSvgText::VerticalRL) {
+            lineTop = QPointF(wordBox.left(), 0);
+            lineBottom = QPointF(wordBox.right(), 0);
+        } else {
+            lineTop = QPointF(wordBox.right(), 0);
+            lineBottom = QPointF(wordBox.left(), 0);
+        }
+    }
+
+    QPolygonF polygon = shape.toFillPolygon();
+    QList<QPointF> intersects;
+    for(int i = 0; i < polygon.size()-1; i++) {
+        QLineF line(polygon.at(i), polygon.at(i+1));
+
+        QPointF intersect;
+        if (baseLine.intersects(line, &intersect) == QLineF::BoundedIntersection) {
+            intersects.append(intersect);
+        }
+    }
+    if (!intersects.isEmpty()) {
+        intersects.append(baseLine.p1());
+        intersects.append(baseLine.p2());
+    }
+    if (writingMode == KoSvgText::HorizontalTB) {
+        std::sort(intersects.begin(), intersects.end(), pointLessThan);
+    } else {
+        std::sort(intersects.begin(), intersects.end(), pointLessThanVertical);
+    }
+
+    for (int i = 0; i< intersects.size()-1; i++) {
+        QLineF line(intersects.at(i), intersects.at(i+1));
+        if (!shape.contains(line.center())) {
+            continue;
+        }
+        if (!lines.isEmpty()) {
+            if (lines.last().p2() == intersects.at(i)) {
+                lines.removeLast();
+                line = QLineF(intersects.at(i-1), intersects.at(i+1));
+            }
+        }
+
+
+        QRectF lineBox = QRectF(line.p1() + lineTop, line.p2() + lineBottom).normalized();
+        QLineF topLine = baseLine.translated(lineTop);
+        QLineF bottomLine = baseLine.translated(lineBottom);
+
+        QVector<QPointF> relevant;
+        for(int i = 0; i < polygon.size()-1; i++) {
+
+            QLineF edgeLine(polygon.at(i), polygon.at(i+1));
+            /*
+            if (shape.contains(edgeLine.center() + QPointF(1,1)) &&
+                    shape.contains(edgeLine.center() - QPointF(1,1))) {
+                continue;
+            }*/
+
+            QPointF iRelevant;
+
+            if (lineBox.contains(polygon.at(i))) {
+                relevant.append(polygon.at(i));
+            }
+            if (edgeLine.intersects(topLine, &iRelevant) == QLineF::BoundedIntersection) {
+                relevant.append(iRelevant);
+            }
+            if (edgeLine.intersects(bottomLine, &iRelevant) == QLineF::BoundedIntersection) {
+                relevant.append(iRelevant);
+            }
+        }
+        qreal start = writingMode == KoSvgText::HorizontalTB? lineBox.left(): lineBox.top();
+        qreal end = writingMode == KoSvgText::HorizontalTB? lineBox.right(): lineBox.bottom();
+        for(int j = 0; j < relevant.size(); j++) {
+            QPointF current = relevant.at(j);
+
+            if (writingMode == KoSvgText::HorizontalTB) {
+                if (current.x() < line.center().x()) {
+                    start = qMax(current.x(), start);
+                } else if (current.x() > line.center().x()) {
+                    end = qMin(current.x(), end);
+                }
+            } else {
+                if (current.y() < line.center().y()) {
+                    start = qMax(current.y(), start);
+                } else if (current.y() > line.center().y()) {
+                    end = qMin(current.y(), end);
+                }
+            }
+        }
+        if (writingMode == KoSvgText::HorizontalTB) {
+            lines.append(QLineF(start, line.p1().y(), end, line.p2().y()));
+        } else {
+            lines.append(QLineF(line.p1().x(), start, line.p2().x(), end));
+        }
+    }
+
+    return lines;
+}
+
+void KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProperties &properties,
+                                               const QMap<int, int> &logicalToVisual,
+                                               QVector<CharacterResult> &result,
+                                               QList<QPainterPath> shapes) {
+    KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(properties.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::Direction direction = KoSvgText::Direction(properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+    KoSvgText::AutoValue lineHeight = properties.propertyOrDefault(KoSvgTextProperties::LineHeightId).value<KoSvgText::AutoValue>();
+    bool ltr = direction == KoSvgText::DirectionLeftToRight;
+    bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
+
+    QPointF textIndent; ///< The textIndent.
+    KoSvgText::TextIndentInfo textIndentInfo = properties.propertyOrDefault(KoSvgTextProperties::TextIndentId).value<KoSvgText::TextIndentInfo>();
+
+    QVector<int> wordIndices; ///< 'word' in this case meaning characters
+                              ///< inbetween softbreaks.
+    QRectF wordBox; ///< Approximated box of the currrent word;
+    QPointF wordAdvance;
+    QRectF lineBox; ///< The line box gets used to determine lineHeight;
+
+    bool firstLine = false;
+    QPointF currentPos = writingMode == KoSvgText::VerticalRL? shapes.at(0).boundingRect().topRight():shapes.at(0).boundingRect().topLeft(); ///< Current position with advances of each character.
+    if (!textIndentInfo.hanging) {
+        currentPos += textIndent;
+    }
+    QPointF lineOffset = currentPos; ///< Current line offset.
+
+    QVector<int> lineIndices; ///< Indices of characters in line.
+    QVector<QLineF> lineWidths;
+    int lineWidthIndex = 0;
+
+    QListIterator<int> it(logicalToVisual.keys());
+    QListIterator<QPainterPath> shapesIt(shapes);
+    if (shapes.isEmpty()) {
+        return;
+    }
+    QPainterPath currentShape;
+    while (it.hasNext()) {
+        int index = it.next();
+        CharacterResult charResult = result.at(index);
+        if (!charResult.addressable) {
+            continue;
+        }
+
+        bool breakLine = false; ///< Whether to break a line.
+        bool wordToNextLine = false; ///< Whether to add the current 'word' into the next line.
+
+        bool doNotCountAdvance =
+            ((charResult.lineEnd != NoChange) && !lineBox.isEmpty());
+        if (!doNotCountAdvance) {
+            if (wordIndices.isEmpty()) {
+                wordBox = charResult.boundingBox;
+                wordAdvance = charResult.advance;
+            } else {
+                wordBox |= charResult.boundingBox.translated(wordAdvance);
+                wordAdvance += charResult.advance;
+            }
+        }
+        wordIndices.append(index);
+        bool atEnd = !it.hasNext();
+        bool alsoSoftBreak = false; /// sometimes a word that ends in a hardbreak is also still too large for the previous line.
+
+        if (charResult.breakType == HardBreak) {
+            breakLine = true;
+            wordToNextLine = false;
+
+        } else if (charResult.breakType == SoftBreak || atEnd) {
+            if (lineWidths.isEmpty()) {
+                breakLine = true;
+                wordToNextLine = true;
+            }
+
+            for (int i = lineWidthIndex; i < lineWidths.size(); i++) {
+                QLineF line = lineWidths.at(i);
+                qreal lineLength = isHorizontal ? (currentPos - line.p1() + wordAdvance).x() : (currentPos - line.p1() + wordAdvance).y();
+                if (qRound((abs(lineLength) - line.length())) > 0) {
+                    if (i == lineWidths.size()-1) {
+                        breakLine = true;
+                        wordToNextLine = true;
+                        break;
+                    } else {
+                        currentPos = lineWidths.at(i+1).p1();
+                    }
+                } else {
+                    addWordToLine(result, currentPos, wordIndices, lineBox, lineIndices, ltr, firstLine);
+                    lineWidthIndex = i;
+                    break;
+                }
+            }
+        }
+        if (doNotCountAdvance) {
+            currentPos += charResult.advance;
+            lineBox |= charResult.boundingBox.translated(wordAdvance);
+        }
+
+        if (breakLine) {
+            if (wordToNextLine) {
+                if (!lineIndices.isEmpty()) {
+                    lineOffset += lineHeightOffset(writingMode, result, lineIndices, lineBox, currentPos, lineHeight, true);
+                    lineBox = QRectF();
+                    lineIndices.clear();
+                    lineWidthIndex = 0;
+                    firstLine = false;
+                }
+                bool foundFirst = false;
+                while(!foundFirst) {
+                    foundFirst = getFirstPosition(currentPos, currentShape, wordBox, lineOffset, writingMode, ltr);
+                    if (foundFirst || !shapesIt.hasNext()) {
+                        break;
+                    }
+                    currentShape = shapesIt.next();
+                    currentPos = writingMode == KoSvgText::VerticalRL? currentShape.boundingRect().topRight():currentShape.boundingRect().topLeft();
+                    lineOffset = currentPos;
+                }
+                if (foundFirst) {
+                    lineWidths = findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode);
+                    lineOffset = currentPos;
+                    addWordToLine(result, currentPos, wordIndices, lineBox, lineIndices, ltr, firstLine);
+
+                    //finalizeLine(result, currentPos, lineBox, lineIndices, lineOffset, startPos, currentPos, KoSvgText::AnchorStart,
+                    //             firstLine, lineHeight, writingMode, ltr, true, atEnd, false, QPointF());
+                } else {
+                    Q_FOREACH (int j, wordIndices) {
+                        result[j].hidden = true;
+                    }
+                }
+            } else {
+                if (getFirstPosition(currentPos, currentShape, wordBox, lineOffset, writingMode, ltr)) {
+                    finalizeLine(result, currentPos, lineBox, lineIndices, lineOffset, QPointF(), QPointF(), KoSvgText::AnchorStart,
+                                 firstLine, lineHeight, writingMode, ltr, true, atEnd, false, QPointF());
+                    addWordToLine(result, currentPos, wordIndices, lineBox, lineIndices, ltr, firstLine);
+                    lineOffset = currentPos;
+                } else {
+                    Q_FOREACH (int j, wordIndices) {
+                        result[j].hidden = true;
+                    }
+                }
+            }
+        }
+    }
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
@@ -2618,12 +3040,21 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                 painter.save();
                 painter.setBrush(Qt::transparent);
                 QPen pen (QColor(0, 0, 0, 50));
+                pen.setWidthF(72./xRes);
                 painter.setPen(pen);
                 painter.drawPolygon(tf.map(result.at(i).path.boundingRect()));
+                //Q_FOREACH(QLineF offsetLine, result.at(i).offsetPoly) {
+                //    painter.drawLine(offsetLine);
+                //}
+                //Q_FOREACH(QPointF candidate, result.at(i).candidates) {
+                //    painter.setPen(Qt::green);
+                //    painter.drawPoint(candidate);
+                //}
                 QColor penColor = result.at(i).anchored_chunk?
                                          result.at(i).isHanging? Qt::red:
                 Qt::magenta: result.at(i).lineEnd==NoChange? Qt::cyan:
-                Qt::yellow; pen.setColor(penColor); pen.setWidthF(72./xRes);
+                Qt::yellow; pen.setColor(penColor);
+                pen.setWidthF(72./xRes);
                 painter.setPen(pen);
                 painter.drawPolygon(tf.map(result.at(i).boundingBox));
                 if (result.at(i).breakType == SoftBreak){

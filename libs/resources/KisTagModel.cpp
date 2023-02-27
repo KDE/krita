@@ -689,6 +689,7 @@ bool KisTagModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
 
             if (!q.exec()) {
                 qWarning() << "Could not execute tags in storages query" << q.lastError() << q.boundValues();
+                return true;
             }
             else {
                 q.first();

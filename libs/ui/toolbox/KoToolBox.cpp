@@ -285,7 +285,7 @@ void KoToolBox::changeEvent(QEvent *event)
 {
     QWidget::changeEvent(event);
     if (event->type() == QEvent::PaletteChange) {
-        for (QToolButton *button : d->buttons) {
+        Q_FOREACH (QToolButton *button, d->buttons) {
             KoToolBoxButton* toolBoxButton = qobject_cast<KoToolBoxButton*>(button);
             if (toolBoxButton) {
                 toolBoxButton->setHighlightColor();

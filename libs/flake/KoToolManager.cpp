@@ -334,9 +334,9 @@ void KoToolManager::initializeCurrentToolForCanvas()
 
 void KoToolManager::themeChanged()
 {
-    for (const QList<CanvasData*> &canvasDataList : d->canvasses) {
-        for (CanvasData *canvasData : canvasDataList) {
-            for (KoToolBase *tool : canvasData->allTools) {
+    Q_FOREACH (const QList<CanvasData*> &canvasDataList, d->canvasses) {
+        Q_FOREACH (CanvasData *canvasData, canvasDataList) {
+            Q_FOREACH (KoToolBase *tool, canvasData->allTools) {
                 tool->updateOptionsWidgetIcons();
             }
         }

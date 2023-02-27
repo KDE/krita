@@ -411,7 +411,7 @@ void KoToolBase::updateOptionsWidgetIcons()
     Q_D(KoToolBase);
     if (d->optionWidgetsCreated) {
         QObjectList objects;
-        for (QPointer<QWidget> widget : d->optionWidgets) {
+        Q_FOREACH (QPointer<QWidget> widget, d->optionWidgets) {
             objects.append(widget);
         }
         while (!objects.isEmpty()) {

@@ -863,7 +863,7 @@ void KisMainWindow::updateTheme()
 
     // Update toolbars
     {
-        for (KisToolBar* aToolBar : toolBars()) {
+        Q_FOREACH (KisToolBar* aToolBar, toolBars()) {
             QObjectList objects;
             objects.append(aToolBar);
             while (!objects.isEmpty()) {
@@ -889,7 +889,7 @@ void KisMainWindow::slotThemeChanged()
     updateTheme();
 
     // Make the other top level windows update as well
-    for (QWidget* topLevelWidget : qApp->topLevelWidgets()) {
+    Q_FOREACH (QWidget* topLevelWidget, qApp->topLevelWidgets()) {
         if (topLevelWidget == this) {
             // Skip if the current top level widget is this window
             continue;

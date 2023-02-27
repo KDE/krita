@@ -1127,7 +1127,8 @@ void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overla
 
     ui.chkReverse->setChecked(config->reverse());
     ui.cmbStyle->setCurrentIndex((int)config->style());
-    ui.chkAlignWithLayer->setCheckable(config->alignWithLayer());
+    ui.chkAlignWithLayer->setChecked(config->alignWithLayer());
+    ui.chkAlignWithLayer->setCheckable(true);
     ui.angleSelector->setValue(config->angle());
     ui.intScale->setValue(config->scale());
     ui.chkDither->setChecked(config->dither());
@@ -1470,7 +1471,8 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
 
     ui.chkReverse->setChecked(stroke->antiAliased());
     ui.cmbStyle->setCurrentIndex((int)stroke->style());
-    ui.chkAlignWithLayer->setCheckable(stroke->alignWithLayer());
+    ui.chkAlignWithLayer->setChecked(stroke->alignWithLayer());
+    ui.chkAlignWithLayer->setCheckable(true);
     ui.angleSelector->setValue(stroke->angle());
     ui.intScale->setValue(stroke->scale());
 
@@ -1486,7 +1488,8 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
     stroke->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     stroke->setOpacity(ui.intOpacity->value());
 
-    stroke->setFillType((psd_fill_type)ui.cmbFillType->currentIndex());
+    psd_fill_type fillType = (psd_fill_type)ui.cmbFillType->currentIndex();
+    stroke->setFillType(fillType);
 
     stroke->setColor(ui.bnColor->color());
 
@@ -1497,11 +1500,17 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
 
     stroke->setReverse(ui.chkReverse->isChecked());
     stroke->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
-    stroke->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
+    if (fillType == psd_fill_gradient) {
+        // there is only one boolean value, and it's shared with pattern's "link with layer"
+        stroke->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
+    }
     stroke->setAngle(ui.angleSelector->value());
     stroke->setScale(ui.intScale->value());
 
     stroke->setPattern(ui.patternChooser->currentResource(true).staticCast<KoPattern>());
-    stroke->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());
+    if (fillType == psd_fill_pattern) {
+        // there is only one boolean value, and it's shared with gradient's "align with layer"
+        stroke->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());
+    }
     stroke->setScale(ui.intScale->value());
 }

@@ -85,6 +85,7 @@ int KisAllTagsModel::rowCount(const QModelIndex &parent) const
         q.bindValue(":language", KisTag::currentLocale());
         if (!q.exec()) {
             qWarning() << "Could not execute tags rowcount query" << q.lastError();
+            return 0;
         }
         q.first();
 

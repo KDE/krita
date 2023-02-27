@@ -388,7 +388,7 @@ namespace KisLsUtils
         const QRect boundsRect = alignWithLayer ?
             env->layerBounds() : env->defaultBounds();
 
-        patternOffset += boundsRect.topLeft();
+        patternOffset -= boundsRect.topLeft();
 
         patternOffset.rx() %= psize.width();
         patternOffset.ry() %= psize.height();

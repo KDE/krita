@@ -49,13 +49,13 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
     KisLodTransformScalar t(device);
 
     QVariant value;
-    float horizontalRadius = 1.0;
+    double horizontalRadius = 1.0;
     if (configuration->getProperty("horizRadius", value)) {
-        horizontalRadius = t.scale(value.toFloat());
+        horizontalRadius = t.scale(value.toDouble());
     }
-    float verticalRadius = 1.0;
+    double verticalRadius = 1.0;
     if (configuration->getProperty("vertRadius", value)) {
-        verticalRadius = t.scale(value.toFloat());
+        verticalRadius = t.scale(value.toDouble());
     }
 
     QBitArray channelFlags;

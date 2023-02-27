@@ -82,10 +82,11 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
     KIS_SAFE_ASSERT_RECOVER_RETURN(canvasController);
 
+    d->mode = (Shortcut)shortcut;
+
     switch(shortcut) {
         case RotateModeShortcut:
         case DiscreteRotateModeShortcut:
-            d->mode = (Shortcut)shortcut;
             d->startRotation = inputManager()->canvas()->rotationAngle();
             d->previousRotation = 0;
             d->updatedRotation = false;
@@ -104,6 +105,10 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
 
 void KisRotateCanvasAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos)
 {
+    if (d->mode == RotateResetShortcut) {
+        return;
+    }
+
     const KisCoordinatesConverter *converter = inputManager()->canvas()->coordinatesConverter();
     const QPointF centerPoint = converter->flakeToWidget(converter->flakeCenterPoint());
     const QPointF startPoint = startPos - centerPoint;

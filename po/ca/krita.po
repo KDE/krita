@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-25 22:53+0100\n"
+"PO-Revision-Date: 2023-02-26 12:14+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -25805,6 +25805,7 @@ msgstr "Usa el color de fons i l'opacitat per a crear una capa ràster de fons."
 msgid "As &raster layer"
 msgstr "Com a capa &ràster"
 
+# skip-rule: rst-link0italic,rst-italic2
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:541
 #, kde-format

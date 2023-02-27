@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-23 18:59+0300\n"
+"PO-Revision-Date: 2023-02-26 13:29+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -8691,7 +8691,7 @@ msgstr "Dikey Ayna Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Hide Mirror X Line"
-msgstr "Yansıtma X Çizgisini Gizle"
+msgstr "X Yansıtma Çizgisini Gizle"
 
 #. i18n: context: text @ Action (mirrorY-hideDecorations), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorY-hideDecorations), Actions (Painting), ActionCollection (Krita)
@@ -8703,7 +8703,7 @@ msgstr "Yansıtma X Çizgisini Gizle"
 #, kde-format
 msgctxt "action"
 msgid "Hide Mirror Y Line"
-msgstr "Yansıtma Y Çizgisini Gizle"
+msgstr "Y Yansıtma Çizgisini Gizle"
 
 #. i18n: context: text @ Action (mirrorX-lock), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorX-lock), Actions (Painting), ActionCollection (Krita)
@@ -21688,7 +21688,7 @@ msgstr "Özgün Önayarı Yeniden Yükle"
 #: libs/ui/brushhud/kis_brush_hud.cpp:82
 #, kde-format
 msgid "Configure the on-canvas brush editor"
-msgstr "Tuval üzerindeki fırça düzenleyicisini yapılandır"
+msgstr "Tuval üstü fırça düzenleyicisini yapılandır"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:24
@@ -24618,7 +24618,7 @@ msgstr "Çoklu Belge Kipi:"
 #: libs/ui/forms/wdggeneralsettings.ui:444
 #, kde-format
 msgid "Subwindows"
-msgstr "Altpencereler"
+msgstr "Alt Pencereler"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_cmbMDIType)
 #: libs/ui/forms/wdggeneralsettings.ui:449
@@ -56114,7 +56114,7 @@ msgstr "Birim:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1093
 #, kde-format
 msgid "Horizontal Translation"
-msgstr "Yatay Çevrim"
+msgstr "Yatay Çeviri"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateX)
@@ -56132,7 +56132,7 @@ msgstr "&x:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1122
 #, kde-format
 msgid "Vertical Translation"
-msgstr "Dikey Çevrim"
+msgstr "Dikey Çeviri"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetY)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateY)

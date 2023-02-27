@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-19 21:29+0100\n"
+"PO-Revision-Date: 2023-02-26 09:47+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
@@ -25702,6 +25702,7 @@ msgstr "Som &Internett-bilete (sRGB)"
 msgid "As on &Monitor"
 msgstr "Som &skjermen"
 
+# skip-rule: komma-leddsetning-viss
 #. i18n: ectx: property (text), widget (QLabel, lblExplanationMonitor)
 #: libs/ui/forms/wdgMissingColorProfile.ui:102
 #, kde-format
@@ -49098,7 +49099,7 @@ msgid ""
 "If non-zero, specifies the minimal distortion to try to achieve. Takes "
 "precedence over Target Size."
 msgstr ""
-"Viss større enn 0 fastset dette målverdien for minste forvrenging. "
+"Viss større enn 0, fastset dette målverdien for minste forvrenging. "
 "Overstyrer ønskt filstorleik."
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetPSNR)

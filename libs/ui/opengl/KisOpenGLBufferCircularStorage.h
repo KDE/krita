@@ -34,7 +34,11 @@ public:
         BufferBinder(KisOpenGLBufferCircularStorage *bufferStorage, const void **dataPtr, int dataSize);
         ~BufferBinder();
 
-        Q_DISABLE_COPY_MOVE(BufferBinder);
+        BufferBinder(const BufferBinder &) = delete;
+        BufferBinder &operator=(const BufferBinder &) = delete;
+        BufferBinder(BufferBinder &&) = delete;
+        BufferBinder &operator=(BufferBinder &&) = delete;
+
     private:
         QOpenGLBuffer *m_buffer = nullptr;
     };
@@ -42,6 +46,11 @@ public:
     KisOpenGLBufferCircularStorage();
     KisOpenGLBufferCircularStorage(QOpenGLBuffer::Type type);
     ~KisOpenGLBufferCircularStorage();
+
+    KisOpenGLBufferCircularStorage(const KisOpenGLBufferCircularStorage &) = delete;
+    KisOpenGLBufferCircularStorage &operator=(const KisOpenGLBufferCircularStorage &) = delete;
+    KisOpenGLBufferCircularStorage(KisOpenGLBufferCircularStorage &&) = delete;
+    KisOpenGLBufferCircularStorage &operator=(KisOpenGLBufferCircularStorage &&) = delete;
 
     void allocate(int numBuffers, int bufferSize);
     QOpenGLBuffer* getNextBuffer();
@@ -54,8 +63,6 @@ public:
 
 private:
     void addBuffersImpl(size_t buffersToAdd, int bufferSize);
-
-    Q_DISABLE_COPY_MOVE(KisOpenGLBufferCircularStorage)
 
     struct Private;
     const QScopedPointer<Private> m_d;

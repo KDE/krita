@@ -21,6 +21,9 @@ public:
     KisWarningBlock(QWidget *parent = nullptr);
     ~KisWarningBlock() override;
 
+    KisWarningBlock(const KisWarningBlock &) = delete;
+    KisWarningBlock &operator=(const KisWarningBlock &) = delete;
+
     QString text() const;
     QPixmap pixmap() const;
 
@@ -31,8 +34,6 @@ Q_SIGNALS:
     void linkActivated(const QString &link);
 
 private:
-    Q_DISABLE_COPY_MOVE(KisWarningBlock)
-
     struct Private;
     QScopedPointer<Private> m_d;
 };

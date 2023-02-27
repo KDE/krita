@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2021-01-18 19:24+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -39947,6 +39947,12 @@ msgstr "பிம்பத்தை சுற்று"
 msgid "Wide Gamut Color Selector"
 msgstr "தேர்வை அளவுமாற்று"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "ஒப்பந்தம்..."
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 msgid "Wide Gamut Color Selector Settings"
@@ -64054,11 +64060,6 @@ msgstr "உருவத்திற்கு மறுபெயரிடு"
 #~ msgctxt "action"
 #~ msgid "Insert"
 #~ msgstr "அடுக்கு வகை"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "ஒப்பந்தம்..."
 
 #, fuzzy
 #~ msgctxt "action"

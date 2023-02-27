@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2022-09-14 16:45+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -42651,6 +42651,14 @@ msgstr "Tee siveltimen väristä keltaisempi"
 msgid "Wide Gamut Color Selector"
 msgstr "Piilota sävyvalitsin"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Configure..."
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "Asetukset…"
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 #| msgid "Color Selector Settings"
@@ -68469,10 +68477,6 @@ msgstr "Viitekuvatyökalu"
 #~ msgctxt "action"
 #~ msgid "Insert Labeled Endnote"
 #~ msgstr "Lisää nimiöllinen loppuviite"
-
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "Asetukset…"
 
 #~ msgctxt "action"
 #~ msgid "Configure the Table of Contents"

@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -40107,6 +40107,12 @@ msgstr "Rasmni &180 darajaga burish"
 msgid "Wide Gamut Color Selector"
 msgstr "Tanlanganni bekitish"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "Moslash..."
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 msgid "Wide Gamut Color Selector Settings"
@@ -64342,11 +64348,6 @@ msgstr "Rasmning nomini oʻzgartirish"
 #~ msgctxt "action"
 #~ msgid "Insert"
 #~ msgstr "Qatlamning nomi:"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "Moslash..."
 
 #, fuzzy
 #~ msgctxt "action"

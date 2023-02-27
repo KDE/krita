@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2011-06-01 01:29-0400\n"
 "Last-Translator: Agron Selimaj <linuxmaster@verizon.net>\n"
 "Language-Team: Albanian <sq@li.org>\n"
@@ -39816,6 +39816,12 @@ msgstr "Rrotullo Imazhin"
 msgid "Wide Gamut Color Selector"
 msgstr "Përzgjedhje"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "..."
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 msgid "Wide Gamut Color Selector Settings"
@@ -63229,11 +63235,6 @@ msgstr "Rrotullo Imazhin"
 #~ msgctxt "action"
 #~ msgid "Insert Citation"
 #~ msgstr "Ngopja"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "..."
 
 #, fuzzy
 #~ msgctxt "action"

@@ -3,7 +3,7 @@
 #
 # Sebastià Pla <sastia@retemail.es>, 2000.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2006, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2006, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Pau Tallada Crespí <pau_tallada@telefonica.net>, 2006, 2007.
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
-"PO-Revision-Date: 2023-02-23 11:51+0100\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
+"PO-Revision-Date: 2023-02-26 22:55+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -20428,8 +20428,8 @@ msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
-"El FFmpeg indicat sembla que està comprimit. Primer intenteu extreure el "
-"FFmpeg de l'arxiu."
+"El FFmpeg indicat sembla que està comprimit. Primer intenteu extreure'l de "
+"l'arxiu."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
 #, kde-format
@@ -20439,8 +20439,8 @@ msgid ""
 "the correct location of an FFmpeg executable on your system."
 msgstr ""
 "El FFmpeg indicat sembla que no és "
-"valid.                                                     Seleccioneu la "
-"ubicació correcta de l'executable del FFmpeg en aquest sistema."
+"vàlid.                                                     Seleccioneu la "
+"ubicació correcta de l'executable en aquest sistema."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:675
 #, kde-format
@@ -22857,11 +22857,10 @@ msgid "%1 is not a valid image file!"
 msgstr "%1 no és cap fitxer d'imatge vàlid!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:790
-#, fuzzy, kde-format
-#| msgid "Warning: this location is not writable."
+#, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
-msgstr "Avís: Aquesta ubicació no és d'escriptura."
+msgstr "<b>Avís:</b> Aquesta ubicació no és d'escriptura."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:893
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1002
@@ -23001,10 +23000,9 @@ msgid "Warning(s):"
 msgstr "Avís/os:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1823
-#, fuzzy, kde-format
-#| msgid "WARNING: current display doesn't support HDR rendering"
+#, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
-msgstr "AVÍS: La pantalla actual no permet la renderització HDR"
+msgstr "<b>Avís:</b> La pantalla actual no permet la renderització HDR"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1908
 #, kde-format
@@ -24464,18 +24462,15 @@ msgstr "Transparència en escacs:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:295
-#, fuzzy, kde-format
-#| msgctxt "Default name for a color swatch"
-#| msgid "Color %1"
+#, kde-format
 msgid "Color 1:"
-msgstr "Color %1"
+msgstr "Color 1:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/forms/wdgdisplaysettings.ui:322
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Color 2:"
-msgstr "Color:"
+msgstr "Color 2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCheckSize)
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
@@ -24537,24 +24532,21 @@ msgstr "Superposició de la selecció:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
-#, fuzzy, kde-format
-#| msgid "Selection Outline Opacity:"
+#, kde-format
 msgid "Outline opacity:"
-msgstr "Selecció de l'opacitat del contorn:"
+msgstr "Opacitat del contorn:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
-#, fuzzy, kde-format
-#| msgid "Overlay Mode"
+#, kde-format
 msgid "Overlay color:"
-msgstr "Mode superposició"
+msgstr "Color de la superposició:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:460
-#, fuzzy, kde-format
-#| msgid "Curves opacity:"
+#, kde-format
 msgid "Overlay opacity:"
-msgstr "Opacitat de les corbes:"
+msgstr "Opacitat de la superposició:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -24932,10 +24924,9 @@ msgstr "Espaiat entre la imatge i la pàgina en fer zoom per ajustar, en píxels
 
 #. i18n: ectx: property (title), widget (QGroupBox, group_subWinMode)
 #: libs/ui/forms/wdggeneralsettings.ui:408
-#, fuzzy, kde-format
-#| msgid "Subwindows"
+#, kde-format
 msgid "Subwindow mode"
-msgstr "Subfinestres"
+msgstr "Mode de subfinestres"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton)
 #. i18n: ectx: property (text), widget (QPushButton, clearBgImageButton)
@@ -24998,8 +24989,7 @@ msgstr "Activa el factor d'escala fraccional"
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:623
 #: libs/ui/forms/wdggeneralsettings.ui:807
-#, fuzzy, kde-format
-#| msgid "(Needs restart)"
+#, kde-format
 msgid "(needs restart)"
 msgstr "(cal reiniciar)"
 
@@ -25084,13 +25074,11 @@ msgstr "Sensibilitat:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
 #: libs/ui/forms/wdggeneralsettings.ui:781
-#, fuzzy, kde-format
-#| msgid ""
-#| "Hide docker scrollbars if kinetic scrolling is enabled (needs restart)"
+#, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr ""
 "Oculta les barres de desplaçament de l'acoblador si el desplaçament cinètic "
-"és actiu (cal reiniciar)"
+"és actiu"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:834
@@ -25228,11 +25216,9 @@ msgstr "Retalla els fotogrames en importar animacions"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1023
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Painting"
+#, kde-format
 msgid "Pasting"
-msgstr "Pintat"
+msgstr "Enganxat"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
 #: libs/ui/forms/wdggeneralsettings.ui:1035
@@ -26158,6 +26144,7 @@ msgstr "Usa el color de fons i l'opacitat per a crear una capa ràster de fons."
 msgid "As &raster layer"
 msgstr "Com a capa &ràster"
 
+# skip-rule: rst-link0italic,rst-italic2
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:567
 #, kde-format
@@ -40752,6 +40739,13 @@ msgstr "Desplaça el to del color seleccionat en sentit antihorari"
 #, kde-format
 msgid "Wide Gamut Color Selector"
 msgstr "Selector de color de gamma àmplia"
+
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+#| msgid "&Configure %1..."
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "&Configura el %1..."
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, kde-format
@@ -60536,11 +60530,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "HDR Warning.................................."
-#~ msgstr "Avís HDR.................................."
-
-#~ msgid ""
-#~ "<b>Note: Krita will need to be restarted for changes to take effect</b>"
-#~ msgstr ""
-#~ "<b>Nota: Cal reiniciar el Krita per tal que els canvis tinguin efecte</b>"

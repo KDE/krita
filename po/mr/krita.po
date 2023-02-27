@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -41154,6 +41154,12 @@ msgstr "कुंचल्याचा रंग  गडद करा"
 msgid "Wide Gamut Color Selector"
 msgstr "छाया निवडणारा"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "रचना"
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 #| msgid "Color Selector Settings"
@@ -66321,11 +66327,6 @@ msgstr "25%"
 #~ msgctxt "action"
 #~ msgid "Insert"
 #~ msgstr "नाव घाला"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "रचना"
 
 #, fuzzy
 #~ msgctxt "action"

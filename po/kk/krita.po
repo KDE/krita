@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -41381,6 +41381,12 @@ msgstr "Қылқалам түсін қоюлау қылу"
 msgid "Wide Gamut Color Selector"
 msgstr "Көлеңке таңдағышы"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "Баптау..."
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 #| msgid "Color Selector Settings"
@@ -66964,11 +66970,6 @@ msgstr "Эталон кескіндері"
 #~ msgctxt "action"
 #~ msgid "Insert"
 #~ msgstr "Атауын ендіру"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "Баптау..."
 
 #, fuzzy
 #~ msgctxt "action"

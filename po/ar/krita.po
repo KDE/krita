@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -41683,6 +41683,14 @@ msgstr "اجعل لون الفرشاة مصفرًّا أكثر"
 msgid "Wide Gamut Color Selector"
 msgstr "أخفِ منتقي الظّلال"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Configure..."
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "اضبط..."
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 #| msgid "Color Selector Settings"
@@ -66528,10 +66536,6 @@ msgstr "الصّور المرجع"
 #~ msgctxt "action"
 #~ msgid "Insert Labeled Endnote"
 #~ msgstr "أدرِج حاشية ختاميّة مسمّاة"
-
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "اضبط..."
 
 #~ msgctxt "action"
 #~ msgid "Configure the Table of Contents"

@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2011-01-17 21:35+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -40791,6 +40791,12 @@ msgstr "Tourner l' imådje"
 msgid "Wide Gamut Color Selector"
 msgstr "Tchoezixheu d' ombion"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "Novea apontiaedje %1"
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 #| msgid "Color Selector Settings"
@@ -65809,11 +65815,6 @@ msgstr "Imådje di referince:"
 #~ msgctxt "action"
 #~ msgid "Insert"
 #~ msgstr "No del coûtche:"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "Novea apontiaedje %1"
 
 #, fuzzy
 #~ msgctxt "action"

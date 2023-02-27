@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2023-02-10 21:36+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -40886,6 +40886,12 @@ msgstr "Aldatu pintzelaren kolore tonua erlojuren aurkako noranzkoan"
 msgid "Wide Gamut Color Selector"
 msgstr "Gama zabalaren hautatzailea"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "Konfigurazioa:"
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 #| msgid "Color Selector Settings"
@@ -65478,11 +65484,6 @@ msgstr "Erreferentziazko irudien tresna"
 #~ msgctxt "action"
 #~ msgid "Insert"
 #~ msgstr "Txertatu izena"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "Konfigurazioa:"
 
 #, fuzzy
 #~ msgctxt "action"

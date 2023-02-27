@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2009-04-22 00:18+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -40344,6 +40344,12 @@ msgstr "परत घुमाबू"
 msgid "Wide Gamut Color Selector"
 msgstr "चयन घोकचाबू"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "संतृप्ति:"
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 msgid "Wide Gamut Color Selector Settings"
@@ -64412,11 +64418,6 @@ msgstr "वरीयतासभ"
 #~ msgctxt "action"
 #~ msgid "Insert Citation"
 #~ msgstr "संतृप्ति"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "संतृप्ति:"
 
 #, fuzzy
 #~ msgctxt "action"

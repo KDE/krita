@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2021-09-09 23:33-0700\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik Language Support\n"
@@ -39702,6 +39702,12 @@ msgstr ""
 #| msgid "&Color"
 msgid "Wide Gamut Color Selector"
 msgstr "&Ранг"
+
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, kde-format
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr ""
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, kde-format

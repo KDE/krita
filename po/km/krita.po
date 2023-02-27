@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -40409,6 +40409,12 @@ msgstr "បង្វិល​រូបភាព​ត្រឹម​ ៩០ ដ�
 msgid "Wide Gamut Color Selector"
 msgstr "ធ្វើ​មាត្រដ្ឋាន​ការ​ជ្រើស"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "ការ​កំណត់​រចនាសម្ព័ន្ធ​ថ្មី %1"
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 #| msgid "Color Selector Settings"
@@ -64908,11 +64914,6 @@ msgstr "រូបភាព​យោង ៖"
 #~ msgctxt "action"
 #~ msgid "Insert"
 #~ msgstr "បញ្ចូល​ឈ្មោះ"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "ការ​កំណត់​រចនាសម្ព័ន្ធ​ថ្មី %1"
 
 #, fuzzy
 #~ msgctxt "action"

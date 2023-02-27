@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2023-01-15 21:44-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -40841,6 +40841,13 @@ msgstr "ブラシの色の色相を反時計回りにシフト"
 #| msgid "Wide Gamut Selector"
 msgid "Wide Gamut Color Selector"
 msgstr "広色域セレクター"
+
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+#| msgid "&Configure %1..."
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "%1を設定(&C)..."
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format

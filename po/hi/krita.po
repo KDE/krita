@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -40167,6 +40167,12 @@ msgstr "ब्रश के रंग को वामावर्त की ओ
 msgid "Wide Gamut Color Selector"
 msgstr "विस्तृत वर्ण विस्तार चयनक"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "कॉन्फ़िगर..."
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 #| msgid "Color Selector Settings"
@@ -64467,11 +64473,6 @@ msgstr "संदर्भ छवि औज़ार"
 #~ msgctxt "action"
 #~ msgid "Insert"
 #~ msgstr "परत का नाम:"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "कॉन्फ़िगर..."
 
 #, fuzzy
 #~ msgctxt "action"

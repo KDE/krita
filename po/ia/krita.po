@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2022-12-18 23:04+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -40945,6 +40945,14 @@ msgstr "Rota selection in senso anti-horari imagine 90 grados"
 msgid "Wide Gamut Color Selector"
 msgstr "Selector de forma de Mypaint"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Configure..."
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "Configura..."
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 #| msgid "Color Settings"
@@ -65516,10 +65524,6 @@ msgstr "Instrumento de Inages de Referentia"
 #~ msgctxt "action"
 #~ msgid "Insert"
 #~ msgstr "Inserta"
-
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "Configura..."
 
 #~ msgctxt "action"
 #~ msgid "Configure the Table of Contents"

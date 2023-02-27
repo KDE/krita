@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -43462,6 +43462,13 @@ msgstr ""
 msgid "Wide Gamut Color Selector"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+#| msgid "Configure..."
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "...ਸੰਰਚਨਾ"
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 #| msgid "Document Settings"
@@ -69548,12 +69555,6 @@ msgstr "ਤਬਦੀਲ"
 #~ msgctxt "action"
 #~ msgid "Insert Labeled Endnote"
 #~ msgstr "ਸਲਾਈਡ ਸ਼ਾਮਲ"
-
-#, fuzzy
-#~| msgid "Configure..."
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "...ਸੰਰਚਨਾ"
 
 #, fuzzy
 #~| msgid "Configure..."

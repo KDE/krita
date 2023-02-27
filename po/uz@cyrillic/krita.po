@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -41909,6 +41909,13 @@ msgstr "Файлнинг бошини ўқиб бўлмади."
 msgid "Wide Gamut Color Selector"
 msgstr "Тўлдириш"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+#| msgid "Confirm Save"
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "Сақлашни тасдиқлаш"
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 #| msgid "Completion"
@@ -67405,12 +67412,6 @@ msgstr "&Алмаштириш:"
 #~ msgctxt "action"
 #~ msgid "Insert Labeled Endnote"
 #~ msgstr "Матнни қўйиш"
-
-#, fuzzy
-#~| msgid "Confirm Save"
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "Сақлашни тасдиқлаш"
 
 #, fuzzy
 #~ msgctxt "action"

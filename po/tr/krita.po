@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
-"PO-Revision-Date: 2023-02-23 19:25+0300\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
+"PO-Revision-Date: 2023-02-26 13:29+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -8769,7 +8769,7 @@ msgstr "Dikey Ayna Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Hide Mirror X Line"
-msgstr "Yansıtma X Çizgisini Gizle"
+msgstr "X Yansıtma Çizgisini Gizle"
 
 #. i18n: context: text @ Action (mirrorY-hideDecorations), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorY-hideDecorations), Actions (Painting), ActionCollection (Krita)
@@ -8781,7 +8781,7 @@ msgstr "Yansıtma X Çizgisini Gizle"
 #, kde-format
 msgctxt "action"
 msgid "Hide Mirror Y Line"
-msgstr "Yansıtma Y Çizgisini Gizle"
+msgstr "Y Yansıtma Çizgisini Gizle"
 
 #. i18n: context: text @ Action (mirrorX-lock), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorX-lock), Actions (Painting), ActionCollection (Krita)
@@ -21915,7 +21915,7 @@ msgstr "Özgün Önayarı Yeniden Yükle"
 #: libs/ui/brushhud/kis_brush_hud.cpp:82
 #, kde-format
 msgid "Configure the on-canvas brush editor"
-msgstr "Tuval üzerindeki fırça düzenleyicisini yapılandır"
+msgstr "Tuval üstü fırça düzenleyicisini yapılandır"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:24
@@ -22808,11 +22808,10 @@ msgid "%1 is not a valid image file!"
 msgstr "%1, geçerli bir görsel dosyası değil!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:790
-#, fuzzy, kde-format
-#| msgid "Warning: this location is not writable."
+#, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
-msgstr "Uyarı: Bu konum yazılabilir değil."
+msgstr "<b>Uyarı:</b> Bu konum yazılabilir değil."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:893
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1002
@@ -22951,10 +22950,9 @@ msgid "Warning(s):"
 msgstr "Uyarılar:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1823
-#, fuzzy, kde-format
-#| msgid "WARNING: current display doesn't support HDR rendering"
+#, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
-msgstr "UYARI: Geçerli ekran HDR olarak sunmayı desteklemiyor"
+msgstr "<b>Uyarı:</b> Geçerli ekran HDR olarak sunmayı desteklemiyor"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1908
 #, kde-format
@@ -24406,18 +24404,15 @@ msgstr "Saydamlık Dama Tahtası:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:295
-#, fuzzy, kde-format
-#| msgctxt "Default name for a color swatch"
-#| msgid "Color %1"
+#, kde-format
 msgid "Color 1:"
-msgstr "Renk %1"
+msgstr "1. Renk:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/forms/wdgdisplaysettings.ui:322
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Color 2:"
-msgstr "Renk:"
+msgstr "2. Renk:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCheckSize)
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
@@ -24479,24 +24474,21 @@ msgstr "Seçim Kaplaması:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
-#, fuzzy, kde-format
-#| msgid "Selection Outline Opacity:"
+#, kde-format
 msgid "Outline opacity:"
-msgstr "Seçim Ana Hat Matlığı:"
+msgstr "Ana hat matlığı:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
-#, fuzzy, kde-format
-#| msgid "Overlay Mode"
+#, kde-format
 msgid "Overlay color:"
-msgstr "Kaplama Kipi"
+msgstr "Kaplama rengi:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:460
-#, fuzzy, kde-format
-#| msgid "Curves opacity:"
+#, kde-format
 msgid "Overlay opacity:"
-msgstr "Eğri matlığı:"
+msgstr "Kaplama matlığı:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -24843,7 +24835,7 @@ msgstr "Çoklu Belge Kipi:"
 #: libs/ui/forms/wdggeneralsettings.ui:350
 #, kde-format
 msgid "Subwindows"
-msgstr "Altpencereler"
+msgstr "Alt Pencereler"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_cmbMDIType)
 #: libs/ui/forms/wdggeneralsettings.ui:355
@@ -24873,10 +24865,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, group_subWinMode)
 #: libs/ui/forms/wdggeneralsettings.ui:408
-#, fuzzy, kde-format
-#| msgid "Subwindows"
+#, kde-format
 msgid "Subwindow mode"
-msgstr "Altpencereler"
+msgstr "Alt pencere kipi"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton)
 #. i18n: ectx: property (text), widget (QPushButton, clearBgImageButton)
@@ -24939,10 +24930,9 @@ msgstr "Kesirli ölçek çarpanını etkinleştir"
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:623
 #: libs/ui/forms/wdggeneralsettings.ui:807
-#, fuzzy, kde-format
-#| msgid "(Needs restart)"
+#, kde-format
 msgid "(needs restart)"
-msgstr "(Yeniden başlatma gerektirir)"
+msgstr "(yeniden başlatma gerektirir)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:650
@@ -25025,13 +25015,9 @@ msgstr "Hassaslık:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
 #: libs/ui/forms/wdggeneralsettings.ui:781
-#, fuzzy, kde-format
-#| msgid ""
-#| "Hide docker scrollbars if kinetic scrolling is enabled (needs restart)"
+#, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
-msgstr ""
-"Devinimsel sarma etkinleştirilmişse rıhtımcı sarma çubuklarını gizle "
-"(yeniden başlatma gerektirir)"
+msgstr "Devinimsel sarma etkinse rıhtımcı sarma çubuklarını gizle"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:834
@@ -25167,11 +25153,9 @@ msgstr "Canlandırmaları içe aktarırken kareleri kırp"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1023
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Painting"
+#, kde-format
 msgid "Pasting"
-msgstr "Boyama"
+msgstr "Yapıştırma"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
 #: libs/ui/forms/wdggeneralsettings.ui:1035
@@ -40591,6 +40575,13 @@ msgstr "Seçili rengin tonunu saat yönünün tersine kaydır"
 #, kde-format
 msgid "Wide Gamut Color Selector"
 msgstr "Geniş Gam Renk Seçici"
+
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+#| msgid "&Configure %1..."
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "&Yapılandır %1..."
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, kde-format
@@ -57127,7 +57118,7 @@ msgstr "Birim:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1093
 #, kde-format
 msgid "Horizontal Translation"
-msgstr "Yatay Çevrim"
+msgstr "Yatay Çeviri"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateX)
@@ -57145,7 +57136,7 @@ msgstr "&x:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1122
 #, kde-format
 msgid "Vertical Translation"
-msgstr "Dikey Çevrim"
+msgstr "Dikey Çeviri"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetY)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateY)

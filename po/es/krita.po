@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2023-02-25 14:40+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -40806,6 +40806,14 @@ msgstr "Desplazar el tono del color seleccionado en sentido antihorario"
 msgid "Wide Gamut Color Selector"
 msgstr "Selector de color de gama amplia"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Configure..."
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "Configurar..."
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, kde-format
 msgid "Wide Gamut Color Selector Settings"
@@ -65947,10 +65955,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgctxt "action"
 #~ msgid "Insert Labeled Endnote"
 #~ msgstr "Insertar una nota al fin con etiqueta"
-
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "Configurar..."
 
 #~ msgctxt "action"
 #~ msgid "Configure the Table of Contents"

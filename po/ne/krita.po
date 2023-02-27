@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:56+0000\n"
+"POT-Creation-Date: 2023-02-27 00:58+0000\n"
 "PO-Revision-Date: 2007-08-24 15:02+0545\n"
 "Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -40463,6 +40463,12 @@ msgstr "छवि १८० डिग्रीमा घुमाउनुहो
 msgid "Wide Gamut Color Selector"
 msgstr "चयन मापन गर्नुहोस्"
 
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#, fuzzy, kde-format
+msgctxt "Wide Gamut Color Selector"
+msgid "Configure..."
+msgstr "कन्फिगर गर्नुहोस्..."
+
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, fuzzy, kde-format
 msgid "Wide Gamut Color Selector Settings"
@@ -65203,11 +65209,6 @@ msgstr "सन्दर्भ छवि:"
 #~ msgctxt "action"
 #~ msgid "Insert"
 #~ msgstr "तह नाम:"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Configure..."
-#~ msgstr "कन्फिगर गर्नुहोस्..."
 
 #, fuzzy
 #~ msgctxt "action"

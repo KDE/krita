@@ -556,6 +556,22 @@ TabSizeInfo parseTabSize(const QString &value, const SvgLoadingContext &context)
 QString writeTabSize(TabSizeInfo tabSize);
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TabSizeInfo &value);
 
+
+struct LineHeightInfo : public boost::equality_comparable<LineHeightInfo> {
+    qreal value = 1.0; /// Length or number.
+    bool isNumber = false; /// It's a number indicating the lineHeight;
+    bool isNormal = true; /// The 'auto' value.
+
+    bool operator==(const LineHeightInfo &rhs) const
+    {
+        return (value == rhs.value) && (isNumber == rhs.isNumber)  && (isNormal == rhs.isNormal);
+    }
+};
+
+LineHeightInfo parseLineHeight(const QString &value, const SvgLoadingContext &context);
+QString writeLineHeight(LineHeightInfo lineHeight);
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::LineHeightInfo &value);
+
 /**
  * @brief The AssociatedShapeWrapper struct is a special shared-pointer-like class
  * to store a safe reference to the associated shape. It implements the shape listener
@@ -670,6 +686,7 @@ Q_DECLARE_METATYPE(KoSvgText::StrokeProperty)
 Q_DECLARE_METATYPE(KoSvgText::TextTransformInfo)
 Q_DECLARE_METATYPE(KoSvgText::TextIndentInfo)
 Q_DECLARE_METATYPE(KoSvgText::TabSizeInfo)
+Q_DECLARE_METATYPE(KoSvgText::LineHeightInfo)
 Q_DECLARE_METATYPE(KoSvgText::AssociatedShapeWrapper)
 
 #endif // KOSVGTEXT_H

@@ -51,6 +51,10 @@ struct TextPropertiesStaticRegistrar {
         QMetaType::registerEqualsComparator<KoSvgText::TabSizeInfo>();
         QMetaType::registerDebugStreamOperator<KoSvgText::TabSizeInfo>();
 
+        qRegisterMetaType<KoSvgText::LineHeightInfo>("KoSvgText::LineHeightInfo");
+        QMetaType::registerEqualsComparator<KoSvgText::LineHeightInfo>();
+        QMetaType::registerDebugStreamOperator<KoSvgText::LineHeightInfo>();
+
         qRegisterMetaType<KoSvgText::AssociatedShapeWrapper>("KoSvgText::AssociatedShapeWrapper");
     }
 };
@@ -978,4 +982,51 @@ int parseCSSFontWeight(const QString &value, int currentWeight)
     }
     return weight;
 }
+
+LineHeightInfo parseLineHeight(const QString &value, const SvgLoadingContext &context)
+{
+    LineHeightInfo lineHeight;
+    lineHeight.isNormal = value == "normal";
+    qreal parsed = value.toDouble(&lineHeight.isNumber);
+
+    if (lineHeight.isNumber) {
+        lineHeight.value = parsed;
+    } else {
+        if (value.endsWith("%")) {
+            qreal percent = SvgUtil::fromPercentage(value);
+            lineHeight.value = SvgUtil::parseUnitXY(context.currentGC(), QString::number(percent)+"em");
+        } else {
+            lineHeight.value = SvgUtil::parseUnitXY(context.currentGC(), value);
+        }
+    }
+
+    return lineHeight;
+}
+
+QString writeLineHeight(LineHeightInfo lineHeight)
+{
+    if (lineHeight.isNormal) return QString("normal");
+    QString val = KisDomUtils::toString(lineHeight.value);
+    if (!lineHeight.isNumber) {
+        val += "pt";
+    }
+    return val;
+}
+
+QDebug operator<<(QDebug dbg, const LineHeightInfo &value)
+{
+    dbg.nospace() << "LineHeightInfo(";
+
+    if (value.isNormal) {
+        dbg.nospace() << "normal";
+    } else if (!value.isNumber) {
+        dbg.nospace() << value.value << "pt";
+    } else {
+        dbg.nospace() << value.value;
+    }
+
+    dbg.nospace() << ")";
+    return dbg.space();
+}
+
 } // namespace KoSvgText

@@ -455,22 +455,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
             setProperty(TextAlignLastId, KoSvgText::parseTextAlign(value));
         }
     } else if (command == "line-height") {
-        bool ok = false;
-        qreal parsed = value.toDouble(&ok);
-        qreal fontSize = propertyOrDefault(FontSizeId).toReal();
-        KoSvgText::AutoValue lineheightVal;
-        // Normal: use font metrics, ratio/percentage: multiply with fontsize,
-        // other: is absolute length.
-        if (ok) {
-            lineheightVal.customValue = fontSize * parsed;
-            lineheightVal.isAuto = false;
-        } else if (value.endsWith("%")) {
-            lineheightVal.isAuto = false;
-            lineheightVal.customValue = fontSize * SvgUtil::fromPercentage(value);
-        } else {
-            lineheightVal = KoSvgText::parseAutoValueXY(value, context, "normal");
-        }
-        setProperty(LineHeightId, KoSvgText::fromAutoValue(lineheightVal));
+        setProperty(LineHeightId, QVariant::fromValue(KoSvgText::parseLineHeight(value, context)));
     } else if (command == "text-indent") {
         setProperty(TextIndentId, QVariant::fromValue(KoSvgText::parseTextIndent(value, context)));
     } else if (command == "hanging-punctuation") {
@@ -785,15 +770,8 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         }
     }
     if (hasProperty(LineHeightId)) {
-        KoSvgText::AutoValue lineHeight = property(LineHeightId).value<AutoValue>();
-        if (lineHeight.isAuto) {
-            result.insert("line-height", "normal");
-        } else {
-            // We always compute the percentage because it's the least ambiguous
-            // with regard to SVG units.
-            qreal fontSize = propertyOrDefault(FontSizeId).toReal();
-            result.insert("line-height", QString::number((lineHeight.customValue / fontSize) * 100) + "%");
-        }
+        KoSvgText::LineHeightInfo lineHeight = property(LineHeightId).value<LineHeightInfo>();
+        result.insert("line-height", KoSvgText::writeLineHeight(lineHeight));
     }
     if (hasProperty(InlineSizeId)) {
         result.insert("inline-size", writeAutoValue(property(InlineSizeId).value<AutoValue>(), "auto"));

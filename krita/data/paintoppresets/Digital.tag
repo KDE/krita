@@ -20,6 +20,7 @@ Name[hu]=Digitális
 Name[ia]=Digital
 Name[id]=Digital
 Name[it]=Digitale
+Name[ja]=デジタル
 Name[ka]=ციფრული
 Name[kk]=Цифрлық
 Name[ko]=디지털

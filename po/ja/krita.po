@@ -7,6 +7,7 @@
 # Tsugumi Harabayashi <tu.hrby@gmail.com>, 2014.
 # Tomohiro Hyakutake <tomhioo@outlook.jp>, 2019.
 # bbch <suzihi248@ruru.be>, 2020, 2022.
+# Shizuku Hagoromo <Lemonade.flash.1164@gmail.com>, 2023.
 # Fumiaki Okushi <fumiaki.okushi@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2017, 2019, 2020, 2022, 2023.
 # --- kritalibs
 # Translation of koffice into Japanese.
@@ -33,14 +34,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-01-15 21:44-0800\n"
+"PO-Revision-Date: 2023-02-26 23:02-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.0\n"
+"X-Generator: Lokalize 22.12.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -1023,7 +1024,7 @@ msgstr "i) ウェットペイントプラス(mypaint)"
 #, kde-format
 msgctxt "./krita/data/symbols/BalloonSymbols.svg"
 msgid "Word Balloons"
-msgstr ""
+msgstr "ふきだし"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1056,7 +1057,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_dotted-flat."
 "png"
 msgid "3 dotted-flat"
-msgstr ""
+msgstr "3 ドット絵"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1064,21 +1065,21 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_flat-brush."
 "png"
 msgid "3 flat-brush"
-msgstr ""
+msgstr "3 平筆"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_rake.png"
 msgid "3 rake"
-msgstr ""
+msgstr "3 レーキ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_splat.png"
 msgid "3 splat"
-msgstr ""
+msgstr "3 スプライト"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2797,22 +2798,20 @@ msgid "Tangent normal y inverted"
 msgstr "接線法線"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Texture_fuzzy.kpp"
 msgid "Texture fuzzy"
-msgstr "テクスチャ"
+msgstr "もしゃもしゃしたテクスチャ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Texture"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Texture_hair.kpp"
 msgid "Texture hair"
-msgstr "テクスチャ"
+msgstr "髪のテクスチャ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2820,7 +2819,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Texture_leaves_fuzzy.kpp"
 msgid "Texture leaves fuzzy"
-msgstr ""
+msgstr "もしゃもしゃした葉のテクスチャ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -2860,13 +2859,12 @@ msgid "Animation"
 msgstr "アニメーション"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Big Endian"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Paint."
 "kws"
 msgid "Big Paint"
-msgstr "ビッグエンディアン"
+msgstr "大きなペイント"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2874,7 +2872,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Paint_2."
 "kws"
 msgid "Big Paint 2"
-msgstr ""
+msgstr "大きなペイント 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2882,7 +2880,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/Big_Vector."
 "kws"
 msgid "Big Vector"
-msgstr ""
+msgstr "最大"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -2910,13 +2908,12 @@ msgid "Small Vector"
 msgstr "最小"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "MyPaint"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:workspaces/VFX_Paint."
 "kws"
 msgid "VFX Paint"
-msgstr "MyPaint"
+msgstr "VFX Paint"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3043,7 +3040,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/14_texture-"
 "rock.png"
 msgid "14 texture-rock"
-msgstr ""
+msgstr "14 テクスチャ-岩"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3051,7 +3048,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/15_texture-"
 "rockB.png"
 msgid "15 texture-rockB"
-msgstr ""
+msgstr "15 テクスチャ-岩B"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3059,7 +3056,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/16_texture-"
 "woody.png"
 msgid "16 texture-woody"
-msgstr ""
+msgstr "16 テクスチャ-木"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3067,7 +3064,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/17_texture-"
 "melt.png"
 msgid "17 texture-melt"
-msgstr ""
+msgstr "17 テクスチャ-液体"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4341,7 +4338,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "i)_Wet_Paint.kpp"
 msgid "i) Wet Paint"
-msgstr ""
+msgstr "i) バケツ塗り"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -45906,10 +45903,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, spaceLabel)
 #: plugins/impex/heif/WdgHeifExport.ui:79
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:158
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Space:"
-msgstr "描点間隔:"
+msgstr "スペース:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnGamma)
 #: plugins/impex/heif/WdgHeifExport.ui:96
@@ -46316,11 +46312,10 @@ msgstr "作者のプロファイルデータで署名"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:462
 #: plugins/impex/jxl/JPEGXLImport.cpp:473
-#, fuzzy, kde-format
-#| msgid "Could not load profile: %1."
+#, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
-msgstr "プロファイルを読み込めませんでした: %1"
+msgstr "画像プロファイルを読み込めませんでした。"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:507
 #, kde-format
@@ -46332,14 +46327,14 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."
-msgstr ""
+msgstr "このアニメーションは 240fps 以上のフレームレートを宣言できます。"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:32
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (only for low quality)"
-msgstr ""
+msgstr "通常（低品質の場合のみ）"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:33
@@ -46354,21 +46349,21 @@ msgstr "拡大縮小なし"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
-msgstr ""
+msgstr "2x2 下方標本化周波数変換"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:35
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
-msgstr ""
+msgstr "4x4 下方標本化周波数変換"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
-msgstr ""
+msgstr "8x8 下方標本化周波数変換"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
@@ -46471,32 +46466,31 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "128"
-msgstr ""
+msgstr "128"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:109
-#, fuzzy, kde-format
-#| msgid "255"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "256"
-msgstr "255"
+msgstr "256"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:110
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512"
-msgstr ""
+msgstr "512"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:111
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "1024"
-msgstr ""
+msgstr "1024"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:116
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Zero"
-msgstr ""
+msgstr "0"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:117
 #, fuzzy, kde-format
@@ -58730,6 +58724,8 @@ msgid ""
 "Layer has children with transform masks. Please disable them before doing "
 "transformation."
 msgstr ""
+"レイヤー形式は位置マスクを子として持っている場合があります。変換を行う前には"
+"削除してください。"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:898
 #, kde-format
@@ -58985,7 +58981,7 @@ msgstr "ゆがみ"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:252
 #, kde-format
 msgid "Mesh"
-msgstr ""
+msgstr "メッシュ"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:358

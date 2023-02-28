@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-15 15:39+0100\n"
+"PO-Revision-Date: 2023-02-26 12:14+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -8107,7 +8107,7 @@ msgstr "Mostra el selector de color"
 #, kde-format
 msgctxt "action"
 msgid "Show MyPaint shade selector"
-msgstr "Mostra el selector d'ombres del MyPaint"
+msgstr "Mostra el selector d'ombres de MyPaint"
 
 #. i18n: context: text @ Action (show_minimal_shade_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_minimal_shade_selector), Actions (General), ActionCollection (Krita)
@@ -25812,6 +25812,7 @@ msgstr ""
 msgid "As &raster layer"
 msgstr "Com a capa &ràster"
 
+# skip-rule: rst-link0italic,rst-italic2
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:541
 #, kde-format
@@ -31790,7 +31791,7 @@ msgstr ""
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
-"El motor de pinzells del MyPaint no està disponible per a este espai de color"
+"El motor de pinzells de MyPaint no està disponible per a este espai de color"
 
 #: libs/ui/tool/kis_tool_paint.cc:569
 #, kde-format
@@ -36895,7 +36896,7 @@ msgstr "açò no inclou un canvi de color per part del selector d'ombres"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:557
 #, kde-format
 msgid "Foreground color changes"
-msgstr "Canvie del color de primer pla"
+msgstr "Canvi del color de primer pla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:570
@@ -52181,7 +52182,7 @@ msgstr "Bàsica"
 #: plugins/paintops/mypaint/MyPaintPaintOpPlugin.cpp:32
 #, kde-format
 msgid "MyPaint Brush Presets"
-msgstr "Pinzells predefinits del MyPaint"
+msgstr "Pinzells predefinits de MyPaint"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:25
 #, kde-format

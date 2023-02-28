@@ -123,7 +123,7 @@ endif()
 if("turbojpeg_static" IN_LIST libjpeg-turbo_FIND_COMPONENTS)
     find_library(libjpeg-turbo_static_LIBRARY
         NAMES turbojpeg-static
-        HINTS ${PC_TURBOJPEG_STATIC_LIBDIR} ${PC_TURBOJPEG_STATIC_LIBRARY_DIRS}
+        HINTS ${PC_TURBOJPEG_LIBDIR} ${PC_TURBOJPEG_LIBRARY_DIRS}
     )
 
     if(libjpeg-turbo_static_LIBRARY)
@@ -149,7 +149,7 @@ endif()
 if("jpeg_static" IN_LIST libjpeg-turbo_FIND_COMPONENTS)
     find_library(jpeg_static_LIBRARY
         NAMES jpeg-static
-        HINTS ${PC_JPEG_STATIC_LIBDIR} ${PC_JPEG_STATIC_LIBRARY_DIRS}
+        HINTS ${PC_JPEG_LIBDIR} ${PC_JPEG_LIBRARY_DIRS}
     )
 
     if(jpeg_static_LIBRARY)
@@ -173,7 +173,7 @@ if(libjpeg-turbo_FOUND)
             IMPORTED_LOCATION "${libjpeg-turbo_LIBRARY}"
             INTERFACE_COMPILE_OPTIONS "${PC_TURBOJPEG_CFLAGS} ${PC_TURBOJPEG_CFLAGS_OTHER}"
             INTERFACE_INCLUDE_DIRECTORIES "${libjpeg-turbo_INCLUDE_DIR}"
-            INTERFACE_LINK_LIBRARIES "${PC_TURBOJPEG_LIBRARIES}"
+            INTERFACE_LINK_LIBRARIES "${PC_TURBOJPEG_LINK_LIBRARIES}"
         )
     endif()
 
@@ -181,9 +181,9 @@ if(libjpeg-turbo_FOUND)
         add_library(libjpeg-turbo::turbojpeg_static UNKNOWN IMPORTED GLOBAL)
         set_target_properties(libjpeg-turbo::turbojpeg_static PROPERTIES
             IMPORTED_LOCATION "${libjpeg-turbo_static_LIBRARY}"
-            INTERFACE_COMPILE_OPTIONS "${PC_TURBOJPEG_STATIC_CFLAGS} ${PC_TURBOJPEG_STATIC_CFLAGS_OTHER}"
+            INTERFACE_COMPILE_OPTIONS "${PC_TURBOJPEG_CFLAGS} ${PC_TURBOJPEG_CFLAGS_OTHER}"
             INTERFACE_INCLUDE_DIRECTORIES "${libjpeg-turbo_INCLUDE_DIR}"
-            INTERFACE_LINK_LIBRARIES "${PC_TURBOJPEG_STATIC_LIBRARIES}"
+            INTERFACE_LINK_LIBRARIES "${PC_TURBOJPEG_LINK_LIBRARIES}"
         )
     endif()
 
@@ -193,7 +193,7 @@ if(libjpeg-turbo_FOUND)
             IMPORTED_LOCATION "${jpeg_LIBRARY}"
             INTERFACE_COMPILE_OPTIONS "${PC_JPEG_CFLAGS} ${PC_JPEG_CFLAGS_OTHER}"
             INTERFACE_INCLUDE_DIRECTORIES "${libjpeg-turbo_INCLUDE_DIR}"
-            INTERFACE_LINK_LIBRARIES "${PC_JPEG_LIBRARIES}"
+            INTERFACE_LINK_LIBRARIES "${PC_JPEG_LINK_LIBRARIES}"
         )
     endif()
 
@@ -201,9 +201,9 @@ if(libjpeg-turbo_FOUND)
         add_library(libjpeg-turbo::jpeg_static UNKNOWN IMPORTED GLOBAL)
         set_target_properties(libjpeg-turbo::jpeg_static PROPERTIES
             IMPORTED_LOCATION "${jpeg_static_LIBRARY}"
-            INTERFACE_COMPILE_OPTIONS "${PC_JPEG_STATIC_CFLAGS} ${PC_JPEG_STATIC_CFLAGS_OTHER}"
+            INTERFACE_COMPILE_OPTIONS "${PC_JPEG_CFLAGS} ${PC_JPEG_CFLAGS_OTHER}"
             INTERFACE_INCLUDE_DIRECTORIES "${libjpeg-turbo_INCLUDE_DIR}"
-            INTERFACE_LINK_LIBRARIES "${PC_JPEG_STATIC_LIBRARIES}"
+            INTERFACE_LINK_LIBRARIES "${PC_JPEG_LINK_LIBRARIES}"
         )
     endif()
 

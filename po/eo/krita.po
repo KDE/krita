@@ -41,8 +41,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 00:58+0000\n"
-"PO-Revision-Date: 2023-02-12 16:17+0100\n"
+"POT-Creation-Date: 2023-02-28 00:56+0000\n"
+"PO-Revision-Date: 2023-02-27 20:54+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -4815,7 +4815,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Floor.kpp"
 msgid "z) Stamp Floor"
-msgstr "z) Stampo Planko"
+msgstr "z) Stampi Plankon"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4824,7 +4824,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Grass.kpp"
 msgid "z) Stamp Grass"
-msgstr "z) Stampo Herbo"
+msgstr "z) Stampi Herbon"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4833,7 +4833,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Grass_Patch.kpp"
 msgid "z) Stamp Grass Patch"
-msgstr "z) Stampi Herba Flikaĵo"
+msgstr "z) Stampi Herbomakulon"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4851,7 +4851,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Herbals.kpp"
 msgid "z) Stamp Herbals"
-msgstr "z) Stamp Herbals"
+msgstr "z) Stampi Herbaĵojn"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4860,7 +4860,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Leaves.kpp"
 msgid "z) Stamp Leaves"
-msgstr "z) Stamp Folioj"
+msgstr "z) Stampi Foliojn"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4869,7 +4869,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Mountains_Distant.kpp"
 msgid "z) Stamp Mountains Distant"
-msgstr "z) Stamp Montoj Malproksimaj"
+msgstr "z) Stampi Montojn Malproksimajn"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4878,7 +4878,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Shoujo_Bubbles.kpp"
 msgid "z) Stamp Shoujo Bubbles"
-msgstr "z) Stamp Shoujo Bubbles"
+msgstr "z) Stampi Shoujo Bubbles"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4887,7 +4887,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Sparkles.kpp"
 msgid "z) Stamp Sparkles"
-msgstr "z) Poŝtmarkoj"
+msgstr "z) Stampi Ekbrilojn"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4896,7 +4896,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Stylised_Tree.kpp"
 msgid "z) Stamp Stylised Tree"
-msgstr "z) Stampo Stiligita Arbo"
+msgstr "z) Stampi Stiligitan Arbon"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4905,7 +4905,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Vegetal.kpp"
 msgid "z) Stamp Vegetal"
-msgstr "z) Stampo Vegetal"
+msgstr "z) Stampin Vegetal"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4914,7 +4914,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Water.kpp"
 msgid "z) Stamp Water"
-msgstr "z) Stampo Akvo"
+msgstr "z) Stampi Akvon"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -15905,7 +15905,8 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
 msgstr "Interspaco > 0.5, konsideru malŝalti Tujan Antaŭrigardon"
 
-#: libs/brush/KisBrushTypeMetaDataFixup.cpp:31
+#: libs/brush/KisBrushTypeMetaDataFixup.cpp:28
+#: libs/brush/KisBrushTypeMetaDataFixup.cpp:35
 #, kde-format
 msgid "Could not access brush tip metadata"
 msgstr "Ne eblis aliri metadatumojn pri penikpinto"
@@ -16110,8 +16111,8 @@ msgctxt "(qtundo-format)"
 msgid "Lock shapes"
 msgstr "Ŝlosi formojn"
 
-#: libs/flake/commands/KoShapeMoveCommand.cpp:23
-#: libs/flake/commands/KoShapeMoveCommand.cpp:35
+#: libs/flake/commands/KoShapeMoveCommand.cpp:24
+#: libs/flake/commands/KoShapeMoveCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Move shapes"
 msgstr "Movi formojn"
@@ -16216,7 +16217,7 @@ msgstr "Ne povas konservi %1 al html"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:123
-#: libs/ui/flake/kis_shape_layer.cc:520
+#: libs/ui/flake/kis_shape_layer.cc:524
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -17240,7 +17241,7 @@ msgstr "Cepŝeloj"
 #: libs/image/kis_layer_properties_icons.cpp:27
 #: libs/resources/KisResourceModel.cpp:142
 #: libs/resources/KisStorageModel.cpp:483
-#: libs/resources/KisTagResourceModel.cpp:638
+#: libs/resources/KisTagResourceModel.cpp:644
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:110
 #, kde-format
 msgid "Active"
@@ -17340,14 +17341,14 @@ msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Konverti al Farbo-Tavolo"
 
-#: libs/image/kis_processing_visitor.cpp:23
+#: libs/image/kis_processing_visitor.cpp:24
 #, kde-format
 msgid "Processing"
 msgstr "Prilaborado"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1414
-#: libs/ui/KisMainWindow.cpp:1694 libs/ui/KisMainWindow.cpp:1707
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1415
+#: libs/ui/KisMainWindow.cpp:1695 libs/ui/KisMainWindow.cpp:1708
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18083,8 +18084,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "CSV Dokumento"
 
-#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2058
-#: libs/ui/KisMainWindow.cpp:2141
+#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2059
+#: libs/ui/KisMainWindow.cpp:2142
 #, kde-format
 msgid "Import frames"
 msgstr "Importi kadrojn"
@@ -19332,8 +19333,8 @@ msgstr "Elen"
 #: libs/pigment/resources/KoColorSet.cpp:1387
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
-#: libs/ui/actions/KisPasteActionFactories.cpp:352
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:451 libs/ui/KisView.cpp:1134
+#: libs/ui/actions/KisPasteActionFactories.cpp:354
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:451 libs/ui/KisView.cpp:1135
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19365,7 +19366,7 @@ msgstr "Ne analizita Rimeda Bloko"
 msgid "Local Resources"
 msgstr "Lokaj Rimedoj"
 
-#: libs/resources/KisResourceCacheDb.cpp:252
+#: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
@@ -19393,16 +19394,16 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:935
 #: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:1855
 #: libs/ui/KisDocument.cpp:1898 libs/ui/KisDocument.cpp:1908
-#: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1087
-#: libs/ui/KisMainWindow.cpp:1213 libs/ui/KisMainWindow.cpp:1312
-#: libs/ui/KisMainWindow.cpp:1918 libs/ui/KisMainWindow.cpp:1927
-#: libs/ui/KisMainWindow.cpp:2066 libs/ui/KisMainWindow.cpp:2127
-#: libs/ui/KisMainWindow.cpp:2148 libs/ui/KisMainWindow.cpp:2761
+#: libs/ui/KisMainWindow.cpp:972 libs/ui/KisMainWindow.cpp:1088
+#: libs/ui/KisMainWindow.cpp:1214 libs/ui/KisMainWindow.cpp:1313
+#: libs/ui/KisMainWindow.cpp:1919 libs/ui/KisMainWindow.cpp:1928
+#: libs/ui/KisMainWindow.cpp:2067 libs/ui/KisMainWindow.cpp:2128
+#: libs/ui/KisMainWindow.cpp:2149 libs/ui/KisMainWindow.cpp:2762
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:681 libs/ui/KisView.cpp:1137
+#: libs/ui/KisView.cpp:682 libs/ui/KisView.cpp:1138
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:292
@@ -19443,7 +19444,7 @@ msgctxt "@title:window"
 msgid "Krita"
 msgstr "Krita"
 
-#: libs/resources/KisResourceCacheDb.cpp:252
+#: libs/resources/KisResourceCacheDb.cpp:255
 #, kde-format
 msgid ""
 "The resource database scheme has changed. Krita will backup your database "
@@ -19513,7 +19514,7 @@ msgstr "Ne eblis sinkronigi %1 kun la datumbazo"
 
 #: libs/resources/KisResourceModel.cpp:124
 #: libs/resources/KisStorageModel.cpp:473
-#: libs/resources/KisTagResourceModel.cpp:620
+#: libs/resources/KisTagResourceModel.cpp:626
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:81
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:103
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:147
@@ -19522,7 +19523,7 @@ msgid "Id"
 msgstr "Id"
 
 #: libs/resources/KisResourceModel.cpp:126
-#: libs/resources/KisTagResourceModel.cpp:622
+#: libs/resources/KisTagResourceModel.cpp:628
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:83
 #, kde-format
 msgid "Storage ID"
@@ -19530,7 +19531,7 @@ msgstr "Stoka ID"
 
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisStorageModel.cpp:487
-#: libs/resources/KisTagResourceModel.cpp:624
+#: libs/resources/KisTagResourceModel.cpp:630
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:107
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
@@ -19539,13 +19540,13 @@ msgid "Name"
 msgstr "Nomo"
 
 #: libs/resources/KisResourceModel.cpp:130
-#: libs/resources/KisTagResourceModel.cpp:626
+#: libs/resources/KisTagResourceModel.cpp:632
 #, kde-format
 msgid "File Name"
 msgstr "Dosiernomo"
 
 #: libs/resources/KisResourceModel.cpp:132
-#: libs/resources/KisTagResourceModel.cpp:628
+#: libs/resources/KisTagResourceModel.cpp:634
 #, kde-format
 msgid "Tooltip"
 msgstr "Konsileto"
@@ -19554,7 +19555,7 @@ msgstr "Konsileto"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: libs/resources/KisResourceModel.cpp:134
-#: libs/resources/KisTagResourceModel.cpp:630
+#: libs/resources/KisTagResourceModel.cpp:636
 #: libs/ui/imagesize/imagesize.xmlgui:4
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:156
 #: plugins/extensions/imagesplit/imagesplit.xmlgui:4
@@ -19567,14 +19568,14 @@ msgid "Image"
 msgstr "Bildo"
 
 #: libs/resources/KisResourceModel.cpp:136
-#: libs/resources/KisTagResourceModel.cpp:632
+#: libs/resources/KisTagResourceModel.cpp:638
 #, kde-format
 msgid "Status"
 msgstr "Statuso"
 
 #: libs/resources/KisResourceModel.cpp:138
 #: libs/resources/KisStorageModel.cpp:477
-#: libs/resources/KisTagResourceModel.cpp:634
+#: libs/resources/KisTagResourceModel.cpp:640
 #: libs/resourcewidgets/KisIconToolTip.cpp:104
 #, kde-format
 msgid "Location"
@@ -19582,21 +19583,21 @@ msgstr "Loko"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/resources/KisResourceModel.cpp:140
-#: libs/resources/KisTagResourceModel.cpp:636
+#: libs/resources/KisTagResourceModel.cpp:642
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:43
 #, kde-format
 msgid "Resource Type"
 msgstr "Rimedotipo"
 
 #: libs/resources/KisResourceModel.cpp:144
-#: libs/resources/KisTagResourceModel.cpp:640
-#: libs/resources/KisTagResourceModel.cpp:670
+#: libs/resources/KisTagResourceModel.cpp:646
+#: libs/resources/KisTagResourceModel.cpp:676
 #, kde-format
 msgid "Storage Active"
 msgstr "Stokado Aktiva"
 
 #: libs/resources/KisResourceModel.cpp:146
-#: libs/resources/KisTagResourceModel.cpp:642
+#: libs/resources/KisTagResourceModel.cpp:648
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:86
 #, kde-format
 msgid "md5sum"
@@ -19604,7 +19605,7 @@ msgstr "md5sumo"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:148
-#: libs/resources/KisTagResourceModel.cpp:644
+#: libs/resources/KisTagResourceModel.cpp:650
 #: libs/resourcewidgets/KisIconToolTip.cpp:95
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
 #, kde-format
@@ -19612,14 +19613,13 @@ msgid "Tags"
 msgstr "Etikedoj"
 
 #: libs/resources/KisResourceModel.cpp:150
-#: libs/resources/KisTagResourceModel.cpp:646
-#, fuzzy, kde-format
-#| msgid "Clear Thumbnail"
+#: libs/resources/KisTagResourceModel.cpp:652
+#, kde-format
 msgid "Large Thumbnail"
-msgstr "Viŝi Bildeton"
+msgstr "Granda Bildeton"
 
 #: libs/resources/KisResourceModel.cpp:152
-#: libs/resources/KisTagResourceModel.cpp:648
+#: libs/resources/KisTagResourceModel.cpp:654
 #, kde-format
 msgid "Dirty"
 msgstr ""
@@ -19628,7 +19628,7 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/resources/KisResourceModel.cpp:154
-#: libs/resources/KisTagResourceModel.cpp:650
+#: libs/resources/KisTagResourceModel.cpp:656
 #: libs/ui/animation/VideoImportDialog.ui:197
 #: plugins/dockers/logdocker/LogDockerDock.cpp:187
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
@@ -19804,7 +19804,7 @@ msgstr "Bildeto"
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
-#: libs/resources/KisTagModel.cpp:121 libs/resources/KisTagModel.cpp:300
+#: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:305
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:629
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:648
@@ -19815,67 +19815,61 @@ msgstr "Bildeto"
 msgid "All"
 msgstr "Ĉiuj"
 
-#: libs/resources/KisTagModel.cpp:149 libs/resources/KisTagModel.cpp:310
+#: libs/resources/KisTagModel.cpp:154 libs/resources/KisTagModel.cpp:315
 #, kde-format
 msgid "All Untagged"
 msgstr "Ĉiuj Senetikeditaj"
 
-#: libs/resources/KisTagModel.cpp:303
+#: libs/resources/KisTagModel.cpp:308
 #, kde-format
 msgid "All Resources"
 msgstr "Ĉiuj Rimedoj"
 
-#: libs/resources/KisTagModel.cpp:313
+#: libs/resources/KisTagModel.cpp:318
 #, kde-format
 msgid "All Untagged Resources"
 msgstr "Ĉiuj Senetikedaj Rimedoj"
 
-#: libs/resources/KisTagResourceModel.cpp:658
+#: libs/resources/KisTagResourceModel.cpp:664
 #, kde-format
 msgid "Tag ID"
 msgstr ""
 
-#: libs/resources/KisTagResourceModel.cpp:660
-#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
-#, fuzzy, kde-format
-#| msgid "Resources"
-msgid "Resource ID"
-msgstr "Rimedoj"
-
-#: libs/resources/KisTagResourceModel.cpp:662
-#, kde-format
-msgid "Tag Url"
-msgstr ""
-
-#: libs/resources/KisTagResourceModel.cpp:664
-#, fuzzy, kde-format
-#| msgid "Resources"
-msgid "Resource"
-msgstr "Rimedoj"
-
 #: libs/resources/KisTagResourceModel.cpp:666
-#, fuzzy, kde-format
-#| msgid "Resource View"
-msgid "Resource Active"
-msgstr "Rimeda Vido"
+#: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
+#, kde-format
+msgid "Resource ID"
+msgstr "Risurca ID"
 
 #: libs/resources/KisTagResourceModel.cpp:668
-#, fuzzy, kde-format
-#| msgid "Storage Active"
-msgid "Tag Active"
-msgstr "Stokado Aktiva"
+#, kde-format
+msgid "Tag Url"
+msgstr "Etiked-URL"
+
+#: libs/resources/KisTagResourceModel.cpp:670
+#, kde-format
+msgid "Resource"
+msgstr "Risurco"
 
 #: libs/resources/KisTagResourceModel.cpp:672
-#, fuzzy, kde-format
-#| msgid "Resource Type"
-msgid "Resource Name"
-msgstr "Rimedotipo"
+#, kde-format
+msgid "Resource Active"
+msgstr "Risurco Aktiva"
 
 #: libs/resources/KisTagResourceModel.cpp:674
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
+msgid "Tag Active"
+msgstr "Etikedo Aktiva"
+
+#: libs/resources/KisTagResourceModel.cpp:678
+#, kde-format
+msgid "Resource Name"
+msgstr "Risurconomo"
+
+#: libs/resources/KisTagResourceModel.cpp:680
+#, kde-format
 msgid "Tag File Name"
-msgstr "Dosiernomo"
+msgstr "Etikeda Dosiernomo"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:101
 #, kde-format
@@ -19901,7 +19895,7 @@ msgid "Delete resource"
 msgstr "Forigi rimedon"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:333
-#: libs/ui/KisMainWindow.cpp:2560
+#: libs/ui/KisMainWindow.cpp:2561
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:609
 #, kde-format
 msgctxt "@title:window"
@@ -20246,7 +20240,7 @@ msgid "Select All"
 msgstr "Elekti ĉion"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:775
+#: libs/ui/KisView.cpp:776
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Inundo Pleniga Tavolo"
@@ -20308,17 +20302,17 @@ msgid "Paste shapes"
 msgstr "Alglui formojn"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:359 libs/ui/KisView.cpp:597
+#: libs/ui/actions/KisPasteActionFactories.cpp:361 libs/ui/KisView.cpp:598
 #, kde-format
 msgid "(pasted)"
 msgstr "(algluita)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:357
+#: libs/ui/actions/KisPasteActionFactories.cpp:359
 #, kde-format
 msgid "Pasted"
 msgstr "Algluita"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:412
+#: libs/ui/actions/KisPasteActionFactories.cpp:414
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "Alglui Stilon"
@@ -20361,7 +20355,7 @@ msgstr ""
 "Malsukcesis bildigi animaciajn kadrojn! Eligdosieroj estas nekompletaj."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2168
+#: libs/ui/KisMainWindow.cpp:2169
 #, kde-format
 msgid "Render Animation"
 msgstr "Redoni Animacion"
@@ -20397,10 +20391,7 @@ msgid "spline"
 msgstr "spline"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:100
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Not Applicable, used where there's no colorants or gamma curve found"
-#| msgid "N/A"
+#, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N/A"
@@ -20411,10 +20402,9 @@ msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:431
-#, fuzzy, kde-format
-#| msgid "FFMpeg Version: None"
+#, kde-format
 msgid "FFmpeg Version: "
-msgstr "FFMpeg Versio: Neniu"
+msgstr "FFMpeg Versio: "
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:648
 #, kde-format
@@ -20424,17 +20414,15 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
-#, fuzzy, kde-format
-#| msgid ""
-#| "The location of FFmpeg is invalid. Please select the correct location of "
-#| "the FFmpeg executable on your system."
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be "
 "invalid.                                                     Please select "
 "the correct location of an FFmpeg executable on your system."
 msgstr ""
-"La loko de FFmpeg estas malvalida. Bonvolu elekti la ĝustan lokon de la "
-"plenumebla FFmpeg en via sistemo."
+"La FFmpeg, kiun vi donis, ŝajnas esti "
+"nevalida.                                                    Bonvolu elekti "
+"Bonvolu elekti la ĝustan lokon de FFmpeg-plenumeblaĵo en via sistemo."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:675
 #, kde-format
@@ -21265,11 +21253,10 @@ msgid "kbps"
 msgstr "kbps"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:291
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
-msgstr "Malfermi"
+msgstr "OpenH264"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
 #, kde-format
@@ -22435,7 +22422,7 @@ msgid "Numerical"
 msgstr "Nombra"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:137
-#: libs/ui/KisMainWindow.cpp:1181
+#: libs/ui/KisMainWindow.cpp:1182
 #, kde-format
 msgid "Import Images"
 msgstr "Importi Bildojn"
@@ -22574,7 +22561,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Enigi novan stilnomon"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2571
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2572
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -22842,11 +22829,10 @@ msgid "%1 is not a valid image file!"
 msgstr "%1 ne estas valida bilddosiero!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:790
-#, fuzzy, kde-format
-#| msgid "Warning: this location is not writable."
+#, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
-msgstr "Averto: ĉi tiu loko ne estas skribebla."
+msgstr "<b>Averto:</b> ĉi tiu loko ne estas skribebla."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:893
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1002
@@ -22984,10 +22970,9 @@ msgid "Warning(s):"
 msgstr "Averto(j):"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1823
-#, fuzzy, kde-format
-#| msgid "WARNING: current display doesn't support HDR rendering"
+#, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
-msgstr "AVERTO: nuna ekrano ne subtenas HDR-bildon"
+msgstr "<b>Averto:</b> nuna ekrano ne subtenas HDR-bildigon"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1908
 #, kde-format
@@ -24439,18 +24424,15 @@ msgstr "Travidebleco damtabulo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:295
-#, fuzzy, kde-format
-#| msgctxt "Default name for a color swatch"
-#| msgid "Color %1"
+#, kde-format
 msgid "Color 1:"
-msgstr "Koloro %1"
+msgstr "Koloro 1:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/forms/wdgdisplaysettings.ui:322
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Color 2:"
-msgstr "Koloro:"
+msgstr "Koloro 2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCheckSize)
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
@@ -24512,24 +24494,21 @@ msgstr "Superkovro de Elekto:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
-#, fuzzy, kde-format
-#| msgid "Selection Outline Opacity:"
+#, kde-format
 msgid "Outline opacity:"
-msgstr "Opakeco de Elekta Skizo:"
+msgstr "Opakeco de Skizo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
-#, fuzzy, kde-format
-#| msgid "Overlay Mode"
+#, kde-format
 msgid "Overlay color:"
-msgstr "Overlay Reĝimo"
+msgstr "Surmeta koloro:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:460
-#, fuzzy, kde-format
-#| msgid "Curves opacity:"
+#, kde-format
 msgid "Overlay opacity:"
-msgstr "Opakeco de kurboj:"
+msgstr "Surmeta opakeco:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -24902,10 +24881,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, group_subWinMode)
 #: libs/ui/forms/wdggeneralsettings.ui:408
-#, fuzzy, kde-format
-#| msgid "Subwindows"
+#, kde-format
 msgid "Subwindow mode"
-msgstr "Subfenestroj"
+msgstr "Subfenestra reĝimo"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton)
 #. i18n: ectx: property (text), widget (QPushButton, clearBgImageButton)
@@ -24968,10 +24946,9 @@ msgstr "Ebligi frakcian skalfaktoron"
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:623
 #: libs/ui/forms/wdggeneralsettings.ui:807
-#, fuzzy, kde-format
-#| msgid "(Needs restart)"
+#, kde-format
 msgid "(needs restart)"
-msgstr "(Necesas rekomenci)"
+msgstr "(bezonas rekomencon)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:650
@@ -25054,12 +25031,9 @@ msgstr "Sentemeco:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
 #: libs/ui/forms/wdggeneralsettings.ui:781
-#, fuzzy, kde-format
-#| msgid ""
-#| "Hide docker scrollbars if kinetic scrolling is enabled (needs restart)"
+#, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
-msgstr ""
-"Kaŝi docker-rulumbretojn se kinetika movo estas ebligita (bezonas rekomenci)"
+msgstr "Kaŝi docker-rulumbretojn se kinetika rulumo estas ebligita"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:834
@@ -25195,11 +25169,9 @@ msgstr "Tondi kadrojn dum importado de kuraĝigoj"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1023
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Painting"
+#, kde-format
 msgid "Pasting"
-msgstr "Pentraĵo"
+msgstr "Algluado"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
 #: libs/ui/forms/wdggeneralsettings.ui:1035
@@ -26221,7 +26193,7 @@ msgstr "Nuna peniko antaŭfiksita"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1066
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1067
 #: libs/ui/widgets/kis_workspace_chooser.cpp:111
 #: libs/ui/widgets/kis_workspace_chooser.cpp:190
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -27603,57 +27575,62 @@ msgstr "&Larĝeco:"
 msgid "Adjust print size separately"
 msgstr "Alĝustigi presan grandecon aparte"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:55
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:58
 #, kde-format
 msgid "Add shortcut..."
 msgstr "Aldoni ŝparvojon..."
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:67
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:70
 #, kde-format
 msgctxt "Shortcut type"
 msgid "Key Combination"
 msgstr "Ŝlosila Kombinaĵo"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:70
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:73
 #, kde-format
 msgctxt "Shortcut type"
 msgid "Mouse Button"
 msgstr "Musbutono"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:73
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:76
 #, kde-format
 msgctxt "Shortcut type"
 msgid "Mouse Wheel"
 msgstr "Musa Rado"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:76
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:79
 #, kde-format
 msgctxt "Shortcut type"
 msgid "Gesture"
 msgstr "Gesto"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:79
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:82
 #, kde-format
 msgid "Unknown Input"
 msgstr "Nekonata Enigo"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:178
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:181
 #, kde-format
 msgctxt "Type of shortcut"
 msgid "Type"
 msgstr "Tipo"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:181
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:184
 #, kde-format
 msgctxt "Input for shortcut"
 msgid "Input"
 msgstr "Enigo"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:184
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:187
 #, kde-format
 msgctxt "Action to trigger with shortcut"
 msgid "Action"
 msgstr "Ago"
+
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:271
+#, kde-format
+msgid "A conflict exists between two or more shortcuts."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, editProfilesButton)
 #: libs/ui/input/config/kis_edit_profiles_dialog.cpp:54
@@ -27722,17 +27699,24 @@ msgstr "Eniga Profilo"
 msgid "Manage canvas input profiles"
 msgstr "Administri kanvasajn enigajn profilojn"
 
-#: libs/ui/input/config/kis_input_configuration_page_item.cpp:38
+#. i18n: ectx: property (toolTip), widget (QPushButton, warningConflictButton)
+#: libs/ui/input/config/kis_input_configuration_page_item.cpp:27
+#: libs/ui/input/config/kis_input_configuration_page_item.ui:111
+#, kde-format
+msgid "Conflict found for a Shortcut in this Action."
+msgstr ""
+
+#: libs/ui/input/config/kis_input_configuration_page_item.cpp:52
 #, kde-format
 msgid "Delete Shortcut"
 msgstr "Forigi Ŝparvojon"
 
-#: libs/ui/input/config/kis_input_configuration_page_item.cpp:83
+#: libs/ui/input/config/kis_input_configuration_page_item.cpp:112
 #, kde-format
 msgid "Deleting last shortcut for this action!"
 msgstr "Forigante lastan ŝparvojon por ĉi tiu ago!"
 
-#: libs/ui/input/config/kis_input_configuration_page_item.cpp:84
+#: libs/ui/input/config/kis_input_configuration_page_item.cpp:113
 #, kde-format
 msgid "It is not allowed to erase some default shortcuts. Modify it instead."
 msgstr "Ne rajtas forigi iujn defaŭltajn ŝparvojojn. Modifi ĝin anstataŭe."
@@ -27744,7 +27728,7 @@ msgid "<html><head/><body><p>Action Description</p></body></html>"
 msgstr "<html><head/><body><p>Ago Priskribo</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QToolButton, collapseButton)
-#: libs/ui/input/config/kis_input_configuration_page_item.ui:77
+#: libs/ui/input/config/kis_input_configuration_page_item.ui:92
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:278
 #, kde-format
 msgid "Action Name"
@@ -28065,61 +28049,61 @@ msgstr "Elekti Tavolreĝimon"
 msgid "Select Multiple Layer Mode"
 msgstr "Elekti Plurtavolan Reĝimon"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:261
+#: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
 msgctxt "Separator in the list of mouse buttons for shortcut"
 msgid " + "
 msgstr " + "
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:266
+#: libs/ui/input/kis_shortcut_configuration.cpp:298
 #, kde-format
 msgctxt "Left Mouse Button"
 msgid "Left"
 msgstr "Maldekstra"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:275
+#: libs/ui/input/kis_shortcut_configuration.cpp:307
 #, kde-format
 msgctxt "Right Mouse Button"
 msgid "Right"
 msgstr "Dekstra"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:283
+#: libs/ui/input/kis_shortcut_configuration.cpp:315
 #, kde-format
 msgctxt "Middle Mouse Button"
 msgid "Middle"
 msgstr "Meza"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:291
+#: libs/ui/input/kis_shortcut_configuration.cpp:323
 #, kde-format
 msgctxt "Mouse Back Button"
 msgid "Back"
 msgstr "Reen"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:299
+#: libs/ui/input/kis_shortcut_configuration.cpp:331
 #, kde-format
 msgctxt "Mouse Forward Button"
 msgid "Forward"
 msgstr "Antaŭen"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:307
+#: libs/ui/input/kis_shortcut_configuration.cpp:339
 #, kde-format
 msgctxt "Mouse Task Button"
 msgid "Task"
 msgstr "Tasko"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:314
+#: libs/ui/input/kis_shortcut_configuration.cpp:346
 #, kde-format
 msgctxt "Mouse Button"
 msgid "Mouse %1"
 msgstr "Muso %1"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:320
+#: libs/ui/input/kis_shortcut_configuration.cpp:352
 #, kde-format
 msgctxt "No mouse buttons for shortcut"
 msgid "None"
 msgstr "Neniu"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:326
+#: libs/ui/input/kis_shortcut_configuration.cpp:358
 #, kde-format
 msgctxt ""
 "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
@@ -28129,156 +28113,156 @@ msgid_plural "%1 Buttons"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:338
+#: libs/ui/input/kis_shortcut_configuration.cpp:370
 #, kde-format
 msgctxt "Separator in the list of keys for shortcut"
 msgid " + "
 msgstr " + "
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:343
+#: libs/ui/input/kis_shortcut_configuration.cpp:375
 #, kde-format
 msgctxt "Ctrl key"
 msgid "Ctrl"
 msgstr "Ktrl"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:347
+#: libs/ui/input/kis_shortcut_configuration.cpp:379
 #, kde-format
 msgctxt "Meta key"
 msgid "Meta"
 msgstr "Meta"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:351
+#: libs/ui/input/kis_shortcut_configuration.cpp:383
 #, kde-format
 msgctxt "Alt key"
 msgid "Alt"
 msgstr "Alt"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:355
+#: libs/ui/input/kis_shortcut_configuration.cpp:387
 #, kde-format
 msgctxt "Shift key"
 msgid "Shift"
 msgstr "Shift"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:367
+#: libs/ui/input/kis_shortcut_configuration.cpp:399
 #, kde-format
 msgctxt "No keys for shortcut"
 msgid "None"
 msgstr "Neniu"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:377
+#: libs/ui/input/kis_shortcut_configuration.cpp:409
 #, kde-format
 msgid "Mouse Wheel Up"
 msgstr "Musa Rado Supren"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:381
+#: libs/ui/input/kis_shortcut_configuration.cpp:413
 #, kde-format
 msgid "Mouse Wheel Down"
 msgstr "Musa Rado Malsupren"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:385
+#: libs/ui/input/kis_shortcut_configuration.cpp:417
 #, kde-format
 msgid "Mouse Wheel Left"
 msgstr "Musa Rado Maldekstre"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:389
+#: libs/ui/input/kis_shortcut_configuration.cpp:421
 #, kde-format
 msgid "Mouse Wheel Right"
 msgstr "Musa Rado Dekstre"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:393
+#: libs/ui/input/kis_shortcut_configuration.cpp:425
 #, kde-format
 msgid "Trackpad Pan"
 msgstr "Trackpad Pan"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:397
+#: libs/ui/input/kis_shortcut_configuration.cpp:429
 #, kde-format
 msgctxt "No mouse wheel buttons for shortcut"
 msgid "None"
 msgstr "Neniu"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:409
+#: libs/ui/input/kis_shortcut_configuration.cpp:441
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse buttons in shortcut"
 msgid "%1 + %2"
 msgstr "%1 + %2"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:425
+#: libs/ui/input/kis_shortcut_configuration.cpp:457
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse wheel buttons in shortcut"
 msgid "%1 + %2"
 msgstr "%1 + %2"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:439
+#: libs/ui/input/kis_shortcut_configuration.cpp:471
 #, kde-format
 msgid "Pinch Gesture"
 msgstr "Pinĉa Gesto"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:441
+#: libs/ui/input/kis_shortcut_configuration.cpp:473
 #, kde-format
 msgid "Pan Gesture"
 msgstr "Ŝovuma Gesto"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:443
+#: libs/ui/input/kis_shortcut_configuration.cpp:475
 #, kde-format
 msgid "Rotate Gesture"
 msgstr "Rotacia Gesto"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:445
+#: libs/ui/input/kis_shortcut_configuration.cpp:477
 #, kde-format
 msgid "Smart Zoom Gesture"
 msgstr "Inteligent-Zoma Gesto"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:448
+#: libs/ui/input/kis_shortcut_configuration.cpp:480
 #, kde-format
 msgid "One Finger Tap"
 msgstr "Unufingra Frapeto"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:450
+#: libs/ui/input/kis_shortcut_configuration.cpp:482
 #, kde-format
 msgid "Two Finger Tap"
 msgstr "Dufingra Frapeto"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:452
+#: libs/ui/input/kis_shortcut_configuration.cpp:484
 #, kde-format
 msgid "Three Finger Tap"
 msgstr "Trifingra Frapeto"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:454
+#: libs/ui/input/kis_shortcut_configuration.cpp:486
 #, kde-format
 msgid "Four Finger Tap"
 msgstr "Kvarfingra Frapeto"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:456
+#: libs/ui/input/kis_shortcut_configuration.cpp:488
 #, kde-format
 msgid "Five Finger Tap"
 msgstr "Kvinfingra Frapeto"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:458
+#: libs/ui/input/kis_shortcut_configuration.cpp:490
 #, kde-format
 msgid "One Finger Drag"
 msgstr "Unufingra Trenado"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:460
+#: libs/ui/input/kis_shortcut_configuration.cpp:492
 #, kde-format
 msgid "Two Finger Drag"
 msgstr "Dufingra Trenado"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:462
+#: libs/ui/input/kis_shortcut_configuration.cpp:494
 #, kde-format
 msgid "Three Finger Drag"
 msgstr "Trifingra Trenado"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:464
+#: libs/ui/input/kis_shortcut_configuration.cpp:496
 #, kde-format
 msgid "Four Finger Drag"
 msgstr "Kvarfingra Trenado"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:466
+#: libs/ui/input/kis_shortcut_configuration.cpp:498
 #, kde-format
 msgid "Five Finger Drag"
 msgstr "Kvinfingra Treno"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:469
+#: libs/ui/input/kis_shortcut_configuration.cpp:501
 #, kde-format
 msgid "No Gesture"
 msgstr "Neniu Gesto"
@@ -28579,7 +28563,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Ŝanĝi Dosiertavolon"
 
-#: libs/ui/kis_clipboard.cc:714 libs/ui/KisView.cpp:682
+#: libs/ui/kis_clipboard.cc:714 libs/ui/KisView.cpp:683
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -29799,18 +29783,16 @@ msgid "%1 cannot be written to. Please save under a different name."
 msgstr "%1 ne povas esti skribita al. Bonvolu konservi sub alia nomo."
 
 #: libs/ui/KisDocument.cpp:751
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL errors"
-#| msgid "Unable to read the image profile."
+#, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "Ne eblas legi la bildan profilon."
+msgstr "Malsukcesis krei savdosieron."
 
 #: libs/ui/KisDocument.cpp:768
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr ""
+msgstr "Malsukcesis kreado de nombrigita savdosiero"
 
 #: libs/ui/KisDocument.cpp:790
 #, kde-format
@@ -30331,32 +30313,32 @@ msgstr "Montri %1 Ilobreto"
 msgid "Hide %1 Toolbar"
 msgstr "Kaŝi %1 Ilobreto"
 
-#: libs/ui/KisMainWindow.cpp:1029
+#: libs/ui/KisMainWindow.cpp:1030
 #, kde-format
 msgid "Write Protected"
 msgstr "Skribo Protektita"
 
-#: libs/ui/KisMainWindow.cpp:1033
+#: libs/ui/KisMainWindow.cpp:1034
 #, kde-format
 msgid "Recovered"
 msgstr "Rekuperita"
 
-#: libs/ui/KisMainWindow.cpp:1063
+#: libs/ui/KisMainWindow.cpp:1064
 #, kde-format
 msgid "Save as %1"
 msgstr "Konservi kiel %1"
 
-#: libs/ui/KisMainWindow.cpp:1087
+#: libs/ui/KisMainWindow.cpp:1088
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "La dosiero %1 ne ekzistas."
 
-#: libs/ui/KisMainWindow.cpp:1181
+#: libs/ui/KisMainWindow.cpp:1182
 #, kde-format
 msgid "Open Images"
 msgstr "Malfermi Bildojn"
 
-#: libs/ui/KisMainWindow.cpp:1313
+#: libs/ui/KisMainWindow.cpp:1314
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30369,45 +30351,45 @@ msgstr ""
 "\n"
 "Bonvolu elekti lokon kie la originala dosiero ne estos anstataŭita!"
 
-#: libs/ui/KisMainWindow.cpp:1369
+#: libs/ui/KisMainWindow.cpp:1370
 #, kde-format
 msgid "Exporting"
 msgstr "Eksportante"
 
-#: libs/ui/KisMainWindow.cpp:1369
+#: libs/ui/KisMainWindow.cpp:1370
 #, kde-format
 msgid "Saving As"
 msgstr "Konservante Kiel"
 
-#: libs/ui/KisMainWindow.cpp:1673
+#: libs/ui/KisMainWindow.cpp:1674
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Krei novan dokumenton"
 
-#: libs/ui/KisMainWindow.cpp:1697
+#: libs/ui/KisMainWindow.cpp:1698
 #, kde-format
 msgid "Custom Document"
 msgstr "Propra Dokumento"
 
-#: libs/ui/KisMainWindow.cpp:1709
+#: libs/ui/KisMainWindow.cpp:1710
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Krei el Clipboard"
 
-#: libs/ui/KisMainWindow.cpp:1887
+#: libs/ui/KisMainWindow.cpp:1888
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Tavoloj/Maskoj"
 
-#: libs/ui/KisMainWindow.cpp:1913
+#: libs/ui/KisMainWindow.cpp:1914
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:181
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:286
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Vi ne havas iujn ajn rimedajn pakaĵojn ebligitaj."
 
-#: libs/ui/KisMainWindow.cpp:1917
+#: libs/ui/KisMainWindow.cpp:1918
 #, kde-format
 msgid ""
 "\n"
@@ -30418,7 +30400,7 @@ msgstr ""
 "Ne estas disponeblaj antaŭmetitaj penikoj. Bonvolu ebligi pakon kiu havas "
 "antaŭdifiniĝojn antaŭ ol daŭrigi.\n"
 
-#: libs/ui/KisMainWindow.cpp:1927
+#: libs/ui/KisMainWindow.cpp:1928
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
 #, kde-format
@@ -30429,7 +30411,7 @@ msgstr ""
 "\n"
 "Nur viaj lokaj rimedoj disponeblas."
 
-#: libs/ui/KisMainWindow.cpp:2066 libs/ui/KisMainWindow.cpp:2148
+#: libs/ui/KisMainWindow.cpp:2067 libs/ui/KisMainWindow.cpp:2149
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30438,40 +30420,40 @@ msgstr ""
 "Ne eblis fini importadon de animacio:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2127
+#: libs/ui/KisMainWindow.cpp:2128
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Malsukcesis krei novan dokumenton. Animacia importo ĉesigita."
 
-#: libs/ui/KisMainWindow.cpp:2551
+#: libs/ui/KisMainWindow.cpp:2552
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importi Laborspacon..."
 
-#: libs/ui/KisMainWindow.cpp:2566
+#: libs/ui/KisMainWindow.cpp:2567
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nova Laborspaco..."
 
-#: libs/ui/KisMainWindow.cpp:2570
+#: libs/ui/KisMainWindow.cpp:2571
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nova Laborspaco..."
 
-#: libs/ui/KisMainWindow.cpp:2614
+#: libs/ui/KisMainWindow.cpp:2615
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2617
+#: libs/ui/KisMainWindow.cpp:2618
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2784
+#: libs/ui/KisMainWindow.cpp:2785
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -30480,19 +30462,19 @@ msgstr ""
 "La kromadministrado de koloro Krita LittleCMS ne estas instalita. Krita "
 "ĉesos nun."
 
-#: libs/ui/KisMainWindow.cpp:2800
+#: libs/ui/KisMainWindow.cpp:2801
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Instala eraro"
 
-#: libs/ui/KisMainWindow.cpp:2909
+#: libs/ui/KisMainWindow.cpp:2910
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "E&tosoj"
 
-#: libs/ui/KisMainWindow.cpp:2967
+#: libs/ui/KisMainWindow.cpp:2968
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Vastiĝanta Spacer"
@@ -30806,27 +30788,27 @@ msgstr "Neniu bildo uzebla."
 msgid "Use This Template"
 msgstr "Uzi tiun ŝablonon"
 
-#: libs/ui/KisView.cpp:750
+#: libs/ui/KisView.cpp:751
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Vi ne povas treni kaj faligi kolorojn sur la elektita tavolspeco."
 
-#: libs/ui/KisView.cpp:758 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:759 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Tavolo estas ŝlosita kaj nevidebla."
 
-#: libs/ui/KisView.cpp:760 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "Tavolo estas ŝlosita."
 
-#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Tavolo estas nevidebla."
 
-#: libs/ui/KisView.cpp:1138
+#: libs/ui/KisView.cpp:1139
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -30835,70 +30817,70 @@ msgstr ""
 "<p>La dokumento <b>'%1'</b> estas ŝanĝita.</p><p>Ĉu vi volas sekurigi ĝin?</"
 "p>"
 
-#: libs/ui/KisView.cpp:1327
+#: libs/ui/KisView.cpp:1328
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Soft Proofing ne funkcias en glitpunkto."
 
-#: libs/ui/KisView.cpp:1332
+#: libs/ui/KisView.cpp:1333
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Soft Proofing ŝaltita."
 
-#: libs/ui/KisView.cpp:1334
+#: libs/ui/KisView.cpp:1335
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Soft Proofing malŝaltita."
 
-#: libs/ui/KisView.cpp:1346
+#: libs/ui/KisView.cpp:1347
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Gamut-Avertoj ne funkcias en glitpunkto."
 
-#: libs/ui/KisView.cpp:1352
+#: libs/ui/KisView.cpp:1353
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Gamut-Avertoj ŝaltis."
 
-#: libs/ui/KisView.cpp:1354
+#: libs/ui/KisView.cpp:1355
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Sed Soft Proofing ankoraŭ estas for."
 
-#: libs/ui/KisView.cpp:1357
+#: libs/ui/KisView.cpp:1358
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Gamut-Avertoj malŝaltitaj."
 
-#: libs/ui/KisViewManager.cpp:779
+#: libs/ui/KisViewManager.cpp:780
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Aktiva Aŭtora Profilo"
 
-#: libs/ui/KisViewManager.cpp:909
+#: libs/ui/KisViewManager.cpp:910
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (Kopio)"
 
-#: libs/ui/KisViewManager.cpp:1052 libs/ui/KisViewManager.cpp:1133
+#: libs/ui/KisViewManager.cpp:1053 libs/ui/KisViewManager.cpp:1134
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Alternativaj nomoj elĉerpitaj, provu konservi permane kun pli alta nombro"
 
-#: libs/ui/KisViewManager.cpp:1052
+#: libs/ui/KisViewManager.cpp:1053
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Ne eblis konservi pliigan version"
 
-#: libs/ui/KisViewManager.cpp:1133
+#: libs/ui/KisViewManager.cpp:1134
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Ne eblis konservi pliigan sekurkopion"
 
-#: libs/ui/KisViewManager.cpp:1316
+#: libs/ui/KisViewManager.cpp:1317
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -30907,13 +30889,13 @@ msgstr ""
 "Enirante nur Canvas-reĝimon.\n"
 "Premu %1 por reiri."
 
-#: libs/ui/KisViewManager.cpp:1356
+#: libs/ui/KisViewManager.cpp:1357
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Malfermi Rimedan Dosierujon"
 
-#: libs/ui/KisViewManager.cpp:1360
+#: libs/ui/KisViewManager.cpp:1361
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -30937,19 +30919,19 @@ msgstr ""
 "<p><b>Privata aplika loko</b>:<br/> \n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1375
+#: libs/ui/KisViewManager.cpp:1376
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Malfermi en AppData de &uzanto"
 
-#: libs/ui/KisViewManager.cpp:1376
+#: libs/ui/KisViewManager.cpp:1377
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Malfermi en &privata aplikloko"
 
-#: libs/ui/KisViewManager.cpp:1494 libs/ui/KisViewManager.cpp:1512
+#: libs/ui/KisViewManager.cpp:1495 libs/ui/KisViewManager.cpp:1513
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32161,13 +32143,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "Filtrilo \"%1\""
 
-#: libs/ui/toolbox/KoToolBox.cpp:346 libs/widgetutils/xmlgui/ktoolbar.cpp:323
+#: libs/ui/toolbox/KoToolBox.cpp:347 libs/widgetutils/xmlgui/ktoolbar.cpp:323
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Defaŭlte"
 
-#: libs/ui/toolbox/KoToolBox.cpp:353
+#: libs/ui/toolbox/KoToolBox.cpp:354
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
@@ -37182,10 +37164,9 @@ msgstr "ĉi tio ne inkluzivas kolorŝanĝon per la nuanco-elektilo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:392
-#, fuzzy, kde-format
-#| msgid "Background color change"
+#, kde-format
 msgid "Background color changes"
-msgstr "Ŝanĝo de fona koloro"
+msgstr "Ŝanĝoj de fona koloro"
 
 #. i18n: ectx: property (text), widget (QCheckBox, shadeSelectorUpdateOnForeground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:405
@@ -37215,7 +37196,7 @@ msgstr "Minimuma Ombro-Selektilo"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:450
 #, kde-format
 msgid "Colo&r Patches"
-msgstr "Kolo&raj Flikiloj"
+msgstr "Kolo&raj Makuloj"
 
 #. i18n: ectx: property (text), widget (QRadioButton, minimalShadeSelectorAsGradient)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:457
@@ -37239,7 +37220,7 @@ msgstr "LinioAlteco:"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:556
 #, kde-format
 msgid "Patches Per Line: "
-msgstr "Flikaĵoj per linio:"
+msgstr "Makuloj po linio:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, historyGroupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_ColorHistory)
@@ -37261,7 +37242,7 @@ msgstr "Montri Koloran Histor&ion"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:855
 #, kde-format
 msgid "Patch Options"
-msgstr "Flikaj Opcioj"
+msgstr "Makulaj Opcioj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
@@ -40184,30 +40165,27 @@ msgstr "Tuŝ-Docker"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Mode"
+#, kde-format
 msgid "Color Model"
-msgstr "Kolora Reĝimo"
+msgstr "Kolormodelo"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
-#, fuzzy, kde-format
-#| msgid "Selector Appearance"
+#, kde-format
 msgid "Hue Ring Appearance:"
-msgstr "Elektilo Apero"
+msgstr "Apero de Kolortona Ringo:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgid "Static"
-msgstr "Statuso"
+msgstr "Statika"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
 #, kde-format
 msgid "Dynamic"
-msgstr ""
+msgstr "Dinamika"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
@@ -40217,70 +40195,59 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpQuickSettingsMenu)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
-#, fuzzy, kde-format
-#| msgid "Quick Settings Docker"
+#, kde-format
 msgid "Show &Quick Settings Menu"
-msgstr "Rapidaj Agordoj Docker"
+msgstr "Montri &Rapid-Agordan Menuon"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:124
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select layout"
+#, kde-format
 msgid "Favorite Selector Layouts:"
-msgstr "Elekti aranĝon"
+msgstr "Ŝatataj Elektil-aranĝoj:"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
-#, fuzzy, kde-format
-#| msgid "&Select..."
+#, kde-format
 msgid "Select..."
-msgstr "&Selekti..."
+msgstr "Elekti..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
-#, fuzzy, kde-format
-#| msgid "Select a Color Space"
+#, kde-format
 msgid "Selection Color Space:"
-msgstr "Elekti Koloran Spacon"
+msgstr "Elekto Kolorspaco:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
-#, fuzzy, kde-format
-#| msgid "Layers/Masks"
+#, kde-format
 msgid "Layer/Mask"
-msgstr "Tavoloj/Maskoj"
+msgstr "Tavolo/Masko"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Projection Color Space"
+#, kde-format
 msgid "Proof Colors to Painting Color Space"
-msgstr "Konverti Projekcian Koloraspacon"
+msgstr "Testkoloroj por Pentri Kolorspacon"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
 #, kde-format
 msgid "Pop-ups"
-msgstr ""
+msgstr "Ŝprucfenestraĵoj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Group size"
+#, kde-format
 msgid "Pop-up size:"
-msgstr "Grupo grandeco"
+msgstr "Grandeco de ŝprucaĵo:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:221
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:539
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Patches"
-msgstr "Kolo&raj Flikiloj"
+msgstr "Kolormakuloj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -40288,10 +40255,9 @@ msgstr "Kolo&raj Flikiloj"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:560
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:767
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Orientation:"
-msgstr "Orientiĝo"
+msgstr "Orientiĝo:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryHorizontal)
@@ -40299,10 +40265,9 @@ msgstr "Orientiĝo"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:260
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:582
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
-#, fuzzy, kde-format
-#| msgid "Hori&zontal"
+#, kde-format
 msgid "hori&zontal"
-msgstr "Hori&zontala"
+msgstr "hori&zontala"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryVertical)
@@ -40310,10 +40275,9 @@ msgstr "Hori&zontala"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:270
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:592
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
-#, fuzzy, kde-format
-#| msgid "&Vertical"
+#, kde-format
 msgid "&vertical"
-msgstr "&Vertikala"
+msgstr "&vertikala"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -40321,10 +40285,9 @@ msgstr "&Vertikala"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:289
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:628
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:835
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Along Orientation"
-msgstr "Orientiĝo"
+msgstr "Laŭ Orientiĝo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -40332,10 +40295,9 @@ msgstr "Orientiĝo"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:294
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:633
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:840
-#, fuzzy, kde-format
-#| msgid "Vertically"
+#, kde-format
 msgid "Laterally"
-msgstr "Vertikale"
+msgstr "Flanke"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
@@ -40343,10 +40305,9 @@ msgstr "Vertikale"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:302
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:641
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Scrolling:"
-msgstr "Spaco:"
+msgstr "Rulumado:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -40354,12 +40315,9 @@ msgstr "Spaco:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:322
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:651
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:858
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatche.gpl"
-#| msgid "Swatches"
+#, kde-format
 msgid "Patches"
-msgstr "Swatches"
+msgstr "Makuloj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #. i18n: ectx: property (text), widget (QLabel, label_15)
@@ -40367,81 +40325,69 @@ msgstr "Swatches"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:356
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:687
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:894
-#, fuzzy, kde-format
-#| msgid "Max Patches: "
+#, kde-format
 msgid "Max Patches:"
-msgstr "Maksimumaj diakiloj:"
+msgstr "Maksimumaj makuloj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
-#, fuzzy, kde-format
-#| msgid "Update Selector When:"
+#, kde-format
 msgid "Update Base Color When:"
-msgstr "Ĝisdatigi Elektilon Kiam:"
+msgstr "Ĝisdatigi Bazkoloron Kiam:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
-#, fuzzy, kde-format
-#| msgid "Color channels in color"
+#, kde-format
 msgid "Color changes externally"
-msgstr "Koloraj kanaloj en koloro"
+msgstr "Koloro ŝanĝiĝas de ekstere"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateOnRightClick)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
-#, fuzzy, kde-format
-#| msgid "Right clicking on shade selector"
+#, kde-format
 msgid "Right-clicking on shade selector"
 msgstr "Dekstra alklako al nuanc-elektilo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Interaction ends"
-msgstr "Ripetoj"
+msgstr "Interago finiĝas"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
-#, fuzzy, kde-format
-#| msgid "Line Count: "
+#, kde-format
 msgid "Line Count:"
-msgstr "Linia Nombro:"
+msgstr "Nombro da Linioj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgid "Line Height:"
-msgstr "LinioAlteco:"
+msgstr "Alteco de Linio:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
-#, fuzzy, kde-format
-#| msgctxt "left mouse button"
-#| msgid "left button"
+#, kde-format
 msgid "Clear Button"
-msgstr "maldekstra butono"
+msgstr "Malplenigi Butonon"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
-#, fuzzy, kde-format
-#| msgid "Colors from Image"
+#, kde-format
 msgid "Colors fro&m Image"
-msgstr "Koloroj de Bildo"
+msgstr "Koloroj e&l Bildo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
-#, fuzzy, kde-format
-#| msgid "Auto updates"
+#, kde-format
 msgid "Auto Update"
-msgstr "Aŭtomataj ĝisdatigoj"
+msgstr "Aŭtomate ĝisdatigi"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRange)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
-#, fuzzy, kde-format
-#| msgid "&Range:"
+#, kde-format
 msgid "Range:"
-msgstr "&Gamo:"
+msgstr "Gamo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOffset)
 #. i18n: ectx: property (text), widget (QLabel, labelOffset)
@@ -40457,56 +40403,48 @@ msgstr "Deŝovo:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDisplay)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:157
-#, fuzzy, kde-format
-#| msgid "Display"
+#, kde-format
 msgid "Display:"
-msgstr "Montrado"
+msgstr "Ekrano:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
 #, kde-format
 msgid "S&lider"
-msgstr ""
+msgstr "Ŝovi&lo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Pa&tches"
-msgstr "Kolo&raj Flikiloj"
+msgstr "Kolo&raj Makuloj"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Preview:"
-msgstr "Antaŭrigardo"
+msgstr "Antaŭrigardo:"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:4
-#, fuzzy, kde-format
-#| msgid "Color Selector Settings"
+#, kde-format
 msgctxt "action"
 msgid "WG Color Selector Actions"
-msgstr "Koloraj Elektilo-Agordoj"
+msgstr "WG-Kolorelektilaj Agordoj"
 
 #. i18n: context: text @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:7
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color selector"
+#, kde-format
 msgctxt "action"
 msgid "Show wide-gamut color selector"
-msgstr "Montru koloran elektilon"
+msgstr "Montri larĝ-gaman kolorelektilon"
 
 #. i18n: context: text @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:17
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show wide-gamut shade selector"
-msgstr "Montru MyPaint-ombro-elektilon"
+msgstr "Montri larĝ-gaman ombro-elektilon"
 
 #. i18n: context: toolTip @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
@@ -40514,12 +40452,10 @@ msgstr "Montru MyPaint-ombro-elektilon"
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:19
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:20
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show shade selector"
-msgstr "Montru MyPaint-ombro-elektilon"
+msgstr "Montri ombro-elektilon"
 
 #. i18n: context: toolTip @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
@@ -40527,12 +40463,10 @@ msgstr "Montru MyPaint-ombro-elektilon"
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:29
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show MyPaint selector"
-msgstr "Montru MyPaint-ombro-elektilon"
+msgstr "Montri MyPaint-elektilon"
 
 #. i18n: context: text @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
@@ -40540,12 +40474,10 @@ msgstr "Montru MyPaint-ombro-elektilon"
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:47
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:50
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color lighter"
+#, kde-format
 msgctxt "action"
 msgid "Make color lighter"
-msgstr "Pli malpeza koloro de la peniko"
+msgstr "Pli heligi koloron"
 
 #. i18n: context: toolTip @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:49
@@ -40562,12 +40494,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:57
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color darker"
+#, kde-format
 msgctxt "action"
 msgid "Make color darker"
-msgstr "Faru la penikkoloron pli malhela"
+msgstr "Pli malheligi koloron "
 
 #. i18n: context: toolTip @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:59
@@ -40584,12 +40514,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:67
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:70
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Saturation HSY"
-#| msgid "Increase Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Increase color saturation"
-msgstr "Pliigi Saturacion"
+msgstr "Pliigi koloran saturecon"
 
 #. i18n: context: toolTip @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:69
@@ -40604,12 +40532,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:77
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:80
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Decrease color saturation"
-msgstr "Malpliigi Saturacion"
+msgstr "Malpliigi koloran saturecon"
 
 #. i18n: context: toolTip @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:79
@@ -40624,21 +40550,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:87
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:90
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue clockwise"
-msgstr "Movu la nuancon de la peniko dekstrume"
+msgstr "Ŝovi kolortonon dekstrume"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:89
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color clockwise"
-msgstr "Movu la nuancon de la peniko dekstrume"
+msgstr "Ŝovi tonon de la elektita koloro dekstrume"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
@@ -40646,40 +40568,33 @@ msgstr "Movu la nuancon de la peniko dekstrume"
 #. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:97
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:100
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue counter-clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue counter-clockwise"
-msgstr "Movu la nuancon de la peniko maldekstrume"
+msgstr "Ŝovi kolortonon maldekstrume"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue counter-clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color counter-clockwise"
-msgstr "Movu la nuancon de la peniko maldekstrume"
+msgstr "Ŝovi tonon de la elektita koloro maldekstrume"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
-#, fuzzy, kde-format
-#| msgid "Wide Gamut Selector"
+#, kde-format
 msgid "Wide Gamut Color Selector"
-msgstr "Larĝa Gamut-Selektilo"
+msgstr "Larĝ-Gama Kolor-elektilo"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
-#, fuzzy, kde-format
-#| msgid "&Configure %1..."
+#, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
-msgstr "&Agordi %1..."
+msgstr "Agordi..."
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
-#, fuzzy, kde-format
-#| msgid "Color Selector Settings"
+#, kde-format
 msgid "Wide Gamut Color Selector Settings"
-msgstr "Koloraj Elektilo-Agordoj"
+msgstr "Agordoj de Larĝ-Gama Kolor-Elektilo"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:35
 #, kde-format
@@ -40923,8 +40838,7 @@ msgstr "&Aldoni al nuna elekto"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSubtract)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:108
-#, fuzzy, kde-format
-#| msgid "Subtract from current selection"
+#, kde-format
 msgid "Subtract fro&m current selection"
 msgstr "Subtrahi de &momenta elekto"
 
@@ -41091,15 +41005,13 @@ msgid "Resources Cache Database Explorer"
 msgstr "Rimedoj Cache Database Explorer"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
-#, fuzzy, kde-format
-#| msgid "Versions"
+#, kde-format
 msgid "Version"
-msgstr "Versioj"
+msgstr "Versio"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "File name"
 msgstr "Dosiernomo"
 
@@ -41116,22 +41028,19 @@ msgid "Display Name"
 msgstr "Montra Nomo"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version"
-msgstr "Datumbaza Versio"
+msgstr "Datumbaza versio"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version"
-msgstr "Krita Versio"
+msgstr "Krita-versio"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Upgrade date"
-msgstr "Ĝisdatigi"
+msgstr "Plibonig-eldona dato"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
@@ -41153,24 +41062,21 @@ msgstr "Skemaj Informoj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
-#, fuzzy, kde-format
-#| msgid "Quantization"
+#, kde-format
 msgid "Initialization"
-msgstr "Kvantigo"
+msgstr "Pravalorizo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version:"
-msgstr "Datumbaza Versio"
+msgstr "Datumbaza versio:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version:"
-msgstr "Krita Versio"
+msgstr "Krita-versio:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
@@ -47647,10 +47553,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:329
-#, fuzzy, kde-format
-#| msgid "Modular parameters"
+#, kde-format
 msgid "Encoder parameters"
-msgstr "Modulaj parametroj"
+msgstr "Kodigilaj parametroj"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:335
@@ -47729,13 +47634,13 @@ msgstr "Ebligas aŭ malŝaltas la generacion de punktoj."
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Generate patches"
-msgstr "Generi flikojn"
+msgstr "Generi makulojn"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patches)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:409
 #, kde-format
 msgid "Enables or disables patches generation."
-msgstr "Ebligas aŭ malŝaltas la generadon de flikaĵoj."
+msgstr "Ebligas aŭ malŝaltas la generadon de makuloj."
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:416
@@ -59433,7 +59338,7 @@ msgstr "Elekti farbtavolon por uzi ĉi tiun ilon"
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:172
 msgctxt "(qtundo-format)"
 msgid "Smart Patch"
-msgstr "Inteligenta Flikaĵo"
+msgstr "Inteligenta Makulo"
 
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
 #, kde-format
@@ -59462,7 +59367,7 @@ msgstr "Precizeco:"
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:115
 #, kde-format
 msgid "Patch Radius:"
-msgstr "Flikradiuso:"
+msgstr "Makulradiuso:"
 
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format

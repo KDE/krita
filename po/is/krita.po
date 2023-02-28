@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 00:58+0000\n"
+"POT-Creation-Date: 2023-02-28 00:56+0000\n"
 "PO-Revision-Date: 2021-12-26 13:54+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -16180,7 +16180,8 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
 msgstr ""
 
-#: libs/brush/KisBrushTypeMetaDataFixup.cpp:31
+#: libs/brush/KisBrushTypeMetaDataFixup.cpp:28
+#: libs/brush/KisBrushTypeMetaDataFixup.cpp:35
 #, fuzzy, kde-format
 msgid "Could not access brush tip metadata"
 msgstr "Fjaðra val"
@@ -16404,8 +16405,8 @@ msgctxt "(qtundo-format)"
 msgid "Lock shapes"
 msgstr "Bylgja"
 
-#: libs/flake/commands/KoShapeMoveCommand.cpp:23
-#: libs/flake/commands/KoShapeMoveCommand.cpp:35
+#: libs/flake/commands/KoShapeMoveCommand.cpp:24
+#: libs/flake/commands/KoShapeMoveCommand.cpp:36
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move shapes"
@@ -16521,7 +16522,7 @@ msgstr ""
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:123
-#: libs/ui/flake/kis_shape_layer.cc:520
+#: libs/ui/flake/kis_shape_layer.cc:524
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -17588,7 +17589,7 @@ msgstr ""
 #: libs/image/kis_layer_properties_icons.cpp:27
 #: libs/resources/KisResourceModel.cpp:142
 #: libs/resources/KisStorageModel.cpp:483
-#: libs/resources/KisTagResourceModel.cpp:638
+#: libs/resources/KisTagResourceModel.cpp:644
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:110
 #, fuzzy, kde-format
 msgid "Active"
@@ -17704,14 +17705,14 @@ msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Líma lag"
 
-#: libs/image/kis_processing_visitor.cpp:23
+#: libs/image/kis_processing_visitor.cpp:24
 #, kde-format
 msgid "Processing"
 msgstr "Í vinnslu"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1414
-#: libs/ui/KisMainWindow.cpp:1694 libs/ui/KisMainWindow.cpp:1707
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1415
+#: libs/ui/KisMainWindow.cpp:1695 libs/ui/KisMainWindow.cpp:1708
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, fuzzy, kde-format
 msgid "Unnamed"
@@ -18439,8 +18440,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Skjal"
 
-#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2058
-#: libs/ui/KisMainWindow.cpp:2141
+#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2059
+#: libs/ui/KisMainWindow.cpp:2142
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Flytja inn myndir"
@@ -19721,8 +19722,8 @@ msgstr "Út"
 #: libs/pigment/resources/KoColorSet.cpp:1387
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
-#: libs/ui/actions/KisPasteActionFactories.cpp:352
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:451 libs/ui/KisView.cpp:1134
+#: libs/ui/actions/KisPasteActionFactories.cpp:354
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:451 libs/ui/KisView.cpp:1135
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -19754,7 +19755,7 @@ msgstr "Mynd"
 msgid "Local Resources"
 msgstr "Mynd"
 
-#: libs/resources/KisResourceCacheDb.cpp:252
+#: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
@@ -19782,16 +19783,16 @@ msgstr "Mynd"
 #: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:935
 #: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:1855
 #: libs/ui/KisDocument.cpp:1898 libs/ui/KisDocument.cpp:1908
-#: libs/ui/KisMainWindow.cpp:971 libs/ui/KisMainWindow.cpp:1087
-#: libs/ui/KisMainWindow.cpp:1213 libs/ui/KisMainWindow.cpp:1312
-#: libs/ui/KisMainWindow.cpp:1918 libs/ui/KisMainWindow.cpp:1927
-#: libs/ui/KisMainWindow.cpp:2066 libs/ui/KisMainWindow.cpp:2127
-#: libs/ui/KisMainWindow.cpp:2148 libs/ui/KisMainWindow.cpp:2761
+#: libs/ui/KisMainWindow.cpp:972 libs/ui/KisMainWindow.cpp:1088
+#: libs/ui/KisMainWindow.cpp:1214 libs/ui/KisMainWindow.cpp:1313
+#: libs/ui/KisMainWindow.cpp:1919 libs/ui/KisMainWindow.cpp:1928
+#: libs/ui/KisMainWindow.cpp:2067 libs/ui/KisMainWindow.cpp:2128
+#: libs/ui/KisMainWindow.cpp:2149 libs/ui/KisMainWindow.cpp:2762
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:681 libs/ui/KisView.cpp:1137
+#: libs/ui/KisView.cpp:682 libs/ui/KisView.cpp:1138
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:292
@@ -19832,7 +19833,7 @@ msgctxt "@title:window"
 msgid "Krita"
 msgstr "Krita"
 
-#: libs/resources/KisResourceCacheDb.cpp:252
+#: libs/resources/KisResourceCacheDb.cpp:255
 #, kde-format
 msgid ""
 "The resource database scheme has changed. Krita will backup your database "
@@ -19905,7 +19906,7 @@ msgstr "Fjaðra val"
 
 #: libs/resources/KisResourceModel.cpp:124
 #: libs/resources/KisStorageModel.cpp:473
-#: libs/resources/KisTagResourceModel.cpp:620
+#: libs/resources/KisTagResourceModel.cpp:626
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:81
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:103
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:147
@@ -19914,7 +19915,7 @@ msgid "Id"
 msgstr ""
 
 #: libs/resources/KisResourceModel.cpp:126
-#: libs/resources/KisTagResourceModel.cpp:622
+#: libs/resources/KisTagResourceModel.cpp:628
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:83
 #, kde-format
 msgid "Storage ID"
@@ -19922,7 +19923,7 @@ msgstr ""
 
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisStorageModel.cpp:487
-#: libs/resources/KisTagResourceModel.cpp:624
+#: libs/resources/KisTagResourceModel.cpp:630
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:107
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
@@ -19931,13 +19932,13 @@ msgid "Name"
 msgstr "Nafn"
 
 #: libs/resources/KisResourceModel.cpp:130
-#: libs/resources/KisTagResourceModel.cpp:626
+#: libs/resources/KisTagResourceModel.cpp:632
 #, fuzzy, kde-format
 msgid "File Name"
 msgstr "Skráarheiti"
 
 #: libs/resources/KisResourceModel.cpp:132
-#: libs/resources/KisTagResourceModel.cpp:628
+#: libs/resources/KisTagResourceModel.cpp:634
 #, fuzzy, kde-format
 #| msgid "Tools"
 msgid "Tooltip"
@@ -19947,7 +19948,7 @@ msgstr "Verkfæri"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: libs/resources/KisResourceModel.cpp:134
-#: libs/resources/KisTagResourceModel.cpp:630
+#: libs/resources/KisTagResourceModel.cpp:636
 #: libs/ui/imagesize/imagesize.xmlgui:4
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:156
 #: plugins/extensions/imagesplit/imagesplit.xmlgui:4
@@ -19960,7 +19961,7 @@ msgid "Image"
 msgstr "%1 (%2 mynd)"
 
 #: libs/resources/KisResourceModel.cpp:136
-#: libs/resources/KisTagResourceModel.cpp:632
+#: libs/resources/KisTagResourceModel.cpp:638
 #, fuzzy, kde-format
 #| msgid "Show St&atusbar"
 msgid "Status"
@@ -19968,7 +19969,7 @@ msgstr "Sýn&a stöðuslá"
 
 #: libs/resources/KisResourceModel.cpp:138
 #: libs/resources/KisStorageModel.cpp:477
-#: libs/resources/KisTagResourceModel.cpp:634
+#: libs/resources/KisTagResourceModel.cpp:640
 #: libs/resourcewidgets/KisIconToolTip.cpp:104
 #, fuzzy, kde-format
 msgid "Location"
@@ -19976,21 +19977,21 @@ msgstr "Snúningur:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/resources/KisResourceModel.cpp:140
-#: libs/resources/KisTagResourceModel.cpp:636
+#: libs/resources/KisTagResourceModel.cpp:642
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:43
 #, fuzzy, kde-format
 msgid "Resource Type"
 msgstr "Auðlind"
 
 #: libs/resources/KisResourceModel.cpp:144
-#: libs/resources/KisTagResourceModel.cpp:640
-#: libs/resources/KisTagResourceModel.cpp:670
+#: libs/resources/KisTagResourceModel.cpp:646
+#: libs/resources/KisTagResourceModel.cpp:676
 #, fuzzy, kde-format
 msgid "Storage Active"
 msgstr "Rétthyrningur"
 
 #: libs/resources/KisResourceModel.cpp:146
-#: libs/resources/KisTagResourceModel.cpp:642
+#: libs/resources/KisTagResourceModel.cpp:648
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:86
 #, kde-format
 msgid "md5sum"
@@ -19998,7 +19999,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:148
-#: libs/resources/KisTagResourceModel.cpp:644
+#: libs/resources/KisTagResourceModel.cpp:650
 #: libs/resourcewidgets/KisIconToolTip.cpp:95
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
 #, fuzzy, kde-format
@@ -20006,13 +20007,13 @@ msgid "Tags"
 msgstr "Merki"
 
 #: libs/resources/KisResourceModel.cpp:150
-#: libs/resources/KisTagResourceModel.cpp:646
+#: libs/resources/KisTagResourceModel.cpp:652
 #, fuzzy, kde-format
 msgid "Large Thumbnail"
 msgstr "Smámyndir"
 
 #: libs/resources/KisResourceModel.cpp:152
-#: libs/resources/KisTagResourceModel.cpp:648
+#: libs/resources/KisTagResourceModel.cpp:654
 #, kde-format
 msgid "Dirty"
 msgstr ""
@@ -20021,7 +20022,7 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/resources/KisResourceModel.cpp:154
-#: libs/resources/KisTagResourceModel.cpp:650
+#: libs/resources/KisTagResourceModel.cpp:656
 #: libs/ui/animation/VideoImportDialog.ui:197
 #: plugins/dockers/logdocker/LogDockerDock.cpp:187
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
@@ -20205,7 +20206,7 @@ msgstr "Smámyndir"
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
-#: libs/resources/KisTagModel.cpp:121 libs/resources/KisTagModel.cpp:300
+#: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:305
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:629
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:648
@@ -20216,58 +20217,58 @@ msgstr "Smámyndir"
 msgid "All"
 msgstr "Allt"
 
-#: libs/resources/KisTagModel.cpp:149 libs/resources/KisTagModel.cpp:310
+#: libs/resources/KisTagModel.cpp:154 libs/resources/KisTagModel.cpp:315
 #, fuzzy, kde-format
 msgid "All Untagged"
 msgstr "Allar síður"
 
-#: libs/resources/KisTagModel.cpp:303
+#: libs/resources/KisTagModel.cpp:308
 #, fuzzy, kde-format
 msgid "All Resources"
 msgstr "Mynd"
 
-#: libs/resources/KisTagModel.cpp:313
+#: libs/resources/KisTagModel.cpp:318
 #, fuzzy, kde-format
 msgid "All Untagged Resources"
 msgstr "Stjórna auðlindum"
 
-#: libs/resources/KisTagResourceModel.cpp:658
+#: libs/resources/KisTagResourceModel.cpp:664
 #, kde-format
 msgid "Tag ID"
 msgstr ""
 
-#: libs/resources/KisTagResourceModel.cpp:660
+#: libs/resources/KisTagResourceModel.cpp:666
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
 #, fuzzy, kde-format
 msgid "Resource ID"
 msgstr "Mynd"
 
-#: libs/resources/KisTagResourceModel.cpp:662
+#: libs/resources/KisTagResourceModel.cpp:668
 #, kde-format
 msgid "Tag Url"
 msgstr ""
 
-#: libs/resources/KisTagResourceModel.cpp:664
+#: libs/resources/KisTagResourceModel.cpp:670
 #, fuzzy, kde-format
 msgid "Resource"
 msgstr "Mynd"
 
-#: libs/resources/KisTagResourceModel.cpp:666
+#: libs/resources/KisTagResourceModel.cpp:672
 #, fuzzy, kde-format
 msgid "Resource Active"
 msgstr "Auðlind"
 
-#: libs/resources/KisTagResourceModel.cpp:668
+#: libs/resources/KisTagResourceModel.cpp:674
 #, fuzzy, kde-format
 msgid "Tag Active"
 msgstr "Rétthyrningur"
 
-#: libs/resources/KisTagResourceModel.cpp:672
+#: libs/resources/KisTagResourceModel.cpp:678
 #, fuzzy, kde-format
 msgid "Resource Name"
 msgstr "Auðlind"
 
-#: libs/resources/KisTagResourceModel.cpp:674
+#: libs/resources/KisTagResourceModel.cpp:680
 #, fuzzy, kde-format
 msgid "Tag File Name"
 msgstr "Skráarheiti"
@@ -20296,7 +20297,7 @@ msgid "Delete resource"
 msgstr "Eyða auðlind"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:333
-#: libs/ui/KisMainWindow.cpp:2560
+#: libs/ui/KisMainWindow.cpp:2561
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:609
 #, kde-format
 msgctxt "@title:window"
@@ -20629,7 +20630,7 @@ msgid "Select All"
 msgstr "Velja allt"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:775
+#: libs/ui/KisView.cpp:776
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
@@ -20698,17 +20699,17 @@ msgid "Paste shapes"
 msgstr "Búa til sniðmát"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:268
-#: libs/ui/actions/KisPasteActionFactories.cpp:359 libs/ui/KisView.cpp:597
+#: libs/ui/actions/KisPasteActionFactories.cpp:361 libs/ui/KisView.cpp:598
 #, fuzzy, kde-format
 msgid "(pasted)"
 msgstr "Pastellitir"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:357
+#: libs/ui/actions/KisPasteActionFactories.cpp:359
 #, kde-format
 msgid "Pasted"
 msgstr "Pastellitir"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:412
+#: libs/ui/actions/KisPasteActionFactories.cpp:414
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
@@ -20750,7 +20751,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Viðbót"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2168
+#: libs/ui/KisMainWindow.cpp:2169
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "Stefna"
@@ -22742,7 +22743,7 @@ msgid "Numerical"
 msgstr "Töluorð"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:137
-#: libs/ui/KisMainWindow.cpp:1181
+#: libs/ui/KisMainWindow.cpp:1182
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "Flytja inn myndir"
@@ -22882,7 +22883,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Skrifaðu nafn á hóp:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2571
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2572
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -26432,7 +26433,7 @@ msgstr "Stillingar"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1066
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1067
 #: libs/ui/widgets/kis_workspace_chooser.cpp:111
 #: libs/ui/widgets/kis_workspace_chooser.cpp:190
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -27758,57 +27759,62 @@ msgstr "Breidd"
 msgid "Adjust print size separately"
 msgstr ""
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:55
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:58
 #, fuzzy, kde-format
 msgid "Add shortcut..."
 msgstr "Bæta flýtileið við"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:67
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:70
 #, kde-format
 msgctxt "Shortcut type"
 msgid "Key Combination"
 msgstr "Lyklasamsetning"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:70
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:73
 #, fuzzy, kde-format
 msgctxt "Shortcut type"
 msgid "Mouse Button"
 msgstr "Stillingar"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:73
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:76
 #, kde-format
 msgctxt "Shortcut type"
 msgid "Mouse Wheel"
 msgstr "Músarhjól"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:76
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:79
 #, fuzzy, kde-format
 msgctxt "Shortcut type"
 msgid "Gesture"
 msgstr "Efnisáferð"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:79
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:82
 #, fuzzy, kde-format
 msgid "Unknown Input"
 msgstr "Óþekkt"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:178
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:181
 #, fuzzy, kde-format
 msgctxt "Type of shortcut"
 msgid "Type"
 msgstr "Tegund"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:181
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:184
 #, fuzzy, kde-format
 msgctxt "Input for shortcut"
 msgid "Input"
 msgstr "Inntak"
 
-#: libs/ui/input/config/kis_action_shortcuts_model.cpp:184
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:187
 #, fuzzy, kde-format
 msgctxt "Action to trigger with shortcut"
 msgid "Action"
 msgstr "Aðgerð"
+
+#: libs/ui/input/config/kis_action_shortcuts_model.cpp:271
+#, kde-format
+msgid "A conflict exists between two or more shortcuts."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, editProfilesButton)
 #: libs/ui/input/config/kis_edit_profiles_dialog.cpp:54
@@ -27883,17 +27889,24 @@ msgstr "Snið"
 msgid "Manage canvas input profiles"
 msgstr ""
 
-#: libs/ui/input/config/kis_input_configuration_page_item.cpp:38
+#. i18n: ectx: property (toolTip), widget (QPushButton, warningConflictButton)
+#: libs/ui/input/config/kis_input_configuration_page_item.cpp:27
+#: libs/ui/input/config/kis_input_configuration_page_item.ui:111
+#, kde-format
+msgid "Conflict found for a Shortcut in this Action."
+msgstr ""
+
+#: libs/ui/input/config/kis_input_configuration_page_item.cpp:52
 #, fuzzy, kde-format
 msgid "Delete Shortcut"
 msgstr "Gildi"
 
-#: libs/ui/input/config/kis_input_configuration_page_item.cpp:83
+#: libs/ui/input/config/kis_input_configuration_page_item.cpp:112
 #, kde-format
 msgid "Deleting last shortcut for this action!"
 msgstr ""
 
-#: libs/ui/input/config/kis_input_configuration_page_item.cpp:84
+#: libs/ui/input/config/kis_input_configuration_page_item.cpp:113
 #, kde-format
 msgid "It is not allowed to erase some default shortcuts. Modify it instead."
 msgstr ""
@@ -27905,7 +27918,7 @@ msgid "<html><head/><body><p>Action Description</p></body></html>"
 msgstr "Tenglar"
 
 #. i18n: ectx: property (text), widget (QToolButton, collapseButton)
-#: libs/ui/input/config/kis_input_configuration_page_item.ui:77
+#: libs/ui/input/config/kis_input_configuration_page_item.ui:92
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:278
 #, kde-format
 msgid "Action Name"
@@ -28227,62 +28240,62 @@ msgstr "Velja lag"
 msgid "Select Multiple Layer Mode"
 msgstr "Kvarða lag"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:261
+#: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
 msgctxt "Separator in the list of mouse buttons for shortcut"
 msgid " + "
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:266
+#: libs/ui/input/kis_shortcut_configuration.cpp:298
 #, fuzzy, kde-format
 msgctxt "Left Mouse Button"
 msgid "Left"
 msgstr "Vinstri"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:275
+#: libs/ui/input/kis_shortcut_configuration.cpp:307
 #, fuzzy, kde-format
 msgctxt "Right Mouse Button"
 msgid "Right"
 msgstr "Hægri"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:283
+#: libs/ui/input/kis_shortcut_configuration.cpp:315
 #, fuzzy, kde-format
 msgctxt "Middle Mouse Button"
 msgid "Middle"
 msgstr "Miðja"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:291
+#: libs/ui/input/kis_shortcut_configuration.cpp:323
 #, fuzzy, kde-format
 msgctxt "Mouse Back Button"
 msgid "Back"
 msgstr "Til &baka"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:299
+#: libs/ui/input/kis_shortcut_configuration.cpp:331
 #, fuzzy, kde-format
 msgctxt "Mouse Forward Button"
 msgid "Forward"
 msgstr "Áfram"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:307
+#: libs/ui/input/kis_shortcut_configuration.cpp:339
 #, fuzzy, kde-format
 #| msgid "Task Sets"
 msgctxt "Mouse Task Button"
 msgid "Task"
 msgstr "Mynd"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:314
+#: libs/ui/input/kis_shortcut_configuration.cpp:346
 #, fuzzy, kde-format
 msgctxt "Mouse Button"
 msgid "Mouse %1"
 msgstr "Mús"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:320
+#: libs/ui/input/kis_shortcut_configuration.cpp:352
 #, fuzzy, kde-format
 msgctxt "No mouse buttons for shortcut"
 msgid "None"
 msgstr "Ekkert"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:326
+#: libs/ui/input/kis_shortcut_configuration.cpp:358
 #, fuzzy, kde-format
 msgctxt ""
 "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
@@ -28292,157 +28305,157 @@ msgid_plural "%1 Buttons"
 msgstr[0] "Stillingar"
 msgstr[1] "Stillingar"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:338
+#: libs/ui/input/kis_shortcut_configuration.cpp:370
 #, kde-format
 msgctxt "Separator in the list of keys for shortcut"
 msgid " + "
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:343
+#: libs/ui/input/kis_shortcut_configuration.cpp:375
 #, fuzzy, kde-format
 #| msgid "Ctrl+W"
 msgctxt "Ctrl key"
 msgid "Ctrl"
 msgstr "Ctrl+W"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:347
+#: libs/ui/input/kis_shortcut_configuration.cpp:379
 #, fuzzy, kde-format
 msgctxt "Meta key"
 msgid "Meta"
 msgstr "Meta"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:351
+#: libs/ui/input/kis_shortcut_configuration.cpp:383
 #, fuzzy, kde-format
 msgctxt "Alt key"
 msgid "Alt"
 msgstr "Alt"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:355
+#: libs/ui/input/kis_shortcut_configuration.cpp:387
 #, fuzzy, kde-format
 msgctxt "Shift key"
 msgid "Shift"
 msgstr "Shift"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:367
+#: libs/ui/input/kis_shortcut_configuration.cpp:399
 #, fuzzy, kde-format
 msgctxt "No keys for shortcut"
 msgid "None"
 msgstr "Ekkert"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:377
+#: libs/ui/input/kis_shortcut_configuration.cpp:409
 #, fuzzy, kde-format
 msgid "Mouse Wheel Up"
 msgstr "Stillingar"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:381
+#: libs/ui/input/kis_shortcut_configuration.cpp:413
 #, fuzzy, kde-format
 msgid "Mouse Wheel Down"
 msgstr "Stillingar"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:385
+#: libs/ui/input/kis_shortcut_configuration.cpp:417
 #, fuzzy, kde-format
 msgid "Mouse Wheel Left"
 msgstr "Stillingar"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:389
+#: libs/ui/input/kis_shortcut_configuration.cpp:421
 #, fuzzy, kde-format
 msgid "Mouse Wheel Right"
 msgstr "Stillingar"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:393
+#: libs/ui/input/kis_shortcut_configuration.cpp:425
 #, kde-format
 msgid "Trackpad Pan"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:397
+#: libs/ui/input/kis_shortcut_configuration.cpp:429
 #, fuzzy, kde-format
 msgctxt "No mouse wheel buttons for shortcut"
 msgid "None"
 msgstr "Ekkert"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:409
+#: libs/ui/input/kis_shortcut_configuration.cpp:441
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse buttons in shortcut"
 msgid "%1 + %2"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:425
+#: libs/ui/input/kis_shortcut_configuration.cpp:457
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse wheel buttons in shortcut"
 msgid "%1 + %2"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:439
+#: libs/ui/input/kis_shortcut_configuration.cpp:471
 #, fuzzy, kde-format
 msgid "Pinch Gesture"
 msgstr "Mynd"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:441
+#: libs/ui/input/kis_shortcut_configuration.cpp:473
 #, fuzzy, kde-format
 msgid "Pan Gesture"
 msgstr "Efnisáferð"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:443
+#: libs/ui/input/kis_shortcut_configuration.cpp:475
 #, fuzzy, kde-format
 msgid "Rotate Gesture"
 msgstr "Snúningshamur"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:445
+#: libs/ui/input/kis_shortcut_configuration.cpp:477
 #, kde-format
 msgid "Smart Zoom Gesture"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:448
+#: libs/ui/input/kis_shortcut_configuration.cpp:480
 #, kde-format
 msgid "One Finger Tap"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:450
+#: libs/ui/input/kis_shortcut_configuration.cpp:482
 #, kde-format
 msgid "Two Finger Tap"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:452
+#: libs/ui/input/kis_shortcut_configuration.cpp:484
 #, kde-format
 msgid "Three Finger Tap"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:454
+#: libs/ui/input/kis_shortcut_configuration.cpp:486
 #, kde-format
 msgid "Four Finger Tap"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:456
+#: libs/ui/input/kis_shortcut_configuration.cpp:488
 #, kde-format
 msgid "Five Finger Tap"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:458
+#: libs/ui/input/kis_shortcut_configuration.cpp:490
 #, kde-format
 msgid "One Finger Drag"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:460
+#: libs/ui/input/kis_shortcut_configuration.cpp:492
 #, kde-format
 msgid "Two Finger Drag"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:462
+#: libs/ui/input/kis_shortcut_configuration.cpp:494
 #, kde-format
 msgid "Three Finger Drag"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:464
+#: libs/ui/input/kis_shortcut_configuration.cpp:496
 #, kde-format
 msgid "Four Finger Drag"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:466
+#: libs/ui/input/kis_shortcut_configuration.cpp:498
 #, kde-format
 msgid "Five Finger Drag"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:469
+#: libs/ui/input/kis_shortcut_configuration.cpp:501
 #, fuzzy, kde-format
 msgid "No Gesture"
 msgstr "Efnisáferð"
@@ -28755,7 +28768,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Kvarða lag"
 
-#: libs/ui/kis_clipboard.cc:714 libs/ui/KisView.cpp:682
+#: libs/ui/kis_clipboard.cc:714 libs/ui/KisView.cpp:683
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -30487,32 +30500,32 @@ msgstr "Sýna %1 tækjaslá"
 msgid "Hide %1 Toolbar"
 msgstr "Fela %1 tækjaslá"
 
-#: libs/ui/KisMainWindow.cpp:1029
+#: libs/ui/KisMainWindow.cpp:1030
 #, fuzzy, kde-format
 msgid "Write Protected"
 msgstr "ritvörn"
 
-#: libs/ui/KisMainWindow.cpp:1033
+#: libs/ui/KisMainWindow.cpp:1034
 #, fuzzy, kde-format
 msgid "Recovered"
 msgstr "(endurheimt)"
 
-#: libs/ui/KisMainWindow.cpp:1063
+#: libs/ui/KisMainWindow.cpp:1064
 #, kde-format
 msgid "Save as %1"
 msgstr "Vista sem %1"
 
-#: libs/ui/KisMainWindow.cpp:1087
+#: libs/ui/KisMainWindow.cpp:1088
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Skráin %1 er ekki til."
 
-#: libs/ui/KisMainWindow.cpp:1181
+#: libs/ui/KisMainWindow.cpp:1182
 #, kde-format
 msgid "Open Images"
 msgstr "Opna myndir"
 
-#: libs/ui/KisMainWindow.cpp:1313
+#: libs/ui/KisMainWindow.cpp:1314
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30521,38 +30534,38 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1369
+#: libs/ui/KisMainWindow.cpp:1370
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "Flytja út"
 
-#: libs/ui/KisMainWindow.cpp:1369
+#: libs/ui/KisMainWindow.cpp:1370
 #, fuzzy, kde-format
 msgid "Saving As"
 msgstr "Snið"
 
-#: libs/ui/KisMainWindow.cpp:1673
+#: libs/ui/KisMainWindow.cpp:1674
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Búa til nýtt skjal"
 
-#: libs/ui/KisMainWindow.cpp:1697
+#: libs/ui/KisMainWindow.cpp:1698
 #, kde-format
 msgid "Custom Document"
 msgstr "Sérsniðið skjal"
 
-#: libs/ui/KisMainWindow.cpp:1709
+#: libs/ui/KisMainWindow.cpp:1710
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "Líma lag af klippispjaldi"
 
-#: libs/ui/KisMainWindow.cpp:1887
+#: libs/ui/KisMainWindow.cpp:1888
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Kvarða lag"
 
-#: libs/ui/KisMainWindow.cpp:1913
+#: libs/ui/KisMainWindow.cpp:1914
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:181
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:286
 #, fuzzy, kde-format
@@ -30560,7 +30573,7 @@ msgstr "Kvarða lag"
 msgid "You don't have any resource bundles enabled."
 msgstr "Gat ekki búið til skrá til vistunar"
 
-#: libs/ui/KisMainWindow.cpp:1917
+#: libs/ui/KisMainWindow.cpp:1918
 #, kde-format
 msgid ""
 "\n"
@@ -30568,7 +30581,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1927
+#: libs/ui/KisMainWindow.cpp:1928
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
 #, kde-format
@@ -30577,66 +30590,66 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2066 libs/ui/KisMainWindow.cpp:2148
+#: libs/ui/KisMainWindow.cpp:2067 libs/ui/KisMainWindow.cpp:2149
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
 "%1"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2127
+#: libs/ui/KisMainWindow.cpp:2128
 #, fuzzy, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Viðbót"
 
-#: libs/ui/KisMainWindow.cpp:2551
+#: libs/ui/KisMainWindow.cpp:2552
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Vinnusvæði"
 
-#: libs/ui/KisMainWindow.cpp:2566
+#: libs/ui/KisMainWindow.cpp:2567
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Vinnusvæði"
 
-#: libs/ui/KisMainWindow.cpp:2570
+#: libs/ui/KisMainWindow.cpp:2571
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Vinnusvæði"
 
-#: libs/ui/KisMainWindow.cpp:2614
+#: libs/ui/KisMainWindow.cpp:2615
 #, fuzzy, kde-format
 msgid "&%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2617
+#: libs/ui/KisMainWindow.cpp:2618
 #, fuzzy, kde-format
 msgid "%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2784
+#: libs/ui/KisMainWindow.cpp:2785
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2800
+#: libs/ui/KisMainWindow.cpp:2801
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Innri villa"
 
-#: libs/ui/KisMainWindow.cpp:2909
+#: libs/ui/KisMainWindow.cpp:2910
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "Þ&emu"
 
-#: libs/ui/KisMainWindow.cpp:2967
+#: libs/ui/KisMainWindow.cpp:2968
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -30954,111 +30967,111 @@ msgstr "Engin mynd til."
 msgid "Use This Template"
 msgstr "Nota þetta snið"
 
-#: libs/ui/KisView.cpp:750
+#: libs/ui/KisView.cpp:751
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:758 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:759 libs/ui/tool/kis_tool.cc:673
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgid "Layer is locked and invisible."
 msgstr "Mynd"
 
-#: libs/ui/KisView.cpp:760 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "Mynd"
 
-#: libs/ui/KisView.cpp:762 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool.cc:677
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgid "Layer is invisible."
 msgstr "Mynd"
 
-#: libs/ui/KisView.cpp:1138
+#: libs/ui/KisView.cpp:1139
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Skjalinu <b>'%1'</b> hefur verið breytt.</p><p>Viltu vista það?</p>"
 
-#: libs/ui/KisView.cpp:1327
+#: libs/ui/KisView.cpp:1328
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Valkostir tóla"
 
-#: libs/ui/KisView.cpp:1332
+#: libs/ui/KisView.cpp:1333
 #, fuzzy, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Valkostir tóla"
 
-#: libs/ui/KisView.cpp:1334
+#: libs/ui/KisView.cpp:1335
 #, fuzzy, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Valkostir tóla"
 
-#: libs/ui/KisView.cpp:1346
+#: libs/ui/KisView.cpp:1347
 #, fuzzy, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Aðvörun"
 
-#: libs/ui/KisView.cpp:1352
+#: libs/ui/KisView.cpp:1353
 #, fuzzy, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Aðvörun"
 
-#: libs/ui/KisView.cpp:1354
+#: libs/ui/KisView.cpp:1355
 #, fuzzy, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Valkostir tóla"
 
-#: libs/ui/KisView.cpp:1357
+#: libs/ui/KisView.cpp:1358
 #, fuzzy, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Aðvörun"
 
-#: libs/ui/KisViewManager.cpp:779
+#: libs/ui/KisViewManager.cpp:780
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Penslar"
 
-#: libs/ui/KisViewManager.cpp:909
+#: libs/ui/KisViewManager.cpp:910
 #, fuzzy, kde-format
 msgid "%1 (Copy)"
 msgstr "Afrita"
 
-#: libs/ui/KisViewManager.cpp:1052 libs/ui/KisViewManager.cpp:1133
+#: libs/ui/KisViewManager.cpp:1053 libs/ui/KisViewManager.cpp:1134
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1052
+#: libs/ui/KisViewManager.cpp:1053
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Stighækkandi"
 
-#: libs/ui/KisViewManager.cpp:1133
+#: libs/ui/KisViewManager.cpp:1134
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Stighækkandi"
 
-#: libs/ui/KisViewManager.cpp:1316
+#: libs/ui/KisViewManager.cpp:1317
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
 "Press %1 to go back."
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1356
+#: libs/ui/KisViewManager.cpp:1357
 #, fuzzy, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Mynd"
 
-#: libs/ui/KisViewManager.cpp:1360
+#: libs/ui/KisViewManager.cpp:1361
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31073,19 +31086,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1375
+#: libs/ui/KisViewManager.cpp:1376
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1376
+#: libs/ui/KisViewManager.cpp:1377
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1494 libs/ui/KisViewManager.cpp:1512
+#: libs/ui/KisViewManager.cpp:1495 libs/ui/KisViewManager.cpp:1513
 #, fuzzy, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32280,13 +32293,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "Sía"
 
-#: libs/ui/toolbox/KoToolBox.cpp:346 libs/widgetutils/xmlgui/ktoolbar.cpp:323
+#: libs/ui/toolbox/KoToolBox.cpp:347 libs/widgetutils/xmlgui/ktoolbar.cpp:323
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Sjálfgefið"
 
-#: libs/ui/toolbox/KoToolBox.cpp:353
+#: libs/ui/toolbox/KoToolBox.cpp:354
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"

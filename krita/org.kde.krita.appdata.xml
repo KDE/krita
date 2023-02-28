@@ -23,6 +23,7 @@
   <developer_name xml:lang="ia">Krita Foundation (Fundation de Krita)</developer_name>
   <developer_name xml:lang="id">Yayasan Krita</developer_name>
   <developer_name xml:lang="it">Fondazione Krita</developer_name>
+  <developer_name xml:lang="ja">Krita 財団</developer_name>
   <developer_name xml:lang="ka">Krita Foundation</developer_name>
   <developer_name xml:lang="ko">Krita Foundation</developer_name>
   <developer_name xml:lang="nl">Krita Foundation</developer_name>
@@ -59,6 +60,7 @@
   <name xml:lang="ia">Krita</name>
   <name xml:lang="id">Krita</name>
   <name xml:lang="it">Krita</name>
+  <name xml:lang="ja">Krita</name>
   <name xml:lang="ka">Krita</name>
   <name xml:lang="ko">Krita</name>
   <name xml:lang="nb">Krita</name>
@@ -98,6 +100,7 @@
   <summary xml:lang="ia">Pictura digital, Libertate creative</summary>
   <summary xml:lang="id">Pelukisan Digital, Kebebasan Berkreatif</summary>
   <summary xml:lang="it">Pittura digitale, libertà creativa</summary>
+  <summary xml:lang="ja">デジタルペインティング、創造性の自由</summary>
   <summary xml:lang="ka">ციფრული მხატვრობა, კრეატიული თავისუფლება</summary>
   <summary xml:lang="ko">디지털 페인팅, 자유로운 창의성</summary>
   <summary xml:lang="nl">Digital Painting, Creative Freedom</summary>
@@ -349,6 +352,7 @@
       <caption xml:lang="ia">Il ha dece plus que immensemente potente motores de brossar</caption>
       <caption xml:lang="id">Ada lebih dari sepuluh perkakas kuas yang sangat hebat</caption>
       <caption xml:lang="it">Ci sono più di dieci motori di pennelli incredibilmente potenti</caption>
+      <caption xml:lang="ja">こちらには 10 個を超えるとても強力なブラシエンジンがあります。</caption>
       <caption xml:lang="ka">არსებობს ათზე მეტი უზომოდ ძლიერი ფუნჯის ძრავა</caption>
       <caption xml:lang="ko">10가지 종류의 강력한 브러시 엔진을 사용할 수 있습니다</caption>
       <caption xml:lang="nl">Er zijn meer dan tien immens krachtige penseelengines</caption>
@@ -448,6 +452,7 @@
       <caption xml:lang="fr">Krita propose des filtres puissants</caption>
       <caption xml:lang="id">Krita menawarkan saringan berdaya</caption>
       <caption xml:lang="it">Krita offre filtri molto avanzati</caption>
+      <caption xml:lang="ja">Krita には強力なフィルタがあります。</caption>
       <caption xml:lang="ka">Krita-ს მძლავრი ფილტრები გააჩნია</caption>
       <caption xml:lang="nl">Krita biedt krachtige filters</caption>
       <caption xml:lang="nn">Krita har kraftige filter</caption>
@@ -503,6 +508,7 @@
       <caption xml:lang="fr">Rejoignez notre canal sur Youtube !</caption>
       <caption xml:lang="id">Bergabung dengan saluran YouTube kami!</caption>
       <caption xml:lang="it">Unisciti al nostro canale Youtube!</caption>
+      <caption xml:lang="ja">YouTube のチャンネルを登録してください！</caption>
       <caption xml:lang="ka">შემოგვიერთდით ჩვენს Youtube არხზე!</caption>
       <caption xml:lang="nl">Doe mee in ons Youtube kanaal!</caption>
       <caption xml:lang="nn">Sjå på YouTube-kanalen vår!</caption>

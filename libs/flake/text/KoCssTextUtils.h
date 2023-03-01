@@ -154,6 +154,18 @@ public:
      * @return a QStringList of the graphemes as seperate strings.
      */
     static QStringList textToUnicodeGraphemeClusters(QString text, QString langCode);
+
+    /**
+     * @brief justificationOpportunities
+     * mark justification opportunities in the text. Opportunities are between
+     * characters, so this returns a pair of before and after.
+     * As of currently, this only implements the bare minimum for CSS-Text-3
+     * auto justification.
+     * @param text the text to check against.
+     * @param langCode language, used for the grapheme breaking.
+     * @return a list of booleans for whether the current codePoint represents a justificaton opportunity.
+     */
+    static QVector<QPair<bool, bool>> justificationOpportunities(QString text, QString langCode);
 };
 
 #endif // KOCSSTEXTUTILS_H

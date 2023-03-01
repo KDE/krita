@@ -448,10 +448,17 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "line-break") {
         setProperty(LineBreakId, KoSvgText::parseLineBreak(value));
     } else if (command == "text-align" || command == "text-align-all" || command == "text-align-last") {
+        QStringList params = value.split(' ', QString::SkipEmptyParts);
         if (command == "text-align" || command == "text-align-all") {
-            setProperty(TextAlignAllId, KoSvgText::parseTextAlign(value));
+            setProperty(TextAlignAllId, KoSvgText::parseTextAlign(params.first()));
+            if (value == "justify-all") {
+                setProperty(TextAlignLastId, KoSvgText::parseTextAlign(value));
+            }
         }
-        if (command == "text-align" || command == "text-align-last") {
+        if (command == "text-align" && params.size() > 1) {
+            setProperty(TextAlignLastId, KoSvgText::parseTextAlign(params.last()));
+        }
+        if (command == "text-align-last") {
             setProperty(TextAlignLastId, KoSvgText::parseTextAlign(value));
         }
     } else if (command == "line-height") {

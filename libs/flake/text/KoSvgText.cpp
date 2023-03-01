@@ -770,6 +770,7 @@ TextAlign parseTextAlign(const QString &value)
         : value == "right"        ? AlignRight
         : value == "center"       ? AlignCenter
         : value == "justify"      ? AlignJustify
+        : value == "justify-all"  ? AlignJustify
         : value == "match-parent" ? AlignMatchParent
         : value == "auto"         ? AlignLastAuto
                                   : // only for text-align-last

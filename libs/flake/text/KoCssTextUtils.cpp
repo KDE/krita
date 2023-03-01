@@ -295,3 +295,38 @@ QStringList KoCssTextUtils::textToUnicodeGraphemeClusters(const QString text, co
     graphemes.append(text.mid(lastGrapheme, text.size() - lastGrapheme));
     return graphemes;
 }
+
+static QVector<QChar::Script> blockScript {
+    QChar::Script_Bopomofo,
+    QChar::Script_Han,
+    QChar::Script_Hangul,
+    QChar::Script_Hiragana,
+    QChar::Script_Katakana,
+    QChar::Script_Yi
+};
+
+static QVector<QChar::Script> clusterScript {
+    QChar::Script_Khmer,
+    QChar::Script_Lao,
+    QChar::Script_Myanmar,
+    QChar::Script_NewTaiLue,
+    QChar::Script_TaiLe,
+    QChar::Script_TaiTham,
+    QChar::Script_TaiViet,
+    QChar::Script_Thai
+};
+
+QVector<QPair<bool, bool> > KoCssTextUtils::justificationOpportunities(QString text, QString langCode)
+{
+    QVector<QPair<bool, bool>> opportunities(text.size());
+    opportunities.fill(QPair<bool, bool>(false, false));
+    QStringList graphemes = textToUnicodeGraphemeClusters(text, langCode);
+    for (int i = 0; i < graphemes.size(); i++) {
+        QString grapheme = graphemes.at(i);
+        if (IsCssWordSeparator(grapheme) || blockScript.contains(grapheme.at(0).script())
+                || clusterScript.contains(grapheme.at(0).script())) {
+            opportunities[i] = QPair<bool, bool>(true, true);
+        }
+    }
+    return opportunities;
+}

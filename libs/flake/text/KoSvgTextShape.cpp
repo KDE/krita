@@ -107,6 +107,8 @@ struct CharacterResult {
     BreakType breakType = NoBreak;
     LineEdgeBehaviour lineEnd = NoChange;
     LineEdgeBehaviour lineStart = NoChange;
+    bool justifyBefore = false;///< Justification Opportunity precedes this character.
+    bool justifyAfter = false; ///< Justification Opportunity follows this character.
     bool isHanging = false;
     bool textLengthApplied = false;
 
@@ -173,6 +175,7 @@ struct Line {
     bool firstLine = false;
     bool lastLine = false;
     bool lineFinalized = false;
+    bool justifyLine = false;
 
     LineChunk chunk() {
         return chunks.at(currentChunk);
@@ -594,6 +597,7 @@ void KoSvgTextShape::relayout() const
             lang += "-strict";
         }
     }
+    QVector<QPair<bool, bool>> justify;
     QVector<char> lineBreaks(text.size());
     QVector<char> graphemeBreaks(text.size());
     if (text.size() > 0) {
@@ -601,6 +605,7 @@ void KoSvgTextShape::relayout() const
         // can't currently remember if removing the associated outlines was all that is necessary.
         set_linebreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), lang.toUtf8().data(), lineBreaks.data());
         set_graphemebreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), lang.toUtf8().data(), graphemeBreaks.data());
+        justify = KoCssTextUtils::justificationOpportunities(text, lang);
     }
 
 
@@ -658,6 +663,9 @@ void KoSvgTextShape::relayout() const
                 CharacterResult cr = result[start + i];
                 cr.anchor = anchor;
                 cr.direction = direction;
+                QPair<bool, bool> canJustify = justify.value(start + i, QPair<bool, bool>(false, false));
+                cr.justifyBefore = canJustify.first;
+                cr.justifyAfter = canJustify.second;
                 if (lineBreaks[start + i] == LINEBREAK_MUSTBREAK) {
                     cr.breakType = HardBreak;
                     cr.lineEnd = Collapse;
@@ -1655,15 +1663,52 @@ void finalizeLine(QVector<CharacterResult> &result,
         }
         currentPos = lineOffset;
 
+
         handleCollapseAndHang(result, currentChunk, lineOffset, inlineSize, writingMode, ltr, currentLine.lastLine);
+
+        QPointF justifyOffset;
+        if (currentLine.justifyLine) {
+            int justificationCount = 0;
+            QPointF justificationLength;
+            Q_FOREACH (int j, visualToLogical.values()) {
+                if (!result.at(j).addressable || result.at(j).isHanging) {
+                    continue;
+                }
+                if (result.at(j).justifyBefore && j!= visualToLogical.values().first()) {
+                    justificationCount += 1;
+                }
+                if (result.at(j).justifyAfter && j!= visualToLogical.values().last()) {
+                    justificationCount += 1;
+                }
+                justificationLength+= result.at(j).advance;
+            }
+
+            if (justificationCount > 0) {
+                if (isHorizontal) {
+                    qreal val = currentChunk.length.length()-justificationLength.x();
+                    val = val / justificationCount;
+                    justifyOffset = QPointF(val, 0);
+                } else {
+                    qreal val = currentChunk.length.length()-justificationLength.y();
+                    val = val / justificationCount;
+                    justifyOffset = QPointF(0, val);
+                }
+            }
+        }
 
         Q_FOREACH (int j, visualToLogical.values()) {
             if (!result.at(j).addressable || result.at(j).isHanging) {
                 continue;
             }
+            if (result.at(j).justifyBefore) {
+                currentPos += justifyOffset;
+            }
             result[j].cssPosition = currentPos;
             result[j].finalPosition = currentPos;
             currentPos = currentPos + result.at(j).advance;
+            if (result.at(j).justifyAfter) {
+                currentPos += justifyOffset;
+            }
         }
 
         if (inlineSize) {
@@ -2189,6 +2234,8 @@ KoSvgText::TextAnchor textAnchorForTextAlign(KoSvgText::TextAlign align, KoSvgTe
         return ltr? KoSvgText::AnchorStart: KoSvgText::AnchorEnd;
     } else if (compare == KoSvgText::AlignRight) {
         return ltr? KoSvgText::AnchorEnd: KoSvgText::AnchorStart;
+    } else if (align == KoSvgText::AlignJustify) {
+        return KoSvgText::AnchorMiddle;
     }
     return KoSvgText::AnchorStart;
 }
@@ -2204,7 +2251,6 @@ QVector<Line> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextPropertie
     bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
     KoSvgText::TextAlign align = KoSvgText::TextAlign(properties.propertyOrDefault(KoSvgTextProperties::TextAlignAllId).toInt());
     KoSvgText::TextAlign alignLast = KoSvgText::TextAlign(properties.propertyOrDefault(KoSvgTextProperties::TextAlignLastId).toInt());
-    bool isJustified = false;
     KoSvgText::TextAnchor anchor = textAnchorForTextAlign(align, alignLast, ltr);
 
     QPointF textIndent; ///< The textIndent.
@@ -2252,6 +2298,9 @@ QVector<Line> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextPropertie
         }
         wordIndices.append(index);
         currentLine.lastLine = !it.hasNext();
+        if (currentLine.lastLine) {
+            currentLine.justifyLine = alignLast == KoSvgText::AlignJustify;
+        }
         bool alsoSoftBreak = false; /// sometimes a word that ends in a hardbreak is also still too large for the previous line.
 
         if (charResult.breakType == HardBreak) {
@@ -2312,6 +2361,7 @@ QVector<Line> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextPropertie
                     currentLine.expectedLineTop = isHorizontal? fabs(wordBox.top()):
                                                                          writingMode == KoSvgText::VerticalRL? fabs(wordBox.right()): fabs(wordBox.left());
                     currentLine.setCurrentChunkForPos(currentPos, isHorizontal);
+                    currentLine.justifyLine = align == KoSvgText::AlignJustify;
                     currentPos = currentLine.chunk().length.p1();
                     lineOffset = currentPos;
                     addWordToLine(result, currentPos, wordIndices, currentLine, ltr);

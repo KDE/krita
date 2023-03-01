@@ -571,7 +571,6 @@ struct LineHeightInfo : public boost::equality_comparable<LineHeightInfo> {
 LineHeightInfo parseLineHeight(const QString &value, const SvgLoadingContext &context);
 QString writeLineHeight(LineHeightInfo lineHeight);
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::LineHeightInfo &value);
-
 /**
  * @brief The AssociatedShapeWrapper struct is a special shared-pointer-like class
  * to store a safe reference to the associated shape. It implements the shape listener

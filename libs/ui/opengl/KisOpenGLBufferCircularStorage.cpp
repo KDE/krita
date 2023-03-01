@@ -93,9 +93,19 @@ void KisOpenGLBufferCircularStorage::allocateMoreBuffers()
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->buffers.empty());
 
-    QOpenGLBuffer *const begin = &(*m_d->buffers.begin());
-    QOpenGLBuffer *const middle = begin + m_d->nextBuffer;
-    QOpenGLBuffer *const end = &(*m_d->buffers.end());
+    auto begin = m_d->buffers.begin();
+    auto middle = [&]() {
+        using value_type = typename decltype(m_d->buffers)::difference_type;
+        const value_type maxIndex = std::numeric_limits<value_type>::max();
+
+        if (m_d->nextBuffer <= std::numeric_limits<value_type>::max()) {
+            return std::next(begin, value_type(m_d->nextBuffer));
+        } else {
+            auto midpoint = std::next(begin, std::numeric_limits<value_type>::max());
+            return std::next(midpoint, value_type(m_d->nextBuffer - maxIndex));
+        }
+    }();
+    auto end = m_d->buffers.end();
 
     std::rotate(begin, middle, end);
 

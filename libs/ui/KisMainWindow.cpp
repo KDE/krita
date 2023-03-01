@@ -819,6 +819,9 @@ void KisMainWindow::slotPreferences()
         KisConfigNotifier::instance()->notifyPixelGridModeChanged();
         KisImageConfigNotifier::instance()->notifyConfigChanged();
 
+        // Refresh the DPI and display profile on all consumers.
+        emit screenChanged();
+
         // XXX: should this be changed for the views in other windows as well?
         Q_FOREACH (QPointer<KisView> koview, KisPart::instance()->views()) {
             KisViewManager *view = qobject_cast<KisViewManager*>(koview);

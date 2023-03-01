@@ -1547,6 +1547,7 @@ void handleCollapseAndHang(QVector<CharacterResult> &result,
 void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
                               LineChunk chunk,
                               KoSvgText::TextAnchor anchor,
+                              QPointF anchorPoint,
                               bool ltr,
                               bool isHorizontal,
                               bool firstLine,
@@ -1554,14 +1555,14 @@ void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
                               QPointF textIndent)
 {
     QVector<int> lineIndices = chunk.chunkIndices;
-    QPointF startPos = chunk.length.p1();
+    QPointF startPos = anchorPoint;
     qreal shift = isHorizontal ? startPos.x() : startPos.y();
 
     qreal a = 0;
     qreal b = 0;
 
-    QPointF aStartPos = startPos;
-    const QPointF inlineWidth = startPos - chunk.length.p2();
+    QPointF aStartPos = chunk.length.p1();
+    const QPointF inlineWidth = aStartPos - chunk.length.p2();
     QPointF aEndPos = aStartPos - inlineWidth;
 
     Q_FOREACH (int i, lineIndices) {
@@ -1665,9 +1666,16 @@ void finalizeLine(QVector<CharacterResult> &result,
             currentPos = currentPos + result.at(j).advance;
         }
 
-
         if (inlineSize) {
-            applyInlineSizeAnchoring(result, currentChunk, anchor, ltr, isHorizontal, firstLine, currentLine.textIndentHanging, currentLine.textIndent);
+            QPointF anchorPoint = currentChunk.length.p1();
+            if (textInShape) {
+                if (anchor == KoSvgText::AnchorMiddle) {
+                    anchorPoint = currentChunk.length.center();
+                } else if (anchor == KoSvgText::AnchorEnd) {
+                    anchorPoint = currentChunk.length.p2();
+                }
+            }
+            applyInlineSizeAnchoring(result, currentChunk, anchor, anchorPoint, ltr, isHorizontal, firstLine, currentLine.textIndentHanging, currentLine.textIndent);
         }
     }
     if (lineNotEmpty) {
@@ -2166,6 +2174,25 @@ void getEstimatedHeight(QVector<CharacterResult> &result, int index, QRectF &wor
     }
 }
 
+KoSvgText::TextAnchor textAnchorForTextAlign(KoSvgText::TextAlign align, KoSvgText::TextAlign alignLast, bool ltr) {
+    KoSvgText::TextAlign compare = align;
+    if (align == KoSvgText::AlignJustify) {
+        compare = alignLast;
+    }
+    if (compare == KoSvgText::AlignStart) {
+        return KoSvgText::AnchorStart;
+    } else if (compare == KoSvgText::AlignCenter) {
+        return KoSvgText::AnchorMiddle;
+    } else if (compare == KoSvgText::AlignEnd) {
+        return KoSvgText::AnchorEnd;
+    } else if (compare == KoSvgText::AlignLeft) {
+        return ltr? KoSvgText::AnchorStart: KoSvgText::AnchorEnd;
+    } else if (compare == KoSvgText::AlignRight) {
+        return ltr? KoSvgText::AnchorEnd: KoSvgText::AnchorStart;
+    }
+    return KoSvgText::AnchorStart;
+}
+
 QVector<Line> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProperties &properties,
                                                const QMap<int, int> &logicalToVisual,
                                                QVector<CharacterResult> &result,
@@ -2175,6 +2202,10 @@ QVector<Line> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextPropertie
     KoSvgText::Direction direction = KoSvgText::Direction(properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
     bool ltr = direction == KoSvgText::DirectionLeftToRight;
     bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
+    KoSvgText::TextAlign align = KoSvgText::TextAlign(properties.propertyOrDefault(KoSvgTextProperties::TextAlignAllId).toInt());
+    KoSvgText::TextAlign alignLast = KoSvgText::TextAlign(properties.propertyOrDefault(KoSvgTextProperties::TextAlignLastId).toInt());
+    bool isJustified = false;
+    KoSvgText::TextAnchor anchor = textAnchorForTextAlign(align, alignLast, ltr);
 
     QPointF textIndent; ///< The textIndent.
     KoSvgText::TextIndentInfo textIndentInfo = properties.propertyOrDefault(KoSvgTextProperties::TextIndentId).value<KoSvgText::TextIndentInfo>();
@@ -2263,7 +2294,7 @@ QVector<Line> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextPropertie
             if (wordToNextLine) {
                 if (!currentLine.chunk().chunkIndices.isEmpty() || currentLine.currentChunk > 0) {
                     lineBoxes.append(currentLine);
-                    finalizeLine(result, currentPos, currentLine, lineOffset, KoSvgText::AnchorStart, writingMode, ltr, true, true);
+                    finalizeLine(result, currentPos, currentLine, lineOffset, anchor, writingMode, ltr, true, true);
                 }
                 bool foundFirst = false;
                 while(!foundFirst) {
@@ -2281,6 +2312,7 @@ QVector<Line> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextPropertie
                     currentLine.expectedLineTop = isHorizontal? fabs(wordBox.top()):
                                                                          writingMode == KoSvgText::VerticalRL? fabs(wordBox.right()): fabs(wordBox.left());
                     currentLine.setCurrentChunkForPos(currentPos, isHorizontal);
+                    currentPos = currentLine.chunk().length.p1();
                     lineOffset = currentPos;
                     addWordToLine(result, currentPos, wordIndices, currentLine, ltr);
                 } else {
@@ -2291,7 +2323,7 @@ QVector<Line> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextPropertie
                 }
             } else {
                 if (getFirstPosition(currentPos, currentShape, wordBox, lineOffset, writingMode, ltr)) {
-                    finalizeLine(result, currentPos, currentLine, lineOffset, KoSvgText::AnchorStart, writingMode, ltr, true, true);
+                    finalizeLine(result, currentPos, currentLine, lineOffset, anchor, writingMode, ltr, true, true);
                     addWordToLine(result, currentPos, wordIndices, currentLine, ltr);
                     lineOffset = currentPos;
                 } else {
@@ -2304,7 +2336,7 @@ QVector<Line> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextPropertie
         }
     }
     lineBoxes.append(currentLine);
-    finalizeLine(result, currentPos, currentLine, lineOffset, KoSvgText::AnchorStart, writingMode, ltr, true, true);
+    finalizeLine(result, currentPos, currentLine, lineOffset, anchor, writingMode, ltr, true, true);
     return lineBoxes;
 }
 

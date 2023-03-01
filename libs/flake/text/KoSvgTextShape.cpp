@@ -164,10 +164,8 @@ struct Line {
     QVector<LineChunk> chunks;
     int currentChunk = 0;
 
-    qreal anticipatedLineHeightTop = 0;
-    qreal anticipatedAscend = 0;
-    qreal actualLineHeightTop = 0;
-    qreal actualAscent = 0;
+    qreal expectedLineTop = 0;
+    qreal actualLineTop = 0;
     qreal actualLineBottom = 0;
 
     bool textIndentHanging = false;
@@ -181,19 +179,16 @@ struct Line {
     }
 
     void setCurrentChunk(LineChunk chunk) {
-        qDebug() << currentChunk << chunks.size();
         if (currentChunk+1 > chunks.size()) {
             chunks.append(chunk);
         } else {
-            qDebug() << "setChunk";
             chunks[currentChunk] = chunk;
         }
     }
 
     void clearAndAdjust(bool isHorizontal, QPointF current) {
-        actualAscent = 0;
         actualLineBottom = 0;
-        actualLineHeightTop = 0;
+        actualLineTop = 0;
         LineChunk chunk;
         QLineF length = chunks.at(currentChunk).length;
         if (isHorizontal) {
@@ -208,6 +203,25 @@ struct Line {
         chunk.length = length;
         chunks.append(chunk);
         firstLine = false;
+    }
+
+    void setCurrentChunkForPos(QPointF pos, bool isHorizontal) {
+        for (int i=0; i<chunks.size(); i++) {
+            LineChunk chunk = chunks.at(i);
+            if (isHorizontal) {
+                if ((pos.x() < qMax(chunk.length.p1().x(), chunk.length.p2().x())) &&
+                        (pos.x() >= qMin(chunk.length.p1().x(), chunk.length.p2().x()))) {
+                        currentChunk = i;
+                        break;
+                }
+            } else {
+                if ((pos.y() < qMax(chunk.length.p1().y(), chunk.length.p2().y())) &&
+                        (pos.y() >= qMin(chunk.length.p1().y(), chunk.length.p2().y()))) {
+                        currentChunk = i;
+                        break;
+                }
+            }
+        }
     }
 };
 
@@ -237,6 +251,7 @@ public:
         yRes = rhs.yRes;
         xRes = rhs.xRes;
         result = rhs.result;
+        lineBoxes = rhs.lineBoxes;
     };
 
     TextRendering textRendering = Auto;
@@ -246,6 +261,7 @@ public:
     QList<KoShape*> shapesSubtract;
 
     QVector<CharacterResult> result;
+    QVector<Line> lineBoxes;
 
     void clearAssociatedOutlines(const KoShape *rootShape);
     void resolveTransforms(const KoShape *rootShape, int &currentIndex, bool isHorizontal, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars);
@@ -255,7 +271,7 @@ public:
                            const QMap<int, int> &logicalToVisual,
                            QVector<CharacterResult> &result,
                            QPointF startPos);
-    static void flowTextInShapes(const KoSvgTextProperties &properties,
+    static QVector<Line> flowTextInShapes(const KoSvgTextProperties &properties,
                                  const QMap<int, int> &logicalToVisual,
                                  QVector<CharacterResult> &result, QList<QPainterPath> shapes);
     void applyTextLength(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal);
@@ -399,6 +415,14 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
         painter.strokePath(p, QPen(Qt::red));
     }
     //*/
+    /*
+    Q_FOREACH(Line lineBox, d->lineBoxes) {
+        Q_FOREACH(LineChunk chunk, lineBox.chunks) {
+            painter.setPen(QColor(0, 128, 255));
+            painter.drawLine(chunk.length);
+        }
+    }
+    */
 
     painter.restore();
 }
@@ -1041,7 +1065,7 @@ void KoSvgTextShape::relayout() const
                 shapes.append(p);
             }
         }
-        d->flowTextInShapes(this->textProperties(), logicalToVisual, result, shapes);
+        d->lineBoxes = d->flowTextInShapes(this->textProperties(), logicalToVisual, result, shapes);
     } else {
         d->breakLines(this->textProperties(), logicalToVisual, result, startPos);
     }
@@ -1414,8 +1438,7 @@ void addWordToLine(QVector<CharacterResult> &result,
         result[j] = cr;
         currentChunk.boundingBox |= cr.boundingBox.translated(cr.cssPosition);
 
-        currentLine.actualAscent = qMax(fabs(cr.ascent), currentLine.actualAscent);
-        currentLine.actualLineHeightTop = qMax(fabs(cr.ascent-cr.halfLeading), currentLine.actualLineHeightTop);
+        currentLine.actualLineTop = qMax(fabs(cr.ascent-cr.halfLeading), currentLine.actualLineTop);
         currentLine.actualLineBottom = qMax(fabs(cr.descent+cr.halfLeading), currentLine.actualLineBottom);
     }
     currentPos = lineAdvance;
@@ -1430,26 +1453,47 @@ void addWordToLine(QVector<CharacterResult> &result,
  */
 QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
                          QVector<CharacterResult> &result,
-                         Line currentLine,
+                         Line &currentLine,
                          bool firstLine)
 {
-    QPointF ascent = writingMode == KoSvgText::HorizontalTB ? QPointF(0, currentLine.actualLineHeightTop)
-                     : writingMode == KoSvgText::VerticalLR ? QPointF(currentLine.actualLineHeightTop, 0)
-                                                            : QPointF(-currentLine.actualLineHeightTop, 0);
-    QPointF lineBottom = writingMode == KoSvgText::HorizontalTB ? QPointF(0, currentLine.actualLineBottom)
-                     : writingMode == KoSvgText::VerticalLR ? QPointF(currentLine.actualLineBottom, 0)
-                                                            : QPointF(-currentLine.actualLineBottom, 0);
+    QPointF lineTop;
+    QPointF lineBottom;
+    QPointF correctionOffset;
+    qreal expectedLineTop = qMax(currentLine.expectedLineTop, currentLine.actualLineTop);
+    if (writingMode == KoSvgText::HorizontalTB) {
+        lineTop = QPointF(0, currentLine.actualLineTop);
+        lineBottom = QPointF(0, currentLine.actualLineBottom);
+        correctionOffset = QPointF(0, expectedLineTop);
+    } else if (writingMode == KoSvgText::VerticalLR) {
+        lineTop = QPointF(currentLine.actualLineTop, 0);
+        lineBottom = QPointF(currentLine.actualLineBottom, 0);
+        correctionOffset = QPointF(expectedLineTop, 0);
+    } else {
+        lineTop = QPointF(-currentLine.actualLineTop, 0);
+        lineBottom = QPointF(-currentLine.actualLineBottom, 0);
+        correctionOffset = QPointF(-expectedLineTop, 0);
+    }
     bool returnDescent = firstLine;
-    QPointF offset = ascent + lineBottom;
+    QPointF offset = lineTop + lineBottom;
+
+    correctionOffset -= lineTop;
     if (!returnDescent) {
         Q_FOREACH(LineChunk chunk, currentLine.chunks) {
             Q_FOREACH (int j, chunk.chunkIndices) {
-                result[j].cssPosition += ascent;
+                result[j].cssPosition += lineTop;
                 result[j].finalPosition = result.at(j).cssPosition;
             }
         }
     } else {
-        offset = lineBottom;
+        offset = lineBottom - correctionOffset;
+        Q_FOREACH(LineChunk chunk, currentLine.chunks) {
+            Q_FOREACH (int j, chunk.chunkIndices) {
+                result[j].cssPosition -= correctionOffset;
+                result[j].finalPosition = result.at(j).cssPosition;
+            }
+            chunk.length.translate(-correctionOffset);
+            chunk.boundingBox.translate(-correctionOffset);
+        }
     }
     return offset;
 }
@@ -2090,10 +2134,43 @@ QVector<QLineF> findLineBoxesForFirstPos(QPainterPath shape, QPointF firstPos, Q
     return lines;
 }
 
-void KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProperties &properties,
+void getEstimatedHeight(QVector<CharacterResult> &result, int index, QRectF &wordBox, QRectF boundingBox, KoSvgText::WritingMode writingMode) {
+    bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
+    QPointF totalAdvance = wordBox.bottomRight() - wordBox.topLeft();
+    qreal maxAscent = isHorizontal? fabs(wordBox.top()):
+                                    writingMode == KoSvgText::VerticalRL? fabs(wordBox.right()): fabs(wordBox.left());
+    qreal maxDescent = isHorizontal? fabs(wordBox.bottom()):
+                                     writingMode == KoSvgText::VerticalRL? fabs(wordBox.left()): fabs(wordBox.right());
+
+    for (int i=index; i<result.size(); i++) {
+        if (!result.at(i).addressable || result.at(i).hidden) {
+            continue;
+        }
+        totalAdvance += result.at(i).advance;
+        if ((totalAdvance.x() > boundingBox.width() && isHorizontal) ||
+                (totalAdvance.y() > boundingBox.height() && !isHorizontal)) {
+            break;
+        }
+        maxAscent = qMax(fabs(result.at(i).ascent-result.at(i).halfLeading), maxAscent);
+        maxDescent = qMax(fabs(result.at(i).descent+result.at(i).halfLeading), maxDescent);
+    }
+    if (writingMode == KoSvgText::HorizontalTB) {
+        wordBox.setTop(-maxAscent);
+        wordBox.setBottom(maxDescent);
+    } else if (writingMode == KoSvgText::VerticalRL) {
+        wordBox.setRight(maxAscent);
+        wordBox.setLeft(-maxDescent);
+    } else {
+        wordBox.setLeft(-maxAscent);
+        wordBox.setRight(maxDescent);
+    }
+}
+
+QVector<Line> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProperties &properties,
                                                const QMap<int, int> &logicalToVisual,
                                                QVector<CharacterResult> &result,
                                                QList<QPainterPath> shapes) {
+    QVector<Line> lineBoxes;
     KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(properties.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
     KoSvgText::Direction direction = KoSvgText::Direction(properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
     bool ltr = direction == KoSvgText::DirectionLeftToRight;
@@ -2118,7 +2195,7 @@ void KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProperties &proper
     QListIterator<int> it(logicalToVisual.keys());
     QListIterator<QPainterPath> shapesIt(shapes);
     if (shapes.isEmpty()) {
-        return;
+        return lineBoxes;
     }
     QPainterPath currentShape;
     while (it.hasNext()) {
@@ -2185,10 +2262,12 @@ void KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProperties &proper
         if (breakLine) {
             if (wordToNextLine) {
                 if (!currentLine.chunk().chunkIndices.isEmpty() || currentLine.currentChunk > 0) {
+                    lineBoxes.append(currentLine);
                     finalizeLine(result, currentPos, currentLine, lineOffset, KoSvgText::AnchorStart, writingMode, ltr, true, true);
                 }
                 bool foundFirst = false;
                 while(!foundFirst) {
+                    getEstimatedHeight(result, index, wordBox, currentShape.boundingRect(), writingMode);
                     foundFirst = getFirstPosition(currentPos, currentShape, wordBox, lineOffset, writingMode, ltr);
                     if (foundFirst || !shapesIt.hasNext()) {
                         break;
@@ -2199,7 +2278,9 @@ void KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProperties &proper
                 }
                 if (foundFirst) {
                     currentLine = Line(findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode), ltr);
-
+                    currentLine.expectedLineTop = isHorizontal? fabs(wordBox.top()):
+                                                                         writingMode == KoSvgText::VerticalRL? fabs(wordBox.right()): fabs(wordBox.left());
+                    currentLine.setCurrentChunkForPos(currentPos, isHorizontal);
                     lineOffset = currentPos;
                     addWordToLine(result, currentPos, wordIndices, currentLine, ltr);
                 } else {
@@ -2222,7 +2303,9 @@ void KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProperties &proper
             }
         }
     }
+    lineBoxes.append(currentLine);
     finalizeLine(result, currentPos, currentLine, lineOffset, KoSvgText::AnchorStart, writingMode, ltr, true, true);
+    return lineBoxes;
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)

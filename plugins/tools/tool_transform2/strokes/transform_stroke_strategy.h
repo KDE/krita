@@ -92,7 +92,7 @@ public:
     void doStrokeCallback(KisStrokeJobData *data) override;
 
 Q_SIGNALS:
-    void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *cookie);
+    void sigTransactionGenerated(TransformTransactionProperties &transaction, ToolTransformArgs &args, void *cookie);
     void sigPreviewDeviceReady(KisPaintDeviceSP device);
 
 protected:

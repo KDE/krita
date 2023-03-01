@@ -2300,7 +2300,6 @@ QVector<Line> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextPropertie
                     } else {
                         QLineF nextLine = currentLine.chunks.at(i+1).length;
                         if (isHorizontal) {
-
                             currentPos.setX(ltr? qMax(nextLine.p1().x(), currentPos.x()):
                                                  qMin(nextLine.p1().x(), currentPos.x()));
                         } else {
@@ -2321,8 +2320,31 @@ QVector<Line> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextPropertie
                 lineBoxes.append(currentLine);
             }
             bool foundFirst = false;
+            bool needNewLine = true;
+            getEstimatedHeight(result, index, wordBox, currentShape.boundingRect(), writingMode);
+            if (!currentShape.isEmpty()) {
+                // we're going to try and get an offset line first before trying get first pos.
+                // This gives more stable results on curved shapes.
+                currentPos -= writingMode == KoSvgText::VerticalRL? wordBox.topRight(): wordBox.topLeft();
+                currentLine = Line(findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode), ltr);
+                qreal length = isHorizontal? wordBox.width(): wordBox.height();
+                for (int i = 0; i < currentLine.chunks.size(); i++) {
+                    if (currentLine.chunks.at(i).length.length() > length) {
+                        currentLine.currentChunk = i;
+                        foundFirst = true;
+                        needNewLine = false;
+                        break;
+                    }
+                }
+            }
+            /*
+             * In theory we could have overflow wrap for shapes, but it'd require either generalizing
+             * the line-filling portion above and this new line seeking portion, or somehow reverting
+             * the itterator over the results to be on the last fitted glyph (which'd still require
+             * generalizing the line-filling portion about), and I am unsure how to do that.
+             * Either way, this place here is where you'd check for overflow wrap.
+             */
             while(!foundFirst) {
-                getEstimatedHeight(result, index, wordBox, currentShape.boundingRect(), writingMode);
                 foundFirst = getFirstPosition(currentPos, currentShape, wordBox, lineOffset, writingMode, ltr);
                 if (foundFirst || !shapesIt.hasNext()) {
                     break;
@@ -2332,7 +2354,9 @@ QVector<Line> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextPropertie
                 lineOffset = currentPos;
             }
             if (foundFirst) {
-                currentLine = Line(findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode), ltr);
+                if (needNewLine) {
+                    currentLine = Line(findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode), ltr);
+                }
                 currentLine.expectedLineTop = isHorizontal? fabs(wordBox.top()):
                                                             writingMode == KoSvgText::VerticalRL? fabs(wordBox.right()): fabs(wordBox.left());
                 currentLine.setCurrentChunkForPos(currentPos, isHorizontal);

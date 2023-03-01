@@ -569,7 +569,7 @@ flattenTopdown(struct FlattenSpec *spec, struct Tile *top,
                  * this is visible after all. So just free it and return 'top'.
                  */
                 freeTile(below);
-                freeTile(top);
+                freeTile(tile);
                 return top ;
             }
             if (merge_exotic(below,tile,spec->layers[nlayers].mode) != XCF_OK) {

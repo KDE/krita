@@ -1578,12 +1578,12 @@ qint32 KisImage::nHiddenLayers() const
 
 qint32 KisImage::nChildLayers() const
 {
-    QStringList list;
-    list << "KisLayer";
+    const QStringList list = {"KisLayer"};
 
     KoProperties koProperties;
     KisCountVisitor visitor(list, koProperties);
-    for (auto childNode : m_d->rootLayer->childNodes(list, koProperties)) {
+    const QList<KisNodeSP> childNodes = m_d->rootLayer->childNodes(list, koProperties);
+    for (KisNodeSP childNode: childNodes) {
         childNode->accept(visitor);
     }
     return visitor.count();

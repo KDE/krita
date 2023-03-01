@@ -190,7 +190,8 @@ void KisCurveOptionWidget::slotUseSameCurveChanged()
     if (m_curveOption->isSameCurveUsed()) {
         m_curveOption->setCommonCurve(currentCurve);
     } else {
-        for (auto sensor : m_curveOption->activeSensors()) {
+        const QList<KisDynamicSensorSP> sensors = m_curveOption->activeSensors();
+        for (KisDynamicSensorSP sensor : sensors) {
             sensor->setCurve(currentCurve);
         }
         // set the current curve since it might be disabled

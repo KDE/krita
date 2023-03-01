@@ -209,10 +209,6 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
 
 void KisImageInterface::gmic_qt_detach()
 {
-    for (auto memorySegment : p->m_sharedMemorySegments) {
-        dbgPlugins << "detaching" << memorySegment;
-        memorySegment.clear();
-    }
     p->m_sharedMemorySegments.clear();
 }
 

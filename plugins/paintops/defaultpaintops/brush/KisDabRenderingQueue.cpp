@@ -140,27 +140,17 @@ KisDabRenderingJobSP KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabReq
 
     const int lastDabJobIndex = m_d->lastDabJobInQueue;
 
-    KisDabRenderingJobSP job(new KisDabRenderingJob());
+    KisDabRenderingJobSP job(new KisDabRenderingJob(seqNo, KisDabRenderingJob::Dab, opacity, flow));
 
     bool shouldUseCache = false;
-    m_d->cacheInterface->getDabType(lastDabJobIndex >= 0,
-                                    resources,
-                                    request,
-                                    &job->generationInfo,
-                                    &shouldUseCache);
+    m_d->cacheInterface->getDabType(lastDabJobIndex >= 0, resources, request, &job->generationInfo, &shouldUseCache);
 
     m_d->putResourcesToCache(resources);
-    resources = 0;
+    resources = nullptr;
 
-    // TODO: initialize via c-tor
-    job->seqNo = seqNo;
-    job->type =
-        !shouldUseCache ? KisDabRenderingJob::Dab :
-        job->generationInfo.needsPostprocessing ? KisDabRenderingJob::Postprocess :
-        KisDabRenderingJob::Copy;
-    job->opacity = opacity;
-    job->flow = flow;
-
+    job->type = !shouldUseCache                   ? KisDabRenderingJob::Dab
+        : job->generationInfo.needsPostprocessing ? KisDabRenderingJob::Postprocess
+                                                  : KisDabRenderingJob::Copy;
 
     if (job->type == KisDabRenderingJob::Dab) {
         job->status = KisDabRenderingJob::Running;

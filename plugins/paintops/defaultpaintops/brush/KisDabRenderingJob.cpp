@@ -16,15 +16,11 @@
 
 #include <tool/strokes/FreehandStrokeRunnableJobDataWithUpdate.h>
 
-
-KisDabRenderingJob::KisDabRenderingJob()
-{
-}
-
-KisDabRenderingJob::KisDabRenderingJob(int _seqNo, KisDabCacheUtils::DabGenerationInfo _generationInfo, KisDabRenderingJob::JobType _type)
-    : seqNo(_seqNo),
-      generationInfo(_generationInfo),
-      type(_type)
+KisDabRenderingJob::KisDabRenderingJob(int _seqNo, KisDabRenderingJob::JobType _type, qreal _opacity, qreal _flow)
+    : seqNo(_seqNo)
+    , type(_type)
+    , opacity(_opacity)
+    , flow(_flow)
 {
 }
 

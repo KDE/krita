@@ -32,10 +32,8 @@ public:
     };
 
 public:
-    KisDabRenderingJob();
     KisDabRenderingJob(int _seqNo,
-                       KisDabCacheUtils::DabGenerationInfo _generationInfo,
-                       JobType _type);
+                       JobType _type, qreal opacity = OPACITY_OPAQUE_F, qreal flow = OPACITY_OPAQUE_F);
     KisDabRenderingJob(const KisDabRenderingJob &rhs);
     KisDabRenderingJob& operator=(const KisDabRenderingJob &rhs);
 

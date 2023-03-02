@@ -17,6 +17,7 @@
 #include <QStandardPaths>
 #include <QDebug>
 #include <QFileInfo>
+#include <QScreen>
 
 #include <kconfig.h>
 
@@ -543,7 +544,17 @@ void KisConfig::setMDIBackgroundImage(const QString &filename) const
 QString KisConfig::monitorProfile(int screen) const
 {
     // Note: keep this in sync with the default profile for the RGB colorspaces!
-    QString profile = m_cfg.readEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), "sRGB-elle-V2-srgbtrc.icc");
+    const QString defaultProfile = "sRGB-elle-V2-srgbtrc.icc";
+
+    QString profile;
+    const QString screenIdentifierKey = "monitorProfile" + getScreenStringIdentfier(screen);
+
+    if (m_cfg.hasKey(screenIdentifierKey)) {
+        profile = m_cfg.readEntry(screenIdentifierKey, defaultProfile);
+    } else {
+        profile = m_cfg.readEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), defaultProfile);
+    }
+
     //dbgKrita << "KisConfig::monitorProfile()" << profile;
     return profile;
 }
@@ -563,6 +574,9 @@ void KisConfig::setMonitorProfile(int screen, const QString & monitorProfile, bo
 {
     m_cfg.writeEntry("monitorProfile/OverrideX11", override);
     m_cfg.writeEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), monitorProfile);
+    if (getScreenStringIdentfier(screen) != "") {
+        m_cfg.writeEntry("monitorProfile" + getScreenStringIdentfier(screen), monitorProfile);
+    }
 }
 
 const KoColorProfile *KisConfig::getScreenProfile(int screen)
@@ -635,6 +649,27 @@ const KoColorProfile *KisConfig::displayProfile(int screen) const
     }
 
     return profile;
+}
+
+const QString KisConfig::getScreenStringIdentfier(int screenNo) const {
+    if (screenNo < 0 || screenNo >= QGuiApplication::screens().length()) {
+        return QString();
+    }
+    QScreen* screen = QGuiApplication::screens()[screenNo];
+
+    QString manufacturer = screen->manufacturer();
+    QString model = screen->model();
+    QString serialNumber = screen->serialNumber();
+    QString resolution = QString::number(screen->geometry().width()) + "x" + QString::number(screen->geometry().width());
+    QString dpi = QString::number(screen->physicalDotsPerInch()) + "_" + QString::number(screen->logicalDotsPerInch());
+    QString scale = QString::number(screen->devicePixelRatio());
+
+    if (manufacturer == "" && model == "" && serialNumber == "") {
+        return QString(); // it would be scary to base the profile just on resolution
+    }
+
+    QString identifier = QStringList({manufacturer, model, serialNumber, resolution, dpi, scale}).join("_");
+    return identifier;
 }
 
 QString KisConfig::workingColorSpace(bool defaultValue) const

@@ -142,6 +142,8 @@ public:
     /// the custom monitor profile set by the user, depending on the configuration
     const KoColorProfile *displayProfile(int screen) const;
 
+    const QString getScreenStringIdentfier(int screenNo) const;
+
     QString workingColorSpace(bool defaultValue = false) const;
     void setWorkingColorSpace(const QString & workingColorSpace) const;
 

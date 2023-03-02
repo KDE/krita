@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-28 00:56+0000\n"
+"POT-Creation-Date: 2023-03-02 00:52+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -18443,8 +18443,8 @@ msgid "Processing"
 msgstr "Töötlemine"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1415
-#: libs/ui/KisMainWindow.cpp:1695 libs/ui/KisMainWindow.cpp:1708
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1419
+#: libs/ui/KisMainWindow.cpp:1699 libs/ui/KisMainWindow.cpp:1712
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18933,7 +18933,7 @@ msgstr "Teisendamismask"
 
 #: libs/impex/KisExportCheckRegistry.cpp:122 libs/ui/kis_mask_manager.cc:210
 #: libs/ui/kis_node_manager.cpp:1294
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:379
 #: plugins/impex/tiff/kis_tiff_import.cc:562
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
@@ -19215,8 +19215,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Dokument"
 
-#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2059
-#: libs/ui/KisMainWindow.cpp:2142
+#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2063
+#: libs/ui/KisMainWindow.cpp:2146
 #, kde-format
 msgid "Import frames"
 msgstr "Kaadrite import"
@@ -20597,7 +20597,7 @@ msgstr "Välja"
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:451 libs/ui/KisView.cpp:1135
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:453 libs/ui/KisView.cpp:1144
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -20633,9 +20633,9 @@ msgstr "Kohalikud ressurssid"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:648
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:675
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:650
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:664
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:677
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20657,16 +20657,16 @@ msgstr "Kohalikud ressurssid"
 #: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:935
 #: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:1855
 #: libs/ui/KisDocument.cpp:1898 libs/ui/KisDocument.cpp:1908
-#: libs/ui/KisMainWindow.cpp:972 libs/ui/KisMainWindow.cpp:1088
-#: libs/ui/KisMainWindow.cpp:1214 libs/ui/KisMainWindow.cpp:1313
-#: libs/ui/KisMainWindow.cpp:1919 libs/ui/KisMainWindow.cpp:1928
-#: libs/ui/KisMainWindow.cpp:2067 libs/ui/KisMainWindow.cpp:2128
-#: libs/ui/KisMainWindow.cpp:2149 libs/ui/KisMainWindow.cpp:2762
+#: libs/ui/KisMainWindow.cpp:976 libs/ui/KisMainWindow.cpp:1092
+#: libs/ui/KisMainWindow.cpp:1218 libs/ui/KisMainWindow.cpp:1317
+#: libs/ui/KisMainWindow.cpp:1923 libs/ui/KisMainWindow.cpp:1932
+#: libs/ui/KisMainWindow.cpp:2071 libs/ui/KisMainWindow.cpp:2132
+#: libs/ui/KisMainWindow.cpp:2153 libs/ui/KisMainWindow.cpp:2766
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:682 libs/ui/KisView.cpp:1138
+#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1147
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:292
@@ -21185,7 +21185,7 @@ msgid "Delete resource"
 msgstr "Ressursi kustutamine"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:333
-#: libs/ui/KisMainWindow.cpp:2561
+#: libs/ui/KisMainWindow.cpp:2565
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:609
 #, kde-format
 msgctxt "@title:window"
@@ -21541,7 +21541,7 @@ msgid "Select All"
 msgstr "Kõige valimine"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:776
+#: libs/ui/KisView.cpp:785
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Kihi ülekanduv täitmine"
@@ -21657,7 +21657,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Animatsioonikaadrite renderdamine nurjus!"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2169
+#: libs/ui/KisMainWindow.cpp:2173
 #, kde-format
 msgid "Render Animation"
 msgstr "Animatsiooni renderdamine"
@@ -21696,7 +21696,7 @@ msgctxt "spline filtering"
 msgid "spline"
 msgstr "Splain"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:100
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:101
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "Not Applicable, used where there's no colorants or gamma curve found"
@@ -21705,26 +21705,26 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "-"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:377
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:379
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:431
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:433
 #, fuzzy, kde-format
 #| msgctxt "ICC profile version"
 #| msgid "ICC Version: "
 msgid "FFmpeg Version: "
 msgstr "ICC versioon:"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:648
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:650
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:664
 #, fuzzy, kde-format
 #| msgid ""
 #| "The location of FFmpeg is invalid. Please select the correct location of "
@@ -21737,7 +21737,7 @@ msgstr ""
 "FFmpeg'i asukoht on vigane. Palun vali FFmpeg'i täitmisfaili korrektne "
 "asukoht oma süsteemis."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:675
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:677
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Palun sisesta renderdatava faili nimi."
@@ -23805,7 +23805,7 @@ msgid "Numerical"
 msgstr "Arvuline"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:137
-#: libs/ui/KisMainWindow.cpp:1182
+#: libs/ui/KisMainWindow.cpp:1186
 #, kde-format
 msgid "Import Images"
 msgstr "Piltide import"
@@ -23944,7 +23944,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Uue stiili nimi"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2572
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2576
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -27657,7 +27657,7 @@ msgstr "Aktiivne pintsli valmisseadistus"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1067
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1071
 #: libs/ui/widgets/kis_workspace_chooser.cpp:111
 #: libs/ui/widgets/kis_workspace_chooser.cpp:190
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -30070,7 +30070,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Failikihi muutmine"
 
-#: libs/ui/kis_clipboard.cc:714 libs/ui/KisView.cpp:683
+#: libs/ui/kis_clipboard.cc:714 libs/ui/KisView.cpp:692
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -31861,32 +31861,32 @@ msgstr "%1 tööriistariba näitamine"
 msgid "Hide %1 Toolbar"
 msgstr "%1 tööriistariba peitmine"
 
-#: libs/ui/KisMainWindow.cpp:1030
+#: libs/ui/KisMainWindow.cpp:1034
 #, kde-format
 msgid "Write Protected"
 msgstr "Kirjutuskaitstud"
 
-#: libs/ui/KisMainWindow.cpp:1034
+#: libs/ui/KisMainWindow.cpp:1038
 #, kde-format
 msgid "Recovered"
 msgstr "Taastatud"
 
-#: libs/ui/KisMainWindow.cpp:1064
+#: libs/ui/KisMainWindow.cpp:1068
 #, kde-format
 msgid "Save as %1"
 msgstr "Salvesta kui %1"
 
-#: libs/ui/KisMainWindow.cpp:1088
+#: libs/ui/KisMainWindow.cpp:1092
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Faili %1 ei ole olemas."
 
-#: libs/ui/KisMainWindow.cpp:1182
+#: libs/ui/KisMainWindow.cpp:1186
 #, kde-format
 msgid "Open Images"
 msgstr "Piltide avamine"
 
-#: libs/ui/KisMainWindow.cpp:1314
+#: libs/ui/KisMainWindow.cpp:1318
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -31899,40 +31899,40 @@ msgstr ""
 "\n"
 "Palun vali asukoht, kus originaalfaili üle ei kirjutataks!"
 
-#: libs/ui/KisMainWindow.cpp:1370
+#: libs/ui/KisMainWindow.cpp:1374
 #, kde-format
 msgid "Exporting"
 msgstr "Eksport"
 
-#: libs/ui/KisMainWindow.cpp:1370
+#: libs/ui/KisMainWindow.cpp:1374
 #, kde-format
 msgid "Saving As"
 msgstr "Salvestamine"
 
-#: libs/ui/KisMainWindow.cpp:1674
+#: libs/ui/KisMainWindow.cpp:1678
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Uue dokumendi loomine"
 
-#: libs/ui/KisMainWindow.cpp:1698
+#: libs/ui/KisMainWindow.cpp:1702
 #, kde-format
 msgid "Custom Document"
 msgstr "Kohandatud dokument"
 
-#: libs/ui/KisMainWindow.cpp:1710
+#: libs/ui/KisMainWindow.cpp:1714
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Loomine lõikepuhvrist"
 
-#: libs/ui/KisMainWindow.cpp:1888
+#: libs/ui/KisMainWindow.cpp:1892
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Save Layer/Mask"
 msgid "Layers/Masks"
 msgstr "Salvesta kiht/mask"
 
-#: libs/ui/KisMainWindow.cpp:1914
+#: libs/ui/KisMainWindow.cpp:1918
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:181
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:286
 #, fuzzy, kde-format
@@ -31940,7 +31940,7 @@ msgstr "Salvesta kiht/mask"
 msgid "You don't have any resource bundles enabled."
 msgstr "Väljunddokumendi loomine nurjus"
 
-#: libs/ui/KisMainWindow.cpp:1918
+#: libs/ui/KisMainWindow.cpp:1922
 #, kde-format
 msgid ""
 "\n"
@@ -31948,7 +31948,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1928
+#: libs/ui/KisMainWindow.cpp:1932
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
 #, kde-format
@@ -31957,7 +31957,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2067 libs/ui/KisMainWindow.cpp:2149
+#: libs/ui/KisMainWindow.cpp:2071 libs/ui/KisMainWindow.cpp:2153
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31966,43 +31966,43 @@ msgstr ""
 "Animatsiooni importimise lõpetamine nurjus:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2128
+#: libs/ui/KisMainWindow.cpp:2132
 #, fuzzy, kde-format
 #| msgid "Failed to render animation frames!"
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Animatsioonikaadrite renderdamine nurjus!"
 
-#: libs/ui/KisMainWindow.cpp:2552
+#: libs/ui/KisMainWindow.cpp:2556
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Impordi tööruum ..."
 
-#: libs/ui/KisMainWindow.cpp:2567
+#: libs/ui/KisMainWindow.cpp:2571
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Uus tööruum ..."
 
-#: libs/ui/KisMainWindow.cpp:2571
+#: libs/ui/KisMainWindow.cpp:2575
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Uus tööruum ..."
 
-#: libs/ui/KisMainWindow.cpp:2615
+#: libs/ui/KisMainWindow.cpp:2619
 #, fuzzy, kde-format
 #| msgid "&%1 %2"
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2618
+#: libs/ui/KisMainWindow.cpp:2622
 #, fuzzy, kde-format
 #| msgid "%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2785
+#: libs/ui/KisMainWindow.cpp:2789
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -32011,19 +32011,19 @@ msgstr ""
 "Krita LittleCMS-i värvihalduse plugin ei ole paigaldatud. Krita lõpetab nüüd "
 "töö."
 
-#: libs/ui/KisMainWindow.cpp:2801
+#: libs/ui/KisMainWindow.cpp:2805
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Paigaldusviga"
 
-#: libs/ui/KisMainWindow.cpp:2910
+#: libs/ui/KisMainWindow.cpp:2914
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Teemad"
 
-#: libs/ui/KisMainWindow.cpp:2968
+#: libs/ui/KisMainWindow.cpp:2972
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Laienev eraldaja"
@@ -32361,28 +32361,28 @@ msgstr "Ühtki pilti pole."
 msgid "Use This Template"
 msgstr "Kasuta seda malli"
 
-#: libs/ui/KisView.cpp:751
+#: libs/ui/KisView.cpp:760
 #, fuzzy, kde-format
 #| msgid "You cannot use this tool with the selected layer type"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Seda tööriista ei saa valitud kihitüübi puhul kasutada"
 
-#: libs/ui/KisView.cpp:759 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:768 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Kiht on lukustatud ja nähtamatu."
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:770 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "Kiht on lukustatud."
 
-#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:772 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Kiht on nähtamatu."
 
-#: libs/ui/KisView.cpp:1139
+#: libs/ui/KisView.cpp:1148
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -32390,37 +32390,37 @@ msgid ""
 msgstr ""
 "<p>Dokumenti <b>'%1'</b> on muudetud.</p><p>Kas soovid selle salvestada?</p>"
 
-#: libs/ui/KisView.cpp:1328
+#: libs/ui/KisView.cpp:1337
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Väljundvaade ujukomaarvu puhul ei tööta."
 
-#: libs/ui/KisView.cpp:1333
+#: libs/ui/KisView.cpp:1342
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Väljundvaade on sisse lülitatud."
 
-#: libs/ui/KisView.cpp:1335
+#: libs/ui/KisView.cpp:1344
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Väljundvaade on välja lülitatud."
 
-#: libs/ui/KisView.cpp:1347
+#: libs/ui/KisView.cpp:1356
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Värviulatuse hoiatused ujukomaarvu puhul ei tööta."
 
-#: libs/ui/KisView.cpp:1353
+#: libs/ui/KisView.cpp:1362
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Värviulatuse hoiatused on sisse lülitatud."
 
-#: libs/ui/KisView.cpp:1355
+#: libs/ui/KisView.cpp:1364
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Kuid väljundvaade on endiselt välja lülitatud."
 
-#: libs/ui/KisView.cpp:1358
+#: libs/ui/KisView.cpp:1367
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Värviulatuse hoiatused on välja lülitatud."
@@ -50203,7 +50203,7 @@ msgctxt "@title:window"
 msgid "File not found"
 msgstr "Faili ei leitud"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:262
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:263
 #, kde-format
 msgctxt "Warning during loading a kra file with a filter layer"
 msgid ""
@@ -50211,7 +50211,7 @@ msgid ""
 "selection."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:325
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:326
 #, kde-format
 msgctxt "Loading a .kra file"
 msgid ""
@@ -50221,67 +50221,67 @@ msgstr ""
 "Fail sisaldab kloonikihti, millel on vale allika sõlme ID. See kiht "
 "teisendatakse joonistuskihiks."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:393
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Teisendamismaski \"id\" laadimine nurjus"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:407
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "Teisendamismaski parameetrite loomine nurjus"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:560
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:568
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:597
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Piksliandmete lugemine nurjus: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:604
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Piksliandmete laadimine nurjus: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:620
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "Profiili laadimine nurjus: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:675
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Seadistuse %1 filtreerimine nurjus."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:716
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Kihi %1 metaandmete laadimine nurjus."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:759
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Vektorivaliku %1 laadimine nurjus."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:775
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Rastervaliku %1 laadimine nurjus."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:805
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Võtmekaadrite laadimine asukohast %1 nurjus."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:819
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -50290,7 +50290,7 @@ msgstr ""
 "Parsimisviga võtmekaadrifailis %1 reas %2, veerus %3\n"
 "Veateade: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:832
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "tundmatu võtmekaadri kanali tüüp: %1 asukohas %2"

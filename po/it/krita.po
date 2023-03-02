@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-28 00:56+0000\n"
+"POT-Creation-Date: 2023-03-02 00:52+0000\n"
 "PO-Revision-Date: 2023-02-23 23:52+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -17375,8 +17375,8 @@ msgid "Processing"
 msgstr "Elaborazione"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1415
-#: libs/ui/KisMainWindow.cpp:1695 libs/ui/KisMainWindow.cpp:1708
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1419
+#: libs/ui/KisMainWindow.cpp:1699 libs/ui/KisMainWindow.cpp:1712
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -17837,7 +17837,7 @@ msgstr "Maschera di trasformazione"
 
 #: libs/impex/KisExportCheckRegistry.cpp:122 libs/ui/kis_mask_manager.cc:210
 #: libs/ui/kis_node_manager.cpp:1294
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:214
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:379
 #: plugins/impex/tiff/kis_tiff_import.cc:562
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
@@ -18112,8 +18112,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Documento CSV"
 
-#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2059
-#: libs/ui/KisMainWindow.cpp:2142
+#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2063
+#: libs/ui/KisMainWindow.cpp:2146
 #, kde-format
 msgid "Import frames"
 msgstr "Importa fotogrammi"
@@ -19363,7 +19363,7 @@ msgstr "Fuori"
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:451 libs/ui/KisView.cpp:1135
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:453 libs/ui/KisView.cpp:1144
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19399,9 +19399,9 @@ msgstr "Risorse locali"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:648
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:675
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:650
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:664
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:677
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19423,16 +19423,16 @@ msgstr "Risorse locali"
 #: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:935
 #: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:1855
 #: libs/ui/KisDocument.cpp:1898 libs/ui/KisDocument.cpp:1908
-#: libs/ui/KisMainWindow.cpp:972 libs/ui/KisMainWindow.cpp:1088
-#: libs/ui/KisMainWindow.cpp:1214 libs/ui/KisMainWindow.cpp:1313
-#: libs/ui/KisMainWindow.cpp:1919 libs/ui/KisMainWindow.cpp:1928
-#: libs/ui/KisMainWindow.cpp:2067 libs/ui/KisMainWindow.cpp:2128
-#: libs/ui/KisMainWindow.cpp:2149 libs/ui/KisMainWindow.cpp:2762
+#: libs/ui/KisMainWindow.cpp:976 libs/ui/KisMainWindow.cpp:1092
+#: libs/ui/KisMainWindow.cpp:1218 libs/ui/KisMainWindow.cpp:1317
+#: libs/ui/KisMainWindow.cpp:1923 libs/ui/KisMainWindow.cpp:1932
+#: libs/ui/KisMainWindow.cpp:2071 libs/ui/KisMainWindow.cpp:2132
+#: libs/ui/KisMainWindow.cpp:2153 libs/ui/KisMainWindow.cpp:2766
 #: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:682 libs/ui/KisView.cpp:1138
+#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1147
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:292
@@ -19926,7 +19926,7 @@ msgid "Delete resource"
 msgstr "Elimina risorsa"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:333
-#: libs/ui/KisMainWindow.cpp:2561
+#: libs/ui/KisMainWindow.cpp:2565
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:609
 #, kde-format
 msgctxt "@title:window"
@@ -20273,7 +20273,7 @@ msgid "Select All"
 msgstr "Seleziona tutto"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:776
+#: libs/ui/KisView.cpp:785
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Livello Riempimento"
@@ -20389,7 +20389,7 @@ msgstr ""
 "incompleti."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2169
+#: libs/ui/KisMainWindow.cpp:2173
 #, kde-format
 msgid "Render Animation"
 msgstr "Resa animazione"
@@ -20424,23 +20424,23 @@ msgctxt "spline filtering"
 msgid "spline"
 msgstr "spline"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:100
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:101
 #, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N/D"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:377
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:379
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Nessun eseguibile FFmpeg valido fornito..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:431
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:433
 #, kde-format
 msgid "FFmpeg Version: "
 msgstr "Versione FFmpeg: "
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:648
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:650
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20449,7 +20449,7 @@ msgstr ""
 "Il file FFmpeg che hai fornito sembra essere compresso. Prova prima a "
 "estrarre il file FFmpeg dall'archivio."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:664
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be "
@@ -20459,7 +20459,7 @@ msgstr ""
 "Il file FFmpeg che hai fornito non sembra valido. Seleziona la posizione "
 "attuale di un eseguibile FFmpeg nel tuo sistema."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:675
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:677
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Inserisci un nome file su cui eseguire la resa."
@@ -22467,7 +22467,7 @@ msgid "Numerical"
 msgstr "Numerico"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:137
-#: libs/ui/KisMainWindow.cpp:1182
+#: libs/ui/KisMainWindow.cpp:1186
 #, kde-format
 msgid "Import Images"
 msgstr "Importa immagini"
@@ -22606,7 +22606,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Inserisci il nuovo nome dello stile"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2572
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2576
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -26278,7 +26278,7 @@ msgstr "Preimpostazione del pennello attuale"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1067
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1071
 #: libs/ui/widgets/kis_workspace_chooser.cpp:111
 #: libs/ui/widgets/kis_workspace_chooser.cpp:190
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -28679,7 +28679,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Cambia livello file"
 
-#: libs/ui/kis_clipboard.cc:714 libs/ui/KisView.cpp:683
+#: libs/ui/kis_clipboard.cc:714 libs/ui/KisView.cpp:692
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -30432,32 +30432,32 @@ msgstr "Mostra la barra degli strumenti %1"
 msgid "Hide %1 Toolbar"
 msgstr "Nascondi la barra degli strumenti %1"
 
-#: libs/ui/KisMainWindow.cpp:1030
+#: libs/ui/KisMainWindow.cpp:1034
 #, kde-format
 msgid "Write Protected"
 msgstr "Protetto da scrittura"
 
-#: libs/ui/KisMainWindow.cpp:1034
+#: libs/ui/KisMainWindow.cpp:1038
 #, kde-format
 msgid "Recovered"
 msgstr "Recuperato"
 
-#: libs/ui/KisMainWindow.cpp:1064
+#: libs/ui/KisMainWindow.cpp:1068
 #, kde-format
 msgid "Save as %1"
 msgstr "Salva come %1"
 
-#: libs/ui/KisMainWindow.cpp:1088
+#: libs/ui/KisMainWindow.cpp:1092
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Il file %1 non esiste."
 
-#: libs/ui/KisMainWindow.cpp:1182
+#: libs/ui/KisMainWindow.cpp:1186
 #, kde-format
 msgid "Open Images"
 msgstr "Apri immagini"
 
-#: libs/ui/KisMainWindow.cpp:1314
+#: libs/ui/KisMainWindow.cpp:1318
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30470,45 +30470,45 @@ msgstr ""
 "\n"
 "Seleziona una posizione in cui il file originale non venga sovrascritto."
 
-#: libs/ui/KisMainWindow.cpp:1370
+#: libs/ui/KisMainWindow.cpp:1374
 #, kde-format
 msgid "Exporting"
 msgstr "Esportazione"
 
-#: libs/ui/KisMainWindow.cpp:1370
+#: libs/ui/KisMainWindow.cpp:1374
 #, kde-format
 msgid "Saving As"
 msgstr "Salvataggio come"
 
-#: libs/ui/KisMainWindow.cpp:1674
+#: libs/ui/KisMainWindow.cpp:1678
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Crea un nuovo documento"
 
-#: libs/ui/KisMainWindow.cpp:1698
+#: libs/ui/KisMainWindow.cpp:1702
 #, kde-format
 msgid "Custom Document"
 msgstr "Documento personalizzato"
 
-#: libs/ui/KisMainWindow.cpp:1710
+#: libs/ui/KisMainWindow.cpp:1714
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Crea dagli appunti"
 
-#: libs/ui/KisMainWindow.cpp:1888
+#: libs/ui/KisMainWindow.cpp:1892
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Livelli/maschere"
 
-#: libs/ui/KisMainWindow.cpp:1914
+#: libs/ui/KisMainWindow.cpp:1918
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:181
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:286
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Non ci sono gruppi di risorse abilitati."
 
-#: libs/ui/KisMainWindow.cpp:1918
+#: libs/ui/KisMainWindow.cpp:1922
 #, kde-format
 msgid ""
 "\n"
@@ -30519,7 +30519,7 @@ msgstr ""
 "Non sono disponibili preimpostazioni dei pennelli. Prima di continuare, "
 "abilita un gruppo che contenga preimpostazioni.\n"
 
-#: libs/ui/KisMainWindow.cpp:1928
+#: libs/ui/KisMainWindow.cpp:1932
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
 #, kde-format
@@ -30530,7 +30530,7 @@ msgstr ""
 "\n"
 "Sono disponibili solo le tue risorse locali."
 
-#: libs/ui/KisMainWindow.cpp:2067 libs/ui/KisMainWindow.cpp:2149
+#: libs/ui/KisMainWindow.cpp:2071 libs/ui/KisMainWindow.cpp:2153
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30539,42 +30539,42 @@ msgstr ""
 "Impossibile terminare l'importazione dell'animazione:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2128
+#: libs/ui/KisMainWindow.cpp:2132
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "Creazione del nuovo documento non riuscita. L'importazione dell'animazione è "
 "stata interrotta."
 
-#: libs/ui/KisMainWindow.cpp:2552
+#: libs/ui/KisMainWindow.cpp:2556
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importa spazio di lavoro..."
 
-#: libs/ui/KisMainWindow.cpp:2567
+#: libs/ui/KisMainWindow.cpp:2571
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nuovo spazio di lavoro..."
 
-#: libs/ui/KisMainWindow.cpp:2571
+#: libs/ui/KisMainWindow.cpp:2575
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nuovo spazio di lavoro..."
 
-#: libs/ui/KisMainWindow.cpp:2615
+#: libs/ui/KisMainWindow.cpp:2619
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2618
+#: libs/ui/KisMainWindow.cpp:2622
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2785
+#: libs/ui/KisMainWindow.cpp:2789
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -30583,19 +30583,19 @@ msgstr ""
 "L'estensione di gestione del colore LittleCMS di Krita non è installata. "
 "Krita ora verrà chiuso."
 
-#: libs/ui/KisMainWindow.cpp:2801
+#: libs/ui/KisMainWindow.cpp:2805
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Errore di installazione"
 
-#: libs/ui/KisMainWindow.cpp:2910
+#: libs/ui/KisMainWindow.cpp:2914
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temi"
 
-#: libs/ui/KisMainWindow.cpp:2968
+#: libs/ui/KisMainWindow.cpp:2972
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Spaziatore di espansione"
@@ -30911,66 +30911,66 @@ msgstr "Nessuna immagine disponibile."
 msgid "Use This Template"
 msgstr "Usa questo modello"
 
-#: libs/ui/KisView.cpp:751
+#: libs/ui/KisView.cpp:760
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 "Non puoi usare trascinare e rilasciare i colori sul tipo di livello "
 "selezionato."
 
-#: libs/ui/KisView.cpp:759 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:768 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Il livello è bloccato e invisibile."
 
-#: libs/ui/KisView.cpp:761 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:770 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "Il livello è bloccato."
 
-#: libs/ui/KisView.cpp:763 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:772 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Il livello è invisibile."
 
-#: libs/ui/KisView.cpp:1139
+#: libs/ui/KisView.cpp:1148
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Il documento <b>%1</b> è stato modificato.</p><p>Vuoi salvarlo?</p>"
 
-#: libs/ui/KisView.cpp:1328
+#: libs/ui/KisView.cpp:1337
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "La prova colore non funziona in virgola mobile."
 
-#: libs/ui/KisView.cpp:1333
+#: libs/ui/KisView.cpp:1342
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Prova colore attivata."
 
-#: libs/ui/KisView.cpp:1335
+#: libs/ui/KisView.cpp:1344
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Prova colore spenta."
 
-#: libs/ui/KisView.cpp:1347
+#: libs/ui/KisView.cpp:1356
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Gli avvisi per il gamut non funzionano in virgola mobile."
 
-#: libs/ui/KisView.cpp:1353
+#: libs/ui/KisView.cpp:1362
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Avvisi per il gamut attivati."
 
-#: libs/ui/KisView.cpp:1355
+#: libs/ui/KisView.cpp:1364
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Ma la prova colore è ancora spenta."
 
-#: libs/ui/KisView.cpp:1358
+#: libs/ui/KisView.cpp:1367
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Avvisi per il gamut spenti."
@@ -48193,7 +48193,7 @@ msgctxt "@title:window"
 msgid "File not found"
 msgstr "File non trovato"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:262
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:263
 #, kde-format
 msgctxt "Warning during loading a kra file with a filter layer"
 msgid ""
@@ -48203,7 +48203,7 @@ msgstr ""
 "Impossibile caricare la selezione nel livello %s. Sarà sostituita con una "
 "selezione vuota."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:325
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:326
 #, kde-format
 msgctxt "Loading a .kra file"
 msgid ""
@@ -48213,71 +48213,71 @@ msgstr ""
 "Il file contiene un livello clone che possiede un identificativo scorretto "
 "del nodo di origine. Questo livello sarà convertito in un livello disegno."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:393
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Impossibile caricare l'«ID» della maschera di trasformazione"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:407
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "Impossibile creare parametri per la maschera di trasformazione"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:560
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr ""
 "Impossibile trovare i dati dei pixel del fotogramma chiave per il fotogramma "
 "%1 in %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:568
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr ""
 "Impossibile caricare i dati dei pixel del fotogramma chiave per il "
 "fotogramma %1 in %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:597
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Impossibile leggere i dati dei pixel: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:604
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Impossibile caricare i dati dei pixel: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:620
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "Impossibile caricare il profilo: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:675
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Impossibile filtrare la configurazione %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:716
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Impossibile caricare i metadati per il livello %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:759
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Impossibile caricare la selezione vettoriale %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:775
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Impossibile caricare la selezione raster %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:805
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Impossibile caricare i fotogrammi chiave da %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:819
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -48287,7 +48287,7 @@ msgstr ""
 "%3\n"
 "Messaggio di errore: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:832
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "tipo di canale dei fotogrammi chiave sconosciuto: %1 in %2"

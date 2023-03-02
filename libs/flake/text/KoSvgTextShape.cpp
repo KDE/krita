@@ -302,6 +302,7 @@ public:
                            const QMap<int, int> &logicalToVisual,
                            QVector<CharacterResult> &result,
                            QPointF startPos);
+    static QList<QPainterPath> getShapes(QList<KoShape*> shapesInside, QList<KoShape*> shapesSubtract, const KoSvgTextProperties &properties);
     static QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                                  const QMap<int, int> &logicalToVisual,
                                  QVector<CharacterResult> &result, QList<QPainterPath> shapes);
@@ -526,7 +527,7 @@ QList<KoShape *> KoSvgTextShape::shapesSubtract() const
 
 QMap<QString, QString> KoSvgTextShape::shapeTypeSpecificStyles(SvgSavingContext &context) const
 {
-    QMap<QString, QString> map;
+    QMap<QString, QString> map = this->textProperties().convertParagraphProperties();
     if (!d->shapesInside.isEmpty()) {
         QStringList shapesInsideList;
         Q_FOREACH(KoShape* shape, d->shapesInside) {
@@ -1096,15 +1097,7 @@ void KoSvgTextShape::relayout() const
 
 
     if (!d->shapesInside.isEmpty()) {
-        QList<QPainterPath> shapes;
-        Q_FOREACH(KoShape *shape, d->shapesInside) {
-            KoPathShape *path = dynamic_cast<KoPathShape*>(shape);
-            if (path) {
-                QPainterPath p = path->transformation().map(path->outline());
-                p.setFillRule(path->fillRule());
-                shapes.append(p);
-            }
-        }
+        QList<QPainterPath> shapes = d->getShapes(d->shapesInside, d->shapesSubtract, this->textProperties());
         d->lineBoxes = d->flowTextInShapes(this->textProperties(), logicalToVisual, result, shapes);
     } else {
         d->lineBoxes = d->breakLines(this->textProperties(), logicalToVisual, result, startPos);
@@ -1431,6 +1424,55 @@ QImage KoSvgTextShape::Private::convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyph
     }
 
     return img;
+}
+
+QList<QPainterPath> KoSvgTextShape::Private::getShapes(QList<KoShape *> shapesInside,
+                                                       QList<KoShape *> shapesSubtract,
+                                                       const KoSvgTextProperties &properties) {
+    qreal shapePadding = properties.propertyOrDefault(KoSvgTextProperties::ShapePaddingId).toReal();
+    qreal shapeMargin = properties.propertyOrDefault(KoSvgTextProperties::ShapeMarginId).toReal();
+
+    QPainterPathStroker marginStroker;
+    marginStroker.setWidth(shapeMargin*2);
+    marginStroker.setJoinStyle(Qt::RoundJoin);
+
+    QPainterPathStroker paddingStroker;
+    paddingStroker.setWidth(shapePadding*2);
+    paddingStroker.setJoinStyle(Qt::RoundJoin);
+
+    QPainterPath subtract;
+    Q_FOREACH(KoShape *shape, shapesSubtract) {
+        KoPathShape *path = dynamic_cast<KoPathShape*>(shape);
+        if (path) {
+            QPainterPath p = path->transformation().map(path->outline());
+            p.setFillRule(path->fillRule());
+            QPointF topLeft = p.boundingRect().topLeft();
+            subtract.addPath(p);
+            if (shapeMargin > 0) {
+                subtract.addPath(marginStroker.createStroke(p));
+            }
+        }
+    }
+    QPointF topLeft = subtract.boundingRect().topLeft();
+    subtract = subtract.simplified();
+    subtract.translate(subtract.boundingRect().topLeft() - topLeft);
+
+    QList<QPainterPath> shapes;
+    Q_FOREACH(KoShape *shape, shapesInside) {
+        KoPathShape *path = dynamic_cast<KoPathShape*>(shape);
+        if (path) {
+            QPainterPath p = path->transformation().map(path->outline());
+            p.setFillRule(path->fillRule());
+            if (shapePadding > 0) {
+                p -= (paddingStroker.createStroke(p));
+            }
+            if (!subtract.isEmpty() && p.intersects(subtract)) {
+                p -= subtract;
+            }
+            shapes.append(p);
+        }
+    }
+    return shapes;
 }
 
 /**

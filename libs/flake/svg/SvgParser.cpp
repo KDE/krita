@@ -2189,28 +2189,40 @@ KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value,
     } else if (value.startsWith("circle(")) {
         el = e.ownerDocument().createElement("circle");
         QStringList params = val.split(" ");
-        el.setAttribute("r", params.first());
+        el.setAttribute("r", SvgUtil::parseUnitXY(context.currentGC(), params.first()));
         if (params.contains("at")) {
             // 1 == "at"
-            el.setAttribute("cx", params.at(2));
-            el.setAttribute("cy", params.at(3));
+            el.setAttribute("cx", SvgUtil::parseUnitX(context.currentGC(), params.at(2)));
+            el.setAttribute("cy", SvgUtil::parseUnitY(context.currentGC(), params.at(3)));
         }
     } else if (value.startsWith("ellipse(")) {
         el = e.ownerDocument().createElement("ellipse");
         QStringList params = val.split(" ");
-        el.setAttribute("rx", params.at(0));
-        el.setAttribute("ry", params.at(1));
+        el.setAttribute("rx", SvgUtil::parseUnitX(context.currentGC(), params.at(0)));
+        el.setAttribute("ry", SvgUtil::parseUnitY(context.currentGC(), params.at(1)));
         if (params.contains("at")) {
             // 2 == "at"
-            el.setAttribute("cx", params.at(3));
-            el.setAttribute("cy", params.at(4));
+            el.setAttribute("cx", SvgUtil::parseUnitX(context.currentGC(), params.at(3)));
+            el.setAttribute("cy", SvgUtil::parseUnitY(context.currentGC(), params.at(4)));
         }
     } else if (value.startsWith("polygon(")) {
         el = e.ownerDocument().createElement("polygon");
-        el.setAttribute("points", val);
+        QStringList points;
+        Q_FOREACH(QString point,  SvgUtil::simplifyList(val)) {
+            bool xVal = points.size() % 2;
+            if (xVal) {
+                points.append(QString::number(SvgUtil::parseUnitX(context.currentGC(), point)));
+            } else {
+                points.append(QString::number(SvgUtil::parseUnitY(context.currentGC(), point)));
+            }
+        }
+        el.setAttribute("points", points.join(" "));
     } else if (value.startsWith("path(")) {
         el = e.ownerDocument().createElement("path");
-        el.setAttribute("d", val);
+        // SVG path data is inside a string.
+        start += 1;
+        end -= 1;
+        el.setAttribute("d", value.mid(start, end - start));
     }
 
     el.setAttribute("fill-rule", fillRule);

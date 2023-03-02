@@ -2467,6 +2467,38 @@ void TestSvgText::testCssShapeParsing()
 
 }
 
+void TestSvgText::testShapeInsideRender()
+{
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    bool res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
+    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
+    res = KoFontRegistry::instance()->addFontFilePathToRegistery(fileName);
+
+    QMap<QString, QRect> testFiles;
+    testFiles.insert("textShape-test-complex-shapes", QRect(0, 0, 380, 380));
+    // Tests basic text align.
+    testFiles.insert("textShape-test-text-align", QRect(0, 0, 550, 700));
+    // Tests justification.
+    testFiles.insert("textShape-test-text-align-justify", QRect(0, 0, 550, 550));
+    // Tests padding and margin
+    testFiles.insert("textShape-test-shape-padding-margin", QRect(0, 0, 250, 130));
+    // Tests multiple shapes inside and subtract
+    testFiles.insert("textShape-test-shape-inside-subtract", QRect(0, 0, 310, 260));
+
+    for (QString testFile : testFiles.keys()) {
+        QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/" + testFile + ".svg"));
+        res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+        QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+        QXmlInputSource data;
+        data.setData(file.readAll());
+
+        SvgRenderTester t(data.data());
+        t.setFuzzyThreshold(5);
+        t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
+    }
+}
+
 #include "kistest.h"
 
 

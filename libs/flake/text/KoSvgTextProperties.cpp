@@ -498,6 +498,10 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                                           : KoSvgText::OverflowWrapNormal);
     } else if (command == "tab-size") {
         setProperty(TabSizeId, QVariant::fromValue(KoSvgText::parseTabSize(value, context)));
+    } else if (command == "shape-padding") {
+        setProperty(ShapePaddingId, SvgUtil::parseUnitXY(context.currentGC(), value));
+    } else if (command == "shape-margin") {
+        setProperty(ShapeMarginId, SvgUtil::parseUnitXY(context.currentGC(), value));
     } else {
         qFatal("FATAL: Unknown SVG property: %s = %s", command.toUtf8().data(), value.toUtf8().data());
     }
@@ -758,14 +762,6 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
     if (hasProperty(LineBreakId)) {
         result.insert("line-break", writeLineBreak(LineBreak(property(LineBreakId).toInt())));
     }
-    if (hasProperty(TextAlignAllId)) {
-        TextAlign all = TextAlign(property(TextAlignAllId).toInt());
-        result.insert("text-align", writeTextAlign(all));
-        TextAlign last = TextAlign(property(TextAlignLastId).toInt());
-        if (last != all || last != AlignLastAuto) {
-            result.insert("text-align-last", writeTextAlign(last));
-        }
-    }
     if (hasProperty(TextCollapseId) || hasProperty(TextWrapId)) {
         KoSvgText::TextSpaceTrims trims = propertyOrDefault(TextTrimId).value<KoSvgText::TextSpaceTrims>();
         KoSvgText::TextWrap wrap = KoSvgText::TextWrap(propertyOrDefault(TextWrapId).toInt());
@@ -779,12 +775,6 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
     if (hasProperty(LineHeightId)) {
         KoSvgText::LineHeightInfo lineHeight = property(LineHeightId).value<LineHeightInfo>();
         result.insert("line-height", KoSvgText::writeLineHeight(lineHeight));
-    }
-    if (hasProperty(InlineSizeId)) {
-        result.insert("inline-size", writeAutoValue(property(InlineSizeId).value<AutoValue>(), "auto"));
-    }
-    if (hasProperty(TextIndentId)) {
-        result.insert("text-indent", writeTextIndent(propertyOrDefault(TextIndentId).value<TextIndentInfo>()));
     }
     if (hasProperty(TabSizeId)) {
         result.insert("tab-size", writeTabSize(propertyOrDefault(TabSizeId).value<TabSizeInfo>()));
@@ -834,6 +824,33 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         }
     }
 
+    return result;
+}
+
+QMap<QString, QString> KoSvgTextProperties::convertParagraphProperties() const
+{
+    using namespace KoSvgText;
+    QMap<QString, QString> result;
+    if (hasProperty(InlineSizeId)) {
+        result.insert("inline-size", writeAutoValue(property(InlineSizeId).value<AutoValue>(), "auto"));
+    }
+    if (hasProperty(TextIndentId)) {
+        result.insert("text-indent", writeTextIndent(propertyOrDefault(TextIndentId).value<TextIndentInfo>()));
+    }
+    if (hasProperty(TextAlignAllId)) {
+        TextAlign all = TextAlign(property(TextAlignAllId).toInt());
+        result.insert("text-align", writeTextAlign(all));
+        TextAlign last = TextAlign(property(TextAlignLastId).toInt());
+        if (last != all || last != AlignLastAuto) {
+            result.insert("text-align-last", writeTextAlign(last));
+        }
+    }
+    if (hasProperty(ShapePaddingId)) {
+        result.insert("shape-padding", QString::number(property(ShapePaddingId).toReal()));
+    }
+    if (hasProperty(ShapeMarginId)) {
+        result.insert("shape-margin", QString::number(property(ShapeMarginId).toReal()));
+    }
     return result;
 }
 

@@ -2,7 +2,7 @@
     xmlns="http://www.w3.org/2000/svg" version="2.0">
 <g id="testRect">
     
-    <!-- This tests css-inline line-height. Line-height:normal can be differrent depending on the renderer, but line-height:1.5 is ascent+descent*1.5. Test passes if the lower set of teext align to the blue lines.-->
+    <!-- This tests css-inline line-height. Line-height:normal can be differrent depending on the renderer, but line-height:1.5 is ascent+descent*1.5. Test passes if the lower set of text aligns to the blue lines.-->
     
     <!-- These lines define the position of the baseline for the horizontal text. -->
     <!-- line x1="5" x2="115" y1="25" y2="25" stroke="powderblue" / -->

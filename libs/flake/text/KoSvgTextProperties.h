@@ -109,6 +109,9 @@ public:
         HangingPunctuationId, ///< Flags, KoSvgText::HangingPunctuations
         TabSizeId, ///< Int
 
+        ShapePaddingId, ///< Double
+        ShapeMarginId,  ///< Double
+
         KraTextVersionId ///< Int, used for handling incorrectly saved files.
     };
 
@@ -200,7 +203,14 @@ public:
      * Convert all the properties of the set into a map of XML attribute/value
      * pairs.
      */
-    QMap<QString,QString> convertToSvgTextAttributes() const;
+    QMap<QString, QString> convertToSvgTextAttributes() const;
+
+    /**
+     * @brief convertParagraphProperties
+     * some properties only apply to the root shape, so we write those separately.
+     * @return
+     */
+    QMap<QString, QString> convertParagraphProperties() const;
 
     QFont generateFont() const;
 

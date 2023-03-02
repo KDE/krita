@@ -160,6 +160,7 @@ struct LineBox {
         LineChunk chunk;
         chunk.length =  QLineF(start, end);
         chunks.append(chunk);
+        currentChunk = 0;
     }
 
     LineBox(QVector<QLineF> lineWidths, bool ltr, QPointF indent) {
@@ -167,20 +168,22 @@ struct LineBox {
         if (ltr) {
             Q_FOREACH(QLineF line, lineWidths) {
                 LineChunk chunk;
-                chunk.length =  QLineF(line.p1(), line.p2());
+                chunk.length = line;
                 chunks.append(chunk);
+                currentChunk = 0;
             }
         } else {
             Q_FOREACH(QLineF line, lineWidths) {
                 LineChunk chunk;
-                chunk.length =  QLineF(line.p2(), line.p1());
+                chunk.length = QLineF(line.p2(), line.p1());
                 chunks.insert(0, chunk);
+                currentChunk = 0;
             }
         }
     }
 
     QVector<LineChunk> chunks;
-    int currentChunk = 0;
+    int currentChunk = -1;
 
     qreal expectedLineTop = 0;
     qreal actualLineTop = 0;
@@ -196,14 +199,15 @@ struct LineBox {
     bool justifyLine = false;
 
     LineChunk chunk() {
-        return chunks.at(currentChunk);
+        return chunks.value(currentChunk);
     }
 
     void setCurrentChunk(LineChunk chunk) {
-        if (currentChunk+1 > chunks.size()) {
-            chunks.append(chunk);
-        } else {
+        currentChunk = qMax(currentChunk, 0);
+        if (currentChunk < chunks.size()) {
             chunks[currentChunk] = chunk;
+        } else {
+            chunks.append(chunk);
         }
     }
 
@@ -445,6 +449,7 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
     /*
     Q_FOREACH(LineBox lineBox, d->lineBoxes) {
         Q_FOREACH(LineChunk chunk, lineBox.chunks) {
+            painter.setBrush(QBrush(Qt::transparent));
             painter.setPen(QColor(0, 128, 255, 80));
             painter.drawLine(chunk.length);
             painter.setPen(QColor(255, 128, 0, 80));
@@ -2111,12 +2116,24 @@ QVector<QLineF> findLineBoxesForFirstPos(QPainterPath shape, QPointF firstPos, Q
 
     QPolygonF polygon = shape.toFillPolygon();
     QList<QPointF> intersects;
+    QLineF topLine = baseLine.translated(lineTop);
+    QLineF bottomLine = baseLine.translated(lineBottom);
     for(int i = 0; i < polygon.size()-1; i++) {
         QLineF line(polygon.at(i), polygon.at(i+1));
-
+        bool addedA = false;
+        QPointF intersectA;
+        QPointF intersectB;
         QPointF intersect;
-        if (baseLine.intersects(line, &intersect) == QLineF::BoundedIntersection) {
-            intersects.append(intersect);
+        if (topLine.intersects(line, &intersect) == QLineF::BoundedIntersection) {
+            intersectA = intersect-lineTop;
+            intersects.append(intersectA);
+            addedA = true;
+        }
+        if (bottomLine.intersects(line, &intersect) == QLineF::BoundedIntersection) {
+            intersectB = intersect-lineBottom;
+            if (intersectA != intersectB || !addedA) {
+                intersects.append(intersectB);
+            }
         }
     }
     if (!intersects.isEmpty()) {
@@ -2129,30 +2146,25 @@ QVector<QLineF> findLineBoxesForFirstPos(QPainterPath shape, QPointF firstPos, Q
         std::sort(intersects.begin(), intersects.end(), pointLessThanVertical);
     }
 
+
     for (int i = 0; i< intersects.size()-1; i++) {
         QLineF line(intersects.at(i), intersects.at(i+1));
 
-        if (!shape.contains(line.center())) continue;
+        if (!(shape.contains(line.translated(lineTop).center())
+              && shape.contains(line.translated(lineBottom).center()))
+                || line.length() == 0) {
+            continue;
+        }
 
         QRectF lineBox = QRectF(line.p1() + lineTop, line.p2() + lineBottom).normalized();
-        QLineF topLine = line.translated(lineTop);
-        QLineF bottomLine = line.translated(lineBottom);
 
         QVector<QPointF> relevant;
         for(int i = 0; i < polygon.size()-1; i++) {
 
             QLineF edgeLine(polygon.at(i), polygon.at(i+1));
 
-            QPointF iRelevant;
-
             if (lineBox.contains(polygon.at(i))) {
                 relevant.append(polygon.at(i));
-            }
-            if (edgeLine.intersects(topLine, &iRelevant) == QLineF::BoundedIntersection) {
-                relevant.append(iRelevant);
-            }
-            if (edgeLine.intersects(bottomLine, &iRelevant) == QLineF::BoundedIntersection) {
-                relevant.append(iRelevant);
             }
         }
         qreal start = writingMode == KoSvgText::HorizontalTB? lineBox.left(): lineBox.top();
@@ -2175,6 +2187,7 @@ QVector<QLineF> findLineBoxesForFirstPos(QPainterPath shape, QPointF firstPos, Q
             }
         }
         if (writingMode == KoSvgText::HorizontalTB) {
+
             QLineF newLine(start, line.p1().y(), end, line.p2().y());
             if (!lines.isEmpty()) {
                 if (lines.last().p2() == intersects.at(i)) {
@@ -2318,7 +2331,11 @@ QVector<LineBox> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProper
             }
 
             for (int i = currentLine.currentChunk; i < currentLine.chunks.size(); i++) {
-                QLineF line = currentLine.chunks.at(i).length;
+                if (i == -1) {
+                    currentLine.currentChunk = 0;
+                    i = 0;
+                }
+                QLineF line = currentLine.chunks.value(i).length;
                 qreal lineLength = isHorizontal ? (currentPos - line.p1() + wordAdvance).x()
                                                 : (currentPos - line.p1() + wordAdvance).y();
                 if (qRound((abs(lineLength) - line.length())) > 0) {
@@ -2326,7 +2343,7 @@ QVector<LineBox> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProper
                         softBreak = true;
                         break;
                     } else {
-                        QLineF nextLine = currentLine.chunks.at(i+1).length;
+                        QLineF nextLine = currentLine.chunks.value(i+1).length;
                         if (isHorizontal) {
                             currentPos.setX(ltr? qMax(nextLine.p1().x(), currentPos.x()):
                                                  qMin(nextLine.p1().x(), currentPos.x()));
@@ -2343,7 +2360,7 @@ QVector<LineBox> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProper
         }
 
         if (softBreak) {
-            if (!currentLine.isEmpty() || currentLine.currentChunk > 0) {
+            if (!currentLine.isEmpty()) {
                 finalizeLine(result, currentPos, currentLine, lineOffset, anchor, writingMode, ltr, true, true);
                 lineBoxes.append(currentLine);
                 firstLine = false;
@@ -2404,11 +2421,11 @@ QVector<LineBox> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProper
             if (foundFirst) {
                 if (needNewLine) {
                     currentLine = LineBox(findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode), ltr, indent);
+                    currentLine.setCurrentChunkForPos(currentPos, isHorizontal);
                 }
                 currentLine.firstLine = firstLine;
                 currentLine.expectedLineTop = isHorizontal? fabs(wordBox.top()):
                                                             writingMode == KoSvgText::VerticalRL? fabs(wordBox.right()): fabs(wordBox.left());
-                currentLine.setCurrentChunkForPos(currentPos, isHorizontal);
                 currentLine.justifyLine = align == KoSvgText::AlignJustify;
                 currentPos = ltr? currentLine.chunk().length.p1() + indent: currentLine.chunk().length.p1() - indent;
                 lineOffset = currentPos;

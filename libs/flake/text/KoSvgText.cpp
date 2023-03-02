@@ -209,7 +209,7 @@ QString writeDominantBaseline(Baseline value)
         : value == BaselineMiddle       ? "middle"
         : value == BaselineTextBottom   ? "text-bottom"
                                         : // text-after-edge in svg 1.1
-        value == BaselineTextTop ? "text-before-edge"
+        value == BaselineTextTop ? "text-top"
                                    : // text-before-edge in svg 1.1
         "auto";
 }
@@ -225,7 +225,7 @@ QString writeAlignmentBaseline(Baseline value)
         : value == BaselineMiddle       ? "middle"
         : value == BaselineTextBottom   ? "text-bottom"
                                         : // text-after-edge in svg 1.1
-        value == BaselineTextTop ? "text-before-edge"
+        value == BaselineTextTop ? "text-top"
                                    : // text-before-edge in svg 1.1
         "auto";
 }

@@ -1,6 +1,6 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# Shinjo Park <kde@peremen.name>, 2014, 2015, 2016, 2019, 2020, 2021, 2022.
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2016, 2019, 2020, 2021, 2022, 2023.
 # Yeheun Shin <syh0091@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 # JungHee Lee <daemul72@gmail.com>, 2019, 2020, 2021.
 #
@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2022-05-15 22:38+0200\n"
+"PO-Revision-Date: 2023-03-01 00:29+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -7827,7 +7827,7 @@ msgstr "GPS 쇠 막대"
 #, kde-format
 msgctxt "./krita/data/palettes/animation-color-set.gpl"
 msgid "Animation Color Set"
-msgstr "애니메이션 색 배열"
+msgstr "애니메이션 색 구성표"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/palettes/concept-cookie.gpl:2
@@ -18598,7 +18598,7 @@ msgstr "Krita 색역 마스크"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Krita Shortcut Scheme"
-msgstr "Krita 단축키 배열"
+msgstr "Krita 단축키 구성표"
 
 #: libs/koplugin/KisMimeDatabase.cpp:299
 #, kde-format
@@ -36502,7 +36502,7 @@ msgid ""
 "The current shortcut scheme is modified. Save before switching to the new "
 "one?"
 msgstr ""
-"현재 단축키 배열이 수정되었습니다. 새로운 것으로 바꾸기 전에 저장하시겠습니"
+"현재 단축키 구성표가 수정되었습니다. 새로운 것으로 바꾸기 전에 저장하시겠습니"
 "까?"
 
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:244
@@ -36630,13 +36630,13 @@ msgstr "지원하지 않는 키"
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:51
 #, kde-format
 msgid "Shortcut Schemes:"
-msgstr "단축키 배열:"
+msgstr "단축키 구성표:"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:61
 #, kde-format
 msgctxt "New shortcut scheme"
 msgid "New..."
-msgstr "새 단축키 배열..."
+msgstr "새 단축키 구성표..."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:67
 #, kde-format
@@ -36658,32 +36658,32 @@ msgstr "사용자 정의 단축키 불러오기"
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:78
 #, kde-format
 msgid "Export Scheme..."
-msgstr "배열 내보내기..."
+msgstr "구성표 내보내기..."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:80
 #, kde-format
 msgid "Import Scheme..."
-msgstr "배열 가져오기..."
+msgstr "구성표 가져오기..."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:96
 #, kde-format
 msgid "Name for New Scheme"
-msgstr "새 배열의 이름"
+msgstr "새 구성표의 이름"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:97
 #, kde-format
 msgid "Name for new scheme:"
-msgstr "새 배열의 이름:"
+msgstr "새 구성표의 이름:"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:97
 #, kde-format
 msgid "New Scheme"
-msgstr "새 배열"
+msgstr "새 구성표"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:103
 #, kde-format
 msgid "A scheme with this name already exists."
-msgstr "같은 이름의 배열이 이미 있습니다."
+msgstr "같은 이름의 구성표가 이미 있습니다."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
 #, kde-format
@@ -36691,8 +36691,8 @@ msgid ""
 "Do you really want to delete the scheme %1?\n"
 "Note that this will not remove any system wide shortcut schemes."
 msgstr ""
-"배열 %1을(를) 삭제하시겠습니까?\n"
-"시스템 전역 단축키 배열을 삭제하지는 않습니다."
+"단축키 구성표 %1을(를) 삭제하시겠습니까?\n"
+"시스템 전역 단축키 구성표를 삭제하지는 않습니다."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:151
 #, kde-format

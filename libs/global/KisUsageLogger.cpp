@@ -284,6 +284,7 @@ QString KisUsageLogger::screenInformation()
         info.append("\n\t\tManufacturer: ").append(screen->manufacturer());
         info.append("\n\t\tModel: ").append(screen->model());
         info.append("\n\t\tRefresh Rate: ").append(QString::number(screen->refreshRate()));
+        info.append("\n\t\tSerial Number: ").append(screen->serialNumber());
 
     }
     info.append("\n");

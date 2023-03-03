@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-02 00:52+0000\n"
-"PO-Revision-Date: 2023-02-27 18:59+0100\n"
+"PO-Revision-Date: 2023-03-01 06:59+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -27836,10 +27836,9 @@ msgid "Action"
 msgstr "Action"
 
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:271
-#, fuzzy, kde-format
-#| msgid "A connection between two other shapes"
+#, kde-format
 msgid "A conflict exists between two or more shortcuts."
-msgstr "Une connexion entre deux autres formes"
+msgstr "Un conflit existe entre au moins entre deux raccourcis."
 
 #. i18n: ectx: property (text), widget (QPushButton, editProfilesButton)
 #: libs/ui/input/config/kis_edit_profiles_dialog.cpp:54
@@ -27915,7 +27914,7 @@ msgstr "Gérer les profils d'entrée des tableaux"
 #: libs/ui/input/config/kis_input_configuration_page_item.ui:111
 #, kde-format
 msgid "Conflict found for a Shortcut in this Action."
-msgstr ""
+msgstr "Conflit constaté pour un raccourci dans cette action."
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:52
 #, kde-format

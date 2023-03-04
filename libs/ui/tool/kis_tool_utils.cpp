@@ -127,6 +127,48 @@ namespace KisToolUtils {
         return foundNode;
     }
 
+    KisNodeList findNodes(KisNodeSP node, const QPoint &point, bool wholeGroup, bool includeGroups, bool editableOnly)
+    {
+        KisNodeList foundNodes;
+        while (node) {
+            KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
+
+            if (!layer || !layer->isEditable()) {
+                node = node->nextSibling();
+                continue;
+            }
+
+            KoColor color(layer->projection()->colorSpace());
+            layer->projection()->pixel(point.x(), point.y(), &color);
+            const bool isTransparent = color.opacityU8() == OPACITY_TRANSPARENT_U8;
+
+            KisGroupLayerSP group = dynamic_cast<KisGroupLayer*>(layer.data());
+
+            if (group) {
+                if (!isTransparent || group->passThroughMode()) {
+                    foundNodes << findNodes(node->firstChild(), point, wholeGroup, includeGroups, editableOnly);
+                    if (includeGroups) {
+                        foundNodes << node;
+                    }
+                }
+            } else {
+                if (!isTransparent) {
+                    if (wholeGroup) {
+                        if (!foundNodes.contains(node->parent())) {
+                            foundNodes << node->parent();
+                        }
+                    } else {
+                        foundNodes << node;
+                    }
+                }
+            }
+
+            node = node->nextSibling();
+        }
+
+        return foundNodes;
+    }
+
     bool clearImage(KisImageSP image, KisNodeList nodes, KisSelectionSP selection)
     {
         KisNodeList masks;

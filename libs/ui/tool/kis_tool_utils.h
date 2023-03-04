@@ -55,6 +55,9 @@ bool KRITAUI_EXPORT sampleColor(KoColor &out_color, KisPaintDeviceSP dev, const 
  */
 KisNodeSP KRITAUI_EXPORT findNode(KisNodeSP node, const QPoint &point, bool wholeGroup, bool editableOnly = true);
 
+KisNodeList KRITAUI_EXPORT findNodes(KisNodeSP node, const QPoint &point, bool wholeGroup,
+                                     bool includeGroups = true, bool editableOnly = true);
+
 /**
  * return true if success
  * Clears the image. Selection is optional, use 0 to clear everything.

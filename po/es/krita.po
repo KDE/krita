@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-02 00:52+0000\n"
+"POT-Creation-Date: 2023-03-04 00:45+0000\n"
 "PO-Revision-Date: 2023-02-27 19:04+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -15817,7 +15817,7 @@ msgstr ""
 "en Wayland. Krita se cerrará ahora."
 
 #: krita/main.cc:618 libs/ui/KisApplication.cpp:410
-#: libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -19430,10 +19430,10 @@ msgstr "Recursos locales"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
 #: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
-#: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
-#: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
-#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:935
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
+#: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
+#: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
+#: libs/ui/KisApplication.cpp:1073 libs/ui/KisDocument.cpp:935
 #: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:1855
 #: libs/ui/KisDocument.cpp:1898 libs/ui/KisDocument.cpp:1908
 #: libs/ui/KisMainWindow.cpp:976 libs/ui/KisMainWindow.cpp:1092
@@ -29630,40 +29630,59 @@ msgstr "Inicializando valores globales..."
 msgid "Adding resource types..."
 msgstr "Añadiendo tipos de recursos..."
 
-#: libs/ui/KisApplication.cpp:474
+#: libs/ui/KisApplication.cpp:463
+#, fuzzy, kde-format
+#| msgid "Loading Bundles..."
+msgid "Loading plugins..."
+msgstr "Cargando paquetes..."
+
+#: libs/ui/KisApplication.cpp:469
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Loading Resource Bundles..."
+msgid "Loading resources..."
+msgstr "Cargando paquetes de recursos..."
+
+#: libs/ui/KisApplication.cpp:478
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Cargando la ventana principal..."
 
-#: libs/ui/KisApplication.cpp:573
+#: libs/ui/KisApplication.cpp:510
+#, fuzzy, kde-format
+#| msgid "Scanning..."
+msgid "Launching..."
+msgstr "Explorando..."
+
+#: libs/ui/KisApplication.cpp:579
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "No se ha encontrado el tipo MIME, pruebe a usar la opción -mimetype"
 
-#: libs/ui/KisApplication.cpp:629
+#: libs/ui/KisApplication.cpp:635
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "La renderización de fotogramas de la animación ha fallado."
 
-#: libs/ui/KisApplication.cpp:656 libs/ui/KisApplication.cpp:846
+#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:852
 #, kde-format
 msgid "File layer"
 msgstr "Capa de archivo"
 
-#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:669
-#: libs/ui/KisApplication.cpp:840 libs/ui/KisApplication.cpp:854
-#: libs/ui/KisApplication.cpp:859
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:846 libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:865
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Advertencia"
 
-#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:855
+#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:861
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "No se puede añadir %1 como capa de archivo: el archivo no existe."
 
-#: libs/ui/KisApplication.cpp:670
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29684,7 +29703,7 @@ msgstr ""
 "abierto en otra ventana de Krita, marque la casilla «Permitir solo una "
 "instancia de Krita» en las preferencias (Preferencias -> General -> Ventana)."
 
-#: libs/ui/KisApplication.cpp:676
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29695,33 +29714,33 @@ msgstr ""
 "Puede crear un archivo nuevo usando la opción --new-image, o puede abrir un "
 "archivo existente."
 
-#: libs/ui/KisApplication.cpp:841
+#: libs/ui/KisApplication.cpp:847
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "No se ha podido abrir el archivo %1"
 
-#: libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:866
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 "No se puede añadir la capa de archivo: no hay ningún documento abierto."
 
-#: libs/ui/KisApplication.cpp:975
+#: libs/ui/KisApplication.cpp:981
 #, kde-format
 msgid "No template found for: %1"
 msgstr "No se ha encontrado ninguna plantilla para: %1"
 
-#: libs/ui/KisApplication.cpp:978
+#: libs/ui/KisApplication.cpp:984
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Se han encontrado demasiadas plantillas para: %1"
 
-#: libs/ui/KisApplication.cpp:994
+#: libs/ui/KisApplication.cpp:1000
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Se ha producido un fallo al cargar la plantilla %1."
 
-#: libs/ui/KisApplication.cpp:1026
+#: libs/ui/KisApplication.cpp:1032
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29736,7 +29755,7 @@ msgstr ""
 "\n"
 "Reinicie Krita para que los cambios tengan efecto."
 
-#: libs/ui/KisApplication.cpp:1040
+#: libs/ui/KisApplication.cpp:1046
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29748,7 +29767,7 @@ msgstr ""
 "Por favor, asegúrese de que ningún otro programa está usando el archivo y "
 "vuelva a intentarlo."
 
-#: libs/ui/KisApplication.cpp:1068
+#: libs/ui/KisApplication.cpp:1074
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "¿Desea borrar el archivo de preferencias?"
@@ -64363,9 +64382,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "Loading Brushes..."
 #~ msgstr "Cargando pinceles..."
 
-#~ msgid "Loading Bundles..."
-#~ msgstr "Cargando paquetes..."
-
 #~ msgid "Workspace"
 #~ msgstr "Espacio de trabajo"
 
@@ -80511,10 +80527,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Loading Paint Operations..."
 #~ msgstr "Cargando operaciones de pintura..."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Loading Resource Bundles..."
-#~ msgstr "Cargando paquetes de recursos..."
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Loading Plugins for Krita/Tool..."

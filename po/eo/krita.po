@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-02 00:52+0000\n"
+"POT-Creation-Date: 2023-03-04 00:45+0000\n"
 "PO-Revision-Date: 2023-02-27 20:54+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -15780,7 +15780,7 @@ msgstr ""
 "Wayland. Krita fermos nun."
 
 #: krita/main.cc:618 libs/ui/KisApplication.cpp:410
-#: libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -19388,10 +19388,10 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
 #: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
-#: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
-#: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
-#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:935
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
+#: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
+#: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
+#: libs/ui/KisApplication.cpp:1073 libs/ui/KisDocument.cpp:935
 #: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:1855
 #: libs/ui/KisDocument.cpp:1898 libs/ui/KisDocument.cpp:1908
 #: libs/ui/KisMainWindow.cpp:976 libs/ui/KisMainWindow.cpp:1092
@@ -29518,40 +29518,58 @@ msgstr "Komencante Globals..."
 msgid "Adding resource types..."
 msgstr "Aldonante rimedotipojn..."
 
-#: libs/ui/KisApplication.cpp:474
+#: libs/ui/KisApplication.cpp:463
+#, fuzzy, kde-format
+#| msgid "Loading Pages..."
+msgid "Loading plugins..."
+msgstr "Ŝargante paĝojn..."
+
+#: libs/ui/KisApplication.cpp:469
+#, fuzzy, kde-format
+#| msgid "Adding resource types..."
+msgid "Loading resources..."
+msgstr "Aldonante rimedotipojn..."
+
+#: libs/ui/KisApplication.cpp:478
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Ŝarĝante Ĉeffenestron..."
 
-#: libs/ui/KisApplication.cpp:573
+#: libs/ui/KisApplication.cpp:510
+#, fuzzy, kde-format
+#| msgid "Scanning..."
+msgid "Launching..."
+msgstr "Skanante..."
+
+#: libs/ui/KisApplication.cpp:579
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Mimetype ne trovita, provu uzi la -mimetype opcion"
 
-#: libs/ui/KisApplication.cpp:629
+#: libs/ui/KisApplication.cpp:635
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Malsukcesis bildigi animaciajn kadrojn!"
 
-#: libs/ui/KisApplication.cpp:656 libs/ui/KisApplication.cpp:846
+#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:852
 #, kde-format
 msgid "File layer"
 msgstr "Dosiera tavolo"
 
-#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:669
-#: libs/ui/KisApplication.cpp:840 libs/ui/KisApplication.cpp:854
-#: libs/ui/KisApplication.cpp:859
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:846 libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:865
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita:Averto"
 
-#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:855
+#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:861
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Ne povas aldoni %1 kiel dosiertavolon: la dosiero ne ekzistas."
 
-#: libs/ui/KisApplication.cpp:670
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29572,7 +29590,7 @@ msgstr ""
 "funkcianta kazo de Krita, marku la markobutonon \"Permesi nur unu ekzemplon "
 "de Krita\" en la agordoj (Agordoj -> Ĝenerala -> Fenestro)."
 
-#: libs/ui/KisApplication.cpp:676
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29583,32 +29601,32 @@ msgstr ""
 "Vi povas aŭ krei novan dosieron uzante la opcion --new-image, aŭ vi povas "
 "malfermi ekzistantan dosieron."
 
-#: libs/ui/KisApplication.cpp:841
+#: libs/ui/KisApplication.cpp:847
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Ne eblis malfermi la dosieron %1"
 
-#: libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:866
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Ne povas aldoni la dosiertavolon: neniu dokumento estas malfermita."
 
-#: libs/ui/KisApplication.cpp:975
+#: libs/ui/KisApplication.cpp:981
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Neniu ŝablono trovita por: %1"
 
-#: libs/ui/KisApplication.cpp:978
+#: libs/ui/KisApplication.cpp:984
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Tro da ŝablonoj trovitaj por: %1"
 
-#: libs/ui/KisApplication.cpp:994
+#: libs/ui/KisApplication.cpp:1000
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Ŝablono %1 malsukcesis ŝargi."
 
-#: libs/ui/KisApplication.cpp:1026
+#: libs/ui/KisApplication.cpp:1032
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29623,7 +29641,7 @@ msgstr ""
 "\n"
 "Rekomencu Krita por ke ŝanĝoj efektiviĝu."
 
-#: libs/ui/KisApplication.cpp:1040
+#: libs/ui/KisApplication.cpp:1046
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29634,7 +29652,7 @@ msgstr ""
 "\n"
 "Bonvolu certigi, ke neniu alia programo uzas la dosieron kaj provu denove."
 
-#: libs/ui/KisApplication.cpp:1068
+#: libs/ui/KisApplication.cpp:1074
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Ĉu vi volas forigi la agordan dosieron?"

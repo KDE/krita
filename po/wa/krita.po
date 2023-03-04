@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-02 00:52+0000\n"
+"POT-Creation-Date: 2023-03-04 00:45+0000\n"
 "PO-Revision-Date: 2011-01-17 21:35+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -16059,7 +16059,7 @@ msgid ""
 msgstr ""
 
 #: krita/main.cc:618 libs/ui/KisApplication.cpp:410
-#: libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:681
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -19816,10 +19816,10 @@ msgstr "Fitchîs sourdants:"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
 #: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
-#: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
-#: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
-#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:935
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
+#: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
+#: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
+#: libs/ui/KisApplication.cpp:1073 libs/ui/KisDocument.cpp:935
 #: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:1855
 #: libs/ui/KisDocument.cpp:1898 libs/ui/KisDocument.cpp:1908
 #: libs/ui/KisMainWindow.cpp:976 libs/ui/KisMainWindow.cpp:1092
@@ -29888,42 +29888,57 @@ msgstr "&Rissourses"
 msgid "Adding resource types..."
 msgstr "&Rissourses"
 
-#: libs/ui/KisApplication.cpp:474
+#: libs/ui/KisApplication.cpp:463
+#, fuzzy, kde-format
+msgid "Loading plugins..."
+msgstr "Pinceas prédefinis"
+
+#: libs/ui/KisApplication.cpp:469
+#, fuzzy, kde-format
+msgid "Loading resources..."
+msgstr "Fitchîs sourdants:"
+
+#: libs/ui/KisApplication.cpp:478
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "Usteye di shuvaedje des candjmints"
 
-#: libs/ui/KisApplication.cpp:573
+#: libs/ui/KisApplication.cpp:510
+#, fuzzy, kde-format
+msgid "Launching..."
+msgstr "Mapaedje des tons..."
+
+#: libs/ui/KisApplication.cpp:579
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:629
+#: libs/ui/KisApplication.cpp:635
 #, fuzzy, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Ahiver on novea faitindje"
 
-#: libs/ui/KisApplication.cpp:656 libs/ui/KisApplication.cpp:846
+#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:852
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "Côutche p&assete..."
 
-#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:669
-#: libs/ui/KisApplication.cpp:840 libs/ui/KisApplication.cpp:854
-#: libs/ui/KisApplication.cpp:859
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:846 libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:865
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Asteme!"
 
-#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:855
+#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:861
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 "Dji n' sai apicî d' coleur dabôrd kel coûtche en alaedje n' est nén veyåve."
 
-#: libs/ui/KisApplication.cpp:670
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29936,7 +29951,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:676
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29944,32 +29959,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:841
+#: libs/ui/KisApplication.cpp:847
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
 msgstr "Dji n' a savou radjouter l' coûtche a l' imådje."
 
-#: libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:866
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:975
+#: libs/ui/KisApplication.cpp:981
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Dji n' a trové nou modele po : %1"
 
-#: libs/ui/KisApplication.cpp:978
+#: libs/ui/KisApplication.cpp:984
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Dj' a trové trop d' modeles po : %1"
 
-#: libs/ui/KisApplication.cpp:994
+#: libs/ui/KisApplication.cpp:1000
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "Tchoezi ttafwait"
 
-#: libs/ui/KisApplication.cpp:1026
+#: libs/ui/KisApplication.cpp:1032
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29979,7 +29994,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1040
+#: libs/ui/KisApplication.cpp:1046
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29987,7 +30002,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1068
+#: libs/ui/KisApplication.cpp:1074
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to clear the settings file?"
@@ -64526,10 +64541,6 @@ msgstr "Imådje di referince:"
 #~ msgstr "Pinceas prédefinis"
 
 #, fuzzy
-#~ msgid "Loading Bundles..."
-#~ msgstr "Pinceas prédefinis"
-
-#, fuzzy
 #~ msgid "Workspace"
 #~ msgstr "Espåce di coleurs"
 
@@ -80644,11 +80655,6 @@ msgstr "Imådje di referince:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Loading Paint Operations..."
 #~ msgstr "Usteye di shuvaedje des candjmints"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Loading Resource Bundles..."
-#~ msgstr "Fitchîs sourdants:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) @title:window"

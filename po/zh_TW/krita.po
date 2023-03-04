@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-02 00:52+0000\n"
+"POT-Creation-Date: 2023-03-04 00:45+0000\n"
 "PO-Revision-Date: 2022-11-24 09:58+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -15731,7 +15731,7 @@ msgstr ""
 "Krita 現在會退出。"
 
 #: krita/main.cc:618 libs/ui/KisApplication.cpp:410
-#: libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -19307,10 +19307,10 @@ msgstr "本機資源"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
 #: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
-#: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
-#: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
-#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:935
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
+#: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
+#: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
+#: libs/ui/KisApplication.cpp:1073 libs/ui/KisDocument.cpp:935
 #: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:1855
 #: libs/ui/KisDocument.cpp:1898 libs/ui/KisDocument.cpp:1908
 #: libs/ui/KisMainWindow.cpp:976 libs/ui/KisMainWindow.cpp:1092
@@ -29359,40 +29359,58 @@ msgstr "正在初始化全域參數…"
 msgid "Adding resource types..."
 msgstr "正在新增資源類型…"
 
-#: libs/ui/KisApplication.cpp:474
+#: libs/ui/KisApplication.cpp:463
+#, fuzzy, kde-format
+#| msgid "Loading Pages..."
+msgid "Loading plugins..."
+msgstr "正在載入頁面…"
+
+#: libs/ui/KisApplication.cpp:469
+#, fuzzy, kde-format
+#| msgid "Adding resource types..."
+msgid "Loading resources..."
+msgstr "正在新增資源類型…"
+
+#: libs/ui/KisApplication.cpp:478
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "正在載入主視窗…"
 
-#: libs/ui/KisApplication.cpp:573
+#: libs/ui/KisApplication.cpp:510
+#, fuzzy, kde-format
+#| msgid "Scanning..."
+msgid "Launching..."
+msgstr "掃描中……"
+
+#: libs/ui/KisApplication.cpp:579
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "無法找到 MIME 類型，請嘗試使用 -mimetype 選項"
 
-#: libs/ui/KisApplication.cpp:629
+#: libs/ui/KisApplication.cpp:635
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "動畫影格繪製失敗！"
 
-#: libs/ui/KisApplication.cpp:656 libs/ui/KisApplication.cpp:846
+#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:852
 #, kde-format
 msgid "File layer"
 msgstr "檔案圖層"
 
-#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:669
-#: libs/ui/KisApplication.cpp:840 libs/ui/KisApplication.cpp:854
-#: libs/ui/KisApplication.cpp:859
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:846 libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:865
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita：警告"
 
-#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:855
+#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:861
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "無法新增 %1 為檔案圖層：檔案不存在。"
 
-#: libs/ui/KisApplication.cpp:670
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29411,7 +29429,7 @@ msgstr ""
 "如果您想改新增檔案圖層至執行中 Krita 實體中的文件，請核取設定中的「只允許一"
 "個 Krita 實體」(設定 -> 一般 -> 視窗)。"
 
-#: libs/ui/KisApplication.cpp:676
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29421,32 +29439,32 @@ msgstr ""
 "無法新增檔案圖層：未開啟檔案。\n"
 "您可使用 --new-image 選項建立新檔案，或者是開啟現有檔案。"
 
-#: libs/ui/KisApplication.cpp:841
+#: libs/ui/KisApplication.cpp:847
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "無法開啟檔案「%1」"
 
-#: libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:866
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "無法新增檔案圖層：未開啟檔案。"
 
-#: libs/ui/KisApplication.cpp:975
+#: libs/ui/KisApplication.cpp:981
 #, kde-format
 msgid "No template found for: %1"
 msgstr "找不到適用於 %1 的範本"
 
-#: libs/ui/KisApplication.cpp:978
+#: libs/ui/KisApplication.cpp:984
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "適用於 %1 的範本過多"
 
-#: libs/ui/KisApplication.cpp:994
+#: libs/ui/KisApplication.cpp:1000
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "範本 %1 載入失敗。"
 
-#: libs/ui/KisApplication.cpp:1026
+#: libs/ui/KisApplication.cpp:1032
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29461,7 +29479,7 @@ msgstr ""
 "\n"
 "請重新啟動 Krita 以套用變更。"
 
-#: libs/ui/KisApplication.cpp:1040
+#: libs/ui/KisApplication.cpp:1046
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29472,7 +29490,7 @@ msgstr ""
 "\n"
 "請確保沒有其他程式正在使用該檔案並重試。"
 
-#: libs/ui/KisApplication.cpp:1068
+#: libs/ui/KisApplication.cpp:1074
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "要清空設定檔嗎？"

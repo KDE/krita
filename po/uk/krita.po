@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-02 00:52+0000\n"
+"POT-Creation-Date: 2023-03-04 00:45+0000\n"
 "PO-Revision-Date: 2023-02-28 09:08+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -15759,7 +15759,7 @@ msgstr ""
 "Wayland скористайтеся XWayland. Зараз Krita завершить роботу."
 
 #: krita/main.cc:618 libs/ui/KisApplication.cpp:410
-#: libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -19599,10 +19599,10 @@ msgstr "Локальні ресурси"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
 #: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:974
-#: libs/ui/KisApplication.cpp:977 libs/ui/KisApplication.cpp:993
-#: libs/ui/KisApplication.cpp:1025 libs/ui/KisApplication.cpp:1039
-#: libs/ui/KisApplication.cpp:1067 libs/ui/KisDocument.cpp:935
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
+#: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
+#: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
+#: libs/ui/KisApplication.cpp:1073 libs/ui/KisDocument.cpp:935
 #: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:1855
 #: libs/ui/KisDocument.cpp:1898 libs/ui/KisDocument.cpp:1908
 #: libs/ui/KisMainWindow.cpp:976 libs/ui/KisMainWindow.cpp:1092
@@ -29912,40 +29912,58 @@ msgstr "Ініціалізуємо загальні параметри…"
 msgid "Adding resource types..."
 msgstr "Додаємо типи ресурсів…"
 
-#: libs/ui/KisApplication.cpp:474
+#: libs/ui/KisApplication.cpp:463
+#, fuzzy, kde-format
+#| msgid "Loading Plugins Exiv/IO..."
+msgid "Loading plugins..."
+msgstr "Завантажуємо додатки Exiv та введення-виведення…"
+
+#: libs/ui/KisApplication.cpp:469
+#, fuzzy, kde-format
+#| msgid "Adding resource types..."
+msgid "Loading resources..."
+msgstr "Додаємо типи ресурсів…"
+
+#: libs/ui/KisApplication.cpp:478
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Завантажуємо головне вікно…"
 
-#: libs/ui/KisApplication.cpp:573
+#: libs/ui/KisApplication.cpp:510
+#, fuzzy, kde-format
+#| msgid "Scanning..."
+msgid "Launching..."
+msgstr "Сканування…"
+
+#: libs/ui/KisApplication.cpp:579
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Не знайдено тип mime, спробуйте параметр -mimetype"
 
-#: libs/ui/KisApplication.cpp:629
+#: libs/ui/KisApplication.cpp:635
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Не вдалося обробити кадри анімації!"
 
-#: libs/ui/KisApplication.cpp:656 libs/ui/KisApplication.cpp:846
+#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:852
 #, kde-format
 msgid "File layer"
 msgstr "Файловий шар"
 
-#: libs/ui/KisApplication.cpp:664 libs/ui/KisApplication.cpp:669
-#: libs/ui/KisApplication.cpp:840 libs/ui/KisApplication.cpp:854
-#: libs/ui/KisApplication.cpp:859
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
+#: libs/ui/KisApplication.cpp:846 libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:865
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: попередження"
 
-#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:855
+#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:861
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Не вдалося додати %1 як файловий шар: файла не існує."
 
-#: libs/ui/KisApplication.cpp:670
+#: libs/ui/KisApplication.cpp:676
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29967,7 +29985,7 @@ msgstr ""
 "Krita» у параметрах програми (Параметри → Налаштувати Krita → Загальне → "
 "Вікно)."
 
-#: libs/ui/KisApplication.cpp:676
+#: libs/ui/KisApplication.cpp:682
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29978,32 +29996,32 @@ msgstr ""
 "Ви можете створити документ за допомогою параметра --new-image або відкрити "
 "наявний файл."
 
-#: libs/ui/KisApplication.cpp:841
+#: libs/ui/KisApplication.cpp:847
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Не вдалося відкрити файл %1"
 
-#: libs/ui/KisApplication.cpp:860
+#: libs/ui/KisApplication.cpp:866
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Неможливо додати файловий шар: не відкрито жодного документа."
 
-#: libs/ui/KisApplication.cpp:975
+#: libs/ui/KisApplication.cpp:981
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Не знайдено шаблон для: %1"
 
-#: libs/ui/KisApplication.cpp:978
+#: libs/ui/KisApplication.cpp:984
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Знайдено забагато шаблонів для: %1"
 
-#: libs/ui/KisApplication.cpp:994
+#: libs/ui/KisApplication.cpp:1000
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Не вдалось завантажити шаблон %1."
 
-#: libs/ui/KisApplication.cpp:1026
+#: libs/ui/KisApplication.cpp:1032
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30018,7 +30036,7 @@ msgstr ""
 "\n"
 "Перезапустіть Krita, щоб зміни набули чинності."
 
-#: libs/ui/KisApplication.cpp:1040
+#: libs/ui/KisApplication.cpp:1046
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30030,7 +30048,7 @@ msgstr ""
 "Будь ласка, переконайтеся, що з файлом не працюють інші програми, і "
 "повторіть спробу."
 
-#: libs/ui/KisApplication.cpp:1068
+#: libs/ui/KisApplication.cpp:1074
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Ви дійсно хочете спорожнити файл параметрів?"
@@ -62099,9 +62117,6 @@ msgstr "Інструмент еталонних зображень"
 #~ msgctxt "Autobrush Label"
 #~ msgid "Auto"
 #~ msgstr "Авто"
-
-#~ msgid "Loading Plugins Exiv/IO..."
-#~ msgstr "Завантажуємо додатки Exiv та введення-виведення…"
 
 #~ msgctxt "action"
 #~ msgid "Database Explorer"

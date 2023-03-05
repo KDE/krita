@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
+"POT-Creation-Date: 2023-03-05 00:47+0000\n"
 "PO-Revision-Date: 2023-02-28 16:14+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -28322,26 +28322,58 @@ msgstr "Rota a dextera"
 msgid "Reset Rotation"
 msgstr "Redimensiona telas (canevas)"
 
-#: libs/ui/input/kis_select_layer_action.cpp:36
+#: libs/ui/input/kis_select_layer_action.cpp:116
 #, kde-format
 msgid "Select Layer"
 msgstr "Selige disposition (Layer)"
 
-#: libs/ui/input/kis_select_layer_action.cpp:37
+#: libs/ui/input/kis_select_layer_action.cpp:117
 #, fuzzy, kde-format
 #| msgid "Click to change cursor position."
-msgid "Selects a layer under cursor position"
+msgid "Select layers under the cursor position"
 msgstr "Pulsa pro cambiar le position del cursor"
 
-#: libs/ui/input/kis_select_layer_action.cpp:40
-#, kde-format
-msgid "Select Layer Mode"
-msgstr "Selige modo de disposition (Layer)"
+#: libs/ui/input/kis_select_layer_action.cpp:120
+#, fuzzy, kde-format
+msgid "Select Top Layer (Replace Selection)"
+msgstr "Selige opac"
 
-#: libs/ui/input/kis_select_layer_action.cpp:41
+#: libs/ui/input/kis_select_layer_action.cpp:122
+#, fuzzy, kde-format
+msgid "Select All Layers (Replace Selection)"
+msgstr "Selige opac"
+
+#: libs/ui/input/kis_select_layer_action.cpp:124
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Selection Mode: Replace"
+msgid "Select from Menu (Replace Selection)"
+msgstr "Modo de Selection: Reimplaciar"
+
+#: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
-msgid "Select Multiple Layer Mode"
-msgstr "Selige modo de disposition (Layer) multiple"
+msgid "Select Top Layer (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:128
+#, fuzzy, kde-format
+msgid "Select All Layers (Add to Selection)"
+msgstr "Sca&la strato a nove grandor"
+
+#: libs/ui/input/kis_select_layer_action.cpp:130
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Invert Selection"
+msgid "Select from Menu (Add to Selection)"
+msgstr "Inverte selection"
+
+#: libs/ui/input/kis_select_layer_action.cpp:246
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select all layers"
+msgctxt "Menu entry for the select layer under cursor canvas input action"
+msgid "Select all layers"
+msgstr "Selige omne stratos (Layer)"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -32432,7 +32464,7 @@ msgid ""
 "Y: %2 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
+#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
@@ -60876,6 +60908,12 @@ msgstr "Instrumento de Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Instrumento de Inages de Referentia"
+
+#~ msgid "Select Layer Mode"
+#~ msgstr "Selige modo de disposition (Layer)"
+
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Selige modo de disposition (Layer) multiple"
 
 #, fuzzy
 #~| msgid "Please provide a new name for the bookmark"

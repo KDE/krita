@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
+"POT-Creation-Date: 2023-03-05 00:47+0000\n"
 "PO-Revision-Date: 2022-09-14 16:45+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -29552,26 +29552,62 @@ msgstr "Kierrä oikealle"
 msgid "Reset Rotation"
 msgstr "Kumoa kierto"
 
-#: libs/ui/input/kis_select_layer_action.cpp:36
+#: libs/ui/input/kis_select_layer_action.cpp:116
 #, kde-format
 msgid "Select Layer"
 msgstr "Valitse taso"
 
-#: libs/ui/input/kis_select_layer_action.cpp:37
+#: libs/ui/input/kis_select_layer_action.cpp:117
 #, fuzzy, kde-format
 #| msgid "Click to change cursor position."
-msgid "Selects a layer under cursor position"
+msgid "Select layers under the cursor position"
 msgstr "Muuta kohdistimen sijaintia napsauttamalla."
 
-#: libs/ui/input/kis_select_layer_action.cpp:40
+#: libs/ui/input/kis_select_layer_action.cpp:120
 #, fuzzy, kde-format
-msgid "Select Layer Mode"
-msgstr "Kiertotilan käyttö"
+#| msgctxt "action"
+#| msgid "Select Opaque"
+msgid "Select Top Layer (Replace Selection)"
+msgstr "Valitse läpinäkymätön"
 
-#: libs/ui/input/kis_select_layer_action.cpp:41
+#: libs/ui/input/kis_select_layer_action.cpp:122
 #, fuzzy, kde-format
-msgid "Select Multiple Layer Mode"
-msgstr "Kiertotilan käyttö"
+#| msgctxt "action"
+#| msgid "Select Opaque"
+msgid "Select All Layers (Replace Selection)"
+msgstr "Valitse läpinäkymätön"
+
+#: libs/ui/input/kis_select_layer_action.cpp:124
+#, fuzzy, kde-format
+#| msgid "Selection Mode"
+msgid "Select from Menu (Replace Selection)"
+msgstr "Valintatapa"
+
+#: libs/ui/input/kis_select_layer_action.cpp:126
+#, kde-format
+msgid "Select Top Layer (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:128
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Scale Layer to new Size"
+msgid "Select All Layers (Add to Selection)"
+msgstr "Skaalaa taso uuteen kokoon"
+
+#: libs/ui/input/kis_select_layer_action.cpp:130
+#, fuzzy, kde-format
+#| msgid "&Subtract from current selection"
+msgid "Select from Menu (Add to Selection)"
+msgstr "&Vähennä nykyisestä valinnasta"
+
+#: libs/ui/input/kis_select_layer_action.cpp:246
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select all layers"
+msgctxt "Menu entry for the select layer under cursor canvas input action"
+msgid "Select all layers"
+msgstr "Valitse kaikki tasot"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -33849,7 +33885,7 @@ msgid ""
 "Y: %2 px"
 msgstr "X: %1 px, Y: %2 px"
 
-#: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
+#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
@@ -63027,6 +63063,14 @@ msgstr "Lähennystyökalu"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Viitekuvatyökalu"
+
+#, fuzzy
+#~ msgid "Select Layer Mode"
+#~ msgstr "Kiertotilan käyttö"
+
+#, fuzzy
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Kiertotilan käyttö"
 
 #~ msgid "HDR Warning.................................."
 #~ msgstr "HDR-varoitus.................................."

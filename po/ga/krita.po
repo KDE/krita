@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
+"POT-Creation-Date: 2023-03-05 00:47+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -28375,25 +28375,52 @@ msgstr "Rothlú"
 msgid "Reset Rotation"
 msgstr "Rothlú"
 
-#: libs/ui/input/kis_select_layer_action.cpp:36
+#: libs/ui/input/kis_select_layer_action.cpp:116
 #, fuzzy, kde-format
 msgid "Select Layer"
 msgstr "Scálaigh Sraith"
 
-#: libs/ui/input/kis_select_layer_action.cpp:37
+#: libs/ui/input/kis_select_layer_action.cpp:117
 #, fuzzy, kde-format
-msgid "Selects a layer under cursor position"
+msgid "Select layers under the cursor position"
 msgstr "Bailiúchán Réamhshocraithe"
 
-#: libs/ui/input/kis_select_layer_action.cpp:40
+#: libs/ui/input/kis_select_layer_action.cpp:120
 #, fuzzy, kde-format
-msgid "Select Layer Mode"
-msgstr "Rothlaigh Nód"
+msgid "Select Top Layer (Replace Selection)"
+msgstr "Mód Roghnaithe"
 
-#: libs/ui/input/kis_select_layer_action.cpp:41
+#: libs/ui/input/kis_select_layer_action.cpp:122
 #, fuzzy, kde-format
-msgid "Select Multiple Layer Mode"
-msgstr "Rothlaigh Nód"
+msgid "Select All Layers (Replace Selection)"
+msgstr "Mód Roghnaithe"
+
+#: libs/ui/input/kis_select_layer_action.cpp:124
+#, fuzzy, kde-format
+#| msgid "Selection Mode"
+msgid "Select from Menu (Replace Selection)"
+msgstr "Mód Roghnaithe"
+
+#: libs/ui/input/kis_select_layer_action.cpp:126
+#, kde-format
+msgid "Select Top Layer (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:128
+#, fuzzy, kde-format
+msgid "Select All Layers (Add to Selection)"
+msgstr "&Scálaigh Sraith..."
+
+#: libs/ui/input/kis_select_layer_action.cpp:130
+#, fuzzy, kde-format
+msgid "Select from Menu (Add to Selection)"
+msgstr "Cóipeáil an gníomh atá roghnaithe faoi láthair"
+
+#: libs/ui/input/kis_select_layer_action.cpp:246
+#, fuzzy, kde-format
+msgctxt "Menu entry for the select layer under cursor canvas input action"
+msgid "Select all layers"
+msgstr "Scálaigh Sraith"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -32434,7 +32461,7 @@ msgid ""
 "Y: %2 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
+#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -60725,6 +60752,14 @@ msgstr "Uirlis Súmála"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Athainmnigh Íomhá"
+
+#, fuzzy
+#~ msgid "Select Layer Mode"
+#~ msgstr "Rothlaigh Nód"
+
+#, fuzzy
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Rothlaigh Nód"
 
 #, fuzzy
 #~ msgid "Please extract ffmpeg from the archive first."

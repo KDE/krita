@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
+"POT-Creation-Date: 2023-03-05 00:47+0000\n"
 "PO-Revision-Date: 2022-11-24 09:58+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -27880,25 +27880,63 @@ msgstr "向右旋轉"
 msgid "Reset Rotation"
 msgstr "重設旋轉"
 
-#: libs/ui/input/kis_select_layer_action.cpp:36
+#: libs/ui/input/kis_select_layer_action.cpp:116
 #, kde-format
 msgid "Select Layer"
 msgstr "選取圖層"
 
-#: libs/ui/input/kis_select_layer_action.cpp:37
-#, kde-format
-msgid "Selects a layer under cursor position"
+#: libs/ui/input/kis_select_layer_action.cpp:117
+#, fuzzy, kde-format
+#| msgid "Selects a layer under cursor position"
+msgid "Select layers under the cursor position"
 msgstr "選取游標之下的圖層"
 
-#: libs/ui/input/kis_select_layer_action.cpp:40
-#, kde-format
-msgid "Select Layer Mode"
-msgstr "選取圖層模式"
+#: libs/ui/input/kis_select_layer_action.cpp:120
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select &Opaque (Replace)"
+msgid "Select Top Layer (Replace Selection)"
+msgstr "選取不透明區域 (取代) (&O)"
 
-#: libs/ui/input/kis_select_layer_action.cpp:41
+#: libs/ui/input/kis_select_layer_action.cpp:122
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select &Opaque (Replace)"
+msgid "Select All Layers (Replace Selection)"
+msgstr "選取不透明區域 (取代) (&O)"
+
+#: libs/ui/input/kis_select_layer_action.cpp:124
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Selection Mode: Replace"
+msgid "Select from Menu (Replace Selection)"
+msgstr "選取區域模式：取代"
+
+#: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
-msgid "Select Multiple Layer Mode"
-msgstr "選取多個圖層模式"
+msgid "Select Top Layer (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:128
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Scale All Layers to new Size"
+msgid "Select All Layers (Add to Selection)"
+msgstr "縮放所有圖層至新尺寸"
+
+#: libs/ui/input/kis_select_layer_action.cpp:130
+#, fuzzy, kde-format
+#| msgid "Subtract fro&m current selection"
+msgid "Select from Menu (Add to Selection)"
+msgstr "從目前選取區域減去(&M)"
+
+#: libs/ui/input/kis_select_layer_action.cpp:246
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select all layers"
+msgctxt "Menu entry for the select layer under cursor canvas input action"
+msgid "Select all layers"
+msgstr "選取所有圖層"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -31948,7 +31986,7 @@ msgstr ""
 "X：%1 px\n"
 "Y：%2 px"
 
-#: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
+#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
@@ -59701,6 +59739,12 @@ msgstr "縮放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "參考圖工具"
+
+#~ msgid "Select Layer Mode"
+#~ msgstr "選取圖層模式"
+
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "選取多個圖層模式"
 
 #~ msgid "HDR Warning.................................."
 #~ msgstr "HDR 警告.................................."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
+"POT-Creation-Date: 2023-03-05 00:47+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -28077,25 +28077,53 @@ msgstr ""
 "\n"
 "Ориентација:"
 
-#: libs/ui/input/kis_select_layer_action.cpp:36
+#: libs/ui/input/kis_select_layer_action.cpp:116
 #, fuzzy, kde-format
 msgid "Select Layer"
 msgstr "Отстрани шаблон"
 
-#: libs/ui/input/kis_select_layer_action.cpp:37
+#: libs/ui/input/kis_select_layer_action.cpp:117
 #, fuzzy, kde-format
-msgid "Selects a layer under cursor position"
+msgid "Select layers under the cursor position"
 msgstr "Рабови на страна"
 
-#: libs/ui/input/kis_select_layer_action.cpp:40
+#: libs/ui/input/kis_select_layer_action.cpp:120
 #, fuzzy, kde-format
-msgid "Select Layer Mode"
-msgstr "Отстрани шаблон"
+msgid "Select Top Layer (Replace Selection)"
+msgstr "Одбери слика"
 
-#: libs/ui/input/kis_select_layer_action.cpp:41
+#: libs/ui/input/kis_select_layer_action.cpp:122
 #, fuzzy, kde-format
-msgid "Select Multiple Layer Mode"
-msgstr "Отстрани шаблон"
+msgid "Select All Layers (Replace Selection)"
+msgstr "Одбери слика"
+
+#: libs/ui/input/kis_select_layer_action.cpp:124
+#, fuzzy, kde-format
+msgid "Select from Menu (Replace Selection)"
+msgstr "Отстрани група"
+
+#: libs/ui/input/kis_select_layer_action.cpp:126
+#, kde-format
+msgid "Select Top Layer (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:128
+#, fuzzy, kde-format
+msgid "Select All Layers (Add to Selection)"
+msgstr "Создади шаблон"
+
+#: libs/ui/input/kis_select_layer_action.cpp:130
+#, fuzzy, kde-format
+msgid "Select from Menu (Add to Selection)"
+msgstr ""
+"\n"
+"Ориентација:"
+
+#: libs/ui/input/kis_select_layer_action.cpp:246
+#, fuzzy, kde-format
+msgctxt "Menu entry for the select layer under cursor canvas input action"
+msgid "Select all layers"
+msgstr "Одбери слика"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -32138,7 +32166,7 @@ msgid ""
 "Y: %2 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
+#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -60138,6 +60166,14 @@ msgstr "Колони:"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Отстрани приказ"
+
+#, fuzzy
+#~ msgid "Select Layer Mode"
+#~ msgstr "Отстрани шаблон"
+
+#, fuzzy
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Отстрани шаблон"
 
 #, fuzzy
 #~| msgid "Columns:"

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
+"POT-Creation-Date: 2023-03-05 00:47+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -27976,25 +27976,52 @@ msgstr "Pemutaran"
 msgid "Reset Rotation"
 msgstr "Pemutaran"
 
-#: libs/ui/input/kis_select_layer_action.cpp:36
+#: libs/ui/input/kis_select_layer_action.cpp:116
 #, fuzzy, kde-format
 msgid "Select Layer"
 msgstr "Skalakan Lapisan"
 
-#: libs/ui/input/kis_select_layer_action.cpp:37
+#: libs/ui/input/kis_select_layer_action.cpp:117
 #, fuzzy, kde-format
-msgid "Selects a layer under cursor position"
+msgid "Select layers under the cursor position"
 msgstr "Pemilihan"
 
-#: libs/ui/input/kis_select_layer_action.cpp:40
+#: libs/ui/input/kis_select_layer_action.cpp:120
 #, fuzzy, kde-format
-msgid "Select Layer Mode"
-msgstr "Putar"
+msgid "Select Top Layer (Replace Selection)"
+msgstr "Pemilihan"
 
-#: libs/ui/input/kis_select_layer_action.cpp:41
+#: libs/ui/input/kis_select_layer_action.cpp:122
 #, fuzzy, kde-format
-msgid "Select Multiple Layer Mode"
-msgstr "Putar"
+msgid "Select All Layers (Replace Selection)"
+msgstr "Pemilihan"
+
+#: libs/ui/input/kis_select_layer_action.cpp:124
+#, fuzzy, kde-format
+msgid "Select from Menu (Replace Selection)"
+msgstr "Pemilihan"
+
+#: libs/ui/input/kis_select_layer_action.cpp:126
+#, kde-format
+msgid "Select Top Layer (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:128
+#, fuzzy, kde-format
+msgid "Select All Layers (Add to Selection)"
+msgstr "Simpan Lapisan sebagai Imej..."
+
+#: libs/ui/input/kis_select_layer_action.cpp:130
+#, fuzzy, kde-format
+#| msgid "&Subtract from current selection"
+msgid "Select from Menu (Add to Selection)"
+msgstr "&Tolak daripada pemilihan semasa"
+
+#: libs/ui/input/kis_select_layer_action.cpp:246
+#, fuzzy, kde-format
+msgctxt "Menu entry for the select layer under cursor canvas input action"
+msgid "Select all layers"
+msgstr "Skalakan Lapisan"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -31981,7 +32008,7 @@ msgid ""
 "Y: %2 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
+#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -59625,6 +59652,14 @@ msgstr "Alat zum "
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ungu Lembut Gangguan"
+
+#, fuzzy
+#~ msgid "Select Layer Mode"
+#~ msgstr "Putar"
+
+#, fuzzy
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Putar"
 
 #, fuzzy
 #~ msgid "Colu&mns:"

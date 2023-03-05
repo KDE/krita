@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
+"POT-Creation-Date: 2023-03-05 00:47+0000\n"
 "PO-Revision-Date: 2021-12-26 13:54+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -28219,25 +28219,54 @@ msgstr "Snúa til hægri"
 msgid "Reset Rotation"
 msgstr "Núllstilla snúning"
 
-#: libs/ui/input/kis_select_layer_action.cpp:36
+#: libs/ui/input/kis_select_layer_action.cpp:116
 #, kde-format
 msgid "Select Layer"
 msgstr "Velja lag"
 
-#: libs/ui/input/kis_select_layer_action.cpp:37
+#: libs/ui/input/kis_select_layer_action.cpp:117
 #, kde-format
-msgid "Selects a layer under cursor position"
+msgid "Select layers under the cursor position"
 msgstr ""
 
-#: libs/ui/input/kis_select_layer_action.cpp:40
+#: libs/ui/input/kis_select_layer_action.cpp:120
 #, fuzzy, kde-format
-#| msgid "Select Layer"
-msgid "Select Layer Mode"
-msgstr "Velja lag"
+#| msgctxt "(qtundo-format)"
+#| msgid "Select Opaque"
+msgid "Select Top Layer (Replace Selection)"
+msgstr "Valtól"
 
-#: libs/ui/input/kis_select_layer_action.cpp:41
+#: libs/ui/input/kis_select_layer_action.cpp:122
 #, fuzzy, kde-format
-msgid "Select Multiple Layer Mode"
+#| msgctxt "(qtundo-format)"
+#| msgid "Select Opaque"
+msgid "Select All Layers (Replace Selection)"
+msgstr "Valtól"
+
+#: libs/ui/input/kis_select_layer_action.cpp:124
+#, fuzzy, kde-format
+msgid "Select from Menu (Replace Selection)"
+msgstr "Valhamur"
+
+#: libs/ui/input/kis_select_layer_action.cpp:126
+#, kde-format
+msgid "Select Top Layer (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:128
+#, fuzzy, kde-format
+msgid "Select All Layers (Add to Selection)"
+msgstr "Kvarða mynd"
+
+#: libs/ui/input/kis_select_layer_action.cpp:130
+#, fuzzy, kde-format
+msgid "Select from Menu (Add to Selection)"
+msgstr "Draga í val"
+
+#: libs/ui/input/kis_select_layer_action.cpp:246
+#, fuzzy, kde-format
+msgctxt "Menu entry for the select layer under cursor canvas input action"
+msgid "Select all layers"
 msgstr "Kvarða lag"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
@@ -32279,7 +32308,7 @@ msgid ""
 "Y: %2 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
+#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -60407,6 +60436,15 @@ msgstr "S&tækkunaráhald"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Stillingar"
+
+#, fuzzy
+#~| msgid "Select Layer"
+#~ msgid "Select Layer Mode"
+#~ msgstr "Velja lag"
+
+#, fuzzy
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Kvarða lag"
 
 #, fuzzy
 #~ msgid "Colu&mns:"

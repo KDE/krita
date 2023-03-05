@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
+"POT-Creation-Date: 2023-03-05 00:47+0000\n"
 "PO-Revision-Date: 2021-01-18 19:24+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -27830,25 +27830,51 @@ msgstr "சுழற்றுகிறது"
 msgid "Reset Rotation"
 msgstr "சுழற்றுகிறது"
 
-#: libs/ui/input/kis_select_layer_action.cpp:36
+#: libs/ui/input/kis_select_layer_action.cpp:116
 #, fuzzy, kde-format
 msgid "Select Layer"
 msgstr "அடுக்கை அளவாக்கு "
 
-#: libs/ui/input/kis_select_layer_action.cpp:37
+#: libs/ui/input/kis_select_layer_action.cpp:117
 #, fuzzy, kde-format
-msgid "Selects a layer under cursor position"
+msgid "Select layers under the cursor position"
 msgstr "தேர்வு"
 
-#: libs/ui/input/kis_select_layer_action.cpp:40
+#: libs/ui/input/kis_select_layer_action.cpp:120
 #, fuzzy, kde-format
-msgid "Select Layer Mode"
-msgstr "சுழற்று"
+msgid "Select Top Layer (Replace Selection)"
+msgstr "தேர்வு"
 
-#: libs/ui/input/kis_select_layer_action.cpp:41
+#: libs/ui/input/kis_select_layer_action.cpp:122
 #, fuzzy, kde-format
-msgid "Select Multiple Layer Mode"
-msgstr "சுழற்று"
+msgid "Select All Layers (Replace Selection)"
+msgstr "தேர்வு"
+
+#: libs/ui/input/kis_select_layer_action.cpp:124
+#, fuzzy, kde-format
+msgid "Select from Menu (Replace Selection)"
+msgstr "தேர்வு"
+
+#: libs/ui/input/kis_select_layer_action.cpp:126
+#, kde-format
+msgid "Select Top Layer (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:128
+#, fuzzy, kde-format
+msgid "Select All Layers (Add to Selection)"
+msgstr "அடுக்கை உருவமாக சேமி..."
+
+#: libs/ui/input/kis_select_layer_action.cpp:130
+#, fuzzy, kde-format
+msgid "Select from Menu (Add to Selection)"
+msgstr "தேர்வு இல்லை"
+
+#: libs/ui/input/kis_select_layer_action.cpp:246
+#, fuzzy, kde-format
+msgctxt "Menu entry for the select layer under cursor canvas input action"
+msgid "Select all layers"
+msgstr "அடுக்கை அளவாக்கு "
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -31811,7 +31837,7 @@ msgid ""
 "Y: %2 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
+#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -59330,6 +59356,14 @@ msgstr "பெரிதாக்க கருவி"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "உருவத்திற்கு மறுபெயரிடு"
+
+#, fuzzy
+#~ msgid "Select Layer Mode"
+#~ msgstr "சுழற்று"
+
+#, fuzzy
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "சுழற்று"
 
 #, fuzzy
 #~ msgid "Colu&mns:"

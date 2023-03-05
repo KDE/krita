@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
+"POT-Creation-Date: 2023-03-05 00:47+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -13621,7 +13621,7 @@ msgstr "&صيّر الحركة..."
 #, kde-format
 msgctxt "action"
 msgid "Render Animation to GIF, Image Sequence or Video"
-msgstr "صيّر الحركة إلى GIF أو تتابع صور أو ڤديو"
+msgstr "صيّر الحركة إلى GIF أو تتابع صور أو فديو"
 
 #. i18n: context: iconText @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
@@ -16175,7 +16175,7 @@ msgstr "عن كريتا"
 #, kde-format
 msgctxt "action"
 msgid "About &KDE"
-msgstr "عن &كدي"
+msgstr "عن &كِيدِي"
 
 #. i18n: context: toolTip @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
@@ -16185,7 +16185,7 @@ msgstr "عن &كدي"
 #, kde-format
 msgctxt "action"
 msgid "About KDE"
-msgstr "عن &كدي"
+msgstr "عن &كِيدِي"
 
 #. i18n: context: text @ Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1938
@@ -22578,7 +22578,7 @@ msgstr "&تتابع الصّور"
 #: libs/ui/animation/wdg_animationrenderer.ui:53
 #, kde-format
 msgid "&Video"
-msgstr "ڤ&ديو"
+msgstr "ف&ديو"
 
 #. i18n: ectx: property (text), widget (QRadioButton, shouldExportAll)
 #. i18n: ectx: property (text), widget (QRadioButton, radioBoth)
@@ -22604,7 +22604,7 @@ msgstr "آخر إطار:"
 #: libs/ui/animation/wdg_animationrenderer.ui:232
 #, kde-format
 msgid "Video Options"
-msgstr "خيارات الڤديو"
+msgstr "خيارات الفديو"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:255
@@ -22630,7 +22630,7 @@ msgstr "صيّر كَ‍:"
 #: libs/ui/animation/wdg_animationrenderer.ui:293
 #, kde-format
 msgid "Video Location:"
-msgstr "مكان الڤديو:"
+msgstr "مكان الفديو:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIncludeAudio)
 #: libs/ui/animation/wdg_animationrenderer.ui:309
@@ -22694,7 +22694,7 @@ msgid ""
 "Select the file format for the image sequence. If you want to render to "
 "video or animated gif, you can only select PNG"
 msgstr ""
-"اختر نسق ملفّات تتابع الصّور. إن أردت تصيير ڤديو أو GIF متحرّك، فيمكنك اختيار "
+"اختر نسق ملفّات تتابع الصّور. إن أردت تصيير فديو أو GIF متحرّك، فيمكنك اختيار "
 "PNG فقط"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnExportOptions)
@@ -22999,13 +22999,13 @@ msgid ""
 "internationalization visit <a href=\"http://l10n.kde.org\">http://l10n.kde."
 "org</a></p>"
 msgstr ""
-"<p>يقوم طاقم عربآيز بترجمة واجهة كدي إلى اللغة العربية، و هذا بفضل جهود طاقم "
-"مترجمين متطوعين من كافة الدول العربية وغيرها. </p><p>للمزيد من المعلومات حول "
-"ترجمة كدي إلى العربية ، زر  <a href=\"http://www.arabeyes.org\"> الموقع "
-"الرسمي لعربآيز</a> الرجاء التبليغ عن أخطاء الترجمة على العنوان التالي: "
-"contact@arabeyes.org</p><p>تترجم كدي إلى لغات متعددة بفضل طواقم الترجمة من "
-"العالم بأسره.</p><p>لمزيد من المعلومات زر <a  href=\"http://l10n.kde.org "
-"\">http://l10n.kde.org</a></p>"
+"<p>يقوم طاقم عربآيز بترجمة واجهة كِيدِي إلى اللغة العربية، و هذا بفضل جهود "
+"طاقم مترجمين متطوعين من كافة الدول العربية وغيرها. </p><p>للمزيد من "
+"المعلومات حول ترجمة كِيدِي إلى العربية ، زر  <a href=\"http://www.arabeyes.org"
+"\"> الموقع الرسمي لعربآيز</a> الرجاء التبليغ عن أخطاء الترجمة على العنوان "
+"التالي: contact@arabeyes.org</p><p>تترجم كِيدِي إلى لغات متعددة بفضل طواقم "
+"الترجمة من العالم بأسره.</p><p>لمزيد من المعلومات زر <a  href=\"http://l10n."
+"kde.org \">http://l10n.kde.org</a></p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:95
 #, kde-format
@@ -24366,7 +24366,7 @@ msgstr "ادعم كريتا"
 #: libs/ui/forms/KisWelcomePage.ui:1178 libs/ui/KisWelcomePageWidget.cpp:396
 #, kde-format
 msgid "Powered by KDE"
-msgstr "ممكنة بواسطة كدي"
+msgstr "ممكنة بواسطة كِيدِي"
 
 #. i18n: ectx: property (text), widget (QLabel, dragImageHereLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1261
@@ -26307,7 +26307,7 @@ msgstr "افتح مجلّد الموارد"
 #, fuzzy, kde-format
 #| msgid "Video Options"
 msgid "Geometry Options"
-msgstr "خيارات الڤديو"
+msgstr "خيارات الفديو"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, textLabelFill)
@@ -28904,27 +28904,60 @@ msgstr "دوّر لليمين"
 msgid "Reset Rotation"
 msgstr "صفّر التّدوير"
 
-#: libs/ui/input/kis_select_layer_action.cpp:36
+#: libs/ui/input/kis_select_layer_action.cpp:116
 #, kde-format
 msgid "Select Layer"
 msgstr "اختر طبقة"
 
-#: libs/ui/input/kis_select_layer_action.cpp:37
-#, kde-format
-msgid "Selects a layer under cursor position"
+#: libs/ui/input/kis_select_layer_action.cpp:117
+#, fuzzy, kde-format
+#| msgid "Selects a layer under cursor position"
+msgid "Select layers under the cursor position"
 msgstr "ينتقي طبقة تحت مؤشّر الفأرة"
 
-#: libs/ui/input/kis_select_layer_action.cpp:40
+#: libs/ui/input/kis_select_layer_action.cpp:120
 #, fuzzy, kde-format
 #| msgid "Select Layer"
-msgid "Select Layer Mode"
+msgid "Select Top Layer (Replace Selection)"
 msgstr "اختر طبقة"
 
-#: libs/ui/input/kis_select_layer_action.cpp:41
+#: libs/ui/input/kis_select_layer_action.cpp:122
 #, fuzzy, kde-format
-#| msgid "Select Multiply Blending Mode"
-msgid "Select Multiple Layer Mode"
-msgstr "اختر وضع المزج ”ضرب“"
+#| msgid "Select Layer"
+msgid "Select All Layers (Replace Selection)"
+msgstr "اختر طبقة"
+
+#: libs/ui/input/kis_select_layer_action.cpp:124
+#, fuzzy, kde-format
+#| msgid "Selection Mode"
+msgid "Select from Menu (Replace Selection)"
+msgstr "وضع التّحديد"
+
+#: libs/ui/input/kis_select_layer_action.cpp:126
+#, kde-format
+msgid "Select Top Layer (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:128
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Scale Layer to new Size"
+msgid "Select All Layers (Add to Selection)"
+msgstr "حجّم الطّبقة إلى المقاس الجديد"
+
+#: libs/ui/input/kis_select_layer_action.cpp:130
+#, fuzzy, kde-format
+#| msgid "Subtract fro&m current selection"
+msgid "Select from Menu (Add to Selection)"
+msgstr "اطرح &من التّحديد الحاليّ"
+
+#: libs/ui/input/kis_select_layer_action.cpp:246
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select all layers"
+msgctxt "Menu entry for the select layer under cursor canvas input action"
+msgid "Select all layers"
+msgstr "حدّد كلّ الطّبقات"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -31998,7 +32031,7 @@ msgstr "آخر مَن حفظه"
 #: libs/ui/KoDocumentInfoDlg.cpp:170
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
-msgstr "استخدم ’;‘ (مثلًا: مكتب;كدي;كاليغرا)"
+msgstr "استخدم ’;‘ (مثلًا: مكتب;كِيدِي;كاليغرا)"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:296
 #, kde-format
@@ -33119,7 +33152,7 @@ msgid ""
 "Y: %2 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
+#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
@@ -36252,7 +36285,7 @@ msgstr "&عن %1"
 #: libs/widgetutils/config/kstandardaction_p.h:105
 #, kde-format
 msgid "About &KDE"
-msgstr "عن &كدي"
+msgstr "عن &كِيدِي"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:207
 #, kde-format
@@ -36380,12 +36413,12 @@ msgstr "%1"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:33
 #, kde-format
 msgid "About KDE"
-msgstr "عن كدي"
+msgstr "عن كِيدِي"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:36
 #, kde-format
 msgid "<html><font size=\"5\">KDE - Be Free!</font></html>"
-msgstr "<html><font size=\"5\">كدي- كن حرًّا!</font></html>"
+msgstr "<html><font size=\"5\">كِيدِي- كن حرًّا!</font></html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:50
 #, kde-format
@@ -36400,13 +36433,13 @@ msgid ""
 ">Visit <a href=\"%2\">%2</a> for more information about the KDE community "
 "and the software we produce.</html>"
 msgstr ""
-"<html><b>كدي</b> هي شبكة عالميّة مكوّنة من مطوّري برمجيّات، وفنّانين، وكاتبين، "
+"<html><b>كِيدِي</b> هي شبكة عالميّة مكوّنة من مطوّري برمجيّات، وفنّانين، وكاتبين، "
 "ومترجمين ومن ساهم في تطوير <a href=\"%1\">البرمجيّات الحرّة</a>. صنع هذا "
-"المجتمع مئات التّطبيقات الحرّة كجزء من أُطر عمل لكدي، وفضاءات عمل وتطبيقات.<br /"
-"><br />تُعتبر كدي مشروعًا تعاونيًّا لا يتحكّم أحد بمفرده بجهود أو منتجات كدي "
-"مستبعدًا الغير. الباب مفتوح للجميع للانضمام والمساهمة في كدي، وأنت لست "
+"المجتمع مئات التّطبيقات الحرّة كجزء من أُطر عمل لكِيدِي، وفضاءات عمل وتطبيقات."
+"<br /><br />تُعتبر كِيدِي مشروعًا تعاونيًّا لا يتحكّم أحد بمفرده بجهود أو منتجات "
+"كِيدِي مستبعدًا الغير. الباب مفتوح للجميع للانضمام والمساهمة في كِيدِي، وأنت لست "
 "استثناءً.<br /><br />زُر <a href=\"%2\">%2</a> للاطلاع على معلومات أكثر عن "
-"مجتمع كدي والبرمجيّات التي يقدّمها.</html>"
+"مجتمع كِيدِي والبرمجيّات التي يقدّمها.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:69
 #, kde-format
@@ -36419,13 +36452,13 @@ msgid ""
 "improvement then you are welcome to use the bug tracking system to register "
 "your wish. Make sure you use the severity called \"Wishlist\".</html>"
 msgstr ""
-"<html>التطبيقات في حاجة دائمة للتحسين، وفريق كدي جاهزاً لذلك.لكن عليك كمستخدم "
-"أن تخبرنا بالأشياء التي لا تعمل كما يجب أو يمكن فعلها بشكل أفضل.<br /><br /"
-">تملك كدي نظام تعقب للعلل البرمجية. زر <a href=\"%1\">%1</a> أو استخدم "
-"المربع الحواري  \"أبلغ عن عله...\" من قائمة \"المساعدة\" للتبليغ عن العلل . "
-"يكون التبليغ عن العلل باللغة الإنجليزية<br /><br />إذا كان لديك اقتراحات حول "
-"تحسين تطبيقاتنا فندعوك لاستخدام نظام تعقب العلل لتقيد أمنيتك. تأكد أن تستخدم "
-"\"ًWishlist\" في درجة الخطورة.</html>"
+"<html>التطبيقات في حاجة دائمة للتحسين، وفريق كِيدِي جاهزاً لذلك.لكن عليك "
+"كمستخدم أن تخبرنا بالأشياء التي لا تعمل كما يجب أو يمكن فعلها بشكل أفضل.<br /"
+"><br />تملك كِيدِي نظام تعقب للعلل البرمجية. زر <a href=\"%1\">%1</a> أو "
+"استخدم المربع الحواري  \"أبلغ عن عله...\" من قائمة \"المساعدة\" للتبليغ عن "
+"العلل . يكون التبليغ عن العلل باللغة الإنجليزية<br /><br />إذا كان لديك "
+"اقتراحات حول تحسين تطبيقاتنا فندعوك لاستخدام نظام تعقب العلل لتقيد أمنيتك. "
+"تأكد أن تستخدم \"ًWishlist\" في درجة الخطورة.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:87
 #, kde-format
@@ -36438,7 +36471,7 @@ msgid ""
 "documentation, then a visit to <a href=\"%2\">%2</a> will provide you with "
 "what you need.</html>"
 msgstr ""
-"<html>ليس عليك أن تكون مطوّر برمجيّات لتكون عضوًا من فريق كدي. يمكنك الانضمام "
+"<html>ليس عليك أن تكون مطوّر برمجيّات لتكون عضوًا من فريق كِيدِي. يمكنك الانضمام "
 "إلى الفرق الوطنيّة التي تترجم واجهات البرمجيّات. يمكنك أيضًا توفير الرّسوميّات، "
 "والسّمات، والأصوات وتحسين التّوثيق. أنت تقرّر ما تريد! <br /><br />زُر <a href="
 "\"%1\">%1</a> للاطّلاع على بعض المشاريع التي يمكنك المشاركة فيها.<br /><br /"
@@ -36460,12 +36493,12 @@ msgid ""
 "described at <a href=\"%2\">%2</a>.<br /><br />Thank you very much in "
 "advance for your support.</html>"
 msgstr ""
-"<html>إن كدي متوفرة بدون مقابل، ولكن صنعها ليس كذلك.<br /><br />لذا قام فريق "
-"كدي بتكوين KDE e.V ، وهي منظمة غير ربحية موجودة بشكل قانوني في في ألمانيا. "
-"تمثّل KDE e.V مشروع كدي في الأمور القانونية و المالية. طالع <a href=\"%1\">"
-"%1</a> للمزيد من المعلومات حول KDE e.V.<br /><br /> تستفيد كدي من الدعم "
-"المالي. تستعمل الأغلب الأموال لتعويض الأعضاء و غيرهم عن التكاليف التي "
-"يتحملونها أثناء المساهمة في كدي. نحن نشجعك على دعم كدي من خلال الهبات "
+"<html>إن كِيدِي متوفرة بدون مقابل، ولكن صنعها ليس كذلك.<br /><br />لذا قام "
+"فريق كِيدِي بتكوين KDE e.V ، وهي منظمة غير ربحية موجودة بشكل قانوني في في "
+"ألمانيا. تمثّل KDE e.V مشروع كِيدِي في الأمور القانونية و المالية. طالع <a href="
+"\"%1\">%1</a> للمزيد من المعلومات حول KDE e.V.<br /><br /> تستفيد كِيدِي من "
+"الدعم المالي. تستعمل الأغلب الأموال لتعويض الأعضاء و غيرهم عن التكاليف التي "
+"يتحملونها أثناء المساهمة في كِيدِي. نحن نشجعك على دعم كِيدِي من خلال الهبات "
 "المالية، استخدم إحدى الطرق الموصوفة هنا <a href=\"%2\">%2</a>.<br /><br /"
 ">شكرًا جزيلًا مقدمًا لدعمك.</html>"
 
@@ -36483,12 +36516,12 @@ msgstr "أبل&غ عن العلل والأمنيات"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
 #, kde-format
 msgid "&Join KDE"
-msgstr "ان&ضمّ إلى كدي"
+msgstr "ان&ضمّ إلى كِيدِي"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:131
 #, kde-format
 msgid "&Support KDE"
-msgstr "ا&دعم كدي"
+msgstr "ا&دعم كِيدِي"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:84
 #: libs/widgetutils/xmlgui/kbugreport.cpp:101
@@ -40249,7 +40282,7 @@ msgstr "الدّخل"
 #, fuzzy, kde-format
 #| msgid "&Video"
 msgid "Video FPS:"
-msgstr "ڤ&ديو"
+msgstr "ف&ديو"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonEditProfile)
 #: plugins/dockers/recorder/recorder_export.ui:290
@@ -51953,7 +51986,7 @@ msgstr "قبل:"
 #, fuzzy, kde-format
 #| msgid "Video Options"
 msgid "Deform Options"
-msgstr "خيارات الڤديو"
+msgstr "خيارات الفديو"
 
 #: plugins/paintops/deform/kis_deform_option.cpp:109
 #, kde-format
@@ -60306,7 +60339,7 @@ msgstr "اقفل الارتفاع"
 #, fuzzy, kde-format
 #| msgid "Video Location:"
 msgid "Lock Ratio"
-msgstr "مكان الڤديو:"
+msgstr "مكان الفديو:"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:253
 #, fuzzy, kde-format
@@ -61826,6 +61859,16 @@ msgstr "أداة العدسة"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "الصّور المرجع"
+
+#, fuzzy
+#~| msgid "Select Layer"
+#~ msgid "Select Layer Mode"
+#~ msgstr "اختر طبقة"
+
+#, fuzzy
+#~| msgid "Select Multiply Blending Mode"
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "اختر وضع المزج ”ضرب“"
 
 #~ msgid ""
 #~ "<b>Note: Krita will need to be restarted for changes to take effect</b>"

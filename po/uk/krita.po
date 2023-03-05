@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
-"PO-Revision-Date: 2023-02-28 09:08+0200\n"
+"POT-Creation-Date: 2023-03-05 00:47+0000\n"
+"PO-Revision-Date: 2023-03-04 08:36+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -28346,25 +28346,63 @@ msgstr "Обертання за годинниковою стрілкою"
 msgid "Reset Rotation"
 msgstr "Скинути обертання"
 
-#: libs/ui/input/kis_select_layer_action.cpp:36
+#: libs/ui/input/kis_select_layer_action.cpp:116
 #, kde-format
 msgid "Select Layer"
 msgstr "Позначити шар"
 
-#: libs/ui/input/kis_select_layer_action.cpp:37
-#, kde-format
-msgid "Selects a layer under cursor position"
+#: libs/ui/input/kis_select_layer_action.cpp:117
+#, fuzzy, kde-format
+#| msgid "Selects a layer under cursor position"
+msgid "Select layers under the cursor position"
 msgstr "Позначити шар під вказівником"
 
-#: libs/ui/input/kis_select_layer_action.cpp:40
-#, kde-format
-msgid "Select Layer Mode"
-msgstr "Режим вибору шару"
+#: libs/ui/input/kis_select_layer_action.cpp:120
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select &Opaque (Replace)"
+msgid "Select Top Layer (Replace Selection)"
+msgstr "Вибрати &непрозоре (замінити)"
 
-#: libs/ui/input/kis_select_layer_action.cpp:41
+#: libs/ui/input/kis_select_layer_action.cpp:122
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select &Opaque (Replace)"
+msgid "Select All Layers (Replace Selection)"
+msgstr "Вибрати &непрозоре (замінити)"
+
+#: libs/ui/input/kis_select_layer_action.cpp:124
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Selection Mode: Replace"
+msgid "Select from Menu (Replace Selection)"
+msgstr "Режим позначення: Замінити"
+
+#: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
-msgid "Select Multiple Layer Mode"
-msgstr "Режим вибору декількох шарів"
+msgid "Select Top Layer (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:128
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Scale All Layers to new Size"
+msgid "Select All Layers (Add to Selection)"
+msgstr "Масштабувати усі шари до нового розміру"
+
+#: libs/ui/input/kis_select_layer_action.cpp:130
+#, fuzzy, kde-format
+#| msgid "Subtract fro&m current selection"
+msgid "Select from Menu (Add to Selection)"
+msgstr "Від&няти від поточного позначеного"
+
+#: libs/ui/input/kis_select_layer_action.cpp:246
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select all layers"
+msgctxt "Menu entry for the select layer under cursor canvas input action"
+msgid "Select all layers"
+msgstr "Позначити усі шари"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -29913,16 +29951,14 @@ msgid "Adding resource types..."
 msgstr "Додаємо типи ресурсів…"
 
 #: libs/ui/KisApplication.cpp:463
-#, fuzzy, kde-format
-#| msgid "Loading Plugins Exiv/IO..."
+#, kde-format
 msgid "Loading plugins..."
-msgstr "Завантажуємо додатки Exiv та введення-виведення…"
+msgstr "Завантажуємо додатки…"
 
 #: libs/ui/KisApplication.cpp:469
-#, fuzzy, kde-format
-#| msgid "Adding resource types..."
+#, kde-format
 msgid "Loading resources..."
-msgstr "Додаємо типи ресурсів…"
+msgstr "Завантажуємо ресурси…"
 
 #: libs/ui/KisApplication.cpp:478
 #, kde-format
@@ -29930,10 +29966,9 @@ msgid "Loading Main Window..."
 msgstr "Завантажуємо головне вікно…"
 
 #: libs/ui/KisApplication.cpp:510
-#, fuzzy, kde-format
-#| msgid "Scanning..."
+#, kde-format
 msgid "Launching..."
-msgstr "Сканування…"
+msgstr "Триває запуск…"
 
 #: libs/ui/KisApplication.cpp:579
 #, kde-format
@@ -32568,7 +32603,7 @@ msgstr ""
 "X: %1 пк\n"
 "Y: %2 пк"
 
-#: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
+#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
@@ -61131,6 +61166,12 @@ msgstr "Інструмент масштабування"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Інструмент еталонних зображень"
+
+#~ msgid "Select Layer Mode"
+#~ msgstr "Режим вибору шару"
+
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Режим вибору декількох шарів"
 
 #~ msgid "HDR Warning.................................."
 #~ msgstr "Попередження щодо HDR........................."

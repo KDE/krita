@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
+"POT-Creation-Date: 2023-03-05 00:47+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -28560,26 +28560,54 @@ msgstr "Lienwand na rechts dreihen"
 msgid "Reset Rotation"
 msgstr "Dreihen"
 
-#: libs/ui/input/kis_select_layer_action.cpp:36
+#: libs/ui/input/kis_select_layer_action.cpp:116
 #, fuzzy, kde-format
 msgid "Select Layer"
 msgstr "Laag topassen"
 
-#: libs/ui/input/kis_select_layer_action.cpp:37
+#: libs/ui/input/kis_select_layer_action.cpp:117
 #, fuzzy, kde-format
 #| msgid "Click to change cursor position."
-msgid "Selects a layer under cursor position"
+msgid "Select layers under the cursor position"
 msgstr "Klick ännert de Blinkerpositschoon"
 
-#: libs/ui/input/kis_select_layer_action.cpp:40
+#: libs/ui/input/kis_select_layer_action.cpp:120
 #, fuzzy, kde-format
-msgid "Select Layer Mode"
-msgstr "Knütt dreihen"
+msgid "Select Top Layer (Replace Selection)"
+msgstr "Deckstärk utsöken"
 
-#: libs/ui/input/kis_select_layer_action.cpp:41
+#: libs/ui/input/kis_select_layer_action.cpp:122
 #, fuzzy, kde-format
-msgid "Select Multiple Layer Mode"
-msgstr "Knütt dreihen"
+msgid "Select All Layers (Replace Selection)"
+msgstr "Deckstärk utsöken"
+
+#: libs/ui/input/kis_select_layer_action.cpp:124
+#, fuzzy, kde-format
+#| msgid "Selection Mode"
+msgid "Select from Menu (Replace Selection)"
+msgstr "Köörbedrief"
+
+#: libs/ui/input/kis_select_layer_action.cpp:126
+#, kde-format
+msgid "Select Top Layer (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:128
+#, fuzzy, kde-format
+msgid "Select All Layers (Add to Selection)"
+msgstr "Na nieg Grött topassen..."
+
+#: libs/ui/input/kis_select_layer_action.cpp:130
+#, fuzzy, kde-format
+#| msgid "&Subtract from current selection"
+msgid "Select from Menu (Add to Selection)"
+msgstr "Ut de aktuell Köör &aftrecken"
+
+#: libs/ui/input/kis_select_layer_action.cpp:246
+#, fuzzy, kde-format
+msgctxt "Menu entry for the select layer under cursor canvas input action"
+msgid "Select all layers"
+msgstr "Laag topassen"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -32623,7 +32651,7 @@ msgid ""
 "Y: %2 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
+#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -61234,6 +61262,14 @@ msgstr "Ansichtgrött op all"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Betogbild:"
+
+#, fuzzy
+#~ msgid "Select Layer Mode"
+#~ msgstr "Knütt dreihen"
+
+#, fuzzy
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Knütt dreihen"
 
 #, fuzzy
 #~| msgid "Please enter a name for the filter effect"

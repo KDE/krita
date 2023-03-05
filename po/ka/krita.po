@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
+"POT-Creation-Date: 2023-03-05 00:47+0000\n"
 "PO-Revision-Date: 2023-02-27 06:38+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -27536,25 +27536,53 @@ msgstr "მარჯვნივ შებრუნება"
 msgid "Reset Rotation"
 msgstr ""
 
-#: libs/ui/input/kis_select_layer_action.cpp:36
+#: libs/ui/input/kis_select_layer_action.cpp:116
 #, kde-format
 msgid "Select Layer"
 msgstr "ფენის მონიშვნა"
 
-#: libs/ui/input/kis_select_layer_action.cpp:37
+#: libs/ui/input/kis_select_layer_action.cpp:117
 #, kde-format
-msgid "Selects a layer under cursor position"
+msgid "Select layers under the cursor position"
 msgstr ""
 
-#: libs/ui/input/kis_select_layer_action.cpp:40
+#: libs/ui/input/kis_select_layer_action.cpp:120
 #, kde-format
-msgid "Select Layer Mode"
-msgstr "აირჩიეთ ფენის რეჟიმი"
+msgid "Select Top Layer (Replace Selection)"
+msgstr ""
 
-#: libs/ui/input/kis_select_layer_action.cpp:41
+#: libs/ui/input/kis_select_layer_action.cpp:122
 #, kde-format
-msgid "Select Multiple Layer Mode"
-msgstr "აირჩიეთ ბევრი ფენის რეჟიმი"
+msgid "Select All Layers (Replace Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:124
+#, kde-format
+msgid "Select from Menu (Replace Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:126
+#, kde-format
+msgid "Select Top Layer (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:128
+#, kde-format
+msgid "Select All Layers (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:130
+#, kde-format
+msgid "Select from Menu (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:246
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select all layers"
+msgctxt "Menu entry for the select layer under cursor canvas input action"
+msgid "Select all layers"
+msgstr "ყველა ფენის მონიშვნა"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -31454,7 +31482,7 @@ msgstr ""
 "X: %1 პქს\n"
 "Y: %2 პქს"
 
-#: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
+#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
@@ -58466,6 +58494,12 @@ msgstr "გადიდების ხელსაწყო"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
+
+#~ msgid "Select Layer Mode"
+#~ msgstr "აირჩიეთ ფენის რეჟიმი"
+
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "აირჩიეთ ბევრი ფენის რეჟიმი"
 
 #~ msgid "&Rows:"
 #~ msgstr "&მწკრივები:"

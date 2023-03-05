@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
-"PO-Revision-Date: 2023-02-28 10:23+0100\n"
+"POT-Creation-Date: 2023-03-05 00:47+0000\n"
+"PO-Revision-Date: 2023-03-04 11:33+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -28104,25 +28104,63 @@ msgstr "Gira a la dreta"
 msgid "Reset Rotation"
 msgstr "Reinicia el gir"
 
-#: libs/ui/input/kis_select_layer_action.cpp:36
+#: libs/ui/input/kis_select_layer_action.cpp:116
 #, kde-format
 msgid "Select Layer"
 msgstr "Selecció de la capa"
 
-#: libs/ui/input/kis_select_layer_action.cpp:37
-#, kde-format
-msgid "Selects a layer under cursor position"
+#: libs/ui/input/kis_select_layer_action.cpp:117
+#, fuzzy, kde-format
+#| msgid "Selects a layer under cursor position"
+msgid "Select layers under the cursor position"
 msgstr "Selecciona una capa sota la posició del cursor"
 
-#: libs/ui/input/kis_select_layer_action.cpp:40
-#, kde-format
-msgid "Select Layer Mode"
-msgstr "Mode de selecció de la capa"
+#: libs/ui/input/kis_select_layer_action.cpp:120
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select &Opaque (Replace)"
+msgid "Select Top Layer (Replace Selection)"
+msgstr "Selecciona l'&opac (substitueix)"
 
-#: libs/ui/input/kis_select_layer_action.cpp:41
+#: libs/ui/input/kis_select_layer_action.cpp:122
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select &Opaque (Replace)"
+msgid "Select All Layers (Replace Selection)"
+msgstr "Selecciona l'&opac (substitueix)"
+
+#: libs/ui/input/kis_select_layer_action.cpp:124
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Selection Mode: Replace"
+msgid "Select from Menu (Replace Selection)"
+msgstr "Mode de selecció: substitueix"
+
+#: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
-msgid "Select Multiple Layer Mode"
-msgstr "Mode de selecció de múltiples capes"
+msgid "Select Top Layer (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:128
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Scale All Layers to new Size"
+msgid "Select All Layers (Add to Selection)"
+msgstr "Escala totes les capes a una mida nova"
+
+#: libs/ui/input/kis_select_layer_action.cpp:130
+#, fuzzy, kde-format
+#| msgid "Subtract fro&m current selection"
+msgid "Select from Menu (Add to Selection)"
+msgstr "Sos&treu de la selecció actual"
+
+#: libs/ui/input/kis_select_layer_action.cpp:246
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select all layers"
+msgctxt "Menu entry for the select layer under cursor canvas input action"
+msgid "Select all layers"
+msgstr "Selecciona totes les capes"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -29596,16 +29634,14 @@ msgid "Adding resource types..."
 msgstr "S'estan afegint els tipus de recursos..."
 
 #: libs/ui/KisApplication.cpp:463
-#, fuzzy, kde-format
-#| msgid "Loading Pages..."
+#, kde-format
 msgid "Loading plugins..."
-msgstr "Càrrega de pàgines..."
+msgstr "S'estan carregant els connectors..."
 
 #: libs/ui/KisApplication.cpp:469
-#, fuzzy, kde-format
-#| msgid "Adding resource types..."
+#, kde-format
 msgid "Loading resources..."
-msgstr "S'estan afegint els tipus de recursos..."
+msgstr "S'estan carregant els recursos..."
 
 #: libs/ui/KisApplication.cpp:478
 #, kde-format
@@ -29613,10 +29649,9 @@ msgid "Loading Main Window..."
 msgstr "S'està carregant la finestra principal..."
 
 #: libs/ui/KisApplication.cpp:510
-#, fuzzy, kde-format
-#| msgid "Scanning..."
+#, kde-format
 msgid "Launching..."
-msgstr "S'està explorant..."
+msgstr "S'està llançant..."
 
 #: libs/ui/KisApplication.cpp:579
 #, kde-format
@@ -32232,7 +32267,7 @@ msgstr ""
 "X: %1 px\n"
 "Y: %2 px"
 
-#: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
+#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
@@ -60560,3 +60595,9 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
+
+#~ msgid "Select Layer Mode"
+#~ msgstr "Mode de selecció de la capa"
+
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Mode de selecció de múltiples capes"

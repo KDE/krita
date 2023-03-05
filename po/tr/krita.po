@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:45+0000\n"
-"PO-Revision-Date: 2023-02-28 11:48+0300\n"
+"POT-Creation-Date: 2023-03-05 00:47+0000\n"
+"PO-Revision-Date: 2023-03-04 14:02+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -28017,25 +28017,63 @@ msgstr "Sağa Döndür"
 msgid "Reset Rotation"
 msgstr "Döndürmeyi Sıfırla"
 
-#: libs/ui/input/kis_select_layer_action.cpp:36
+#: libs/ui/input/kis_select_layer_action.cpp:116
 #, kde-format
 msgid "Select Layer"
 msgstr "Katman Seç"
 
-#: libs/ui/input/kis_select_layer_action.cpp:37
-#, kde-format
-msgid "Selects a layer under cursor position"
+#: libs/ui/input/kis_select_layer_action.cpp:117
+#, fuzzy, kde-format
+#| msgid "Selects a layer under cursor position"
+msgid "Select layers under the cursor position"
 msgstr "İmleç konumunun altındaki bir katmanı seçer"
 
-#: libs/ui/input/kis_select_layer_action.cpp:40
-#, kde-format
-msgid "Select Layer Mode"
-msgstr "Katman Seçme Kipi"
+#: libs/ui/input/kis_select_layer_action.cpp:120
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select &Opaque (Replace)"
+msgid "Select Top Layer (Replace Selection)"
+msgstr "&Matlığı Seç (Değiştir)"
 
-#: libs/ui/input/kis_select_layer_action.cpp:41
+#: libs/ui/input/kis_select_layer_action.cpp:122
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select &Opaque (Replace)"
+msgid "Select All Layers (Replace Selection)"
+msgstr "&Matlığı Seç (Değiştir)"
+
+#: libs/ui/input/kis_select_layer_action.cpp:124
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Selection Mode: Replace"
+msgid "Select from Menu (Replace Selection)"
+msgstr "Seçim Kipi: Değiştir"
+
+#: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
-msgid "Select Multiple Layer Mode"
-msgstr "Çoklu Katman Kipi Seç"
+msgid "Select Top Layer (Add to Selection)"
+msgstr ""
+
+#: libs/ui/input/kis_select_layer_action.cpp:128
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Scale All Layers to new Size"
+msgid "Select All Layers (Add to Selection)"
+msgstr "Tüm katmanları yeni boyuta ölçekle"
+
+#: libs/ui/input/kis_select_layer_action.cpp:130
+#, fuzzy, kde-format
+#| msgid "Subtract fro&m current selection"
+msgid "Select from Menu (Add to Selection)"
+msgstr "&Geçerli seçimden çıkar"
+
+#: libs/ui/input/kis_select_layer_action.cpp:246
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Select all layers"
+msgctxt "Menu entry for the select layer under cursor canvas input action"
+msgid "Select all layers"
+msgstr "Tüm katmanları seç"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -29508,16 +29546,14 @@ msgid "Adding resource types..."
 msgstr "Özkaynak türleri ekleniyor..."
 
 #: libs/ui/KisApplication.cpp:463
-#, fuzzy, kde-format
-#| msgid "Loading Pages..."
+#, kde-format
 msgid "Loading plugins..."
-msgstr "Sayfalar Yükleniyor..."
+msgstr "Eklentiler yükleniyor..."
 
 #: libs/ui/KisApplication.cpp:469
-#, fuzzy, kde-format
-#| msgid "Adding resource types..."
+#, kde-format
 msgid "Loading resources..."
-msgstr "Özkaynak türleri ekleniyor..."
+msgstr "Özkaynaklar yükleniyor..."
 
 #: libs/ui/KisApplication.cpp:478
 #, kde-format
@@ -29525,10 +29561,9 @@ msgid "Loading Main Window..."
 msgstr "Ana pencere yükleniyor..."
 
 #: libs/ui/KisApplication.cpp:510
-#, fuzzy, kde-format
-#| msgid "Scanning..."
+#, kde-format
 msgid "Launching..."
-msgstr "Taranıyor..."
+msgstr "Başlatılıyor..."
 
 #: libs/ui/KisApplication.cpp:579
 #, kde-format
@@ -32124,7 +32159,7 @@ msgstr ""
 "X: %1 pks\n"
 "Y: %2 pks"
 
-#: libs/ui/tool/kis_tool_utils.cpp:149 libs/ui/tool/kis_tool_utils.cpp:161
+#: libs/ui/tool/kis_tool_utils.cpp:191 libs/ui/tool/kis_tool_utils.cpp:203
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 msgctxt "(qtundo-format)"
 msgid "Clear"
@@ -60284,6 +60319,12 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
+
+#~ msgid "Select Layer Mode"
+#~ msgstr "Katman Seçme Kipi"
+
+#~ msgid "Select Multiple Layer Mode"
+#~ msgstr "Çoklu Katman Kipi Seç"
 
 #~ msgid "HDR Warning.................................."
 #~ msgstr "HDR Uyarısı.................................."

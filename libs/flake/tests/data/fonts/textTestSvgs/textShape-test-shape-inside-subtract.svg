@@ -22,12 +22,12 @@
     <use xlink:href="#bubble" fill="pink" stroke="darkslategrey" transform="translate(125,5)" />
     <use xlink:href="#bubble3" fill="pink" stroke="darkslategrey" transform="translate(125,5)" />
     <text id="test1ttb" transform="translate(125,5)" style="shape-inside: url(#bubble) url(#bubble3); shape-subtract: url(#bubble2) url(#bubble4); writing-mode: vertical-rl; text-align: center"
-          font-family="Krita_Test_Unicode_Variation_A,DejaVu Sans" fill="darkslategrey" font-size="10">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;あ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;あ</text>
+          font-family="Krita_Test_Unicode_Variation_A,DejaVu Sans" fill="darkslategrey" font-size="12">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</text>
     
     <use xlink:href="#bubble" fill="paleturquoise" stroke="brown" transform="translate(185,5)" />
     <use xlink:href="#bubble3" fill="paleturquoise" stroke="brown" transform="translate(185,5)" />
     <text id="test1ttblr" transform="translate(185,5)" style="shape-inside: url(#bubble) url(#bubble3); shape-subtract: url(#bubble2) url(#bubble4); writing-mode: vertical-lr; text-align:center"
-          font-family="Krita_Test_Unicode_Variation_A,DejaVu Sans" fill="brown" font-size="10">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;あ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;あ</text>
+          font-family="Krita_Test_Unicode_Variation_A,DejaVu Sans" fill="brown" font-size="12">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;&#x82A6;&#x82A6;ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</text>
 </g>
 
 </svg>

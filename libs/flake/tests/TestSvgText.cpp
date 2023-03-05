@@ -2484,6 +2484,11 @@ void TestSvgText::testShapeInsideRender()
     testFiles.insert("textShape-test-shape-padding-margin", QRect(0, 0, 250, 130));
     // Tests multiple shapes inside and subtract
     testFiles.insert("textShape-test-shape-inside-subtract", QRect(0, 0, 310, 260));
+    // Test hanging punctuation and text-indent.
+    testFiles.insert("textShape-test-edge-effects", QRect(0, 0, 450, 450));
+    // Tests mixed markup (though only font-size changes for now.
+    testFiles.insert("textShape-test-mixed-markup", QRect(0, 0, 200, 70));
+
 
     for (QString testFile : testFiles.keys()) {
         QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/" + testFile + ".svg"));

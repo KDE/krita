@@ -1426,6 +1426,42 @@ QImage KoSvgTextShape::Private::convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyph
     return img;
 }
 
+/**
+ * Offset polygon points.
+ * HACK ALERT!!! This and getShapes rely on QPainterPath
+ * (and more particularly QPathClipper), being much faster
+ * when their contents are 100% straight lines. It's still
+ * not particularly fast, because QPathClipper clips based
+ * on regions, not on the algebraic line intersections.
+ */
+QPolygonF offsetPolygonPoints(QPolygonF polygon, qreal offset) {
+
+    if (offset == 0) {
+        return polygon;
+    }
+
+    QPainterPath offsetPath;
+    offsetPath.setFillRule(Qt::WindingFill);
+
+    for (int i=0; i < polygon.size()-1; i++) {
+        QLineF line(polygon.at(i), polygon.at(i+1));
+
+        QPointF vectorN(qSin(qDegreesToRadians(line.angle())), qCos(qDegreesToRadians(line.angle())));
+        QPointF offsetP = (offset * vectorN);
+        line.translate(offsetP);
+
+        if (offsetPath.isEmpty()) {
+            offsetPath.moveTo(line.p1());
+        } else if (offsetPath.currentPosition() != line.p1()) {
+            offsetPath.lineTo(line.p1());
+            // TODO: make an arc, without using the arc function, as that slows it down.
+        }
+        offsetPath.lineTo(line.p2());
+    }
+
+    return offsetPath.simplified().toFillPolygon();
+}
+
 QList<QPainterPath> KoSvgTextShape::Private::getShapes(QList<KoShape *> shapesInside,
                                                        QList<KoShape *> shapesSubtract,
                                                        const KoSvgTextProperties &properties) {
@@ -1437,9 +1473,17 @@ QList<QPainterPath> KoSvgTextShape::Private::getShapes(QList<KoShape *> shapesIn
     Q_FOREACH(const KoShape *shape, shapesSubtract) {
         const KoPathShape *path = dynamic_cast<const KoPathShape*>(shape);
         if (path) {
-            QPainterPath p = path->transformation().map(path->outline());
+            QPainterPath p;
+            p.addPolygon(path->transformation().map(path->outline()).toFillPolygon());
             p.setFillRule(path->fillRule());
             // grow each polygon here with the shape margin size.
+            if (shapeMargin > 0) {
+                QList<QPolygonF> fillPolygons = p.toReversed().simplified().toFillPolygons();
+                p.clear();
+                Q_FOREACH (const QPolygonF poly, fillPolygons) {
+                    p.addPolygon(offsetPolygonPoints(poly, shapeMargin));
+                }
+            }
             subtract.addPath(p);
         }
     }
@@ -1448,7 +1492,8 @@ QList<QPainterPath> KoSvgTextShape::Private::getShapes(QList<KoShape *> shapesIn
     Q_FOREACH(const KoShape *shape, shapesInside) {
         const KoPathShape *path = dynamic_cast<const KoPathShape*>(shape);
         if (path) {
-            QPainterPath p = path->transformation().map(path->outline());
+            QPainterPath p;
+            p.addPolygon(path->transformation().map(path->outline()).toFillPolygon());
             p.setFillRule(path->fillRule());
             QPainterPath p2;
             p2.setFillRule(path->fillRule());
@@ -1456,10 +1501,10 @@ QList<QPainterPath> KoSvgTextShape::Private::getShapes(QList<KoShape *> shapesIn
             // 'fill-rule:evenodd' kind of polygon, so we at the very least also need a method
             // that pre-processes windingfill/nonzero polygons to be evenodd before doing further processing.
             // we can't use qpainterpath::simplified, because it's too slow.
-            QList<QPolygonF> fillPolygons = p.toFillPolygons();
+            QList<QPolygonF> fillPolygons = p.simplified().toFillPolygons();
             for (int i=0; i < fillPolygons.size(); i++) {
-                QPolygonF fillPoly = fillPolygons.at(i);
                 // shrink fillpoly by padding size.
+                QPolygonF fillPoly = offsetPolygonPoints(fillPolygons.at(i), shapePadding);
                 Q_FOREACH (const QPolygonF subtractPoly, subtract.toFillPolygons()) {
                     fillPoly = fillPoly.subtracted(subtractPoly);
                 }

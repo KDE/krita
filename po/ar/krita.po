@@ -13730,7 +13730,7 @@ msgstr "&صيّر الحركة..."
 #, kde-format
 msgctxt "action"
 msgid "Render Animation to GIF, Image Sequence or Video"
-msgstr "صيّر الحركة إلى GIF أو تتابع صور أو ڤديو"
+msgstr "صيّر الحركة إلى GIF أو تتابع صور أو فديو"
 
 #. i18n: context: iconText @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
@@ -16142,7 +16142,7 @@ msgstr "عن كريتا"
 #, kde-format
 msgctxt "action"
 msgid "About &KDE"
-msgstr "عن &كدي"
+msgstr "عن &كِيدِي"
 
 #. i18n: context: toolTip @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
@@ -16152,7 +16152,7 @@ msgstr "عن &كدي"
 #, kde-format
 msgctxt "action"
 msgid "About KDE"
-msgstr "عن &كدي"
+msgstr "عن &كِيدِي"
 
 #. i18n: context: text @ Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1842
@@ -19674,7 +19674,7 @@ msgstr ""
 #| msgid "Video Options"
 msgctxt "Blending mode - Geometric Mean"
 msgid "Geometric Mean"
-msgstr "خيارات الڤديو"
+msgstr "خيارات الفديو"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:123
 #, fuzzy, kde-format
@@ -20343,7 +20343,7 @@ msgstr "شريط الحالة"
 #, fuzzy, kde-format
 #| msgid "Video Location:"
 msgid "Location"
-msgstr "مكان الڤديو:"
+msgstr "مكان الفديو:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/resources/KisResourceModel.cpp:141
@@ -22678,7 +22678,7 @@ msgstr "&تتابع الصّور"
 #: libs/ui/animation/wdg_animationrenderer.ui:53
 #, kde-format
 msgid "&Video"
-msgstr "ڤ&ديو"
+msgstr "ف&ديو"
 
 #. i18n: ectx: property (text), widget (QRadioButton, shouldExportAll)
 #. i18n: ectx: property (text), widget (QRadioButton, radioBoth)
@@ -22704,7 +22704,7 @@ msgstr "آخر إطار:"
 #: libs/ui/animation/wdg_animationrenderer.ui:232
 #, kde-format
 msgid "Video Options"
-msgstr "خيارات الڤديو"
+msgstr "خيارات الفديو"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:255
@@ -22730,7 +22730,7 @@ msgstr "صيّر كَ‍:"
 #: libs/ui/animation/wdg_animationrenderer.ui:293
 #, kde-format
 msgid "Video Location:"
-msgstr "مكان الڤديو:"
+msgstr "مكان الفديو:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIncludeAudio)
 #: libs/ui/animation/wdg_animationrenderer.ui:309
@@ -22794,7 +22794,7 @@ msgid ""
 "Select the file format for the image sequence. If you want to render to "
 "video or animated gif, you can only select PNG"
 msgstr ""
-"اختر نسق ملفّات تتابع الصّور. إن أردت تصيير ڤديو أو GIF متحرّك، فيمكنك اختيار "
+"اختر نسق ملفّات تتابع الصّور. إن أردت تصيير فديو أو GIF متحرّك، فيمكنك اختيار "
 "PNG فقط"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnExportOptions)
@@ -24527,7 +24527,7 @@ msgstr "المصدر"
 #, fuzzy, kde-format
 #| msgid "&Support KDE"
 msgid "Support Krita"
-msgstr "ا&دعم كدي"
+msgstr "ا&دعم كِيدِي"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
 #: libs/ui/forms/KisWelcomePage.ui:1178 libs/ui/KisWelcomePageWidget.cpp:394
@@ -26338,7 +26338,7 @@ msgstr "افتح مجلّد الموارد"
 #, fuzzy, kde-format
 #| msgid "Video Options"
 msgid "Geometry Options"
-msgstr "خيارات الڤديو"
+msgstr "خيارات الفديو"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, textLabelFill)
@@ -27378,7 +27378,7 @@ msgstr "حدّ حجم الملفّ:"
 #, fuzzy, kde-format
 #| msgid "Video Location:"
 msgid "Location:"
-msgstr "مكان الڤديو:"
+msgstr "مكان الفديو:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: libs/ui/forms/wdgperformancesettings.ui:257
@@ -31985,7 +31985,7 @@ msgstr "آخر مَن حفظه"
 #: libs/ui/KoDocumentInfoDlg.cpp:170
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
-msgstr "استخدم ’;‘ (مثلًا: مكتب;كدي;كاليغرا)"
+msgstr "استخدم ’;‘ (مثلًا: مكتب;كِيدِي;كاليغرا)"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:296
 #, kde-format
@@ -36275,7 +36275,7 @@ msgstr "&عن %1"
 #: libs/widgetutils/config/kstandardaction_p.h:105
 #, kde-format
 msgid "About &KDE"
-msgstr "عن &كدي"
+msgstr "عن &كِيدِي"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:207
 #, kde-format
@@ -36406,12 +36406,12 @@ msgstr "%1"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:33
 #, kde-format
 msgid "About KDE"
-msgstr "عن كدي"
+msgstr "عن كِيدِي"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:36
 #, kde-format
 msgid "<html><font size=\"5\">KDE - Be Free!</font></html>"
-msgstr "<html><font size=\"5\">كدي- كن حرًّا!</font></html>"
+msgstr "<html><font size=\"5\">كِيدِي- كن حرًّا!</font></html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:50
 #, kde-format
@@ -36426,13 +36426,13 @@ msgid ""
 ">Visit <a href=\"%2\">%2</a> for more information about the KDE community "
 "and the software we produce.</html>"
 msgstr ""
-"<html><b>كدي</b> هي شبكة عالميّة مكوّنة من مطوّري برمجيّات، وفنّانين، وكاتبين، "
+"<html><b>كِيدِي</b> هي شبكة عالميّة مكوّنة من مطوّري برمجيّات، وفنّانين، وكاتبين، "
 "ومترجمين ومن ساهم في تطوير <a href=\"%1\">البرمجيّات الحرّة</a>. صنع هذا "
-"المجتمع مئات التّطبيقات الحرّة كجزء من أُطر عمل لكدي، وفضاءات عمل وتطبيقات.<br /"
-"><br />تُعتبر كدي مشروعًا تعاونيًّا لا يتحكّم أحد بمفرده بجهود أو منتجات كدي "
-"مستبعدًا الغير. الباب مفتوح للجميع للانضمام والمساهمة في كدي، وأنت لست "
+"المجتمع مئات التّطبيقات الحرّة كجزء من أُطر عمل لكِيدِي، وفضاءات عمل وتطبيقات."
+"<br /><br />تُعتبر كِيدِي مشروعًا تعاونيًّا لا يتحكّم أحد بمفرده بجهود أو منتجات "
+"كِيدِي مستبعدًا الغير. الباب مفتوح للجميع للانضمام والمساهمة في كِيدِي، وأنت لست "
 "استثناءً.<br /><br />زُر <a href=\"%2\">%2</a> للاطلاع على معلومات أكثر عن "
-"مجتمع كدي والبرمجيّات التي يقدّمها.</html>"
+"مجتمع كِيدِي والبرمجيّات التي يقدّمها.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:69
 #, kde-format
@@ -36457,7 +36457,7 @@ msgid ""
 "documentation, then a visit to <a href=\"%2\">%2</a> will provide you with "
 "what you need.</html>"
 msgstr ""
-"<html>ليس عليك أن تكون مطوّر برمجيّات لتكون عضوًا من فريق كدي. يمكنك الانضمام "
+"<html>ليس عليك أن تكون مطوّر برمجيّات لتكون عضوًا من فريق كِيدِي. يمكنك الانضمام "
 "إلى الفرق الوطنيّة التي تترجم واجهات البرمجيّات. يمكنك أيضًا توفير الرّسوميّات، "
 "والسّمات، والأصوات وتحسين التّوثيق. أنت تقرّر ما تريد! <br /><br />زُر <a href="
 "\"%1\">%1</a> للاطّلاع على بعض المشاريع التي يمكنك المشاركة فيها.<br /><br /"
@@ -36494,12 +36494,12 @@ msgstr "أبل&غ عن العلل والأمنيات"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
 #, kde-format
 msgid "&Join KDE"
-msgstr "ان&ضمّ إلى كدي"
+msgstr "ان&ضمّ إلى كِيدِي"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:131
 #, kde-format
 msgid "&Support KDE"
-msgstr "ا&دعم كدي"
+msgstr "ا&دعم كِيدِي"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:84
 #: libs/widgetutils/xmlgui/kbugreport.cpp:101
@@ -40296,7 +40296,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "&Video"
 msgid "Video FPS:"
-msgstr "ڤ&ديو"
+msgstr "ف&ديو"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinCaptureInterval)
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinLastFrameSec)
@@ -40338,7 +40338,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "Video Location:"
 msgid "Video duration:"
-msgstr "مكان الڤديو:"
+msgstr "مكان الفديو:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDone)
 #: plugins/dockers/recorder/recorder_export.ui:912
@@ -51522,7 +51522,7 @@ msgstr "قبل:"
 #, fuzzy, kde-format
 #| msgid "Video Options"
 msgid "Deform Options"
-msgstr "خيارات الڤديو"
+msgstr "خيارات الفديو"
 
 #: plugins/paintops/deform/kis_deform_option.cpp:109
 #, kde-format
@@ -55890,7 +55890,7 @@ msgstr "صدّر التّراكب"
 #, fuzzy
 #| msgid "Video Location:"
 msgid "Copy Location"
-msgstr "مكان الڤديو:"
+msgstr "مكان الفديو:"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
 msgid ""
@@ -60198,7 +60198,7 @@ msgstr "اقفل الارتفاع"
 #, fuzzy, kde-format
 #| msgid "Video Location:"
 msgid "Lock Ratio"
-msgstr "مكان الڤديو:"
+msgstr "مكان الفديو:"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:253
 #, fuzzy, kde-format

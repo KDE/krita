@@ -52,7 +52,7 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
 {
     setupUi(this);
 
-    setUnit(m_tool->canvas()->unit());
+    setUnit(KoUnit(KoUnit::Point));
 
     // Connect and initialize automated aspect locker
     m_sizeAspectLocker->connectSpinBoxes(widthSpinBox, heightSpinBox, aspectButton);
@@ -421,6 +421,11 @@ void DefaultToolGeometryWidget::setUnit(const KoUnit &unit)
     positionYSpinBox->setUnit(unit);
     widthSpinBox->setUnit(unit);
     heightSpinBox->setUnit(unit);
+
+    positionXSpinBox->setDecimals(2);
+    positionYSpinBox->setDecimals(2);
+    widthSpinBox->setDecimals(2);
+    heightSpinBox->setDecimals(2);
 
     positionXSpinBox->setLineStep(1.0);
     positionYSpinBox->setLineStep(1.0);

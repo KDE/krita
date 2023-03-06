@@ -157,8 +157,6 @@ Node *Document::nodeByName(const QString &name) const
     if (!d->document) return 0;
     KisNodeSP node = KisLayerUtils::findNodeByName(d->document->image()->rootLayer(),name);
 
-    qDebug() << "node" << node << "is null" << node.isNull();
-
     if (node.isNull()) return 0;
 
     return Node::createNode(d->document->image(), node);

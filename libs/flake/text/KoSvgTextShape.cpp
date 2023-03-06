@@ -31,6 +31,7 @@
 
 #include "kis_debug.h"
 #include <kis_global.h>
+#include "kis_algebra_2d.h"
 
 #include <KoClipMaskPainter.h>
 #include <KoColorBackground.h>
@@ -1436,9 +1437,12 @@ QImage KoSvgTextShape::Private::convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyph
  */
 QPolygonF offsetPolygonPoints(QPolygonF polygon, qreal offset) {
 
-    if (offset == 0) {
+    if (offset == 0 || polygon.isEmpty()) {
         return polygon;
     }
+
+    // We need to guess the direction to do this right...
+    qreal offsetA = KisAlgebra2D::polygonDirection(polygon) * offset;
 
     QPainterPath offsetPath;
     offsetPath.setFillRule(Qt::WindingFill);
@@ -1446,8 +1450,9 @@ QPolygonF offsetPolygonPoints(QPolygonF polygon, qreal offset) {
     for (int i=0; i < polygon.size()-1; i++) {
         QLineF line(polygon.at(i), polygon.at(i+1));
 
-        QPointF vectorN(qSin(qDegreesToRadians(line.angle())), qCos(qDegreesToRadians(line.angle())));
-        QPointF offsetP = (offset * vectorN);
+        QPointF vectorN(qSin(qDegreesToRadians(line.angle())),
+                        qCos(qDegreesToRadians(line.angle())));
+        QPointF offsetP = (offsetA * vectorN);
         line.translate(offsetP);
 
         if (offsetPath.isEmpty()) {
@@ -1478,7 +1483,7 @@ QList<QPainterPath> KoSvgTextShape::Private::getShapes(QList<KoShape *> shapesIn
             p.setFillRule(path->fillRule());
             // grow each polygon here with the shape margin size.
             if (shapeMargin > 0) {
-                QList<QPolygonF> fillPolygons = p.toReversed().simplified().toFillPolygons();
+                QList<QPolygonF> fillPolygons = p.simplified().toFillPolygons();
                 p.clear();
                 Q_FOREACH (const QPolygonF poly, fillPolygons) {
                     p.addPolygon(offsetPolygonPoints(poly, shapeMargin));
@@ -1504,7 +1509,7 @@ QList<QPainterPath> KoSvgTextShape::Private::getShapes(QList<KoShape *> shapesIn
             QList<QPolygonF> fillPolygons = p.simplified().toFillPolygons();
             for (int i=0; i < fillPolygons.size(); i++) {
                 // shrink fillpoly by padding size.
-                QPolygonF fillPoly = offsetPolygonPoints(fillPolygons.at(i), shapePadding);
+                QPolygonF fillPoly = offsetPolygonPoints(fillPolygons.at(i), -shapePadding);
                 Q_FOREACH (const QPolygonF subtractPoly, subtract.toFillPolygons()) {
                     fillPoly = fillPoly.subtracted(subtractPoly);
                 }
@@ -2498,6 +2503,8 @@ QVector<LineBox> KoSvgTextShape::Private::flowTextInShapes(const KoSvgTextProper
             if (foundFirst) {
                 if (needNewLine) {
                     currentLine = LineBox(findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode), ltr, indent);
+                    // We could set this to find the first fitting width, but it's better to try and improve the precision of the firstpos algorithm,
+                    // as this gives more stable results.
                     currentLine.setCurrentChunkForPos(currentPos, isHorizontal);
                 }
                 currentLine.firstLine = firstLine;

@@ -2481,7 +2481,7 @@ void TestSvgText::testShapeInsideRender()
     // Tests justification.
     testFiles.insert("textShape-test-text-align-justify", QRect(0, 0, 550, 550));
     // Tests padding and margin
-    testFiles.insert("textShape-test-shape-padding-margin", QRect(0, 0, 250, 130));
+    testFiles.insert("textShape-test-shape-padding-margin", QRect(0, 0, 250, 255));
     // Tests multiple shapes inside and subtract
     testFiles.insert("textShape-test-shape-inside-subtract", QRect(0, 0, 310, 260));
     // Test hanging punctuation and text-indent.

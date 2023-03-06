@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-26 13:29+0300\n"
+"PO-Revision-Date: 2023-03-05 15:56+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -14716,7 +14716,7 @@ msgstr "&Matlığı Seç (Değiştir)"
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque"
-msgstr "Matlığı Seçin"
+msgstr "Matlığı Seç"
 
 #. i18n: context: text @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1417
@@ -28901,7 +28901,7 @@ msgstr "Matlığı Seç (Simetrik Fark)"
 #: libs/ui/kis_selection_manager.cc:722
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
-msgstr "Matlığı Seçin"
+msgstr "Matlığı Seç"
 
 #: libs/ui/kis_splash_screen.cpp:151
 #, kde-format

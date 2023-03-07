@@ -622,65 +622,40 @@
     <!-- Note: website infrastructure uses the appstream file from the master branch 
                to determine the last release, so this entry must always reflect the
                last actual release -->
-    <release date="2022-04-27" version="5.0.6">
-      <url>https://krita.org/en/item/krita-5.0.6-released/</url>
+    <release date="2023-01-05" version="5.1.5">
       <artifacts>
+        <artifact type="binary" platform="x86_64-appimage">
+          <location>https://download.kde.org/stable/krita/5.1.5/krita-5.1.5-x86_64.appimage</location>
+          <bundle type="appimage">krita-5.1.5</bundle>
+        </artifact>
         <artifact type="binary" platform="macOS">
-          <location>https://download.kde.org/stable/krita/5.0.6/krita-5.0.6.dmg</location>
-          <checksum type="sha256">53edf2519aaad0f2d3e3b858d7bd8dc2e8215ed9b3bfea8de0516527c54aadba</checksum>
-          <size type="download">290333344</size>
+          <location>https://download.kde.org/stable/krita/5.1.5/krita-5.1.5.dmg</location>
+        </artifact>
+        <artifact type="binary" platform="win64">
+          <location>https://download.kde.org/stable/krita/5.1.5/krita-x64-5.1.5-setup.exe</location>
+       </artifact>
+        <artifact type="binary" platform="win32">
+          <location>https://download.kde.org/stable/krita/5.1.5/krita-x86-5.1.5-setup.exe</location>
+        </artifact>
+        <artifact type="binary" platform="android-arm64_v8a">
+          <location>https://download.kde.org/stable/krita/5.1.5/krita_build_apk-release-arm64_v8a-release.apk</location>
+        </artifact>
+        <artifact type="binary" platform="android-armeabi_v7a">
+          <location>https://download.kde.org/stable/krita/5.1.5/krita_build_apk-release-armeabi_v7a-release.apk</location>
+        </artifact>
+        <artifact type="source">
+          <location>https://download.kde.org/stable/krita/5.1.5/krita-5.1.5.tar.xz</location>
         </artifact>
       </artifacts>
+    </release>
+    <release date="2022-04-27" version="5.0.6">
+      <url>https://krita.org/en/item/krita-5.0.6-released/</url>
     </release>
     <release date="2022-04-12" version="5.0.5">
       <url>https://krita.org/en/item/krita-5.0.5-released/</url>
     </release>
     <release date="2021-03-24" version="4.4.3">
       <url>https://krita.org/en/item/krita-4-4-3-released/</url>
-      <artifacts>
-        <artifact type="binary" platform="x86_64-appimage">
-          <location>https://download.kde.org/stable/krita/4.4.3/krita-4.4.3-x86_64.appimage</location>
-          <checksum type="sha256">f3432e6f66ea3a3a8e06adaee062eec020d2c41d0b8a2bd96d84a0036e9ec40e</checksum>
-          <size type="download">235216936</size>
-          <bundle type="appimage">krita-4.4.3</bundle>
-        </artifact>
-        <artifact type="binary" platform="x86_64-appimage">
-          <location>https://download.kde.org/stable/krita/4.4.3/gmic_krita_qt-x86_64.appimage</location>
-          <checksum type="sha256">95b35a7ff2d591d8adad6159b98558f9b88e99a24568ba9ee217126188f5d026</checksum>
-          <size type="download">37085224</size>
-          <bundle type="appimage">gmic_krita_qt-4.4.3</bundle>
-        </artifact>
-        <artifact type="binary" platform="macOS">
-          <location>https://download.kde.org/stable/krita/4.4.3/krita-4.4.3.dmg</location>
-          <checksum type="sha256">f2415d5e1b6b15660996001dddb0b1860b7d32c1fb24f9a6334113929e0c84af</checksum>
-          <size type="download">263109755</size>
-        </artifact>
-        <artifact type="binary" platform="win64">
-          <location>https://download.kde.org/stable/krita/4.4.3/krita-x64-4.4.3-setup.exe</location>
-          <checksum type="sha256">a2861265853789dfa6f973ba7d2ee664d14c5852acae623898535e862fd69afd</checksum>
-          <size type="download">136530048</size>
-        </artifact>
-        <artifact type="binary" platform="win32">
-          <location>https://download.kde.org/stable/krita/4.4.3/krita-x86-4.4.3-setup.exe</location>
-          <checksum type="sha256">46e69f82cc96fe03dfdec54211be2c9bed0d342307a2196d6c5b4798d1be56f8</checksum>
-          <size type="download">121618480</size>
-        </artifact>
-        <artifact type="binary" platform="android-arm64_v8a">
-          <location>https://download.kde.org/stable/krita/4.4.3/krita_build_apk-release-arm64_v8a-release.apk</location>
-          <checksum type="sha256">b11254d049ff8f5b0c33b2129352660ebc0d18068db1ce4f8630520dd2371821</checksum>
-          <size type="download">102868707</size>
-        </artifact>
-        <artifact type="binary" platform="android-armeabi_v7a">
-          <location>https://download.kde.org/stable/krita/4.4.3/krita_build_apk-release-armeabi_v7a-release.apk</location>
-          <checksum type="sha256">e779335cf1813f756f50bd61b2266c037543e1a072b722b297604b21469394bb</checksum>
-          <size type="download">90585293</size>
-        </artifact>
-        <artifact type="source">
-          <location>https://download.kde.org/stable/krita/4.4.3/krita-4.4.3.tar.xz</location>
-          <checksum type="sha256">4aa0821af0baf3f21c1f6b4e97a3cbb41f2bf23b74d59b049c653c8d1cb9a784</checksum>
-          <size type="download">232915178</size>
-        </artifact>
-      </artifacts>
     </release>
     <release date="2021-01-19" version="4.4.2">
       <url>https://krita.org/en/item/krita-4-4-2-released/</url>

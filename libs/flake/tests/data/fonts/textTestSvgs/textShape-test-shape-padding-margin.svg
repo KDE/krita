@@ -14,7 +14,7 @@
     <use xlink:href="#bubble3" fill="powderblue" stroke="sienna" transform="translate(5,5)" />
     <use xlink:href="#bubble2" fill="beige" stroke="seagreen" transform="translate(5,5)" />
     <text id="test1" transform="translate(5,5)" style="shape-inside: url(#bubble) url(#bubble3); shape-subtract: url(#bubble2); shape-margin: 12; shape-padding:6; text-align: center;"
-          font-family="DejaVu Sans" fill="sienna" font-size="10">The quick brown fox jumps over the lazy dog, black sphinx of quartz hear my vow.
+          font-family="DejaVu Sans" fill="sienna" font-size="10">The quick brown fox jumps over the lazy dog, sphinx of black quartz judge my vow.
     </text>
     <text id="test2" transform="translate(5,5)" style="shape-inside: url(#bubble2); shape-margin: 12; shape-padding:6; text-align: center;"
           font-family="DejaVu Sans" fill="seagreen" font-size="10">Pa's wijze lynx overzag vroom het fikse aquaduct.
@@ -27,7 +27,7 @@
           font-family="DejaVu Sans" fill="seagreen" font-size="10">The quick brown fox jumps over the lazy dog.
     </text>
     <text id="test1" transform="translate(20,130)" style="shape-inside: url(#coin); shape-subtract: url(#curly); shape-margin: 6; shape-padding:3; text-align: center;"
-          font-family="DejaVu Sans" fill="sienna" font-size="10">A Black Sphinx of quartz hears vows.</text>
+          font-family="DejaVu Sans" fill="sienna" font-size="10">A Sphinx of black quartz judges vows.</text>
 </g>
 
 </svg>

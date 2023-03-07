@@ -2170,11 +2170,11 @@ KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value,
 
     QString val = value.mid(start, end - start);
     QString fillRule;
-    if (val.startsWith("evenodd")) {
-        start += QString("evenodd").size();
+    if (val.startsWith("evenodd,")) {
+        start += QString("evenodd,").size();
         fillRule = "evenodd";
-    } else if (val.startsWith("nonzero")) {
-        start += QString("nonzero").size();
+    } else if (val.startsWith("nonzero,")) {
+        start += QString("nonzero,").size();
         fillRule = "nonzero";
     }
     val = value.mid(start, end - start);

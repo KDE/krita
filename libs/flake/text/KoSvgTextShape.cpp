@@ -1898,6 +1898,8 @@ QVector<LineBox> KoSvgTextShape::Private::breakLines(const KoSvgTextProperties &
                 } else {
                     addWordToLine(result, currentPos, wordIndices, currentLine, ltr);
                 }
+            } else {
+                addWordToLine(result, currentPos, wordIndices, currentLine, ltr);
             }
         }
 
@@ -3440,13 +3442,6 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                 pen.setWidthF(72./xRes);
                 painter.setPen(pen);
                 painter.drawPolygon(tf.map(result.at(i).path.boundingRect()));
-                //Q_FOREACH(QLineF offsetLine, result.at(i).offsetPoly) {
-                //    painter.drawLine(offsetLine);
-                //}
-                //Q_FOREACH(QPointF candidate, result.at(i).candidates) {
-                //    painter.setPen(Qt::green);
-                //    painter.drawPoint(candidate);
-                //}
                 QColor penColor = result.at(i).anchored_chunk?
                                          result.at(i).isHanging? Qt::red:
                 Qt::magenta: result.at(i).lineEnd==NoChange? Qt::cyan:

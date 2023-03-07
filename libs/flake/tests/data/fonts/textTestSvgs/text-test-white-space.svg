@@ -29,6 +29,10 @@
     <text style="white-space:normal;" transform="translate(120,180)" font-family="DejaVu Sans" fill="green"
           font-size="10" dy="0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0">Test    text   with      white-space.</text>
     
+    <text style="white-space:pre;" transform="translate(280,170)" font-family="DejaVu Sans" fill="green"
+          font-size="10" dy="0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 -3 3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0">Test hard breaks for
+svg 1.1 style text.</text>
+
     <text id="test-ws-pre-wrap" transform="translate(5,115)"
           style="white-space:pre-wrap; tab-size:4; inline-size:100"
           font-family="DejaVu Sans" fill="red"

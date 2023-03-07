@@ -27,6 +27,7 @@
 #include "KisView.h"
 #include "KisViewManager.h"
 #include "KisImportExportManager.h"
+#include "KoDocumentInfo.h"
 
 #include <kis_debug.h>
 #include <KoResourcePaths.h>
@@ -539,6 +540,7 @@ void KisPart::openTemplate(const QUrl &url)
     bool ok = document->loadNativeFormat(url.toLocalFile());
     document->setModified(false);
     document->undoStack()->clear();
+    document->documentInfo()->resetMetaData();
 
     if (ok) {
         QString mimeType = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());

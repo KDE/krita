@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-05 00:47+0000\n"
+"POT-Creation-Date: 2023-03-07 00:44+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -18247,7 +18247,7 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Yangi hujjatlarda ochish"
 
-#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2063
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2063
 #: libs/ui/KisMainWindow.cpp:2146
 #, fuzzy, kde-format
 msgid "Import frames"

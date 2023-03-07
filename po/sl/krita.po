@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-05 00:47+0000\n"
-"PO-Revision-Date: 2023-03-04 16:38+0100\n"
+"POT-Creation-Date: 2023-03-07 00:44+0000\n"
+"PO-Revision-Date: 2023-03-06 14:18+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -18062,7 +18062,7 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Dokument CSV"
 
-#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2063
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2063
 #: libs/ui/KisMainWindow.cpp:2146
 #, kde-format
 msgid "Import frames"
@@ -28025,54 +28025,42 @@ msgid "Select Layer"
 msgstr "Izberite plast"
 
 #: libs/ui/input/kis_select_layer_action.cpp:117
-#, fuzzy, kde-format
-#| msgid "Selects a layer under cursor position"
+#, kde-format
 msgid "Select layers under the cursor position"
-msgstr "Izbere plast pod položajem kazalca"
+msgstr "Izberi plasti pod položajem kazalca"
 
 #: libs/ui/input/kis_select_layer_action.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque (Replace)"
+#, kde-format
 msgid "Select Top Layer (Replace Selection)"
-msgstr "&Izberi prekrivno (Zamenjaj)"
+msgstr "Izberi vrhnjo plast (zamenjaj izbor)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque (Replace)"
+#, kde-format
 msgid "Select All Layers (Replace Selection)"
-msgstr "&Izberi prekrivno (Zamenjaj)"
+msgstr "Izberi vse plasti (zamenjaj izbor)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:124
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Selection Mode: Replace"
+#, kde-format
 msgid "Select from Menu (Replace Selection)"
-msgstr "Način izbiranja: zamenjaj"
+msgstr "Izberi iz menija (zamenjaj izbor)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
 msgid "Select Top Layer (Add to Selection)"
-msgstr ""
+msgstr "Izberi vrhnjo plast (dodaj v izbor)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale All Layers to new Size"
+#, kde-format
 msgid "Select All Layers (Add to Selection)"
-msgstr "Umeri vse plasti na novo velikost"
+msgstr "Izberi vse plasti (dodaj v izbor)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:130
-#, fuzzy, kde-format
-#| msgid "Subtract fro&m current selection"
+#, kde-format
 msgid "Select from Menu (Add to Selection)"
-msgstr "O&dštej od trenutnega izbora"
+msgstr "Izberi iz menija (dodaj v izbor)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:246
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select all layers"
+#, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
 msgstr "Izberi vse plasti"
@@ -60379,9 +60367,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "Select Layer Mode"
-#~ msgstr "Izberite način plasti"
-
-#~ msgid "Select Multiple Layer Mode"
-#~ msgstr "Izberite način več plasti"

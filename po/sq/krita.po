@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-05 00:47+0000\n"
+"POT-Creation-Date: 2023-03-07 00:44+0000\n"
 "PO-Revision-Date: 2011-06-01 01:29-0400\n"
 "Last-Translator: Agron Selimaj <linuxmaster@verizon.net>\n"
 "Language-Team: Albanian <sq@li.org>\n"
@@ -18122,7 +18122,7 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Gjerësia:"
 
-#: libs/libkis/Document.cpp:961 libs/ui/KisMainWindow.cpp:2063
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2063
 #: libs/ui/KisMainWindow.cpp:2146
 #, fuzzy, kde-format
 msgid "Import frames"

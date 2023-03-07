@@ -7,6 +7,7 @@
       
       <polygon id="overlapNonZero" fill-rule="nonzero" points="0 0, 20 0, 70 70, 50 70, 50 0, 120 0, 120 120, 0 120" />
       <polygon id="overlapEvenOdd" fill-rule="evenodd" points="0 0, 20 0, 70 70, 50 70, 50 0, 120 0, 120 120, 0 120" />
+      <path id="ring" fill-rule="nonzero" d="M0 0L120 0L120 120L0 120ZM50 70L70 70L70 50L50 50Z" />
       
       <polygon id="pronged" fill-rule="evenodd" points="0 0, 50 0, 50 70, 70 70, 70 0, 120 0, 120 120, 0 120" />
       
@@ -40,8 +41,8 @@
           font-family="DejaVu Sans" fill="blue" font-size="10">Text inside a self-overlapping polygon with fill-rule: nonzero. The quick brown fox jumps over the lazy dog. <tspan direction="rtl" unicode-bidi="embed">داستان SVG 2.0 SE طولا ني است.</tspan>
     </text>
     
-    <use id="ref-overlapEvenOdd" fill="cornflowerblue" fill-opacity="0.2" xlink:href="#overlapEvenOdd" stroke="cornflowerblue" transform="translate(130,130)" />
-    <text id="test-overlapEvenOdd" transform="translate(130,130)" style="shape-inside: url(#overlapEvenOdd);"
+    <use id="ref-overlapEvenOdd" fill="cornflowerblue" fill-opacity="0.2" xlink:href="#ring" stroke="cornflowerblue" transform="translate(130,130)" />
+    <text id="test-overlapEvenOdd" transform="translate(130,130)" style="shape-inside: url(#ring);"
           font-family="DejaVu Sans" fill="blue" font-size="10">Text inside a self-overlapping polygon with fill-rule: evenodd. The quick brown fox jumps over the lazy dog. <tspan direction="rtl" unicode-bidi="embed">داستان SVG 2.0 SE طولا ني است.</tspan>
     </text>
     

@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2017 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -28,6 +29,7 @@
 #include <text/KoFontRegistry.h>
 #include <text/KoSvgTextChunkShape_p.h>
 #include <text/KoSvgTextShapeMarkupConverter.h>
+#include <text/KoPolygonUtils.h>
 
 #include "kis_debug.h"
 #include <kis_global.h>
@@ -1427,67 +1429,38 @@ QImage KoSvgTextShape::Private::convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyph
     return img;
 }
 
-/**
- * Offset polygon points.
- * HACK ALERT!!! This and getShapes rely on QPainterPath
- * (and more particularly QPathClipper), being much faster
- * when their contents are 100% straight lines. It's still
- * not particularly fast, because QPathClipper clips based
- * on regions, not on the algebraic line intersections.
- */
-QPolygonF offsetPolygonPoints(QPolygonF polygon, qreal offset) {
-
-    if (offset == 0 || polygon.isEmpty()) {
-        return polygon;
-    }
-
-    // We need to guess the direction to do this right...
-    qreal offsetA = KisAlgebra2D::polygonDirection(polygon) * offset;
-
-    QPainterPath offsetPath;
-    offsetPath.setFillRule(Qt::WindingFill);
-
-    for (int i=0; i < polygon.size()-1; i++) {
-        QLineF line(polygon.at(i), polygon.at(i+1));
-
-        QPointF vectorN(qSin(qDegreesToRadians(line.angle())),
-                        qCos(qDegreesToRadians(line.angle())));
-        QPointF offsetP = (offsetA * vectorN);
-        line.translate(offsetP);
-
-        if (offsetPath.isEmpty()) {
-            offsetPath.moveTo(line.p1());
-        } else if (offsetPath.currentPosition() != line.p1()) {
-            offsetPath.lineTo(line.p1());
-            // TODO: make an arc, without using the arc function, as that slows it down.
-        }
-        offsetPath.lineTo(line.p2());
-    }
-
-    return offsetPath.simplified().toFillPolygon();
-}
 
 QList<QPainterPath> KoSvgTextShape::Private::getShapes(QList<KoShape *> shapesInside,
                                                        QList<KoShape *> shapesSubtract,
                                                        const KoSvgTextProperties &properties) {
-    qreal shapePadding = properties.propertyOrDefault(KoSvgTextProperties::ShapePaddingId).toReal();
-    qreal shapeMargin = properties.propertyOrDefault(KoSvgTextProperties::ShapeMarginId).toReal();
 
+    // the boost polygon method requires (and gives best result) on a inter-based polygon,
+    // so we need to scale up. The scale selected here is the size freetype coordinates give to a single pixel.
+    qreal scale = 64.0;
+    QTransform precisionTF = QTransform::fromScale(scale, scale);
+
+    qreal shapePadding = scale * properties.propertyOrDefault(KoSvgTextProperties::ShapePaddingId).toReal();
+    qreal shapeMargin = scale * properties.propertyOrDefault(KoSvgTextProperties::ShapeMarginId).toReal();
 
     QPainterPath subtract;
     Q_FOREACH(const KoShape *shape, shapesSubtract) {
         const KoPathShape *path = dynamic_cast<const KoPathShape*>(shape);
         if (path) {
-            QPainterPath p;
-            p.addPolygon(path->transformation().map(path->outline()).toFillPolygon());
+            QPainterPath p = path->transformation().map(path->outline());
             p.setFillRule(path->fillRule());
             // grow each polygon here with the shape margin size.
             if (shapeMargin > 0) {
-                QList<QPolygonF> fillPolygons = p.simplified().toFillPolygons();
-                p.clear();
-                Q_FOREACH (const QPolygonF poly, fillPolygons) {
-                    p.addPolygon(offsetPolygonPoints(poly, shapeMargin));
+                QList<QPolygon> subpathPolygons;
+                Q_FOREACH(QPolygonF subPath, p.toSubpathPolygons()) {
+                    subpathPolygons.append(precisionTF.map(subPath).toPolygon());
                 }
+                subpathPolygons = KoPolygonUtils::offsetPolygons(subpathPolygons, shapeMargin);
+                p.clear();
+                Q_FOREACH (const QPolygon poly, subpathPolygons) {
+                    p.addPolygon(poly);
+                }
+            } else {
+                p = precisionTF.map(p);
             }
             subtract.addPath(p);
         }
@@ -1497,25 +1470,27 @@ QList<QPainterPath> KoSvgTextShape::Private::getShapes(QList<KoShape *> shapesIn
     Q_FOREACH(const KoShape *shape, shapesInside) {
         const KoPathShape *path = dynamic_cast<const KoPathShape*>(shape);
         if (path) {
-            QPainterPath p;
-            p.addPolygon(path->transformation().map(path->outline()).toFillPolygon());
+            QPainterPath p = path->transformation().map(path->outline());
             p.setFillRule(path->fillRule());
             QPainterPath p2;
             p2.setFillRule(path->fillRule());
-            // if you subtract a qpolygonf from another, the returned polygon is always a
-            // 'fill-rule:evenodd' kind of polygon, so we at the very least also need a method
-            // that pre-processes windingfill/nonzero polygons to be evenodd before doing further processing.
-            // we can't use qpainterpath::simplified, because it's too slow.
-            QList<QPolygonF> fillPolygons = p.simplified().toFillPolygons();
-            for (int i=0; i < fillPolygons.size(); i++) {
-                // shrink fillpoly by padding size.
-                QPolygonF fillPoly = offsetPolygonPoints(fillPolygons.at(i), -shapePadding);
-                Q_FOREACH (const QPolygonF subtractPoly, subtract.toFillPolygons()) {
-                    fillPoly = fillPoly.subtracted(subtractPoly);
-                }
-                p2.addPolygon(fillPoly);
+
+            QList<QPolygon> subpathPolygons;
+            Q_FOREACH(QPolygonF subPath, p.toSubpathPolygons()) {
+                subpathPolygons.append(precisionTF.map(subPath).toPolygon());
             }
-            shapes.append(p2);
+            subpathPolygons = KoPolygonUtils::offsetPolygons(subpathPolygons, -shapePadding);
+
+            for (int i=0; i < subpathPolygons.size(); i++) {
+                QPolygonF subpathPoly = subpathPolygons.at(i);
+                Q_FOREACH(QPolygonF subtractPoly, subtract.toSubpathPolygons()) {
+                    if (subpathPoly.intersects(subtractPoly)) {
+                        subpathPoly = subpathPoly.subtracted(subtractPoly);
+                    }
+                }
+                p2.addPolygon(subpathPoly);
+            }
+            shapes.append(precisionTF.inverted().map(p2));
         }
     }
     return shapes;

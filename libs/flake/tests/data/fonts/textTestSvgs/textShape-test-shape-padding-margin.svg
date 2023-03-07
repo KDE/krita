@@ -6,7 +6,7 @@
     <path id="bubble3" transform="translate(120, 0)" d="M60 0C90 0 120 30 120 60C120 90 90 120 60 120C30 120 0 90 0 60C0 30 30 0 60 0Z" />
     
     <path id="curly"  fill-rule="nonzero" transform="translate(0, 0)" d="M60 60C30 30 60 0 90 0C115 0 120 30 120 60C120 90 90 120 60 120C30 120 0 90 0 60C0 30 5 0 30 0C60 0 90 30 60 60Z" />
-    <path id="curly2" fill-rule="evenodd" transform="translate(90, 0)" d="M60 60C30 30 60 0 90 0C115 0 120 30 120 60C120 90 90 120 60 120C30 120 0 90 0 60C0 30 5 0 30 0C60 0 90 30 60 60Z" />
+    <path id="coin" fill-rule="nonzero" transform="translate(90, 0)" d="M60 0C90 0 120 30 120 60C120 90 90 120 60 120C30 120 0 90 0 60C0 30 30 0 60 0ZM50 70L70 70L70 50L50 50Z" />
 </defs>
 <g id="testRect">
     
@@ -21,12 +21,12 @@
     </text>
     
     <use xlink:href="#curly" fill="beige" stroke="none" transform="translate(20,130)" />
-    <use xlink:href="#curly2" fill="powderblue" stroke="sienna" transform="translate(20,130)" />
+    <use xlink:href="#coin" fill="powderblue" stroke="sienna" transform="translate(20,130)" />
     <use xlink:href="#curly" fill="none" stroke="seagreen" transform="translate(20,130)" />
-    <text id="test1" transform="translate(20,130)" style="shape-inside: url(#curly); shape-subtract: url(#curly2); shape-margin: 6; shape-padding:3; text-align: center;"
+    <text id="test1" transform="translate(20,130)" style="shape-inside: url(#curly); shape-subtract: url(#coin); shape-margin: 6; shape-padding:3; text-align: center;"
           font-family="DejaVu Sans" fill="seagreen" font-size="10">The quick brown fox jumps over the lazy dog.
     </text>
-    <text id="test1" transform="translate(20,130)" style="shape-inside: url(#curly2); shape-subtract: url(#curly); shape-margin: 6; shape-padding:3; text-align: center;"
+    <text id="test1" transform="translate(20,130)" style="shape-inside: url(#coin); shape-subtract: url(#curly); shape-margin: 6; shape-padding:3; text-align: center;"
           font-family="DejaVu Sans" fill="sienna" font-size="10">A Black Sphinx of quartz hears vows.</text>
 </g>
 

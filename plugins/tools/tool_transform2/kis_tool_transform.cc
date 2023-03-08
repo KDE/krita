@@ -910,10 +910,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
     if (m_currentlyUsingOverlayPreviewStyle) {
         TransformStrokeStrategy *transformStrategy = new TransformStrokeStrategy(mode, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data());
         connect(transformStrategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP)));
-        connect(transformStrategy,
-                &TransformStrokeStrategy::sigTransactionGenerated,
-                this,
-                &KisToolTransform::slotTransactionGenerated);
+        connect(transformStrategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
         strategy = transformStrategy;
 
         // save unique identifier of the stroke so we could
@@ -924,10 +921,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
 
     } else {
         InplaceTransformStrokeStrategy *transformStrategy = new InplaceTransformStrokeStrategy(mode, m_currentArgs.filterId(), forceReset, currentNode, selection, externalSource, image().data(), image().data(), image()->root(), m_forceLodMode);
-        connect(transformStrategy,
-                &InplaceTransformStrokeStrategy::sigTransactionGenerated,
-                this,
-                &KisToolTransform::slotTransactionGenerated);
+        connect(transformStrategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
         strategy = transformStrategy;
 
         // save unique identifier of the stroke so we could
@@ -971,9 +965,7 @@ void KisToolTransform::endStroke()
     outlineChanged();
 }
 
-void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties &transaction,
-                                                ToolTransformArgs &args,
-                                                void *strokeStrategyCookie)
+void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *strokeStrategyCookie)
 {
     if (!m_strokeId || strokeStrategyCookie != m_strokeStrategyCookie) return;
 

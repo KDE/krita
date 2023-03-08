@@ -424,7 +424,7 @@ void TransformStrokeStrategy::initStrokeCallback()
         m_processedNodes.clear();
 
         TransformTransactionProperties transaction(QRect(), &m_initialTransformArgs, m_rootNode, m_processedNodes);
-        emit sigTransactionGenerated(transaction, m_initialTransformArgs, this);
+        Q_EMIT sigTransactionGenerated(transaction, m_initialTransformArgs, this);
         return;
     }
 

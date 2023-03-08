@@ -134,7 +134,7 @@ public:
     void doStrokeCallback(KisStrokeJobData *data) override;
 
 Q_SIGNALS:
-    void sigTransactionGenerated(TransformTransactionProperties &transaction, ToolTransformArgs &args, void *cookie);
+    void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *cookie);
 
 protected:
     void postProcessToplevelCommand(KUndo2Command *command) override;

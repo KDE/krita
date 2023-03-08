@@ -300,7 +300,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
         m_d->processedNodes.clear();
 
         TransformTransactionProperties transaction(QRect(), &m_d->initialTransformArgs, m_d->rootNode, m_d->processedNodes);
-        emit sigTransactionGenerated(transaction, m_d->initialTransformArgs, this);
+        Q_EMIT sigTransactionGenerated(transaction, m_d->initialTransformArgs, this);
         return;
     }
 
@@ -474,7 +474,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
             }
         }
 
-        emit sigTransactionGenerated(transaction, m_d->initialTransformArgs, this);
+        Q_EMIT sigTransactionGenerated(transaction, m_d->initialTransformArgs, this);
     });
 
     /// recover back visibility of decorated nodes

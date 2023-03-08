@@ -336,9 +336,7 @@ private Q_SLOTS:
     void slotMoveDiscreteRight();
     void slotMoveDiscreteRightMore();
 
-    void slotTransactionGenerated(TransformTransactionProperties &transaction,
-                                  ToolTransformArgs &args,
-                                  void *strokeStrategyCookie);
+    void slotTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *strokeStrategyCookie);
     void slotPreviewDeviceGenerated(KisPaintDeviceSP device);
 
     // context menu options for updating the transform type

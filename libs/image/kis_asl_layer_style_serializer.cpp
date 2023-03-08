@@ -1239,7 +1239,7 @@ void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style, 
     CONN_BOOL("/ebbl/InvT", setTextureInvert, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
     CONN_BOOL("/ebbl/Algn", setTextureAlignWithLayer, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
     CONN_UNITF("/ebbl/Scl ", "#Prc", setTextureScale, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
-    CONN_UNITF("/ebbl/textureDepth", "#Prc", setTextureDepth, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_UNITF("/ebbl/textureDepth ", "#Prc", setTextureDepth, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
     CONN_PATTERN("/ebbl/Ptrn", setTexturePattern, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
     CONN_POINT("/ebbl/phase", setTexturePhase, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 }

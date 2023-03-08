@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-07 00:44+0000\n"
+"POT-Creation-Date: 2023-03-08 00:44+0000\n"
 "PO-Revision-Date: 2020-01-12 12:14+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -20665,7 +20665,7 @@ msgstr "Saída"
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:453 libs/ui/KisView.cpp:1144
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1144
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -20702,9 +20702,9 @@ msgstr "Cargando os recursos…"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:650
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:664
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:677
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20713,7 +20713,7 @@ msgstr "Cargando os recursos…"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:607
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:674
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:714
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:774
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:770
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
@@ -20731,7 +20731,7 @@ msgstr "Cargando os recursos…"
 #: libs/ui/KisMainWindow.cpp:1923 libs/ui/KisMainWindow.cpp:1932
 #: libs/ui/KisMainWindow.cpp:2071 libs/ui/KisMainWindow.cpp:2132
 #: libs/ui/KisMainWindow.cpp:2153 libs/ui/KisMainWindow.cpp:2766
-#: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -21814,26 +21814,26 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N/D"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:379
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:390
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:433
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:445
 #, fuzzy, kde-format
 #| msgctxt "ICC profile version"
 #| msgid "ICC Version: "
 msgid "FFmpeg Version: "
 msgstr "Versión de ICC:"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:650
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:664
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
 #, fuzzy, kde-format
 #| msgid ""
 #| "The location of FFmpeg is invalid. Please select the correct location of "
@@ -21846,7 +21846,7 @@ msgstr ""
 "A ruta de FFmpeg é incorrecta. Seleccione a ruta correcta do executábel de "
 "FFmpeg no sistema."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:677
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Escriba o nome do ficheiro no que renderizar."
@@ -22092,7 +22092,7 @@ msgstr "Krita non é compatíbel con este formato de ficheiro"
 msgid "No video stream could be found!"
 msgstr "Non se atopou ningún nodo «text» (de texto)!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:774
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
 #, fuzzy, kde-format
 #| msgid "Failed to download remote file"
 msgid "Failed to load video information"
@@ -32441,7 +32441,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Novo grupo %1"
 
-#: libs/ui/KisPart.cpp:553
+#: libs/ui/KisPart.cpp:555
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -32450,7 +32450,7 @@ msgstr ""
 "Non se puido crear o documento a partir do modelo\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:558
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -45168,7 +45168,7 @@ msgctxt "@title:column"
 msgid "Comment"
 msgstr "Comentario"
 
-#: plugins/extensions/qmic/kis_qmic_interface.cpp:237
+#: plugins/extensions/qmic/kis_qmic_interface.cpp:233
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Gmic filter"
@@ -62568,14 +62568,14 @@ msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "As seleccións non se usan ao editar máscaras de transformación. "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Non pode transformarse unha capa baleira. "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -62585,7 +62585,7 @@ msgstr ""
 "Tamén se transformarán as subcapas invisíbeis. Bloquee as capas se non quere "
 "transformalas."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:358
+#: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Transforma unha capa ou unha selección"

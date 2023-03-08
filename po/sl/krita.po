@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-07 00:44+0000\n"
+"POT-Creation-Date: 2023-03-08 00:44+0000\n"
 "PO-Revision-Date: 2023-03-06 14:18+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -19312,7 +19312,7 @@ msgstr "Oddalji"
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:453 libs/ui/KisView.cpp:1144
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1144
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19348,9 +19348,9 @@ msgstr "Krajevni viri"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:650
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:664
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:677
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19359,7 +19359,7 @@ msgstr "Krajevni viri"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:607
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:674
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:714
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:774
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:770
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
@@ -19377,7 +19377,7 @@ msgstr "Krajevni viri"
 #: libs/ui/KisMainWindow.cpp:1923 libs/ui/KisMainWindow.cpp:1932
 #: libs/ui/KisMainWindow.cpp:2071 libs/ui/KisMainWindow.cpp:2132
 #: libs/ui/KisMainWindow.cpp:2153 libs/ui/KisMainWindow.cpp:2766
-#: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -20372,17 +20372,17 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "ni na voljo"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:379
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:390
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Veljavna izvršljiva datoteka FFmpeg ni podana …"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:433
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:445
 #, kde-format
 msgid "FFmpeg Version: "
 msgstr "Različica FFMpeg: "
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:650
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20391,7 +20391,7 @@ msgstr ""
 "FFmpeg, ki ste nam ga podali, je stisnjen. Poskusite najprej izvleči FFmpeg "
 "iz arhiva."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:664
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be "
@@ -20402,7 +20402,7 @@ msgstr ""
 "veljavno.                                                     Izberite pravo "
 "mesto izvršilne datoteke FFmpeg na svojem sistemu."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:677
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Vnesite ime datoteke, v katero želite upodabljati."
@@ -20642,7 +20642,7 @@ msgstr "Vaša različica FFMpeg ne podpira te vrste zapisa"
 msgid "No video stream could be found!"
 msgstr "Video toka ni bilo mogoče najti!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:774
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
 #, kde-format
 msgid "Failed to load video information"
 msgstr "Informacij o videu ni bilo mogoče naložiti"
@@ -30640,7 +30640,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Nova skupina %1"
 
-#: libs/ui/KisPart.cpp:553
+#: libs/ui/KisPart.cpp:555
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -30649,7 +30649,7 @@ msgstr ""
 "Iz predloge ni bilo mogoče ustvariti dokumenta\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:558
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -42773,7 +42773,7 @@ msgctxt "@title:column"
 msgid "Comment"
 msgstr "Komentar"
 
-#: plugins/extensions/qmic/kis_qmic_interface.cpp:237
+#: plugins/extensions/qmic/kis_qmic_interface.cpp:233
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
 msgstr "Filter G’MIC"
@@ -59585,14 +59585,14 @@ msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Izbori se ne uporabijo pri urejanju mask transformacije "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Prazne plasti ni mogoče preoblikovati"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59602,7 +59602,7 @@ msgstr ""
 "Preoblikovale se bodo tudi nevidne podplasti. Zaklenite plasti, če ne "
 "želite, da se preoblikujejo "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:358
+#: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Preoblikuj plast ali izbor"

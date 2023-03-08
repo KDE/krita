@@ -61,7 +61,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-07 00:44+0000\n"
+"POT-Creation-Date: 2023-03-08 00:44+0000\n"
 "PO-Revision-Date: 2023-03-05 15:56+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -19405,7 +19405,7 @@ msgstr "Uit"
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:453 libs/ui/KisView.cpp:1144
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1144
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19441,9 +19441,9 @@ msgstr "Lokale hulpbronnen"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:650
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:664
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:677
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19452,7 +19452,7 @@ msgstr "Lokale hulpbronnen"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:607
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:674
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:714
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:774
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:770
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
@@ -19470,7 +19470,7 @@ msgstr "Lokale hulpbronnen"
 #: libs/ui/KisMainWindow.cpp:1923 libs/ui/KisMainWindow.cpp:1932
 #: libs/ui/KisMainWindow.cpp:2071 libs/ui/KisMainWindow.cpp:2132
 #: libs/ui/KisMainWindow.cpp:2153 libs/ui/KisMainWindow.cpp:2766
-#: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -20471,17 +20471,17 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N.v.t."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:379
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:390
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Geen geldig binair bestand FFmpeg geleverd..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:433
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:445
 #, kde-format
 msgid "FFmpeg Version: "
 msgstr "FFmpeg-versie: "
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:650
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20490,7 +20490,7 @@ msgstr ""
 "De FFmpeg die u ons hebt gegeven lijkt te zijn gecomprimeerd. Probeer eerst "
 "FFmpeg uit het archief uit te pakken."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:664
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be "
@@ -20501,7 +20501,7 @@ msgstr ""
 "zijn.                                                     Selecteer de "
 "juiste locatie van het uitvoerbare programma FFmpeg op uw systeem."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:677
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Voer een bestandsnaam waarnaar te renderen."
@@ -20742,7 +20742,7 @@ msgstr "Uw FFMpeg-versie ondersteunt dit formaat niet"
 msgid "No video stream could be found!"
 msgstr "Geen video-stream gevonden!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:774
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
 #, kde-format
 msgid "Failed to load video information"
 msgstr "Video-informatie laden is mislukt"
@@ -30802,7 +30802,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Nieuwe groep %1"
 
-#: libs/ui/KisPart.cpp:553
+#: libs/ui/KisPart.cpp:555
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -30811,7 +30811,7 @@ msgstr ""
 "Kon document niet aanmaken uit sjabloon\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:558
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -42938,7 +42938,7 @@ msgctxt "@title:column"
 msgid "Comment"
 msgstr "Toelichting"
 
-#: plugins/extensions/qmic/kis_qmic_interface.cpp:237
+#: plugins/extensions/qmic/kis_qmic_interface.cpp:233
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
 msgstr "G'MIC-filter"
@@ -59853,14 +59853,14 @@ msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Selecties worden niet gebruikt bij bewerken van transformatiemaskers "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Lege laag transformeren kan niet "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59870,7 +59870,7 @@ msgstr ""
 "Onzichtbare sublagen zullen ook getransformeerd worden. Vergrendel lagen als "
 "u niet wilt dat ze getransformeerd worden "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:358
+#: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Transformeer een laag of selectie"

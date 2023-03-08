@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-07 00:44+0000\n"
-"PO-Revision-Date: 2023-02-23 23:52+0100\n"
+"POT-Creation-Date: 2023-03-08 00:44+0000\n"
+"PO-Revision-Date: 2023-03-05 20:34+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -19363,7 +19363,7 @@ msgstr "Fuori"
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:453 libs/ui/KisView.cpp:1144
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1144
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19399,9 +19399,9 @@ msgstr "Risorse locali"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:650
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:664
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:677
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19410,7 +19410,7 @@ msgstr "Risorse locali"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:607
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:674
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:714
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:774
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:770
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
@@ -19428,7 +19428,7 @@ msgstr "Risorse locali"
 #: libs/ui/KisMainWindow.cpp:1923 libs/ui/KisMainWindow.cpp:1932
 #: libs/ui/KisMainWindow.cpp:2071 libs/ui/KisMainWindow.cpp:2132
 #: libs/ui/KisMainWindow.cpp:2153 libs/ui/KisMainWindow.cpp:2766
-#: libs/ui/KisPart.cpp:553 libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -20430,17 +20430,17 @@ msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "N/D"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:379
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:390
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Nessun eseguibile FFmpeg valido fornito..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:433
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:445
 #, kde-format
 msgid "FFmpeg Version: "
 msgstr "Versione FFmpeg: "
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:650
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20449,7 +20449,7 @@ msgstr ""
 "Il file FFmpeg che hai fornito sembra essere compresso. Prova prima a "
 "estrarre il file FFmpeg dall'archivio."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:664
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be "
@@ -20459,7 +20459,7 @@ msgstr ""
 "Il file FFmpeg che hai fornito non sembra valido. Seleziona la posizione "
 "attuale di un eseguibile FFmpeg nel tuo sistema."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:677
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Inserisci un nome file su cui eseguire la resa."
@@ -20699,7 +20699,7 @@ msgstr "La tua versione FFmpeg non supporta questo formato"
 msgid "No video stream could be found!"
 msgstr "Impossibile trovare un flusso video."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:774
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
 #, kde-format
 msgid "Failed to load video information"
 msgstr "Caricamento delle informazioni video non riuscita"
@@ -22874,11 +22874,10 @@ msgid "%1 is not a valid image file!"
 msgstr "%1 non è un file immagine valido!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:790
-#, fuzzy, kde-format
-#| msgid "Warning: this location is not writable."
+#, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
-msgstr "Attenzione: questa posizione non è scrivibile."
+msgstr "<b>Attenzione</b>: questa posizione non è scrivibile."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:893
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1002
@@ -23017,10 +23016,9 @@ msgid "Warning(s):"
 msgstr "Avvisi:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1823
-#, fuzzy, kde-format
-#| msgid "WARNING: current display doesn't support HDR rendering"
+#, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
-msgstr "ATTENZIONE: lo schermo attuale non supporta la resa HDR"
+msgstr "<b>Attenzione</b>: lo schermo attuale non supporta la resa HDR"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1908
 #, kde-format
@@ -24478,18 +24476,15 @@ msgstr "Scacchiera di trasparenza:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:295
-#, fuzzy, kde-format
-#| msgctxt "Default name for a color swatch"
-#| msgid "Color %1"
+#, kde-format
 msgid "Color 1:"
-msgstr "Colore %1"
+msgstr "Colore 1:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/forms/wdgdisplaysettings.ui:322
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Color 2:"
-msgstr "Colore:"
+msgstr "Colore 2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCheckSize)
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
@@ -24551,24 +24546,21 @@ msgstr "Sovrapposizione della selezione:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
-#, fuzzy, kde-format
-#| msgid "Selection Outline Opacity:"
+#, kde-format
 msgid "Outline opacity:"
-msgstr "Selezione opacità contorno:"
+msgstr "Opacità contorno:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:440
-#, fuzzy, kde-format
-#| msgid "Overlay Mode"
+#, kde-format
 msgid "Overlay color:"
-msgstr "Modalità di sovrapposizione"
+msgstr "Colore di sovrapposizione:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:460
-#, fuzzy, kde-format
-#| msgid "Overall opacity:"
+#, kde-format
 msgid "Overlay opacity:"
-msgstr "Opacità globale:"
+msgstr "Opacità di sovrapposizione:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -24945,10 +24937,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, group_subWinMode)
 #: libs/ui/forms/wdggeneralsettings.ui:408
-#, fuzzy, kde-format
-#| msgid "Subwindows"
+#, kde-format
 msgid "Subwindow mode"
-msgstr "Sottofinestre"
+msgstr "Modalità sottofinestre"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton)
 #. i18n: ectx: property (text), widget (QPushButton, clearBgImageButton)
@@ -25011,10 +25002,9 @@ msgstr "Abilita il fattore di scala frazionale"
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:623
 #: libs/ui/forms/wdggeneralsettings.ui:807
-#, fuzzy, kde-format
-#| msgid "(Needs restart)"
+#, kde-format
 msgid "(needs restart)"
-msgstr "(Richiede il riavvio)"
+msgstr "(richiede il riavvio)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:650
@@ -25097,13 +25087,11 @@ msgstr "Sensibilità:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
 #: libs/ui/forms/wdggeneralsettings.ui:781
-#, fuzzy, kde-format
-#| msgid ""
-#| "Hide docker scrollbars if kinetic scrolling is enabled (needs restart)"
+#, kde-format
 msgid "Hide docker scrollbars if kinetic scrolling is enabled"
 msgstr ""
 "Nascondi le barre di scorrimento dell'area di aggancio, se è abilitato lo "
-"scorrimento cinetico (richiede riavvio)"
+"scorrimento cinetico"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:834
@@ -25240,11 +25228,9 @@ msgstr "Ritaglia i fotogrammi quando importi animazioni"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1023
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Painting"
+#, kde-format
 msgid "Pasting"
-msgstr "Disegno"
+msgstr "Incollaggio"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
 #: libs/ui/forms/wdggeneralsettings.ui:1035
@@ -27734,10 +27720,9 @@ msgid "Action"
 msgstr "Azione"
 
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:271
-#, fuzzy, kde-format
-#| msgid "A connection between two other shapes"
+#, kde-format
 msgid "A conflict exists between two or more shortcuts."
-msgstr "Una connessione tra due altre forme"
+msgstr "È presente un conflitto tra due o più scorciatoie."
 
 #. i18n: ectx: property (text), widget (QPushButton, editProfilesButton)
 #: libs/ui/input/config/kis_edit_profiles_dialog.cpp:54
@@ -27812,7 +27797,7 @@ msgstr "Gestisci i profili di input della tela"
 #: libs/ui/input/config/kis_input_configuration_page_item.ui:111
 #, kde-format
 msgid "Conflict found for a Shortcut in this Action."
-msgstr ""
+msgstr "Conflitto per una scorciatoia riscontrato in questa azione."
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:52
 #, kde-format
@@ -28148,54 +28133,42 @@ msgid "Select Layer"
 msgstr "Seleziona livello"
 
 #: libs/ui/input/kis_select_layer_action.cpp:117
-#, fuzzy, kde-format
-#| msgid "Selects a layer under cursor position"
+#, kde-format
 msgid "Select layers under the cursor position"
-msgstr "Seleziona un livello sotto il cursore"
+msgstr "Seleziona livelli sotto la posizione del cursore"
 
 #: libs/ui/input/kis_select_layer_action.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque (Replace)"
+#, kde-format
 msgid "Select Top Layer (Replace Selection)"
-msgstr "Seleziona &opacità (Sostituisci)"
+msgstr "Seleziona livello in cima (sostituisci la selezione)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque (Replace)"
+#, kde-format
 msgid "Select All Layers (Replace Selection)"
-msgstr "Seleziona &opacità (Sostituisci)"
+msgstr "Seleziona tutti i livelli (sostituisci la selezione)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:124
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Selection Mode: Replace"
+#, kde-format
 msgid "Select from Menu (Replace Selection)"
-msgstr "Modalità di selezione: Sostituisci"
+msgstr "Seleziona dal menu (sostituisci la selezione)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
 msgid "Select Top Layer (Add to Selection)"
-msgstr ""
+msgstr "Seleziona livello in cima (aggiungi alla selezione)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale All Layers to new Size"
+#, kde-format
 msgid "Select All Layers (Add to Selection)"
-msgstr "Cambia tutti i livelli a nuova dimensione"
+msgstr "Seleziona tutti i livelli (aggiungi alla selezione)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:130
-#, fuzzy, kde-format
-#| msgid "Subtract fro&m current selection"
+#, kde-format
 msgid "Select from Menu (Add to Selection)"
-msgstr "Sottrai dalla sele&zione attuale"
+msgstr "Seleziona dal menu (aggiungi alla selezione)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:246
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select all layers"
+#, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
 msgstr "Seleziona tutti i livelli"
@@ -29671,16 +29644,14 @@ msgid "Adding resource types..."
 msgstr "Aggiunta dei tipi di risorse..."
 
 #: libs/ui/KisApplication.cpp:463
-#, fuzzy, kde-format
-#| msgid "Loading Bundles..."
+#, kde-format
 msgid "Loading plugins..."
-msgstr "Caricamento dei gruppi..."
+msgstr "Caricamento delle estensioni..."
 
 #: libs/ui/KisApplication.cpp:469
-#, fuzzy, kde-format
-#| msgid "Loading Resource Bundles..."
+#, kde-format
 msgid "Loading resources..."
-msgstr "Caricamento dei gruppi di risorse..."
+msgstr "Caricamento delle risorse..."
 
 #: libs/ui/KisApplication.cpp:478
 #, kde-format
@@ -29688,10 +29659,9 @@ msgid "Loading Main Window..."
 msgstr "Caricamento della finestra principale..."
 
 #: libs/ui/KisApplication.cpp:510
-#, fuzzy, kde-format
-#| msgid "Scanning..."
+#, kde-format
 msgid "Launching..."
-msgstr "Analisi in corso..."
+msgstr "Avvio corso..."
 
 #: libs/ui/KisApplication.cpp:579
 #, kde-format
@@ -30783,7 +30753,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Nuovo gruppo %1"
 
-#: libs/ui/KisPart.cpp:553
+#: libs/ui/KisPart.cpp:555
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -30792,7 +30762,7 @@ msgstr ""
 "Impossibile creare il documento dal modello\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:556
+#: libs/ui/KisPart.cpp:558
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -40857,9 +40827,7 @@ msgid "Wide Gamut Color Selector"
 msgstr "Selettore dei colori del gamut esteso"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Configure..."
+#, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
 msgstr "Configura..."
@@ -42950,7 +42918,7 @@ msgctxt "@title:column"
 msgid "Comment"
 msgstr "Commento"
 
-#: plugins/extensions/qmic/kis_qmic_interface.cpp:237
+#: plugins/extensions/qmic/kis_qmic_interface.cpp:233
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
 msgstr "Filtro G'MIC"
@@ -59897,14 +59865,14 @@ msgstr ""
 "Le selezioni non vengono utilizzate durante la modifica delle maschere di "
 "trasformazione "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Impossibile trasformare un livello vuoto "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59914,7 +59882,7 @@ msgstr ""
 "Saranno trasformati anche i sottolivelli invisibili. Blocca i livelli se non "
 "vuoi che vengano trasformati"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:358
+#: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Trasforma un livello o una selezione"

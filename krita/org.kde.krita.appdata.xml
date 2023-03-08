@@ -633,7 +633,7 @@
         </artifact>
         <artifact type="binary" platform="win64">
           <location>https://download.kde.org/stable/krita/5.1.5/krita-x64-5.1.5-setup.exe</location>
-       </artifact>
+        </artifact>
         <artifact type="binary" platform="win32">
           <location>https://download.kde.org/stable/krita/5.1.5/krita-x86-5.1.5-setup.exe</location>
         </artifact>

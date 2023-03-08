@@ -326,6 +326,9 @@ bool tryParseDescriptor(const QDomElement &el, const QString &path, const QStrin
         retval = false;
     } else if (el.attribute("key", " ") == "Clr ") {
         catcher.addColor(path, parseColorObject(el, classId));
+    } else if (el.attribute("key", " ") == "hglC" || el.attribute("key", " ") == "sdwC") {
+        // like Clr, but /ebbl/ likes to do everything differently - see bug 464218
+        catcher.addColor(path, parseColorObject(el, classId));
     } else if (classId == "ShpC") {
         CurveObjectCatcher curveCatcher;
 

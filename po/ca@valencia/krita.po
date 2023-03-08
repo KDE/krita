@@ -28694,7 +28694,7 @@ msgstr "La capa no té dades dels píxels"
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
-msgstr "Exporta a SVG"
+msgstr "Exporta cap a SVG"
 
 #: libs/ui/kis_node_manager.cpp:1281
 #, kde-format
@@ -29423,7 +29423,7 @@ msgstr "Substituïx el DPI de la pantalla"
 #: libs/ui/KisApplicationArguments.cpp:95
 #, kde-format
 msgid "Export to the given filename and exit"
-msgstr "Exporta a un fitxer especificat i ix"
+msgstr "Exporta cap a un fitxer especificat i ix"
 
 #: libs/ui/KisApplicationArguments.cpp:96
 #, kde-format
@@ -53363,7 +53363,7 @@ msgstr "Clau de la capa de quadro:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:268
 msgid "Export to CBZ"
-msgstr "Exporta a CBZ"
+msgstr "Exporta cap a CBZ"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:273
 msgid "Metadata to Add"
@@ -53520,7 +53520,7 @@ msgstr "ACBF"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:395
 msgid "Export to EPUB"
-msgstr "Exporta a EPUB"
+msgstr "Exporta cap a EPUB"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:400
 msgid "EPUB"
@@ -53528,7 +53528,7 @@ msgstr "EPUB"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:405
 msgid "Export to TIFF"
-msgstr "Exporta a TIFF"
+msgstr "Exporta cap a TIFF"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:410
 msgid "TIFF"

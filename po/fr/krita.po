@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-08 00:44+0000\n"
-"PO-Revision-Date: 2023-03-04 19:37+0100\n"
+"POT-Creation-Date: 2023-03-09 00:44+0000\n"
+"PO-Revision-Date: 2023-03-08 14:41+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -28253,54 +28253,42 @@ msgid "Select Layer"
 msgstr "Sélection du calque"
 
 #: libs/ui/input/kis_select_layer_action.cpp:117
-#, fuzzy, kde-format
-#| msgid "Selects a layer under cursor position"
+#, kde-format
 msgid "Select layers under the cursor position"
-msgstr "Sélectionne un calque sous le pointeur"
+msgstr "Sélectionner les calques en dessous de la position du pointeur"
 
 #: libs/ui/input/kis_select_layer_action.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque (Replace)"
+#, kde-format
 msgid "Select Top Layer (Replace Selection)"
-msgstr "Sélection &Opaque (Remplacer)"
+msgstr "Sélectionner le menu de plus haut niveau (Remplacer la sélection)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque (Replace)"
+#, kde-format
 msgid "Select All Layers (Replace Selection)"
-msgstr "Sélection &Opaque (Remplacer)"
+msgstr "Sélectionner tous les calques (Remplacer la sélection)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:124
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Selection Mode: Replace"
+#, kde-format
 msgid "Select from Menu (Replace Selection)"
-msgstr "Mode de sélection : « Remplacer »"
+msgstr "Sélectionner à partir du menu (Remplacer la sélection)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
 msgid "Select Top Layer (Add to Selection)"
-msgstr ""
+msgstr "Sélectionner le menu de plus haut niveau (Ajouter à la sélection)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale All Layers to new Size"
+#, kde-format
 msgid "Select All Layers (Add to Selection)"
-msgstr "Redimensionner tous les calques à une nouvelle taille..."
+msgstr "Sélectionner tous les calques (Ajouter à la sélection)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:130
-#, fuzzy, kde-format
-#| msgid "Subtract fro&m current selection"
+#, kde-format
 msgid "Select from Menu (Add to Selection)"
-msgstr "&Soustraire de la sélection en cours"
+msgstr "Sélectionner à partir du menu (Ajouter à la sélection)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:246
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select all layers"
+#, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
 msgstr "Sélectionner tous les calques"
@@ -60178,14 +60166,14 @@ msgstr ""
 "Les sélections ne sont pas utilisées lors de l'édition de masques de "
 "transformation"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Impossible transformer un calque vide "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60195,7 +60183,7 @@ msgstr ""
 "Les sous-calques invisibles seront aussi transformés. Verrouiller les "
 "calques, si vous ne voulez pas qu'ils soient transformés."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:360
+#: plugins/tools/tool_transform2/kis_tool_transform.h:358
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Transformer un calque ou une sélection"

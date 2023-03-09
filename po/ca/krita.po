@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-08 00:44+0000\n"
+"POT-Creation-Date: 2023-03-09 00:44+0000\n"
 "PO-Revision-Date: 2023-03-05 11:14+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -59796,14 +59796,14 @@ msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Les seleccions no s'usen en editar les màscares de transformació "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "No es pot transformar una capa buida "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59813,7 +59813,7 @@ msgstr ""
 "Les subcapes invisibles també es transformaran. Bloquegeu les capes si no "
 "voleu que es transformin"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:360
+#: plugins/tools/tool_transform2/kis_tool_transform.h:358
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Transforma una capa o una selecció"

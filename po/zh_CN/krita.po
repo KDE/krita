@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-08 00:44+0000\n"
+"POT-Creation-Date: 2023-03-09 00:44+0000\n"
 "PO-Revision-Date: 2023-02-24 12:42\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -58839,14 +58839,14 @@ msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "编辑变形蒙版时，选区不被使用"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "无法对空图层进行变形操作"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -58854,7 +58854,7 @@ msgid ""
 "them to be transformed "
 msgstr "不可见的子图层也将被变形。请锁定不想被变形的图层 "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:360
+#: plugins/tools/tool_transform2/kis_tool_transform.h:358
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "变形工具：对图层或选区生效"

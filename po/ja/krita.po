@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-08 00:44+0000\n"
+"POT-Creation-Date: 2023-03-09 00:44+0000\n"
 "PO-Revision-Date: 2023-02-26 23:02-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -60030,14 +60030,14 @@ msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "変形マスクの編集中は選択は使用しません"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "空のレイヤーを変形することはできません"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60047,7 +60047,7 @@ msgstr ""
 "表示されていないサブレイヤーも変形されます。変形させたくないサブレイヤーにつ"
 "いてはそのレイヤーをロックしてください。"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:360
+#: plugins/tools/tool_transform2/kis_tool_transform.h:358
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "レイヤーまたは選択範囲を変形"

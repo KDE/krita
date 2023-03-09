@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-08 00:44+0000\n"
+"POT-Creation-Date: 2023-03-09 00:44+0000\n"
 "PO-Revision-Date: 2022-10-01 11:35+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -59751,14 +59751,14 @@ msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Markeringar används inte när transformeringsmasker redigeras "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Kan inte transformera tomt lager "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59768,7 +59768,7 @@ msgstr ""
 "Osynliga dellager kommer också att transformeras. Lås lager om du inte vill "
 "att de ska transformeras."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:360
+#: plugins/tools/tool_transform2/kis_tool_transform.h:358
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Transformera ett lager eller en markering"

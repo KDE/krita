@@ -42,7 +42,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -1115,8 +1115,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>546</width>
-            <height>513</height>
+            <width>623</width>
+            <height>558</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -1454,6 +1454,12 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
             </spacer>
            </item>
           </layout>
@@ -1487,11 +1493,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_resourceFolderResetButton">
-           <property name="text">
-            <string>Default</string>
-           </property>
-          </widget>
+          <widget class="QComboBox" name="m_resourceFolderSelector"/>
          </item>
         </layout>
        </item>

@@ -111,7 +111,6 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
 
         connect(m_page->shouldExportOnlyImageSequence, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
         connect(m_page->shouldExportOnlyVideo, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
-        connect(m_page->shouldExportAll, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
 
         connect(m_page->intFramesPerSecond, SIGNAL(valueChanged(int)), SLOT(frameRateChanged(int)));
 
@@ -134,7 +133,6 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
         initializeRenderSettings(*doc, options);
     }
 
-    resize(m_page->sizeHint());
     setMainWidget(m_page);
 }
 
@@ -200,7 +198,9 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
         KIS_SAFE_ASSERT_RECOVER_NOOP(!lastUsedOptions.shouldDeleteSequence);
         m_page->shouldExportOnlyImageSequence->setChecked(true);
     } else {
-        m_page->shouldExportAll->setChecked(true); // export to both
+        // export to both
+        m_page->shouldExportOnlyVideo->setChecked(true);
+        m_page->shouldExportOnlyImageSequence->setChecked(true);
     }
 
 
@@ -740,57 +740,14 @@ void KisDlgAnimationRenderer::slotExportTypeChanged()
 {
     KisConfig cfg(false);
 
-    bool willEncodeVideo =
-        m_page->shouldExportAll->isChecked() || m_page->shouldExportOnlyVideo->isChecked();
+    const bool willEncodeVideo = m_page->shouldExportOnlyVideo->isChecked();
 
     // if a video format needs to be outputted
     if (willEncodeVideo) {
          // videos always uses PNG for creating video, so disable the ability to change the format
          m_page->cmbMimetype->setEnabled(false);
-         for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
-             if (m_page->cmbMimetype->itemData(i).toString() == "image/png") {
-                 m_page->cmbMimetype->setCurrentIndex(i);
-                 break;
-             }
-         }
+         m_page->cmbMimetype->setCurrentIndex(m_page->cmbMimetype->findData("image/png"));
     }
-
-    m_page->intWidth->setVisible(willEncodeVideo);
-    m_page->intHeight->setVisible(willEncodeVideo);
-    m_page->intFramesPerSecond->setVisible(willEncodeVideo);
-    m_page->fpsLabel->setVisible(willEncodeVideo);
-    m_page->cmbScaleFilter->setVisible(willEncodeVideo);
-    m_page->scaleFilterLabel->setVisible(willEncodeVideo);
-    m_page->lblWidth->setVisible(willEncodeVideo);
-    m_page->lblHeight->setVisible(willEncodeVideo);
-
-    // if only exporting video
-    if (m_page->shouldExportOnlyVideo->isChecked()) {
-        m_page->cmbMimetype->setEnabled(false); // allow to change image format
-        m_page->imageSequenceOptionsGroup->setVisible(false);
-        m_page->videoOptionsGroup->setVisible(false); //shrinks the horizontal space temporarily to help resize() work
-        m_page->videoOptionsGroup->setVisible(true);
-    }
-
-
-    // if only an image sequence needs to be output
-    if (m_page->shouldExportOnlyImageSequence->isChecked()) {
-        m_page->cmbMimetype->setEnabled(true); // allow to change image format
-        m_page->videoOptionsGroup->setVisible(false);
-        m_page->imageSequenceOptionsGroup->setVisible(false);
-        m_page->imageSequenceOptionsGroup->setVisible(true);
-    }
-
-    // show all options
-    if (m_page->shouldExportAll->isChecked()) {
-        m_page->imageSequenceOptionsGroup->setVisible(true);
-        m_page->videoOptionsGroup->setVisible(true);
-    }
-
-    // for the resize to work as expected, try to hide elements first before displaying other ones.
-    // if the widget gets bigger at any point, the resize will use that, even if elements are hidden later to make it
-    // smaller
-    resize(m_page->sizeHint());
 }
 
 void KisDlgAnimationRenderer::frameRateChanged(int framerate)

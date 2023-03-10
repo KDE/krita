@@ -11,372 +11,250 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
-    <widget class="QGroupBox" name="grpExportType">
-     <property name="title">
-      <string>Export:</string>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QRadioButton" name="shouldExportOnlyImageSequence">
-        <property name="text">
-         <string>Image Se&amp;quence</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="shouldExportOnlyVideo">
-        <property name="text">
-         <string>&amp;Video</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="shouldExportAll">
-        <property name="text">
-         <string>Both</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
     <widget class="QGroupBox" name="grpGeneralOptions">
      <property name="title">
       <string>General</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout" columnstretch="1,1,1">
+     <layout class="QFormLayout" name="formLayout_3">
       <item row="0" column="0">
-       <widget class="QWidget" name="widget_2" native="true">
-        <layout class="QFormLayout" name="formLayout_3">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>First frame:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QSpinBox" name="intStart"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Last frame:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QSpinBox" name="intEnd">
-           <property name="maximum">
-            <number>10000</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>First frame:</string>
+        </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QWidget" name="widget" native="true">
-        <layout class="QFormLayout" name="formLayout_4">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="lblWidth">
-           <property name="text">
-            <string>Width:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QSpinBox" name="intWidth">
-           <property name="suffix">
-            <string> px</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="lblHeight">
-           <property name="text">
-            <string>Height:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QSpinBox" name="intHeight">
-           <property name="suffix">
-            <string> px</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+       <widget class="QSpinBox" name="intStart"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Last frame:</string>
+        </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QWidget" name="widget_3" native="true">
-        <layout class="QFormLayout" name="formLayout_5">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="fpsLabel">
-           <property name="text">
-            <string>FPS:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QSpinBox" name="intFramesPerSecond">
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="singleStep">
-            <number>1</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="scaleFilterLabel">
-           <property name="text">
-            <string comment="Resize intepolation method list label">Filter:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QComboBox" name="cmbScaleFilter"/>
-         </item>
-        </layout>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="intEnd">
+        <property name="maximum">
+         <number>10000</number>
+        </property>
        </widget>
       </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="grpOptionsByType" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,1">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QGroupBox" name="videoOptionsGroup">
-        <property name="title">
-         <string>Video Options</string>
+    <widget class="QGroupBox" name="shouldExportOnlyImageSequence">
+     <property name="title">
+      <string>Export as image sequence</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>File format:</string>
         </property>
-        <layout class="QFormLayout" name="formLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>Render as:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="QComboBox" name="cmbRenderType"/>
-           </item>
-           <item>
-            <widget class="QToolButton" name="bnRenderOptions">
-             <property name="toolTip">
-              <string>Select the FFmpeg render options.</string>
-             </property>
-             <property name="text">
-              <string>...</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_7">
-           <property name="text">
-            <string>Video location:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="KisFileNameRequester" name="videoFilename" native="true"/>
-         </item>
-         <item row="2" column="1">
-          <widget class="QCheckBox" name="chkIncludeAudio">
-           <property name="text">
-            <string>Include Audio</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_9">
-           <property name="text">
-            <string>FFmpeg location:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="KisFileNameRequester" name="ffmpegLocation" native="true"/>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_10">
-           <property name="text">
-            <string>FFmpeg version:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QLabel" name="lblFFMpegVersion">
-           <property name="text">
-            <string>None</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0" colspan="2">
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
        </widget>
       </item>
-      <item>
-       <widget class="QGroupBox" name="imageSequenceOptionsGroup">
-        <property name="title">
-         <string>Image Sequence Options</string>
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QComboBox" name="cmbMimetype">
+          <property name="toolTip">
+           <string>Select the file format for the image sequence. If you want to render to video or animated gif, you can only select PNG</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="bnExportOptions">
+          <property name="toolTip">
+           <string>Select the frame export options</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Image location:</string>
         </property>
-        <layout class="QFormLayout" name="formLayout_2">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_8">
-           <property name="text">
-            <string>File format:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QComboBox" name="cmbMimetype">
-             <property name="toolTip">
-              <string>Select the file format for the image sequence. If you want to render to video or animated gif, you can only select PNG</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="bnExportOptions">
-             <property name="toolTip">
-              <string>Select the frame export options</string>
-             </property>
-             <property name="text">
-              <string>...</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Image location:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="KisFileNameRequester" name="dirRequester" native="true"/>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Base name:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="txtBasename">
-           <property name="text">
-            <string>frame</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>Start numbering at:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QSpinBox" name="sequenceStart">
-           <property name="maximum">
-            <number>999</number>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QCheckBox" name="chkOnlyUniqueFrames">
-           <property name="text">
-            <string>Only Unique Frames</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0" colspan="2">
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KisFileNameRequester" name="dirRequester" native="true"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Base name:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="txtBasename">
+        <property name="text">
+         <string>frame</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Start numbering at:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QSpinBox" name="sequenceStart">
+        <property name="maximum">
+         <number>999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QCheckBox" name="chkOnlyUniqueFrames">
+        <property name="text">
+         <string>Only Unique Frames</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="shouldExportOnlyVideo">
+     <property name="title">
+      <string>Export as video</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblWidth">
+        <property name="text">
+         <string>Width:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="intWidth">
+        <property name="suffix">
+         <string> px</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblHeight">
+        <property name="text">
+         <string>Height:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="intHeight">
+        <property name="suffix">
+         <string> px</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="fpsLabel">
+        <property name="text">
+         <string>FPS:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="intFramesPerSecond">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="singleStep">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="scaleFilterLabel">
+        <property name="text">
+         <string comment="Resize intepolation method list label">Filter:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="cmbScaleFilter"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Render as:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QComboBox" name="cmbRenderType"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="bnRenderOptions">
+          <property name="toolTip">
+           <string>Select the FFmpeg render options.</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Video location:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="KisFileNameRequester" name="videoFilename" native="true"/>
+      </item>
+      <item row="6" column="1">
+       <widget class="QCheckBox" name="chkIncludeAudio">
+        <property name="text">
+         <string>Include Audio</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>FFmpeg location:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="KisFileNameRequester" name="ffmpegLocation" native="true"/>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>FFmpeg version:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QLabel" name="lblFFMpegVersion">
+        <property name="text">
+         <string>None</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -399,21 +277,35 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisFileNameRequester</class>
-   <extends>QWidget</extends>
-   <header>kis_file_name_requester.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KisWarningBlock</class>
    <extends>QGroupBox</extends>
    <header location="global">kis_warning_block.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>KisFileNameRequester</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_file_name_requester.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>intStart</tabstop>
+  <tabstop>intEnd</tabstop>
+  <tabstop>shouldExportOnlyImageSequence</tabstop>
   <tabstop>cmbMimetype</tabstop>
+  <tabstop>bnExportOptions</tabstop>
+  <tabstop>txtBasename</tabstop>
+  <tabstop>sequenceStart</tabstop>
+  <tabstop>chkOnlyUniqueFrames</tabstop>
+  <tabstop>shouldExportOnlyVideo</tabstop>
+  <tabstop>intWidth</tabstop>
+  <tabstop>intHeight</tabstop>
+  <tabstop>intFramesPerSecond</tabstop>
+  <tabstop>cmbScaleFilter</tabstop>
   <tabstop>cmbRenderType</tabstop>
+  <tabstop>bnRenderOptions</tabstop>
+  <tabstop>chkIncludeAudio</tabstop>
  </tabstops>
  <resources/>
  <connections/>

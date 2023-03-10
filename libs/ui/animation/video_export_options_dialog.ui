@@ -492,6 +492,40 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>cmbCodec</tabstop>
+  <tabstop>intOpenH264bitrate</tabstop>
+  <tabstop>intCRFH264</tabstop>
+  <tabstop>cmbPresetH264</tabstop>
+  <tabstop>cmbProfileH264</tabstop>
+  <tabstop>cmbTuneH264</tabstop>
+  <tabstop>intCRFH265</tabstop>
+  <tabstop>cmbPresetH265</tabstop>
+  <tabstop>cmbProfileH265</tabstop>
+  <tabstop>cmbTuneH265</tabstop>
+  <tabstop>chkUseHDRMetadata</tabstop>
+  <tabstop>btnHdrMetadata</tabstop>
+  <tabstop>intBitrate</tabstop>
+  <tabstop>vp9Mbits</tabstop>
+  <tabstop>vp9Lossless</tabstop>
+  <tabstop>gifLoop</tabstop>
+  <tabstop>gifTransDiff</tabstop>
+  <tabstop>cmbPalettegenStatsModeGIF</tabstop>
+  <tabstop>cmbPaletteuseDitherGIF</tabstop>
+  <tabstop>intPaletteuseBayerScaleGIF</tabstop>
+  <tabstop>cmbPaletteuseDiffModeGIF</tabstop>
+  <tabstop>gifReserveTransparent</tabstop>
+  <tabstop>apngLoop</tabstop>
+  <tabstop>cmbPredAPNG</tabstop>
+  <tabstop>webpLossless</tabstop>
+  <tabstop>intCompressWEBP</tabstop>
+  <tabstop>intQscaleWEBP</tabstop>
+  <tabstop>cmbPresetWEBP</tabstop>
+  <tabstop>webpLoop</tabstop>
+  <tabstop>chkCustomLine</tabstop>
+  <tabstop>txtCustomLine</tabstop>
+  <tabstop>btnResetCustomLine</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

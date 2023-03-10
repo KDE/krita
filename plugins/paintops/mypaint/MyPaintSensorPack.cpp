@@ -36,12 +36,12 @@ struct MyPaintSensorFactoriesRegistrar {
                 new KisSimpleDynamicSensorFactory(minimumValue, maximumValue, minimumLabel, maximumLabel, valueSuffix));
         };
 
-        addFactory(MyPaintPressureId, 0, 20, "", "", i18n(""));
-        addFactory(MyPaintFineSpeedId, -20, 20, "", "", i18n(""));
-        addFactory(MyPaintGrossSpeedId, -20, 20, "", "", i18n(""));
-        addFactory(MyPaintRandomId,  0, 1, "", "", i18n(""));
-        addFactory(MyPaintStrokeId, 0, 1, "", "", i18n(""));
-        addFactory(MyPaintDirectionId, 0, 180, "", "", i18n(""));
+        addFactory(MyPaintPressureId, 0, 20, "", "", "");
+        addFactory(MyPaintFineSpeedId, -20, 20, "", "", "");
+        addFactory(MyPaintGrossSpeedId, -20, 20, "", "", "");
+        addFactory(MyPaintRandomId,  0, 1, "", "", "");
+        addFactory(MyPaintStrokeId, 0, 1, "", "", "");
+        addFactory(MyPaintDirectionId, 0, 180, "", "", "");
         addFactory(MyPaintDeclinationId, 0, 90, "", "", i18n("%"));
         addFactory(MyPaintAscensionId, -180, 180, "", "", i18n("%"));
         addFactory(MyPaintCustomId, -20, 20, "", "", i18n("%"));

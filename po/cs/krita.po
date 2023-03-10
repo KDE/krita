@@ -49,7 +49,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-22 14:10+0100\n"
+"PO-Revision-Date: 2023-03-06 13:18+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -57,7 +57,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -39066,7 +39066,7 @@ msgstr "Purpurové"
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:47
 #, kde-format
 msgid "Highlights"
-msgstr "Světla"
+msgstr "Zvýraznění"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonMidtones)
 #. i18n: ectx: property (text), widget (QLabel, label_2)

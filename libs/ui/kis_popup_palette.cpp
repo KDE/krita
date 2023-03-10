@@ -618,6 +618,9 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             ? palette().brush(QPalette::Highlight)
             : palette().brush(QPalette::Text));
         
+        // gotta update the rect, see bug 459801
+        // (note: it can't just update when it shows up because then rotating when popup palette is on the screen wouldn't make an effect)
+        m_canvasRotationIndicatorRect = rotationIndicatorRect(m_coordinatesConverter->rotationAngle());
         painter.drawEllipse(m_canvasRotationIndicatorRect);
 
         painter.restore();

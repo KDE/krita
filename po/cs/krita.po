@@ -49,7 +49,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-09 00:44+0000\n"
-"PO-Revision-Date: 2023-02-27 14:53+0100\n"
+"PO-Revision-Date: 2023-03-06 13:18+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -57,7 +57,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -27247,7 +27247,7 @@ msgstr "Činnost"
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:271
 #, kde-format
 msgid "A conflict exists between two or more shortcuts."
-msgstr ""
+msgstr "Existuje konflikt mezi dvěma nebo vícero zkratkami."
 
 #. i18n: ectx: property (text), widget (QPushButton, editProfilesButton)
 #: libs/ui/input/config/kis_edit_profiles_dialog.cpp:54
@@ -27321,7 +27321,7 @@ msgstr ""
 #: libs/ui/input/config/kis_input_configuration_page_item.ui:111
 #, kde-format
 msgid "Conflict found for a Shortcut in this Action."
-msgstr ""
+msgstr "Pro zkratku k této činnosti byl nalezen konflikt."
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:52
 #, kde-format
@@ -27686,9 +27686,7 @@ msgid "Select from Menu (Add to Selection)"
 msgstr ""
 
 #: libs/ui/input/kis_select_layer_action.cpp:246
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select all layers"
+#, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
 msgstr "Vybrat všechny vrstvy"
@@ -29130,16 +29128,14 @@ msgid "Adding resource types..."
 msgstr ""
 
 #: libs/ui/KisApplication.cpp:463
-#, fuzzy, kde-format
-#| msgid "Loading Main Window..."
+#, kde-format
 msgid "Loading plugins..."
-msgstr "Načítá se hlavní okno"
+msgstr "Načítá přídavné moduly..."
 
 #: libs/ui/KisApplication.cpp:469
-#, fuzzy, kde-format
-#| msgid "Manage Resources..."
+#, kde-format
 msgid "Loading resources..."
-msgstr "Spravovat zdroje..."
+msgstr ""
 
 #: libs/ui/KisApplication.cpp:478
 #, kde-format
@@ -29147,10 +29143,9 @@ msgid "Loading Main Window..."
 msgstr "Načítá se hlavní okno"
 
 #: libs/ui/KisApplication.cpp:510
-#, fuzzy, kde-format
-#| msgid "Scanning..."
+#, kde-format
 msgid "Launching..."
-msgstr "Zkoumám..."
+msgstr "Spouštím..."
 
 #: libs/ui/KisApplication.cpp:579
 #, kde-format
@@ -39987,7 +39982,7 @@ msgstr "Purpurové"
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:47
 #, kde-format
 msgid "Highlights"
-msgstr "Světla"
+msgstr "Zvýraznění"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonMidtones)
 #. i18n: ectx: property (text), widget (QLabel, label_2)

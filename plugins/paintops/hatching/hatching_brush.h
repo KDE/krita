@@ -16,7 +16,6 @@
 #include <kis_paint_device.h>
 #include <brushengine/kis_paint_information.h>
 
-#include "kis_hatching_options.h"
 
 class HatchingBrush
 {

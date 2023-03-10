@@ -12,16 +12,14 @@
 #include "kis_brush.h"
 #include "kis_texture_option.h"
 #include "kis_precision_option.h"
-#include "kis_airbrush_option_widget.h"
-#include "kis_pressure_mirror_option.h"
 #include <kis_threaded_text_rendering_workaround.h>
-
+#include <KisMirrorOption.h>
 
 class KisPropertiesConfiguration;
-class KisPressureSpacingOption;
-class KisPressureRateOption;
 class KisDabCache;
 class KisResourcesInterface;
+struct KisAirbrushOptionData;
+class KisSpacingOption;
 
 /// Internal
 class TextBrushInitializationWorkaround
@@ -59,11 +57,10 @@ public:
 
     KisSpacingInformation effectiveSpacing(qreal scale) const;
     KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisPaintInformation &pi) const;
-    KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const;
-    KisSpacingInformation effectiveSpacing(qreal scale,
-                                           qreal rotation,
-                                           const KisAirbrushOptionProperties *airbrushOption,
-                                           const KisPressureSpacingOption *spacingOption,
+    KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisSpacingOption &spacingOption, const KisPaintInformation &pi) const;
+    KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation,
+                                           const KisAirbrushOptionData *airbrushOption,
+                                           const KisSpacingOption *spacingOption,
                                            const KisPaintInformation &pi) const;
 
     ///Reimplemented, false if brush is 0
@@ -85,10 +82,10 @@ protected: // XXX: make private!
     KisBrushSP m_brush;
 
 private:
-    KisTextureProperties m_textureProperties;
+    KisTextureOption m_textureOption;
 
 protected:
-    KisPressureMirrorOption m_mirrorOption;
+    KisMirrorOption m_mirrorOption;
     KisPrecisionOption m_precisionOption;
 };
 

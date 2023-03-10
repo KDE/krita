@@ -16,7 +16,6 @@ public:
     KisExperimentPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisExperimentPaintOpSettings() override;
 
-    bool lodSizeThresholdSupported() const override;
     bool paintIncremental() override;
     KisOptimizedBrushOutline brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 

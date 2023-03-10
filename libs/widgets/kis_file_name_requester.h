@@ -41,7 +41,6 @@ public:
     void setConfigurationName(const QString &name);
 
     QString fileName() const;
-    void setFileName(const QString &path);
 
     void setMode(KoFileDialog::DialogType mode);
     KoFileDialog::DialogType mode() const;
@@ -58,6 +57,7 @@ public:
 
 public Q_SLOTS:
     void slotSelectFile();
+    void setFileName(const QString &path);
 
 Q_SIGNALS:
     void textChanged(const QString &fileName);

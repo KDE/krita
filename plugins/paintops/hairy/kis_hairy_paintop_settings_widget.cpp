@@ -7,27 +7,27 @@
 #include "kis_hairy_paintop_settings_widget.h"
 #include "kis_hairy_paintop_settings.h"
 
-#include "kis_hairy_ink_option.h"
+#include "KisHairyBristleOptionWidget.h"
+#include "KisHairyInkOptionWidget.h"
 
-#include <kis_paint_action_type_option.h>
-#include "kis_hairy_bristle_option.h"
-#include <kis_curve_option_widget.h>
-#include <kis_pressure_size_option.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_compositeop_option.h>
+#include <KisPaintOpOptionWidgetUtils.h>
+#include <KisCompositeOpOptionWidget.h>
+#include <KisStandardOptionData.h>
+#include <KisSizeOptionWidget.h>
+#include <KisPaintingModeOptionWidget.h>
 #include <kis_brush_option_widget.h>
 
 KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget* parent)
-    : KisBrushBasedPaintopOptionWidget(parent)
+    : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::None, parent)
 {
-    addPaintOpOption(new KisHairyBristleOption());
-    addPaintOpOption(new KisHairyInkOption());
-    addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));
-    addPaintOpOption(new KisPaintActionTypeOption());
+    namespace kpowu = KisPaintOpOptionWidgetUtils;
+    addPaintOpOption(kpowu::createOptionWidgetWithLodLimitations<KisHairyBristleOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisHairyInkOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
+    addPaintOpOption(kpowu::createOpacityOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisSizeOptionWidget>());
+    addPaintOpOption(kpowu::createRotationOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisPaintingModeOptionWidget>());
 
     KisBrushOptionWidget *brushWidget = brushOptionWidget();
     QStringList hiddenOptions;

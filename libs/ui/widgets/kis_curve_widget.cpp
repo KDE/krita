@@ -76,57 +76,13 @@ KisCurveWidget::~KisCurveWidget()
     delete d;
 }
 
-void KisCurveWidget::setupInOutControls(QSpinBox *in, QSpinBox *out, int inMin, int inMax, int outMin, int outMax)
+bool KisCurveWidget::setCurrentPoint(QPointF pt)
 {
-    dropInOutControls();
-
-    d->m_intIn = in;
-    d->m_intOut = out;
-
-    if (!d->m_intIn || !d->m_intOut)
-        return;
-
-    d->m_inMin = inMin;
-    d->m_inMax = inMax;
-    d->m_outMin = outMin;
-    d->m_outMax = outMax;
-
-    int realInMin = qMin(inMin, inMax); // tilt elevation has range (90, 0), which QSpinBox can't handle
-    int realInMax = qMax(inMin, inMax);
-
-    d->m_intIn->setRange(realInMin, realInMax);
-    d->m_intOut->setRange(d->m_outMin, d->m_outMax);
-
-    connect(d->m_intIn, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)), Qt::UniqueConnection);
-    connect(d->m_intOut, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)), Qt::UniqueConnection);
-
-    d->syncIOControls();
-
-}
-void KisCurveWidget::dropInOutControls()
-{
-    if (!d->m_intIn || !d->m_intOut)
-        return;
-
-    disconnect(d->m_intIn, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
-    disconnect(d->m_intOut, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
-
-    d->m_intIn = d->m_intOut = 0;
-
-}
-
-void KisCurveWidget::inOutChanged(int)
-{
-    QPointF pt;
-
     Q_ASSERT(d->m_grab_point_index >= 0);
 
-    pt.setX(d->io2sp(d->m_intIn->value(), d->m_inMin, d->m_inMax));
-    pt.setY(d->io2sp(d->m_intOut->value(), d->m_outMin, d->m_outMax));
-
-    bool newPoint = false;
+    bool needResyncControls = true;
     if (d->jumpOverExistingPoints(pt, d->m_grab_point_index)) {
-        newPoint = true;
+        needResyncControls = false;
 
         d->m_curve.setPoint(d->m_grab_point_index, pt);
         d->m_grab_point_index = d->m_curve.points().indexOf(pt);
@@ -135,28 +91,20 @@ void KisCurveWidget::inOutChanged(int)
         pt = d->m_curve.points()[d->m_grab_point_index];
     }
 
-    if (!newPoint) {
-        // if there is a new Point, no point in rewriting values in spinboxes
-
-        d->m_intIn->blockSignals(true);
-        d->m_intOut->blockSignals(true);
-
-        d->m_intIn->setValue(d->sp2io(pt.x(), d->m_inMin, d->m_inMax));
-        d->m_intOut->setValue(d->sp2io(pt.y(), d->m_outMin, d->m_outMax));
-
-        d->m_intIn->blockSignals(false);
-        d->m_intOut->blockSignals(false);
-    }
-
     d->setCurveModified(false);
+    return needResyncControls;
 }
 
+std::optional<QPointF> KisCurveWidget::currentPoint() const
+{
+    return d->m_grab_point_index >= 0 && d->m_grab_point_index < d->m_curve.points().count() ?
+                std::make_optional(d->m_curve.points()[d->m_grab_point_index]) : std::nullopt;
+}
 
 void KisCurveWidget::reset(void)
 {
     d->m_grab_point_index = -1;
     emit pointSelectedChanged();
-    d->m_guideVisible = false;
 
     //remove total - 2 points.
     while (d->m_curve.points().count() - 2 ) {
@@ -164,13 +112,6 @@ void KisCurveWidget::reset(void)
     }
 
     d->setCurveModified();
-}
-
-void KisCurveWidget::setCurveGuide(const QColor & color)
-{
-    d->m_guideVisible = true;
-    d->m_colorGuide   = color;
-
 }
 
 void KisCurveWidget::setPixmap(const QPixmap & pix)
@@ -183,16 +124,6 @@ void KisCurveWidget::setPixmap(const QPixmap & pix)
 QPixmap KisCurveWidget::getPixmap()
 {
     return d->m_pix;
-}
-
-void KisCurveWidget::setBasePixmap(const QPixmap &pix)
-{
-    d->m_pixmapBase = pix;
-}
-
-QPixmap KisCurveWidget::getBasePixmap()
-{
-    return d->m_pixmapBase;
 }
 
 bool KisCurveWidget::pointSelected() const
@@ -250,8 +181,7 @@ void KisCurveWidget::addPointInTheMiddle()
     d->m_grab_point_index = d->m_curve.addPoint(pt);
     emit pointSelectedChanged();
 
-    if (d->m_intIn)
-        d->m_intIn->setFocus(Qt::TabFocusReason);
+    emit shouldFocusIOControls();
     d->setCurveModified();
 }
 
@@ -524,6 +454,7 @@ void KisCurveWidget::leaveEvent(QEvent *)
 void KisCurveWidget::notifyModified()
 {
     emit modified();
+    emit curveChanged(d->m_curve);
 }
 
 void KisCurveWidget::slotCompressorShouldEmitModified()

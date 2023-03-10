@@ -13,6 +13,7 @@
 #include <kritaui_export.h>
 
 #include <QString>
+#include <QSignalMapper>
 
 struct KRITAUI_EXPORT KisOptionInfo
 {
@@ -48,11 +49,18 @@ class KRITAUI_EXPORT KisPaintOpOptionListModel : public BaseOptionCategorizedLis
 {
 public:
     KisPaintOpOptionListModel(QObject *parent);
-    void addPaintOpOption(KisPaintOpOption* option, int widgetIndex, const QString &label, KisPaintOpOption::PaintopCategory categoryType);
     void addPaintOpOption(KisPaintOpOption *option, int widgetIndex, const QString &label, const QString &category);
     QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole) override;
     void signalDataChanged(const QModelIndex& index);
+
+    static QString categoryName(KisPaintOpOption::PaintopCategory category);
+
+private Q_SLOTS:
+    void slotCheckedEnabledStateChanged(int row);
+
+private:
+    QSignalMapper m_stateSignalsMapper;
 };
 
 #endif // _KIS_PAINTOP_OPTION_LIST_MODEL_H_

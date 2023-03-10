@@ -28,8 +28,8 @@ bool KisBrushOpSettings::needsAsynchronousUpdates() const
 
 #include "kis_paintop_preset.h"
 #include "KisPaintOpPresetUpdateProxy.h"
-#include "kis_curve_option_uniform_property.h"
-#include "kis_pressure_lightness_strength_option.h"
+#include "KisCurveOptionDataUniformProperty.h"
+#include "KisStandardOptionData.h"
 
 QList<KisUniformPaintOpPropertySP> KisBrushOpSettings::uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy)
 {
@@ -37,10 +37,10 @@ QList<KisUniformPaintOpPropertySP> KisBrushOpSettings::uniformProperties(KisPain
 
     if (props.isEmpty()) {
         {
-            KisCurveOptionUniformProperty *prop =
-                new KisCurveOptionUniformProperty(
+            KisCurveOptionDataUniformProperty *prop =
+                new KisCurveOptionDataUniformProperty(
+                    KisLightnessStrengthOptionData(),
                     "lightness_strength",
-                    new KisPressureLightnessStrengthOption(),
                     settings, 0);
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));

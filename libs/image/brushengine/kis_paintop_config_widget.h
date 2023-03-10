@@ -13,6 +13,7 @@
 #include "kis_image.h"
 #include <kis_debug.h>
 #include <kis_properties_configuration.h>
+#include <lager/reader.hpp>
 
 class KisResourcesInterface;
 using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
@@ -44,6 +45,8 @@ public:
 
 
     virtual KisPaintopLodLimitations lodLimitations() const = 0;
+    virtual lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const = 0;
+    virtual lager::reader<qreal> effectiveBrushSize() const = 0;
 
     virtual void setImage(KisImageWSP image);
     virtual void setNode(KisNodeWSP node);

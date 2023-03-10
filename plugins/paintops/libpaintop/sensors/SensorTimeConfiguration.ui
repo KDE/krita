@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -59,7 +59,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisDoubleSliderSpinBox" name="spinBoxDuration" native="true">
+      <widget class="KisSliderSpinBox" name="spinBoxDuration" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -70,7 +70,7 @@
         <number>0</number>
        </property>
        <property name="maximum" stdset="0">
-        <number>10</number>
+        <number>10000</number>
        </property>
        <property name="value" stdset="0">
         <number>2</number>
@@ -83,8 +83,8 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
+   <class>KisSliderSpinBox</class>
+   <extends>QSpinBox</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>

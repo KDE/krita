@@ -10,16 +10,15 @@
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 
-#include <kis_airbrush_option_widget.h>
-#include <kis_pressure_size_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_rate_option.h>
+#include <KisAirbrushOptionData.h>
+#include <KisOpacityOption.h>
+#include <KisRotationOption.h>
 
 #include "deform_brush.h"
 
 #include "kis_deform_paintop_settings.h"
-#include "kis_deform_option.h"
+#include "KisDeformOptionData.h"
+#include "KisBrushSizeOptionData.h"
 
 class KisPainter;
 
@@ -43,15 +42,15 @@ private:
     KisPaintDeviceSP m_dev;
 
     DeformBrush m_deformBrush;
-    DeformOption m_properties;
-    KisBrushSizeOptionProperties m_sizeProperties;
+    KisDeformOptionData m_deformData;
+    KisBrushSizeOptionData m_brushSizeData;
 
-    KisAirbrushOptionProperties m_airbrushOption;
+    KisAirbrushOptionData m_airbrushData;
 
-    KisPressureSizeOption m_sizeOption;
-    KisPressureOpacityOption m_opacityOption;
-    KisPressureRotationOption m_rotationOption;
-    KisPressureRateOption m_rateOption;
+    KisSizeOption m_sizeOption;
+    KisOpacityOption m_opacityOption;
+    KisRotationOption m_rotationOption;
+    KisRateOption m_rateOption;
 
     qreal m_xSpacing;
     qreal m_ySpacing;

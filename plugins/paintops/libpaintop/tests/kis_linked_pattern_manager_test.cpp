@@ -12,7 +12,7 @@
 #include <KoResourceServerProvider.h>
 #include <resources/KoPattern.h>
 
-#include "kis_linked_pattern_manager.h"
+#include "KisEmbeddedTextureData.h"
 
 #include <kis_properties_configuration.h>
 #include <KisResourceServerProvider.h>
@@ -45,9 +45,13 @@ void KisLinkedPatternManagerTest::testRoundTrip()
 
     KisPropertiesConfigurationSP config(new KisPropertiesConfiguration);
 
-    KisLinkedPatternManager::saveLinkedPattern(config, pattern);
+    KisEmbeddedTextureData data1 = KisEmbeddedTextureData::fromPattern(pattern);
+    data1.write(config.data());
 
-    KoPatternSP newPattern = KisLinkedPatternManager::loadLinkedPattern(config, KisGlobalResourcesInterface::instance()).resource<KoPattern>();
+    KisEmbeddedTextureData data2;
+    data2.read(config.data());
+
+    KoPatternSP newPattern = data2.loadLinkedPattern(KisGlobalResourcesInterface::instance()).resource<KoPattern>();
 
     QCOMPARE(newPattern->pattern(), pattern->pattern());
     QCOMPARE(newPattern->name(), pattern->name());
@@ -134,8 +138,10 @@ void KisLinkedPatternManagerTest::checkOneConfig(NameStatus nameStatus, bool has
 
     KisPropertiesConfigurationSP setting = createXML(nameStatus, hasMd5);
 
+    KisEmbeddedTextureData data2;
+    data2.read(setting.data());
 
-    KoPatternSP pattern = KisLinkedPatternManager::loadLinkedPattern(setting, KisGlobalResourcesInterface::instance()).resource<KoPattern>();
+    KoPatternSP pattern = data2.loadLinkedPattern(KisGlobalResourcesInterface::instance()).resource<KoPattern>();
 
     QVERIFY(pattern);
     QCOMPARE(pattern->pattern(), basePattern->pattern());

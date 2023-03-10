@@ -48,66 +48,47 @@ struct ColorSmudgeInterstrokeDataFactory : public KisInterstrokeDataFactory
 KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_firstRun(true)
-    , m_smudgeRateOption()
-    , m_colorRateOption(KoID("ColorRate", i18nc("Color rate of active Foreground color", "Color Rate")), KisPaintOpOption::GENERAL, false)
-    , m_smudgeRadiusOption()
+    , m_sizeOption(settings.data())
+    , m_ratioOption(settings.data())
+    , m_opacityOption(settings.data())
+    , m_spacingOption(settings.data())
+    , m_rateOption(settings.data())
+    , m_rotationOption(settings.data())
+    , m_scatterOption(settings.data())
+    , m_paintThicknessOption(settings.data())
+    , m_gradientOption(settings.data())
+    , m_smudgeRateOption(settings.data())
+    , m_colorRateOption(settings.data())
+    , m_smudgeRadiusOption(settings.data())
 {
     Q_UNUSED(node);
-
-    Q_ASSERT(settings);
     Q_ASSERT(painter);
-    m_sizeOption.readOptionSetting(settings);
-    m_opacityOption.readOptionSetting(settings);
-    m_ratioOption.readOptionSetting(settings);
-    m_spacingOption.readOptionSetting(settings);
-    m_rateOption.readOptionSetting(settings);
-    m_paintThicknessOption.readOptionSetting(settings);
-    m_smudgeRateOption.readOptionSetting(settings);
-    m_colorRateOption.readOptionSetting(settings);
 
-    m_overlayModeOption.readOptionSetting(settings);
-    m_rotationOption.readOptionSetting(settings);
-    m_scatterOption.readOptionSetting(settings);
-    m_gradientOption.readOptionSetting(settings);
-    m_airbrushOption.readOptionSetting(settings);
-
-    m_sizeOption.resetAllSensors();
-    m_opacityOption.resetAllSensors();
-    m_ratioOption.resetAllSensors();
-    m_spacingOption.resetAllSensors();
-    m_rateOption.resetAllSensors();
-    m_paintThicknessOption.resetAllSensors();
-    m_smudgeRateOption.resetAllSensors();
-    m_colorRateOption.resetAllSensors();
-
-    m_rotationOption.resetAllSensors();
-    m_scatterOption.resetAllSensors();
-    m_gradientOption.resetAllSensors();
+    m_airbrushData.read(settings.data());
+    m_overlayModeData.read(settings.data());
 
     m_gradient = painter->gradient();
 
     // useNewEngine should be true if brushApplication is not ALPHAMASK
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_brush->brushApplication() == ALPHAMASK || m_smudgeRateOption.getUseNewEngine());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_brush->brushApplication() == ALPHAMASK || m_smudgeRateOption.useNewEngine());
 
-    const bool useSmearAlpha = m_smudgeRateOption.getSmearAlpha();
-    const bool useDullingMode = m_smudgeRateOption.getMode() == KisSmudgeOption::DULLING_MODE;
-    const bool useOverlayMode = m_overlayModeOption.isChecked();
+    const bool useSmearAlpha = m_smudgeRateOption.smearAlpha();
+    const bool useDullingMode = m_smudgeRateOption.mode() == KisSmudgeLengthOptionData::DULLING_MODE;
+    const bool useOverlayMode = m_overlayModeData.isChecked;
 
     m_rotationOption.applyFanCornersInfo(this);
 
-    bool usesNewEngine = true;
-
     if (m_brush->brushApplication() == LIGHTNESSMAP) {
-        KisPressurePaintThicknessOption::ThicknessMode thicknessMode =
+        KisPaintThicknessOptionData::ThicknessMode thicknessMode =
             m_paintThicknessOption.isChecked() ?
-                m_paintThicknessOption.getThicknessMode() :
-                KisPressurePaintThicknessOption::OVERWRITE;
+                m_paintThicknessOption.mode() :
+                KisPaintThicknessOptionData::OVERWRITE;
 
         m_strategy.reset(new KisColorSmudgeStrategyLightness(painter,
                                                              useSmearAlpha,
                                                              useDullingMode,
                                                              thicknessMode));
-    } else if (m_smudgeRateOption.getUseNewEngine() &&
+    } else if (m_smudgeRateOption.useNewEngine() &&
                m_brush->brushApplication() == ALPHAMASK) {
         m_strategy.reset(new KisColorSmudgeStrategyMask(painter,
                                                         image,
@@ -127,31 +108,18 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
                                                               useSmearAlpha,
                                                               useDullingMode,
                                                               useOverlayMode));
-        usesNewEngine = false;
     }
-
-    if (usesNewEngine){
-        m_smudgeRadiusOption.updateRange(0.0, 1.0);
-    } else {
-        m_smudgeRadiusOption.updateRange(0.0, 3.0);
-    }
-
-    // Initialize smudge radius only after the proper range is set
-    m_smudgeRadiusOption.readOptionSetting(settings);
-    m_smudgeRadiusOption.resetAllSensors();
 
     m_strategy->initializePainting();
     m_paintColor = painter->paintColor().convertedTo(m_strategy->preciseColorSpace());
 
-    m_hsvOptions.append(KisPressureHSVOption::createHueOption());
-    m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
-    m_hsvOptions.append(KisPressureHSVOption::createValueOption());
+    m_hsvOptions.append(KisHSVOption::createHueOption(settings.data()));
+    m_hsvOptions.append(KisHSVOption::createSaturationOption(settings.data()));
+    m_hsvOptions.append(KisHSVOption::createValueOption(settings.data()));
 
     /// color transformation must be created **after** the color
     /// space of m_paintColor has been set up
-    Q_FOREACH (KisPressureHSVOption * option, m_hsvOptions) {
-        option->readOptionSetting(settings);
-        option->resetAllSensors();
+    Q_FOREACH (KisHSVOption * option, m_hsvOptions) {
         if (option->isChecked() && !m_hsvTransform) {
             m_hsvTransform = m_paintColor.colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
         }
@@ -172,7 +140,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     if (!painter()->device() || !brush || !brush->canPaintFor(info)) {
         return KisSpacingInformation(1.0);
     }
-    if (m_smudgeRateOption.getMode() == KisSmudgeOption::SMEARING_MODE) {
+    if (m_smudgeRateOption.mode() == KisSmudgeLengthOptionData::SMEARING_MODE) {
         /**
         * Disable handling of the subpixel precision. In the smudge op we
         * should read from the aligned areas of the image, so having
@@ -205,7 +173,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     KisSpacingInformation spacingInfo =
             effectiveSpacing(scale, rotation,
-                             &m_airbrushOption, &m_spacingOption, info);
+                             &m_airbrushData, &m_spacingOption, info);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_strategy, spacingInfo);
 
@@ -232,14 +200,14 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     const qreal colorRate = m_colorRateOption.isChecked() ? m_colorRateOption.computeSizeLikeValue(info) : 0.0;
     const qreal smudgeRate = m_smudgeRateOption.isChecked() ? m_smudgeRateOption.computeSizeLikeValue(info) : 1.0;
-    const qreal maxSmudgeRate = m_smudgeRateOption.getRate();
-    const qreal fpOpacity = m_opacityOption.getOpacityf(info);
+    const qreal maxSmudgeRate = m_smudgeRateOption.strengthValue();
+    const qreal fpOpacity = m_opacityOption.apply(info);
 
     KoColor paintColor = m_paintColor;
 
     m_gradientOption.apply(paintColor, m_gradient, info);
     if (m_hsvTransform) {
-        Q_FOREACH (KisPressureHSVOption * option, m_hsvOptions) {
+        Q_FOREACH (KisHSVOption *option, m_hsvOptions) {
             option->apply(m_hsvTransform, info);
         }
         m_hsvTransform->transform(paintColor.data(), paintColor.data(), 1);
@@ -263,12 +231,12 @@ KisSpacingInformation KisColorSmudgeOp::updateSpacingImpl(const KisPaintInformat
 {
     const qreal scale = m_sizeOption.apply(info) * KisLodTransform::lodToScale(painter()->device());
     const qreal rotation = m_rotationOption.apply(info);
-    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
+    return effectiveSpacing(scale, rotation, &m_airbrushData, &m_spacingOption, info);
 }
 
 KisTimingInformation KisColorSmudgeOp::updateTimingImpl(const KisPaintInformation &info) const
 {
-    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushData, &m_rateOption, info);
 }
 
 KisInterstrokeDataFactory *KisColorSmudgeOp::createInterstrokeDataFactory(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)

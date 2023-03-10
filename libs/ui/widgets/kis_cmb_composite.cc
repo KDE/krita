@@ -43,6 +43,16 @@ KoID KisCompositeOpListWidget::selectedCompositeOp() const {
     return KoCompositeOpRegistry::instance().getDefaultCompositeOp();
 }
 
+void KisCompositeOpListWidget::setCompositeOp(const KoID &id)
+{
+    const QModelIndex index = m_model->indexOf(id);
+    if (index.isValid()) {
+        setCurrentIndex(index);
+    } else {
+        qWarning() << "KisCompositeOpListWidget::setCompositeOp: ailed to find index for blendmode" << ppVar(id);
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // ---- KisCompositeOpComboBox -------------------------------------------------------- //
 

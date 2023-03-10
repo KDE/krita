@@ -10,41 +10,23 @@
 #include <kritapaintop_export.h>
 
 #include <QList>
-
-#include <kis_properties_configuration.h>
+#include <QScopedPointer>
 
 class KisColorSource;
 class KoID;
 class KisPainter;
+class KisPropertiesConfiguration;
 
 class PAINTOP_EXPORT KisColorSourceOption
 {
 public:
-    enum Type {
-        PLAIN,
-        GRADIENT,
-        UNIFORM_RANDOM,
-        TOTAL_RANDOM,
-        PATTERN,
-        PATTERN_LOCKED
-    };
-public:
-    KisColorSourceOption();
+    KisColorSourceOption(const KisPropertiesConfiguration *setting);
     ~KisColorSourceOption();
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
 
     KisColorSource* createColorSource(const KisPainter* _painter) const;
-    QString colorSourceTypeId() const;
-    void setColorSourceType(Type _type);
-    void setColorSourceType(const QString& _type);
-    static QList<KoID> sourceIds();
-
-    Type type() const;
-
 private:
     struct Private;
-    Private* const d;
+    const QScopedPointer<Private> d;
 };
 
 #endif

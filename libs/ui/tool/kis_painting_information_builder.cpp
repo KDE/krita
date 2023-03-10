@@ -44,8 +44,7 @@ KisPaintingInformationBuilder::~KisPaintingInformationBuilder()
 void KisPaintingInformationBuilder::updateSettings()
 {
     KisConfig cfg(true);
-    KisCubicCurve curve;
-    curve.fromString(cfg.pressureTabletCurve());
+    const KisCubicCurve curve(cfg.pressureTabletCurve());
     m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION + 1);
     m_maxAllowedSpeedValue = cfg.readEntry("maxAllowedSpeedValue", 30);
     m_speedSmoother->updateSettings();

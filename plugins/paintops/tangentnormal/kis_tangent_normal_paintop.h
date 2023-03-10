@@ -12,17 +12,16 @@
 #include <kis_brush_based_paintop.h>
 #include <kis_types.h>
 
-#include <kis_pressure_size_option.h>
-#include <kis_tangent_tilt_option.h>
-#include <kis_airbrush_option_widget.h>
-#include <kis_pressure_flow_opacity_option.h>
-#include <kis_pressure_spacing_option.h>
-#include <kis_pressure_rate_option.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_scatter_option.h>
-#include <kis_pressure_flow_option.h>
-#include <kis_pressure_softness_option.h>
-#include <kis_pressure_sharpness_option.h>
+#include <KisTangentTiltOption.h>
+#include <KisTangentTiltOptionData.h>
+
+#include <KisStandardOptions.h>
+#include <KisFlowOpacityOption.h>
+#include <KisSpacingOption.h>
+#include <KisSharpnessOption.h>
+#include <KisScatterOption.h>
+#include <KisRotationOption.h>
+#include <KisAirbrushOptionData.h>
 
 class KisBrushBasedPaintOpSettings;
 class KisPainter;
@@ -52,17 +51,18 @@ private:
 
 private:
     //private functions//
-    KisPressureSizeOption m_sizeOption;
-    KisFlowOpacityOption m_opacityOption;
-    KisPressureSpacingOption m_spacingOption;
-    KisPressureRateOption m_rateOption;
-    KisPressureRotationOption m_rotationOption;
-    KisPressureScatterOption m_scatterOption;
     KisTangentTiltOption m_tangentTiltOption;
-    KisAirbrushOptionProperties m_airbrushOption;
-    KisPressureSoftnessOption m_softnessOption;
-    KisPressureSharpnessOption m_sharpnessOption;
-    KisPressureFlowOption m_flowOption;
+
+    KisFlowOpacityOption2 m_opacityOption;
+    KisFlowOption m_flowOption;
+    KisSizeOption m_sizeOption;
+    KisSpacingOption m_spacingOption;
+    KisSoftnessOption m_softnessOption;
+    KisSharpnessOption m_sharpnessOption;
+    KisScatterOption m_scatterOption;
+    KisRotationOption m_rotationOption;
+    KisAirbrushOptionData m_airbrushData;
+    KisRateOption m_rateOption;
 
     KisFixedPaintDeviceSP m_maskDab;
     KisPaintDeviceSP m_tempDev;

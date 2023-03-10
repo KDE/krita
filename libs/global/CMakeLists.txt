@@ -69,6 +69,8 @@ target_link_libraries(kritaglobal
         Qt5::Xml 
         KF5::I18n
         Boost::boost
+        zug
+        lager
     PRIVATE
         Eigen3::Eigen
 )

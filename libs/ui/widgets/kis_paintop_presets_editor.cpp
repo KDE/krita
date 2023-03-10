@@ -41,6 +41,7 @@
 
 #include "KisResourceServerProvider.h"
 #include "kis_lod_availability_widget.h"
+#include "KisLodAvailabilityModel.h"
 
 #include "kis_signal_auto_connection.h"
 #include <kis_paintop_settings.h>
@@ -49,6 +50,8 @@
 // ones from brush engine selector
 #include <brushengine/kis_paintop_factory.h>
 #include <kis_preset_live_preview_view.h>
+
+#include <lager/state.hpp>
 
 struct KisPaintOpPresetsEditor::Private
 {
@@ -69,6 +72,8 @@ struct KisPaintOpPresetsEditor::Private
     QSize minimumSettingsWidgetSize;
 
     KisSignalAutoConnectionsStore widgetConnections;
+
+    lager::state<KisLodAvailabilityData, lager::automatic_tag> lodAvailabilityData;
 };
 
 void setSizeHint(QWidget* widget, int width, int height)
@@ -293,27 +298,8 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
     m_d->uiWdgPaintOpPresetSettings.eraserBrushSizeCheckBox->setChecked(cfg.useEraserBrushSize());
     m_d->uiWdgPaintOpPresetSettings.eraserBrushOpacityCheckBox->setChecked(cfg.useEraserBrushOpacity());
 
-    m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setCanvasResourceManager(resourceProvider->resourceManager());
-
-    connect(resourceProvider->resourceManager(),
-            SIGNAL(canvasResourceChanged(int,QVariant)),
-            SLOT(slotResourceChanged(int,QVariant)));
-
-    connect(m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability,
-            SIGNAL(sigUserChangedLodAvailability(bool)),
-            SLOT(slotLodAvailabilityChanged(bool)));
-
-    connect(m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability,
-            SIGNAL(sigUserChangedLodThreshold(qreal)),
-            SLOT(slotLodThresholdChanged(qreal)));
-
-    slotResourceChanged(KoCanvasResource::LodAvailability,
-                        resourceProvider->resourceManager()->
-                        resource(KoCanvasResource::LodAvailability));
-
-    slotResourceChanged(KoCanvasResource::LodSizeThreshold,
-                        resourceProvider->resourceManager()->
-                        resource(KoCanvasResource::LodSizeThreshold));
+    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdatePaintOpFilter()));
+    connect(m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset, SIGNAL(clicked()), this, SLOT(slotBlackListCurrentPreset()));
 
     updateThemedIcons();
 
@@ -429,27 +415,6 @@ void KisPaintOpPresetsEditor::slotSaveRenameCurrentBrush()
     slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 }
 
-void KisPaintOpPresetsEditor::slotResourceChanged(int key, const QVariant &value)
-{
-    if (key == KoCanvasResource::LodAvailability) {
-        m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->slotUserChangedLodAvailability(value.toBool());
-    } else if (key == KoCanvasResource::LodSizeThreshold) {
-        m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->slotUserChangedLodThreshold(value.toDouble());
-    } else if (key == KoCanvasResource::Size) {
-        m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->slotUserChangedSize(value.toDouble());
-    }
-}
-
-void KisPaintOpPresetsEditor::slotLodAvailabilityChanged(bool value)
-{
-    m_d->resourceProvider->resourceManager()->setResource(KoCanvasResource::LodAvailability, QVariant(value));
-}
-
-void KisPaintOpPresetsEditor::slotLodThresholdChanged(qreal value)
-{
-    m_d->resourceProvider->resourceManager()->setResource(KoCanvasResource::LodSizeThreshold, QVariant(value));
-}
-
 KisPaintOpPresetsEditor::~KisPaintOpPresetsEditor()
 {
     if (m_d->settingsWidget) {
@@ -486,8 +451,11 @@ void KisPaintOpPresetsEditor::setPaintOpSettingsWidget(QWidget * widget)
             slotSwitchScratchpad(false);
         }
 
-        m_d->widgetConnections.addConnection(m_d->settingsWidget, SIGNAL(sigConfigurationItemChanged()),
-                                             this, SLOT(slotUpdateLodAvailability()));
+        KisLodAvailabilityModel *model =
+            new KisLodAvailabilityModel(m_d->lodAvailabilityData,
+                                        m_d->settingsWidget->effectiveBrushSize(),
+                                        m_d->settingsWidget->lodLimitationsReader());
+        m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setLodAvailabilityModel(model);
 
         widget->setFont(m_d->smallFont);
 
@@ -505,19 +473,17 @@ void KisPaintOpPresetsEditor::setPaintOpSettingsWidget(QWidget * widget)
                                                  this, SLOT(slotUpdatePresetSettings()));
         }
 
+        m_d->widgetConnections.addConnection(model, SIGNAL(effectiveLodAvailableChanged(bool)),
+                                             this, SLOT(slotUpdateEffectiveLodAvailable(bool)));
+        slotUpdateEffectiveLodAvailable(model->effectiveLodAvailable());
+
+        m_d->widgetConnections.addConnection(model, SIGNAL(sigConfigurationItemChanged()),
+                                             widget, SIGNAL(sigConfigurationItemChanged()));
+
         m_d->layout->update();
         widget->show();
 
     }
-    slotUpdateLodAvailability();
-}
-
-void KisPaintOpPresetsEditor::slotUpdateLodAvailability()
-{
-    if (!m_d->settingsWidget) return;
-
-    KisPaintopLodLimitations l = m_d->settingsWidget->lodLimitations();
-    m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setLimitations(l);
 }
 
 QImage KisPaintOpPresetsEditor::cutOutOverlay()
@@ -533,6 +499,24 @@ void KisPaintOpPresetsEditor::contextMenuEvent(QContextMenuEvent *e)
 void KisPaintOpPresetsEditor::setCreatingBrushFromScratch(bool enabled)
 {
     m_d->isCreatingBrushFromScratch = enabled;
+}
+
+void KisPaintOpPresetsEditor::readOptionSetting(const KisPropertiesConfigurationSP setting)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->settingsWidget);
+    m_d->settingsWidget->setConfigurationSafe(setting);
+
+    KisLodAvailabilityData data = m_d->lodAvailabilityData.get();
+    data.read(setting.data());
+    m_d->lodAvailabilityData.set(data);
+}
+
+void KisPaintOpPresetsEditor::writeOptionSetting(KisPropertiesConfigurationSP setting) const
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->settingsWidget);
+
+    m_d->settingsWidget->writeConfigurationSafe(setting);
+    m_d->lodAvailabilityData->write(setting.data());
 }
 
 void KisPaintOpPresetsEditor::resourceSelected(KoResourceSP resource)
@@ -793,6 +777,12 @@ void KisPaintOpPresetsEditor::slotToggleDetach(bool detach)
     emit toggleDetachState(detach);
     KisConfig cfg(false);
     cfg.setPaintopPopupDetached(detach);
+}
+
+void KisPaintOpPresetsEditor::slotUpdateEffectiveLodAvailable(bool value)
+{
+    if (!m_d->resourceProvider) return;
+    m_d->resourceProvider->resourceManager()->setResource(KoCanvasResource::EffectiveLodAvailablility, value);
 }
 
 void KisPaintOpPresetsEditor::slotCreateNewBrushPresetEngine()

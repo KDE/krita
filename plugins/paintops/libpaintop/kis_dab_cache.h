@@ -14,9 +14,7 @@
 #include "kis_brush.h"
 
 class KisColorSource;
-class KisPressureSharpnessOption;
-class KisTextureProperties;
-class KisPressureMirrorOption;
+class KisTextureOption;
 class KisPrecisionOption;
 struct MirrorProperties;
 
@@ -72,8 +70,8 @@ public:
                                                   QRect *dstDabRect);
 
 
-    void setSharpnessPostprocessing(KisPressureSharpnessOption *option);
-    void setTexturePostprocessing(KisTextureProperties *option);
+    void setSharpnessPostprocessing(KisSharpnessOption *option);
+    void setTexturePostprocessing(KisTextureOption *option);
 
     bool needSeparateOriginal() const;
 

@@ -39,8 +39,7 @@ void KisToolBasicBrushBase::updateSettings()
 {
     KisConfig cfg(true);
     // Pressure curve
-    KisCubicCurve curve;
-    curve.fromString(cfg.pressureTabletCurve());
+    KisCubicCurve curve(cfg.pressureTabletCurve());
     m_pressureSamples = curve.floatTransfer(levelOfPressureResolution + 1);
     // Outline options
     m_outlineStyle = cfg.newOutlineStyle();

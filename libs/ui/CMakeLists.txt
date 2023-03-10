@@ -228,6 +228,7 @@ set(kritaui_LIB_SRCS
 
     widgets/kis_canvas_drop.cpp
     widgets/kis_cmb_composite.cc
+    widgets/KisCompositeOpListConnectionHelper.cpp
     widgets/kis_cmb_contour.cpp
     widgets/kis_cmb_gradient.cpp
     widgets/kis_collapsible_button_group.cpp
@@ -240,6 +241,8 @@ set(kritaui_LIB_SRCS
     widgets/kis_transport_controls.cpp
     widgets/kis_utility_title_bar.cpp
     widgets/kis_curve_widget.cpp
+    widgets/KisCurveWidgetConnectionHelper.cpp
+    widgets/KisCurveWidgetControlsManager.cpp
     widgets/kis_custom_image_widget.cc
     widgets/kis_image_from_clipboard_widget.cpp
     widgets/kis_filter_selector_widget.cc
@@ -249,7 +252,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_multi_bool_filter_widget.cc
     widgets/kis_multi_double_filter_widget.cc
     widgets/kis_multi_integer_filter_widget.cc
-    widgets/kis_multipliers_double_slider_spinbox.cpp
     widgets/kis_paintop_presets_editor.cpp
     widgets/kis_tool_options_popup.cpp
     widgets/kis_paintop_presets_chooser_popup.cpp
@@ -271,6 +273,8 @@ set(kritaui_LIB_SRCS
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
     widgets/kis_lod_availability_widget.cpp
+    widgets/KisLodAvailabilityData.cpp
+    widgets/KisLodAvailabilityModel.cpp
     widgets/kis_color_filter_combo.cpp
     widgets/kis_color_label_selector_widget.cpp
     widgets/kis_color_label_button.cpp

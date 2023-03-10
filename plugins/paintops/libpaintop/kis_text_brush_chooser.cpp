@@ -15,82 +15,69 @@
 #include <QString>
 #include <QFontDialog>
 
-#define showSlider(input) input->setRange(input->minimum(), input->maximum())
+#include "KisTextBrushModel.h"
+#include "KisWidgetConnectionUtils.h"
 
-KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, const QString& caption)
-    : QWidget(parent)
-    , m_textBrush(new KisTextBrush())
+using namespace KisBrushModel;
+using namespace KisWidgetConnectionUtils;
+
+struct KisTextBrushChooser::Private
 {
-    setObjectName(name);
+    Private(KisTextBrushModel *_model)
+        : model(_model)
+    {
+    }
+
+    KisTextBrushModel *model;
+};
+
+KisTextBrushChooser::KisTextBrushChooser(KisTextBrushModel *model, QWidget *parent)
+    : QWidget(parent),
+      m_d(new Private(model))
+{
+    setObjectName("textbrush");
     setupUi(this);
 
-    setWindowTitle(caption);
-    connect((QObject*)lineEdit, SIGNAL(textChanged(QString)), this, SLOT(rebuildTextBrush()));
-    connect((QObject*)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
-    connect(pipeModeChbox, SIGNAL(toggled(bool)), this, SLOT(rebuildTextBrush()));
-    m_font = font();
+    setWindowTitle(i18nc("Text Brush tip mode", "Text"));
+
     inputSpacing->setRange(0.0, 10, 2);
     inputSpacing->setSingleStep(0.01);
     inputSpacing->setValue(0.1);
-    rebuildTextBrush();
-    connect(inputSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(rebuildTextBrush()));
+
+    connectControl(pipeModeChbox, m_d->model, "usePipeMode");
+    connectControl(inputSpacing, m_d->model, "spacing");
+    connectControl(lineEdit, m_d->model, "text");
+
+    connect((QObject*)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
+
+    connect(m_d->model, &KisTextBrushModel::fontChanged,
+            this, &KisTextBrushChooser::updateBrushPreview);
+    updateBrushPreview();
 }
 
+KisTextBrushChooser::~KisTextBrushChooser()
+{
+}
 
 void KisTextBrushChooser::getFont()
 {
     bool ok = false;
-    QFont f = QFontDialog::getFont(&ok, m_font);
+
+    QFont f;
+    f.fromString(m_d->model->font());
+    f = QFontDialog::getFont(&ok, f);
+
     if (ok) {
-        m_font = f;
-        rebuildTextBrush();
+        m_d->model->setfont(f.toString());
     }
 }
 
-void KisTextBrushChooser::rebuildTextBrush()
+void KisTextBrushChooser::updateBrushPreview()
 {
-    pipeModeChbox->setEnabled(!lineEdit->text().isEmpty());
-    if (lineEdit->text().isEmpty()) {
-        pipeModeChbox->setChecked(false);
-    }
+    QFont f;
+    f.fromString(m_d->model->font());
 
-    lblFont->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
-    lblFont->setFont(m_font);
-
-    KisTextBrush* textBrush = dynamic_cast<KisTextBrush*>(m_textBrush.data());
-    KIS_ASSERT(textBrush);
-
-    textBrush->setFont(m_font);
-    textBrush->setText(lineEdit->text());
-    textBrush->setPipeMode(pipeModeChbox->isChecked());
-    textBrush->setSpacing(inputSpacing->value());
-    textBrush->updateBrush();
-
-    emit sigBrushChanged();
-}
-
-void KisTextBrushChooser::setBrush(KisBrushSP brush)
-{
-    bool b;
-
-    m_textBrush = brush;
-
-    KisTextBrush *textBrush = dynamic_cast<KisTextBrush*>(brush.data());
-    KIS_ASSERT(textBrush);
-
-    m_font = textBrush->font();
-
-    // we want to set all the gui widgets without triggering any signals
-    // (and thus calling rebuildTextBrush)
-    b = lineEdit->blockSignals(true);
-    lineEdit->setText(textBrush->text());
-    lineEdit->blockSignals(b);
-
-    b = pipeModeChbox->blockSignals(true);
-    pipeModeChbox->setChecked(textBrush->pipeMode());
-    pipeModeChbox->blockSignals(b);
-
-    // trigger rebuildTextBrush on the last change
-    inputSpacing->setValue(textBrush->spacing());
+    lblFont->setText(QString(f.family() + ", %1").arg(f.pointSize()));
+    lblFont->setFont(f);
 }
 

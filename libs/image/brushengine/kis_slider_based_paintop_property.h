@@ -9,6 +9,18 @@
 
 #include "kis_uniform_paintop_property.h"
 
+class KRITAIMAGE_EXPORT KisSliderBasedPaintOpPropertyBase
+    : public KisUniformPaintOpProperty
+{
+    Q_OBJECT
+
+public:
+    using KisUniformPaintOpProperty::KisUniformPaintOpProperty;
+
+Q_SIGNALS:
+    void sigRangeChanged();
+};
+
 
 /**
  * This is a general class for the properties that can be represented
@@ -22,7 +34,7 @@
 
 template<typename T>
 class KRITAIMAGE_EXPORT_TEMPLATE KisSliderBasedPaintOpProperty
-    : public KisUniformPaintOpProperty
+    : public KisSliderBasedPaintOpPropertyBase
 {
 public:
     KisSliderBasedPaintOpProperty(Type type, SubType subType, const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent);

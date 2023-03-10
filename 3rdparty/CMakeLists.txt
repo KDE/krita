@@ -642,6 +642,7 @@ if (WIN32)
     add_subdirectory( ext_drmingw )
 endif ()
 
+add_subdirectory( ext_lager )
 add_subdirectory( ext_heif )
 add_subdirectory(ext_giflib)
 add_subdirectory(ext_quazip)

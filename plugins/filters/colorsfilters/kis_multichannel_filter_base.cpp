@@ -157,7 +157,7 @@ void KisMultiChannelFilterConfiguration::fromXML(const QDomElement& root)
                 index = qMin(index, quint16(curves.count()));
 
                 if (!e.text().isEmpty()) {
-                    curve.fromString(e.text());
+                    curve = KisCubicCurve(e.text());
                 }
                 curves.insert(index, curve);
             }

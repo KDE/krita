@@ -1092,8 +1092,7 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & colorSpaceId)
 void TabletSettingsTab::setDefault()
 {
     KisConfig cfg(true);
-    KisCubicCurve curve;
-    curve.fromString(DEFAULT_CURVE_STRING);
+    const KisCubicCurve curve(DEFAULT_CURVE_STRING);
     m_page->pressureCurve->setCurve(curve);
 
     m_page->chkUseRightMiddleClickWorkaround->setChecked(
@@ -1134,9 +1133,7 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
     l->addWidget(m_page, 0, 0);
 
     KisConfig cfg(true);
-    KisCubicCurve curve;
-    curve.fromString( cfg.pressureTabletCurve() );
-
+    const KisCubicCurve curve(cfg.pressureTabletCurve());
     m_page->pressureCurve->setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
     m_page->pressureCurve->setCurve(curve);
 

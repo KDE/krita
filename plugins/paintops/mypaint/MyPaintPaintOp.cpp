@@ -22,8 +22,6 @@
 #include <kis_spacing_information.h>
 #include <libmypaint/mypaint-brush.h>
 
-#include "MyPaintPaintOpOption.h"
-
 KisMyPaintPaintOp::KisMyPaintPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP /*node*/, KisImageSP image)
     : KisPaintOp (painter) {
 
@@ -47,11 +45,11 @@ KisMyPaintPaintOp::KisMyPaintPaintOp(const KisPaintOpSettingsSP settings, KisPai
     }
 
     m_settings = settings;
-    m_airBrushOption.readOptionSetting(m_settings);
+    m_airBrushData.read(m_settings.data());
 
     m_dtime = -1;
     m_isStrokeStarted = false;
-    m_radius = settings->getFloat(MYPAINT_DIAMETER)/2;
+    m_radius = exp(mypaint_brush_get_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC));
 }
 
 KisMyPaintPaintOp::~KisMyPaintPaintOp() {
@@ -64,8 +62,9 @@ KisSpacingInformation KisMyPaintPaintOp::paintAt(const KisPaintInformation& info
     }
 
     const qreal lodScale = KisLodTransform::lodToScale(painter()->device());
-    qreal radius = m_radius * lodScale;
 
+    qreal radius = m_radius;
+    radius *= lodScale;
     mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(radius));
 
     m_isStrokeStarted = mypaint_brush_get_state(m_brush->brush(), MYPAINT_BRUSH_STATE_STROKE_STARTED);
@@ -96,12 +95,12 @@ KisSpacingInformation KisMyPaintPaintOp::updateSpacingImpl(const KisPaintInforma
 
 KisTimingInformation KisMyPaintPaintOp::updateTimingImpl(const KisPaintInformation &info) const {
 
-    return KisPaintOpPluginUtils::effectiveTiming(&m_airBrushOption, nullptr, info);
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airBrushData, nullptr, info);
 }
 
 KisSpacingInformation KisMyPaintPaintOp::computeSpacing(const KisPaintInformation &info, qreal lodScale) const {
 
     return KisPaintOpPluginUtils::effectiveSpacing(m_radius*2, m_radius*2,
                                                    false, 0.0, false, m_radius*2,
-                                                   true, 1, lodScale, &m_airBrushOption, nullptr, info);
+                                                   true, 1, lodScale, &m_airBrushData, nullptr, info);
 }

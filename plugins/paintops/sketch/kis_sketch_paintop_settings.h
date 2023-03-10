@@ -12,8 +12,6 @@
 
 #include "kis_sketch_paintop_settings_widget.h"
 
-#include <kis_pressure_opacity_option.h>
-
 
 class KisSketchPaintOpSettings : public KisBrushBasedPaintOpSettings
 {

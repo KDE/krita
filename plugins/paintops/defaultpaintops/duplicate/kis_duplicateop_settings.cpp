@@ -9,8 +9,8 @@
  */
 
 #include "kis_duplicateop_settings.h"
-#include "kis_duplicateop_option.h"
 #include "kis_duplicateop_settings_widget.h"
+#include <KisDuplicateOptionData.h>
 
 #include <QDomElement>
 #include <QDomDocument>
@@ -21,10 +21,6 @@
 #include <kis_image.h>
 #include <kis_brush_option_widget.h>
 #include <kis_paintop_settings_widget.h>
-#include <kis_pressure_darken_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
-#include <kis_paint_action_type_option.h>
 #include <kis_dom_utils.h>
 #include <KisOptimizedBrushOutline.h>
 
@@ -186,6 +182,7 @@ KisOptimizedBrushOutline KisDuplicateOpSettings::brushOutline(const KisPaintInfo
 #include "kis_paintop_preset.h"
 #include "KisPaintOpPresetUpdateProxy.h"
 #include "kis_standard_uniform_properties_factory.h"
+#include <KisDuplicateOptionData.h>
 
 
 QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy)
@@ -200,17 +197,17 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(Kis
 
             prop->setReadCallback(
                         [](KisUniformPaintOpProperty *prop) {
-                KisDuplicateOptionProperties option;
-                option.readOptionSetting(prop->settings().data());
+                KisDuplicateOptionData optionData;
+                optionData.read(prop->settings().data());
 
-                prop->setValue(option.duplicate_healing);
+                prop->setValue(optionData.healing);
             });
             prop->setWriteCallback(
                         [](KisUniformPaintOpProperty *prop) {
-                KisDuplicateOptionProperties option;
-                option.readOptionSetting(prop->settings().data());
-                option.duplicate_healing = prop->value().toBool();
-                option.writeOptionSetting(prop->settings().data());
+                KisDuplicateOptionData optionData;
+                optionData.read(prop->settings().data());
+                optionData.healing = prop->value().toBool();
+                optionData.write(prop->settings().data());
             });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -223,17 +220,17 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(Kis
 
             prop->setReadCallback(
                         [](KisUniformPaintOpProperty *prop) {
-                KisDuplicateOptionProperties option;
-                option.readOptionSetting(prop->settings().data());
+                KisDuplicateOptionData optionData;
+                optionData.read(prop->settings().data());
 
-                prop->setValue(option.duplicate_move_source_point);
+                prop->setValue(optionData.moveSourcePoint);
             });
             prop->setWriteCallback(
                         [](KisUniformPaintOpProperty *prop) {
-                KisDuplicateOptionProperties option;
-                option.readOptionSetting(prop->settings().data());
-                option.duplicate_move_source_point = prop->value().toBool();
-                option.writeOptionSetting(prop->settings().data());
+                KisDuplicateOptionData optionData;
+                optionData.read(prop->settings().data());
+                optionData.moveSourcePoint = prop->value().toBool();
+                optionData.write(prop->settings().data());
             });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));

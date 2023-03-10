@@ -6,8 +6,6 @@
 
 #include "kis_colorsmudgeop_settings.h"
 
-#include "kis_smudge_option.h"
-
 struct KisColorSmudgeOpSettings::Private
 {
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
@@ -27,9 +25,11 @@ KisColorSmudgeOpSettings::~KisColorSmudgeOpSettings()
 #include <brushengine/kis_combo_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "KisPaintOpPresetUpdateProxy.h"
-#include "kis_curve_option_uniform_property.h"
-#include "kis_smudge_radius_option.h"
-#include "kis_pressure_paint_thickness_option.h"
+#include "KisSmudgeLengthOptionData.h"
+#include "KisPaintThicknessOptionData.h"
+#include "KisColorSmudgeStandardOptionData.h"
+#include "KisCurveOptionDataUniformProperty.h"
+#include "KisSmudgeRadiusOptionData.h"
 
 QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy)
 {
@@ -48,17 +48,16 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    KisSmudgeOption option;
-                    option.readOptionSetting(prop->settings().data());
-
-                    prop->setValue(int(option.getMode()));
+                    KisSmudgeLengthOptionData data;
+                    data.read(prop->settings().data());
+                    prop->setValue(int(data.mode));
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    KisSmudgeOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    option.setMode(KisSmudgeOption::Mode(prop->value().toInt()));
-                    option.writeOptionSetting(prop->settings().data());
+                    KisSmudgeLengthOptionData data;
+                    data.read(prop->settings().data());
+                    data.mode = KisSmudgeLengthOptionData::Mode(prop->value().toInt());
+                    data.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -67,10 +66,10 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
         }
 
         {
-            KisCurveOptionUniformProperty *prop =
-                new KisCurveOptionUniformProperty(
+            KisCurveOptionDataUniformProperty *prop =
+                new KisCurveOptionDataUniformProperty(
+                    KisSmudgeLengthOptionData(),
                     "smudge_length",
-                    new KisSmudgeOption(),
                     settings, 0);
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -78,10 +77,10 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
             props << toQShared(prop);
         }
         {
-            KisCurveOptionUniformProperty *prop =
-                new KisCurveOptionUniformProperty(
+            KisCurveOptionDataUniformProperty *prop =
+                new KisCurveOptionDataUniformProperty(
+                    KisSmudgeRadiusOptionData(),
                     "smudge_radius",
-                    new KisSmudgeRadiusOption(),
                     settings, 0);
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -90,11 +89,11 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
         }
 
         {
-            KisCurveOptionUniformProperty *prop =
-                new KisCurveOptionUniformProperty("smudge_color_rate",
-                                                  new KisRateOption(KoID("ColorRate", i18n("Color Rate")), KisPaintOpOption::GENERAL, false),
-                                                  settings,
-                                                  0);
+            KisCurveOptionDataUniformProperty *prop =
+                new KisCurveOptionDataUniformProperty(
+                        KisColorRateOptionData(),
+                        "smudge_color_rate",
+                        settings, 0);
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
@@ -107,17 +106,17 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    KisSmudgeOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisSmudgeLengthOptionData data;
+                    data.read(prop->settings().data());
 
-                    prop->setValue(option.getSmearAlpha());
+                    prop->setValue(data.smearAlpha);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    KisSmudgeOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    option.setSmearAlpha(prop->value().toBool());
-                    option.writeOptionSetting(prop->settings().data());
+                    KisSmudgeLengthOptionData data;
+                    data.read(prop->settings().data());
+                    data.smearAlpha = prop->value().toBool();
+                    data.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -126,10 +125,10 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
         }
 
         {
-            KisCurveOptionUniformProperty *prop =
-                new KisCurveOptionUniformProperty(
+            KisCurveOptionDataUniformProperty *prop =
+                new KisCurveOptionDataUniformProperty(
+                    KisPaintThicknessOptionData(),
                     "smudge_paint_thickness_rate",
-                    new KisPressurePaintThicknessOption(),
                     settings, 0);
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -149,17 +148,17 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    KisPressurePaintThicknessOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisPaintThicknessOptionData data;
+                    data.read(prop->settings().data());
 
-                    prop->setValue(int(option.getThicknessMode()) - 1);
+                    prop->setValue(int(data.mode) - 1);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    KisPressurePaintThicknessOption option;
-                    option.readOptionSetting(prop->settings().data());
-                    option.setThicknessMode(KisPressurePaintThicknessOption::ThicknessMode(prop->value().toInt() + 1));
-                    option.writeOptionSetting(prop->settings().data());
+                    KisPaintThicknessOptionData data;
+                    data.read(prop->settings().data());
+                    data.mode = KisPaintThicknessOptionData::ThicknessMode(prop->value().toInt() + 1);
+                    data.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));

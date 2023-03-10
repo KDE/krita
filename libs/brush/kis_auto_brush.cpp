@@ -195,6 +195,10 @@ QSizeF KisAutoBrush::characteristicSize(KisDabShape const& shape) const
     return KisBrush::characteristicSize(lieAboutDabShape(shape, maskGenerator()->spikes()));
 }
 
+KisFixedPaintDeviceSP KisAutoBrush::paintDevice(const KoColorSpace *, const KisDabShape &, const KisPaintInformation &, double, double) const {
+    return 0; // The autobrush does NOT support images!
+}
+
 
 inline void fillPixelOptimized_4bytes(quint8 *color, quint8 *buf, int size)
 {

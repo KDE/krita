@@ -819,6 +819,11 @@ void KoSvgTextShape::relayout() const
                 hb_position_t ascender = 0;
                 hb_position_t descender = 0;
                 hb_position_t lineGap = 0;
+
+                // The inkscape devs say that this data should be gotten from the os/2 table,
+                // but at the same time, firefox and chromium are definitely getting their
+                // vertical metrics from the hvea/vvea tables, so this needs more research...
+                // https://wiki.inkscape.org/wiki/Text_Rendering_Notes#Ascent_and_Descent
                 if (isHorizontal) {
                     if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &ascender)) {
                         ascender = face.data()->ascender;

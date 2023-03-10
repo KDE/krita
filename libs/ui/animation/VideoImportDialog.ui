@@ -684,6 +684,29 @@ The higher the sensitivity, the more frames are added to Krita.</string>
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>videoPreviewSlider</tabstop>
+  <tabstop>prevFrameButton</tabstop>
+  <tabstop>currentFrameNumberInput</tabstop>
+  <tabstop>nextFrameButton</tabstop>
+  <tabstop>fpsSpinbox</tabstop>
+  <tabstop>frameSkipSpinbox</tabstop>
+  <tabstop>startExportingAtSpinbox</tabstop>
+  <tabstop>exportDurationSpinbox</tabstop>
+  <tabstop>optionFilterDuplicates</tabstop>
+  <tabstop>sensitivitySpinbox</tabstop>
+  <tabstop>cmbDocumentHandler</tabstop>
+  <tabstop>documentWidthSpinbox</tabstop>
+  <tabstop>documentHeightSpinbox</tabstop>
+  <tabstop>videoWidthSpinbox</tabstop>
+  <tabstop>videoHeightSpinbox</tabstop>
+  <tabstop>cmbVideoScaleFilter</tabstop>
+  <tabstop>cmbFFMpegLocation</tabstop>
+  <tabstop>ffmpegPickerButton</tabstop>
+  <tabstop>cmbFFProbeLocation</tabstop>
+  <tabstop>ffprobePickerButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -21136,8 +21136,7 @@ msgid "Tag Url"
 msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:670
-#, fuzzy, kde-format
-#| msgid "Resource"
+#, kde-format
 msgid "Resource"
 msgstr "Resurssi"
 
@@ -42347,8 +42346,7 @@ msgstr "Väriläikät"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:560
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:767
-#, fuzzy, kde-format
-#| msgid "Orientation:"
+#, kde-format
 msgid "Orientation:"
 msgstr "Suunta:"
 
@@ -42425,7 +42423,7 @@ msgstr "Väriviuhkat"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:356
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:687
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:894
-#, fuzzy, kde-format
+#, kde-format
 msgid "Max Patches:"
 msgstr "Läikkiä enintään:"
 
@@ -42458,7 +42456,7 @@ msgstr "Kylläisyys"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line Count:"
 msgstr "Rivimäärä:"
 
@@ -52106,15 +52104,15 @@ msgid ""
 "output color space profile.</li></ul></p>"
 msgstr ""
 "<title>Työtila</title><p>Valitse tässä raakatiedon lukuun käytettävä "
-"tulosväriavaruus.</para><p><ul><li><emphasis strong='true'>Raaka "
-"(profiiliton)</emphasis>: tässä tilassa raakatiedon lukuun ei käytetä "
-"tulosväriavaruutta.</li><li><emphasis strong='true'>sRGB</emphasis>: Hewlett-"
-"Packardin ja Microsoftin yhdessä kehittämä RGB-väriavaruus, joka on paras "
-"valinta verkkoon ja muotokuviin.</li><li><emphasis strong='true'>Adobe RGB</"
+"tulosväriavaruus.</p><p><ul><li><emphasis strong='true'>Raaka (profiiliton)</"
+"emphasis>: tässä tilassa raakatiedon lukuun ei käytetä tulosväriavaruutta.</"
+"li><li><emphasis strong='true'>sRGB</emphasis>: Hewlett-Packardin ja "
+"Microsoftin yhdessä kehittämä RGB-väriavaruus, joka on paras valinta "
+"verkkoon ja muotokuviin.</li><li><emphasis strong='true'>Adobe RGB</"
 "emphasis>: Adoben kehittämä laajennettu RGB-väriavaruus, jota käyttävät "
 "mainos- ja taidevalokuvaussovellukset.</li><li><emphasis strong='true'>Wide "
 "Gamut</emphasis>: laajennettu versio Adoben RGB-väriavaruudesta.</"
-"item><li><emphasis strong='true'>Pro-Photo</emphasis>: Kodakin kehittämä RGB-"
+"li><li><emphasis strong='true'>Pro-Photo</emphasis>: Kodakin kehittämä RGB-"
 "väriavaruus, joka tarjoaa erityisen laajan värikirjon valokuvatulosteisiin.</"
 "li><li><emphasis strong='true'>Mukautettu</emphasis>: mukauta "
 "tulosväriavaruutta.</li></ul></p>"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-09 00:44+0000\n"
-"PO-Revision-Date: 2023-03-08 09:50+0100\n"
+"PO-Revision-Date: 2023-03-10 02:33+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -21969,6 +21969,9 @@ msgid ""
 "internationalization visit <a href=\"http://l10n.kde.org\">http://l10n.kde."
 "org</a></p>"
 msgstr ""
+"<p>KDE მრავალ ენაზეა ნათარგმნი მთელი მსოფლიოს სხვადასხვა მთარგმნელთა "
+"ჯგუფების მიერ.</p><p>დამატებითი ინფორმაციისთვის  KDE ინტერნაციონალიზაციის "
+"შესახებ ეწვიეთ http://i18n.kde.org</p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:95
 #, kde-format
@@ -27412,7 +27415,7 @@ msgstr ""
 #: libs/ui/input/kis_gamma_exposure_action.cpp:67
 #, kde-format
 msgid "Exposure Mode"
-msgstr ""
+msgstr "ექსპოზიციის რეჟიმი"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:68
 #, kde-format
@@ -40346,7 +40349,7 @@ msgstr "ხელით"
 #, kde-format
 msgctxt "EXIF: exposure - exposure mode"
 msgid "Auto bracket"
-msgstr ""
+msgstr "ავტომატური ფრჩხილი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: plugins/extensions/metadataeditor/editors/exif.ui:115
@@ -40374,21 +40377,21 @@ msgstr "ხელით"
 #, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Normal program"
-msgstr ""
+msgstr "ნორმალური პროგრამა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:141
 #, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Aperture priority"
-msgstr ""
+msgstr "დიაფრაგმის პრიორიტეტი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:146
 #, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Shutter priority"
-msgstr ""
+msgstr "შატერის პრიორიტეტი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:151
@@ -40640,7 +40643,7 @@ msgstr ""
 #, kde-format
 msgctxt "EXIF: flash - strobe return"
 msgid "Strobe return light detected"
-msgstr ""
+msgstr "სტრობის დაბრუნებული სინათლე აღმოჩენილია"
 
 #. i18n: ectx: property (text), widget (QLabel, label_21)
 #: plugins/extensions/metadataeditor/editors/exif.ui:461
@@ -40805,14 +40808,14 @@ msgstr "გაურკვეველი"
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Fine weather"
-msgstr ""
+msgstr "კარგი ამინდი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:635
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Cloudy weather"
-msgstr ""
+msgstr "ღრუბლიანი ამინდი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:640
@@ -40854,21 +40857,21 @@ msgstr ""
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Standard light A"
-msgstr ""
+msgstr "სტანდარტული სინათლე A"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:675
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Standard light B"
-msgstr ""
+msgstr "სტანდარტული სინათლე B"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:680
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Standard light C"
-msgstr ""
+msgstr "სტანდარტული სინათლე C"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:685
@@ -40903,7 +40906,7 @@ msgstr "D50"
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "ISO studio tungsten"
-msgstr ""
+msgstr "ISO სტუდია ვოლფრამი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:710
@@ -41029,7 +41032,7 @@ msgstr "პორტრეტი"
 #, kde-format
 msgctxt "EXIF: misc - scene capture type"
 msgid "Night scene"
-msgstr ""
+msgstr "ღამის სცენა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: plugins/extensions/metadataeditor/editors/exif.ui:841
@@ -41065,35 +41068,35 @@ msgstr ""
 #, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "One-chip color area sensor"
-msgstr ""
+msgstr "ერთჩიპიანი ფერის ადგილის სენსორი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:893
 #, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "Two-chip color area sensor"
-msgstr ""
+msgstr "ორჩიპიანი ფერის ადგილის სენსორი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:898
 #, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "Three-chip color area sensor"
-msgstr ""
+msgstr "სამჩიპიანი ფერის ადგილის სენსორი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:903
 #, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "Color sequential area sensor"
-msgstr ""
+msgstr "ფერადი მიმდევრობი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:908
 #, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "Trilinear sensor"
-msgstr ""
+msgstr "სამხაზოვანი სენსორი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:913
@@ -45835,7 +45838,7 @@ msgstr "საწყისი"
 #, kde-format
 msgctxt "A progressive jpeg file can be displayed while loading."
 msgid "Progressive"
-msgstr ""
+msgstr "პროგრესული"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkForceSRGB)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:38
@@ -53536,7 +53539,7 @@ msgstr "პიქსელი"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:27
 msgid "Centimeter"
-msgstr ""
+msgstr "სანტიმეტრი"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:28
 msgid "millimeter"

@@ -411,6 +411,8 @@ build_3rdparty () {
         ext_unibreak \
         ext_fontconfig
 
+    cmake_3rdparty ext_lager
+
     ## All builds done, creating a new install onlydeps install dir
     dir_clean "${KIS_INSTALL_DIR}.onlydeps"
     log "Copying ${KIS_INSTALL_DIR} to ${KIS_INSTALL_DIR}.onlydeps"

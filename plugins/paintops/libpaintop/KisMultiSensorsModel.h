@@ -10,6 +10,7 @@
 #include <QScopedPointer>
 #include <QAbstractListModel>
 #include <lager/cursor.hpp>
+#include <KoID.h>
 
 
 class KisCubicCurve;

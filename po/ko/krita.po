@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-09 00:44+0000\n"
+"POT-Creation-Date: 2023-03-12 00:44+0000\n"
 "PO-Revision-Date: 2023-03-01 00:29+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -16707,7 +16707,7 @@ msgstr "원본"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:300
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:16
-#: plugins/paintops/curvebrush/curve_paintop_plugin.cpp:29
+#: plugins/paintops/curvebrush/curve_paintop_plugin.cpp:30
 #, kde-format
 msgid "Curve"
 msgstr "곡선"
@@ -16742,19 +16742,19 @@ msgstr "연필"
 msgid "Line"
 msgstr "선"
 
-#: libs/brush/kis_auto_brush.cpp:450
+#: libs/brush/kis_auto_brush.cpp:454 libs/brush/KisBrushModel.cpp:81
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Brush Density recommended value 100.0"
 msgstr "브러시 밀도 권장 값 100.0"
 
-#: libs/brush/kis_auto_brush.cpp:454
+#: libs/brush/kis_auto_brush.cpp:458 libs/brush/KisBrushModel.cpp:85
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
 msgstr "브러시 임의성 권장 값 0.0"
 
-#: libs/brush/kis_brush.cpp:756
+#: libs/brush/kis_brush.cpp:756 libs/brush/KisBrushModel.cpp:76
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -17438,7 +17438,7 @@ msgstr "기본값"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:34
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:18
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
-#: plugins/paintops/libpaintop/kis_pressure_size_option.cpp:15
+#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1412
 #, kde-format
@@ -17481,14 +17481,14 @@ msgstr "크기"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1347
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1350
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1317
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1314
 #: libs/ui/forms/wdgdisplaysettings.ui:336
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
 #: libs/ui/forms/wdgrectangleconstraints.ui:98
 #: libs/ui/forms/wdgrectangleconstraints.ui:178
 #: libs/ui/forms/wdgrectangleconstraints.ui:200 libs/ui/kis_paintop_box.cc:287
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:73
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:70
 #: libs/ui/widgets/kis_selection_options.cc:186
 #: libs/ui/widgets/kis_selection_options.cc:200
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:311
@@ -17513,30 +17513,28 @@ msgstr "크기"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:69
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:74
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:80
-#: plugins/paintops/curvebrush/kis_curve_line_option.cpp:21
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:66
-#: plugins/paintops/deform/kis_brush_size_option.cpp:37
-#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:115
-#: plugins/paintops/experiment/kis_experimentop_option.cpp:26
-#: plugins/paintops/gridbrush/kis_gridop_option.cpp:31
-#: plugins/paintops/gridbrush/kis_gridop_option.cpp:37
-#: plugins/paintops/gridbrush/kis_gridop_option.cpp:43
-#: plugins/paintops/hatching/kis_hatching_options.cpp:21
-#: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:153
-#: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:183
-#: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:47
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:264
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:152
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:68
+#: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:31
+#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:25
+#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:111
+#: plugins/paintops/experiment/KisExperimentOpOptionWidget.cpp:33
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:33
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:39
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:45
+#: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:135
+#: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:165
+#: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:27
+#: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:63
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:172
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:42
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:44
-#: plugins/paintops/libpaintop/sensors/kis_dynamic_sensor_fade.cpp:54
-#: plugins/paintops/roundmarker/kis_roundmarker_option.cpp:24
-#: plugins/paintops/sketch/kis_sketchop_option.cpp:32
-#: plugins/paintops/spray/kis_spray_shape_option.cpp:45
-#: plugins/paintops/spray/kis_spray_shape_option.cpp:49
-#: plugins/paintops/spray/kis_spray_shape_option.cpp:122
-#: plugins/paintops/spray/kis_spray_shape_option.cpp:124
-#: plugins/paintops/spray/kis_sprayop_option.cpp:32
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:59
+#: plugins/paintops/roundmarker/KisRoundMarkerOpOptionWidget.cpp:29
+#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:25
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:32
+#: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
+#: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
+#: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
 #: plugins/tools/basictools/kis_tool_brush.cc:390
 #: plugins/tools/basictools/kis_tool_fill.cc:522
 #: plugins/tools/basictools/kis_tool_fill.cc:533
@@ -17569,15 +17567,14 @@ msgstr " 픽셀"
 #: plugins/dockers/layerdocker/LayerBox.cpp:389
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
-#: plugins/paintops/libpaintop/kis_pressure_flow_opacity_option.cpp:19
-#: plugins/paintops/libpaintop/kis_pressure_opacity_option.cpp:12
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:17
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:54
 #, kde-format
 msgid "Opacity"
 msgstr "불투명도"
 
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:20
-#: plugins/paintops/libpaintop/kis_pressure_flow_option.cpp:12
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:28
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:55
 #, kde-format
 msgid "Flow"
@@ -17588,9 +17585,9 @@ msgstr "흐름"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:21
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:112
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:50
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:165
-#: plugins/paintops/hatching/kis_hatching_pressure_angle_option.cpp:15
-#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:223
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:164
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:16
+#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:221
 #, kde-format
 msgid "Angle"
 msgstr "각도"
@@ -17598,9 +17595,10 @@ msgstr "각도"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:22
 #: plugins/dockers/arrangedocker/arrange_docker_widget.ui:322
-#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:276
-#: plugins/paintops/libpaintop/kis_pressure_spacing_option.cpp:15
-#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:93
+#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:274
+#: plugins/paintops/libpaintop/KisSpacingOptionData.h:35
+#: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:116
+#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:94
 #, kde-format
 msgid "Spacing"
 msgstr "간격"
@@ -17772,8 +17770,7 @@ msgid "Default"
 msgstr "기본값"
 
 #: libs/image/kis_base_mask_generator.h:23
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:58
-#: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_settings_widget.cpp:49
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:53
 #, kde-format
 msgid "Soft"
 msgstr "부드러움"
@@ -18052,9 +18049,9 @@ msgid "%1%"
 msgstr "%1%"
 
 #. i18n: ectx: property (toolTip), widget (KisCompositeOpComboBox, cmbComposite)
-#: libs/image/kis_layer.cc:281 libs/ui/widgets/kis_cmb_composite.cc:66
+#: libs/image/kis_layer.cc:281 libs/ui/widgets/kis_cmb_composite.cc:76
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:56
-#: plugins/paintops/libpaintop/kis_compositeop_option.cpp:20
+#: plugins/paintops/libpaintop/KisCompositeOpOptionWidget.cpp:30
 #, kde-format
 msgid "Blending Mode"
 msgstr "혼합 모드"
@@ -20425,7 +20422,7 @@ msgstr "풍선 도움말"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:156
 #: plugins/extensions/imagesplit/imagesplit.xmlgui:4
 #: plugins/extensions/separate_channels/imageseparate.xmlgui:4
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:401
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:55
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:90
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:400
 #, kde-format
@@ -20507,8 +20504,8 @@ msgstr "메타데이터"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1649
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1653
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1646
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1650
 #: libs/ui/forms/wdgdisplaysettings.ui:165 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:326
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -20544,7 +20541,7 @@ msgstr "메모리"
 
 #: libs/resources/KisResourceStorage.h:128
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:47
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:397
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:51
 #, kde-format
 msgid "Invalid"
 msgstr "잘못됨"
@@ -20671,7 +20668,7 @@ msgstr "축소판"
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:305
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:629
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:648
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:700
@@ -20769,7 +20766,7 @@ msgstr "리소스 삭제"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:333
 #: libs/ui/KisMainWindow.cpp:2565
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:609
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:400
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Add"
@@ -22223,7 +22220,7 @@ msgstr "DCI-P3 D65"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:28
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:161
-#: plugins/paintops/mypaint/MyPaintBrushOption.h:38
+#: plugins/paintops/mypaint/MyPaintSensorPack.h:25
 #, kde-format
 msgid "Custom"
 msgstr "사용자 정의"
@@ -22252,8 +22249,8 @@ msgstr "마스터 디스플레이:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:38
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1945
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1947
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1942
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1944
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -22351,8 +22348,8 @@ msgstr "비디오 애니메이션 가져오기"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1915
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1917
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1912
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1914
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22447,7 +22444,9 @@ msgstr "미리 보기 없음"
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:160
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:49
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:192
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:101
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:39
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:39
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:39
 #, kde-format
 msgid "0"
 msgstr "0"
@@ -23404,32 +23403,37 @@ msgstr "레이어 속성"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:684
 #: plugins/impex/webp/kis_wdg_options_webp.ui:750
 #: plugins/impex/webp/kis_wdg_options_webp.ui:773
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:125
-#: plugins/paintops/deform/kis_brush_size_option.cpp:59
-#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:82
-#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:151
-#: plugins/paintops/gridbrush/kis_gridop_option.cpp:49
-#: plugins/paintops/gridbrush/kis_gridop_option.cpp:54
-#: plugins/paintops/hairy/kis_hairy_ink_option.cpp:33
-#: plugins/paintops/hairy/kis_hairy_ink_option.cpp:37
-#: plugins/paintops/hairy/kis_hairy_ink_option.cpp:41
-#: plugins/paintops/hairy/kis_hairy_ink_option.cpp:45
-#: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:90
-#: plugins/paintops/libpaintop/kis_curve_option.cpp:153
-#: plugins/paintops/libpaintop/kis_curve_option_widget.cpp:77
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:260
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:275
-#: plugins/paintops/libpaintop/kis_pressure_flow_opacity_option_widget.cpp:39
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:167
-#: plugins/paintops/mypaint/MyPaintBrushOption.cpp:104
-#: plugins/paintops/sketch/kis_sketchop_option.cpp:37
-#: plugins/paintops/sketch/kis_sketchop_option.cpp:41
-#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:165
-#: plugins/paintops/spray/kis_spray_shape_option.cpp:128
-#: plugins/paintops/spray/kis_spray_shape_option.cpp:130
-#: plugins/paintops/spray/kis_sprayop_option.cpp:60
-#: plugins/paintops/tangentnormal/kis_tangent_tilt_option.cpp:39
-#: plugins/paintops/tangentnormal/kis_tangent_tilt_option.cpp:43
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:127
+#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:43
+#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:78
+#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:147
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:51
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:56
+#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:35
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:24
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:27
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:30
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:33
+#: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:121
+#: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:61
+#: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:78
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:20
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:22
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:23
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:24
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
+#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:45
+#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:46
+#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:47
+#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:29
+#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:32
+#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:166
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:60
+#: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
+#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:27
+#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:30
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:281
 #: plugins/tools/basictools/kis_tool_fill.cc:490
 #: plugins/tools/basictools/kis_tool_fill.cc:507
@@ -23536,10 +23540,10 @@ msgstr "이름이 같은 번들이 이미 존재합니다. 덮어쓰시겠습니
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1418
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1421
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1232
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1236
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1240
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1322
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1229
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1233
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1237
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1319
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:45
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:52
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:123
@@ -23758,7 +23762,7 @@ msgstr "화면 %1(%2):"
 msgid "Install Color Profiles"
 msgstr "색 프로필 설치"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1176
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1173
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -23767,205 +23771,205 @@ msgstr ""
 "브러시 속도에 태블릿 드라이버 타임스탬프 사용(WinTab 태블릿 API 사용 시 아티"
 "팩트가 발생할 수 있음)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1178
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1175
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "브러시 속도에 태블릿 드라이버 타임스탬프 사용"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1286
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1283
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1307
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1304
 #, kde-format
 msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr "초"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1311
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1308
 #, kde-format
 msgid " fps"
 msgstr " fps"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1521
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1518
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1522
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1519
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "소프트웨어 렌더러(매우 느림)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1524
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1521
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11(ANGLE 사용)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1526
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1523
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1533
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1530
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1553
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1550
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "자동(%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1635
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1632
 #, kde-format
 msgid "Display Id: %1"
 msgstr "디스플레이 ID: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1636
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1633
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "디스플레이 이름: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1637
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1634
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "최소 휘도: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1638
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1635
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "최대 휘도: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1639
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1636
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "최대 풀 프레임 휘도: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1640
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1637
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "기본 빨간색: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1641
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1638
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "기본 녹색: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1642
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1639
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "기본 파란색: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1643
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1640
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "백색 점: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1677
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1674
 #, kde-format
 msgid "Warning(s):"
 msgstr "경고:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1823
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1820
 #, fuzzy, kde-format
 #| msgid "WARNING: current display doesn't support HDR rendering"
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "경고: 현재 디스플레이에서 HDR 렌더링을 지원하지 않음"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1908
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1905
 #, kde-format
 msgid "Configure Krita"
 msgstr "Krita 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1925
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1922
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "키보드 단축키"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1927
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1924
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "단축키"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1937
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1934
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "캔버스 입력 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1938
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1935
 #, kde-format
 msgid "Canvas Input"
 msgstr "캔버스 입력"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1955
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1952
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #, kde-format
 msgid "Color Management"
 msgstr "색 관리"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1957
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1954
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "색상"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1965
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1967
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1962
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1964
 #, kde-format
 msgid "Performance"
 msgstr "성능"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1975
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1972
 #, kde-format
 msgid "Tablet settings"
 msgstr "태블릿 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1977
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1974
 #, kde-format
 msgid "Tablet"
 msgstr "태블릿"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1985
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1982
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "캔버스만 보기 설정"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1987
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1984
 #, kde-format
 msgid "Canvas-only"
 msgstr "캔버스만 보기"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1995
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1997
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1992
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1994
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "팝업 팔레트"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2005
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2002
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "작성자"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2007
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2004
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "작성자"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2014
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2011
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -24103,7 +24107,6 @@ msgstr "사용자 정의 영역으로 매핑"
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbPaletteSize)
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbSelectorSize)
 #. i18n: ectx: property (text), item, widget (QComboBox, sizeBox)
-#. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intHeight)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intWidth)
 #. i18n: ectx: property (text), widget (QLabel, pxLabel)
@@ -24136,7 +24139,6 @@ msgstr "사용자 정의 영역으로 매핑"
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:142
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:157
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:189
-#: plugins/paintops/libpaintop/sensors/SensorDistanceConfiguration.ui:89
 #, kde-format
 msgid "px"
 msgstr "픽셀"
@@ -26434,8 +26436,8 @@ msgstr "배경색"
 #: libs/ui/widgets/KoFillConfigWidget.ui:110
 #: plugins/generators/pattern/patterngenerator.h:41
 #: plugins/generators/pattern/wdgpatternoptions.ui:21
-#: plugins/paintops/libpaintop/kis_color_source_option.cpp:46
-#: plugins/paintops/libpaintop/kis_texture_option.cpp:54
+#: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:20
+#: plugins/paintops/libpaintop/KisTextureOptionWidget.cpp:27
 #: plugins/tools/basictools/kis_tool_fill.cc:566
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:446
 #, kde-format
@@ -26457,7 +26459,7 @@ msgstr "외곽선 사용 안 함"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbOutline)
 #: libs/ui/forms/wdggeometryoptions.ui:101
-#: plugins/paintops/roundmarker/kis_roundmarker_option.cpp:29
+#: plugins/paintops/roundmarker/KisRoundMarkerOpOptionWidget.cpp:49
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:440
 #, kde-format
 msgid "Brush"
@@ -26968,7 +26970,7 @@ msgstr "세로"
 #. i18n: ectx: property (text), widget (QPushButton, clipboardButton)
 #: libs/ui/forms/wdgnewimage.ui:320
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:94
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:363
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:317
 #, kde-format
 msgid "Clipboard"
 msgstr "클립보드"
@@ -27721,7 +27723,7 @@ msgstr "백그라운드 캐시 생성 활성화"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: libs/ui/forms/wdgperformancesettings.ui:541
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:138
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:166
 #, kde-format
 msgid "Instant Preview"
 msgstr "즉시 미리 보기"
@@ -28275,36 +28277,24 @@ msgstr "높은 압력"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdgtabletsettings.ui:98
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:55
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:61
-#: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:22
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:67
-#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:43
-#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:44
-#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:45
-#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:46
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:175
-#: plugins/paintops/libpaintop/kis_pressure_scatter_option_widget.cpp:20
-#: plugins/paintops/libpaintop/kis_pressure_sharpness_option_widget.cpp:22
-#: plugins/paintops/mypaint/MyPaintBrushOption.cpp:56
+#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:38
+#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:39
+#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:40
+#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:41
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:20
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:67
 #, kde-format
 msgid "1.0"
 msgstr "1.0"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgtabletsettings.ui:118
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:55
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:60
-#: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:22
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:67
-#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:43
-#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:44
-#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:45
-#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:46
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:128
-#: plugins/paintops/libpaintop/kis_pressure_scatter_option_widget.cpp:20
-#: plugins/paintops/libpaintop/kis_pressure_sharpness_option_widget.cpp:22
-#: plugins/paintops/mypaint/MyPaintBrushOption.cpp:47
+#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:38
+#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:39
+#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:40
+#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:41
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:20
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:66
 #, kde-format
 msgid "0.0"
 msgstr "0.0"
@@ -30128,8 +30118,8 @@ msgstr "작업 공간 선택"
 msgid "Brush composite"
 msgstr "브러시 합성"
 
-#: libs/ui/kis_paintop_box.cc:1274 libs/ui/kis_paintop_box.cc:1296
-#: libs/ui/kis_paintop_box.cc:1310
+#: libs/ui/kis_paintop_box.cc:1271 libs/ui/kis_paintop_box.cc:1293
+#: libs/ui/kis_paintop_box.cc:1307
 #, kde-format
 msgid ""
 "%1\n"
@@ -30138,31 +30128,31 @@ msgstr ""
 "%1\n"
 "선택됨"
 
-#: libs/ui/kis_paintop_options_model.cpp:24
+#: libs/ui/kis_paintop_options_model.cpp:25
 #, kde-format
 msgctxt "option category"
 msgid "General"
 msgstr "일반"
 
-#: libs/ui/kis_paintop_options_model.cpp:27
+#: libs/ui/kis_paintop_options_model.cpp:28
 #, kde-format
 msgctxt "option category"
 msgid "Color"
 msgstr "색상"
 
-#: libs/ui/kis_paintop_options_model.cpp:30
+#: libs/ui/kis_paintop_options_model.cpp:31
 #, kde-format
 msgctxt "option category"
 msgid "Texture"
 msgstr "텍스처"
 
-#: libs/ui/kis_paintop_options_model.cpp:33
+#: libs/ui/kis_paintop_options_model.cpp:34
 #, kde-format
 msgctxt "option category"
 msgid "Filter"
 msgstr "필터"
 
-#: libs/ui/kis_paintop_options_model.cpp:36
+#: libs/ui/kis_paintop_options_model.cpp:37
 #, kde-format
 msgctxt "option category"
 msgid "Masked Brush"
@@ -30184,40 +30174,12 @@ msgid "Canvas Only"
 msgstr "캔버스만"
 
 #: libs/ui/kis_popup_palette.cpp:189
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:47
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:48
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:69
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:78
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:23
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:24
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:52
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:53
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:54
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:77
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:99
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:112
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:116
-#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:36
-#: plugins/paintops/deform/kis_deform_paintop_settings_widget.cpp:31
-#: plugins/paintops/deform/kis_deform_paintop_settings_widget.cpp:34
-#: plugins/paintops/filterop/kis_filterop_settings_widget.cpp:38
-#: plugins/paintops/hairy/kis_hairy_paintop_settings_widget.cpp:28
-#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:48
-#: plugins/paintops/libpaintop/kis_pressure_lightness_strength_option_widget.cpp:18
-#: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option_widget.cpp:20
-#: plugins/paintops/libpaintop/kis_pressure_spacing_option_widget.cpp:22
-#: plugins/paintops/particle/kis_particle_paintop_settings_widget.cpp:25
-#: plugins/paintops/roundmarker/kis_roundmarkerop_settings_widget.cpp:30
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:25
+#: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:47
+#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:32
+#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:33
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
-#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:36
-#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:37
-#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:38
-#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:40
-#: plugins/paintops/spray/kis_spray_paintop_settings_widget.cpp:33
-#: plugins/paintops/spray/kis_spray_paintop_settings_widget.cpp:41
-#: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_settings_widget.cpp:41
-#: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_settings_widget.cpp:42
-#: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_settings_widget.cpp:54
 #, kde-format
 msgid "100%"
 msgstr "100%"
@@ -30418,7 +30380,7 @@ msgid "Ants"
 msgstr "점선"
 
 #: libs/ui/kis_statusbar.cc:380
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:399
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
 #, kde-format
 msgid "Mask"
 msgstr "마스크"
@@ -32178,7 +32140,7 @@ msgstr "기법(&T):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbTechnique)
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:95
-#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:111
+#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:107
 #, kde-format
 msgid "Smooth"
 msgstr "부드러움"
@@ -32689,8 +32651,8 @@ msgstr "그라디언트 오버레이"
 #: libs/ui/layerstyles/WdgStroke.ui:143
 #: libs/ui/widgets/KoFillConfigWidget.ui:88
 #: plugins/generators/gradient/KisGradientGenerator.h:33
-#: plugins/paintops/libpaintop/kis_color_source_option.cpp:43
-#: plugins/paintops/libpaintop/kis_pressure_gradient_option.cpp:14
+#: plugins/paintops/colorsmudge/KisColorSmudgeStandardOptionData.h:23
+#: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:17
 #, kde-format
 msgid "Gradient"
 msgstr "그라디언트"
@@ -33135,7 +33097,7 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_path.cc:78
 #: plugins/tools/basictools/kis_tool_pencil.cc:53
 #: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:113
-#: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:72
+#: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:71
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr "이 색 공간에서는 MyPaint 브러시 엔진을 사용할 수 없음"
@@ -33149,7 +33111,7 @@ msgstr "브러시 크기"
 #: libs/ui/tool/kis_tool_polyline_base.cpp:113
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
 #: libs/ui/tool/KisToolOutlineBase.cpp:156
-#: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:66
+#: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:65
 #, kde-format
 msgid ""
 "This tool cannot paint on clone layers.  Please select a paint or vector "
@@ -33223,7 +33185,7 @@ msgstr "도구 상자"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:141
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:181
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:186
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:321
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
 #, kde-format
@@ -33455,17 +33417,7 @@ msgid "Custom color"
 msgstr "사용자 정의 색상"
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:82
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:46
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:22
-#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:35
-#: plugins/paintops/deform/kis_deform_paintop_settings_widget.cpp:30
-#: plugins/paintops/filterop/kis_filterop_settings_widget.cpp:37
-#: plugins/paintops/hairy/kis_hairy_paintop_settings_widget.cpp:27
-#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:47
-#: plugins/paintops/libpaintop/kis_pressure_flow_opacity_option_widget.cpp:25
-#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:33
-#: plugins/paintops/spray/kis_spray_paintop_settings_widget.cpp:32
-#: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_settings_widget.cpp:40
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:20
 #, kde-format
 msgid "Transparent"
 msgstr "투명"
@@ -33477,7 +33429,6 @@ msgstr "투명"
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
-#: plugins/paintops/libpaintop/kis_pressure_flow_opacity_option_widget.cpp:38
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:44
 #, kde-format
@@ -34552,36 +34503,31 @@ msgstr "색상 레이블로 필터..."
 msgid "Reset Filters"
 msgstr "필터 초기화"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:28
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:30
 #, kde-format
 msgctxt "@label:slider"
 msgid "Threshold:"
 msgstr "임곗값:"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:29
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:31
 #, kde-format
 msgctxt "@label:slider"
 msgid "Instant preview threshold:"
 msgstr "즉시 미리 보기 임곗값:"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:60
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:57
 #, kde-format
 msgid "Enable after:"
 msgstr "다음 이후 사용:"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:138
-#, kde-format
-msgid "(Instant Preview)*"
-msgstr "(즉시 미리 보기)*"
-
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:144
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:131
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Instant Preview Mode is disabled by the following options:<ul>%1</ul></p>"
 msgstr "<p>다음 옵션 때문에 즉시 미리 보기 모드가 비활성화됨:<ul>%1</ul></p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:152
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:140
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -34593,7 +34539,7 @@ msgstr ""
 "릭해서 임곗값을 변경하십시오<ul><li>브러시 크기: %1</li><li>제한값: %2</li></"
 "ul></p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:161
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:157
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -34603,21 +34549,21 @@ msgstr ""
 "<p>즉시 미리 보기는 최종 결과와 다르게 보일 수 있습니다. 문제가 발생하면 다"
 "음 옵션을 비활성화하십시오:<ul>%1</ul></p>"
 
-#: libs/ui/widgets/kis_lod_availability_widget.cpp:166
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:162
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Instant Preview Mode is available</p>"
 msgstr "<p>즉시 미리 보기 모드 사용 가능</p>"
 
+#: libs/ui/widgets/kis_lod_availability_widget.cpp:166
+#, kde-format
+msgid "(Instant Preview)*"
+msgstr "(즉시 미리 보기)*"
+
 #: libs/ui/widgets/kis_meta_data_merge_strategy_chooser_widget.cc:62
 #, kde-format
 msgid "Choose meta data merge strategy"
 msgstr "메타데이터 병합 전략 선택"
-
-#: libs/ui/widgets/kis_multipliers_double_slider_spinbox.cpp:51
-#, kde-format
-msgid "x%1"
-msgstr "x%1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, labelHue)
@@ -34645,7 +34591,7 @@ msgid "Mid-gray level:"
 msgstr "중간 회색 레벨:"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:160
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:160
 #, kde-format
 msgctxt "@title Which elements to display (e.g., thumbnails or details)"
@@ -34653,7 +34599,7 @@ msgid "Display"
 msgstr "디스플레이"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:164
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:169
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:168
 #, kde-format
 msgid "Thumbnails"
@@ -34661,45 +34607,45 @@ msgstr "축소판"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:172
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:177
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:174
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:228
 #, kde-format
 msgid "Details"
 msgstr "자세히"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:110
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:115
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
 #, kde-format
 msgid "The settings for this preset have changed from their default."
 msgstr "이 사전 설정의 설정이 기본값에서 변경되었습니다."
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:112
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:117
 #, kde-format
 msgid "Toggle showing presets"
 msgstr "사전 설정 표시/숨기기"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:114
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:119
 #, kde-format
 msgid "Toggle showing scratchpad"
 msgstr "스크래치패드 표시/숨기기"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:116
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:121
 #, kde-format
 msgid "Reload the brush preset"
 msgstr "브러시 사전 설정 다시 불러오기"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:117
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:122
 #, kde-format
 msgid "Rename the brush preset"
 msgstr "브러시 사전 설정 이름 바꾸기"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:217
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:222
 #, kde-format
 msgid "Detach Brush Editor"
 msgstr "브러시 편집기 분리"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:564
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:548
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
@@ -34948,7 +34894,7 @@ msgid "File name already in use. Saving will overwrite the original Workspace."
 msgstr "파일 이름이 이미 있습니다. 저장하면 원래 작업 공간에 덮어씁니다."
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:185
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:145
+#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
 #, kde-format
@@ -35517,6 +35463,21 @@ msgstr "이름"
 msgctxt "@title:dialog"
 msgid "Removing Group"
 msgstr "그룹 삭제"
+
+#: libs/widgets/kis_spacing_selection_widget.cpp:51
+#, kde-format
+msgctxt "@action:button"
+msgid "Auto"
+msgstr "자동"
+
+#: libs/widgets/kis_spacing_selection_widget.cpp:52
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"In auto mode the spacing of the brush will be calculated automatically "
+"depending on its size"
+msgstr ""
+"자동 모드에서는 브러시의 크기에 따라 브러시의 간격이 자동으로 계산됩니다"
 
 #: libs/widgets/KisAngleSelector.cpp:214
 #, kde-format
@@ -36500,6 +36461,11 @@ msgstr "글꼴 종류"
 msgid "Font Style"
 msgstr "글꼴 스타일"
 
+#: libs/widgetutils/kis_multipliers_double_slider_spinbox.cpp:51
+#, kde-format
+msgid "x%1"
+msgstr "x%1"
+
 #: libs/widgetutils/kis_slider_spin_box_p.h:375
 #, kde-format
 msgctxt ""
@@ -36897,6 +36863,7 @@ msgid "Curr&ent actions:"
 msgstr "현재 동작(&E):"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1042
+#: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, kde-format
 msgid "Filter"
 msgstr "필터"
@@ -43745,6 +43712,7 @@ msgstr "현재 스크립트 저장"
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:141
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:207
+#: plugins/paintops/libpaintop/forms/wdgcurveoption2.ui:207
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:212
 #, kde-format
 msgid "Ctrl+S"
@@ -45010,12 +44978,12 @@ msgstr "색상 균형(&C)..."
 msgid "Color Balance"
 msgstr "색상 균형"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:229
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:230
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "교차 채널 색상 조정 곡선(&C)..."
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.h:42
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.h:43
 #, kde-format
 msgid "Cross-channel color adjustment"
 msgstr "교차 채널 색상 조정"
@@ -45032,7 +45000,7 @@ msgstr "채도 감소"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:226
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:29
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:11
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:86
 #, kde-format
 msgid "Hue"
 msgstr "색조"
@@ -45042,7 +45010,7 @@ msgstr "색조"
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:33
 #: plugins/paintops/hairy/wdghairyeoptions.ui:314
 #: plugins/paintops/hairy/wdgInkOptions.ui:75
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:37
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:94
 #, kde-format
 msgid "Saturation"
 msgstr "채도"
@@ -45106,12 +45074,12 @@ msgstr ""
 "현재 설정은 다른 색 공간용으로 만들어져 사용할 수 없습니다. 모든 곡선이 초기"
 "화됩니다."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:159
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:160
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "색상 조정 곡선(&C)..."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.h:52
+#: plugins/filters/colorsfilters/kis_perchannel_filter.h:54
 #, kde-format
 msgid "Color Adjustment"
 msgstr "색상 조정"
@@ -45613,7 +45581,7 @@ msgstr "그라디언트 맵(&G)..."
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:14
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:223
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:34
 #, kde-format
 msgid "Gradient Map"
 msgstr "그라디언트 맵"
@@ -46051,10 +46019,10 @@ msgid "&Oilpaint..."
 msgstr "유화(&O)..."
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:205
-#: plugins/paintops/deform/kis_brush_size_option.cpp:25
-#: plugins/paintops/gridbrush/kis_gridop_option.cpp:21
-#: plugins/paintops/particle/kis_particleop_option.cpp:26
-#: plugins/paintops/sketch/kis_sketchop_option.cpp:22
+#: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:67
+#: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:91
+#: plugins/paintops/particle/KisParticleOpOptionWidget.cpp:58
+#: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:52
 #, kde-format
 msgid "Brush size"
 msgstr "브러시 크기"
@@ -46328,6 +46296,7 @@ msgid "Steps"
 msgstr "단계"
 
 #: plugins/filters/posterize/posterize.h:31
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:160
 #, kde-format
 msgid "Posterize"
 msgstr "포스터화"
@@ -47566,7 +47535,7 @@ msgstr "상수"
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
 #: plugins/impex/brush/KisWdgOptionsBrush.h:34
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:214
-#: plugins/paintops/mypaint/MyPaintBrushOption.h:33
+#: plugins/paintops/mypaint/MyPaintSensorPack.h:20
 #, kde-format
 msgid "Random"
 msgstr "무작위"
@@ -47583,7 +47552,7 @@ msgstr "증분"
 #. i18n: ectx: property (text), widget (QToolButton, liquifyAmountPressureBox)
 #: plugins/impex/brush/KisWdgOptionsBrush.h:36
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:224
-#: plugins/paintops/mypaint/MyPaintBrushOption.h:30
+#: plugins/paintops/mypaint/MyPaintSensorPack.h:17
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2100
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2116
 #, kde-format
@@ -48691,8 +48660,8 @@ msgstr "Kra 파일 압축"
 
 #. i18n: ectx: property (text), widget (QLabel, lblHighQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:87
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:160
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:173
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:24
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
 #, kde-format
 msgid "High"
 msgstr "높음"
@@ -48707,8 +48676,8 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:117
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:113
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:126
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:24
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
 #, kde-format
 msgid "Low"
 msgstr "낮음"
@@ -51381,7 +51350,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
 #. i18n: ectx: property (text), widget (QLabel, lblFast)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:414
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:156
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:74
 #, kde-format
 msgid "Fast"
@@ -51644,13 +51613,6 @@ msgstr "IPTC"
 msgid "Color Smudge"
 msgstr "색상 번짐"
 
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop.cpp:52
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:59
-#, kde-format
-msgctxt "Color rate of active Foreground color"
-msgid "Color Rate"
-msgstr "색상 비율"
-
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSmudgeMode)
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:41
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:47
@@ -51659,151 +51621,138 @@ msgid "Smudge Mode"
 msgstr "번짐 모드"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:44
-#: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:27
+#: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:52
 #, kde-format
 msgid "Smearing"
 msgstr "문지르기"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:45
-#: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:90
+#: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:107
 #, kde-format
 msgid "Dulling"
 msgstr "색 섞기"
 
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:95
-#, kde-format
-msgid "Color Rate"
-msgstr "색상 비율"
-
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:106
+#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:105
 #, kde-format
 msgid "Smear Alpha"
 msgstr "투명도 번짐"
 
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:142
+#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:141
 #, kde-format
 msgid "Paint Thickness Mode"
 msgstr "칠하기 두께 모드"
 
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:146
+#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:145
 #, kde-format
 msgid "Paint over"
 msgstr "덮어 칠하기"
 
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:46
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:22
-#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:35
-#: plugins/paintops/deform/kis_deform_paintop_settings_widget.cpp:30
-#: plugins/paintops/filterop/kis_filterop_settings_widget.cpp:37
-#: plugins/paintops/hairy/kis_hairy_paintop_settings_widget.cpp:27
-#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:47
-#: plugins/paintops/libpaintop/kis_pressure_flow_opacity_option_widget.cpp:25
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:37
-#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:33
-#: plugins/paintops/spray/kis_spray_paintop_settings_widget.cpp:32
-#: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_settings_widget.cpp:40
-#, kde-format
-msgid "Opaque"
-msgstr "불투명"
-
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:47
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:48
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:69
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:78
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:23
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:24
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:52
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:53
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:54
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:77
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:99
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:112
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:116
-#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:36
-#: plugins/paintops/deform/kis_deform_paintop_settings_widget.cpp:31
-#: plugins/paintops/deform/kis_deform_paintop_settings_widget.cpp:34
-#: plugins/paintops/filterop/kis_filterop_settings_widget.cpp:38
-#: plugins/paintops/hairy/kis_hairy_paintop_settings_widget.cpp:28
-#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:48
-#: plugins/paintops/libpaintop/kis_pressure_lightness_strength_option_widget.cpp:18
-#: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option_widget.cpp:20
-#: plugins/paintops/libpaintop/kis_pressure_spacing_option_widget.cpp:22
-#: plugins/paintops/particle/kis_particle_paintop_settings_widget.cpp:25
-#: plugins/paintops/roundmarker/kis_roundmarkerop_settings_widget.cpp:30
-#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
-#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:36
-#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:37
-#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:38
-#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:40
-#: plugins/paintops/spray/kis_spray_paintop_settings_widget.cpp:33
-#: plugins/paintops/spray/kis_spray_paintop_settings_widget.cpp:41
-#: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_settings_widget.cpp:41
-#: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_settings_widget.cpp:42
-#: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_settings_widget.cpp:54
-#, kde-format
-msgid "0%"
-msgstr "0%"
-
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:65
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:60
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:124
-#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:37
-#: plugins/paintops/deform/kis_deform_paintop_settings_widget.cpp:32
-#: plugins/paintops/filterop/kis_filterop_settings_widget.cpp:39
-#: plugins/paintops/hairy/kis_hairy_paintop_settings_widget.cpp:29
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:20
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:31
-#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:35
-#: plugins/paintops/spray/kis_spray_paintop_settings_widget.cpp:39
-#: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_settings_widget.cpp:52
-#, kde-format
-msgid "-180°"
-msgstr "-180°"
-
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:65
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:60
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:125
-#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:37
-#: plugins/paintops/deform/kis_deform_paintop_settings_widget.cpp:32
-#: plugins/paintops/filterop/kis_filterop_settings_widget.cpp:39
-#: plugins/paintops/hairy/kis_hairy_paintop_settings_widget.cpp:29
-#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:35
-#: plugins/paintops/spray/kis_spray_paintop_settings_widget.cpp:39
-#: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_settings_widget.cpp:52
-#, kde-format
-msgid "180°"
-msgstr "180°"
-
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:81
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:83
-#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:41
-#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:54
-#: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_settings_widget.cpp:58
+#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:110
+#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:46
 #, kde-format
 msgid "Strong"
 msgstr "강하게"
 
-#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:81
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:83
-#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:41
-#: plugins/paintops/hatching/kis_hatching_paintop_settings_widget.cpp:54
-#: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_settings_widget.cpp:58
+#: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:110
+#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:45
 #, kde-format
 msgid "Weak"
 msgstr "약하게"
 
-#: plugins/paintops/colorsmudge/kis_overlay_mode_option.h:21
+#: plugins/paintops/colorsmudge/KisColorSmudgeStandardOptionData.h:15
 #, kde-format
-msgid "Overlay Mode"
-msgstr "오버레이 모드"
+msgctxt "Color rate of active Foreground color"
+msgid "Color Rate"
+msgstr "색상 비율"
 
-#: plugins/paintops/colorsmudge/kis_overlay_mode_option.h:40
+#: plugins/paintops/colorsmudge/KisPaintThicknessOptionData.h:40
+#, kde-format
+msgid "Paint Thickness"
+msgstr "칠하기 두께"
+
+#: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:38
+#: plugins/paintops/libpaintop/KisLightnessStrengthOptionWidget.cpp:30
+#, kde-format
+msgid "Disabled: brush must be in Lightness mode for this option to apply"
+msgstr "비활성화됨: 이 옵션을 적용하려면 브러시가 광도 모드여야 합니다"
+
+#: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:43
+#, kde-format
+msgid "Overwrite (Smooth out when low) existing paint thickness"
+msgstr "기존 칠하기 두께 덮어쓰기(낮은 경우 매끄럽게 처리)"
+
+#: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:44
+#, kde-format
+msgid "Paint over existing paint thickness (controlled by Smudge Length)"
+msgstr "기존 칠하기 두께(번짐 길이로 제어)"
+
+#: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:47
+#, kde-format
+msgid "Paint Thickness Mode:"
+msgstr "칠하기 두께 모드:"
+
+#: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:48
+#, kde-format
+msgid ""
+"Describes how the brush's paint thickness interacts with existing thick "
+"paint, especially at low values."
+msgstr ""
+"특히 낮은 값에서 브러시의 칠하기 두께가 기존의 두꺼운 칠하기와 상호 작용하는 "
+"방식을 설명합니다."
+
+#: plugins/paintops/colorsmudge/KisSmudgeLengthOptionData.h:39
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:332
+#, kde-format
+msgid "Smudge Length"
+msgstr "번짐 길이"
+
+#: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:59
+#, kde-format
+msgid "Smudge mode:"
+msgstr "색상 번짐 모드:"
+
+#: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:60
+#, kde-format
+msgid "Smear alpha:"
+msgstr "투명도 번짐:"
+
+#: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:61
+#, kde-format
+msgid "Use new smudge algorithm:"
+msgstr "새 번짐 알고리즘 사용:"
+
+#: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:62
+#, kde-format
+msgid "(required for Color Image, Lightness Map, and Gradient Map brushes)"
+msgstr "(컬러 이미지, 광도 맵 및 그라디언트 맵 브러시에 필요)"
+
+#: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:111
+#, kde-format
+msgid " (caution, pierced brush!)"
+msgstr " (주의, 조각난 브러시!)"
+
+#: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:112
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"This brush has transparent pixels in its center. \"Dulling\" mode may give "
+"unstable results. Consider using \"Smearing\" mode instead."
+msgstr ""
+"이 브러시의 중심에는 투명 픽셀이 있습니다. \"색 섞기\" 모드는 불안정한 결과"
+"를 제공할 수 있습니다. 대신 \"문지르기\" 모드를 사용하는 것을 추천합니다."
+
+#: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionData.cpp:26
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Overlay Option"
 msgstr "오버레이 옵션"
 
-#: plugins/paintops/colorsmudge/kis_overlay_mode_option.h:52
+#: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:36
+#, kde-format
+msgid "Overlay Mode"
+msgstr "오버레이 모드"
+
+#: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:47
 #, kde-format
 msgid ""
 "Paints on the current layer\n"
@@ -51814,93 +51763,62 @@ msgstr ""
 "현재 볼 수 있는 모든 레이어를 번집 입력용으로 사용합니다.\n"
 "참고: 이 모드는 완전히 불투명한 배경에서만 올바르게 작동할 수 있습니다"
 
-#: plugins/paintops/colorsmudge/kis_overlay_mode_option.h:61
+#: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:56
 #, kde-format
 msgid "Disabled: overlay mode is not supported in Lightness mode of the brush"
 msgstr "비활성화됨: 이 옵션을 적용하려면 브러시가 광도 모드여야 합니다"
 
-#: plugins/paintops/colorsmudge/kis_smudge_option.cpp:18
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:197
-#, kde-format
-msgid "Smudge Length"
-msgstr "번짐 길이"
-
-#: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:36
-#, kde-format
-msgid "Smudge mode:"
-msgstr "색상 번짐 모드:"
-
-#: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:37
-#, kde-format
-msgid "Smear alpha:"
-msgstr "투명도 번짐:"
-
-#: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:38
-#, kde-format
-msgid "Use new smudge algorithm:"
-msgstr "새 번짐 알고리즘 사용:"
-
-#: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:39
-#, kde-format
-msgid "(required for Color Image, Lightness Map, and Gradient Map brushes)"
-msgstr "(컬러 이미지, 광도 맵 및 그라디언트 맵 브러시에 필요)"
-
-#: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:94
-#, kde-format
-msgid " (caution, pierced brush!)"
-msgstr " (주의, 조각난 브러시!)"
-
-#: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:95
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"This brush has transparent pixels in its center. \"Dulling\" mode may give "
-"unstable results. Consider using \"Smearing\" mode instead."
-msgstr ""
-"이 브러시의 중심에는 투명 픽셀이 있습니다. \"색 섞기\" 모드는 불안정한 결과"
-"를 제공할 수 있습니다. 대신 \"문지르기\" 모드를 사용하는 것을 추천합니다."
-
-#: plugins/paintops/colorsmudge/kis_smudge_radius_option.cpp:32
+#: plugins/paintops/colorsmudge/KisSmudgeRadiusOptionData.cpp:11
 #, kde-format
 msgid "Smudge Radius"
 msgstr "번짐 반지름"
 
-#: plugins/paintops/curvebrush/kis_curve_line_option.cpp:30
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:62
+#, kde-format
+msgid "Line Width"
+msgstr "선 넓이"
+
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:91
+#, kde-format
+msgid "History Size"
+msgstr "과거 기록 크기"
+
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:120
+#, kde-format
+msgid "Line Opacity"
+msgstr "선 불투명도"
+
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:150
+#, kde-format
+msgid "Connection Line"
+msgstr "연결선"
+
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:24
+#: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:25
+#: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:47
+#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:32
+#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:33
+#: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
+#, kde-format
+msgid "0%"
+msgstr "0%"
+
+#: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:55
 #, kde-format
 msgctxt "Brush settings curve value"
 msgid "Value"
 msgstr "명도"
 
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:60
-#, kde-format
-msgid "Line Width"
-msgstr "선 넓이"
-
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:89
-#, kde-format
-msgid "History Size"
-msgstr "과거 기록 크기"
-
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:118
-#, kde-format
-msgid "Line Opacity"
-msgstr "선 불투명도"
-
-#: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:148
-#, kde-format
-msgid "Connection Line"
-msgstr "연결선"
-
-#: plugins/paintops/curvebrush/kis_curves_opacity_option.cpp:11
-#, kde-format
-msgid "Curves opacity"
-msgstr "곡선 불투명도"
-
-#: plugins/paintops/curvebrush/kis_linewidth_option.cpp:11
-#: plugins/paintops/sketch/kis_linewidth_option.cpp:10
+#: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:15
+#: plugins/paintops/sketch/KisSketchStandardOptionData.h:25
 #, kde-format
 msgid "Line width"
 msgstr "선 폭"
+
+#: plugins/paintops/curvebrush/KisCurveStandardOptionData.h:25
+#, kde-format
+msgid "Curves opacity"
+msgstr "곡선 불투명도"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, lineWidthLbl)
@@ -51935,26 +51853,6 @@ msgstr "칠하기 연결선"
 msgid "Smoothing"
 msgstr "평활화"
 
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:58
-#: plugins/paintops/tangentnormal/kis_tangent_normal_paintop_settings_widget.cpp:49
-#, kde-format
-msgid "Hard"
-msgstr "강함"
-
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:68
-#, fuzzy, kde-format
-#| msgid "Background"
-msgctxt "Background painting color"
-msgid "Background"
-msgstr "배경"
-
-#: plugins/paintops/defaultpaintops/brush/kis_brushop_settings_widget.cpp:68
-#, fuzzy, kde-format
-#| msgid "Foreground"
-msgctxt "Foreground painting color"
-msgid "Foreground"
-msgstr "전경"
-
 #: plugins/paintops/defaultpaintops/defaultpaintops_plugin.cc:35
 #, kde-format
 msgctxt "Pixel paintbrush"
@@ -51967,29 +51865,29 @@ msgctxt "clone paintbrush (previously \"Duplicate\")"
 msgid "Clone"
 msgstr "복제"
 
-#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_option.cpp:32
-#: plugins/paintops/libpaintop/kis_paint_action_type_option.cpp:25
-#, kde-format
-msgid "Painting Mode"
-msgstr "그리기 모드"
-
 #. i18n: ectx: property (text), widget (QCheckBox, cbHealing)
-#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings.cpp:199
+#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings.cpp:196
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:25
 #, kde-format
 msgid "Healing"
 msgstr "고치기"
 
-#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings.cpp:222
+#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings.cpp:219
 #, kde-format
 msgid "Move Source"
 msgstr "원본 이동"
 
-#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:59
+#: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:64
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Clone Brush (temporarily disabled)"
 msgstr "복제 브러시(일시적으로 사용 안 함)"
+
+#: plugins/paintops/defaultpaintops/duplicate/KisDuplicateOptionWidget.cpp:37
+#: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:55
+#, kde-format
+msgid "Painting Mode"
+msgstr "그리기 모드"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbPerspective)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:32
@@ -51998,13 +51896,13 @@ msgid "To correct perspective, first create a perspective grid."
 msgstr "원근법을 교정하려면 원근법 격자를 만드십시오."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbPerspective)
-#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:35
+#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:38
 #, kde-format
 msgid "Correct the perspective"
 msgstr "원근 수정"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbSourcePoint)
-#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:42
+#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:45
 #, kde-format
 msgid ""
 "Move the clone origin with the brush. Uncheck to keep cloning from the "
@@ -52014,25 +51912,25 @@ msgstr ""
 "이 항목의 선택을 해제하십시오."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbSourcePoint)
-#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:45
+#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:48
 #, kde-format
 msgid "Source point move"
 msgstr "원점 이동"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbResetSourcePoint)
-#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:55
+#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:58
 #, kde-format
 msgid "Reset the origin every time you make a new stroke."
 msgstr "새로 획을 그릴 때마다 원점을 초기화합니다."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbResetSourcePoint)
-#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:58
+#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:61
 #, kde-format
 msgid "Source point reset before a new stroke"
 msgstr "새로 획을 그리기 전에 원점 초기화"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCloneProjection)
-#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:68
+#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:71
 #, kde-format
 msgid ""
 "When checked, clone from all visible layers. Otherwise, clone from the "
@@ -52042,13 +51940,13 @@ msgstr ""
 "어에서 복제합니다."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCloneProjection)
-#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:71
+#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:74
 #, kde-format
 msgid "Clone From All Visible Layers"
 msgstr "보이는 모든 레이어에서 복제"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:99
+#: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:102
 #, kde-format
 msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Clone Brush:</span></"
@@ -52066,31 +51964,20 @@ msgstr ""
 msgid "Deform"
 msgstr "왜곡"
 
-#: plugins/paintops/deform/kis_deform_option.cpp:26
-#, kde-format
-msgid "Deform Options"
-msgstr "왜곡 옵션"
-
-#: plugins/paintops/deform/kis_deform_option.cpp:109
-#, kde-format
-msgctxt "PaintOp instant preview limitation"
-msgid "Deform Brush (unsupported)"
-msgstr "왜곡 브러시(지원하지 않음)"
-
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:99
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:98
 #, kde-format
 msgid "Amount"
 msgstr "정도"
 
 #. i18n: ectx: property (text), widget (QLabel, deformLabel)
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:127
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:126
 #: plugins/paintops/deform/wdgdeformoptions.ui:39
 #, kde-format
 msgid "Deform Mode"
 msgstr "왜곡 모드"
 
 #. i18n: ectx: property (text), widget (QRadioButton, growBtn)
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:130
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:129
 #: plugins/paintops/deform/wdgdeformoptions.ui:48
 #, kde-format
 msgctxt "Grow as in deform brush engine"
@@ -52098,7 +51985,7 @@ msgid "Grow"
 msgstr "확장"
 
 #. i18n: ectx: property (text), widget (QRadioButton, shrinkBtn)
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:131
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:130
 #: plugins/paintops/deform/wdgdeformoptions.ui:55
 #, fuzzy, kde-format
 #| msgid "Shrink"
@@ -52107,14 +51994,14 @@ msgid "Shrink"
 msgstr "수축"
 
 #. i18n: ectx: property (text), widget (QRadioButton, swirlCWBtn)
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:132
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:131
 #: plugins/paintops/deform/wdgdeformoptions.ui:69
 #, kde-format
 msgid "Swirl CW"
 msgstr "시계 방향 소용돌이"
 
 #. i18n: ectx: property (text), widget (QRadioButton, swirlCCWBtn)
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:133
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:132
 #: plugins/paintops/deform/wdgdeformoptions.ui:62
 #, kde-format
 msgid "Swirl CCW"
@@ -52123,7 +52010,7 @@ msgstr "반시계 방향 소용돌이"
 #. i18n: ectx: property (text), widget (QRadioButton, moveBtn)
 #. i18n: ectx: property (text), widget (QPushButton, moveOriginButton)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyMove)
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:134
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:133
 #: plugins/paintops/deform/wdgdeformoptions.ui:79
 #: plugins/tools/basictools/wdgmultihandtool.ui:173
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1814
@@ -52131,21 +52018,32 @@ msgstr "반시계 방향 소용돌이"
 msgid "Move"
 msgstr "이동"
 
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:135
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:134
 #, kde-format
 msgid "Lens Zoom In"
 msgstr "렌즈 확대"
 
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:136
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:135
 #, kde-format
 msgid "Lens Zoom Out"
 msgstr "렌즈 축소"
 
-#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:137
+#: plugins/paintops/deform/kis_deform_paintop_settings.cpp:136
 #, kde-format
 msgctxt "Rearrange the positions of the pixels under the cursor"
 msgid "Color Deformation"
 msgstr "색상 왜곡"
+
+#: plugins/paintops/deform/KisDeformOptionData.cpp:43
+#, kde-format
+msgctxt "PaintOp instant preview limitation"
+msgid "Deform Brush (unsupported)"
+msgstr "왜곡 브러시(지원하지 않음)"
+
+#: plugins/paintops/deform/KisDeformOptionWidget.cpp:46
+#, kde-format
+msgid "Deform Options"
+msgstr "왜곡 옵션"
 
 #. i18n: ectx: property (text), widget (QRadioButton, colorBtn)
 #: plugins/paintops/deform/wdgdeformoptions.ui:86
@@ -52199,40 +52097,34 @@ msgid "Shape"
 msgstr "모양"
 
 #. i18n: ectx: property (text), widget (QCheckBox, speedCHBox)
-#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:78
+#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:74
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:84
 #, kde-format
 msgid "Speed"
 msgstr "속도"
 
 #. i18n: ectx: property (text), widget (QCheckBox, displaceCHBox)
-#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:145
+#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:141
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:102
 #, kde-format
 msgid "Displace"
 msgstr "대체"
 
-#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:181
+#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:177
 #, kde-format
 msgid "Winding Fill"
 msgstr "와인딩 채우기"
 
-#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:205
+#: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:201
 #, kde-format
 msgid "Hard Edge"
 msgstr "강한 테두리"
 
-#: plugins/paintops/experiment/kis_experimentop_option.cpp:38
+#: plugins/paintops/experiment/KisExperimentOpOptionWidget.cpp:60
 #, fuzzy, kde-format
 #| msgid "Experiment option"
 msgid "Experiment Option"
 msgstr "실험 옵션"
-
-#: plugins/paintops/experiment/kis_experimentop_option.cpp:138
-#, kde-format
-msgctxt "PaintOp instant preview limitation"
-msgid "Displacement Option"
-msgstr "변위 옵션"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:33
@@ -52289,12 +52181,12 @@ msgctxt "type of a brush engine, shown in the list of brush engines"
 msgid "Grid"
 msgstr "격자"
 
-#: plugins/paintops/gridbrush/kis_grid_paintop_settings.cpp:196
+#: plugins/paintops/gridbrush/kis_grid_paintop_settings.cpp:201
 #, kde-format
 msgid "Division Level"
 msgstr "분할 단계"
 
-#: plugins/paintops/gridbrush/kis_grid_shape_option.cpp:21
+#: plugins/paintops/gridbrush/KisGridShapeOptionWidget.cpp:44
 #, kde-format
 msgid "Particle type"
 msgstr "입자 종류"
@@ -52378,19 +52270,19 @@ msgstr "수직 오프셋:"
 msgid "Bristle"
 msgstr "강모"
 
-#: plugins/paintops/hairy/kis_hairy_bristle_option.cpp:39
-#, kde-format
-msgid "Bristle options"
-msgstr "털끝 옵션"
-
-#: plugins/paintops/hairy/kis_hairy_bristle_option.cpp:94
+#: plugins/paintops/hairy/KisHairyBristleOptionData.cpp:54
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Bristle Brush (the lines will be thinner than on preview)"
 msgstr "강모 브러시(미리 보기보다 선이 엷어짐)"
 
+#: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:55
+#, kde-format
+msgid "Bristle options"
+msgstr "털끝 옵션"
+
 #. i18n: ectx: attribute (title), widget (QWidget, inkTab)
-#: plugins/paintops/hairy/kis_hairy_ink_option.cpp:22
+#: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:51
 #: plugins/paintops/hairy/wdghairyeoptions.ui:263
 #, kde-format
 msgid "Ink depletion"
@@ -52618,40 +52510,40 @@ msgstr "잉크 고갈 곡선 가중:"
 msgid "Hatching"
 msgstr "해칭"
 
-#: plugins/paintops/hatching/kis_hatching_options.cpp:50
+#: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:97
 #, kde-format
-msgid "Hatching options"
-msgstr "해칭 옵션"
+msgid "Hatching Angle"
+msgstr "해칭 각도"
 
-#: plugins/paintops/hatching/kis_hatching_options.cpp:121
+#: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:128
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:36
+#, kde-format
+msgid "Separation"
+msgstr "분리"
+
+#: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:158
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:46
+#, kde-format
+msgid "Thickness"
+msgstr "두께"
+
+#: plugins/paintops/hatching/KisHatchingOptionsData.cpp:76
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Hatching Brush (heavy aliasing in preview mode)"
 msgstr "해칭 브러시(미리 보기 모드에서 무거운 에일리어싱)"
 
-#: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:115
+#: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:65
 #, kde-format
-msgid "Hatching Angle"
-msgstr "해칭 각도"
+msgid "Hatching options"
+msgstr "해칭 옵션"
 
-#: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:146
-#: plugins/paintops/hatching/kis_hatching_pressure_separation_option.cpp:16
-#, kde-format
-msgid "Separation"
-msgstr "분리"
-
-#: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:176
-#: plugins/paintops/hatching/kis_hatching_pressure_thickness_option.cpp:16
-#, kde-format
-msgid "Thickness"
-msgstr "두께"
-
-#: plugins/paintops/hatching/kis_hatching_preferences.cpp:22
+#: plugins/paintops/hatching/KisHatchingPreferencesWidget.cpp:43
 #, kde-format
 msgid "Hatching preferences"
 msgstr "해칭 설정"
 
-#: plugins/paintops/hatching/kis_hatching_pressure_crosshatching_option.cpp:15
+#: plugins/paintops/hatching/KisHatchingStandardOptionData.h:26
 #, kde-format
 msgid "Crosshatching"
 msgstr "크로스 해칭"
@@ -52915,6 +52807,7 @@ msgstr "사용 가능한 혼합 모드"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxUseCurve)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:52
+#: plugins/paintops/libpaintop/forms/wdgcurveoption2.ui:52
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:57
 #, kde-format
 msgid "Enable Pen Settings"
@@ -52940,10 +52833,13 @@ msgstr "Y 범위:"
 msgid "To"
 msgstr "대상"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QLabel, lblCurveMode)
 #. i18n: ectx: property (toolTip), widget (QComboBox, curveMode)
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:521
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:537
+#: plugins/paintops/libpaintop/forms/wdgcurveoption2.ui:424
+#: plugins/paintops/libpaintop/forms/wdgcurveoption2.ui:440
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:526
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:542
 #, kde-format
@@ -52972,8 +52868,10 @@ msgstr ""
 "<p> 최댓값과 최솟값 차이</p><p>(0.8 압력), (0.3 속도), (0.6 페이드) = 0.5</"
 "p></body></html>"
 
+#. i18n: ectx: property (text), widget (QLabel, lblCurveMode)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:524
+#: plugins/paintops/libpaintop/forms/wdgcurveoption2.ui:427
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:529
 #, kde-format
 msgid "Curves calculation mode:"
@@ -52981,6 +52879,7 @@ msgstr "곡선 계산 모드:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:544
+#: plugins/paintops/libpaintop/forms/wdgcurveoption2.ui:447
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:549
 #, kde-format
 msgid "multiply"
@@ -52988,6 +52887,7 @@ msgstr "곱하기"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:549
+#: plugins/paintops/libpaintop/forms/wdgcurveoption2.ui:452
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:554
 #, kde-format
 msgid "addition"
@@ -52995,6 +52895,7 @@ msgstr "더하기"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:554
+#: plugins/paintops/libpaintop/forms/wdgcurveoption2.ui:457
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:559
 #, kde-format
 msgid "maximum"
@@ -53002,6 +52903,7 @@ msgstr "최댓값"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:559
+#: plugins/paintops/libpaintop/forms/wdgcurveoption2.ui:462
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:564
 #, kde-format
 msgid "minimum"
@@ -53009,6 +52911,7 @@ msgstr "최솟값"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:564
+#: plugins/paintops/libpaintop/forms/wdgcurveoption2.ui:467
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:569
 #, kde-format
 msgid "difference"
@@ -53016,6 +52919,7 @@ msgstr "차이"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxUseSameCurve)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:574
+#: plugins/paintops/libpaintop/forms/wdgcurveoption2.ui:503
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:579
 #, kde-format
 msgid "Share curve across all settings"
@@ -53099,7 +53003,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, stampButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:346
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:300
 #, kde-format
 msgid "Stamp"
 msgstr "스탬프"
@@ -53224,44 +53128,19 @@ msgstr "무작위 오프셋"
 msgid "Vertical Offset:"
 msgstr "수직 오프셋:"
 
-#: plugins/paintops/libpaintop/kis_airbrush_option_widget.cpp:49
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:318
-#, kde-format
-msgid "Airbrush"
-msgstr "에어브러시"
-
-#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
+#: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:249
+#: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:91
 #, kde-format
 msgid "Auto Spacing"
 msgstr "자동 간격"
 
-#: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:16
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:69
+#: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:209
 #, kde-format
 msgid "Brush Tip"
 msgstr "브러시 끝"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:45
-#, kde-format
-msgctxt "Autobrush Brush tip mode"
-msgid "Auto"
-msgstr "자동"
-
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:49
-#, fuzzy, kde-format
-#| msgid "Predefined"
-msgctxt "Predefined Brush tip mode"
-msgid "Predefined"
-msgstr "사전 설정됨"
-
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:51
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:53
-#, kde-format
-msgctxt "Text Brush tip mode"
-msgid "Text"
-msgstr "텍스트"
-
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:144
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:50
 #, kde-format
 msgid ""
 "Precision Level 1 (fastest)\n"
@@ -53276,7 +53155,7 @@ msgstr ""
 "\n"
 "매우 큰 브러시에 적합합니다"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:152
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:58
 #, kde-format
 msgid ""
 "Precision Level 2\n"
@@ -53291,7 +53170,7 @@ msgstr ""
 "\n"
 "큰 브러시에 적합합니다"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:160
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:66
 #, kde-format
 msgid ""
 "Precision Level 3\n"
@@ -53302,7 +53181,7 @@ msgstr ""
 "서브 픽셀 정밀도: 비활성화\n"
 "브러시 크기 정밀도: 정확"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:166
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:72
 #, kde-format
 msgid ""
 "Precision Level 4 (optimal)\n"
@@ -53317,7 +53196,7 @@ msgstr ""
 "\n"
 "단계 5에 비해 50% 더 나은 성능을 제공합니다"
 
-#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:174
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:80
 #, kde-format
 msgid ""
 "Precision Level 5 (best quality)\n"
@@ -53332,6 +53211,26 @@ msgstr ""
 "\n"
 "성능은 가장 느립니다. 최고 품질입니다."
 
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:144
+#, kde-format
+msgctxt "Autobrush Brush tip mode"
+msgid "Auto"
+msgstr "자동"
+
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:146
+#, fuzzy, kde-format
+#| msgid "Predefined"
+msgctxt "Predefined Brush tip mode"
+msgid "Predefined"
+msgstr "사전 설정됨"
+
+#: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:149
+#: plugins/paintops/libpaintop/kis_text_brush_chooser.cpp:41
+#, kde-format
+msgctxt "Text Brush tip mode"
+msgid "Text"
+msgstr "텍스트"
+
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:102
 #, kde-format
 msgid ""
@@ -53341,273 +53240,7 @@ msgstr ""
 "클립보드에\n"
 " 복사한 것 없음"
 
-#: plugins/paintops/libpaintop/kis_color_option.cpp:32
-#, kde-format
-msgid "Color options"
-msgstr "색상 옵션"
-
-#: plugins/paintops/libpaintop/kis_color_source_option.cpp:42
-#, kde-format
-msgid "Plain color"
-msgstr "일반 색상"
-
-#: plugins/paintops/libpaintop/kis_color_source_option.cpp:44
-#, kde-format
-msgid "Uniform random"
-msgstr "균일한 무작위"
-
-#: plugins/paintops/libpaintop/kis_color_source_option.cpp:45
-#, kde-format
-msgid "Total random"
-msgstr "무작위 합계"
-
-#: plugins/paintops/libpaintop/kis_color_source_option.cpp:47
-#, kde-format
-msgid "Locked pattern"
-msgstr "잠긴 패턴"
-
-#: plugins/paintops/libpaintop/kis_color_source_option_widget.cpp:27
-#, fuzzy, kde-format
-#| msgid "Source"
-msgctxt "Color source"
-msgid "Source"
-msgstr "원본"
-
-#: plugins/paintops/libpaintop/kis_color_source_option_widget.cpp:77
-#, kde-format
-msgctxt "PaintOp instant preview limitation"
-msgid "Source -> Total Random"
-msgstr "원본 -> 무작위 합계"
-
-#: plugins/paintops/libpaintop/kis_color_source_option_widget.cpp:79
-#, kde-format
-msgctxt "PaintOp instant preview limitation"
-msgid "Source -> Pattern"
-msgstr "원본 -> 패턴"
-
-#: plugins/paintops/libpaintop/kis_color_source_option_widget.cpp:81
-#, kde-format
-msgctxt "PaintOp instant preview limitation"
-msgid "Source -> Pattern Locked"
-msgstr "원본 -> 잠긴 패턴"
-
-#: plugins/paintops/libpaintop/kis_curve_option_widget.cpp:76
-#, kde-format
-msgid "Strength: "
-msgstr "강도: "
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:103
-#, kde-format
-msgid "0 px"
-msgstr "0픽셀"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:105
-#, kde-format
-msgid "0 s"
-msgstr "0초"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:107
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:111
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:119
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:162
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:164
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:168
-#, kde-format
-msgid "0°"
-msgstr "0°"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:109
-#, kde-format
-msgid "Slow"
-msgstr "느림"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:115
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:117
-#, kde-format
-msgid "-60°"
-msgstr "-60°"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:121
-#, kde-format
-msgid "90°"
-msgstr "90°"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:123
-#, kde-format
-msgid "Far"
-msgstr "멀리 있음"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:140
-#, kde-format
-msgid "1000"
-msgstr "1000"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:142
-#, kde-format
-msgid "%1"
-msgstr "%1"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:145
-#, kde-format
-msgid "30 px"
-msgstr "30픽셀"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:147
-#, kde-format
-msgid "%1 px"
-msgstr "%1픽셀"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:150
-#, kde-format
-msgid "3 s"
-msgstr "3초"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:152
-#, kde-format
-msgid "%1 s"
-msgstr "%1초"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:154
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:158
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:166
-#, kde-format
-msgid "360°"
-msgstr "360°"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:170
-#, kde-format
-msgid "Near"
-msgstr "인접"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:266
-#, kde-format
-msgid " ms"
-msgstr " ms"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.cc:273
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:165
-#: plugins/paintops/libpaintop/kis_pressure_rotation_option.cpp:75
-#: plugins/paintops/libpaintop/sensors/kis_dynamic_sensor_drawing_angle.cpp:76
-#: plugins/paintops/libpaintop/sensors/kis_dynamic_sensor_drawing_angle.cpp:85
-#, kde-format
-msgid "°"
-msgstr "°"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:29
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "Fuzzy Dab"
-msgstr "두드리기 퍼지"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:30
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "Fuzzy Stroke"
-msgstr "획 그리기 퍼지"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:31
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "Speed"
-msgstr "속도"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:32
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "Fade"
-msgstr "페이드"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:33
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "Distance"
-msgstr "거리"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:34
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "Time"
-msgstr "시간"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:35
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "Drawing angle"
-msgstr "그리기 각도"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:36
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "Rotation"
-msgstr "회전"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:37
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "Pressure"
-msgstr "압력"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:38
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "PressureIn"
-msgstr "지점에서의 압력"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:39
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "X-Tilt"
-msgstr "X축 기울기"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:40
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "Y-Tilt"
-msgstr "Y축 기울기"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:48
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "Tilt direction"
-msgstr "기울기 방향"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:49
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "Tilt elevation"
-msgstr "기울기 높이"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:51
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "Perspective"
-msgstr "원근법"
-
-#: plugins/paintops/libpaintop/kis_dynamic_sensor.h:52
-#, kde-format
-msgctxt "Context: dynamic sensors"
-msgid "Tangential pressure"
-msgstr "접선 압력"
-
-#: plugins/paintops/libpaintop/kis_filter_option.cpp:39
-#, kde-format
-msgctxt "option name"
-msgid "Filter"
-msgstr "필터"
-
-#: plugins/paintops/libpaintop/kis_filter_option.cpp:205
-#, kde-format
-msgctxt "PaintOp instant preview limitation"
-msgid "\"%1\" does not support scaled preview (non-linear filter)"
-msgstr "\"%1\"은(는) 배율 조정된 미리 보기(비선형 필터)를 지원하지 않습니다"
-
-#: plugins/paintops/libpaintop/kis_paint_action_type_option.cpp:98
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Only wash mode is possible when using a masked brush."
-msgstr "마스크 브러시를 사용할 때에는 워시 모드만 사용할 수 있습니다."
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:188
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:222
 #, kde-format
 msgid ""
 "Creates a brush tip from the current image selection.\n"
@@ -53616,12 +53249,12 @@ msgstr ""
 "현재 선택한 이미지에서 브러시 끝을 생성합니다.\n"
 "선택한 항목이 없을 경우 전체 이미지를 사용합니다."
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:192
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
 #, kde-format
 msgid "Creates a brush tip from the image in the clipboard."
 msgstr "클립보드의 이미지에서 브러시 끝을 만듭니다."
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:197
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:231
 #, kde-format
 msgid ""
 "Reloads Spacing from file\n"
@@ -53632,25 +53265,25 @@ msgstr ""
 "확대/축소를 1.0으로 설정\n"
 "회전을 0.0으로 설정"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:203
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:237
 #, kde-format
 msgctxt "@label:slider"
 msgid "Neutral point: "
 msgstr "중립점: "
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:209
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:245
 #, kde-format
 msgctxt "@label:slider"
 msgid "Brightness: "
 msgstr "명도: "
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:215
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:252
 #, kde-format
 msgctxt "@label:slider"
 msgid "Contrast: "
 msgstr "대비: "
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:217
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:255
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -53663,371 +53296,6 @@ msgstr ""
 " 중립점: 127\n"
 " 명도: 0%\n"
 " 대비: 0%"
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:220
-#, kde-format
-msgid "Alpha Mask"
-msgstr "알파 마스크"
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:221
-#, kde-format
-msgid "Color Image"
-msgstr "색상 이미지"
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:222
-#, kde-format
-msgid "Lightness Map"
-msgstr "광도 맵"
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:224
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"Luminosity of the brush tip image is used as alpha channel for the stroke"
-msgstr "브러시 끝 부분 그림의 광도를 획 그리기의 알파 채널로 사용함"
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:225
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "The brush tip image is painted as it is"
-msgstr "브러시 끝 부분 그림을 있는 그대로 칠함"
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"Luminosity of the brush tip image is used as lightness correction for the "
-"painting color. Alpha channel of the brush tip image is used as alpha for "
-"the final stroke"
-msgstr ""
-"브러시 끝 부분 그림의 광도를 그리기 색상의 광도 보정에 사용합니다. 브러시 끝 "
-"부분 그림의 알파 채널을 최종 획의 알파 채널로 사용합니다"
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:227
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"The brush tip maps its value to the currently selected gradient. Alpha "
-"channel of the brush tip image is used as alpha for the final stroke"
-msgstr ""
-"브러시 끝 부분 그림의 명도를 현재 선택한 그라디언트에 대응합니다. 브러시 끝 "
-"부분 그림의 알파 채널을 최종 획의 알파 채널로 사용합니다"
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:403
-#, kde-format
-msgid "Animated Mask"
-msgstr "애니메이션 마스크"
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:412
-#, kde-format
-msgid "Animated Image"
-msgstr "애니메이션 이미지"
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:465
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"Luminosity value of the brush that will not change the painting color. All "
-"brush pixels darker than neutral point will paint with darker color, pixels "
-"lighter than neutral point — lighter."
-msgstr ""
-"페인팅 색상을 변경하지 않는 브러시의 광도 값입니다. 중립 점보다 어두운 모든 "
-"브러시 픽셀은 더 어두운 색으로 칠하고 중간 점보다 밝은 픽셀은 더 밝게 칠합니"
-"다."
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:466
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Brightness correction for the brush"
-msgstr "브러시의 명도 조정"
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:467
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Contrast correction for the brush"
-msgstr "브러시의 대비 조정"
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:485
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"The selected brush tip does not have color channels. The brush will work in "
-"\"Mask\" mode."
-msgstr ""
-"선택한 브러시 끝에 색상 채널이 없습니다. 브러시가 \"마스크\" 모드로 작동합니"
-"다."
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:488
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"The selected brush engine does not support \"Color\" or \"Lightness\" modes. "
-"The brush will work in \"Mask\" mode."
-msgstr ""
-"선택한 브러시 엔진에서 \"색상\"이나 \"광도\" 모드를 지원하지 않습니다. 브러시"
-"가 \"마스크\" 모드로 작동합니다."
-
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:524
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"Brush average: %1\n"
-"Adjusted average: %2"
-msgstr ""
-"브러시 평균: %1\n"
-"조정된 평균: %2"
-
-#: plugins/paintops/libpaintop/kis_pressure_darken_option.cpp:15
-#, kde-format
-msgid "Darken"
-msgstr "어둡게"
-
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:17
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:28
-#, no-c-format, kde-format
-msgid "(0° is active color)"
-msgstr "(0°는 활성 색상)"
-
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:19
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:30
-#, kde-format
-msgid "+180°"
-msgstr "+180°"
-
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:22
-#, kde-format
-msgid "CCW hue"
-msgstr "반시계 방향 색조"
-
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:33
-#, kde-format
-msgid "CW hue"
-msgstr "시계 방향 색조"
-
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:43
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:55
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:70
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:82
-#, no-c-format, kde-format
-msgid "(50% is active color)"
-msgstr "(50%는 활성 색상)"
-
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:45
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:57
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:72
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:84
-#, kde-format
-msgid "+100%"
-msgstr "+100%"
-
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:46
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:58
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:73
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:85
-#, kde-format
-msgid "-100%"
-msgstr "-100%"
-
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:48
-#, kde-format
-msgid "Less saturation "
-msgstr "채도 감소 "
-
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:60
-#, kde-format
-msgid "More saturation"
-msgstr "채도 증가"
-
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:64
-#, kde-format
-msgctxt "Label of Brightness value in Color Smudge brush engine options"
-msgid "Value"
-msgstr "명도"
-
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:75
-#, fuzzy, kde-format
-#| msgid "Lower value "
-msgctxt "Lower HSV brightness"
-msgid "Lower value "
-msgstr "낮은 값 "
-
-#: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:87
-#, fuzzy, kde-format
-#| msgid "Higher value"
-msgctxt "Higher HSV brightness"
-msgid "Higher value"
-msgstr "높은 값"
-
-#: plugins/paintops/libpaintop/kis_pressure_lightness_strength_option.cpp:9
-#, kde-format
-msgid "Lightness Strength"
-msgstr "광도 강도"
-
-#: plugins/paintops/libpaintop/kis_pressure_lightness_strength_option_widget.cpp:22
-#: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option_widget.cpp:24
-#, kde-format
-msgid "Disabled: brush must be in Lightness mode for this option to apply"
-msgstr "비활성화됨: 이 옵션을 적용하려면 브러시가 광도 모드여야 합니다"
-
-#: plugins/paintops/libpaintop/kis_pressure_mirror_option.cpp:17
-#, kde-format
-msgid "Mirror"
-msgstr "반전"
-
-#: plugins/paintops/libpaintop/kis_pressure_mirror_option_widget.cpp:19
-#, kde-format
-msgid "Mirrored"
-msgstr "반전됨"
-
-#: plugins/paintops/libpaintop/kis_pressure_mirror_option_widget.cpp:19
-#, kde-format
-msgid "Not mirrored"
-msgstr "반전되지 않음"
-
-#: plugins/paintops/libpaintop/kis_pressure_mirror_option_widget.cpp:23
-#, kde-format
-msgid "Horizontally"
-msgstr "수평"
-
-#: plugins/paintops/libpaintop/kis_pressure_mirror_option_widget.cpp:25
-#, kde-format
-msgid "Vertically"
-msgstr "수직"
-
-#: plugins/paintops/libpaintop/kis_pressure_mix_option.cpp:12
-#, fuzzy, kde-format
-#| msgid "Mix"
-msgctxt "Mixing of colors"
-msgid "Mix"
-msgstr "섞기"
-
-#: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option.cpp:9
-#, kde-format
-msgid "Paint Thickness"
-msgstr "칠하기 두께"
-
-#: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option_widget.cpp:29
-#, kde-format
-msgid "Overwrite (Smooth out when low) existing paint thickness"
-msgstr "기존 칠하기 두께 덮어쓰기(낮은 경우 매끄럽게 처리)"
-
-#: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option_widget.cpp:30
-#, kde-format
-msgid "Paint over existing paint thickness (controlled by Smudge Length)"
-msgstr "기존 칠하기 두께(번짐 길이로 제어)"
-
-#: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option_widget.cpp:33
-#, kde-format
-msgid "Paint Thickness Mode:"
-msgstr "칠하기 두께 모드:"
-
-#: plugins/paintops/libpaintop/kis_pressure_paint_thickness_option_widget.cpp:34
-#, kde-format
-msgid ""
-"Describes how the brush's paint thickness interacts with existing thick "
-"paint, especially at low values."
-msgstr ""
-"특히 낮은 값에서 브러시의 칠하기 두께가 기존의 두꺼운 칠하기와 상호 작용하는 "
-"방식을 설명합니다."
-
-#: plugins/paintops/libpaintop/kis_pressure_rate_option.cpp:8
-#, kde-format
-msgid "Rate"
-msgstr "비율"
-
-#: plugins/paintops/libpaintop/kis_pressure_ratio_option.cpp:10
-#, kde-format
-msgid "Ratio"
-msgstr "비율"
-
-#. i18n: ectx: property (title), widget (QGroupBox, rotationGroup)
-#: plugins/paintops/libpaintop/kis_pressure_rotation_option.cpp:16
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:739
-#, kde-format
-msgid "Rotation"
-msgstr "회전"
-
-#: plugins/paintops/libpaintop/kis_pressure_scatter_option.cpp:20
-#, kde-format
-msgid "Scatter"
-msgstr "분산"
-
-#: plugins/paintops/libpaintop/kis_pressure_scatter_option_widget.cpp:22
-#, kde-format
-msgid "Axis X"
-msgstr "X축"
-
-#: plugins/paintops/libpaintop/kis_pressure_scatter_option_widget.cpp:24
-#, kde-format
-msgid "Axis Y"
-msgstr "Y축"
-
-#: plugins/paintops/libpaintop/kis_pressure_scatter_option_widget.cpp:27
-#, kde-format
-msgid "Scatter amount"
-msgstr "분산 양"
-
-#: plugins/paintops/libpaintop/kis_pressure_sharpness_option.cpp:19
-#, kde-format
-msgid "Sharpness"
-msgstr "날카로움"
-
-#: plugins/paintops/libpaintop/kis_pressure_sharpness_option_widget.cpp:26
-#, kde-format
-msgid "Align the brush preview outline to the pixel grid"
-msgstr ""
-
-#: plugins/paintops/libpaintop/kis_pressure_sharpness_option_widget.cpp:30
-#, kde-format
-msgid "Soften edge:"
-msgstr "테두리 부드럽게:"
-
-#: plugins/paintops/libpaintop/kis_pressure_size_option.cpp:31
-#, kde-format
-msgctxt "PaintOp instant preview limitation"
-msgid "Size -> Fuzzy (sensor)"
-msgstr "크기 -> 퍼지(센서)"
-
-#: plugins/paintops/libpaintop/kis_pressure_size_option.cpp:35
-#, kde-format
-msgctxt "PaintOp instant preview limitation"
-msgid "Size -> Fade (sensor)"
-msgstr "크기 -> 페이드(센서)"
-
-#: plugins/paintops/libpaintop/kis_pressure_softness_option.cpp:10
-#, kde-format
-msgid "Softness"
-msgstr "부드러움"
-
-#: plugins/paintops/libpaintop/kis_pressure_spacing_option_widget.cpp:24
-#, kde-format
-msgid "Isotropic Spacing"
-msgstr "등방성 간격"
-
-#: plugins/paintops/libpaintop/kis_pressure_spacing_option_widget.cpp:25
-#, kde-format
-msgid "Update Between Dabs"
-msgstr "두드리기 횟수 간 업데이트"
-
-#: plugins/paintops/libpaintop/kis_pressure_texture_strength_option.cpp:12
-#, kde-format
-msgid "Strength"
-msgstr "강도"
-
-#: plugins/paintops/libpaintop/kis_spacing_selection_widget.cpp:51
-#, kde-format
-msgctxt "@action:button"
-msgid "Auto"
-msgstr "자동"
-
-#: plugins/paintops/libpaintop/kis_spacing_selection_widget.cpp:52
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"In auto mode the spacing of the brush will be calculated automatically "
-"depending on its size"
-msgstr ""
-"자동 모드에서는 브러시의 크기에 따라 브러시의 간격이 자동으로 계산됩니다"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format
@@ -54098,18 +53366,241 @@ msgid ""
 msgstr ""
 "패턴 텍스처 값이 슬라이더로 지정한 범위를 벗어나면 차단 정책이 적용됩니다."
 
-#: plugins/paintops/libpaintop/kis_texture_option.cpp:192
+#: plugins/paintops/libpaintop/KisAirbrushOptionWidget.cpp:56
+#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:189
 #, kde-format
-msgctxt "PaintOp instant preview limitation"
-msgid "Texture->Pattern (low quality preview)"
-msgstr "텍스처->패턴(저품질 미리 보기)"
+msgid "Airbrush"
+msgstr "에어브러시"
 
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:44
+#: plugins/paintops/libpaintop/KisColorOptionWidget.cpp:52
 #, kde-format
-msgid "Blending Mode:"
-msgstr "혼합 모드:"
+msgid "Color options"
+msgstr "색상 옵션"
 
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:146
+#: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:16
+#, kde-format
+msgid "Plain color"
+msgstr "일반 색상"
+
+#: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:18
+#, kde-format
+msgid "Uniform random"
+msgstr "균일한 무작위"
+
+#: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:19
+#, kde-format
+msgid "Total random"
+msgstr "무작위 합계"
+
+#: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:21
+#, kde-format
+msgid "Locked pattern"
+msgstr "잠긴 패턴"
+
+#: plugins/paintops/libpaintop/KisColorSourceOptionWidget.cpp:29
+#, fuzzy, kde-format
+#| msgid "Source"
+msgctxt "Color source"
+msgid "Source"
+msgstr "원본"
+
+#: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:78
+#, kde-format
+msgid "Strength: "
+msgstr "강도: "
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:72
+#, kde-format
+msgid "%1 px"
+msgstr "%1픽셀"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:42
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
+#, kde-format
+msgid "0°"
+msgstr "0°"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:42
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
+#, kde-format
+msgid "360°"
+msgstr "360°"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:43
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:66
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:72
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:155
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:57
+#, fuzzy, kde-format
+#| msgid "Lock"
+msgctxt "Lock Drawing angle at start of each stroke"
+msgid "Lock"
+msgstr "잠금"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:60
+#, kde-format
+msgctxt "Smoothing Drawing angle when a stroke is making a sharp turn"
+msgid "Fan Corners"
+msgstr "팬 모서리"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:79
+#, kde-format
+msgid "Angle Offset"
+msgstr "각도 오프셋"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:71
+#, kde-format
+msgid "%1"
+msgstr "%1"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
+#, kde-format
+msgid "Slow"
+msgstr "느림"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
+#, kde-format
+msgid "Far"
+msgstr "멀리 있음"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
+#, kde-format
+msgid "Near"
+msgstr "인접"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
+#, kde-format
+msgid "-60°"
+msgstr "-60°"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
+#, kde-format
+msgid "90°"
+msgstr "90°"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:40
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:61
+#, kde-format
+msgid " ms"
+msgstr " ms"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:73
+#, kde-format
+msgid "%1 ms"
+msgstr ""
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "Fuzzy Dab"
+msgstr "두드리기 퍼지"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:12
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "Fuzzy Stroke"
+msgstr "획 그리기 퍼지"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:13
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "Speed"
+msgstr "속도"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:14
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "Fade"
+msgstr "페이드"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:15
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "Distance"
+msgstr "거리"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:16
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "Time"
+msgstr "시간"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:17
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "Drawing angle"
+msgstr "그리기 각도"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:18
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "Rotation"
+msgstr "회전"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:19
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "Pressure"
+msgstr "압력"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:20
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "PressureIn"
+msgstr "지점에서의 압력"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:21
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "X-Tilt"
+msgstr "X축 기울기"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:22
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "Y-Tilt"
+msgstr "Y축 기울기"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:30
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "Tilt direction"
+msgstr "기울기 방향"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:31
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "Tilt elevation"
+msgstr "기울기 높이"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:33
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "Perspective"
+msgstr "원근법"
+
+#: plugins/paintops/libpaintop/KisDynamicSensorIds.h:34
+#, kde-format
+msgctxt "Context: dynamic sensors"
+msgid "Tangential pressure"
+msgstr "접선 압력"
+
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:47
 #, kde-format
 msgctxt "warning about too big size of the masked brush"
 msgid ""
@@ -54117,28 +53608,305 @@ msgid ""
 "value has been cropped to %2 pixels."
 msgstr ""
 
-#: plugins/paintops/libpaintop/sensors/kis_dynamic_sensor_drawing_angle.cpp:61
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:178
+#, kde-format
+msgid "Blending Mode:"
+msgstr "혼합 모드:"
+
+#: plugins/paintops/libpaintop/KisMirrorOptionData.h:34
+#, kde-format
+msgid "Mirror"
+msgstr "반전"
+
+#: plugins/paintops/libpaintop/KisMirrorOptionWidget.cpp:44
+#, kde-format
+msgid "Horizontally"
+msgstr "수평"
+
+#: plugins/paintops/libpaintop/KisMirrorOptionWidget.cpp:45
+#, kde-format
+msgid "Vertically"
+msgstr "수직"
+
+#: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:29
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Only wash mode is possible when using a masked brush."
+msgstr "마스크 브러시를 사용할 때에는 워시 모드만 사용할 수 있습니다."
+
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
+#, kde-format
+msgid "Alpha Mask"
+msgstr "알파 마스크"
+
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:27
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Luminosity of the brush tip image is used as alpha channel for the stroke"
+msgstr "브러시 끝 부분 그림의 광도를 획 그리기의 알파 채널로 사용함"
+
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
+#, kde-format
+msgid "Color Image"
+msgstr "색상 이미지"
+
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:30
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The brush tip image is painted as it is"
+msgstr "브러시 끝 부분 그림을 있는 그대로 칠함"
+
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:32
+#, kde-format
+msgid "Lightness Map"
+msgstr "광도 맵"
+
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:33
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Luminosity of the brush tip image is used as lightness correction for the "
+"painting color. Alpha channel of the brush tip image is used as alpha for "
+"the final stroke"
+msgstr ""
+"브러시 끝 부분 그림의 광도를 그리기 색상의 광도 보정에 사용합니다. 브러시 끝 "
+"부분 그림의 알파 채널을 최종 획의 알파 채널로 사용합니다"
+
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:35
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The brush tip maps its value to the currently selected gradient. Alpha "
+"channel of the brush tip image is used as alpha for the final stroke"
+msgstr ""
+"브러시 끝 부분 그림의 명도를 현재 선택한 그라디언트에 대응합니다. 브러시 끝 "
+"부분 그림의 알파 채널을 최종 획의 알파 채널로 사용합니다"
+
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
+#, kde-format
+msgid "Animated Mask"
+msgstr "애니메이션 마스크"
+
+#: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:60
+#, kde-format
+msgid "Animated Image"
+msgstr "애니메이션 이미지"
+
+#: plugins/paintops/libpaintop/KisScatterOptionData.cpp:30
+#, kde-format
+msgid "Scatter"
+msgstr "분산"
+
+#: plugins/paintops/libpaintop/KisScatterOptionWidget.cpp:45
+#, kde-format
+msgid "Axis X"
+msgstr "X축"
+
+#: plugins/paintops/libpaintop/KisScatterOptionWidget.cpp:46
+#, kde-format
+msgid "Axis Y"
+msgstr "Y축"
+
+#: plugins/paintops/libpaintop/KisScatterOptionWidget.cpp:47
+#, kde-format
+msgid "Scatter amount"
+msgstr "분산 양"
+
+#: plugins/paintops/libpaintop/KisSharpnessOptionData.cpp:32
+#, kde-format
+msgid "Sharpness"
+msgstr "날카로움"
+
+#: plugins/paintops/libpaintop/KisSharpnessOptionWidget.cpp:43
+#, kde-format
+msgid "Soften edge:"
+msgstr "테두리 부드럽게:"
+
+#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:25
+#, kde-format
+msgctxt "PaintOp instant preview limitation"
+msgid "Size -> Fuzzy (sensor)"
+msgstr "크기 -> 퍼지(센서)"
+
+#: plugins/paintops/libpaintop/KisSizeOptionData.cpp:29
+#, kde-format
+msgctxt "PaintOp instant preview limitation"
+msgid "Size -> Fade (sensor)"
+msgstr "크기 -> 페이드(센서)"
+
+#: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:38
+#, kde-format
+msgid "Isotropic Spacing"
+msgstr "등방성 간격"
+
+#: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:39
+#, kde-format
+msgid "Update Between Dabs"
+msgstr "두드리기 횟수 간 업데이트"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:21
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:86
+#, kde-format
+msgid "Opaque"
+msgstr "불투명"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:27
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:85
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:96
+#, kde-format
+msgid "-180°"
+msgstr "-180°"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:28
+#, kde-format
+msgid "180°"
+msgstr "180°"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:54
+#, kde-format
+msgid "Hard"
+msgstr "강함"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:74
 #, fuzzy, kde-format
-#| msgid "Lock"
-msgctxt "Lock Drawing angle at start of each stroke"
-msgid "Lock"
-msgstr "잠금"
+#| msgid "Background"
+msgctxt "Background painting color"
+msgid "Background"
+msgstr "배경"
 
-#: plugins/paintops/libpaintop/sensors/kis_dynamic_sensor_drawing_angle.cpp:67
-#, kde-format
-msgctxt "Smoothing Drawing angle when a stroke is making a sharp turn"
-msgid "Fan Corners"
-msgstr "팬 모서리"
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:75
+#, fuzzy, kde-format
+#| msgid "Foreground"
+msgctxt "Foreground painting color"
+msgid "Foreground"
+msgstr "전경"
 
-#: plugins/paintops/libpaintop/sensors/kis_dynamic_sensor_drawing_angle.cpp:95
-#, kde-format
-msgid "Angle Offset"
-msgstr "각도 오프셋"
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:82
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:93
+#, no-c-format, kde-format
+msgid "(0° is active color)"
+msgstr "(0°는 활성 색상)"
 
-#: plugins/paintops/libpaintop/sensors/kis_dynamic_sensor_time.cc:59
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:84
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:95
 #, kde-format
-msgid " s"
-msgstr " 초"
+msgid "+180°"
+msgstr "+180°"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:87
+#, kde-format
+msgid "CCW hue"
+msgstr "반시계 방향 색조"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:98
+#, kde-format
+msgid "CW hue"
+msgstr "시계 방향 색조"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:104
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
+#, no-c-format, kde-format
+msgid "(50% is active color)"
+msgstr "(50%는 활성 색상)"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:129
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:141
+#, kde-format
+msgid "+100%"
+msgstr "+100%"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:107
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:119
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:130
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:142
+#, kde-format
+msgid "-100%"
+msgstr "-100%"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:109
+#, kde-format
+msgid "Less saturation "
+msgstr "채도 감소 "
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:121
+#, kde-format
+msgid "More saturation"
+msgstr "채도 증가"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:132
+#, fuzzy, kde-format
+#| msgid "Lower value "
+msgctxt "Lower HSV brightness"
+msgid "Lower value "
+msgstr "낮은 값 "
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:144
+#, fuzzy, kde-format
+#| msgid "Higher value"
+msgctxt "Higher HSV brightness"
+msgid "Higher value"
+msgstr "높은 값"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:41
+#, kde-format
+msgid "Ratio"
+msgstr "비율"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:50
+#, kde-format
+msgid "Softness"
+msgstr "부드러움"
+
+#. i18n: ectx: property (title), widget (QGroupBox, rotationGroup)
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:61
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:739
+#, kde-format
+msgid "Rotation"
+msgstr "회전"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:70
+#, kde-format
+msgid "Darken"
+msgstr "어둡게"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:78
+#, fuzzy, kde-format
+#| msgid "Mix"
+msgctxt "Mixing of colors"
+msgid "Mix"
+msgstr "섞기"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:102
+#, kde-format
+msgctxt "Label of Brightness value in Color Smudge brush engine options"
+msgid "Value"
+msgstr "명도"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:110
+#, kde-format
+msgid "Rate"
+msgstr "비율"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:118
+#, kde-format
+msgid "Strength"
+msgstr "강도"
+
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:126
+#, kde-format
+msgid "Lightness Strength"
+msgstr "광도 강도"
+
+#: plugins/paintops/libpaintop/KisTextureOptionData.cpp:62
+#, kde-format
+msgctxt "PaintOp instant preview limitation"
+msgid "Texture->Pattern (low quality preview)"
+msgstr "텍스처->패턴(저품질 미리 보기)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRepeat)
 #: plugins/paintops/libpaintop/sensors/SensorDistanceConfiguration.ui:39
@@ -54148,17 +53916,114 @@ msgstr " 초"
 msgid "repeat"
 msgstr "반복"
 
-#: plugins/paintops/mypaint/MyPaintBrushOption.h:31
+#: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
+#, fuzzy, kde-format
+#| msgid "Basic"
+msgctxt "MyPaint option name"
+msgid "Basic"
+msgstr "기본"
+
+#: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
+#, fuzzy, kde-format
+#| msgid "CPU Limit:"
+msgid "Y limit: "
+msgstr "CPU 제한:"
+
+#: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
+#, fuzzy, kde-format
+#| msgctxt "Suffix: “Every x min”"
+#| msgid " min"
+msgid "X min: "
+msgstr " 분"
+
+#: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
+#, kde-format
+msgid "X max: "
+msgstr ""
+
+#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
+#, fuzzy, kde-format
+#| msgctxt "PaintOp instant preview limitation"
+#| msgid "Random Sensor Active, consider disabling Instant Preview"
+msgctxt "PaintOp instant preview limitation"
+msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
+msgstr "무작위 센서 활성화됨, 즉시 미리 보기를 사용하지 않는 것을 권장함"
+
+#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
+#, kde-format
+msgid "Base Value: "
+msgstr "기준 값: "
+
+#: plugins/paintops/mypaint/MyPaintPaintOpPlugin.cpp:32
+#, kde-format
+msgid "MyPaint Brush Presets"
+msgstr "MyPaint 브러시 사전 설정"
+
+#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:186
+#, kde-format
+msgctxt "Option Category"
+msgid "Basic"
+msgstr "기본"
+
+#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:192
+#, kde-format
+msgctxt "Option Category"
+msgid "Color"
+msgstr "색상"
+
+#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:195
+#, kde-format
+msgctxt "Option Category"
+msgid "Speed"
+msgstr "속도"
+
+#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:198
+#, kde-format
+msgctxt "Option Category"
+msgid "Dabs"
+msgstr "두드리기 횟수"
+
+#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:201
+#, kde-format
+msgctxt "Option Category"
+msgid "Opacity"
+msgstr "불투명도"
+
+#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:204
+#, kde-format
+msgctxt "Option Category"
+msgid "Tracking"
+msgstr "추적"
+
+#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:207
+#, kde-format
+msgctxt "Option Category"
+msgid "Smudge"
+msgstr "번짐"
+
+#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:210
+#, kde-format
+msgctxt "Option Category"
+msgid "Stroke"
+msgstr "획 그리기"
+
+#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:213
+#, kde-format
+msgctxt "Option Category"
+msgid "Custom"
+msgstr "사용자 정의"
+
+#: plugins/paintops/mypaint/MyPaintSensorPack.h:18
 #, kde-format
 msgid "Fine Speed"
 msgstr "미세 속도"
 
-#: plugins/paintops/mypaint/MyPaintBrushOption.h:32
+#: plugins/paintops/mypaint/MyPaintSensorPack.h:19
 #, kde-format
 msgid "Gross Speed"
 msgstr "대폭 속도"
 
-#: plugins/paintops/mypaint/MyPaintBrushOption.h:34
+#: plugins/paintops/mypaint/MyPaintSensorPack.h:21
 #, fuzzy, kde-format
 #| msgid "Stroke"
 msgctxt "The duration of a brush stroke"
@@ -54166,299 +54031,252 @@ msgid "Stroke"
 msgstr "획 그리기"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionDirection)
-#: plugins/paintops/mypaint/MyPaintBrushOption.h:35
+#: plugins/paintops/mypaint/MyPaintSensorPack.h:22
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:243
 #, kde-format
 msgctxt "Drawing Angle"
 msgid "Direction"
 msgstr "방향"
 
-#: plugins/paintops/mypaint/MyPaintBrushOption.h:36
+#: plugins/paintops/mypaint/MyPaintSensorPack.h:23
 #, kde-format
 msgctxt "Pen tilt declination"
 msgid "Declination"
 msgstr "적위"
 
-#: plugins/paintops/mypaint/MyPaintBrushOption.h:37
+#: plugins/paintops/mypaint/MyPaintSensorPack.h:24
 #, fuzzy, kde-format
 #| msgid "Ascension"
 msgctxt "Pen tilt ascension"
 msgid "Ascension"
 msgstr "상승"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:189
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:70
 #, kde-format
-msgctxt "PaintOp instant preview limitation"
-msgid "Random Sensor Active, consider disabling Instant Preview"
-msgstr "무작위 센서 활성화됨, 즉시 미리 보기를 사용하지 않는 것을 권장함"
+msgid "Radius Logarithmic"
+msgstr "로그 반지름"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:193
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:78
 #, kde-format
-msgctxt "PaintOp instant preview limitation"
-msgid "Offset by Random, consider disabling Instant Preview"
-msgstr "무작위 오프셋 활성화됨, 즉시 미리 보기를 사용하지 않는 것을 권장함"
+msgid "Hardness"
+msgstr "단단한 정도"
 
-#: plugins/paintops/mypaint/MyPaintCurveOption.cpp:197
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:31
+#, kde-format
+msgid "Radius by Random"
+msgstr "무작위 반지름"
+
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:39
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Radius by Random, consider disabling Instant Preview"
 msgstr "무작위 반지름 활성화됨, 즉시 미리 보기를 사용하지 않는 것을 권장함"
 
-#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
-#, kde-format
-msgid "Base Value: "
-msgstr "기준 값: "
-
-#: plugins/paintops/mypaint/MyPaintPaintOpOption.cpp:24
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:315
-#, kde-format
-msgctxt "Option Category"
-msgid "Basic"
-msgstr "기본"
-
-#: plugins/paintops/mypaint/MyPaintPaintOpPlugin.cpp:32
-#, kde-format
-msgid "MyPaint Brush Presets"
-msgstr "MyPaint 브러시 사전 설정"
-
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:25
-#, kde-format
-msgid "Radius Logarithmic"
-msgstr "로그 반지름"
-
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:31
-#, kde-format
-msgid "Hardness"
-msgstr "단단한 정도"
-
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:43
-#, kde-format
-msgid "Radius by Random"
-msgstr "무작위 반지름"
-
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:49
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:48
 #, kde-format
 msgid "Anti Aliasing"
 msgstr "앤티에일리어싱"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:54
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:58
 #, kde-format
 msgid "Elliptical Dab Angle"
 msgstr "타원형 두드리기 각도"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:59
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:67
 #, kde-format
 msgid "Elliptical Dab Ratio"
 msgstr "타원형 두드리기 비율"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:64
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:77
 #, kde-format
 msgid "Direction Filter"
 msgstr "방향 필터"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:71
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:86
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Snap Pixel"
 msgid "Snap To Pixel"
 msgstr "픽셀 스냅"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:78
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:96
 #, fuzzy, kde-format
 #| msgctxt "Context: dynamic sensors"
 #| msgid "PressureIn"
 msgid "Pressure Gain"
 msgstr "지점에서의 압력"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:85
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:106
 #, kde-format
 msgid "Change Color H"
 msgstr "색상 H 변경"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:90
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:115
 #, kde-format
 msgid "Change Color L"
 msgstr "색상 L 변경"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:95
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:124
 #, kde-format
 msgid "Change Color V"
 msgstr "색상 V 변경"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:100
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:133
 #, kde-format
 msgid "Change Color HSL S"
 msgstr "색상 HSL S 변경"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:105
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:142
 #, kde-format
 msgid "Change Color HSV S"
 msgstr "색상 HSV S 변경"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:110
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:151
 #, kde-format
 msgid "Colorize"
 msgstr "색상화"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:113
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
+#, fuzzy, kde-format
+#| msgid "Posterize"
+msgid "Posterization Levels"
+msgstr "포스터화"
+
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
 msgid "Fine Speed Gamma"
 msgstr "미세 속도 감마"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:118
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:187
 #, kde-format
 msgid "Gross Speed Gamma"
 msgstr "대폭 속도 감마"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:123
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:196
 #, kde-format
 msgid "Fine Speed Slowness"
 msgstr "미세 속도 느림 정도"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:128
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:205
 #, kde-format
 msgid "Gross Speed Slowness"
 msgstr "대폭 속도 느림 정도"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:134
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:214
 #, kde-format
 msgid "Offset By Speed"
 msgstr "속도에 따른 오프셋"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:140
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:223
 #, fuzzy, kde-format
 #| msgid "Offset By Speed"
 msgid "Offset by Speed Filter"
 msgstr "속도에 따른 오프셋"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:146
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:232
 #, kde-format
 msgid "Offset By Random"
 msgstr "무작위 오프셋"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:152
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:240
+#, kde-format
+msgctxt "PaintOp instant preview limitation"
+msgid "Offset by Random, consider disabling Instant Preview"
+msgstr "무작위 오프셋 활성화됨, 즉시 미리 보기를 사용하지 않는 것을 권장함"
+
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:250
 #, fuzzy, kde-format
 #| msgid "Dabs Per Actual Radius"
 msgid "Dabs Per Basic Radius"
 msgstr "실제 반지름당 두드리기 횟수"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:158
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:259
 #, kde-format
 msgid "Dabs Per Actual Radius"
 msgstr "실제 반지름당 두드리기 횟수"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:163
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:268
 #, kde-format
 msgid "Dabs per Second"
 msgstr "초당 두드리기 횟수"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:169
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:278
 #, kde-format
 msgid "Opaque Linearize"
 msgstr "불투명 선형화"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:174
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:287
 #, kde-format
 msgid "Opaque Multiply"
 msgstr "불투명 곱하기"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:179
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:296
 #, kde-format
 msgid "Slow tracking per dab"
 msgstr "두드리기 당 느린 추적"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:184
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:305
 #, kde-format
 msgid "Slow Tracking"
 msgstr "느린 추적"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:189
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:314
 #, kde-format
 msgid "Tracking Noise"
 msgstr "잡음 추적"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:194
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:323
 #, kde-format
 msgid "Smudge"
 msgstr "번짐"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:202
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:341
 #, kde-format
 msgid "Smudge Radius Log"
 msgstr "번짐 반지름 로그"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:208
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
+#, fuzzy, kde-format
+#| msgid "Smudge Length"
+msgid "Smudge Length Multiplier"
+msgstr "번짐 길이"
+
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
+#, fuzzy, kde-format
+#| msgid "Smudge Mode"
+msgid "Smudge Bucket"
+msgstr "번짐 모드"
+
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
+#, fuzzy, kde-format
+#| msgid "Transparent"
+msgid "Smudge Transparency"
+msgstr "투명"
+
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
 msgid "Stroke Duration log"
 msgstr "획 그리기 간격 로그"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:213
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:386
 #, kde-format
 msgid "Stroke Holdtime"
 msgstr "획 그리기 대기 시간"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:218
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:395
 #, kde-format
 msgid "Stroke Threshold"
 msgstr "획 그리기 임곗값"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:223
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:404
 #, kde-format
 msgid "Custom Input"
 msgstr "사용자 정의 입력"
 
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:228
+#: plugins/paintops/mypaint/MyPaintStandardOptionData.h:413
 #, kde-format
 msgid "Custom Input Slowness"
 msgstr "사용자 정의 입력 느림 정도"
-
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:321
-#, kde-format
-msgctxt "Option Category"
-msgid "Color"
-msgstr "색상"
-
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:324
-#, kde-format
-msgctxt "Option Category"
-msgid "Speed"
-msgstr "속도"
-
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:327
-#, kde-format
-msgctxt "Option Category"
-msgid "Dabs"
-msgstr "두드리기 횟수"
-
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:330
-#, kde-format
-msgctxt "Option Category"
-msgid "Opacity"
-msgstr "불투명도"
-
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:333
-#, kde-format
-msgctxt "Option Category"
-msgid "Tracking"
-msgstr "추적"
-
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:336
-#, kde-format
-msgctxt "Option Category"
-msgid "Smudge"
-msgstr "번짐"
-
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:339
-#, kde-format
-msgctxt "Option Category"
-msgid "Stroke"
-msgstr "획 그리기"
-
-#: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:342
-#, kde-format
-msgctxt "Option Category"
-msgid "Custom"
-msgstr "사용자 정의"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLbl)
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:110
@@ -54466,37 +54284,37 @@ msgstr "사용자 정의"
 msgid "Radius Logarithmic:"
 msgstr "로그 반지름:"
 
-#: plugins/paintops/particle/kis_particle_paintop_settings.cpp:54
+#: plugins/paintops/particle/kis_particle_paintop_settings.cpp:50
 #, kde-format
 msgid "Particles"
 msgstr "입자"
 
-#: plugins/paintops/particle/kis_particle_paintop_settings.cpp:83
+#: plugins/paintops/particle/kis_particle_paintop_settings.cpp:79
 #, kde-format
 msgid "Opacity Weight"
 msgstr "불투명도 무게"
 
-#: plugins/paintops/particle/kis_particle_paintop_settings.cpp:112
+#: plugins/paintops/particle/kis_particle_paintop_settings.cpp:108
 #, kde-format
 msgid "dx scale"
 msgstr "dx 크기 조정"
 
-#: plugins/paintops/particle/kis_particle_paintop_settings.cpp:141
+#: plugins/paintops/particle/kis_particle_paintop_settings.cpp:137
 #, kde-format
 msgid "dy scale"
 msgstr "dy 크기 조정"
 
-#: plugins/paintops/particle/kis_particle_paintop_settings.cpp:170
+#: plugins/paintops/particle/kis_particle_paintop_settings.cpp:166
 #, kde-format
 msgid "Gravity"
 msgstr "중력"
 
-#: plugins/paintops/particle/kis_particle_paintop_settings.cpp:198
+#: plugins/paintops/particle/kis_particle_paintop_settings.cpp:194
 #, kde-format
 msgid "Iterations"
 msgstr "반복 횟수"
 
-#: plugins/paintops/particle/kis_particleop_option.cpp:130
+#: plugins/paintops/particle/KisParticleOpOptionData.cpp:45
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Particle Brush (not supported)"
@@ -54548,22 +54366,22 @@ msgstr "dy 크기 조정:"
 msgid "Quick Brush"
 msgstr "빠른 브러시"
 
-#: plugins/paintops/sketch/kis_density_option.cpp:11
-#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:157
-#, kde-format
-msgid "Density"
-msgstr "밀도"
-
-#: plugins/paintops/sketch/kis_offset_scale_option.cpp:11
-#, kde-format
-msgid "Offset scale"
-msgstr "오프셋 스케일"
-
-#: plugins/paintops/sketch/kis_sketchop_option.cpp:96
+#: plugins/paintops/sketch/KisSketchOpOptionData.cpp:60
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Sketch brush (differences in connecting lines are possible)"
 msgstr "스케치 브러시(연결선에 차이가 발생할 수 있음)"
+
+#: plugins/paintops/sketch/KisSketchStandardOptionData.h:15
+#, kde-format
+msgid "Offset scale"
+msgstr "오프셋 스케일"
+
+#: plugins/paintops/sketch/KisSketchStandardOptionData.h:35
+#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:158
+#, kde-format
+msgid "Density"
+msgstr "밀도"
 
 #: plugins/paintops/sketch/sketch_paintop_plugin.cpp:29
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:334
@@ -54607,34 +54425,19 @@ msgstr "무작위 RGB"
 msgid "Distance opacity"
 msgstr "거리 불투명도"
 
-#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:122
+#: plugins/paintops/spray/kis_spray_paintop_settings.cpp:123
 #, kde-format
 msgid "Particle Count"
 msgstr "입자 개수"
 
-#: plugins/paintops/spray/kis_spray_shape_dynamics.cpp:21
-#, kde-format
-msgid "Shape dynamics"
-msgstr "모양 역학"
-
-#: plugins/paintops/spray/kis_spray_shape_option.cpp:30
-#, kde-format
-msgid "Spray shape"
-msgstr "스프레이 모양"
-
-#: plugins/paintops/spray/kis_sprayop_option.cpp:22
-#, kde-format
-msgid "Spray Area"
-msgstr "스프레이 구역"
-
-#: plugins/paintops/spray/kis_sprayop_option.cpp:63
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:63
 #, kde-format
 msgid ""
 "Select how the particles are distributed as a function of the angle to the "
 "center of the spray area."
 msgstr ""
 
-#: plugins/paintops/spray/kis_sprayop_option.cpp:66
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:66
 #, kde-format
 msgid ""
 "Set a custom distribution of the particles.\n"
@@ -54645,48 +54448,48 @@ msgid ""
 "angle."
 msgstr ""
 
-#: plugins/paintops/spray/kis_sprayop_option.cpp:71
-#: plugins/paintops/spray/kis_sprayop_option.cpp:107
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:71
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:107
 #, fuzzy, kde-format
 #| msgid "Repeat:"
 msgid "Repeat: "
 msgstr "반복:"
 
-#: plugins/paintops/spray/kis_sprayop_option.cpp:72
-#: plugins/paintops/spray/kis_sprayop_option.cpp:108
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:72
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:108
 #, kde-format
 msgctxt "Times symbol, like in 10x"
 msgid "x"
 msgstr "x"
 
-#: plugins/paintops/spray/kis_sprayop_option.cpp:75
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:75
 #, kde-format
 msgid ""
 "Set how many times should the curve repeat from 0 degrees to 360 degrees."
 msgstr ""
 
-#: plugins/paintops/spray/kis_sprayop_option.cpp:78
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:78
 #, kde-format
 msgid ""
 "Select how the particles are distributed as a function of the distance from "
 "the center of the spray area."
 msgstr ""
 
-#: plugins/paintops/spray/kis_sprayop_option.cpp:81
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:81
 #, kde-format
 msgid ""
 "Activates the old behavior where the particles are more accumulated towards "
 "the center of the spray area."
 msgstr ""
 
-#: plugins/paintops/spray/kis_sprayop_option.cpp:83
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:83
 #, fuzzy, kde-format
 #| msgctxt "EXIF: postprocessing - light source"
 #| msgid "Standard light A"
 msgid "Standard deviation: "
 msgstr "표준 광원 A"
 
-#: plugins/paintops/spray/kis_sprayop_option.cpp:87
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:87
 #, kde-format
 msgid ""
 "Set the standard deviation for the gaussian distribution.\n"
@@ -54694,13 +54497,13 @@ msgid ""
 "spray area."
 msgstr ""
 
-#: plugins/paintops/spray/kis_sprayop_option.cpp:91
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:91
 #, fuzzy, kde-format
 #| msgid "Deform amount:"
 msgid "Clustering amount: "
 msgstr "왜곡 합계:"
 
-#: plugins/paintops/spray/kis_sprayop_option.cpp:95
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:95
 #, kde-format
 msgid ""
 "Set how the particles should spread in the spray area.\n"
@@ -54711,7 +54514,7 @@ msgid ""
 "Values near 0 will make the particles spread more uniformly."
 msgstr ""
 
-#: plugins/paintops/spray/kis_sprayop_option.cpp:102
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:102
 #, kde-format
 msgid ""
 "Set a custom distribution of the particles.\n"
@@ -54723,12 +54526,28 @@ msgid ""
 "that distance."
 msgstr ""
 
-#: plugins/paintops/spray/kis_sprayop_option.cpp:111
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:111
 #, kde-format
 msgid ""
 "Set how many times should the curve repeat from the center to the border of "
 "the spray area."
 msgstr ""
+
+#: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:176
+#, kde-format
+msgid "Spray Area"
+msgstr "스프레이 구역"
+
+#: plugins/paintops/spray/KisSprayShapeDynamicsOptionWidget.cpp:55
+#, kde-format
+msgid "Shape dynamics"
+msgstr "모양 역학"
+
+#: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
+#, fuzzy, kde-format
+#| msgid "Spray shape"
+msgid "Spray Shape"
+msgstr "스프레이 모양"
 
 #: plugins/paintops/spray/spray_paintop_plugin.cpp:27
 #, kde-format
@@ -54949,7 +54768,7 @@ msgstr "텍스처:"
 msgid "Tangent Normal"
 msgstr "탄젠트 법선"
 
-#: plugins/paintops/tangentnormal/kis_tangent_tilt_option.cpp:28
+#: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:52
 #, kde-format
 msgid "Tangent Tilt"
 msgstr "탄젠트 기울기"
@@ -61559,6 +61378,102 @@ msgstr "확대/축소 도구"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "참조 이미지 도구"
+
+#~ msgid "Color Rate"
+#~ msgstr "색상 비율"
+
+#~ msgctxt "PaintOp instant preview limitation"
+#~ msgid "Displacement Option"
+#~ msgstr "변위 옵션"
+
+#~ msgctxt "PaintOp instant preview limitation"
+#~ msgid "Source -> Total Random"
+#~ msgstr "원본 -> 무작위 합계"
+
+#~ msgctxt "PaintOp instant preview limitation"
+#~ msgid "Source -> Pattern"
+#~ msgstr "원본 -> 패턴"
+
+#~ msgctxt "PaintOp instant preview limitation"
+#~ msgid "Source -> Pattern Locked"
+#~ msgstr "원본 -> 잠긴 패턴"
+
+#~ msgid "0 px"
+#~ msgstr "0픽셀"
+
+#~ msgid "0 s"
+#~ msgstr "0초"
+
+#~ msgid "1000"
+#~ msgstr "1000"
+
+#~ msgid "30 px"
+#~ msgstr "30픽셀"
+
+#~ msgid "3 s"
+#~ msgstr "3초"
+
+#~ msgid "%1 s"
+#~ msgstr "%1초"
+
+#~ msgctxt "option name"
+#~ msgid "Filter"
+#~ msgstr "필터"
+
+#~ msgctxt "PaintOp instant preview limitation"
+#~ msgid "\"%1\" does not support scaled preview (non-linear filter)"
+#~ msgstr "\"%1\"은(는) 배율 조정된 미리 보기(비선형 필터)를 지원하지 않습니다"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "Luminosity value of the brush that will not change the painting color. "
+#~ "All brush pixels darker than neutral point will paint with darker color, "
+#~ "pixels lighter than neutral point — lighter."
+#~ msgstr ""
+#~ "페인팅 색상을 변경하지 않는 브러시의 광도 값입니다. 중립 점보다 어두운 모"
+#~ "든 브러시 픽셀은 더 어두운 색으로 칠하고 중간 점보다 밝은 픽셀은 더 밝게 "
+#~ "칠합니다."
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Brightness correction for the brush"
+#~ msgstr "브러시의 명도 조정"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Contrast correction for the brush"
+#~ msgstr "브러시의 대비 조정"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "The selected brush tip does not have color channels. The brush will work "
+#~ "in \"Mask\" mode."
+#~ msgstr ""
+#~ "선택한 브러시 끝에 색상 채널이 없습니다. 브러시가 \"마스크\" 모드로 작동합"
+#~ "니다."
+
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "The selected brush engine does not support \"Color\" or \"Lightness\" "
+#~ "modes. The brush will work in \"Mask\" mode."
+#~ msgstr ""
+#~ "선택한 브러시 엔진에서 \"색상\"이나 \"광도\" 모드를 지원하지 않습니다. 브"
+#~ "러시가 \"마스크\" 모드로 작동합니다."
+
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "Brush average: %1\n"
+#~ "Adjusted average: %2"
+#~ msgstr ""
+#~ "브러시 평균: %1\n"
+#~ "조정된 평균: %2"
+
+#~ msgid "Mirrored"
+#~ msgstr "반전됨"
+
+#~ msgid "Not mirrored"
+#~ msgstr "반전되지 않음"
+
+#~ msgid " s"
+#~ msgstr " 초"
 
 #~ msgid "Select Layer Mode"
 #~ msgstr "레이어 모드 선택"

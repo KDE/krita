@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-24 12:58\n"
+"PO-Revision-Date: 2023-03-11 04:54\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -27509,7 +27509,7 @@ msgstr "重置旋转"
 #: libs/ui/input/kis_select_layer_action.cpp:36
 #, kde-format
 msgid "Select Layer"
-msgstr "选中点击内容所在图层"
+msgstr "选择图层"
 
 #: libs/ui/input/kis_select_layer_action.cpp:37
 #, kde-format
@@ -41154,7 +41154,7 @@ msgid ""
 "need to restart Krita to enable or disable plugins.</p></body></html>"
 msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">注意：</span>启用或禁"
-"用插件后必须重启 Krita 以生效。</p></body></html>"
+"用插件后必须重启 Krita 才能生效。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, errorLabel)
 #: plugins/extensions/pykrita/plugin/manager.ui:43
@@ -41969,7 +41969,7 @@ msgstr "S-Pen 手势逆时针画圈"
 #, kde-format
 msgctxt "action"
 msgid "Toggle popup palette with S-Pen"
-msgstr "S-Pen 弹出面板开关"
+msgstr "S-Pen 弹出面板"
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:33

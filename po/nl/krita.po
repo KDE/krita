@@ -62,14 +62,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-01-19 12:48+0100\n"
+"PO-Revision-Date: 2023-03-11 13:49+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -27677,7 +27677,7 @@ msgstr ""
 #: libs/ui/input/kis_gamma_exposure_action.cpp:67
 #, kde-format
 msgid "Exposure Mode"
-msgstr "Belichtingmodus"
+msgstr "Belichtingsmodus"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:68
 #, kde-format

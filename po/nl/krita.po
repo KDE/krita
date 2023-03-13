@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-12 00:44+0000\n"
-"PO-Revision-Date: 2023-03-11 13:49+0100\n"
+"PO-Revision-Date: 2023-03-12 15:30+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -52603,7 +52603,7 @@ msgstr " ms"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:73
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -53021,37 +53021,33 @@ msgid "repeat"
 msgstr "herhaal"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
 msgstr "Basis"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
-#, fuzzy, kde-format
-#| msgid "CPU Limit:"
+#, kde-format
 msgid "Y limit: "
-msgstr "CPU-limiet:"
+msgstr "Y-limiet:"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Suffix: “Every x min”"
-#| msgid " min"
+#, kde-format
 msgid "X min: "
-msgstr " min"
+msgstr "X-min: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
 #, kde-format
 msgid "X max: "
-msgstr ""
+msgstr "X-max: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Random Sensor Active, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
-msgstr "Random-sensor is actief, overweeg uitschakelen Permanent miniatuur."
+msgstr ""
+"Random-sensor is actief in optie %1, overweeg uitschakelen Onmiddellijk "
+"voorbeeld."
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
 #, kde-format
@@ -53235,10 +53231,9 @@ msgid "Colorize"
 msgstr "Inkleuren"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
-#, fuzzy, kde-format
-#| msgid "Posterize"
+#, kde-format
 msgid "Posterization Levels"
-msgstr "Poster maken"
+msgstr "Posterisatieniveaus"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
@@ -53332,26 +53327,19 @@ msgid "Smudge Radius Log"
 msgstr "Log van uitsmeerstraal"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "Uitsmeerlengte"
+msgstr "Uitsmeerlengtevermenigvuldiger"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Smudge_rake.kpp"
-#| msgid "Smudge rake"
+#, kde-format
 msgid "Smudge Bucket"
-msgstr "Smeerhark"
+msgstr "Smeeremmer"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#, kde-format
 msgid "Smudge Transparency"
-msgstr "Transparantie"
+msgstr "Uitsmeertransparantie"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -53671,8 +53659,7 @@ msgid "Shape dynamics"
 msgstr "Vorm-dynamica"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Shape"
 msgstr "Spuitvorm"
 

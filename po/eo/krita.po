@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-12 00:44+0000\n"
-"PO-Revision-Date: 2023-02-27 20:54+0100\n"
+"PO-Revision-Date: 2023-03-12 22:53+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -28025,54 +28025,42 @@ msgid "Select Layer"
 msgstr "Elekti Tavolon"
 
 #: libs/ui/input/kis_select_layer_action.cpp:117
-#, fuzzy, kde-format
-#| msgid "Selects a layer under cursor position"
+#, kde-format
 msgid "Select layers under the cursor position"
-msgstr "Elektas tavolon sub kursora pozicio"
+msgstr "Elekti tavolojn sub la kursora pozicio"
 
 #: libs/ui/input/kis_select_layer_action.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque (Replace)"
+#, kde-format
 msgid "Select Top Layer (Replace Selection)"
-msgstr "Elekti &Opakon (Anstataŭigi)"
+msgstr "Elekti Supran Tavolon (Anstataŭigi Elekton)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque (Replace)"
+#, kde-format
 msgid "Select All Layers (Replace Selection)"
-msgstr "Elekti &Opakon (Anstataŭigi)"
+msgstr "Elekti Ĉiujn Tavolojn (Anstataŭigi Elekton)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:124
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Selection Mode: Replace"
+#, kde-format
 msgid "Select from Menu (Replace Selection)"
-msgstr "Elekta Reĝimo: Anstataŭigi"
+msgstr "Elekti de Menuo (Anstataŭigi Elekton)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
 msgid "Select Top Layer (Add to Selection)"
-msgstr ""
+msgstr "Elekti Supran Tavolon (Aldoni al Elekto)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale All Layers to new Size"
+#, kde-format
 msgid "Select All Layers (Add to Selection)"
-msgstr "Skali Ĉiujn Tavolojn al nova Grandeco"
+msgstr "Skali Ĉiujn Tavolojn (Aldoni al Elekto)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:130
-#, fuzzy, kde-format
-#| msgid "Subtract fro&m current selection"
+#, kde-format
 msgid "Select from Menu (Add to Selection)"
-msgstr "Subtrahi de &momenta elekto"
+msgstr "Elekti de Menuo (Aldoni al Elekto)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:246
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select all layers"
+#, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
 msgstr "Elekti ĉiujn tavolojn"
@@ -29519,16 +29507,14 @@ msgid "Adding resource types..."
 msgstr "Aldonante rimedotipojn..."
 
 #: libs/ui/KisApplication.cpp:463
-#, fuzzy, kde-format
-#| msgid "Loading Pages..."
+#, kde-format
 msgid "Loading plugins..."
-msgstr "Ŝargante paĝojn..."
+msgstr "Ŝargante kromprogramojn..."
 
 #: libs/ui/KisApplication.cpp:469
-#, fuzzy, kde-format
-#| msgid "Adding resource types..."
+#, kde-format
 msgid "Loading resources..."
-msgstr "Aldonante rimedotipojn..."
+msgstr "Ŝargante risurcojn..."
 
 #: libs/ui/KisApplication.cpp:478
 #, kde-format
@@ -29536,10 +29522,9 @@ msgid "Loading Main Window..."
 msgstr "Ŝarĝante Ĉeffenestron..."
 
 #: libs/ui/KisApplication.cpp:510
-#, fuzzy, kde-format
-#| msgid "Scanning..."
+#, kde-format
 msgid "Launching..."
-msgstr "Skanante..."
+msgstr "Lanĉante..."
 
 #: libs/ui/KisApplication.cpp:579
 #, kde-format
@@ -52745,37 +52730,31 @@ msgid "repeat"
 msgstr "ripeti"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
-msgstr "Baza"
+msgstr "Basic"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
-#, fuzzy, kde-format
-#| msgid "CPU Limit:"
+#, kde-format
 msgid "Y limit: "
-msgstr "CPU-Limo:"
+msgstr "Y-limo:"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Suffix: “Every x min”"
-#| msgid " min"
+#, kde-format
 msgid "X min: "
-msgstr "min"
+msgstr "X mini: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
 #, kde-format
 msgid "X max: "
-msgstr ""
+msgstr "X maks: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Random Sensor Active, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
-msgstr "Hazarda Sensilo Aktiva, konsideru malŝalti Tuja Antaŭrigardon"
+msgstr "Hazarda Sensilo Aktiva in %1, konsideru malŝalti Tujan Antaŭrigardon"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
 #, kde-format
@@ -52959,45 +52938,44 @@ msgid "Colorize"
 msgstr "Kolorigi"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
-#, fuzzy, kde-format
-#| msgid "Posterize"
+#, kde-format
 msgid "Posterization Levels"
-msgstr "Posterigi"
+msgstr "Niveloj de Afiŝiĝo"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
 msgid "Fine Speed Gamma"
-msgstr "Bona Rapida Gamo"
+msgstr "Fajna Rapidecogamo"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:187
 #, kde-format
 msgid "Gross Speed Gamma"
-msgstr "Malneta Rapida Gamo"
+msgstr "Kruda Rapidecogamo"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:196
 #, kde-format
 msgid "Fine Speed Slowness"
-msgstr "Bona Rapido Malrapideco"
+msgstr "Fajnrapida Malrapideco"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:205
 #, kde-format
 msgid "Gross Speed Slowness"
-msgstr "Malneta Rapida Malrapideco"
+msgstr "Krudrapida Malrapideco"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:214
 #, kde-format
 msgid "Offset By Speed"
-msgstr "Deŝovo De Rapido"
+msgstr "Deŝovo Per Rapido"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:223
 #, kde-format
 msgid "Offset by Speed Filter"
-msgstr "Deŝovo per Rapida Filtrilo"
+msgstr "Filtrilo por Deŝovo de Rapido"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:232
 #, kde-format
 msgid "Offset By Random"
-msgstr "Deŝovo Per Hazarda"
+msgstr "Deŝovo Per Hazardo"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:240
 #, kde-format
@@ -53056,26 +53034,19 @@ msgid "Smudge Radius Log"
 msgstr "Smudge Radius Log"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "Smudge Longo"
+msgstr "Smudge-Longeca Multiplikilo"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Smudge_rake.kpp"
-#| msgid "Smudge rake"
+#, kde-format
 msgid "Smudge Bucket"
-msgstr "Smudge rastilo"
+msgstr "Smudge-ujo"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#, kde-format
 msgid "Smudge Transparency"
-msgstr "Travidebleco"
+msgstr "Smudge-Travidebleco"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -53085,7 +53056,7 @@ msgstr "Stroke Daŭro protokolo"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:386
 #, kde-format
 msgid "Stroke Holdtime"
-msgstr "Bato Holdtime"
+msgstr "Bato Tenotempo"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:395
 #, kde-format
@@ -53394,10 +53365,9 @@ msgid "Shape dynamics"
 msgstr "Formdinamiko"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Shape"
-msgstr "Ŝpruciga formo"
+msgstr "Ŝpruciga Formo"
 
 #: plugins/paintops/spray/spray_paintop_plugin.cpp:27
 #, kde-format

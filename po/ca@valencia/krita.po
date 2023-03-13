@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-12 00:44+0000\n"
-"PO-Revision-Date: 2023-03-05 11:14+0100\n"
+"PO-Revision-Date: 2023-03-12 11:17+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -52567,7 +52567,7 @@ msgstr " ms"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:73
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -52983,38 +52983,33 @@ msgid "repeat"
 msgstr "repetició"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
-msgstr "Bàsica"
+msgstr "Bàsic"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
-#, fuzzy, kde-format
-#| msgid "CPU Limit:"
+#, kde-format
 msgid "Y limit: "
-msgstr "Límit de la CPU:"
+msgstr "Límit d'Y: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Suffix: “Every x min”"
-#| msgid " min"
+#, kde-format
 msgid "X min: "
-msgstr " min"
+msgstr "X mín.: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
 #, kde-format
 msgid "X max: "
-msgstr ""
+msgstr "X màx.: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Random Sensor Active, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
 msgstr ""
-"Sensor aleatori actiu, considereu desactivar la vista prèvia instantània"
+"Sensor aleatori actiu en l'opció %1, considereu desactivar la vista prèvia "
+"instantània"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
 #, kde-format
@@ -53199,10 +53194,9 @@ msgid "Colorize"
 msgstr "Acolorix"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
-#, fuzzy, kde-format
-#| msgid "Posterize"
+#, kde-format
 msgid "Posterization Levels"
-msgstr "Posteritza"
+msgstr "Nivells de posterització"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
@@ -53298,26 +53292,19 @@ msgid "Smudge Radius Log"
 msgstr "Registre del radi d'esborronar"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "Duració de l'esborronat"
+msgstr "Multiplicador de la duració de l'esborronat"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Smudge_rake.kpp"
-#| msgid "Smudge rake"
+#, kde-format
 msgid "Smudge Bucket"
-msgstr "Esborronat de rasclet"
+msgstr "Cubeta d'esborronat"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#, kde-format
 msgid "Smudge Transparency"
-msgstr "Transparència"
+msgstr "Transparència de l'esborronat"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -53638,8 +53625,7 @@ msgid "Shape dynamics"
 msgstr "Dinàmiques de forma"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Shape"
 msgstr "Forma del ruixat"
 
@@ -60409,104 +60395,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Color Rate"
-#~ msgstr "Proporció de color"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Displacement Option"
-#~ msgstr "Opció de desplaçament"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Total Random"
-#~ msgstr "Origen -> Aleatorietat total"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern"
-#~ msgstr "Origen -> Patró"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern Locked"
-#~ msgstr "Origen -> Patró bloquejat"
-
-#~ msgid "0 px"
-#~ msgstr "0 px"
-
-#~ msgid "0 s"
-#~ msgstr "0 s"
-
-#~ msgid "1000"
-#~ msgstr "1000"
-
-#~ msgid "30 px"
-#~ msgstr "30 px"
-
-#~ msgid "3 s"
-#~ msgstr "3 s"
-
-#~ msgid "%1 s"
-#~ msgstr "%1 s"
-
-#~ msgctxt "option name"
-#~ msgid "Filter"
-#~ msgstr "Filtre"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "\"%1\" does not support scaled preview (non-linear filter)"
-#~ msgstr "«%1» no permet la vista prèvia escalada (filtratge no lineal)"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Luminosity value of the brush that will not change the painting color. "
-#~ "All brush pixels darker than neutral point will paint with darker color, "
-#~ "pixels lighter than neutral point — lighter."
-#~ msgstr ""
-#~ "Valor de la lluminositat del pinzell que no canviarà el color del pintat. "
-#~ "Tots els píxels del pinzell més foscos que el punt neutre es pintaran amb "
-#~ "un color més fosc, i els píxels més clars que el punt neutre — més clars."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Brightness correction for the brush"
-#~ msgstr "Correcció de la brillantor per al pinzell"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Contrast correction for the brush"
-#~ msgstr "Correcció del contrast per al pinzell"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush tip does not have color channels. The brush will work "
-#~ "in \"Mask\" mode."
-#~ msgstr ""
-#~ "La punta del pinzell seleccionada no té canals de color. El pinzell "
-#~ "funcionarà en mode «Màscara»."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush engine does not support \"Color\" or \"Lightness\" "
-#~ "modes. The brush will work in \"Mask\" mode."
-#~ msgstr ""
-#~ "El motor de pinzell seleccionat admet els modes «Color» o «Claredat». El "
-#~ "pinzell funcionarà en mode «Màscara»."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Brush average: %1\n"
-#~ "Adjusted average: %2"
-#~ msgstr ""
-#~ "Mitjana del pinzell: %1\n"
-#~ "Mitjana ajustada: %2"
-
-#~ msgid "Mirrored"
-#~ msgstr "Emmirallat"
-
-#~ msgid "Not mirrored"
-#~ msgstr "Sense emmirallar"
-
-#~ msgid "Align the brush preview outline to the pixel grid"
-#~ msgstr ""
-#~ "Alinea el contorn de la vista prèvia del pinzell amb la quadrícula de "
-#~ "píxels"
-
-#~ msgid " s"
-#~ msgstr " s"

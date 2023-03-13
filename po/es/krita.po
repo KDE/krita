@@ -66,7 +66,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-12 00:44+0000\n"
-"PO-Revision-Date: 2023-03-06 13:33+0100\n"
+"PO-Revision-Date: 2023-03-12 22:10+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -50715,14 +50715,14 @@ msgstr "IPTC"
 #: plugins/paintops/colorsmudge/colorsmudge_paintop_plugin.cpp:30
 #, kde-format
 msgid "Color Smudge"
-msgstr "Tizne a colores"
+msgstr "Mancha de color"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSmudgeMode)
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:41
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:47
 #, kde-format
 msgid "Smudge Mode"
-msgstr "Modo de tizne"
+msgstr "Modo de manchado"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:44
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:52
@@ -50813,12 +50813,12 @@ msgstr ""
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:332
 #, kde-format
 msgid "Smudge Length"
-msgstr "Longitud del tizne"
+msgstr "Longitud de la mancha"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:59
 #, kde-format
 msgid "Smudge mode:"
-msgstr "Modo de tiznado:"
+msgstr "Modo de manchado:"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:60
 #, kde-format
@@ -50828,7 +50828,7 @@ msgstr "Alfa de manchado:"
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:61
 #, kde-format
 msgid "Use new smudge algorithm:"
-msgstr "Usar nuevo algoritmo de tiznado:"
+msgstr "Usar nuevo algoritmo de manchado:"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:62
 #, kde-format
@@ -50886,7 +50886,7 @@ msgstr ""
 #: plugins/paintops/colorsmudge/KisSmudgeRadiusOptionData.cpp:11
 #, kde-format
 msgid "Smudge Radius"
-msgstr "Radio del tizne"
+msgstr "Radio de la mancha"
 
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:62
 #, kde-format
@@ -52621,7 +52621,7 @@ msgstr " ms"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:73
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -53037,39 +53037,33 @@ msgid "repeat"
 msgstr "repetir"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
 msgstr "Básico"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
-#, fuzzy, kde-format
-#| msgid "CPU Limit:"
+#, kde-format
 msgid "Y limit: "
-msgstr "Límite de CPU:"
+msgstr "Límite Y: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Suffix: “Every x min”"
-#| msgid " min"
+#, kde-format
 msgid "X min: "
-msgstr " min"
+msgstr "X mín: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
 #, kde-format
 msgid "X max: "
-msgstr ""
+msgstr "X máx: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Random Sensor Active, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
 msgstr ""
-"Sensor aleatorio activado, considere la desactivación de la vista previa "
-"instantánea"
+"Sensor aleatorio activado en la opción %1, considere la desactivación de la "
+"vista previa instantánea"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
 #, kde-format
@@ -53121,7 +53115,7 @@ msgstr "Seguimiento"
 #, kde-format
 msgctxt "Option Category"
 msgid "Smudge"
-msgstr "Tiznar"
+msgstr "Manchar"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:210
 #, kde-format
@@ -53254,10 +53248,9 @@ msgid "Colorize"
 msgstr "Colorear"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
-#, fuzzy, kde-format
-#| msgid "Posterize"
+#, kde-format
 msgid "Posterization Levels"
-msgstr "Posterizar"
+msgstr "Niveles de posterización"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
@@ -53345,34 +53338,27 @@ msgstr "Ruido de seguimiento"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:323
 #, kde-format
 msgid "Smudge"
-msgstr "Tiznar"
+msgstr "Manchar"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:341
 #, kde-format
 msgid "Smudge Radius Log"
-msgstr "Registro del radio del tiznado"
+msgstr "Registro del radio de manchado"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "Longitud del tizne"
+msgstr "Multiplicador de la longitud de manchado"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Smudge_rake.kpp"
-#| msgid "Smudge rake"
+#, kde-format
 msgid "Smudge Bucket"
-msgstr "Mancha de rastrillo"
+msgstr "Cubo de manchas"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#, kde-format
 msgid "Smudge Transparency"
-msgstr "Transparencia"
+msgstr "Transparencia de manchado"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -53693,8 +53679,7 @@ msgid "Shape dynamics"
 msgstr "Dinámica de la forma"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Shape"
 msgstr "Forma del pulverizador"
 

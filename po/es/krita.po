@@ -66,14 +66,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-02-27 19:04+0100\n"
+"PO-Revision-Date: 2023-03-12 22:10+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -49653,7 +49653,7 @@ msgstr "IPTC"
 #: plugins/paintops/colorsmudge/colorsmudge_paintop_plugin.cpp:30
 #, kde-format
 msgid "Color Smudge"
-msgstr "Tizne a colores"
+msgstr "Mancha de color"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop.cpp:52
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:59
@@ -49667,7 +49667,7 @@ msgstr "Proporción de color"
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:47
 #, kde-format
 msgid "Smudge Mode"
-msgstr "Modo de tizne"
+msgstr "Modo de manchado"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:44
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:27
@@ -49837,12 +49837,12 @@ msgstr ""
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:197
 #, kde-format
 msgid "Smudge Length"
-msgstr "Longitud del tizne"
+msgstr "Longitud de la mancha"
 
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:36
 #, kde-format
 msgid "Smudge mode:"
-msgstr "Modo de tiznado:"
+msgstr "Modo de manchado:"
 
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:37
 #, kde-format
@@ -49852,7 +49852,7 @@ msgstr "Alfa de manchado:"
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:38
 #, kde-format
 msgid "Use new smudge algorithm:"
-msgstr "Usar nuevo algoritmo de tiznado:"
+msgstr "Usar nuevo algoritmo de manchado:"
 
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:39
 #, kde-format
@@ -49880,7 +49880,7 @@ msgstr ""
 #: plugins/paintops/colorsmudge/kis_smudge_radius_option.cpp:32
 #, kde-format
 msgid "Smudge Radius"
-msgstr "Radio del tizne"
+msgstr "Radio de la mancha"
 
 #: plugins/paintops/curvebrush/kis_curve_line_option.cpp:30
 #, kde-format
@@ -52407,12 +52407,12 @@ msgstr "Ruido de seguimiento"
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:194
 #, kde-format
 msgid "Smudge"
-msgstr "Tiznar"
+msgstr "Manchar"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:202
 #, kde-format
 msgid "Smudge Radius Log"
-msgstr "Registro del radio del tiznado"
+msgstr "Registro del radio de manchado"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:208
 #, kde-format
@@ -52473,7 +52473,7 @@ msgstr "Seguimiento"
 #, kde-format
 msgctxt "Option Category"
 msgid "Smudge"
-msgstr "Tiznar"
+msgstr "Manchar"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:339
 #, kde-format

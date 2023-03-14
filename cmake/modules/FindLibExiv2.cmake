@@ -96,7 +96,8 @@ if(LibExiv2_FOUND AND NOT TARGET LibExiv2::LibExiv2)
         target_compile_definitions(LibExiv2::LibExiv2
             INTERFACE _HAS_AUTO_PTR_ETC=1
         )
-    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang") # libc++
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR
+           CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang") # libc++
         target_compile_definitions(LibExiv2::LibExiv2
             INTERFACE _LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR
         )

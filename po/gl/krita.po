@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-12 00:44+0000\n"
+"POT-Creation-Date: 2023-03-14 00:44+0000\n"
 "PO-Revision-Date: 2020-01-12 12:14+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -17814,8 +17814,8 @@ msgstr "Tamaño"
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
 #: plugins/tools/basictools/kis_tool_brush.cc:390
-#: plugins/tools/basictools/kis_tool_fill.cc:522
-#: plugins/tools/basictools/kis_tool_fill.cc:533
+#: plugins/tools/basictools/kis_tool_fill.cc:565
+#: plugins/tools/basictools/kis_tool_fill.cc:576
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
@@ -17826,8 +17826,8 @@ msgstr "Tamaño"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:275
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:406
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:417
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:469
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:480
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:105
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:115
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
@@ -20662,7 +20662,7 @@ msgstr "Saída"
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1144
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1167
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -20732,10 +20732,10 @@ msgstr "Cargando os recursos…"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1147
+#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1170
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
-#: libs/ui/widgets/kis_custom_image_widget.cc:292
+#: libs/ui/widgets/kis_custom_image_widget.cc:293
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1350
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1353
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
@@ -24024,12 +24024,14 @@ msgstr "Propiedades da capa"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:27
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:30
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:281
-#: plugins/tools/basictools/kis_tool_fill.cc:490
-#: plugins/tools/basictools/kis_tool_fill.cc:507
+#: plugins/tools/basictools/kis_tool_fill.cc:527
+#: plugins/tools/basictools/kis_tool_fill.cc:535
+#: plugins/tools/basictools/kis_tool_fill.cc:550
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:370
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1449
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:382
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:392
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:439
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:447
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:455
 #, no-c-format, kde-format
 msgid "%"
 msgstr "%"
@@ -27044,8 +27046,8 @@ msgstr "Cor de fondo"
 #: plugins/generators/pattern/wdgpatternoptions.ui:21
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:20
 #: plugins/paintops/libpaintop/KisTextureOptionWidget.cpp:27
-#: plugins/tools/basictools/kis_tool_fill.cc:566
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:446
+#: plugins/tools/basictools/kis_tool_fill.cc:609
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:509
 #, kde-format
 msgid "Pattern"
 msgstr "Padrón"
@@ -27067,7 +27069,7 @@ msgstr "Sen contorno"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbOutline)
 #: libs/ui/forms/wdggeometryoptions.ui:101
 #: plugins/paintops/roundmarker/KisRoundMarkerOpOptionWidget.cpp:49
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:440
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:503
 #, kde-format
 msgid "Brush"
 msgstr "Pincel"
@@ -28850,8 +28852,8 @@ msgstr "Liña:"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:96
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:224
-#: plugins/tools/basictools/kis_tool_fill.cc:564
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:444
+#: plugins/tools/basictools/kis_tool_fill.cc:607
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:507
 #, kde-format
 msgid "Foreground color"
 msgstr "Cor de primeiro plano"
@@ -28860,8 +28862,8 @@ msgstr "Cor de primeiro plano"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:101
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:214
-#: plugins/tools/basictools/kis_tool_fill.cc:565
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
+#: plugins/tools/basictools/kis_tool_fill.cc:608
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:508
 #, kde-format
 msgid "Background color"
 msgstr "Cor do fondo"
@@ -32613,44 +32615,44 @@ msgstr "A capa está bloqueada."
 msgid "Layer is invisible."
 msgstr "A capa está oculta."
 
-#: libs/ui/KisView.cpp:1148
+#: libs/ui/KisView.cpp:1171
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>O documento «<b>%1</b>» modificouse.</p><p>Queres gardalo?</p>"
 
-#: libs/ui/KisView.cpp:1337
+#: libs/ui/KisView.cpp:1360
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "As probas de resultados non funciona en coma flotante."
 
-#: libs/ui/KisView.cpp:1342
+#: libs/ui/KisView.cpp:1365
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Activáronse as probas de resultados."
 
-#: libs/ui/KisView.cpp:1344
+#: libs/ui/KisView.cpp:1367
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Desactiváronse as probas de resultados."
 
-#: libs/ui/KisView.cpp:1356
+#: libs/ui/KisView.cpp:1379
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Os avisos de gama non funciona en coma flotante."
 
-#: libs/ui/KisView.cpp:1362
+#: libs/ui/KisView.cpp:1385
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Activáronse os avisos de gama."
 
-#: libs/ui/KisView.cpp:1364
+#: libs/ui/KisView.cpp:1387
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Pero as probas de resultado seguen desactivadas."
 
-#: libs/ui/KisView.cpp:1367
+#: libs/ui/KisView.cpp:1390
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Desactiváronse os avisos de gama."
@@ -34230,8 +34232,10 @@ msgstr "Transparente"
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
+#: plugins/tools/basictools/kis_tool_fill.cc:534
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:44
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:446
 #, kde-format
 msgid "Opacity: "
 msgstr "Opacidade:"
@@ -35354,7 +35358,7 @@ msgstr "Seleccionar un espazo de cores"
 msgid "&Create"
 msgstr "&Crear"
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:293
+#: libs/ui/widgets/kis_custom_image_widget.cc:294
 #, kde-format
 msgid ""
 "Linear gamma RGB color spaces are not supposed to be used in 8-bit integer "
@@ -35371,7 +35375,7 @@ msgstr ""
 "Prema «Aceptar» para crear un espazo de cores RGB lineal de enteiro de 8 "
 "bits, ou prema «Cancelar» para volver ao diálogo de configuración."
 
-#: libs/ui/widgets/kis_custom_image_widget.cc:534
+#: libs/ui/widgets/kis_custom_image_widget.cc:535
 #, kde-format
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
@@ -35578,7 +35582,7 @@ msgid "No Preview for this engine"
 msgstr "Non hai vista previa para este motor"
 
 #: libs/ui/widgets/kis_selection_options.cc:179
-#: plugins/tools/basictools/kis_tool_fill.cc:516
+#: plugins/tools/basictools/kis_tool_fill.cc:559
 #, fuzzy, kde-format
 #| msgid "Anti-aliasing"
 msgctxt "The anti-alias checkbox in fill tool options"
@@ -35662,8 +35666,8 @@ msgid "Grow or shrink the selection by the set amount"
 msgstr "Aumentar/reducir a selección en:"
 
 #: libs/ui/widgets/kis_selection_options.cc:237
-#: plugins/tools/basictools/kis_tool_fill.cc:579
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:456
+#: plugins/tools/basictools/kis_tool_fill.cc:625
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
@@ -38525,7 +38529,7 @@ msgstr "Asistente Ellipse"
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:41
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:262
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:70
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:437
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
 #, kde-format
 msgid "Ellipse"
 msgstr "Elipse"
@@ -40308,7 +40312,7 @@ msgstr "Seguro que quere eliminar a máscara <b>'%1'</b>?"
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:46
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:267
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:75
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:436
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:499
 #, kde-format
 msgid "Rectangle"
 msgstr "Rectángulo"
@@ -59234,39 +59238,46 @@ msgstr "Debuxar unha elipse"
 msgid "Ellipse Tool"
 msgstr "Ferramenta de elipse"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:109
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:157
+#: plugins/tools/basictools/kis_tool_fill.cc:129
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:177
 #, kde-format
 msgid "You cannot use this tool with the selected layer type"
 msgstr "Non pode usar esta ferramenta co tipo de capa seleccionado"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:220
+#: plugins/tools/basictools/kis_tool_fill.cc:240
 msgctxt "(qtundo-format)"
 msgid "Flood Fill"
 msgstr "Inundar"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:489
+#: plugins/tools/basictools/kis_tool_fill.cc:526
 #, fuzzy, kde-format
 #| msgid "Scale: "
 msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
 msgid "Scale: "
 msgstr "Escala:"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:503
+#: plugins/tools/basictools/kis_tool_fill.cc:531
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:443
+#, fuzzy, kde-format
+#| msgid "Hatching options"
+msgid "Use custom blending options"
+msgstr "Opcións de incubación"
+
+#: plugins/tools/basictools/kis_tool_fill.cc:546
 #, fuzzy, kde-format
 #| msgid "Threshold: "
 msgctxt "The 'threshold' spinbox prefix in fill tool options"
 msgid "Threshold: "
 msgstr "Limiar: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:506
+#: plugins/tools/basictools/kis_tool_fill.cc:549
 #, fuzzy, kde-format
 #| msgid "Spread:"
 msgctxt "The 'spread' spinbox prefix in fill tool options"
 msgid "Spread: "
 msgstr "Esparexemento:"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:512
+#: plugins/tools/basictools/kis_tool_fill.cc:555
 #, fuzzy, kde-format
 #| msgid "Border selection by"
 msgctxt ""
@@ -59275,184 +59286,204 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Escoller o contorno en"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:520
+#: plugins/tools/basictools/kis_tool_fill.cc:563
 #, fuzzy, kde-format
 #| msgid "Grow"
 msgctxt "The 'grow/shrink' spinbox prefix in fill tool options"
 msgid "Grow: "
 msgstr "Aumentar"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:531
+#: plugins/tools/basictools/kis_tool_fill.cc:574
 #, fuzzy, kde-format
 #| msgid "Feather radius:"
 msgctxt "The 'feather' spinbox prefix in fill tool options"
 msgid "Feather: "
 msgstr "Raio da selección suave:"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:557
+#: plugins/tools/basictools/kis_tool_fill.cc:600
 #, fuzzy, kde-format
 #| msgid "Reset"
 msgctxt "The 'reset' button in fill tool options"
 msgid "Reset"
 msgstr "Restaurar"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:560
+#: plugins/tools/basictools/kis_tool_fill.cc:603
 #, fuzzy, kde-format
 #| msgid "Failed to save the selection for filter mask %1."
 msgid "Fill the active selection, or the entire canvas"
 msgstr "Non se puido gardar a selección para a máscara de filtro %1."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:561
+#: plugins/tools/basictools/kis_tool_fill.cc:604
 #, fuzzy, kde-format
 #| msgid "Include translator's comments"
 msgid "Fill a contiguous region"
 msgstr "Incluír os comentarios do tradutor"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:562
+#: plugins/tools/basictools/kis_tool_fill.cc:605
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Fill all regions of a similar color"
 msgstr "Encher a zona coa cor de fondo."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:567
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:447
+#: plugins/tools/basictools/kis_tool_fill.cc:610
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:510
 #, fuzzy, kde-format
 #| msgid "Set the blend mode for the layer"
 msgid "Set the scale of the pattern"
 msgstr "Definir o método de fusión da capa."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:568
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:448
+#: plugins/tools/basictools/kis_tool_fill.cc:611
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:511
 #, fuzzy, kde-format
 #| msgid "Set the master opacity for the layer"
 msgid "Set the rotation of the pattern"
 msgstr "Definir a opacidade principal da capa."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:570
+#: plugins/tools/basictools/kis_tool_fill.cc:612
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
+#, kde-format
+msgid "Set custom blending options instead of using the brush ones"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_fill.cc:613
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
+#, fuzzy, kde-format
+#| msgid "Set the master opacity for the layer"
+msgid "Set a custom opacity for the fill"
+msgstr "Definir a opacidade principal da capa."
+
+#: plugins/tools/basictools/kis_tool_fill.cc:614
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
+#, fuzzy, kde-format
+#| msgid "Set the blend mode for the layer"
+msgid "Set a custom blend mode for the fill"
+msgstr "Definir o método de fusión da capa."
+
+#: plugins/tools/basictools/kis_tool_fill.cc:616
 #, kde-format
 msgid "Fill regions similar in color to the clicked region"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:571
+#: plugins/tools/basictools/kis_tool_fill.cc:617
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Fill all regions until a specific boundary color"
 msgstr "Encher a zona coa cor de fondo."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:572
+#: plugins/tools/basictools/kis_tool_fill.cc:618
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, fuzzy, kde-format
 #| msgid "Background color"
 msgid "Boundary color"
 msgstr "Cor do fondo"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:573
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:450
+#: plugins/tools/basictools/kis_tool_fill.cc:619
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
 "increases the range of similar colors to be filled."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:574
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:451
+#: plugins/tools/basictools/kis_tool_fill.cc:620
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:517
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
 "decreases opacity of fill areas depending on color similarity."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:575
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
+#: plugins/tools/basictools/kis_tool_fill.cc:621
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when filling the region"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:577
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:454
+#: plugins/tools/basictools/kis_tool_fill.cc:623
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
 #, fuzzy, kde-format
 #| msgid "Could not read the beginning of the file."
 msgid "Smooths the edges of the fill"
 msgstr "Non foi posíbel ler o inicio do ficheiro."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:578
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:455
+#: plugins/tools/basictools/kis_tool_fill.cc:624
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:580
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:457
+#: plugins/tools/basictools/kis_tool_fill.cc:626
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
 #, kde-format
 msgid "Blur the fill by the set amount"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:582
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:459
+#: plugins/tools/basictools/kis_tool_fill.cc:628
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Fill regions found from the active layer"
 msgstr "Encher a zona coa cor de fondo."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:583
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
+#: plugins/tools/basictools/kis_tool_fill.cc:629
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:584
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
+#: plugins/tools/basictools/kis_tool_fill.cc:630
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
 msgstr "Encher a zona coa cor de fondo."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:586
+#: plugins/tools/basictools/kis_tool_fill.cc:632
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Dragging will fill regions of any color"
 msgstr "Encher a zona coa cor de fondo."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:587
+#: plugins/tools/basictools/kis_tool_fill.cc:633
 #, kde-format
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:589
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:463
+#: plugins/tools/basictools/kis_tool_fill.cc:635
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Reset to default value"
 msgid "Reset the options to their default values"
 msgstr "Restaurar o valor predeterminado"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:598
+#: plugins/tools/basictools/kis_tool_fill.cc:644
 #, fuzzy, kde-format
 #| msgid "Simple mode"
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
 msgstr "Modo sinxelo"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:605
+#: plugins/tools/basictools/kis_tool_fill.cc:651
 #, fuzzy, kde-format
 #| msgid "Add Resources"
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
 msgstr "Engadir recursos"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:616
+#: plugins/tools/basictools/kis_tool_fill.cc:665
 #, fuzzy, kde-format
 #| msgid "Images extensions:"
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
 msgstr "Extensións de imaxe:"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:628
+#: plugins/tools/basictools/kis_tool_fill.cc:677
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "HSV Adjustment"
@@ -59460,20 +59491,20 @@ msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
 msgstr "Axuste de HSV"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:637
+#: plugins/tools/basictools/kis_tool_fill.cc:686
 #, fuzzy, kde-format
 #| msgid "References"
 msgctxt "The 'reference' section label in fill tool options"
 msgid "Reference"
 msgstr "Referencias"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:646
+#: plugins/tools/basictools/kis_tool_fill.cc:695
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.h:219
+#: plugins/tools/basictools/kis_tool_fill.h:234
 #, kde-format
 msgid "Fill Tool"
 msgstr "Ferramenta de recheo"
@@ -61861,7 +61892,7 @@ msgctxt "action"
 msgid "Enclose and Fill Tool"
 msgstr "Activar a ferramenta de liñas"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:247
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:267
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Flood Fill"
@@ -61869,42 +61900,42 @@ msgctxt "(qtundo-format)"
 msgid "Enclose and Fill"
 msgstr "Inundar"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:361
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:418
 #, fuzzy, kde-format
 #| msgid "Invert"
 msgctxt "The 'invert' checkbox in enclose and fill tool"
 msgid "Invert"
 msgstr "Inverter"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:366
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:423
 #, fuzzy, kde-format
 #| msgid "Include translator's comments"
 msgctxt "The 'include contour regions' checkbox in enclose and fill tool"
 msgid "Include contour regions"
 msgstr "Incluír os comentarios do tradutor"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:381
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:438
 #, fuzzy, kde-format
 #| msgid "Scale: "
 msgctxt "The pattern 'scale' spinbox prefix in enclose and fill tool options"
 msgid "Scale: "
 msgstr "Escala:"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:388
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:451
 #, fuzzy, kde-format
 #| msgid "Threshold: "
 msgctxt "The 'threshold' spinbox prefix in enclose and fill tool options"
 msgid "Threshold: "
 msgstr "Limiar: "
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:391
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:454
 #, fuzzy, kde-format
 #| msgid "Spread:"
 msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
 msgid "Spread: "
 msgstr "Esparexemento:"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:397
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
 #, fuzzy, kde-format
 #| msgid "Border selection by"
 msgctxt ""
@@ -61913,86 +61944,86 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Escoller o contorno en"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:401
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:464
 #, fuzzy, kde-format
 #| msgid "Anti-aliasing"
 msgctxt "The anti-alias checkbox in enclose and fill tool options"
 msgid "Anti-aliasing"
 msgstr "Suavizado das curvas"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:404
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:467
 #, fuzzy, kde-format
 #| msgid "Grow"
 msgctxt "The 'grow/shrink' spinbox prefix in enclose and fill tool options"
 msgid "Grow: "
 msgstr "Aumentar"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:415
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:478
 #, fuzzy, kde-format
 #| msgid "Feather radius:"
 msgctxt "The 'feather' spinbox prefix in enclose and fill tool options"
 msgid "Feather: "
 msgstr "Raio da selección suave:"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:433
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:496
 #, fuzzy, kde-format
 #| msgid "Reset"
 msgctxt "The 'reset' button in enclose and fill tool options"
 msgid "Reset"
 msgstr "Restaurar"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:438
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:501
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Draw Bezier Curve"
 msgid "Bezier Curve"
 msgstr "Debuxar unha curva Bezier"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:439
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:502
 #, kde-format
 msgid "Lasso"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:442
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:505
 #, kde-format
 msgid "Enable to fill opposite regions instead"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:443
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:506
 #, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:472
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:538
 #, fuzzy, kde-format
 #| msgid "Sens&ing method type:"
 msgctxt "The 'enclosing method' section label in enclose and fill tool options"
 msgid "Enclosing method"
 msgstr "Tipo de método de med&ir:"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:479
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:545
 #, fuzzy, kde-format
 #| msgid "Transparent"
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
 msgstr "Transparente"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:489
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:555
 #, fuzzy, kde-format
 #| msgid "Add Resources"
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
 msgstr "Engadir recursos"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:569
 #, fuzzy, kde-format
 #| msgid "Images extensions:"
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
 msgstr "Extensións de imaxe:"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:509
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "HSV Adjustment"
@@ -62000,75 +62031,75 @@ msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
 msgstr "Axuste de HSV"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:587
 #, fuzzy, kde-format
 #| msgid "References"
 msgctxt "The 'reference' section label in enclose and fill tool options"
 msgid "Reference"
 msgstr "Referencias"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:714
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:836
 #, fuzzy, kde-format
 #| msgid "All"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Todas"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:717
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:839
 #, fuzzy, kde-format
 #| msgid "Specific Color Selector"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "Selector de cores específico"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:720
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:842
 #, fuzzy, kde-format
 #| msgid "Transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "Transparente"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:723
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:845
 #, fuzzy, kde-format
 #| msgid "Specific Color Selector"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "Selector de cores específico"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:726
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "Encher a zona coa cor de fondo."
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:729
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:732
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:735
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "Encher a zona coa cor de fondo."
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:738
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
 #, fuzzy, kde-format
 #| msgid "Foreground to Transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "Primeiro plano a transparente"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:741
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, fuzzy, kde-format
 #| msgid "Foreground to Transparent"
 msgctxt "Region selection method in enclose and fill tool"

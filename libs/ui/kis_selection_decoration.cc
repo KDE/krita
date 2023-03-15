@@ -55,8 +55,6 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>_view)
     connect(m_window, SIGNAL(screenChanged(QScreen*)), this, SLOT(screenChanged(QScreen*)));
 
     m_screen = m_window->screen();
-    connect(m_screen, SIGNAL(physicalDotsPerInchChanged(qreal)), this, SLOT(initializePens()));
-
     initializePens();
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
@@ -99,33 +97,13 @@ bool KisSelectionDecoration::selectionIsActive()
 
 void KisSelectionDecoration::initializePens()
 {
-    /**
-     * On MacOS in HiDPI mode devicePixelRatio is always fixed to 2.0,
-     * so we should use physical DPI for better guess of the screen
-     * detail level (which is divided by the pixel ratio in Qt).
-     */
-    const qreal dotsPerInch = m_screen->physicalDotsPerInch() * m_screen->devicePixelRatio();
-    int screenScale = 1;
-
-    if (dotsPerInch < 220) {
-        screenScale = 1;
-    }
-    else if (dotsPerInch < 300) {
-        screenScale = 2;
-    }
-    else if (dotsPerInch < 500) {
-        screenScale = 3;
-    }
-    else {
-        screenScale = 4;
-    }
-
     KisPaintingTweaks::initAntsPen(&m_antsPen, &m_outlinePen,
                                    ANT_LENGTH, ANT_SPACE);
 
-    if (screenScale > 1) {
-        m_antsPen.setWidth(screenScale);
-        m_outlinePen.setWidth(screenScale);
+    int penWidth = qRound(m_screen->devicePixelRatio());
+    if (penWidth > 1) {
+        m_antsPen.setWidth(penWidth);
+        m_outlinePen.setWidth(penWidth);
     }
     else {
         m_antsPen.setCosmetic(true);

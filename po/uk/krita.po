@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-14 00:44+0000\n"
-"PO-Revision-Date: 2023-03-12 08:46+0200\n"
+"PO-Revision-Date: 2023-03-14 08:35+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -57106,10 +57106,9 @@ msgstr "Масштаб:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:531
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:443
-#, fuzzy, kde-format
-#| msgid "Encoding options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "Параметри кодування"
+msgstr "Нетипові параметри змішування"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #, kde-format
@@ -57181,20 +57180,20 @@ msgstr "Встановити обертання взірця"
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
+"Встановити нетипові параметри змішування, замість використання параметрів "
+"пензля"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:613
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "Встановити основний рівень непрозорості для шару"
+msgstr "Встановити нетипову непрозорість для заповнення"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:614
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "Встановити режим змішування для шару"
+msgstr "Встановити нетиповий режим змішування для заповнення"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
 #, kde-format

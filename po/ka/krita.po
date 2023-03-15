@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-14 00:44+0000\n"
-"PO-Revision-Date: 2023-03-10 02:33+0100\n"
+"PO-Revision-Date: 2023-03-14 05:07+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -17830,7 +17830,7 @@ msgstr ""
 #, kde-format
 msgctxt "description of a file type"
 msgid "Color Palette"
-msgstr ""
+msgstr "ფერის პალიტრა"
 
 #: libs/koplugin/KisMimeDatabase.cpp:239
 #, kde-format
@@ -27487,12 +27487,12 @@ msgstr "პანინგი მარჯვნივ"
 #: libs/ui/input/kis_pan_action.cpp:47
 #, kde-format
 msgid "Pan Up"
-msgstr ""
+msgstr "პანორამა მაღლა"
 
 #: libs/ui/input/kis_pan_action.cpp:48
 #, kde-format
 msgid "Pan Down"
-msgstr ""
+msgstr "პანორამა დაბლა"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:39
 #, kde-format
@@ -50760,7 +50760,7 @@ msgstr " მწმ"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:73
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 მწმ"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -51166,24 +51166,20 @@ msgid "repeat"
 msgstr "repeat"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
 msgstr "საწყისი"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
-#, fuzzy, kde-format
-#| msgid "CPU Limit:"
+#, kde-format
 msgid "Y limit: "
-msgstr "CPU-ის ლიმიტი:"
+msgstr "Y ზღვარი: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Suffix: “Every x min”"
-#| msgid " min"
+#, kde-format
 msgid "X min: "
-msgstr " წთ"
+msgstr "X წთ: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
 #, kde-format
@@ -51378,10 +51374,9 @@ msgid "Colorize"
 msgstr "გაფერადება"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
-#, fuzzy, kde-format
-#| msgid "Posterize"
+#, kde-format
 msgid "Posterization Levels"
-msgstr "პოსტერიზაცია"
+msgstr "პოსტერიზაციის დონეები"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
@@ -51480,17 +51475,14 @@ msgid "Smudge Length Multiplier"
 msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
-#, fuzzy, kde-format
-#| msgid "Smudge"
+#, kde-format
 msgid "Smudge Bucket"
-msgstr "გადღაბნა"
+msgstr "ბაკეტის გადღაბნა"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#, kde-format
 msgid "Smudge Transparency"
-msgstr "გამჭვირვალობა"
+msgstr "გადღაბნის გამჭვირვალობა"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -51779,8 +51771,7 @@ msgid "Shape dynamics"
 msgstr "ფორმის დინამიკა"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Shape"
 msgstr "შესხმის ფორმა"
 
@@ -54647,10 +54638,9 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:531
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:443
-#, fuzzy, kde-format
-#| msgid "Encoding options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "კოდირების პარამეტრები"
+msgstr "შერევის პარამეტრების ხელით მითითება"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #, kde-format

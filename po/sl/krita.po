@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-14 00:44+0000\n"
-"PO-Revision-Date: 2023-03-06 14:18+0100\n"
+"PO-Revision-Date: 2023-03-14 08:32+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -52389,7 +52389,7 @@ msgstr " ms"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:73
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -52802,38 +52802,33 @@ msgid "repeat"
 msgstr "ponovi"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
 msgstr "Osnovno"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
-#, fuzzy, kde-format
-#| msgid "CPU Limit:"
+#, kde-format
 msgid "Y limit: "
-msgstr "Omejitev CPE:"
+msgstr "Y, meja: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Suffix: “Every x min”"
-#| msgid " min"
+#, kde-format
 msgid "X min: "
-msgstr " minut"
+msgstr "X, najm.: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
 #, kde-format
 msgid "X max: "
-msgstr ""
+msgstr "X, najv.: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Random Sensor Active, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
 msgstr ""
-"Naključna aktivacija senzorja, razmislite o onemogočanju sprotnega predogleda"
+"Naključna aktivacija tipala v možnosti %1, razmislite o onemogočanju "
+"sprotnega predogleda"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
 #, kde-format
@@ -53017,10 +53012,9 @@ msgid "Colorize"
 msgstr "Prebarvaj"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
-#, fuzzy, kde-format
-#| msgid "Posterize"
+#, kde-format
 msgid "Posterization Levels"
-msgstr "Posteriziraj"
+msgstr "Ravni posterizacije"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
@@ -53114,26 +53108,19 @@ msgid "Smudge Radius Log"
 msgstr "Zapisnik polmera razmaza"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "Dolžina razmaza"
+msgstr "Multiplikator dolžine razmaza"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Smudge_rake.kpp"
-#| msgid "Smudge rake"
+#, kde-format
 msgid "Smudge Bucket"
-msgstr "Razmaz, grablje"
+msgstr "Razmaz, vedro"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#, kde-format
 msgid "Smudge Transparency"
-msgstr "Prosojnost"
+msgstr "Prosojnost razmaza"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -53449,8 +53436,7 @@ msgid "Shape dynamics"
 msgstr "Dinamika lika"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Shape"
 msgstr "Oblika pršilke"
 
@@ -56424,10 +56410,9 @@ msgstr "Merilo: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:531
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:443
-#, fuzzy, kde-format
-#| msgid "Encoding options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "Možnosti kodiranja"
+msgstr "Uporabi možnosti mešanja po meri"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #, kde-format
@@ -56498,21 +56483,19 @@ msgstr "Določite vrtenje vzorca"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
-msgstr ""
+msgstr "Nastavite možnosti mešanja po meri namesto uporabe možnosti čopiča"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:613
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "Določite splošno prosojnost plasti"
+msgstr "Polnilu določite prekrivnost po meri"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:614
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "Določite način mešanja za plast"
+msgstr "Polnilu določite način mešanja po meri"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
 #, kde-format
@@ -60221,103 +60204,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "Color Rate"
-#~ msgstr "Barvna mera"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Displacement Option"
-#~ msgstr "Možnost razmestitve"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Total Random"
-#~ msgstr "Vir -> povsem naključno"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern"
-#~ msgstr "Vir -> vzorec"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern Locked"
-#~ msgstr "Vir -> zaklenjen vzorec"
-
-#~ msgid "0 px"
-#~ msgstr "0 sl. točk"
-
-#~ msgid "0 s"
-#~ msgstr "0 s"
-
-#~ msgid "1000"
-#~ msgstr "1000"
-
-#~ msgid "30 px"
-#~ msgstr "30 sl. točk"
-
-#~ msgid "3 s"
-#~ msgstr "3 s"
-
-#~ msgid "%1 s"
-#~ msgstr "%1 s"
-
-#~ msgctxt "option name"
-#~ msgid "Filter"
-#~ msgstr "Filter"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "\"%1\" does not support scaled preview (non-linear filter)"
-#~ msgstr "»%1« ne podpira raztegnjenega predogleda (nelinearni filter)"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Luminosity value of the brush that will not change the painting color. "
-#~ "All brush pixels darker than neutral point will paint with darker color, "
-#~ "pixels lighter than neutral point — lighter."
-#~ msgstr ""
-#~ "Vrednost svetilnosti čopiča, ki ne bo spremenila barve slikanja. Vse "
-#~ "slikovne točke čopiča, temnejše od nevtralne točke, bodo slikale s "
-#~ "temnejšo barvo, slikovne točke, svetlejše od nevtralne točke, pa s "
-#~ "svetlejšo."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Brightness correction for the brush"
-#~ msgstr "Korekcija svetlosti za čopič"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Contrast correction for the brush"
-#~ msgstr "Korekcija kontrasta za krtačo"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush tip does not have color channels. The brush will work "
-#~ "in \"Mask\" mode."
-#~ msgstr ""
-#~ "Izbrana konica čopiča nima barvnih kanalov. Čopič bo deloval v načinu "
-#~ "»Maska«."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush engine does not support \"Color\" or \"Lightness\" "
-#~ "modes. The brush will work in \"Mask\" mode."
-#~ msgstr ""
-#~ "Izbrani ustroj čopičev ne podpira načinov »Barva« ali »Svetlost«. Čopič "
-#~ "bo deloval v načinu »Maska«."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Brush average: %1\n"
-#~ "Adjusted average: %2"
-#~ msgstr ""
-#~ "Povprečje čopiča: %1\n"
-#~ "Prilagojeno povprečje: %2"
-
-#~ msgid "Mirrored"
-#~ msgstr "Zrcaljeno"
-
-#~ msgid "Not mirrored"
-#~ msgstr "Ni zrcaljeno"
-
-#~ msgid "Align the brush preview outline to the pixel grid"
-#~ msgstr "Poravnaj obris predogleda čopiča na mrežo slikovnih točk"
-
-#~ msgid " s"
-#~ msgstr " s"

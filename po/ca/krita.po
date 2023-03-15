@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-14 00:44+0000\n"
-"PO-Revision-Date: 2023-03-12 11:17+0100\n"
+"PO-Revision-Date: 2023-03-14 10:10+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -56613,10 +56613,9 @@ msgstr "Escala: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:531
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:443
-#, fuzzy, kde-format
-#| msgid "Encoding options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "Opcions de codificació"
+msgstr "Usa opcions personalitzades de barreja"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #, kde-format
@@ -56688,20 +56687,19 @@ msgstr "Estableix el gir del patró"
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
+"Estableix opcions personalitzades de barreja en lloc d'emprar les del pinzell"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:613
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "Estableix l'opacitat mestra per a la capa"
+msgstr "Estableix una opacitat personalitzada per a l'emplenat"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:614
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "Estableix el mode de barreja per a la capa"
+msgstr "Estableix un mode personalitzat de barreja per a l'emplenat"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
 #, kde-format

@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-14 00:44+0000\n"
-"PO-Revision-Date: 2023-03-12 15:30+0100\n"
+"PO-Revision-Date: 2023-03-14 14:11+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -56656,10 +56656,9 @@ msgstr "Schalen: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:531
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:443
-#, fuzzy, kde-format
-#| msgid "Encoding options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "Opties voor coderen"
+msgstr "Aangepaste opties voor mengen gebruiken"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #, kde-format
@@ -56731,20 +56730,20 @@ msgstr "De draaiing van het patroon instellen"
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
+"Aangepaste opties voor mengen zetten in plaats van die van de penseel "
+"gebruiken"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:613
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "De hoofddekking voor de laag instellen."
+msgstr "Een aangepaste dekking voor het vullen zetten"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:614
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "De mengmodus voor de laag instellen."
+msgstr "Een aangepaste mengmodus voor het vullen zetten"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
 #, kde-format

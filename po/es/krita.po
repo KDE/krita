@@ -66,8 +66,8 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-14 00:44+0000\n"
-"PO-Revision-Date: 2023-03-12 22:10+0100\n"
-"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2023-03-14 21:12+0100\n"
+"Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -47513,7 +47513,7 @@ msgstr "Orden de línea de exploración"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Center-first order"
-msgstr "Orden primiero el centro"
+msgstr "Orden primero el centro"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:89
 #, kde-format
@@ -56683,10 +56683,9 @@ msgstr "Escalado: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:531
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:443
-#, fuzzy, kde-format
-#| msgid "Encoding options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "Opciones de codificación"
+msgstr "Usar opciones de mezcla personalizadas"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #, kde-format
@@ -56758,20 +56757,19 @@ msgstr "Definir la rotación del patrón"
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
+"Definir las opciones de mezcla personalizadas en lugar de usar las del pincel"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:613
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "Establecer la opacidad maestra para la capa"
+msgstr "Definir una opacidad personalizada para el relleno"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:614
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "Establecer el modo de fusión para la capa."
+msgstr "Definir un modo de mezcla personalizado para el relleno"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
 #, kde-format

@@ -1,6 +1,6 @@
 SET(EXTPREFIX_qt  "${EXTPREFIX}")
 
-set(QT_GIT_TAG "9a2554d719a214479b6f6adfa0ce1204761f11f0")
+set(QT_GIT_TAG "a5433c5c58c990b9ae68cab07baa5ad81f291d7b")
 
 if (MINGW)
   set(QT_BUILD_COMMAND   mingw32-make -j${SUBMAKE_JOBS})

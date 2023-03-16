@@ -1503,7 +1503,13 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
        <item row="1" column="1">
         <widget class="KisWarningBlock" name="grpNonWritableLocation"/>
        </item>
-       <item row="3" column="0" colspan="2">
+       <item row="3" column="1">
+        <widget class="KisWarningBlock" name="grpRestartMessage"/>
+       </item>
+       <item row="4" column="1">
+        <widget class="KisWarningBlock" name="grpAndroidWarningMessage"/>
+       </item>
+       <item row="5" column="0" colspan="2">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

@@ -435,6 +435,16 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     connect(m_urlResourceFolder, SIGNAL(textChanged(QString)), SLOT(checkResourcePath()));
     checkResourcePath();
 
+    grpRestartMessage->setPixmap(
+        grpRestartMessage->style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(QSize(32, 32)));
+    grpRestartMessage->setText(i18n("You will need to Restart Krita for the changes to take an effect."));
+
+    grpAndroidWarningMessage->setVisible(false);
+    grpAndroidWarningMessage->setPixmap(
+        grpAndroidWarningMessage->style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(QSize(32, 32)));
+    grpAndroidWarningMessage->setText(
+        i18n("Saving at a Location picked from the File Picker may slow down the startup!"));
+
 #ifdef Q_OS_ANDROID
     m_urlResourceFolder->setVisible(false);
 
@@ -488,6 +498,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
         int index = m_resourceFolderSelector->count() - 1;
         m_resourceFolderSelector->setItemData(index, resourceLocation, Qt::UserRole);
         m_resourceFolderSelector->setCurrentIndex(index);
+        grpAndroidWarningMessage->setVisible(true);
     } else {
         // find the index of the current resource location in the writableLocation, so we can set our view to that
         auto iterator = std::find_if(writableLocations.constBegin(),
@@ -529,10 +540,16 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
                     m_resourceFolderSelector->setItemData(index, selectedDirectory, Qt::UserRole);
                     m_resourceFolderSelector->setCurrentIndex(index);
                 }
+                // since we have selected the custom location, make the warning visible.
+                grpAndroidWarningMessage->setVisible(true);
             } else {
                 m_resourceFolderSelector->setCurrentIndex(previousIndex);
             }
         }
+
+        // hide-unhide based on the selection of user.
+        grpAndroidWarningMessage->setVisible(
+            m_resourceFolderSelector->currentData(Qt::UserRole).value<QString>().startsWith("content://"));
     });
 
 #else

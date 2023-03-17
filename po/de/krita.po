@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-14 00:44+0000\n"
+"POT-Creation-Date: 2023-03-17 00:55+0000\n"
 "PO-Revision-Date: 2022-08-28 09:26+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -17373,10 +17373,10 @@ msgstr "Größe"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:753
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:956
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:963
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1178
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1347
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1350
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1179
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1348
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1351
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1415
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1314
 #: libs/ui/forms/wdgdisplaysettings.ui:336
 #: libs/ui/forms/wdggeneralsettings.ui:383
@@ -23489,17 +23489,17 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:967
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1096
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1099
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1169
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1172
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1175
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1182
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1185
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1302
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1305
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1344
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1418
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1421
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1170
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1173
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1176
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1183
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1186
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1303
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1306
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1345
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1422
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1425
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1229
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1233
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1237
@@ -23532,13 +23532,13 @@ msgid "Choke:"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1165
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1166
 #: libs/ui/layerstyles/wdglayerstyles.ui:60
 #, kde-format
 msgid "Outer Glow"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1211
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1212
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"

@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-14 00:44+0000\n"
-"PO-Revision-Date: 2023-03-08 14:41+0100\n"
+"POT-Creation-Date: 2023-03-17 00:55+0000\n"
+"PO-Revision-Date: 2023-03-15 20:48+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -16718,10 +16718,10 @@ msgstr "Taille"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:753
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:956
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:963
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1178
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1347
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1350
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1179
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1348
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1351
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1415
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1314
 #: libs/ui/forms/wdgdisplaysettings.ui:336
 #: libs/ui/forms/wdggeneralsettings.ui:383
@@ -22753,17 +22753,17 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:967
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1096
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1099
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1169
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1172
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1175
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1182
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1185
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1302
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1305
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1344
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1418
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1421
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1170
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1173
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1176
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1183
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1186
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1303
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1306
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1345
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1422
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1425
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1229
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1233
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1237
@@ -22796,13 +22796,13 @@ msgid "Choke:"
 msgstr "Étrangler :"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1165
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1166
 #: libs/ui/layerstyles/wdglayerstyles.ui:60
 #, kde-format
 msgid "Outer Glow"
 msgstr "Lueur extérieure"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1211
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1212
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
@@ -52889,7 +52889,7 @@ msgstr " ms"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:73
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -53307,38 +53307,33 @@ msgid "repeat"
 msgstr "répéter"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
 msgstr "Basique"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
-#, fuzzy, kde-format
-#| msgid "CPU Limit:"
+#, kde-format
 msgid "Y limit: "
-msgstr "Limite du processeur :"
+msgstr "Limite en Y : "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Suffix: “Every x min”"
-#| msgid " min"
+#, kde-format
 msgid "X min: "
-msgstr " min"
+msgstr "Limite en X : "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
 #, kde-format
 msgid "X max: "
-msgstr ""
+msgstr "X max : "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Random Sensor Active, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
 msgstr ""
-"Capteur actif de façon aléatoire. Il faudrait désactiver l'aperçu instantané."
+"Capteur actif de façon aléatoire dans l'option %1. Veuillez prendre en "
+"compte la désactivation de l'aperçu instantané."
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
 #, kde-format
@@ -53524,10 +53519,9 @@ msgid "Colorize"
 msgstr "Colorer"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
-#, fuzzy, kde-format
-#| msgid "Posterize"
+#, kde-format
 msgid "Posterization Levels"
-msgstr "Postériser"
+msgstr "Niveau de postérisation"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
@@ -53622,26 +53616,19 @@ msgid "Smudge Radius Log"
 msgstr "Développer le journal autour"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "Longueur d'étalement"
+msgstr "Multiplicateur de longueur d'étalement"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Smudge_rake.kpp"
-#| msgid "Smudge rake"
+#, kde-format
 msgid "Smudge Bucket"
-msgstr "Râteau à salissures"
+msgstr "Réservoir d'étalement"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#, kde-format
 msgid "Smudge Transparency"
-msgstr "Transparence"
+msgstr "Transparence d'étalement"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -53963,10 +53950,9 @@ msgid "Shape dynamics"
 msgstr "Dynamique des formes"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Shape"
-msgstr "Forme de l'aérographe"
+msgstr "Profil de l'aérographe"
 
 #: plugins/paintops/spray/spray_paintop_plugin.cpp:27
 #, kde-format
@@ -56976,10 +56962,9 @@ msgstr "Échelle :"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:531
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:443
-#, fuzzy, kde-format
-#| msgid "Encoding options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "Options d'encodage"
+msgstr "Utiliser des options personnalisées de mélange"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #, kde-format
@@ -57051,20 +57036,19 @@ msgstr "Définir la rotation de la forme"
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
+"Définir des options personnalisées de mélange plutôt que celles des brosses"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:613
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "Définir l'opacité maîtresse pour le calque"
+msgstr "Définir une opacité personnalisée pour le remplissage"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:614
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "Définir le mode de fusion pour le calque."
+msgstr "Définir un mode personnalisé de mélange pour le remplissage"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
 #, kde-format

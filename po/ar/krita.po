@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-14 00:44+0000\n"
+"POT-Creation-Date: 2023-03-17 00:55+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -17266,10 +17266,10 @@ msgstr "المقاس"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:753
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:956
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:963
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1178
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1347
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1350
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1414
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1179
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1348
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1351
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1415
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1314
 #: libs/ui/forms/wdgdisplaysettings.ui:336
 #: libs/ui/forms/wdggeneralsettings.ui:383
@@ -23439,17 +23439,17 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:967
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1096
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1099
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1169
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1172
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1175
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1182
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1185
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1302
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1305
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1344
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1418
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1421
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1170
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1173
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1176
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1183
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1186
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1303
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1306
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1345
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1422
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1425
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1229
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1233
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1237
@@ -23482,13 +23482,13 @@ msgid "Choke:"
 msgstr "الكبح:"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1165
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1166
 #: libs/ui/layerstyles/wdglayerstyles.ui:60
 #, kde-format
 msgid "Outer Glow"
 msgstr "توهّج خارجيّ"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1211
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:1212
 #, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
@@ -43451,13 +43451,13 @@ msgstr ""
 #: plugins/extensions/pykrita/plugin/plugin.cpp:33
 #, kde-format
 msgid "Cannot load Python library"
-msgstr "تعذّر تحميل مكتبة «پيثون»"
+msgstr "تعذّر تحميل مكتبة «بيثون»"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:80
 #: plugins/extensions/pykrita/plugin/plugin.cpp:36
 #, kde-format
 msgid "Cannot set Python paths"
-msgstr "تعذّر ضبط مسارات «پيثون»"
+msgstr "تعذّر ضبط مسارات «بيثون»"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:83
 #: plugins/extensions/pykrita/plugin/plugin.cpp:39
@@ -43469,7 +43469,7 @@ msgstr "تعذّر تحميل وحدة pykrita المضمّنة"
 #: plugins/extensions/pykrita/plugin/plugin.cpp:42
 #, kde-format
 msgid "Unexpected error initializing python plugin."
-msgstr "خطأ غير متوقّع أثناء تمهيد ملحقة «پيثون»."
+msgstr "خطأ غير متوقّع أثناء تمهيد ملحقة «بيثون»."
 
 #. i18n: ectx: property (whatsThis), widget (QIconButton, actionIcon)
 #. i18n: ectx: property (whatsThis), widget (QIconButton, configPageIcon)
@@ -43640,7 +43640,7 @@ msgstr "Ctrl+C"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:92
 #, kde-format
 msgid "Python"
-msgstr "پيثون"
+msgstr "بيثون"
 
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:95
@@ -43729,7 +43729,7 @@ msgstr ""
 #: plugins/extensions/pykrita/plugin/manager.ui:43
 #, kde-format
 msgid "Error: The Python engine could not be initialized"
-msgstr "خطأ: تعذّر تمهيد محرّك «پيثون»"
+msgstr "خطأ: تعذّر تمهيد محرّك «بيثون»"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:75
@@ -43744,7 +43744,7 @@ msgstr ""
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:61
 #, kde-format
 msgid "Python Plugin Manager"
-msgstr "مدير ملحقات «پيثون»"
+msgstr "مدير ملحقات «بيثون»"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:131
 #, kde-format
@@ -57088,7 +57088,7 @@ msgstr ""
 #| msgid "Python Plugin Manager"
 msgctxt "action"
 msgid "Python Plugin Importer"
-msgstr "مدير ملحقات «پيثون»"
+msgstr "مدير ملحقات «بيثون»"
 
 #. i18n: context: text @ Action (plugin_importer_file), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:8

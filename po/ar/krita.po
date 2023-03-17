@@ -42928,13 +42928,13 @@ msgstr ""
 #: plugins/extensions/pykrita/plugin/plugin.cpp:33
 #, kde-format
 msgid "Cannot load Python library"
-msgstr "تعذّر تحميل مكتبة «پيثون»"
+msgstr "تعذّر تحميل مكتبة «بيثون»"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:76
 #: plugins/extensions/pykrita/plugin/plugin.cpp:36
 #, kde-format
 msgid "Cannot set Python paths"
-msgstr "تعذّر ضبط مسارات «پيثون»"
+msgstr "تعذّر ضبط مسارات «بيثون»"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:79
 #: plugins/extensions/pykrita/plugin/plugin.cpp:39
@@ -42946,7 +42946,7 @@ msgstr "تعذّر تحميل وحدة pykrita المضمّنة"
 #: plugins/extensions/pykrita/plugin/plugin.cpp:42
 #, kde-format
 msgid "Unexpected error initializing python plugin."
-msgstr "خطأ غير متوقّع أثناء تمهيد ملحقة «پيثون»."
+msgstr "خطأ غير متوقّع أثناء تمهيد ملحقة «بيثون»."
 
 #. i18n: ectx: property (whatsThis), widget (QIconButton, actionIcon)
 #. i18n: ectx: property (whatsThis), widget (QIconButton, configPageIcon)
@@ -43116,7 +43116,7 @@ msgstr "Ctrl+C"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:92
 #, kde-format
 msgid "Python"
-msgstr "پيثون"
+msgstr "بيثون"
 
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:95
@@ -43204,7 +43204,7 @@ msgstr ""
 #: plugins/extensions/pykrita/plugin/manager.ui:43
 #, kde-format
 msgid "Error: The Python engine could not be initialized"
-msgstr "خطأ: تعذّر تمهيد محرّك «پيثون»"
+msgstr "خطأ: تعذّر تمهيد محرّك «بيثون»"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:75
@@ -43219,7 +43219,7 @@ msgstr ""
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:61
 #, kde-format
 msgid "Python Plugin Manager"
-msgstr "مدير ملحقات «پيثون»"
+msgstr "مدير ملحقات «بيثون»"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:131
 #, kde-format
@@ -57079,7 +57079,7 @@ msgstr ""
 #| msgid "Python Plugin Manager"
 msgctxt "action"
 msgid "Python Plugin Importer"
-msgstr "مدير ملحقات «پيثون»"
+msgstr "مدير ملحقات «بيثون»"
 
 #. i18n: context: text @ Action (plugin_importer_file), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:8

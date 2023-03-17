@@ -45,7 +45,7 @@ namespace
 {
 using ResourceKey = QPair<QString, QString>;
 using ThumbnailCacheT = QMap<ImageScalingParameters, QImage>;
-}
+} // namespace
 
 struct KisResourceThumbnailCache::Private {
     QMap<ResourceKey, ThumbnailCacheT> scaledThumbnailCache;
@@ -63,13 +63,20 @@ struct KisResourceThumbnailCache::Private {
 QImage KisResourceThumbnailCache::Private::getExactMatch(const ResourceKey &key,
                                                          ImageScalingParameters param) const
 {
-    if (scaledThumbnailCache.contains(key) && scaledThumbnailCache[key].contains(param)) {
-        return scaledThumbnailCache[key][param];
-    } else if (originalImageCache.contains(key) && originalImageCache[key].size() == param.size) {
-        return originalImageCache[key];
-    } else {
-        return QImage();
+    const auto thumbnailEntries = scaledThumbnailCache.find(key);
+    if (thumbnailEntries != scaledThumbnailCache.end()) {
+        const auto scaledThumbnail = thumbnailEntries->find(param);
+        if (scaledThumbnail != thumbnailEntries->end()) {
+            return *scaledThumbnail;
+        }
     }
+
+    const auto originalImage = originalImageCache.find(key);
+    if (originalImage != originalImageCache.end() && originalImage->size() == param.size) {
+        return *originalImage;
+    }
+
+    return QImage();
 }
 
 QImage KisResourceThumbnailCache::Private::getOriginal(const ResourceKey &key) const

@@ -1376,6 +1376,7 @@ void KisToolTransform::setTranslateY(double translation)
         m_currentArgs.setTransformedCenter(QPointF(translateX(), translation));
         currentStrategy()->externalConfigChanged();
         updateOptionWidget();
+        outlineChanged();
     }
 }
 
@@ -1387,6 +1388,7 @@ void KisToolTransform::setTranslateX(double translation)
         m_currentArgs.setTransformedCenter(QPointF(translation, translateY()));
         currentStrategy()->externalConfigChanged();
         updateOptionWidget();
+        outlineChanged();
     }
 }
 

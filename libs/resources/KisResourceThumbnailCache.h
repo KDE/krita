@@ -30,15 +30,16 @@ public:
 private:
     friend class KisResourceQueryMapper;
     friend class KisResourceLocator;
+    friend class KisStorageModel;
 
     /*
      * Check if we have the original image in the cache.
      */
     QImage originalImage(const QString &storageLocation, const QString &resourceType, const QString &filename) const;
     void insert(const QString &storageLocation,
-                             const QString &resourceType,
-                             const QString &filename,
-                             const QImage &image);
+                const QString &resourceType,
+                const QString &filename,
+                const QImage &image);
     void insert(const QPair<QString, QString> &key, const QImage &image);
 
     void remove(const QString &storageLocation, const QString &resourceType, const QString &filename);

@@ -11,6 +11,7 @@
 #include <KisResourceLocator.h>
 #include <KoResourcePaths.h>
 #include <KisResourceModelProvider.h>
+#include <KisResourceThumbnailCache.h>
 #include <QFileInfo>
 #include <kis_assert.h>
 
@@ -85,7 +86,7 @@ QImage KisStorageModel::getThumbnailFromQuery(const QSqlQuery &query)
     const QString storageType = query.value("storage_type").toString();
     const QString storageIdAsString = query.value("id").toString();
 
-    QImage img = KisResourceLocator::instance()->thumbnailCached(storageLocation, storageType, storageIdAsString);
+    QImage img = KisResourceThumbnailCache::instance()->originalImage(storageLocation, storageType, storageIdAsString);
     if (!img.isNull()) {
         return img;
     } else {
@@ -118,7 +119,7 @@ QImage KisStorageModel::getThumbnailFromQuery(const QSqlQuery &query)
         QBuffer buf(&ba);
         buf.open(QBuffer::ReadOnly);
         img.load(&buf, "PNG");
-        KisResourceLocator::instance()->cacheThumbnail(storageLocation, storageType, storageIdAsString, img);
+        KisResourceThumbnailCache::instance()->insert(storageLocation, storageType, storageIdAsString, img);
         return img;
     }
 }

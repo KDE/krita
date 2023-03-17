@@ -120,10 +120,13 @@ QImage KisResourceThumbnailCache::originalImage(const QString &storageLocation,
 }
 
 void KisResourceThumbnailCache::insert(const QString &storageLocation,
-                                                    const QString &resourceType,
-                                                    const QString &filename,
-                                                    const QImage &image)
+                                       const QString &resourceType,
+                                       const QString &filename,
+                                       const QImage &image)
 {
+    if (image.isNull()) {
+        return;
+    }
     insert(m_d->key(storageLocation, resourceType, filename), image);
 }
 
@@ -183,7 +186,7 @@ QImage KisResourceThumbnailCache::getImage(const QModelIndex &index,
         KIS_ASSERT(m_d->containsOriginal(key));
     }
     // if the size that the has been demanded, we will then cache the size and then pass it.
-    if (param.size.isValid()) {
+    if (!result.isNull() && param.size.isValid()) {
         const QImage scaledImage = result.scaled(param.size, param.aspectRatioMode, param.transformationMode);
         if (m_d->scaledThumbnailCache.contains(key)) {
             m_d->scaledThumbnailCache[key].insert(param, scaledImage);

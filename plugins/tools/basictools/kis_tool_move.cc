@@ -119,7 +119,9 @@ void KisToolMove::resetCursorStyle()
                 !selection->selectedRect().isEmpty() &&
                 !selection->selectedExactRect().isEmpty();
 
-        if (!canUseSelectionMode) {
+        if (canUseSelectionMode) {
+            canMove = (m_currentMode == MoveSelectedLayer ? paintLayer->isEditable() : true);
+        } else {
             KisNodeSelectionRecipe nodeSelection =
                     KisNodeSelectionRecipe(
                         this->selectedNodes(),
@@ -179,6 +181,13 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
     }
 
     if (m_strokeId) return true;
+
+
+    if (canUseSelectionMode && !nodeEditable()) {
+        // if there is a selection, it would only use the current layer anyway
+        // if the current layer is not editable, don't continue
+        return false;
+    }
 
     KisNodeList nodes;
 

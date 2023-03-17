@@ -361,7 +361,7 @@ void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfigurationSP con
 
 void KisHSVConfigWidget::configureSliderLimitsAndLabels()
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_page->cmbType->currentIndex() < 0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_page->cmbType->currentIndex() >= 0);
 
     const std::array<SLIDER_TYPE, 3> sliderSet = SLIDER_SETS[m_page->cmbType->currentIndex()];
     const bool colorize = m_page->chkColorize->isChecked();

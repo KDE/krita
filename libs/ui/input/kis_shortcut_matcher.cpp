@@ -936,6 +936,7 @@ bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
         if (m_d->readyShortcut) {
             DEBUG_SHORTCUT("Deactivating readyShortcut action for touch shortcut", m_d->readyShortcut);
             m_d->readyShortcut->action()->deactivate(m_d->readyShortcut->shortcutIndex());
+            m_d->readyShortcut = nullptr;
         }
 
         m_d->touchShortcut = goodCandidate;

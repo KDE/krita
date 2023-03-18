@@ -257,6 +257,8 @@ add_feature_info("Enable updaters" ENABLE_UPDATERS "Enable updaters/update notif
 option(KRITA_ENABLE_PCH "Enable precompiled headers support" ON)
 add_feature_info("Precompiled Headers" KRITA_ENABLE_PCH "precompiled headers make build process faster on some systems")
 
+option(DISABLE_PO_INSTALLATION "Disable installation of po files" OFF)
+
 set(ADDRESS_SANITIZER_ENABLED FALSE)
 if (ECM_ENABLE_SANITIZERS MATCHES address)
     set(ADDRESS_SANITIZER_ENABLED TRUE)
@@ -1153,7 +1155,9 @@ set_package_properties(libunibreak PROPERTIES
 
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
     find_package(KF5I18n CONFIG REQUIRED)
-    ki18n_install(po)
+    if (NOT DISABLE_PO_INSTALLATION)
+        ki18n_install(po)
+    endif()
 endif()
 
 ##

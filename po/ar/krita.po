@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-17 00:55+0000\n"
+"POT-Creation-Date: 2023-03-18 00:56+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -17270,7 +17270,7 @@ msgstr "المقاس"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1348
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1351
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1415
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1314
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1447
 #: libs/ui/forms/wdgdisplaysettings.ui:336
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -17314,7 +17314,7 @@ msgstr "المقاس"
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:165
 #: plugins/paintops/hatching/KisHatchingOptionsWidget.cpp:27
 #: plugins/paintops/libpaintop/kis_auto_brush_widget.cpp:63
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:172
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:176
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:42
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:44
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:59
@@ -17556,9 +17556,8 @@ msgctxt "Auto-generated layer style name for embedded styles (style itself)"
 msgid "<%1> (embedded)"
 msgstr "<%1> (مضمّنة)"
 
-#. i18n: ectx: property (text), widget (QPushButton, m_resourceFolderResetButton)
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/forms/wdggeneralsettings.ui:1492
+#: libs/ui/dialogs/kis_dlg_preferences.cc:475
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -17891,7 +17890,7 @@ msgstr ""
 
 #: libs/image/kis_layer_properties_icons.cpp:27
 #: libs/resources/KisResourceModel.cpp:142
-#: libs/resources/KisStorageModel.cpp:483
+#: libs/resources/KisStorageModel.cpp:484
 #: libs/resources/KisTagResourceModel.cpp:644
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:110
 #, kde-format
@@ -20121,7 +20120,7 @@ msgstr "يحمّل حزم الموارد..."
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:714
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
-#: libs/ui/dialogs/kis_dlg_preferences.cc:770
+#: libs/ui/dialogs/kis_dlg_preferences.cc:903
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
@@ -20200,33 +20199,33 @@ msgstr "تعذر إنشاء الملف للحفظ"
 msgid "2. The resource location at %1 is not writable."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:817
+#: libs/resources/KisResourceLocator.cpp:799
 #, fuzzy, kde-format
 #| msgid "Could not load \"id\" of the transform mask"
 msgid "Could not add %1 to the database"
 msgstr "تعذّر تحميل ”id“ لقناع التّحويل"
 
-#: libs/resources/KisResourceLocator.cpp:861
-#: libs/resources/KisResourceLocator.cpp:1208
+#: libs/resources/KisResourceLocator.cpp:843
+#: libs/resources/KisResourceLocator.cpp:1190
 #, fuzzy, kde-format
 #| msgid "Couldn't remove bundle from blacklist"
 msgid "Could not remove storage %1 from the database"
 msgstr "تعذّرت إزالة الحزمة من القائمة السّوداء"
 
-#: libs/resources/KisResourceLocator.cpp:973
+#: libs/resources/KisResourceLocator.cpp:955
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:980
+#: libs/resources/KisResourceLocator.cpp:962
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "3. Could not create the resource location at %1."
 msgstr "تعذر إنشاء الملف للحفظ"
 
-#: libs/resources/KisResourceLocator.cpp:993
-#: libs/resources/KisResourceLocator.cpp:1009
+#: libs/resources/KisResourceLocator.cpp:975
+#: libs/resources/KisResourceLocator.cpp:991
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save %1\n"
@@ -20236,34 +20235,34 @@ msgstr ""
 "تعذر حفظ %1\n"
 "السبب: %2"
 
-#: libs/resources/KisResourceLocator.cpp:1005
+#: libs/resources/KisResourceLocator.cpp:987
 #, fuzzy, kde-format
 #| msgid "Could not install the resources for bundle %1."
 msgid "Installing the resources from bundle %1."
 msgstr "تعذّر تثبيت موارد الحزمة %1."
 
-#: libs/resources/KisResourceLocator.cpp:1027
+#: libs/resources/KisResourceLocator.cpp:1009
 #, fuzzy, kde-format
 #| msgid "Manage Resources..."
 msgid "Initializing the resources."
 msgstr "أدر الموارد..."
 
-#: libs/resources/KisResourceLocator.cpp:1061
+#: libs/resources/KisResourceLocator.cpp:1043
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Import resource"
 msgid "Temporary Resources"
 msgstr "استورد موردًا"
 
-#: libs/resources/KisResourceLocator.cpp:1184
-#: libs/resources/KisResourceLocator.cpp:1190
+#: libs/resources/KisResourceLocator.cpp:1166
+#: libs/resources/KisResourceLocator.cpp:1172
 #, fuzzy, kde-format
 #| msgid "Krita could not create a new image."
 msgid "Could not synchronize %1 with the database"
 msgstr "تعذّر على «كريتا» إنشاء صورة جديدة."
 
 #: libs/resources/KisResourceModel.cpp:124
-#: libs/resources/KisStorageModel.cpp:473
+#: libs/resources/KisStorageModel.cpp:474
 #: libs/resources/KisTagResourceModel.cpp:626
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:81
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:103
@@ -20280,7 +20279,7 @@ msgid "Storage ID"
 msgstr ""
 
 #: libs/resources/KisResourceModel.cpp:128
-#: libs/resources/KisStorageModel.cpp:487
+#: libs/resources/KisStorageModel.cpp:488
 #: libs/resources/KisTagResourceModel.cpp:630
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:107
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
@@ -20324,9 +20323,9 @@ msgid "Status"
 msgstr "الحالة"
 
 #: libs/resources/KisResourceModel.cpp:138
-#: libs/resources/KisStorageModel.cpp:477
+#: libs/resources/KisStorageModel.cpp:478
 #: libs/resources/KisTagResourceModel.cpp:640
-#: libs/resourcewidgets/KisIconToolTip.cpp:104
+#: libs/resourcewidgets/KisIconToolTip.cpp:113
 #, kde-format
 msgid "Location"
 msgstr "المكان"
@@ -20357,7 +20356,7 @@ msgstr "تدقيق MD5"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:148
 #: libs/resources/KisTagResourceModel.cpp:650
-#: libs/resourcewidgets/KisIconToolTip.cpp:95
+#: libs/resourcewidgets/KisIconToolTip.cpp:104
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
 #, kde-format
 msgid "Tags"
@@ -20393,8 +20392,8 @@ msgstr "البيانات الوصفيّة"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1646
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1650
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1779
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1783
 #: libs/ui/forms/wdgdisplaysettings.ui:165 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:326
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -20529,7 +20528,7 @@ msgctxt "resource type"
 msgid "Layer Styles"
 msgstr "أنماط الطّبقة"
 
-#: libs/resources/KisStorageModel.cpp:475
+#: libs/resources/KisStorageModel.cpp:476
 #: libs/widgets/KoConfigAuthorPage.cpp:90
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:104
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:97
@@ -20539,13 +20538,13 @@ msgstr "أنماط الطّبقة"
 msgid "Type"
 msgstr "النّوع"
 
-#: libs/resources/KisStorageModel.cpp:479
+#: libs/resources/KisStorageModel.cpp:480
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:87
 #, kde-format
 msgid "Creation Date"
 msgstr "تاريخ الإنشاء"
 
-#: libs/resources/KisStorageModel.cpp:481
+#: libs/resources/KisStorageModel.cpp:482
 #, fuzzy, kde-format
 #| msgid "Parallel"
 msgid "Preinstalled"
@@ -20553,7 +20552,7 @@ msgstr "متوازٍ"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, iconPanel)
-#: libs/resources/KisStorageModel.cpp:485
+#: libs/resources/KisStorageModel.cpp:486
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:111
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:185
@@ -20644,7 +20643,7 @@ msgstr "نوع المصدر"
 msgid "Tag File Name"
 msgstr "اسم الملفّ"
 
-#: libs/resourcewidgets/KisIconToolTip.cpp:101
+#: libs/resourcewidgets/KisIconToolTip.cpp:110
 #, fuzzy, kde-format
 #| msgid "Open Resource Folder"
 msgctxt "a placeholder name for the default storage of resources"
@@ -20672,7 +20671,7 @@ msgstr "احذف المورد"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:333
 #: libs/ui/KisMainWindow.cpp:2565
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:400
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Add"
@@ -22162,8 +22161,8 @@ msgstr "اعرض:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:38
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1942
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1944
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2075
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2077
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -22265,8 +22264,8 @@ msgstr "تصيير الحركة"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1912
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1914
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2045
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2047
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -23450,10 +23449,10 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1422
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1425
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1229
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1233
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1237
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1319
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1362
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1366
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1370
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:45
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:52
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:123
@@ -23507,17 +23506,17 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "كرّر الطّبقة أو القناع"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:200
+#: libs/ui/dialogs/kis_dlg_preferences.cc:222
 #, kde-format
 msgid "No Cursor"
 msgstr "لا مؤشّر"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:201
+#: libs/ui/dialogs/kis_dlg_preferences.cc:223
 #, kde-format
 msgid "Tool Icon"
 msgstr "أيقونة الأداء"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:202
+#: libs/ui/dialogs/kis_dlg_preferences.cc:224
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -23526,57 +23525,57 @@ msgstr "أيقونة الأداء"
 msgid "Arrow"
 msgstr "سهم"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:203
+#: libs/ui/dialogs/kis_dlg_preferences.cc:225
 #, kde-format
 msgid "Small Circle"
 msgstr "دائرة صغيرة"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:204
+#: libs/ui/dialogs/kis_dlg_preferences.cc:226
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:205
+#: libs/ui/dialogs/kis_dlg_preferences.cc:227
 #, kde-format
 msgid "Triangle Righthanded"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:206
+#: libs/ui/dialogs/kis_dlg_preferences.cc:228
 #, kde-format
 msgid "Triangle Lefthanded"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:207
+#: libs/ui/dialogs/kis_dlg_preferences.cc:229
 #, kde-format
 msgid "Black Pixel"
 msgstr "بكسل أسود"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:208
+#: libs/ui/dialogs/kis_dlg_preferences.cc:230
 #, kde-format
 msgid "White Pixel"
 msgstr "بكسل أبيض"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:233
 #, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "بلا مخطط تفصيلي"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:212
+#: libs/ui/dialogs/kis_dlg_preferences.cc:234
 #, fuzzy, kde-format
 #| msgid "Circle Bullet"
 msgid "Circle Outline"
 msgstr "نقطة دائريّة"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:213
+#: libs/ui/dialogs/kis_dlg_preferences.cc:235
 #, fuzzy, kde-format
 #| msgid "&Preview"
 msgid "Preview Outline"
 msgstr "&عاين"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:214
+#: libs/ui/dialogs/kis_dlg_preferences.cc:236
 #, fuzzy, kde-format
 #| msgid "Timeline"
 msgid "Tilt Outline"
@@ -23584,46 +23583,75 @@ msgstr "الخطّ الزّمنيّ"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:238
+#: libs/ui/dialogs/kis_dlg_preferences.cc:260
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
 msgid "Eraser"
 msgstr "ممحاة"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:314
+#: libs/ui/dialogs/kis_dlg_preferences.cc:336
 #, kde-format
 msgid "On Touch Drag"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:315
+#: libs/ui/dialogs/kis_dlg_preferences.cc:337
 #, kde-format
 msgid "On Click Drag"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:316
+#: libs/ui/dialogs/kis_dlg_preferences.cc:338
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:353
+#: libs/ui/dialogs/kis_dlg_preferences.cc:375
 #, kde-format
 msgid "Open default window"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:354
+#: libs/ui/dialogs/kis_dlg_preferences.cc:376
 #, fuzzy, kde-format
 #| msgid "Go to previous page"
 msgid "Load previous session"
 msgstr "انتقل إلى الصّفحة السّابقة"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:355
+#: libs/ui/dialogs/kis_dlg_preferences.cc:377
 #, fuzzy, kde-format
 #| msgid "Show in Timeline"
 msgid "Show session manager"
 msgstr "اعرض في الخطّ الزّمنيّ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:450
+#: libs/ui/dialogs/kis_dlg_preferences.cc:440
+#, fuzzy, kde-format
+#| msgid "Note: Krita will need to be restarted for changes to take effect"
+msgid "You will need to Restart Krita for the changes to take an effect."
+msgstr "لاحظ أنّه عليك إعادة تشغيل «كريتا» لتأخذ التّغييرات مفعولها"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:446
+#, kde-format
+msgid ""
+"Saving at a Location picked from the File Picker may slow down the startup!"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:478
+#, fuzzy, kde-format
+#| msgid "Internal error"
+msgid "Internal Storage"
+msgstr "خطأ داخليّ"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:480
+#, kde-format
+msgid "SD-Card"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:518
+#, fuzzy, kde-format
+#| msgid "User Manual"
+msgid "Choose Manually"
+msgstr "دليل المستخدم"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:583
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -23638,26 +23666,26 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:758
+#: libs/ui/dialogs/kis_dlg_preferences.cc:891
 #, kde-format
 msgid "Select a Background Image"
 msgstr "اختر صورة خلفية"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:770
+#: libs/ui/dialogs/kis_dlg_preferences.cc:903
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 ليست صورة صالحة!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:790
+#: libs/ui/dialogs/kis_dlg_preferences.cc:923
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:893
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1002
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1084
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1026
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1135
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1217
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -23665,33 +23693,33 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "الشّاشة %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:961
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1094
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, fuzzy, kde-format
 msgid "Install Color Profiles"
 msgstr "تثبيت لاحات ألوان"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1173
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1306
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1175
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1308
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr ""
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1283
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1416
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr " غ.بايت"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1304
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1437
 #, fuzzy, kde-format
 #| msgid "%1 second"
 #| msgid_plural "%1 seconds"
@@ -23699,30 +23727,30 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " ث"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1308
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1441
 #, kde-format
 msgid " fps"
 msgstr "  إطار/ثا"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1518
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1651
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "أوبن‌جي‌إل"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1519
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1652
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1521
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1654
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1523
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1656
 #, fuzzy, kde-format
 #| msgctxt "canvas renderer"
 #| msgid "OpenGL"
@@ -23730,161 +23758,161 @@ msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "أوبن‌جي‌إل"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1530
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1663
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "غير معروف"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1550
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1683
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "آليّ (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1632
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1765
 #, fuzzy, kde-format
 #| msgid "Display:"
 msgid "Display Id: %1"
 msgstr "اعرض:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1633
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1766
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "اسم العرض: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1634
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1767
 #, fuzzy, kde-format
 #| msgid "Distance:"
 msgid "Min Luminance: %1"
 msgstr "المسافة:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1635
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1768
 #, fuzzy, kde-format
 #| msgid "Distance:"
 msgid "Max Luminance: %1"
 msgstr "المسافة:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1636
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1769
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1637
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1770
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1638
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1771
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1639
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1772
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1640
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1773
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "النّقطة البيضاء: %1، %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1674
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1807
 #, fuzzy, kde-format
 msgid "Warning(s):"
 msgstr "التّحذيرات:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1820
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1953
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1905
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2038
 #, kde-format
 msgid "Configure Krita"
 msgstr "اضبط كريتا"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1922
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "اختصارات لوحة المفاتيح"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1924
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2057
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "الاختصارات"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1934
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2067
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "إعدادات دخل رقعة الرسم"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1935
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2068
 #, kde-format
 msgid "Canvas Input"
 msgstr "دخل رقعة الرسم"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1952
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2085
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #, kde-format
 msgid "Color Management"
 msgstr "إدارة الألوان"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1954
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2087
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "اللون"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1962
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1964
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2095
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2097
 #, kde-format
 msgid "Performance"
 msgstr "الأداء"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1972
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2105
 #, kde-format
 msgid "Tablet settings"
 msgstr "إعدادات اللوحي"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1974
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2107
 #, kde-format
 msgid "Tablet"
 msgstr "اللوحي"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1982
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2115
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "إعدادات ”رقعة الرّسم فقط“"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1984
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2117
 #, kde-format
 msgid "Canvas-only"
 msgstr "رقعة الرسم فقط"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1992
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1994
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2125
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2127
 #, fuzzy, kde-format
 #| msgid "Save palette"
 msgid "Pop-up Palette"
 msgstr "احفظ اللوحة"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2002
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2135
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "المؤلف"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2004
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2137
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "المؤلف"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2011
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2144
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -26293,14 +26321,14 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#: libs/ui/forms/wdggeneralsettings.ui:1467
+#: libs/ui/forms/wdggeneralsettings.ui:1473
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
 #, kde-format
 msgid "Resources"
 msgstr "الموارد"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
-#: libs/ui/forms/wdggeneralsettings.ui:1473
+#: libs/ui/forms/wdggeneralsettings.ui:1479
 #, fuzzy, kde-format
 #| msgid "Open Resource Folder"
 msgid "Resource Folder:"
@@ -26887,7 +26915,7 @@ msgstr "بالطّول"
 #. i18n: ectx: property (text), widget (QPushButton, clipboardButton)
 #: libs/ui/forms/wdgnewimage.ui:320
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:94
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:317
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:321
 #, kde-format
 msgid "Clipboard"
 msgstr "الحافظة"
@@ -30147,7 +30175,7 @@ msgstr ""
 msgid "Fit Canvas to View"
 msgstr "مقاس رقعة الرّسم"
 
-#: libs/ui/kis_popup_palette.cpp:872
+#: libs/ui/kis_popup_palette.cpp:875
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Reset Foreground and Background Color"
@@ -30156,7 +30184,7 @@ msgid ""
 "Right click to set to black and white."
 msgstr "صفّر لوني المقدّمة والخلفيّة"
 
-#: libs/ui/kis_popup_palette.cpp:1010
+#: libs/ui/kis_popup_palette.cpp:1013
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -34378,7 +34406,7 @@ msgstr "اعرض المستويات:"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:44
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:160
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:169
 #, kde-format
 msgctxt "@title Which elements to display (e.g., thumbnails or details)"
 msgid "Display"
@@ -34386,7 +34414,7 @@ msgstr "العرض"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:169
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:168
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:177
 #, kde-format
 msgid "Thumbnails"
 msgstr "المصغّرات"
@@ -34394,7 +34422,7 @@ msgstr "المصغّرات"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:177
-#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:174
+#: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:183
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:228
 #, kde-format
 msgid "Details"
@@ -52958,7 +52986,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, stampButton)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:81
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:300
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:304
 #, kde-format
 msgid "Stamp"
 msgstr "الختم"
@@ -53184,19 +53212,19 @@ msgid ""
 " to Clipboard"
 msgstr "انسخ إلى الحافظة"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:222
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
 #, kde-format
 msgid ""
 "Creates a brush tip from the current image selection.\n"
 " If no selection is present the whole image will be used."
 msgstr ""
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:230
 #, kde-format
 msgid "Creates a brush tip from the image in the clipboard."
 msgstr ""
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:231
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:235
 #, kde-format
 msgid ""
 "Reloads Spacing from file\n"
@@ -53204,7 +53232,7 @@ msgid ""
 "Sets Rotation to 0.0"
 msgstr ""
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:237
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:241
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Merge points"
@@ -53212,19 +53240,19 @@ msgctxt "@label:slider"
 msgid "Neutral point: "
 msgstr "دمج النّقاط"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:245
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:249
 #, kde-format
 msgctxt "@label:slider"
 msgid "Brightness: "
 msgstr "السّطوع:"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:252
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:256
 #, kde-format
 msgctxt "@label:slider"
 msgid "Contrast: "
 msgstr "التّباين:"
 
-#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:255
+#: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:259
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -58109,13 +58137,13 @@ msgstr ""
 msgid "Measure Tool"
 msgstr "أداة القياس"
 
-#: plugins/tools/basictools/kis_tool_move.cc:284
+#: plugins/tools/basictools/kis_tool_move.cc:293
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "X: %1 px, Y: %2 px"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_move.cc:332
+#: plugins/tools/basictools/kis_tool_move.cc:341
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
@@ -65661,9 +65689,6 @@ msgstr "الصّور المرجع"
 
 #~ msgid "Invalid file format"
 #~ msgstr "نسق الملفّ غير صالح"
-
-#~ msgid "Internal error"
-#~ msgstr "خطأ داخليّ"
 
 #~ msgid "Cancelled by user"
 #~ msgstr "ألغاه المستخدم"

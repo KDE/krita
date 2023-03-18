@@ -921,8 +921,8 @@ bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
     if (m_d->actionsSuppressed())
         return false;
 
-    if( goodCandidate ) {
-        if( m_d->runningShortcut ) {
+    if (goodCandidate) {
+        if (m_d->runningShortcut) {
             QTouchEvent touchEvent(QEvent::TouchEnd,
                                    event->device(),
                                    event->modifiers(),
@@ -931,11 +931,19 @@ bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
             tryEndRunningShortcut(Qt::LeftButton, &touchEvent);
         }
 
+        // Because we don't match keyboard or button based actions with touch system, we have to ensure that we first
+        // deactivate an activated readyShortcut, to not throw other statemachines out of place.
+        if (m_d->readyShortcut) {
+            DEBUG_SHORTCUT("Deactivating readyShortcut action for touch shortcut", m_d->readyShortcut);
+            m_d->readyShortcut->action()->deactivate(m_d->readyShortcut->shortcutIndex());
+        }
+
         m_d->touchShortcut = goodCandidate;
         m_d->usingTouch = true;
 
         Private::RecursionGuard guard(this);
         DEBUG_SHORTCUT("Running a touch shortcut", goodCandidate)
+
         goodCandidate->action()->activate(goodCandidate->shortcutIndex());
         goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
 

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-18 00:56+0000\n"
-"PO-Revision-Date: 2023-03-14 14:50+0300\n"
+"PO-Revision-Date: 2023-03-18 12:56+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22779,35 +22779,32 @@ msgid "Show session manager"
 msgstr "Oturum yöneticisini göster"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:440
-#, fuzzy, kde-format
-#| msgid "Note: Krita will need to be restarted for changes to take effect"
+#, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr ""
-"Not: Değişikliklerin etkili olabilmesi için Krita'nın yeniden başlatılması "
-"gerekecek"
+"Değişikliklerin etkili olması için Krita'yı yeniden başlatmanız gerekecek."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:446
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
+"Dosya Seçici'den seçilmiş bir konuma kaydetmek başlangıcı yavaşlatabilir!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:478
-#, fuzzy, kde-format
-#| msgid "Internal Pool:"
+#, kde-format
 msgid "Internal Storage"
-msgstr "İç Havuz:"
+msgstr "İç Depolama"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:480
 #, kde-format
 msgid "SD-Card"
-msgstr ""
+msgstr "SD Kart"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:518
-#, fuzzy, kde-format
-#| msgid "User Manual"
+#, kde-format
 msgid "Choose Manually"
-msgstr "Kullanıcı Kılavuzu"
+msgstr "Elle Seç"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:583
 #, kde-format

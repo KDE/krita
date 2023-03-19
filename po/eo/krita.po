@@ -42,7 +42,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-18 00:56+0000\n"
-"PO-Revision-Date: 2023-03-12 22:53+0100\n"
+"PO-Revision-Date: 2023-03-18 17:41+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -13052,7 +13052,7 @@ msgstr "Importi animaciajn kadrojn..."
 #, kde-format
 msgctxt "action"
 msgid "Import animation frames"
-msgstr "Importi kuraĝigajn kadrojn"
+msgstr "Importi animaciajn kadrojn"
 
 #. i18n: context: text @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:129
@@ -13069,7 +13069,7 @@ msgstr "Importi videoan animacion..."
 #, kde-format
 msgctxt "action"
 msgid "Import video animation"
-msgstr "Importi videoan kuraĝigon"
+msgstr "Importi videoan animacion"
 
 #. i18n: context: text @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:141
@@ -19618,7 +19618,7 @@ msgstr "Granda Bildeton"
 #: libs/resources/KisTagResourceModel.cpp:654
 #, kde-format
 msgid "Dirty"
-msgstr ""
+msgstr "Malpura"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
@@ -19829,7 +19829,7 @@ msgstr "Ĉiuj Senetikedaj Rimedoj"
 #: libs/resources/KisTagResourceModel.cpp:664
 #, kde-format
 msgid "Tag ID"
-msgstr ""
+msgstr "Etiked-ID"
 
 #: libs/resources/KisTagResourceModel.cpp:666
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
@@ -20395,7 +20395,7 @@ msgstr "N/A"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:390
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
-msgstr ""
+msgstr "Ne donis validan FFmpeg-binarprogramon..."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:445
 #, kde-format
@@ -20408,6 +20408,8 @@ msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
+"La FFmpeg, kiun vi donis, ŝajnas esti kunpremita. Bonvolu unue provu "
+"ekstrakti FFmpeg de la arkivo."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
 #, kde-format
@@ -22798,10 +22800,9 @@ msgid "Show session manager"
 msgstr "Montri seancan administranton"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:440
-#, fuzzy, kde-format
-#| msgid "Note: Krita will need to be restarted for changes to take effect"
+#, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
-msgstr "Noto: Krita devos esti rekomencita por ke ŝanĝoj efektiviĝu"
+msgstr "Noto: Vi devos restarti Krita por ke la ŝanĝoj efektiviĝu."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:446
 #, kde-format
@@ -22810,21 +22811,19 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:478
-#, fuzzy, kde-format
-#| msgid "Internal Pool:"
+#, kde-format
 msgid "Internal Storage"
-msgstr "Interna Naĝejo:"
+msgstr "Interna Konservejo:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:480
 #, kde-format
 msgid "SD-Card"
-msgstr ""
+msgstr "SD-Karto"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:518
-#, fuzzy, kde-format
-#| msgid "User Manual"
+#, kde-format
 msgid "Choose Manually"
-msgstr "Uzanto Manlibro"
+msgstr "Elekti Permane"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:583
 #, kde-format
@@ -25197,7 +25196,7 @@ msgstr "Tondi dosierojn antaŭ konservi"
 #: libs/ui/forms/wdggeneralsettings.ui:999
 #, kde-format
 msgid "Trim frames when importing animations"
-msgstr "Tondi kadrojn dum importado de kuraĝigoj"
+msgstr "Tondi kadrojn dum importado de animacioj"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1023
@@ -26450,7 +26449,7 @@ msgstr "MiB"
 #: libs/ui/forms/wdgperformancesettings.ui:119
 #, kde-format
 msgid "Internal Pool:"
-msgstr "Interna Naĝejo:"
+msgstr "Interna Konservejo:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_4)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, sliderUndoLimit)
@@ -27650,7 +27649,7 @@ msgstr "Ago"
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:271
 #, kde-format
 msgid "A conflict exists between two or more shortcuts."
-msgstr ""
+msgstr "Estas konflikto inter du aŭ pli ŝparvojoj."
 
 #. i18n: ectx: property (text), widget (QPushButton, editProfilesButton)
 #: libs/ui/input/config/kis_edit_profiles_dialog.cpp:54
@@ -27724,7 +27723,7 @@ msgstr "Administri kanvasajn enigajn profilojn"
 #: libs/ui/input/config/kis_input_configuration_page_item.ui:111
 #, kde-format
 msgid "Conflict found for a Shortcut in this Action."
-msgstr ""
+msgstr "Trovis konflikton por Ŝparvojo in ĉi Ago."
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:52
 #, kde-format
@@ -28156,8 +28155,8 @@ msgctxt ""
 "number of buttons in that list."
 msgid "%1 Button"
 msgid_plural "%1 Buttons"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 Butono"
+msgstr[1] "%1 Butonoj"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:370
 #, kde-format
@@ -28569,7 +28568,7 @@ msgstr "Ne demandi denove (premu Shift por demandi denove)"
 #: libs/ui/kis_animation_importer.cpp:65
 msgctxt "(qtundo-format)"
 msgid "Import animation"
-msgstr "Importi kuraĝigon"
+msgstr "Importi animacion"
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -28842,8 +28841,8 @@ msgstr ""
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
 msgid_plural "Layers are locked"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Tavolo estas ŝlosita"
+msgstr[1] "Tavoloj estas ŝlositaj"
 
 #: libs/ui/kis_layer_manager.cc:858
 #, kde-format
@@ -31040,36 +31039,36 @@ msgstr "Uzi ';' (Ekzemplo: Oficejo;KDE;Calligra)"
 #, kde-format
 msgid "%1 week"
 msgid_plural "%1 weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 semajno"
+msgstr[1] "%1 semajnoj"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:297 libs/ui/KoDocumentInfoDlg.cpp:299
 #, kde-format
 msgid "%1 day"
 msgid_plural "%1 days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 tago"
+msgstr[1] "%1 tagoj"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:300 libs/ui/KoDocumentInfoDlg.cpp:302
 #, kde-format
 msgid "%1 hour"
 msgid_plural "%1 hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 horo"
+msgstr[1] "%1 horo%1 horoj"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:303 libs/ui/KoDocumentInfoDlg.cpp:305
 #, kde-format
 msgid "%1 minute"
 msgid_plural "%1 minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 minuto"
+msgstr[1] "%1 minutoj"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:306 libs/ui/KoDocumentInfoDlg.cpp:308
 #, kde-format
 msgid "%1 second"
 msgid_plural "%1 seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 sekundo"
+msgstr[1] "%1 sekundoj"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:314
 #, kde-format
@@ -36036,8 +36035,8 @@ msgstr "%1"
 msgctxt "%1 is the number of conflicts"
 msgid "Shortcut Conflict"
 msgid_plural "Shortcut Conflicts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Konflikto de Ŝparvojo"
+msgstr[1] "Konfliktoj de Ŝparvojoj"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:171
 #, kde-format
@@ -37570,14 +37569,14 @@ msgstr "Meti interpolan reĝimon"
 msgctxt "(qtundo-format)"
 msgid "Adjust Keyframe"
 msgid_plural "Adjust %1 Keyframes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Alĝustigi Ŝlosilkadron"
+msgstr[1] "Alĝustigi %1 Ŝlosilkadrojn"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:51
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:238
 #, kde-format
 msgid "Animation Timeline"
-msgstr "Kuraĝiga Templinio"
+msgstr "Animacia Templinio"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
 #, kde-format
@@ -37619,8 +37618,8 @@ msgstr "Forigitaj kadroj ne haveblas en ĉi tiu Krita-instanco"
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Aldoni blankan kadron"
+msgstr[1] "Aldoni %1 blankajn kadrojn"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:928
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:976
@@ -37628,8 +37627,8 @@ msgstr[1] ""
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
 msgid_plural "Insert %1 frames"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Enmeti kadron"
+msgstr[1] "Enmeti %1 kadrojn"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:195
 #, kde-format
@@ -37778,32 +37777,32 @@ msgstr "Aldoni Ŝlosilkadron"
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Forigi Ŝlosilkadron"
+msgstr[1] "Remove Ŝlosilkadrojn"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:304
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
 msgid_plural "Move %1 Keyframes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Movi Ŝlosilkadron"
+msgstr[1] "Movi %1 Ŝlosilkadrojn"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:308
 #, kde-format
 msgctxt "(qtundo-format) Copy one or several keyframes"
 msgid "Copy Keyframe"
 msgid_plural "Copy %1 Keyframes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kopii Ŝlosilkadron"
+msgstr[1] "Kopii %1 Ŝlosilkadrojn"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:381
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Clone Keyframe"
 msgid_plural "Clone %1 Keyframes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kloni Ŝlosilkadron"
+msgstr[1] "Kloni %1 Ŝlosilkadrojn"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:412
 msgctxt "(qtundo-format)"
@@ -37863,8 +37862,8 @@ msgstr "Sekvaj kadroj"
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
 msgid_plural "Remove %1 frames and shift"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Forigi kadron kaj ŝovi"
+msgstr[1] "Remove %1 kadrojn kaj ŝovi"
 
 #: plugins/dockers/animation/KisTimeBasedItemModel.cpp:431
 msgctxt "(qtundo-format)"
@@ -40232,7 +40231,7 @@ msgstr "Dinamika"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
 #, kde-format
 msgid "Dynamic + Static Edge"
-msgstr ""
+msgstr "Dinamika + Statika Eĝo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpQuickSettingsMenu)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
@@ -40565,7 +40564,7 @@ msgstr "Pliigi koloran saturecon"
 #, kde-format
 msgctxt "action"
 msgid "Increase saturation of the selected color"
-msgstr ""
+msgstr "Pliigi saturecon de la elektita koloro"
 
 #. i18n: context: text @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
@@ -40583,7 +40582,7 @@ msgstr "Malpliigi koloran saturecon"
 #, kde-format
 msgctxt "action"
 msgid "Decrease saturation of the selected color"
-msgstr ""
+msgstr "Malpliigi saturecon de la elektita koloro"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
@@ -41123,7 +41122,7 @@ msgstr "Krita-versio:"
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
 #, kde-format
 msgid "Schema upgrades"
-msgstr ""
+msgstr "Skemaj plibonigoj"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
@@ -44640,8 +44639,8 @@ msgstr "Indeksaj Koloroj"
 msgctxt "suffix for a spinbox"
 msgid " color"
 msgid_plural " colors"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " koloro"
+msgstr[1] " koloroj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:33
@@ -45972,8 +45971,8 @@ msgctxt ""
 "generator"
 msgid "Every {n} cell horizontally"
 msgid_plural "Every {n} cells horizontally"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ĉiun {n} ĉelon horizontale"
+msgstr[1] "Ĉiujn {n} ĉelojn horizontale"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -45985,8 +45984,8 @@ msgctxt ""
 "generator"
 msgid "Every {n} cell vertically"
 msgid_plural "Every {n} cells vertically"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ĉiun {n} ĉelon vertikale"
+msgstr[1] "Ĉiujn {n} ĉelojn vertikale"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
 #, kde-format
@@ -52348,7 +52347,7 @@ msgstr " ms"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:73
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -56376,10 +56375,9 @@ msgstr "Skalo: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:531
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:443
-#, fuzzy, kde-format
-#| msgid "Encoding options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "Kodigaj opcioj"
+msgstr "Uzi proprajn opciojn de miksado"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #, kde-format
@@ -56450,21 +56448,19 @@ msgstr "Agordi la rotacion de la ŝablono"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
-msgstr ""
+msgstr "Meti proprajn miks-opciojn anstataŭ uzi tiujn de la peniko"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:613
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "Agordi la majstran opakecon por la tavolo"
+msgstr "Agordi propran opakecon por la tavolo"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:614
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "Agordi la miksreĝimon por la tavolo"
+msgstr "Agordi propran miksreĝimon por la plenigo"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
 #, kde-format

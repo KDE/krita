@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-18 00:56+0000\n"
-"PO-Revision-Date: 2023-03-14 08:32+0100\n"
+"PO-Revision-Date: 2023-03-19 09:47+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -22776,33 +22776,32 @@ msgid "Show session manager"
 msgstr "Pokaži upravitelja sej"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:440
-#, fuzzy, kde-format
-#| msgid "Note: Krita will need to be restarted for changes to take effect"
+#, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
-msgstr "Opomba: Krito je potrebno za učinkovanje sprememb ponovno zagnati"
+msgstr "Za učinkovanje sprememb je Krito potrebno ponovno zagnati."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:446
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
+"Shranjevanje na mestu, ki ste ga izbrali prek izbirnika datotek, lahko "
+"upočasni zagon!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:478
-#, fuzzy, kde-format
-#| msgid "Internal Pool:"
+#, kde-format
 msgid "Internal Storage"
-msgstr "Notranja zaloga:"
+msgstr "Notranja shramba"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:480
 #, kde-format
 msgid "SD-Card"
-msgstr ""
+msgstr "Kartica SD"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:518
-#, fuzzy, kde-format
-#| msgid "User Manual"
+#, kde-format
 msgid "Choose Manually"
-msgstr "Uporabniški priročnik"
+msgstr "Izberite ročno"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:583
 #, kde-format

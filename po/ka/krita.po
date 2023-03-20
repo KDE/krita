@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-18 00:56+0000\n"
-"PO-Revision-Date: 2023-03-14 05:07+0100\n"
+"PO-Revision-Date: 2023-03-19 05:24+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -22552,10 +22552,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:478
-#, fuzzy, kde-format
-#| msgid "Internal Pool:"
+#, kde-format
 msgid "Internal Storage"
-msgstr "შიდა პული:"
+msgstr "შიდა საცავი"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:480
 #, kde-format
@@ -22563,10 +22562,9 @@ msgid "SD-Card"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:518
-#, fuzzy, kde-format
-#| msgid "User Manual"
+#, kde-format
 msgid "Choose Manually"
-msgstr "მომხმარებლის სახელმძღვანელო"
+msgstr "აირჩიეთ ხელით"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:583
 #, kde-format
@@ -24633,7 +24631,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:807
 #, kde-format
 msgid "(needs restart)"
-msgstr ""
+msgstr "(საჭიროებს გადატვირთვას)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Tools)
 #: libs/ui/forms/wdggeneralsettings.ui:650
@@ -39630,7 +39628,7 @@ msgstr "ფაილში შენახვა"
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:84
 #, kde-format
 msgid "Unable to open file"
-msgstr ""
+msgstr "ფაილის გახსნა შეუძლებელია"
 
 #: plugins/extensions/buginfo/DlgAndroidLogcatDumper.cpp:30
 #, kde-format

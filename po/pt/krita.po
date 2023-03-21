@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-18 00:56+0000\n"
-"PO-Revision-Date: 2023-03-06 15:54+0000\n"
+"PO-Revision-Date: 2023-03-20 13:56+0000\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -332,7 +332,7 @@ msgstr ""
 "X-POFile-SpellExtra: Equalização Val Android XL lanczos AppData\n"
 "X-POFile-SpellExtra: HiDPI VarDCT preditiva Toptop Reamostragem\n"
 "X-POFile-SpellExtra: reamostragem Gaborish AC Quantização DC Photobash\n"
-"X-POFile-SpellExtra: libjpeg Buffering CICP OpenH KPL GA\n"
+"X-POFile-SpellExtra: libjpeg Buffering CICP OpenH KPL GA SD mín\n"
 "X-POFile-IgnoreConsistency: difference\n"
 "X-POFile-IgnoreConsistency: Children\n"
 "X-POFile-IgnoreConsistency: Clip\n"
@@ -23110,33 +23110,32 @@ msgid "Show session manager"
 msgstr "Mostrar o gestor de sessões"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:440
-#, fuzzy, kde-format
-#| msgid "Note: Krita will need to be restarted for changes to take effect"
+#, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
-msgstr "Nota: o Krita terá de ser reiniciado para as alterações fazerem efeito"
+msgstr "O Krita terá de ser reiniciado para as alterações fazerem efeito."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:446
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
+"A gravação numa localização escolhida no Selector de Ficheiros poderá "
+"atrasar o arranque!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:478
-#, fuzzy, kde-format
-#| msgid "Internal Pool:"
+#, kde-format
 msgid "Internal Storage"
-msgstr "Armazenamento Interno:"
+msgstr "Armazenamento Interno"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:480
 #, kde-format
 msgid "SD-Card"
-msgstr ""
+msgstr "Cartão SD"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:518
-#, fuzzy, kde-format
-#| msgid "User Manual"
+#, kde-format
 msgid "Choose Manually"
-msgstr "Manual do Utilizador"
+msgstr "Escolher Manualmente"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:583
 #, kde-format
@@ -52849,7 +52848,7 @@ msgstr " ms"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:73
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -53264,37 +53263,33 @@ msgid "repeat"
 msgstr "repetição"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
 msgstr "Básico"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
-#, fuzzy, kde-format
-#| msgid "CPU Limit:"
+#, kde-format
 msgid "Y limit: "
-msgstr "Limite de CPU:"
+msgstr "Limite em Y: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Suffix: “Every x min”"
-#| msgid " min"
+#, kde-format
 msgid "X min: "
-msgstr " min"
+msgstr "X mín.: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
 #, kde-format
 msgid "X max: "
-msgstr ""
+msgstr "X máx.: "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Random Sensor Active, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
-msgstr "Sensor Aleatório Activo; pense em desactivar a Antevisão Instantânea"
+msgstr ""
+"Sensor Aleatório Activo na opção %1; pense em desactivar a Antevisão "
+"Instantânea"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
 #, kde-format
@@ -53478,10 +53473,9 @@ msgid "Colorize"
 msgstr "Colorir"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
-#, fuzzy, kde-format
-#| msgid "Posterize"
+#, kde-format
 msgid "Posterization Levels"
-msgstr "'Poster'"
+msgstr "Níveis do Poster"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
@@ -53575,26 +53569,19 @@ msgid "Smudge Radius Log"
 msgstr "Raio Logarít. da Mistura"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "Comprimento do Fumo"
+msgstr "Multiplicador do Comprimento do Fumo"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Smudge_rake.kpp"
-#| msgid "Smudge rake"
+#, kde-format
 msgid "Smudge Bucket"
-msgstr "Ancinho do fumo"
+msgstr "Ancinho do Fumo"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#, kde-format
 msgid "Smudge Transparency"
-msgstr "Transparência"
+msgstr "Transparência do Fumo"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -53914,10 +53901,9 @@ msgid "Shape dynamics"
 msgstr "Dinâmica da forma"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Shape"
-msgstr "Forma do 'spray'"
+msgstr "Forma do 'Spray'"
 
 #: plugins/paintops/spray/spray_paintop_plugin.cpp:27
 #, kde-format
@@ -56907,10 +56893,9 @@ msgstr "Escala: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:531
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:443
-#, fuzzy, kde-format
-#| msgid "Encoding options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "Opções de codificação"
+msgstr "Usar as opções de mistura personalizadas"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #, kde-format
@@ -56982,20 +56967,19 @@ msgstr "Definir a rotação do padrão"
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
+"Definir as opções de mistura personalizadas em vez de usar as do pincel"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:613
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "Definir a opacidade-mestra da camada"
+msgstr "Definir uma opacidade personalizada no preenchimento"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:614
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "Definir o modo de mistura da camada"
+msgstr "Definir um modo de mistura personalizado no preenchimento"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
 #, kde-format
@@ -60726,103 +60710,3 @@ msgstr "Ferramenta de Ampliação"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta de Imagens de Referência"
-
-#~ msgid "Color Rate"
-#~ msgstr "Gama de Cores"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Displacement Option"
-#~ msgstr "Opção de Deslocação"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Total Random"
-#~ msgstr "Origem -> Aleatório Total"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern"
-#~ msgstr "Origem -> Padrão"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern Locked"
-#~ msgstr "Imagem -> Padrão Bloqueado"
-
-#~ msgid "0 px"
-#~ msgstr "0 pt"
-
-#~ msgid "0 s"
-#~ msgstr "0 s"
-
-#~ msgid "1000"
-#~ msgstr "1000"
-
-#~ msgid "30 px"
-#~ msgstr "30 pt"
-
-#~ msgid "3 s"
-#~ msgstr "3 s"
-
-#~ msgid "%1 s"
-#~ msgstr "%1 s"
-
-#~ msgctxt "option name"
-#~ msgid "Filter"
-#~ msgstr "Filtrar"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "\"%1\" does not support scaled preview (non-linear filter)"
-#~ msgstr "O \"%1\" não suporta a antevisão com escala (filtro não-linear)"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Luminosity value of the brush that will not change the painting color. "
-#~ "All brush pixels darker than neutral point will paint with darker color, "
-#~ "pixels lighter than neutral point — lighter."
-#~ msgstr ""
-#~ "O valor da luminosidade do pincel não irá alterar a cor da pintura. Todos "
-#~ "os pixels do pincel mais escuros que o ponto neutro irão pintar com uma "
-#~ "cor mais escura; os pixels mais claros que o ponto neutro, por seu turno, "
-#~ "ficarão mais claros."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Brightness correction for the brush"
-#~ msgstr "Correcção do brilho do pincel"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Contrast correction for the brush"
-#~ msgstr "Correcção de contraste do pincel"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush tip does not have color channels. The brush will work "
-#~ "in \"Mask\" mode."
-#~ msgstr ""
-#~ "A ponta de pincel seleccionada não tem canais de cores. O pincel irá "
-#~ "funcionar no modo de \"Máscara\"."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush engine does not support \"Color\" or \"Lightness\" "
-#~ "modes. The brush will work in \"Mask\" mode."
-#~ msgstr ""
-#~ "O motor de pincel seleccionado não suporta os modos de \"Cor\" ou "
-#~ "\"Luminosidade\". O pincel irá funcionar no modo de \"Máscara\"."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Brush average: %1\n"
-#~ "Adjusted average: %2"
-#~ msgstr ""
-#~ "Média do pincel: %1\n"
-#~ "Média ajustada: %2"
-
-#~ msgid "Mirrored"
-#~ msgstr "Espelhado"
-
-#~ msgid "Not mirrored"
-#~ msgstr "Não espelhado"
-
-#~ msgid "Align the brush preview outline to the pixel grid"
-#~ msgstr "Alinhar o contorno de antevisão do pincel à grelha de pixels"
-
-#~ msgid " s"
-#~ msgstr " s"

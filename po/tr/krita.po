@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-03-07 20:41+0300\n"
+"PO-Revision-Date: 2023-03-21 13:57+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -47274,7 +47274,7 @@ msgstr "Dosya kaydetmek için oluşturulamadı"
 #: plugins/impex/libkra/kra_converter.cpp:223
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr "'%1' yazılamadı. Disk bölümü dolu olabilir mi?"
+msgstr "'%1' yazılamadı. Bölüntü dolu olabilir mi?"
 
 #: plugins/impex/libkra/kra_converter.cpp:315
 #, kde-format
@@ -49156,14 +49156,14 @@ msgid ""
 "log2(number of token partitions) between 0 and 3. Default is 0 for easier "
 "progressive decoding."
 msgstr ""
-"log2(jeton bölümlerin sayısı) 0 ile 3 arası. Daha kolay ilerlemeci kod "
+"log2(jeton bölüntülerin sayısı) 0 ile 3 arası. Daha kolay ilerlemeci kod "
 "çözümü için öntanımlı değer 0'dır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitions)
 #: plugins/impex/webp/dlg_webp_export.ui:562
 #, kde-format
 msgid "Partitions"
-msgstr "Bölümler"
+msgstr "Bölüntüler"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPartitionLimit)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, partitionLimit)
@@ -49181,7 +49181,7 @@ msgstr ""
 #: plugins/impex/webp/dlg_webp_export.ui:582
 #, kde-format
 msgid "Partition Limit"
-msgstr "Bölüm Sınırı"
+msgstr "Bölüntü Sınırı"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: plugins/impex/webp/dlg_webp_export.ui:591

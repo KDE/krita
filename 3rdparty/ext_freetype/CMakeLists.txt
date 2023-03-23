@@ -37,6 +37,7 @@ ExternalProject_Add(
     URL_HASH SHA256=4a6ce097b75a8121facc4ba83b5b083bfec657f45b003cd5a3424f2ae6b4434d
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-patch-msvc.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/harfbuzz-clang16-fix.patch
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}

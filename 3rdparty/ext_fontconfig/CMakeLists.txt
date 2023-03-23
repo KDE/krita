@@ -8,7 +8,7 @@ ExternalProject_Add( ext_fontconfig
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-fontconfig-Do-not-create-symlinks-microsoft-23735.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-fontconfig-Enable-tool-CLI-option-handling-24553.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Add-default-fonts-path-for-Android.patch
-
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-GPerf-to-compile-with-C-17.patch
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}

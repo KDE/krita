@@ -22699,7 +22699,7 @@ msgid ""
 "when using WinTab tablet API)"
 msgstr ""
 "Utilitza les marques de temps del controlador de la tauleta per a la "
-"velocitat del pinzell (pot causar defectes severs en utilitzar la API de la "
+"velocitat del pinzell (pot causar defectes severs en utilitzar l'API de la "
 "tauleta WinTab)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1105
@@ -27100,7 +27100,7 @@ msgid ""
 "Krita should be restarted.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Alguns dispositius de tauleta no passen els clics del "
-"botó del barril via la API de la tauleta. Si teniu un dispositiu d'estos, "
+"botó del barril via l'API de la tauleta. Si teniu un dispositiu d'estos, "
 "podeu intentar activar esta solució temporal. Krita intentarà llegir els "
 "clics del botó dret i mig del flux d'esdeveniments del ratolí. Pot funcionar "
 "o no en el vostre dispositiu (depenent de la implementació del controlador "
@@ -42882,7 +42882,7 @@ msgstr "Angle:"
 #: plugins/paintops/libpaintop/sensors/SensorFadeConfiguration.ui:54
 #, kde-format
 msgid "Length:"
-msgstr "Llargària:"
+msgstr "Longitud:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxShape)
 #. i18n: ectx: property (text), item, widget (KComboBox, cbShape)
@@ -44370,7 +44370,7 @@ msgstr "Ona horitzontal"
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:199
 #, kde-format
 msgid "Wavelength:"
-msgstr "Llargària d'ona:"
+msgstr "Longitud d'ona:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_3)

@@ -99,7 +99,7 @@ public:
     void setText(const KUndo2MagicString &text);
 
     virtual int id() const;
-    virtual int timedId();
+    virtual int timedId() const;
     virtual void setTimedID(int timedID);
     virtual bool mergeWith(const KUndo2Command *other);
     virtual bool timedMergeWith(KUndo2Command *other);
@@ -109,14 +109,16 @@ public:
     int childCount() const;
     const KUndo2Command *child(int index) const;
 
-    bool hasParent();
-    virtual void setTime();
-    virtual QTime time();
-    virtual void setEndTime();
-    virtual QTime endTime();
+    bool hasParent() const;
+    void setTime();
+    virtual void setTime(const QTime &time);
+    virtual QTime time() const;
+    void setEndTime();
+    virtual void setEndTime(const QTime &time);
+    virtual QTime endTime() const;
 
-    virtual QVector<KUndo2Command*> mergeCommandsVector();
-    virtual bool isMerged();
+    virtual QVector<KUndo2Command*> mergeCommandsVector() const;
+    virtual bool isMerged() const;
     virtual void undoMergedCommands();
     virtual void redoMergedCommands();
 
@@ -234,8 +236,6 @@ private:
     double m_timeT1;
     double m_timeT2;
     int m_strokesN;
-    int m_lastMergedSetCount;
-    int m_lastMergedIndex;
 
     // also from QUndoStackPrivate
     void setIndex(int idx, bool clean);

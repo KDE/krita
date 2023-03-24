@@ -1,3 +1,5 @@
+add_subdirectory( tests )
+
 set(kritacommand_LIB_SRCS
 	kundo2stack.cpp
 	kundo2group.cpp

@@ -318,11 +318,12 @@ const KUndo2Command *KUndo2Command::child(int index) const
     return d->child_list.at(index);
 }
 
-bool KUndo2Command::hasParent()
+bool KUndo2Command::hasParent() const
 {
     return m_hasParent;
 }
-int KUndo2Command::timedId()
+
+int KUndo2Command::timedId() const
 {
     return m_timedID;
 }
@@ -333,10 +334,12 @@ void KUndo2Command::setTimedID(int value)
 
 bool KUndo2Command::timedMergeWith(KUndo2Command *other)
 {
-    if(other->timedId() == this->timedId() && other->timedId()!=-1 )
+    if(other->timedId() == this->timedId() && other->timedId()!=-1 ) {
         m_mergeCommandsVector.append(other);
-    else
+        m_timeOfCreation = other->time();
+    } else {
         return false;
+    }
     return true;
 }
 /*!
@@ -362,19 +365,31 @@ bool KUndo2Command::canAnnihilateWith(const KUndo2Command *other) const
     Q_UNUSED(other)
     return false;
 }
+
 void KUndo2Command::setTime()
 {
-    m_timeOfCreation = QTime::currentTime();
+    setTime(QTime::currentTime());
 }
-QTime KUndo2Command::time()
+
+void KUndo2Command::setTime(const QTime &time)
+{
+    m_timeOfCreation = time;
+}
+
+QTime KUndo2Command::time() const
 {
     return m_timeOfCreation;
 }
+
 void KUndo2Command::setEndTime()
 {
-    m_endOfCommand  = QTime::currentTime();
+    setEndTime(QTime::currentTime());
 }
-QTime KUndo2Command::endTime()
+void KUndo2Command::setEndTime(const QTime &time)
+{
+    m_endOfCommand  = time;
+}
+QTime KUndo2Command::endTime() const
 {
     return m_endOfCommand;
 }
@@ -406,11 +421,11 @@ void KUndo2Command::redoMergedCommands()
     }
     redo();
 }
-QVector<KUndo2Command*> KUndo2Command::mergeCommandsVector()
+QVector<KUndo2Command*> KUndo2Command::mergeCommandsVector() const
 {
     return m_mergeCommandsVector;
 }
-bool KUndo2Command::isMerged()
+bool KUndo2Command::isMerged() const
 {
     return !m_mergeCommandsVector.isEmpty();
 }
@@ -534,17 +549,7 @@ void KUndo2Action::setPrefixedText(const QString &text)
 void KUndo2QStack::setIndex(int idx, bool clean)
 {
     bool was_clean = m_index == m_clean_index;
-    if (m_lastMergedIndex <= idx) {
-        m_lastMergedSetCount = idx - m_lastMergedIndex;
 
-    } else {
-        m_lastMergedSetCount = 1;
-        m_lastMergedIndex = idx-1;
-    }
-    if(idx == 0){
-        m_lastMergedSetCount = 0;
-        m_lastMergedIndex = 0;
-    }
     if (idx != m_index) {
         m_index = idx;
         emit indexChanged(m_index);
@@ -626,7 +631,7 @@ bool KUndo2QStack::checkUndoLimit()
 */
 
 KUndo2QStack::KUndo2QStack(QObject *parent)
-    : QObject(parent), m_index(0), m_clean_index(0), m_group(0), m_undo_limit(0), m_useCumulativeUndoRedo(false), m_lastMergedSetCount(0), m_lastMergedIndex(0)
+    : QObject(parent), m_index(0), m_clean_index(0), m_group(0), m_undo_limit(0), m_useCumulativeUndoRedo(false)
 {
     setTimeT1(5);
     setTimeT2(1);
@@ -718,7 +723,10 @@ void KUndo2QStack::clear()
 void KUndo2QStack::push(KUndo2Command *cmd)
 {
     cmd->redoMergedCommands();
-    cmd->setEndTime();
+
+    if (cmd->endTime().isNull()) {
+        cmd->setEndTime();
+    }
 
     bool macro = !m_macro_stack.isEmpty();
 
@@ -748,102 +756,92 @@ void KUndo2QStack::push(KUndo2Command *cmd)
      * N : Number of commands that should remain individual at the top of the
      *     stack.
      *
-     * T1 : Time lapsed between current command and previously merged command
-     *      -- signal to merge throughout the stack.
+     * T1 : Timeout for the commands to be outdated and merged
      *
-     * T2 : Time elapsed between two commands (unmerged) signaling both commands
-     *      belong to the same set
+     * T2 : Time separation between two commands to be considered as belonging
+     *      to the same group
      *
-     * Whenever a KUndo2Command is initialized -- it consists of a start-time
-     * and when it is pushed -- an end time. Every time a command is pushed --
-     * it checks whether the command pushed was pushed after T1 seconds of the
-     * last merged command. Then the merging begins with each group depending on
-     * the time in between each command (T2).
-     *
-     * @TODO : Currently it is not able to merge two merged commands together.
      */
 
     if (!macro && m_command_list.size() > 1 && cmd->timedId() != -1 && m_useCumulativeUndoRedo) {
         KUndo2Command* lastcmd = m_command_list.last();
-        if (qAbs(cmd->time().msecsTo(lastcmd->endTime())) < m_timeT2 * 1000) {
-            m_lastMergedSetCount++;
-        } else {
-            m_lastMergedSetCount = 0;
-            m_lastMergedIndex = m_index-1;
-        }
-        if (lastcmd->timedId() == -1){
-            m_lastMergedSetCount = 0;
-            m_lastMergedIndex = m_index;
-        }
 
-        {
-            /**
-             * Implement N rule: not more than N strokes with the same timedId
-             * should stay separate in the Undo History
-             */
+        const int thresholdT1 = qRound(m_timeT1 * 1000);
+        const int thresholdT2 = qRound(m_timeT2 * 1000);
 
-            const int mergeSourceIndex = m_lastMergedIndex;
-            const int mergeDestinationIndex = m_lastMergedIndex + 1;
 
-            if (m_lastMergedSetCount > m_strokesN && mergeSourceIndex >= 0
-                && mergeDestinationIndex < m_command_list.size()) {
+        auto tryMergeBack =
+            [this, thresholdT2] (auto revIt, bool *isMerged) {
+                /// we have a guarantee that std::next(revIt) exists,
+                /// so we can safely iterate back in the forward order
+                auto dst = std::prev(revIt.base());
+                auto src = std::prev(dst);
 
-                KUndo2Command *mergeDestination = m_command_list.at(mergeDestinationIndex);
-                KUndo2Command *mergeSource = m_command_list.at(mergeSourceIndex);
+                if ((*dst)->timedId() != -1 &&
+                    (*dst)->timedId() == (*src)->timedId() &&
+                    (*src)->endTime().msecsTo((*dst)->time()) <= thresholdT2) {
 
-                if (mergeDestination && mergeSource) {
+                    (*dst)->timedMergeWith(*src);
 
-                    if (mergeDestination->timedMergeWith(mergeSource)) {
-                        m_command_list.removeAt(mergeSourceIndex);
-                    }
+                    const int removedIndex = std::distance(m_command_list.begin(), src);
 
-                    m_lastMergedSetCount--;
-                    m_lastMergedIndex = m_command_list.indexOf(mergeDestination);
-                }
-            }
-        }
-
-        m_index = m_command_list.size();
-
-        if (m_lastMergedIndex < m_index) {
-            KUndo2Command* mergeDestination = m_command_list.at(m_lastMergedIndex);
-
-            if (qAbs(cmd->time().msecsTo(mergeDestination->endTime())) > m_timeT1 * 1000) { //T1 time elapsed
-                QListIterator<KUndo2Command*> it(m_command_list);
-
-                it.toBack();
-                m_lastMergedSetCount = 1;
-
-                while (it.hasPrevious()) {
-                    KUndo2Command* curr = it.previous();
-                    KUndo2Command* lastCmdInCurrent = curr;
-
-                    if (!lastcmd->mergeCommandsVector().isEmpty()) {
-                        if (qAbs(lastcmd->mergeCommandsVector().last()->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent && lastcmd != curr) {
-                            if(lastcmd->timedMergeWith(curr)){
-                                if (m_command_list.contains(curr)) {
-                                    m_command_list.removeOne(curr);
-                                }
-                             }
-                        } else {
-                            lastcmd = curr; //end of a merge set
-                        }
+                    /// index and clean_index are one off the real index in the
+                    /// commands list
+                    if (m_clean_index - 1 == removedIndex) {
+                        m_clean_index = -1;
                     } else {
-                        if (qAbs(lastcmd->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent &&lastcmd!=curr) {
-                            if(lastcmd->timedMergeWith(curr)){
-                                if (m_command_list.contains(curr)){
-                                    m_command_list.removeOne(curr);
-                                }
-                            }
-                        } else {
-                            lastcmd = curr; //end of a merge set
-                        }
+                        m_clean_index--;
                     }
+                    m_index--;
+
+                    dst = m_command_list.erase(src);
+                    *isMerged = true;
+                } else {
+                    *isMerged = false;
                 }
-                m_lastMergedIndex = m_command_list.size()-1;
+
+                return std::make_reverse_iterator(std::next(dst));
+        };
+
+        int newDepth = 1; // `cmd` will be added soon and will increase the total depth!
+        QTime oldTimeBase = lastcmd->time(); // needed to calculate already processed items
+        QTime newTimeBase = cmd->time();
+
+        auto it = std::make_reverse_iterator(m_command_list.end());
+        auto next = std::next(it);
+
+        while (next != std::make_reverse_iterator(m_command_list.begin())) {
+
+            if (newDepth >= m_strokesN) {
+                bool merged = true;
+                it = tryMergeBack(it, &merged);
+                Q_UNUSED(merged);
+                break;
             }
+
+            int oldTime = (*it)->endTime().msecsTo(oldTimeBase);
+            int newTime = (*it)->endTime().msecsTo(newTimeBase);
+
+            /// we have reached the element processed when
+            /// the previous command was added
+            if (oldTime > thresholdT1) break;
+
+            if (newTime >= thresholdT1) {
+                bool merged = true;
+
+                it = tryMergeBack(it, &merged);
+
+                if (!merged) {
+                    ++newDepth;
+                }
+
+            } else {
+                ++it;
+                ++newDepth;
+            }
+
+            next = std::next(it);
         }
-        m_index = m_command_list.size();
     }
 
     if (try_merge && !macro && cur->canAnnihilateWith(cmd)) {
@@ -879,10 +877,8 @@ void KUndo2QStack::push(KUndo2Command *cmd)
             m_macro_stack.last()->d->child_list.append(cmd);
         } else {
             m_command_list.append(cmd);
-            if(checkUndoLimit())
-            {
-                m_lastMergedIndex = m_index - m_strokesN;
-            }
+
+            checkUndoLimit();
             setIndex(m_index + 1, false);
         }
     }

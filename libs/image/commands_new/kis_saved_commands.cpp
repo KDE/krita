@@ -107,7 +107,7 @@ void KisSavedCommand::addCommands(KisStrokeId id, bool undo)
     strokesFacade()->
         addJob(id, new KisStrokeStrategyUndoCommandBased::Data(m_command, undo));
 }
-int KisSavedCommand::timedId()
+int KisSavedCommand::timedId() const
 {
     return m_command->timedId();
 }
@@ -120,29 +120,29 @@ bool KisSavedCommand::timedMergeWith(KUndo2Command *other)
 {
     return m_command->timedMergeWith(other);
 }
-QVector<KUndo2Command*> KisSavedCommand::mergeCommandsVector()
+QVector<KUndo2Command*> KisSavedCommand::mergeCommandsVector() const
 {
     return m_command->mergeCommandsVector();
 }
-void KisSavedCommand::setTime()
+void KisSavedCommand::setTime(const QTime &time)
 {
-    m_command->setTime();
+    m_command->setTime(time);
 }
 
-QTime KisSavedCommand::time()
+QTime KisSavedCommand::time() const
 {
     return m_command->time();
 }
-void KisSavedCommand::setEndTime()
+void KisSavedCommand::setEndTime(const QTime &time)
 {
-    m_command->setEndTime();
+    m_command->setEndTime(time);
 }
 
-QTime KisSavedCommand::endTime()
+QTime KisSavedCommand::endTime() const
 {
     return m_command->endTime();
 }
-bool KisSavedCommand::isMerged()
+bool KisSavedCommand::isMerged() const
 {
     return m_command->isMerged();
 }

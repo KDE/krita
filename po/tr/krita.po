@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-18 00:56+0000\n"
-"PO-Revision-Date: 2023-03-21 13:57+0300\n"
+"PO-Revision-Date: 2023-03-24 16:46+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -35961,7 +35961,7 @@ msgid ""
 "(e.g. 'Copy') shown in the left column and keys or combination of keys (e.g. "
 "Ctrl+V) shown in the right column."
 msgstr ""
-"Düğme bağlantılarını burada görebilirsiniz; örneğin sol sütunda gösterilen "
+"Düğme bağıntılarını burada görebilirsiniz; örneğin sol sütunda gösterilen "
 "eylemler (ör. 'Kopyala') ile sağ sütunda gösterilen düğmeler veya düğme "
 "kombinasyonları arasındaki bağlantıları."
 
@@ -55171,7 +55171,7 @@ msgstr "Diyalog Yazarı"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Binding designer"
-msgstr "Ciltleme tasarımcısı"
+msgstr "Cilt tasarımcısı"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Bookjacket designer"

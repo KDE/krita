@@ -21223,8 +21223,7 @@ msgid "Tag Url"
 msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:670
-#, fuzzy, kde-format
-#| msgid "Resource"
+#, kde-format
 msgid "Resource"
 msgstr "Recurso"
 

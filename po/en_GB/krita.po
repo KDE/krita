@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-18 00:56+0000\n"
-"PO-Revision-Date: 2023-03-14 21:01+0000\n"
+"PO-Revision-Date: 2023-03-26 14:32+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -22819,33 +22819,31 @@ msgid "Show session manager"
 msgstr "Show session manager"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:440
-#, fuzzy, kde-format
-#| msgid "Note: Krita will need to be restarted for changes to take effect"
+#, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
-msgstr "Note: Krita will need to be restarted for changes to take effect"
+msgstr "You will need to Restart Krita for the changes to take an effect."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:446
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
+"Saving at a Location picked from the File Picker may slow down the startup!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:478
-#, fuzzy, kde-format
-#| msgid "Internal error"
+#, kde-format
 msgid "Internal Storage"
-msgstr "Internal error"
+msgstr "Internal Storage"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:480
 #, kde-format
 msgid "SD-Card"
-msgstr ""
+msgstr "SD-Card"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:518
-#, fuzzy, kde-format
-#| msgid "User Manual"
+#, kde-format
 msgid "Choose Manually"
-msgstr "User Manual"
+msgstr "Choose Manually"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:583
 #, kde-format

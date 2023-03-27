@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-18 00:56+0000\n"
-"PO-Revision-Date: 2023-03-11 04:51\n"
+"PO-Revision-Date: 2023-03-26 02:18\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -19271,7 +19271,7 @@ msgstr "未解析的资源数据块"
 #: libs/resources/KisFolderStorage.cpp:278
 #, kde-format
 msgid "Local Resources"
-msgstr "本机资源"
+msgstr "本地资源"
 
 #: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
@@ -22680,33 +22680,30 @@ msgid "Show session manager"
 msgstr "显示会话管理器"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:440
-#, fuzzy, kde-format
-#| msgid "Note: Krita will need to be restarted for changes to take effect"
+#, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
-msgstr "提示：更改此页面任何设置后必须重新启动程序才能生效。"
+msgstr "您需要重启 Krita 才能使更改生效。"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:446
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
-msgstr ""
+msgstr "保存到从文件选择器中选择的位置可能会减慢 Krita 的启动速度。"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:478
-#, fuzzy, kde-format
-#| msgid "Internal Pool:"
+#, kde-format
 msgid "Internal Storage"
-msgstr "内部保留上限："
+msgstr "内部存储"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:480
 #, kde-format
 msgid "SD-Card"
-msgstr ""
+msgstr "SD 卡"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:518
-#, fuzzy, kde-format
-#| msgid "User Manual"
+#, kde-format
 msgid "Choose Manually"
-msgstr "使用手册"
+msgstr "手动选择"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:583
 #, kde-format
@@ -25093,7 +25090,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1056
 #, kde-format
 msgid "Prefer a local copy (if available; metadata may be lost)"
-msgstr "首选使用本机缓存副本 (如果可用；元数据可能会丢失)"
+msgstr "首选使用本地缓存副本 (如果可用；元数据可能会丢失)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnBitmap)
 #: libs/ui/forms/wdggeneralsettings.ui:1063
@@ -26199,7 +26196,7 @@ msgstr "保存原始元数据和色彩特性文件。"
 #: libs/ui/forms/wdgPasteFormat.ui:92
 #, kde-format
 msgid "Use &local file"
-msgstr "使用本机缓存版本(&L)"
+msgstr "使用本地缓存版本(&L)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdgPasteFormat.ui:105
@@ -30226,7 +30223,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 "\n"
-"仅本机资源可用。"
+"仅本地资源可用。"
 
 #: libs/ui/KisMainWindow.cpp:2071 libs/ui/KisMainWindow.cpp:2153
 #, kde-format
@@ -51759,7 +51756,7 @@ msgstr " 毫秒"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:73
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 毫秒"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -52169,37 +52166,31 @@ msgid "repeat"
 msgstr "循环"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
 msgstr "基本"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
-#, fuzzy, kde-format
-#| msgid "CPU Limit:"
+#, kde-format
 msgid "Y limit: "
-msgstr "CPU 可用线程上限："
+msgstr "Y 限制： "
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Suffix: “Every x min”"
-#| msgid " min"
+#, kde-format
 msgid "X min: "
-msgstr " 分钟"
+msgstr "X 最小值："
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
 #, kde-format
 msgid "X max: "
-msgstr ""
+msgstr "X 最大值："
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Random Sensor Active, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
-msgstr "随机度传感器已激活，请考虑禁用快速预渲染"
+msgstr "随机度传感器已在 %1 选项中激活，请考虑禁用快速预渲染"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
 #, kde-format
@@ -52383,10 +52374,9 @@ msgid "Colorize"
 msgstr "着色"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
-#, fuzzy, kde-format
-#| msgid "Posterize"
+#, kde-format
 msgid "Posterization Levels"
-msgstr "色调分离"
+msgstr "色调分离级别"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
@@ -52480,26 +52470,19 @@ msgid "Smudge Radius Log"
 msgstr "涂抹半径 (对数)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "涂抹长度"
+msgstr "涂抹长度倍数"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Smudge_rake.kpp"
-#| msgid "Smudge rake"
+#, kde-format
 msgid "Smudge Bucket"
-msgstr "涂抹 刮刀 齿状"
+msgstr "涂抹桶"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#, kde-format
 msgid "Smudge Transparency"
-msgstr "透明区域"
+msgstr "涂抹透明度"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
@@ -52802,8 +52785,7 @@ msgid "Shape dynamics"
 msgstr "形状动态"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Shape"
 msgstr "喷雾形状"
 
@@ -55729,10 +55711,9 @@ msgstr "缩放："
 
 #: plugins/tools/basictools/kis_tool_fill.cc:531
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:443
-#, fuzzy, kde-format
-#| msgid "Encoding options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "编码选项"
+msgstr "使用自定义混合选项"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #, kde-format
@@ -55803,21 +55784,19 @@ msgstr "设置图案的旋转角度"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
-msgstr ""
+msgstr "设置自定义的混合选项，而不是使用笔刷预设的混合选项"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:613
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "设置图层的主体不透明度"
+msgstr "设置填充的自定义不透明度"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:614
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "设置图层的混合模式"
+msgstr "设置填充的自定义混合模式"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
 #, kde-format
@@ -59471,97 +59450,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgid "Color Rate"
-#~ msgstr "前景色比例"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Displacement Option"
-#~ msgstr "位移选项"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Total Random"
-#~ msgstr "颜色来源 -> 随机 - 彩色噪声"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern"
-#~ msgstr "颜色来源 -> 图案"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern Locked"
-#~ msgstr "颜色来源 -> 锁定图案"
-
-#~ msgid "0 px"
-#~ msgstr "0 像素"
-
-#~ msgid "0 s"
-#~ msgstr "0 秒"
-
-#~ msgid "1000"
-#~ msgstr "1000"
-
-#~ msgid "30 px"
-#~ msgstr "30 像素"
-
-#~ msgid "3 s"
-#~ msgstr "3 s"
-
-#~ msgid "%1 s"
-#~ msgstr "%1 s"
-
-#~ msgctxt "option name"
-#~ msgid "Filter"
-#~ msgstr "滤镜"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "\"%1\" does not support scaled preview (non-linear filter)"
-#~ msgstr "“%1”不支持缩放的快速预渲染 (非线性过滤)"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Luminosity value of the brush that will not change the painting color. "
-#~ "All brush pixels darker than neutral point will paint with darker color, "
-#~ "pixels lighter than neutral point — lighter."
-#~ msgstr ""
-#~ "指定不对前景色深浅造成影响的笔尖图像亮度值。笔尖图像中所有比中性点要暗的像"
-#~ "素将绘制出比前景色更深的颜色，比中性点更亮的像素将绘制出更浅的颜色。"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Brightness correction for the brush"
-#~ msgstr "调整笔尖图像的亮度"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Contrast correction for the brush"
-#~ msgstr "调整笔尖图像的对比度"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush tip does not have color channels. The brush will work "
-#~ "in \"Mask\" mode."
-#~ msgstr "所选笔尖图像不含色彩通道，它将在蒙版模式下工作。"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush engine does not support \"Color\" or \"Lightness\" "
-#~ "modes. The brush will work in \"Mask\" mode."
-#~ msgstr "所选笔刷引擎不支持颜色和亮度模式，笔尖图像将在蒙版模式下工作。"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Brush average: %1\n"
-#~ "Adjusted average: %2"
-#~ msgstr ""
-#~ "笔刷平均：%1\n"
-#~ "校正平均：%2"
-
-#~ msgid "Mirrored"
-#~ msgstr "镜像"
-
-#~ msgid "Not mirrored"
-#~ msgstr "非镜像"
-
-#~ msgid "Align the brush preview outline to the pixel grid"
-#~ msgstr "对齐笔刷预览轮廓到像素网格"
-
-#~ msgid " s"
-#~ msgstr " s"

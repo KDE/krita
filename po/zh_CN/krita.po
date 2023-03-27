@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-03-11 04:54\n"
+"PO-Revision-Date: 2023-03-26 02:20\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -19008,7 +19008,7 @@ msgstr "未解析的资源数据块"
 #: libs/resources/KisFolderStorage.cpp:278
 #, kde-format
 msgid "Local Resources"
-msgstr "本机资源"
+msgstr "本地资源"
 
 #: libs/resources/KisResourceCacheDb.cpp:252
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
@@ -24935,7 +24935,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1338
 #, kde-format
 msgid "Prefer a local copy (if available; metadata may be lost)"
-msgstr "首选使用本机缓存副本 (如果可用；元数据可能会丢失)"
+msgstr "首选使用本地缓存副本 (如果可用；元数据可能会丢失)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnBitmap)
 #: libs/ui/forms/wdggeneralsettings.ui:1345
@@ -25853,7 +25853,7 @@ msgstr "保存原始元数据和色彩特性文件。"
 #: libs/ui/forms/wdgPasteFormat.ui:92
 #, kde-format
 msgid "Use &local file"
-msgstr "使用本机缓存版本(&L)"
+msgstr "使用本地缓存版本(&L)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdgPasteFormat.ui:105
@@ -29831,7 +29831,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 "\n"
-"仅本机资源可用。"
+"仅本地资源可用。"
 
 #: libs/ui/KisMainWindow.cpp:2061 libs/ui/KisMainWindow.cpp:2143
 #, kde-format
@@ -51277,7 +51277,7 @@ msgstr "角度偏移"
 #: plugins/paintops/libpaintop/sensors/kis_dynamic_sensor_time.cc:59
 #, kde-format
 msgid " s"
-msgstr " s"
+msgstr " 秒"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRepeat)
 #: plugins/paintops/libpaintop/sensors/SensorDistanceConfiguration.ui:39

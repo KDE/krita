@@ -96,6 +96,7 @@ public Q_SLOTS:
     void setStackT1(double value);
     void setStackT2(double value);
     void setStackN(int value);
+    void setStackMaxGroupDuration(double value);
 #ifndef QT_NO_UNDOGROUP
     void setGroup(KUndo2Group *group);
 #endif

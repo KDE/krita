@@ -67,6 +67,9 @@ public:
     int stackN(bool defaultValue = false) const;
     void setStackN(int N);
 
+    int stackMaxGroupDuration(bool defaultValue = false) const;
+    void setStackMaxGroupDuration(int value);
+
     qint32 defImageWidth(bool defaultValue = false) const;
     void defImageWidth(qint32 width) const;
 

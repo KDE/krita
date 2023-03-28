@@ -322,5 +322,13 @@ void KisUndoView::setStackN(int value)
     cfg.setStackN(value);
 }
 
+void KisUndoView::setStackMaxGroupDuration(double value)
+{
+    const int msecValue = qRound(value * 1000.0);
+    stack()->setMaxGroupDuration(msecValue);
+    KisConfig cfg(false);
+    cfg.setStackMaxGroupDuration(msecValue);
+}
+
 
 #endif // QT_NO_UNDOVIEW

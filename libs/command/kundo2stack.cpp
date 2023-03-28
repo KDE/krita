@@ -631,7 +631,7 @@ bool KUndo2QStack::checkUndoLimit()
 */
 
 KUndo2QStack::KUndo2QStack(QObject *parent)
-    : QObject(parent), m_index(0), m_clean_index(0), m_group(0), m_undo_limit(0), m_useCumulativeUndoRedo(false)
+    : QObject(parent), m_index(0), m_clean_index(0), m_group(0), m_undo_limit(0), m_useCumulativeUndoRedo(false), m_maxGroupDuration(5000)
 {
     setTimeT1(5);
     setTimeT2(1);
@@ -779,6 +779,7 @@ void KUndo2QStack::push(KUndo2Command *cmd)
 
                 if ((*dst)->timedId() != -1 &&
                     (*dst)->timedId() == (*src)->timedId() &&
+                    (*src)->time().msecsTo((*dst)->endTime()) <= m_maxGroupDuration &&
                     (*src)->endTime().msecsTo((*dst)->time()) <= thresholdT2) {
 
                     (*dst)->timedMergeWith(*src);
@@ -803,6 +804,7 @@ void KUndo2QStack::push(KUndo2Command *cmd)
                 return std::make_reverse_iterator(std::next(dst));
         };
 
+        int extraCheckDepth = 0;
         int newDepth = 1; // `cmd` will be added soon and will increase the total depth!
         QTime oldTimeBase = lastcmd->time(); // needed to calculate already processed items
         QTime newTimeBase = cmd->time();
@@ -812,26 +814,36 @@ void KUndo2QStack::push(KUndo2Command *cmd)
 
         while (next != std::make_reverse_iterator(m_command_list.begin())) {
 
-            if (newDepth >= m_strokesN) {
-                bool merged = true;
-                it = tryMergeBack(it, &merged);
-                Q_UNUSED(merged);
-                break;
+            if (newDepth < m_strokesN) {
+                ++it;
+                ++newDepth;
+                next = std::next(it);
+                continue;
             }
 
             int oldTime = (*it)->endTime().msecsTo(oldTimeBase);
             int newTime = (*it)->endTime().msecsTo(newTimeBase);
 
             /// we have reached the element processed when
-            /// the previous command was added
-            if (oldTime > thresholdT1) break;
+            /// the previous command was added, now we need to
+            /// count m_strokesN to make sure that "pinned" jobs
+            /// are also process
+            if (oldTime > thresholdT1 && extraCheckDepth++ >= m_strokesN) break;
 
             if (newTime >= thresholdT1) {
                 bool merged = true;
 
+                KUndo2Command *debugOldCmd = *it;
+
                 it = tryMergeBack(it, &merged);
 
+                KUndo2Command *debugNewCmd = *it;
+
+                KIS_SAFE_ASSERT_RECOVER_BREAK(it != std::make_reverse_iterator(m_command_list.begin()));
+                KIS_SAFE_ASSERT_RECOVER_BREAK(debugOldCmd == debugNewCmd);
+
                 if (!merged) {
+                    ++it;
                     ++newDepth;
                 }
 
@@ -1361,7 +1373,7 @@ void KUndo2QStack::setUseCumulativeUndoRedo(bool value)
     m_useCumulativeUndoRedo = value;
 }
 
-bool KUndo2QStack::useCumulativeUndoRedo()
+bool KUndo2QStack::useCumulativeUndoRedo() const
 {
     return m_useCumulativeUndoRedo;
 }
@@ -1370,7 +1382,7 @@ void KUndo2QStack::setTimeT1(double value)
     m_timeT1 = value;
 }
 
-double KUndo2QStack::timeT1()
+double KUndo2QStack::timeT1() const
 {
     return m_timeT1;
 }
@@ -1380,11 +1392,11 @@ void KUndo2QStack::setTimeT2(double value)
     m_timeT2 = value;
 }
 
-double KUndo2QStack::timeT2()
+double KUndo2QStack::timeT2() const
 {
     return m_timeT2;
 }
-int KUndo2QStack::strokesN()
+int KUndo2QStack::strokesN() const
 {
     return m_strokesN;
 }
@@ -1393,7 +1405,15 @@ void KUndo2QStack::setStrokesN(int value)
     m_strokesN  = value;
 }
 
+int KUndo2QStack::maxGroupDuration() const
+{
+    return m_maxGroupDuration;
+}
 
+void KUndo2QStack::setMaxGroupDuration(int value)
+{
+    m_maxGroupDuration = value;
+}
 
 QAction* KUndo2Stack::createRedoAction(KisKActionCollection* actionCollection, const QString& actionName)
 {

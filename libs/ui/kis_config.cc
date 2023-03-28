@@ -185,7 +185,17 @@ int KisConfig::stackN(bool defaultValue) const
 
 void KisConfig::setStackN(int N)
 {
-     m_cfg.writeEntry("stackN", N);
+    m_cfg.writeEntry("stackN", N);
+}
+
+int KisConfig::stackMaxGroupDuration(bool defaultValue) const
+{
+    return (defaultValue ? 5000 : m_cfg.readEntry("stackMaxGroupDuration", 5000));
+}
+
+void KisConfig::setStackMaxGroupDuration(int value)
+{
+    m_cfg.writeEntry("stackMaxGroupDuration", value);
 }
 
 qint32 KisConfig::defImageWidth(bool defaultValue) const

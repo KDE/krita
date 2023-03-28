@@ -195,13 +195,15 @@ public:
     const KUndo2Command *command(int index) const;
 
     void setUseCumulativeUndoRedo(bool value);
-    bool useCumulativeUndoRedo();
+    bool useCumulativeUndoRedo() const;
     void setTimeT1(double value);
-    double timeT1();
+    double timeT1() const;
     void setTimeT2(double value);
-    double timeT2();
-    int strokesN();
+    double timeT2() const;
+    int strokesN() const;
     void setStrokesN(int value);
+    int maxGroupDuration() const;
+    void setMaxGroupDuration(int value);
 
 
 public Q_SLOTS:
@@ -235,6 +237,7 @@ private:
     bool m_useCumulativeUndoRedo;
     double m_timeT1;
     double m_timeT2;
+    int m_maxGroupDuration;
     int m_strokesN;
 
     // also from QUndoStackPrivate

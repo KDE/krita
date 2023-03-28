@@ -29,6 +29,7 @@
 #include "ui_wdgfullscreensettings.h"
 #include "ui_WdgPopupPaletteSettings.h"
 #include "KisShortcutsDialog.h"
+#include "KisCumulativeUndoData.h"
 
 class KoID;
 class KisInputConfigurationPage;
@@ -101,9 +102,11 @@ private Q_SLOTS:
     void clearBackgroundImage();
     void checkResourcePath();
     void enableSubWindowOptions(int);
+    void showAdvancedCumulativeUndoSettings();
 
 public:
     QButtonGroup m_pasteFormatGroup;
+    KisCumulativeUndoData m_cumulativeUndoData;
 };
 
 

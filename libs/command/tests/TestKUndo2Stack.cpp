@@ -16,9 +16,7 @@ void TestKUndo2Stack::testMergeGroupByDepth()
     KUndo2Stack stack;
 
     stack.setUseCumulativeUndoRedo(true);
-    stack.setStrokesN(5);
-    stack.setTimeT1(50.0);
-    stack.setTimeT2(1.0);
+    stack.setCumulativeUndoData({5, 50000, 1000, 5000});
 
     int startTime = 0;
 
@@ -61,9 +59,7 @@ void TestKUndo2Stack::testMergeMultipleGroupsByDepth()
     KUndo2Stack stack;
 
     stack.setUseCumulativeUndoRedo(true);
-    stack.setStrokesN(10);
-    stack.setTimeT1(50.0);
-    stack.setTimeT2(1.0);
+    stack.setCumulativeUndoData({10, 50000, 1000, 5000});
 
     int startTime = 0;
 
@@ -164,9 +160,7 @@ void TestKUndo2Stack::testMergeGroupByTimeout()
     KUndo2Stack stack;
 
     stack.setUseCumulativeUndoRedo(true);
-    stack.setStrokesN(50);
-    stack.setTimeT1(4.0);
-    stack.setTimeT2(1.0);
+    stack.setCumulativeUndoData({50, 4000, 1000, 5000});
 
     int startTime = 0;
 
@@ -228,9 +222,7 @@ void TestKUndo2Stack::testManageCleanIndex()
     KUndo2Stack stack;
 
     stack.setUseCumulativeUndoRedo(true);
-    stack.setStrokesN(5);
-    stack.setTimeT1(50.0);
-    stack.setTimeT2(1.0);
+    stack.setCumulativeUndoData({5, 50000, 1000, 5000});
 
     int startTime = 0;
 

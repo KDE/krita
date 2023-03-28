@@ -293,42 +293,4 @@ void KisUndoView::setCanvas(KisCanvas2 *canvas) {
     d->model->setCanvas(canvas);
 }
 
-
-void KisUndoView::toggleCumulativeUndoRedo()
-{
-    stack()->setUseCumulativeUndoRedo(!stack()->useCumulativeUndoRedo() );
-    KisConfig cfg(false);
-    cfg.setCumulativeUndoRedo(stack()->useCumulativeUndoRedo());
-}
-
-void KisUndoView::setStackT1(double value)
-{
-    stack()->setTimeT1(value);
-    KisConfig cfg(false);
-    cfg.setStackT1(value);
-}
-
-void KisUndoView::setStackT2(double value)
-{
-    stack()->setTimeT2(value);
-    KisConfig cfg(false);
-    cfg.setStackT2(value);
-}
-
-void KisUndoView::setStackN(int value)
-{
-    stack()->setStrokesN(value);
-    KisConfig cfg(false);
-    cfg.setStackN(value);
-}
-
-void KisUndoView::setStackMaxGroupDuration(double value)
-{
-    const int msecValue = qRound(value * 1000.0);
-    stack()->setMaxGroupDuration(msecValue);
-    KisConfig cfg(false);
-    cfg.setStackMaxGroupDuration(msecValue);
-}
-
-
 #endif // QT_NO_UNDOVIEW

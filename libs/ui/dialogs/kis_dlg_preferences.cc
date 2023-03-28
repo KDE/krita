@@ -90,6 +90,8 @@
 #include "input/config/kis_input_configuration_page.h"
 #include "input/wintab/drawpile_tablettester/tablettester.h"
 
+#include "KisDlgConfigureCumulativeUndo.h"
+
 #ifdef Q_OS_WIN
 #include "config_use_qt_tablet_windows.h"
 #   ifndef USE_QT_TABLET_WINDOWS
@@ -382,6 +384,11 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
 
     m_undoStackSize->setValue(cfg.undoStackLimit());
+    chkCumulativeUndo->setChecked(cfg.useCumulativeUndoRedo());
+    connect(chkCumulativeUndo, SIGNAL(toggled(bool)), btnAdvancedCumulativeUndo, SLOT(setEnabled(bool)));
+    btnAdvancedCumulativeUndo->setEnabled(chkCumulativeUndo->isChecked());
+    connect(btnAdvancedCumulativeUndo, SIGNAL(clicked()), SLOT(showAdvancedCumulativeUndoSettings()));
+    m_cumulativeUndoData = cfg.cumulativeUndoData();
 
     chkShowRootLayer->setChecked(cfg.showRootLayer());
 
@@ -647,6 +654,8 @@ void GeneralTab::setDefault()
     chkHideAutosaveFiles->setChecked(true);
 
     m_undoStackSize->setValue(cfg.undoStackLimit(true));
+    chkCumulativeUndo->setChecked(cfg.useCumulativeUndoRedo(true));
+    m_cumulativeUndoData = cfg.cumulativeUndoData(true);
 
     m_backupFileCheckBox->setChecked(cfg.backupFile(true));
     cmbBackupFileLocation->setCurrentIndex(0);
@@ -726,6 +735,14 @@ void GeneralTab::setDefault()
 
     if (button) {
         button->setChecked(true);
+    }
+}
+
+void GeneralTab::showAdvancedCumulativeUndoSettings()
+{
+    KisDlgConfigureCumulativeUndo dlg(m_cumulativeUndoData, m_undoStackSize->value(), this);
+    if (dlg.exec() == KoDialog::Accepted) {
+        m_cumulativeUndoData = dlg.cumulativeUndoData();
     }
 }
 
@@ -2326,6 +2343,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.setActivateTransformToolAfterPaste(m_general->chkEnableTranformToolAfterPaste->isChecked());
         cfg.setConvertToImageColorspaceOnImport(m_general->convertToImageColorspaceOnImport());
         cfg.setUndoStackLimit(m_general->undoStackSize());
+        cfg.setCumulativeUndoRedo(m_general->chkCumulativeUndo->isChecked());
+        cfg.setCumulativeUndoData(m_general->m_cumulativeUndoData);
 
         cfg.setAutoPinLayersToTimeline(m_general->autopinLayersToTimeline());
         cfg.setAdaptivePlaybackRange(m_general->adaptivePlaybackRange());

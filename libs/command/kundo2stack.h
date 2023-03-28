@@ -67,6 +67,7 @@ class KisKActionCollection;
 
 #include "kundo2magicstring.h"
 #include "kundo2commandextradata.h"
+#include "KisCumulativeUndoData.h"
 
 
 /**
@@ -196,15 +197,9 @@ public:
 
     void setUseCumulativeUndoRedo(bool value);
     bool useCumulativeUndoRedo() const;
-    void setTimeT1(double value);
-    double timeT1() const;
-    void setTimeT2(double value);
-    double timeT2() const;
-    int strokesN() const;
-    void setStrokesN(int value);
-    int maxGroupDuration() const;
-    void setMaxGroupDuration(int value);
 
+    void setCumulativeUndoData(const KisCumulativeUndoData &data);
+    KisCumulativeUndoData cumulativeUndoData();
 
 public Q_SLOTS:
     void setClean();
@@ -235,10 +230,7 @@ private:
     KUndo2Group *m_group;
     int m_undo_limit;
     bool m_useCumulativeUndoRedo;
-    double m_timeT1;
-    double m_timeT2;
-    int m_maxGroupDuration;
-    int m_strokesN;
+    KisCumulativeUndoData m_cumulativeUndoData;
 
     // also from QUndoStackPrivate
     void setIndex(int idx, bool clean);

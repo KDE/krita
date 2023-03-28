@@ -2169,6 +2169,8 @@ void KisDocument::slotConfigChanged()
         }
         d->undoStack->setUndoLimit(cfg.undoStackLimit());
     }
+    d->undoStack->setUseCumulativeUndoRedo(cfg.useCumulativeUndoRedo());
+    d->undoStack->setCumulativeUndoData(cfg.cumulativeUndoData());
 
     d->autoSaveDelay = cfg.autoSaveInterval();
     setNormalAutoSaveInterval();

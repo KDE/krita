@@ -24,6 +24,7 @@ class KoColorSpace;
 class KisSnapConfig;
 class QSettings;
 class KisOcioConfiguration;
+struct KisCumulativeUndoData;
 
 class KRITAUI_EXPORT KisConfig
 {
@@ -58,17 +59,8 @@ public:
     bool useCumulativeUndoRedo(bool defaultValue = false) const;
     void setCumulativeUndoRedo(bool value);
 
-    double stackT1(bool defaultValue = false) const;
-    void setStackT1(int T1);
-
-    double stackT2(bool defaultValue = false) const;
-    void setStackT2(int T2);
-
-    int stackN(bool defaultValue = false) const;
-    void setStackN(int N);
-
-    int stackMaxGroupDuration(bool defaultValue = false) const;
-    void setStackMaxGroupDuration(int value);
+    KisCumulativeUndoData cumulativeUndoData(bool defaultValue = false) const;
+    void setCumulativeUndoData(KisCumulativeUndoData value);
 
     qint32 defImageWidth(bool defaultValue = false) const;
     void defImageWidth(qint32 width) const;

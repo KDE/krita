@@ -41,6 +41,7 @@
 #include <KisOcioConfiguration.h>
 #include <KisUsageLogger.h>
 #include <kis_image_config.h>
+#include <KisCumulativeUndoData.h>
 
 #ifdef Q_OS_WIN
 #include "config_use_qt_tablet_windows.h"
@@ -158,44 +159,20 @@ void KisConfig::setCumulativeUndoRedo(bool value)
     m_cfg.writeEntry("useCumulativeUndoRedo", value);
 }
 
-qreal KisConfig::stackT1(bool defaultValue) const
+KisCumulativeUndoData KisConfig::cumulativeUndoData(bool defaultValue) const
 {
-     return (defaultValue ? 5 : m_cfg.readEntry("stackT1",5));
+    if (defaultValue) {
+        return KisCumulativeUndoData::defaultValue;
+    }
+
+    KisCumulativeUndoData data;
+    data.read(&m_cfg);
+    return data;
 }
 
-void KisConfig::setStackT1(int T1)
+void KisConfig::setCumulativeUndoData(KisCumulativeUndoData value)
 {
-    m_cfg.writeEntry("stackT1", T1);
-}
-
-qreal KisConfig::stackT2(bool defaultValue) const
-{
-     return (defaultValue ? 1 : m_cfg.readEntry("stackT2",1));
-}
-
-void KisConfig::setStackT2(int T2)
-{
-    m_cfg.writeEntry("stackT2", T2);
-}
-
-int KisConfig::stackN(bool defaultValue) const
-{
-    return (defaultValue ? 5 : m_cfg.readEntry("stackN",5));
-}
-
-void KisConfig::setStackN(int N)
-{
-    m_cfg.writeEntry("stackN", N);
-}
-
-int KisConfig::stackMaxGroupDuration(bool defaultValue) const
-{
-    return (defaultValue ? 5000 : m_cfg.readEntry("stackMaxGroupDuration", 5000));
-}
-
-void KisConfig::setStackMaxGroupDuration(int value)
-{
-    m_cfg.writeEntry("stackMaxGroupDuration", value);
+    value.write(&m_cfg);
 }
 
 qint32 KisConfig::defImageWidth(bool defaultValue) const

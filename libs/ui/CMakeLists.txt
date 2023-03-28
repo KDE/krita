@@ -73,6 +73,8 @@ set(kritaui_LIB_SRCS
     dialogs/KisDlgSavePreset.cpp
     dialogs/kis_dlg_missing_color_profile.cpp
     dialogs/kis_dlg_hlg_import.cpp
+    dialogs/KisDlgConfigureCumulativeUndo.cpp
+    dialogs/KisCumulativeUndoModel.cpp
 
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp

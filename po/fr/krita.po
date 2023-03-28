@@ -30950,7 +30950,7 @@ msgid ""
 "Do you want to download the image from %1?\n"
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
-"Voulez-vous vraiment télécharger l’image à partir de %1 ?  \n"
+"Voulez-vous vraiment télécharger l’image à partir de %1 ?\n"
 "Veuillez cliquer sur « Afficher les détails » pour afficher le lien complet "
 "vers l’image."
 

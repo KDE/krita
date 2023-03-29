@@ -14,10 +14,12 @@ class TestKUndo2Stack : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
-    void testMergeGroupByDepth();
-    void testMergeMultipleGroupsByDepth();
-    void testMergeGroupByTimeout();
-    void testManageCleanIndex();
+    void testExcludeFromMerge();
+    void testMergeTimeout();
+    void testGroupSeparation();
+    void testMaxGroupDuration();
+    void testCleanIndexAfterMerge();
+    void testCleanIndexBeforeMerge();
 };
 
 #endif // TESTKUNDO2STACK_H

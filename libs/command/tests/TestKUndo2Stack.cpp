@@ -11,12 +11,19 @@
 #include <kundo2command.h>
 
 
-void TestKUndo2Stack::testMergeGroupByDepth()
+void TestKUndo2Stack::testExcludeFromMerge()
 {
     KUndo2Stack stack;
 
     stack.setUseCumulativeUndoRedo(true);
-    stack.setCumulativeUndoData({5, 50000, 1000, 5000});
+
+    KisCumulativeUndoData data;
+    data.excludeFromMerge = 5;
+    data.mergeTimeout = 1000;
+    data.maxGroupSeparation = 1000;
+    data.maxGroupDuration = 100000;
+
+    stack.setCumulativeUndoData(data);
 
     int startTime = 0;
 
@@ -34,6 +41,12 @@ void TestKUndo2Stack::testMergeGroupByDepth()
     QCOMPARE(stack.count(), 6);
     QCOMPARE(stack.index(), stack.count());
 
+//    qDebug() << "===";
+//    for (int j = 0; j < stack.count(); j++) {
+//        qDebug() << j << stack.command(j)->text();
+//    }
+//    qDebug() << "===";
+
     for (int i = 0; i < 50; i++) {
         KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString::number(startTime)));
 
@@ -43,6 +56,7 @@ void TestKUndo2Stack::testMergeGroupByDepth()
 
         stack.push(cmd);
         startTime++;
+
         QCOMPARE(stack.count(), 6);
         QCOMPARE(stack.index(), stack.count());
     }
@@ -54,17 +68,24 @@ void TestKUndo2Stack::testMergeGroupByDepth()
     }
 }
 
-void TestKUndo2Stack::testMergeMultipleGroupsByDepth()
+void TestKUndo2Stack::testMergeTimeout()
 {
     KUndo2Stack stack;
 
     stack.setUseCumulativeUndoRedo(true);
-    stack.setCumulativeUndoData({10, 50000, 1000, 5000});
+
+    KisCumulativeUndoData data;
+    data.excludeFromMerge = 1;
+    data.mergeTimeout = 5000;
+    data.maxGroupSeparation = 1000;
+    data.maxGroupDuration = 50000;
+
+    stack.setCumulativeUndoData(data);
 
     int startTime = 0;
 
     // group 1
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 7; i++) {
         KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString("group 1: %1").arg(startTime)));
 
         cmd->setTimedID(1);
@@ -75,14 +96,13 @@ void TestKUndo2Stack::testMergeMultipleGroupsByDepth()
         startTime++;
     }
 
-    QCOMPARE(stack.count(), 5);
+    QCOMPARE(stack.count(), 7);
     QCOMPARE(stack.index(), stack.count());
 
-    // group 2
-    for (int i = 0; i < 6; i++) {
-        KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString("group 2: %1").arg(startTime)));
+    {
+        KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString("group 1: %1").arg(startTime)));
 
-        cmd->setTimedID(2);
+        cmd->setTimedID(1);
         cmd->setTime(QTime(0, 0, startTime, 0));
         cmd->setEndTime(QTime(0, 0, startTime, 500));
 
@@ -90,77 +110,31 @@ void TestKUndo2Stack::testMergeMultipleGroupsByDepth()
         startTime++;
     }
 
-    QCOMPARE(stack.count(), 11);
+    QCOMPARE(stack.count(), 7);
     QCOMPARE(stack.index(), stack.count());
 
-    // group3: push out group1
-    for (int i = 0; i < 4; i++) {
-        KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString("group 3: %1").arg(startTime)));
-
-        cmd->setTimedID(1);
-        cmd->setTime(QTime(0, 0, startTime, 0));
-        cmd->setEndTime(QTime(0, 0, startTime, 500));
-
-        stack.push(cmd);
-        startTime++;
-        QCOMPARE(stack.count(), 11);
-        QCOMPARE(stack.index(), stack.count());
-    }
-
-    // group3: push out group2
-    for (int i = 0; i < 6; i++) {
-        KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString("group 3: %1").arg(startTime)));
-
-        cmd->setTimedID(1);
-        cmd->setTime(QTime(0, 0, startTime, 0));
-        cmd->setEndTime(QTime(0, 0, startTime, 500));
-
-        stack.push(cmd);
-        startTime++;
-        QCOMPARE(stack.count(), 12);
-        QCOMPARE(stack.index(), stack.count());
-    }
-
-    // group3: just add more commands to group3
-    for (int i = 0; i < 5; i++) {
-        KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString("group 3: %1").arg(startTime)));
-
-        cmd->setTimedID(1);
-        cmd->setTime(QTime(0, 0, startTime, 0));
-        cmd->setEndTime(QTime(0, 0, startTime, 500));
-
-        stack.push(cmd);
-        startTime++;
-
-        /// merged group1 + merged group2 + merged group3 +
-        ///     10 separate commands -> 13 commands
-        QCOMPARE(stack.count(), 13);
-        QCOMPARE(stack.index(), stack.count());
-    }
-
-    // the last command of the first group
-    QCOMPARE(stack.command(0)->text().toString(), "group 1: 4");
     QCOMPARE(stack.command(0)->isMerged(), true);
-
-    // the last command of the second group
-    QCOMPARE(stack.command(1)->text().toString(), "group 2: 10");
-    QCOMPARE(stack.command(1)->isMerged(), true);
-
-    // the merged part of the third group
-    QCOMPARE(stack.command(2)->text().toString(), "group 3: 15");
-    QCOMPARE(stack.command(2)->isMerged(), true);
-
-    // first unmerged command of the third group
-    QCOMPARE(stack.command(3)->text().toString(), "group 3: 16");
+    QCOMPARE(stack.command(1)->isMerged(), false);
+    QCOMPARE(stack.command(2)->isMerged(), false);
     QCOMPARE(stack.command(3)->isMerged(), false);
+    QCOMPARE(stack.command(4)->isMerged(), false);
+    QCOMPARE(stack.command(5)->isMerged(), false);
+    QCOMPARE(stack.command(6)->isMerged(), false);
 }
 
-void TestKUndo2Stack::testMergeGroupByTimeout()
+void TestKUndo2Stack::testGroupSeparation()
 {
     KUndo2Stack stack;
 
     stack.setUseCumulativeUndoRedo(true);
-    stack.setCumulativeUndoData({50, 4000, 1000, 5000});
+
+    KisCumulativeUndoData data;
+    data.excludeFromMerge = 1;
+    data.mergeTimeout = 6000;
+    data.maxGroupSeparation = 1000;
+    data.maxGroupDuration = 50000;
+
+    stack.setCumulativeUndoData(data);
 
     int startTime = 0;
 
@@ -175,14 +149,29 @@ void TestKUndo2Stack::testMergeGroupByTimeout()
         startTime++;
     }
 
-    // add two seconds!
-    startTime += 2;
-
     QCOMPARE(stack.count(), 3);
     QCOMPARE(stack.index(), stack.count());
 
-    /// fourth command is added without pushing out anything,
-    /// since it touches the very first command
+    // add one second to split groups
+    startTime += 1;
+
+    for (int i = 0; i < 2; i++) {
+        KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString::number(startTime)));
+
+        cmd->setTimedID(1);
+        cmd->setTime(QTime(0, 0, startTime, 0));
+        cmd->setEndTime(QTime(0, 0, startTime, 500));
+
+        stack.push(cmd);
+        startTime++;
+    }
+
+    QCOMPARE(stack.count(), 5);
+    QCOMPARE(stack.index(), stack.count());
+
+    // add five seconds to make all the previous commands outdated
+    startTime += 6;
+
     {
         KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString::number(startTime)));
 
@@ -194,11 +183,51 @@ void TestKUndo2Stack::testMergeGroupByTimeout()
         startTime++;
     }
 
-    QCOMPARE(stack.count(), 4);
+    // all the first commands were collapsed
+    QCOMPARE(stack.count(), 3);
     QCOMPARE(stack.index(), stack.count());
 
-    /// fifth command pushes out the first one!
-    {
+    // two separate groups
+    QCOMPARE(stack.command(0)->isMerged(), true);
+    QCOMPARE(stack.command(1)->isMerged(), true);
+    QCOMPARE(stack.command(2)->isMerged(), false);
+}
+
+void TestKUndo2Stack::testMaxGroupDuration()
+{
+    KUndo2Stack stack;
+
+    stack.setUseCumulativeUndoRedo(true);
+
+    KisCumulativeUndoData data;
+    data.excludeFromMerge = 1;
+    data.mergeTimeout = 1000;
+    data.maxGroupSeparation = 1000;
+    data.maxGroupDuration = 3000;
+
+    stack.setCumulativeUndoData(data);
+
+    int startTime = 0;
+
+    for (int i = 0; i < 3; i++) {
+        KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString::number(startTime)));
+
+        cmd->setTimedID(1);
+        cmd->setTime(QTime(0, 0, startTime, 0));
+        cmd->setEndTime(QTime(0, 0, startTime, 500));
+
+        stack.push(cmd);
+        startTime++;
+    }
+
+    QCOMPARE(stack.count(), 3);
+    QCOMPARE(stack.index(), stack.count());
+
+    QCOMPARE(stack.command(0)->isMerged(), false);
+    QCOMPARE(stack.command(1)->isMerged(), false);
+    QCOMPARE(stack.command(2)->isMerged(), false);
+
+    for (int i = 0; i < 3; i++) {
         KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString::number(startTime)));
 
         cmd->setTimedID(1);
@@ -213,20 +242,49 @@ void TestKUndo2Stack::testMergeGroupByTimeout()
     QCOMPARE(stack.index(), stack.count());
 
     QCOMPARE(stack.command(0)->isMerged(), true);
-    // the time range is also merged
-    QCOMPARE(stack.command(0)->time().msecsTo(stack.command(0)->endTime()), 1500);
+    QCOMPARE(stack.command(1)->isMerged(), false);
+    QCOMPARE(stack.command(2)->isMerged(), false);
+    QCOMPARE(stack.command(3)->isMerged(), false);
+
+    startTime += 5;
+
+    {
+        KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString::number(startTime)));
+
+        cmd->setTimedID(1);
+        cmd->setTime(QTime(0, 0, startTime, 0));
+        cmd->setEndTime(QTime(0, 0, startTime, 500));
+
+        stack.push(cmd);
+        startTime++;
+    }
+
+    QCOMPARE(stack.count(), 3);
+    QCOMPARE(stack.index(), stack.count());
+
+    // two separate groups, even though they have the same separation
+    QCOMPARE(stack.command(0)->isMerged(), true);
+    QCOMPARE(stack.command(1)->isMerged(), true);
+    QCOMPARE(stack.command(2)->isMerged(), false);
 }
 
-void TestKUndo2Stack::testManageCleanIndex()
+void TestKUndo2Stack::testCleanIndexAfterMerge()
 {
     KUndo2Stack stack;
 
     stack.setUseCumulativeUndoRedo(true);
-    stack.setCumulativeUndoData({5, 50000, 1000, 5000});
+
+    KisCumulativeUndoData data;
+    data.excludeFromMerge = 3;
+    data.mergeTimeout = 5000;
+    data.maxGroupSeparation = 1000;
+    data.maxGroupDuration = 3000;
+
+    stack.setCumulativeUndoData(data);
 
     int startTime = 0;
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 3; i++) {
         KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString::number(startTime)));
 
         cmd->setTimedID(1);
@@ -235,46 +293,42 @@ void TestKUndo2Stack::testManageCleanIndex()
 
         stack.push(cmd);
         startTime++;
+    }
 
-        if (i == 2) {
+    QCOMPARE(stack.count(), 3);
+    QCOMPARE(stack.index(), stack.count());
+
+    QCOMPARE(stack.command(0)->isMerged(), false);
+    QCOMPARE(stack.command(1)->isMerged(), false);
+    QCOMPARE(stack.command(2)->isMerged(), false);
+
+    for (int i = 0; i < 2; i++) {
+        KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString::number(startTime)));
+
+        cmd->setTimedID(1);
+        cmd->setTime(QTime(0, 0, startTime, 0));
+        cmd->setEndTime(QTime(0, 0, startTime, 500));
+
+        stack.push(cmd);
+
+        if (i == 0) {
             stack.setClean();
         }
-    }
 
-    QCOMPARE(stack.count(), 6);
-    QCOMPARE(stack.index(), stack.count());
-    QCOMPARE(stack.cleanIndex(), 3);
-
-    /// the seventh command pushes out the first one!
-    {
-        KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString::number(startTime)));
-
-        cmd->setTimedID(1);
-        cmd->setTime(QTime(0, 0, startTime, 0));
-        cmd->setEndTime(QTime(0, 0, startTime, 500));
-
-        stack.push(cmd);
         startTime++;
     }
 
-    QCOMPARE(stack.count(), 6);
+    QCOMPARE(stack.count(), 5);
     QCOMPARE(stack.index(), stack.count());
-    QCOMPARE(stack.cleanIndex(), 2);
+    QCOMPARE(stack.cleanIndex() - 1, 3);
 
-    {
-        KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString::number(startTime)));
+    QCOMPARE(stack.command(0)->isMerged(), false);
+    QCOMPARE(stack.command(1)->isMerged(), false);
+    QCOMPARE(stack.command(2)->isMerged(), false);
+    QCOMPARE(stack.command(3)->isMerged(), false);
+    QCOMPARE(stack.command(4)->isMerged(), false);
 
-        cmd->setTimedID(1);
-        cmd->setTime(QTime(0, 0, startTime, 0));
-        cmd->setEndTime(QTime(0, 0, startTime, 500));
-
-        stack.push(cmd);
-        startTime++;
-    }
-
-    QCOMPARE(stack.count(), 6);
-    QCOMPARE(stack.index(), stack.count());
-    QCOMPARE(stack.cleanIndex(), 1);
+    startTime += 10;
 
     {
         KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString::number(startTime)));
@@ -287,9 +341,92 @@ void TestKUndo2Stack::testManageCleanIndex()
         startTime++;
     }
 
-    QCOMPARE(stack.count(), 6);
+    QCOMPARE(stack.count(), 4);
     QCOMPARE(stack.index(), stack.count());
-    QCOMPARE(stack.cleanIndex(), -1);
+
+    // the clean index got adjusted!
+    QCOMPARE(stack.cleanIndex() - 1, 1);
+
+    QCOMPARE(stack.command(0)->isMerged(), true);
+    QCOMPARE(stack.command(1)->isMerged(), false);
+    QCOMPARE(stack.command(2)->isMerged(), false);
+    QCOMPARE(stack.command(3)->isMerged(), false);
+}
+
+void TestKUndo2Stack::testCleanIndexBeforeMerge()
+{
+    KUndo2Stack stack;
+
+    stack.setUseCumulativeUndoRedo(true);
+
+    KisCumulativeUndoData data;
+    data.excludeFromMerge = 1;
+    data.mergeTimeout = 5000;
+    data.maxGroupSeparation = 1000;
+    data.maxGroupDuration = 3000;
+
+    stack.setCumulativeUndoData(data);
+
+    int startTime = 0;
+
+    {
+        KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString::number(startTime)));
+
+        cmd->setTimedID(1);
+        cmd->setTime(QTime(0, 0, startTime, 0));
+        cmd->setEndTime(QTime(0, 0, startTime, 500));
+
+        stack.push(cmd);
+        startTime++;
+    }
+
+    // set the first command as clean
+    stack.setClean();
+
+    startTime += 3;
+
+    for (int i = 0; i < 3; i++) {
+        KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString::number(startTime)));
+
+        cmd->setTimedID(1);
+        cmd->setTime(QTime(0, 0, startTime, 0));
+        cmd->setEndTime(QTime(0, 0, startTime, 500));
+
+        stack.push(cmd);
+        startTime++;
+    }
+
+    QCOMPARE(stack.count(), 4);
+    QCOMPARE(stack.index(), stack.count());
+    QCOMPARE(stack.cleanIndex() - 1, 0);
+
+    QCOMPARE(stack.command(0)->isMerged(), false);
+    QCOMPARE(stack.command(1)->isMerged(), false);
+    QCOMPARE(stack.command(2)->isMerged(), false);
+    QCOMPARE(stack.command(3)->isMerged(), false);
+
+    startTime += 10;
+
+    {
+        KUndo2Command *cmd = new KUndo2Command(kundo2_noi18n(QString::number(startTime)));
+
+        cmd->setTimedID(1);
+        cmd->setTime(QTime(0, 0, startTime, 0));
+        cmd->setEndTime(QTime(0, 0, startTime, 500));
+
+        stack.push(cmd);
+        startTime++;
+    }
+
+    QCOMPARE(stack.count(), 3);
+    QCOMPARE(stack.index(), stack.count());
+
+    // the index is unchanged!
+    QCOMPARE(stack.cleanIndex() - 1, 0);
+
+    QCOMPARE(stack.command(0)->isMerged(), false);
+    QCOMPARE(stack.command(1)->isMerged(), true);
+    QCOMPARE(stack.command(2)->isMerged(), false);
 }
 
 SIMPLE_TEST_MAIN(TestKUndo2Stack)

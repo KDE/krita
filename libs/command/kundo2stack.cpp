@@ -784,7 +784,7 @@ void KUndo2QStack::push(KUndo2Command *cmd)
                     /// commands list
                     if (m_clean_index - 1 == removedIndex) {
                         m_clean_index = -1;
-                    } else {
+                    } else if (m_clean_index - 1 > removedIndex) {
                         m_clean_index--;
                     }
                     m_index--;

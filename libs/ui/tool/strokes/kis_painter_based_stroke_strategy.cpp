@@ -407,6 +407,8 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
     QSharedPointer<KUndo2Command> parentCommand(new KUndo2Command());
     parentCommand->setText(name());
     parentCommand->setTimedID(m_useMergeID ? timedID(this->id()) : -1);
+    parentCommand->setTime(m_transaction->undoCommand()->time());
+    parentCommand->setEndTime(QTime::currentTime());
 
     if (m_autokeyCommand) {
         KisCommandUtils::CompositeCommand *wrapper = new KisCommandUtils::CompositeCommand(parentCommand.data());

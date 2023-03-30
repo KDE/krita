@@ -57,6 +57,9 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>_view)
     m_screen = m_window->screen();
     initializePens();
 
+    connect(m_screen, SIGNAL(logicalDotsPerInchChanged(qreal)),
+            this, SLOT(initializePens()));
+
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();

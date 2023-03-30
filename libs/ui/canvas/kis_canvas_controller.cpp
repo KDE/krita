@@ -235,6 +235,16 @@ void KisCanvasController::Private::showRotationValueOnCanvas()
             QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
 }
 
+void KisCanvasController::beginCanvasRotation()
+{
+    m_d->coordinatesConverter->beginRotation();
+}
+
+void KisCanvasController::endCanvasRotation()
+{
+    m_d->coordinatesConverter->endRotation();
+}
+
 void KisCanvasController::rotateCanvas(qreal angle, const QPointF &center)
 {
     QPoint newOffset = m_d->coordinatesConverter->rotate(center, angle);

@@ -21,7 +21,9 @@ struct KisCoordinatesConverter::Private {
     Private():
         isXAxisMirrored(false),
         isYAxisMirrored(false),
+        isRotating(false),
         rotationAngle(0.0),
+        rotationBaseAngle(0.0),
         devicePixelRatio(1.0)
     {
     }
@@ -30,12 +32,15 @@ struct KisCoordinatesConverter::Private {
 
     bool isXAxisMirrored;
     bool isYAxisMirrored;
+    bool isRotating;
     qreal rotationAngle;
+    qreal rotationBaseAngle;
     QSizeF canvasWidgetSize;
     qreal devicePixelRatio;
     QPointF documentOffset;
 
     QTransform flakeToWidget;
+    QTransform rotationBaseTransform;
     QTransform imageToDocument;
     QTransform documentToFlake;
     QTransform widgetToViewport;
@@ -217,15 +222,43 @@ qreal KisCoordinatesConverter::effectivePhysicalZoom() const
     return 0.5 * (scaleX + scaleY);
 }
 
+void KisCoordinatesConverter::beginRotation()
+{
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->isRotating);
+
+    // Save the current transformation and angle to use as the base of the ongoing rotation.
+    m_d->rotationBaseTransform = m_d->flakeToWidget;
+    m_d->rotationBaseAngle = m_d->rotationAngle;
+    m_d->isRotating = true;
+}
+
+void KisCoordinatesConverter::endRotation()
+{
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->isRotating);
+
+    m_d->isRotating = false;
+}
+
 QPoint KisCoordinatesConverter::rotate(QPointF center, qreal angle)
 {
     QTransform rot;
     rot.rotate(angle);
 
+    if (m_d->isRotating)
+    {
+        // Modal (begin/end) rotation. Transform from the stable base.
+        m_d->flakeToWidget = m_d->rotationBaseTransform;
+        m_d->rotationAngle = std::fmod(m_d->rotationBaseAngle + angle, 360.0);
+    }
+    else
+    {
+        // Immediate rotation, directly applied to the canvas transformation.
+        m_d->rotationAngle = std::fmod(m_d->rotationAngle + angle, 360.0);
+    }
+
     m_d->flakeToWidget *= QTransform::fromTranslate(-center.x(),-center.y());
     m_d->flakeToWidget *= rot;
     m_d->flakeToWidget *= QTransform::fromTranslate(center.x(), center.y());
-    m_d->rotationAngle = std::fmod(m_d->rotationAngle + angle, 360.0);
 
     correctOffsetToTransformation();
     recalculateTransformations();

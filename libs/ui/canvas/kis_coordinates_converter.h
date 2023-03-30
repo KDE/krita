@@ -58,6 +58,11 @@ public:
     QPoint documentOffset() const;
     qreal rotationAngle() const;
 
+    // Use the begin/end interface to rotate the canvas in one transformation.
+    // This method is more accurate and doesn't amplify numerical errors from very small angles.
+    void beginRotation();
+    void endRotation();
+
     QPoint rotate(QPointF center, qreal angle);
     QPoint mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis);
     bool xAxisMirrored() const;

@@ -50,12 +50,15 @@ public Q_SLOTS:
     void mirrorCanvasAroundCursor(bool enable);
     void mirrorCanvasAroundCanvas(bool enable);
 
+    void beginCanvasRotation();
+    void endCanvasRotation();
     void rotateCanvas(qreal angle, const QPointF &center);
     void rotateCanvas(qreal angle);
     void rotateCanvasRight15();
     void rotateCanvasLeft15();
     qreal rotation() const;
     void resetCanvasRotation();
+
     void slotToggleWrapAroundMode(bool value);
     void slotSetWrapAroundModeAxis(WrapAroundAxis axis);
     void slotSetWrapAroundModeAxisHV();

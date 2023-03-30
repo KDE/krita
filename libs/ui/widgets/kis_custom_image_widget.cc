@@ -532,7 +532,7 @@ void KisCustomImageWidget::changeDocumentInfoLabel()
     int bitSize = 8 * cs->pixelSize(); //pixelsize is in bytes.
     layerSize = layerSize * cs->pixelSize();
     QString text = i18nc("arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in bits. arg5: image size",
-                         "This document will be %1 pixels by %2 pixels in %3, which means the pixel size is %4 bit. A single paint layer will thus take up %5 of RAM.",
+                         "This document will be %1 pixels by %2 pixels in %3. Te pixel size is %4 bit. A single paint layer will use %5 of RAM.",
                          width,
                          height,
                          cs->name(),

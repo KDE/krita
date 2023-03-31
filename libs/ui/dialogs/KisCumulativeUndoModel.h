@@ -6,6 +6,8 @@
 #ifndef KISCUMULATIVEUNDOMODEL_H
 #define KISCUMULATIVEUNDOMODEL_H
 
+#include <QObject>
+
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>
 

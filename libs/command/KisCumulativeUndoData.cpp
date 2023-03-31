@@ -6,7 +6,7 @@
 #include "KisCumulativeUndoData.h"
 
 #include <kconfiggroup.h>
-#include <QDebug>
+#include <kis_debug.h>
 
 const KisCumulativeUndoData KisCumulativeUndoData::defaultValue;
 

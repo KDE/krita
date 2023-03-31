@@ -53,7 +53,8 @@
 #include "kundo2stack_p.h"
 #include "kundo2group.h"
 #include <KoIcon.h>
-#include<QtGlobal>
+#include <QtGlobal>
+#include "kis_assert.h"
 
 
 #ifndef QT_NO_UNDOCOMMAND

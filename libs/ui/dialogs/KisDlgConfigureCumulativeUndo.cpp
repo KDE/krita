@@ -100,13 +100,13 @@ KisDlgConfigureCumulativeUndo::KisDlgConfigureCumulativeUndo(const KisCumulative
     QLabel *help = new QLabel(
         i18n("Cumulative Undo allows Krita to merge undo actions "
              "and make undo history cleaner. Krita will still keep "
-             "a few latest actions unmerged acoording to "
+             "a few latest actions unmerged according to "
              "\"Wait before merging strokes\" and \"Exclude last strokes from merge\" "
              "options. Whenever an action gets outdated using "
-             "the time limit and this action is not excuded using "
+             "the time limit and this action is not excluded using "
              "\"Exclude last strokes from merge\", Krita will try "
              " to merge this action into a group. The groups are "
-             "fomed using \"Max group strokes delay\" and "
+             "formed using \"Max group strokes delay\" and "
              "\"Max group duration\" options."),
         page);
     help->setWordWrap(true);

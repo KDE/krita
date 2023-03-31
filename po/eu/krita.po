@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-18 00:56+0000\n"
+"POT-Creation-Date: 2023-03-31 00:44+0000\n"
 "PO-Revision-Date: 2023-02-10 21:36+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -17192,7 +17192,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:123
-#: libs/ui/canvas/kis_canvas_controller.cpp:359
+#: libs/ui/canvas/kis_canvas_controller.cpp:369
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -22259,13 +22259,13 @@ msgid "Horizontal mirroring: %1 "
 msgstr "Isla horizontala: %1"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:347
+#: libs/ui/canvas/kis_canvas_controller.cpp:357
 #, kde-format
 msgid "OFF"
 msgstr "ITZALITA"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:347
+#: libs/ui/canvas/kis_canvas_controller.cpp:357
 #, kde-format
 msgid "ON"
 msgstr "PIZTUTA"
@@ -22276,7 +22276,7 @@ msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Biraketa: %1º"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:280
+#: libs/ui/canvas/kis_canvas_controller.cpp:290
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -22285,24 +22285,24 @@ msgstr ""
 "Modu inguratzailea aktibatzen ari zara, baina ez duzu OpenGL gaitu.\n"
 "Modu inguratzailea irudikatzeko, gaitu OpenGL."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:346
+#: libs/ui/canvas/kis_canvas_controller.cpp:356
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Bat-batean aurreikusteko modua:  %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:353
+#: libs/ui/canvas/kis_canvas_controller.cpp:363
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "Bat-batean aurreikustea onartzen da soilik OpenGL aktibatuta dagoenean"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:359
+#: libs/ui/canvas/kis_canvas_controller.cpp:369
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Bizilagun hurbilena"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:360
+#: libs/ui/canvas/kis_canvas_controller.cpp:370
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -22313,7 +22313,7 @@ msgstr ""
 " iragazteko modu trilinialean edo Kalitate handikoan.\n"
 "Uneko modua %1 da"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:364
+#: libs/ui/canvas/kis_canvas_controller.cpp:374
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -28278,39 +28278,39 @@ msgstr "Panoramika goitik"
 msgid "Pan Down"
 msgstr "Panoramika behetik"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:39
+#: libs/ui/input/kis_rotate_canvas_action.cpp:38
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "Biratu oihala"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:40
+#: libs/ui/input/kis_rotate_canvas_action.cpp:39
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr "<i>Oihala biratzea</i> ekintzak oihala biratzen du."
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:43
+#: libs/ui/input/kis_rotate_canvas_action.cpp:42
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Rotate Mode"
 msgstr "Biratze modua"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:44
+#: libs/ui/input/kis_rotate_canvas_action.cpp:43
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:40
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "Biratze modu diskretua"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:45
+#: libs/ui/input/kis_rotate_canvas_action.cpp:44
 #, kde-format
 msgid "Rotate Left"
 msgstr "Biratu ezkerrera"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:46
+#: libs/ui/input/kis_rotate_canvas_action.cpp:45
 #, kde-format
 msgid "Rotate Right"
 msgstr "Biratu eskuinera"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_rotate_canvas_action.cpp:46
 #, kde-format
 msgid "Reset Rotation"
 msgstr "Berrezarri biraketa"
@@ -33676,8 +33676,8 @@ msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
 "bits. arg5: image size"
 msgid ""
-"This document will be %1 pixels by %2 pixels in %3, which means the pixel "
-"size is %4 bit. A single paint layer will thus take up %5 of RAM."
+"This document will be %1 pixels by %2 pixels in %3. The pixel size is %4 "
+"bit. A single paint layer will use %5 of RAM."
 msgstr ""
 
 #: libs/ui/widgets/kis_filter_selector_widget.cc:157

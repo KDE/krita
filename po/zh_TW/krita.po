@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-18 00:56+0000\n"
+"POT-Creation-Date: 2023-03-31 00:44+0000\n"
 "PO-Revision-Date: 2022-11-24 09:58+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -16910,7 +16910,7 @@ msgstr "複製影像中的像素。保留所有原始細節，但可能伴有鋸
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:123
-#: libs/ui/canvas/kis_canvas_controller.cpp:359
+#: libs/ui/canvas/kis_canvas_controller.cpp:369
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -21901,13 +21901,13 @@ msgid "Horizontal mirroring: %1 "
 msgstr "畫布鏡像顯示：%1"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:347
+#: libs/ui/canvas/kis_canvas_controller.cpp:357
 #, kde-format
 msgid "OFF"
 msgstr "關閉"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:347
+#: libs/ui/canvas/kis_canvas_controller.cpp:357
 #, kde-format
 msgid "ON"
 msgstr "開啟"
@@ -21918,7 +21918,7 @@ msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "旋轉：%1°"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:280
+#: libs/ui/canvas/kis_canvas_controller.cpp:290
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -21927,24 +21927,24 @@ msgstr ""
 "您已進入連續環繞模式，但 OpenGL 未被啟用。\n"
 "啟用 OpenGL 後影像環繞模式的效果才能顯示。"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:346
+#: libs/ui/canvas/kis_canvas_controller.cpp:356
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "即時預覽模式：%1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:353
+#: libs/ui/canvas/kis_canvas_controller.cpp:363
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "即時預覽只在 OpenGL 啟用時可用"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:359
+#: libs/ui/canvas/kis_canvas_controller.cpp:369
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "最近相鄰"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:360
+#: libs/ui/canvas/kis_canvas_controller.cpp:370
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -21955,7 +21955,7 @@ msgstr ""
 "三線性過濾或高品質過濾模式下有效。\n"
 "目前模式為%1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:364
+#: libs/ui/canvas/kis_canvas_controller.cpp:374
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -27863,39 +27863,39 @@ msgstr "向上平移"
 msgid "Pan Down"
 msgstr "向下平移"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:39
+#: libs/ui/input/kis_rotate_canvas_action.cpp:38
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "旋轉畫布"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:40
+#: libs/ui/input/kis_rotate_canvas_action.cpp:39
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr "<b>旋轉畫布</b>操作用於對畫布檢視進行旋轉。"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:43
+#: libs/ui/input/kis_rotate_canvas_action.cpp:42
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Rotate Mode"
 msgstr "旋轉模式"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:44
+#: libs/ui/input/kis_rotate_canvas_action.cpp:43
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:40
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "非連續旋轉模式"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:45
+#: libs/ui/input/kis_rotate_canvas_action.cpp:44
 #, kde-format
 msgid "Rotate Left"
 msgstr "向左旋轉"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:46
+#: libs/ui/input/kis_rotate_canvas_action.cpp:45
 #, kde-format
 msgid "Rotate Right"
 msgstr "向右旋轉"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_rotate_canvas_action.cpp:46
 #, kde-format
 msgid "Reset Rotation"
 msgstr "重設旋轉"
@@ -33231,13 +33231,19 @@ msgstr ""
 "框。"
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:535
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel "
+#| "in bits. arg5: image size"
+#| msgid ""
+#| "This document will be %1 pixels by %2 pixels in %3, which means the pixel "
+#| "size is %4 bit. A single paint layer will thus take up %5 of RAM."
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
 "bits. arg5: image size"
 msgid ""
-"This document will be %1 pixels by %2 pixels in %3, which means the pixel "
-"size is %4 bit. A single paint layer will thus take up %5 of RAM."
+"This document will be %1 pixels by %2 pixels in %3. The pixel size is %4 "
+"bit. A single paint layer will use %5 of RAM."
 msgstr ""
 "此檔案的大小為 %1 像素 x %2 像素，色彩空間為 %3 ，像素大小為 %4 位元 。每個顏"
 "料圖層將佔用 %5 記憶體。"

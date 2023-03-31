@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-18 00:56+0000\n"
+"POT-Creation-Date: 2023-03-31 00:44+0000\n"
 "PO-Revision-Date: 2023-03-20 13:56+0000\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -17269,7 +17269,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:123
-#: libs/ui/canvas/kis_canvas_controller.cpp:359
+#: libs/ui/canvas/kis_canvas_controller.cpp:369
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -22306,13 +22306,13 @@ msgid "Horizontal mirroring: %1 "
 msgstr "Espelho horizontal: %1 "
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:347
+#: libs/ui/canvas/kis_canvas_controller.cpp:357
 #, kde-format
 msgid "OFF"
 msgstr "DESLIGADO"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:347
+#: libs/ui/canvas/kis_canvas_controller.cpp:357
 #, kde-format
 msgid "ON"
 msgstr "LIGADO"
@@ -22323,7 +22323,7 @@ msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Rotação: %1° "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:280
+#: libs/ui/canvas/kis_canvas_controller.cpp:290
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -22332,24 +22332,24 @@ msgstr ""
 "Está a activar o modo de envolvência, mas não activou o OpenGL.\n"
 "Para visualizar o modo de envolvência, active o OpenGL."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:346
+#: libs/ui/canvas/kis_canvas_controller.cpp:356
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Modo de Antevisão Instantânea: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:353
+#: libs/ui/canvas/kis_canvas_controller.cpp:363
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "A Antevisão Instantânea só é suportada com o OpenGL activo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:359
+#: libs/ui/canvas/kis_canvas_controller.cpp:369
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Vizinho Mais Próximo"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:360
+#: libs/ui/canvas/kis_canvas_controller.cpp:370
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -22360,7 +22360,7 @@ msgstr ""
 " nos modos de filtragem Trilinear de Alta-Qualidade.\n"
 "O modo actual é o %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:364
+#: libs/ui/canvas/kis_canvas_controller.cpp:374
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -28362,39 +28362,39 @@ msgstr "Deslocar para Cima"
 msgid "Pan Down"
 msgstr "Deslocar para Baixo"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:39
+#: libs/ui/input/kis_rotate_canvas_action.cpp:38
 #, kde-format
 msgid "Rotate Canvas"
 msgstr "Rodar a Área de Desenho"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:40
+#: libs/ui/input/kis_rotate_canvas_action.cpp:39
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
 msgstr "A acção <i>Rodar a Área de Desenho</i> roda a área de desenho."
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:43
+#: libs/ui/input/kis_rotate_canvas_action.cpp:42
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Rotate Mode"
 msgstr "Modo de Rotação"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:44
+#: libs/ui/input/kis_rotate_canvas_action.cpp:43
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:40
 #, kde-format
 msgid "Discrete Rotate Mode"
 msgstr "Modo de Rotação Discreta"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:45
+#: libs/ui/input/kis_rotate_canvas_action.cpp:44
 #, kde-format
 msgid "Rotate Left"
 msgstr "Rodar para a Esquerda"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:46
+#: libs/ui/input/kis_rotate_canvas_action.cpp:45
 #, kde-format
 msgid "Rotate Right"
 msgstr "Rodar para a Direita"
 
-#: libs/ui/input/kis_rotate_canvas_action.cpp:47
+#: libs/ui/input/kis_rotate_canvas_action.cpp:46
 #, kde-format
 msgid "Reset Rotation"
 msgstr "Repor a Rotação"
@@ -33871,13 +33871,19 @@ msgstr ""
 "bits ou em \"Cancelar\" para voltar à janela de configuração."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:535
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel "
+#| "in bits. arg5: image size"
+#| msgid ""
+#| "This document will be %1 pixels by %2 pixels in %3, which means the pixel "
+#| "size is %4 bit. A single paint layer will thus take up %5 of RAM."
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
 "bits. arg5: image size"
 msgid ""
-"This document will be %1 pixels by %2 pixels in %3, which means the pixel "
-"size is %4 bit. A single paint layer will thus take up %5 of RAM."
+"This document will be %1 pixels by %2 pixels in %3. The pixel size is %4 "
+"bit. A single paint layer will use %5 of RAM."
 msgstr ""
 "Este documento terá %1 pixels por %2 pixels em %3, o que significa que o "
 "tamanho de cada pixel é de %4 bits. Uma única camada de pintura irá assim "

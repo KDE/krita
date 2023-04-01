@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-31 00:44+0000\n"
-"PO-Revision-Date: 2023-03-18 08:54+0200\n"
+"PO-Revision-Date: 2023-03-31 14:15+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -33939,13 +33939,7 @@ msgstr ""
 "вікна параметрів."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:535
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel "
-#| "in bits. arg5: image size"
-#| msgid ""
-#| "This document will be %1 pixels by %2 pixels in %3, which means the pixel "
-#| "size is %4 bit. A single paint layer will thus take up %5 of RAM."
+#, kde-format
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
 "bits. arg5: image size"
@@ -33954,8 +33948,8 @@ msgid ""
 "bit. A single paint layer will use %5 of RAM."
 msgstr ""
 "Розміри цього документа у %3 будуть дорівнювати у пікселях %1 на %2. Об'єм "
-"даних для одного пікселя у бітах дорівнюватиме %4. Таким чином, один шар "
-"зображення займатиме до %5 у оперативній пам'яті."
+"даних для одного пікселя у бітах дорівнюватиме %4. Один шар зображення "
+"займатиме до %5 у оперативній пам'яті."
 
 #: libs/ui/widgets/kis_filter_selector_widget.cc:157
 #, kde-format

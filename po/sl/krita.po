@@ -8,6 +8,7 @@
 # This file is distributed under the same license as the Krita package.
 #
 #
+#
 # Marko Samastur <markos@elite.org>, 2000.
 # Gregor Rakar <gregor.rakar@kiss.si>, 2002, 2003, 2004, 2005.
 # Andrej Vernekar <andrej.vernekar@gmail.com>, 2002,2003, 2005, 2006, 2007, 2008, 2010, 2011, 2012, 2013.
@@ -16,21 +17,20 @@
 # Jure Repinc <jlp@holodeck1.com>, 2006, 2012.
 # Matjaž Jeran <matjaz.jeran@amis.net>, 2020, 2021, 2022, 2023.
 # Martin Srebotnjak <miles@filmsi.net>, 2020, 2021, 2022, 2023.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-31 00:44+0000\n"
-"PO-Revision-Date: 2023-03-19 09:47+0100\n"
-"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
+"PO-Revision-Date: 2023-04-01 10:34+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "X-Generator: Poedit 3.2.2\n"
 
@@ -33484,13 +33484,7 @@ msgstr ""
 "nastavitvami."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:535
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel "
-#| "in bits. arg5: image size"
-#| msgid ""
-#| "This document will be %1 pixels by %2 pixels in %3, which means the pixel "
-#| "size is %4 bit. A single paint layer will thus take up %5 of RAM."
+#, kde-format
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
 "bits. arg5: image size"
@@ -33498,8 +33492,8 @@ msgid ""
 "This document will be %1 pixels by %2 pixels in %3. The pixel size is %4 "
 "bit. A single paint layer will use %5 of RAM."
 msgstr ""
-"Ta dokument bo %1 sl. točk krat %2 sl. točk v %3, kar pomeni, da je velikost "
-"slik. točk %4 bitov. Enobarvni sloj bo tako prevzel %5 RAM-a."
+"Ta dokument bo %1 sl. točk krat %2 sl. točk v %3. Velikost slik. točke je %4 "
+"bitov. Enobarvni sloj bo uporabil %5 RAM-a."
 
 #: libs/ui/widgets/kis_filter_selector_widget.cc:157
 #, kde-format

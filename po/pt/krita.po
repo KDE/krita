@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-31 00:44+0000\n"
-"PO-Revision-Date: 2023-03-20 13:56+0000\n"
+"PO-Revision-Date: 2023-04-01 12:02+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -33871,13 +33871,7 @@ msgstr ""
 "bits ou em \"Cancelar\" para voltar à janela de configuração."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:535
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel "
-#| "in bits. arg5: image size"
-#| msgid ""
-#| "This document will be %1 pixels by %2 pixels in %3, which means the pixel "
-#| "size is %4 bit. A single paint layer will thus take up %5 of RAM."
+#, kde-format
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
 "bits. arg5: image size"
@@ -33885,9 +33879,8 @@ msgid ""
 "This document will be %1 pixels by %2 pixels in %3. The pixel size is %4 "
 "bit. A single paint layer will use %5 of RAM."
 msgstr ""
-"Este documento terá %1 pixels por %2 pixels em %3, o que significa que o "
-"tamanho de cada pixel é de %4 bits. Uma única camada de pintura irá assim "
-"ocupar %5 of RAM."
+"Este documento terá %1 pixels por %2 pixels em %3. O tamanho de cada pixel é "
+"de %4 bits. Uma única camada de pintura irá assim ocupar %5 of RAM."
 
 #: libs/ui/widgets/kis_filter_selector_widget.cc:157
 #, kde-format

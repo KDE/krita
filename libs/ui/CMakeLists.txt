@@ -699,7 +699,7 @@ target_link_libraries(kritaui
 )
 
 if (MLT_FOUND)
-    target_link_libraries(kritaui SDL2 mlt-7 mlt++-7)
+    target_link_libraries(kritaui PRIVATE SDL2 mlt-7 mlt++-7)
 endif()
 
 if (ANDROID)

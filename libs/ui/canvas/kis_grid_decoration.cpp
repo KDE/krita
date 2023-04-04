@@ -79,9 +79,10 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
     gc.setRenderHints(QPainter::HighQualityAntialiasing, false);
 
 
-    QRectF updateRectInImagePixels =
+    const QRect imageRectInImagePixels = converter->imageRectInImagePixels();
+    const QRectF updateRectInImagePixels =
         converter->documentToImage(updateArea) &
-        converter->imageRectInImagePixels();
+        imageRectInImagePixels;
 
     // for angles. This will later be a combobox to select different types of options
     // also add options to hide specific lines (vertical, horizonta, angle 1, etc
@@ -109,7 +110,8 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
                 int w = offset + i * step;
 
                 gc.setPen(i % subdivision == 0 ? mainPen : subdivisionPen);
-                gc.drawLine(QPointF(w, y1),QPointF(w, y2));
+                // we adjusted y2 to draw the grid correctly, clip it now...
+                gc.drawLine(QPointF(w, y1),QPointF(w, qMin(y2, qreal(imageRectInImagePixels.bottom() + 1))));
             }
         }
 
@@ -126,7 +128,8 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
                 int w = offset + i * step;
 
                 gc.setPen(i % subdivision == 0 ? mainPen : subdivisionPen);
-                gc.drawLine(QPointF(x1, w),QPointF(x2, w));
+                // we adjusted x2 to draw the grid correctly, clip it now...
+                gc.drawLine(QPointF(x1, w),QPointF(qMin(x2, qreal(imageRectInImagePixels.right() + 1)), w));
             }
         }
     }

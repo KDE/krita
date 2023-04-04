@@ -35,7 +35,6 @@ https://bugs.kde.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=CONFIRMED&bug
 ### Discussion Forum
 
 * https://krita-artists.org/
-* http://forum.kde.org/viewforum.php?f=136
 
 ### IRC channel
 

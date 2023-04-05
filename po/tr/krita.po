@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-31 00:44+0000\n"
-"PO-Revision-Date: 2023-03-31 12:36+0300\n"
+"PO-Revision-Date: 2023-04-05 00:52+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16296,7 +16296,7 @@ msgstr "Tutacı taşımak için sürükleyin."
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
-"Noktayı taşımak için sürükleyin. Nokta türünü değiştirmek için Shift "
+"Noktayı taşımak için sürükleyin. Nokta türünü değiştirmek için Üst Karakter "
 "düğmesini basılı tutarak tıklayın."
 
 #: libs/flake/tools/KoPathTool.cpp:716
@@ -25013,7 +25013,7 @@ msgstr "Sert (Krita 4.1 ve önceki sürümler)"
 #: libs/ui/forms/wdggeneralsettings.ui:703
 #, kde-format
 msgid "Switch Control/Alt Selection Modifiers"
-msgstr "Kontrol/Alt Seçim Düzenleyicilerini Değiştir"
+msgstr "Kontrol/Seçenek Seçim Düzenleyicilerini Değiştir"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTouch)
 #: libs/ui/forms/wdggeneralsettings.ui:710
@@ -28156,25 +28156,25 @@ msgstr " + "
 #, kde-format
 msgctxt "Ctrl key"
 msgid "Ctrl"
-msgstr "Ctrl"
+msgstr "Kontrol"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:379
 #, kde-format
 msgctxt "Meta key"
 msgid "Meta"
-msgstr "Üst Birim"
+msgstr "Meta"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:383
 #, kde-format
 msgctxt "Alt key"
 msgid "Alt"
-msgstr "Alt"
+msgstr "Seçenek"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:387
 #, kde-format
 msgctxt "Shift key"
 msgid "Shift"
-msgstr "Shift"
+msgstr "Üst Karakter"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:399
 #, kde-format
@@ -28553,7 +28553,7 @@ msgstr "Her ikisi de hatalıysa boyutu elle girin:"
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:159
 #, kde-format
 msgid "Do not ask again (hold Shift to ask again)"
-msgstr "Bir daha sorma (yeniden sormak için Shift'i basılı tutun)"
+msgstr "Bir daha sorma (yeniden sormak için Üst Karakter'i basılı tutun)"
 
 #: libs/ui/kis_animation_importer.cpp:65
 msgctxt "(qtundo-format)"
@@ -28615,12 +28615,12 @@ msgstr "Sık Kullanılanlar"
 #: libs/ui/kis_control_frame.cpp:62
 #, kde-format
 msgid "Fill Patterns"
-msgstr "Desenleri Doldur"
+msgstr "Dolgu Desenleri"
 
 #: libs/ui/kis_control_frame.cpp:66
 #, kde-format
 msgid "Fill Gradients"
-msgstr "Gradyanlar Doldur"
+msgstr "Dolgu Gradyanları"
 
 #: libs/ui/kis_control_frame.cpp:76
 #, kde-format
@@ -29093,7 +29093,7 @@ msgstr "Araç Ayarları"
 #: libs/ui/kis_paintop_box.cc:119
 #, kde-format
 msgid "Edit brush settings"
-msgstr "Fırça ayarını düzenle"
+msgstr "Fırça ayarlarını düzenle"
 
 #: libs/ui/kis_paintop_box.cc:126
 #, kde-format
@@ -35949,8 +35949,8 @@ msgid ""
 "Search interactively for shortcut names (e.g. Copy) or combination of keys "
 "(e.g. Ctrl+C) by typing them here."
 msgstr ""
-"Kısayol adları (ör. Kopyala) veya düğme kombinasyonları (ör. Ctrl+C) buraya "
-"yazarak etkileşimli olarak arayabilirsiniz."
+"Kısayol adları (ör. Kopyala) veya düğme kombinasyonları (ör. Kontrol+C) "
+"buraya yazarak etkileşimli olarak arayabilirsiniz."
 
 #. i18n: ectx: property (whatsThis), widget (QTreeWidget, list)
 #: libs/widgetutils/xmlgui/KisShortcutsDialog.ui:28
@@ -36085,7 +36085,7 @@ msgid ""
 msgstr ""
 "Düğmeye tıklayın, ardından programda hep yaptığınız gibi kısayol düğmelerine "
 "basın.\n"
-"Ctrl+A için örnek: Ctrl düğmesine basılı tutup A düğmesine basın."
+"Kontrol+A için örnek: Kontrol düğmesine basılı tutup A düğmesine basın."
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:536
 #, kde-format
@@ -42365,8 +42365,8 @@ msgid ""
 "The shortcut to fire this action, such as 'Ctrl+1', or a QKeySequence "
 "instance, or None."
 msgstr ""
-"Bu eylemi başlatmak için bir kısayol, 'Ctrl+1' veya bir QKeySequence örneği "
-"veya Hiçbiri gibi."
+"Bu eylemi başlatmak için bir kısayol, 'Kontrol+1' veya bir QKeySequence "
+"örneği veya Hiçbiri gibi."
 
 #. i18n: ectx: property (text), widget (QLabel, labelText)
 #: plugins/extensions/pykrita/plugin/info.ui:68
@@ -42437,7 +42437,7 @@ msgid ""
 "The shortcut to fire this action such as 'Ctrl+1', or a QKeySequence "
 "instance, or None."
 msgstr ""
-"'Ctrl+1' veya bir QKeySequence örneği gibi bu eylemi başlatacak kısayol, "
+"'Kontrol+1' veya bir QKeySequence örneği gibi bu eylemi başlatacak kısayol, "
 "veya Hiçbiri."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -42488,7 +42488,7 @@ msgstr "&Çalıştır"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:66
 #, kde-format
 msgid "Ctrl+W"
-msgstr "Ctrl+W"
+msgstr "Kontrol+W"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:71
@@ -42500,7 +42500,7 @@ msgstr "&Çık"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:79
 #, kde-format
 msgid "Ctrl+R"
-msgstr "Ctrl+R"
+msgstr "Kontrol+R"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:84
@@ -42512,7 +42512,7 @@ msgstr "Konsolda betiği ça&lıştır"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:87
 #, kde-format
 msgid "Ctrl+C"
-msgstr "Ctrl+C"
+msgstr "Kontrol+C"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:92
@@ -42524,7 +42524,7 @@ msgstr "Python"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:95
 #, kde-format
 msgid "Ctrl+N"
-msgstr "Ctrl+N"
+msgstr "Kontrol+N"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:100
@@ -42554,7 +42554,7 @@ msgstr "Betiği kaydet"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:119
 #, kde-format
 msgid "Ctrl+A"
-msgstr "Ctrl+A"
+msgstr "Kontrol+A"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:124
@@ -42572,7 +42572,7 @@ msgstr "Bir betik aç"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:130
 #, kde-format
 msgid "Ctrl+O"
-msgstr "Ctrl+O"
+msgstr "Kontrol+O"
 
 #. i18n: ectx: property (toolTip), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:138
@@ -42588,7 +42588,7 @@ msgstr "Geçerli betiği kaydet"
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:212
 #, kde-format
 msgid "Ctrl+S"
-msgstr "Ctrl+S"
+msgstr "Kontrol+S"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/pykrita/plugin/manager.ui:21
@@ -50806,9 +50806,9 @@ msgid ""
 "html>"
 msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Klon Fırçası:</"
-"span></p><p>Geçerli katmandan kaynak noktayı Ctrl-tık ile seçin. Önceden "
-"seçilmiş katmandan bir kaynak seçmek için Ctrl+Alt+tık düğme kombinasyonunu "
-"kullanın.</p></body></html>"
+"span></p><p>Geçerli katmandan kaynak noktayı Kontrol-tık ile seçin. Önceden "
+"seçilmiş katmandan bir kaynak seçmek için Kontrol+Seçenek+tık düğme "
+"kombinasyonunu kullanın.</p></body></html>"
 
 #: plugins/paintops/deform/deform_paintop_plugin.cpp:29
 #, kde-format
@@ -51177,7 +51177,7 @@ msgstr "Yumuşatma:"
 #: plugins/paintops/hairy/wdgbristleoptions.ui:205
 #, kde-format
 msgid "Composite bristles:"
-msgstr "Birleşiklik fırçalar:"
+msgstr "Bileşik kıllar:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, brushTab)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:37
@@ -55841,7 +55841,7 @@ msgstr "Hata Ayıkla"
 
 #: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:23
 msgid "Debug Ctrl+D"
-msgstr "Hata Ayıkla Ctrl+D"
+msgstr "Hata Ayıkla Kontrol+D"
 
 #: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:20
 msgid "New"
@@ -55877,7 +55877,7 @@ msgstr "Dosyayı Yeniden Yükle"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:26
 msgid "Reload File Alt+R"
-msgstr "Dosyayı Yeniden Yükle Alt+R"
+msgstr "Dosyayı Yeniden Yükle Seçenek+R"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:39
 msgid "No existing document"
@@ -55899,7 +55899,7 @@ msgstr "Çalıştır"
 
 #: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:40
 msgid "Run Ctrl+R"
-msgstr "Çalıştır Ctrl+R"
+msgstr "Çalıştır Kontrol+R"
 
 #: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:35
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:33
@@ -56661,8 +56661,8 @@ msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
 "+Drag will force you to draw straight lines"
 msgstr ""
-"Alt+Sürükleme şu anda gösterilen çizginin merkezini etrafta hareket ettirir, "
-"Shift+Sürükleme sizi düz çizgiler çizmeye zorlar"
+"Seçenek+Sürükleme şu anda gösterilen çizginin merkezini etrafta hareket "
+"ettirir, Üst Karakter+Sürükleme sizi düz çizgiler çizmeye zorlar"
 
 #: plugins/tools/basictools/kis_tool_line.h:113
 #, kde-format
@@ -56756,7 +56756,7 @@ msgstr "Bezier Eğrisi Çiz"
 #: plugins/tools/basictools/kis_tool_path.h:84
 #, kde-format
 msgid "Bezier Curve Tool: Shift-mouseclick ends the curve."
-msgstr "Bezier Eğrisi Aracı: Shift-fare tıklaması eğriyi sonlandırır."
+msgstr "Bezier Eğrisi Aracı: Üst Karakter-fare tıklaması eğriyi sonlandırır."
 
 #: plugins/tools/basictools/kis_tool_pencil.cc:120
 msgctxt "(qtundo-format)"
@@ -56795,7 +56795,7 @@ msgstr "Bezier Eğrisi Aracı"
 msgctxt "action"
 msgid "Bezier Curve Tool. Shift-mouseclick or double-click ends the curve."
 msgstr ""
-"Bezier Eğrisi Aracı. Shift ve fare tıklaması veya çift tıklama eğriyi "
+"Bezier Eğrisi Aracı. Üst Karakter ve fare tıklaması veya çift tıklama eğriyi "
 "sonlandırır."
 
 #. i18n: context: text @ Action (KisToolPencil), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -57000,7 +57000,8 @@ msgstr "Taşı Kısayolu"
 #, kde-format
 msgid "When holding shift, move keyboard shortcuts scale up by this amount."
 msgstr ""
-"Shift düğmesine basarken, klavye kısayolları ölçeğini bu miktarda taşıyın."
+"Üst Karakter düğmesine basarken, klavye kısayolları ölçeğini bu miktarda "
+"taşıyın."
 
 #. i18n: ectx: property (text), widget (QLabel, scaleLabel)
 #: plugins/tools/basictools/wdgmovetool.ui:112
@@ -57328,7 +57329,7 @@ msgstr "Değişiklikleri Sıfırla"
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
 #, kde-format
 msgid "Press Shift to hold x- or y-position."
-msgstr "x- veya y- konumunu tutmak için Shift'e basın."
+msgstr "x- veya y- konumunu tutmak için Üst Karakter'e basın."
 
 #: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:96
 #, kde-format
@@ -59199,7 +59200,7 @@ msgstr "Çokgen Çiz"
 #: plugins/tools/tool_polygon/kis_tool_polygon.h:41
 #, kde-format
 msgid "Polygon Tool: Shift-mouseclick ends the polygon."
-msgstr "Çokgen Aracı: Shift ve fare tıklaması çokgeni sonlandırır."
+msgstr "Çokgen Aracı: Üst Karakter ve fare tıklaması çokgeni sonlandırır."
 
 #. i18n: context: text @ Action (KisToolPolygon), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_polygon/KisToolPolygon.action:7
@@ -59217,12 +59218,13 @@ msgstr "Çokgen Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Polygon Tool. Shift-mouseclick ends the polygon."
-msgstr "Çokgen Aracı. Shift ve fare tıklaması çokgeni sonlandırır."
+msgstr "Çokgen Aracı. Üst Karakter ve fare tıklaması çokgeni sonlandırır."
 
 #: plugins/tools/tool_polyline/kis_tool_polyline.h:42
 #, kde-format
 msgid "Polyline Tool: Shift-mouseclick ends the polyline."
-msgstr "Süren Çizgi Aracı: Shift ve fare tıklaması çoklu çizgiyi sonlandırır."
+msgstr ""
+"Süren Çizgi Aracı: Üst Karakter ve fare tıklaması çoklu çizgiyi sonlandırır."
 
 #. i18n: context: text @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_polyline/KisToolPolyline.action:7
@@ -59240,7 +59242,8 @@ msgstr "Süren Çizgi Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Polyline Tool. Shift-mouseclick ends the polyline."
-msgstr "Süren Çizgi Aracı. Shift ve fare tıklaması çoklu çizgiyi sonlandırır."
+msgstr ""
+"Süren Çizgi Aracı. Üst Karakter ve fare tıklaması çoklu çizgiyi sonlandırır."
 
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:133
 #, kde-format
@@ -59646,7 +59649,7 @@ msgstr "S&üz:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:377
 #, kde-format
 msgid "Transform around pivot point (Alt)"
-msgstr "Pivot noktası çevresinde dönüştür (Alt)"
+msgstr "Pivot noktası çevresinde dönüştür (Seçenek)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeMoveRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:630

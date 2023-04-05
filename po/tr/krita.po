@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-03-24 16:46+0300\n"
+"PO-Revision-Date: 2023-04-05 00:50+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -24712,7 +24712,7 @@ msgstr "Sert (Krita 4.1 ve önceki sürümler)"
 #: libs/ui/forms/wdggeneralsettings.ui:667
 #, kde-format
 msgid "Switch Control/Alt Selection Modifiers"
-msgstr "Kontrol/Alt Seçim Düzenleyicilerini Değiştir"
+msgstr "Kontrol/Seçenek Seçim Düzenleyicilerini Değiştir"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTouch)
 #: libs/ui/forms/wdggeneralsettings.ui:674
@@ -27797,13 +27797,13 @@ msgstr "Ctrl"
 #, kde-format
 msgctxt "Meta key"
 msgid "Meta"
-msgstr "Üst Birim"
+msgstr "Meta"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:351
 #, kde-format
 msgctxt "Alt key"
 msgid "Alt"
-msgstr "Alt"
+msgstr "Seçenek"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:355
 #, kde-format
@@ -54994,7 +54994,7 @@ msgstr "Dosyayı Yeniden Yükle"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:26
 msgid "Reload File Alt+R"
-msgstr "Dosyayı Yeniden Yükle Alt+R"
+msgstr "Dosyayı Yeniden Yükle Seçenek+R"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:39
 msgid "No existing document"
@@ -58742,7 +58742,7 @@ msgstr "S&üz:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:377
 #, kde-format
 msgid "Transform around pivot point (Alt)"
-msgstr "Pivot noktası çevresinde dönüştür (Alt)"
+msgstr "Pivot noktası çevresinde dönüştür (Seçenek)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeMoveRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:630

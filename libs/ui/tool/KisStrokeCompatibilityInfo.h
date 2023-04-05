@@ -12,7 +12,8 @@
 #include <QString>
 #include <KoColor.h>
 #include <KoResourceSignature.h>
-#include <KoCompositeOpRegistry.h>.h>
+#include <KoCompositeOpRegistry.h>
+#include <QUuid>
 
 
 class KisResourcesSnapshot;

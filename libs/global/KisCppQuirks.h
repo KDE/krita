@@ -75,6 +75,19 @@ struct add_const_if
 template <bool is_const, class T>
 using add_const_if_t = typename add_const_if<is_const, T>::type;
 
+/**
+ * copy_const returns type Dst with exactly the same const-qualifier
+ * as type Src. In other words, it copies "constness" property from
+ * type Src to Dst.
+ */
+template <typename Src, typename Dst>
+struct copy_const {
+    using type = add_const_if_t<std::is_const_v<Src>, std::remove_const_t<Dst>>;
+};
+
+template <typename Src, typename Dst>
+using copy_const_t = typename copy_const<Src, Dst>::type;
+
 } // namespace std
 
 #if __cplusplus >= 201603L                                                     \

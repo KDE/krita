@@ -58,9 +58,16 @@ public:
     QTime endTime() const override;
     bool isMerged() const override;
 
+    /**
+     * The function lazily unwraps a saved command `cmd` and passes the internal
+     * command to the the function `func`. If passed `cmd` command is not a saved
+     * command, then it is passed to the function directly.
+     */
     template <typename Command, typename Func>
-    static auto unwrap(Command *cmd, Func &&func) -> decltype(func(static_cast<Command*>(nullptr))) {
-        using SavedCommand = std::add_const_if_t<std::is_const_v<Command>, KisSavedCommand>;
+    static auto unwrap(Command *cmd, Func &&func)
+        -> decltype(func(static_cast<Command*>(nullptr))) {
+
+        using SavedCommand = std::copy_const_t<Command, KisSavedCommand>;
 
         SavedCommand *savedCommand =
             dynamic_cast<SavedCommand*>(cmd);

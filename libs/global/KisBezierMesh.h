@@ -189,7 +189,7 @@ public:
         }
 
         template <class NodeType,
-                  class PointType = std::add_const_if_t<std::is_const<NodeType>::value, QPointF>>
+                  class PointType = std::copy_const_t<NodeType, QPointF>>
         static
         PointType& controlPoint(NodeType &node, ControlType controlType) {
             return

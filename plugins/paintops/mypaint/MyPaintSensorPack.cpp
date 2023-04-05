@@ -54,8 +54,8 @@ static MyPaintSensorFactoriesRegistrar myPaintSensorFactoriesRegistrar;
 
 template <typename Data,
           typename SensorData =
-              std::add_const_if_t<std::is_const_v<Data>,
-                                  KisSensorData>>
+              std::copy_const_t<Data,
+                               KisSensorData>>
 inline std::vector<SensorData*> sensors(Data *data)
 {
     std::vector<SensorData*> result;

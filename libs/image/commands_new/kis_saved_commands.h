@@ -10,6 +10,7 @@
 #include <kundo2command.h>
 #include "kis_types.h"
 #include "kis_stroke_job_strategy.h"
+#include "KisCppQuirks.h"
 
 class KisStrokesFacade;
 
@@ -56,6 +57,18 @@ public:
     using KisSavedCommandBase::setEndTime;
     QTime endTime() const override;
     bool isMerged() const override;
+
+    template <typename Command, typename Func>
+    static auto unwrap(Command *cmd, Func &&func) -> decltype(func(static_cast<Command*>(nullptr))) {
+        using SavedCommand = std::add_const_if_t<std::is_const_v<Command>, KisSavedCommand>;
+
+        SavedCommand *savedCommand =
+            dynamic_cast<SavedCommand*>(cmd);
+
+        return savedCommand ?
+            std::forward<Func>(func)(savedCommand->m_command.data()) :
+            std::forward<Func>(func)(cmd);
+    }
 
 protected:
     void addCommands(KisStrokeId id, bool undo) override;

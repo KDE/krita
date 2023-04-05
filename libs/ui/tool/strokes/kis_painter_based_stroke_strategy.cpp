@@ -27,12 +27,14 @@
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
 
+#include <commands_new/kis_saved_commands.h>
 #include "kis_command_utils.h"
 
 #include "KisInterstrokeDataFactory.h"
 #include "KisInterstrokeDataTransactionWrapperFactory.h"
 #include "KisRunnableStrokeJobsInterface.h"
 #include "KisRunnableStrokeJobUtils.h"
+#include <KisStrokeCompatibilityInfo.h>
 
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QLatin1String &id,
@@ -389,6 +391,40 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     runnableJobsInterface()->addRunnableJobs(jobs);
 }
 
+namespace {
+
+struct MergeableStrokeUndoCommand : KUndo2Command
+{
+    MergeableStrokeUndoCommand(KisResourcesSnapshotSP resourcesSnapshot)
+        : m_compatibilityInfo(*resourcesSnapshot)
+    {
+    }
+
+    bool timedMergeWith(KUndo2Command *_other) override {
+        if(_other->timedId() == this->timedId() && _other->timedId() != -1 ) {
+            const bool isCompatible =
+                KisSavedCommand::unwrap(_other, [this] (KUndo2Command *cmd) {
+                    MergeableStrokeUndoCommand *other =
+                        dynamic_cast<MergeableStrokeUndoCommand*>(cmd);
+                    return other && m_compatibilityInfo == other->m_compatibilityInfo;
+                });
+
+            if (isCompatible) {
+                /// NOTE: we are merging the original (potentially) "saved"
+                ///       command, to the one we unwrapped above, because
+                ///       the unwrapped command is **owned** by the "saved"
+                ///       command
+                return KUndo2Command::timedMergeWith(_other);
+            }
+        }
+        return false;
+    }
+
+    KisStrokeCompatibilityInfo m_compatibilityInfo;
+};
+
+} // namespace
+
 void KisPainterBasedStrokeStrategy::finishStrokeCallback()
 {
     KisNodeSP node = m_resources->currentNode();
@@ -404,9 +440,16 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
         undoAdapter = m_fakeUndoData->undoAdapter.data();
     }
 
-    QSharedPointer<KUndo2Command> parentCommand(new KUndo2Command());
+    QSharedPointer<KUndo2Command> parentCommand;
+
+    if (!m_useMergeID) {
+        parentCommand.reset(new KUndo2Command());
+    } else {
+        parentCommand.reset(new MergeableStrokeUndoCommand(m_resources));
+        parentCommand->setTimedID(timedID(this->id()));
+    }
+
     parentCommand->setText(name());
-    parentCommand->setTimedID(m_useMergeID ? timedID(this->id()) : -1);
     parentCommand->setTime(m_transaction->undoCommand()->time());
     parentCommand->setEndTime(QTime::currentTime());
 

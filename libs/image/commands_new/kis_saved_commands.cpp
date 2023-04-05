@@ -80,26 +80,16 @@ int KisSavedCommand::id() const
 
 bool KisSavedCommand::mergeWith(const KUndo2Command* command)
 {
-    const KisSavedCommand *other =
-        dynamic_cast<const KisSavedCommand*>(command);
-
-    if (other) {
-        command = other->m_command.data();
-    }
-
-    return m_command->mergeWith(command);
+    return unwrap(command, [this] (const KUndo2Command *cmd) {
+        return m_command->mergeWith(cmd);
+    });
 }
 
 bool KisSavedCommand::canAnnihilateWith(const KUndo2Command *command) const
 {
-    const KisSavedCommand *other =
-        dynamic_cast<const KisSavedCommand*>(command);
-
-    if (other) {
-        command = other->m_command.data();
-    }
-
-    return m_command->canAnnihilateWith(command);
+    return unwrap(command, [this] (const KUndo2Command *cmd) {
+        return m_command->canAnnihilateWith(cmd);
+    });
 }
 
 void KisSavedCommand::addCommands(KisStrokeId id, bool undo)
@@ -118,6 +108,11 @@ void KisSavedCommand::setTimedID(int timedID)
 
 bool KisSavedCommand::timedMergeWith(KUndo2Command *other)
 {
+    /// Since we are saving the actual command inside another
+    /// command, so we cannot unwrap the command here. Otherwise
+    /// the shared pointer in `other` will destroy the merged
+    /// command some time later.
+
     return m_command->timedMergeWith(other);
 }
 QVector<KUndo2Command*> KisSavedCommand::mergeCommandsVector() const

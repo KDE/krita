@@ -335,7 +335,7 @@ void KUndo2Command::setTimedID(int value)
 
 bool KUndo2Command::timedMergeWith(KUndo2Command *other)
 {
-    if(other->timedId() == this->timedId() && other->timedId()!=-1 ) {
+    if(other->timedId() == this->timedId() && other->timedId() != -1 ) {
         m_mergeCommandsVector.append(other);
         m_timeOfCreation = other->time();
     } else {
@@ -775,9 +775,8 @@ void KUndo2QStack::push(KUndo2Command *cmd)
                 if ((*dst)->timedId() != -1 &&
                     (*dst)->timedId() == (*src)->timedId() &&
                     (*src)->time().msecsTo((*dst)->endTime()) <= m_cumulativeUndoData.maxGroupDuration &&
-                    (*src)->endTime().msecsTo((*dst)->time()) <= m_cumulativeUndoData.maxGroupSeparation) {
-
-                    (*dst)->timedMergeWith(*src);
+                    (*src)->endTime().msecsTo((*dst)->time()) <= m_cumulativeUndoData.maxGroupSeparation &&
+                    (*dst)->timedMergeWith(*src)) {
 
                     const int removedIndex = std::distance(m_command_list.begin(), src);
 

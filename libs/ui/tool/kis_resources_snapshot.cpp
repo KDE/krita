@@ -397,6 +397,11 @@ KoAbstractGradientSP KisResourcesSnapshot::currentGradient() const
     return m_d->currentGradient;
 }
 
+KisFilterConfigurationSP KisResourcesSnapshot::currentGenerator() const
+{
+    return m_d->currentGenerator;
+}
+
 QBitArray KisResourcesSnapshot::channelLockFlags() const
 {
     QBitArray channelFlags;

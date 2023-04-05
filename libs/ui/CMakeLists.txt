@@ -205,6 +205,7 @@ set(kritaui_LIB_SRCS
     tool/KisToolOutlineBase.cpp
     tool/kis_tool_utils.cpp
     tool/kis_resources_snapshot.cpp
+    tool/KisStrokeCompatibilityInfo.cpp
     tool/kis_smoothing_options.cpp
     tool/KisStabilizerDelayedPaintHelper.cpp
     tool/KisStrokeSpeedMonitor.cpp

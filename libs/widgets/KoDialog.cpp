@@ -450,7 +450,7 @@ int KoDialog::marginHint()
 
 int KoDialog::spacingHint()
 {
-    return QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    return QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing);
 }
 
 int KoDialog::groupSpacingHint()

@@ -616,8 +616,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     whiteBalanceLayout->addWidget(d->blackPointSpinBox,              11, 1, 1, 2);
     whiteBalanceLayout->addWidget(d->whitePointCheckBox,             12, 0, 1, 1);
     whiteBalanceLayout->addWidget(d->whitePointSpinBox,              12, 1, 1, 2);
-    whiteBalanceLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    whiteBalanceLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    whiteBalanceLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+    whiteBalanceLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
 
     addItem(d->whiteBalanceSettings, KisIconUtils::loadIcon("kdcraw").pixmap(16, 16), i18nc("@label", "White Balance"), QString("whitebalance"), true);
 
@@ -704,8 +704,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     correctionsLayout->addWidget(d->caBlueMultLabel,        6, 0, 1, 1);
     correctionsLayout->addWidget(d->caBlueMultSpinBox,      6, 1, 1, 2);
     correctionsLayout->setRowStretch(7, 10);
-    correctionsLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    correctionsLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    correctionsLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+    correctionsLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
 
     addItem(d->correctionsSettings, KisIconUtils::loadIcon("kdcraw").pixmap(16, 16), i18nc("@label", "Corrections"), QString("corrections"), false);
 
@@ -775,8 +775,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     colormanLayout->addWidget(d->outputColorSpaceComboBox, 2, 1, 1, 2);
     colormanLayout->addWidget(d->outIccUrlEdit,            3, 0, 1, 3);
     colormanLayout->setRowStretch(4, 10);
-    colormanLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    colormanLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    colormanLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+    colormanLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
 
     addItem(d->colormanSettings, KisIconUtils::loadIcon("kdcraw").pixmap(16, 16), i18nc("@label", "Color Management"), QString("colormanagement"), false);
 

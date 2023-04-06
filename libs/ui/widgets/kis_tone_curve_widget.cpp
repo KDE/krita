@@ -290,7 +290,7 @@ void KisToneCurveWidget::paintEvent(QPaintEvent*)
         p.fillRect(0, 0, width(), height(),
                    palette().color(QPalette::Disabled, QPalette::Window));
  
-        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
+        QPen pen(palette().color(QPalette::Disabled, QPalette::WindowText));
         pen.setStyle(Qt::SolidLine);
         pen.setWidth(1);
  

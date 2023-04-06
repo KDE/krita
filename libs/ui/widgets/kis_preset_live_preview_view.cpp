@@ -163,7 +163,7 @@ void KisPresetLivePreviewView::paintBackground()
 
         // fill with gray first to clear out what existed from previous preview        
         KisTransaction t(m_layer->paintDevice());
-        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Background) , m_colorSpace));
+        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Window) , m_colorSpace));
         t.end();
 
         m_paintColor = KoColor(palette().color(QPalette::Text), m_colorSpace);
@@ -182,7 +182,7 @@ void KisPresetLivePreviewView::paintBackground()
 
         // fill with gray first to clear out what existed from previous preview
         KisTransaction t(m_layer->paintDevice());
-        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Background) , m_colorSpace));
+        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Window) , m_colorSpace));
         t.end();
 
         m_paintColor = KoColor(palette().color(QPalette::Text), m_colorSpace);

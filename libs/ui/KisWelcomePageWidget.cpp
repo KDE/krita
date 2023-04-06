@@ -305,7 +305,7 @@ void KisWelcomePageWidget::showDropAreaIndicator(bool show)
         dropFrameBorder->setStyleSheet(dropFrameStyle);
     } else {
         QColor textColor = qApp->palette().color(QPalette::Text);
-        QColor backgroundColor = qApp->palette().color(QPalette::Background);
+        QColor backgroundColor = qApp->palette().color(QPalette::Window);
         QColor blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.8);
 
         // QColor.name() turns it into a hex/web format
@@ -317,7 +317,7 @@ void KisWelcomePageWidget::showDropAreaIndicator(bool show)
 void KisWelcomePageWidget::slotUpdateThemeColors()
 {
     textColor = qApp->palette().color(QPalette::Text);
-    backgroundColor = qApp->palette().color(QPalette::Background);
+    backgroundColor = qApp->palette().color(QPalette::Window);
 
     // make the welcome screen labels a subtle color so it doesn't clash with the main UI elements
     blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.8);

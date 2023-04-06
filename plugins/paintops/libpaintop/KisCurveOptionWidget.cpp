@@ -372,7 +372,7 @@ void KisCurveOptionWidget::updateThemedIcons()
     // this helps make the checkboxes show themselves on the dark color themes
     QPalette pal = m_curveOptionWidget->sensorSelector->palette();
     QPalette newPalette = pal;
-    newPalette.setColor(QPalette::Active, QPalette::Background, pal.text().color() );
+    newPalette.setColor(QPalette::Active, QPalette::Window, pal.text().color() );
     m_curveOptionWidget->sensorSelector->setPalette(newPalette);
 
 }

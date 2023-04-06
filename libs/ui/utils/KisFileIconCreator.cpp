@@ -62,7 +62,7 @@ QIcon createIcon(const QImage &source, const QSize &iconSize)
     // draw faint outline
     QPainter painter(&result);
     QColor textColor = qApp->palette().color(QPalette::Text);
-    QColor backgroundColor = qApp->palette().color(QPalette::Background);
+    QColor backgroundColor = qApp->palette().color(QPalette::Window);
     QColor blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.2);
     painter.setPen(blendedColor);
     painter.drawRect(result.rect().adjusted(0, 0, -1, -1));

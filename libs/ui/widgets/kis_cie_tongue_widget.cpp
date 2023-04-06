@@ -627,7 +627,7 @@ void KisCIETongueWidget::paintEvent(QPaintEvent*)
     if ( !isEnabled() )
     {
         p.fillRect(0, 0, width(), height(),
-                   palette().color(QPalette::Disabled, QPalette::Background));
+                   palette().color(QPalette::Disabled, QPalette::Window));
  
         QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
         pen.setStyle(Qt::SolidLine);
@@ -644,7 +644,7 @@ void KisCIETongueWidget::paintEvent(QPaintEvent*)
  
     if (!d->profileDataAvailable)
     {
-        p.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
+        p.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Window));
         QPen pen(palette().color(QPalette::Active, QPalette::Text));
         pen.setStyle(Qt::SolidLine);
         pen.setWidth(1);

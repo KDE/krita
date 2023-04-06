@@ -1268,7 +1268,7 @@ void SvgTextEditor::applySettings()
     QPalette palette = m_textEditorWidget.svgTextEdit->palette();
 
     QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().window().color());
-    palette.setBrush(QPalette::Active, QPalette::Background, QBrush(background));
+    palette.setBrush(QPalette::Active, QPalette::Window, QBrush(background));
     m_textEditorWidget.richTextEdit->setStyleSheet(QString("background-color:%1").arg(background.name()));
     m_textEditorWidget.svgStylesEdit->setStyleSheet(QString("background-color:%1").arg(background.name()));
     m_textEditorWidget.svgTextEdit->setStyleSheet(QString("background-color:%1").arg(background.name()));

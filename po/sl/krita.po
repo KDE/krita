@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-31 00:44+0000\n"
+"POT-Creation-Date: 2023-04-06 00:45+0000\n"
 "PO-Revision-Date: 2023-04-01 10:34+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -15889,25 +15889,25 @@ msgstr "Razmik > 0,5, razmislite o onemogočanju sprotnega predogleda"
 msgid "Could not access brush tip metadata"
 msgstr "Ni bilo mogoče dostopati do metapodatkov konice čopiča"
 
-#: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1142
+#: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #, kde-format
 msgctxt "Default text for undo action"
 msgid "Undo"
 msgstr "Razveljavi"
 
-#: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1142
+#: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #: libs/ui/KisUndoActionsUpdateManager.cpp:44
 #, kde-format
 msgid "Undo %1"
 msgstr "Razveljavi %1"
 
-#: libs/command/kundo2group.cpp:386 libs/command/kundo2stack.cpp:1168
+#: libs/command/kundo2group.cpp:386 libs/command/kundo2stack.cpp:1171
 #, kde-format
 msgctxt "Default text for redo action"
 msgid "Redo"
 msgstr "Znova uveljavi"
 
-#: libs/command/kundo2group.cpp:386 libs/command/kundo2stack.cpp:1168
+#: libs/command/kundo2group.cpp:386 libs/command/kundo2stack.cpp:1171
 #: libs/ui/KisUndoActionsUpdateManager.cpp:49
 #, kde-format
 msgid "Redo %1"
@@ -15919,14 +15919,14 @@ msgstr "Znova uveljavi %1"
 msgid "<empty>"
 msgstr "<prazno>"
 
-#: libs/command/kundo2stack.cpp:1413 libs/ui/input/KisTouchGestureAction.cpp:22
+#: libs/command/kundo2stack.cpp:1397 libs/ui/input/KisTouchGestureAction.cpp:22
 #: libs/widgetutils/xmlgui/kundoactions.cpp:32
 #, kde-format
 msgid "Redo"
 msgstr "Znova uveljavi"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyUndo)
-#: libs/command/kundo2stack.cpp:1432 libs/ui/input/KisTouchGestureAction.cpp:21
+#: libs/command/kundo2stack.cpp:1416 libs/ui/input/KisTouchGestureAction.cpp:21
 #: libs/widgetutils/xmlgui/kundoactions.cpp:51
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1905
 #, kde-format
@@ -16610,7 +16610,7 @@ msgstr "Velikost"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1348
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1351
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1415
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1447
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1464
 #: libs/ui/forms/wdgdisplaysettings.ui:336
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -16891,7 +16891,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (vdelano)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:475
+#: libs/ui/dialogs/kis_dlg_preferences.cc:482
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -17017,7 +17017,7 @@ msgstr "Uvožena slika"
 msgid "Selection Mask"
 msgstr "Maska izbora"
 
-#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2489
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2491
 #: plugins/impex/psd/psd_loader.cpp:189
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19357,7 +19357,7 @@ msgstr "Krajevni viri"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:714
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
-#: libs/ui/dialogs/kis_dlg_preferences.cc:903
+#: libs/ui/dialogs/kis_dlg_preferences.cc:920
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
@@ -19615,8 +19615,8 @@ msgstr "Metapodatki"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1779
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1783
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1796
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1800
 #: libs/ui/forms/wdgdisplaysettings.ui:165 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:326
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -21330,8 +21330,8 @@ msgstr "Glavni zaslon:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:38
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2075
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2077
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2092
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2094
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -21429,8 +21429,8 @@ msgstr "Uvoz video animacije"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2045
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2047
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2062
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2064
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22608,10 +22608,10 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1422
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1425
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1362
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1366
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1370
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1379
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1383
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1387
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1469
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:45
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:52
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:123
@@ -22664,17 +22664,17 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "Zaznanih več virov lepljenja"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:224
 #, kde-format
 msgid "No Cursor"
 msgstr "Brez kazalca"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:223
+#: libs/ui/dialogs/kis_dlg_preferences.cc:225
 #, kde-format
 msgid "Tool Icon"
 msgstr "Ikona orodja"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:224
+#: libs/ui/dialogs/kis_dlg_preferences.cc:226
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -22683,104 +22683,104 @@ msgstr "Ikona orodja"
 msgid "Arrow"
 msgstr "Puščica"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:225
+#: libs/ui/dialogs/kis_dlg_preferences.cc:227
 #, kde-format
 msgid "Small Circle"
 msgstr "Majhen krog"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:226
+#: libs/ui/dialogs/kis_dlg_preferences.cc:228
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
 msgstr "Križec"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:227
+#: libs/ui/dialogs/kis_dlg_preferences.cc:229
 #, kde-format
 msgid "Triangle Righthanded"
 msgstr "Desnoroki trikotnik"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:230
 #, kde-format
 msgid "Triangle Lefthanded"
 msgstr "Levoroki trikotnik"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:229
+#: libs/ui/dialogs/kis_dlg_preferences.cc:231
 #, kde-format
 msgid "Black Pixel"
 msgstr "Črna slikovna točka"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:230
+#: libs/ui/dialogs/kis_dlg_preferences.cc:232
 #, kde-format
 msgid "White Pixel"
 msgstr "Bela slikovna točka"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:233
+#: libs/ui/dialogs/kis_dlg_preferences.cc:235
 #, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "Brez orisa"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:234
+#: libs/ui/dialogs/kis_dlg_preferences.cc:236
 #, kde-format
 msgid "Circle Outline"
 msgstr "Krožni oris"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:235
+#: libs/ui/dialogs/kis_dlg_preferences.cc:237
 #, kde-format
 msgid "Preview Outline"
 msgstr "Predogled orisa"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:236
+#: libs/ui/dialogs/kis_dlg_preferences.cc:238
 #, kde-format
 msgid "Tilt Outline"
 msgstr "Nagnjen oris"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:260
+#: libs/ui/dialogs/kis_dlg_preferences.cc:262
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
 msgid "Eraser"
 msgstr "Radirka"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:336
+#: libs/ui/dialogs/kis_dlg_preferences.cc:338
 #, kde-format
 msgid "On Touch Drag"
 msgstr "ob dotiku povleci"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:337
+#: libs/ui/dialogs/kis_dlg_preferences.cc:339
 #, kde-format
 msgid "On Click Drag"
 msgstr "ob kliku povleci"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:338
+#: libs/ui/dialogs/kis_dlg_preferences.cc:340
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr "ob srednjem kliku povleci"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:375
+#: libs/ui/dialogs/kis_dlg_preferences.cc:377
 #, kde-format
 msgid "Open default window"
 msgstr "Odpri privzeto okno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:376
+#: libs/ui/dialogs/kis_dlg_preferences.cc:378
 #, kde-format
 msgid "Load previous session"
 msgstr "Naloži prejšnjo sejo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:377
+#: libs/ui/dialogs/kis_dlg_preferences.cc:379
 #, kde-format
 msgid "Show session manager"
 msgstr "Pokaži upravitelja sej"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:440
+#: libs/ui/dialogs/kis_dlg_preferences.cc:447
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "Za učinkovanje sprememb je Krito potrebno ponovno zagnati."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:446
+#: libs/ui/dialogs/kis_dlg_preferences.cc:453
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
@@ -22788,22 +22788,22 @@ msgstr ""
 "Shranjevanje na mestu, ki ste ga izbrali prek izbirnika datotek, lahko "
 "upočasni zagon!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:478
+#: libs/ui/dialogs/kis_dlg_preferences.cc:485
 #, kde-format
 msgid "Internal Storage"
 msgstr "Notranja shramba"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:480
+#: libs/ui/dialogs/kis_dlg_preferences.cc:487
 #, kde-format
 msgid "SD-Card"
 msgstr "Kartica SD"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:518
+#: libs/ui/dialogs/kis_dlg_preferences.cc:525
 #, kde-format
 msgid "Choose Manually"
 msgstr "Izberite ročno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:583
+#: libs/ui/dialogs/kis_dlg_preferences.cc:590
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -22828,26 +22828,26 @@ msgstr ""
 ">\n"
 "%2</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:891
+#: libs/ui/dialogs/kis_dlg_preferences.cc:908
 #, kde-format
 msgid "Select a Background Image"
 msgstr "Izberi sliko za ozadje"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:903
+#: libs/ui/dialogs/kis_dlg_preferences.cc:920
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 ni veljavna slikovna datoteka!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:923
+#: libs/ui/dialogs/kis_dlg_preferences.cc:940
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>Opozorilo:</b> na to mesto ni možno pisati."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1026
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1135
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1043
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1152
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1234
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -22855,14 +22855,14 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "Zaslon %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1094
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1111
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "Namesti barvne profile"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1306
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1323
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -22871,204 +22871,204 @@ msgstr ""
 "Uporabi časovne žige gonilnika tablice za hitrost čopiča (lahko povzroči "
 "opazne artefakte pri uporabi API-ja za tablice WinTab)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1308
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1325
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "Uporabi časovne žige gonilnika tablice za hitrost čopiča"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1416
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1433
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1437
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1454
 #, kde-format
 msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " s"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1441
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1458
 #, kde-format
 msgid " fps"
 msgstr " sl/s"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1651
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1668
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1652
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1669
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Programski izrisovalnik/upodabljalnik (zelo počasi)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1654
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1671
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 prek ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1656
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1673
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1663
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1680
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1683
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1700
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Samodejno (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1765
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1782
 #, kde-format
 msgid "Display Id: %1"
 msgstr "ID zaslona: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1766
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1783
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Ime zaslona: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1767
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1784
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "Najm. svetilnost: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1768
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1785
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "Najv. svetilnost: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1769
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1786
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "Največja svetilnost sličice polnega formata: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1770
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1787
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Primarna rdeča: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1771
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1788
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Primarna zelena: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1772
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1789
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Primarna modra: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1773
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1790
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Bela točka: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1807
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
 #, kde-format
 msgid "Warning(s):"
 msgstr "Opozorila:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1953
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1970
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Opozorilo:</b> trenutni zaslon ne podpira upodabljanja HDR"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2038
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
 #, kde-format
 msgid "Configure Krita"
 msgstr "Prilagodi Krito"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2072
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Tipke za bližnjice"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2057
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2074
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Tipke za bližnjice"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2067
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2084
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Nastavitve vnosa na platno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2068
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2085
 #, kde-format
 msgid "Canvas Input"
 msgstr "Vnos na platno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2085
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2102
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #, kde-format
 msgid "Color Management"
 msgstr "Upravljanje z barvami"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2087
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2104
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Barva"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2095
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2097
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2112
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2114
 #, kde-format
 msgid "Performance"
 msgstr "Hitrost delovanja"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2105
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2122
 #, kde-format
 msgid "Tablet settings"
 msgstr "Nastavitve tablice"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2107
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2124
 #, kde-format
 msgid "Tablet"
 msgstr "Tablica"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2115
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2132
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Nastavitve samo za platno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2117
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2134
 #, kde-format
 msgid "Canvas-only"
 msgstr "Samo za platno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2125
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2127
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2142
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2144
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Pojavna paleta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2135
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2152
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Avtor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2137
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2154
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Avtor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2144
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2161
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -23166,6 +23166,83 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Change Clone Layers"
 msgstr "Spremeni klonirane plasti"
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:55
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The amount of time during which the strokes will be kept unmerged. When a "
+"stroke becomes old enough, Krita will try to merge it"
+msgstr ""
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
+#, fuzzy, kde-format
+#| msgctxt "suffix for \"seconds\""
+#| msgid " sec"
+msgid " sec"
+msgstr " s"
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
+#, kde-format
+msgid "Wait before merging strokes:"
+msgstr ""
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "The number of last strokes which Krita should store separately"
+msgctxt "@info:tooltip"
+msgid ""
+"The number of last strokes that Krita will not merge (even if they are old "
+"enough)"
+msgstr "Število zadnjih potez, ki jih mora Krita shraniti ločeno"
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
+#, kde-format
+msgid "Exclude last strokes from merge:"
+msgstr ""
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"If two strokes have short time interval (delay) between each other, then "
+"they will be considered as belonging to the same group and merged"
+msgstr ""
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
+#, kde-format
+msgid "Max interval of grouped strokes:"
+msgstr ""
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Maximum allowed duration of the group after the merge. If the group is going "
+"to be longer than this limit in the result of the merge, this merge will not "
+"happen."
+msgstr ""
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
+#, fuzzy, kde-format
+#| msgid "Video duration:"
+msgid "Max group duration:"
+msgstr "Trajanje videoposnetka:"
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
+#, kde-format
+msgid ""
+"Cumulative Undo allows Krita to merge undo actions and make undo history "
+"cleaner. Krita will still keep a few latest actions unmerged according to "
+"\"Wait before merging strokes\" and \"Exclude last strokes from merge\" "
+"options. Whenever an action gets outdated using the time limit and this "
+"action is not excluded using \"Exclude last strokes from merge\", Krita will "
+"try  to merge this action into a group. The groups are formed using \"Max "
+"group strokes delay\" and \"Max group duration\" options."
+msgstr ""
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -25421,16 +25498,31 @@ msgstr "Dodaj »Spojeno« k imenu spojenih skupin plasti"
 msgid "Add \"(pasted)\" to pasted layers"
 msgstr "Dodaj »(prilepljeno)« k imenu prilepljenih plasti"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
+#: libs/ui/forms/wdggeneralsettings.ui:1470
+#, fuzzy, kde-format
+#| msgid "Enable Cumulative Undo"
+msgid "Use cumulative undo"
+msgstr "Omogoči kumulativno razveljavitev"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
+#: libs/ui/forms/wdggeneralsettings.ui:1490
+#, fuzzy, kde-format
+#| msgctxt "Tablet mapping settings"
+#| msgid "Advanced..."
+msgid "Advanced..."
+msgstr "Napredno …"
+
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#: libs/ui/forms/wdggeneralsettings.ui:1473
+#: libs/ui/forms/wdggeneralsettings.ui:1504
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
 #, kde-format
 msgid "Resources"
 msgstr "Viri"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
-#: libs/ui/forms/wdggeneralsettings.ui:1479
+#: libs/ui/forms/wdggeneralsettings.ui:1510
 #, kde-format
 msgid "Resource Folder:"
 msgstr "Mapa z viri:"
@@ -29929,13 +30021,13 @@ msgstr "Prišlo je do težav pri odpiranju %1."
 msgid "Not Saved"
 msgstr "Ni shranjeno"
 
-#: libs/ui/KisDocument.cpp:2496
+#: libs/ui/KisDocument.cpp:2498
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Polnilo ozadja"
 
-#: libs/ui/KisDocument.cpp:2550
+#: libs/ui/KisDocument.cpp:2552
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -38439,49 +38531,7 @@ msgstr "Mreža in vodila"
 msgid "Histogram"
 msgstr "Histogram"
 
-#: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:24
-#, kde-format
-msgid "Enable Cumulative Undo"
-msgstr "Omogoči kumulativno razveljavitev"
-
-#: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:30
-#, kde-format
-msgid "Start merging time"
-msgstr "Čas pričetka spajanja"
-
-#: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:32
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "The amount of time after a merged stroke before merging again"
-msgstr "Pretečeni čas po spojeni potezi čopiča pred ponovnim spajanjem"
-
-#: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:40
-#, kde-format
-msgid "Group time"
-msgstr "Čas skupine"
-
-#: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:42
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"The amount of time every stroke should be apart from its previous stroke to "
-"be classified in one group"
-msgstr ""
-"Vmesni čas med vsako potezo od prejšnje poteze, da je razvrščena v eno "
-"skupino"
-
-#: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:50
-#, kde-format
-msgid "Split Strokes"
-msgstr "Razdeli potezo"
-
-#: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:52
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "The number of last strokes which Krita should store separately"
-msgstr "Število zadnjih potez, ki jih mora Krita shraniti ločeno"
-
-#: plugins/dockers/historydocker/HistoryDock.cpp:38
+#: plugins/dockers/historydocker/HistoryDock.cpp:23
 #, kde-format
 msgid "Undo History"
 msgstr "Zgodovina razveljavitev"
@@ -60231,3 +60281,24 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
+
+#~ msgid "Start merging time"
+#~ msgstr "Čas pričetka spajanja"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "The amount of time after a merged stroke before merging again"
+#~ msgstr "Pretečeni čas po spojeni potezi čopiča pred ponovnim spajanjem"
+
+#~ msgid "Group time"
+#~ msgstr "Čas skupine"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid ""
+#~ "The amount of time every stroke should be apart from its previous stroke "
+#~ "to be classified in one group"
+#~ msgstr ""
+#~ "Vmesni čas med vsako potezo od prejšnje poteze, da je razvrščena v eno "
+#~ "skupino"
+
+#~ msgid "Split Strokes"
+#~ msgstr "Razdeli potezo"

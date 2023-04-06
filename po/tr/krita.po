@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-31 00:44+0000\n"
+"POT-Creation-Date: 2023-04-06 00:45+0000\n"
 "PO-Revision-Date: 2023-04-05 00:52+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -15885,25 +15885,25 @@ msgstr "Aralama > 0,5; Anında Önizlemeyi devre dışı bırakmayı düşünün
 msgid "Could not access brush tip metadata"
 msgstr "Fırça ucu üst verisine erişilemedi"
 
-#: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1142
+#: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #, kde-format
 msgctxt "Default text for undo action"
 msgid "Undo"
 msgstr "Geri Al"
 
-#: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1142
+#: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #: libs/ui/KisUndoActionsUpdateManager.cpp:44
 #, kde-format
 msgid "Undo %1"
 msgstr "Geri Al: %1"
 
-#: libs/command/kundo2group.cpp:386 libs/command/kundo2stack.cpp:1168
+#: libs/command/kundo2group.cpp:386 libs/command/kundo2stack.cpp:1171
 #, kde-format
 msgctxt "Default text for redo action"
 msgid "Redo"
 msgstr "Yinele"
 
-#: libs/command/kundo2group.cpp:386 libs/command/kundo2stack.cpp:1168
+#: libs/command/kundo2group.cpp:386 libs/command/kundo2stack.cpp:1171
 #: libs/ui/KisUndoActionsUpdateManager.cpp:49
 #, kde-format
 msgid "Redo %1"
@@ -15915,14 +15915,14 @@ msgstr "Yinele: %1"
 msgid "<empty>"
 msgstr "<boş>"
 
-#: libs/command/kundo2stack.cpp:1413 libs/ui/input/KisTouchGestureAction.cpp:22
+#: libs/command/kundo2stack.cpp:1397 libs/ui/input/KisTouchGestureAction.cpp:22
 #: libs/widgetutils/xmlgui/kundoactions.cpp:32
 #, kde-format
 msgid "Redo"
 msgstr "Yinele"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyUndo)
-#: libs/command/kundo2stack.cpp:1432 libs/ui/input/KisTouchGestureAction.cpp:21
+#: libs/command/kundo2stack.cpp:1416 libs/ui/input/KisTouchGestureAction.cpp:21
 #: libs/widgetutils/xmlgui/kundoactions.cpp:51
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1905
 #, kde-format
@@ -16603,7 +16603,7 @@ msgstr "Boyut"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1348
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1351
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1415
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1447
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1464
 #: libs/ui/forms/wdgdisplaysettings.ui:336
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -16884,7 +16884,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (gömülü)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:475
+#: libs/ui/dialogs/kis_dlg_preferences.cc:482
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -17010,7 +17010,7 @@ msgstr "İçe Aktarılmış Görsel"
 msgid "Selection Mask"
 msgstr "Seçim Maskesi"
 
-#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2489
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2491
 #: plugins/impex/psd/psd_loader.cpp:189
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19353,7 +19353,7 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:714
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
-#: libs/ui/dialogs/kis_dlg_preferences.cc:903
+#: libs/ui/dialogs/kis_dlg_preferences.cc:920
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
@@ -19611,8 +19611,8 @@ msgstr "Üst veri"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1779
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1783
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1796
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1800
 #: libs/ui/forms/wdgdisplaysettings.ui:165 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:326
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -21332,8 +21332,8 @@ msgstr "Ana Ekran:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:38
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2075
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2077
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2092
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2094
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -21431,8 +21431,8 @@ msgstr "Video Canlandırma İçe Aktar"
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2045
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2047
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2062
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2064
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22611,10 +22611,10 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1422
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1425
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1362
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1366
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1370
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1379
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1383
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1387
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1469
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:45
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:52
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:123
@@ -22667,17 +22667,17 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "Birden Çok Yapıştırma Kaynağı Algılandı"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:224
 #, kde-format
 msgid "No Cursor"
 msgstr "İmleç Yok"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:223
+#: libs/ui/dialogs/kis_dlg_preferences.cc:225
 #, kde-format
 msgid "Tool Icon"
 msgstr "Araç Simgesi"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:224
+#: libs/ui/dialogs/kis_dlg_preferences.cc:226
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -22686,127 +22686,127 @@ msgstr "Araç Simgesi"
 msgid "Arrow"
 msgstr "Ok"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:225
+#: libs/ui/dialogs/kis_dlg_preferences.cc:227
 #, kde-format
 msgid "Small Circle"
 msgstr "Küçük Çember"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:226
+#: libs/ui/dialogs/kis_dlg_preferences.cc:228
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
 msgstr "Artı işareti"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:227
+#: libs/ui/dialogs/kis_dlg_preferences.cc:229
 #, kde-format
 msgid "Triangle Righthanded"
 msgstr "Sağ Elli Üçgen"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:230
 #, kde-format
 msgid "Triangle Lefthanded"
 msgstr "Sol Elli Üçgen"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:229
+#: libs/ui/dialogs/kis_dlg_preferences.cc:231
 #, kde-format
 msgid "Black Pixel"
 msgstr "Siyah Piksel"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:230
+#: libs/ui/dialogs/kis_dlg_preferences.cc:232
 #, kde-format
 msgid "White Pixel"
 msgstr "Beyaz Piksel"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:233
+#: libs/ui/dialogs/kis_dlg_preferences.cc:235
 #, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "Ana Hat Yok"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:234
+#: libs/ui/dialogs/kis_dlg_preferences.cc:236
 #, kde-format
 msgid "Circle Outline"
 msgstr "Çember Ana Hatı"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:235
+#: libs/ui/dialogs/kis_dlg_preferences.cc:237
 #, kde-format
 msgid "Preview Outline"
 msgstr "Ana Hatı Önizle"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:236
+#: libs/ui/dialogs/kis_dlg_preferences.cc:238
 #, kde-format
 msgid "Tilt Outline"
 msgstr "Ana Hatı Eğ"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:260
+#: libs/ui/dialogs/kis_dlg_preferences.cc:262
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
 msgid "Eraser"
 msgstr "Silgi"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:336
+#: libs/ui/dialogs/kis_dlg_preferences.cc:338
 #, kde-format
 msgid "On Touch Drag"
 msgstr "Dokun Sürükle"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:337
+#: libs/ui/dialogs/kis_dlg_preferences.cc:339
 #, kde-format
 msgid "On Click Drag"
 msgstr "Tıkla Sürükle"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:338
+#: libs/ui/dialogs/kis_dlg_preferences.cc:340
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr "Orta Tıkla Sürükle"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:375
+#: libs/ui/dialogs/kis_dlg_preferences.cc:377
 #, kde-format
 msgid "Open default window"
 msgstr "Öntanımlı pencereyi aç"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:376
+#: libs/ui/dialogs/kis_dlg_preferences.cc:378
 #, kde-format
 msgid "Load previous session"
 msgstr "Önceki oturumu yükle"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:377
+#: libs/ui/dialogs/kis_dlg_preferences.cc:379
 #, kde-format
 msgid "Show session manager"
 msgstr "Oturum yöneticisini göster"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:440
+#: libs/ui/dialogs/kis_dlg_preferences.cc:447
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr ""
 "Değişikliklerin etkili olması için Krita'yı yeniden başlatmanız gerekecek."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:446
+#: libs/ui/dialogs/kis_dlg_preferences.cc:453
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 "Dosya Seçici'den seçilmiş bir konuma kaydetmek başlangıcı yavaşlatabilir!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:478
+#: libs/ui/dialogs/kis_dlg_preferences.cc:485
 #, kde-format
 msgid "Internal Storage"
 msgstr "İç Depolama"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:480
+#: libs/ui/dialogs/kis_dlg_preferences.cc:487
 #, kde-format
 msgid "SD-Card"
 msgstr "SD Kart"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:518
+#: libs/ui/dialogs/kis_dlg_preferences.cc:525
 #, kde-format
 msgid "Choose Manually"
 msgstr "Elle Seç"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:583
+#: libs/ui/dialogs/kis_dlg_preferences.cc:590
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -22830,26 +22830,26 @@ msgstr ""
 "<p><b>Özel uygulama konumu</b> (<a href=\"copyprivate\">Kopya</a>):<br/>\n"
 "%2</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:891
+#: libs/ui/dialogs/kis_dlg_preferences.cc:908
 #, kde-format
 msgid "Select a Background Image"
 msgstr "Bir Arka Plan Görseli Seç"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:903
+#: libs/ui/dialogs/kis_dlg_preferences.cc:920
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1, geçerli bir görsel dosyası değil!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:923
+#: libs/ui/dialogs/kis_dlg_preferences.cc:940
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>Uyarı:</b> Bu konum yazılabilir değil."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1026
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1135
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1043
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1152
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1234
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -22857,14 +22857,14 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "Ekran %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1094
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1111
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "Renk Profilleri Kur"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1306
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1323
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -22873,205 +22873,205 @@ msgstr ""
 "Fırça hızı için tablet sürücüsü zaman damgalarını kullan (WinTab tablet "
 "API'sini kullanırken yüksek derecede kalıntılara neden olabilir)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1308
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1325
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr ""
 "Fırça hızı zaman damgaları için tablet sürücüsü zaman damgalarını kullan"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1416
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1433
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1437
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1454
 #, kde-format
 msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " san"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1441
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1458
 #, kde-format
 msgid " fps"
 msgstr " fps"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1651
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1668
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1652
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1669
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Yazılımsal Sunucu (çok yavaş)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1654
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1671
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11, ANGLE ile"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1656
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1673
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1663
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1680
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1683
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1700
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Otomatik (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1765
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1782
 #, kde-format
 msgid "Display Id: %1"
 msgstr "Ekran Kimliği: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1766
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1783
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Ekran Adı: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1767
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1784
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "En Az Renk Parlaklığı: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1768
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1785
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "En Fazla Renk Parlaklığı: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1769
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1786
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "En Yüksek Tam Renk Parlaklığı: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1770
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1787
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Kırmızı Öncelik: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1771
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1788
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Yeşil Öncelik: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1772
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1789
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Mavi Öncelik: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1773
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1790
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Beyaz Nokta: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1807
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
 #, kde-format
 msgid "Warning(s):"
 msgstr "Uyarılar:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1953
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1970
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Uyarı:</b> Geçerli ekran HDR olarak sunmayı desteklemiyor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2038
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
 #, kde-format
 msgid "Configure Krita"
 msgstr "Krita'yı Yapılandır"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2072
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Klavye Kısayolları"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2057
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2074
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Kısayollar"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2067
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2084
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Tuval Giriş Ayarları"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2068
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2085
 #, kde-format
 msgid "Canvas Input"
 msgstr "Tuval Girişi"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2085
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2102
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #, kde-format
 msgid "Color Management"
 msgstr "Renk Yönetimi"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2087
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2104
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Renk"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2095
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2097
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2112
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2114
 #, kde-format
 msgid "Performance"
 msgstr "Başarım"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2105
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2122
 #, kde-format
 msgid "Tablet settings"
 msgstr "Tablet Ayarları"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2107
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2124
 #, kde-format
 msgid "Tablet"
 msgstr "Tablet"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2115
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2132
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Yalnızca Tuval Ayarları"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2117
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2134
 #, kde-format
 msgid "Canvas-only"
 msgstr "Yalnızca Tuval"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2125
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2127
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2142
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2144
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Açılır Palet"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2135
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2152
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Çizer"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2137
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2154
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Çizer"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2144
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2161
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -23170,6 +23170,83 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Change Clone Layers"
 msgstr "Klon Katmanları Değiştir"
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:55
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"The amount of time during which the strokes will be kept unmerged. When a "
+"stroke becomes old enough, Krita will try to merge it"
+msgstr ""
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
+#, fuzzy, kde-format
+#| msgctxt "suffix for \"seconds\""
+#| msgid " sec"
+msgid " sec"
+msgstr " san"
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
+#, kde-format
+msgid "Wait before merging strokes:"
+msgstr ""
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "The number of last strokes which Krita should store separately"
+msgctxt "@info:tooltip"
+msgid ""
+"The number of last strokes that Krita will not merge (even if they are old "
+"enough)"
+msgstr "Krita'nın ayrı olarak saklaması gereken son vuruş sayısı"
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
+#, kde-format
+msgid "Exclude last strokes from merge:"
+msgstr ""
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"If two strokes have short time interval (delay) between each other, then "
+"they will be considered as belonging to the same group and merged"
+msgstr ""
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
+#, kde-format
+msgid "Max interval of grouped strokes:"
+msgstr ""
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Maximum allowed duration of the group after the merge. If the group is going "
+"to be longer than this limit in the result of the merge, this merge will not "
+"happen."
+msgstr ""
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
+#, fuzzy, kde-format
+#| msgid "Video duration:"
+msgid "Max group duration:"
+msgstr "Video süresi:"
+
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
+#, kde-format
+msgid ""
+"Cumulative Undo allows Krita to merge undo actions and make undo history "
+"cleaner. Krita will still keep a few latest actions unmerged according to "
+"\"Wait before merging strokes\" and \"Exclude last strokes from merge\" "
+"options. Whenever an action gets outdated using the time limit and this "
+"action is not excluded using \"Exclude last strokes from merge\", Krita will "
+"try  to merge this action into a group. The groups are formed using \"Max "
+"group strokes delay\" and \"Max group duration\" options."
+msgstr ""
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -25426,16 +25503,31 @@ msgstr "Birleştirilmiş grup katmanlarına \"Birleştirilmiş\"i ekle"
 msgid "Add \"(pasted)\" to pasted layers"
 msgstr "Yapıştırılan katmanlara \"(yapıştırılmış)\" ekle"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
+#: libs/ui/forms/wdggeneralsettings.ui:1470
+#, fuzzy, kde-format
+#| msgid "Enable Cumulative Undo"
+msgid "Use cumulative undo"
+msgstr "Birikimli Geri Almayı Etkinleştir"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
+#: libs/ui/forms/wdggeneralsettings.ui:1490
+#, fuzzy, kde-format
+#| msgctxt "Tablet mapping settings"
+#| msgid "Advanced..."
+msgid "Advanced..."
+msgstr "Gelişmiş..."
+
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#: libs/ui/forms/wdggeneralsettings.ui:1473
+#: libs/ui/forms/wdggeneralsettings.ui:1504
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
 #, kde-format
 msgid "Resources"
 msgstr "Özkaynaklar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
-#: libs/ui/forms/wdggeneralsettings.ui:1479
+#: libs/ui/forms/wdggeneralsettings.ui:1510
 #, kde-format
 msgid "Resource Folder:"
 msgstr "Özkaynak Klasörü:"
@@ -29925,13 +30017,13 @@ msgstr "%1 açılırken sorunlarla karşılaşıldı."
 msgid "Not Saved"
 msgstr "Kaydedilmemiş"
 
-#: libs/ui/KisDocument.cpp:2496
+#: libs/ui/KisDocument.cpp:2498
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Arka Plan Dolgusu"
 
-#: libs/ui/KisDocument.cpp:2550
+#: libs/ui/KisDocument.cpp:2552
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -38389,49 +38481,7 @@ msgstr "Izgara ve Kılavuzlar"
 msgid "Histogram"
 msgstr "Histogram"
 
-#: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:24
-#, kde-format
-msgid "Enable Cumulative Undo"
-msgstr "Birikimli Geri Almayı Etkinleştir"
-
-#: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:30
-#, kde-format
-msgid "Start merging time"
-msgstr "Birleştirme zamanına başla"
-
-#: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:32
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "The amount of time after a merged stroke before merging again"
-msgstr "Birleştirilmiş vuruştan sonra yeniden birleştirmeden önce geçen süre"
-
-#: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:40
-#, kde-format
-msgid "Group time"
-msgstr "Gruplama zamanı"
-
-#: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:42
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"The amount of time every stroke should be apart from its previous stroke to "
-"be classified in one group"
-msgstr ""
-"Her vuruş, bir grupta sınıflandırılmak üzere önceki vuruşundan ayrı "
-"tutulması gereken süre"
-
-#: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:50
-#, kde-format
-msgid "Split Strokes"
-msgstr "Vuruşları Ayır"
-
-#: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:52
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "The number of last strokes which Krita should store separately"
-msgstr "Krita'nın ayrı olarak saklaması gereken son vuruş sayısı"
-
-#: plugins/dockers/historydocker/HistoryDock.cpp:38
+#: plugins/dockers/historydocker/HistoryDock.cpp:23
 #, kde-format
 msgid "Undo History"
 msgstr "Geri Alma Geçmişi"
@@ -38911,7 +38961,7 @@ msgstr "Görünümün siyah ve beyaz noktalarını yapılandır"
 #: plugins/dockers/overview/overviewdocker_dock.cpp:38
 #, kde-format
 msgid "Overview"
-msgstr "Gözden Geçirme"
+msgstr "Genel Görünüm"
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:156
 #, kde-format
@@ -59307,7 +59357,7 @@ msgstr "Bük"
 #, kde-format
 msgctxt "Liquify Transform Tab Label"
 msgid "Liquify"
-msgstr "Erit"
+msgstr "Sıvılaştır"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:125
 #, kde-format
@@ -59613,7 +59663,7 @@ msgstr "Serbest Dönüşüm"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:180
 #, kde-format
 msgid "Warp"
-msgstr "Sar"
+msgstr "Bük"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, cageButton)
 #. i18n: ectx: property (text), widget (QToolButton, cageButton)
@@ -59629,7 +59679,7 @@ msgstr "Kafes"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:233
 #, kde-format
 msgid "Liquify"
-msgstr "Erit"
+msgstr "Sıvılaştır"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, meshButton)
 #. i18n: ectx: property (text), widget (QToolButton, meshButton)
@@ -60175,116 +60225,24 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
 
-#~ msgid "Color Rate"
-#~ msgstr "Renk Oranı"
+#~ msgid "Start merging time"
+#~ msgstr "Birleştirme zamanına başla"
 
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Displacement Option"
-#~ msgstr "Kaldırma Seçeneği"
+#~ msgctxt "@info:tooltip"
+#~ msgid "The amount of time after a merged stroke before merging again"
+#~ msgstr ""
+#~ "Birleştirilmiş vuruştan sonra yeniden birleştirmeden önce geçen süre"
 
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Total Random"
-#~ msgstr "Kaynak -> Toplam Rastgele"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern"
-#~ msgstr "Kaynak -> Desen"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern Locked"
-#~ msgstr "Kaynak -> Desen Kilitli"
-
-#~ msgid "0 px"
-#~ msgstr "0 pks"
-
-#~ msgid "0 s"
-#~ msgstr "0 s"
-
-#~ msgid "1000"
-#~ msgstr "1000"
-
-#~ msgid "30 px"
-#~ msgstr "30 pks"
-
-#~ msgid "3 s"
-#~ msgstr "3 s"
-
-#~ msgid "%1 s"
-#~ msgstr "%1 sn"
-
-#~ msgctxt "option name"
-#~ msgid "Filter"
-#~ msgstr "Süzgeç"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "\"%1\" does not support scaled preview (non-linear filter)"
-#~ msgstr "\"%1\" ölçeklenmiş önizlemeyi (doğrusal olmayan süzgeç) desteklemez"
+#~ msgid "Group time"
+#~ msgstr "Gruplama zamanı"
 
 #~ msgctxt "@info:tooltip"
 #~ msgid ""
-#~ "Luminosity value of the brush that will not change the painting color. "
-#~ "All brush pixels darker than neutral point will paint with darker color, "
-#~ "pixels lighter than neutral point — lighter."
+#~ "The amount of time every stroke should be apart from its previous stroke "
+#~ "to be classified in one group"
 #~ msgstr ""
-#~ "Boyama rengini değiştirmeyecek fırçanın parlaklık değeri. Nötr noktadan "
-#~ "daha koyu olan tüm fırça pikselleri daha koyu renkle, nötr noktadan daha "
-#~ "açık pikseller — daha açık renkle boyayacaktır."
+#~ "Her vuruş, bir grupta sınıflandırılmak üzere önceki vuruşundan ayrı "
+#~ "tutulması gereken süre"
 
-#~ msgctxt "@info:tooltip"
-#~ msgid "Brightness correction for the brush"
-#~ msgstr "Fırça için parlaklık düzeltme"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Contrast correction for the brush"
-#~ msgstr "Fırça için karşıtlık düzeltmesi"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush tip does not have color channels. The brush will work "
-#~ "in \"Mask\" mode."
-#~ msgstr ""
-#~ "Seçili fırça ucunun renk kanalı yok. Fırça, \"Maske\" kipinde "
-#~ "çalışacaktır."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush engine does not support \"Color\" or \"Lightness\" "
-#~ "modes. The brush will work in \"Mask\" mode."
-#~ msgstr ""
-#~ "Seçili fırça işletkesi, \"Renk\" veya \"Açıklık\" kiplerini "
-#~ "desteklemiyor. Fırça \"Maske\" kipinde çalışacak."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Brush average: %1\n"
-#~ "Adjusted average: %2"
-#~ msgstr ""
-#~ "Fırça ortalaması: %1\n"
-#~ "Ayarlanmış ortalama: %2"
-
-#~ msgid "Mirrored"
-#~ msgstr "Yansıtılmış"
-
-#~ msgid "Not mirrored"
-#~ msgstr "Yansıtılmamış"
-
-#~ msgid "Align the brush preview outline to the pixel grid"
-#~ msgstr "Fırça önizleme ana hatını piksel ızgarasına hizala"
-
-#~ msgid " s"
-#~ msgstr " sn"
-
-#~ msgid "Select Layer Mode"
-#~ msgstr "Katman Seçme Kipi"
-
-#~ msgid "Select Multiple Layer Mode"
-#~ msgstr "Çoklu Katman Kipi Seç"
-
-#~ msgid "HDR Warning.................................."
-#~ msgstr "HDR Uyarısı.................................."
-
-#~ msgid ""
-#~ "<b>Note: Krita will need to be restarted for changes to take effect</b>"
-#~ msgstr ""
-#~ "<b>Not: Değişikliklerin etkin olabilmesi için Krita'nın yeniden "
-#~ "başlatılması gerekecek.</b>"
+#~ msgid "Split Strokes"
+#~ msgstr "Vuruşları Ayır"

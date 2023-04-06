@@ -392,7 +392,7 @@ void NodeDelegate::drawText(QPainter *p, const QStyleOptionViewItem &option, con
             }
 
             const int rectCenter = rc.height()/2;
-            const int nameWidth = p->fontMetrics().width(elided);
+            const int nameWidth = p->fontMetrics().horizontalAdvance(elided);
             // draw the layer name
             if (!useOneLine) {
                 // enforce Qt::TextSingleLine because we are adding a line below it

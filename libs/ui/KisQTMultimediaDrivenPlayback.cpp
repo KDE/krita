@@ -10,6 +10,7 @@
 #include <QMediaPlayer>
 #include <QMediaService>
 #include <QAudioDeviceInfo>
+#include <QMimeDatabase>
 
 qint64 framesToMSec(qreal value, int fps) {
     return qRound((value / fps) * 1000.0);

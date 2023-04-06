@@ -17,6 +17,7 @@
 #include <boost/optional.hpp>
 
 
+#include <QElapsedTimer>
 
 /**
  * @brief The KisPlaybackEngineQT class is an implementation of KisPlaybackEngine

@@ -39,7 +39,7 @@ void KisColorSourceToggle::setBackgroundColor(const QColor &color)
     update();
 }
 
-void KisColorSourceToggle::paintEvent(QPaintEvent *e)
+void KisColorSourceToggle::paintEvent(QPaintEvent */*e*/)
 {
     int length = qMin(width(), height());
     int patchSize = length * 6 / 10;

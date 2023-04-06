@@ -1256,7 +1256,7 @@ QStyleOptionViewItem NodeDelegate::getOptions(const QStyleOptionViewItem &o, con
     v = index.data(Qt::TextColorRole);
     if (v.isValid())
         option.palette.setColor(QPalette::Text, v.value<QColor>());
-    v = index.data(Qt::BackgroundColorRole);
+    v = index.data(Qt::BackgroundRole);
     if (v.isValid())
         option.palette.setColor(QPalette::Window, v.value<QColor>());
 

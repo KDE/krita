@@ -231,7 +231,7 @@ KoToolProxy *KisCanvasWidgetBase::toolProxy() const
 
 QVariant KisCanvasWidgetBase::processInputMethodQuery(Qt::InputMethodQuery query) const
 {
-    if (query == Qt::ImMicroFocus) {
+    if (query == Qt::ImCursorRectangle) {
         QRectF rect = m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter).toRectF();
         return m_d->coordinatesConverter->flakeToWidget(rect);
     }

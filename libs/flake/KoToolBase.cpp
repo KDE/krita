@@ -131,7 +131,7 @@ QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewCo
         return QVariant();
 
     switch (query) {
-    case Qt::ImMicroFocus:
+    case Qt::ImCursorRectangle:
         return QRect(d->canvas->canvasWidget()->width() / 2, 0, 1, d->canvas->canvasWidget()->height());
     case Qt::ImFont:
         return d->canvas->canvasWidget()->font();

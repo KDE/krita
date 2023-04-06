@@ -486,8 +486,8 @@ void KisInputManager::Private::addStrokeShortcut(KisAbstractInputAction* action,
     if(buttons & Qt::RightButton) {
         buttonSet << Qt::RightButton;
     }
-    if(buttons & Qt::MidButton) {
-        buttonSet << Qt::MidButton;
+    if(buttons & Qt::MiddleButton) {
+        buttonSet << Qt::MiddleButton;
     }
 
 BOOST_PP_REPEAT_FROM_TO(1, 25, EXTRA_BUTTON, _)

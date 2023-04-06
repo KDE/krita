@@ -1069,7 +1069,7 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
             menu.exec(event->globalPos());
         }
         
-    } else if (event->button() == Qt::MidButton) {
+    } else if (event->button() == Qt::MiddleButton) {
         QModelIndex index = model()->buddy(indexAt(event->pos()));
         if (index.isValid()) {
             QStyleOptionViewItem option = viewOptions();
@@ -1144,7 +1144,7 @@ void KisAnimTimelineFramesView::mouseMoveEvent(QMouseEvent *e)
             verticalScrollBar()->setValue(offset.y() / height);
         }
         e->accept();
-    } else if (e->buttons() == Qt::MidButton) {
+    } else if (e->buttons() == Qt::MiddleButton) {
         QModelIndex index = model()->buddy(indexAt(e->pos()));
         if (index.isValid()) {
             QStyleOptionViewItem option = viewOptions();

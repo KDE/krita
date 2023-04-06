@@ -263,7 +263,7 @@ bool NodeView::viewportEvent(QEvent *e)
             /* This is a workaround for a bug in QTreeView that immediately begins a dragging action
             when the mouse lands on the decoration/icon of a different index and moves 1 pixel or more */
             Qt::MouseButtons buttons = static_cast<QMouseEvent*>(e)->buttons();
-            if ((Qt::LeftButton | Qt::MidButton) & buttons) {
+            if ((Qt::LeftButton | Qt::MiddleButton) & buttons) {
                 if ((pos - d->lastPos).manhattanLength() > qApp->startDragDistance()) {
                     return QTreeView::viewportEvent(e);
                 }

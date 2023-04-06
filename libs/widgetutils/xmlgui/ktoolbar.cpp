@@ -1248,7 +1248,7 @@ bool KisToolBar::eventFilter(QObject *watched, QEvent *event)
             // Handle MMB on toolbar buttons
             if (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonRelease) {
                 QMouseEvent *me = static_cast<QMouseEvent *>(event);
-                if (me->button() == Qt::MidButton /*&&
+                if (me->button() == Qt::MiddleButton /*&&
                                                  act->receivers(SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)))*/) {
                     QAction *act = tbActions.first();
                     if (me->type() == QEvent::MouseButtonPress) {

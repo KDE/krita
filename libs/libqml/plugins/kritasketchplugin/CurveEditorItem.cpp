@@ -37,7 +37,7 @@ CurveEditorItem::CurveEditorItem(QQuickItem* parent)
     , d(new Private(this))
 {
     setFlag(QQuickItem::ItemHasContents, true);
-    setAcceptedMouseButtons( Qt::LeftButton | Qt::RightButton | Qt::MidButton );
+    setAcceptedMouseButtons( Qt::LeftButton | Qt::RightButton | Qt::MiddleButton );
     connect(d->curveWidget, SIGNAL(pointSelectedChanged()), SIGNAL(pointSelectedChanged()));
     connect(d->curveWidget, SIGNAL(modified()), SIGNAL(curveChanged()));
     qRegisterMetaType<KisCubicCurve>();

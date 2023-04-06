@@ -161,7 +161,7 @@ KisScratchPad::Mode KisScratchPad::modeFromButton(Qt::MouseButton button) const
 {
     return
         button == Qt::NoButton ? HOVERING :
-        button == Qt::MidButton ? PANNING :
+        button == Qt::MiddleButton ? PANNING :
         button == Qt::RightButton ? SAMPLING :
         PAINTING;
 }
@@ -176,7 +176,7 @@ void KisScratchPad::pointerPress(KoPointerEvent *event)
 
     // see if we are pressing down with a button
     if (event->button() == Qt::LeftButton ||
-        event->button() == Qt::MidButton ||
+        event->button() == Qt::MiddleButton ||
         event->button() == Qt::RightButton) {
         isMouseDown = true;
     } else {

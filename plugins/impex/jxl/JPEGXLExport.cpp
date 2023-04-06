@@ -882,7 +882,13 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
 
             const auto *frames = projection->paintDevice()->keyframeChannel();
             const auto times = [&]() {
-                auto t = frames->allKeyframeTimes().toList();
+            QList<int>  t;
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+                QSet<int> s = frames->allKeyframeTimes();
+                t = QList<int>(s.begin(), s.end());
+#else
+                t = frames->allKeyframeTimes();.toList();
+#endif
                 std::sort(t.begin(), t.end());
                 return t;
             }();

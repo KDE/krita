@@ -115,8 +115,18 @@ bool KisKritaSensorPack::read(KisCurveOptionDataCommon &data, const KisPropertie
         sensorById.insert(sensor->id.id(), sensor);
     }
 
-    QSet<KisSensorData*> sensorsToReset =
+    QSet<KisSensorData*> sensorsToReset;
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+
+    QList l = sensorById.values();
+    if (!l.isEmpty()) {
+        sensorsToReset = QSet<KisSensorData*>(l.begin(), l.end());
+    }
+#else
+    sensorsToReset =
         QSet<KisSensorData*>::fromList(sensorById.values());
+#endif
 
     const QString sensorDefinition = setting->getString(data.id.id() + "Sensor");
 

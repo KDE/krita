@@ -1253,7 +1253,7 @@ QStyleOptionViewItem NodeDelegate::getOptions(const QStyleOptionViewItem &o, con
     v = index.data(Qt::TextAlignmentRole);
     if (v.isValid())
         option.displayAlignment = QFlag(v.toInt());
-    v = index.data(Qt::TextColorRole);
+    v = index.data(Qt::ForegroundRole);
     if (v.isValid())
         option.palette.setColor(QPalette::Text, v.value<QColor>());
     v = index.data(Qt::BackgroundRole);

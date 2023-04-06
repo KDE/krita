@@ -489,7 +489,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole: return node->icon();
     case Qt::EditRole: return node->name();
     case Qt::SizeHintRole: return m_d->image->size(); // FIXME
-    case Qt::TextColorRole:
+    case Qt::ForegroundRole:
         return belongsToIsolatedGroup(node) &&
             !node->projectionLeaf()->isDroppedNode() ? QVariant() : QVariant(QColor(Qt::gray));
     case Qt::FontRole: {

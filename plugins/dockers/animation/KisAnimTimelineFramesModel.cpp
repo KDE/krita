@@ -492,7 +492,7 @@ QVariant KisAnimTimelineFramesModel::headerData(int section, Qt::Orientation ori
 
             return name;
         }
-        case Qt::TextColorRole: {
+        case Qt::ForegroundRole: {
             // WARNING: this role doesn't work for header views! Use
             //          bold font to show isolated mode instead!
             return QVariant();

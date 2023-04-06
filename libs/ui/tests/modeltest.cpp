@@ -437,7 +437,7 @@ void ModelTest::data()
         Q_ASSERT(colorVariant.canConvert<QColor>());
     }
 
-    colorVariant = model->data(model->index(0, 0), Qt::TextColorRole);
+    colorVariant = model->data(model->index(0, 0), Qt::ForegroundRole);
     if (colorVariant.isValid()) {
         Q_ASSERT(colorVariant.canConvert<QColor>());
     }

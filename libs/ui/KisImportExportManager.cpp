@@ -167,7 +167,7 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
             QList<KoJsonTrader::Plugin> list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
             Q_FOREACH(const KoJsonTrader::Plugin &loader, list) {
                 QJsonObject json = loader.metaData().value("MetaData").toObject();
-                Q_FOREACH(const QString &mimetype, json.value("X-KDE-Import").toString().split(",", QString::SkipEmptyParts)) {
+                Q_FOREACH(const QString &mimetype, json.value("X-KDE-Import").toString().split(",", Qt::SkipEmptyParts)) {
                     //qDebug() << "Adding  import mimetype" << mimetype << KisMimeDatabase::descriptionForMimeType(mimetype) << "from plugin" << loader;
                     mimeTypes << mimetype;
                 }
@@ -185,7 +185,7 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
             QList<KoJsonTrader::Plugin> list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
             Q_FOREACH(const KoJsonTrader::Plugin &loader, list) {
                 QJsonObject json = loader.metaData().value("MetaData").toObject();
-                Q_FOREACH(const QString &mimetype, json.value("X-KDE-Export").toString().split(",", QString::SkipEmptyParts)) {
+                Q_FOREACH(const QString &mimetype, json.value("X-KDE-Export").toString().split(",", Qt::SkipEmptyParts)) {
                     //qDebug() << "Adding  export mimetype" << mimetype << KisMimeDatabase::descriptionForMimeType(mimetype) << "from plugin" << loader;
                     mimeTypes << mimetype;
                 }
@@ -212,7 +212,7 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
         QJsonObject json = loader.metaData().value("MetaData").toObject();
         QString directionKey = direction == Export ? "X-KDE-Export" : "X-KDE-Import";
 
-        if (json.value(directionKey).toString().split(",", QString::SkipEmptyParts).contains(mimetype)) {
+        if (json.value(directionKey).toString().split(",", Qt::SkipEmptyParts).contains(mimetype)) {
             KLibFactory *factory = qobject_cast<KLibFactory *>(loader.instance());
 
             if (!factory) {

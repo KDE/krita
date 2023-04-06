@@ -37,7 +37,7 @@ KoResourceSP KisStoragePlugin::resource(const QString &url)
 {
     if (!url.contains('/')) return nullptr;
 
-    QStringList parts = url.split('/', QString::SkipEmptyParts);
+    QStringList parts = url.split('/', Qt::SkipEmptyParts);
     if (parts.isEmpty()) return nullptr;
 
     const QString resourceType = parts[0];

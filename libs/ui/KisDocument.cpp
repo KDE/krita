@@ -934,15 +934,15 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
         if (!fileBatchMode()) {
             DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
                                 i18n("Could not save %1.", job.filePath),
-                                errorMessage.split("\n", QString::SkipEmptyParts)
-                                    + warningMessage.split("\n", QString::SkipEmptyParts),
+                                errorMessage.split("\n", Qt::SkipEmptyParts)
+                                    + warningMessage.split("\n", Qt::SkipEmptyParts),
                                 status.errorMessage());
             dlg.exec();
         }
     }
     else {
         if (!fileBatchMode() && !warningMessage.isEmpty()) {
-            QStringList reasons = warningMessage.split("\n", QString::SkipEmptyParts);
+            QStringList reasons = warningMessage.split("\n", Qt::SkipEmptyParts);
             DlgLoadMessages dlg(
                 i18nc("@title:window", "Krita"),
                 i18nc("dialog box shown to the user if there were warnings while saving the document, "
@@ -1897,8 +1897,8 @@ bool KisDocument::openFile()
         if (!msg.isEmpty() && !fileBatchMode()) {
             DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
                                 i18n("Could not open %1.", prettyPath()),
-                                errorMessage().split("\n", QString::SkipEmptyParts)
-                                    + warningMessage().split("\n", QString::SkipEmptyParts),
+                                errorMessage().split("\n", Qt::SkipEmptyParts)
+                                    + warningMessage().split("\n", Qt::SkipEmptyParts),
                                 msg);
             dlg.exec();
         }
@@ -1907,7 +1907,7 @@ bool KisDocument::openFile()
     else if (!warningMessage().isEmpty() && !fileBatchMode()) {
         DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
                             i18n("There were problems opening %1.", prettyPath()),
-                            warningMessage().split("\n", QString::SkipEmptyParts));
+                            warningMessage().split("\n", Qt::SkipEmptyParts));
         dlg.exec();
         setPath(QString());
     }

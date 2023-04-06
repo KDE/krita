@@ -420,7 +420,7 @@ QStringList SvgUtil::simplifyList(const QString &str)
     attribute.replace(',', ' ');
     attribute.remove('\r');
     attribute.remove('\n');
-    return attribute.simplified().split(' ', QString::SkipEmptyParts);
+    return attribute.simplified().split(' ', Qt::SkipEmptyParts);
 }
 
 SvgUtil::PreserveAspectRatioParser::PreserveAspectRatioParser(const QString &str)

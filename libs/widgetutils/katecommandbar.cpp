@@ -182,7 +182,7 @@ public:
             QVector<QPair<QRect, QString>> btns;
             const auto list = [&shortcutString] {
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-                auto list = shortcutString.split(QLatin1Char('+'), QString::SkipEmptyParts);
+                auto list = shortcutString.split(QLatin1Char('+'), Qt::SkipEmptyParts);
 #else
                 auto list = shortcutString.split(QLatin1Char('+'), Qt::SkipEmptyParts);
 #endif

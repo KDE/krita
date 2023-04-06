@@ -271,7 +271,7 @@ void KisSelectionToolConfigWidgetHelper::reloadExactToolConfig()
         cfgToolSpecific.readEntry("sampleLayersMode", "sampleCurrentLayer");
     const QStringList colorLabelsStr =
         cfgToolSpecific.readEntry<QString>("colorLabels", "")
-            .split(',', QString::SkipEmptyParts);
+            .split(',', Qt::SkipEmptyParts);
 
     const KisSelectionOptions::ReferenceLayers referenceLayers =
         referenceLayersStr == "sampleAllLayers"

@@ -868,7 +868,7 @@ void KisView::dropEvent(QDropEvent *event)
             }
             QList<int> colorLabels;
             {
-                const QStringList colorLabelsStr = configGroup.readEntry<QString>("colorLabels", "").split(',', QString::SkipEmptyParts);
+                const QStringList colorLabelsStr = configGroup.readEntry<QString>("colorLabels", "").split(',', Qt::SkipEmptyParts);
                 for (const QString &colorLabelStr : colorLabelsStr) {
                     bool ok;
                     const int colorLabel = colorLabelStr.toInt(&ok);

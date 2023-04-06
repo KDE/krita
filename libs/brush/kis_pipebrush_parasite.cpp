@@ -12,9 +12,9 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
     needsMovement = false;
     QRegExp basicSplitter(" ");
     QRegExp parasiteSplitter(":");
-    QStringList parasites = source.split(basicSplitter, QString::SkipEmptyParts);
+    QStringList parasites = source.split(basicSplitter, Qt::SkipEmptyParts);
     for (int i = 0; i < parasites.count(); i++) {
-        QStringList split = parasites.at(i).split(parasiteSplitter, QString::SkipEmptyParts);
+        QStringList split = parasites.at(i).split(parasiteSplitter, Qt::SkipEmptyParts);
         if (split.count() != 2) {
             warnImage << "Wrong count for this parasite key/value:" << parasites.at(i);
             continue;

@@ -713,7 +713,7 @@ QStringList KoResourcePaths::findExtraResourceDirs() const
 {
     QStringList extraResourceDirs =
         QString::fromUtf8(qgetenv("EXTRA_RESOURCE_DIRS"))
-            .split(';', QString::SkipEmptyParts);
+            .split(';', Qt::SkipEmptyParts);
 
     const KConfigGroup cfg(KSharedConfig::openConfig(), "");
     const QString customPath =

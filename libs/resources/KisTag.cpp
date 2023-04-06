@@ -246,7 +246,7 @@ bool KisTag::load(QIODevice &io)
             d->resourceType = value;
         }
         else if (key == s_defaultResources) {
-            d->defaultResources = value.split(',', QString::SkipEmptyParts);
+            d->defaultResources = value.split(',', Qt::SkipEmptyParts);
         }
         else if (key == s_name) {
             d->name = value;

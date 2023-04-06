@@ -52,7 +52,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     if (fileDevelopers.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream developersText(&fileDevelopers);
         developersText.setCodec("UTF-8");
-        authors.append(developersText.readAll().split("\n", QString::SkipEmptyParts).join(", "));
+        authors.append(developersText.readAll().split("\n", Qt::SkipEmptyParts).join(", "));
     }
     authors.append(".</p></body></html>");
     wdgTab->lblAuthors->setText(authors);
@@ -103,7 +103,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     if (fileBackers.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream backersText(&fileBackers);
         backersText.setCodec("UTF-8");
-        backers.append(backersText.readAll().split("\n", QString::SkipEmptyParts).join(", "));
+        backers.append(backersText.readAll().split("\n", Qt::SkipEmptyParts).join(", "));
     }
     backers.append(i18n(".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"));
     wdgTab->lblKickstarter->setText(backers);
@@ -119,7 +119,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     if (fileCredits.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream creditsText(&fileCredits);
         creditsText.setCodec("UTF-8");
-        Q_FOREACH (const QString &credit, creditsText.readAll().split('\n', QString::SkipEmptyParts)) {
+        Q_FOREACH (const QString &credit, creditsText.readAll().split('\n', Qt::SkipEmptyParts)) {
             if (credit.contains(":")) {
                 QList<QString> creditSplit = credit.split(':');
                 credits.append(creditSplit.at(0));
@@ -174,7 +174,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
                                       "<h1 align=\"center\"><b>Third-party Libraries used by Krita</b></h1>"
                                       "<p>Krita is built on the following free software libraries:</p><p><ul>");
 
-        Q_FOREACH (const QString &lib, thirdPartyText.readAll().split('\n', QString::SkipEmptyParts)) {
+        Q_FOREACH (const QString &lib, thirdPartyText.readAll().split('\n', Qt::SkipEmptyParts)) {
             if (!lib.startsWith("#")) {
                 QStringList parts = lib.split(',');
                 if (parts.size() >= 3) {

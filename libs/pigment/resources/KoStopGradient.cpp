@@ -503,7 +503,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element, QHash<QString,
             else {
                 // try style attr
                 QString style = colorstop.attribute("style").simplified();
-                QStringList substyles = style.split(';', QString::SkipEmptyParts);
+                QStringList substyles = style.split(';', Qt::SkipEmptyParts);
                 Q_FOREACH(const QString & s, substyles) {
                     QStringList substyle = s.split(':');
                     QString command = substyle[0].trimmed();

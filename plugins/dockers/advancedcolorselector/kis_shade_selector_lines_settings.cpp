@@ -33,7 +33,7 @@ QString KisShadeSelectorLinesSettings::toString() const
 
 void KisShadeSelectorLinesSettings::fromString(const QString &stri)
 {
-    QStringList strili = stri.split(';', QString::SkipEmptyParts);
+    QStringList strili = stri.split(';', Qt::SkipEmptyParts);
     setLineCount(strili.size());
     for(int i=0; i<strili.size(); i++) {
         m_lineList.at(i)->setConfiguration(strili.at(i));

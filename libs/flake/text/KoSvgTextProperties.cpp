@@ -189,7 +189,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         }
     } else if (command == "vertical-align") {
         QRegExp digits = QRegExp("\\d");
-        Q_FOREACH (const QString &param, value.split(' ', QString::SkipEmptyParts)) {
+        Q_FOREACH (const QString &param, value.split(' ', Qt::SkipEmptyParts)) {
             if (param == "sub" || param == "super" || param.contains(digits)) {
                 parseSvgTextAttribute(context, "baseline-shift", param);
             } else {
@@ -214,7 +214,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         setProperty(WordSpacingId, KoSvgText::fromAutoValue(KoSvgText::parseAutoValueXY(value, context, "normal")));
     } else if (command == "font-family") {
         QStringList familiesList;
-        Q_FOREACH (const QString &fam, value.split(',', QString::SkipEmptyParts)) {
+        Q_FOREACH (const QString &fam, value.split(',', Qt::SkipEmptyParts)) {
             QString family = fam.trimmed();
             if ((family.startsWith('\"') && family.endsWith('\"')) ||
                 (family.startsWith('\'') && family.endsWith('\''))) {
@@ -367,7 +367,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         ;
         QColor textDecorationColor = propertyOrDefault(TextDecorationStyleId).value<QColor>();
 
-        Q_FOREACH (const QString &param, value.split(' ', QString::SkipEmptyParts)) {
+        Q_FOREACH (const QString &param, value.split(' ', Qt::SkipEmptyParts)) {
             if (param == "line-through") {
                 deco |= DecorationLineThrough;
             } else if (param == "underline") {
@@ -463,7 +463,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         setProperty(TextIndentId, QVariant::fromValue(KoSvgText::parseTextIndent(value, context)));
     } else if (command == "hanging-punctuation") {
         KoSvgText::HangingPunctuations hang;
-        Q_FOREACH (const QString &param, value.split(' ', QString::SkipEmptyParts)) {
+        Q_FOREACH (const QString &param, value.split(' ', Qt::SkipEmptyParts)) {
             if (param == "first") {
                 hang.setFlag(KoSvgText::HangFirst, true);
             } else if (param == "last") {

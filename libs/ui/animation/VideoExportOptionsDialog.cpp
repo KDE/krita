@@ -377,7 +377,7 @@ void KisVideoExportOptionsDialog::slotSaveCustomLine()
 QStringList KisVideoExportOptionsDialog::customUserOptions() const
 {
     return ui->chkCustomLine->isChecked() ?
-        ui->txtCustomLine->text().split(" ", QString::SkipEmptyParts) :
+        ui->txtCustomLine->text().split(" ", Qt::SkipEmptyParts) :
                 generateCustomLine();
 }
 

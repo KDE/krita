@@ -88,7 +88,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 
     // This option does not do anything anymore with Qt4.6, so don't re-enable it since it seems to break display
     // https://lists.qt-project.org/pipermail/qt-interest-old/2009-December/017078.html
-    // gc.setRenderHint(QPainter::HighQualityAntialiasing);
+    // gc.setRenderHint(QPainter::Antialiasing);
 
     gc.setRenderHint(QPainter::SmoothPixmapTransform);
 

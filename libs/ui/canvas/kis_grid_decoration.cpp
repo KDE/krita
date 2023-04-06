@@ -76,7 +76,7 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
     gc.save();
     gc.setTransform(transform);
     gc.setRenderHints(QPainter::Antialiasing, false);
-    gc.setRenderHints(QPainter::HighQualityAntialiasing, false);
+    gc.setRenderHints(QPainter::Antialiasing, false);
 
 
     const QRect imageRectInImagePixels = converter->imageRectInImagePixels();

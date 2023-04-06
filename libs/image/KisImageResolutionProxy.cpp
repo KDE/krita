@@ -71,7 +71,8 @@ KisImageResolutionProxy::KisImageResolutionProxy(KisImageWSP image)
 }
 
 KisImageResolutionProxy::KisImageResolutionProxy(const KisImageResolutionProxy &rhs)
-    : m_d(new Private(*rhs.m_d))
+    : QObject(nullptr)
+    , m_d(new Private(*rhs.m_d))
 {
 }
 

@@ -979,22 +979,17 @@ set_package_properties(PyQt5 PROPERTIES
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)
 
-find_package(MLT)
-set_package_properties(MLT PROPERTIES DESCRIPTION "Media Lovin' Toolkit (Multimedia Framework)"
+find_package(Mlt7)
+set_package_properties(Mlt7 PROPERTIES DESCRIPTION "Media Lovin' Toolkit (Multimedia Framework)"
                 URL "https://mltframework.org/"
                 PURPOSE "Required to do audio/video syncrhonization and processing. No MLT = No Audio! ")
-if (MLT_FOUND)
-    include_directories(${MLT_INCLUDE_DIR})
-    include_directories(${MLTPP_INCLUDE_DIR})
-
+if (Mlt7_FOUND)
     find_package(SDL2 REQUIRED)
     set_package_properties(SDL2 PROPERTIES DESCRIPTION "Simple DirectMedia Layer 2"
                 URL "https://www.libsdl.org/"
                 PURPOSE "Required for MLT to render audio buffers. Required **only** when MLT is found on the system." )
-    
-    include_directories(${SDL2_INCLUDE_DIRS})
 endif()
-macro_bool_to_01(MLT_FOUND HAVE_MLT)
+macro_bool_to_01(Mlt7_FOUND HAVE_MLT)
 configure_file(config-mlt.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-mlt.h)
 
 

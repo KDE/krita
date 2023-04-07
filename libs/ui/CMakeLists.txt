@@ -473,7 +473,7 @@ if (KSeExpr_FOUND)
     )
 endif()
 
-if (MLT_FOUND)
+if (Mlt7_FOUND)
     set(kritaui_LIB_SRCS ${kritaui_LIB_SRCS}
         KisPlaybackEngineMLT.cpp
     )
@@ -698,8 +698,8 @@ target_link_libraries(kritaui
         kritaresources
 )
 
-if (MLT_FOUND)
-    target_link_libraries(kritaui PRIVATE SDL2 mlt-7 mlt++-7)
+if (Mlt7_FOUND)
+    target_link_libraries(kritaui PRIVATE SDL2::SDL2 Mlt7::mlt Mlt7::mlt++)
 endif()
 
 if (ANDROID)

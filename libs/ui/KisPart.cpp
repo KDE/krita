@@ -103,7 +103,7 @@ public:
             playbackEngine.reset(new KisPlaybackEngineQT);
         }
 #else
-        dbgUI << "Krita built without MLT support. Using QT Playback backend."
+        dbgUI << "Krita built without MLT support. Using QT Playback backend.";
         playbackEngine.reset(new KisPlaybackEngineQT);
 #endif
     }

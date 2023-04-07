@@ -651,12 +651,12 @@ setlocal enableextensions enabledelayedexpansion
 for /f "delims=" %%F in ('dir /b "%KRITA_INSTALL_DIR%\bin\*.dll"') do (
 	set file=%%F
 	set file=!file:~0,3!
-	if not x!file! == xQt5 copy %KRITA_INSTALL_DIR%\bin\%%F %pkg_root%\bin
+	if not x!file! == xQt5 copy "%KRITA_INSTALL_DIR%\bin\%%F" %pkg_root%\bin
 )
 for /f "delims=" %%F in ('dir /b "%DEPS_INSTALL_DIR%\bin\*.dll"') do (
 	set file=%%F
 	set file=!file:~0,3!
-	if not x!file! == xQt5 copy %DEPS_INSTALL_DIR%\bin\%%F %pkg_root%\bin
+	if not x!file! == xQt5 copy "%DEPS_INSTALL_DIR%\bin\%%F" %pkg_root%\bin
 )
 endlocal
 :: symsrv.yes for Dr. Mingw

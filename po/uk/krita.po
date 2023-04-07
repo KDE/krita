@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-03-31 14:15+0300\n"
+"PO-Revision-Date: 2023-04-06 07:57+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -23462,35 +23462,35 @@ msgid ""
 "The amount of time during which the strokes will be kept unmerged. When a "
 "stroke becomes old enough, Krita will try to merge it"
 msgstr ""
+"Проміжок часу, протягом якого мазки не об'єднуватимуться. Коли мазок стане "
+"достатньо давнім, Krita спробує його об'єднати."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "suffix for \"seconds\""
-#| msgid " sec"
+#, kde-format
 msgid " sec"
 msgstr " с"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
 msgid "Wait before merging strokes:"
-msgstr ""
+msgstr "Очікування до об'єднання мазків:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "The number of last strokes which Krita should store separately"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The number of last strokes that Krita will not merge (even if they are old "
 "enough)"
-msgstr "Кількість останніх мазків, дані щодо яких Krita має зберігати окремо"
+msgstr ""
+"Кількість останніх мазків, які Krita не об'єднуватиме (навіть якщо вони "
+"достатньо давні)"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr ""
+msgstr "Виключати останні мазки з об'єднання:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -23499,11 +23499,13 @@ msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
 msgstr ""
+"Якщо між двома мазками короткий інтервал (затримка), вони вважатимуться "
+"належними до однієї групи і об'єднуватимуться."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
 msgid "Max interval of grouped strokes:"
-msgstr ""
+msgstr "Максимальний інтервал групованих мазків:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
 #, kde-format
@@ -23513,12 +23515,13 @@ msgid ""
 "to be longer than this limit in the result of the merge, this merge will not "
 "happen."
 msgstr ""
+"Максимальна дозволена тривалість групи після об'єднання. Якщо у результаті "
+"об'єднання група стане тривалішою за цей час, об'єднання не виконуватиметься."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Video duration:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "Тривалість відео:"
+msgstr "Максимальна тривалість групи:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -23531,6 +23534,14 @@ msgid ""
 "try  to merge this action into a group. The groups are formed using \"Max "
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
+"Накопичувальне скасування надає змогу Krita об'єднувати дії зі скасування і "
+"спрощувати журнал дій. Krita триматиме у пам'яті декілька найсвіжіших дій "
+"без об'єднання, відповідно до значень параметрів «Очікування до об'єднання "
+"мазків» та «Виключати останні мазки з об'єднання». Якщо дія стає достатньо "
+"старою за обмеженням часу, і цю дію не виключено на основі пункту «Виключати "
+"останні мазки з об'єднання», Krita спробує включити об'єднанням цю дію до "
+"групи. Групи буде сформовано на основі значень параметрів «Максимальний "
+"інтервал групованих мазків» та «Максимальна тривалість групи»."
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -25803,16 +25814,13 @@ msgstr "Додати «(вставлено)» до вставлених шарі
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1470
-#, fuzzy, kde-format
-#| msgid "Enable Cumulative Undo"
+#, kde-format
 msgid "Use cumulative undo"
-msgstr "Увімкнути накопичувальне скасування"
+msgstr "Накопичувальне скасування"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1490
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "Додатково…"
 

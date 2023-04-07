@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-03-31 12:58+0200\n"
+"PO-Revision-Date: 2023-04-06 17:52+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 20.12.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -23231,35 +23231,35 @@ msgid ""
 "The amount of time during which the strokes will be kept unmerged. When a "
 "stroke becomes old enough, Krita will try to merge it"
 msgstr ""
+"La quantitat de temps durant el qual els traços es mantindran sense "
+"fusionar. Quan un traç siga prou antic, Krita l'intentarà fusionar"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "suffix for \"seconds\""
-#| msgid " sec"
+#, kde-format
 msgid " sec"
 msgstr " s"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
 msgid "Wait before merging strokes:"
-msgstr ""
+msgstr "Espera abans de fusionar els traços:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "The number of last strokes which Krita should store separately"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The number of last strokes that Krita will not merge (even if they are old "
 "enough)"
-msgstr "El nombre dels darrers traços que Krita emmagatzemarà separadament"
+msgstr ""
+"El nombre dels darrers traços que Krita no fusionarà (encara que siguen prou "
+"antics)"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr ""
+msgstr "Exclou els darrers traços de la fusió:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -23268,11 +23268,13 @@ msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
 msgstr ""
+"Si dos traços tenen un interval de temps curt (retard) entre ells, llavors "
+"es consideraran que pertanyen al mateix grup i es fusionaran"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
 msgid "Max interval of grouped strokes:"
-msgstr ""
+msgstr "Interval màxim de traços agrupats:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
 #, kde-format
@@ -23282,12 +23284,14 @@ msgid ""
 "to be longer than this limit in the result of the merge, this merge will not "
 "happen."
 msgstr ""
+"Duració màxima permesa del grup després de la fusió. Si la duració del grup "
+"serà més llarg que este límit en el resultat de la fusió, la fusió no es "
+"produirà."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Video duration:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "Duració del vídeo:"
+msgstr "Duració màxima del grup:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -23300,6 +23304,14 @@ msgid ""
 "try  to merge this action into a group. The groups are formed using \"Max "
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
+"L'operació de desfer acumulatiu permet a Krita fusionar les accions de "
+"desfer i fer més net l'historial de desfer. Krita encara mantindrà algunes "
+"accions recents sense fusionar d'acord amb les opcions «Espera abans de "
+"fusionar els traços» i «Exclou els darrers traços de la fusió». Sempre que "
+"una acció es desfaça utilitzant el límit de temps i esta acció no s'excloga "
+"utilitzant «Exclou els darrers traços de la fusió», Krita intentarà fusionar "
+"esta acció en un grup. Els grups es formen utilitzant les opcions «Interval "
+"màxim de traços agrupats» i «Duració màxima del grup»."
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -25576,16 +25588,13 @@ msgstr "Afig «(apegat)» a les capes enganxades"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1470
-#, fuzzy, kde-format
-#| msgid "Enable Cumulative Undo"
+#, kde-format
 msgid "Use cumulative undo"
-msgstr "Activa el fet de desfer acumulatiu"
+msgstr "Utilitza el fet de desfer acumulatiu"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1490
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "Avançat..."
 
@@ -60499,26 +60508,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Start merging time"
-#~ msgstr "Inicia el temps de fusió"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "The amount of time after a merged stroke before merging again"
-#~ msgstr ""
-#~ "La quantitat de temps després d'un traç fusionat abans de tornar a "
-#~ "fusionar"
-
-#~ msgid "Group time"
-#~ msgstr "Temps de grup"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The amount of time every stroke should be apart from its previous stroke "
-#~ "to be classified in one group"
-#~ msgstr ""
-#~ "La quantitat de temps que cada traç s'ha de separar del traç anterior per "
-#~ "a ser classificat en un grup"
-
-#~ msgid "Split Strokes"
-#~ msgstr "Dividix els traços"

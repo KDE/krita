@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-03-31 11:41+0200\n"
+"PO-Revision-Date: 2023-04-06 10:26+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -23286,35 +23286,35 @@ msgid ""
 "The amount of time during which the strokes will be kept unmerged. When a "
 "stroke becomes old enough, Krita will try to merge it"
 msgstr ""
+"De hoeveelheid tijd gedurende welke de streken niet gemengd zullen worden. "
+"Wanneer een streek oud genoeg wordt, zal Krita deze proberen te mengen"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "suffix for \"seconds\""
-#| msgid " sec"
+#, kde-format
 msgid " sec"
 msgstr " sec"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
 msgid "Wait before merging strokes:"
-msgstr ""
+msgstr "Wachten alvorens streken te mengen:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "The number of last strokes which Krita should store separately"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The number of last strokes that Krita will not merge (even if they are old "
 "enough)"
-msgstr "Het aantal laatste streken die Krita apart zou moeten opslaan"
+msgstr ""
+"Het aantal laatste streken die Krita niet zal mengen (zelfs als ze oud "
+"genoeg zijn)"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr ""
+msgstr "Laatste streken uitsluiten van mengen:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -23323,11 +23323,14 @@ msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
 msgstr ""
+"Als twee streken een korte tijdsinterval (vertraging) hebben tussen elkaar, "
+"dan zullen ze beschouwd worden als behorende tot dezelfde groep en gemengd "
+"worden"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
 msgid "Max interval of grouped strokes:"
-msgstr ""
+msgstr "Maximaal interval van gegroepeerde streken:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
 #, kde-format
@@ -23337,12 +23340,14 @@ msgid ""
 "to be longer than this limit in the result of the merge, this merge will not "
 "happen."
 msgstr ""
+"Maximaal toegestane duur van de groep na het mengen. Als de groep langer "
+"wordt dan deze limiet in het resultaat van het mengen, zal dit mengen niet "
+"gebeuren."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Video duration:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "Tijdsduur van de video:"
+msgstr "Maximale tijdsduur van groep:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -23355,6 +23360,15 @@ msgid ""
 "try  to merge this action into a group. The groups are formed using \"Max "
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
+"Cumulatieve keren Ongedaan maken biedt Krita om ongedaan-maken-acties te "
+"mengen en de geschiedenis ervan op te schonen. Krita zal nog steeds een paar "
+"van de laatste niet gemengde acties bewaren volgens de opties \"Wacht "
+"alvorens streken te mengen\" en \"Laatste streken uitsluiten van mengen\". "
+"Wanneer een actie verouderd raakt met gebruik van de tijdslimiet en deze "
+"actie is niet uitgesloten met \"Laatste streken uitsluiten van mengen\", zal "
+"Krita deze actie proberen te mengen in een groep. De groepen worden gevormd "
+"met gebruik van opties \"Maximale vertraging van gegroepeerde streken\" en "
+"\"Maximale groepsduur\"."
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -25629,16 +25643,13 @@ msgstr "\"(Geplakt)\" toevoegen aan geplakte lagen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1470
-#, fuzzy, kde-format
-#| msgid "Disable Cumulative Undo"
+#, kde-format
 msgid "Use cumulative undo"
-msgstr "Cumulatief Ongedaan maken uitschakelen"
+msgstr "Cumulatief Ongedaan maken gebruiken"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1490
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "Geavanceerd..."
 

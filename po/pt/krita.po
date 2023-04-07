@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-04-01 12:02+0100\n"
+"PO-Revision-Date: 2023-04-06 10:40+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -23511,35 +23511,35 @@ msgid ""
 "The amount of time during which the strokes will be kept unmerged. When a "
 "stroke becomes old enough, Krita will try to merge it"
 msgstr ""
+"A quantidade de tempo durante a qual os traços continuarão não-reunidos. "
+"Quando um traço começar a ficar demasiado antigo, o Krita irá tentar reuni-lo"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "suffix for \"seconds\""
-#| msgid " sec"
+#, kde-format
 msgid " sec"
 msgstr " s"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
 msgid "Wait before merging strokes:"
-msgstr ""
+msgstr "Atraso até reunir os traços:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "The number of last strokes which Krita should store separately"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The number of last strokes that Krita will not merge (even if they are old "
 "enough)"
-msgstr "O número de últimos traços que o Krita deverá guardar em separado"
+msgstr ""
+"O número de últimos traços que o Krita não irá reunir (mesmo que antigos o "
+"sufciente)"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr ""
+msgstr "Excluir os últimos traços da reunião:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -23548,11 +23548,13 @@ msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
 msgstr ""
+"Se dois traços tiverem um intervalo de tempo (atraso) curto entre cada uma, "
+"serão consideradas como fazendo parte do mesmo grupo e reunidas"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
 msgid "Max interval of grouped strokes:"
-msgstr ""
+msgstr "Intervalo máximo de traços agrupados:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
 #, kde-format
@@ -23562,12 +23564,13 @@ msgid ""
 "to be longer than this limit in the result of the merge, this merge will not "
 "happen."
 msgstr ""
+"A duração máxima permitida do grupo após a reunião. Se o grupo demorar mais "
+"que este limite no resultado da reunião, a mesma não irá acontecer."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Video duration:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "Duração do vídeo:"
+msgstr "Duração máxima do grupo:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -23580,6 +23583,15 @@ msgid ""
 "try  to merge this action into a group. The groups are formed using \"Max "
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
+"O 'Desfazer' Acumulativo permite ao Krita reunir as acções de anulação e "
+"tornar o seu histórico mais arrumado. O Krita irá manter à mesma algumas das "
+"últimas acções por reunir, de acordo com as opções \"Atraso antes de reunir "
+"os traços\" e \"Excluir os últimos traços da reunião\". Sempre que uma acção "
+"ficar desactualizada, usanndo o limite de tempo e desde que esta acção não "
+"seja excluída pela opação \"Excluir os últimos traços da reunião\", o Krita "
+"irá tentar reunir esta acção num gurpo. Os grupos são formados com base nas "
+"opções \"Atraso máximo para agrupar os traços\" e \"Duração máxima do grupo"
+"\"."
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -25850,16 +25862,13 @@ msgstr "Adicionar \"(colada)\" às camadas coladas"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1470
-#, fuzzy, kde-format
-#| msgid "Enable Cumulative Undo"
+#, kde-format
 msgid "Use cumulative undo"
-msgstr "Activar o 'Desfazer' Acumulativo"
+msgstr "Activar o 'desfazer' acumulativo"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1490
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "Avançado..."
 
@@ -60758,25 +60767,3 @@ msgstr "Ferramenta de Ampliação"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta de Imagens de Referência"
-
-#~ msgid "Start merging time"
-#~ msgstr "Tempo de início da reunião"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "The amount of time after a merged stroke before merging again"
-#~ msgstr ""
-#~ "A quantidade de tempo após um traço de reunião antes de uma nova reunião"
-
-#~ msgid "Group time"
-#~ msgstr "Tempo do grupo"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The amount of time every stroke should be apart from its previous stroke "
-#~ "to be classified in one group"
-#~ msgstr ""
-#~ "A quantidade de tempo de distância entre cada traço para ser classificado "
-#~ "como estando num grupo"
-
-#~ msgid "Split Strokes"
-#~ msgstr "Traços de Divisão"

@@ -7,7 +7,9 @@ ExternalProject_Add(
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL http://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.gz
     URL_HASH SHA256=0eb4b4b9420a0f51db142ba3f9c64b333f826532dc0f48c6410ae51f4799b664
- 
+
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-libogg-Fix-library-filename-on-Windows.patch
+
     CMAKE_ARGS ${LIBOGG_EXTRA_CMAKE_ARGS} -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ffmpeg} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
@@ -19,7 +21,7 @@ ExternalProject_Add(
     URL http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.tar.xz
     URL_HASH SHA256=b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f72954b
 
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-vorbis-Fix-library-definition-files-lacking-a-library.patch
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-libvorbis-Fix-empty-LIBRARY-tag-in-.def-files.patch
 
     CMAKE_ARGS ${LIBVORBIS_EXTRA_CMAKE_ARGS} -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ffmpeg} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
@@ -275,5 +277,5 @@ kis_ExternalProject_Add_with_separate_builds_apple(
 
     UPDATE_COMMAND ""
 
-    DEPENDS ${FLAC_DEP} ${VPX_DEP} ${OPUS_DEP} ${SDL_DEP} ${VPX_DEP} ext_libvorbis ext_libtheora ext_libopenh264 ext_libmp3lame ext_libaom ext_webp ext_png ext_jpeg ${MESON_DEP} ${PKG_CONFIG_DEP}
+    DEPENDS ${FLAC_DEP} ${OPUS_DEP} ${SDL_DEP} ${VPX_DEP} ext_libvorbis ext_libtheora ext_libopenh264 ext_libmp3lame ext_libaom ext_webp ext_png ext_jpeg ${MESON_DEP} ${PKG_CONFIG_DEP}
 )

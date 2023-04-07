@@ -691,6 +691,10 @@ xcopy /Y %KRITA_INSTALL_DIR%\lib\kritaplugins\*.dll %pkg_root%\lib\kritaplugins\
 xcopy /Y /S /I %DEPS_INSTALL_DIR%\lib\krita-python-libs %pkg_root%\lib\krita-python-libs
 xcopy /Y /S /I %KRITA_INSTALL_DIR%\lib\krita-python-libs %pkg_root%\lib\krita-python-libs
 
+:: MLT plugins and their data
+xcopy /S /Y /I %DEPS_INSTALL_DIR%\lib\mlt %pkg_root%\lib\mlt
+xcopy /S /Y /I %DEPS_INSTALL_DIR%\share\mlt %pkg_root%\share\mlt
+
 :: Fontconfig
 xcopy /Y /S /I %DEPS_INSTALL_DIR%\etc\fonts %pkg_root%\etc\fonts
 

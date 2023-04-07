@@ -286,6 +286,12 @@ if os.path.isdir(f"{DEPS_INSTALL_DIR}\\lib\\site-packages"):
     subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\lib\\site-packages".format(
         DEPS_INSTALL_DIR), f"{pkg_root}\\lib\\site-packages"], check=True)
 
+# MLT plugins and their data
+subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\lib\\mlt".format(
+    DEPS_INSTALL_DIR), f"{pkg_root}\\lib\\mlt"], check=True)
+subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\mlt".format(
+    DEPS_INSTALL_DIR), f"{pkg_root}\\share\\mlt"], check=True)
+
 # Fontconfig
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\etc\\fonts".format(
     DEPS_INSTALL_DIR), f"{pkg_root}\\etc\\fonts"], check=True)

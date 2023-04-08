@@ -250,7 +250,6 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
         KIS_SAFE_ASSERT_RECOVER_RETURN(animState);
 
         animState->disconnect(this);
-
     }
 
     KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(p_canvas);

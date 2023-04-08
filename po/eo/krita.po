@@ -1,6 +1,7 @@
 # translation of krita.po to Esperanto
 # Copyright (C) 2002 Free Software Foundation, Inc.
 # Wolfram Diestel <wolfram@steloj.de>, 2002.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 # --- kritalibs
 # translation of koffice.po to Esperanto
@@ -42,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-03-18 17:41+0100\n"
+"PO-Revision-Date: 2023-04-07 10:09+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -15337,7 +15338,7 @@ msgstr "Administri Rimedojn"
 #, kde-format
 msgctxt "action"
 msgid "Switch Application &Language..."
-msgstr "Ŝanĝi Aplikaĵo & &Lingvon..."
+msgstr "Ŝanĝi Aplikaĵan &Lingvon..."
 
 #. i18n: context: toolTip @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
@@ -21866,7 +21867,7 @@ msgid ""
 "body></html>"
 msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Averto:</span> "
-"FFMpeg devas esti almenaŭ versio 4.2+ por ke gif-travidebleco funkciu</p ></"
+"FFMpeg devas esti almenaŭ versio 4.2+ por ke gif-travidebleco funkciu</p></"
 "body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, imageSequenceOptionsGroup)
@@ -22172,13 +22173,14 @@ msgstr "<html><head/><body><h1 align=\"center\">Kreita de</h1></p><p>"
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Viaj nomoj"
+msgstr "Wolfram Diestel,Axel Rousseau,Oliver Kellogg"
 
 #: libs/ui/dialogs/kis_about_application.cpp:64
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "Viaj retpoŝtoj"
+msgstr ""
+"wolfram@steloj.de,axel@esperanto-jeunes.org,okellogg@users.sourceforge.net"
 
 #: libs/ui/dialogs/kis_about_application.cpp:75
 #, kde-format
@@ -23201,31 +23203,29 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "suffix for \"seconds\""
-#| msgid " sec"
+#, kde-format
 msgid " sec"
 msgstr " sek"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
 msgid "Wait before merging strokes:"
-msgstr ""
+msgstr "Atendi antaŭ ol kunfandi batojn:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "The number of last strokes which Krita should store separately"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The number of last strokes that Krita will not merge (even if they are old "
 "enough)"
-msgstr "La nombro da lastaj strekoj, kiujn Krita devas konservi aparte"
+msgstr ""
+"La nombro da lastaj strekoj, kiujn Krita ne kunfandos (eĉ se ili estas "
+"sufiĉe malnovaj)"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr ""
+msgstr "Ekskludi lastajn strekojn el kunfundado:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -23238,7 +23238,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
 msgid "Max interval of grouped strokes:"
-msgstr ""
+msgstr "Maksimuma intervalo de grupigitaj strekoj:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
 #, kde-format
@@ -23250,10 +23250,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Video duration:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "Daŭro de video:"
+msgstr "Maksimuma grupdaŭro:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -23706,7 +23705,7 @@ msgstr ""
 "kaj komunuma ilo por ciferecaj artistoj ĉie.<br />Progreso estas ebligita "
 "danke al daŭra subteno de nia komunumo de <a href=\"https://docs.krita.org/"
 "en/contributors_manual.html\">kontribuantoj</a>, sponsoroj, kaj <a href="
-"\"https://fund.krita.org/\">disvolva fonduso < /a>anoj.</p></body></html>"
+"\"https://fund.krita.org/\">disvolva fonduso </a>anoj.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -25520,16 +25519,13 @@ msgstr "Aldoni \"(algluita)\" al algluitaj tavoloj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1470
-#, fuzzy, kde-format
-#| msgid "Enable Cumulative Undo"
+#, kde-format
 msgid "Use cumulative undo"
-msgstr "Ebligi Akumulan Malfaron"
+msgstr "Ebligi akumulan malfaron"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1490
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "Altnivela..."
 
@@ -26634,10 +26630,10 @@ msgstr ""
 "animacia kaŝmemorregenerado), Krita faros la specifitan nombron da kopioj de "
 "via bildo kaj laboros pri ili paralele. Ĉiu kopio postulos pli da RAM por "
 "sia stokado (ĉirkaŭ 20% de la grandeco de via bildo), do altigu ĉi tiun "
-"limon nur se vi havas sufiĉe da RAM instalita.</p><p><br/></p><p ><span "
-"style=\" font-weight:600;\">Rekomendita valoro:</span> agordi Klonojn Limigu "
-"al la nombro da <span style=\" text-decoration: underline;\">fizika</span> "
-"(ne-hiperfadenaj) kernoj havas via CPU</p></body></html>"
+"limon nur se vi havas sufiĉe da RAM instalita.</p><p><br/></p><p><span style="
+"\" font-weight:600;\">Rekomendita valoro:</span> agordi Klonojn Limigu al la "
+"nombro da <span style=\" text-decoration: underline;\">fizika</span> (ne-"
+"hiperfadenaj) kernoj havas via CPU</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: libs/ui/forms/wdgperformancesettings.ui:303
@@ -26731,9 +26727,9 @@ msgid ""
 "add the contents of the directory to a bug report.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Kiam agado protokolo estas ebligita Krita konservas "
-"tempinformojn en la dosierujon <tt><working_dir>/log</tt>. Se vi spertas "
-"problemojn pri rendimento kaj volas helpi nin, ebligu ĉi tiun opcion kaj "
-"aldonu la enhavon de la dosierujo al raporto pri eraro.</p></body></html>"
+"tempinformojn en la dosierujon <tt>&lt;working_dir&gt;/log</tt>. Se vi "
+"spertas problemojn pri rendimento kaj volas helpi nin, ebligu ĉi tiun opcion "
+"kaj aldonu la enhavon de la dosierujo al raporto pri eraro.</p></body></html>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgperformancesettings.ui:427
@@ -26760,7 +26756,7 @@ msgid ""
 "4K UltraHD@25fps video you need extra 800 MiB of memory</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Animacia kadro-kaŝmemoro estos konservita en RAM tute "
-"sen ia ajn limigo</p><p><span style=\" font-weight:600;\">AVERTO:< /span> "
+"sen ia ajn limigo</p><p><span style=\" font-weight:600;\">AVERTO:</span> "
 "bonvolu certigi, ke via komputilo havas sufiĉe da RAM <span style=\" text-"
 "decoration: underline;\">super</span> la kvanto kiun vi petis en Ĝenerala "
 "langeto. Alie vi eble renkontos sistemajn frostiĝojn.</p><p>* dum 1 sekundo "
@@ -27034,7 +27030,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Elekti la laŭvolan embleman piktogramon kiu indikas "
 "kromajn informojn, kiel la antaŭdifinita esti specialefekta peniko, aŭ "
-"simple uzante kliniĝon aŭ angulan iel.</p></p></p> korpo></html>"
+"simple uzante kliniĝon aŭ angulan iel.</p></p></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:51
@@ -27488,7 +27484,7 @@ msgstr ""
 "ĉi tiun solvon. Krita provos legi dekstren kaj mezbutonajn klakojn de la "
 "musa eventofluo. Ĝi eble aŭ ne funkcias ĉe via aparato (dependas de la "
 "efektivigo de la tablojda pelilo).</p><p><br/></p><p>Post ŝanĝi ĉi tiun "
-"opcion Krita devus esti rekomencita.</p><p> /korpo></html>"
+"opcion Krita devus esti rekomencita.</p><p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseRightMiddleClickWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:180
@@ -29400,7 +29396,7 @@ msgid ""
 "td></table></body></html>"
 msgstr ""
 "<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
-"style=\" koloro:%1;\" ><b>Uzante Krita</b></span></p><p><a href=\"https://"
+"style=\" koloro:%1;\"><b>Uzante Krita</b></span></p><p><a href=\"https://"
 "krita.org/support-us/\"><span style=\" text- dekoracio: substreko; koloro:%1;"
 "\">Subtenu la Disvolviĝon de Krita!</span></a></p><p><a href=\"https://docs."
 "krita.org/en/user_manual /getting_started.html\"><span style=\" text-"
@@ -29410,9 +29406,9 @@ msgstr ""
 "style=\" teksto-ornamado: substreko; koloro:%1;\">Krita-retejo</span></a></"
 "p> </td><td><p><span style=\" color:%1;\"><b>Kodigo Krita</b></span></"
 "p><p><a href=\" https://krita-artists.org\"><span style=\" teksto-ornamado: "
-"substreko; koloro:%1;\">Uzantkomunumo</span></a></p><p>< a href=\"https://"
+"substreko; koloro:%1;\">Uzantkomunumo</span></a></p><p><a href=\"https://"
 "invent.kde.org/graphics/krita\"><span style=\" teksto-ornamado: substreko; "
-"koloro:%1;\">Fontokodo</span></a ></p><p><a href= \"https://api.kde.org/"
+"koloro:%1;\">Fontokodo</span></a></p><p><a href= \"https://api.kde.org/"
 "appcomplete-api/krita-apidocs/libs/libkis/html/index.html\"><span style=\" "
 "text-decoration: substreko; color:%1;\">Scripting API</span></a></p><p><a "
 "href=\"https://scripting.krita.org/lessons/introduction\"><span stilo =\" "
@@ -31036,7 +31032,7 @@ msgstr ""
 "<p>Vi uzas la Microsoft Store-pakaĵversion de Krita. Kvankam Krita povas "
 "esti agordita por meti rimedojn sub la lokon de la uzanto AppData, Vindozo "
 "efektive povas stoki la dosierojn ene de privata aplika loko.</p>\n"
-"<p>Vi devus kontroli ambaŭ lokojn por determini kie troviĝas la dosieroj.< /"
+"<p>Vi devus kontroli ambaŭ lokojn por determini kie troviĝas la dosieroj.</"
 "p>\n"
 "<p><b>Uzanto AppData</b>:<br/>\n"
 "%1</p>\n"
@@ -32343,7 +32339,7 @@ msgid ""
 "\">Recent files</span></p></body></html>"
 msgstr ""
 "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-"\">Lastatempaj dosieroj</span></p></body>< /html>"
+"\">Lastatempaj dosieroj</span></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowAtStartup)
 #: libs/ui/wdgsplash.ui:594
@@ -33267,7 +33263,7 @@ msgstr ""
 "ProPhotoRGB. Sed se vi havas jam bone establitan laborfluon uzante "
 "ProPhotoRGB, vi eble trovos iom strangan ŝanĝon al alia RGB-labora spaco, "
 "almenaŭ komence, kaj do vi devas pezi la avantaĝojn kaj malavantaĝojn de "
-"ŝanĝi vian laborfluon.</p >"
+"ŝanĝi vian laborfluon.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:604
 #, kde-format
@@ -33562,13 +33558,7 @@ msgstr ""
 "\" por reveni al la agorda dialogo. ."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:535
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel "
-#| "in bits. arg5: image size"
-#| msgid ""
-#| "This document will be %1 pixels by %2 pixels in %3, which means the pixel "
-#| "size is %4 bit. A single paint layer will thus take up %5 of RAM."
+#, kde-format
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
 "bits. arg5: image size"
@@ -33576,9 +33566,8 @@ msgid ""
 "This document will be %1 pixels by %2 pixels in %3. The pixel size is %4 "
 "bit. A single paint layer will use %5 of RAM."
 msgstr ""
-"Ĉi tiu dokumento estos %1 pikseloj je %2 pikseloj en %3, kio signifas, ke la "
-"grandeco de pikseloj estas %4 bitoj. Ununura farbotavolo tiel okupas %5de "
-"RAM."
+"Ĉi tiu dokumento estos %1 pikseloj je %2 pikseloj en %3. La rastrumera "
+"grandeco estas %4 bitoj. Unuopa farbtavolo tiel okupos %5 de RAM."
 
 #: libs/ui/widgets/kis_filter_selector_widget.cc:157
 #, kde-format
@@ -35706,7 +35695,7 @@ msgstr ""
 "tion. Tamen vi - la uzanto - devas diri al ni kiam io ne funkcias kiel "
 "atendite aŭ povus esti farita pli bone.<br /><br />KDE havas cimspuran "
 "sistemon. Vizitu <a href=\"%1\">%1</a> aŭ uzu la dialogon \"Raporti Eraron..."
-"\" el la menuo \"Helpo\" por raporti erarojn.<br /><br / >Se vi havas "
+"\" el la menuo \"Helpo\" por raporti erarojn.<br /><br />Se vi havas "
 "sugeston por plibonigo, vi bonvenas uzi la cimspuran sistemon por registri "
 "vian deziron. Certigu, ke vi uzas la severecon nomatan \"Dezirlisto\".</html>"
 
@@ -35837,7 +35826,7 @@ msgstr ""
 "untranslatable_pages/reporting_bugs.html\">ĉi tiun gvidilon</a></b> por "
 "raporti erarojn unue!</p><p>Por sendi cimraporton, alklaku la suban butonon. "
 "Ĉi tio malfermos retumilon fenestron ĉe <a href=\"https://bugs.kde.org"
-"\">https://bugs.kde.org</a> kie vi trovos formularon por plenigi. < /"
+"\">https://bugs.kde.org</a> kie vi trovos formularon por plenigi. </"
 "p><p><b>Bonvolu alglui la jenajn informojn en la raporton pri eraro!</b></"
 "p></qt>"
 
@@ -42654,7 +42643,7 @@ msgid ""
 "need to restart Krita to enable or disable plugins.</p></body></html>"
 msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Noto:</span> vi "
-"devas rekomenci Krita por ebligi aŭ malŝalti kromaĵojn.</p><p> /korpo></html>"
+"devas rekomenci Krita por ebligi aŭ malŝalti kromaĵojn.</p><p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, errorLabel)
 #: plugins/extensions/pykrita/plugin/manager.ui:43
@@ -42672,9 +42661,9 @@ msgid ""
 "School</span></a>!</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Se vi volas lerni kiel skribi Krita-skriptojn, "
-"kontrolu la <a href=\"https://scripting.krita.org/lessons/introduction\">< "
-"span stilo=\" text-decoration: underline; color:#2980b9;\">Krita Scripting "
-"School</span></a>!</p></body></html>"
+"kontrolu la <a href=\"https://scripting.krita.org/lessons/introduction"
+"\"><span stilo=\" text-decoration: underline; color:#2980b9;\">Krita "
+"Scripting School</span></a>!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:61
 #, kde-format
@@ -42695,7 +42684,7 @@ msgid ""
 "application>: <icode>%2</icode>. Skipped</p>"
 msgstr ""
 "<p>Specigita versio havas nevalidan formaton por dependeco <application>%1</"
-"application>: <icode>%2</icode>. Preterpasita</ p >"
+"application>: <icode>%2</icode>. Preterpasita</p>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:181
 #, kde-format
@@ -48710,7 +48699,7 @@ msgstr ""
 "<p>La dosierformato de Portable Network Graphics (PNG) permesas konservi "
 "travideblecon en via bildo konservante alfa-kanalon.\n"
 "Vi povas malmarki la skatolon se vi ne uzas travideblecon kaj vi volas "
-"malgrandigi la rezultan dosieron.<br >Ĉiam konservi la alfa kanalon "
+"malgrandigi la rezultan dosieron.<br>Ĉiam konservi la alfa kanalon "
 "rekomendas.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, alpha)
@@ -49022,7 +49011,7 @@ msgstr ""
 "dulinian interpoladon (defaŭlte - por malrapidaj komputiloj). En ĉi tiu "
 "metodo, la ruĝa valoro de neruĝa pikselo estas kalkulita kiel la mezumo de "
 "la apudaj ruĝaj pikseloj, kaj simile por blua kaj verda.</li><li><emphasis "
-"strong='true'>VNG</emphasis >: uzu la interpoladon de Variabla Nombro de "
+"strong='true'>VNG</emphasis>: uzu la interpoladon de Variabla Nombro de "
 "Gradientoj. Ĉi tiu metodo kalkulas gradientojn proksime de la pikselo de "
 "intereso kaj uzas la pli malaltajn gradientojn (reprezentantajn pli glatajn "
 "kaj pli similajn partojn de la bildo) por fari takson.</li><li><emphasis "
@@ -49094,7 +49083,7 @@ msgstr ""
 "malmultaj Kvalitaj opcioj:</p><p><ul><li><emphasis strong='true'>DCB</"
 "emphasis>: turni sur la filtrilo de plibonigi interpolitaj koloroj.</"
 "li><li><emphasis strong='true'>VCD & AHD</emphasis>: ŝaltu la plibonigitan "
-"efikan kolorinterpoladon (EECI) rafini por plibonigi akrecon.</li>< /ul></p>"
+"efikan kolorinterpoladon (EECI) rafini por plibonigi akrecon.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:453
 #, kde-format
@@ -49151,7 +49140,7 @@ msgstr ""
 "emphasis>: Uzu la blankbalancon specifitan de la fotilo. Se ne havebla, "
 "revenas al defaŭlta neŭtrala blankbalanco.</li><li><emphasis "
 "strong='true'>Aŭtomata</emphasis>: Kalkulas aŭtomatan blankbalancon "
-"averaĝante la tutan bildon.</li><li>< emphasis strong='true'>Manlibro</"
+"averaĝante la tutan bildon.</li><li><emphasis strong='true'>Manlibro</"
 "emphasis>: Agordu kutimajn temperaturojn kaj verdajn nivelajn valorojn.</"
 "li></ul></p>"
 
@@ -49229,11 +49218,12 @@ msgid ""
 msgstr ""
 "<title>Kulminaĵoj</title><p>Elektu ĉi tie la plej elstaran tondmetodon:</"
 "p><p><ul><li><emphasis strong='true'>Fila blanka</emphasis>: tranĉu ĉiujn "
-"lumaĵojn al solida blanka</ek><li><emphasis strong='true'>Unclip</emphasis>: "
-"lasi lumaĵojn netonditaj en diversaj nuancoj de rozo</li><li><emphasis "
-"strong='true'>Miksaĵo</emphasis >:Miksi tonditajn kaj netonditajn valorojn "
-"kune por laŭpaŝa fado al blanka</li><li><emphasis strong='true'>Rekonstrui</"
-"emphasis>: rekonstrui lumaĵojn uzante nivelvaloron</li></ul><ul><li> /p>"
+"lumaĵojn al solida blanka</emphasis><li><emphasis strong='true'>Unclip</"
+"emphasis>: lasi lumaĵojn netonditaj en diversaj nuancoj de rozo</"
+"li><li><emphasis strong='true'>Miksaĵo</emphasis>:Miksi tonditajn kaj "
+"netonditajn valorojn kune por laŭpaŝa fado al blanka</li><li><emphasis "
+"strong='true'>Rekonstrui</emphasis>: rekonstrui lumaĵojn uzante "
+"nivelvaloron</li></ul><ul><li></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:513
 #, kde-format
@@ -49587,7 +49577,7 @@ msgstr ""
 "por malkodi RAW-datumojn.</p><p><ul><li><emphasis strong='true'>Neniu</"
 "emphasis> : neniu eniga kolorprofilo estas uzata dum RAW-malkodado.</"
 "li><li><emphasis strong='true'>Enigita</emphasis>: uzu enigitan "
-"kolorprofilon el RAW-dosiero, se ĝi ekzistas.</li><li> ><emphasis "
+"kolorprofilon el RAW-dosiero, se ĝi ekzistas.</li><li><emphasis "
 "strong='true'>Persona</emphasis>: uzu propran enigaĵan kolorspacan profilon."
 "</li></ul></p>"
 
@@ -49660,7 +49650,7 @@ msgid ""
 msgstr ""
 "<title>Laborspaco</title><p>Elektu ĉi tie la eligkoloran spacon uzatan por "
 "malkodi RAW-datumojn.</p><p><ul><li><emphasis strong='true'>Kruda (neniu "
-"profilo)< /emphasis>: en ĉi tiu reĝimo, neniu eliga kolorspaco estas uzata "
+"profilo)</emphasis>: en ĉi tiu reĝimo, neniu eliga kolorspaco estas uzata "
 "dum RAW-malkodado.</li><li><emphasis strong='true'>sRGB</emphasis>: ĉi tiu "
 "estas RGB-kolorspaco, kreita kunlabore de Hewlett -Packard kaj Microsoft. Ĝi "
 "estas la plej bona elekto por bildoj destinitaj por la reto kaj "
@@ -51764,12 +51754,12 @@ msgid ""
 msgstr ""
 "<html><head/><body>\n"
 "<p>Kurba kalkulreĝimo ŝanĝas kiel 2 aŭ pli da kurbo funkcias kune<br/></p>\n"
-"<p> multobligi (defaŭlte): ĉiuj valoroj de kurboj multobligas < /p><p>(0,8 "
+"<p> multobligi (defaŭlte): ĉiuj valoroj de kurboj multobligas </p><p>(0,8 "
 "premo) * (0,5 rapido) = 0,4 <br/></p>\n"
 "<p> aldono: ĉiuj valoroj de kurboj aldonas</p><p>(0,6 premo) + ( 0,3 rapido) "
 "= 0,9<br/></p>\n"
 "<p> maksimuma valoro</p><p>(0,7 premo), (0,3 rapideco) = 0,7<br/></p>\n"
-"<p > minimuma valoro </p><p>(0,7 premo), (0,3 rapideco) = 0,3<br/></p>\n"
+"<p> minimuma valoro </p><p>(0,7 premo), (0,3 rapideco) = 0,3<br/></p>\n"
 "<p> diferenco inter min kaj maksimuma valoroj</p><p>(0,8 premo ), (0,3 "
 "rapido), (0,6 fade) = 0,5</p></body></html>"
 
@@ -53841,7 +53831,7 @@ msgid ""
 "axes, while tilt-elevation is used for the Z-axis.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Miksi Tilton kaj Desegnan angulon por determini la X- "
-"kaj Y-aksojn, dum kliniĝo-alto estas uzata por la Z-akso.</p></body></html >"
+"kaj Y-aksojn, dum kliniĝo-alto estas uzata por la Z-akso.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionMix)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:263
@@ -55845,7 +55835,7 @@ msgid ""
 "(https://github.com/test/plugin)</li>"
 msgstr ""
 "<p><strong>Enigu elŝutan URL</strong></p><p>Ekzemple:<ul><li>Zip-elŝuta "
-"ligilo (http://example.com/plugin.zip)</li>< li>Github-deponejo (https://"
+"ligilo (http://example.com/plugin.zip)</li><li>Github-deponejo (https://"
 "github.com/test/plugin)</li>"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:102
@@ -57307,7 +57297,7 @@ msgstr ""
 "weight:600;\">aktivigita</span>, la streko de la formo estas skalita kun la "
 "formo mem. </p><p>En la stato <span style=\" font-weight:600;\">malŝaltita</"
 "span>, nur la formo estas regrandigita, konservante la streklarĝon kaj "
-"stilon neŝanĝitaj.</p><p> /korpo></html>"
+"stilon neŝanĝitaj.</p><p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUniformScaling)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:205
@@ -59472,7 +59462,7 @@ msgstr ""
 "<p>Elektu filtran reĝimon:\n"
 "<ul><li><b>Plej proksima najbaro</b> por piksela arto. Ne produktas novan "
 "koloron.</li><li><b>Dulineara</b> por areoj kun unuforma koloro por eviti "
-"artefaktojn.</li><li><b>Bikuba</b> por pli glataj rezultoj.< /"
+"artefaktojn.</li><li><b>Bikuba</b> por pli glataj rezultoj.</"
 "li><li><b>Lanczos3</b> por akraj rezultoj. Povas produkti antenojn.</li></"
 "ul></p>"
 

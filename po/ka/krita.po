@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-03-19 05:24+0100\n"
+"PO-Revision-Date: 2023-04-07 04:58+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -6818,7 +6818,7 @@ msgstr ""
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/grass.gih"
 msgid "Grass"
-msgstr ""
+msgstr "ბალახი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/grass_patch.gih:1
@@ -12083,7 +12083,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Split Layer"
-msgstr ""
+msgstr "ფენის გაყოფა"
 
 #. i18n: context: text @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3112
@@ -12537,7 +12537,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Move into previous group"
-msgstr ""
+msgstr "წინა ჯგუფში გადატანა"
 
 #. i18n: context: text @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
@@ -12549,7 +12549,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Move into next group"
-msgstr ""
+msgstr "შემდეგ ჯგუფში გადატანა"
 
 #. i18n: context: text @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
@@ -22909,9 +22909,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "suffix for \"seconds\""
-#| msgid " sec"
+#, kde-format
 msgid " sec"
 msgstr " წმ"
 
@@ -22956,10 +22954,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Video duration:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "ვიდეოს ხანგრძლივობა:"
+msgstr "მაქს. ჯგუფის ხანგრძლივობა:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -25145,9 +25142,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1490
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "დამატებით..."
 
@@ -39815,19 +39810,19 @@ msgstr ""
 #: plugins/extensions/colorrange/wdg_colorrange.ui:27
 #, kde-format
 msgid "Reds"
-msgstr ""
+msgstr "წითლები"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:32
 #, kde-format
 msgid "Yellows"
-msgstr ""
+msgstr "ნარინჯისფრები"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:37
 #, kde-format
 msgid "Greens"
-msgstr ""
+msgstr "მწვანები"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:42
@@ -39934,7 +39929,7 @@ msgstr ""
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:36
 #, kde-format
 msgid "For images"
-msgstr ""
+msgstr "გამოსახულებებისთვის"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:42
@@ -40162,7 +40157,7 @@ msgstr ""
 #: plugins/extensions/imagesplit/imagesplit.cpp:247
 #, kde-format
 msgid "Save Image on Split"
-msgstr ""
+msgstr "გამოსახულების შენახვა გაყოფისას"
 
 #. i18n: ectx: property (text), widget (QLabel, lblHorizontalSplitLines)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:26
@@ -40188,7 +40183,7 @@ msgstr "ვერტიკალური ხაზები"
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:74
 #, kde-format
 msgid "Sort Direction:"
-msgstr ""
+msgstr "დალაგების მიმართულება:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSuffix)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:107
@@ -40207,37 +40202,37 @@ msgstr "ფაილის ტიპი"
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:152
 #, kde-format
 msgid "Autosave on Split"
-msgstr ""
+msgstr "ავტომატური შენახვა გაყოფისას"
 
 #: plugins/extensions/layergroupswitcher/layergroupswitcher.cpp:31
 #, kde-format
 msgid "Move into previous group"
-msgstr ""
+msgstr "წინა ჯგუფში გადატანა"
 
 #: plugins/extensions/layergroupswitcher/layergroupswitcher.cpp:35
 #, kde-format
 msgid "Move into next group"
-msgstr ""
+msgstr "შემდეგ ჯგუფში გადატანა"
 
 #: plugins/extensions/layersplit/dlg_layersplit.cpp:30
 #, kde-format
 msgid "Split Layer"
-msgstr ""
+msgstr "ფენის გაყოფა"
 
 #: plugins/extensions/layersplit/layersplit.cpp:108
 #, kde-format
 msgid "Split into Layers"
-msgstr ""
+msgstr "ფენებად დაყოფა"
 
 #: plugins/extensions/layersplit/layersplit.cpp:111
 #, kde-format
 msgid "Split into Masks"
-msgstr ""
+msgstr "ნიღბებად დაყოფა"
 
 #: plugins/extensions/layersplit/layersplit.cpp:194
 msgctxt "(qtundo-format)"
 msgid "Split Layer"
-msgstr ""
+msgstr "ფენის გაყოფა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCreateGroupLayer)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:29
@@ -40291,13 +40286,13 @@ msgstr ""
 #: plugins/extensions/layersplit/wdg_layersplit.ui:103
 #, kde-format
 msgid "Choose Palette"
-msgstr ""
+msgstr "აირჩიეთ პალიტრა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbMode)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:111
 #, kde-format
 msgid "Split Into Layers"
-msgstr ""
+msgstr "ფენებად დაყოფა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbMode)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:116
@@ -40318,7 +40313,7 @@ msgstr ""
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:21
 #, kde-format
 msgid "Creator name:"
-msgstr ""
+msgstr "ავტორის სახელი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:34
@@ -40351,7 +40346,7 @@ msgstr "ექსპოზიცია"
 #, kde-format
 msgctxt "EXIF: exposure"
 msgid "Brightness &value:"
-msgstr ""
+msgstr "სიკაშკაშის &მნიშვნელობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/metadataeditor/editors/exif.ui:50
@@ -40365,14 +40360,14 @@ msgstr "&ISO:"
 #, kde-format
 msgctxt "EXIF: exposure"
 msgid "Exposure &time:"
-msgstr ""
+msgstr "ექსპოზიციის &დრო:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/metadataeditor/editors/exif.ui:86
 #, kde-format
 msgctxt "EXIF: exposure"
 msgid "E&xposure mode:"
-msgstr ""
+msgstr "&ექსპოზიციის რეჟიმი:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:97
@@ -40400,7 +40395,7 @@ msgstr "ავტომატური ფრჩხილი"
 #, kde-format
 msgctxt "EXIF: exposure"
 msgid "Exposure pro&gram:"
-msgstr ""
+msgstr "ექსპოზიციის _პროგრამა:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:126
@@ -40449,21 +40444,21 @@ msgstr ""
 #, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Action program"
-msgstr ""
+msgstr "ქმედების პროგრამა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:161
 #, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Portrait mode"
-msgstr ""
+msgstr "პორტრეტის რეჟიმი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:166
 #, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Landscape mode"
-msgstr ""
+msgstr "ლანდშაფტის რეჟიმი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/metadataeditor/editors/exif.ui:174
@@ -40736,14 +40731,14 @@ msgstr "ფუნქცია"
 #, kde-format
 msgctxt "EXIF: flash"
 msgid "Red-eye removal"
-msgstr ""
+msgstr "წითელი თვალის მოცილება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_23)
 #: plugins/extensions/metadataeditor/editors/exif.ui:509
 #, kde-format
 msgctxt "EXIF: flash"
 msgid "Flash ener&gy:"
-msgstr ""
+msgstr "განათების &ენერგია:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: plugins/extensions/metadataeditor/editors/exif.ui:523
@@ -40757,7 +40752,7 @@ msgstr "პოსტპროცესინგი"
 #, kde-format
 msgctxt "EXIF: postprocessing"
 msgid "&Gain control:"
-msgstr ""
+msgstr "&გაძლიერების კონტროლი:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editGainControl)
 #: plugins/extensions/metadataeditor/editors/exif.ui:546
@@ -40799,7 +40794,7 @@ msgstr ""
 #, kde-format
 msgctxt "EXIF: postprocessing"
 msgid "L&ight source:"
-msgstr ""
+msgstr "&სინათლის წყარო:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:585
@@ -40964,7 +40959,7 @@ msgstr "სხვა"
 #, kde-format
 msgctxt "EXIF: postprocessing"
 msgid "Sharpness:"
-msgstr ""
+msgstr "სიმკვეთრე:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSharpness)
 #: plugins/extensions/metadataeditor/editors/exif.ui:729
@@ -41020,7 +41015,7 @@ msgstr "მაგარი"
 #, kde-format
 msgctxt "EXIF: postprocessing"
 msgid "White &balance:"
-msgstr ""
+msgstr "&თეთრის ბალანსი:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editWhiteBalance)
 #: plugins/extensions/metadataeditor/editors/exif.ui:787
@@ -41048,7 +41043,7 @@ msgstr "სხვანი"
 #, kde-format
 msgctxt "EXIF: misc"
 msgid "Scene capture t&ype:"
-msgstr ""
+msgstr "სცენის ჩაწერის &ტიპი:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSceneCaptureType)
 #: plugins/extensions/metadataeditor/editors/exif.ui:818
@@ -41083,7 +41078,7 @@ msgstr "ღამის სცენა"
 #, kde-format
 msgctxt "EXIF: misc"
 msgid "Ma&ker:"
-msgstr ""
+msgstr "&მწარმოებელი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_26)
 #: plugins/extensions/metadataeditor/editors/exif.ui:854
@@ -41105,7 +41100,7 @@ msgstr ""
 #, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "Not Defined"
-msgstr ""
+msgstr "აღუწერელია"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:888
@@ -41192,22 +41187,22 @@ msgstr "ვარიანტი (%1)"
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:64
 #, kde-format
 msgid "Ordered array"
-msgstr ""
+msgstr "დალაგებული მასივი"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:66
 #, kde-format
 msgid "Unordered array"
-msgstr ""
+msgstr "დაულაგებელი მასივი"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:68
 #, kde-format
 msgid "Alternative array"
-msgstr ""
+msgstr "ალტერნატიული მასივი"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:70
 #, kde-format
 msgid "Language array"
-msgstr ""
+msgstr "ენის მასივი"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:74
 #, kde-format
@@ -41269,13 +41264,13 @@ msgstr "მომრგვალების რადიუსი:"
 #: plugins/extensions/modify_selection/wdg_grow_selection.ui:24
 #, kde-format
 msgid "Grow by"
-msgstr ""
+msgstr "ზრდის პირობა"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/extensions/modify_selection/wdg_shrink_selection.ui:69
 #, kde-format
 msgid "Shrink by"
-msgstr ""
+msgstr "დაპატარავების პირობა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbShrinkFromImageBorder)
 #: plugins/extensions/modify_selection/wdg_shrink_selection.ui:127
@@ -42011,7 +42006,7 @@ msgstr "ელფოტა:"
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:413
 #, kde-format
 msgid "Updated:"
-msgstr ""
+msgstr "განახლდა:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDlgCreateBundle)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDlgEmbedTags)
@@ -42063,7 +42058,7 @@ msgstr ""
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:396
 #, kde-format
 msgid "Embed tags..."
-msgstr ""
+msgstr "ჭდეების ჩაშენება..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowDeleted)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:82
@@ -42186,7 +42181,7 @@ msgstr "270 გრ&ადუსით"
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:91
 #, kde-format
 msgid "&Custom:"
-msgstr ""
+msgstr "&ხელით:"
 
 #: plugins/extensions/separate_channels/dlg_separate.cc:29
 #: plugins/extensions/separate_channels/kis_separate_channels_plugin.cc:62
@@ -42204,7 +42199,7 @@ msgstr "გამოსახულების გაცალკევებ�
 #: plugins/extensions/separate_channels/wdg_separations.ui:23
 #, kde-format
 msgid "Current color model:"
-msgstr ""
+msgstr "მიმდინარე ფერის მოდელი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSource)
 #: plugins/extensions/separate_channels/wdg_separations.ui:62
@@ -42216,7 +42211,7 @@ msgstr "წყარო"
 #: plugins/extensions/separate_channels/wdg_separations.ui:68
 #, kde-format
 msgid "Current layer"
-msgstr ""
+msgstr "მიმდინარე ფენა"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAllLayers)
 #: plugins/extensions/separate_channels/wdg_separations.ui:78
@@ -42228,7 +42223,7 @@ msgstr ""
 #: plugins/extensions/separate_channels/wdg_separations.ui:90
 #, kde-format
 msgid "Alpha Options"
-msgstr ""
+msgstr "ალფას მორგება"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCopyAlpha)
 #: plugins/extensions/separate_channels/wdg_separations.ui:96
@@ -42240,7 +42235,7 @@ msgstr ""
 #: plugins/extensions/separate_channels/wdg_separations.ui:103
 #, kde-format
 msgid "Discard alpha channel"
-msgstr ""
+msgstr "ალფა არხის მოცილება"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSeparateAlpha)
 #: plugins/extensions/separate_channels/wdg_separations.ui:113

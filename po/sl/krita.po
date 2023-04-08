@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-04-01 10:34+0200\n"
-"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"PO-Revision-Date: 2023-04-07 11:06+0200\n"
+"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -23174,35 +23174,34 @@ msgid ""
 "The amount of time during which the strokes will be kept unmerged. When a "
 "stroke becomes old enough, Krita will try to merge it"
 msgstr ""
+"Čas, v katerem se bodo poteze ohranjene nezdružene. Ko bo poteza dovolj "
+"stara, jo bo Krita poskušala združiti."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "suffix for \"seconds\""
-#| msgid " sec"
+#, kde-format
 msgid " sec"
 msgstr " s"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
 msgid "Wait before merging strokes:"
-msgstr ""
+msgstr "Čas pred združevanjem potez:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "The number of last strokes which Krita should store separately"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The number of last strokes that Krita will not merge (even if they are old "
 "enough)"
-msgstr "Število zadnjih potez, ki jih mora Krita shraniti ločeno"
+msgstr ""
+"Število zadnjih potez, ki jih Krita ne bo spojila (tudi če so dovolj stare)"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr ""
+msgstr "Izključi zadnje poteze iz združevanja:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -23211,11 +23210,13 @@ msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
 msgstr ""
+"Če imata dve potezi med seboj kratek časovni interval (zamik), se šteje, da "
+"sodita v isto skupino in se združita."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
 msgid "Max interval of grouped strokes:"
-msgstr ""
+msgstr "Največji interval združenih potez:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
 #, kde-format
@@ -23225,12 +23226,13 @@ msgid ""
 "to be longer than this limit in the result of the merge, this merge will not "
 "happen."
 msgstr ""
+"Največje dovoljeno trajanje skupine po združitvi. Če bo skupina v rezultatu "
+"združevanja dlje od te omejitve, se ta združitev ne bo zgodila."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Video duration:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "Trajanje videoposnetka:"
+msgstr "Najdaljše trajanje skupine:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -23243,6 +23245,14 @@ msgid ""
 "try  to merge this action into a group. The groups are formed using \"Max "
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
+"Kumulativna razveljavitev omogoča Kriti, da združi dejanja razveljavitve in "
+"počisti zgodovino razveljavitev. Krita bo še vedno ohranila nekaj "
+"najnovejših dejanj nezdruženih glede na možnosti »Čas pred združevanjem "
+"potez« in »Izključi zadnje poteze iz združevanja«. Kadar koli dejanje "
+"zastara z uporabo časovne omejitve in to dejanje ni izključeno z uporabo "
+"»Izključi zadnje poteze iz združevanja«, bo Krita poskušala združiti to "
+"dejanje v skupino. Skupine so oblikovane z možnostmi »Največji interval "
+"združenih potez« in »Najdaljše trajanje skupine«."
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -25500,16 +25510,13 @@ msgstr "Dodaj »(prilepljeno)« k imenu prilepljenih plasti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1470
-#, fuzzy, kde-format
-#| msgid "Enable Cumulative Undo"
+#, kde-format
 msgid "Use cumulative undo"
-msgstr "Omogoči kumulativno razveljavitev"
+msgstr "Uporabi kumulativno razveljavitev"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1490
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "Napredno …"
 
@@ -60281,24 +60288,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "Start merging time"
-#~ msgstr "Čas pričetka spajanja"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "The amount of time after a merged stroke before merging again"
-#~ msgstr "Pretečeni čas po spojeni potezi čopiča pred ponovnim spajanjem"
-
-#~ msgid "Group time"
-#~ msgstr "Čas skupine"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The amount of time every stroke should be apart from its previous stroke "
-#~ "to be classified in one group"
-#~ msgstr ""
-#~ "Vmesni čas med vsako potezo od prejšnje poteze, da je razvrščena v eno "
-#~ "skupino"
-
-#~ msgid "Split Strokes"
-#~ msgstr "Razdeli potezo"

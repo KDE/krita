@@ -405,11 +405,12 @@ int WGColorPatches::indexAt(const QPoint &widgetPos) const
 
     int col = pos.x() / m_patchWidth;
     int row = pos.y() / m_patchHeight;
-    int patchNr = row * m_patchesPerLine + col;
 
     if (col > m_patchesPerLine || row > m_totalLines) {
         return -1;
     }
+
+    int patchNr = m_scrollInline ? col * m_numLines + row : row * m_patchesPerLine + col;
 
     //patchNr -= m_buttonList.size();
 

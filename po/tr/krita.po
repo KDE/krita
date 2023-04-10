@@ -2424,7 +2424,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Quick_circle_big.kpp"
 msgid "Quick circle big"
-msgstr "Hızlı çember büyük"
+msgstr "Tez çember büyük"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2432,7 +2432,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Quick_circle_huge.kpp"
 msgid "Quick circle huge"
-msgstr "Hızlı çember dev"
+msgstr "Tez çember dev"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2440,7 +2440,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Quick_circle_layout.kpp"
 msgid "Quick circle layout"
-msgstr "Hızlı çember yerleşim"
+msgstr "Tez çember yerleşim"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3986,7 +3986,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-6_Quick_Shade.kpp"
 msgid "c) Pencil-6 Quick Shade"
-msgstr "c) Kurşun Kalem 6 Hızlı Gölge"
+msgstr "c) Kurşun Kalem 6 Tez Gölge"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -6687,7 +6687,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-cmyk."
 "gpl"
 msgid "Swatch CMYK"
-msgstr "CMYK örneği"
+msgstr "CMSK örneği"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-colored-grey.gpl:2
@@ -7169,7 +7169,7 @@ msgstr "Ps"
 #, kde-format
 msgctxt "./krita/data/palettes/swatch-cmyk.gpl"
 msgid "Swatch CMYK"
-msgstr "CMYK örneği"
+msgstr "CMSK örneği"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/palettes/swatch-colored-grey.gpl:2
@@ -10716,7 +10716,7 @@ msgstr "Seçimin sağına sütun ekleyip canlandırmanın kuyruğunu sağa taş�
 #, kde-format
 msgctxt "action"
 msgid "Insert Multiple Columns"
-msgstr "Çoklu Sütun Ekle"
+msgstr "Birden Çok Sütun Ekle"
 
 #. i18n: context: toolTip @ Action (insert_multiple_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2091
@@ -11651,7 +11651,7 @@ msgstr "Panodan katman yapıştır"
 #, kde-format
 msgctxt "action"
 msgid "Quick Group"
-msgstr "Hızlı Grupla"
+msgstr "Tez Grupla"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2790
@@ -11668,7 +11668,7 @@ msgstr "Seçilmiş katmanları içeren bir grup katmanı oluştur"
 #, kde-format
 msgctxt "action"
 msgid "Quick Ungroup"
-msgstr "Hızlıca Grubu Boz"
+msgstr "Tez Grubu Boz"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2802
@@ -11685,7 +11685,7 @@ msgstr "Katman gruplamasını kaldır veya gruptan bir katmanı kaldır"
 #, kde-format
 msgctxt "action"
 msgid "Quick Clipping Group"
-msgstr "Hızlı Kırpma Grubu"
+msgstr "Tez Kırpma Grubu"
 
 #. i18n: context: toolTip @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2814
@@ -12485,7 +12485,7 @@ msgstr "Katman Renk Uzayını Dönüştür"
 #, kde-format
 msgctxt "action"
 msgid "&Merge with Layer Below"
-msgstr "&Alttaki Katman ile Birleştir"
+msgstr "&Alttaki Katmanla Birleştir"
 
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
@@ -18377,7 +18377,7 @@ msgstr "L*a*b*/Alfa"
 #: libs/pigment/KoColorModelStandardIds.cpp:16
 #, kde-format
 msgid "CMYK/Alpha"
-msgstr "CMYK/Alfa"
+msgstr "CMSK/Alfa"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:17
 #, kde-format
@@ -18477,7 +18477,7 @@ msgstr "Diğer"
 #, kde-format
 msgctxt "Blending mode - category HSY"
 msgid "HSY"
-msgstr "HSY"
+msgstr "TDY"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:40
 #, kde-format
@@ -29145,12 +29145,12 @@ msgstr "Düğümleri Kes"
 #: libs/ui/kis_node_manager.cpp:1544
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
-msgstr "Hızlı Grup"
+msgstr "Tez Grup"
 
 #: libs/ui/kis_node_manager.cpp:1555
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
-msgstr "Hızlı Kırpma Grubu"
+msgstr "Tez Kırpma Grubu"
 
 #: libs/ui/kis_node_manager.cpp:1562
 #, kde-format
@@ -29167,7 +29167,7 @@ msgstr "Maske Katmanı"
 #: libs/ui/kis_node_manager.cpp:1580
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
-msgstr "Hızlıca Grubu Boz"
+msgstr "Tez Grubu Boz"
 
 #: libs/ui/kis_node_model.cpp:525
 #, kde-format
@@ -29788,7 +29788,7 @@ msgstr ""
 "    * KYMA\n"
 "    * XYZA\n"
 "    * LABA\n"
-"    * CMYKA\n"
+"    * CMSKA\n"
 "    * GRAY\n"
 "    * YCbCrA\n"
 "Kanal derinliği olası argümanları:\n"
@@ -32813,7 +32813,7 @@ msgstr "Bu renk uzayının Ton Yanıt Eğrisi hem sRGB, L* hem de rec709 TRC."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Estimated Gamma cannot be retrieved for CMYK."
-msgstr "Tahmini gama, CMYK için alınamadı."
+msgstr "Tahmini gama, CMSK için alınamadı."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:357
 #, kde-format
@@ -32888,11 +32888,11 @@ msgid ""
 msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/CMYK_color_model\">CMYK (Cam "
 "göbeği, Macenta, Sarı, Anahtar)</a></b>, yazıcılar ve diğer mürekkep tabanlı "
-"medyalar tarafından kullanılan modeldir.<br/>CMYK, renkleri bir araya "
-"getirmenin onları daha koyu hale getireceği, çıkarımcı bir modeldir. CMYK "
+"medyalar tarafından kullanılan modeldir.<br/>CMSK, renkleri bir araya "
+"getirmenin onları daha koyu hale getireceği, çıkarımcı bir modeldir. CMSK "
 "profilleri yazıcı başına çok spesifik olduğundan, KYM alanında çalışılması "
-"ve daha sonra tercihen CMYK profiline, tercihen yazıcınız tarafından "
-"gönderilen bir profile dönüştürülmesi önerilir.<br/>CMYK boyama için "
+"ve daha sonra tercihen CMSK profiline, tercihen yazıcınız tarafından "
+"gönderilen bir profile dönüştürülmesi önerilir.<br/>CMSK boyama için "
 "<b>önerilmez</b>. Maalesef, Krita bu alan için renklendiriciler veya TRC'yi "
 "alamaz."
 
@@ -36994,17 +36994,17 @@ msgstr "GRAY/F32 float Histogram"
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:244
 #, kde-format
 msgid "CMYK/8 Histogram"
-msgstr "CMYK/8 Histogram"
+msgstr "CMSK/8 Histogram"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:248
 #, kde-format
 msgid "CMYK/16 Histogram"
-msgstr "CMYK/16 Histogram"
+msgstr "CMSK/16 Histogram"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:252
 #, kde-format
 msgid "CMYK/F32 Histogram"
-msgstr "CMYK/F32 Histogram"
+msgstr "CMSK/F32 Histogram"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:270
 #, kde-format
@@ -38607,12 +38607,12 @@ msgstr "Katmanları seçmek/seçimini kaldırmak için onay kutusunu göster"
 #: plugins/dockers/layerdocker/LayerBox.cpp:974
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
-msgstr "Hızlı Seçim Maskesi"
+msgstr "Tez Seçim Maskesi"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:996
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
-msgstr "Hızlı Seçim Maskesini İptal Et"
+msgstr "Tez Seçim Maskesini İptal Et"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:1220
 #, kde-format
@@ -40294,7 +40294,7 @@ msgstr "Devingen + Durgun Kenar"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
 #, kde-format
 msgid "Show &Quick Settings Menu"
-msgstr "&Hızlı Ayarlar Menüsünü Göster"
+msgstr "&Tez Ayarlar Menüsünü Göster"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:124
@@ -46462,7 +46462,7 @@ msgstr "Köşeli"
 #: plugins/impex/brush/KisWdgOptionsBrush.h:38
 #, kde-format
 msgid "Velocity"
-msgstr "Hızlılık"
+msgstr "Hız"
 
 #: plugins/impex/brush/KisWdgOptionsBrush.h:55
 #, kde-format
@@ -51369,13 +51369,13 @@ msgstr "ağırlıklı doygunluk"
 #: plugins/paintops/hairy/wdghairyshapeoptions.ui:94
 #, kde-format
 msgid "&1D"
-msgstr "&1D"
+msgstr "&1B"
 
 #. i18n: ectx: property (text), widget (QRadioButton, twoDimBrushBtn)
 #: plugins/paintops/hairy/wdghairyshapeoptions.ui:104
 #, kde-format
 msgid "&2D"
-msgstr "&2D"
+msgstr "&2B"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, soakInkCBox)
 #: plugins/paintops/hairy/wdgInkOptions.ui:88
@@ -51720,7 +51720,7 @@ msgstr "Kullanılabilir Harmanlama Kipleri"
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:57
 #, kde-format
 msgid "Enable Pen Settings"
-msgstr "Kurşun Kalem Ayarlarını Etkinleştir"
+msgstr "Kalem Ayarlarını Etkinleştir"
 
 #. i18n: ectx: property (text), widget (QLabel, yRangeLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -53252,7 +53252,7 @@ msgstr "dy ölçeği:"
 #: plugins/paintops/roundmarker/roundmarker_paintop_plugin.cpp:30
 #, kde-format
 msgid "Quick Brush"
-msgstr "Hızlı Fırça"
+msgstr "Tez Fırça"
 
 #: plugins/paintops/sketch/KisSketchOpOptionData.cpp:60
 #, kde-format
@@ -53894,7 +53894,7 @@ msgstr "CMV Renkleri"
 
 #: plugins/python/channels2layers/channels2layers.py:69
 msgid "CMYK Colors"
-msgstr "CMYK Renkleri"
+msgstr "CMSK Renkleri"
 
 #: plugins/python/channels2layers/channels2layers.py:70
 msgid "RGB Grayscale levels"
@@ -53906,7 +53906,7 @@ msgstr "CMY Gri Tonlu Düzeyleri"
 
 #: plugins/python/channels2layers/channels2layers.py:72
 msgid "CMYK Grayscale levels"
-msgstr "CMYK Gri Tonlu düzeyleri"
+msgstr "CMSK Gri Tonlu düzeyleri"
 
 #: plugins/python/channels2layers/channels2layers.py:77
 msgid "Unchanged"
@@ -54824,8 +54824,8 @@ msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
 msgstr ""
-"Proje yolunu panoya kopyalar. Dosya yöneticisine veya benzerlerine hızlı "
-"şekilde kopyalamak için kullanışlıdır."
+"Proje yolunu panoya kopyalar. Dosya yöneticisine veya benzerlerine tez "
+"kopyalamak için kullanışlıdır."
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:341
 msgid "Please select the JSON comic config file."
@@ -55863,7 +55863,7 @@ msgstr "Zip Arşivi"
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:29
 msgid "Quick Settings Docker"
-msgstr "Hızlı Ayarlar Rıhtımı"
+msgstr "Tez Ayarlar Rıhtımcısı"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"
@@ -55871,7 +55871,7 @@ msgstr "Betik Ekle"
 
 #: plugins/python/scriptdocker/scriptdocker.py:24
 msgid "Script Docker"
-msgstr "Betik Rıhtımı"
+msgstr "Betik Rıhtımcısı"
 
 #: plugins/python/scriptdocker/scriptdocker.py:41
 #, python-brace-format

@@ -23859,6 +23859,19 @@ msgid ""
 "sponsors, and <a href=\"https://fund.krita.org/\">development fund </"
 "a>members.</p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Krita は、あらゆる場所にい"
+"るデジタルアーティストのための、オープンソースでコミュニティ主導のツールで"
+"す。<br />その発展は<a href=\"https://docs.krita.org/en/contributors_manual."
+"html\">貢献者</a>コミュニティやスポンサー、そして<a href=\"https://fund."
+"krita.org/\">開発資金</a>メンバーからの継続的な支援によって成り立っています。"
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -25683,9 +25696,7 @@ msgstr "累積で元に戻すを有効化"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1490
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "詳細..."
 
@@ -60759,117 +60770,3 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
-
-#~ msgid "Start merging time"
-#~ msgstr "統合時間の開始"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "The amount of time after a merged stroke before merging again"
-#~ msgstr "描線が統合された後、再度統合されるまでの時間"
-
-#~ msgid "Group time"
-#~ msgstr "グループ化の時間"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The amount of time every stroke should be apart from its previous stroke "
-#~ "to be classified in one group"
-#~ msgstr ""
-#~ "すべての描線がその前の描線と分離され、一つのグループに分類されるまでの時間"
-
-#~ msgid "Split Strokes"
-#~ msgstr "描線を分離"
-
-#~ msgid "Color Rate"
-#~ msgstr "描画色の割合"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Displacement Option"
-#~ msgstr "変位のオプション"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Total Random"
-#~ msgstr "参照点⇒完全ランダム"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern"
-#~ msgstr "参照点⇒パターンとして使う"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern Locked"
-#~ msgstr "参照点⇒ロックされたパターン"
-
-#~ msgid "0 px"
-#~ msgstr "0 px"
-
-#~ msgid "0 s"
-#~ msgstr "0 s"
-
-#~ msgid "1000"
-#~ msgstr "1000"
-
-#~ msgid "30 px"
-#~ msgstr "30 px"
-
-#~ msgid "3 s"
-#~ msgstr "3 s"
-
-#~ msgid "%1 s"
-#~ msgstr "%1 s"
-
-#~ msgctxt "option name"
-#~ msgid "Filter"
-#~ msgstr "フィルタ"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "\"%1\" does not support scaled preview (non-linear filter)"
-#~ msgstr "%1は高速プレビューをサポートしていません (非線形フィルタ)"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Luminosity value of the brush that will not change the painting color. "
-#~ "All brush pixels darker than neutral point will paint with darker color, "
-#~ "pixels lighter than neutral point — lighter."
-#~ msgstr ""
-#~ "描画色を変更しないブラシの光度値です。中間点より暗いすべてのブラシピクセル"
-#~ "は、より暗い色で描画されます。中間点より明るいピクセルは、より明るく描画さ"
-#~ "れます。"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Brightness correction for the brush"
-#~ msgstr "ブラシの明度補正"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Contrast correction for the brush"
-#~ msgstr "ブラシのコントラスト補正"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush tip does not have color channels. The brush will work "
-#~ "in \"Mask\" mode."
-#~ msgstr ""
-#~ "選択されたブラシ形状には色チャンネルがありません。ブラシは「マスク」モード"
-#~ "で動作します。"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush engine does not support \"Color\" or \"Lightness\" "
-#~ "modes. The brush will work in \"Mask\" mode."
-#~ msgstr ""
-#~ "選択されたブラシエンジンは、「色」または「光度」モードをサポートしていませ"
-#~ "ん。ブラシは「マスク」モードで動作します。"
-
-#~ msgid "Mirrored"
-#~ msgstr "100%の割合で反転される"
-
-#~ msgid "Not mirrored"
-#~ msgstr "100%割合で反転されない"
-
-#~ msgid " s"
-#~ msgstr " s"
-
-#~ msgid "Select Layer Mode"
-#~ msgstr "レイヤー選択モード"
-
-#~ msgid "Select Multiple Layer Mode"
-#~ msgstr "複数レイヤー選択モード"

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-04-06 13:14+0300\n"
+"PO-Revision-Date: 2023-04-11 00:40+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.03.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4409,7 +4409,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "l)_Adjust_Dodge.kpp"
 msgid "l) Adjust Dodge"
-msgstr "l) Soldurmayı Ayarla"
+msgstr "l) Atlatmayı Ayarla"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -9310,7 +9310,7 @@ msgstr "Yalnızca Yatay Kabart"
 #, kde-format
 msgctxt "action"
 msgid "D&odge"
-msgstr "&Soldur"
+msgstr "&Atlat"
 
 #. i18n: context: toolTip @ Action (krita_filter_dodge), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_dodge), Actions (Filters), ActionCollection (Krita)
@@ -9320,7 +9320,7 @@ msgstr "&Soldur"
 #, kde-format
 msgctxt "action"
 msgid "Dodge"
-msgstr "Soldur"
+msgstr "Atlat"
 
 #. i18n: context: text @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:988
@@ -10153,7 +10153,7 @@ msgstr "Ekran Harmanlama Kipini Seç"
 #, kde-format
 msgctxt "action"
 msgid "Select Color Dodge Blending Mode"
-msgstr "Renk Soldur Harmanlama Kipini Seç"
+msgstr "Renk Atlatma Harmanlama Kipini Seç"
 
 #. i18n: context: text @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10165,7 +10165,7 @@ msgstr "Renk Soldur Harmanlama Kipini Seç"
 #, kde-format
 msgctxt "action"
 msgid "Select Linear Dodge Blending Mode"
-msgstr "Doğrusal Soldurma Harmanlama Kipini Seç"
+msgstr "Doğrusal Atlatma Harmanlama Kipini Seç"
 
 #. i18n: context: text @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -18645,13 +18645,13 @@ msgstr "Basit Yakma"
 #, kde-format
 msgctxt "Blending mode - Color Dodge"
 msgid "Color Dodge"
-msgstr "Renk Soldur"
+msgstr "Renk Atlat"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
 #, kde-format
 msgctxt "Blending mode - Linear Dodge"
 msgid "Linear Dodge"
-msgstr "Doğrusal Soldurma"
+msgstr "Doğrusal Atlatma"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -18771,7 +18771,7 @@ msgstr "Sis Açıklaştır (IFS Yanılsama)"
 #, kde-format
 msgctxt "Blending mode - Easy Dodge"
 msgid "Easy Dodge"
-msgstr "Basit Soldurma"
+msgstr "Basit Atlatma"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:93
 #, kde-format
@@ -26406,7 +26406,7 @@ msgstr "Alanını geçerli görselle doldur"
 #: libs/ui/forms/wdgpaintopsettings.ui:881
 #, kde-format
 msgid "Fill area with gradient"
-msgstr "Alanı geçişli doldur"
+msgstr "Alanı gradyanla doldur"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, fillSolid)
 #: libs/ui/forms/wdgpaintopsettings.ui:900
@@ -44330,7 +44330,7 @@ msgstr "Köşegen Kabart"
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:19
 #, kde-format
 msgid "Dodge..."
-msgstr "Soldur..."
+msgstr "Atlat..."
 
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:20
 #, kde-format
@@ -45562,7 +45562,7 @@ msgstr "Spiral Şekli"
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:34
 #, kde-format
 msgid "Fade:"
-msgstr "Kaybolma:"
+msgstr "Solma:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:60
@@ -52642,7 +52642,7 @@ msgstr "Boyut -> Belirsiz (algılayıcı)"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Size -> Fade (sensor)"
-msgstr "Boyut -> Solgunluk (algılayıcı)"
+msgstr "Boyut -> Solma (algılayıcı)"
 
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:38
 #, kde-format
@@ -56025,70 +56025,70 @@ msgstr "On Fırça"
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 1"
-msgstr "Fırça Önayar 1'i Etkinleştir"
+msgstr "Fırça Önayarı 1'i Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_2), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:34
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 2"
-msgstr "Fırça Önayar 2'yi Etkinleştir"
+msgstr "Fırça Önayarı 2'yi Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_3), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:47
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 3"
-msgstr "Fırça Önayar 3'ü Etkinleştir"
+msgstr "Fırça Önayarı 3'ü Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_4), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:60
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 4"
-msgstr "Fırça Önayar 4'ü Etkinleştir"
+msgstr "Fırça Önayarı 4'ü Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_5), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:73
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 5"
-msgstr "Fırça Önayar 5'i Etkinleştir"
+msgstr "Fırça Önayarı 5'i Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_6), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:86
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 6"
-msgstr "Fırça Önayar 6'yı Etkinleştir"
+msgstr "Fırça Önayarı 6'yı Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_7), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:99
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 7"
-msgstr "Fırça Önayar 7'yi Etkinleştir"
+msgstr "Fırça Önayarı 7'yi Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_8), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:112
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 8"
-msgstr "Fırça Önayar 8'i Etkinleştir"
+msgstr "Fırça Önayarı 8'i Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_9), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:125
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 9"
-msgstr "Fırça Önayar 9'u Etkinleştir"
+msgstr "Fırça Önayarı 9'u Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 10"
-msgstr "Fırça Önayar 10'u Etkinleştir"
+msgstr "Fırça Önayarı 10'u Etkinleştir"
 
 #: plugins/python/tenbrushes/tenbrushes.py:28
 msgid "Ten Brushes"

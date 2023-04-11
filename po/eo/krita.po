@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-04-07 10:09+0100\n"
+"PO-Revision-Date: 2023-04-10 04:45+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -27030,7 +27030,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Elekti la laŭvolan embleman piktogramon kiu indikas "
 "kromajn informojn, kiel la antaŭdifinita esti specialefekta peniko, aŭ "
-"simple uzante kliniĝon aŭ angulan iel.</p></p></p></body></html>"
+"simple uzante kliniĝon aŭ angulan iel.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:51
@@ -27484,7 +27484,7 @@ msgstr ""
 "ĉi tiun solvon. Krita provos legi dekstren kaj mezbutonajn klakojn de la "
 "musa eventofluo. Ĝi eble aŭ ne funkcias ĉe via aparato (dependas de la "
 "efektivigo de la tablojda pelilo).</p><p><br/></p><p>Post ŝanĝi ĉi tiun "
-"opcion Krita devus esti rekomencita.</p><p></body></html>"
+"opcion Krita devus esti rekomencita.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseRightMiddleClickWorkaround)
 #: libs/ui/forms/wdgtabletsettings.ui:180
@@ -29411,7 +29411,7 @@ msgstr ""
 "koloro:%1;\">Fontokodo</span></a></p><p><a href= \"https://api.kde.org/"
 "appcomplete-api/krita-apidocs/libs/libkis/html/index.html\"><span style=\" "
 "text-decoration: substreko; color:%1;\">Scripting API</span></a></p><p><a "
-"href=\"https://scripting.krita.org/lessons/introduction\"><span stilo =\" "
+"href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" "
 "teksto-ornamado: substreko; color:%1;\">Skriptlernejo</span></a></p></td></"
 "table></body></html>"
 
@@ -32329,7 +32329,7 @@ msgid ""
 "\">Links</span></p></body></html>"
 msgstr ""
 "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-"\">Ligiloj</span></p></body></body> html>"
+"\">Ligiloj</span></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRecent)
 #: libs/ui/wdgsplash.ui:493
@@ -42643,7 +42643,7 @@ msgid ""
 "need to restart Krita to enable or disable plugins.</p></body></html>"
 msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Noto:</span> vi "
-"devas rekomenci Krita por ebligi aŭ malŝalti kromaĵojn.</p><p></body></html>"
+"devas rekomenci Krita por ebligi aŭ malŝalti kromaĵojn.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, errorLabel)
 #: plugins/extensions/pykrita/plugin/manager.ui:43
@@ -42662,7 +42662,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Se vi volas lerni kiel skribi Krita-skriptojn, "
 "kontrolu la <a href=\"https://scripting.krita.org/lessons/introduction"
-"\"><span stilo=\" text-decoration: underline; color:#2980b9;\">Krita "
+"\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
 "Scripting School</span></a>!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:61
@@ -48860,7 +48860,7 @@ msgstr ""
 "en la produktaĵo; uzado de ĉi tiu opcio solvas ĉi tiun problemon kun "
 "minimuma perdo de detaloj.</p><p>Por rekomenci, ĉi tiu opcio iom malklarigas "
 "la bildon, sed ĝi forigas falsajn 2x2 maŝajn ŝablonojn kun VNG-kvalita "
-"metodo aŭ labirintojn kun AHD-kvalita metodo.</ p>"
+"metodo aŭ labirintojn kun AHD-kvalita metodo.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:299
 #, kde-format
@@ -49223,7 +49223,7 @@ msgstr ""
 "li><li><emphasis strong='true'>Miksaĵo</emphasis>:Miksi tonditajn kaj "
 "netonditajn valorojn kune por laŭpaŝa fado al blanka</li><li><emphasis "
 "strong='true'>Rekonstrui</emphasis>: rekonstrui lumaĵojn uzante "
-"nivelvaloron</li></ul><ul><li></p>"
+"nivelvaloron</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:513
 #, kde-format
@@ -57297,7 +57297,7 @@ msgstr ""
 "weight:600;\">aktivigita</span>, la streko de la formo estas skalita kun la "
 "formo mem. </p><p>En la stato <span style=\" font-weight:600;\">malŝaltita</"
 "span>, nur la formo estas regrandigita, konservante la streklarĝon kaj "
-"stilon neŝanĝitaj.</p><p></body></html>"
+"stilon neŝanĝitaj.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUniformScaling)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:205

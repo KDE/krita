@@ -160,7 +160,11 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
             return ImportExportCodes::InternalError;
         }
 
-        encodingOptions.allow_mixed = true;
+        if (cfg->getBool("lossless", true)) {
+            encodingOptions.allow_mixed = false;
+        } else {
+            encodingOptions.allow_mixed = true;
+        }
         encodingOptions.verbose = true;
         // XXX: should we implement background selection as in JPEG?
         encodingOptions.anim_params.loop_count = 0;
@@ -260,6 +264,11 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
                 currentFrame.get()->width = bounds.width();
                 currentFrame.get()->height = bounds.height();
 
+                // Use ARGB in lossless mode
+                if (config.lossless == 1) {
+                    currentFrame.get()->use_argb = 1;
+                }
+
                 const std::vector<uint8_t> pixels = [&]() {
                     const KisRasterKeyframeSP frameData =
                         frames->keyframeAt<KisRasterKeyframe>(i);
@@ -322,6 +331,11 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
 
             currentFrame.get()->width = bounds.width();
             currentFrame.get()->height = bounds.height();
+
+            // Use ARGB in lossless mode
+            if (config.lossless == 1) {
+                currentFrame.get()->use_argb = 1;
+            }
 
             // Insert the projection itself only
             const std::vector<uint8_t> pixels = [&]() {

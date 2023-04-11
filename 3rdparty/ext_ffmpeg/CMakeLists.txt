@@ -218,6 +218,9 @@ kis_ExternalProject_Add_with_separate_builds_apple(
 # Anything not enabled (missing or commented out) in these lists is considered unsafe and should NOT be used!
 # While unlikely, it's possible that these lists could change, so it's worth occasionally cross-referencing.
 
+if (NOT MSVC)
+    set(_stack_guard_flag "-Denable-ssp=true")
+endif() 
 
 kis_ExternalProject_Add_with_separate_builds_apple(
     ext_ffmpeg
@@ -229,8 +232,16 @@ kis_ExternalProject_Add_with_separate_builds_apple(
     # Workaround https://github.com/mesonbuild/meson/issues/11113
     # See https://gitlab.freedesktop.org/gstreamer/meson-ports/ffmpeg/-/issues/31
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-meson-Fix-library-detection-in-prefixed-builds.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-ffmpeg-Add-an-option-to-disable-UB-in-av_uninit.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-ffmpeg-Fix-crashes-in-ff_seek_frame_binary-if-built-with-la.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-ffmpeg-Add-options-for-SSP-and-CFGuard.patch
 
     CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
+            --libdir=lib
+            -Dno_uninit_ub=true
+            ${_stack_guard_flag}
+            -Denable-cfguard=disabled # TODO: change to 'auto' when Krita enabled cfguard internally
+            -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
             -Ddefault_library=shared
             -Dcli=enabled
             -Dtests=disabled

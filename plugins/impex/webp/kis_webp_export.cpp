@@ -220,6 +220,8 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
             }
         }
 
+        const bool enableDithering = cfg->getBool("dithering", true);
+
         if (image->animationInterface()->hasAnimation()
             && cfg->getBool("haveAnimation", true)) {
             // Flatten the image, projections don't have keyframes.
@@ -269,23 +271,72 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
                     currentFrame.get()->use_argb = 1;
                 }
 
-                const std::vector<uint8_t> pixels = [&]() {
+                const QImage pixels = [&]() {
                     const KisRasterKeyframeSP frameData =
                         frames->keyframeAt<KisRasterKeyframe>(i);
                     KisPaintDeviceSP dev = new KisPaintDevice(
                         *image->projection(),
                         KritaUtils::DeviceCopyMode::CopySnapshot);
                     frameData->writeFrameToDevice(dev);
-                    std::vector<uint8_t> p;
-                    p.resize(cs->pixelSize()
-                             * static_cast<size_t>(bounds.width()
-                                                   * bounds.height()));
-                    dev->readBytes(p.data(), image->bounds());
-                    return p;
+
+                    KisPaintDeviceSP dst;
+                    if ((cs->colorModelId() == RGBAColorModelID && cs->colorDepthId() == Integer8BitsColorDepthID)
+                        || !enableDithering) {
+                        dst = dev;
+                    } else {
+                        // We need to use gradient painter code's:
+                        //    to convert to RGBA samedepth;
+                        //    then dither to RGBA8
+                        //    then convert from ARGB32 to RGBA8888
+                        const KisPaintDeviceSP src = dev;
+                        const KoID depthId = src->colorSpace()->colorDepthId();
+                        const KoColorSpace *destCs = KoColorSpaceRegistry::instance()->rgb8();
+                        const KoColorSpace *mixCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
+                                                                                                 depthId.id(),
+                                                                                                 destCs->profile());
+
+                        KisPaintDeviceSP tmp = new KisPaintDevice(*src);
+                        tmp->convertTo(mixCs);
+                        dst = new KisPaintDevice(destCs);
+
+                        const KisDitherOp *op =
+                            mixCs->ditherOp(destCs->colorDepthId().id(), enableDithering ? DITHER_BEST : DITHER_NONE);
+
+                        KisRandomConstAccessorSP srcIt = tmp->createRandomConstAccessorNG();
+                        KisRandomAccessorSP dstIt = dst->createRandomAccessorNG();
+
+                        int rows = 1;
+                        int columns = 1;
+
+                        for (int y = bounds.y(); y <= bounds.bottom(); y += rows) {
+                            rows = qMin(srcIt->numContiguousRows(y),
+                                        qMin(dstIt->numContiguousRows(y), bounds.bottom() - y + 1));
+
+                            for (int x = bounds.x(); x <= bounds.right(); x += columns) {
+                                columns = qMin(srcIt->numContiguousColumns(x),
+                                               qMin(dstIt->numContiguousColumns(x), bounds.right() - x + 1));
+
+                                srcIt->moveTo(x, y);
+                                dstIt->moveTo(x, y);
+
+                                const qint32 srcRowStride = srcIt->rowStride(x, y);
+                                const qint32 dstRowStride = dstIt->rowStride(x, y);
+                                const quint8 *srcPtr = srcIt->rawDataConst();
+                                quint8 *dstPtr = dstIt->rawData();
+
+                                op->dither(srcPtr, srcRowStride, dstPtr, dstRowStride, x, y, columns, rows);
+                            }
+                        }
+                    }
+
+                    const QImage imageOut = dst->convertToQImage(nullptr, 0, 0, bounds.width(), bounds.height())
+                                                .convertToFormat(QImage::Format_RGBA8888);
+
+                    return imageOut;
                 }();
 
-                if (!WebPPictureImportBGRA(currentFrame.get(),
-                                           pixels.data(),
+                if (!WebPPictureImportRGBA(currentFrame.get(),
+                                           pixels.constBits(),
                                            bounds.width() * 4)) {
                     errFile << "WebP picture conversion failure:"
                             << currentFrame.get()->error_code;
@@ -338,18 +389,65 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
             }
 
             // Insert the projection itself only
-            const std::vector<uint8_t> pixels = [&]() {
-                const QRect bounds = image->bounds();
-                std::vector<uint8_t> p;
-                p.reserve(
-                    cs->pixelSize()
-                    * static_cast<size_t>(bounds.width() * bounds.height()));
-                image->projection()->readBytes(p.data(), image->bounds());
-                return p;
+            const QImage pixels = [&]() {
+                KisPaintDeviceSP dst;
+                if ((cs->colorModelId() == RGBAColorModelID && cs->colorDepthId() == Integer8BitsColorDepthID)
+                    || !enableDithering) {
+                    dst = document->savingImage()->projection();
+                } else {
+                    // We need to use gradient painter code's:
+                    //    to convert to RGBA samedepth;
+                    //    then dither to RGBA8
+                    //    then convert from ARGB32 to RGBA8888
+                    const KisPaintDeviceSP src = document->savingImage()->projection();
+                    const KoID depthId = src->colorSpace()->colorDepthId();
+                    const KoColorSpace *destCs = KoColorSpaceRegistry::instance()->rgb8();
+                    const KoColorSpace *mixCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
+                                                                                             depthId.id(),
+                                                                                             destCs->profile());
+
+                    KisPaintDeviceSP tmp = new KisPaintDevice(*src);
+                    tmp->convertTo(mixCs);
+                    dst = new KisPaintDevice(destCs);
+
+                    const KisDitherOp *op =
+                        mixCs->ditherOp(destCs->colorDepthId().id(), enableDithering ? DITHER_BEST : DITHER_NONE);
+
+                    KisRandomConstAccessorSP srcIt = tmp->createRandomConstAccessorNG();
+                    KisRandomAccessorSP dstIt = dst->createRandomAccessorNG();
+
+                    int rows = 1;
+                    int columns = 1;
+
+                    for (int y = bounds.y(); y <= bounds.bottom(); y += rows) {
+                        rows = qMin(srcIt->numContiguousRows(y),
+                                    qMin(dstIt->numContiguousRows(y), bounds.bottom() - y + 1));
+
+                        for (int x = bounds.x(); x <= bounds.right(); x += columns) {
+                            columns = qMin(srcIt->numContiguousColumns(x),
+                                           qMin(dstIt->numContiguousColumns(x), bounds.right() - x + 1));
+
+                            srcIt->moveTo(x, y);
+                            dstIt->moveTo(x, y);
+
+                            const qint32 srcRowStride = srcIt->rowStride(x, y);
+                            const qint32 dstRowStride = dstIt->rowStride(x, y);
+                            const quint8 *srcPtr = srcIt->rawDataConst();
+                            quint8 *dstPtr = dstIt->rawData();
+
+                            op->dither(srcPtr, srcRowStride, dstPtr, dstRowStride, x, y, columns, rows);
+                        }
+                    }
+                }
+
+                const QImage imageOut = dst->convertToQImage(nullptr, 0, 0, bounds.width(), bounds.height())
+                                            .convertToFormat(QImage::Format_RGBA8888);
+
+                return imageOut;
             }();
 
-            if (!WebPPictureImportBGRA(currentFrame.get(),
-                                       pixels.data(),
+            if (!WebPPictureImportRGBA(currentFrame.get(),
+                                       pixels.constBits(),
                                        bounds.width() * 4)) {
                 errFile << "WebP picture conversion failure:"
                         << currentFrame.get()->error_code;

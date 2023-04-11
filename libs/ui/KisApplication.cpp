@@ -658,7 +658,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     if (!args.fileLayer().isEmpty()){
         if (d->mainWindow->viewManager()->image()){
             KisFileLayer *fileLayer = new KisFileLayer(d->mainWindow->viewManager()->image(), "",
-                                                    args.fileLayer(), KisFileLayer::None,
+                                                    args.fileLayer(), KisFileLayer::None, "Bicubic",
                                                     d->mainWindow->viewManager()->image()->nextLayerName(i18n("File layer")), OPACITY_OPAQUE_U8);
             QFileInfo fi(fileLayer->path());
             if (fi.exists()){
@@ -848,7 +848,7 @@ void KisApplication::executeRemoteArguments(QByteArray message, KisMainWindow *m
         }
         else if (mainWindow->viewManager()->image()){
             KisFileLayer *fileLayer = new KisFileLayer(mainWindow->viewManager()->image(), "",
-                                                    args.fileLayer(), KisFileLayer::None,
+                                                    args.fileLayer(), KisFileLayer::None, "Bicubic",
                                                     mainWindow->viewManager()->image()->nextLayerName(i18n("File layer")), OPACITY_OPAQUE_U8);
             QFileInfo fi(fileLayer->path());
             if (fi.exists()){

@@ -700,6 +700,7 @@ void KisView::dropEvent(QDropEvent *event)
                                              "",
                                              url.toLocalFile(),
                                              KisFileLayer::None,
+                                             "Bicubic",
                                              fileInfo.fileName(),
                                              OPACITY_OPAQUE_U8);
 

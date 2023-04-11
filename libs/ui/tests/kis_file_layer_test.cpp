@@ -37,7 +37,7 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskOffImage()
     TestUtil::MaskParent p(refRect);
 
     QString refName(TestUtil::fetchDataFileLazy("hakonepa.png"));
-    KisLayerSP flayer = new KisFileLayer(p.image, "", refName, KisFileLayer::None, "flayer", OPACITY_OPAQUE_U8);
+    KisLayerSP flayer = new KisFileLayer(p.image, "", refName, KisFileLayer::None, "Bicubic", "flayer", OPACITY_OPAQUE_U8);
 
     p.image->addNode(flayer, p.image->root(), KisNodeSP());
 
@@ -99,7 +99,7 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskSmallFileBigOffset()
     TestUtil::MaskParent p(refRect);
 
     QString refName(TestUtil::fetchDataFileLazy("file_layer_source.png"));
-    KisLayerSP flayer = new KisFileLayer(p.image, "", refName, KisFileLayer::None, "flayer", OPACITY_OPAQUE_U8);
+    KisLayerSP flayer = new KisFileLayer(p.image, "", refName, KisFileLayer::None, "Bicubic", "flayer", OPACITY_OPAQUE_U8);
 
     p.image->addNode(flayer, p.image->root(), KisNodeSP());
 

@@ -998,6 +998,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const QDomElement& element, KisImageSP ima
             scalingMethod = KisFileLayer::None;
         }
     }
+    QString scalingFilter = element.attribute("scalingfilter", "Bicubic");
 
     QString documentPath;
     if (m_d->document) {
@@ -1041,7 +1042,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const QDomElement& element, KisImageSP ima
         qApp->restoreOverrideCursor();
     }
 
-    KisLayer *layer = new KisFileLayer(image, basePath, filename, (KisFileLayer::ScalingMethod)scalingMethod, name, opacity, fallbackColorSpace);
+    KisLayer *layer = new KisFileLayer(image, basePath, filename, (KisFileLayer::ScalingMethod)scalingMethod, scalingFilter, name, opacity, fallbackColorSpace);
     Q_CHECK_PTR(layer);
 
     return layer;

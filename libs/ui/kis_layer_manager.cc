@@ -301,14 +301,17 @@ void KisLayerManager::layerProperties()
         QString basePath = QFileInfo(m_view->document()->path()).absolutePath();
         QString fileNameOld = fileLayer->fileName();
         KisFileLayer::ScalingMethod scalingMethodOld = fileLayer->scalingMethod();
+        QString scalingFilterOld = fileLayer->scalingFilter();
         KisDlgFileLayer dlg(basePath, fileLayer->name(), m_view->mainWindow());
         dlg.setCaption(i18n("File Layer Properties"));
         dlg.setFileName(fileNameOld);
         dlg.setScalingMethod(scalingMethodOld);
+        dlg.setScalingFilter(scalingFilterOld);
 
         if (dlg.exec() == QDialog::Accepted) {
             const QString fileNameNew = dlg.fileName();
             KisFileLayer::ScalingMethod scalingMethodNew = dlg.scaleToImageResolution();
+            QString scalingFilterNew = dlg.scalingFilter();
 
             if(fileNameNew.isEmpty()){
                 QMessageBox::critical(m_view->mainWindow(), i18nc("@title:window", "Krita"), i18n("No file name specified"));
@@ -316,15 +319,17 @@ void KisLayerManager::layerProperties()
             }
             fileLayer->setName(dlg.layerName());
 
-            if (fileNameOld!= fileNameNew || scalingMethodOld != scalingMethodNew) {
+            if (fileNameOld!= fileNameNew || scalingMethodOld != scalingMethodNew || scalingFilterOld != scalingFilterNew) {
                 KisChangeFileLayerCmd *cmd
                         = new KisChangeFileLayerCmd(fileLayer,
                                                     basePath,
                                                     fileNameOld,
                                                     scalingMethodOld,
+                                                    scalingFilterOld,
                                                     basePath,
                                                     fileNameNew,
-                                                    scalingMethodNew);
+                                                    scalingMethodNew,
+                                                    scalingFilterNew);
                 m_view->undoAdapter()->addCommand(cmd);
             }
         }
@@ -557,7 +562,7 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
     } else {
         QString basePath = QFileInfo(m_view->document()->path()).absolutePath();
         QString relativePath = QDir(basePath).relativeFilePath(path);
-        KisFileLayer *fileLayer = new KisFileLayer(image, basePath, relativePath, KisFileLayer::None, source->name(), OPACITY_OPAQUE_U8);
+        KisFileLayer *fileLayer = new KisFileLayer(image, basePath, relativePath, KisFileLayer::None, "Bicubic", source->name(), OPACITY_OPAQUE_U8);
         fileLayer->setX(bounds.x());
         fileLayer->setY(bounds.y());
         KisNodeSP dstParent = source->parent();
@@ -966,7 +971,8 @@ KisNodeSP KisLayerManager::addFileLayer(KisNodeSP activeNode)
         }
 
         KisFileLayer::ScalingMethod scalingMethod = dlg.scaleToImageResolution();
-        KisNodeSP node = new KisFileLayer(image, basePath, fileName, scalingMethod, name, OPACITY_OPAQUE_U8);
+        QString scalingFilter = dlg.scalingFilter();
+        KisNodeSP node = new KisFileLayer(image, basePath, fileName, scalingMethod, scalingFilter, name, OPACITY_OPAQUE_U8);
         addLayerCommon(activeNode, node, true, 0);
         return node;
     }

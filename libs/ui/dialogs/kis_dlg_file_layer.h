@@ -35,12 +35,15 @@ public:
     QString fileName() const;
     QString layerName() const;
     KisFileLayer::ScalingMethod scaleToImageResolution() const;
+    QString scalingFilter() const;
 
     void setFileName(QString fileName);
     void setScalingMethod(KisFileLayer::ScalingMethod method);
+    void setScalingFilter(QString filter);
 
 protected Q_SLOTS:
     void slotNameChanged(const QString &);
+    void slotMethodChanged(const bool &);
 
 private:
 

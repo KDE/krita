@@ -98,6 +98,7 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
         }
         layerElement.setAttribute("scalingmethod", (int)fileLayer->scalingMethod());
         layerElement.setAttribute(COLORSPACE_NAME, layer->original()->colorSpace()->id());
+        layerElement.setAttribute("scalingfilter", fileLayer->scalingFilter());
 
         m_elem.appendChild(layerElement);
         m_count++;

@@ -39,11 +39,12 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &name, quint8 opacit
     connect(this, SIGNAL(sigRequestOpenFile()), SLOT(openFile()));
 }
 
-KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity, const KoColorSpace *fallbackColorSpace)
+KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, QString scalingFilter, const QString &name, quint8 opacity, const KoColorSpace *fallbackColorSpace)
     : KisExternalLayer(image, name, opacity)
     , m_basePath(basePath)
     , m_filename(filename)
     , m_scalingMethod(scaleToImageResolution)
+    , m_scalingFilter(scalingFilter)
 {
     /**
      * Set default paint device for a layer. It will be used in case
@@ -75,6 +76,7 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
     m_basePath = rhs.m_basePath;
     m_filename = rhs.m_filename;
     m_scalingMethod = rhs.m_scalingMethod;
+    m_scalingFilter = rhs.m_scalingFilter;
 
     m_generatedForImageSize = rhs.m_generatedForImageSize;
     m_generatedForXRes = rhs.m_generatedForXRes;
@@ -203,6 +205,16 @@ void KisFileLayer::setScalingMethod(ScalingMethod method)
     m_scalingMethod = method;
 }
 
+QString KisFileLayer::scalingFilter() const
+{
+    return m_scalingFilter;
+}
+
+void KisFileLayer::setScalingFilter(QString filter)
+{
+    m_scalingFilter = filter;
+}
+
 void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection,
                                        qreal xRes, qreal yRes,
                                        const QSize &size)
@@ -234,7 +246,7 @@ void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection,
             qreal xscale = image->xRes() / xRes;
             qreal yscale = image->yRes() / yRes;
 
-            KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
+            KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get(m_scalingFilter));
             worker.run();
         }
         else if (m_scalingMethod == ToImageSize && size != image->size()) {
@@ -243,7 +255,7 @@ void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection,
             qreal xscale =  (qreal)sz.width() / (qreal)size.width();
             qreal yscale = (qreal)sz.height() / (qreal)size.height();
 
-            KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
+            KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get(m_scalingFilter));
             worker.run();
         }
 

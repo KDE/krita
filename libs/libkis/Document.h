@@ -592,9 +592,11 @@ print(root.childNodes())
      * @param fileName the absolute filename of the file referenced. Symlinks will be resolved.
      * @param scalingMethod how the dimensions of the file are interpreted
      *        can be either "None", "ImageToSize" or "ImageToPPI"
+     * @param scalingFilter filter used to scale the file
+     *        can be "Bicubic", "Hermite", "NearestNeighbor", "Bilinear", "Bell", "BSpline", "Lanczos3", "Mitchell"
      * @return a FileLayer
      */
-    FileLayer* createFileLayer(const QString &name, const QString fileName, const QString scalingMethod);
+    FileLayer* createFileLayer(const QString &name, const QString fileName, const QString scalingMethod, const QString scalingFilter = "Bicubic");
 
     /**
      * @brief createFilterLayer creates a filter layer, which is a layer that represents a filter

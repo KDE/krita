@@ -69,7 +69,7 @@ public Q_SLOTS:
     FilterLayer *createFilterLayer(const QString &name, Filter &filter, Selection &selection) /Factory/;
     FillLayer *createFillLayer(const QString &name, const QString filterName, InfoObject &configuration, Selection &selection) /Factory/;
     VectorLayer *createVectorLayer(const QString &name) /Factory/;
-    FileLayer *createFileLayer(const QString &name, const QString fileName, const QString scalingMethod) /Factory/;
+    FileLayer *createFileLayer(const QString &name, const QString fileName, const QString scalingMethod, const QString scalingFilter = "Bicubic") /Factory/;
     FilterMask *createFilterMask(const QString &name, Filter &filter, Selection &selection) /Factory/;
     FilterMask *createFilterMask(const QString &name, Filter &filter, const Node *selection_source) /Factory/;
     SelectionMask *createSelectionMask(const QString &name) /Factory/;

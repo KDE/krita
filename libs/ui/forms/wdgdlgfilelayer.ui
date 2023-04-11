@@ -139,6 +139,33 @@
      </layout>
     </widget>
    </item>
+   <item>
+    <layout class="QFormLayout" name="formLayout_2">
+     <item column="0" row="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>&amp;Scaling Filter:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>cmbFilter</cstring>
+       </property>
+      </widget>
+     </item>
+     <item column="1" row="0">
+      <widget class="KisCmbIDList" name="cmbFilter" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -147,6 +174,11 @@
    <extends>QWidget</extends>
    <header location="global">kis_file_name_requester.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisCmbIDList</class>
+   <extends></extends>
+   <header>widgets/kis_cmb_idlist.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

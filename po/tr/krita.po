@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-04-11 00:40+0300\n"
+"PO-Revision-Date: 2023-04-11 21:48+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -51800,7 +51800,7 @@ msgstr "çarp"
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:554
 #, kde-format
 msgid "addition"
-msgstr "toplama"
+msgstr "topla"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:554
@@ -51808,7 +51808,7 @@ msgstr "toplama"
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:559
 #, kde-format
 msgid "maximum"
-msgstr "en fazla"
+msgstr "en büyük"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:559
@@ -51816,7 +51816,7 @@ msgstr "en fazla"
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:564
 #, kde-format
 msgid "minimum"
-msgstr "en az"
+msgstr "en küçük"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:564

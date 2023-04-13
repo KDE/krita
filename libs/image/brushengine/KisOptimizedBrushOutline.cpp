@@ -76,7 +76,7 @@ QRectF KisOptimizedBrushOutline::boundingRect() const
         auto it = polyIt->cbegin();
 
         if (!resultInitialized && it != polyIt->cend()) {
-            KisAlgebra2D::Private::resetEmptyRectangle(*it, &result);
+            KisAlgebra2D::Private::resetEmptyRectangle(m_transform.map(*it), &result);
             resultInitialized = true;
             ++it;
         }
@@ -90,7 +90,7 @@ QRectF KisOptimizedBrushOutline::boundingRect() const
         auto it = polyIt->cbegin();
 
         if (!resultInitialized && it != polyIt->cend()) {
-            KisAlgebra2D::Private::resetEmptyRectangle(*it, &result);
+            KisAlgebra2D::Private::resetEmptyRectangle(m_transform.map(*it), &result);
             resultInitialized = true;
             ++it;
         }

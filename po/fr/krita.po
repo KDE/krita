@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-04-08 10:47+0200\n"
+"PO-Revision-Date: 2023-04-12 18:25+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -23339,6 +23339,9 @@ msgid ""
 "The amount of time during which the strokes will be kept unmerged. When a "
 "stroke becomes old enough, Krita will try to merge it"
 msgstr ""
+"La quantité de temps durant laquelle les appuis de touches seront considérés "
+"comme non fusionnés. Quand un appui devient suffisamment ancien, Krita "
+"tentera de le fusionner."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
@@ -23374,6 +23377,9 @@ msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
 msgstr ""
+"Si deux appuis de touches se font avec un intervalle de temps court entre "
+"elles, alors, elle seront considérées comme appartenant au même groupe et "
+"fusionnées."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format

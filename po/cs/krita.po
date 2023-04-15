@@ -49,7 +49,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-03-20 14:18+0100\n"
+"PO-Revision-Date: 2023-04-06 15:04+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -22991,16 +22991,14 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "suffix for \"seconds\""
-#| msgid " sec"
+#, kde-format
 msgid " sec"
 msgstr " sek"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
 msgid "Wait before merging strokes:"
-msgstr ""
+msgstr "Čekat před sloučením tahů:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
 #, kde-format
@@ -23013,7 +23011,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr ""
+msgstr "Vyjmout poslední tahy ze sloučení:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -23026,7 +23024,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
 msgid "Max interval of grouped strokes:"
-msgstr ""
+msgstr "Maximální interval seskupených tahů:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
 #, kde-format
@@ -23038,10 +23036,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Video duration:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "Délka videa:"
+msgstr "Maximální délka trvání skupiny:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -25243,13 +25240,11 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1470
 #, kde-format
 msgid "Use cumulative undo"
-msgstr ""
+msgstr "Použít kumulativní krok zpátky"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1490
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "Pokročilé..."
 
@@ -58666,6 +58661,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#~ msgid "Split Strokes"
-#~ msgstr "Rozdělit tahy"

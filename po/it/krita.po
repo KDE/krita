@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-03-19 11:22+0100\n"
+"PO-Revision-Date: 2023-04-07 20:47+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.03.80\n"
+"X-Generator: Lokalize 23.03.90\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -23243,36 +23243,36 @@ msgid ""
 "The amount of time during which the strokes will be kept unmerged. When a "
 "stroke becomes old enough, Krita will try to merge it"
 msgstr ""
+"La quantità di tempo durante il quale i tratteggi verranno tenuti separati. "
+"Quando un tratteggio diventa sufficientemente vecchio, Krita tenterà di "
+"unirlo"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "suffix for \"seconds\""
-#| msgid " sec"
+#, kde-format
 msgid " sec"
 msgstr " sec"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
 msgid "Wait before merging strokes:"
-msgstr ""
+msgstr "Attendi prima di unire i tratteggi:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "The number of last strokes which Krita should store separately"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The number of last strokes that Krita will not merge (even if they are old "
 "enough)"
 msgstr ""
-"Il numero degli ultimi tratteggi che Krita deve memorizzare separatamente"
+"Il numero degli ultimi tratteggi che Krita non unirà (anche se sono "
+"sufficientemente vecchi)"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr ""
+msgstr "Escludi gli ultimi tratteggi dall'unione:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -23281,11 +23281,13 @@ msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
 msgstr ""
+"Se due tratteggi hanno un intervallo breve (ritardo) tra di loro, allora "
+"saranno considerati come appartenenti allo stesso gruppo e quindi uniti"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
 msgid "Max interval of grouped strokes:"
-msgstr ""
+msgstr "Intervallo massimo di tratteggi raggruppati:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
 #, kde-format
@@ -23295,13 +23297,15 @@ msgid ""
 "to be longer than this limit in the result of the merge, this merge will not "
 "happen."
 msgstr ""
+"Durata massima consentita del gruppo dopo l'unione. Se il gruppo sarà più "
+"lungo di questo limite nel risultato dell'unione, questa non verrà eseguita."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Video duration:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "Durata del video:"
+msgstr "Durata massima del gruppo:"
 
+# VM: cannot filnd the string "Max group strokes delay"
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
 msgid ""
@@ -23313,6 +23317,14 @@ msgid ""
 "try  to merge this action into a group. The groups are formed using \"Max "
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
+"L'annullamento cumulativo permette a Krita di unire azioni e creare un "
+"pulitore di cronologia degli annullamenti. Krita manterrà le ultime azioni "
+"non unite in base alle opzioni «Attendi prima di unire i tratteggi» e "
+"«Escludi gli ultimi tratteggi dall'unione». Ogni qualvolta un'azione diventa "
+"obsoleta tramite il limite di tempo e non viene esclusa utilizzando «Escludi "
+"gli ultimi tratteggi dall'unione», Krita tenterà di unire l'azione a un "
+"gruppo. I gruppo vengono formati in base alle opzioni «Ritardo massimo dei "
+"tratteggi del gruppo» e «Durata massima del gruppo»."
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -25585,20 +25597,17 @@ msgstr "Aggiungi «Unito» ai livelli di gruppo uniti"
 #: libs/ui/forms/wdggeneralsettings.ui:1445
 #, kde-format
 msgid "Add \"(pasted)\" to pasted layers"
-msgstr "Aggiungi \"(incollato)\" ai livelli incollati"
+msgstr "Aggiungi «(incollato)» ai livelli incollati"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1470
-#, fuzzy, kde-format
-#| msgid "Disable Cumulative Undo"
+#, kde-format
 msgid "Use cumulative undo"
-msgstr "Disabilita annullamenti cumulativi"
+msgstr "Usa annullamento cumulativo"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1490
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "Avanzate..."
 
@@ -33711,13 +33720,7 @@ msgstr ""
 "«Annulla» per tornare alla finestra delle impostazioni."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:535
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel "
-#| "in bits. arg5: image size"
-#| msgid ""
-#| "This document will be %1 pixels by %2 pixels in %3, which means the pixel "
-#| "size is %4 bit. A single paint layer will thus take up %5 of RAM."
+#, kde-format
 msgctxt ""
 "arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in "
 "bits. arg5: image size"
@@ -33725,9 +33728,8 @@ msgid ""
 "This document will be %1 pixels by %2 pixels in %3. The pixel size is %4 "
 "bit. A single paint layer will use %5 of RAM."
 msgstr ""
-"Questo documento sarà %1 pixel per %2 pixel in %3, il che significa che la "
-"dimensione dei pixel è di %4 bit. Un singolo livello di disegno occuperà "
-"dunque %5 di RAM."
+"Questo documento sarà %1 pixel per %2 pixel in %3. La dimensione dei pixel è "
+"di %4 bit. Un singolo livello di disegno utilizzerà %5 di RAM."
 
 #: libs/ui/widgets/kis_filter_selector_widget.cc:157
 #, kde-format

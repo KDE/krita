@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-04-12 18:25+0200\n"
+"PO-Revision-Date: 2023-04-14 14:43+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -23394,6 +23394,9 @@ msgid ""
 "to be longer than this limit in the result of the merge, this merge will not "
 "happen."
 msgstr ""
+"Durée maximale autorisée du groupe après la fusion. Si le groupage dure plus "
+"longtemps que cette durée pour le résultat de la fusion, cette fusion ne se "
+"fera pas."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
 #, kde-format

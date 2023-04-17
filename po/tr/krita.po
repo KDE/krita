@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-04-11 21:48+0300\n"
+"PO-Revision-Date: 2023-04-17 00:54+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -36820,7 +36820,7 @@ msgstr "İki nokta yardımcısı"
 #: plugins/assistants/Assistants/TwoPointAssistant.cc:547
 #, kde-format
 msgid "2 Point Perspective"
-msgstr "2 Nokta Perspektif"
+msgstr "2 Noktalı Perspektif"
 
 #: plugins/assistants/Assistants/VanishingPointAssistant.cc:27
 #, kde-format
@@ -37613,7 +37613,7 @@ msgstr "Doğrusal aradeğerleme."
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:482
 #, kde-format
 msgid "Bezier curve interpolation."
-msgstr "Bezier eğrisi aradeğerlemesi."
+msgstr "Bézier eğrisi aradeğerlemesi."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:489
 #, kde-format
@@ -38346,18 +38346,18 @@ msgstr "Dikdörtgen"
 #: plugins/dockers/griddocker/grid_config_widget.cpp:346
 #, kde-format
 msgid "Isometric"
-msgstr "Izometrik"
+msgstr "İzometrik"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:348
 #, kde-format
 msgid "Isometric (requires OpenGL)"
-msgstr "İzometric (OpenGL gerektirir)"
+msgstr "İzometrik (OpenGL gerektirir)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGrid)
 #: plugins/dockers/griddocker/grid_config_widget.ui:60
 #, kde-format
 msgid "Show grid"
-msgstr "Izgara çizgilerini göster"
+msgstr "Izgarayı göster"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSnapToGrid)
 #: plugins/dockers/griddocker/grid_config_widget.ui:73
@@ -56810,12 +56810,12 @@ msgstr "Çevir Aracı"
 #: plugins/tools/basictools/kis_tool_path.cc:130
 msgctxt "(qtundo-format)"
 msgid "Draw Bezier Curve"
-msgstr "Bezier Eğrisi Çiz"
+msgstr "Bézier Eğrisi Çiz"
 
 #: plugins/tools/basictools/kis_tool_path.h:84
 #, kde-format
 msgid "Bezier Curve Tool: Shift-mouseclick ends the curve."
-msgstr "Bezier Eğrisi Aracı: Üst Karakter-fare tıklaması eğriyi sonlandırır."
+msgstr "Bézier Eğrisi Aracı: Üst Karakter-fare tıklaması eğriyi sonlandırır."
 
 #: plugins/tools/basictools/kis_tool_pencil.cc:120
 msgctxt "(qtundo-format)"
@@ -56842,7 +56842,7 @@ msgstr "Dikdörtgen Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Bezier Curve Tool"
-msgstr "Bezier Eğrisi Aracı"
+msgstr "Bézier Eğrisi Aracı"
 
 #. i18n: context: toolTip @ Action (KisToolPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolPath), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -56854,7 +56854,7 @@ msgstr "Bezier Eğrisi Aracı"
 msgctxt "action"
 msgid "Bezier Curve Tool. Shift-mouseclick or double-click ends the curve."
 msgstr ""
-"Bezier Eğrisi Aracı. Üst Karakter ve fare tıklaması veya çift tıklama eğriyi "
+"Bézier Eğrisi Aracı. Üst Karakter ve fare tıklaması veya çift tıklama eğriyi "
 "sonlandırır."
 
 #. i18n: context: text @ Action (KisToolPencil), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -57835,12 +57835,12 @@ msgstr "Yolu seç"
 #: plugins/tools/selectiontools/kis_tool_select_path.cc:170
 msgctxt "(qtundo-format)"
 msgid "Select by Bezier Curve"
-msgstr "Bezier Eğrisine göre Seç"
+msgstr "Bézier Eğrisine göre Seç"
 
 #: plugins/tools/selectiontools/kis_tool_select_path.h:88
 #, kde-format
 msgid "Bezier Curve Selection Tool"
-msgstr "Bezier Eğrisi Seçim Aracı"
+msgstr "Bézier Eğrisi Seçim Aracı"
 
 #: plugins/tools/selectiontools/kis_tool_select_polygonal.cc:41
 #, kde-format
@@ -58073,7 +58073,7 @@ msgstr "Serbest Seçim Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Bezier Curve Selection Tool"
-msgstr "Bezier Eğrisi Seçim Aracı"
+msgstr "Bézier Eğrisi Seçim Aracı"
 
 #. i18n: context: toolTip @ Action (KisToolSelectPolygonal), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolSelectPolygonal), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59032,7 +59032,7 @@ msgstr "Sıfırla"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:501
 #, kde-format
 msgid "Bezier Curve"
-msgstr "Bezier Eğrisi"
+msgstr "Bézier Eğrisi"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:502
 #, kde-format

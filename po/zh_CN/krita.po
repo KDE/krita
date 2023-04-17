@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-04-10 14:09\n"
+"PO-Revision-Date: 2023-04-16 12:31\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -29730,7 +29730,7 @@ msgstr "正在保存图像..."
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
-msgstr "无法初始化 %1 的保存操作。请等待当前的保存操作完成后重试。"
+msgstr "无法发起保存 %1 的操作。请在当前的保存操作结束后重试。"
 
 #: libs/ui/KisDocument.cpp:930
 #, kde-format

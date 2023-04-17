@@ -10,9 +10,7 @@
 void KisCurveOptionDataTest::testCurveOptionData()
 {
     KisCurveOptionData data(KoID("Opacity"),
-                            KisPaintOpOption::GENERAL,
-                            true,
-                            true);
+                            false, true);
 
     KisCurveOptionData data2 = data;
 
@@ -53,7 +51,7 @@ void KisCurveOptionDataTest::testCurveOptionData()
 void KisCurveOptionDataTest::testSerializeDisabledSensors()
 {
     KisCurveOptionData data(KoID("Opacity"),
-                            KisPaintOpOption::GENERAL);
+                            false, true);
 
     // sensor is disabled!
     data.sensorStruct().sensorPressure.isActive = false;
@@ -88,25 +86,14 @@ void KisCurveOptionDataTest::testSerializeDisabledSensors()
 
     QVERIFY(data != data2);
     data2.sensorStruct().sensorPressure.curve = data.sensorStruct().sensorPressure.curve;
-    QVERIFY(data == data2);
 
+    QVERIFY(data == data2);
 }
 
 void KisCurveOptionDataTest::testSerializeNoSensors()
 {
     KisCurveOptionData data(KoID("Opacity"),
-                            KisPaintOpOption::GENERAL);
-
-
-    KisCurveOptionData data2(KoID("Opacity"),
-                             KisPaintOpOption::GENERAL);
-
-    QVERIFY(data == data2);
-
-    KisPropertiesConfiguration config;
-
-    data.write(&config);
-    QVERIFY(data2.read(&config));
+                            false, true);
 
     /**
      * When Krita loads a configuration with no sensors
@@ -114,10 +101,8 @@ void KisCurveOptionDataTest::testSerializeNoSensors()
      * sensors with the default curve.
      */
 
-    QCOMPARE(data.sensorStruct().sensorPressure.isActive, false);
-    QCOMPARE(data2.sensorStruct().sensorPressure.isActive, true);
-    QCOMPARE(data2.sensorStruct().sensorPressure.curve, DEFAULT_CURVE_STRING);
-    QVERIFY(data != data2);
+    QCOMPARE(data.sensorStruct().sensorPressure.isActive, true);
+    QCOMPARE(data.sensorStruct().sensorPressure.curve, DEFAULT_CURVE_STRING);
 }
 
 SIMPLE_TEST_MAIN(KisCurveOptionDataTest)

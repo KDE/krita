@@ -19,6 +19,8 @@
 #include <QMap>
 #include <QScopedPointer>
 
+#include <KisPropagateConstWrapper.h>
+
 /**
  * @brief The KisSwatchGroup class stores a matrix of color swatches
  * swatches can accessed using (x, y) coordinates.
@@ -135,9 +137,12 @@ private:
     void setColumnCount(int columnCount);
     int columnCount() const;
 
-
+    /**
+     * The usage of propagate_const makes all 'const' methods of the
+     * class reentrant. Which is necessary for, e.g., palettize filter.
+     */
     struct Private;
-    QScopedPointer<Private> d;
+    std::experimental::propagate_const<std::unique_ptr<Private>> d;
 };
 
 inline QDebug operator<<(QDebug dbg, const KisSwatchGroup group)

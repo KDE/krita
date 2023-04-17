@@ -38,7 +38,7 @@ KisSwatchGroup &KisSwatchGroup::operator =(const KisSwatchGroup &rhs)
     if (&rhs == this) {
         return *this;
     }
-    d.reset(new Private(*rhs.d));
+    *d = *rhs.d;
     return *this;
 }
 

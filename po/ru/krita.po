@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-06 00:45+0000\n"
+"POT-Creation-Date: 2023-04-18 00:45+0000\n"
 "PO-Revision-Date: 2023-03-12 19:06+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -12898,7 +12898,7 @@ msgstr "&Настройка"
 msgid "&Help"
 msgstr "&Справка"
 
-#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:126
+#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
 #, kde-format
@@ -16948,7 +16948,7 @@ msgstr ""
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:675 libs/ui/kis_layer_manager.cc:727
+#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr ""
@@ -17258,7 +17258,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Фон"
 
-#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:618
+#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "Обычный слой"
@@ -18061,30 +18061,30 @@ msgstr ""
 "Формат не может это представить, поэтому продолжительность кадра будет "
 "округлена до ближайшей миллисекунды."
 
-#: libs/impex/KisExportCheckRegistry.cpp:104 libs/ui/kis_layer_manager.cc:647
+#: libs/impex/KisExportCheckRegistry.cpp:104 libs/ui/kis_layer_manager.cc:652
 #, kde-format
 msgid "Clone Layer"
 msgstr "Клонирующий слой"
 
-#: libs/impex/KisExportCheckRegistry.cpp:106 libs/ui/kis_layer_manager.cc:631
+#: libs/impex/KisExportCheckRegistry.cpp:106 libs/ui/kis_layer_manager.cc:636
 #: libs/ui/kis_node_manager.cpp:1514
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Группа"
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:956
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:961
 #, kde-format
 msgid "File Layer"
 msgstr "Файловый слой"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:660
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:665
 #: plugins/impex/svg/kis_svg_import.cc:90
 #, kde-format
 msgid "Vector Layer"
 msgstr "Векторный слой"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:682
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "Filter Layer"
 msgstr "Фильтрующий слой"
@@ -19638,7 +19638,7 @@ msgstr "Выходной"
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1167
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1168
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19690,8 +19690,8 @@ msgstr "Локальные источники"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:920
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
-#: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
+#: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
 #: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
 #: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
@@ -19707,7 +19707,7 @@ msgstr "Локальные источники"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1170
+#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1171
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20548,7 +20548,7 @@ msgstr ""
 "выделение всего"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:785
+#: libs/ui/KisView.cpp:786
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr ""
@@ -22651,6 +22651,24 @@ msgstr "Название слоя:"
 #, kde-format
 msgid "No configuration options are available for this filter"
 msgstr "У этого фильтра нет настраиваемых параметров"
+
+#: libs/ui/dialogs/kis_dlg_file_layer.cpp:49
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Select filtering mode:\n"
+"<ul><li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</"
+"li><li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</"
+"li><li><b>Bicubic</b> for smoother results.</li><li><b>Lanczos3</b> for "
+"sharp results. May produce aerials.</li></ul></p>"
+msgstr ""
+"<p>Выбор режима фильтрации:\n"
+"<ul><li><b>Ближайший сосед</b> для пиксельной графики. Не даёт нового цвета."
+"</li><li><b>Билинейный</b> для областей с равномерным цветом, чтобы избежать "
+"артефактов.</li><li><b>Бикубический</b> для более сглаженного результата.</"
+"li><li><b>Ланцош3</b> для резких изображений на выходе. Может усиливать "
+"контуры объектов.</li></ul></p>"
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:114
 #, kde-format
@@ -25108,6 +25126,13 @@ msgstr "Отмасштабировать до размера изображен�
 #, kde-format
 msgid "Adapt to Image Resolution (ppi)"
 msgstr "Адаптировать к разрешению изображения (ppi)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: libs/ui/forms/wdgdlgfilelayer.ui:147
+#, fuzzy, kde-format
+#| msgid "in Filters"
+msgid "&Scaling Filter:"
+msgstr "в фильтрах"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -29145,7 +29170,7 @@ msgctxt "Brush Option Scatter"
 msgid "Scatter: %1%"
 msgstr "Рассеяние: %1%"
 
-#: libs/ui/kis_change_file_layer_command.h:22
+#: libs/ui/kis_change_file_layer_command.h:24
 msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr ""
@@ -29238,19 +29263,19 @@ msgid "This pattern already exists. Do you want to overwrite it?"
 msgstr "Этот узор уже существует. Перезаписать его?"
 
 # BUGME: please add full stop. --aspotashev
-#: libs/ui/kis_file_layer.cpp:131
+#: libs/ui/kis_file_layer.cpp:133
 #, kde-format
 msgctxt "placeholder test for a warning when not file is set in the file layer"
 msgid "<No file name is set>"
 msgstr "<Не указано имя файла>"
 
-#: libs/ui/kis_file_layer.cpp:136
+#: libs/ui/kis_file_layer.cpp:138
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot find its linked file"
 msgid "Linked file not found: %1"
 msgstr "Связанный файл не найден: %1"
 
-#: libs/ui/kis_file_layer.cpp:139
+#: libs/ui/kis_file_layer.cpp:141
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot load its linked file"
 msgid "Failed to load linked file: %1"
@@ -29317,35 +29342,35 @@ msgstr "Свойства фильтрующего слоя"
 msgid "Fill Layer Properties"
 msgstr "Свойства заливаемого слоя"
 
-#: libs/ui/kis_layer_manager.cc:305
+#: libs/ui/kis_layer_manager.cc:306
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Свойства файлового слоя"
 
 # BUGME: please add full stop. --aspotashev
-#: libs/ui/kis_layer_manager.cc:314 libs/ui/kis_layer_manager.cc:964
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:969
 #, kde-format
 msgid "No file name specified"
 msgstr "Не указано имя файла."
 
-#: libs/ui/kis_layer_manager.cc:372
+#: libs/ui/kis_layer_manager.cc:377
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "Изменить клонирующий слой"
 
-#: libs/ui/kis_layer_manager.cc:481
+#: libs/ui/kis_layer_manager.cc:486
 msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr ""
 "Преобразование в анимированный слой\n"
 "преобразование в анимированный слой"
 
-#: libs/ui/kis_layer_manager.cc:501
+#: libs/ui/kis_layer_manager.cc:506
 #, kde-format
 msgid "Save layers to..."
 msgstr "Сохранить слои как..."
 
-#: libs/ui/kis_layer_manager.cc:502
+#: libs/ui/kis_layer_manager.cc:507
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -29354,30 +29379,30 @@ msgstr ""
 "Выберите место, где будет храниться слой. Новый слой будет ссылаться на "
 "указанный файл."
 
-#: libs/ui/kis_layer_manager.cc:565
+#: libs/ui/kis_layer_manager.cc:570
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr ""
 "Преобразование в слой из файла\n"
 "преобразование в слой из файла"
 
-#: libs/ui/kis_layer_manager.cc:682
+#: libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Новый фильтрующий слой"
 
-#: libs/ui/kis_layer_manager.cc:731 libs/ui/kis_mimedata.cpp:314
+#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:314
 #, kde-format
 msgid "Fill Layer"
 msgstr "Заливаемый слой"
 
-#: libs/ui/kis_layer_manager.cc:758
+#: libs/ui/kis_layer_manager.cc:763
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Сведение изображения"
 
-#: libs/ui/kis_layer_manager.cc:759
+#: libs/ui/kis_layer_manager.cc:764
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -29386,7 +29411,7 @@ msgstr ""
 "Изображение содержит скрытые слои, которые будут потеряны. Свести "
 "изображение?"
 
-#: libs/ui/kis_layer_manager.cc:837
+#: libs/ui/kis_layer_manager.cc:842
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -29396,18 +29421,18 @@ msgstr[1] "Слои заблокированы"
 msgstr[2] "Слои заблокированы"
 msgstr[3] "Слой заблокирован"
 
-#: libs/ui/kis_layer_manager.cc:858
+#: libs/ui/kis_layer_manager.cc:863
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Слой заблокирован"
 
-#: libs/ui/kis_layer_manager.cc:914
+#: libs/ui/kis_layer_manager.cc:919
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Преобразовать невидимые группы"
 
-#: libs/ui/kis_layer_manager.cc:917
+#: libs/ui/kis_layer_manager.cc:922
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Экспортировать только группы верхнего уровня"
@@ -31472,65 +31497,65 @@ msgstr "Нет доступных рисунков."
 msgid "Use This Template"
 msgstr "Использовать этот шаблон"
 
-#: libs/ui/KisView.cpp:760
+#: libs/ui/KisView.cpp:761
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Нельзя перетаскивать цвета на выбранный тип слоя."
 
-#: libs/ui/KisView.cpp:768 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Слой заблокирован и невидим."
 
-#: libs/ui/KisView.cpp:770 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "Слой заблокирован."
 
-#: libs/ui/KisView.cpp:772 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Слой невидим."
 
-#: libs/ui/KisView.cpp:1171
+#: libs/ui/KisView.cpp:1172
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Документ <b>«%1»</b> был изменён.</p><p>Сохранить его?</p>"
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1361
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr ""
 "Мягкая цветопроба не работает в цветовых пространствах с плавающей запятой."
 
-#: libs/ui/KisView.cpp:1365
+#: libs/ui/KisView.cpp:1366
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Режим мягкой цветопробы включён."
 
-#: libs/ui/KisView.cpp:1367
+#: libs/ui/KisView.cpp:1368
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Режим мягкой цветопробы выключен."
 
-#: libs/ui/KisView.cpp:1379
+#: libs/ui/KisView.cpp:1380
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Предупреждения о цветовом охвате не работают с плавающей точкой."
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1386
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Предупреждения о цветовом охвате включены."
 
-#: libs/ui/KisView.cpp:1387
+#: libs/ui/KisView.cpp:1388
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Но мягкаяцветопроба всё ещё отключена."
 
-#: libs/ui/KisView.cpp:1390
+#: libs/ui/KisView.cpp:1391
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Предупреждения о цветовом охвате отключены."
@@ -48923,8 +48948,8 @@ msgstr ""
 "Хотите выбрать другое место на диске?"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
-#: plugins/impex/libkra/kis_kra_loader.cpp:1024
-#: plugins/impex/libkra/kis_kra_loader.cpp:1393
+#: plugins/impex/libkra/kis_kra_loader.cpp:1025
+#: plugins/impex/libkra/kis_kra_loader.cpp:1394
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -49095,7 +49120,7 @@ msgstr "Слой %1 имеет неподдерживаемый тип: %2."
 msgid "Failure loading layer %1 of type: %2."
 msgstr "Ошибка загрузки слоя %1, имеющего тип %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1019
+#: plugins/impex/libkra/kis_kra_loader.cpp:1020
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -49113,7 +49138,7 @@ msgstr ""
 "\n"
 "Хотите указать правильный путь вручную?"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1388
+#: plugins/impex/libkra/kis_kra_loader.cpp:1389
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -60515,23 +60540,6 @@ msgstr ""
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Трансформация слоя или выделения"
-
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"<p>Select filtering mode:\n"
-"<ul><li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</"
-"li><li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</"
-"li><li><b>Bicubic</b> for smoother results.</li><li><b>Lanczos3</b> for "
-"sharp results. May produce aerials.</li></ul></p>"
-msgstr ""
-"<p>Выбор режима фильтрации:\n"
-"<ul><li><b>Ближайший сосед</b> для пиксельной графики. Не даёт нового цвета."
-"</li><li><b>Билинейный</b> для областей с равномерным цветом, чтобы избежать "
-"артефактов.</li><li><b>Бикубический</b> для более сглаженного результата.</"
-"li><li><b>Ланцош3</b> для резких изображений на выходе. Может усиливать "
-"контуры объектов.</li></ul></p>"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:86
 #, kde-format

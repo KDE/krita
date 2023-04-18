@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-06 00:45+0000\n"
+"POT-Creation-Date: 2023-04-18 00:45+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -12947,7 +12947,7 @@ msgstr "Seting"
 msgid "&Help"
 msgstr "&Sembunyi/Papar Lapisan"
 
-#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:126
+#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
 #, fuzzy, kde-format
@@ -16893,7 +16893,7 @@ msgstr "&Nyahpilih"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:675 libs/ui/kis_layer_manager.cc:727
+#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -17182,7 +17182,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "latar belakang"
 
-#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:618
+#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:623
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&Lapisan"
@@ -17935,12 +17935,12 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:104 libs/ui/kis_layer_manager.cc:647
+#: libs/impex/KisExportCheckRegistry.cpp:104 libs/ui/kis_layer_manager.cc:652
 #, fuzzy, kde-format
 msgid "Clone Layer"
 msgstr "Lapisan Baru"
 
-#: libs/impex/KisExportCheckRegistry.cpp:106 libs/ui/kis_layer_manager.cc:631
+#: libs/impex/KisExportCheckRegistry.cpp:106 libs/ui/kis_layer_manager.cc:636
 #: libs/ui/kis_node_manager.cpp:1514
 #, fuzzy, kde-format
 #| msgid "Group:"
@@ -17948,18 +17948,18 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "Kumpulan:"
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:956
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:961
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "Penapis"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:660
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:665
 #: plugins/impex/svg/kis_svg_import.cc:90
 #, fuzzy, kde-format
 msgid "Vector Layer"
 msgstr "&Cantum Lapisan"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:682
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:687
 #, fuzzy, kde-format
 msgid "Filter Layer"
 msgstr "Penapis"
@@ -19529,7 +19529,7 @@ msgstr "Luar"
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1167
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1168
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -19582,8 +19582,8 @@ msgstr "&Alih Keluar Lapisan"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:920
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
-#: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
+#: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
 #: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
 #: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
@@ -19599,7 +19599,7 @@ msgstr "&Alih Keluar Lapisan"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1170
+#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1171
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20434,7 +20434,7 @@ msgid "Select All"
 msgstr "&Pilih Semua"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:785
+#: libs/ui/KisView.cpp:786
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
@@ -22422,6 +22422,18 @@ msgstr "Jenis lapisan:"
 #, fuzzy, kde-format
 msgid "No configuration options are available for this filter"
 msgstr "Konfigurasi Clmg"
+
+#: libs/ui/dialogs/kis_dlg_file_layer.cpp:49
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Select filtering mode:\n"
+"<ul><li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</"
+"li><li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</"
+"li><li><b>Bicubic</b> for smoother results.</li><li><b>Lanczos3</b> for "
+"sharp results. May produce aerials.</li></ul></p>"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:114
 #, kde-format
@@ -24784,6 +24796,12 @@ msgstr "Ricik Imej"
 #, fuzzy, kde-format
 msgid "Adapt to Image Resolution (ppi)"
 msgstr "Resolusi Imej"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: libs/ui/forms/wdgdlgfilelayer.ui:147
+#, fuzzy, kde-format
+msgid "&Scaling Filter:"
+msgstr "Penapis"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -28632,7 +28650,7 @@ msgctxt "Brush Option Scatter"
 msgid "Scatter: %1%"
 msgstr "Corak"
 
-#: libs/ui/kis_change_file_layer_command.h:22
+#: libs/ui/kis_change_file_layer_command.h:24
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change File Layer"
@@ -28724,19 +28742,19 @@ msgstr ""
 "Dokumen dengan nama ini sudah wujud.\n"
 "Anda mahu tindih?"
 
-#: libs/ui/kis_file_layer.cpp:131
+#: libs/ui/kis_file_layer.cpp:133
 #, fuzzy, kde-format
 msgctxt "placeholder test for a warning when not file is set in the file layer"
 msgid "<No file name is set>"
 msgstr "&Profil:"
 
-#: libs/ui/kis_file_layer.cpp:136
+#: libs/ui/kis_file_layer.cpp:138
 #, fuzzy, kde-format
 msgctxt "a tooltip shown when a file layer cannot find its linked file"
 msgid "Linked file not found: %1"
 msgstr "Lokasi fail:"
 
-#: libs/ui/kis_file_layer.cpp:139
+#: libs/ui/kis_file_layer.cpp:141
 #, fuzzy, kde-format
 msgctxt "a tooltip shown when a file layer cannot load its linked file"
 msgid "Failed to load linked file: %1"
@@ -28801,69 +28819,69 @@ msgstr "Ciri Lapisan"
 msgid "Fill Layer Properties"
 msgstr "Ciri Lapisan"
 
-#: libs/ui/kis_layer_manager.cc:305
+#: libs/ui/kis_layer_manager.cc:306
 #, fuzzy, kde-format
 msgid "File Layer Properties"
 msgstr "Ciri Lapisan"
 
-#: libs/ui/kis_layer_manager.cc:314 libs/ui/kis_layer_manager.cc:964
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:969
 #, kde-format
 msgid "No file name specified"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:372
+#: libs/ui/kis_layer_manager.cc:377
 #, fuzzy, kde-format
 msgid "Change Clone Layer"
 msgstr "Penapis"
 
-#: libs/ui/kis_layer_manager.cc:481
+#: libs/ui/kis_layer_manager.cc:486
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "Tukar Lapisan Semasa Dari"
 
-#: libs/ui/kis_layer_manager.cc:501
+#: libs/ui/kis_layer_manager.cc:506
 #, fuzzy, kde-format
 msgid "Save layers to..."
 msgstr "Simpan Lapisan sebagai Imej..."
 
-#: libs/ui/kis_layer_manager.cc:502
+#: libs/ui/kis_layer_manager.cc:507
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:565
+#: libs/ui/kis_layer_manager.cc:570
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Tukar Lapisan Semasa Dari"
 
-#: libs/ui/kis_layer_manager.cc:682
+#: libs/ui/kis_layer_manager.cc:687
 #, fuzzy, kde-format
 msgid "New Filter Layer"
 msgstr "Penapis"
 
-#: libs/ui/kis_layer_manager.cc:731 libs/ui/kis_mimedata.cpp:314
+#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:314
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "Penapis"
 
-#: libs/ui/kis_layer_manager.cc:758
+#: libs/ui/kis_layer_manager.cc:763
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Imej Rata"
 
-#: libs/ui/kis_layer_manager.cc:759
+#: libs/ui/kis_layer_manager.cc:764
 #, fuzzy, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "Imej mengandungi lapisan tersembunyi yang akan hilang."
 
-#: libs/ui/kis_layer_manager.cc:837
+#: libs/ui/kis_layer_manager.cc:842
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -28871,18 +28889,18 @@ msgid_plural "Layers are locked"
 msgstr[0] "Saiz Lapisan"
 msgstr[1] "Saiz Lapisan"
 
-#: libs/ui/kis_layer_manager.cc:858
+#: libs/ui/kis_layer_manager.cc:863
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Saiz Lapisan"
 
-#: libs/ui/kis_layer_manager.cc:914
+#: libs/ui/kis_layer_manager.cc:919
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:917
+#: libs/ui/kis_layer_manager.cc:922
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr ""
@@ -30785,27 +30803,27 @@ msgstr "Gambar tidak disediakan"
 msgid "Use This Template"
 msgstr "Cipta Templat"
 
-#: libs/ui/KisView.cpp:760
+#: libs/ui/KisView.cpp:761
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:768 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:673
 #, fuzzy, kde-format
 msgid "Layer is locked and invisible."
 msgstr "kebolehlarutcampuran"
 
-#: libs/ui/KisView.cpp:770 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:675
 #, fuzzy, kde-format
 msgid "Layer is locked."
 msgstr "Saiz Lapisan"
 
-#: libs/ui/KisView.cpp:772 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:677
 #, fuzzy, kde-format
 msgid "Layer is invisible."
 msgstr "kebolehlarutcampuran"
 
-#: libs/ui/KisView.cpp:1171
+#: libs/ui/KisView.cpp:1172
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -30814,37 +30832,37 @@ msgstr ""
 "<p>Dokumen <b>'%1'</b> telah diubah suai.</p><p>Anda ingin simpan dokumen "
 "ini?</p>"
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1361
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Topeng alfa"
 
-#: libs/ui/KisView.cpp:1365
+#: libs/ui/KisView.cpp:1366
 #, fuzzy, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Topeng alfa"
 
-#: libs/ui/KisView.cpp:1367
+#: libs/ui/KisView.cpp:1368
 #, fuzzy, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Topeng alfa"
 
-#: libs/ui/KisView.cpp:1379
+#: libs/ui/KisView.cpp:1380
 #, fuzzy, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Pencetakan Terakhir "
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1386
 #, fuzzy, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Pencetakan Terakhir "
 
-#: libs/ui/KisView.cpp:1387
+#: libs/ui/KisView.cpp:1388
 #, fuzzy, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Topeng alfa"
 
-#: libs/ui/KisView.cpp:1390
+#: libs/ui/KisView.cpp:1391
 #, fuzzy, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Pencetakan Terakhir "
@@ -47496,8 +47514,8 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
-#: plugins/impex/libkra/kis_kra_loader.cpp:1024
-#: plugins/impex/libkra/kis_kra_loader.cpp:1393
+#: plugins/impex/libkra/kis_kra_loader.cpp:1025
+#: plugins/impex/libkra/kis_kra_loader.cpp:1394
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -47662,7 +47680,7 @@ msgstr "kebolehlarutcampuran"
 msgid "Failure loading layer %1 of type: %2."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1019
+#: plugins/impex/libkra/kis_kra_loader.cpp:1020
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -47674,7 +47692,7 @@ msgid ""
 "Do you want to locate it manually?"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1388
+#: plugins/impex/libkra/kis_kra_loader.cpp:1389
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -58814,17 +58832,6 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Alat pilih pemadam"
-
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"<p>Select filtering mode:\n"
-"<ul><li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</"
-"li><li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</"
-"li><li><b>Bicubic</b> for smoother results.</li><li><b>Lanczos3</b> for "
-"sharp results. May produce aerials.</li></ul></p>"
-msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:86
 #, fuzzy, kde-format

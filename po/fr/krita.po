@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-06 00:45+0000\n"
+"POT-Creation-Date: 2023-04-18 00:45+0000\n"
 "PO-Revision-Date: 2023-04-15 20:01+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
@@ -12931,7 +12931,7 @@ msgstr "Para&mètres"
 msgid "&Help"
 msgstr "&Aide"
 
-#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:126
+#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
 #, kde-format
@@ -16856,7 +16856,7 @@ msgstr "Désélectionner"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:675 libs/ui/kis_layer_manager.cc:727
+#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Ajout d'un calque"
@@ -17136,7 +17136,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Arrière-plan"
 
-#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:618
+#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "Calque de dessin"
@@ -17850,30 +17850,30 @@ msgstr ""
 "b>. Il est impossible de représenter ceci avec le format et la durée de "
 "trame sera arrondi à la valeur de la milliseconde la plus proche."
 
-#: libs/impex/KisExportCheckRegistry.cpp:104 libs/ui/kis_layer_manager.cc:647
+#: libs/impex/KisExportCheckRegistry.cpp:104 libs/ui/kis_layer_manager.cc:652
 #, kde-format
 msgid "Clone Layer"
 msgstr "Calque de clonage"
 
-#: libs/impex/KisExportCheckRegistry.cpp:106 libs/ui/kis_layer_manager.cc:631
+#: libs/impex/KisExportCheckRegistry.cpp:106 libs/ui/kis_layer_manager.cc:636
 #: libs/ui/kis_node_manager.cpp:1514
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Calque de groupe"
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:956
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:961
 #, kde-format
 msgid "File Layer"
 msgstr "Calque de fichier"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:660
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:665
 #: plugins/impex/svg/kis_svg_import.cc:90
 #, kde-format
 msgid "Vector Layer"
 msgstr "Calque vectoriel"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:682
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "Filter Layer"
 msgstr "Calque de filtrage"
@@ -19430,7 +19430,7 @@ msgstr "Dehors"
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1167
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1168
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19482,8 +19482,8 @@ msgstr "Ressources locales"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:920
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
-#: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
+#: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
 #: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
 #: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
@@ -19499,7 +19499,7 @@ msgstr "Ressources locales"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1170
+#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1171
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20346,7 +20346,7 @@ msgid "Select All"
 msgstr "Tout sélectionner"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:785
+#: libs/ui/KisView.cpp:786
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Calque pot de peinture"
@@ -22427,6 +22427,24 @@ msgstr "Nom du calque :"
 #, kde-format
 msgid "No configuration options are available for this filter"
 msgstr "Aucune option de configuration n'est disponible pour ce filtre."
+
+#: libs/ui/dialogs/kis_dlg_file_layer.cpp:49
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Select filtering mode:\n"
+"<ul><li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</"
+"li><li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</"
+"li><li><b>Bicubic</b> for smoother results.</li><li><b>Lanczos3</b> for "
+"sharp results. May produce aerials.</li></ul></p>"
+msgstr ""
+"<p>Sélectionnez le mode de filtrage :\n"
+"<ul> <li><b>Voisin le plus proche</b> pour du pixel art. Ne produit aucune "
+"nouvelle couleur,</li><li><b>Bilinéaire</b> pour des surfaces avec des "
+"couleurs uniformes, pour éviter les artefacts,</li><li><b>Bicubique</b> pour "
+"des résultats plus doux,</li><li><b>Lanczos3</b> pour des résultats nets. "
+"Cela peut produire des halos.</li></ul></p>"
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:114
 #, kde-format
@@ -24900,6 +24918,13 @@ msgstr "Redimensionner à la taille de l'image"
 #, kde-format
 msgid "Adapt to Image Resolution (ppi)"
 msgstr "Adapter la résolution de l'image (ppp)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: libs/ui/forms/wdgdlgfilelayer.ui:147
+#, fuzzy, kde-format
+#| msgid "in Filters"
+msgid "&Scaling Filter:"
+msgstr "dans « Filtres »"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -28931,7 +28956,7 @@ msgctxt "Brush Option Scatter"
 msgid "Scatter: %1%"
 msgstr "Dispersion : %1 %"
 
-#: libs/ui/kis_change_file_layer_command.h:22
+#: libs/ui/kis_change_file_layer_command.h:24
 msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Modifier le calque de fichier"
@@ -29023,19 +29048,19 @@ msgstr "Ajouter aux motifs prédéfinis"
 msgid "This pattern already exists. Do you want to overwrite it?"
 msgstr "Ce motif existe déjà. Voulez-vous vraiment l'écraser ?"
 
-#: libs/ui/kis_file_layer.cpp:131
+#: libs/ui/kis_file_layer.cpp:133
 #, kde-format
 msgctxt "placeholder test for a warning when not file is set in the file layer"
 msgid "<No file name is set>"
 msgstr "<Aucun nom de fichier n'est spécifié>"
 
-#: libs/ui/kis_file_layer.cpp:136
+#: libs/ui/kis_file_layer.cpp:138
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot find its linked file"
 msgid "Linked file not found: %1"
 msgstr "Impossible de trouver le fichier associé : %1"
 
-#: libs/ui/kis_file_layer.cpp:139
+#: libs/ui/kis_file_layer.cpp:141
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot load its linked file"
 msgid "Failed to load linked file: %1"
@@ -29103,32 +29128,32 @@ msgstr "Propriétés des calques de filtrage"
 msgid "Fill Layer Properties"
 msgstr "Propriétés du calque de remplissage"
 
-#: libs/ui/kis_layer_manager.cc:305
+#: libs/ui/kis_layer_manager.cc:306
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Propriétés du calque de fichier"
 
-#: libs/ui/kis_layer_manager.cc:314 libs/ui/kis_layer_manager.cc:964
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:969
 #, kde-format
 msgid "No file name specified"
 msgstr "Aucun nom de fichier spécifié"
 
-#: libs/ui/kis_layer_manager.cc:372
+#: libs/ui/kis_layer_manager.cc:377
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "Modifier le calque de clonage"
 
-#: libs/ui/kis_layer_manager.cc:481
+#: libs/ui/kis_layer_manager.cc:486
 msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "Convertir en calque animé"
 
-#: libs/ui/kis_layer_manager.cc:501
+#: libs/ui/kis_layer_manager.cc:506
 #, kde-format
 msgid "Save layers to..."
 msgstr "Enregistrer le calque / masque..."
 
-#: libs/ui/kis_layer_manager.cc:502
+#: libs/ui/kis_layer_manager.cc:507
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -29137,28 +29162,28 @@ msgstr ""
 "Sélectionner un emplacement où les calques pourront être enregistrés. Le "
 "nouveau calque de fichier fera alors référence à cet emplacement."
 
-#: libs/ui/kis_layer_manager.cc:565
+#: libs/ui/kis_layer_manager.cc:570
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Convertir en calque de fichier"
 
-#: libs/ui/kis_layer_manager.cc:682
+#: libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Nouveau calque de filtrage"
 
-#: libs/ui/kis_layer_manager.cc:731 libs/ui/kis_mimedata.cpp:314
+#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:314
 #, kde-format
 msgid "Fill Layer"
 msgstr "Calque de remplissage"
 
-#: libs/ui/kis_layer_manager.cc:758
+#: libs/ui/kis_layer_manager.cc:763
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Aplatir l'image"
 
-#: libs/ui/kis_layer_manager.cc:759
+#: libs/ui/kis_layer_manager.cc:764
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -29167,7 +29192,7 @@ msgstr ""
 "L'image contient des calques cachés qui seront perdus. Voulez-vous aplatir "
 "l'image ?"
 
-#: libs/ui/kis_layer_manager.cc:837
+#: libs/ui/kis_layer_manager.cc:842
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -29175,18 +29200,18 @@ msgid_plural "Layers are locked"
 msgstr[0] "Le calque est verrouillé."
 msgstr[1] "Les calques sont verrouillés."
 
-#: libs/ui/kis_layer_manager.cc:858
+#: libs/ui/kis_layer_manager.cc:863
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Le calque est verrouillé."
 
-#: libs/ui/kis_layer_manager.cc:914
+#: libs/ui/kis_layer_manager.cc:919
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Convertir les groupes invisibles"
 
-#: libs/ui/kis_layer_manager.cc:917
+#: libs/ui/kis_layer_manager.cc:922
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Exporter uniquement les groupes du plus haut niveau"
@@ -31202,29 +31227,29 @@ msgstr "Aucune image disponible"
 msgid "Use This Template"
 msgstr "Utiliser ce modèle"
 
-#: libs/ui/KisView.cpp:760
+#: libs/ui/KisView.cpp:761
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 "Vous ne pouvez pas faire un glisser / déposer sur le type de calque "
 "sélectionné."
 
-#: libs/ui/KisView.cpp:768 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Le calque est verrouillé et invisible."
 
-#: libs/ui/KisView.cpp:770 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "Le calque est verrouillé."
 
-#: libs/ui/KisView.cpp:772 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Le calque est invisible."
 
-#: libs/ui/KisView.cpp:1171
+#: libs/ui/KisView.cpp:1172
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -31233,37 +31258,37 @@ msgstr ""
 "<p>Le document <b> « %1 » </b> a été modifié.</p><p>Voulez-vous "
 "l'enregistrer ? </p>"
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1361
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Une épreuve en mode logiciel ne fonctionne pas en virgule flottante."
 
-#: libs/ui/KisView.cpp:1365
+#: libs/ui/KisView.cpp:1366
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Épreuvage actif."
 
-#: libs/ui/KisView.cpp:1367
+#: libs/ui/KisView.cpp:1368
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Épreuvage inactif."
 
-#: libs/ui/KisView.cpp:1379
+#: libs/ui/KisView.cpp:1380
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Les alarmes de Gamut ne fonctionnent pas en format à virgule flottante"
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1386
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Signalement des couleurs non imprimables activé."
 
-#: libs/ui/KisView.cpp:1387
+#: libs/ui/KisView.cpp:1388
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Mais l'épreuve numérique est encore active."
 
-#: libs/ui/KisView.cpp:1390
+#: libs/ui/KisView.cpp:1391
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Signalement des couleurs non imprimables inactif."
@@ -48528,8 +48553,8 @@ msgstr ""
 "Voulez-vous vraiment sélectionner un autre emplacement ?"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
-#: plugins/impex/libkra/kis_kra_loader.cpp:1024
-#: plugins/impex/libkra/kis_kra_loader.cpp:1393
+#: plugins/impex/libkra/kis_kra_loader.cpp:1025
+#: plugins/impex/libkra/kis_kra_loader.cpp:1394
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -48703,7 +48728,7 @@ msgstr "Le calque %1 a un type non pris en charge : %2."
 msgid "Failure loading layer %1 of type: %2."
 msgstr "Échec au chargement du calque %1 de type : %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1019
+#: plugins/impex/libkra/kis_kra_loader.cpp:1020
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -48721,7 +48746,7 @@ msgstr ""
 "\n"
 "Voulez-vous le localiser manuellement ?"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1388
+#: plugins/impex/libkra/kis_kra_loader.cpp:1389
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -60116,23 +60141,6 @@ msgstr ""
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Transformer un calque ou une sélection"
-
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"<p>Select filtering mode:\n"
-"<ul><li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</"
-"li><li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</"
-"li><li><b>Bicubic</b> for smoother results.</li><li><b>Lanczos3</b> for "
-"sharp results. May produce aerials.</li></ul></p>"
-msgstr ""
-"<p>Sélectionnez le mode de filtrage :\n"
-"<ul> <li><b>Voisin le plus proche</b> pour du pixel art. Ne produit aucune "
-"nouvelle couleur,</li><li><b>Bilinéaire</b> pour des surfaces avec des "
-"couleurs uniformes, pour éviter les artefacts,</li><li><b>Bicubique</b> pour "
-"des résultats plus doux,</li><li><b>Lanczos3</b> pour des résultats nets. "
-"Cela peut produire des halos.</li></ul></p>"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:86
 #, kde-format

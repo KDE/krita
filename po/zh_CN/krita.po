@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-06 00:45+0000\n"
+"POT-Creation-Date: 2023-04-18 00:45+0000\n"
 "PO-Revision-Date: 2023-04-16 12:31\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -12792,7 +12792,7 @@ msgstr "设置(&N)"
 msgid "&Help"
 msgstr "帮助(&H)"
 
-#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:126
+#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
 #, kde-format
@@ -16695,7 +16695,7 @@ msgstr "取消选择"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:675 libs/ui/kis_layer_manager.cc:727
+#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "添加图层"
@@ -16969,7 +16969,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "背景"
 
-#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:618
+#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "颜料图层"
@@ -17672,30 +17672,30 @@ msgstr ""
 "此图像包含的动画使用了<b>非整数毫秒fractions of a millisecond</b>的帧持续时"
 "间。此格式不支持非整数毫秒的帧持续时间，它将被四舍五入为最接近的整数毫秒。"
 
-#: libs/impex/KisExportCheckRegistry.cpp:104 libs/ui/kis_layer_manager.cc:647
+#: libs/impex/KisExportCheckRegistry.cpp:104 libs/ui/kis_layer_manager.cc:652
 #, kde-format
 msgid "Clone Layer"
 msgstr "克隆图层"
 
-#: libs/impex/KisExportCheckRegistry.cpp:106 libs/ui/kis_layer_manager.cc:631
+#: libs/impex/KisExportCheckRegistry.cpp:106 libs/ui/kis_layer_manager.cc:636
 #: libs/ui/kis_node_manager.cpp:1514
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "图层组"
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:956
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:961
 #, kde-format
 msgid "File Layer"
 msgstr "文件图层"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:660
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:665
 #: plugins/impex/svg/kis_svg_import.cc:90
 #, kde-format
 msgid "Vector Layer"
 msgstr "矢量图层"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:682
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "Filter Layer"
 msgstr "滤镜图层"
@@ -19241,7 +19241,7 @@ msgstr "输出"
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1167
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1168
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19293,8 +19293,8 @@ msgstr "本地资源"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:920
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
-#: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
+#: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
 #: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
 #: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
@@ -19310,7 +19310,7 @@ msgstr "本地资源"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1170
+#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1171
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20143,7 +20143,7 @@ msgid "Select All"
 msgstr "全部选择"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:785
+#: libs/ui/KisView.cpp:786
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "浸漫填充图层"
@@ -22180,6 +22180,22 @@ msgstr "图层名称："
 #, kde-format
 msgid "No configuration options are available for this filter"
 msgstr "此滤镜没有可用的配置选项"
+
+#: libs/ui/dialogs/kis_dlg_file_layer.cpp:49
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Select filtering mode:\n"
+"<ul><li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</"
+"li><li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</"
+"li><li><b>Bicubic</b> for smoother results.</li><li><b>Lanczos3</b> for "
+"sharp results. May produce aerials.</li></ul></p>"
+msgstr ""
+"<p>选择平滑算法：\n"
+"<ul><li><b>最近邻算法</b>不产生新颜色，适合像素画</li><li><b>双线性算法</b>减"
+"轻色块锯齿</li><li><b>双立方算法</b>过渡平滑，适合一般用途</"
+"li><li><b>Lanczos3 算法</b>边缘锐利，但杂色较明显</li></ul></p>"
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:114
 #, kde-format
@@ -24590,6 +24606,13 @@ msgstr "缩放到图像大小"
 #, kde-format
 msgid "Adapt to Image Resolution (ppi)"
 msgstr "适应图像分辨率 (ppi)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: libs/ui/forms/wdgdlgfilelayer.ui:147
+#, fuzzy, kde-format
+#| msgid "in Filters"
+msgid "&Scaling Filter:"
+msgstr "滤镜"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -28499,7 +28522,7 @@ msgctxt "Brush Option Scatter"
 msgid "Scatter: %1%"
 msgstr "分散：%1%"
 
-#: libs/ui/kis_change_file_layer_command.h:22
+#: libs/ui/kis_change_file_layer_command.h:24
 msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "更改文件图层"
@@ -28589,19 +28612,19 @@ msgstr "添加到预制图案"
 msgid "This pattern already exists. Do you want to overwrite it?"
 msgstr "此图案已经存在。您想要覆盖它吗？"
 
-#: libs/ui/kis_file_layer.cpp:131
+#: libs/ui/kis_file_layer.cpp:133
 #, kde-format
 msgctxt "placeholder test for a warning when not file is set in the file layer"
 msgid "<No file name is set>"
 msgstr "<尚未设置文件名>"
 
-#: libs/ui/kis_file_layer.cpp:136
+#: libs/ui/kis_file_layer.cpp:138
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot find its linked file"
 msgid "Linked file not found: %1"
 msgstr "无法找到链接的文件：%1"
 
-#: libs/ui/kis_file_layer.cpp:139
+#: libs/ui/kis_file_layer.cpp:141
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot load its linked file"
 msgid "Failed to load linked file: %1"
@@ -28666,85 +28689,85 @@ msgstr "滤镜图层属性"
 msgid "Fill Layer Properties"
 msgstr "填充图层属性"
 
-#: libs/ui/kis_layer_manager.cc:305
+#: libs/ui/kis_layer_manager.cc:306
 #, kde-format
 msgid "File Layer Properties"
 msgstr "文件图层属性"
 
-#: libs/ui/kis_layer_manager.cc:314 libs/ui/kis_layer_manager.cc:964
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:969
 #, kde-format
 msgid "No file name specified"
 msgstr "未指定文件名"
 
-#: libs/ui/kis_layer_manager.cc:372
+#: libs/ui/kis_layer_manager.cc:377
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "更改克隆图层"
 
-#: libs/ui/kis_layer_manager.cc:481
+#: libs/ui/kis_layer_manager.cc:486
 msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "转换为动画图层"
 
-#: libs/ui/kis_layer_manager.cc:501
+#: libs/ui/kis_layer_manager.cc:506
 #, kde-format
 msgid "Save layers to..."
 msgstr "将图层保存至..."
 
-#: libs/ui/kis_layer_manager.cc:502
+#: libs/ui/kis_layer_manager.cc:507
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr "选择图层保存的位置。新文件图层将在此后将引用此位置的数据。"
 
-#: libs/ui/kis_layer_manager.cc:565
+#: libs/ui/kis_layer_manager.cc:570
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "转换为文件图层"
 
-#: libs/ui/kis_layer_manager.cc:682
+#: libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "New Filter Layer"
 msgstr "新建滤镜图层"
 
-#: libs/ui/kis_layer_manager.cc:731 libs/ui/kis_mimedata.cpp:314
+#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:314
 #, kde-format
 msgid "Fill Layer"
 msgstr "填充图层"
 
-#: libs/ui/kis_layer_manager.cc:758
+#: libs/ui/kis_layer_manager.cc:763
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "合并整个图像"
 
-#: libs/ui/kis_layer_manager.cc:759
+#: libs/ui/kis_layer_manager.cc:764
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "此图像包含隐藏图层，它们将在合并后被丢弃。您确定要继续合并该图像吗？"
 
-#: libs/ui/kis_layer_manager.cc:837
+#: libs/ui/kis_layer_manager.cc:842
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
 msgid_plural "Layers are locked"
 msgstr[0] "图层已锁定"
 
-#: libs/ui/kis_layer_manager.cc:858
+#: libs/ui/kis_layer_manager.cc:863
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "图层已锁定"
 
-#: libs/ui/kis_layer_manager.cc:914
+#: libs/ui/kis_layer_manager.cc:919
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "导出不可见图层组"
 
-#: libs/ui/kis_layer_manager.cc:917
+#: libs/ui/kis_layer_manager.cc:922
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "仅导出顶级图层组"
@@ -30691,64 +30714,64 @@ msgstr "无可用图片。"
 msgid "Use This Template"
 msgstr "加载此模板"
 
-#: libs/ui/KisView.cpp:760
+#: libs/ui/KisView.cpp:761
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "您不能在所选图层类型上拖放颜色。"
 
-#: libs/ui/KisView.cpp:768 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "图层已锁定且不可见。"
 
-#: libs/ui/KisView.cpp:770 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "图层已锁定。"
 
-#: libs/ui/KisView.cpp:772 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "图层不可见。"
 
-#: libs/ui/KisView.cpp:1171
+#: libs/ui/KisView.cpp:1172
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>图像<b>“%1”</b> 已被修改。</p><p>您想要保存它吗？</p>"
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1361
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "色彩校样不支持浮点通道。"
 
-#: libs/ui/KisView.cpp:1365
+#: libs/ui/KisView.cpp:1366
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "色彩校样已启用。"
 
-#: libs/ui/KisView.cpp:1367
+#: libs/ui/KisView.cpp:1368
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "色彩校样已关闭。"
 
-#: libs/ui/KisView.cpp:1379
+#: libs/ui/KisView.cpp:1380
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "色域超出警告不支持浮点通道。"
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1386
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "色域超出警告色已启用。"
 
-#: libs/ui/KisView.cpp:1387
+#: libs/ui/KisView.cpp:1388
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "但色彩校样尚未启用。"
 
-#: libs/ui/KisView.cpp:1390
+#: libs/ui/KisView.cpp:1391
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "色域超出警告色已关闭。"
@@ -47547,8 +47570,8 @@ msgstr ""
 "是否选择其他位置？"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
-#: plugins/impex/libkra/kis_kra_loader.cpp:1024
-#: plugins/impex/libkra/kis_kra_loader.cpp:1393
+#: plugins/impex/libkra/kis_kra_loader.cpp:1025
+#: plugins/impex/libkra/kis_kra_loader.cpp:1394
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -47710,7 +47733,7 @@ msgstr "图层 %1 包含不支持的类型：%2 。"
 msgid "Failure loading layer %1 of type: %2."
 msgstr "加载类型为 %2 的图层 %1 时失败。"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1019
+#: plugins/impex/libkra/kis_kra_loader.cpp:1020
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -47728,7 +47751,7 @@ msgstr ""
 "\n"
 "您想要手动指定该文件的位置吗？"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1388
+#: plugins/impex/libkra/kis_kra_loader.cpp:1389
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -58747,21 +58770,6 @@ msgstr "不可见的子图层也将被变形。请锁定不想被变形的图层
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "变形工具：对图层或选区生效"
-
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"<p>Select filtering mode:\n"
-"<ul><li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</"
-"li><li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</"
-"li><li><b>Bicubic</b> for smoother results.</li><li><b>Lanczos3</b> for "
-"sharp results. May produce aerials.</li></ul></p>"
-msgstr ""
-"<p>选择平滑算法：\n"
-"<ul><li><b>最近邻算法</b>不产生新颜色，适合像素画</li><li><b>双线性算法</b>减"
-"轻色块锯齿</li><li><b>双立方算法</b>过渡平滑，适合一般用途</"
-"li><li><b>Lanczos3 算法</b>边缘锐利，但杂色较明显</li></ul></p>"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:86
 #, kde-format

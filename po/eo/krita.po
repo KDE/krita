@@ -42,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-06 00:45+0000\n"
-"PO-Revision-Date: 2023-04-10 04:45+0100\n"
+"POT-Creation-Date: 2023-04-18 00:45+0000\n"
+"PO-Revision-Date: 2023-04-17 06:30+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -12846,7 +12846,7 @@ msgstr "Agordoj"
 msgid "&Help"
 msgstr "&Helpo"
 
-#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:126
+#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
 #, kde-format
@@ -16761,7 +16761,7 @@ msgstr "Malelekti"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:675 libs/ui/kis_layer_manager.cc:727
+#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Aldoni Ebenon"
@@ -17041,7 +17041,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Fono"
 
-#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:618
+#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "Pentra Tavolo"
@@ -17756,30 +17756,30 @@ msgstr ""
 "formato ne povas reprezenti ĉi tion, kaj la framdaŭro estos rondigita al la "
 "plej proksima milisekundo."
 
-#: libs/impex/KisExportCheckRegistry.cpp:104 libs/ui/kis_layer_manager.cc:647
+#: libs/impex/KisExportCheckRegistry.cpp:104 libs/ui/kis_layer_manager.cc:652
 #, kde-format
 msgid "Clone Layer"
 msgstr "Klona Tavolo"
 
-#: libs/impex/KisExportCheckRegistry.cpp:106 libs/ui/kis_layer_manager.cc:631
+#: libs/impex/KisExportCheckRegistry.cpp:106 libs/ui/kis_layer_manager.cc:636
 #: libs/ui/kis_node_manager.cpp:1514
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Grupo"
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:956
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:961
 #, kde-format
 msgid "File Layer"
 msgstr "Dosiera Tavolo"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:660
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:665
 #: plugins/impex/svg/kis_svg_import.cc:90
 #, kde-format
 msgid "Vector Layer"
 msgstr "Vektora Tavolo"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:682
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "Filter Layer"
 msgstr "Filtrila Tavolo"
@@ -19331,7 +19331,7 @@ msgstr "Elen"
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1167
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1168
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19383,8 +19383,8 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:920
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
-#: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
+#: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
 #: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
 #: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
@@ -19400,7 +19400,7 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1170
+#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1171
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20237,7 +20237,7 @@ msgid "Select All"
 msgstr "Elekti ĉion"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:785
+#: libs/ui/KisView.cpp:786
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Inundo Pleniga Tavolo"
@@ -22299,6 +22299,24 @@ msgstr "Ebenonomo:"
 #, kde-format
 msgid "No configuration options are available for this filter"
 msgstr "Neniuj agordaj opcioj disponeblas por ĉi tiu filtrilo"
+
+#: libs/ui/dialogs/kis_dlg_file_layer.cpp:49
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Select filtering mode:\n"
+"<ul><li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</"
+"li><li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</"
+"li><li><b>Bicubic</b> for smoother results.</li><li><b>Lanczos3</b> for "
+"sharp results. May produce aerials.</li></ul></p>"
+msgstr ""
+"<p>Elektu filtran reĝimon:\n"
+"<ul><li><b>Plej proksima najbaro</b> por piksela arto. Ne produktas novan "
+"koloron.</li><li><b>Dulineara</b> por areoj kun unuforma koloro por eviti "
+"artefaktojn.</li><li><b>Bikuba</b> por pli glataj rezultoj.</"
+"li><li><b>Lanczos3</b> por akraj rezultoj. Povas produkti antenojn.</li></"
+"ul></p>"
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:114
 #, kde-format
@@ -24722,6 +24740,13 @@ msgstr "Skali al Bilda Grandeco"
 #, kde-format
 msgid "Adapt to Image Resolution (ppi)"
 msgstr "Adaptiĝi al Bilda Rezolucio (ppi)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: libs/ui/forms/wdgdlgfilelayer.ui:147
+#, fuzzy, kde-format
+#| msgid "in Filters"
+msgid "&Scaling Filter:"
+msgstr "en Filtriloj"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -28691,7 +28716,7 @@ msgctxt "Brush Option Scatter"
 msgid "Scatter: %1%"
 msgstr "Disvastigo: %1%"
 
-#: libs/ui/kis_change_file_layer_command.h:22
+#: libs/ui/kis_change_file_layer_command.h:24
 msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Ŝanĝi Dosiertavolon"
@@ -28781,19 +28806,19 @@ msgstr "Aldoni al Antaŭdifinitaj Ŝablonoj"
 msgid "This pattern already exists. Do you want to overwrite it?"
 msgstr "Ĉi tiu ŝablono jam ekzistas. Ĉu vi volas anstataŭigi ĝin?"
 
-#: libs/ui/kis_file_layer.cpp:131
+#: libs/ui/kis_file_layer.cpp:133
 #, kde-format
 msgctxt "placeholder test for a warning when not file is set in the file layer"
 msgid "<No file name is set>"
 msgstr "<Neniu dosiernomo estas agordita>"
 
-#: libs/ui/kis_file_layer.cpp:136
+#: libs/ui/kis_file_layer.cpp:138
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot find its linked file"
 msgid "Linked file not found: %1"
 msgstr "Ligita dosiero ne trovita: %1"
 
-#: libs/ui/kis_file_layer.cpp:139
+#: libs/ui/kis_file_layer.cpp:141
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot load its linked file"
 msgid "Failed to load linked file: %1"
@@ -28860,32 +28885,32 @@ msgstr "Filtrila Tavolo Propraĵoj"
 msgid "Fill Layer Properties"
 msgstr "Plenig-Tavolaj Trajtoj"
 
-#: libs/ui/kis_layer_manager.cc:305
+#: libs/ui/kis_layer_manager.cc:306
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Propraĵoj de Dosiera Tavolo"
 
-#: libs/ui/kis_layer_manager.cc:314 libs/ui/kis_layer_manager.cc:964
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:969
 #, kde-format
 msgid "No file name specified"
 msgstr "Neniu dosiernomo specifita"
 
-#: libs/ui/kis_layer_manager.cc:372
+#: libs/ui/kis_layer_manager.cc:377
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "Ŝanĝi Klonan Tavolon"
 
-#: libs/ui/kis_layer_manager.cc:481
+#: libs/ui/kis_layer_manager.cc:486
 msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "Konverti al vigla tavolo"
 
-#: libs/ui/kis_layer_manager.cc:501
+#: libs/ui/kis_layer_manager.cc:506
 #, kde-format
 msgid "Save layers to..."
 msgstr "Konservi tavolojn al..."
 
-#: libs/ui/kis_layer_manager.cc:502
+#: libs/ui/kis_layer_manager.cc:507
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -28894,28 +28919,28 @@ msgstr ""
 "Elektu la lokon kie la tavolo estos konservita. La nova dosiertavolo tiam "
 "referencos ĉi tiun lokon."
 
-#: libs/ui/kis_layer_manager.cc:565
+#: libs/ui/kis_layer_manager.cc:570
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Konverti al dosiera tavolo"
 
-#: libs/ui/kis_layer_manager.cc:682
+#: libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Nova Filtrila Tavolo"
 
-#: libs/ui/kis_layer_manager.cc:731 libs/ui/kis_mimedata.cpp:314
+#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:314
 #, kde-format
 msgid "Fill Layer"
 msgstr "Plenigi Tavolon"
 
-#: libs/ui/kis_layer_manager.cc:758
+#: libs/ui/kis_layer_manager.cc:763
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Platigi Bildon"
 
-#: libs/ui/kis_layer_manager.cc:759
+#: libs/ui/kis_layer_manager.cc:764
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -28924,7 +28949,7 @@ msgstr ""
 "La bildo enhavas kaŝitajn tavolojn, kiuj estos perditaj. Ĉu vi volas platigi "
 "la bildon?"
 
-#: libs/ui/kis_layer_manager.cc:837
+#: libs/ui/kis_layer_manager.cc:842
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -28932,18 +28957,18 @@ msgid_plural "Layers are locked"
 msgstr[0] "Tavolo estas ŝlosita"
 msgstr[1] "Tavoloj estas ŝlositaj"
 
-#: libs/ui/kis_layer_manager.cc:858
+#: libs/ui/kis_layer_manager.cc:863
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Tavolo estas ŝlosita"
 
-#: libs/ui/kis_layer_manager.cc:914
+#: libs/ui/kis_layer_manager.cc:919
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Konverti Nevideblajn Grupojn"
 
-#: libs/ui/kis_layer_manager.cc:917
+#: libs/ui/kis_layer_manager.cc:922
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Eksporti Nur Supernivelajn Grupojn"
@@ -30908,27 +30933,27 @@ msgstr "Neniu bildo uzebla."
 msgid "Use This Template"
 msgstr "Uzi tiun ŝablonon"
 
-#: libs/ui/KisView.cpp:760
+#: libs/ui/KisView.cpp:761
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Vi ne povas treni kaj faligi kolorojn sur la elektita tavolspeco."
 
-#: libs/ui/KisView.cpp:768 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Tavolo estas ŝlosita kaj nevidebla."
 
-#: libs/ui/KisView.cpp:770 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "Tavolo estas ŝlosita."
 
-#: libs/ui/KisView.cpp:772 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Tavolo estas nevidebla."
 
-#: libs/ui/KisView.cpp:1171
+#: libs/ui/KisView.cpp:1172
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -30937,37 +30962,37 @@ msgstr ""
 "<p>La dokumento <b>'%1'</b> estas ŝanĝita.</p><p>Ĉu vi volas sekurigi ĝin?</"
 "p>"
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1361
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Soft Proofing ne funkcias en glitpunkto."
 
-#: libs/ui/KisView.cpp:1365
+#: libs/ui/KisView.cpp:1366
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Soft Proofing ŝaltita."
 
-#: libs/ui/KisView.cpp:1367
+#: libs/ui/KisView.cpp:1368
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Soft Proofing malŝaltita."
 
-#: libs/ui/KisView.cpp:1379
+#: libs/ui/KisView.cpp:1380
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Gamut-Avertoj ne funkcias en glitpunkto."
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1386
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Gamut-Avertoj ŝaltis."
 
-#: libs/ui/KisView.cpp:1387
+#: libs/ui/KisView.cpp:1388
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Sed Soft Proofing ankoraŭ estas for."
 
-#: libs/ui/KisView.cpp:1390
+#: libs/ui/KisView.cpp:1391
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Gamut-Avertoj malŝaltitaj."
@@ -48022,8 +48047,8 @@ msgstr ""
 "Ĉu vi volas elekti alian lokon?"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
-#: plugins/impex/libkra/kis_kra_loader.cpp:1024
-#: plugins/impex/libkra/kis_kra_loader.cpp:1393
+#: plugins/impex/libkra/kis_kra_loader.cpp:1025
+#: plugins/impex/libkra/kis_kra_loader.cpp:1394
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -48193,7 +48218,7 @@ msgstr "Tavolo %1 havas nesubtenan tipon: %2."
 msgid "Failure loading layer %1 of type: %2."
 msgstr "Malsukceso ŝarĝante tavolon %1 de tipo: %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1019
+#: plugins/impex/libkra/kis_kra_loader.cpp:1020
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -48211,7 +48236,7 @@ msgstr ""
 "\n"
 "Ĉu vi volas lokalizi ĝin permane?"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1388
+#: plugins/impex/libkra/kis_kra_loader.cpp:1389
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -49218,12 +49243,11 @@ msgid ""
 msgstr ""
 "<title>Kulminaĵoj</title><p>Elektu ĉi tie la plej elstaran tondmetodon:</"
 "p><p><ul><li><emphasis strong='true'>Fila blanka</emphasis>: tranĉu ĉiujn "
-"lumaĵojn al solida blanka</emphasis><li><emphasis strong='true'>Unclip</"
-"emphasis>: lasi lumaĵojn netonditaj en diversaj nuancoj de rozo</"
-"li><li><emphasis strong='true'>Miksaĵo</emphasis>:Miksi tonditajn kaj "
-"netonditajn valorojn kune por laŭpaŝa fado al blanka</li><li><emphasis "
-"strong='true'>Rekonstrui</emphasis>: rekonstrui lumaĵojn uzante "
-"nivelvaloron</li></ul></p>"
+"lumaĵojn al solida blanka</li><li><emphasis strong='true'>Unclip</emphasis>: "
+"lasi lumaĵojn netonditaj en diversaj nuancoj de rozo</li><li><emphasis "
+"strong='true'>Miksaĵo</emphasis>:Miksi tonditajn kaj netonditajn valorojn "
+"kune por laŭpaŝa fado al blanka</li><li><emphasis strong='true'>Rekonstrui</"
+"emphasis>: rekonstrui lumaĵojn uzante nivelvaloron</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:513
 #, kde-format
@@ -59449,23 +59473,6 @@ msgstr ""
 msgid "Transform a layer or a selection"
 msgstr "Transformi tavolon aŭ elekton"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
-#, kde-format
-msgctxt "@info:tooltip"
-msgid ""
-"<p>Select filtering mode:\n"
-"<ul><li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</"
-"li><li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</"
-"li><li><b>Bicubic</b> for smoother results.</li><li><b>Lanczos3</b> for "
-"sharp results. May produce aerials.</li></ul></p>"
-msgstr ""
-"<p>Elektu filtran reĝimon:\n"
-"<ul><li><b>Plej proksima najbaro</b> por piksela arto. Ne produktas novan "
-"koloron.</li><li><b>Dulineara</b> por areoj kun unuforma koloro por eviti "
-"artefaktojn.</li><li><b>Bikuba</b> por pli glataj rezultoj.</"
-"li><li><b>Lanczos3</b> por akraj rezultoj. Povas produkti antenojn.</li></"
-"ul></p>"
-
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:86
 #, kde-format
 msgid "Default (Affine)"
@@ -60209,186 +60216,3 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referenca Bilda Ilo"
-
-#~ msgid "Start merging time"
-#~ msgstr "Komenci kunfandon de tempo"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "The amount of time after a merged stroke before merging again"
-#~ msgstr "La kvanto da tempo post kunfandita streko antaŭ kunfandi denove"
-
-#~ msgid "Group time"
-#~ msgstr "Grupa tempo"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The amount of time every stroke should be apart from its previous stroke "
-#~ "to be classified in one group"
-#~ msgstr ""
-#~ "La kvanto de tempo ĉiu bato devus esti krom sia antaŭa bato por esti "
-#~ "klasifikita en unu grupon"
-
-#~ msgid "Split Strokes"
-#~ msgstr "Split Batoj"
-
-#~ msgid "Color Rate"
-#~ msgstr "Kolora Indico"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Displacement Option"
-#~ msgstr "Movo Opcio"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Total Random"
-#~ msgstr "Fonto -> Tuta Hazarda"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern"
-#~ msgstr "Fonto -> Skemo"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern Locked"
-#~ msgstr "Fonto -> Ŝablono Ŝlosita"
-
-#~ msgid "0 px"
-#~ msgstr "0 px"
-
-#~ msgid "0 s"
-#~ msgstr "0 s"
-
-#~ msgid "1000"
-#~ msgstr "1000"
-
-#~ msgid "30 px"
-#~ msgstr "30 px"
-
-#~ msgid "3 s"
-#~ msgstr "3 s"
-
-#~ msgid "%1 s"
-#~ msgstr "%1 s"
-
-#~ msgctxt "option name"
-#~ msgid "Filter"
-#~ msgstr "Filtrilo"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "\"%1\" does not support scaled preview (non-linear filter)"
-#~ msgstr "\"%1\" ne subtenas skalan antaŭrigardon (nelinia filtrilo)"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Luminosity value of the brush that will not change the painting color. "
-#~ "All brush pixels darker than neutral point will paint with darker color, "
-#~ "pixels lighter than neutral point — lighter."
-#~ msgstr ""
-#~ "Lumeca valoro de la peniko, kiu ne ŝanĝos la pentran koloron. Ĉiuj "
-#~ "penikopikseloj pli malhelaj ol neŭtrala punkto pentros kun pli malhela "
-#~ "koloro, pikseloj pli malpezaj ol neŭtrala punkto — pli helaj."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Brightness correction for the brush"
-#~ msgstr "Brileco korekto por la peniko"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Contrast correction for the brush"
-#~ msgstr "Kontrasta korekto por la peniko"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush tip does not have color channels. The brush will work "
-#~ "in \"Mask\" mode."
-#~ msgstr ""
-#~ "La elektita penikopinto ne havas kolorkanalojn. La peniko funkcios en "
-#~ "reĝimo \"Masko\"."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush engine does not support \"Color\" or \"Lightness\" "
-#~ "modes. The brush will work in \"Mask\" mode."
-#~ msgstr ""
-#~ "La elektita penikomotoro ne subtenas reĝimojn \"Koloro\" aŭ \"Leĝeco\". "
-#~ "La peniko funkcios en reĝimo \"Masko\"."
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Brush average: %1\n"
-#~ "Adjusted average: %2"
-#~ msgstr ""
-#~ "Penikomezumo: %1\n"
-#~ "Alĝustigita mezumo: %2"
-
-#~ msgid "Mirrored"
-#~ msgstr "Spegulita"
-
-#~ msgid "Not mirrored"
-#~ msgstr "Ne spegulita"
-
-#~ msgid "Align the brush preview outline to the pixel grid"
-#~ msgstr "Vicigi la antaŭrigardan skizon de la peniko al la piksela krado"
-
-#~ msgid " s"
-#~ msgstr "s"
-
-#~ msgid "Select Layer Mode"
-#~ msgstr "Elekti Tavolreĝimon"
-
-#~ msgid "Select Multiple Layer Mode"
-#~ msgstr "Elekti Plurtavolan Reĝimon"
-
-#~ msgid "HDR Warning.................................."
-#~ msgstr "HDR-Averto.................................."
-
-#~ msgid ""
-#~ "<b>Note: Krita will need to be restarted for changes to take effect</b>"
-#~ msgstr "<b>Noto: Krita devos esti rekomencita por ke ŝanĝoj efektiviĝu</b>"
-
-#~ msgid ""
-#~ "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on "
-#~ "another free program called FFmpeg to turn frame-by-frame animations into "
-#~ "video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-#~ "i><br><br>            To learn more about setting up Krita for rendering "
-#~ "animations, <a href=\"https://docs.krita.org/en/reference_manual/"
-#~ "render_animation.html#setting-up-krita-for-exporting-animations\">please "
-#~ "visit this section of our User Manual.</a>"
-#~ msgstr ""
-#~ "<b>Krita ne povas trovi FFmpeg!</b><br> <i>Krita dependas de alia senpaga "
-#~ "programo nomata FFmpeg por transformi kadrajn animaciojn en "
-#~ "videodosierojn. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-#~ "i><br><br> Por lerni pli pri agordo de Krita por bildigi animaciojn, <a "
-#~ "href=\"https://docs.krita.org/en/reference_manual/render_animation."
-#~ "html#setting-up-krita-for-exporting-animations\">bonvolu viziti ĉi tiun "
-#~ "sekcion de nia Manlibro.</a>"
-
-#~ msgid "Please extract ffmpeg from the archive first."
-#~ msgstr "Bonvolu eltiri ffmpeg unue el la arkivo."
-
-#~ msgid ""
-#~ "This is a source code archive. Please download the application archive "
-#~ "('Windows Builds'), unpack it and then provide the path to the extracted "
-#~ "ffmpeg file."
-#~ msgstr ""
-#~ "Ĉi tio estas fontkoda arkivo. Bonvolu elŝuti la aplikaĵarkivon (\"Windows "
-#~ "Konstruaĵoj\"), malpakigi ĝin kaj poste provizi la vojon al la ĉerpita "
-#~ "ffmpeg-dosiero."
-
-#~ msgid "This is a source code archive. Please install ffmpeg instead."
-#~ msgstr "Ĉi tio estas fontkoda arkivo. Bonvolu instali ffmpeg anstataŭe."
-
-#~ msgid "Colu&mns:"
-#~ msgstr "Kolu&mnoj:"
-
-#~ msgid "&Rows:"
-#~ msgstr "&Vicoj:"
-
-#~ msgid "HSV Sliders to Show"
-#~ msgstr "HSV Glitiloj por Montri"
-
-#~ msgid "HSL Sliders to Show"
-#~ msgstr "HSL Glitiloj por Montri"
-
-#~ msgid "HSI Sliders to Show"
-#~ msgstr "HSI Glitiloj por Montri"
-
-#~ msgid "HSY' Sliders to Show"
-#~ msgstr "HSY' Glitiloj por Montri"

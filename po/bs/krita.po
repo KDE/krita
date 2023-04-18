@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-06 00:45+0000\n"
+"POT-Creation-Date: 2023-04-18 00:45+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -13250,7 +13250,7 @@ msgstr "P&odešavanja"
 msgid "&Help"
 msgstr "&Pomoć"
 
-#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:126
+#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
 #, kde-format
@@ -17226,7 +17226,7 @@ msgstr "Skini označenje"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:675 libs/ui/kis_layer_manager.cc:727
+#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Dodaj sloj"
@@ -17524,7 +17524,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Pozadina"
 
-#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:618
+#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:623
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&Slikarski sloj"
@@ -18302,30 +18302,30 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:104 libs/ui/kis_layer_manager.cc:647
+#: libs/impex/KisExportCheckRegistry.cpp:104 libs/ui/kis_layer_manager.cc:652
 #, fuzzy, kde-format
 msgid "Clone Layer"
 msgstr "&Kloniraj sloj"
 
-#: libs/impex/KisExportCheckRegistry.cpp:106 libs/ui/kis_layer_manager.cc:631
+#: libs/impex/KisExportCheckRegistry.cpp:106 libs/ui/kis_layer_manager.cc:636
 #: libs/ui/kis_node_manager.cpp:1514
 #, fuzzy, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Grupa:"
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:956
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:961
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "&Datoteka sloj"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:660
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:665
 #: plugins/impex/svg/kis_svg_import.cc:90
 #, kde-format
 msgid "Vector Layer"
 msgstr "Vektor sloj"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:682
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:687
 #, fuzzy, kde-format
 msgid "Filter Layer"
 msgstr "&Datoteka sloj"
@@ -20018,7 +20018,7 @@ msgstr "Izlaz"
 #: libs/pigment/resources/KoColorSet.cpp:1466
 #: libs/pigment/resources/KoColorSet.cpp:1680
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1167
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1168
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -20070,8 +20070,8 @@ msgstr "Upravljane Resurs Bundlima"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:920
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
-#: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
+#: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
 #: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
 #: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
@@ -20087,7 +20087,7 @@ msgstr "Upravljane Resurs Bundlima"
 #: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
 #: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1170
+#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1171
 #: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20989,7 +20989,7 @@ msgid "Select All"
 msgstr "Izaberi sve"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:785
+#: libs/ui/KisView.cpp:786
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Flood Fill sloj"
@@ -23119,6 +23119,30 @@ msgstr "Ime sloja:"
 #, kde-format
 msgid "No configuration options are available for this filter"
 msgstr "Ovaj filter nema opcija za podešavanje"
+
+#: libs/ui/dialogs/kis_dlg_file_layer.cpp:49
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid ""
+#| "<para>Select filtering mode:\n"
+#| "<list><item><interface>Bilinear</interface> for areas with uniform color "
+#| "to avoid artifacts</item><item><interface>Bicubic</interface> for "
+#| "smoother results</item><item><interface>Lanczos3</interface> for sharp "
+#| "results. May produce aerials.</item></list></para>"
+msgctxt "@info:tooltip"
+msgid ""
+"<p>Select filtering mode:\n"
+"<ul><li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</"
+"li><li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</"
+"li><li><b>Bicubic</b> for smoother results.</li><li><b>Lanczos3</b> for "
+"sharp results. May produce aerials.</li></ul></p>"
+msgstr ""
+"<para>Izaberite režim filtriranja:\n"
+"<list><item><interface>Bilinearno</interface> za područja s uniformnom bojom "
+"da izbjegnete negativne efekte</item><item><interface>Bikubno</interface> za "
+"glađe rezultate</item><item><interface>Lanczos3</interface> za oštre "
+"rezultate. Može proizvesti zrak.</item></list></para>"
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:114
 #, kde-format
@@ -25606,6 +25630,12 @@ msgstr "Skaliraj prema veličini slike"
 #, kde-format
 msgid "Adapt to Image Resolution (ppi)"
 msgstr "Prilagodi na rezoluciju slike (ppi)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: libs/ui/forms/wdgdlgfilelayer.ui:147
+#, fuzzy, kde-format
+msgid "&Scaling Filter:"
+msgstr "Filteri:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -29625,7 +29655,7 @@ msgctxt "Brush Option Scatter"
 msgid "Scatter: %1%"
 msgstr "Rasipanje"
 
-#: libs/ui/kis_change_file_layer_command.h:22
+#: libs/ui/kis_change_file_layer_command.h:24
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Change Filter"
@@ -29732,21 +29762,21 @@ msgstr ""
 "Profil sa tim imenom već postoji.\n"
 "Želite li ga prepisati?"
 
-#: libs/ui/kis_file_layer.cpp:131
+#: libs/ui/kis_file_layer.cpp:133
 #, fuzzy, kde-format
 #| msgid "No file name specified"
 msgctxt "placeholder test for a warning when not file is set in the file layer"
 msgid "<No file name is set>"
 msgstr "Nije navedeno ime datoteke."
 
-#: libs/ui/kis_file_layer.cpp:136
+#: libs/ui/kis_file_layer.cpp:138
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgctxt "a tooltip shown when a file layer cannot find its linked file"
 msgid "Linked file not found: %1"
 msgstr "Datoteka nije pronađena"
 
-#: libs/ui/kis_file_layer.cpp:139
+#: libs/ui/kis_file_layer.cpp:141
 #, fuzzy, kde-format
 #| msgid "Failed to download remote file"
 msgctxt "a tooltip shown when a file layer cannot load its linked file"
@@ -29814,25 +29844,25 @@ msgstr "Svojstva filterskog sloja"
 msgid "Fill Layer Properties"
 msgstr "Postavke sloja popune"
 
-#: libs/ui/kis_layer_manager.cc:305
+#: libs/ui/kis_layer_manager.cc:306
 #, fuzzy, kde-format
 #| msgid "Filter Layer Properties"
 msgid "File Layer Properties"
 msgstr "Svojstva filterskog sloja"
 
-#: libs/ui/kis_layer_manager.cc:314 libs/ui/kis_layer_manager.cc:964
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:969
 #, kde-format
 msgid "No file name specified"
 msgstr "Nije navedeno ime datoteke."
 
-#: libs/ui/kis_layer_manager.cc:372
+#: libs/ui/kis_layer_manager.cc:377
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Change Filter"
 msgid "Change Clone Layer"
 msgstr "Promjeni filter"
 
-#: libs/ui/kis_layer_manager.cc:481
+#: libs/ui/kis_layer_manager.cc:486
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert to a Paint Layer"
@@ -29840,19 +29870,19 @@ msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "Konvertuj u Paint sloj"
 
-#: libs/ui/kis_layer_manager.cc:501
+#: libs/ui/kis_layer_manager.cc:506
 #, fuzzy, kde-format
 msgid "Save layers to..."
 msgstr "Spremi sloj/masku..."
 
-#: libs/ui/kis_layer_manager.cc:502
+#: libs/ui/kis_layer_manager.cc:507
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:565
+#: libs/ui/kis_layer_manager.cc:570
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert to a Paint Layer"
@@ -29860,23 +29890,23 @@ msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Konvertuj u Paint sloj"
 
-#: libs/ui/kis_layer_manager.cc:682
+#: libs/ui/kis_layer_manager.cc:687
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Novi filterski sloj"
 
-#: libs/ui/kis_layer_manager.cc:731 libs/ui/kis_mimedata.cpp:314
+#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:314
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "&Datoteka sloj"
 
-#: libs/ui/kis_layer_manager.cc:758
+#: libs/ui/kis_layer_manager.cc:763
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Spljošti sliku"
 
-#: libs/ui/kis_layer_manager.cc:759
+#: libs/ui/kis_layer_manager.cc:764
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -29885,7 +29915,7 @@ msgstr ""
 "Slika sadrži skrivene slojeve, koji će biti izgubljeni. Želite li izravnati "
 "sliku?"
 
-#: libs/ui/kis_layer_manager.cc:837
+#: libs/ui/kis_layer_manager.cc:842
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgctxt "floating message in layer manager"
@@ -29895,19 +29925,19 @@ msgstr[0] "Sloj je zaključan"
 msgstr[1] "Sloj je zaključan"
 msgstr[2] "Sloj je zaključan"
 
-#: libs/ui/kis_layer_manager.cc:858
+#: libs/ui/kis_layer_manager.cc:863
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Sloj je zaključan"
 
-#: libs/ui/kis_layer_manager.cc:914
+#: libs/ui/kis_layer_manager.cc:919
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Prevedi nevidljive grupe"
 
-#: libs/ui/kis_layer_manager.cc:917
+#: libs/ui/kis_layer_manager.cc:922
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Izvezi samo grupe na najvišem nivou"
@@ -31966,66 +31996,66 @@ msgstr "Niti jedna slika nije dostupna."
 msgid "Use This Template"
 msgstr "Koristi ovaj šablon"
 
-#: libs/ui/KisView.cpp:760
+#: libs/ui/KisView.cpp:761
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:768 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Sloj je zaključan i nevidljiv."
 
-#: libs/ui/KisView.cpp:770 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "Sloj je zaključan"
 
-#: libs/ui/KisView.cpp:772 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Sloj je nevidljiv"
 
-#: libs/ui/KisView.cpp:1171
+#: libs/ui/KisView.cpp:1172
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Dokument <b>'%1'</b> je mijenjan.</p><p>Želite li ga snimiti?</p>"
 
-#: libs/ui/KisView.cpp:1360
+#: libs/ui/KisView.cpp:1361
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Prikaži dekoracije"
 
-#: libs/ui/KisView.cpp:1365
+#: libs/ui/KisView.cpp:1366
 #, fuzzy, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Prikaži dekoracije"
 
-#: libs/ui/KisView.cpp:1367
+#: libs/ui/KisView.cpp:1368
 #, fuzzy, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Prikaži dekoracije"
 
-#: libs/ui/KisView.cpp:1379
+#: libs/ui/KisView.cpp:1380
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Upozorenje"
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1386
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned on."
 msgstr "Upozorenje"
 
-#: libs/ui/KisView.cpp:1387
+#: libs/ui/KisView.cpp:1388
 #, fuzzy, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Prikaži dekoracije"
 
-#: libs/ui/KisView.cpp:1390
+#: libs/ui/KisView.cpp:1391
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned off."
@@ -49583,8 +49613,8 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
-#: plugins/impex/libkra/kis_kra_loader.cpp:1024
-#: plugins/impex/libkra/kis_kra_loader.cpp:1393
+#: plugins/impex/libkra/kis_kra_loader.cpp:1025
+#: plugins/impex/libkra/kis_kra_loader.cpp:1394
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -49747,7 +49777,7 @@ msgstr "Sloj %1 ima nepodržan tip: %2."
 msgid "Failure loading layer %1 of type: %2."
 msgstr "Neuspjelo učitavanje sloja %1 tipa: %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1019
+#: plugins/impex/libkra/kis_kra_loader.cpp:1020
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid ""
@@ -49765,7 +49795,7 @@ msgstr ""
 "Datoteke povezane na sloj datoteku s imenom \" %1 \" nije pronađena.<nl/><nl/"
 ">Očekivani putanja:<nl/>%2<nl/><nl/>Želite li da ga ručno locirati ?"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1388
+#: plugins/impex/libkra/kis_kra_loader.cpp:1389
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid ""
@@ -61621,29 +61651,6 @@ msgstr ""
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Transformiši sloj ili izbor"
-
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "<para>Select filtering mode:\n"
-#| "<list><item><interface>Bilinear</interface> for areas with uniform color "
-#| "to avoid artifacts</item><item><interface>Bicubic</interface> for "
-#| "smoother results</item><item><interface>Lanczos3</interface> for sharp "
-#| "results. May produce aerials.</item></list></para>"
-msgctxt "@info:tooltip"
-msgid ""
-"<p>Select filtering mode:\n"
-"<ul><li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</"
-"li><li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</"
-"li><li><b>Bicubic</b> for smoother results.</li><li><b>Lanczos3</b> for "
-"sharp results. May produce aerials.</li></ul></p>"
-msgstr ""
-"<para>Izaberite režim filtriranja:\n"
-"<list><item><interface>Bilinearno</interface> za područja s uniformnom bojom "
-"da izbjegnete negativne efekte</item><item><interface>Bikubno</interface> za "
-"glađe rezultate</item><item><interface>Lanczos3</interface> za oštre "
-"rezultate. Može proizvesti zrak.</item></list></para>"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:86
 #, kde-format

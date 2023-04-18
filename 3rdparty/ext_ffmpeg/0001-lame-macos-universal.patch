@@ -1,0 +1,10 @@
+diff --git a/include/libmp3lame.sym b/include/libmp3lame.sym
+index ff7d318..fd120f5 100644
+--- a/include/libmp3lame.sym
++++ b/include/libmp3lame.sym
+@@ -1,5 +1,4 @@
+ lame_init
+-lame_init_old
+ lame_set_num_samples
+ lame_get_num_samples
+ lame_set_in_samplerate

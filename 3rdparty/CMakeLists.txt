@@ -261,6 +261,11 @@ if (MSYS)
 endif()
 
 if (APPLE)
+    set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR})
+    include(KritaExternalProject)
+
+    set(PARENT_CMAKE_SOURCE_DIR ${CMAKE_SOURCE_DIR})
+    string(REPLACE ";" "$<SEMICOLON>" CMAKE_OSX_ARCHITECTURES_ESCAPED "${CMAKE_OSX_ARCHITECTURES}")
     set(GLOBAL_PROFILE ${GLOBAL_PROFILE}
                         -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
                         -DCMAKE_INCLUDE_PATH:PATH=${CMAKE_PREFIX_PATH}/include
@@ -270,9 +275,24 @@ if (APPLE)
                         -DBUILD_WITH_INSTALL_RPATH=ON
                         -DAPPLE_SUPPRESS_X11_WARNING=ON
                         -DCMAKE_FIND_FRAMEWORK=LAST
-                        -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
-         )
+                        -DCMAKE_OSX_ARCHITECTURES:STRING=${CMAKE_OSX_ARCHITECTURES_ESCAPED}
+    )
+
+    list(LENGTH CMAKE_OSX_ARCHITECTURES MACOS_ARCHS)
+    list(JOIN CMAKE_OSX_ARCHITECTURES " " CMAKE_OSX_ARCHITECTURES_STR)
+
+    foreach(arch ${CMAKE_OSX_ARCHITECTURES})
+        string(APPEND MACOS_ARCH_FLAGS "-arch ${arch} ")
+    endforeach()
+    string(STRIP "${MACOS_ARCH_FLAGS}" MACOS_ARCH_FLAGS)
+
+    set(GLOBAL_AUTOMAKE_PROFILE 
+        "CFLAGS=${MACOS_ARCH_FLAGS}"
+        "CXXFLAGS=${MACOS_ARCH_FLAGS}"
+    )
+
     set(PATCH_COMMAND patch)
+
 endif ()
 
 if (ANDROID)
@@ -403,7 +423,9 @@ if (ANDROID)
 endif()
 
 if (CMAKE_OSX_ARCHITECTURES)
-    set(CROSS_COMPILE_FLAGS "${CROSS_COMPILE_FLAGS} -arch ${CMAKE_OSX_ARCHITECTURES}")
+    foreach(arch ${CMAKE_OSX_ARCHITECTURES})
+        string(APPEND CROSS_COMPILE_FLAGS_${arch} "${CROSS_COMPILE_FLAGS} -arch ${arch}")
+    endforeach()
 endif()
 
 mesonify(SECURITY_C_FLAGS _security_c_flags)
@@ -512,10 +534,16 @@ configure_file(
     ${CMAKE_CURRENT_BINARY_DIR}/meson-compiler.ini
 )
 
-configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/meson-host.ini.in
-    ${CMAKE_CURRENT_BINARY_DIR}/meson-host.ini
-)
+# Prepare file for crosscompile multiple archs
+if (CMAKE_OSX_ARCHITECTURES)
+    foreach(arch ${CMAKE_OSX_ARCHITECTURES})
+        mesonify(CROSS_COMPILE_FLAGS_${arch} _cross_compile_flags)
+        configure_file(
+            ${CMAKE_CURRENT_SOURCE_DIR}/meson-compiler.ini.in
+            ${CMAKE_CURRENT_BINARY_DIR}/meson-compiler_${arch}.ini
+        )
+    endforeach()
+endif()
 
 LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake/modules/avcodecs")
 

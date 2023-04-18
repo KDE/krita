@@ -110,13 +110,16 @@ elseif(ANDROID)
        DEPENDEES install
    )
 else()
+  if(APPLE)
+      set(MACOS_BOOST_ARGS architecture=arm+x86 cxxflags="${MACOS_ARCH_FLAGS}")
+  endif()
 	ExternalProject_Add( ext_boost
         	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
           URL https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.gz
           URL_HASH SHA256=4b2136f98bdd1f5857f1c3dea9ac2018effe65286cf251534b6ae20cc45e1847
 
         	CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.sh --prefix=${PREFIX_ext_boost} --with-libraries=system
-	        BUILD_COMMAND <SOURCE_DIR>/b2 -j${SUBMAKE_JOBS} install
+	        BUILD_COMMAND <SOURCE_DIR>/b2 ${MACOS_BOOST_ARGS} -j${SUBMAKE_JOBS} install
 	        INSTALL_COMMAND ""
         	INSTALL_DIR ${PREFIX_ext_boost}
 

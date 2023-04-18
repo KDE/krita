@@ -23,7 +23,7 @@ if (WIN32)
 
         DEPENDS ext_python ${NINJA_DEP}
     )
-elseif(NOT CMAKE_CROSSCOMPILING OR APPLE)
+elseif(NOT CMAKE_CROSSCOMPILING)
     set(_meson_prefix "${PREFIX_ext_meson}")
 
     ExternalProject_Add( ext_meson

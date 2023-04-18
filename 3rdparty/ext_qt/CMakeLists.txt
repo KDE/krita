@@ -217,36 +217,40 @@ elseif (NOT APPLE)
   )
 else( APPLE )
 
-      if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "arm64")
-        set(QT_DEVICE_OPTION "-device-option" "QMAKE_APPLE_DEVICE_ARCHS=arm64")
-      endif()
-
-      ExternalProject_Add(
-        ext_qt
-        GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
-        GIT_TAG ${QT_GIT_TAG}
-        GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtmultimedia qtsvg qtmacextras qttranslations
-        GIT_SUBMODULES_RECURSE false
-        GIT_PROGRESS true
-        GIT_REMOTE_UPDATE_STRATEGY REBASE
-
-        CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
-
-        INSTALL_DIR ${EXTPREFIX_qt}
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure
+    set(MACOS_QT_CONFIGURE_OPS
         -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdoc -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland
-            -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtwebengine -skip qtxmlpatterns
-            -skip qtcharts -skip qtdatavis3d  -skip qtgamepad -skip qtnetworkauth
-            -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -nomake examples -nomake tools -no-compile-examples
-            -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -icu -no-mtdev -system-zlib -qt-pcre -qt-sqlite
-            -opensource -confirm-license  -openssl-linked -prefix ${EXTPREFIX_qt}
-            ${QT_DEVICE_OPTION}
+        -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtwebengine -skip qtxmlpatterns
+        -skip qtcharts -skip qtdatavis3d  -skip qtgamepad -skip qtnetworkauth
+        -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -nomake examples -nomake tools -no-compile-examples
+        -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -icu -no-mtdev -system-zlib -qt-pcre -qt-sqlite
+        -opensource -confirm-license -openssl-linked -prefix ${EXTPREFIX_qt}
+    )
 
-        BUILD_COMMAND ${QT_BUILD_COMMAND}
-        INSTALL_COMMAND ${QT_INSTALL_COMMAND}
+    kis_ExternalProject_Add_macos(
+      ext_qt
 
-        UPDATE_COMMAND ""
-        BUILD_IN_SOURCE OFF
-        DEPENDS ${ZLIB_DEP} ext_icu
-      )
+      GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
+      GIT_TAG ${QT_GIT_TAG}
+      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtmultimedia qtsvg qtmacextras qttranslations
+      GIT_SUBMODULES_RECURSE false
+      GIT_PROGRESS true
+      GIT_REMOTE_UPDATE_STRATEGY REBASE
+
+      WORKING_DIRECTORY <BINARY_DIR>-@ARCH@
+
+      CONFIGURE_COMMAND -e "OPENSSL_LIBS=-L${EXTPREFIX_qt}/lib -lssl -lcrypto"
+          <SOURCE_DIR>/configure
+          ${MACOS_QT_CONFIGURE_OPS}
+          -device-option QMAKE_APPLE_DEVICE_ARCHS=@ARCH@
+
+      BUILD_COMMAND ${QT_BUILD_COMMAND}
+
+      DEPENDS ${ZLIB_DEP} ext_icu ext_openssl
+    )
+
+    # Qt needs separate builds for universal compilation before qt6
+    foreach(ARCH ${CMAKE_OSX_ARCHITECTURES})
+        mkdir_build_arch_dir(${ARCH})
+    endforeach()
+
 endif()

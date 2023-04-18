@@ -16,7 +16,7 @@ ExternalProject_Add( ext_iconv
 	URL https://ftp.gnu.org/gnu/libiconv/libiconv-1.17.tar.gz
 	URL_HASH SHA256=8f74213b56238c85a50a5329f77e06198771e70dd9a739779f4c02f65d971313
 
-    INSTALL_DIR ${PREFIX_ext_iconv}
+	INSTALL_DIR ${PREFIX_ext_iconv}
 	CONFIGURE_COMMAND ./configure --prefix=${PREFIX_ext_iconv}  ${GLOBAL_AUTOMAKE_PROFILE}
 
     UPDATE_COMMAND ""

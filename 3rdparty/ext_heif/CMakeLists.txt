@@ -61,23 +61,43 @@ endif()
 if(PERL_FOUND OR USE_STRAWBERRYPERL)
     message(STATUS "Building AVIF support using libaom.")
 
-    ExternalProject_Add(
-        ext_libaom
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    if(APPLE)
+        kis_ExternalProject_Add_macos(
+            ext_libaom
+            URL https://storage.googleapis.com/aom-releases/libaom-3.6.0.tar.gz
+            URL_HASH SHA256=a4a6c0fab685da743b796662a928fcdf7ae60594edc306efb73e78a17ea6cde6
 
-        URL https://storage.googleapis.com/aom-releases/libaom-3.6.0.tar.gz
-        URL_HASH SHA256=a4a6c0fab685da743b796662a928fcdf7ae60594edc306efb73e78a17ea6cde6
+            # Shared libraries cause a race condition in MSVC because
+            # both export and static targets output the same file.
+            # Do NOT build them that way unless you want the FFmpeg build
+            # to fail in turn!
+            CONFIGURE_ARGS ${LIBAOM_EXTRA_CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif}
+                -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_SHARED_LIBS=OFF
+                -DENABLE_EXAMPLES=OFF -DENABLE_TESTDATA=OFF -DENABLE_TESTS=OFF 
+                -DENABLE_TOOLS=OFF ${GLOBAL_PROFILE}
 
-        # Shared libraries cause a race condition in MSVC because
-        # both export and static targets output the same file.
-        # Do NOT build them that way unless you want the FFmpeg build
-        # to fail in turn!
-        CMAKE_ARGS ${LIBAOM_EXTRA_CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_SHARED_LIBS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_TESTDATA=OFF -DENABLE_TESTS=OFF -DENABLE_TOOLS=OFF ${GLOBAL_PROFILE}
+            DEPENDS ext_nasm ${LIBAOM_STRAWBERRYPERL_DEP}
+        )
 
-        UPDATE_COMMAND ""
+    else()
+        ExternalProject_Add(
+            ext_libaom
+            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-        DEPENDS ext_nasm ${LIBAOM_STRAWBERRYPERL_DEP}
-    )
+            URL https://storage.googleapis.com/aom-releases/libaom-3.6.0.tar.gz
+            URL_HASH SHA256=a4a6c0fab685da743b796662a928fcdf7ae60594edc306efb73e78a17ea6cde6
+
+            # Shared libraries cause a race condition in MSVC because
+            # both export and static targets output the same file.
+            # Do NOT build them that way unless you want the FFmpeg build
+            # to fail in turn!
+            CMAKE_ARGS ${LIBAOM_EXTRA_CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_SHARED_LIBS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_TESTDATA=OFF -DENABLE_TESTS=OFF -DENABLE_TOOLS=OFF ${GLOBAL_PROFILE}
+
+            UPDATE_COMMAND ""
+
+            DEPENDS ext_nasm ${LIBAOM_STRAWBERRYPERL_DEP}
+        )
+    endif()
 
     set(EXTRA_AVIF_DEPS ext_libaom)
 else()

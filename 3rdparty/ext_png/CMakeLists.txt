@@ -1,4 +1,20 @@
 SET(PREFIX_ext_png "${EXTPREFIX}" )
+
+if(APPLE)
+
+    kis_ExternalProject_Add_macos(
+        ext_png
+        URL https://downloads.sourceforge.net/project/libpng/libpng16/1.6.38/libpng-1.6.38.tar.xz
+        URL_HASH SHA256=b3683e8b8111ebf6f1ac004ebb6b0c975cd310ec469d98364388e9cedbfa68be
+
+        CONFIGURE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_png}
+            -DPNG_TESTS=OFF
+            -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+            
+        DEPENDS ${ZLIB_DEP}
+    )
+
+else()
 ExternalProject_Add( ext_png
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://downloads.sourceforge.net/project/libpng/libpng16/1.6.38/libpng-1.6.38.tar.xz
@@ -11,3 +27,4 @@ ExternalProject_Add( ext_png
 
     DEPENDS ${ZLIB_DEP}
 )
+endif()

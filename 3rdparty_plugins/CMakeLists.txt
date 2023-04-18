@@ -107,12 +107,16 @@ if (WIN32)
 endif()
 
 if (APPLE)
+    string(REPLACE ";" "$<SEMICOLON>" CMAKE_OSX_ARCHITECTURES_ESCAPED "${CMAKE_OSX_ARCHITECTURES}")
     set(GLOBAL_PROFILE ${GLOBAL_PROFILE}
                         -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
                         -DCMAKE_MACOSX_RPATH=ON
                         -DKDE_SKIP_RPATH_SETTINGS=ON
                         -DBUILD_WITH_INSTALL_RPATH=ON
-                        -DAPPLE_SUPPRESS_X11_WARNING=ON)
+                        -DAPPLE_SUPPRESS_X11_WARNING=ON
+                        -DCMAKE_FIND_FRAMEWORK=LAST
+                        -DCMAKE_OSX_ARCHITECTURES:STRING=${CMAKE_OSX_ARCHITECTURES_ESCAPED}
+                        )
     set(PATCH_COMMAND patch)
 endif ()
 

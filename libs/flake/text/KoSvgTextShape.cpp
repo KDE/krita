@@ -110,6 +110,13 @@ struct CharacterResult {
 
     KoSvgText::TextAnchor anchor = KoSvgText::AnchorStart;
     KoSvgText::Direction direction = KoSvgText::DirectionLeftToRight;
+
+    QTransform finalTransform() const {
+        QTransform tf =
+            QTransform::fromTranslate(finalPosition.x(), finalPosition.y());
+        tf.rotateRadians(rotate);
+        return tf;
+    }
 };
 
 class KoSvgTextShape::Private
@@ -243,7 +250,7 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
 
     QPainterPath chunk;
     int currentIndex = 0;
-    if (!d->result.empty()) {
+    if (!d->result.isEmpty()) {
         d->paintPaths(painter, this->outline(), this, d->result, chunk, currentIndex);
     }
     /* Debug
@@ -926,9 +933,7 @@ void KoSvgTextShape::relayout() const
         const int j = chunk.text.size();
         for (int i = globalIndex; i < globalIndex + j; i++) {
             if (result.at(i).addressable && !result.at(i).hidden) {
-                QTransform tf =
-                    QTransform::fromTranslate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
-                tf.rotateRadians(result.at(i).rotate);
+                const QTransform tf = result.at(i).finalTransform();
                 wrapper.addCharacterRect(tf.mapRect(result.at(i).boundingBox));
             }
         }
@@ -2342,8 +2347,7 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape, QVector<Ch
                     const qreal mid = characterResultOnPath(cr, length, offset, isHorizontal, isClosed);
                     if (!cr.hidden) {
                         if (stretch && !cr.path.isEmpty()) {
-                            QTransform tf = QTransform::fromTranslate(cr.finalPosition.x(), cr.finalPosition.y());
-                            tf.rotateRadians(cr.rotate);
+                            const QTransform tf = cr.finalTransform();
                             QPainterPath glyph = stretchGlyphOnPath(tf.map(cr.path), path, isHorizontal, offset, isClosed);
                             cr.path = glyph;
                         }
@@ -2366,8 +2370,7 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape, QVector<Ch
                             cr.finalPosition = pos - (o * vectorT) + (cr.finalPosition.x() * vectorN);
                         }
                         if (stretch && !cr.path.isEmpty()) {
-                            QTransform tf = QTransform::fromTranslate(cr.finalPosition.x(), cr.finalPosition.y());
-                            tf.rotateRadians(cr.rotate);
+                            const QTransform tf = cr.finalTransform();
                             cr.path = tf.inverted().map(cr.path);
                         }
                     }
@@ -2452,9 +2455,18 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
 
         for (int i = currentIndex; i < j; i++) {
             if (result.at(i).addressable && !result.at(i).hidden) {
-                QTransform tf =
-                    QTransform::fromTranslate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
-                tf.rotateRadians(result.at(i).rotate);
+                const QTransform tf = result.at(i).finalTransform();
+
+                /**
+                 * Make sure the character touches the painter's clip rect,
+                 * otherwise we can just skip it
+                 */
+                const QRectF boundingRect = tf.mapRect(result.at(i).boundingBox);
+                const QRectF clipRect = painter.clipBoundingRect();
+                if (boundingRect.isEmpty() ||
+                    (!clipRect.contains(boundingRect) &&
+                     !clipRect.intersects(boundingRect))) continue;
+
                 /* Debug
                 painter.save();
                 painter.setBrush(Qt::transparent);
@@ -2575,7 +2587,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
 
     } else {
         Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-            paintPaths(painter, outlineRect, child, result, chunk, currentIndex);
+            paintPaths(painter, child->outline(), child, result, chunk, currentIndex);
         }
     }
     if (textDecorations.contains(KoSvgText::DecorationLineThrough)) {
@@ -2630,9 +2642,7 @@ QList<KoShape *> KoSvgTextShape::Private::collectPaths(const KoShape *rootShape,
         const int j = currentIndex + chunkShape->layoutInterface()->numChars(true);
         for (int i = currentIndex; i < j; i++) {
             if (result.at(i).addressable && !result.at(i).hidden) {
-                QTransform tf =
-                    QTransform::fromTranslate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
-                tf.rotateRadians(result.at(i).rotate);
+                const QTransform tf = result.at(i).finalTransform();
                 QPainterPath p = tf.map(result.at(i).path);
                 if (!result.at(i).colorLayers.empty()) {
                     for (int c = 0; c < result.at(i).colorLayers.size(); c++) {

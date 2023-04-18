@@ -127,12 +127,15 @@ void KisKeyframeChannel::moveKeyframe(KisKeyframeChannel *sourceChannel, int sou
     KIS_ASSERT(sourceChannel && targetChannel);
 
     KisKeyframeSP sourceKeyframe = sourceChannel->keyframeAt(sourceTime);
+    if (!sourceKeyframe) return;
+
     sourceChannel->removeKeyframe(sourceTime, parentUndoCmd);
 
     KisKeyframeSP targetKeyframe = sourceKeyframe;
     if (sourceChannel != targetChannel) {
         // When "moving" Keyframes between channels, a new copy is made for that channel.
         targetKeyframe = sourceKeyframe->duplicate(targetChannel);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(targetKeyframe);
     }
 
     targetChannel->insertKeyframe(targetTime, targetKeyframe, parentUndoCmd);
@@ -143,7 +146,10 @@ void KisKeyframeChannel::copyKeyframe(const KisKeyframeChannel *sourceChannel, i
     KIS_ASSERT(sourceChannel && targetChannel);
 
     KisKeyframeSP sourceKeyframe = sourceChannel->keyframeAt(sourceTime);
+    if (!sourceKeyframe) return;
+
     KisKeyframeSP copiedKeyframe = sourceKeyframe->duplicate(targetChannel);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(copiedKeyframe);
 
     targetChannel->insertKeyframe(targetTime, copiedKeyframe, parentUndoCmd);
 }
@@ -154,6 +160,7 @@ void KisKeyframeChannel::swapKeyframes(KisKeyframeChannel *channelA, int timeA, 
 
     // Store B.
     KisKeyframeSP keyframeB = channelB->keyframeAt(timeB);
+    if (!keyframeB) return;
 
     // Move A -> B
     moveKeyframe(channelA, timeA, channelB, timeB, parentUndoCmd);
@@ -161,6 +168,7 @@ void KisKeyframeChannel::swapKeyframes(KisKeyframeChannel *channelA, int timeA, 
     // Insert B -> A
     if (channelA != channelB) {
         keyframeB = keyframeB->duplicate(channelA);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(keyframeB);
     }
     channelA->insertKeyframe(timeA, keyframeB, parentUndoCmd);
 }

@@ -123,6 +123,13 @@ bool KoStopGradient::stopsAt(KoGradientStop& leftStop, KoGradientStop& rightStop
 {
     if (!m_stops.count())
         return false;
+
+    KIS_SAFE_ASSERT_RECOVER(!qIsNaN(t)) { // if it's nan, it would crash in the last 'else'
+        leftStop = m_stops.first();
+        rightStop = KoGradientStop(-std::numeric_limits<double>::infinity(), leftStop.color, leftStop.type);
+        return true;
+    }
+
     if (t <= m_stops.first().position || m_stops.count() == 1) {
         // we have only one stop or t is before the first stop
         leftStop = m_stops.first();

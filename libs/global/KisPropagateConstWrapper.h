@@ -6,7 +6,7 @@
 #ifndef KISPROPAGATECONSTWRAPPER_H
 #define KISPROPAGATECONSTWRAPPER_H
 
-#if __has_include(<experimental/propagate_const>)
+#if __has_include(<experimental/propagate_const>) && !defined( __cppcheck__)
 #include <experimental/propagate_const>
 #else
 #include "3rdparty/propagate_const.h"

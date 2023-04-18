@@ -6,7 +6,7 @@
 #ifndef KISPROPAGATECONSTWRAPPER_H
 #define KISPROPAGATECONSTWRAPPER_H
 
-#if defined(__clang__) || defined(__GNUC__)
+#if __has_include(<experimental/propagate_const>)
 #include <experimental/propagate_const>
 #else
 #include "3rdparty/propagate_const.h"

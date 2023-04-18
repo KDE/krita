@@ -2402,7 +2402,7 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape, QVector<Ch
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::paintPaths(QPainter &painter,
-                                         const QPainterPath &outlineRect,
+                                         const QPainterPath &rootOutline,
                                          const KoShape *rootShape,
                                          QVector<CharacterResult> &result,
                                          QPainterPath &chunk,
@@ -2438,10 +2438,10 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
 
     if (chunkShape->isTextNode()) {
         const int j = currentIndex + chunkShape->layoutInterface()->numChars(true);
-        KoClipMaskPainter fillPainter(&painter, painter.transform().mapRect(outlineRect.boundingRect()));
+        KoClipMaskPainter fillPainter(&painter, painter.transform().mapRect(chunkShape->outlineRect()));
         if (chunkShape->background()) {
-            chunkShape->background()->paint(*fillPainter.shapePainter(), outlineRect);
-            fillPainter.maskPainter()->fillPath(outlineRect, Qt::black);
+            chunkShape->background()->paint(*fillPainter.shapePainter(), rootOutline);
+            fillPainter.maskPainter()->fillPath(rootOutline, Qt::black);
             if (textRendering != OptimizeSpeed) {
                 fillPainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
                 fillPainter.maskPainter()->setRenderHint(QPainter::SmoothPixmapTransform, true);
@@ -2550,12 +2550,12 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
 
             if (stroke) {
                 if (stroke->lineBrush().gradient()) {
-                    KoClipMaskPainter strokePainter(&painter, painter.transform().mapRect(outlineRect.boundingRect()));
-                    strokePainter.shapePainter()->fillRect(outlineRect.boundingRect(), stroke->lineBrush());
+                    KoClipMaskPainter strokePainter(&painter, painter.transform().mapRect(chunkShape->outlineRect()));
+                    strokePainter.shapePainter()->fillRect(rootOutline.boundingRect(), stroke->lineBrush());
                     maskStroke = KoShapeStrokeSP(new KoShapeStroke(*stroke.data()));
                     maskStroke->setColor(Qt::white);
                     maskStroke->setLineBrush(Qt::white);
-                    strokePainter.maskPainter()->fillPath(outlineRect, Qt::black);
+                    strokePainter.maskPainter()->fillPath(rootOutline, Qt::black);
                     if (textRendering != OptimizeSpeed) {
                         strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
                     } else {
@@ -2587,7 +2587,11 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
 
     } else {
         Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-            paintPaths(painter, child->outline(), child, result, chunk, currentIndex);
+            /**
+             * We pass the root outline to make sure that all gradient and
+             * object-size-related decorations are rendered correctly.
+             */
+            paintPaths(painter, rootOutline, child, result, chunk, currentIndex);
         }
     }
     if (textDecorations.contains(KoSvgText::DecorationLineThrough)) {

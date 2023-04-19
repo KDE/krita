@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-18 00:45+0000\n"
-"PO-Revision-Date: 2023-04-06 10:40+0100\n"
+"POT-Creation-Date: 2023-04-19 00:47+0000\n"
+"PO-Revision-Date: 2023-04-18 09:31+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -16553,25 +16553,25 @@ msgstr ""
 "documento, o objecto de texto será convertido para o formato do Krita 5, o "
 "qual deixará de ser compatível com o Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2689
+#: libs/flake/text/KoSvgTextShape.cpp:2703
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2691
-#: libs/flake/text/KoSvgTextShape.cpp:2699
+#: libs/flake/text/KoSvgTextShape.cpp:2705
+#: libs/flake/text/KoSvgTextShape.cpp:2713
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma de Texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2697
+#: libs/flake/text/KoSvgTextShape.cpp:2711
 #, kde-format
 msgid "SVG Text"
 msgstr "Texto em SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2711
-#: libs/flake/text/KoSvgTextShape.cpp:2726
+#: libs/flake/text/KoSvgTextShape.cpp:2725
+#: libs/flake/text/KoSvgTextShape.cpp:2740
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -23551,7 +23551,7 @@ msgid ""
 "enough)"
 msgstr ""
 "O número de últimos traços que o Krita não irá reunir (mesmo que antigos o "
-"sufciente)"
+"suficiente)"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
@@ -23604,7 +23604,7 @@ msgstr ""
 "tornar o seu histórico mais arrumado. O Krita irá manter à mesma algumas das "
 "últimas acções por reunir, de acordo com as opções \"Atraso antes de reunir "
 "os traços\" e \"Excluir os últimos traços da reunião\". Sempre que uma acção "
-"ficar desactualizada, usanndo o limite de tempo e desde que esta acção não "
+"ficar desactualizada, usando o limite de tempo e desde que esta acção não "
 "seja excluída pela opação \"Excluir os últimos traços da reunião\", o Krita "
 "irá tentar reunir esta acção num gurpo. Os grupos são formados com base nas "
 "opções \"Atraso máximo para agrupar os traços\" e \"Duração máxima do grupo"
@@ -25074,10 +25074,9 @@ msgstr "Adaptar à Resolução da Imagem (ppp)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
-#, fuzzy, kde-format
-#| msgid "in Filters"
+#, kde-format
 msgid "&Scaling Filter:"
-msgstr "nos Filtros"
+msgstr "Filtro da E&scala:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38

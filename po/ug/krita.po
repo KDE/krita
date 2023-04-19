@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-18 00:45+0000\n"
+"POT-Creation-Date: 2023-04-19 00:47+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -16676,28 +16676,28 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:2689
+#: libs/flake/text/KoSvgTextShape.cpp:2703
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "تېكىست"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2691
-#: libs/flake/text/KoSvgTextShape.cpp:2699
+#: libs/flake/text/KoSvgTextShape.cpp:2705
+#: libs/flake/text/KoSvgTextShape.cpp:2713
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "تېكىست شەكلى"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2697
+#: libs/flake/text/KoSvgTextShape.cpp:2711
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " تېكىست:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2711
-#: libs/flake/text/KoSvgTextShape.cpp:2726
+#: libs/flake/text/KoSvgTextShape.cpp:2725
+#: libs/flake/text/KoSvgTextShape.cpp:2740
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"

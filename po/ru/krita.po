@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-18 00:45+0000\n"
+"POT-Creation-Date: 2023-04-19 00:47+0000\n"
 "PO-Revision-Date: 2023-03-12 19:06+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -16434,26 +16434,26 @@ msgstr ""
 "сохранении документа объект текста будет преобразован в формат Krita 5, "
 "который больше не будет совместим с Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2689
+#: libs/flake/text/KoSvgTextShape.cpp:2703
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2691
-#: libs/flake/text/KoSvgTextShape.cpp:2699
+#: libs/flake/text/KoSvgTextShape.cpp:2705
+#: libs/flake/text/KoSvgTextShape.cpp:2713
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Форма текста SVG"
 
 # ?
-#: libs/flake/text/KoSvgTextShape.cpp:2697
+#: libs/flake/text/KoSvgTextShape.cpp:2711
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2711
-#: libs/flake/text/KoSvgTextShape.cpp:2726
+#: libs/flake/text/KoSvgTextShape.cpp:2725
+#: libs/flake/text/KoSvgTextShape.cpp:2740
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"

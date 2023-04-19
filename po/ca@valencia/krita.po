@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-18 00:45+0000\n"
-"PO-Revision-Date: 2023-04-06 17:52+0100\n"
+"POT-Creation-Date: 2023-04-19 00:47+0000\n"
+"PO-Revision-Date: 2023-04-18 10:35+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -16267,25 +16267,25 @@ msgstr ""
 "document, l'objecte de text es convertirà al format de Krita 5, el qual ja "
 "no serà admés per Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2689
+#: libs/flake/text/KoSvgTextShape.cpp:2703
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2691
-#: libs/flake/text/KoSvgTextShape.cpp:2699
+#: libs/flake/text/KoSvgTextShape.cpp:2705
+#: libs/flake/text/KoSvgTextShape.cpp:2713
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma de text SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2697
+#: libs/flake/text/KoSvgTextShape.cpp:2711
 #, kde-format
 msgid "SVG Text"
 msgstr "Text SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2711
-#: libs/flake/text/KoSvgTextShape.cpp:2726
+#: libs/flake/text/KoSvgTextShape.cpp:2725
+#: libs/flake/text/KoSvgTextShape.cpp:2740
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -24802,10 +24802,9 @@ msgstr "Adapta a la resolució de la imatge (PPI)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
-#, fuzzy, kde-format
-#| msgid "in Filters"
+#, kde-format
 msgid "&Scaling Filter:"
-msgstr "als filtres"
+msgstr "Filtre d'e&scalat:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38

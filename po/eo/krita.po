@@ -42,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-18 00:45+0000\n"
-"PO-Revision-Date: 2023-04-17 06:30+0100\n"
+"POT-Creation-Date: 2023-04-19 00:47+0000\n"
+"PO-Revision-Date: 2023-04-18 06:31+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1047,7 +1047,7 @@ msgstr "Parolvezikoj de Pipro & Karoto"
 #, kde-format
 msgctxt "./krita/data/symbols/preset_icons.svg"
 msgid "Krita Brush Preset Icon Library"
-msgstr "Krita Peniko Antaŭmetita Ikono-Biblioteko"
+msgstr "Krita Peniko Antaŭmetita Piktogramo-Biblioteko"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -6505,7 +6505,7 @@ msgstr "Z- Test pressure"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:gradients/BG-Krita2.ggr"
 msgid "BG-Krita2. Gradient background for brush preset icons."
-msgstr "BG-Krita2. Gradienta fono por peniko antaŭfiksitaj ikonoj."
+msgstr "BG-Krita2. Gradienta fono por peniko antaŭfiksitaj piktogramoj."
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:gradients/GPS-eye-_Blue_.ggr:2
@@ -7023,7 +7023,7 @@ msgstr "Akvarelo"
 #, kde-format
 msgctxt "./krita/data/gradients/BG-Krita2.ggr"
 msgid "BG-Krita2. Gradient background for brush preset icons."
-msgstr "BG-Krita2. Gradienta fono por peniko antaŭfiksitaj ikonoj."
+msgstr "BG-Krita2. Gradienta fono por peniko antaŭfiksitaj piktogramoj."
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/gradients/GPS-eye-_Blue_.ggr:2
@@ -8275,7 +8275,7 @@ msgstr "Montru Android-protokolon por cimraportoj."
 #, kde-format
 msgctxt "action"
 msgid "Show crash log for bug reports."
-msgstr "Montru kraŝprotokolon por cimraportoj."
+msgstr "Montru paneoprotokolon por cimraportoj."
 
 #. i18n: context: text @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
@@ -9222,7 +9222,7 @@ msgid ""
 "Shows global selection as a usual selection mask in <interface>Layers</"
 "interface> docker"
 msgstr ""
-"Montras tutmondan elekton kiel kutiman elektomaskon en la doktoro "
+"Montras ĉiean elekton kiel kutiman elektomaskon en la doktoro "
 "<interface>Tavoloj</interface>"
 
 #. i18n: context: iconText @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
@@ -10909,7 +10909,7 @@ msgstr "Aldonu skalarajn ŝlosilkadrojn"
 #, kde-format
 msgctxt "action"
 msgid "Adds keyframe to control scalar property"
-msgstr "Aldonas ŝlosilkadron por kontroli skalaran posedaĵon"
+msgstr "Aldonas ŝlosilkadron por regi skalaran proprecon"
 
 #. i18n: context: text @ Action (remove_scalar_keyframe), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2233
@@ -12971,7 +12971,7 @@ msgstr "Konservi kiel"
 #, kde-format
 msgctxt "action"
 msgid "Sessions..."
-msgstr "Sesioj..."
+msgstr "Seancoj..."
 
 #. i18n: context: toolTip @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:69
@@ -12985,7 +12985,7 @@ msgstr "Malfermi seancan administranton"
 #, kde-format
 msgctxt "action"
 msgid "Sessions"
-msgstr "Sesioj"
+msgstr "Seancoj"
 
 #. i18n: context: text @ Action (file_import_file), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:80
@@ -16259,25 +16259,25 @@ msgstr ""
 "la dokumenton, la tekstobjekto estos konvertita al Krita 5-formato kiu ne "
 "plu kongruos kun Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2689
+#: libs/flake/text/KoSvgTextShape.cpp:2703
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Teksto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2691
-#: libs/flake/text/KoSvgTextShape.cpp:2699
+#: libs/flake/text/KoSvgTextShape.cpp:2705
+#: libs/flake/text/KoSvgTextShape.cpp:2713
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Teksto Formo"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2697
+#: libs/flake/text/KoSvgTextShape.cpp:2711
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Teksto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2711
-#: libs/flake/text/KoSvgTextShape.cpp:2726
+#: libs/flake/text/KoSvgTextShape.cpp:2725
+#: libs/flake/text/KoSvgTextShape.cpp:2740
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17995,7 +17995,7 @@ msgstr "Krita Fenestra Aranĝo"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Krita Session"
-msgstr "Krita Sesio"
+msgstr "Krita Seanco"
 
 #: libs/koplugin/KisMimeDatabase.cpp:279
 #, kde-format
@@ -19732,7 +19732,7 @@ msgstr "Fenestraj Aranĝoj"
 #, kde-format
 msgctxt "resource type"
 msgid "Sessions"
-msgstr "Sesioj"
+msgstr "Seancoj"
 
 #: libs/resources/KisResourceTypes.cpp:52
 #, kde-format
@@ -21158,7 +21158,7 @@ msgstr "desegno"
 #, kde-format
 msgctxt "webp preset option name"
 msgid "icon"
-msgstr "ikono"
+msgstr "piktogramo"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:89
 #, kde-format
@@ -21182,7 +21182,7 @@ msgstr "teksto"
 #, kde-format
 msgctxt "paletegen status mode option name"
 msgid "Global/Full"
-msgstr "Tutmonda/Plena"
+msgstr "Ĉiea/Plena"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:94
 #, kde-format
@@ -22222,7 +22222,7 @@ msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
 "and more.</i></p></body></html>"
 msgstr ""
-".</p><p><i>Por subteni la disvolviĝon de Krita per konsiloj, ikonoj, "
+".</p><p><i>Por subteni la disvolviĝon de Krita per konsiloj, piktogramoj, "
 "penikoroj kaj pli.</i></p></body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:136
@@ -23460,7 +23460,7 @@ msgstr "Konservi Peniko-Agordon"
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:133
 #, kde-format
 msgid "Preset Icon Library"
-msgstr "Antaŭdifinita Ikono-Biblioteko"
+msgstr "Antaŭdifinita Piktogramo-Biblioteko"
 
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.cpp:32
 #, kde-format
@@ -23502,12 +23502,12 @@ msgstr "bone"
 #: libs/ui/dialogs/KisSessionManagerDialog.cpp:71
 #, kde-format
 msgid "Create session"
-msgstr "Krei sesion"
+msgstr "Krei seancon"
 
 #: libs/ui/dialogs/KisSessionManagerDialog.cpp:72
 #, kde-format
 msgid "Session name:"
-msgstr "Nomo de la sesio:"
+msgstr "Nomo de la seanco:"
 
 #: libs/ui/dialogs/KisSessionManagerDialog.cpp:92
 #, kde-format
@@ -24902,7 +24902,7 @@ msgstr "Kursoro"
 #: libs/ui/forms/wdggeneralsettings.ui:61
 #, kde-format
 msgid "Brush Cursor Icon:"
-msgstr "Penika Kursoro-Ikono:"
+msgstr "Penika Kursoro-Piktogramo:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: libs/ui/forms/wdggeneralsettings.ui:83
@@ -26419,7 +26419,7 @@ msgstr "Malnetejo"
 #: libs/ui/forms/wdgpaintopsettings.ui:843
 #, kde-format
 msgid "Fill area with brush preset icon"
-msgstr "Plenigi areon per peniko antaŭfiksita ikono"
+msgstr "Plenigi areon per peniko antaŭfiksita piktogramo"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, fillLayer)
 #: libs/ui/forms/wdgpaintopsettings.ui:862
@@ -26766,7 +26766,7 @@ msgstr "Animacia Kaŝmemoro"
 #: libs/ui/forms/wdgperformancesettings.ui:433
 #, kde-format
 msgid "Cache Storage Backend"
-msgstr "Kaŝmemoro Stokado Backend"
+msgstr "Kaŝmemor-Konserveja Backend"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optInMemory)
 #: libs/ui/forms/wdgperformancesettings.ui:439
@@ -26834,7 +26834,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Redonu malgrandigitan version de la kadro se la bildo "
 "estas pli granda ol la provizita limo. Certigu, ke vi ebligas ĉi tiun opcion "
-"kiam vi uzas surdiskan stokadon.</p></body></html>"
+"kiam vi uzas surdiskan konservejo-backend.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCachedFramesSizeLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:471
@@ -27061,7 +27061,7 @@ msgstr ""
 #: libs/ui/forms/wdgpreseticonlibrary.ui:51
 #, kde-format
 msgid "Emblem icon:"
-msgstr "Emblema ikono:"
+msgstr "Emblema piktogramo:"
 
 #. i18n: ectx: property (toolTip), widget (QListView, vwOptional)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:58
@@ -27430,7 +27430,7 @@ msgstr "Linia koloro"
 #: libs/ui/forms/wdgtabletsettings.ui:28
 #, kde-format
 msgid "Input Pressure Global Curve"
-msgstr "Eniga Premo Tutmonda Kurbo"
+msgstr "Eniga Premo Ĉiea Kurbo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgtabletsettings.ui:61
@@ -31056,7 +31056,7 @@ msgid ""
 msgstr ""
 "<p>Vi uzas la Microsoft Store-pakaĵversion de Krita. Kvankam Krita povas "
 "esti agordita por meti rimedojn sub la lokon de la uzanto AppData, Vindozo "
-"efektive povas stoki la dosierojn ene de privata aplika loko.</p>\n"
+"efektive povas konservi la dosierojn ene de privata aplika loko.</p>\n"
 "<p>Vi devus kontroli ambaŭ lokojn por determini kie troviĝas la dosieroj.</"
 "p>\n"
 "<p><b>Uzanto AppData</b>:<br/>\n"
@@ -31924,7 +31924,7 @@ msgstr "&Tremo:"
 #: libs/ui/layerstyles/wdgKisLayerStyleAngleSelector.ui:54
 #, kde-format
 msgid "Use global light"
-msgstr "Uzi tutmondan lumon"
+msgstr "Uzi ĉiean lumon"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMasterFxSwitch)
 #: libs/ui/layerstyles/wdglayerstyles.ui:23
@@ -32311,7 +32311,7 @@ msgstr "Ilujo"
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
 #, kde-format
 msgid "Icon Size"
-msgstr "Ikono Grandeco"
+msgstr "Piktograma Grandeco"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:144
 #, kde-format
@@ -32457,7 +32457,7 @@ msgstr "Propra Segmentita Gradiento"
 #, kde-format
 msgctxt "Set the gradient chooser to show icons instead of a list"
 msgid "Icon view"
-msgstr "Ikono-vido"
+msgstr "Piktogramo-vido"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:184
 #, kde-format
@@ -32889,7 +32889,7 @@ msgid ""
 msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/RGB_color_space\">RGB (Ruĝa, "
 "Verda, Blua)</a></b>, estas la kolormodelo uzata de ekranoj kaj aliaj "
-"lumbazitaj amaskomunikiloj.<br/>RGB estas aldona kolormodelo: aldonado de "
+"lumbazitaj datumportiloj.<br/>RGB estas aldona kolormodelo: aldonado de "
 "koloroj igas ilin pli helaj. Ĉi tiu kolormodelo estas la plej ampleksa el "
 "ĉiuj kolormodeloj, kaj estas rekomendita kiel modelo por pentrado, kiun vi "
 "povas poste konverti al aliaj spacoj. RGB ankaŭ estas la rekomendinda "
@@ -32910,8 +32910,8 @@ msgid ""
 msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/CMYK_color_model\">CMYK (Cyan, "
 "Magenta, Yellow, Key)</a></b>, estas la modelo uzata de presiloj kaj aliaj "
-"ink-bazitaj amaskomunikiloj.<br/>CMYK estas subtraha modelo, tio signifas, "
-"ke aldonado de koloroj kune mallumigos ilin. Ĉar CMYK-profiloj estas tre "
+"ink-bazitaj datumportiloj.<br/>CMYK estas subtraha modelo, tio signifas, ke "
+"aldonado de koloroj kune mallumigos ilin. Ĉar CMYK-profiloj estas tre "
 "specifaj por presilo, oni rekomendas labori en RGB-spaco, kaj poste konverti "
 "al CMYK-profilo, prefere unu liverita de via presilo. <br/>CMYK <b>ne</b> "
 "estas rekomendita por pentrado. Bedaŭrinde, Krita ne povas preni koloraĵojn "
@@ -35737,7 +35737,7 @@ msgid ""
 msgstr ""
 "<html>Vi ne devas esti programaro por esti membro de la KDE-teamo. Vi povas "
 "aliĝi al la naciaj teamoj, kiuj tradukas programinterfacojn. Vi povas "
-"provizi grafikojn, temojn, sonojn kaj plibonigitan dokumentadon. Vi decidas!"
+"provizi grafikojn, etosojn, sonojn kaj plibonigitan dokumentadon. Vi decidas!"
 "<br /><br />Vizitu <a href=\"%1\">%1</a> por informoj pri iuj projektoj, en "
 "kiuj vi povas partopreni.<br /><br />Se vi bezonas pli da informoj aŭ "
 "dokumentoj, tiam vizito al <a href=\"%2\">%2</a> provizos al vi tion, kion "
@@ -36212,7 +36212,7 @@ msgid ""
 msgstr ""
 "La klavkombinaĵo '%1' ankaŭ estas uzata por la norma ago \"%2\" kiun iuj "
 "aplikaĵoj uzas.\n"
-"Ĉu vi vere volas uzi ĝin ankaŭ kiel tutmondan ŝparvojon?"
+"Ĉu vi vere volas uzi ĝin ankaŭ kiel ĉiean ŝparvojon?"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:585
 #, kde-format
@@ -36440,12 +36440,12 @@ msgstr "Nur Teksto"
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:312
 #, kde-format
 msgid "Text Alongside Icons"
-msgstr "Teksto Apud Ikonoj"
+msgstr "Teksto Apud Piktogramoj"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:313
 #, kde-format
 msgid "Text Under Icons"
-msgstr "Teksto Sub Ikonoj"
+msgstr "Teksto Sub Piktogramoj"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:336
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:357
@@ -36579,7 +36579,7 @@ msgstr "Fiksa Longo"
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:160
 #, kde-format
 msgid "Global Color:"
-msgstr "Tutmonda Koloro:"
+msgstr "Ĉiea Koloro:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useCustomAssistantColor)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:209
@@ -37774,7 +37774,7 @@ msgstr "Forigi audio"
 #, kde-format
 msgctxt "@item:inmenu, slider"
 msgid "Volume:"
-msgstr "Volumo:"
+msgstr "Laŭteco:"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:286
 #, kde-format
@@ -37890,7 +37890,7 @@ msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
 msgstr[0] "Forigi Ŝlosilkadron"
-msgstr[1] "Remove Ŝlosilkadrojn"
+msgstr[1] "Forigi Ŝlosilkadrojn"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:304
 #, kde-format
@@ -37975,7 +37975,7 @@ msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
 msgid_plural "Remove %1 frames and shift"
 msgstr[0] "Forigi kadron kaj ŝovi"
-msgstr[1] "Remove %1 kadrojn kaj ŝovi"
+msgstr[1] "Forigi %1 kadrojn kaj ŝovi"
 
 #: plugins/dockers/animation/KisTimeBasedItemModel.cpp:431
 msgctxt "(qtundo-format)"
@@ -38525,7 +38525,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
-"Montras tutmondan elekton kiel kutiman elektomaskon en <b>Tavoloj</b>-doker"
+"Montras ĉiean elekton kiel kutiman elektomaskon en <b>Tavoloj</b>-doker"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:317
 #, kde-format
@@ -42426,8 +42426,8 @@ msgid ""
 "bar and in toolbars as required. A string to use KDE's image loading system, "
 "or a custom QPixmap or QIcon, or None."
 msgstr ""
-"La ikono asociita kun ĉi tiu ago. Ĝi estas montrita apud teksto en la "
-"menubreto kaj en ilbretoj laŭbezone. Ŝnuro por uzi la bildŝargan sistemon de "
+"La piktogramo asociita kun ĉi tiu ago. Ĝi estas montrita apud teksto en la "
+"menubreto kaj en ilbretoj laŭbezone. Ĉeno por uzi la bildŝargan sistemon de "
 "KDE, aŭ kutiman QPixmap aŭ QIcon, aŭ Neniun."
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, shortcut)
@@ -47194,7 +47194,7 @@ msgid ""
 "<html><head/><body><p>Store document metadata that is in the document "
 "information. This will override any layer metadata.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Stoki dokumentmetadatenojn kiuj estas en la "
+"<html><head/><body><p>Konservi dokumentmetadatenojn kiuj estas en la "
 "dokumentinformo. Ĉi tio anstataŭigos ajnajn tavolmetadatumojn.</p></body></"
 "html>"
 
@@ -47205,7 +47205,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:797
 #, kde-format
 msgid "Store Document Metadata"
-msgstr "Stoki Dokumentajn Metadatumojn"
+msgstr "Konservi Dokumentajn Metadatumojn"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:343
@@ -47660,8 +47660,8 @@ msgid ""
 "Applications like Google Chrome expect HDR images to store their color "
 "profile as CICP values. You can adjust the ICC profile conversion below."
 msgstr ""
-"Aplikoj kiel Google Chrome atendas HDR-bildojn stoki sian kolorprofilon kiel "
-"CICP-valoroj. Vi povas ĝustigi la ICC-profilkonverton sube."
+"Aplikoj kiel Google Chrome atendas HDR-bildojn konservi sian kolorprofilon "
+"kiel CICP-valoroj. Vi povas ĝustigi la ICC-profilkonverton sube."
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:329
@@ -47815,8 +47815,8 @@ msgid ""
 "Determines the order in which 256x256 regions are stored in the codestream "
 "for progressive rendering."
 msgstr ""
-"Determinas la ordon en kiu 256x256 regionoj estas stokitaj en la kodfluo por "
-"progresema bildigo."
+"Determinas la ordon en kiu 256x256 regionoj estas konservitaj en la kodfluo "
+"por progresema bildigo."
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514
@@ -47904,7 +47904,7 @@ msgstr "Ebligas aŭ malŝaltas progresivan kodigon por modula reĝimo."
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:608
 #, kde-format
 msgid "Global channel palette range"
-msgstr "Tutmonda kanala paletrogamo"
+msgstr "Ĉiea kanala paletrogamo"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:619
@@ -47915,8 +47915,8 @@ msgid ""
 "Use 0-100 to set an explicit percentage, -1 to use the encoder default.\n"
 "Used for modular encoding."
 msgstr ""
-"Uzu Tutmondan kanalan paletron se la kvanto de koloroj estas pli malgranda "
-"ol ĉi tiu procento de intervalo.\n"
+"Uzu Ĉiean kanalan paletron se la kvanto de koloroj estas pli malgranda ol ĉi "
+"tiu procento de intervalo.\n"
 "Uzu 0-100 por agordi eksplicitan procenton, -1 por uzi la defaŭltan "
 "kodilon.\n"
 "Uzita por modula kodado."
@@ -48195,8 +48195,8 @@ msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
 "\"%2\" is deactivated"
 msgstr ""
-"Troviĝis du tutmondaj elektaj maskoj en aktiva stato. \"%1\" estas "
-"konservita aktiva, \"%2\" estas malaktivigita"
+"Troviĝis du ĉieaj elektaj maskoj en aktiva stato. \"%1\" estas konservita "
+"aktiva, \"%2\" estas malaktivigita"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:828
 #, kde-format
@@ -48454,7 +48454,7 @@ msgstr "Ne valida dokumento: neniu dosiero 'maindoc.xml'"
 #: plugins/impex/libkra/kra_converter.cpp:149
 #, kde-format
 msgid "Could not create the file for saving"
-msgstr "Ne eblis krei la dosieron por savi"
+msgstr "Ne eblis krei la dosieron por konservi"
 
 #: plugins/impex/libkra/kra_converter.cpp:222
 #, kde-format
@@ -48632,7 +48632,7 @@ msgstr ""
 #: plugins/impex/png/kis_wdg_options_png.ui:87
 #, kde-format
 msgid "Store Metadata"
-msgstr "Stoki Metadatumojn"
+msgstr "Konservi Metadatumojn"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/impex/png/kis_wdg_options_png.ui:98
@@ -49894,7 +49894,7 @@ msgstr "ZIP"
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:134
 #, kde-format
 msgid "Store alpha &channel (transparency)"
-msgstr "Stoki alfa &kanalon (travidebleco)"
+msgstr "Konservi alfa &kanalon (travidebleco)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxJPEG)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:230
@@ -49999,7 +49999,7 @@ msgstr "Linia desegno"
 #, kde-format
 msgctxt "WebP presets"
 msgid "Icon"
-msgstr "Ikono"
+msgstr "Piktogramo"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:38
 #, kde-format
@@ -51084,7 +51084,7 @@ msgstr "Plenigi Stilon"
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:166
 #, kde-format
 msgid "Global Pattern"
-msgstr "Tutmonda Ŝablono"
+msgstr "Ĉiea Ŝablono"
 
 #: plugins/paintops/filterop/filterop.cpp:31
 #, kde-format
@@ -54317,7 +54317,7 @@ msgid ""
 "Saving out ACBF and\n"
 "ACBF standalone"
 msgstr ""
-"Ŝparante ACBF kaj\n"
+"Konservante ACBF kaj\n"
 "ACBF memstaraj"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:168
@@ -58986,7 +58986,7 @@ msgstr "Inkluzivi konturajn regionojn"
 #, kde-format
 msgctxt "The pattern 'scale' spinbox prefix in enclose and fill tool options"
 msgid "Scale: "
-msgstr "&Skali"
+msgstr "Skalo:"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:451
 #, kde-format
@@ -58998,7 +58998,7 @@ msgstr "Pentrosojlo:"
 #, kde-format
 msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
 msgid "Spread: "
-msgstr "Disvastigi:"
+msgstr "Disvastigo:"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
 #, kde-format

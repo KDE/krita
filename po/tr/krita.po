@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-18 00:45+0000\n"
-"PO-Revision-Date: 2023-04-17 00:54+0300\n"
+"POT-Creation-Date: 2023-04-19 00:47+0000\n"
+"PO-Revision-Date: 2023-04-19 00:54+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16232,25 +16232,25 @@ msgstr ""
 "metin nesnesi Krita 5 biçimine dönüştürülür ve Krita 4.x ile uyumlu olmaktan "
 "çıkar."
 
-#: libs/flake/text/KoSvgTextShape.cpp:2689
+#: libs/flake/text/KoSvgTextShape.cpp:2703
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2691
-#: libs/flake/text/KoSvgTextShape.cpp:2699
+#: libs/flake/text/KoSvgTextShape.cpp:2705
+#: libs/flake/text/KoSvgTextShape.cpp:2713
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Metin Şekli"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2697
+#: libs/flake/text/KoSvgTextShape.cpp:2711
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2711
-#: libs/flake/text/KoSvgTextShape.cpp:2726
+#: libs/flake/text/KoSvgTextShape.cpp:2725
+#: libs/flake/text/KoSvgTextShape.cpp:2740
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -24738,10 +24738,9 @@ msgstr "Görsel Çözünürlüğüne Uydur (ppi)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
-#, fuzzy, kde-format
-#| msgid "in Filters"
+#, kde-format
 msgid "&Scaling Filter:"
-msgstr "Süzgeçlerde"
+msgstr "&Ölçekleme Süzgeci:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -42707,7 +42706,7 @@ msgstr ""
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:61
 #, kde-format
 msgid "Python Plugin Manager"
-msgstr "Python Eklenti Yöneticisi"
+msgstr "Python Eklentisi Yöneticisi"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:131
 #, kde-format
@@ -55809,7 +55808,7 @@ msgstr "URL'den indirme bağlantısı algılanamadı"
 #, kde-format
 msgctxt "action"
 msgid "Python Plugin Importer"
-msgstr "Python Eklenti İçe Aktarıcı"
+msgstr "Python Eklentisi İçe Aktarıcı"
 
 #. i18n: context: text @ Action (plugin_importer_file), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:8

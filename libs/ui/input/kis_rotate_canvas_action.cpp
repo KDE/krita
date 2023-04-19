@@ -109,7 +109,15 @@ void KisRotateCanvasAction::end(QEvent *event)
     KisCanvasController *canvasController =
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
     KIS_SAFE_ASSERT_RECOVER_RETURN(canvasController);
-    canvasController->endCanvasRotation();
+
+    switch(d->mode) {
+    case RotateModeShortcut:
+    case DiscreteRotateModeShortcut:
+        canvasController->endCanvasRotation();
+        break;
+    default:
+        break;
+    }
 }
 
 void KisRotateCanvasAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos)

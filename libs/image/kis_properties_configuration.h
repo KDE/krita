@@ -194,7 +194,7 @@ public:
 
 public:
 
-    void dump() const;
+    virtual void dump() const;
 
 private:
 

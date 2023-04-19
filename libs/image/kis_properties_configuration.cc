@@ -25,7 +25,7 @@
 
 struct Q_DECL_HIDDEN KisPropertiesConfiguration::Private {
     QMap<QString, QVariant> properties;
-    QStringList notSavedProperties;
+    QSet<QString> notSavedProperties;
 };
 
 KisPropertiesConfiguration::KisPropertiesConfiguration() : d(new Private)
@@ -320,7 +320,7 @@ void KisPropertiesConfiguration::clearProperties()
 
 void KisPropertiesConfiguration::setPropertyNotSaved(const QString& name)
 {
-    d->notSavedProperties.append(name);
+    d->notSavedProperties.insert(name);
 }
 
 QMap<QString, QVariant> KisPropertiesConfiguration::getProperties() const

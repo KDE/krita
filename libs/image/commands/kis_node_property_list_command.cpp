@@ -69,23 +69,30 @@ KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisBaseNo
 
 void KisNodePropertyListCommand::redo()
 {
-
     const KisBaseNode::PropertyList propsBefore = m_node->sectionModelProperties();
-    if (changedProperties(propsBefore, m_newPropertyList).isEmpty()) return;
+    const QSet<QString> changed = changedProperties(propsBefore, m_newPropertyList);
+    if (changed.isEmpty()) return;
 
     const QRect oldExtent = m_node->projectionPlane()->tightUserVisibleBounds();
     m_node->setSectionModelProperties(m_newPropertyList);
-    doUpdate(propsBefore, m_node->sectionModelProperties(), oldExtent | m_node->projectionPlane()->tightUserVisibleBounds());
+
+    if (!propsWithNoUpdates().contains(changed)) {
+        doUpdate(propsBefore, m_node->sectionModelProperties(), oldExtent | m_node->projectionPlane()->tightUserVisibleBounds());
+    }
 }
 
 void KisNodePropertyListCommand::undo()
 {
     const KisBaseNode::PropertyList propsBefore = m_node->sectionModelProperties();
-    if (changedProperties(propsBefore, m_oldPropertyList).isEmpty()) return;
+    const QSet<QString> changed = changedProperties(propsBefore, m_newPropertyList);
+    if (changed.isEmpty()) return;
 
     const QRect oldExtent = m_node->projectionPlane()->tightUserVisibleBounds();
     m_node->setSectionModelProperties(m_oldPropertyList);
-    doUpdate(propsBefore, m_node->sectionModelProperties(), oldExtent | m_node->projectionPlane()->tightUserVisibleBounds());
+
+    if (!propsWithNoUpdates().contains(changed)) {
+        doUpdate(propsBefore, m_node->sectionModelProperties(), oldExtent | m_node->projectionPlane()->tightUserVisibleBounds());
+    }
 }
 
 int KisNodePropertyListCommand::id() const
@@ -194,6 +201,22 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
     } else {
         m_node->setDirty(totalUpdateExtent); // TODO check if visibility was actually changed or not
     }
+}
+
+const QSet<QString>& KisNodePropertyListCommand::propsWithNoUpdates()
+{
+    static const QSet<QString> noUpdates {
+        KisLayerPropertiesIcons::locked.id(),
+        KisLayerPropertiesIcons::alphaLocked.id(),
+        KisLayerPropertiesIcons::selectionActive.id(),
+        KisLayerPropertiesIcons::colorLabelIndex.id(),
+        KisLayerPropertiesIcons::colorizeNeedsUpdate.id(),
+        KisLayerPropertiesIcons::colorizeEditKeyStrokes.id(),
+        KisLayerPropertiesIcons::colorizeShowColoring.id(),
+        KisLayerPropertiesIcons::openFileLayerFile.id(),
+        KisLayerPropertiesIcons::layerError.id()
+    };
+    return noUpdates;
 }
 
 void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist)

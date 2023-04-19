@@ -17,7 +17,7 @@
 # Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2015.
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2011.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2014.
-# Tommi Nieminen <translator@legisign.org>, 2011, 2018, 2019, 2020, 2021, 2022.
+# Tommi Nieminen <translator@legisign.org>, 2011, 2018, 2019, 2020, 2021, 2022, 2023.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2015.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2014, 2015.
 # Copyright © 2010, 2012 This_file_is_part_of_KDE
@@ -89,7 +89,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2022-09-14 16:45+0300\n"
+"PO-Revision-Date: 2023-04-17 13:16+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -98,7 +98,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2013-01-13 22:09:51+0000\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -18810,10 +18810,10 @@ msgid "Starview Metafile"
 msgstr "Starview-metatiedosto"
 
 #: libs/koplugin/KisMimeDatabase.cpp:224
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "OpenRaster Image"
-msgstr "Avaa kuvia"
+msgstr "OpenRaster-kuva"
 
 #: libs/koplugin/KisMimeDatabase.cpp:229
 #, kde-format
@@ -18822,34 +18822,34 @@ msgid "Photoshop Layer Style Library"
 msgstr "Photoshop tasotyyli kirjasto"
 
 #: libs/koplugin/KisMimeDatabase.cpp:234
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "Color Palette"
-msgstr "Gimp-väripaletti (*.gpl)"
+msgstr "Väripaletti"
 
 #: libs/koplugin/KisMimeDatabase.cpp:239
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "Krita Color Palette"
-msgstr "Gimp-väripaletti (*.gpl)"
+msgstr "Krita-väripaletti"
 
 #: libs/koplugin/KisMimeDatabase.cpp:244
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "OpenColorIO Configuration"
-msgstr "Valitse OpenColorIO-asetus"
+msgstr "OpenColorIO-asetukset"
 
 #: libs/koplugin/KisMimeDatabase.cpp:249
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "GIMP Gradients"
-msgstr "Väriliu’ut"
+msgstr "Gimp-väriliu’ut"
 
 #: libs/koplugin/KisMimeDatabase.cpp:254
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "GIMP Patterns"
-msgstr "GIMP-kuviot (*.pat)"
+msgstr "Gimp-kuviot"
 
 #: libs/koplugin/KisMimeDatabase.cpp:259
 #, kde-format
@@ -18864,32 +18864,28 @@ msgid "Krita Workspace"
 msgstr "Kritan työtila"
 
 #: libs/koplugin/KisMimeDatabase.cpp:269
-#, fuzzy, kde-format
-#| msgid "Window Background:"
+#, kde-format
 msgctxt "description of a file type"
 msgid "Krita Window Layout"
-msgstr "Ikkunan tausta:"
+msgstr "Krita-ikkuna-asettelu"
 
 #: libs/koplugin/KisMimeDatabase.cpp:274
-#, fuzzy, kde-format
-#| msgid "Krita Gemini"
+#, kde-format
 msgctxt "description of a file type"
 msgid "Krita Session"
-msgstr "Krita Gemini"
+msgstr "Krita-istunto"
 
 #: libs/koplugin/KisMimeDatabase.cpp:279
-#, fuzzy, kde-format
-#| msgid "Krita Sketch"
+#, kde-format
 msgctxt "description of a file type"
 msgid "Krita Taskset"
-msgstr "Krita Sketch"
+msgstr "Krita-tehtäväjoukko"
 
 #: libs/koplugin/KisMimeDatabase.cpp:284
-#, fuzzy, kde-format
-#| msgid "Reference Images"
+#, kde-format
 msgctxt "description of a file type"
 msgid "Krita Reference Image Collection"
-msgstr "Mallikuvat"
+msgstr "Krita-viitekuvakokoelma"
 
 #: libs/koplugin/KisMimeDatabase.cpp:289
 #, fuzzy, kde-format
@@ -18905,10 +18901,10 @@ msgid "Krita Shortcut Scheme"
 msgstr "Krita-pikanäppäinteema"
 
 #: libs/koplugin/KisMimeDatabase.cpp:299
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "Camera Raw Files"
-msgstr "Kameran profiili:"
+msgstr "Kameran RAW-tiedostot"
 
 #: libs/koplugin/KisMimeDatabase.cpp:304
 #, fuzzy, kde-format
@@ -19309,41 +19305,35 @@ msgid "YCbCr/Alpha"
 msgstr "YCbCr/alfa"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:21
-#, fuzzy, kde-format
-#| msgid "RGB (8-bit integer/channel)"
+#, kde-format
 msgid "8-bit integer/channel"
-msgstr "RGB (8-bittinen kokonaisluku/kanava)"
+msgstr "8-bittinen kokonaisluku/kanava"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:22
-#, fuzzy, kde-format
-#| msgid "RGB (16-bit integer/channel)"
+#, kde-format
 msgid "16-bit integer/channel"
-msgstr "RGB (16-bittinen kokonaisluku/kanava)"
+msgstr "16-bittinen kokonaisluku/kanava"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:23
-#, fuzzy, kde-format
-#| msgid "XYZ (32-bit float/channel)"
+#, kde-format
 msgid "16-bit float/channel"
-msgstr "XYZ (32-bittinen liukuluku/kanava)"
+msgstr "32-bittinen liukuluku/kanava"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:24
-#, fuzzy, kde-format
-#| msgid "XYZ (32-bit float/channel)"
+#, kde-format
 msgid "32-bit float/channel"
-msgstr "XYZ (32-bittinen liukuluku/kanava)"
+msgstr "32-bittinen liukuluku/kanava"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:25
-#, fuzzy, kde-format
-#| msgid "XYZ (32-bit float/channel)"
+#, kde-format
 msgid "64-bit float/channel"
-msgstr "XYZ (32-bittinen liukuluku/kanava)"
+msgstr "64-bittinen liukuluku/kanava"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:24
-#, fuzzy, kde-format
-#| msgid "Normal"
+#, kde-format
 msgctxt "Blending mode - Normal"
 msgid "Normal"
-msgstr "Normaali"
+msgstr "Tavallinen"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:31
 #, kde-format
@@ -19358,8 +19348,7 @@ msgid "Binary"
 msgstr "Binaari"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:33
-#, fuzzy, kde-format
-#| msgid "Darken"
+#, kde-format
 msgctxt "Blending mode - category Darken"
 msgid "Darken"
 msgstr "Pimennä"
@@ -19390,11 +19379,10 @@ msgid "Mix"
 msgstr "Sekoitus"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:38
-#, fuzzy, kde-format
-#| msgid "Misc"
+#, kde-format
 msgctxt "Blending mode - category Misc"
 msgid "Misc"
-msgstr "Sekalaiset"
+msgstr "Sekalaista"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:39
 #, fuzzy, kde-format
@@ -20810,10 +20798,9 @@ msgstr "Tunniste"
 #. i18n: ectx: property (text), widget (QLabel, colorComment_2)
 #: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:71
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:196
-#, fuzzy, kde-format
-#| msgid "Comments"
+#, kde-format
 msgid "Comment"
-msgstr "Kommentit"
+msgstr "Kommentti"
 
 #: libs/resourcewidgets/dbexplorer/DlgDbExplorer.cpp:74
 #, kde-format
@@ -20858,10 +20845,9 @@ msgstr "Tiedoston tiedot"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:119
-#, fuzzy, kde-format
-#| msgid "Database:"
+#, kde-format
 msgid "Database Version"
-msgstr "Tietokanta"
+msgstr "Tietokannan versio"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDatabaseVersion)
 #. i18n: ectx: property (text), widget (QLabel, lblKritaVersion)
@@ -20882,24 +20868,21 @@ msgstr "Tekstiselite"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:133
-#, fuzzy, kde-format
-#| msgid "Krita Gemini"
+#, kde-format
 msgid "Krita Version"
-msgstr "Krita Gemini"
+msgstr "Kritan versio"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
 #: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:162
-#, fuzzy, kde-format
-#| msgid "Resource"
+#, kde-format
 msgid "Resource View"
-msgstr "Resurssi"
+msgstr "Resurssinäkymä"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:170
-#, fuzzy, kde-format
-#| msgid "Resource"
+#, kde-format
 msgid "Resource Type:"
-msgstr "Resurssi"
+msgstr "Resurssin tyyppi:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/resourcewidgets/dbexplorer/WdgDbExplorer.ui:180
@@ -38547,10 +38530,9 @@ msgstr "Värihistoria"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lastUsedColorsShow)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:740
-#, fuzzy, kde-format
-#| msgid "Show Color History"
+#, kde-format
 msgid "Show Color Histor&y"
-msgstr "Näytä värihistoria"
+msgstr "Näytä väri&historia"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
@@ -38582,19 +38564,17 @@ msgstr "Asettelu"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:842
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1090
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:97
-#, fuzzy, kde-format
-#| msgid "Vertical"
+#, kde-format
 msgid "&Vertical"
-msgstr "Pysty"
+msgstr "&Pystysuuntainen"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_lastUsedNumCols)
 #. i18n: ectx: property (text), widget (QLabel, lbl_commonColorsNumCols)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:865
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1110
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Colu&mns:"
-msgstr "Sarakkeet:"
+msgstr "&Sarakkeita:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, lastUsedColorsAlignHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, commonColorsAlignHorizontal)
@@ -38602,19 +38582,17 @@ msgstr "Sarakkeet:"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:878
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1133
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:85
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgid "Hori&zontal"
-msgstr "Vaaka"
+msgstr "&Vaakasuuntainen"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_lastUsedNumRows)
 #. i18n: ectx: property (text), widget (QLabel, lbl_commonColorsNumRows)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:885
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1097
-#, fuzzy, kde-format
-#| msgid "Rows:"
+#, kde-format
 msgid "&Rows:"
-msgstr "Rivit:"
+msgstr "&Rivejä:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, lastUsedColorsAllowScrolling)
 #. i18n: ectx: property (text), widget (QCheckBox, commonColorsAllowScrolling)
@@ -38748,9 +38726,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1330
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lightness: "
-msgstr "Kirkkaus:"
+msgstr "Kirkkaus: "
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, sb_lightness)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, sb_saturation)
@@ -38769,15 +38747,15 @@ msgstr " askelta"
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1357
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saturation: "
-msgstr "Kylläisyys:"
+msgstr "Kylläisyys: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1384
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hue: "
-msgstr "Sävy:"
+msgstr "Sävy: "
 
 #. i18n: ectx: property (title), widget (QGroupBox, horizontalGroupBox_2)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1401
@@ -38799,10 +38777,9 @@ msgstr "Sinisempi/Keltaisempi:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:55
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:254
-#, fuzzy, kde-format
-#| msgid "Animation curves"
+#, kde-format
 msgid "Animation Curves"
-msgstr "Animaatio käyrät"
+msgstr "Animaatiokäyrät"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:64
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:64
@@ -38814,11 +38791,10 @@ msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:80
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:81
-#, fuzzy, kde-format
-#| msgid "Speed"
+#, kde-format
 msgctxt "preview playback speed percentage prefix"
 msgid "Speed: "
-msgstr "Nopeus"
+msgstr "Nopeus: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:82
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:83
@@ -38841,23 +38817,21 @@ msgstr "Valopöydät"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:170
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:130
-#, fuzzy, kde-format
-#| msgid "ISO studio tungsten"
+#, kde-format
 msgid "Audio menu"
-msgstr "ISO-studiokeinovalo"
+msgstr "Äänivalikko"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:178
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:138
-#, fuzzy, kde-format
-#| msgid "Animated"
+#, kde-format
 msgid "Animation settings menu"
-msgstr "Animoitu"
+msgstr "Animaatioasetusten valikko"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:190
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:150
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clip Start: "
-msgstr "Alku"
+msgstr "Leikkeen alku: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:194
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:154
@@ -38872,26 +38846,24 @@ msgid "Frame Rate: "
 msgstr "Kuvataajuus: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:274
-#, fuzzy, kde-format
+#, kde-format
 msgid "Channel Operations"
-msgstr "Muutosten seurannan asetukset"
+msgstr "Kanavatoiminnot"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:275
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layer Operations"
-msgstr "Muutosten seurannan asetukset"
+msgstr "Tasotoiminnot"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:278
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgid "Reset Channel"
-msgstr "Suorakaide"
+msgstr "Palauta kanava"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:284
-#, fuzzy, kde-format
-#| msgid "All Channels"
+#, kde-format
 msgid "Reset All Channels"
-msgstr "Kaikki kanavat"
+msgstr "Palauta kaikki kanavat"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:468
 #, kde-format
@@ -38899,15 +38871,14 @@ msgid "Hold constant value. No interpolation."
 msgstr "Säilytä vakioarvo. Ei interpolointia."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:475
-#, fuzzy, kde-format
+#, kde-format
 msgid "Linear interpolation."
-msgstr "&Käytä lineaarista interpolaatiota"
+msgstr "Lineaarinen interpolaatio"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:482
-#, fuzzy, kde-format
-#| msgid "Bilinear interpolation"
+#, kde-format
 msgid "Bezier curve interpolation."
-msgstr "Bilineaarinen interpolointi"
+msgstr "Bézier-käyräinterpolointi."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:489
 #, fuzzy, kde-format
@@ -38929,10 +38900,9 @@ msgid "Zoom view to fit channel range."
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:510
-#, fuzzy, kde-format
-#| msgid "Zoom to All"
+#, kde-format
 msgid "Zoom view to fit curve."
-msgstr "Sovita kaikki näkymään"
+msgstr "Sovita näkymä käyrään."
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 #, fuzzy
@@ -39123,10 +39093,9 @@ msgid "Hold Frames"
 msgstr "Kopioi lähteestä"
 
 #: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:494
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Edit Columns:"
-msgstr "Sarakkeet:"
+msgstr "Muokkaa sarakkeita:"
 
 #: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:504
 #, fuzzy, kde-format
@@ -39157,15 +39126,12 @@ msgid "New Layer"
 msgstr "Uusiin tasoihin"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:30
-#, fuzzy, kde-format
-#| msgid "Add Animation Layer"
+#, kde-format
 msgid "Pin Existing Layer"
-msgstr "Lisää animaatiotaso"
+msgstr "Kiinnitä olemassa oleva taso"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:31
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove Layer"
+#, kde-format
 msgid "Remove Layer"
 msgstr "Poista taso"
 
@@ -39328,18 +39294,16 @@ msgid "Side:"
 msgstr "Puoli:"
 
 #: plugins/dockers/animation/timeline_insert_keyframe_dialog.cpp:52
-#, fuzzy, kde-format
-#| msgid "Before:"
+#, kde-format
 msgctxt "@label:radio"
 msgid "Left / Before"
-msgstr "Ennen:"
+msgstr "Vasemmalle / ennen"
 
 #: plugins/dockers/animation/timeline_insert_keyframe_dialog.cpp:53
-#, fuzzy, kde-format
-#| msgid "Right to left"
+#, kde-format
 msgctxt "@label:radio"
 msgid "Right / After"
-msgstr "Oikealta vasemmalle"
+msgstr "Oikealle / jälkeen"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/arrangedocker/arrange_docker_widget.ui:36
@@ -39349,8 +39313,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/arrangedocker/arrange_docker_widget.ui:90
-#, fuzzy, kde-format
-#| msgid "Alignment"
+#, kde-format
 msgid "Align"
 msgstr "Tasaus"
 
@@ -39374,24 +39337,21 @@ msgstr "Taiteellinen värivalitsin"
 
 #: plugins/dockers/artisticcolorselector/artisticcolorselector_dock.cpp:117
 #: plugins/dockers/artisticcolorselector/artisticcolorselector_dock.cpp:118
-#, fuzzy, kde-format
-#| msgid "Continue"
+#, kde-format
 msgid "Continuous Mode"
-msgstr "Jatka"
+msgstr "Jatkuva tila"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:21
-#, fuzzy, kde-format
-#| msgid "Selection Eraser"
+#, kde-format
 msgid "Selector Appearance"
-msgstr "Valinnan pyyhkiminen"
+msgstr "Valitsimen ulkoasu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showBgColor)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:27
-#, fuzzy, kde-format
-#| msgid "Background color change"
+#, kde-format
 msgid "Show background color indicator"
-msgstr "Taustaväri muuttuu"
+msgstr "Näytä taustavärin osoitin"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showValueScaleNumbers)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:34
@@ -39435,13 +39395,9 @@ msgstr "&Pakota toistoalamaski"
 
 #. i18n: ectx: property (text), widget (QRadioButton, permissiveGamutMask)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:271
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste Shapes"
+#, kde-format
 msgid "&Just show the shapes"
-msgstr ""
-"Liitä muotoja\n"
-"muotojen liittäminen"
+msgstr "Näytä &vain hahmot"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:283
@@ -39454,9 +39410,9 @@ msgstr "Värivalitsimen asetukset"
 #. i18n: ectx: property (toolTip), widget (QLabel, labelHueSteps)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:305
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:98
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hue Steps"
-msgstr "Aika-askel:"
+msgstr "Sävyaskelet"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, labelDefSaturationSteps)
 #. i18n: ectx: property (toolTip), widget (QLabel, labelSaturationSteps)
@@ -39484,10 +39440,9 @@ msgstr "Sarakkeen ensisijaisuus"
 
 #. i18n: ectx: property (toolTip), widget (KisPopupButton, bnDockerPrefs)
 #: plugins/dockers/artisticcolorselector/forms/wdgArtisticColorSelector.ui:95
-#, fuzzy, kde-format
-#| msgid "Color Settings"
+#, kde-format
 msgid "Docker settings"
-msgstr "Väriasetukset"
+msgstr "Telakka-asetukset"
 
 #. i18n: ectx: property (text), widget (QCheckBox, bnInverseSat)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:134
@@ -39497,10 +39452,9 @@ msgstr "Käännä kylläisyys"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDefault)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:157
-#, fuzzy, kde-format
-#| msgid "Reset to Default"
+#, kde-format
 msgid "Reset to default"
-msgstr "Alusta oletusarvoonsa"
+msgstr "Palauta oletus"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:53
 #, kde-format
@@ -39533,15 +39487,14 @@ msgid "Move Composition Down"
 msgstr "Komposiittitila"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:86
-#, fuzzy, kde-format
-#| msgid "Import Images"
+#, kde-format
 msgid "Export Images"
-msgstr "Tuo kuvia"
+msgstr "Vie kuvia"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export Animations"
-msgstr "Komposiittitila"
+msgstr "Vie animaatioita"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:104
 #, kde-format
@@ -39736,15 +39689,15 @@ msgstr "Vasen reuna:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblXSpacing)
 #: plugins/dockers/griddocker/grid_config_widget.ui:191
-#, fuzzy, kde-format
+#, kde-format
 msgid "X spacing:"
-msgstr "Välistys"
+msgstr "X-välistys:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblYSpacing)
 #: plugins/dockers/griddocker/grid_config_widget.ui:223
-#, fuzzy, kde-format
+#, kde-format
 msgid "Y spacing:"
-msgstr "Välistys"
+msgstr "Y-välistys:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSubdivision)
 #: plugins/dockers/griddocker/grid_config_widget.ui:246
@@ -39776,9 +39729,9 @@ msgstr "Viivat"
 #: plugins/dockers/griddocker/grid_config_widget.ui:334
 #: plugins/dockers/griddocker/grid_config_widget.ui:375
 #: plugins/dockers/griddocker/grid_config_widget.ui:603
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dashed"
-msgstr "Katkoviivat"
+msgstr "Katkoviiva"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, selectSubdivisionStyle)
 #. i18n: ectx: property (text), item, widget (KComboBox, selectMainStyle)
@@ -39792,19 +39745,19 @@ msgstr "Pisteet"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMainStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:394
-#, fuzzy, kde-format
+#, kde-format
 msgid "Main Style:"
-msgstr "Viivan tyyli"
+msgstr "Päätyyli:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOffset)
 #: plugins/dockers/griddocker/grid_config_widget.ui:424
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grid Offset"
-msgstr "Kaakeloinnin siirtymä"
+msgstr "Ruudukon siirtymä"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGuides)
 #: plugins/dockers/griddocker/grid_config_widget.ui:546
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show guides"
 msgstr "Näytä apuviivat"
 
@@ -39822,9 +39775,7 @@ msgstr "Lukitse apuvivat"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRulers)
 #: plugins/dockers/griddocker/grid_config_widget.ui:567
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Rulers"
+#, kde-format
 msgid "Show rulers"
 msgstr "Näytä viivaimet"
 
@@ -39915,10 +39866,9 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:315
-#, fuzzy, kde-format
-#| msgid "Thumbnail View"
+#, kde-format
 msgid "Thumbnail Size"
-msgstr "Pienoiskuvanäkymä"
+msgstr "Pienoiskuvan koko"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:343
 #, fuzzy, kde-format
@@ -40627,10 +40577,9 @@ msgstr "Kierto:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFfmpegLocation)
 #: plugins/dockers/recorder/recorder_export.ui:155
-#, fuzzy, kde-format
-#| msgid "FF&Mpeg: "
+#, kde-format
 msgid "FFmpeg:"
-msgstr "FF&Mpeg"
+msgstr "FFmpeg:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseExport)
 #: plugins/dockers/recorder/recorder_export.ui:168
@@ -40703,7 +40652,7 @@ msgstr "&Video"
 #, kde-format
 msgctxt "Contraction of \"second\" for interval"
 msgid " sec."
-msgstr ""
+msgstr " s"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, labelHoldLastFrameSec)
 #: plugins/dockers/recorder/recorder_export.ui:518
@@ -40713,9 +40662,7 @@ msgstr ""
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinFirstFrameSec)
 #: plugins/dockers/recorder/recorder_export.ui:581
-#, fuzzy, kde-format
-#| msgctxt "suffix for \"seconds\""
-#| msgid " sec"
+#, kde-format
 msgid " sec."
 msgstr " s"
 
@@ -40743,7 +40690,7 @@ msgstr "Kierto:"
 #, kde-format
 msgctxt "Caption: Video exporting finished"
 msgid "Done!"
-msgstr ""
+msgstr "Valmis!"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonWatchIt)
 #: plugins/dockers/recorder/recorder_export.ui:930
@@ -40779,11 +40726,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRestart)
 #: plugins/dockers/recorder/recorder_export.ui:1061
-#, fuzzy, kde-format
-#| msgid "Restore"
+#, kde-format
 msgctxt "Button to restart the timelapse video configuring"
 msgid "Restart"
-msgstr "Palauta"
+msgstr "Käynnistä uudelleen"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonDoneClose)
 #: plugins/dockers/recorder/recorder_export.ui:1068
@@ -40800,10 +40746,9 @@ msgstr "Muokkaa profiilia"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleProfileSettings)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:26
-#, fuzzy, kde-format
-#| msgid "Tablet settings"
+#, kde-format
 msgid "Profile settings"
-msgstr "Piirtopöydän asetukset"
+msgstr "Profiiliasetukset"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonPresetRevert)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:33
@@ -40814,14 +40759,10 @@ msgstr "Palauta"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleSupportedVariables)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:77
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Variable"
+#, kde-format
 msgctxt "Title: variables for FFMpeg arguments"
 msgid "Insert variable:"
-msgstr ""
-"Lisää muuttuja\n"
-"muuttujan lisäys"
+msgstr "Lisää muuttuja:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleFFMpegArguments)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:167
@@ -40831,34 +40772,30 @@ msgstr "FFmpegin parametrit:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelProfileName)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:194
-#, fuzzy, kde-format
-#| msgid "Profile name"
+#, kde-format
 msgid "Profile name:"
-msgstr "Profiilin nimi"
+msgstr "Profiilin nimi:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFileExt)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:214
-#, fuzzy, kde-format
-#| msgid "&Image Selection"
+#, kde-format
 msgid "File extension:"
-msgstr "&Kuvan valinta"
+msgstr "Tiedostopääte:"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:159
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
 msgstr "Esikatsele"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Header title for directory name column"
 msgid "Name"
 msgstr "Nimi"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
-#, fuzzy, kde-format
-#| msgid "Size"
+#, kde-format
 msgctxt "Header title for size of directory column"
 msgid "Size"
 msgstr "Koko"
@@ -40878,17 +40815,14 @@ msgstr "Etsitään…"
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select All"
+#, kde-format
 msgid "Select All"
 msgstr "Valitse kaikki"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
-#, fuzzy, kde-format
-#| msgid "Select Font"
+#, kde-format
 msgid "Select None"
-msgstr "Valitse fontti"
+msgstr "Poista valinta"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
 #, kde-format
@@ -40995,11 +40929,10 @@ msgstr "Neljännes"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFormat)
 #: plugins/dockers/recorder/recorderdocker.ui:260
-#, fuzzy, kde-format
-#| msgid " Format:"
+#, kde-format
 msgctxt "File format for recorded frames (PNG/JPG)"
 msgid "Format:"
-msgstr " Muotoilu:"
+msgstr "Muoto:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxRecordIsolateMode)
 #: plugins/dockers/recorder/recorderdocker.ui:299
@@ -41068,8 +41001,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:112
-#, fuzzy, kde-format
-#| msgid "Compression:"
+#, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "Pakkaus:"
@@ -41321,11 +41253,10 @@ msgstr "Valitse kansio"
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:137
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:311
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:923
-#, fuzzy, kde-format
-#| msgid "0 s"
+#, kde-format
 msgctxt "suffix in spin box in storyboard that means 'seconds'"
 msgid "s"
-msgstr "0 s"
+msgstr "s"
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:142
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:318
@@ -41342,19 +41273,16 @@ msgid "Storyboard"
 msgstr ""
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:188
-#, fuzzy, kde-format
-#| msgid "Export as PDF"
+#, kde-format
 msgctxt "Export storyboard as PDF"
 msgid "Export as PDF"
 msgstr "Vie PDF:ksi"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:191
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Export"
+#, kde-format
 msgctxt "Export storyboard as SVG"
 msgid "Export as SVG"
-msgstr "Vie"
+msgstr "Vie SVG:ksi"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:207
 #, fuzzy, kde-format
@@ -41426,19 +41354,17 @@ msgstr "Tila"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnColumnMode)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:35
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgctxt "list view layout mode"
 msgid "Column"
-msgstr "Sarakkeet:"
+msgstr "Sarake"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnRowMode)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:42
-#, fuzzy, kde-format
-#| msgid "Rows:"
+#, kde-format
 msgctxt "list view layout mode"
 msgid "Row"
-msgstr "Rivit:"
+msgstr "Rivi"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnGridMode)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:49
@@ -41449,36 +41375,31 @@ msgstr "Ruudukko"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "View"
+#, kde-format
 msgctxt "list view fields visibility"
 msgid "View"
-msgstr "Näytä"
+msgstr "Näkymä"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAllView)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:70
-#, fuzzy, kde-format
-#| msgid "All"
+#, kde-format
 msgctxt "list view fields visibility"
 msgid "All"
 msgstr "Kaikki"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnThumbnailsView)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:77
-#, fuzzy, kde-format
-#| msgid "Thumbnails"
+#, kde-format
 msgctxt "list view fields visibility"
 msgid "Thumbnails Only"
-msgstr "Pienoiskuvat"
+msgstr "Vain pienoiskuvat"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnCommentsView)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:84
-#, fuzzy, kde-format
-#| msgid "Comments"
+#, kde-format
 msgctxt "list view fields visibility"
 msgid "Comments Only"
-msgstr "Kommentit"
+msgstr "Vain kommentit"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgExportStoryboard)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:20
@@ -41489,24 +41410,21 @@ msgstr "Valitse kansio"
 
 #. i18n: ectx: property (text), widget (QLabel, pageSizeLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:34
-#, fuzzy, kde-format
-#| msgid "Image Size"
+#, kde-format
 msgid "Page Size:"
-msgstr "Kuvan koko"
+msgstr "Sivukoko:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:51
-#, fuzzy, kde-format
-#| msgid "0"
+#, kde-format
 msgid "A0"
-msgstr "0"
+msgstr "A0"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:56
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "A1"
-msgstr "1"
+msgstr "A1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:61
@@ -41534,18 +41452,15 @@ msgstr "A5"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:81
-#, fuzzy, kde-format
-#| msgctxt "Page size"
-#| msgid "US Letter"
+#, kde-format
 msgid "US Letter"
 msgstr "US Letter"
 
 #. i18n: ectx: property (text), widget (QLabel, pageOrientationLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:89
-#, fuzzy, kde-format
-#| msgid "Orientation:"
+#, kde-format
 msgid "Page Orientation:"
-msgstr "Suunta:"
+msgstr "Sivun suunta:"
 
 #. i18n: ectx: property (text), widget (QLabel, boardLayoutLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:116
@@ -41570,22 +41485,21 @@ msgstr "Sarakkeet:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "SVG Template"
-msgstr "Alku"
+msgstr "SVG-mallipohja"
 
 #. i18n: ectx: property (text), widget (QLabel, svgTemplatePathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:227
-#, fuzzy, kde-format
+#, kde-format
 msgid "SVG Template Path:"
-msgstr "Alku"
+msgstr "SVG-mallipohjan sijainti:"
 
 #. i18n: ectx: property (text), widget (QLabel, fontSizeLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:237
-#, fuzzy, kde-format
-#| msgid "Font Size"
+#, kde-format
 msgid "Font Size:"
-msgstr "Fonttikoko"
+msgstr "Fonttikoko:"
 
 #. i18n: ectx: property (text), widget (QLabel, exportPathLabel)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:286
@@ -41610,10 +41524,9 @@ msgid "Mode"
 msgstr "Tila"
 
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:156
-#, fuzzy, kde-format
-#| msgid "Vector Layer"
+#, kde-format
 msgid "Symbol Libraries"
-msgstr "Vektoritaso"
+msgstr "Symbolikirjastot"
 
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:78
 #, kde-format
@@ -41687,10 +41600,9 @@ msgstr "Kopioi leikepöydälle"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:39
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:84
-#, fuzzy, kde-format
-#| msgid "Save to Palette"
+#, kde-format
 msgid "Save to file"
-msgstr "Tallenna palettiin"
+msgstr "Tallenna tiedostoon"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:95
 #, kde-format
@@ -41768,7 +41680,7 @@ msgstr "%1 – kopio"
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:239
 #, kde-format
 msgid "Clone %1, %2"
-msgstr ""
+msgstr "Monista %1, %2"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgRotateImage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgClonesArray)
@@ -42176,10 +42088,9 @@ msgid "Split into Layers"
 msgstr "Jaa tasoiksi"
 
 #: plugins/extensions/layersplit/layersplit.cpp:89
-#, fuzzy, kde-format
-#| msgid "Split into Layers"
+#, kde-format
 msgid "Split into Masks"
-msgstr "Jaa tasoiksi"
+msgstr "Jaa peitteiksi"
 
 #: plugins/extensions/layersplit/layersplit.cpp:188
 msgctxt "(qtundo-format)"
@@ -42237,15 +42148,13 @@ msgstr "Valitse tiedosto, jota käytetään dynaamisena tiedostotasona."
 
 #. i18n: ectx: property (text), widget (KisPopupButton, paletteChooser)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:103
-#, fuzzy, kde-format
-#| msgid "Choose palette"
+#, kde-format
 msgid "Choose Palette"
 msgstr "Valitse paletti"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbMode)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:111
-#, fuzzy, kde-format
-#| msgid "Split into Layers"
+#, kde-format
 msgid "Split Into Layers"
 msgstr "Jaa tasoiksi"
 
@@ -43368,10 +43277,9 @@ msgstr "Pikanäppäin:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelMenu)
 #: plugins/extensions/pykrita/plugin/info.ui:108
-#, fuzzy, kde-format
-#| msgid "Menu"
+#, kde-format
 msgid "Menu:"
-msgstr "Valikko"
+msgstr "Valikko:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelActionIcon)
 #. i18n: ectx: property (text), widget (QLabel, labelPageIcon)
@@ -43408,10 +43316,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/pykrita/plugin/info.ui:240
-#, fuzzy, kde-format
-#| msgid "Page"
+#, kde-format
 msgid "Page:"
-msgstr "Sivu"
+msgstr "Sivu:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, topics)
 #: plugins/extensions/pykrita/plugin/info.ui:269
@@ -43422,10 +43329,9 @@ msgstr "Valitse väri sekoitustila"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ExceptHookDialog)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:18
-#, fuzzy, kde-format
-#| msgid "Parsing error"
+#, kde-format
 msgid "Script error"
-msgstr "Jäsennysvirhe"
+msgstr "Skriptivirhe"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:29
@@ -43441,11 +43347,9 @@ msgstr "Poikkeus"
 
 #. i18n: ectx: property (windowTitle), widget (QMainWindow, ScriptEditor)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:18
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Brush Editor"
+#, kde-format
 msgid "Script Editor"
-msgstr "Näytä sivellinmuokkain"
+msgstr "Skriptimuokkain"
 
 #. i18n: ectx: property (title), widget (QMenu, menuRun)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
@@ -43457,25 +43361,21 @@ msgstr "&Suorita"
 
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:66
-#, fuzzy, kde-format
-#| msgctxt "Ctrl key"
-#| msgid "Ctrl"
+#, kde-format
 msgid "Ctrl+W"
-msgstr "Ctrl"
+msgstr "Ctrl+W"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:71
 #, kde-format
 msgid "&Exit"
-msgstr ""
+msgstr "&Lopeta"
 
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:79
-#, fuzzy, kde-format
-#| msgctxt "Ctrl key"
-#| msgid "Ctrl"
+#, kde-format
 msgid "Ctrl+R"
-msgstr "Ctrl"
+msgstr "Ctrl+R"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:84
@@ -43497,46 +43397,39 @@ msgstr "Python"
 
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:95
-#, fuzzy, kde-format
-#| msgctxt "Ctrl key"
-#| msgid "Ctrl"
+#, kde-format
 msgid "Ctrl+N"
-msgstr "Ctrl"
+msgstr "Ctrl+N"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:100
-#, fuzzy, kde-format
-#| msgid "Subscript"
+#, kde-format
 msgid "QtScript"
-msgstr "Alaindeksi"
+msgstr "QtScript"
 
 #. i18n: ectx: property (toolTip), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:108
-#, fuzzy, kde-format
-#| msgid "Clear Points"
+#, kde-format
 msgid "Clear The Console"
-msgstr "Poista pisteet"
+msgstr "Tyhjennä konsoli"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:113
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save &As"
-msgstr "Tallenna makro"
+msgstr "Tallenna &nimellä"
 
 #. i18n: ectx: property (toolTip), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:116
-#, fuzzy, kde-format
-#| msgid "Save the current flipbook"
+#, kde-format
 msgid "Save the script"
-msgstr "Tallenna nykyinen pläri"
+msgstr "Tallenna skripti"
 
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:119
-#, fuzzy, kde-format
-#| msgctxt "Ctrl key"
-#| msgid "Ctrl"
+#, kde-format
 msgid "Ctrl+A"
-msgstr "Ctrl"
+msgstr "Ctrl+A"
 
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:124
@@ -43546,10 +43439,9 @@ msgstr "&Avaa"
 
 #. i18n: ectx: property (toolTip), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:127
-#, fuzzy, kde-format
-#| msgid "Open Macro"
+#, kde-format
 msgid "Open a script"
-msgstr "Avaa makro"
+msgstr "Avaa skripti"
 
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:130
@@ -43669,25 +43561,21 @@ msgid "Module not loaded:<br/>%1"
 msgstr "Pakettia %1 ei voitu ladata."
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Nimi"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:53
-#, fuzzy, kde-format
-#| msgid "Comments"
+#, kde-format
 msgctxt "@title:column"
 msgid "Comment"
-msgstr "Kommentit"
+msgstr "Kommentti"
 
 #: plugins/extensions/qmic/kis_qmic_interface.cpp:239
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Gmic filter"
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
-msgstr "Gmic-suodin"
+msgstr "G’MIC-suodatin"
 
 #: plugins/extensions/qmic/QMic.cpp:54
 #, fuzzy, kde-format
@@ -43889,18 +43777,15 @@ msgstr "Poista resurssi"
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:378
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:221
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Delete resource"
+#, kde-format
 msgid "Delete Resources"
-msgstr "Poista resurssi"
+msgstr "Poista resursseja"
 
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:396
-#, fuzzy, kde-format
-#| msgid "ICC Engine"
+#, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "
-msgstr "ICC-moottori"
+msgstr "Moottori: "
 
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:21
 #, fuzzy, kde-format
@@ -43975,19 +43860,15 @@ msgid ""
 msgstr ""
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Import resource"
+#, kde-format
 msgctxt "Resource Importer file dialog title"
 msgid "Import Resources and Resource Libraries"
-msgstr "Tuo resurssi"
+msgstr "Tuo resursseja ja resurssikirjastoja"
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Manage Resources"
+#, kde-format
 msgid "Manage Resource Libraries..."
-msgstr "Hallitse resursseja"
+msgstr "Hallinnoi resurssikirjastoja…"
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:42
 #, kde-format
@@ -44001,26 +43882,21 @@ msgstr "&Resurssit"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnAdd)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:98
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Import resource"
+#, kde-format
 msgid "Import a resource library"
-msgstr "Tuo resurssi"
+msgstr "Tuo resurssikirjasto"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnToggle)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:118
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Delete resource"
+#, kde-format
 msgid "Delete a resource library"
-msgstr "Poista resurssi"
+msgstr "Poista resurssikirjasto"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:138
-#, fuzzy, kde-format
-#| msgid "Create Resource Bundle"
+#, kde-format
 msgid "Create a resource library"
-msgstr "Luo resurssipaketti"
+msgstr "Luo resurssikirjasto"
 
 #. i18n: ectx: property (text), widget (QLabel, author)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -44072,9 +43948,9 @@ msgstr "Uusi paketti..."
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:34
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:106
-#, fuzzy, kde-format
+#, kde-format
 msgid "Available"
-msgstr "Saatavilla olevat esiasetukset"
+msgstr "Käytettävissä"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:108
@@ -44103,16 +43979,15 @@ msgstr "(256x256)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:341
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save to:"
-msgstr "Tallenna makro"
+msgstr "Tallenna:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEmbedTags)
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:396
-#, fuzzy, kde-format
-#| msgid "Add images..."
+#, kde-format
 msgid "Embed tags..."
-msgstr "Lisää kuvia..."
+msgstr "Upota luokitukset…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowDeleted)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:39
@@ -44136,18 +44011,15 @@ msgstr "Tiedostonimi:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:174
-#, fuzzy, kde-format
-#| msgid "Tags"
+#, kde-format
 msgid "Tags:"
-msgstr "Tunnisteet"
+msgstr "Luokitukset:"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnImportResources)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:250
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Import resource"
+#, kde-format
 msgid "Import Resources"
-msgstr "Tuo resurssi"
+msgstr "Tuo resursseja"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnOpenResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:257
@@ -44171,13 +44043,12 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnExtractTagsToResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:277
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save Tags to Folder"
-msgstr "Valitse läpinäkymätön"
+msgstr "Tallenna luokitukset kansioon"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:244
-#, fuzzy, kde-format
-#| msgid "Layer Styles"
+#, kde-format
 msgid "Layer styles"
 msgstr "Tasotyylit"
 
@@ -44232,8 +44103,7 @@ msgstr "&90 astetta"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radio180)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:63
-#, fuzzy, kde-format
-#| msgid "180 d&egrees"
+#, kde-format
 msgid "&180 degrees"
 msgstr "&180 astetta"
 
@@ -44333,18 +44203,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkActivateCurrentChannel)
 #: plugins/extensions/separate_channels/wdg_separations.ui:140
-#, fuzzy, kde-format
-#| msgid "Delete the current action"
+#, kde-format
 msgid "Activate the current channel"
-msgstr "Poista valittu toiminto"
+msgstr "Aktivoi nykyinen kanava"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgShearImage)
 #: plugins/extensions/shearimage/dlg_shearimage.cc:20
 #: plugins/extensions/shearimage/shearimage.cc:52
 #: plugins/extensions/shearimage/wdg_shearimage.ui:18
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shear Image"
+#, kde-format
 msgid "Shear Image"
 msgstr "Viistoa kuva"
 
@@ -44366,8 +44233,7 @@ msgid "Shear angle Y:"
 msgstr "Viisto Y:"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:54
-#, fuzzy, kde-format
-#| msgid "Do Nothing"
+#, kde-format
 msgid "Do nothing"
 msgstr "Älä tee mitään"
 
@@ -44451,10 +44317,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:33
-#, fuzzy, kde-format
-#| msgid "Fill entire selection"
+#, kde-format
 msgid "Button Actions"
-msgstr "Täytä koko valinta"
+msgstr "Painikkeiden toiminnot"
 
 #. i18n: ectx: property (text), widget (QLabel, labelClick)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:39
@@ -44480,11 +44345,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:83
-#, fuzzy, kde-format
-#| msgctxt "Shortcut type"
-#| msgid "Gesture"
+#, kde-format
 msgid "Gestures"
-msgstr "Ele"
+msgstr "Eleet"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:89
@@ -44500,30 +44363,27 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:106
-#, fuzzy, kde-format
-#| msgid "Linear Light"
+#, kde-format
 msgid "Swipe Right"
-msgstr "Lineaarinen valo"
+msgstr "Pyyhkäise oikealle"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:113
-#, fuzzy, kde-format
-#| msgid "Top Left"
+#, kde-format
 msgid "Swipe Left"
-msgstr "Ylävasemmalle"
+msgstr "Pyyhkäise vasemmalle"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:120
-#, fuzzy, kde-format
-#| msgid "Clockwise"
+#, kde-format
 msgid "Circle Clockwise"
-msgstr "Myötäpäivään"
+msgstr "Pyöritä myötäpäivään"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:127
-#, fuzzy, kde-format
+#, kde-format
 msgid "Circle Counterclockwise"
-msgstr "Siveltimen ääriviiva"
+msgstr "Pyöritä vastapäivään"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:154
@@ -44624,10 +44484,9 @@ msgstr "Teho:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSlope)
 #: plugins/filters/asccdl/wdg_asccdl.ui:63
-#, fuzzy, kde-format
-#| msgid "Slope"
+#, kde-format
 msgid "Slope:"
-msgstr "Kaltevuus"
+msgstr "Kaltevuus:"
 
 #: plugins/filters/blur/kis_blur_filter.cpp:27
 #, kde-format
@@ -44690,30 +44549,30 @@ msgstr "Kolminkeskeinen"
 #. i18n: ectx: property (text), item, widget (QComboBox, irisShapeCombo)
 #: plugins/filters/blur/kis_wdg_lens_blur.cpp:35
 #: plugins/filters/blur/wdg_lens_blur.ui:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pentagon (5)"
-msgstr "&Prosenttia:"
+msgstr "5-kulmio"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, irisShapeCombo)
 #: plugins/filters/blur/kis_wdg_lens_blur.cpp:36
 #: plugins/filters/blur/wdg_lens_blur.ui:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hexagon (6)"
-msgstr "&Prosenttia:"
+msgstr "6-kulmio"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, irisShapeCombo)
 #: plugins/filters/blur/kis_wdg_lens_blur.cpp:37
 #: plugins/filters/blur/wdg_lens_blur.ui:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "Heptagon (7)"
-msgstr "&Prosenttia:"
+msgstr "7-kulmio"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, irisShapeCombo)
 #: plugins/filters/blur/kis_wdg_lens_blur.cpp:38
 #: plugins/filters/blur/wdg_lens_blur.ui:69
-#, fuzzy, kde-format
+#, kde-format
 msgid "Octagon (8)"
-msgstr "&Prosenttia:"
+msgstr "8-kulmio"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
@@ -44938,14 +44797,14 @@ msgid "Lightness"
 msgstr "Kirkkaus"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:232
-#, fuzzy, kde-format
+#, kde-format
 msgid "Yellow-Blue"
-msgstr "Keltainen"
+msgstr "Keltainen–sininen"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:233
-#, fuzzy, kde-format
+#, kde-format
 msgid "Green-Red"
-msgstr "Vihreä:"
+msgstr "Vihreä–punainen"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:254
 #, kde-format
@@ -45042,9 +44901,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAverage)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Average"
-msgstr "Keskimäärin"
+msgstr "&Keskimääräinen"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioMin)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:82
@@ -45078,15 +44937,15 @@ msgstr "Sävy/värikylläisyys/valoisuus"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:69
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hue/Saturation/Intensity"
-msgstr "Sävy/värikylläisyys/valoisuus"
+msgstr "Sävy/kylläisyys/intensiteetti"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hue/Saturation/Luma"
-msgstr "Sävy/kylläisyys/arvo"
+msgstr "Sävy/kylläisyys/luminanssi"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:79
@@ -45108,10 +44967,9 @@ msgstr "&Kylläisyys:"
 
 #. i18n: ectx: property (text), widget (QLabel, vLabel)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:221
-#, fuzzy, kde-format
-#| msgid "Value:"
+#, kde-format
 msgid "&Value:"
-msgstr "Arvo:"
+msgstr "&Arvo:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkColorize)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:281
@@ -45133,15 +44991,15 @@ msgstr "Kirkkauden korjaus"
 
 #. i18n: ectx: property (text), widget (QLabel, labelIn)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "         Input:"
-msgstr "Tuloste"
+msgstr "         Syöte:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelOut)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "         Output:"
-msgstr "Tuloste"
+msgstr "         Tulos:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLogarithmic)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:330
@@ -45299,10 +45157,9 @@ msgid "Edge Detection"
 msgstr "Havaitse reunat"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:22
-#, fuzzy, kde-format
-#| msgid "All Files"
+#, kde-format
 msgid "All sides"
-msgstr "Kaikki tiedostot"
+msgstr "Kaikki sivut"
 
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:23
 #, kde-format
@@ -45360,16 +45217,15 @@ msgstr "Käytä tulosta alfakanavaan"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:64
-#, fuzzy, kde-format
-#| msgid " Format:"
+#, kde-format
 msgid "Formula:"
-msgstr " Muotoilu:"
+msgstr "Kaava:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Output:"
-msgstr "Tuloste"
+msgstr "Tuloste:"
 
 #: plugins/filters/embossfilter/kis_emboss_filter.cpp:43
 #, kde-format
@@ -45377,8 +45233,7 @@ msgid "&Emboss with Variable Depth..."
 msgstr "Vaihtelevas&yvyyksinen kohokuva…"
 
 #: plugins/filters/embossfilter/kis_emboss_filter.cpp:144
-#, fuzzy, kde-format
-#| msgid "Depth"
+#, kde-format
 msgctxt "Emboss depth"
 msgid "Depth"
 msgstr "Syvyys"
@@ -45524,14 +45379,10 @@ msgstr "Muu"
 #: plugins/filters/halftone/halftone.action:7
 #: plugins/filters/halftone/halftone.action:9
 #: plugins/filters/halftone/halftone.action:10
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Filter"
+#, kde-format
 msgctxt "action"
 msgid "Halftone Filter"
-msgstr ""
-"Vaihda suodinta\n"
-"suotimen vaihto"
+msgstr "Puolisävysuodatin"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScreenGenerator)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:49
@@ -45879,10 +45730,9 @@ msgid "Normalize"
 msgstr "Normalisoi"
 
 #: plugins/filters/normalize/kis_normalize.cpp:46
-#, fuzzy, kde-format
-#| msgid "Normalize"
+#, kde-format
 msgid "&Normalize"
-msgstr "Normalisoi"
+msgstr "N&ormalisoi"
 
 #. i18n: context: text @ Action (krita_filter_normalize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_normalize), Actions (Filters), ActionCollection (Krita)
@@ -45893,11 +45743,10 @@ msgstr "Normalisoi"
 #: plugins/filters/normalize/normalize.action:7
 #: plugins/filters/normalize/normalize.action:9
 #: plugins/filters/normalize/normalize.action:10
-#, fuzzy, kde-format
-#| msgid "&Normalize picture"
+#, kde-format
 msgctxt "action"
 msgid "Normalize Filter"
-msgstr "&Normalisoi kuva"
+msgstr "Normalisointisuodatin"
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:44
 #, kde-format
@@ -45940,15 +45789,14 @@ msgid "Palettize Filter"
 msgstr "Paletinhallinta"
 
 #: plugins/filters/palettize/palettize.cpp:110
-#, fuzzy, kde-format
-#| msgid "Offset scale:"
+#, kde-format
 msgid "Offset Scale:"
 msgstr "Siirtymämittakaava:"
 
 #: plugins/filters/palettize/palettize.cpp:119
 #, kde-format
 msgid "Clip:"
-msgstr ""
+msgstr "Leike:"
 
 #: plugins/filters/palettize/palettize.cpp:124
 #, kde-format
@@ -45994,10 +45842,9 @@ msgstr "Nimetyt värit"
 
 #. i18n: ectx: property (text), widget (QLabel, alphaModeLabel)
 #: plugins/filters/palettize/palettize.ui:170
-#, fuzzy, kde-format
-#| msgid "Alpha Locked"
+#, kde-format
 msgid "Alpha Mode"
-msgstr "Alfa lukittu"
+msgstr "Alfatila"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, alphaModeComboBox)
 #: plugins/filters/palettize/palettize.ui:181
@@ -46088,10 +45935,9 @@ msgstr "Valonlähteet"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox4)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:424
-#, fuzzy, kde-format
-#| msgid "Light Source 4"
+#, kde-format
 msgid "Light Source &4"
-msgstr "Valonlähde 4"
+msgstr "Valolähde &4"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, azimuthLabel4)
 #. i18n: ectx: property (toolTip), widget (QLabel, azimuthLabel2)
@@ -46146,24 +45992,21 @@ msgstr "&Resoluutio:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox2)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:526
-#, fuzzy, kde-format
-#| msgid "Light Source 2"
+#, kde-format
 msgid "Light Source &2"
-msgstr "Valonlähde 2"
+msgstr "Valolähde &2"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox1)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:622
-#, fuzzy, kde-format
-#| msgid "Light Source 1"
+#, kde-format
 msgid "Light Source &1"
-msgstr "Valonlähde 1"
+msgstr "Valolähde &1"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox3)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:724
-#, fuzzy, kde-format
-#| msgid "Light Source 3"
+#, kde-format
 msgid "Light Source &3"
-msgstr "Valonlähde 3"
+msgstr "Valolähde &3"
 
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.cpp:46
 #, kde-format
@@ -46191,9 +46034,9 @@ msgid "&Posterize..."
 msgstr "&Posterisoi…"
 
 #: plugins/filters/posterize/posterize.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgid "Steps"
-msgstr "Aika-askel:"
+msgstr "Askelia"
 
 #: plugins/filters/posterize/posterize.h:31
 #, kde-format
@@ -46365,10 +46208,9 @@ msgstr "Amplitudi:"
 #. i18n: ectx: property (text), item, widget (KComboBox, cbVShape)
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:155
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:264
-#, fuzzy, kde-format
-#| msgid "Sinusoidale"
+#, kde-format
 msgid "Sinusoidal"
-msgstr "Sinusoidaalinen"
+msgstr "Sinimuotoinen"
 
 #. i18n: ectx: property (title), widget (QGroupBox, Vertical_wave)
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:181
@@ -46662,11 +46504,9 @@ msgid "A hexagon"
 msgstr "Kuusikulmio"
 
 #: plugins/generators/gradient/KisGradientGenerator.cpp:20
-#, fuzzy, kde-format
-#| msgctxt "@info:progress"
-#| msgid "Gradient..."
+#, kde-format
 msgid "&Gradient..."
-msgstr "Liukuväri…"
+msgstr "&Liukuväri…"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:28
 #: plugins/tools/basictools/kis_tool_gradient.cc:240
@@ -46721,12 +46561,10 @@ msgstr "Spiraali"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:35
 #: plugins/tools/basictools/kis_tool_gradient.cc:247
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Reverse paths"
+#, kde-format
 msgctxt "the gradient will be drawn as a reverse spiral"
 msgid "Reverse Spiral"
-msgstr "Käännä polut"
+msgstr "Käänteinen spiraali"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:36
 #: plugins/tools/basictools/kis_tool_gradient.cc:248
@@ -46764,17 +46602,16 @@ msgid "Pixels"
 msgstr "kuvapistettä"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The position will be a percentage of the width"
 msgid "Percent of the Width"
-msgstr "Pikselin leveys"
+msgstr "Osuus (%) leveydestä"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:46
-#, fuzzy, kde-format
-#| msgid "percent of view height (vh)"
+#, kde-format
 msgctxt "The position will be a percentage of the height"
 msgid "Percent of the Height"
-msgstr "osuus näkymän korkeudesta (vh)"
+msgstr "Osuus (%) korkeudesta"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:47
 #, kde-format
@@ -46811,9 +46648,9 @@ msgstr "Antialiasointikynnys:"
 #. i18n: ectx: property (text), widget (QLabel, labelReverse)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:115
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1944
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reverse:"
-msgstr "Käänteinen"
+msgstr "Käänteinen:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, moveGroup)
 #. i18n: ectx: attribute (title), widget (QWidget, tabPosition)
@@ -46934,27 +46771,24 @@ msgstr "Kuviot"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLines)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:54
-#, fuzzy, kde-format
-#| msgid "Lines"
+#, kde-format
 msgctxt "Lines in Multigridpattern"
 msgid "Lines"
 msgstr "Viivat"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:60
-#, fuzzy, kde-format
-#| msgid "Line Width"
+#, kde-format
 msgctxt "Line width of Multigridpattern"
 msgid "Line Width:"
-msgstr "Viivan leveys"
+msgstr "Viivan paksuus:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbConnector)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:70
-#, fuzzy, kde-format
-#| msgid "Connection Line"
+#, kde-format
 msgctxt "Connector Lines in Multigridpattern"
 msgid "Connector Lines"
-msgstr "Kytkösviiva"
+msgstr "Kytkösviivat"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColor)
@@ -47010,42 +46844,37 @@ msgstr "Viisto X:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gb3dRotation)
 #: plugins/generators/pattern/wdgpatternoptions.ui:293
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "3d Rotation:"
-msgstr "Kierto:"
+msgstr "3D-kierto:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/generators/pattern/wdgpatternoptions.ui:314
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "X-Rotation:"
-msgstr "Kierto:"
+msgstr "X-kierto:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/generators/pattern/wdgpatternoptions.ui:321
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Y-Rotation:"
-msgstr "Kierto:"
+msgstr "Y-kierto:"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:55
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:73
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:85
-#, fuzzy, kde-format
-#| msgid "X:"
+#, kde-format
 msgid "X: "
-msgstr "X;"
+msgstr "X: "
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:57
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:68
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:89
-#, fuzzy, kde-format
-#| msgid "Y:"
+#, kde-format
 msgid "Y: "
-msgstr "Y:"
+msgstr "Y: "
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -47076,18 +46905,16 @@ msgstr[0] "Pystysuuntainen sobel"
 msgstr[1] "Pystysuuntainen sobel"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:468
-#, fuzzy, kde-format
-#| msgid "Pixels/Inch"
+#, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
-msgstr "kuvapistettä/tuuma"
+msgstr " kuvapistettä/tuuma"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
-#, fuzzy, kde-format
-#| msgid "Pixels/Inch"
+#, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
-msgstr "kuvapistettä/tuuma"
+msgstr " kuvapistettä/cm"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:472
 #, kde-format
@@ -47097,11 +46924,10 @@ msgstr ""
 
 # Konteksti on sisällysluettelon sisennys.
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:473
-#, fuzzy, kde-format
-#| msgid "Use outline"
+#, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
-msgstr "Käytä jäsennystä"
+msgstr " viivaa/cm"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScreentoneType)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:49
@@ -47117,42 +46943,36 @@ msgstr "Interpolointi:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelEqualize)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:129
-#, fuzzy, kde-format
-#| msgid "Navigation"
+#, kde-format
 msgid "Equalization:"
-msgstr "Navigointi"
+msgstr "Ekvalisointi:"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonEqualizationNone)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:144
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "Screentone equalization mode"
 msgid "None"
 msgstr "Ei mitään"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonEqualizationFunctionBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:157
-#, fuzzy, kde-format
-#| msgctxt "EXIF: flash"
-#| msgid "Function"
+#, kde-format
 msgctxt "Screentone equalization mode"
 msgid "Function Based"
-msgstr "Funktio"
+msgstr "Funktiopohjainen"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonEqualizationTemplateBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:173
-#, fuzzy, kde-format
-#| msgid "templates"
+#, kde-format
 msgctxt "Screentone equalization mode"
 msgid "Template Based"
-msgstr "mallipohjat"
+msgstr "Mallipohjainen"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransformation)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:204
-#, fuzzy, kde-format
-#| msgid "Apply Transformation"
+#, kde-format
 msgid "Transformation"
-msgstr "Käytä muunnosta"
+msgstr "Muodonmuutos"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSizeMode)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:245
@@ -47163,16 +46983,15 @@ msgstr "Skaalaustapa:"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonSizeModeResolutionBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:257
-#, fuzzy, kde-format
+#, kde-format
 msgid "Resolution based"
-msgstr "Tarkkuus:"
+msgstr "Tarkkuuspohjainen"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonSizeModePixelBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:273
-#, fuzzy, kde-format
-#| msgid "Pixel Eraser"
+#, kde-format
 msgid "Pixel based"
-msgstr "Kuvapisteiden pyyhin"
+msgstr "Kuvapistepohjainen"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxUnits)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:337
@@ -47189,13 +47008,9 @@ msgstr "senttimetriä"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonResolutionFromImage)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:353
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Image"
+#, kde-format
 msgid "Get From Image"
-msgstr ""
-"Rajaa kuva\n"
-"kuvan rajaus"
+msgstr "Nouda kuvasta"
 
 #. i18n: ectx: property (text), widget (QLabel, label_frequency)
 #. i18n: ectx: property (text), widget (QLabel, labelFrequency)
@@ -47207,18 +47022,16 @@ msgstr "Taajuus:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:563
-#, fuzzy, kde-format
-#| msgid "Pixel Grid:"
+#, kde-format
 msgid "Align to Pixel Grid:"
-msgstr "Kuvapisteruudukko:"
+msgstr "Tasaa kuvapisteruudukkoon:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPosition)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:586
-#, fuzzy, kde-format
-#| msgid "Position:"
+#, kde-format
 msgctxt "Geometric Position"
 msgid "Position:"
-msgstr "Asema:"
+msgstr "Sijainti:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelInvert)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:753
@@ -47254,29 +47067,25 @@ msgid "Dots"
 msgstr "Pisteet"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:22
-#, fuzzy, kde-format
-#| msgid "Lines"
+#, kde-format
 msgctxt "Screentone Pattern Type - Lines"
 msgid "Lines"
 msgstr "Viivat"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:29
-#, fuzzy, kde-format
-#| msgid "Round cap"
+#, kde-format
 msgctxt "Screentone Pattern - Round Dots"
 msgid "Round"
-msgstr "Pyöreä pääty"
+msgstr "Pyöreä"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:30
-#, fuzzy, kde-format
-#| msgid "Ellipse Shape"
+#, kde-format
 msgctxt "Screentone Pattern - Ellipse Dots (Krita 4 legacy version)"
 msgid "Ellipse (Legacy)"
-msgstr "Ellipsimuoto"
+msgstr "Ellipsi (vanha)"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:31
-#, fuzzy, kde-format
-#| msgid "Ellipse"
+#, kde-format
 msgctxt "Screentone Pattern - Ellipse Dots"
 msgid "Ellipse"
 msgstr "Ellipsi"
@@ -47300,18 +47109,16 @@ msgid "Straight"
 msgstr "Suora"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:37
-#, fuzzy, kde-format
-#| msgid "Sine"
+#, kde-format
 msgctxt "Screentone Pattern - Sine Wave Lines"
 msgid "Sine Wave"
-msgstr "Sini"
+msgstr "Siniaalto"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:38
-#, fuzzy, kde-format
-#| msgid "Triangle"
+#, kde-format
 msgctxt "Screentone Pattern - Trianular Wave Lines"
 msgid "Triangular Wave"
-msgstr "Kolmio"
+msgstr "Kolmioaalto"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:39
 #, fuzzy, kde-format
@@ -47335,11 +47142,10 @@ msgstr "Lineaarinen"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:54
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:59
-#, fuzzy, kde-format
-#| msgid "Sinusoidale"
+#, kde-format
 msgctxt "Screentone Interpolation Method - Sinusoidal"
 msgid "Sinusoidal"
-msgstr "Sinusoidaalinen"
+msgstr "Sinimuotoinen"
 
 #: plugins/generators/seexpr/generator.cpp:72
 #, kde-format
@@ -47352,10 +47158,9 @@ msgid "SeExpr"
 msgstr ""
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:45
-#, fuzzy, kde-format
-#| msgid "Choose brush preset"
+#, kde-format
 msgid "Reload the preset"
-msgstr "Valitse sivellinesiasetus"
+msgstr "Virkistä esiasetus"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:53
 #, kde-format
@@ -47370,17 +47175,16 @@ msgid "Normalized Y axis coordinate of the image from its top-left corner"
 msgstr ""
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:55
-#, fuzzy, kde-format
-#| msgid "Image Split"
+#, kde-format
 msgctxt "SeExpr variable"
 msgid "Image width"
-msgstr "Kuvan jakaminen"
+msgstr "Kuvan leveys"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "SeExpr variable"
 msgid "Image height"
-msgstr "Rivin korkeus:"
+msgstr "Kuvan korkeus"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:359
 #, kde-format
@@ -47410,11 +47214,10 @@ msgstr "Skripti"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: plugins/generators/seexpr/wdgseexpr.ui:63
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "SeExpr script option"
 msgid "Options"
-msgstr "Asetukset"
+msgstr "Valinnat"
 
 #. i18n: ectx: property (text), widget (QPushButton, saveNewBrushPresetButton)
 #: plugins/generators/seexpr/wdgseexpr.ui:237
@@ -47432,10 +47235,9 @@ msgstr "Ohita esiasetukset"
 
 #. i18n: ectx: property (text), widget (QLabel, newPresetNameLabel)
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:35
-#, fuzzy, kde-format
-#| msgid "Dynamic Brush"
+#, kde-format
 msgid "Preset name:"
-msgstr "Dynaaminen sivellin"
+msgstr "Esiasetuksen nimi:"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadRenderFromScriptButton)
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:126
@@ -47562,16 +47364,16 @@ msgstr "Välistys: "
 #: plugins/impex/brush/wdg_export_gih.ui:51
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:88
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Create mask from color"
-msgstr "Luo leikepöydältä"
+msgstr "Luo väristä peite"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/brush/wdg_export_gih.ui:66
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:130
-#, fuzzy, kde-format
+#, kde-format
 msgid "Brush Style"
-msgstr "Siveltimen ääriviiva"
+msgstr "Siveltimen tyyli"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, styleLbl)
@@ -47634,12 +47436,10 @@ msgid "EXR image has been modified"
 msgstr "Tätä tasoa ei voi tallentaa EXR:ksi"
 
 #: plugins/impex/exr/exr_converter.cc:1323
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip %2 is shortcut"
-#| msgid "%1 (%2)"
+#, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
-msgstr "%1 (%2)"
+msgstr "%1 (tyyppi: ”%2”)"
 
 #: plugins/impex/exr/exr_converter.cc:1328
 #, kde-format
@@ -47690,10 +47490,9 @@ msgid "Color profile was not found in the document."
 msgstr ""
 
 #: plugins/impex/heif/HeifError.cpp:49
-#, fuzzy, kde-format
-#| msgid "Unknown error"
+#, kde-format
 msgid "Unknown error: %1"
-msgstr "Tuntematon virhe"
+msgstr "Tuntematon virhe: %1"
 
 #: plugins/impex/heif/HeifExport.cpp:612
 #, kde-format
@@ -47818,10 +47617,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossySettings)
 #: plugins/impex/heif/WdgHeifExport.ui:21
-#, fuzzy, kde-format
-#| msgid "Advanced Blending"
+#, kde-format
 msgid "Lossy Advanced Settings"
-msgstr "Laajennettu sekoitus"
+msgstr "Häviölliset lisäasetukset"
 
 #. i18n: ectx: property (text), widget (QLabel, qualityLabel)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
@@ -47833,19 +47631,16 @@ msgstr "Laatu:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/heif/WdgHeifExport.ui:47
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Chrominance:"
+#, kde-format
 msgid "Chroma:"
 msgstr "Krominanssi:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, conversionSettings)
 #: plugins/impex/heif/WdgHeifExport.ui:57
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:152
-#, fuzzy, kde-format
-#| msgid "Canvas-only settings"
+#, kde-format
 msgid "Conversion settings"
-msgstr "Vain kangas -tilan asetukset"
+msgstr "Muunnosasetukset"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/heif/WdgHeifExport.ui:69
@@ -48329,11 +48124,10 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:569
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:621
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:737
-#, fuzzy, kde-format
-#| msgid "Default printer color model:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (encoder chooses)"
-msgstr "Tulostuksen oletusvärimalli:"
+msgstr "Oletus (koodaaja valitsee)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:41
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:47
@@ -48345,8 +48139,7 @@ msgstr "Tulostuksen oletusvärimalli:"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:95
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:102
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:136
-#, fuzzy, kde-format
-#| msgid "Disabled"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Disabled"
 msgstr "Ei käytössä"
@@ -48360,8 +48153,7 @@ msgstr "Ei käytössä"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:103
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:137
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Enabled"
 msgstr "Käytössä"
@@ -48411,11 +48203,10 @@ msgid "128"
 msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:109
-#, fuzzy, kde-format
-#| msgid "255"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "256"
-msgstr "255"
+msgstr "256"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:110
 #, kde-format
@@ -48436,19 +48227,16 @@ msgid "Zero"
 msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:117
-#, fuzzy, kde-format
-#| msgid "Left"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Left"
 msgstr "Vasemmalle"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:118
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Top"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top"
-msgstr "Ylhäällä"
+msgstr "Ylös"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:119
 #, kde-format
@@ -48457,36 +48245,31 @@ msgid "Avg0"
 msgstr ""
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:120
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Select"
 msgstr "Valitse"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:121
-#, fuzzy, kde-format
-#| msgid "Gradient"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gradient"
 msgstr "Liukuväri"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:122
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Weighted"
-msgstr "Korkeus:"
+msgstr "Painotettu"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:123
-#, fuzzy, kde-format
-#| msgid "Top Right"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top right"
 msgstr "Yläoikealle"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:124
-#, fuzzy, kde-format
-#| msgid "Top Left"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top left"
 msgstr "Ylävasemmalle"
@@ -48573,10 +48356,9 @@ msgstr "Viivoituksen asetukset"
 
 #. i18n: ectx: property (text), widget (QCheckBox, lossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:53
-#, fuzzy, kde-format
-#| msgid "Compression"
+#, kde-format
 msgid "Lossless encoding"
-msgstr "Pakkaus"
+msgstr "Häviötön koodaus"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:60
@@ -48752,12 +48534,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:413
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Gmic filter"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
-msgstr "Gmic-suodin"
+msgstr "Gaborish-suodin"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:420
@@ -48794,11 +48574,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:455
-#, fuzzy, kde-format
-#| msgid "No Border"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group order"
-msgstr "Ei reunaa"
+msgstr "Ryhmän järjestys"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, groupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:462
@@ -48817,10 +48596,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:476
-#, fuzzy, kde-format
-#| msgid "Mask Parameters"
+#, kde-format
 msgid "VarDCT parameters"
-msgstr "Maskin asetukset"
+msgstr "VarDCT-parametrit"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:482
@@ -48916,11 +48694,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:676
-#, fuzzy, kde-format
-#| msgid "Ella palette"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Delta palette"
-msgstr "Ella-paletti"
+msgstr "Deltapaletti"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, lossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:683
@@ -48930,11 +48707,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
-#, fuzzy, kde-format
-#| msgid "Drop size"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group size"
-msgstr "Pisaran koko"
+msgstr "Ryhmän koko"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:697
@@ -48987,12 +48763,10 @@ msgstr "Progressiivinen"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:837
-#, fuzzy, kde-format
-#| msgctxt "JPEG metadata filter"
-#| msgid "Filters:"
+#, kde-format
 msgctxt "JPEG-XL metadata options"
 msgid "Filters:"
-msgstr "Suotimet:"
+msgstr "Suodattimet:"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:139
 #, fuzzy, kde-format
@@ -49315,15 +49089,10 @@ msgid "Could not export resource for embedding: %1"
 msgstr "Ei voitu luoda tiedostoa tallennettavaksi"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:211
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save\n"
-#| "%1"
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
-msgstr ""
-"Ei voitu tallentaa tiedostoa\n"
-"%1"
+msgstr "Resurssia ei voitu kirjoittaa: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:223
 #, kde-format
@@ -49418,10 +49187,9 @@ msgid "Could not save assistants."
 msgstr "avainruutuja ei voitu tallentaa"
 
 #: plugins/impex/libkra/kra_converter.cpp:76
-#, fuzzy, kde-format
-#| msgid "Not a valid Krita file: %1"
+#, kde-format
 msgid "Not a valid Krita file"
-msgstr "Ei kelvollinen Krita-tiedosto: %1"
+msgstr "Ei kelvollinen Krita-tiedosto"
 
 #: plugins/impex/libkra/kra_converter.cpp:94
 #, kde-format
@@ -49502,8 +49270,7 @@ msgstr "Sivut"
 
 #. i18n: ectx: property (text), widget (QRadioButton, boolAllPages)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:30
-#, fuzzy, kde-format
-#| msgid "&All pages"
+#, kde-format
 msgid "All pa&ges"
 msgstr "K&aikki sivut"
 
@@ -49515,10 +49282,9 @@ msgstr "&Ensimmäinen sivu"
 
 #. i18n: ectx: property (text), widget (QRadioButton, boolSelectionPage)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:47
-#, fuzzy, kde-format
-#| msgid "&Selection of page"
+#, kde-format
 msgid "Selec&tion of page"
-msgstr "&Valitut sivut"
+msgstr "Si&vun valinta"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intResolution)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:304
@@ -49745,10 +49511,9 @@ msgstr "Aktiivinen tekijäprofiili"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDownsample)
 #: plugins/impex/png/kis_wdg_options_png.ui:214
-#, fuzzy, kde-format
-#| msgid "Force convert to sRGB"
+#, kde-format
 msgid "Force convert to 8 bits/channel"
-msgstr "Pakota muunnos sRGB:ksi"
+msgstr "Pakota muunnos 8 bittiin/kanava"
 
 #: plugins/impex/psd/psd_export.cc:56
 #, kde-format
@@ -49766,10 +49531,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18
-#, fuzzy, kde-format
-#| msgid "PNG Options"
+#, kde-format
 msgid "WebP Options"
-msgstr "PNG-asetukset"
+msgstr "WebP-asetukset"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:45
@@ -50539,7 +50303,7 @@ msgid "Noise reduction:"
 msgstr "Kohinanpoisto:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:592
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "None"
 msgstr "Ei mitään"
@@ -50924,8 +50688,7 @@ msgstr "Aseta haluttu tarkkuus (PPI) kohteelle ”%1”"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:38
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:58
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "TIFF options"
 msgid "None"
 msgstr "Ei mitään"
@@ -51205,10 +50968,9 @@ msgstr "Esiasetus"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossless)
 #: plugins/impex/webp/dlg_webp_export.ui:50
-#, fuzzy, kde-format
-#| msgid "Compression"
+#, kde-format
 msgid "Lossless compression"
-msgstr "Pakkaus"
+msgstr "Häviötön pakkaus"
 
 #. i18n: ectx: property (text), widget (QCheckBox, lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, dithering)
@@ -51270,17 +51032,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetSize)
 #: plugins/impex/webp/dlg_webp_export.ui:220
-#, fuzzy, kde-format
-#| msgid "Image Size"
+#, kde-format
 msgid "Target Size"
-msgstr "Kuvan koko"
+msgstr "Kohteen koko"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, targetSize)
 #: plugins/impex/webp/dlg_webp_export.ui:236
-#, fuzzy, kde-format
-#| msgid "0 B"
+#, kde-format
 msgid " B"
-msgstr "0 B"
+msgstr " B"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblTargetPSNR)
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseUnitSpinBox, targetPSNR)
@@ -51309,10 +51069,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSegments)
 #: plugins/impex/webp/dlg_webp_export.ui:278
-#, fuzzy, kde-format
-#| msgid "Elements"
+#, kde-format
 msgid "Segments"
-msgstr "Alkiot"
+msgstr "Segmentit"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblSNSStrength)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, snsStrength)
@@ -51497,17 +51256,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: plugins/impex/webp/dlg_webp_export.ui:591
-#, fuzzy, kde-format
-#| msgid "Gamma Light"
+#, kde-format
 msgid "Maximum degradation"
-msgstr "Gammavaalea"
+msgstr "Enin heikentyminen"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNoDegradation)
 #: plugins/impex/webp/dlg_webp_export.ui:601
-#, fuzzy, kde-format
-#| msgid "Navigation"
+#, kde-format
 msgid "No degradation"
-msgstr "Navigointi"
+msgstr "Ei heikentymistä"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblEmulateJPEGSize)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, emulateJPEGSize)
@@ -51536,10 +51293,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblThreadLevel)
 #: plugins/impex/webp/dlg_webp_export.ui:649
-#, fuzzy, kde-format
-#| msgid "Multithreading"
+#, kde-format
 msgid "Multithreaded Encoding"
-msgstr "Säikeistys"
+msgstr "Monisäikeinen koodaus"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblLowMemory)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, lowMemory)
@@ -51565,10 +51321,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblNearLossless)
 #: plugins/impex/webp/dlg_webp_export.ui:689
-#, fuzzy, kde-format
-#| msgid "Near"
+#, kde-format
 msgid "Near Lossless"
-msgstr "Lähelle"
+msgstr "Lähes häviötön"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblExact)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, exact)
@@ -51744,9 +51499,9 @@ msgid "Dulling"
 msgstr ""
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Rate"
-msgstr "Värialue"
+msgstr "Värinopeus"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:106
 #, fuzzy, kde-format
@@ -52421,15 +52176,13 @@ msgstr "Huojuntareunat"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:147
-#, fuzzy, kde-format
-#| msgid "Horizontal Offset:"
+#, kde-format
 msgid "Horizontal offset:"
 msgstr "Vaakasiirtymä:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:160
-#, fuzzy, kde-format
-#| msgid "Vertical Offset:"
+#, kde-format
 msgid "Vertical offset:"
 msgstr "Pystysiirtymä:"
 
@@ -52698,9 +52451,9 @@ msgstr "Viivoitus"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:146
 #: plugins/paintops/hatching/kis_hatching_pressure_separation_option.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Separation"
-msgstr "Kylläisyys"
+msgstr "Erottelu"
 
 #: plugins/paintops/hatching/kis_hatching_paintop_settings.cpp:176
 #: plugins/paintops/hatching/kis_hatching_pressure_thickness_option.cpp:16
@@ -52771,10 +52524,9 @@ msgstr "+45° taso, sitten −45° taso"
 
 #. i18n: ectx: property (text), widget (QRadioButton, moirePatternRadioButton)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:368
-#, fuzzy, kde-format
-#| msgid "Moiré pattern"
+#, kde-format
 msgid "&Moiré pattern"
-msgstr "Moiré-kuvio"
+msgstr "&Moiré-kuvio"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:384
@@ -52815,9 +52567,9 @@ msgstr "Värillinen tausta"
 
 #. i18n: ectx: property (text), widget (QLabel, rateLbl)
 #: plugins/paintops/libpaintop/forms/wdgairbrush.ui:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rate:"
-msgstr "Päivämäärä"
+msgstr "Nopeus:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxIgnoreSpacing)
 #: plugins/paintops/libpaintop/forms/wdgairbrush.ui:76
@@ -52966,9 +52718,9 @@ msgstr "Sekoita taustaväriin"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Selected:"
-msgstr "Valitse"
+msgstr "Valittu:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnEraser)
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:85
@@ -53042,10 +52794,9 @@ msgstr "Valintatapa:"
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:544
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:549
-#, fuzzy, kde-format
-#| msgid "Multiply"
+#, kde-format
 msgid "multiply"
-msgstr "Kertova"
+msgstr "kerro"
 
 # Oletus: liittyy yhteensä viereisten id:iden kanssa, jotka käskymuotoisia verbejä
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
@@ -53058,26 +52809,23 @@ msgstr "lisäys"
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:554
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:559
-#, fuzzy, kde-format
-#| msgid "Maximum:"
+#, kde-format
 msgid "maximum"
-msgstr "Enintään:"
+msgstr "enintään"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:559
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:564
-#, fuzzy, kde-format
-#| msgid "Maximum:"
+#, kde-format
 msgid "minimum"
-msgstr "Enintään:"
+msgstr "vähintään"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:564
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:569
-#, fuzzy, kde-format
-#| msgid "Difference"
+#, kde-format
 msgid "difference"
-msgstr "Ero"
+msgstr "eroavuus"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxUseSameCurve)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:574
@@ -53194,10 +52942,9 @@ msgstr "Sivellintila"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetAdjustments)
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:275
-#, fuzzy, kde-format
-#| msgid "Color Adjustment"
+#, kde-format
 msgid "Reset Adjustments"
-msgstr "Värinkorjaus"
+msgstr "Palauta säädöt"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFont)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:72
@@ -53250,10 +52997,9 @@ msgstr "Kahvi"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:199
-#, fuzzy, kde-format
-#| msgid "Target point:"
+#, kde-format
 msgid "Neutral Point:"
-msgstr "Kohdepiste:"
+msgstr "Neutraali piste:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpikes)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:222
@@ -53566,8 +53312,7 @@ msgid "Distance"
 msgstr "Etäisyys"
 
 #: plugins/paintops/libpaintop/kis_dynamic_sensor.h:34
-#, fuzzy, kde-format
-#| msgid "Time"
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Time"
 msgstr "Aika"
@@ -53675,26 +53420,22 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:203
-#, fuzzy, kde-format
-#| msgid "Target point:"
+#, kde-format
 msgctxt "@label:slider"
 msgid "Neutral point: "
-msgstr "Kohdepiste:"
+msgstr "Neutraali piste: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:209
-#, fuzzy, kde-format
-#| msgctxt "@label:slider"
-#| msgid "Brightness:"
+#, kde-format
 msgctxt "@label:slider"
 msgid "Brightness: "
-msgstr "Kirkkaus:"
+msgstr "Kirkkaus: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:215
-#, fuzzy, kde-format
-#| msgid "Contrast:"
+#, kde-format
 msgctxt "@label:slider"
 msgid "Contrast: "
-msgstr "Kontrasti:"
+msgstr "Kontrasti: "
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:217
 #, kde-format
@@ -53707,21 +53448,19 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:220
-#, fuzzy, kde-format
-#| msgid "Alpha mask"
+#, kde-format
 msgid "Alpha Mask"
 msgstr "Alfapeite"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:221
-#, fuzzy, kde-format
-#| msgid "Color Range"
+#, kde-format
 msgid "Color Image"
-msgstr "Värialue"
+msgstr "Värikuva"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:222
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lightness Map"
-msgstr "Kirkkaus:"
+msgstr "Kirkkauskartta"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:224
 #, kde-format
@@ -53754,16 +53493,14 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:403
-#, fuzzy, kde-format
-#| msgid "Animated"
+#, kde-format
 msgid "Animated Mask"
-msgstr "Animoitu"
+msgstr "Animoitu peite"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:412
-#, fuzzy, kde-format
-#| msgid "Action Name"
+#, kde-format
 msgid "Animated Image"
-msgstr "Toiminnon nimi"
+msgstr "Animoitu kuva"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:465
 #, kde-format
@@ -53879,18 +53616,16 @@ msgid "Value"
 msgstr "Arvo"
 
 #: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:75
-#, fuzzy, kde-format
-#| msgid "Lower value "
+#, kde-format
 msgctxt "Lower HSV brightness"
 msgid "Lower value "
-msgstr "Matalampi arvo"
+msgstr "Ala-arvo "
 
 #: plugins/paintops/libpaintop/kis_pressure_hsv_option.cpp:87
-#, fuzzy, kde-format
-#| msgid "Higher value"
+#, kde-format
 msgctxt "Higher HSV brightness"
 msgid "Higher value"
-msgstr "Korkeampi arvo"
+msgstr "Yläarvo"
 
 #: plugins/paintops/libpaintop/kis_pressure_lightness_strength_option.cpp:9
 #, kde-format
@@ -53963,10 +53698,9 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/libpaintop/kis_pressure_rate_option.cpp:8
-#, fuzzy, kde-format
-#| msgid "&Rotate"
+#, kde-format
 msgid "Rate"
-msgstr "&Kierrä"
+msgstr "Nopeus"
 
 #: plugins/paintops/libpaintop/kis_pressure_ratio_option.cpp:10
 #, kde-format
@@ -54093,10 +53827,10 @@ msgid "Height"
 msgstr "Korkeus"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:71
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Linear Height blend mode for brush texture"
 msgid "Linear Height"
-msgstr "Rivin korkeus:"
+msgstr "Lineaarinen korkeus"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:72
 #, fuzzy, kde-format
@@ -54142,10 +53876,9 @@ msgid "Texture->Pattern (low quality preview)"
 msgstr "Tekstuuri->Kuvio (matalalaatuinen esikatselu)"
 
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:44
-#, fuzzy, kde-format
-#| msgid "Blending Mode"
+#, kde-format
 msgid "Blending Mode:"
-msgstr "Sekoitustila"
+msgstr "Sekoitustila:"
 
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:146
 #, kde-format
@@ -54247,10 +53980,9 @@ msgid "Radius by Random, consider disabling Instant Preview"
 msgstr "Välistys > 0,5, harkitse välittömän esikatselun ottamista käytöstä"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
-#, fuzzy, kde-format
-#| msgid "Layer name:"
+#, kde-format
 msgid "Base Value: "
-msgstr "Tason nimi:"
+msgstr "Pohja-arvo: "
 
 #: plugins/paintops/mypaint/MyPaintPaintOpOption.cpp:24
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:315
@@ -54535,11 +54267,10 @@ msgid "Stroke"
 msgstr "Veto"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:342
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "Option Category"
 msgid "Custom"
-msgstr "Oma"
+msgstr "Mukautettu"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLbl)
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:110
@@ -54559,14 +54290,14 @@ msgid "Opacity Weight"
 msgstr "peittävyys"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgid "dx scale"
-msgstr "&Skaalaa"
+msgstr "dx-mittakaava"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:141
-#, fuzzy, kde-format
+#, kde-format
 msgid "dy scale"
-msgstr "&Skaalaa"
+msgstr "dy-mittakaava"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:170
 #, kde-format
@@ -54628,9 +54359,9 @@ msgid "dy scale:"
 msgstr "dy-mittakaava:"
 
 #: plugins/paintops/roundmarker/roundmarker_paintop_plugin.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Quick Brush"
-msgstr "Ryhmä:"
+msgstr "Pikasivellin"
 
 #: plugins/paintops/sketch/kis_density_option.cpp:11
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:157
@@ -54740,11 +54471,10 @@ msgstr "Toista:"
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:72
 #: plugins/paintops/spray/kis_sprayop_option.cpp:108
-#, fuzzy, kde-format
-#| msgid "px"
+#, kde-format
 msgctxt "Times symbol, like in 10x"
 msgid "x"
-msgstr " px"
+msgstr "×"
 
 #: plugins/paintops/spray/kis_sprayop_option.cpp:75
 #, kde-format
@@ -54869,43 +54599,38 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, diameterLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:48
-#, fuzzy, kde-format
-#| msgid "Diameter:"
+#, kde-format
 msgctxt "Label for the diameter of the spray area in the spray engine"
 msgid "Diameter:"
 msgstr "Halkaisija:"
 
 #. i18n: ectx: property (text), widget (QLabel, aspectLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:67
-#, fuzzy, kde-format
-#| msgid "Aspect ratio:"
+#, kde-format
 msgctxt "Label for the aspect ratio of the spray area in the spray engine"
 msgid "Aspect ratio:"
 msgstr "Kuvasuhde:"
 
 #. i18n: ectx: property (text), widget (QLabel, rotationLbl)
 #: plugins/paintops/spray/wdgsprayoptions.ui:86
-#, fuzzy, kde-format
-#| msgid "Angle:"
+#, kde-format
 msgctxt "Label for the angle of the spray area in the spray engine"
 msgid "Angle:"
 msgstr "Kulma:"
 
 #. i18n: ectx: property (text), widget (QLabel, scaleLbl)
 #: plugins/paintops/spray/wdgsprayoptions.ui:125
-#, fuzzy, kde-format
-#| msgid "Scale:"
+#, kde-format
 msgctxt "Label for the scale of the spray area in the spray engine"
 msgid "Scale:"
 msgstr "Mittakaava:"
 
 #. i18n: ectx: property (text), widget (QLabel, spacingLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:138
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgctxt "Label for the spacing of the spray area in the spray engine"
 msgid "Spacing:"
-msgstr "Välistys: "
+msgstr "Välistys:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelJitter)
 #: plugins/paintops/spray/wdgsprayoptions.ui:151
@@ -54977,16 +54702,14 @@ msgstr "Sama satunnainen"
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:267
 #: plugins/paintops/spray/wdgsprayoptions.ui:362
-#, fuzzy, kde-format
-#| msgid "Curve"
+#, kde-format
 msgctxt "Custom curve based distribution in spray engine"
 msgid "Curve"
-msgstr "Kaari"
+msgstr "Käyrä"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxRadialDistribution)
 #: plugins/paintops/spray/wdgsprayoptions.ui:322
-#, fuzzy, kde-format
-#| msgid "Radial"
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the radial distribution of particles "
 "in the spray engine"
@@ -54995,19 +54718,17 @@ msgstr "Säteittäinen"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:352
-#, fuzzy, kde-format
-#| msgid "Gaussian"
+#, kde-format
 msgctxt "Gaussian distribution in spray engine"
 msgid "Gaussian"
 msgstr "Gauss"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:357
-#, fuzzy, kde-format
-#| msgid "Faster"
+#, kde-format
 msgctxt "Clustering based distribution in spray engine"
 msgid "Cluster"
-msgstr "Nopeampi"
+msgstr "Ryväs"
 
 #. i18n: ectx: property (text), widget (QCheckBox, centerBiasedPolarDistanceBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:407
@@ -55021,12 +54742,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/spray/wdgsprayoptions.ui:432
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Distribute shapes"
+#, kde-format
 msgctxt "Label for the distribution of particles in the spray engine"
 msgid "Distribution:"
-msgstr "Jaa muotoja"
+msgstr "Jakauma:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, proportionalBox)
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:158
@@ -55203,11 +54922,10 @@ msgstr "<html><head/><body><p>Toiminnon kuvaus</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionRotation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:253
-#, fuzzy, kde-format
-#| msgid "Rotation"
+#, kde-format
 msgctxt "Pen Rotation"
 msgid "Rotation"
-msgstr "Kierrä"
+msgstr "Kierto"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optionMix)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:260
@@ -55236,32 +54954,21 @@ msgid "Direction/Tilt Mix Value"
 msgstr "suuntasuodin"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:19
-#, fuzzy
-#| msgid "Apply Profile"
 msgid "Assign Profile"
-msgstr "Käytä profiilia"
+msgstr "Liitä profiili"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:20
-#, fuzzy
-#| msgid "Saving document..."
 msgid "There is no active document."
-msgstr "Tiedostoa tallennetaan..."
+msgstr "Aktiivista tiedostoa ei ole."
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:53
-#, fuzzy
-#| msgid "Apply Profile"
 msgid "Assign Profile to Image"
-msgstr "Käytä profiilia"
+msgstr "Liitä kuvaan profiili"
 
 #: plugins/python/channels2layers/channels2layers.py:58
 #: plugins/python/channels2layers/channels2layers.py:59
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Filter"
 msgid "Channels to layers"
-msgstr ""
-"Vaihda suodinta\n"
-"suotimen vaihto"
+msgstr "Kanavat tasoiksi"
 
 #: plugins/python/channels2layers/channels2layers.py:67
 msgid "RGB Colors"
@@ -55510,10 +55217,8 @@ msgid "CBZ"
 msgstr "CBZ"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:284
-#, fuzzy
-#| msgid "Document Information"
 msgid "ACBF Document Info"
-msgstr "Tiedoston tiedot"
+msgstr "ACBF-tiedostotiedot"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:287
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:397
@@ -55547,10 +55252,8 @@ msgid "ACBF UID:"
 msgstr "ACBF UID:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:301
-#, fuzzy
-#| msgid "Version:"
 msgid "Version history:"
-msgstr "Versio:"
+msgstr "Versiohistoria:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:304
 #, fuzzy
@@ -55942,9 +55645,8 @@ msgstr "Suunnittelija"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
 msgid "Translator"
-msgstr "Kolmio"
+msgstr "Kääntäjä"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:245
 msgid "Comic Metadata"
@@ -55977,7 +55679,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:296
 msgid "No. "
-msgstr ""
+msgstr "Nro "
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:298
 msgid "Vol. "
@@ -56377,10 +56079,8 @@ msgid "Translation folder:"
 msgstr "Käännösten kansio:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:127
-#, fuzzy
-#| msgid "Create Template"
 msgid "Default template:"
-msgstr "Luo pohja"
+msgstr "Oletusmallipohja:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:128
 #, fuzzy
@@ -56455,10 +56155,8 @@ msgstr ""
 "projektia varten tehdään uusi kansio projektin annetulla nimellä."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:105
-#, fuzzy
-#| msgid "Pages"
 msgid "pages"
-msgstr "Sivut"
+msgstr "sivut"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
 msgid ""
@@ -56523,23 +56221,17 @@ msgstr "Mallipohjien kansio"
 msgid "Translation directory"
 msgstr "Käännösten kansio"
 
-# Kirjoitushetkellä konteksti oli [lukukenttä] ”Pixels”.
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:25
-#, fuzzy
 msgid "Pixels"
-msgstr "kuvapistettä"
+msgstr "Kuvapisteet"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:27
-#, fuzzy
-#| msgid "Centimeters (cm)"
 msgid "Centimeter"
-msgstr "Senttimetriä (cm)"
+msgstr "Senttimetri"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:28
-#, fuzzy
-#| msgid "Millimeters (mm)"
 msgid "millimeter"
-msgstr "Millimetriä (mm)"
+msgstr "millimetri"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:76
 msgid "Add new Template"
@@ -56672,10 +56364,8 @@ msgid "Bookplate designer"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "Booklet"
 msgid "Bookseller"
-msgstr "Moniste"
+msgstr "Kirjakauppias"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Calligrapher"
@@ -56864,7 +56554,7 @@ msgstr "Astetta:"
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:12
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:915
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1839
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scale"
 msgstr "Mittakaava"
 
@@ -56970,15 +56660,12 @@ msgid "Filters:"
 msgstr "Suotimet:"
 
 #: plugins/python/highpass/highpass.py:26
-#, fuzzy
-#| msgid "High Pressure"
 msgid "High Pass"
-msgstr "Korkea paine"
+msgstr "Korkeapäästö"
 
 #: plugins/python/highpass/highpass.py:34
-#, fuzzy
 msgid "High Pass Filter"
-msgstr "&Käytä lineaarista interpolaatiota"
+msgstr "Korkeapäästösuodatin"
 
 #: plugins/python/highpass/highpass.py:35
 msgid "There is no active image."
@@ -57058,11 +56745,9 @@ msgstr "Laajennusten hallinta"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rb_docker)
 #: plugins/python/krita_script_starter/bbdkss.ui:129
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "&Dockers"
+#, kde-format
 msgid "&Docker"
-msgstr "&Telakat"
+msgstr "&Telakka"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:152
@@ -57087,17 +56772,12 @@ msgid "Create Script"
 msgstr "Luo skripti"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:29
-#, fuzzy
-#| msgctxt "@info:tooltip"
-#| msgid "Lock Docker"
 msgid "Last Documents Docker"
-msgstr "Lukitse telakka"
+msgstr "Viimeisimpien tiedostojen telakka"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:41
-#, fuzzy
-#| msgid "Tablet settings"
 msgid "Change settings"
-msgstr "Piirtopöydän asetukset"
+msgstr "Muuta asetuksia"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:58
 msgid "Mixer Slider Docker"
@@ -57111,10 +56791,8 @@ msgid "Number of slider lines: "
 msgstr "Rivien määrä:"
 
 #: plugins/python/palette_docker/palette_docker.py:37
-#, fuzzy
-#| msgid "Palette Docker"
 msgid "Python Palette Docker"
-msgstr "Telakoitu paletti"
+msgstr "Python-palettitelakka"
 
 #: plugins/python/palette_docker/palette_docker.py:63
 msgid "Set"
@@ -57165,32 +56843,25 @@ msgid "{input} has been exported to {output}."
 msgstr ""
 
 #: plugins/python/photobash_images/photobash_images_docker.py:73
-#, fuzzy
-#| msgid "Photoshop Brushes (*.abr)"
 msgctxt "@title:window"
 msgid "Photobash Images"
-msgstr "Photoshop-siveltimet (*.abr)"
+msgstr "Photobash-kuvat"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:141
 #: plugins/python/photobash_images/photobash_images_docker.py:471
-#, fuzzy
-#| msgctxt "action"
-#| msgid "References Tool"
 msgid "Change References Folder"
-msgstr "Viitetyökalu"
+msgstr "Vaihda viitekansio"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:147
 #: plugins/python/photobash_images/photobash_images_docker.py:219
-#, fuzzy, python-brace-format
-#| msgid "Pattern Size"
+#, python-brace-format
 msgid "Image Scale: {0}%"
-msgstr "Kuvion koko"
+msgstr "Kuvan mittakaava: {0} %"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:321
-#, fuzzy, python-brace-format
-#| msgid "Page %1"
+#, python-brace-format
 msgid "Page: {0}/{1}"
-msgstr "Sivu %1"
+msgstr "Sivu: {0}/{1}"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:460
 #, fuzzy
@@ -57204,18 +56875,15 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, changePathButton)
 #: plugins/python/photobash_images/photobash_images_docker.py:469
 #: plugins/python/photobash_images/photobash_images_docker.ui:96
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "References Tool"
+#, kde-format
 msgid "Set References Folder"
-msgstr "Viitetyökalu"
+msgstr "Aseta viitekansio"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, filterTextEdit)
 #: plugins/python/photobash_images/photobash_images_docker.ui:71
-#, fuzzy, kde-format
-#| msgid "Next Frame"
+#, kde-format
 msgid "Filter images by words..."
-msgstr "Seuraava kuva"
+msgstr "Suodata kuvia sanoilla…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, fitCanvasCheckBox)
 #: plugins/python/photobash_images/photobash_images_docker.ui:388
@@ -57251,7 +56919,7 @@ msgstr "Tuo Python-liitännäinen verkosta…"
 
 #: plugins/python/plugin_importer/plugin_importer.py:142
 msgid "Desktop file"
-msgstr ""
+msgstr "Työpöytätiedosto"
 
 #: plugins/python/plugin_importer/plugin_importer.py:210
 msgid "No plugins found in archive"
@@ -57315,16 +56983,13 @@ msgid "Add Script"
 msgstr "Lisää skripti"
 
 #: plugins/python/scriptdocker/scriptdocker.py:24
-#, fuzzy
-#| msgid "Subscript"
 msgid "Script Docker"
-msgstr "Alaindeksi"
+msgstr "Skriptitelakka"
 
 #: plugins/python/scriptdocker/scriptdocker.py:41
-#, fuzzy, python-brace-format
-#| msgid "Subscript"
+#, python-brace-format
 msgid "Script {0}"
-msgstr "Alaindeksi"
+msgstr "Skripti {0}"
 
 #: plugins/python/scripter/debugcontroller.py:63
 #: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:34
@@ -57341,9 +57006,8 @@ msgid "Scripter"
 msgstr "Alaindeksi"
 
 #: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:31
-#, fuzzy
 msgid "Do you want to save the current document?"
-msgstr "Haluatko varmasti korvata pohjan ”%1”?"
+msgstr "Haluatko tallentaa nykyisen tiedoston?"
 
 #: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:22
 msgid "Debug"
@@ -57395,10 +57059,8 @@ msgid "Reload File Alt+R"
 msgstr "Lataa uudelleen"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:39
-#, fuzzy
-#| msgid "Open an existing document"
 msgid "No existing document"
-msgstr "Avaa olemassa oleva tiedosto"
+msgstr "Ei olemassa olevaa tiedostoa"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:40
 msgid "Please specify a document by opening it before reloading"
@@ -57429,9 +57091,8 @@ msgid "Python File (*.py)"
 msgstr "Python-tiedosto (*.py)"
 
 #: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:21
-#, fuzzy
 msgid "Save As"
-msgstr "Tallenna makro"
+msgstr "Tallenna nimellä"
 
 #: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:19
 msgid "Syntax highlighter:"
@@ -57446,8 +57107,6 @@ msgid "Scope"
 msgstr "Kaukoputki"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
-#, fuzzy
-#| msgid "Value"
 msgctxt "Value in DebuggerTable"
 msgid "Value"
 msgstr "Arvo"
@@ -57479,11 +57138,10 @@ msgstr "tallenna"
 #. i18n: context: text @ Action (ten_brushes), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:4
 #: plugins/python/tenbrushes/tenbrushes.action:8
-#, fuzzy, kde-format
-#| msgid "Brushes"
+#, kde-format
 msgctxt "action"
 msgid "Ten Brushes"
-msgstr "Siveltimet"
+msgstr "Kymmenen sivellintä"
 
 #. i18n: context: text @ Action (activate_preset_1), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:21
@@ -57556,10 +57214,8 @@ msgid "Activate Brush Preset 10"
 msgstr "Aktivoi valmis sivellinjoukko 10"
 
 #: plugins/python/tenbrushes/tenbrushes.py:28
-#, fuzzy
-#| msgid "Brushes"
 msgid "Ten Brushes"
-msgstr "Siveltimet"
+msgstr "Kymmenen sivellintä"
 
 #: plugins/python/tenbrushes/tenbrushes.py:29
 msgid "Assign ten brush presets to ten shortcuts."
@@ -57571,11 +57227,12 @@ msgid "Activate Brush Preset {num}"
 msgstr "Aktivoi sivellinjoukko {num}"
 
 #: plugins/python/tenbrushes/tenbrushes.py:105
-#, fuzzy
 msgid ""
 "{}\n"
 "selected"
-msgstr "Valitse"
+msgstr ""
+"{}\n"
+"valittu"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:23
 msgid ""
@@ -57734,8 +57391,7 @@ msgid "Distance:"
 msgstr "Etäisyys:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:347
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "Ei mitään"
@@ -57748,11 +57404,10 @@ msgid "Basic"
 msgstr "Perus"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:349
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
-msgstr "Korkeus:"
+msgstr "Painotettu"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:350
 #, fuzzy, kde-format
@@ -57762,9 +57417,9 @@ msgid "Stabilizer"
 msgstr "Vakauttaja"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:352
-#, fuzzy, kde-format
+#, kde-format
 msgid "Brush Smoothing:"
-msgstr "Siveltimen asetukset"
+msgstr "Siveltimen tasoitus:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:378
 #, kde-format
@@ -57835,9 +57490,9 @@ msgid "Magnetism:"
 msgstr "Magentat"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:467
-#, fuzzy, kde-format
+#, kde-format
 msgid "Snap to Single Line"
-msgstr "Viisto X:"
+msgstr "Kiinnity yksittäiseen viivaan"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:470
 #, kde-format
@@ -57848,10 +57503,9 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:475
-#, fuzzy, kde-format
-#| msgid "Eraser"
+#, kde-format
 msgid "Snap Eraser"
-msgstr "Pyyhin"
+msgstr "Kiinnityksen pyyhin"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:478
 #, kde-format
@@ -57871,8 +57525,7 @@ msgstr ""
 "Ei voi kirjoittaa palettitiedostoon %1. Kenties se on vain luettavissa."
 
 #: plugins/tools/basictools/kis_tool_colorsampler.h:122
-#, fuzzy, kde-format
-#| msgid "Color Selector Tool"
+#, kde-format
 msgid "Color Sampler Tool"
 msgstr "Värivalitsintyökalu"
 
@@ -57902,18 +57555,16 @@ msgstr ""
 "tasainen täyttö"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:361
-#, fuzzy, kde-format
-#| msgid "Scale: "
+#, kde-format
 msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
 msgid "Scale: "
 msgstr "Mittakaava: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:368
-#, fuzzy, kde-format
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "The 'threshold' spinbox prefix in fill tool options"
 msgid "Threshold: "
-msgstr "Kynnys:"
+msgstr "Kynnys: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:371
 #, fuzzy, kde-format
@@ -57947,17 +57598,15 @@ msgid "Feather: "
 msgstr "Häivytys..."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:413
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "The 'reset' button in fill tool options"
 msgid "Reset"
-msgstr "Alusta"
+msgstr "Palauta"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:416
-#, fuzzy, kde-format
-#| msgid "&Add to current selection"
+#, kde-format
 msgid "Current selection"
-msgstr "&Lisää nykyiseen valintaan"
+msgstr "Nykyinen valinta"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:417
 #, kde-format
@@ -58729,9 +58378,9 @@ msgid "Vector Shape Actions"
 msgstr "Vektorivalinta"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1850
-#, fuzzy, kde-format
+#, kde-format
 msgid "Logical Operations"
-msgstr "Muutosten seurannan asetukset"
+msgstr "Loogiset operaatiot"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
 #, fuzzy, kde-format
@@ -58740,10 +58389,9 @@ msgstr "Valitse läpinäkymätön"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:44
-#, fuzzy, kde-format
-#| msgid "Opacity: "
+#, kde-format
 msgid "Opacity [*varies*]: "
-msgstr "Peittävyys:"
+msgstr "Peittävyys [*vaihtelee*]: "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
@@ -58783,10 +58431,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGlobalCoordinates)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:221
-#, fuzzy, kde-format
-#| msgid "Show Color History"
+#, kde-format
 msgid "Global Coordinates"
-msgstr "Näytä värihistoria"
+msgstr "Yleiskoordinaatit"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTabbedWidget.cpp:25
 #, kde-format
@@ -58954,10 +58601,9 @@ msgid "Embed to .KRA"
 msgstr "Upota .KRA:han"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:103
-#, fuzzy, kde-format
-#| msgid "Rotate Image"
+#, kde-format
 msgid "Link to Image"
-msgstr "Kierrä kuvaa"
+msgstr "Linkitä kuvaan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkKeepAspectRatio)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:39
@@ -58967,9 +58613,9 @@ msgstr "Säilytä kuvasuhde"
 
 #. i18n: ectx: property (text), widget (QLabel, saveLocationLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save Location:"
-msgstr "Muodon luonti:"
+msgstr "Tallennuspaikka:"
 
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:56
@@ -59181,11 +58827,10 @@ msgstr ""
 "yhtenäisen alueen valinta"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:242
-#, fuzzy, kde-format
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "The 'threshold' spinbox prefix in contiguous selection tool options"
 msgid "Threshold: "
-msgstr "Kynnys:"
+msgstr "Kynnys: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:247
 #, fuzzy, kde-format
@@ -59195,13 +58840,12 @@ msgid "Spread: "
 msgstr "Le&vitä"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:253
-#, fuzzy, kde-format
-#| msgid "Border Selection"
+#, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in contiguous selection tool to use "
 "selection borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr "Rajavalinta"
+msgstr "Käytä rajana valintaa"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:260
 #, fuzzy, kde-format
@@ -59273,24 +58917,20 @@ msgid "Elliptical Selection Tool"
 msgstr "Ellipsin valintatyökalu"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:49
-#, fuzzy, kde-format
-#| msgid "Feather Selection"
+#, kde-format
 msgid "Freehand Selection"
-msgstr "Häivytä valinta"
+msgstr "Vapaan käden valinta"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:61
 #: plugins/tools/selectiontools/kis_tool_select_outline.cc:84
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Feather Selection"
 msgctxt "(qtundo-format)"
 msgid "Freehand Selection"
-msgstr "Häivytä valinta"
+msgstr "Vapaan käden valinta"
 
 #: plugins/tools/selectiontools/kis_tool_select_outline.h:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "Freehand Selection Tool"
-msgstr "Siveltimen valintatyökalu"
+msgstr "Vapaan käden valintatyökalu"
 
 #: plugins/tools/selectiontools/kis_tool_select_path.cc:27
 #, kde-format
@@ -59360,11 +59000,10 @@ msgstr ""
 "samankaltaisten värien valinta"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:433
-#, fuzzy, kde-format
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
-msgstr "Kynnys:"
+msgstr "Kynnys: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:437
 #, kde-format
@@ -59414,11 +59053,10 @@ msgstr "Ellipsin valintatyökalu"
 
 #. i18n: context: text @ Action (KisToolSelectMagnetic), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.action:7
-#, fuzzy, kde-format
-#| msgid "Magnetic selection tool"
+#, kde-format
 msgctxt "action"
 msgid "Magnetic Selection Tool"
-msgstr "Magneettivalintatyökalu"
+msgstr "Magneettinen valintatyökalu"
 
 #. i18n: context: toolTip @ Action (KisToolSelectMagnetic), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolSelectMagnetic), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59426,31 +59064,27 @@ msgstr "Magneettivalintatyökalu"
 #. i18n: context: iconText @ Action (KisToolSelectMagnetic), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.action:9
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.action:10
-#, fuzzy, kde-format
-#| msgid "Magnetic selection tool"
+#, kde-format
 msgctxt "action"
 msgid "Magnetic Curve Selection Tool"
-msgstr "Magneettivalintatyökalu"
+msgstr "Magneettinen käyrävalintatyökalu"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Magnetic Selection"
 msgstr "Magneettinen valinta"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:486
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:503
-#, fuzzy
-#| msgid "Magnetic Selection"
 msgctxt "(qtundo-format)"
 msgid "Magnetic Selection"
 msgstr "Magneettinen valinta"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:733
-#, fuzzy, kde-format
-#| msgid "Feather radius:"
+#, kde-format
 msgctxt "Filter radius in Magnetic Select Tool settings"
 msgid "Filter Radius: "
-msgstr "Häivytyksen säde:"
+msgstr "Suodatussäde: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:740
 #, fuzzy, kde-format
@@ -59480,11 +59114,10 @@ msgid "Complete"
 msgstr "Valmis"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:766
-#, fuzzy, kde-format
-#| msgid "Discard All"
+#, kde-format
 msgctxt "Discard the selection"
 msgid "Discard"
-msgstr "Hylkää kaikki"
+msgstr "Hylkää"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:772
 #, kde-format
@@ -60477,8 +60110,7 @@ msgstr ""
 "tasainen täyttö"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:344
-#, fuzzy, kde-format
-#| msgid "Invert"
+#, kde-format
 msgctxt "The 'invert' checkbox in enclose and fill tool"
 msgid "Invert"
 msgstr "Käännä"
@@ -60492,18 +60124,16 @@ msgid "Include contour regions"
 msgstr "Lisää kommentti"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:364
-#, fuzzy, kde-format
-#| msgid "Scale: "
+#, kde-format
 msgctxt "The pattern 'scale' spinbox prefix in enclose and fill tool options"
 msgid "Scale: "
 msgstr "Mittakaava: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:371
-#, fuzzy, kde-format
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "The 'threshold' spinbox prefix in enclose and fill tool options"
 msgid "Threshold: "
-msgstr "Kynnys:"
+msgstr "Kynnys: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:374
 #, fuzzy, kde-format
@@ -60513,20 +60143,18 @@ msgid "Spread: "
 msgstr "Le&vitä"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:380
-#, fuzzy, kde-format
-#| msgid "Border Selection"
+#, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in enclose and fill tool to use "
 "selection borders as boundary when filling"
 msgid "Use selection as boundary"
-msgstr "Rajavalinta"
+msgstr "Käytä rajana valintaa"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:384
-#, fuzzy, kde-format
-#| msgid "Anti-aliasing"
+#, kde-format
 msgctxt "The anti-alias checkbox in enclose and fill tool options"
 msgid "Anti-aliasing"
-msgstr "Antialiasoidaan"
+msgstr "Antialiasointi"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:386
 #, fuzzy, kde-format
@@ -60544,17 +60172,15 @@ msgid "Feather: "
 msgstr "Häivytys..."
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:408
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "The 'reset' button in enclose and fill tool options"
 msgid "Reset"
-msgstr "Alusta"
+msgstr "Palauta"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:413
-#, fuzzy, kde-format
-#| msgid "Bezier Curve"
+#, kde-format
 msgid "Bezier Curve"
-msgstr "Bezier-kaari"
+msgstr "Bézier-käyrä"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:414
 #, kde-format
@@ -60581,40 +60207,34 @@ msgid "Enclosing method"
 msgstr "Sekoitustila"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:455
-#, fuzzy, kde-format
-#| msgid "Save to Palette"
+#, kde-format
 msgctxt "The 'what to fill' section label in enclose and fill tool options"
 msgid "What to fill"
-msgstr "Tallenna palettiin"
+msgstr "Mitä täytetään"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:465
-#, fuzzy, kde-format
-#| msgid "Pixel width"
+#, kde-format
 msgctxt "The 'fill with' section label in enclose and fill tool options"
 msgid "Fill with"
-msgstr "Kuvapisteen leveys"
+msgstr "Täyttö"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:476
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgctxt "The 'region extent' section label in enclose and fill tool options"
 msgid "Region extent"
-msgstr "Värimuunnosmenetelmä"
+msgstr "Alueen ala"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:485
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "HSV Adjustment"
+#, kde-format
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
-msgstr "HSV:n säätö"
+msgstr "Säädöt"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:494
-#, fuzzy, kde-format
-#| msgid "References"
+#, kde-format
 msgctxt "The 'reference' section label in enclose and fill tool options"
 msgid "Reference"
-msgstr "Viitteet"
+msgstr "Viite"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:687
 #, fuzzy, kde-format
@@ -60627,14 +60247,13 @@ msgstr "Kaikki tiedostot"
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Regions of a specific color"
-msgstr ""
+msgstr "Tietynväriset alueet"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:693
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparent regions"
-msgstr "Läpinäkyvä"
+msgstr "Läpinäkyvät alueet"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:696
 #, kde-format
@@ -60646,7 +60265,7 @@ msgstr ""
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All regions except those of a specific color"
-msgstr ""
+msgstr "Kaikki paitsi tietynväriset alueet"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:702
 #, kde-format
@@ -60667,11 +60286,10 @@ msgid "Regions surrounded by a specific color"
 msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:711
-#, fuzzy, kde-format
-#| msgid "Foreground color changes"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Regions surrounded by transparent"
-msgstr "Piirtoväri muuttuu"
+msgstr "Läpinäkyvän alueen ympäröimät alueet"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:714
 #, kde-format

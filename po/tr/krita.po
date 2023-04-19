@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 02:51+0000\n"
-"PO-Revision-Date: 2023-04-17 00:54+0300\n"
+"PO-Revision-Date: 2023-04-19 00:54+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -54843,7 +54843,7 @@ msgstr "URL'den indirme bağlantısı algılanamadı"
 #, kde-format
 msgctxt "action"
 msgid "Python Plugin Importer"
-msgstr "Python Eklenti İçe Aktarıcı"
+msgstr "Python Eklentisi İçe Aktarıcı"
 
 #. i18n: context: text @ Action (plugin_importer_file), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:8

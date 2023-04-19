@@ -43,8 +43,14 @@ QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
                 m_parent->setProperty(name + "_previous", m_parent->getProperty(name));
                 m_parent->setPropertyNotSaved(name + "_previous");
             }
-            m_parent->setProperty(name, m_lockedProperties->lockedProperties()->getProperty(name));
-            return m_lockedProperties->lockedProperties()->getProperty(name);
+
+            const QVariant lockedProp = m_lockedProperties->lockedProperties()->getProperty(name);
+
+            if (m_parent->getProperty(name) != lockedProp) {
+                m_parent->setProperty(name, lockedProp);
+            }
+
+            return lockedProp;
         } else {
             if (m_parent->hasProperty(name + "_previous")) {
                 m_parent->setProperty(name, m_parent->getProperty(name + "_previous"));

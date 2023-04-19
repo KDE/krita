@@ -124,17 +124,11 @@ void KisPaintOpSettingsWidget::setConfiguration(const KisPropertiesConfiguration
     Q_FOREACH (KisPaintOpOption* option, m_d->paintOpOptions) {
         option->startReadOptionSetting(propertiesProxy);
 
-        if (KisLockedPropertiesServer::instance()->propertiesFromLocked()) {
-            option->setLocked(true);
-        }
-        else {
-            option->setLocked(false);
-        }
-
         KisLockedPropertiesServer::instance()->setPropertiesFromLocked(false);
         KisOptionInfo info;
         info.option = option;
         info.index = indexcount;
+
         m_d->model->categoriesMapper()->itemFromRow(m_d->model->indexOf(info).row())->setLocked(option->isLocked());
         m_d->model->categoriesMapper()->itemFromRow(m_d->model->indexOf(info).row())->setLockable(true);
         m_d->model->signalDataChanged(m_d->model->indexOf(info));
@@ -238,12 +232,14 @@ void KisPaintOpSettingsWidget::lockProperties(const QModelIndex& index)
             KisLockedPropertiesServer::instance()->addToLockedProperties(p);
             info.option->setLocked(true);
             m_d->model->categoriesMapper()->itemFromRow(index.row())->setLocked(true);
+            m_d->model->signalDataChanged(index);
 
         }
         else {
             KisLockedPropertiesServer::instance()->removeFromLockedProperties(p);
             info.option->setLocked(false);
             m_d->model->categoriesMapper()->itemFromRow(index.row())->setLocked(false);
+            m_d->model->signalDataChanged(index);
 
             if (m_saveLockedOption){
                 emit sigSaveLockedConfig(p);
@@ -253,9 +249,7 @@ void KisPaintOpSettingsWidget::lockProperties(const QModelIndex& index)
             }
             m_saveLockedOption = false;
         }
-        m_d->model->signalDataChanged(index);
     }
-
 }
 void KisPaintOpSettingsWidget::slotLockPropertiesDrop()
 {

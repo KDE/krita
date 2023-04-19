@@ -1379,18 +1379,24 @@ void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is chan
 }
 void KisPaintopBox::slotSaveLockedOptionToPreset(KisPropertiesConfigurationSP p)
 {
+    KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
+    KisPaintOpPreset::UpdatedPostponer postponer(preset);
+
 
     QMapIterator<QString, QVariant> i(p->getProperties());
     while (i.hasNext()) {
         i.next();
-        m_resourceProvider->currentPreset()->settings()->setProperty(i.key(), QVariant(i.value()));
-        if (m_resourceProvider->currentPreset()->settings()->hasProperty(i.key() + "_previous")) {
-            m_resourceProvider->currentPreset()->settings()->removeProperty(i.key() + "_previous");
+
+        preset->settings()->setProperty(i.key(), QVariant(i.value()));
+        if (preset->settings()->hasProperty(i.key() + "_previous")) {
+            preset->settings()->removeProperty(i.key() + "_previous");
         }
 
     }
-    slotGuiChangedCurrentPreset();
 
+    /// explicitly mark the preset as dirty since the properties
+    /// might have the same values (updated before)
+    preset->setDirty(true);
 }
 
 void KisPaintopBox::slotDropLockedOption(KisPropertiesConfigurationSP p)
@@ -1399,6 +1405,7 @@ void KisPaintopBox::slotDropLockedOption(KisPropertiesConfigurationSP p)
     KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
 
     {
+        KisPaintOpPreset::UpdatedPostponer postponer(preset);
         KisDirtyStateSaver<KisPaintOpPresetSP> dirtySaver(preset);
 
         QMapIterator<QString, QVariant> i(p->getProperties());
@@ -1411,7 +1418,6 @@ void KisPaintopBox::slotDropLockedOption(KisPropertiesConfigurationSP p)
 
         }
     }
-
 }
 void KisPaintopBox::slotDirtyPresetToggled(bool value)
 {

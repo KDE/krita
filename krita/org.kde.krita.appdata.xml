@@ -412,6 +412,7 @@
       <caption xml:lang="es">¿Trabaja con animación? Krita proporciona todo lo necesario para la animación manual tradicional</caption>
       <caption xml:lang="et">Sind huvitab animatsioon? Krita pakub kõike, mida läheb tarvis traditsioonilise käsitsi loodud animatsiooni jaoks</caption>
       <caption xml:lang="eu">Animaziorako? Krita-k ohiko eskuz-marraztutako animazioetarako behar duzun guztia dakar</caption>
+      <caption xml:lang="fi">Kiinnostaako animointi? Krita tarjoaa kaiken, mitä tarvitaan perinteiseen käsin piirrettyyn animaatioon</caption>
       <caption xml:lang="fr">Vous réalisez des animations ? Krita vous fournit tout ce dont vous avez besoin pour l'animation traditionnelle et dessinée à la main</caption>
       <caption xml:lang="hi">आपको एनीमेशन में आसक्ती है? क्रिता आपको पारंपरिक, हाथ से तैयार एनीमेशन बनाने के लिए आवश्यक सब कुछ प्रदान करता है</caption>
       <caption xml:lang="hu">Animációt készítene? A Krita minden eszközt biztosít a hagyományos, kézzel rajzolt animációkhoz</caption>
@@ -485,6 +486,7 @@
       <caption xml:lang="eo">Krita ofertas potencajn filtrilojn</caption>
       <caption xml:lang="es">Krita ofrece potentes filtros</caption>
       <caption xml:lang="eu">Kritak iragazki ahaltsuak eskaintzen ditu</caption>
+      <caption xml:lang="fi">Krita tarjoaa tehokkaita suodattimia</caption>
       <caption xml:lang="fr">Krita propose des filtres puissants</caption>
       <caption xml:lang="hi">क्रिता शक्तिशाली फिल्टरों को प्रदान करता है</caption>
       <caption xml:lang="hu">A Krita hatékony szűrőket tartalmaz</caption>
@@ -518,6 +520,7 @@
       <caption xml:lang="eo">Kaj ankaŭ ekzistas integriĝo kun G'Mic, kiu aldonas centojn da filtriloj pli</caption>
       <caption xml:lang="es">Y también está la integración con G'Mic, que añade cientos de filtros</caption>
       <caption xml:lang="eu">Eta G'Mic-ekin bateratzea dago ere, ehunka iragazki gehiago gehitzen dituelarik</caption>
+      <caption xml:lang="fi">Ja G’Mic-eheytyksen myötä vielä satoja suodattimia lisää</caption>
       <caption xml:lang="fr">Et, il existe également une intégration avec « G-Mic », ajoutant des centaines de filtres, de plus.</caption>
       <caption xml:lang="hi">और, जी-मिक के साथ भी एकीकरण है, जो सैकड़ों फ़िल्टर और जोड़ता है</caption>
       <caption xml:lang="hu">A G'Mic integrációjának köszönhetően további több száz szűrő érhető el</caption>
@@ -551,6 +554,7 @@
       <caption xml:lang="eo">Aliĝu al nia Youtube-kanalo!</caption>
       <caption xml:lang="es">Únase a nuestro canal de Youtube.</caption>
       <caption xml:lang="eu">Batu Youtubeko gure kanalera!</caption>
+      <caption xml:lang="fi">Liity YouTube-kanavallemme!</caption>
       <caption xml:lang="fr">Rejoignez notre canal sur Youtube !</caption>
       <caption xml:lang="hi">हमारे यूट्यूब चैनल से जुड़ें!</caption>
       <caption xml:lang="hu">Iratkozzon fel YouTube-csatornánkra!</caption>
@@ -585,6 +589,7 @@
       <caption xml:lang="eo">Aŭ la aktiva <a href="https://krita-artists.org">Komunumo de Krita-Artistoj</a></caption>
       <caption xml:lang="es">O al activo <a href="https://krita-artists.org">La comunidad de artistas de Krita</a></caption>
       <caption xml:lang="eu">Edo <a href="https://krita-artists.org">Krita Artisten komunitatea</a> aktiboa</caption>
+      <caption xml:lang="fi">Tai aktiivinen <a href="https://krita-artists.org">Krita-taiteilijayhteisö</a></caption>
       <caption xml:lang="fr">Ou l'active <a href="https://krita-artists.org">La communauté d'artistes de Krita</a></caption>
       <caption xml:lang="hi">या सक्रिय <a href="https://krita-artists.org">क्रिता कलाकार समुदाय</a></caption>
       <caption xml:lang="hu">vagy az aktív <a href="https://krita-artists.org">A Krita Művészek közössége</a> oldalunkhoz</caption>

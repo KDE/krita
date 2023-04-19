@@ -201,6 +201,9 @@ bool KisKritaSensorPack::read(KisCurveOptionDataCommon &data, const KisPropertie
                                               !data.commonCurve.isEmpty() ?
                                                   data.commonCurve :
                                                   DEFAULT_CURVE_STRING);
+        if (data.commonCurve.isEmpty()) {
+            data.commonCurve = DEFAULT_CURVE_STRING;
+        }
     }
 
     Q_FOREACH (KisSensorData *sensor, sensorsToReset) {

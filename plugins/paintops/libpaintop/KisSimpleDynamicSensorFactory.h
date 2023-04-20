@@ -8,15 +8,19 @@
 
 #include "KisDynamicSensorFactory.h"
 
+#include "KisCurveOptionDataCommon.h"
+
 class PAINTOP_EXPORT KisSimpleDynamicSensorFactory : public KisDynamicSensorFactory
 {
 public:
-    KisSimpleDynamicSensorFactory(int minimumValue,
+    KisSimpleDynamicSensorFactory(const QString &id,
+                                  int minimumValue,
                                   int maximumValue,
                                   const QString &minimumLabel,
                                   const QString &maximumLabel,
                                   const QString &valueSuffix);
 
+    QString id() const override;
     int minimumValue() override;
     int maximumValue(int length) override;
     QString minimumLabel() override;
@@ -26,6 +30,7 @@ public:
 
     int m_minimumValue;
     int m_maximumValue;
+    QString m_id;
     QString m_minimumLabel;
     QString m_maximumLabel;
     QString m_valueSuffix;

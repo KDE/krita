@@ -34,10 +34,7 @@ namespace {
 }
 
 KisDynamicSensorFactoryDistance::KisDynamicSensorFactoryDistance()
-    : KisSimpleDynamicSensorFactory(
-          0, 1000,
-          i18n("0"), "",
-          "")
+    : KisSimpleDynamicSensorFactory(DistanceId.id(), 0, 1000, i18n("0"), "", "")
 {
 
 }

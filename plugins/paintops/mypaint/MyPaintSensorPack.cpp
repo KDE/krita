@@ -31,9 +31,12 @@ struct MyPaintSensorFactoriesRegistrar {
                              const QString &minimumLabel,
                              const QString &maximumLabel,
                              const QString &valueSuffix) {
-            KisDynamicSensorFactoryRegistry::instance()->add(
-                id.id(),
-                new KisSimpleDynamicSensorFactory(minimumValue, maximumValue, minimumLabel, maximumLabel, valueSuffix));
+            KisDynamicSensorFactoryRegistry::instance()->add(new KisSimpleDynamicSensorFactory(id.id(),
+                                                                                               minimumValue,
+                                                                                               maximumValue,
+                                                                                               minimumLabel,
+                                                                                               maximumLabel,
+                                                                                               valueSuffix));
         };
 
         addFactory(MyPaintPressureId, 0, 20, "", "", "");

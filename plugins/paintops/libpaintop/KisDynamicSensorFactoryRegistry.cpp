@@ -31,10 +31,10 @@ KisDynamicSensorFactoryRegistry::KisDynamicSensorFactoryRegistry()
     addImpl(TiltDirectionId, 0, 360, i18n("0°"), i18n("360°"), i18n("°"));
     addImpl(TiltElevationId, 90, 0, i18n("90°"), i18n("0°"), i18n("°"));
 
-    add(FadeId.id(), new KisDynamicSensorFactoryFade());
-    add(DistanceId.id(), new KisDynamicSensorFactoryDistance());
-    add(DrawingAngleId.id(), new KisDynamicSensorFactoryDrawingAngle());
-    add(TimeId.id(), new KisDynamicSensorFactoryTime());
+    add(new KisDynamicSensorFactoryFade());
+    add(new KisDynamicSensorFactoryDistance());
+    add(new KisDynamicSensorFactoryDrawingAngle());
+    add(new KisDynamicSensorFactoryTime());
 }
 
 KisDynamicSensorFactoryRegistry::~KisDynamicSensorFactoryRegistry()
@@ -51,5 +51,10 @@ KisDynamicSensorFactoryRegistry *KisDynamicSensorFactoryRegistry::instance()
 
 void KisDynamicSensorFactoryRegistry::addImpl(const KoID &id, int minimumValue, int maximumValue, const QString &minimumLabel, const QString &maximumLabel, const QString &valueSuffix)
 {
-    add(id.id(), new KisSimpleDynamicSensorFactory(minimumValue, maximumValue, minimumLabel, maximumLabel, valueSuffix));
+    add(new KisSimpleDynamicSensorFactory(id.id(),
+                                          minimumValue,
+                                          maximumValue,
+                                          minimumLabel,
+                                          maximumLabel,
+                                          valueSuffix));
 }

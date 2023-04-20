@@ -4,16 +4,18 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
+
 #include "KisDarkenOption.h"
 
-
-#include <kis_properties_configuration.h>
-#include <kis_paint_information.h>
+#include <KisPaintOpOptionUtils.h>
 #include <KisStandardOptionData.h>
-#include "kis_painter.h"
+#include <kis_paint_device.h>
+#include <kis_paint_information.h>
+#include <kis_painter.h>
+#include <kis_properties_configuration.h>
+
 #include "kis_color_source.h"
 
-#include <KisPaintOpOptionUtils.h>
 namespace kpou = KisPaintOpOptionUtils;
 
 

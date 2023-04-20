@@ -34,10 +34,7 @@ namespace {
 }
 
 KisDynamicSensorFactoryTime::KisDynamicSensorFactoryTime()
-    : KisSimpleDynamicSensorFactory(
-          0, 3000,
-          i18n("0"), "",
-          i18n(" ms"))
+    : KisSimpleDynamicSensorFactory(TimeId.id(), 0, 3000, i18n("0"), "", i18n(" ms"))
 {
 
 }

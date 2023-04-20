@@ -34,10 +34,7 @@ namespace {
 }
 
 KisDynamicSensorFactoryFade::KisDynamicSensorFactoryFade()
-    : KisSimpleDynamicSensorFactory(
-          0, 1000,
-          i18n("0"), "",
-          "")
+    : KisSimpleDynamicSensorFactory(FadeId.id(), 0, 1000, i18n("0"), "", "")
 {
 
 }

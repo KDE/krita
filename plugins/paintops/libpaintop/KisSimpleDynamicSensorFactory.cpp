@@ -3,19 +3,27 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
+
 #include "KisSimpleDynamicSensorFactory.h"
 
-KisSimpleDynamicSensorFactory::KisSimpleDynamicSensorFactory(int minimumValue,
+KisSimpleDynamicSensorFactory::KisSimpleDynamicSensorFactory(const QString &id,
+                                                             int minimumValue,
                                                              int maximumValue,
                                                              const QString &minimumLabel,
                                                              const QString &maximumLabel,
                                                              const QString &valueSuffix)
-    : m_minimumValue(minimumValue),
-      m_maximumValue(maximumValue),
-      m_minimumLabel(minimumLabel),
-      m_maximumLabel(maximumLabel),
-      m_valueSuffix(valueSuffix)
+    : m_minimumValue(minimumValue)
+    , m_maximumValue(maximumValue)
+    , m_id(id)
+    , m_minimumLabel(minimumLabel)
+    , m_maximumLabel(maximumLabel)
+    , m_valueSuffix(valueSuffix)
 {
+}
+
+QString KisSimpleDynamicSensorFactory::id() const
+{
+    return m_id;
 }
 
 int KisSimpleDynamicSensorFactory::minimumValue()

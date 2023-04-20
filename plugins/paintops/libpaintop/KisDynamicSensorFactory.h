@@ -16,6 +16,12 @@ class PAINTOP_EXPORT KisDynamicSensorFactory
 public:
     virtual ~KisDynamicSensorFactory();
 
+    /**
+     * return the id for the shape this factory creates.
+     * @return the id for the shape this factory creates.
+     */
+    virtual QString id() const = 0;
+
     virtual int minimumValue() = 0;
     virtual int maximumValue(int length) = 0;
     virtual QString minimumLabel() = 0;

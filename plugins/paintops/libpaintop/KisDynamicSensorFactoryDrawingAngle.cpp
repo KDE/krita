@@ -37,10 +37,7 @@ namespace {
 }
 
 KisDynamicSensorFactoryDrawingAngle::KisDynamicSensorFactoryDrawingAngle()
-    : KisSimpleDynamicSensorFactory(
-          0, 360,
-          i18n("0°"), i18n("360°"),
-          i18n("°"))
+    : KisSimpleDynamicSensorFactory(DrawingAngleId.id(), 0, 360, i18n("0°"), i18n("360°"), i18n("°"))
 {
 
 }

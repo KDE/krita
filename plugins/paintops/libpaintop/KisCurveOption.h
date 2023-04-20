@@ -19,6 +19,9 @@ class PAINTOP_EXPORT KisCurveOption
 public:
     KisCurveOption(const KisCurveOptionData &data);
 
+    KisCurveOption(KisCurveOption &) = delete;
+    KisCurveOption &operator=(KisCurveOption &) = delete;
+
     struct ValueComponents {
         qreal constant {1.0};
         qreal scaling {1.0};

@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-19 00:47+0000\n"
-"PO-Revision-Date: 2023-04-06 10:26+0200\n"
+"PO-Revision-Date: 2023-04-18 11:00+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -24856,10 +24856,9 @@ msgstr "Aanpassen naar afbeeldingsresolutie (ppi)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
-#, fuzzy, kde-format
-#| msgid "in Filters"
+#, kde-format
 msgid "&Scaling Filter:"
-msgstr "In filters"
+msgstr "Filter voor &schalen:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38

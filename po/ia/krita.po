@@ -8949,7 +8949,7 @@ msgstr "Fixa modo de eradicar"
 #| msgid "Show Preview"
 msgctxt "action"
 msgid "Toggle eraser preset"
-msgstr "Monstrar vista preliminari"
+msgstr "Monstrar vista preliminar"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -14138,7 +14138,7 @@ msgstr "Reflecte Verticalmente"
 #, kde-format
 msgctxt "action"
 msgid "&Instant Preview Mode"
-msgstr "Modo de Vista preliminari &instantanee"
+msgstr "Modo de Vista preliminar &instantanee"
 
 #. i18n: context: toolTip @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
@@ -14148,7 +14148,7 @@ msgstr "Modo de Vista preliminari &instantanee"
 #, kde-format
 msgctxt "action"
 msgid "Instant Preview Mode"
-msgstr "Modo de Vista preliminari instantanee"
+msgstr "Modo de Vista preliminar instantanee"
 
 #. i18n: context: text @ Action (softProof), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:712
@@ -14733,7 +14733,7 @@ msgstr "Selige un assistente"
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Show &Assistant Previews"
-msgstr "Vista preliminari"
+msgstr "Vista preliminar"
 
 #. i18n: context: toolTip @ Action (view_toggle_assistant_previews), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_assistant_previews), Actions (View), ActionCollection (Menu)
@@ -14743,7 +14743,7 @@ msgstr "Vista preliminari"
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Show Assistant Previews"
-msgstr "Vista preliminari"
+msgstr "Vista preliminar"
 
 #. i18n: context: text @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1132
@@ -22411,7 +22411,7 @@ msgstr ""
 #: libs/ui/canvas/kis_canvas_controller.cpp:356
 #, kde-format
 msgid "Instant Preview Mode: %1"
-msgstr "Modo de Vista preliminari instantaneo : %1"
+msgstr "Modo de Vista preliminar instantaneo : %1"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:363
 #, kde-format
@@ -22439,7 +22439,7 @@ msgid ""
 "Failed activating Instant Preview mode!\n"
 "\n"
 "%1"
-msgstr "Modo de vista preliminari"
+msgstr "Modo de vista preliminar"
 
 #: libs/ui/canvas/kis_change_guides_command.cpp:47
 msgctxt "(qtundo-format)"
@@ -23121,7 +23121,7 @@ msgstr "Selige disposition (Layer)"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:237
 #, fuzzy, kde-format
 msgid "Preview Outline"
-msgstr "Dimension de vista preliminari"
+msgstr "Dimension de vista preliminar"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:238
 #, fuzzy, kde-format
@@ -25120,7 +25120,7 @@ msgstr "Profilo:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:50
 #, kde-format
 msgid "Preview"
-msgstr "Vista preliminari"
+msgstr "Vista preliminar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFilterSelectedFrames)
 #: libs/ui/forms/wdgfilterdialog.ui:74
@@ -28938,7 +28938,7 @@ msgstr "&Telas (canvas)"
 #, fuzzy, kde-format
 #| msgid "Show Preview"
 msgid "Toggle Eraser"
-msgstr "Monstrar vista preliminari"
+msgstr "Monstrar vista preliminar"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
 #, fuzzy, kde-format
@@ -32323,7 +32323,7 @@ msgstr "&Exporta..."
 #: libs/ui/layerstyles/wdglayerstyles.ui:177
 #, kde-format
 msgid "Pre&view"
-msgstr "&Vista preliminari"
+msgstr "&Vista preliminar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFillType)
@@ -33774,7 +33774,7 @@ msgstr "Limine:"
 #, fuzzy, kde-format
 msgctxt "@label:slider"
 msgid "Instant preview threshold:"
-msgstr "Modo de vista preliminari"
+msgstr "Modo de vista preliminar"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:57
 #, fuzzy, kde-format
@@ -33786,7 +33786,7 @@ msgstr "Preferentias de filtro"
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Instant Preview Mode is disabled by the following options:<ul>%1</ul></p>"
-msgstr "Modo de vista preliminari"
+msgstr "Modo de vista preliminar"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:140
 #, kde-format
@@ -33803,13 +33803,13 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Instant Preview may look different from the final result. In case of "
 "troubles try disabling the following options:<ul>%1</ul></p>"
-msgstr "Modo de vista preliminari"
+msgstr "Modo de vista preliminar"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:162
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "<p>Instant Preview Mode is available</p>"
-msgstr "Modo de vista preliminari"
+msgstr "Modo de vista preliminar"
 
 #: libs/ui/widgets/kis_lod_availability_widget.cpp:166
 #, kde-format
@@ -35341,7 +35341,7 @@ msgstr "Vista Preliminar de &Imprimer"
 #: libs/widgetutils/config/kstandardaction_p.h:37
 #, kde-format
 msgid "Show a print preview of document"
-msgstr "Monstra un vista preliminari del documento"
+msgstr "Monstra un vista preliminar del documento"
 
 #: libs/widgetutils/config/kstandardaction_p.h:38
 #, kde-format
@@ -35817,7 +35817,7 @@ msgstr "secundas (s)"
 #, fuzzy, kde-format
 #| msgid "Show Preview"
 msgid "Toggle Preview"
-msgstr "Monstrar vista preliminari"
+msgstr "Monstrar vista preliminar"
 
 #: libs/widgetutils/KoFileDialog.cpp:243
 #, kde-format
@@ -39792,7 +39792,7 @@ msgstr "Extension de  file:"
 #, kde-format
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
-msgstr "Vista preliminari"
+msgstr "Vista preliminar"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, kde-format
@@ -40861,7 +40861,7 @@ msgstr "Selectionator de color"
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
 #, kde-format
 msgid "Preview:"
-msgstr "Vista preliminari:"
+msgstr "Vista preliminar:"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:4
@@ -42074,7 +42074,7 @@ msgstr "Claude Vista"
 #, fuzzy, kde-format
 msgctxt "EXIF: autofocus - distance range"
 msgid "Distant view"
-msgstr "Vista preliminari"
+msgstr "Vista preliminar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_6)
 #: plugins/extensions/metadataeditor/editors/exif.ui:414
@@ -57305,7 +57305,7 @@ msgstr "Usa sensores"
 #: plugins/tools/basictools/kis_tool_line.cc:95
 #, kde-format
 msgid "Show Preview"
-msgstr "Monstrar vista preliminari"
+msgstr "Monstrar vista preliminar"
 
 #: plugins/tools/basictools/kis_tool_line.cc:98
 #, fuzzy, kde-format
@@ -60533,7 +60533,7 @@ msgstr "Adaptation de granularitate"
 #, kde-format
 msgctxt "The Granularity value for Cage Transformation Preview"
 msgid "Preview"
-msgstr "Vista preliminari"
+msgstr "Vista preliminar"
 
 #. i18n: ectx: property (text), widget (QLabel, realGranularity)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1737
@@ -61402,13 +61402,13 @@ msgstr "Instrumento de Inages de Referentia"
 #~| msgctxt "action"
 #~| msgid "Instant Preview Mode"
 #~ msgid "Force Instant Preview in Move Tool"
-#~ msgstr "Modo de Vista preliminari instantanee"
+#~ msgstr "Modo de Vista preliminar instantanee"
 
 #, fuzzy
 #~| msgctxt "action"
 #~| msgid "Instant Preview Mode"
 #~ msgid "Force Instant Preview in Filters"
-#~ msgstr "Modo de Vista preliminari instantanee"
+#~ msgstr "Modo de Vista preliminar instantanee"
 
 #, fuzzy
 #~| msgid "Name of Profile"
@@ -62859,7 +62859,7 @@ msgstr "Instrumento de Inages de Referentia"
 #~| msgid "Preview"
 #~ msgctxt "The Granularity value for Preview"
 #~ msgid "Preview"
-#~ msgstr "Vista preliminari"
+#~ msgstr "Vista preliminar"
 
 #, fuzzy
 #~| msgid "RGB"
@@ -62892,7 +62892,7 @@ msgstr "Instrumento de Inages de Referentia"
 #, fuzzy
 #~| msgid "Preview mode"
 #~ msgid "Preview modified layer"
-#~ msgstr "Modo de vista preliminari"
+#~ msgstr "Modo de vista preliminar"
 
 #~ msgid "Pr&eview"
 #~ msgstr "Vista pr&eliminar"
@@ -62905,7 +62905,7 @@ msgstr "Instrumento de Inages de Referentia"
 #~ msgstr "Ori&ginal"
 
 #~ msgid "Update preview"
-#~ msgstr "Actualisa vista preliminari"
+#~ msgstr "Actualisa vista preliminar"
 
 #, fuzzy
 #~| msgid "&Update"
@@ -63024,7 +63024,7 @@ msgstr "Instrumento de Inages de Referentia"
 
 #~ msgctxt "action"
 #~ msgid "Show a print preview of document"
-#~ msgstr "Monstra un vista preliminari del documento"
+#~ msgstr "Monstra un vista preliminar del documento"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Change Connection"
@@ -66204,10 +66204,10 @@ msgstr "Instrumento de Inages de Referentia"
 #~ msgstr "&Cerca:"
 
 #~ msgid "Preview mode"
-#~ msgstr "Modo de vista preliminari"
+#~ msgstr "Modo de vista preliminar"
 
 #~ msgid "Preview size"
-#~ msgstr "Dimension de vista preliminari"
+#~ msgstr "Dimension de vista preliminar"
 
 #~ msgid "Pan"
 #~ msgstr "Pan"
@@ -66722,7 +66722,7 @@ msgstr "Instrumento de Inages de Referentia"
 #~| msgid "Preview"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Preview"
-#~ msgstr "Vista preliminari"
+#~ msgstr "Vista preliminar"
 
 #, fuzzy
 #~| msgid "Options"
@@ -67799,7 +67799,7 @@ msgstr "Instrumento de Inages de Referentia"
 #~| msgid "Pre&view"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Pre&view"
-#~ msgstr "&Vista preliminari"
+#~ msgstr "&Vista preliminar"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
@@ -68467,13 +68467,13 @@ msgstr "Instrumento de Inages de Referentia"
 #~| msgid "Preview mode"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Preview mode"
-#~ msgstr "Modo de vista preliminari"
+#~ msgstr "Modo de vista preliminar"
 
 #, fuzzy
 #~| msgid "Preview size"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Preview size"
-#~ msgstr "Dimension de vista preliminari"
+#~ msgstr "Dimension de vista preliminar"
 
 #, fuzzy
 #~| msgid "Exposure"
@@ -71787,7 +71787,7 @@ msgstr "Instrumento de Inages de Referentia"
 #~| msgid "Show a print preview of document"
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Show a print preview of document"
-#~ msgstr "Monstra un vista preliminari del documento"
+#~ msgstr "Monstra un vista preliminar del documento"
 
 #, fuzzy
 #~| msgctxt "action"
@@ -72053,12 +72053,12 @@ msgstr "Instrumento de Inages de Referentia"
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "&Instant Preview Mode"
-#~ msgstr "Modo de vista preliminari"
+#~ msgstr "Modo de vista preliminar"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Instant Preview Mode"
-#~ msgstr "Modo de vista preliminari"
+#~ msgstr "Modo de vista preliminar"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"
@@ -76007,7 +76007,7 @@ msgstr "Instrumento de Inages de Referentia"
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Instant Preview Mode: %1"
-#~ msgstr "Modo de vista preliminari"
+#~ msgstr "Modo de vista preliminar"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
@@ -76015,7 +76015,7 @@ msgstr "Instrumento de Inages de Referentia"
 #~ "Failed activating Instant Preview mode!\n"
 #~ "\n"
 #~ "%1"
-#~ msgstr "Modo de vista preliminari"
+#~ msgstr "Modo de vista preliminar"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
@@ -76207,7 +76207,7 @@ msgstr "Instrumento de Inages de Referentia"
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Preview Outline"
-#~ msgstr "Dimension de vista preliminari"
+#~ msgstr "Dimension de vista preliminar"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
@@ -77832,12 +77832,12 @@ msgstr "Instrumento de Inages de Referentia"
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
 #~ msgid "(Instant Preview)*"
-#~ msgstr "Vista preliminari"
+#~ msgstr "Vista preliminar"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) @info:tooltip"
 #~ msgid "<p>Instant Preview Mode is available</p>"
-#~ msgstr "Modo de vista preliminari"
+#~ msgstr "Modo de vista preliminar"
 
 #, fuzzy
 #~| msgid "x%1"
@@ -78333,7 +78333,7 @@ msgstr "Instrumento de Inages de Referentia"
 #~| msgid "Show a print preview of document"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Show a print preview of document"
-#~ msgstr "Monstra un vista preliminari del documento"
+#~ msgstr "Monstra un vista preliminar del documento"
 
 #, fuzzy
 #~| msgctxt "action"
@@ -83220,7 +83220,7 @@ msgstr "Instrumento de Inages de Referentia"
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Show Preview"
-#~ msgstr "Vista preliminari"
+#~ msgstr "Vista preliminar"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

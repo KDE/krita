@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-19 00:47+0000\n"
-"PO-Revision-Date: 2023-04-07 04:58+0200\n"
+"PO-Revision-Date: 2023-04-19 06:10+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -24386,10 +24386,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
-#, fuzzy, kde-format
-#| msgid "in Filters"
+#, kde-format
 msgid "&Scaling Filter:"
-msgstr "filtrebSi"
+msgstr "&მასშტაბის ფილტრი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -26458,7 +26457,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:566
 #, kde-format
 msgid "in Filters"
-msgstr "filtrebSi"
+msgstr "ფილტრებში"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTransformToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:573
@@ -39215,7 +39214,7 @@ msgstr "დავალება"
 #: plugins/dockers/tasksetdocker/wdgtasksetdocker.ui:40
 #, kde-format
 msgid "Start Recording"
-msgstr ""
+msgstr "ჩაწერის დაწყება"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveButton)
 #: plugins/dockers/tasksetdocker/wdgtasksetdocker.ui:53
@@ -53976,7 +53975,7 @@ msgstr "უახლესი დოკუმენტების პანე�
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:41
 msgid "Change settings"
-msgstr ""
+msgstr "პარამეტრების შეცვლა"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:58
 msgid "Mixer Slider Docker"

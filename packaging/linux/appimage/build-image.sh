@@ -95,7 +95,6 @@ fi
 cp -r $DEPS_INSTALL_PREFIX/share/mlt-7 $APPDIR/usr/share/mlt
 cp -r $DEPS_INSTALL_PREFIX/lib/mlt-7 $APPDIR/usr/lib/mlt
 cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libmlt*.so* $APPDIR/usr/lib/
-cp -av $DEPS_INSTALL_PREFIX/bin/melt $APPDIR/usr/bin/melt
 
 export MLT_BINARIES=""
 for BIN in $APPDIR/usr/lib/libmlt*.so*; do
@@ -105,11 +104,6 @@ done
 for BIN in $APPDIR/usr/lib/mlt/*.so*; do
   MLT_BINARIES="${MLT_BINARIES} -executable=${BIN}"
 done
-
-for BIN in $APPDIR/usr/bin/melt; do
-  MLT_BINARIES="${MLT_BINARIES} -executable=${BIN}"
-done
-
 
 ## == FFMPEG Dependencies and Resources ==
 cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libav*.s* $APPDIR/usr/lib/

@@ -2337,7 +2337,7 @@ void KisDocument::setStoryboardCommentList(const QVector<StoryboardComment> &sto
     }
 }
 
-QVector<QFileInfo> KisDocument::getAudioTracks() {
+QVector<QFileInfo> KisDocument::getAudioTracks() const {
     return d->audioTracks;
 }
 

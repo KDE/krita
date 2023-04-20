@@ -256,7 +256,8 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
         m_page->sequenceStart->setValue(doc.image()->animationInterface()->exportInitialFrameNumber());
     }
 
-    m_page->chkIncludeAudio->setChecked(true); //todo: Changed based on media file existence.
+    bool hasAudioLoaded = doc.getAudioTracks().count() > 0;
+    m_page->chkIncludeAudio->setChecked(hasAudioLoaded);
 }
 
 void KisDlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeType,

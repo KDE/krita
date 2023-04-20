@@ -398,7 +398,7 @@ public:
      */
     void setStoryboardCommentList(const QVector<StoryboardComment> &storyboardCommentList, bool emitSignal = false);
 
-    QVector<QFileInfo> getAudioTracks();
+    QVector<QFileInfo> getAudioTracks() const;
     void setAudioTracks(QVector<QFileInfo> f);
 
     void setAudioLevel(qreal level);

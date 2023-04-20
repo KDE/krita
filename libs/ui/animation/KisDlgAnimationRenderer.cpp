@@ -673,8 +673,7 @@ bool KisDlgAnimationRenderer::validateFFmpeg(bool warn)
     }
 
     if (warn) {
-        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The FFmpeg that you've given us appears to be invalid. \
-                                                    Please select the correct location of an FFmpeg executable on your system."));
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The FFmpeg that you've given us appears to be invalid. Please select the correct location of an FFmpeg executable on your system."));
     }
 
     return false;

@@ -56,7 +56,7 @@ KisDlgConfigureCumulativeUndo::KisDlgConfigureCumulativeUndo(const KisCumulative
               "be kept unmerged. When a stroke becomes old enough, "
               "Krita will try to merge it"));
     dblMergeTimeout->setRange(3, 600);
-    dblMergeTimeout->setSuffix(i18n(" sec"));
+    dblMergeTimeout->setSuffix(i18nc("suffix for \"seconds\"", " sec"));
     form->addRow(i18n("Wait before merging strokes:"), dblMergeTimeout);
 
     connectControl(dblMergeTimeout, &m_d->model, "mergeTimeout");
@@ -78,7 +78,7 @@ KisDlgConfigureCumulativeUndo::KisDlgConfigureCumulativeUndo(const KisCumulative
               "each other, then they will be considered as belonging to "
               "the same group and merged"));
     dblMaxGroupSeparation->setRange(0.3, 60);
-    dblMaxGroupSeparation->setSuffix(i18n(" sec"));
+    dblMaxGroupSeparation->setSuffix(i18nc("suffix for \"seconds\"", " sec"));
     form->addRow(i18n("Max interval of grouped strokes:"), dblMaxGroupSeparation);
 
     connectControl(dblMaxGroupSeparation, &m_d->model, "maxGroupSeparation");
@@ -90,7 +90,7 @@ KisDlgConfigureCumulativeUndo::KisDlgConfigureCumulativeUndo(const KisCumulative
               "If the group is going to be longer than this limit in "
               "the result of the merge, this merge will not happen."));
     dblMaxGroupDuration->setRange(0.3, 600.0);
-    dblMaxGroupDuration->setSuffix(i18n(" sec"));
+    dblMaxGroupDuration->setSuffix(i18nc("suffix for \"seconds\"", " sec"));
     form->addRow(i18n("Max group duration:"), dblMaxGroupDuration);
 
     connectControl(dblMaxGroupDuration, &m_d->model, "maxGroupDuration");

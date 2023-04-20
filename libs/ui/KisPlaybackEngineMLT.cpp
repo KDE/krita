@@ -120,7 +120,6 @@ struct KisPlaybackEngineMLT::Private {
         pushConsumer.reset();
     }
 
-    // TEMP
     KisCanvas2* activeCanvas() {
         return m_self->activeCanvas();
     }

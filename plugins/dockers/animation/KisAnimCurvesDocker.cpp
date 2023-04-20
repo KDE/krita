@@ -437,7 +437,6 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
         });
 
         connect(m_d->canvas->animationState(), SIGNAL(sigFrameChanged()), this, SLOT(updateFrameRegister()));
-        connect(m_d->canvas->animationState(), SIGNAL(sigPlaybackSpeedChanged(double)), this, SLOT(handlePlaybackSpeedChange(double)));
 
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(updateFrameRegister()));
 

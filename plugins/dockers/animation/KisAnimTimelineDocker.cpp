@@ -438,8 +438,6 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
         connect(m_d->canvas->animationState(), &KisCanvasAnimationState::sigPlaybackStateChanged, [this](PlaybackState state){
             m_d->titlebar->transport->setPlaying(state == PlaybackState::PLAYING);
         });
-        connect(m_d->canvas->animationState(), SIGNAL(sigPlaybackStatisticsUpdated()), this, SLOT(updatePlaybackStatistics()));
-        connect(m_d->canvas->animationState(), SIGNAL(sigPlaybackSpeedChanged(double)), this, SLOT(handlePlaybackSpeedChange(double)));
 
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(updateFrameRegister()));
 

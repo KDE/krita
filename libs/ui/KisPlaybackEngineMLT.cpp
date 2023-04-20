@@ -276,7 +276,10 @@ void KisPlaybackEngineMLT::setupProducer(boost::optional<QFileInfo> file)
         } else {
             // SANITY CHECK: Check that the MLT plugins and resources are where the program expects them to be.
             // HINT -- Check krita/main.cc's mlt environment variable setup for appimage.
-            ENTER_FUNCTION() << "INVALID PRODUCER FOR FILE: " << ppVar(file->absoluteFilePath());
+            KIS_SAFE_ASSERT_RECOVER(qEnvironmentVariableIsSet("MLT_REPOSITORY"));
+            KIS_SAFE_ASSERT_RECOVER(qEnvironmentVariableIsSet("MLT_PROFILES_PATH"));
+            KIS_SAFE_ASSERT_RECOVER(qEnvironmentVariableIsSet("MLT_PRESETS_PATH"));
+            qDebug() << "Warning: Invalid MLT producer for file: " << ppVar(file->absoluteFilePath()) << " Falling back to audio-less playback.";
         }
     }
 

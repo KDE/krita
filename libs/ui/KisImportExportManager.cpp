@@ -167,7 +167,12 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
             QList<KoJsonTrader::Plugin> list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
             Q_FOREACH(const KoJsonTrader::Plugin &loader, list) {
                 QJsonObject json = loader.metaData().value("MetaData").toObject();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
                 Q_FOREACH(const QString &mimetype, json.value("X-KDE-Import").toString().split(",", Qt::SkipEmptyParts)) {
+#else
+                Q_FOREACH(const QString &mimetype, json.value("X-KDE-Import").toString().split(",", QString::SkipEmptyParts)) {
+#endif
+
                     //qDebug() << "Adding  import mimetype" << mimetype << KisMimeDatabase::descriptionForMimeType(mimetype) << "from plugin" << loader;
                     mimeTypes << mimetype;
                 }
@@ -185,7 +190,12 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
             QList<KoJsonTrader::Plugin> list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
             Q_FOREACH(const KoJsonTrader::Plugin &loader, list) {
                 QJsonObject json = loader.metaData().value("MetaData").toObject();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
                 Q_FOREACH(const QString &mimetype, json.value("X-KDE-Export").toString().split(",", Qt::SkipEmptyParts)) {
+#else
+                Q_FOREACH(const QString &mimetype, json.value("X-KDE-Export").toString().split(",", QString::SkipEmptyParts)) {
+#endif
+
                     //qDebug() << "Adding  export mimetype" << mimetype << KisMimeDatabase::descriptionForMimeType(mimetype) << "from plugin" << loader;
                     mimeTypes << mimetype;
                 }
@@ -212,7 +222,12 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
         QJsonObject json = loader.metaData().value("MetaData").toObject();
         QString directionKey = direction == Export ? "X-KDE-Export" : "X-KDE-Import";
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         if (json.value(directionKey).toString().split(",", Qt::SkipEmptyParts).contains(mimetype)) {
+#else
+        if (json.value(directionKey).toString().split(",", QString::SkipEmptyParts).contains(mimetype)) {
+#endif
+
             KLibFactory *factory = qobject_cast<KLibFactory *>(loader.instance());
 
             if (!factory) {

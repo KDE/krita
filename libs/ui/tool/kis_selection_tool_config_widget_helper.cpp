@@ -269,9 +269,16 @@ void KisSelectionToolConfigWidgetHelper::reloadExactToolConfig()
         cfgToolSpecific.readEntry("featherSelection", 0);
     const QString referenceLayersStr =
         cfgToolSpecific.readEntry("sampleLayersMode", "sampleCurrentLayer");
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     const QStringList colorLabelsStr =
         cfgToolSpecific.readEntry<QString>("colorLabels", "")
             .split(',', Qt::SkipEmptyParts);
+#else
+    const QStringList colorLabelsStr =
+        cfgToolSpecific.readEntry<QString>("colorLabels", "")
+            .split(',', QString::SkipEmptyParts);
+#endif
 
     const KisSelectionOptions::ReferenceLayers referenceLayers =
         referenceLayersStr == "sampleAllLayers"

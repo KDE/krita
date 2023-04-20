@@ -462,7 +462,12 @@ KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QStri
         return 0;
     }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList parts = filepath.split('/', Qt::SkipEmptyParts);
+#else
+    QStringList parts = filepath.split('/', QString::SkipEmptyParts);
+#endif
+
     Q_ASSERT(parts.size() == 2);
 
     KoResourceSP resource = loader->create(parts[1]);

@@ -376,9 +376,15 @@ void KisVideoExportOptionsDialog::slotSaveCustomLine()
 
 QStringList KisVideoExportOptionsDialog::customUserOptions() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     return ui->chkCustomLine->isChecked() ?
         ui->txtCustomLine->text().split(" ", Qt::SkipEmptyParts) :
                 generateCustomLine();
+#else
+    return ui->chkCustomLine->isChecked() ?
+        ui->txtCustomLine->text().split(" ", QString::SkipEmptyParts) :
+                generateCustomLine();
+#endif
 }
 
 QString KisVideoExportOptionsDialog::customUserOptionsString() const

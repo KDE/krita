@@ -98,7 +98,11 @@ void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
 
     if (!m_initialized) {
         KisConfig cfg(true);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         QStringList presetHistory = cfg.readEntry<QString>("presethistory", "").split(",", Qt::SkipEmptyParts);
+#else
+        QStringList presetHistory = cfg.readEntry<QString>("presethistory", "").split(",", QString::SkipEmptyParts);
+#endif
 
         m_presetLimit = cfg.readEntry("presethistoryLimit", 10);
 

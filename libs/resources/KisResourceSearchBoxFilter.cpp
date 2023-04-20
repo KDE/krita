@@ -169,7 +169,12 @@ void KisResourceSearchBoxFilter::initializeFilterData()
 
     QString tempFilter(m_d->filter);
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList tokens = tempFilter.split(m_d->searchTokenizer, Qt::SkipEmptyParts);
+#else
+    QStringList tokens = tempFilter.split(m_d->searchTokenizer, QString::SkipEmptyParts);
+#endif
+
     Q_FOREACH(const QString& token, tokens) {
         QString workingToken(token.toLower());
         const bool included = !checkPrefixAndCut(m_d->excludeBegin, workingToken);

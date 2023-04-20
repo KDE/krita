@@ -427,7 +427,11 @@ SvgStyles SvgStyleParser::parseOneCssStyle(const QString &style, const QStringLi
     SvgStyles parsedStyles;
     if (style.isEmpty()) return parsedStyles;
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList substyles = style.simplified().split(';', Qt::SkipEmptyParts);
+#else
+    QStringList substyles = style.simplified().split(';', QString::SkipEmptyParts);
+#endif
     if (!substyles.count()) return parsedStyles;
 
     for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
@@ -473,7 +477,11 @@ SvgStyles SvgStyleParser::collectStyles(const QDomElement &e)
 
     // collect all css style attributes
     Q_FOREACH (const QString &style, cssStyles) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         QStringList substyles = style.split(';', Qt::SkipEmptyParts);
+#else
+        QStringList substyles = style.split(';', QString::SkipEmptyParts);
+#endif
         if (!substyles.count())
             continue;
         for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {

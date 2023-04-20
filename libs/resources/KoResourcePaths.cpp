@@ -711,9 +711,15 @@ QString KoResourcePaths::locateLocalInternal(const QString &type, const QString 
 
 QStringList KoResourcePaths::findExtraResourceDirs() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList extraResourceDirs =
         QString::fromUtf8(qgetenv("EXTRA_RESOURCE_DIRS"))
             .split(';', Qt::SkipEmptyParts);
+#else
+    QStringList extraResourceDirs =
+        QString::fromUtf8(qgetenv("EXTRA_RESOURCE_DIRS"))
+            .split(';', QString::SkipEmptyParts);
+#endif
 
     const KConfigGroup cfg(KSharedConfig::openConfig(), "");
     const QString customPath =

@@ -97,7 +97,11 @@ KisResourceStorage::ResourceItem KisBundleStorage::resourceItem(const QString &u
 {
     KisResourceStorage::ResourceItem item;
     item.url = url;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList parts = url.split('/', Qt::SkipEmptyParts);
+#else
+    QStringList parts = url.split('/', QString::SkipEmptyParts);
+#endif
     Q_ASSERT(parts.size() == 2);
     item.folder = parts[0];
     item.resourceType = parts[0];
@@ -257,7 +261,11 @@ bool KisBundleStorage::saveAsNewVersion(const QString &resourceType, KoResourceS
 
 bool KisBundleStorage::exportResource(const QString &url, QIODevice *device)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList parts = url.split('/', Qt::SkipEmptyParts);
+#else
+    QStringList parts = url.split('/', QString::SkipEmptyParts);
+#endif
     Q_ASSERT(parts.size() == 2);
 
     const QString resourceType = parts[0];

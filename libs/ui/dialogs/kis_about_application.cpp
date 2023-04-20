@@ -52,7 +52,11 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     if (fileDevelopers.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream developersText(&fileDevelopers);
         developersText.setCodec("UTF-8");
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         authors.append(developersText.readAll().split("\n", Qt::SkipEmptyParts).join(", "));
+#else
+        authors.append(developersText.readAll().split("\n", QString::SkipEmptyParts).join(", "));
+#endif
     }
     authors.append(".</p></body></html>");
     wdgTab->lblAuthors->setText(authors);
@@ -103,7 +107,11 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     if (fileBackers.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream backersText(&fileBackers);
         backersText.setCodec("UTF-8");
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         backers.append(backersText.readAll().split("\n", Qt::SkipEmptyParts).join(", "));
+#else
+        backers.append(backersText.readAll().split("\n", QString::SkipEmptyParts).join(", "));
+#endif
     }
     backers.append(i18n(".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"));
     wdgTab->lblKickstarter->setText(backers);
@@ -119,7 +127,13 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     if (fileCredits.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream creditsText(&fileCredits);
         creditsText.setCodec("UTF-8");
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         Q_FOREACH (const QString &credit, creditsText.readAll().split('\n', Qt::SkipEmptyParts)) {
+#else
+        Q_FOREACH (const QString &credit, creditsText.readAll().split('\n', QString::SkipEmptyParts)) {
+#endif
+
             if (credit.contains(":")) {
                 QList<QString> creditSplit = credit.split(':');
                 credits.append(creditSplit.at(0));
@@ -174,7 +188,12 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
                                       "<h1 align=\"center\"><b>Third-party Libraries used by Krita</b></h1>"
                                       "<p>Krita is built on the following free software libraries:</p><p><ul>");
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         Q_FOREACH (const QString &lib, thirdPartyText.readAll().split('\n', Qt::SkipEmptyParts)) {
+#else
+        Q_FOREACH (const QString &lib, thirdPartyText.readAll().split('\n', QString::SkipEmptyParts)) {
+#endif
+
             if (!lib.startsWith("#")) {
                 QStringList parts = lib.split(',');
                 if (parts.size() >= 3) {

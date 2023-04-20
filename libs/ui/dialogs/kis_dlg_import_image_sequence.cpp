@@ -28,8 +28,14 @@ public:
     {
         if (collator->numericMode()) {
             const QRegExp rx(QLatin1String("[^0-9]+"));
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
             QStringList ours = text().split(rx, Qt::SkipEmptyParts);
             QStringList theirs = other.text().split(rx, Qt::SkipEmptyParts);
+#else
+            QStringList ours = text().split(rx, QString::SkipEmptyParts);
+            QStringList theirs = other.text().split(rx, QString::SkipEmptyParts);
+#endif
 
             // Let's compare the last numbers -- they are most likely to be the serial numbers
             if (ours.size() > 0 && theirs.size() > 0) {

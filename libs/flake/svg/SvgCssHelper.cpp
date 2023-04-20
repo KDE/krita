@@ -145,7 +145,11 @@ public:
                 break;
             case InList:
                 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
                     QStringList tokens = e.attribute(m_attribute).split(' ', Qt::SkipEmptyParts);
+#else
+                    QStringList tokens = e.attribute(m_attribute).split(' ', QString::SkipEmptyParts);
+#endif
                     return tokens.contains(m_value);
                 }
                 break;
@@ -497,7 +501,11 @@ public:
     {
         SelectorGroup group;
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         QStringList selectors = pattern.split(',', Qt::SkipEmptyParts);
+#else
+        QStringList selectors = pattern.split(',', QString::SkipEmptyParts);
+#endif
         for (int i = 0; i < selectors.count(); ++i ) {
             CssSelectorBase * selector = compileSelector(selectors[i].simplified());
             if (selector)
@@ -627,7 +635,11 @@ void SvgCssHelper::parseStylesheet(const QDomElement &e)
     commentExp.setMinimal(true); // do not match greedy
     data.remove(commentExp);
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList defs = data.split('}', Qt::SkipEmptyParts);
+#else
+    QStringList defs = data.split('}', QString::SkipEmptyParts);
+#endif
     for (int i = 0; i < defs.count(); ++i) {
         QStringList def = defs[i].split('{');
         if( def.count() != 2 )
@@ -638,7 +650,11 @@ void SvgCssHelper::parseStylesheet(const QDomElement &e)
         QString style = def[1].simplified();
         if (style.isEmpty())
             break;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         QStringList selectors = pattern.split(',', Qt::SkipEmptyParts);
+#else
+        QStringList selectors = pattern.split(',', QString::SkipEmptyParts);
+#endif
         for (int i = 0; i < selectors.count(); ++i ) {
             QString selector = selectors[i].simplified();
             d->cssStyles[selector] = style;

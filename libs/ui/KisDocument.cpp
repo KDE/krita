@@ -931,18 +931,35 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
                                     fileName,
                                     errorMessage), errorMessageTimeout);
 
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         if (!fileBatchMode()) {
             DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
                                 i18n("Could not save %1.", job.filePath),
                                 errorMessage.split("\n", Qt::SkipEmptyParts)
                                     + warningMessage.split("\n", Qt::SkipEmptyParts),
                                 status.errorMessage());
+#else
+        if (!fileBatchMode()) {
+            DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
+                                i18n("Could not save %1.", job.filePath),
+                                errorMessage.split("\n", QString::SkipEmptyParts)
+                                    + warningMessage.split("\n", QString::SkipEmptyParts),
+                                status.errorMessage());
+#endif
+
             dlg.exec();
         }
     }
     else {
         if (!fileBatchMode() && !warningMessage.isEmpty()) {
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
             QStringList reasons = warningMessage.split("\n", Qt::SkipEmptyParts);
+#else
+            QStringList reasons = warningMessage.split("\n", QString::SkipEmptyParts);
+#endif
+
             DlgLoadMessages dlg(
                 i18nc("@title:window", "Krita"),
                 i18nc("dialog box shown to the user if there were warnings while saving the document, "
@@ -1895,19 +1912,35 @@ bool KisDocument::openFile()
         KisUsageLogger::log(QString("Loading %1 failed: %2").arg(prettyPath(), msg));
 
         if (!msg.isEmpty() && !fileBatchMode()) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
             DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
                                 i18n("Could not open %1.", prettyPath()),
                                 errorMessage().split("\n", Qt::SkipEmptyParts)
                                     + warningMessage().split("\n", Qt::SkipEmptyParts),
                                 msg);
+#else
+            DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
+                                i18n("Could not open %1.", prettyPath()),
+                                errorMessage().split("\n", QString::SkipEmptyParts)
+                                    + warningMessage().split("\n", QString::SkipEmptyParts),
+                                msg);
+#endif
+
             dlg.exec();
         }
         return false;
     }
     else if (!warningMessage().isEmpty() && !fileBatchMode()) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
                             i18n("There were problems opening %1.", prettyPath()),
                             warningMessage().split("\n", Qt::SkipEmptyParts));
+#else
+        DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
+                            i18n("There were problems opening %1.", prettyPath()),
+                            warningMessage().split("\n", QString::SkipEmptyParts));
+#endif
+
         dlg.exec();
         setPath(QString());
     }

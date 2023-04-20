@@ -179,7 +179,13 @@ bool KisMemoryStorage::loadVersionedResource(KoResourceSP resource)
 
 bool KisMemoryStorage::importResource(const QString &url, QIODevice *device)
 {
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList parts = url.split('/', Qt::SkipEmptyParts);
+#else
+    QStringList parts = url.split('/', QString::SkipEmptyParts);
+#endif
+
     Q_ASSERT(parts.size() == 2);
 
     const QString resourceType = parts[0];
@@ -204,7 +210,11 @@ bool KisMemoryStorage::importResource(const QString &url, QIODevice *device)
 
 bool KisMemoryStorage::exportResource(const QString &url, QIODevice *device)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList parts = url.split('/', Qt::SkipEmptyParts);
+#else
+    QStringList parts = url.split('/', QString::SkipEmptyParts);
+#endif
     Q_ASSERT(parts.size() == 2);
 
     const QString resourceType = parts[0];
@@ -256,7 +266,12 @@ bool KisMemoryStorage::addResource(const QString &resourceType,  KoResourceSP re
 
 QString KisMemoryStorage::resourceMd5(const QString &url)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList parts = url.split('/', Qt::SkipEmptyParts);
+#else
+    QStringList parts = url.split('/', QString::SkipEmptyParts);
+#endif
+
     Q_ASSERT(parts.size() == 2);
 
     const QString resourceType = parts[0];

@@ -266,7 +266,12 @@ RenderedFrames KisDlgImportVideoAnimation::renderFrames(const QDir& directory)
         frameTimeList = {0}; // We always have a frame 0 here...
         connect(ffmpeg.data(), &KisFFMpegWrapper::sigReadSTDOUT, [&](QByteArray arr) {
             QString out = QString(arr);
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
             QStringList integerOuts = out.split("\n", Qt::SkipEmptyParts);
+#else
+            QStringList integerOuts = out.split("\n", QString::SkipEmptyParts);
+#endif
             Q_FOREACH(const QString& str, integerOuts){
                 bool ok = false;
                 const int value = str.toUInt(&ok);

@@ -1368,7 +1368,11 @@ bool KoColorSet::Private::loadGpl()
         if (lines[i].startsWith('#')) {
             comment += lines[i].mid(1).trimmed() + ' ';
         } else if (!lines[i].isEmpty()) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
             QStringList a = lines[i].replace('\t', ' ').split(' ', Qt::SkipEmptyParts);
+#else
+            QStringList a = lines[i].replace('\t', ' ').split(' ', QString::SkipEmptyParts);
+#endif
 
             if (a.count() < 3) {
                 continue;
@@ -1449,7 +1453,11 @@ bool KoColorSet::Private::loadPsp()
 
     for (int i = 0; i < entries; ++i)  {
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         QStringList a = l[i + 3].replace('\t', ' ').split(' ', Qt::SkipEmptyParts);
+#else
+        QStringList a = l[i + 3].replace('\t', ' ').split(' ', QString::SkipEmptyParts);
+#endif
 
         if (a.count() != 3) {
             continue;

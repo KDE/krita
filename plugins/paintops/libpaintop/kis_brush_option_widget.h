@@ -28,6 +28,8 @@ public:
 
     KisBrushOptionWidget(KisBrushOptionWidgetFlags flags);
 
+    ~KisBrushOptionWidget() override;
+
     /**
      * @return the currently selected brush
      */

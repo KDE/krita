@@ -74,6 +74,8 @@ KisBrushOptionWidget::KisBrushOptionWidget(KisBrushOptionWidgetFlags flags)
     lager::watch(m_d->commonBrushSizeData, std::bind(&KisBrushOptionWidget::emitSettingChanged, this));
 }
 
+KisBrushOptionWidget::~KisBrushOptionWidget() = default;
+
 KisBrushSP KisBrushOptionWidget::brush() const
 {
     return m_brushSelectionWidget->brush();

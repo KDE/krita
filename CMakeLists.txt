@@ -365,6 +365,28 @@ if (WIN32)
 # we set the minimum here.
 remove_definitions(-D_WIN32_WINNT=0x0600 -DWINVER=0x0600 -D_WIN32_IE=0x0600)
 add_definitions(-D_WIN32_WINNT=0x0602 -DWINVER=0x0602  -D_WIN32_IE=0x0602)
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")
+    if (MSVC) # or CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC"
+        # KDE's CompilerSettings module sets -Wall -Wextra for Clang.
+        # However, -Wall on clang-cl maps to -Weverything, which turns on way too
+        # much, so we're using -W4 instead, which is mapped to clang's -Wall -Wextra.
+        # Source: https://hg.mozilla.org/mozilla-central/rev/ffb7bfbfc328
+        string(REPLACE "-Wall -Wextra" "-W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        string(REPLACE "-Wall -Wextra" "-W4" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        # Allow KoColorSpaceMaths operators to build.
+        add_compile_options("/permissive")
+    endif()
+
+    # Remove these invalid flags.
+    string(REPLACE "-fno-common" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+    string(REPLACE "-fno-operator-names" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REPLACE "-fdiagnostics-color=always" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REPLACE "-Wl,--no-undefined" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+    string(REPLACE "-Wl,--no-undefined" "" CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+    string(REPLACE "-Wl,--fatal-warnings" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+    string(REPLACE "-Wl,--fatal-warnings" "" CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+endif()
 endif()
 
 # do not reorder to be alphabetical: this is the order in which the frameworks
@@ -555,7 +577,7 @@ add_definitions(
 # Starting with Qt 5.13, it is impossible to use strict iterators
 # wholesale because of:
 # https://github.com/qt/qtbase/commit/972f8845a85d6a07140025e4257cb8a1a2699b5d
-if (NOT MSVC OR ${Qt5_VERSION} VERSION_LESS "5.13.0")
+if (NOT (MSVC OR CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC") OR ${Qt5_VERSION} VERSION_LESS "5.13.0")
   add_definitions(-DQT_STRICT_ITERATORS)
 endif()
 

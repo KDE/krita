@@ -205,7 +205,7 @@ macro(_xsimd_compile_one_implementation _srcs _impl)
          endif()
       endforeach()
 
-      if(MSVC)
+      if(MSVC AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
          # MSVC for 64bit does not recognize /arch:SSE2 anymore. Therefore we set override _ok if _impl
          # says SSE
          if("${_impl}" MATCHES "SSE")

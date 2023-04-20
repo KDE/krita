@@ -159,6 +159,7 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
 
             d->concentricEllipseInPolygonMirrored.updateToPointOnConcentricEllipse(d->ellipseInPolygon.originalTransform, initialTransform.inverted().map(mousePos), d->cache.horizon, true);
             //d->concentricEllipseInPolygonMirrored.setSimpleEllipseVertices(d->simpleConcentricEllipse);
+            d->concentricEllipseInPolygonMirrored.setSimpleEllipseVertices(d->simpleConcentricEllipseMirrored);
         //}
 
         //ENTER_FUNCTION() << "Set points to simple ellipse:" << d->concentricEllipseInPolygon.finalVertices[0]

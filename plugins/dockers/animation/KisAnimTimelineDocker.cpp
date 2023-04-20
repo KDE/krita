@@ -607,19 +607,19 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
         KisPart::instance()->playbackEngine()->nextUnfilteredKeyframe();
     });
 
-    action = actionManager->createAction("last_frame");
-    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, [this](bool){
-       if (m_d->canvas) {
-           //KisPart::instance()->playbackEngine()->goToEndFrame();
-       }
-    });
-
     action = actionManager->createAction("first_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, [this](bool){
        if (m_d->canvas) {
-           //KisPart::instance()->playbackEngine()->seek;
+           KisPart::instance()->playbackEngine()->firstFrame();
+       }
+    });
+
+    action = actionManager->createAction("last_frame");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, &KisAction::triggered, [this](bool){
+       if (m_d->canvas) {
+           KisPart::instance()->playbackEngine()->lastFrame();
        }
     });
 

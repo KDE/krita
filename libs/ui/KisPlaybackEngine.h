@@ -58,6 +58,8 @@ public Q_SLOTS:
     virtual void nextFrame();
     virtual void previousKeyframe();
     virtual void nextKeyframe();
+    virtual void firstFrame();
+    virtual void lastFrame();
 
     /**
      * @brief previousMatchingKeyframe && nextMatchingKeyframe

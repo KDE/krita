@@ -170,6 +170,38 @@ void KisPlaybackEngine::nextKeyframe()
     }
 }
 
+void KisPlaybackEngine::firstFrame()
+{
+    if (!m_d->activeCanvas) return;
+    KisCanvasAnimationState *animationState = m_d->activeCanvas->animationState();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
+    KisImageAnimationInterface *animInterface = m_d->activeCanvas->image()->animationInterface();
+
+    const int startFrame = animInterface->activePlaybackRange().start();
+
+    if (animationState->playbackState() != STOPPED) {
+        stop();
+    }
+
+    seek(startFrame, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
+}
+
+void KisPlaybackEngine::lastFrame()
+{
+    if (!m_d->activeCanvas) return;
+    KisCanvasAnimationState *animationState = m_d->activeCanvas->animationState();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
+    KisImageAnimationInterface *animInterface = m_d->activeCanvas->image()->animationInterface();
+
+    const int endFrame = animInterface->activePlaybackRange().end();
+
+    if (animationState->playbackState() != STOPPED) {
+        stop();
+    }
+
+    seek(endFrame, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
+}
+
 void KisPlaybackEngine::previousMatchingKeyframe()
 {
     if (!m_d->activeCanvas) return;

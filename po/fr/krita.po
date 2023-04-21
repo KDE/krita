@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-02 02:51+0000\n"
+"POT-Creation-Date: 2023-04-21 02:49+0000\n"
 "PO-Revision-Date: 2023-03-08 14:41+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
@@ -19214,7 +19214,7 @@ msgstr "Ressources locales"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:776
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:717
-#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:707
+#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:711
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
 #: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
@@ -28447,7 +28447,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Modifier le calque de fichier"
 
-#: libs/ui/kis_clipboard.cc:708 libs/ui/KisView.cpp:681
+#: libs/ui/kis_clipboard.cc:712 libs/ui/KisView.cpp:681
 #, kde-format
 msgid ""
 "Could not open %2.\n"

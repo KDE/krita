@@ -21,16 +21,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-19 00:47+0000\n"
-"PO-Revision-Date: 2023-04-19 09:06+0200\n"
-"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
+"POT-Creation-Date: 2023-04-21 00:46+0000\n"
+"PO-Revision-Date: 2023-04-20 09:39+0200\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "X-Generator: Poedit 3.2.2\n"
 
@@ -17017,7 +17017,7 @@ msgstr "Uvožena slika"
 msgid "Selection Mask"
 msgstr "Maska izbora"
 
-#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2491
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2524
 #: plugins/impex/psd/psd_loader.cpp:189
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19304,17 +19304,17 @@ msgid "Out"
 msgstr "Oddalji"
 
 #: libs/pigment/resources/KoColorSet.cpp:1046
-#: libs/pigment/resources/KoColorSet.cpp:1387
-#: libs/pigment/resources/KoColorSet.cpp:1466
-#: libs/pigment/resources/KoColorSet.cpp:1680
+#: libs/pigment/resources/KoColorSet.cpp:1391
+#: libs/pigment/resources/KoColorSet.cpp:1474
+#: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1168
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1173
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
 msgstr "Neimenovano"
 
-#: libs/pigment/resources/KoStopGradient.cpp:368
+#: libs/pigment/resources/KoStopGradient.cpp:375
 #, kde-format
 msgid "SVG Gradient"
 msgstr "Preliv SVG"
@@ -19346,16 +19346,16 @@ msgstr "Krajevni viri"
 #: libs/ui/animation/KisAnimationRender.cpp:99
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:688
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:579
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:600
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:607
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:674
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:714
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:605
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:612
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:679
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:719
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:789
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:920
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
@@ -19365,20 +19365,22 @@ msgstr "Krajevni viri"
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
 #: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
 #: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
-#: libs/ui/KisApplication.cpp:1073 libs/ui/KisDocument.cpp:935
-#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:1855
-#: libs/ui/KisDocument.cpp:1898 libs/ui/KisDocument.cpp:1908
-#: libs/ui/KisMainWindow.cpp:976 libs/ui/KisMainWindow.cpp:1092
-#: libs/ui/KisMainWindow.cpp:1218 libs/ui/KisMainWindow.cpp:1317
-#: libs/ui/KisMainWindow.cpp:1923 libs/ui/KisMainWindow.cpp:1932
-#: libs/ui/KisMainWindow.cpp:2071 libs/ui/KisMainWindow.cpp:2132
-#: libs/ui/KisMainWindow.cpp:2153 libs/ui/KisMainWindow.cpp:2766
-#: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
-#: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
-#: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
-#: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1171
-#: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
+#: libs/ui/KisApplication.cpp:1073 libs/ui/KisDocument.cpp:937
+#: libs/ui/KisDocument.cpp:944 libs/ui/KisDocument.cpp:964
+#: libs/ui/KisDocument.cpp:1872 libs/ui/KisDocument.cpp:1916
+#: libs/ui/KisDocument.cpp:1922 libs/ui/KisDocument.cpp:1935
+#: libs/ui/KisDocument.cpp:1939 libs/ui/KisMainWindow.cpp:976
+#: libs/ui/KisMainWindow.cpp:1092 libs/ui/KisMainWindow.cpp:1218
+#: libs/ui/KisMainWindow.cpp:1317 libs/ui/KisMainWindow.cpp:1923
+#: libs/ui/KisMainWindow.cpp:1932 libs/ui/KisMainWindow.cpp:2071
+#: libs/ui/KisMainWindow.cpp:2132 libs/ui/KisMainWindow.cpp:2153
+#: libs/ui/KisMainWindow.cpp:2766 libs/ui/KisPart.cpp:555
+#: libs/ui/KisPart.cpp:558 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
+#: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:691
+#: libs/ui/KisView.cpp:1176 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1350
@@ -20388,17 +20390,20 @@ msgstr ""
 "iz arhiva."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The FFmpeg that you've given us appears to be "
+#| "invalid.                                                     Please "
+#| "select the correct location of an FFmpeg executable on your system."
 msgid ""
-"The FFmpeg that you've given us appears to be "
-"invalid.                                                     Please select "
-"the correct location of an FFmpeg executable on your system."
+"The FFmpeg that you've given us appears to be invalid. Please select the "
+"correct location of an FFmpeg executable on your system."
 msgstr ""
 "Podano mesto FFmpeg ni "
 "veljavno.                                                     Izberite pravo "
 "mesto izvršilne datoteke FFmpeg na svojem sistemu."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:688
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Vnesite ime datoteke, v katero želite upodabljati."
@@ -20423,7 +20428,7 @@ msgstr " sl/s"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:87
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:93
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:661
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:666
 #, kde-format
 msgctxt "Second as a unit following a value, like 60 s"
 msgid " s"
@@ -20442,7 +20447,7 @@ msgid "Current Document"
 msgstr "Trenutni dokument"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:105
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:626
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:631
 #, kde-format
 msgctxt "Video importer: fps of the document you're importing into"
 msgid ""
@@ -20494,59 +20499,59 @@ msgctxt ""
 msgid "Extracted %1 frames from %2 video."
 msgstr "Izluščenih %1 sličic iz videoposnetka %2."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
 #, kde-format
 msgid "Failed to export frames from video"
 msgstr "Izvažanje sličic iz videa ni uspelo"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:357
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:362
 #, kde-format
 msgid "Select your Video File"
 msgstr "Izberite video datoteko"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:390
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:395
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Width: %1 px"
 msgstr "Širina: %1 sl. točk"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:396
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Height: %1 px"
 msgstr "Višina: %1 sl. točk"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:395
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:400
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Primaries: %1"
 msgstr "Primarne barve: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:398
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:403
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Transfer: %1"
 msgstr "Prenos barv: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:401
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:406
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Duration: %1 s"
 msgstr "Trajanje: %1 s"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:402
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:407
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Frames: %1"
 msgstr "Sličic: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:403
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:408
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "FPS: %1"
 msgstr "Sličic na sekunbdo:\t%1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:407
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:412
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid ""
@@ -20556,7 +20561,7 @@ msgstr ""
 "*<font size='0.5em'><em>*Hitrost (sl/s) v datoteki ni pravilno navedena. "
 "Spremenjena je, da vidite celotno trajanje</em></font>"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:506
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:511
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20566,7 +20571,7 @@ msgstr ""
 "OPOZORILO, poskušate uvoziti %1 sličic, največja količina sličic, ki jih "
 "lahko uvozite, je %2."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:513
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:518
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
@@ -20574,7 +20579,7 @@ msgstr ""
 "Namesto tega uporabite <a href=\"https://kdenlive.org\">program za montažo</"
 "a>!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:519
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:524
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20584,7 +20589,7 @@ msgstr ""
 "Primanjkuje vam pomnilnika za nalaganje tolikšnega števila sličic, "
 "računalnik bo preobremenjen."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:526
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:531
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20592,7 +20597,7 @@ msgid ""
 msgstr ""
 "To bo prevzelo polovico razpoložljivega pomnilnika, urejanje bo oteženo."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:535
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:540
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20601,44 +20606,44 @@ msgid ""
 msgstr ""
 "Krita ne podpira krivulje prenosa videa (%1), zato bo naloženo kot linearno"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:565
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:567
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:570
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
 #, kde-format
 msgid "Open FFProbe"
 msgstr "Odpri FFProbe"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:579
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
 #, kde-format
 msgid "FFProbe is invalid!"
 msgstr "FFProbe ni veljaven!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:586
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:588
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:593
 #, kde-format
 msgid "Open FFMpeg"
 msgstr "Odpri FFMpeg"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:600
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:605
 #, kde-format
 msgid "FFMpeg is invalid!"
 msgstr "FFMpeg ni veljaven!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:607
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:612
 #, kde-format
 msgid "No FFMpeg found!"
 msgstr "FFMpeg ni mogoče najti!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:674
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:679
 #, kde-format
 msgid "Your FFMpeg version does not support this format"
 msgstr "Vaša različica FFMpeg ne podpira te vrste zapisa"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:714
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:719
 #, kde-format
 msgid "No video stream could be found!"
 msgstr "Video toka ni bilo mogoče najti!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:789
 #, kde-format
 msgid "Failed to load video information"
 msgstr "Informacij o videu ni bilo mogoče naložiti"
@@ -20659,13 +20664,13 @@ msgstr "Nalaganje video podatkov … Pregledanih %1 sličic."
 msgid "ffmpeg could not be found at %1"
 msgstr "ffmpeg ni mogoče najti v %1"
 
-#: libs/ui/animation/KisVideoSaver.cpp:136
+#: libs/ui/animation/KisVideoSaver.cpp:141
 #, kde-format
 msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
 msgstr "Ustvarjanje palete za vrsto datoteke %1."
 
-#: libs/ui/animation/KisVideoSaver.cpp:195
+#: libs/ui/animation/KisVideoSaver.cpp:200
 #, kde-format
 msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "
@@ -21276,13 +21281,13 @@ msgctxt "GIF codec name"
 msgid "GIF"
 msgstr "GIF"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:580
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:586
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Exported animation format does not support HDR"
 msgstr "Izvožena oblika animacije ne podpira HDR"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:582
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:588
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
@@ -21625,6 +21630,7 @@ msgstr "Dokument"
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #. i18n: ectx: property (text), widget (QLabel, label_19)
+#. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/VideoImportDialog.ui:546
@@ -21636,6 +21642,7 @@ msgstr "Dokument"
 #: libs/ui/imagesize/wdg_canvassize.ui:55 libs/ui/imagesize/wdg_imagesize.ui:71
 #: libs/ui/imagesize/wdg_layersize.ui:62
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:81
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:645
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:881
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:328
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:660
@@ -21679,7 +21686,6 @@ msgstr "Širina:"
 #: libs/ui/imagesize/wdg_imagesize.ui:101
 #: libs/ui/imagesize/wdg_layersize.ui:129
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:118
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:645
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:861
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:342
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:680
@@ -22145,24 +22151,24 @@ msgstr "O programu Krita"
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Ustvarjalci</h1></p><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:63
+#: libs/ui/dialogs/kis_about_application.cpp:67
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Martin Srebotnjak,Gregor Rakar,Andrej Vernekar"
 
-#: libs/ui/dialogs/kis_about_application.cpp:64
+#: libs/ui/dialogs/kis_about_application.cpp:68
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "miles@filmsi.net,gregor.rakar@kiss.si,andrej.vernekar@moj.net"
 
-#: libs/ui/dialogs/kis_about_application.cpp:75
+#: libs/ui/dialogs/kis_about_application.cpp:79
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>Prevajalci</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:87
+#: libs/ui/dialogs/kis_about_application.cpp:91
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22174,22 +22180,22 @@ msgstr ""
 "skupin po vsem svetu.</p><p>Za več informacij o internacionalizaciji KDE "
 "obiščite <a href=\"http://l10n.kde.org\">http://l10n.kde.org</a></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:95
+#: libs/ui/dialogs/kis_about_application.cpp:99
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Podporniki</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:108
+#: libs/ui/dialogs/kis_about_application.cpp:116
 #, kde-format
 msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
 msgstr ".</p><p><i>Hvala! <b>Enkratni</b> ste!</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:111
+#: libs/ui/dialogs/kis_about_application.cpp:119
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Zahvale</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:132
+#: libs/ui/dialogs/kis_about_application.cpp:146
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22198,7 +22204,7 @@ msgstr ""
 ".</p><p><i>Za podporo razvoju Krite z nasveti, ikonami, nabori čopičev in "
 "mnogo čem drugim.</i></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:136
+#: libs/ui/dialogs/kis_about_application.cpp:150
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22232,7 +22238,7 @@ msgstr ""
 "komercialne programske opreme, ki bodo prepovedale vaše delo v komercialnih "
 "okoliščinah.</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:171
+#: libs/ui/dialogs/kis_about_application.cpp:185
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -22395,33 +22401,33 @@ msgstr "Lastnosti slike"
 msgid "Set color used for warning"
 msgstr "Določi barvo, uporabljeno za opozorila"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:61
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:67
 #, kde-format
 msgid "Ascending"
 msgstr "Naraščajoče"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:62
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:68
 #, kde-format
 msgid "Descending"
 msgstr "Padajoče"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:65
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:71
 #, kde-format
 msgid "Alphabetical"
 msgstr "Po abecedi"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:66
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:72
 #, kde-format
 msgid "Numerical"
 msgstr "Številsko"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:137
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
 #: libs/ui/KisMainWindow.cpp:1186
 #, kde-format
 msgid "Import Images"
 msgstr "Uvozi slike"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:160
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:166
 #, kde-format
 msgid "Source fps: %1"
 msgstr "Hitrost sličic vira: %1"
@@ -22902,6 +22908,9 @@ msgid " GiB"
 msgstr " GiB"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1454
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
 #, kde-format
 msgctxt "suffix for \"seconds\""
 msgid " sec"
@@ -23194,13 +23203,6 @@ msgid ""
 msgstr ""
 "Čas, v katerem se bodo poteze ohranjene nezdružene. Ko bo poteza dovolj "
 "stara, jo bo Krita poskušala združiti."
-
-#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
-#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
-#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
-#, kde-format
-msgid " sec"
-msgstr " s"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
@@ -27090,9 +27092,7 @@ msgid "Width"
 msgstr "Širina"
 
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, intWidth)
-#. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgrectangleconstraints.ui:62
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:665
 #, kde-format
 msgid "Width: "
 msgstr "Širina: "
@@ -27109,7 +27109,9 @@ msgid "Height"
 msgstr "Višina"
 
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, intHeight)
+#. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgrectangleconstraints.ui:101
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:665
 #, kde-format
 msgid "Height: "
 msgstr "Višina: "
@@ -29967,12 +29969,12 @@ msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Napaka med shranjevanjem %1: %2"
 
-#: libs/ui/KisDocument.cpp:936
+#: libs/ui/KisDocument.cpp:938 libs/ui/KisDocument.cpp:945
 #, kde-format
 msgid "Could not save %1."
 msgstr "Ni bilo mogoče shraniti %1."
 
-#: libs/ui/KisDocument.cpp:950
+#: libs/ui/KisDocument.cpp:967
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -29980,45 +29982,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 je bil shranjen, vendar je nepopoln."
 
-#: libs/ui/KisDocument.cpp:956
+#: libs/ui/KisDocument.cpp:973
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "Pri shranjevanju je prišlo do določenih težav."
 
-#: libs/ui/KisDocument.cpp:973
+#: libs/ui/KisDocument.cpp:990
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Dokončano shranjevanje %1"
 
-#: libs/ui/KisDocument.cpp:1376
+#: libs/ui/KisDocument.cpp:1393
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Samodejno shranjevanje ... %1"
 
-#: libs/ui/KisDocument.cpp:1384
+#: libs/ui/KisDocument.cpp:1401
 #, kde-format
 msgid "Autosaving..."
 msgstr "Samodejno shranjevanje ..."
 
-#: libs/ui/KisDocument.cpp:1390
+#: libs/ui/KisDocument.cpp:1407
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Samodejno shranjevanje preloženo: dokument je zaseden ..."
 
-#: libs/ui/KisDocument.cpp:1533
+#: libs/ui/KisDocument.cpp:1550
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Napaka pri samodejnem shranjevanju %1: %2"
 
-#: libs/ui/KisDocument.cpp:1547
+#: libs/ui/KisDocument.cpp:1564
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Samodejno shranjevanje %1 je končano"
 
-#: libs/ui/KisDocument.cpp:1789
+#: libs/ui/KisDocument.cpp:1806
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30027,38 +30029,38 @@ msgstr ""
 "Nepravilno oblikovana pot\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1855
+#: libs/ui/KisDocument.cpp:1872
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Datoteka %1 ne obstaja."
 
-#: libs/ui/KisDocument.cpp:1884
+#: libs/ui/KisDocument.cpp:1901
 #, kde-format
 msgid "Opening document"
 msgstr "Odpiranje dokumenta"
 
-#: libs/ui/KisDocument.cpp:1899
+#: libs/ui/KisDocument.cpp:1917 libs/ui/KisDocument.cpp:1923
 #, kde-format
 msgid "Could not open %1."
 msgstr "Ni mogoče odpreti %1."
 
-#: libs/ui/KisDocument.cpp:1909
+#: libs/ui/KisDocument.cpp:1936 libs/ui/KisDocument.cpp:1940
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Prišlo je do težav pri odpiranju %1."
 
-#: libs/ui/KisDocument.cpp:2038
+#: libs/ui/KisDocument.cpp:2071
 #, kde-format
 msgid "Not Saved"
 msgstr "Ni shranjeno"
 
-#: libs/ui/KisDocument.cpp:2498
+#: libs/ui/KisDocument.cpp:2531
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Polnilo ozadja"
 
-#: libs/ui/KisDocument.cpp:2552
+#: libs/ui/KisDocument.cpp:2585
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30318,29 +30320,29 @@ msgstr ""
 "Datoteka %1 manjka v %2 in je okvarjena. Poskusite jo znova shraniti na "
 "drugo mesto."
 
-#: libs/ui/KisImportExportManager.cpp:280
+#: libs/ui/KisImportExportManager.cpp:295
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Odpri zvok"
 
-#: libs/ui/KisImportExportManager.cpp:374
+#: libs/ui/KisImportExportManager.cpp:389
 #, kde-format
 msgid "Opening document..."
 msgstr "Odpiranje dokumenta ..."
 
-#: libs/ui/KisImportExportManager.cpp:442
+#: libs/ui/KisImportExportManager.cpp:457
 #, kde-format
 msgid "Saving document..."
 msgstr "Shranjevanje dokumenta ..."
 
-#: libs/ui/KisImportExportManager.cpp:536
+#: libs/ui/KisImportExportManager.cpp:551
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr "Slika vsebuje <b>pomočnike</b>. Pomočniki ne bodo shranjeni."
 
-#: libs/ui/KisImportExportManager.cpp:539
+#: libs/ui/KisImportExportManager.cpp:554
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30349,13 +30351,13 @@ msgid ""
 msgstr ""
 "Slika vsebuje <b>referenčne slike</b>. Referenčne slike ne bodo shranjene."
 
-#: libs/ui/KisImportExportManager.cpp:542
+#: libs/ui/KisImportExportManager.cpp:557
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "Slika vsebuje <b>vodila</b>. Vodila ne bodo shranjena."
 
-#: libs/ui/KisImportExportManager.cpp:545
+#: libs/ui/KisImportExportManager.cpp:560
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30365,36 +30367,36 @@ msgstr ""
 "Slika vsebuje <b>prilagoditev mreže po meri</b>. Prilagoditev ne bo "
 "shranjena."
 
-#: libs/ui/KisImportExportManager.cpp:550
+#: libs/ui/KisImportExportManager.cpp:565
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "Napaka: te slike ni mogoče shraniti kot %1."
 
-#: libs/ui/KisImportExportManager.cpp:551
-#: libs/ui/KisImportExportManager.cpp:594
+#: libs/ui/KisImportExportManager.cpp:566
+#: libs/ui/KisImportExportManager.cpp:609
 #, kde-format
 msgid "Reasons:"
 msgstr "Razlogi:"
 
-#: libs/ui/KisImportExportManager.cpp:559
+#: libs/ui/KisImportExportManager.cpp:574
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita: napaka pri izvozu"
 
-#: libs/ui/KisImportExportManager.cpp:576
+#: libs/ui/KisImportExportManager.cpp:591
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 "Opozorilo: pri shranjevanju kot %1 boste izgubili informacije slike.    "
 
-#: libs/ui/KisImportExportManager.cpp:588
+#: libs/ui/KisImportExportManager.cpp:603
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr "Pri shranjevanju te slike kot %1 boste izgubili informacije."
 
-#: libs/ui/KisImportExportManager.cpp:591
+#: libs/ui/KisImportExportManager.cpp:606
 #, kde-format
 msgid "Reason:"
 msgstr "Razlog:"
@@ -30402,7 +30404,7 @@ msgstr "Razlog:"
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/KisImportExportManager.cpp:609
+#: libs/ui/KisImportExportManager.cpp:624
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
@@ -30410,12 +30412,12 @@ msgstr "Razlog:"
 msgid "Options"
 msgstr "Možnosti"
 
-#: libs/ui/KisImportExportManager.cpp:617
+#: libs/ui/KisImportExportManager.cpp:632
 #, kde-format
 msgid "Resize"
 msgstr "Spremeni velikost"
 
-#: libs/ui/KisImportExportManager.cpp:623
+#: libs/ui/KisImportExportManager.cpp:638
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Shrani sliko tudi kot datoteko Krita."
@@ -30958,7 +30960,7 @@ msgstr "Plast je zaklenjena."
 msgid "Layer is invisible."
 msgstr "Plast je nevidna."
 
-#: libs/ui/KisView.cpp:1172
+#: libs/ui/KisView.cpp:1177
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -30966,37 +30968,37 @@ msgid ""
 msgstr ""
 "<p>Dokument <b>»%1«</b> je bil spremenjen.</p> <p>Ali ga želite shraniti?</p>"
 
-#: libs/ui/KisView.cpp:1361
+#: libs/ui/KisView.cpp:1366
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Preverjanje videza ne deluje v načinu plavajoče vejice."
 
-#: libs/ui/KisView.cpp:1366
+#: libs/ui/KisView.cpp:1371
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Preverjanje videza je vključeno."
 
-#: libs/ui/KisView.cpp:1368
+#: libs/ui/KisView.cpp:1373
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Preverjanje videza je izključeno."
 
-#: libs/ui/KisView.cpp:1380
+#: libs/ui/KisView.cpp:1385
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Opozorila o gamutu ne delujejo s plavajočo vejico."
 
-#: libs/ui/KisView.cpp:1386
+#: libs/ui/KisView.cpp:1391
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Opozorila o gamutu so vklopljena."
 
-#: libs/ui/KisView.cpp:1388
+#: libs/ui/KisView.cpp:1393
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Vendar je preverjanje videza še vedno vklopljeno."
 
-#: libs/ui/KisView.cpp:1391
+#: libs/ui/KisView.cpp:1396
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Opozorila o gamutu so izklopljena."
@@ -31117,7 +31119,7 @@ msgid "Get your Krita Supporter Badge here!"
 msgstr "Pridobite svojo značko podpornika Krite tukaj!"
 
 #: libs/ui/KisWelcomePageWidget.cpp:648
-#: plugins/dockers/presethistory/presethistory_dock.cpp:302
+#: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Pozabi »%1«"
@@ -35688,7 +35690,7 @@ msgstr ""
 "Izbrano ime datoteke nima pripone datoteke, ki jo Krita razume.\n"
 "Preverite, ali se ime datoteke konča npr. z ».%1«."
 
-#: libs/widgetutils/KoFileDialog.cpp:506
+#: libs/widgetutils/KoFileDialog.cpp:511
 #, kde-format
 msgid "All supported formats"
 msgstr "Vse podprte vrste datotek"
@@ -39145,27 +39147,27 @@ msgstr "Premakni na vrh ob uporabi"
 msgid "Bubble Up on Repeated Use"
 msgstr "Pomik navzgor ob ponavljajoči se uporabi"
 
-#: plugins/dockers/presethistory/presethistory_dock.cpp:202
+#: plugins/dockers/presethistory/presethistory_dock.cpp:206
 #, kde-format
 msgid "Set Number of Brushes Shown"
 msgstr "Določite število prikazanih čopičev"
 
-#: plugins/dockers/presethistory/presethistory_dock.cpp:203
+#: plugins/dockers/presethistory/presethistory_dock.cpp:207
 #, kde-format
 msgid "Number of Brushes Shown:"
 msgstr "Število prikazanih čopičev:"
 
-#: plugins/dockers/presethistory/presethistory_dock.cpp:305
+#: plugins/dockers/presethistory/presethistory_dock.cpp:309
 #, kde-format
 msgid "Clear History"
 msgstr "Počisti zgodovino"
 
-#: plugins/dockers/presethistory/presethistory_dock.cpp:307
+#: plugins/dockers/presethistory/presethistory_dock.cpp:311
 #, kde-format
 msgid "History Behavior:"
 msgstr "Vedenje zgodovine:"
 
-#: plugins/dockers/presethistory/presethistory_dock.cpp:312
+#: plugins/dockers/presethistory/presethistory_dock.cpp:316
 #, kde-format
 msgid "Configure Number of Brushes Shown..."
 msgstr "Prilagodi število prikazanih čopičev ..."
@@ -59168,61 +59170,61 @@ msgctxt "The 'reference' section label in enclose and fill tool options"
 msgid "Reference"
 msgstr "Sklic"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:836
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:841
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Vse"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:839
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:844
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "Določena barva"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:842
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:847
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "Prosojnost"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:845
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:850
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "Določena barva ali prosojnost"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:853
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "Vse, razen določene barve"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:856
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr "Vse, razen prosojnosti"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:859
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr "Vse, razen določene barve ali prosojnosti"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:862
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "Vse, obdano z določeno barvo"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:865
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "Vse, obdano s prosojnostjo"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:868
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
@@ -60295,3 +60297,6 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
+
+#~ msgid " sec"
+#~ msgstr " s"

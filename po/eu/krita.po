@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-19 00:47+0000\n"
+"POT-Creation-Date: 2023-04-21 00:46+0000\n"
 "PO-Revision-Date: 2023-02-10 21:36+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -17256,7 +17256,7 @@ msgstr "Inportatutako irudia"
 msgid "Selection Mask"
 msgstr "Hautapen maskara"
 
-#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2491
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2524
 #: plugins/impex/psd/psd_loader.cpp:189
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -19554,17 +19554,17 @@ msgid "Out"
 msgstr "Urrundu"
 
 #: libs/pigment/resources/KoColorSet.cpp:1046
-#: libs/pigment/resources/KoColorSet.cpp:1387
-#: libs/pigment/resources/KoColorSet.cpp:1466
-#: libs/pigment/resources/KoColorSet.cpp:1680
+#: libs/pigment/resources/KoColorSet.cpp:1391
+#: libs/pigment/resources/KoColorSet.cpp:1474
+#: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1168
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1173
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
 msgstr "Izengabea"
 
-#: libs/pigment/resources/KoStopGradient.cpp:368
+#: libs/pigment/resources/KoStopGradient.cpp:375
 #, kde-format
 msgid "SVG Gradient"
 msgstr "SVG gradientea"
@@ -19596,16 +19596,16 @@ msgstr "Baliabide lokalak"
 #: libs/ui/animation/KisAnimationRender.cpp:99
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:688
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:579
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:600
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:607
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:674
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:714
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:605
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:612
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:679
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:719
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:789
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:920
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:713
@@ -19615,20 +19615,22 @@ msgstr "Baliabide lokalak"
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
 #: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
 #: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
-#: libs/ui/KisApplication.cpp:1073 libs/ui/KisDocument.cpp:935
-#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:1855
-#: libs/ui/KisDocument.cpp:1898 libs/ui/KisDocument.cpp:1908
-#: libs/ui/KisMainWindow.cpp:976 libs/ui/KisMainWindow.cpp:1092
-#: libs/ui/KisMainWindow.cpp:1218 libs/ui/KisMainWindow.cpp:1317
-#: libs/ui/KisMainWindow.cpp:1923 libs/ui/KisMainWindow.cpp:1932
-#: libs/ui/KisMainWindow.cpp:2071 libs/ui/KisMainWindow.cpp:2132
-#: libs/ui/KisMainWindow.cpp:2153 libs/ui/KisMainWindow.cpp:2766
-#: libs/ui/KisPart.cpp:555 libs/ui/KisPart.cpp:558
-#: libs/ui/KisReferenceImage.cpp:175 libs/ui/KisRemoteFileFetcher.cpp:36
-#: libs/ui/KisRemoteFileFetcher.cpp:60 libs/ui/KisRemoteFileFetcher.cpp:90
-#: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
-#: libs/ui/KisView.cpp:691 libs/ui/KisView.cpp:1171
-#: libs/ui/KisWelcomePageWidget.cpp:726 libs/ui/KisWindowLayoutResource.cpp:373
+#: libs/ui/KisApplication.cpp:1073 libs/ui/KisDocument.cpp:937
+#: libs/ui/KisDocument.cpp:944 libs/ui/KisDocument.cpp:964
+#: libs/ui/KisDocument.cpp:1872 libs/ui/KisDocument.cpp:1916
+#: libs/ui/KisDocument.cpp:1922 libs/ui/KisDocument.cpp:1935
+#: libs/ui/KisDocument.cpp:1939 libs/ui/KisMainWindow.cpp:976
+#: libs/ui/KisMainWindow.cpp:1092 libs/ui/KisMainWindow.cpp:1218
+#: libs/ui/KisMainWindow.cpp:1317 libs/ui/KisMainWindow.cpp:1923
+#: libs/ui/KisMainWindow.cpp:1932 libs/ui/KisMainWindow.cpp:2071
+#: libs/ui/KisMainWindow.cpp:2132 libs/ui/KisMainWindow.cpp:2153
+#: libs/ui/KisMainWindow.cpp:2766 libs/ui/KisPart.cpp:555
+#: libs/ui/KisPart.cpp:558 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
+#: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:691
+#: libs/ui/KisView.cpp:1176 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1350
@@ -20669,14 +20671,13 @@ msgstr ""
 #| "The location of FFmpeg is invalid. Please select the correct location of "
 #| "the FFmpeg executable on your system."
 msgid ""
-"The FFmpeg that you've given us appears to be "
-"invalid.                                                     Please select "
-"the correct location of an FFmpeg executable on your system."
+"The FFmpeg that you've given us appears to be invalid. Please select the "
+"correct location of an FFmpeg executable on your system."
 msgstr ""
 "«FFmpeg»en kokalekua baliogabea da. Mesedez, hautatu «FFmpeg»ren "
 "exekutagarriaren kokaleku zuzena zure sisteman."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:689
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:688
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Sartu hartara errendatzeko fitxategi-izena bat."
@@ -20702,7 +20703,7 @@ msgstr " FPS"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:87
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:93
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:661
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:666
 #, kde-format
 msgctxt "Second as a unit following a value, like 60 s"
 msgid " s"
@@ -20721,7 +20722,7 @@ msgid "Current Document"
 msgstr "Uneko dokumentua"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:105
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:626
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:631
 #, kde-format
 msgctxt "Video importer: fps of the document you're importing into"
 msgid ""
@@ -20773,59 +20774,59 @@ msgctxt ""
 msgid "Extracted %1 frames from %2 video."
 msgstr "%1 fotograma atera dira %2 bideotik."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
 #, kde-format
 msgid "Failed to export frames from video"
 msgstr "Bideotik fotogramak esportatzea huts egin du"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:357
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:362
 #, kde-format
 msgid "Select your Video File"
 msgstr "Hautatu zure bideo-fitxategia"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:390
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:395
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Width: %1 px"
 msgstr "Zabalera: %1 px"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:396
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Height: %1 px"
 msgstr "Altuera: %1 px"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:395
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:400
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Primaries: %1"
 msgstr "Kolore primarioak: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:398
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:403
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Transfer: %1"
 msgstr "Kolore-transferentzia: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:401
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:406
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Duration: %1 s"
 msgstr "Iraupena: %1 s"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:402
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:407
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Frames: %1"
 msgstr "Fotogramak: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:403
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:408
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "FPS: %1"
 msgstr "FPS: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:407
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:412
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid ""
@@ -20835,7 +20836,7 @@ msgstr ""
 "*<font size='0.5em'><em>fitxategiko *FPS ez dago ondo. Aldatu da iraupen "
 "osoa ikusteko</em></font>"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:506
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:511
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20845,14 +20846,14 @@ msgstr ""
 "ERNE, %1 fotograma inportatzen saiatzen ari zara, inporta dezakezun "
 "gehieneko kopurua %2 da."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:513
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:518
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
 msgstr ""
 "Honen ordez, erabili <a href=\"https://kdenlive.org\">bideo editorea!</a>!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:519
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:524
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20862,7 +20863,7 @@ msgstr ""
 "Ez duzu horrenbeste fotograma zamatzeko adina memoria, "
 "ordenagailuakgehiegizko gainzama izango luke."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:526
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:531
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20871,7 +20872,7 @@ msgstr ""
 "Horrek memoria erabilgarriaren erdia hartuko luke, editatzea zaila izango "
 "litzateke."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:535
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:540
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20881,44 +20882,44 @@ msgstr ""
 "Kritak ez du onartzen bideo transferentzia kurba (%1), lineala bezala "
 "zamatuko du"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:565
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:567
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:570
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
 #, kde-format
 msgid "Open FFProbe"
 msgstr "Ireki FFProbe"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:579
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
 #, kde-format
 msgid "FFProbe is invalid!"
 msgstr "FFProbe baliogabea da!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:586
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:588
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:593
 #, kde-format
 msgid "Open FFMpeg"
 msgstr "Ireki FFMpeg"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:600
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:605
 #, kde-format
 msgid "FFMpeg is invalid!"
 msgstr "FFMpeg baliogabea!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:607
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:612
 #, kde-format
 msgid "No FFMpeg found!"
 msgstr "Ez da «FFMpeg»erik aurkitu!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:674
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:679
 #, kde-format
 msgid "Your FFMpeg version does not support this format"
 msgstr "Zure FFMpeg bertsioak ez du formatu hau onartzen"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:714
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:719
 #, kde-format
 msgid "No video stream could be found!"
 msgstr "Ez da bideo datu-korronterik aurkitu!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:784
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:789
 #, kde-format
 msgid "Failed to load video information"
 msgstr "Bideo-informazioa kargatzea huts egin du"
@@ -20939,13 +20940,13 @@ msgstr "Bideo-datuak zamatzen... %1 fotograma aztertu dira."
 msgid "ffmpeg could not be found at %1"
 msgstr "«ffmpeg» ezin izan du aurkitu %1(e)n"
 
-#: libs/ui/animation/KisVideoSaver.cpp:136
+#: libs/ui/animation/KisVideoSaver.cpp:141
 #, kde-format
 msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
 msgstr "%1 fitxategi-formaturako paleta sortzen."
 
-#: libs/ui/animation/KisVideoSaver.cpp:195
+#: libs/ui/animation/KisVideoSaver.cpp:200
 #, kde-format
 msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "
@@ -21544,13 +21545,13 @@ msgctxt "GIF codec name"
 msgid "GIF"
 msgstr "GIF"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:580
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:586
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Exported animation format does not support HDR"
 msgstr "Esportatutako animazio formatuak ez du HDR onartzen"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:582
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:588
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
@@ -21907,6 +21908,7 @@ msgstr "Dokumentua"
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #. i18n: ectx: property (text), widget (QLabel, label_19)
+#. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/VideoImportDialog.ui:546
@@ -21918,6 +21920,7 @@ msgstr "Dokumentua"
 #: libs/ui/imagesize/wdg_canvassize.ui:55 libs/ui/imagesize/wdg_imagesize.ui:71
 #: libs/ui/imagesize/wdg_layersize.ui:62
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:81
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:645
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:881
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:328
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:660
@@ -21961,7 +21964,6 @@ msgstr "Zabalera:"
 #: libs/ui/imagesize/wdg_imagesize.ui:101
 #: libs/ui/imagesize/wdg_layersize.ui:129
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:118
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:645
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:861
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:342
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:680
@@ -22427,7 +22429,7 @@ msgstr "Kritari buruz"
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Sortzailea</h1></p><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:63
+#: libs/ui/dialogs/kis_about_application.cpp:67
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
@@ -22435,7 +22437,7 @@ msgstr ""
 "Ion Gaztañaga,Marcos Goyeneche,Hizkuntza Politikarako Sailburuordetza,Alex "
 "Gabilondo,Iñigo Salvador Azurmendi"
 
-#: libs/ui/dialogs/kis_about_application.cpp:64
+#: libs/ui/dialogs/kis_about_application.cpp:68
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -22443,13 +22445,13 @@ msgstr ""
 "igaztanaga@gmail.com,marcos@euskalgnu.org,hizpol@ej-gv.es,alexgabi@disroot."
 "org,xalba@ni.eus"
 
-#: libs/ui/dialogs/kis_about_application.cpp:75
+#: libs/ui/dialogs/kis_about_application.cpp:79
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr ""
 "<html><head/><body><h1 align=\"center\"><b>Itzultzaileak</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:87
+#: libs/ui/dialogs/kis_about_application.cpp:91
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22461,24 +22463,24 @@ msgstr ""
 "laguntzari esker.</p><p>KDEren internazionalizazioari buruz gehiago jakiteko "
 "bisitatu <a href=\"http://l10n.kde.org\">http://l10n.kde.org</a></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:95
+#: libs/ui/dialogs/kis_about_application.cpp:99
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Babestu du</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:108
+#: libs/ui/dialogs/kis_about_application.cpp:116
 #, kde-format
 msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
 msgstr ""
 ".</p><p><i>Eskerrik asko! <b>Zoragarriak</b> izan zarete!</i></p></body></"
 "html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:111
+#: libs/ui/dialogs/kis_about_application.cpp:119
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Eskerrak ondokoei</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:132
+#: libs/ui/dialogs/kis_about_application.cpp:146
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22487,7 +22489,7 @@ msgstr ""
 ".</p><p><i>Krita-ren garapenean gomendio, ikono, pintzel-multzo eta "
 "gehiagorekin laguntzeagatik.</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:136
+#: libs/ui/dialogs/kis_about_application.cpp:150
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22506,7 +22508,7 @@ msgid ""
 "that will forbid your work in commercial situations.</p><br/><hr/><pre>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:171
+#: libs/ui/dialogs/kis_about_application.cpp:185
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -22673,33 +22675,33 @@ msgstr "Irudiaren propietateak"
 msgid "Set color used for warning"
 msgstr "Ezarri abisuetarako kolorea"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:61
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:67
 #, kde-format
 msgid "Ascending"
 msgstr "Gorakorra"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:62
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:68
 #, kde-format
 msgid "Descending"
 msgstr "Beherakorra"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:65
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:71
 #, kde-format
 msgid "Alphabetical"
 msgstr "Alfabetikoa"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:66
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:72
 #, kde-format
 msgid "Numerical"
 msgstr "Zenbakizkoa"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:137
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
 #: libs/ui/KisMainWindow.cpp:1186
 #, kde-format
 msgid "Import Images"
 msgstr "Inportatu irudiak"
 
-#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:160
+#: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:166
 #, kde-format
 msgid "Source fps: %1"
 msgstr "Sorburuaren FPS: %1"
@@ -23181,6 +23183,9 @@ msgid " GiB"
 msgstr " GiB"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1454
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
+#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
 #, kde-format
 msgctxt "suffix for \"seconds\""
 msgid " sec"
@@ -23473,15 +23478,6 @@ msgid ""
 "The amount of time during which the strokes will be kept unmerged. When a "
 "stroke becomes old enough, Krita will try to merge it"
 msgstr ""
-
-#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
-#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
-#: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "suffix for \"seconds\""
-#| msgid " sec"
-msgid " sec"
-msgstr "seg"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
@@ -27367,9 +27363,7 @@ msgid "Width"
 msgstr "Zabalera"
 
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, intWidth)
-#. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgrectangleconstraints.ui:62
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:665
 #, kde-format
 msgid "Width: "
 msgstr "Zabalera:"
@@ -27386,7 +27380,9 @@ msgid "Height"
 msgstr "Altuera"
 
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, intHeight)
+#. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgrectangleconstraints.ui:101
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:665
 #, fuzzy, kde-format
 #| msgid "Height:"
 msgid "Height: "
@@ -30266,13 +30262,13 @@ msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Errorea %1 gordetzean: %2"
 
-#: libs/ui/KisDocument.cpp:936
+#: libs/ui/KisDocument.cpp:938 libs/ui/KisDocument.cpp:945
 #, fuzzy, kde-format
 #| msgid "Could not save %1"
 msgid "Could not save %1."
 msgstr "Ezin izan du %1 gorde"
 
-#: libs/ui/KisDocument.cpp:950
+#: libs/ui/KisDocument.cpp:967
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30280,45 +30276,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:956
+#: libs/ui/KisDocument.cpp:973
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:973
+#: libs/ui/KisDocument.cpp:990
 #, kde-format
 msgid "Finished saving %1"
 msgstr "%1 gordetzen amaitu du"
 
-#: libs/ui/KisDocument.cpp:1376
+#: libs/ui/KisDocument.cpp:1393
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "%1 automatikoki gordetzen..."
 
-#: libs/ui/KisDocument.cpp:1384
+#: libs/ui/KisDocument.cpp:1401
 #, kde-format
 msgid "Autosaving..."
 msgstr "Automatikoki gordetzen..."
 
-#: libs/ui/KisDocument.cpp:1390
+#: libs/ui/KisDocument.cpp:1407
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Gordetze automatikoa atzeratu da: dokumentua lanpetuta dago..."
 
-#: libs/ui/KisDocument.cpp:1533
+#: libs/ui/KisDocument.cpp:1550
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Errorea %1 automatikoki gordetzean: %2"
 
-#: libs/ui/KisDocument.cpp:1547
+#: libs/ui/KisDocument.cpp:1564
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Amaitu du %1 automatikoki gordetzen"
 
-#: libs/ui/KisDocument.cpp:1789
+#: libs/ui/KisDocument.cpp:1806
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30327,40 +30323,40 @@ msgstr ""
 "Gaizki osatutako bide-izena:\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1855
+#: libs/ui/KisDocument.cpp:1872
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "%1 fitxategia ez da existitzen."
 
-#: libs/ui/KisDocument.cpp:1884
+#: libs/ui/KisDocument.cpp:1901
 #, kde-format
 msgid "Opening document"
 msgstr "Dokumentua irekitzea"
 
-#: libs/ui/KisDocument.cpp:1899
+#: libs/ui/KisDocument.cpp:1917 libs/ui/KisDocument.cpp:1923
 #, fuzzy, kde-format
 #| msgid "Could not open '%1'."
 msgid "Could not open %1."
 msgstr "Ezin izan da «%1» ireki."
 
-#: libs/ui/KisDocument.cpp:1909
+#: libs/ui/KisDocument.cpp:1936 libs/ui/KisDocument.cpp:1940
 #, fuzzy, kde-format
 #| msgid "There were problems opening %1"
 msgid "There were problems opening %1."
 msgstr "%1 irekitzeko arazoak egon dira"
 
-#: libs/ui/KisDocument.cpp:2038
+#: libs/ui/KisDocument.cpp:2071
 #, kde-format
 msgid "Not Saved"
 msgstr "Gorde gabe"
 
-#: libs/ui/KisDocument.cpp:2498
+#: libs/ui/KisDocument.cpp:2531
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Atzeko planoko betegarria"
 
-#: libs/ui/KisDocument.cpp:2552
+#: libs/ui/KisDocument.cpp:2585
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30623,29 +30619,29 @@ msgstr ""
 "%1 fitxategia %2(t)ik falta da eta hondatuta dago. Mesedez, saiatu beste "
 "kokaleku batean berriz gordetzen."
 
-#: libs/ui/KisImportExportManager.cpp:280
+#: libs/ui/KisImportExportManager.cpp:295
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Ireki audioa"
 
-#: libs/ui/KisImportExportManager.cpp:374
+#: libs/ui/KisImportExportManager.cpp:389
 #, kde-format
 msgid "Opening document..."
 msgstr "Dokumentua irekitzen..."
 
-#: libs/ui/KisImportExportManager.cpp:442
+#: libs/ui/KisImportExportManager.cpp:457
 #, kde-format
 msgid "Saving document..."
 msgstr "Dokumentua gordetzen..."
 
-#: libs/ui/KisImportExportManager.cpp:536
+#: libs/ui/KisImportExportManager.cpp:551
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr "Irudiak <b>laguntzaileak</b> ditu. Laguntzaileak ez ditu gordeko."
 
-#: libs/ui/KisImportExportManager.cpp:539
+#: libs/ui/KisImportExportManager.cpp:554
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30655,13 +30651,13 @@ msgstr ""
 "Irudiak <b>erreferentziazko irudiak</b> ditu. Erreferentziazko irudiak ez "
 "ditu gordeko."
 
-#: libs/ui/KisImportExportManager.cpp:542
+#: libs/ui/KisImportExportManager.cpp:557
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "Irudiak <b>gidak</b> ditu. Gidak ez ditu gordeko."
 
-#: libs/ui/KisImportExportManager.cpp:545
+#: libs/ui/KisImportExportManager.cpp:560
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30671,35 +30667,35 @@ msgstr ""
 "Irudiak <b>sareta konfigurazio pertsonalizatua</b> du. Konfigurazioa ez du "
 "gordeko."
 
-#: libs/ui/KisImportExportManager.cpp:550
+#: libs/ui/KisImportExportManager.cpp:565
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "Errorea: ezin da gorde irudi hau %1 bat gisa."
 
-#: libs/ui/KisImportExportManager.cpp:551
-#: libs/ui/KisImportExportManager.cpp:594
+#: libs/ui/KisImportExportManager.cpp:566
+#: libs/ui/KisImportExportManager.cpp:609
 #, kde-format
 msgid "Reasons:"
 msgstr "Arrazoiak:"
 
-#: libs/ui/KisImportExportManager.cpp:559
+#: libs/ui/KisImportExportManager.cpp:574
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita: Esportatzeko errorea"
 
-#: libs/ui/KisImportExportManager.cpp:576
+#: libs/ui/KisImportExportManager.cpp:591
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr "Abisua: %1 bat gisa gordetzean zure irudiko informazioa galduko da."
 
-#: libs/ui/KisImportExportManager.cpp:588
+#: libs/ui/KisImportExportManager.cpp:603
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr "Informazioa galduko duzu irudi hau %1 bat gisa gordetzean."
 
-#: libs/ui/KisImportExportManager.cpp:591
+#: libs/ui/KisImportExportManager.cpp:606
 #, kde-format
 msgid "Reason:"
 msgstr "Arrazoia:"
@@ -30707,7 +30703,7 @@ msgstr "Arrazoia:"
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/KisImportExportManager.cpp:609
+#: libs/ui/KisImportExportManager.cpp:624
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
@@ -30715,12 +30711,12 @@ msgstr "Arrazoia:"
 msgid "Options"
 msgstr "Aukerak"
 
-#: libs/ui/KisImportExportManager.cpp:617
+#: libs/ui/KisImportExportManager.cpp:632
 #, kde-format
 msgid "Resize"
 msgstr "Neurria aldatu"
 
-#: libs/ui/KisImportExportManager.cpp:623
+#: libs/ui/KisImportExportManager.cpp:638
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Gorde zure irudia Krita fitxategi gisa ere."
@@ -31291,44 +31287,44 @@ msgstr "Geruza blokeatuta dago."
 msgid "Layer is invisible."
 msgstr "Geruza ikusezin dago."
 
-#: libs/ui/KisView.cpp:1172
+#: libs/ui/KisView.cpp:1177
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p><b>'%1'</b> dokumentua aldatu egin da.</p><p>Gorde nahi duzu?</p>"
 
-#: libs/ui/KisView.cpp:1361
+#: libs/ui/KisView.cpp:1366
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Software bidezko zuzenketa ez dabil koma-higikorreko moduan."
 
-#: libs/ui/KisView.cpp:1366
+#: libs/ui/KisView.cpp:1371
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Software bidezko zuzenketa piztuta."
 
-#: libs/ui/KisView.cpp:1368
+#: libs/ui/KisView.cpp:1373
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Software bidezko zuzenketa itzalita."
 
-#: libs/ui/KisView.cpp:1380
+#: libs/ui/KisView.cpp:1385
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Gama-abisuak ez dira ibiltzen koma higikorrarekin."
 
-#: libs/ui/KisView.cpp:1386
+#: libs/ui/KisView.cpp:1391
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Gama-abisuak piztu dira."
 
-#: libs/ui/KisView.cpp:1388
+#: libs/ui/KisView.cpp:1393
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Baina software bidezko zuzenketa oraindik itzalita dago."
 
-#: libs/ui/KisView.cpp:1391
+#: libs/ui/KisView.cpp:1396
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Gama-abisuak itzali dira."
@@ -31442,7 +31438,7 @@ msgid "Get your Krita Supporter Badge here!"
 msgstr "Eskuratu hemen zure Krita-ren laguntzaile domina!"
 
 #: libs/ui/KisWelcomePageWidget.cpp:648
-#: plugins/dockers/presethistory/presethistory_dock.cpp:302
+#: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Ahaztu «%1»"
@@ -35897,7 +35893,7 @@ msgid ""
 "Make sure the file name ends in '.%1' for example."
 msgstr ""
 
-#: libs/widgetutils/KoFileDialog.cpp:506
+#: libs/widgetutils/KoFileDialog.cpp:511
 #, kde-format
 msgid "All supported formats"
 msgstr "Onartutako formatu guztiak"
@@ -39358,27 +39354,27 @@ msgstr "Lekuz aldatu puntuak"
 msgid "Bubble Up on Repeated Use"
 msgstr ""
 
-#: plugins/dockers/presethistory/presethistory_dock.cpp:202
+#: plugins/dockers/presethistory/presethistory_dock.cpp:206
 #, fuzzy, kde-format
 msgid "Set Number of Brushes Shown"
 msgstr "Errenkada kopurua"
 
-#: plugins/dockers/presethistory/presethistory_dock.cpp:203
+#: plugins/dockers/presethistory/presethistory_dock.cpp:207
 #, fuzzy, kde-format
 msgid "Number of Brushes Shown:"
 msgstr "Errenkada kopurua"
 
-#: plugins/dockers/presethistory/presethistory_dock.cpp:305
+#: plugins/dockers/presethistory/presethistory_dock.cpp:309
 #, kde-format
 msgid "Clear History"
 msgstr "Garbitu historiala"
 
-#: plugins/dockers/presethistory/presethistory_dock.cpp:307
+#: plugins/dockers/presethistory/presethistory_dock.cpp:311
 #, kde-format
 msgid "History Behavior:"
 msgstr "Historialaren jokabidea:"
 
-#: plugins/dockers/presethistory/presethistory_dock.cpp:312
+#: plugins/dockers/presethistory/presethistory_dock.cpp:316
 #, kde-format
 msgid "Configure Number of Brushes Shown..."
 msgstr ""
@@ -59337,61 +59333,61 @@ msgctxt "The 'reference' section label in enclose and fill tool options"
 msgid "Reference"
 msgstr "Erreferentzia"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:836
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:841
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Dena"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:839
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:844
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "Kolore zehatza"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:842
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:847
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "Gardentasuna"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:845
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:850
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "Kolore zehatz edo gardentasun bat"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:853
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "Dean, kolore zehatz bat izan ezik"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:856
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr "Dena, gardentasun bat izan ezik"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:859
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr "Dena, kolore zehatz edo gardentasun bat izan ezik"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:862
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "Kolore zehatz batez inguratutako edozein"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:865
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "Gardentasun batez inguratutako edozein"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:868
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
@@ -60467,6 +60463,12 @@ msgstr "Zoom tresna"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Erreferentziazko irudien tresna"
+
+#, fuzzy
+#~| msgctxt "suffix for \"seconds\""
+#~| msgid " sec"
+#~ msgid " sec"
+#~ msgstr "seg"
 
 #~ msgid "Start merging time"
 #~ msgstr "Hasi batura denbora"

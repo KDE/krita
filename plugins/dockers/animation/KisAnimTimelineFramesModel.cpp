@@ -1114,7 +1114,7 @@ qreal KisAnimTimelineFramesModel::audioVolume() const
 void KisAnimTimelineFramesModel::setAudioVolume(qreal value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(document());
-    document()->setAudioLevel(value);
+    document()->setAudioVolume(value);
 }
 
 void KisAnimTimelineFramesModel::setDocumentClipRangeStart(int column)

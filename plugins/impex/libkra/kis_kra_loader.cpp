@@ -356,6 +356,8 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
             loadMirrorAxis(e);
         } else if (e.tagName() == "assistants") {
             loadAssistantsList(e);
+        } else if (e.tagName() == "audio") {
+            backCompat_loadAudio(e, image, m_d->document);
         }
     }
 
@@ -643,7 +645,56 @@ void KisKraLoader::loadAudio(KoStore *store, KisDocument *kisDoc)
         QDomElement root = xmlDocument.documentElement();
         loadAudioXML(xmlDocument, root, kisDoc);
     }
+}
 
+void KisKraLoader::backCompat_loadAudio(const QDomElement& elem, KisImageSP image, KisDocument *document)
+{
+    QDomDocument dom;
+    dom.appendChild(dom.importNode(elem, true));
+    QDomElement qElement = dom.firstChildElement();
+
+    QString fileName;
+    if (KisDomUtils::loadValue(qElement, "masterChannelPath", &fileName)) {
+        fileName = QDir::toNativeSeparators(fileName);
+
+        QDir baseDirectory = QFileInfo(m_d->document->localFilePath()).absoluteDir();
+        fileName = QDir::cleanPath( baseDirectory.filePath(fileName) );
+
+        QFileInfo info(fileName);
+
+        if (!info.exists()) {
+            qApp->setOverrideCursor(Qt::ArrowCursor);
+            QString msg = i18nc(
+                        "@info",
+                        "Audio channel file \"%1\" doesn't exist!\n\n"
+                        "Expected path:\n"
+                        "%2\n\n"
+                        "Do you want to locate it manually?", info.fileName(), info.absoluteFilePath());
+
+            int result = QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+            if (result == QMessageBox::Yes) {
+                info.setFile(KisImportExportManager::askForAudioFileName(info.absolutePath(), 0));
+            }
+
+            qApp->restoreOverrideCursor();
+        }
+
+        if (info.exists()) {
+            QVector<QFileInfo> clipFiles;
+
+            clipFiles << info;
+
+            document->setAudioTracks(clipFiles);
+        }
+    }
+
+    // Note: Muting has been removed from backCompat due to it no longer being document-specific.
+
+    qreal audioVolume = 1.0;
+    if (KisDomUtils::loadValue(qElement, "audioVolume", &audioVolume)) {
+        document->setAudioVolume(audioVolume);
+    }
 }
 
 vKisNodeSP KisKraLoader::selectedNodes() const
@@ -1459,7 +1510,7 @@ void KisKraLoader::loadAudioXML(QDomDocument &xmlDoc, QDomElement &xmlElement, K
         }
 
         kisDoc->setAudioTracks(clipFiles);
-        kisDoc->setAudioLevel(volume);
+        kisDoc->setAudioVolume(volume);
     }
 }
 

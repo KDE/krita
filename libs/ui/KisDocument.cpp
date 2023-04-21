@@ -502,7 +502,7 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
         q->setStoryboardItemList(StoryboardItem::cloneStoryboardItemList(rhs.m_storyboardItemList));
         q->setStoryboardCommentList(rhs.m_storyboardCommentList);
         q->setAudioTracks(rhs.audioTracks);
-        q->setAudioLevel(rhs.audioLevel);
+        q->setAudioVolume(rhs.audioLevel);
         q->setGridConfig(rhs.gridConfig);
     } else {
         // in CONSTRUCT mode, we cannot use the functions of KisDocument
@@ -2347,7 +2347,7 @@ void KisDocument::setAudioTracks(QVector<QFileInfo> f)
     emit sigAudioTracksChanged();
 }
 
-void KisDocument::setAudioLevel(qreal level)
+void KisDocument::setAudioVolume(qreal level)
 {
     d->audioLevel = level;
     emit sigAudioLevelChanged(level);

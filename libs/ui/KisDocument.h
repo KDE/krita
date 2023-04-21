@@ -401,7 +401,7 @@ public:
     QVector<QFileInfo> getAudioTracks() const;
     void setAudioTracks(QVector<QFileInfo> f);
 
-    void setAudioLevel(qreal level);
+    void setAudioVolume(qreal level);
     qreal getAudioLevel();
 
     const KisMirrorAxisConfig& mirrorAxisConfig() const;

@@ -462,7 +462,11 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(
             return qimage;
         }();
 
-        KIS_ASSERT(!qimage.isNull());
+        KIS_SAFE_ASSERT_RECOVER(!qimage.isNull())
+        {
+            warnKrita << "Clipboard was cleared before loading image";
+            return nullptr;
+        }
 
         int behaviour = pasteBehaviourOverride;
         bool saveColorSetting = false;

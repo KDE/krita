@@ -423,14 +423,6 @@ void KisAnimTimelineFramesView::slotCanvasUpdate(KoCanvasBase *canvas)
     m_d->canvas = canvas;
 
     horizontalScrollBar()->setEnabled(m_d->canvas != nullptr);
-
-    KisCanvas2* canvas2 = dynamic_cast<KisCanvas2*>(canvas);
-    if (canvas2) {
-        KisCanvasAnimationState* state = canvas2->animationState();
-        connect(state, &KisCanvasAnimationState::sigPlaybackMediaChanged, this, &KisAnimTimelineFramesView::slotUpdateAudioActions);
-    }
-
-    slotUpdateAudioActions();
 }
 
 void KisAnimTimelineFramesView::slotUpdateIcons()
@@ -777,40 +769,6 @@ void KisAnimTimelineFramesView::slotAudioChannelRemove()
 {
     if (!m_d->model) return;
     m_d->model->setAudioChannelFileName(QFileInfo());
-}
-
-void KisAnimTimelineFramesView::slotUpdateAudioActions()
-{
-    if (!m_d->canvas) return;
-
-//    const QString currentFile = m_d->model->audioChannelFileName();
-
-//    if (currentFile.isEmpty()) {
-//        m_d->openAudioAction->setText(i18nc("@item:inmenu", "Open audio..."));
-//    } else {
-//        QFileInfo info(currentFile);
-//        m_d->openAudioAction->setText(i18nc("@item:inmenu", "Change audio (%1)...", info.fileName()));
-//    }
-
-//    m_d->audioMuteAction->setChecked(m_d->model->isAudioMuted());
-
-//    QIcon audioIcon;
-//    if (currentFile.isEmpty()) {
-//        audioIcon = KisIconUtils::loadIcon("audio-none");
-//    } else {
-//        if (m_d->model->isAudioMuted()) {
-//            audioIcon = KisIconUtils::loadIcon("audio-volume-mute");
-//        } else {
-//            audioIcon = KisIconUtils::loadIcon("audio-volume-high");
-//        }
-//    }
-
-//    m_d->audioOptionsButton->setIcon(audioIcon);
-
-//    m_d->volumeSlider->setEnabled(!m_d->model->isAudioMuted());
-
-//    KisSignalsBlocker b(m_d->volumeSlider);
-//    m_d->volumeSlider->setValue(qRound(m_d->model->audioVolume() * 100.0));
 }
 
 void KisAnimTimelineFramesView::slotAudioVolumeChanged(int value)

@@ -119,7 +119,6 @@ public Q_SLOTS:
     void slotSelectAudioChannelFile();
     void slotAudioChannelMute(bool value);
     void slotAudioChannelRemove();
-    void slotUpdateAudioActions();
     void slotAudioVolumeChanged(int value);
 
     // Zoom & Scroll

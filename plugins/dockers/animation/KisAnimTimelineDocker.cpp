@@ -169,6 +169,7 @@ KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
 
             btnAudioMenu->setPopupMode(QToolButton::InstantPopup);
             btnAudioMenu->setMenu(audioMenu);
+            btnAudioMenu->setEnabled(false); // To be enabled on canvas load...
 
             layout->addWidget(btnAudioMenu);
         }
@@ -353,10 +354,13 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
         m_d->framesModel->setNodeManipulationInterface(0);
     }
 
-    if (m_d->canvas) {
+    // Deinitialize from previous canvas...
+    if (m_d->canvas) { 
         m_d->canvas->disconnectCanvasObserver(this);
         m_d->canvas->animationState()->disconnect(this);
         m_d->titlebar->transport->setPlaying(false);
+
+        m_d->titlebar->btnAudioMenu->setEnabled(false);
 
         if(m_d->canvas->image()) {
             m_d->canvas->image()->animationInterface()->disconnect(this);
@@ -370,7 +374,8 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
     setEnabled(m_d->canvas != 0);
     m_d->framesView->slotCanvasUpdate(m_d->canvas);
 
-    if(m_d->canvas) {
+    // Reinitialize new canvas..
+    if (m_d->canvas) {
         KisDocument *doc = static_cast<KisDocument*>(m_d->canvas->imageView()->document());
         KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(doc->shapeController());
         m_d->framesModel->setDummiesFacade(kritaShapeController,
@@ -379,10 +384,9 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
 
         m_d->framesModel->setDocument(doc);
 
-
         updateFrameCache();
 
-        { // Reinitialize titlebar widgets..
+        {   // Titlebar widgets...
             KisSignalsBlocker blocker(m_d->titlebar->sbStartFrame,
                                       m_d->titlebar->sbEndFrame,
                                       m_d->titlebar->sbFrameRate,
@@ -395,6 +399,8 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
             m_d->titlebar->sbFrameRate->setValue(animinterface->framerate());
             m_d->titlebar->sbSpeed->setValue(100);
             m_d->titlebar->frameRegister->setValue(animinterface->currentTime());
+            
+            m_d->titlebar->btnAudioMenu->setEnabled(true); // Menu is disabled until a canvas is loaded.
         }
 
         m_d->framesModel->setAnimationPlayer(m_d->canvas->animationState());

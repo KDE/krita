@@ -242,34 +242,62 @@ int psd_unzip_without_prediction(const char *src, int packed_len, char *dst, int
     return static_cast<int>(stream.total_out);
 }
 
+template<typename T>
+inline void psd_unzip_with_prediction(QByteArray &dst_buf, int row_size);
+
+template<>
+inline void psd_unzip_with_prediction<uint8_t>(QByteArray &dst_buf, const int row_size)
+{
+    auto *buf = reinterpret_cast<uint8_t *>(dst_buf.data());
+    int len = 0;
+    int dst_len = dst_buf.size();
+
+    while (dst_len > 0) {
+        len = row_size;
+        while (--len) {
+            *(buf + 1) += *buf;
+            buf++;
+        }
+        buf++;
+        dst_len -= row_size;
+    }
+}
+
+template<>
+inline void psd_unzip_with_prediction<uint16_t>(QByteArray &dst_buf, const int row_size)
+{
+    auto *buf = reinterpret_cast<uint8_t *>(dst_buf.data());
+    int len = 0;
+    int dst_len = dst_buf.size();
+
+    while (dst_len > 0) {
+        len = row_size;
+        while (--len) {
+            buf[2] += buf[0] + ((buf[1] + buf[3]) >> 8);
+            buf[3] += buf[1];
+            buf += 2;
+        }
+        buf += 2;
+        dst_len -= row_size * 2;
+    }
+}
+
 QByteArray psd_unzip_with_prediction(const QByteArray &src, int dst_len, int row_size, int color_depth)
 {
-    int len;
-
     QByteArray dst_buf = Compression::uncompress(dst_len, src, psd_compression_type::ZIP);
-    if (dst_buf.size() == 0)
-        return dst_buf;
 
-    char *buf = dst_buf.data();
-    do {
-        len = row_size;
-        if (color_depth == 16) {
-            while (--len) {
-                buf[2] += buf[0] + ((buf[1] + buf[3]) >> 8);
-                buf[3] += buf[1];
-                buf += 2;
-            }
-            buf += 2;
-            dst_len -= row_size * 2;
-        } else {
-            while (--len) {
-                *(buf + 1) += *buf;
-                buf++;
-            }
-            buf++;
-            dst_len -= row_size;
-        }
-    } while (dst_len > 0);
+    if (dst_buf.size() == 0)
+        return {};
+
+    if (color_depth == 32) {
+        // Placeholded for future implementation.
+        errKrita << "Unsupported bit depth for prediction";
+        return {};
+    } else if (color_depth == 16) {
+        psd_unzip_with_prediction<quint16>(dst_buf, row_size);
+    } else {
+        psd_unzip_with_prediction<quint8>(dst_buf, row_size);
+    }
 
     return dst_buf;
 }
@@ -278,35 +306,60 @@ QByteArray psd_unzip_with_prediction(const QByteArray &src, int dst_len, int row
 /* End of third party block                                           */
 /**********************************************************************/
 
+template<typename T>
+inline void psd_zip_with_prediction(QByteArray &dst_buf, int row_size);
+
+template<>
+inline void psd_zip_with_prediction<uint8_t>(QByteArray &dst_buf, const int row_size)
+{
+    auto *buf = reinterpret_cast<uint8_t *>(dst_buf.data());
+    int len = 0;
+    int dst_len = dst_buf.size();
+
+    while (dst_len > 0) {
+        len = row_size;
+        while (--len) {
+            *(buf + 1) -= *buf;
+            buf++;
+        }
+        buf++;
+        dst_len -= row_size;
+    }
+}
+
+template<>
+inline void psd_zip_with_prediction<uint16_t>(QByteArray &dst_buf, const int row_size)
+{
+    auto *buf = reinterpret_cast<uint8_t *>(dst_buf.data());
+    int len = 0;
+    int dst_len = dst_buf.size();
+
+    while (dst_len > 0) {
+        len = row_size;
+        while (--len) {
+            buf[2] -= buf[0] + ((buf[1] + buf[3]) >> 8);
+            buf[3] -= buf[1];
+            buf += 2;
+        }
+        buf += 2;
+        dst_len -= row_size * 2;
+    }
+}
+
 QByteArray psd_zip_with_prediction(const QByteArray &src, int row_size, int color_depth)
 {
-    QByteArray tempbuf(src);
+    QByteArray dst_buf(src);
+    if (color_depth == 32) {
+        // Placeholded for future implementation.
+        errKrita << "Unsupported bit depth for prediction";
+        return {};
+    } else if (color_depth == 16) {
+        psd_zip_with_prediction<quint16>(dst_buf, row_size);
+    } else {
+        psd_zip_with_prediction<quint8>(dst_buf, row_size);
+    }
 
-    int len;
-    int dst_len = src.size();
-
-    char *buf = tempbuf.data();
-    do {
-        len = row_size;
-        if (color_depth == 16) {
-            while (--len) {
-                buf[2] -= buf[0] + ((buf[1] + buf[3]) >> 8);
-                buf[3] -= buf[1];
-                buf += 2;
-            }
-            buf += 2;
-            dst_len -= row_size * 2;
-        } else {
-            while (--len) {
-                *(buf + 1) -= *buf;
-                buf++;
-            }
-            buf++;
-            dst_len -= row_size;
-        }
-    } while (dst_len > 0);
-
-    return Compression::compress(tempbuf, psd_compression_type::ZIP);
+    return Compression::compress(dst_buf, psd_compression_type::ZIP);
 }
 
 QByteArray decompress(const QByteArray &data, int expected_length)

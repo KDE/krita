@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-02 02:51+0000\n"
+"POT-Creation-Date: 2023-04-21 02:49+0000\n"
 "PO-Revision-Date: 2023-02-26 09:47+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -19150,7 +19150,7 @@ msgstr "Lokale ressursar"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:776
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:717
-#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:707
+#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:711
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:314
 #: libs/ui/kis_layer_manager.cc:964 libs/ui/kis_node_manager.cpp:1218
@@ -22130,18 +22130,17 @@ msgid ""
 "org</a></p>"
 msgstr ""
 "<p>KDE-programma er omsette til mange språk, og dei var nokre av dei første "
-"store programma som fanst på nynorsk.</p><p>Viss du finn skrive­feil, "
-"feil­omsetjingar eller omsetjingar som kan forbetrast, set me pris på om "
-"sender eit tips til <a href=\"mailto:l10n-no@lister.huftis."
-"org\">diskusjons­lista</a> vår (<a href=\"http://lister.huftis.org/listinfo."
-"cgi/l10n-no-huftis.org\">informasjon og arkiv</a>), eller direkte til "
-"omsetjaren <a href=\"mailto:karl@huftis.org\">Karl Ove Hufthammer</a> dersom "
-"du ikkje ønskjer at meldinga di skal verta offentleg­gjord på lista.</"
-"p><p>Bruk dei same adressene viss du ønskjer å delta aktivt i "
-"nynorsk­omsetjinga av programma. Me har alltid bruk for nye omsetjarar og "
-"korrektur­lesarar!</p><p>Du finn meir informasjon om internasjonalisering av "
-"KDE-programma på <a href=\"https://l10n.kde.org/\">https://l10n.kde.org/</a>."
-"</p>"
+"store programma som fanst på nynorsk.</p><p>Viss du finn skrive­feil, feil­"
+"omsetjingar eller omsetjingar som kan forbetrast, set me pris på om sender "
+"eit tips til <a href=\"mailto:l10n-no@lister.huftis.org\">diskusjons­lista</"
+"a> vår (<a href=\"http://lister.huftis.org/listinfo.cgi/l10n-no-huftis."
+"org\">informasjon og arkiv</a>), eller direkte til omsetjaren <a "
+"href=\"mailto:karl@huftis.org\">Karl Ove Hufthammer</a> dersom du ikkje "
+"ønskjer at meldinga di skal verta offentleg­gjord på lista.</p><p>Bruk dei "
+"same adressene viss du ønskjer å delta aktivt i nynorsk­omsetjinga av "
+"programma. Me har alltid bruk for nye omsetjarar og korrektur­lesarar!</"
+"p><p>Du finn meir informasjon om internasjonalisering av KDE-programma på <a "
+"href=\"https://l10n.kde.org/\">https://l10n.kde.org/</a>.</p>"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDelayedSaveDialog)
@@ -28321,7 +28320,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Endra fil-lag"
 
-#: libs/ui/kis_clipboard.cc:708 libs/ui/KisView.cpp:681
+#: libs/ui/kis_clipboard.cc:712 libs/ui/KisView.cpp:681
 #, kde-format
 msgid ""
 "Could not open %2.\n"

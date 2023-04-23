@@ -119,6 +119,11 @@ bool KisMaskGenerator::shouldSupersample() const
     return antialiasEdges() && (effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10);
 }
 
+bool KisMaskGenerator::shouldSupersample6x6() const
+{
+    return effectiveSrcWidth() < 1 || effectiveSrcHeight() < 1;
+}
+
 bool KisMaskGenerator::shouldVectorize() const
 {
     return false;

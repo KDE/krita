@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-22 00:48+0000\n"
-"PO-Revision-Date: 2023-04-20 11:27+0200\n"
+"PO-Revision-Date: 2023-04-22 09:36+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -20525,11 +20525,7 @@ msgstr ""
 "compressée. Veuillez tenter de l'extraire tout d'abord de l'archive."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
-#, fuzzy, kde-format
-#| msgid ""
-#| "The FFmpeg that you've given us appears to be "
-#| "invalid.                                                     Please "
-#| "select the correct location of an FFmpeg executable on your system."
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."

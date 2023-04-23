@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-22 00:48+0000\n"
-"PO-Revision-Date: 2023-04-08 11:12+0100\n"
+"PO-Revision-Date: 2023-04-22 10:55+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -20435,18 +20435,13 @@ msgstr ""
 "extract FFmpeg from the archive first."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
-#, fuzzy, kde-format
-#| msgid ""
-#| "The FFmpeg that you've given us appears to be "
-#| "invalid.                                                     Please "
-#| "select the correct location of an FFmpeg executable on your system."
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
-"The FFmpeg that you've given us appears to be "
-"invalid.                                                     Please select "
-"the correct location of an FFmpeg executable on your system."
+"The FFmpeg that you've given us appears to be invalid. Please select the "
+"correct location of an FFmpeg executable on your system."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:688
 #, kde-format
@@ -24776,10 +24771,9 @@ msgstr "Adapt to Image Resolution (ppi)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
-#, fuzzy, kde-format
-#| msgid "in Filters"
+#, kde-format
 msgid "&Scaling Filter:"
-msgstr "in Filters"
+msgstr "&Scaling Filter:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38

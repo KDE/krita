@@ -66,14 +66,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-22 00:48+0000\n"
-"PO-Revision-Date: 2023-04-18 22:46+0100\n"
+"PO-Revision-Date: 2023-04-22 20:33+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.03.90\n"
+"X-Generator: Lokalize 23.04.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -20458,16 +20458,12 @@ msgstr ""
 "FFmpeg del archivo comprimido en primer lugar."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
-#, fuzzy, kde-format
-#| msgid ""
-#| "The FFmpeg that you've given us appears to be "
-#| "invalid.                                                     Please "
-#| "select the correct location of an FFmpeg executable on your system."
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
-"Parece que el FFmpeg que ha indicado no es válido. Seleccione lala ubicación "
+"Parece que el FFmpeg que ha indicado no es válido. Seleccione la ubicación "
 "correcta de un ejecutable de FFmpeg en su sistema."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:688

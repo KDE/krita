@@ -67,11 +67,7 @@ void KisImageFromClipboardWidget::createImage()
     newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
     KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
-
-    // if this assert hits, there's no image
-    // let it immediately disable the creation step
-    KIS_SAFE_ASSERT_RECOVER(clip)
-    {
+    if (!clip) {
         enableImageCreation(QImage());
         return;
     }

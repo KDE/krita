@@ -429,7 +429,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     sectionSelectionExtent->appendWidget("sliderSpread", sliderSpread);
     sectionSelectionExtent->appendWidget("checkBoxSelectionAsBoundary",
                                          checkBoxSelectionAsBoundary);
-    selectionWidget->insertWidget(2,
+    selectionWidget->insertWidget(3,
                                   "sectionSelectionExtent",
                                   sectionSelectionExtent);
 

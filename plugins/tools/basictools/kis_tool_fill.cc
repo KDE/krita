@@ -660,6 +660,15 @@ QWidget* KisToolFill::createOptionWidget()
     sectionFillWith->setWidgetVisible("angleSelectorPatternRotation", false);
     m_optionWidget->appendWidget("sectionFillWith", sectionFillWith);
 
+    KisOptionCollectionWidgetWithHeader *sectionReference =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'reference' section label in fill tool options", "Reference")
+        );
+    sectionReference->setPrimaryWidget(optionButtonStripReference);
+    sectionReference->appendWidget("widgetLabels", m_widgetLabels);
+    sectionReference->setWidgetVisible("widgetLabels", false);
+    m_optionWidget->appendWidget("sectionReference", sectionReference);
+
     KisOptionCollectionWidgetWithHeader *sectionRegionExtent =
         new KisOptionCollectionWidgetWithHeader(
             i18nc("The 'fill extent' section label in fill tool options", "Fill extent")
@@ -680,15 +689,6 @@ QWidget* KisToolFill::createOptionWidget()
     sectionAdjustments->appendWidget("containerGrow", containerGrow);
     sectionAdjustments->appendWidget("sliderFeather", m_sliderFeather);
     m_optionWidget->appendWidget("sectionAdjustments", sectionAdjustments);
-    
-    KisOptionCollectionWidgetWithHeader *sectionReference =
-        new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'reference' section label in fill tool options", "Reference")
-        );
-    sectionReference->setPrimaryWidget(optionButtonStripReference);
-    sectionReference->appendWidget("widgetLabels", m_widgetLabels);
-    sectionReference->setWidgetVisible("widgetLabels", false);
-    m_optionWidget->appendWidget("sectionReference", sectionReference);
 
     KisOptionCollectionWidgetWithHeader *sectionDragFill =
         new KisOptionCollectionWidgetWithHeader(

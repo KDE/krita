@@ -540,6 +540,16 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     sectionEnclosingMethod->setPrimaryWidget(optionButtonStripEnclosingMethod);
     m_optionWidget->appendWidget("sectionEnclosingMethod", sectionEnclosingMethod);
 
+    KisOptionCollectionWidgetWithHeader *sectionReference =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'reference' section label in enclose and fill tool options", "Reference")
+        );
+    sectionReference->setPrimaryWidget(optionButtonStripReference);
+    sectionReference->appendWidget("widgetLabels", m_widgetLabels);
+    sectionReference->setWidgetVisible("widgetLabels", false);
+    m_optionWidget->appendWidget("sectionReference", sectionReference);
+
+
     KisOptionCollectionWidgetWithHeader *sectionWhatToFill =
         new KisOptionCollectionWidgetWithHeader(
             i18nc("The 'target regions' section label in enclose and fill tool options", "Target regions")
@@ -581,15 +591,6 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     sectionAdjustments->appendWidget("containerGrow", containerGrow);
     sectionAdjustments->appendWidget("sliderFeather", m_sliderFeather);
     m_optionWidget->appendWidget("sectionAdjustments", sectionAdjustments);
-    
-    KisOptionCollectionWidgetWithHeader *sectionReference =
-        new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'reference' section label in enclose and fill tool options", "Reference")
-        );
-    sectionReference->setPrimaryWidget(optionButtonStripReference);
-    sectionReference->appendWidget("widgetLabels", m_widgetLabels);
-    sectionReference->setWidgetVisible("widgetLabels", false);
-    m_optionWidget->appendWidget("sectionReference", sectionReference);
 
     m_optionWidget->appendWidget("buttonReset", buttonReset);
 

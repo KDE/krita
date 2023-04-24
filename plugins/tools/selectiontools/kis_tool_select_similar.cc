@@ -472,7 +472,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
                   "tool options",
                   "Selection extent"));
     sectionSelectionExtent->appendWidget("sliderThreshold", sliderThreshold);
-    selectionWidget->insertWidget(2,
+    selectionWidget->insertWidget(3,
                                   "sectionSelectionExtent",
                                   sectionSelectionExtent);
 

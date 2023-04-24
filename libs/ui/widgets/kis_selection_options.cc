@@ -262,6 +262,15 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     sectionAction->setPrimaryWidget(m_d->optionButtonStripAction);
     appendWidget("sectionAction", sectionAction);
 
+    KisOptionCollectionWidgetWithHeader *sectionReference =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'reference' section label in selection tools options",
+                  "Reference"));
+    sectionReference->setPrimaryWidget(m_d->optionButtonStripReference);
+    sectionReference->appendWidget("widgetLabels", m_d->widgetLabels);
+    sectionReference->setWidgetVisible("widgetLabels", false);
+    appendWidget("sectionReference", sectionReference);
+
     KisOptionCollectionWidgetWithHeader *sectionAdjustments =
         new KisOptionCollectionWidgetWithHeader(
             i18nc("The 'adjustments' section label in selection tools options",
@@ -272,15 +281,6 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     sectionAdjustments->appendWidget("sliderFeather",
                                      m_d->sliderFeatherSelection);
     appendWidget("sectionAdjustments", sectionAdjustments);
-
-    KisOptionCollectionWidgetWithHeader *sectionReference =
-        new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'reference' section label in selection tools options",
-                  "Reference"));
-    sectionReference->setPrimaryWidget(m_d->optionButtonStripReference);
-    sectionReference->appendWidget("widgetLabels", m_d->widgetLabels);
-    sectionReference->setWidgetVisible("widgetLabels", false);
-    appendWidget("sectionReference", sectionReference);
 
     // Make connections
     connect(m_d->optionButtonStripMode,

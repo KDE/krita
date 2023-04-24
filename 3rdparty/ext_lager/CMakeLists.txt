@@ -33,6 +33,8 @@ ExternalProject_Add( ext_lager
     GIT_REPOSITORY https://github.com/dimula73/lager.git
     GIT_TAG 0b6ab3e0e880bc36be5da4984d768fde03b7cf19
 
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Correctly-use-global-namespace-to-resolve-lager-deta.patch
+
     CMAKE_ARGS -Dlager_BUILD_DEBUGGER_EXAMPLES=OFF
        -Dlager_BUILD_TESTS=OFF
        -Dlager_BUILD_EXAMPLES=OFF

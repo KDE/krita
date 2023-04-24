@@ -34,6 +34,7 @@ ExternalProject_Add( ext_lager
     GIT_TAG 0b6ab3e0e880bc36be5da4984d768fde03b7cf19
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Correctly-use-global-namespace-to-resolve-lager-deta.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Fix-attempt-to-use-final-specifier-with-a-non-virtua.patch
 
     CMAKE_ARGS -Dlager_BUILD_DEBUGGER_EXAMPLES=OFF
        -Dlager_BUILD_TESTS=OFF

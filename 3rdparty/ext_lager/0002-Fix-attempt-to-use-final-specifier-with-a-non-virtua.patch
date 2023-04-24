@@ -1,0 +1,162 @@
+From d1209444c4fb11c3bced674306823b7d2f4161a0 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sun, 23 Apr 2023 21:42:26 -0300
+Subject: [PATCH 2/2] Fix attempt to use final specifier with a non virtual
+ function
+
+This is incorrect as per s.11.4.1.15 [class.mem.general] of the C++
+Standard [1].
+
+See also: https://en.cppreference.com/w/cpp/language/final
+
+[1]: https://eel.is/c++draft/class.mem.general#15
+---
+ lager/constant.hpp           | 2 +-
+ lager/detail/lens_nodes.hpp  | 2 +-
+ lager/detail/merge_nodes.hpp | 2 +-
+ lager/detail/nodes.hpp       | 4 ++--
+ lager/detail/xform_nodes.hpp | 2 +-
+ lager/sensor.hpp             | 2 +-
+ lager/setter.hpp             | 4 ++--
+ lager/state.hpp              | 2 +-
+ lager/store.hpp              | 2 +-
+ 9 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/lager/constant.hpp b/lager/constant.hpp
+index 0b985a0..ede3d7e 100644
+--- a/lager/constant.hpp
++++ b/lager/constant.hpp
+@@ -27,7 +27,7 @@ class constant_node : public root_node<T, reader_node>
+ public:
+     using base_t::base_t;
+ 
+-    virtual void recompute() final {}
++    void recompute() final override {}
+ };
+ 
+ template <typename T>
+diff --git a/lager/detail/lens_nodes.hpp b/lager/detail/lens_nodes.hpp
+index 51a791b..39d78de 100644
+--- a/lager/detail/lens_nodes.hpp
++++ b/lager/detail/lens_nodes.hpp
+@@ -60,7 +60,7 @@ public:
+         , lens_{std::forward<Lens2>(l)}
+     {}
+ 
+-    void recompute() final
++    void recompute() final override
+     {
+         this->push_down(view(lens_, current_from(this->parents())));
+     }
+diff --git a/lager/detail/merge_nodes.hpp b/lager/detail/merge_nodes.hpp
+index 45e2cd4..33ba23e 100644
+--- a/lager/detail/merge_nodes.hpp
++++ b/lager/detail/merge_nodes.hpp
+@@ -49,7 +49,7 @@ public:
+         : base_t{current_from(parents), std::forward<ParentsTuple>(parents)}
+     {}
+ 
+-    void recompute() final { this->push_down(current_from(this->parents())); }
++    void recompute() final override { this->push_down(current_from(this->parents())); }
+ };
+ 
+ template <typename Parents>
+diff --git a/lager/detail/nodes.hpp b/lager/detail/nodes.hpp
+index 87ed89b..e6e4db1 100644
+--- a/lager/detail/nodes.hpp
++++ b/lager/detail/nodes.hpp
+@@ -260,7 +260,7 @@ public:
+         , parents_{std::move(parents)}
+     {}
+ 
+-    void refresh() final
++    void refresh() final override
+     {
+         std::apply([&](auto&&... ps) { noop((ps->refresh(), 0)...); },
+                    parents_);
+@@ -302,7 +302,7 @@ struct root_node : Base<T>
+     using base_t = Base<T>;
+     using base_t::base_t;
+ 
+-    void refresh() final {}
++    void refresh() final override {}
+ };
+ 
+ template <typename... Nodes>
+diff --git a/lager/detail/xform_nodes.hpp b/lager/detail/xform_nodes.hpp
+index 9babe57..c373aa9 100644
+--- a/lager/detail/xform_nodes.hpp
++++ b/lager/detail/xform_nodes.hpp
+@@ -95,7 +95,7 @@ public:
+         , down_step_{std::forward<Xform2>(xform)(send_down_rf)}
+     {}
+ 
+-    void recompute() final
++    void recompute() final override
+     {
+         std::apply([&](auto&&... ps) { down_step_(this, ps->current()...); },
+                    this->parents());
+diff --git a/lager/sensor.hpp b/lager/sensor.hpp
+index 7c29780..3dca346 100644
+--- a/lager/sensor.hpp
++++ b/lager/sensor.hpp
+@@ -41,7 +41,7 @@ public:
+         , sensor_{std::move(sensor)}
+     {}
+ 
+-    void recompute() final { this->push_down(sensor_()); }
++    void recompute() final override { this->push_down(sensor_()); }
+ 
+ private:
+     SensorFnT sensor_;
+diff --git a/lager/setter.hpp b/lager/setter.hpp
+index eec8ec2..01009ec 100644
+--- a/lager/setter.hpp
++++ b/lager/setter.hpp
+@@ -40,7 +40,7 @@ public:
+         , setter_fn_{std::move(fn)}
+     {}
+ 
+-    void recompute() final
++    void recompute() final override
+     {
+         if (recomputed_)
+             recomputed_ = false;
+@@ -48,7 +48,7 @@ public:
+             this->push_down(parent_->current());
+     }
+ 
+-    void refresh() final {}
++    void refresh() final override {}
+ 
+     void send_up(const value_type& value) override
+     {
+diff --git a/lager/state.hpp b/lager/state.hpp
+index 6ba43da..ff99e4d 100644
+--- a/lager/state.hpp
++++ b/lager/state.hpp
+@@ -37,7 +37,7 @@ public:
+ 
+     using base_t::base_t;
+ 
+-    virtual void recompute() final {}
++    void recompute() final override {}
+ 
+     void send_up(const value_type& value) final
+     {
+diff --git a/lager/store.hpp b/lager/store.hpp
+index 6af905a..26bb509 100644
+--- a/lager/store.hpp
++++ b/lager/store.hpp
+@@ -40,7 +40,7 @@ struct store_node_base : public root_node<Model, reader_node>
+     using base_t     = root_node<Model, reader_node>;
+     using base_t::base_t;
+ 
+-    virtual void recompute() final {}
++    void recompute() final override {}
+     virtual future dispatch(action_t action) = 0;
+ };
+ 
+-- 
+2.37.1.windows.1
+

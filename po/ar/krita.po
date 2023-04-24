@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-22 00:48+0000\n"
+"POT-Creation-Date: 2023-04-24 00:45+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -34400,7 +34400,7 @@ msgstr "ضبط جديد %1"
 msgid "No configuration options"
 msgstr "لا خيارات ضبط"
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:138
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
 #, fuzzy, kde-format
 #| msgid "The layer does not have an image associated with it."
 msgid "The clipboard is empty or does not have an image in it."

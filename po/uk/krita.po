@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-22 00:48+0000\n"
+"POT-Creation-Date: 2023-04-24 00:45+0000\n"
 "PO-Revision-Date: 2023-04-21 09:56+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -34083,7 +34083,7 @@ msgstr "XML налаштувань фільтрів"
 msgid "No configuration options"
 msgstr "Немає параметрів налаштовування"
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:138
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
 #, kde-format
 msgid "The clipboard is empty or does not have an image in it."
 msgstr "Буфер даних є порожнім і не містить у собі зображення."

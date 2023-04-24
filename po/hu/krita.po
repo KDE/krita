@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-22 00:48+0000\n"
+"POT-Creation-Date: 2023-04-24 00:45+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -34049,7 +34049,7 @@ msgstr "Új beállítás %1"
 msgid "No configuration options"
 msgstr "Nincsenek beállítási lehetőségek."
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:138
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "The clipboard is empty or does not have an image in it."

@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-22 00:48+0000\n"
+"POT-Creation-Date: 2023-04-24 00:45+0000\n"
 "PO-Revision-Date: 2023-04-20 23:30+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -33605,7 +33605,7 @@ msgstr "Filtrila agordo XML"
 msgid "No configuration options"
 msgstr "Neniuj agordaj opcioj"
 
-#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:138
+#: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:134
 #, kde-format
 msgid "The clipboard is empty or does not have an image in it."
 msgstr "La tondujo estas malplena aŭ ne havas bildon en ĝi."

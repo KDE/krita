@@ -21,7 +21,7 @@ struct KisSmudgeOverlayModeOptionWidget::Private
             lager::reader<bool> overlayModeAllowed)
         : model(optionData, overlayModeAllowed)
         , warningLabelVisible{overlayModeAllowed.map(std::logical_not{})}
-        , lodLimitations(optionData.map(&KisSmudgeOverlayModeOptionData::lodLimitations))
+        , lodLimitations(optionData.map(std::mem_fn(&KisSmudgeOverlayModeOptionData::lodLimitations)))
     {
     }
 

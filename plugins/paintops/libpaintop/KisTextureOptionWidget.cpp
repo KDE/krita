@@ -88,5 +88,5 @@ void KisTextureOptionWidget::readOptionSetting(const KisPropertiesConfigurationS
 
 KisPaintOpOption::OptionalLodLimitationsReader KisTextureOptionWidget::lodLimitationsReader() const
 {
-    return m_d->model.optionData.map(&KisTextureOptionData::lodLimitations);
+    return m_d->model.optionData.map(std::mem_fn(&KisTextureOptionData::lodLimitations));
 }

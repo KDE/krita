@@ -97,10 +97,11 @@ struct WidgetWrapperWithLodLimitations : WidgetWrapper<Widget, Data, Args...>
 
     KisPaintOpOption::OptionalLodLimitationsReader
     lodLimitationsReader() const override {
-        return kislager::fold_optional_cursors(std::bit_or{},
-                                             BaseClass::lodLimitationsReader(),
-                                             KisPaintOpOption::OptionalLodLimitationsReader(
-                                                 this->m_data.map(&Data::lodLimitations)));
+        return kislager::fold_optional_cursors(
+            std::bit_or{},
+            BaseClass::lodLimitationsReader(),
+            KisPaintOpOption::OptionalLodLimitationsReader(
+                this->m_data.map(std::mem_fn(&Data::lodLimitations))));
     }
 };
 

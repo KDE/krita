@@ -11,7 +11,7 @@
 struct KisSizeOptionWidget::Private
 {
     Private(lager::cursor<KisSizeOptionData> optionData)
-        : lodLimitations(optionData.map(&KisSizeOptionData::lodLimitations))
+        : lodLimitations(optionData.map(std::mem_fn(&KisSizeOptionData::lodLimitations)))
     {}
 
     lager::reader<KisPaintopLodLimitations> lodLimitations;

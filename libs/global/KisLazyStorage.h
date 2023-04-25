@@ -72,7 +72,7 @@ private:
         if(!m_data) {
             QMutexLocker l(&m_mutex);
             if(!m_data) {
-                m_data = kismpl::apply_r<T*>(&constructObject, m_constructionArgs);
+                m_data = std::apply(&constructObject, m_constructionArgs);
             }
         }
         return m_data;

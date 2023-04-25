@@ -15,45 +15,6 @@
  * 'kismpl' stands for kis-meta-program-library
  */
 namespace kismpl {
-namespace detail {
-
-template <class F, class Tuple, std::size_t... I>
-void apply_impl(F f, Tuple&& t, std::index_sequence<I...>)
-{
-    f(std::get<I>(std::forward<Tuple>(t))...);
-}
-
-template <typename R, class F, class Tuple, std::size_t... I>
-R apply_r_impl(F f, Tuple&& t, std::index_sequence<I...>)
-{
-    return f(std::get<I>(std::forward<Tuple>(t))...);
-}
-}  // namespace detail
-
-/**
- * Calls function \p f by passing the content of tuple \t as
- * distinct arguments.
- *
- * This is a simplified version of C++17's std::apply() routine.
- * It supports only standard function (not pointer-to-members)
- * without any return value.
- */
-template <class F, class Tuple>
-void apply(F&& f, Tuple&& t)
-{
-    detail::apply_impl(
-        std::forward<F>(f), std::forward<Tuple>(t),
-        std::make_index_sequence<std::tuple_size<std::remove_reference_t<Tuple>>::value>{});
-}
-
-template <typename R, class F, class Tuple>
-R apply_r(F&& f, Tuple&& t)
-{
-    return detail::apply_r_impl<R>(
-        std::forward<F>(f), std::forward<Tuple>(t),
-        std::make_index_sequence<std::tuple_size<std::remove_reference_t<Tuple>>::value>{});
-}
-
 
 namespace detail {
 

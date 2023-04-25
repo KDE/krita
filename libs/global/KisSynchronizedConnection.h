@@ -219,7 +219,7 @@ protected:
             m_queue.pop();
         }
 
-        kismpl::apply(m_callback, args);
+        std::apply(m_callback, args);
     }
 
 private:

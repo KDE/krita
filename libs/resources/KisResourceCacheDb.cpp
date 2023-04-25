@@ -1639,7 +1639,7 @@ struct ResourceVersion : public boost::less_than_comparable<ResourceVersion>
 
 };
 
-MAYBE_UNUSED
+[[maybe_unused]]
 QDebug operator<<(QDebug dbg, const ResourceVersion &ver)
 {
     dbg.nospace() << "ResourceVersion("

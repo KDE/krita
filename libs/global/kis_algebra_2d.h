@@ -879,6 +879,18 @@ public:
         return qreal(m_n) / m_d;
     }
 
+    void step() {
+        generationStep();
+    }
+
+    int currentValue(int maxRange) const {
+        return (m_n * maxRange + m_d / 2) / m_d;
+    }
+
+    qreal currentValue() const{
+        return qreal(m_n) / m_d;
+    }
+
 private:
     inline void generationStep() {
         int x = m_d - m_n;

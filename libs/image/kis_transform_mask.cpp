@@ -413,7 +413,6 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
      * on the higher/lower level
      */
     if (rect.isEmpty()) return rect;
-    if (!m_d->params->isAffine()) return rect;
 
     QRect bounds;
     QRect interestRect;

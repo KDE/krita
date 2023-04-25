@@ -332,6 +332,6 @@ boost::optional<qreal> intersectWithLineNearest(const QPointF &p0,
                                                 const QPointF &nearestAnchor,
                                                 qreal eps);
 
-}
+} // namespace KisBezierUtils
 
 #endif // KISBEZIERUTILS_H

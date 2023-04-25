@@ -40,6 +40,7 @@ set(kritaglobal_LIB_SRCS
     KisSynchronizedConnection.cpp
     KisFilteredRollingMean.cpp
     KisBackup.cpp
+    KisSampleRectIterator.cpp
 )
 
 if(WIN32)

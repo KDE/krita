@@ -7,9 +7,14 @@
 #include "KisBezierTransformMesh.h"
 
 #include "kis_grid_interpolation_tools.h"
+#include <KisBezierPatchParamSpaceUtils.h>
+#include <KisSampleRectIterator.h>
+#include <KisBezierPatchParamToSourceSampler.h>
 #include "kis_debug.h"
 
-KisBezierTransformMesh::PatchIndex KisBezierTransformMesh::hitTestPatch(const QPointF &pt, QPointF *localPointResult) const {
+KisBezierTransformMesh::patch_const_iterator
+KisBezierTransformMesh::hitTestPatchImpl(const QPointF &pt, QPointF *localPointResult) const
+{
     auto result = endPatches();
 
     const QRectF unitRect(0, 0, 1, 1);
@@ -32,7 +37,38 @@ KisBezierTransformMesh::PatchIndex KisBezierTransformMesh::hitTestPatch(const QP
         }
     }
 
-    return result.patchIndex();
+    return result;
+}
+
+KisBezierTransformMesh::PatchIndex KisBezierTransformMesh::hitTestPatch(const QPointF &pt, QPointF *localPointResult) const
+{
+    return hitTestPatchImpl(pt, localPointResult).patchIndex();
+}
+
+QRect KisBezierTransformMesh::hitTestPatchInSourceSpace(const QRectF &rect) const
+{
+    const QRectF searchRect = rect & m_originalRect;
+
+    if (searchRect.isEmpty()) return QRect();
+
+    const QPointF proportionalTL = KisAlgebra2D::absoluteToRelative(searchRect.topLeft(), m_originalRect);
+    const QPointF proportionalBR = KisAlgebra2D::absoluteToRelative(searchRect.bottomRight(), m_originalRect);
+
+    const auto topItY = prev(upper_bound(m_rows.begin(), prev(m_rows.end()), proportionalTL.y()));
+    const int topRow = distance(m_rows.begin(), topItY);
+
+    const auto leftItX = prev(upper_bound(m_columns.begin(), prev(m_columns.end()), proportionalTL.x()));
+    const int leftColumn = distance(m_columns.begin(), leftItX);
+
+    const auto bottomItY = prev(upper_bound(m_rows.begin(), prev(m_rows.end()), proportionalBR.y()));
+    const int bottomRow = distance(m_rows.begin(), bottomItY);
+
+    const auto rightItX = prev(upper_bound(m_columns.begin(), prev(m_columns.end()), proportionalBR.x()));
+    const int rightColumn = distance(m_columns.begin(), rightItX);
+
+    return QRect(leftColumn, topRow,
+                 rightColumn - leftColumn + 1,
+                 bottomRow - topRow + 1);
 }
 
 void KisBezierTransformMesh::transformPatch(const KisBezierPatch &patch, const QPoint &srcQImageOffset, const QImage &srcImage, const QPoint &dstQImageOffset, QImage *dstImage)
@@ -95,13 +131,62 @@ void KisBezierTransformMesh::transformMesh(KisPaintDeviceSP srcDevice, KisPaintD
 
 QRect KisBezierTransformMesh::approxNeedRect(const QRect &rc) const
 {
-    QRect result = rc;
+    QRect result;
 
-    for (auto it = beginPatches(); it != endPatches(); ++it) {
-        KisBezierPatch patch = *it;
+    const QRect sampleRect = rc & dstBoundingRect().toAlignedRect();
+    if (sampleRect.isEmpty()) return result;
 
-        if (patch.dstBoundingRect().intersects(rc)) {
-            result |= patch.srcBoundingRect().toAlignedRect();
+    const QRectF unitRect(0, 0, 1, 1);
+    const int samplesLimit = sampleRect.width() * sampleRect.height() / 2;
+
+    KisSampleRectIterator dstRectSampler(sampleRect);
+    KisBezierPatch patch = *beginPatches();
+    KisBezierPatchParamToSourceSampler patchSampler(patch);
+
+    QRectF stepRect;
+
+    while (1) {
+        for (int i = 0; i < 10; i++) {
+            const QPointF dstPoint = *dstRectSampler++;
+
+            if (patch.dstBoundingRect().contains(dstPoint)) {
+                const QPointF localPoint = patch.globalToLocal(dstPoint);
+                if (unitRect.contains(localPoint)) {
+                    KisAlgebra2D::accumulateBounds(patchSampler.point(localPoint), &stepRect);
+                    continue;
+                }
+            }
+
+            {
+                QPointF localPoint;
+                auto it = hitTestPatchImpl(dstPoint, &localPoint);
+                if (it != endPatches()) {
+                    patch = *it;
+                    patchSampler = KisBezierPatchParamToSourceSampler(patch);
+
+                    KisAlgebra2D::accumulateBounds(patchSampler.point(localPoint), &stepRect);
+                }
+            }
+        }
+
+        QRect alignedRect = stepRect.toAlignedRect();
+
+        if (!alignedRect.isEmpty() && alignedRect == result) {
+            break;
+        }
+
+        result = alignedRect;
+
+        if (dstRectSampler.numSamples() > qMax(2000, samplesLimit)) {
+            /**
+             * We don't warn if the "found" rect is empty, that is a perfectly
+             * valid case.
+             */
+            if (!result.isEmpty()) {
+                qWarning() << "KisBezierTransformMesh::approxNeedRect: the algorithm hasn't converged!"
+                           << ppVar(stepRect) << ppVar(alignedRect) << ppVar(result);
+            }
+            break;
         }
     }
 
@@ -110,17 +195,90 @@ QRect KisBezierTransformMesh::approxNeedRect(const QRect &rc) const
 
 QRect KisBezierTransformMesh::approxChangeRect(const QRect &rc) const
 {
-    QRect result = rc;
+    QRect result;
 
-    for (auto it = beginPatches(); it != endPatches(); ++it) {
-        const KisBezierPatch patch = *it;
+    const QRect affectedPatches = hitTestPatchInSourceSpace(rc);
 
-        if (patch.srcBoundingRect().intersects(rc)) {
-            result |= patch.dstBoundingRect().toAlignedRect();
+    for (int row = affectedPatches.top(); row <= affectedPatches.bottom(); row++) {
+        for (int column = affectedPatches.left(); column <= affectedPatches.right(); column++) {
+            const KisBezierPatch patch = *find(PatchIndex(column, row));
+            const QRectF srcRect = QRectF(rc) & patch.srcBoundingRect();
+            const QRectF paramRect = calcTightSrcRectRangeInParamSpace(patch, srcRect, 0.1);
+
+            KisSampleRectIterator paramRectSampler(paramRect);
+            QRect patchResultRect;
+            QRectF stepRect;
+
+            while (1) {
+                for (int i = 0; i < 10; i++) {
+                    const QPointF sampledParamPoint = *paramRectSampler++;
+                    const QPointF globalPoint = patch.localToGlobal(sampledParamPoint);
+                    KisAlgebra2D::accumulateBounds(globalPoint, &stepRect);
+                }
+
+                const QRect alignedRect = stepRect.toAlignedRect();
+
+                if (!alignedRect.isEmpty() && alignedRect == patchResultRect) {
+                    break;
+                }
+
+                patchResultRect = alignedRect;
+
+                if (paramRectSampler.numSamples() > 2000) {
+                    qWarning() << "KisBezierTransformMesh::approxChangeRect: the algorithm hasn't converged!"
+                               << ppVar(result) << ppVar(patchResultRect) << ppVar(stepRect);
+                    break;
+                }
+            }
+
+            result |= patchResultRect;
         }
     }
 
     return result;
+}
+
+
+/**
+ * Approximate the param-space rect that corresponds to \p srcSpaceRect in the source-space.
+ * The resulting param-space rect will fully cover the source-space rect (and will be bigger).
+ */
+QRectF KisBezierTransformMesh::calcTightSrcRectRangeInParamSpace(const KisBezierPatch &patch, const QRectF &srcSpaceRect, qreal srcPrecision)
+{
+    using KisBezierUtils::Range;
+    using KisBezierUtils::calcTightSrcRectRangeInParamSpace1D;
+
+    KIS_ASSERT_RECOVER_NOOP(patch.srcBoundingRect().contains(srcSpaceRect));
+
+    KisBezierPatchParamToSourceSampler sampler(patch);
+
+    auto xSampler = [sampler] (qreal xParam) -> Range {
+        return sampler.xRange(xParam);
+    };
+
+    auto ySampler = [sampler] (qreal yParam) -> Range {
+        return sampler.yRange(yParam);
+    };
+
+    Range externalRangeX;
+    Range internalRangeX;
+
+    Range externalRangeY;
+    Range internalRangeY;
+
+    std::tie(externalRangeX, internalRangeX) =
+        calcTightSrcRectRangeInParamSpace1D({0.0, 1.0},
+                                            Range::fromRectX(patch.originalRect),
+                                            Range::fromRectX(srcSpaceRect),
+                                            xSampler, srcPrecision);
+
+    std::tie(externalRangeY, internalRangeY) =
+        calcTightSrcRectRangeInParamSpace1D({0.0, 1.0},
+                                            Range::fromRectY(patch.originalRect),
+                                            Range::fromRectY(srcSpaceRect),
+                                            ySampler, srcPrecision);
+
+    return Range::makeRectF(externalRangeX, externalRangeY);
 }
 
 #include <kis_dom_utils.h>

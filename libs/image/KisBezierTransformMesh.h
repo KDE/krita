@@ -49,8 +49,17 @@ public:
     QRect approxNeedRect(const QRect &rc) const;
     QRect approxChangeRect(const QRect &rc) const;
 
+    static QRectF calcTightSrcRectRangeInParamSpace(const KisBezierPatch &patch,
+                                                    const QRectF &srcSpaceRect,
+                                                    qreal srcPrecision);
+
     friend KRITAIMAGE_EXPORT void saveValue(QDomElement *parent, const QString &tag, const KisBezierTransformMesh &mesh);
     friend KRITAIMAGE_EXPORT bool loadValue(const QDomElement &parent, KisBezierTransformMesh *mesh);
+
+    QRect hitTestPatchInSourceSpace(const QRectF &rect) const;
+
+private:
+    patch_const_iterator hitTestPatchImpl(const QPointF &pt, QPointF *localPointResult = 0) const;
 };
 
 KRITAIMAGE_EXPORT

@@ -7,6 +7,8 @@
 #define KISCPPQUIRKS_H
 
 #include <type_traits>
+#include <optional>
+#include <version>
 
 namespace std {
 
@@ -98,5 +100,20 @@ using copy_const_t = typename copy_const<Src, Dst>::type;
 #else
 #define MAYBE_UNUSED
 #endif
+
+template <typename T>
+MAYBE_UNUSED
+QDebug operator<<(QDebug dbg, const std::optional<T> &t)
+{
+
+    if (t) {
+        dbg.nospace() << "std::optional(" << *t << ")";
+    } else {
+        dbg.nospace() << "std::optional(nullopt)";
+    }
+
+    return dbg.space();
+}
+
 
 #endif // KISCPPQUIRKS_H

@@ -38,6 +38,10 @@
 
 #include "qimage_test_util.h"
 
+/**
+ * Compare values and return false on failure
+ * (normal QCOMPARE returns void)
+ */
 #define KIS_COMPARE_RF(expr, ref) \
     if ((expr) != (ref)) { \
         qDebug() << "Compared values are not the same at line" << __LINE__; \
@@ -45,6 +49,18 @@
         qDebug() << "    Expected: " << #ref << "=" << (ref); \
         return false; \
     }
+
+/**
+ * Compare two float numbers by rounding them up to \p prec
+ * decimals after the point.
+ */
+#define KIS_COMPARE_FLT(actual, expected, prec) \
+do {\
+        const qreal multiplier = pow(10, prec); \
+        if (!QTest::qCompare(qRound(actual * multiplier) / multiplier, qRound(expected * multiplier) / multiplier, #actual, #expected, __FILE__, __LINE__))\
+        return;\
+} while (false)
+
 
 /**
  * Routines that are useful for writing efficient tests

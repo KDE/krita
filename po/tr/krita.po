@@ -29518,7 +29518,7 @@ msgid ""
 "Display Mode: %5"
 msgstr ""
 "Seçim: x = %1 y = %2 genişlik = %3 yükseklik = %4\n"
-"Görüntü Kipi: %5"
+"Görüntüleme Kipi: %5"
 
 #: libs/ui/kis_statusbar.cc:388
 #, kde-format

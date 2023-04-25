@@ -89,7 +89,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-24 00:45+0000\n"
-"PO-Revision-Date: 2023-04-17 13:16+0300\n"
+"PO-Revision-Date: 2023-04-20 12:33+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -52032,15 +52032,13 @@ msgid "JPEG DCT compression"
 msgstr "JPEG DCT -pakkaus"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:42
-#, fuzzy, kde-format
-#| msgid "Deflate (ZIP)"
+#, kde-format
 msgctxt "TIFF options"
 msgid "Deflate (ZIP)"
 msgstr "Deflate (ZIP)"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:45
-#, fuzzy, kde-format
-#| msgid "Lempel-Ziv & Welch (LZW)"
+#, kde-format
 msgctxt "TIFF options"
 msgid "Lempel-Ziv & Welch"
 msgstr "Lempel-Ziv & Welch (LZW)"
@@ -52293,11 +52291,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:37
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert to an animated layer"
+#, kde-format
 msgid "Save as animated WebP"
-msgstr "Muunna animoiduksi tasoksi"
+msgstr "Tallenna animoiduksi WebP:ksi"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreset)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:50
@@ -52796,10 +52792,10 @@ msgid "Weak"
 msgstr "Heikko"
 
 #: plugins/paintops/colorsmudge/KisColorSmudgeStandardOptionData.h:15
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Color rate of active Foreground color"
 msgid "Color Rate"
-msgstr "Värialue"
+msgstr "Värinopeus"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionData.h:40
 #, kde-format
@@ -54611,11 +54607,10 @@ msgid "Speed"
 msgstr "Nopeus"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:14
-#, fuzzy, kde-format
-#| msgid "Fade"
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Fade"
-msgstr "Häivytä"
+msgstr "Häivytys"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:15
 #, kde-format
@@ -54630,22 +54625,19 @@ msgid "Time"
 msgstr "Aika"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:17
-#, fuzzy, kde-format
-#| msgid "Drawing angle"
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Drawing angle"
 msgstr "Piirtokulma"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:18
-#, fuzzy, kde-format
-#| msgid "Rotation"
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Rotation"
-msgstr "Kierrä"
+msgstr "Kierto"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:19
-#, fuzzy, kde-format
-#| msgid "Pressure"
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Pressure"
 msgstr "Paine"
@@ -54669,17 +54661,16 @@ msgid "Y-Tilt"
 msgstr "Y-kulma"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:30
-#, fuzzy, kde-format
-#| msgid "Tilt direction"
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Tilt direction"
 msgstr "Kallistuksen suunta"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:31
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Tilt elevation"
-msgstr "Näytä valinta"
+msgstr "Kallistuksen korkeus"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:33
 #, kde-format
@@ -55240,10 +55231,9 @@ msgid "Change Color HSV S"
 msgstr "muuta väriarvoa (HSV)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:151
-#, fuzzy, kde-format
-#| msgid "&Colorize"
+#, kde-format
 msgid "Colorize"
-msgstr "&Väritä"
+msgstr "Väritä"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
 #, fuzzy, kde-format
@@ -55375,22 +55365,19 @@ msgid "Stroke Duration log"
 msgstr "Kylläisyys"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:386
-#, fuzzy, kde-format
-#| msgid "Ask each time"
+#, kde-format
 msgid "Stroke Holdtime"
-msgstr "Kysy joka kerta"
+msgstr "Vedon pitoaika"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:395
-#, fuzzy, kde-format
-#| msgid "Threshold:"
+#, kde-format
 msgid "Stroke Threshold"
-msgstr "Maalauskynnys:"
+msgstr "Vetokynnys"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:404
-#, fuzzy, kde-format
-#| msgid "Custom Gradient"
+#, kde-format
 msgid "Custom Input"
-msgstr "Oma liukuväri"
+msgstr "Mukautettu syöte"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:413
 #, fuzzy, kde-format
@@ -55411,9 +55398,9 @@ msgid "Particles"
 msgstr "Osaset"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Opacity Weight"
-msgstr "peittävyys"
+msgstr "Peittävyyden paino"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:108
 #, kde-format
@@ -55431,9 +55418,9 @@ msgid "Gravity"
 msgstr "Painovoima"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:194
-#, fuzzy, kde-format
+#, kde-format
 msgid "Iterations"
-msgstr "Kylläisyys"
+msgstr "Kierroksia"
 
 #: plugins/paintops/particle/KisParticleOpOptionData.cpp:45
 #, fuzzy, kde-format
@@ -55468,9 +55455,9 @@ msgstr "Kierroksia:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel_2)
 #: plugins/paintops/particle/wdgparticleoptions.ui:118
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gravity:"
-msgstr "Painovoima"
+msgstr "Painovoima:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel_3)
 #: plugins/paintops/particle/wdgparticleoptions.ui:131
@@ -55526,9 +55513,9 @@ msgstr "Gaussin:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, simpleModeCHBox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "Simple mode"
-msgstr "Näytä"
+msgstr "Yksinkertainen tila"
 
 #. i18n: ectx: property (text), widget (QCheckBox, magnetifyCHBox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:131
@@ -55549,10 +55536,9 @@ msgid "Distance opacity"
 msgstr "Etäisyys:"
 
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:123
-#, fuzzy, kde-format
-#| msgid "Particle type"
+#, kde-format
 msgid "Particle Count"
-msgstr "Osastyyppi"
+msgstr "Osasten määrä"
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:63
 #, kde-format
@@ -55574,8 +55560,7 @@ msgstr ""
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:71
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:107
-#, fuzzy, kde-format
-#| msgid "Repeat:"
+#, kde-format
 msgid "Repeat: "
 msgstr "Toista:"
 
@@ -55657,10 +55642,9 @@ msgid ""
 msgstr ""
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:176
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Area"
-msgstr "Suihkeen muoto"
+msgstr "Suihkuala"
 
 #: plugins/paintops/spray/KisSprayShapeDynamicsOptionWidget.cpp:55
 #, kde-format
@@ -55668,10 +55652,9 @@ msgid "Shape dynamics"
 msgstr "Muodon dynamiikka"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Shape"
-msgstr "Suihkeen muoto"
+msgstr "Suihkumuoto"
 
 #: plugins/paintops/spray/spray_paintop_plugin.cpp:27
 #, fuzzy, kde-format
@@ -55761,15 +55744,14 @@ msgstr "Välistys:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelJitter)
 #: plugins/paintops/spray/wdgsprayoptions.ui:151
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label for the jitter movement of the spray area in the spray engine"
 msgid "Jitter Movement:"
-msgstr "Poista segmentti"
+msgstr "Huojuntaliike:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:185
-#, fuzzy, kde-format
-#| msgid "Particles"
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the spay particles in the spray "
 "engine"
@@ -55778,19 +55760,14 @@ msgstr "Osaset"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/spray/wdgsprayoptions.ui:194
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "How much the midtone point used in auto levels is close to the center of "
-#| "the histogram (0%) or to the point selected in the method (100%)"
-#| msgid "Amount:"
+#, kde-format
 msgctxt "Label for the amount of particles in the spray engine"
 msgid "Amount:"
 msgstr "Määrä:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, countRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:203
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgctxt ""
 "Check box to indicate that the user should set the exact number of particles "
 "in the spray engine"
@@ -55799,8 +55776,7 @@ msgstr "Lukumäärä"
 
 #. i18n: ectx: property (text), widget (QRadioButton, densityRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:213
-#, fuzzy, kde-format
-#| msgid "Density"
+#, kde-format
 msgctxt ""
 "Check box to indicate that the user should set the number of particles in "
 "terms of density relative to the spray area in the spray engine"
@@ -56185,10 +56161,8 @@ msgstr "Virkistä"
 #: plugins/python/colorspace/uicolorspace.py:59
 #: plugins/python/documenttools/uidocumenttools.py:44
 #: plugins/python/exportlayers/uiexportlayers.py:91
-#, fuzzy
-#| msgid "Document"
 msgid "Documents:"
-msgstr "Tiedosto"
+msgstr "Tiedostot:"
 
 #: plugins/python/colorspace/uicolorspace.py:61
 msgid "Color depth:"
@@ -56199,10 +56173,8 @@ msgid "Color profile:"
 msgstr "Väriprofiili:"
 
 #: plugins/python/colorspace/uicolorspace.py:129
-#, fuzzy
-#| msgid "This layer cannot be saved to EXR."
 msgid "The selected documents have been converted."
-msgstr "Tätä tasoa ei voi tallentaa EXR:ksi"
+msgstr "Valitut tiedostot on muunnettu."
 
 #: plugins/python/colorspace/uicolorspace.py:131
 #: plugins/python/documenttools/uidocumenttools.py:106
@@ -56242,18 +56214,15 @@ msgstr " DPI"
 msgid "Method:"
 msgstr "Menetelmä:"
 
+# Konteksti on sisällysluettelon sisennys.
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:67
-#, fuzzy
-#| msgid "Show colors as percentages"
 msgid "Percentage:"
-msgstr "Näytä värit prosentteina"
+msgstr "Osuus:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:209
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:265
-#, fuzzy
-#| msgid "Footnote Settings"
 msgid "Export Settings"
-msgstr "Alaviitteiden asetukset"
+msgstr "Vientiasetukset"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:222
 msgid "Crop Settings"
@@ -56272,10 +56241,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:229
-#, fuzzy
-#| msgid "Set line width of actual selection"
 msgid "Set Margins from Active Selection"
-msgstr "Aseta todellisen valinnan viivan paksuus"
+msgstr "Aseta reunukset aktiivisesta valinnasta"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:236
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:207
@@ -56298,8 +56265,6 @@ msgstr "Oikea:"
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:248
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:216
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:245
-#, fuzzy
-#| msgid "Bottom:"
 msgid "Bottom:"
 msgstr "Alhaalla:"
 
@@ -56364,11 +56329,8 @@ msgid "Add History Entry"
 msgstr "Lisää historiatietue"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:295
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Insert Comment"
 msgid "Include translator's comments"
-msgstr "Lisää kommentti"
+msgstr "Sisällytä kääntäjän huomautukset"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:296
 msgid ""
@@ -56385,9 +56347,8 @@ msgid "Version history:"
 msgstr "Versiohistoria:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:304
-#, fuzzy
 msgid "Translator header:"
-msgstr "Kolmio"
+msgstr "Kääntäjän otsake:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:308
 msgid "The people responsible for the generation of the CBZ/ACBF files."
@@ -56969,10 +56930,8 @@ msgid "No description"
 msgstr "Ei kuvausta"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:191
-#, fuzzy
-#| msgid "Resource Tagging"
 msgid "Comics Manager"
-msgstr "Resurssien tunnisteet"
+msgstr "Sarjakuvahallinta"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:247
 msgid "New Project"
@@ -57158,10 +57117,8 @@ msgid "Where are the templates?"
 msgstr "Missä mallipohjat sijaitsevat?"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:116
-#, fuzzy
-#| msgid "Reset Transformations"
 msgid "Where are the translations?"
-msgstr "Nollaa muodonmuutos"
+msgstr "Missä ovat käännökset?"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:117
 #, fuzzy
@@ -57234,10 +57191,8 @@ msgid "Comic Project Setup"
 msgstr "Sarjakuvaprojektin asetus"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:69
-#, fuzzy
-#| msgid "Configure Settings"
 msgid "Basic Comic Project Settings"
-msgstr "Muuta asetuksia"
+msgstr "Perussarjakuvaprojektin asetukset"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:75
 msgid "A Project name. This can be different from the eventual title"
@@ -57423,10 +57378,8 @@ msgid "Annotator"
 msgstr "Annotoija"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "Bibliography entries"
 msgid "Bibliographic antecedent"
-msgstr "Lähdeluettelomerkinnät"
+msgstr "Lähde-edeltäjä"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Architect"
@@ -57437,41 +57390,32 @@ msgid "Artistic director"
 msgstr "Taiteellinen johtaja"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "Action Name"
 msgid "Associated name"
-msgstr "Toiminnon nimi"
+msgstr "Yhdistyvä nimi"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Autographer"
 msgstr "Allekirjoittaja"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Distribute shapes"
 msgid "Attributed name"
-msgstr "Jaa muotoja"
+msgstr "Osoitettu nimi"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Author of dialog"
 msgstr "Vuoropuhelun kirjoittaja"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "Binding Edge:"
 msgid "Binding designer"
-msgstr "Sidontareunus:"
+msgstr "Sidonnan suunnittelija"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Bookjacket designer"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "Reassign"
 msgid "Book designer"
-msgstr "Sijoita uudelleen"
+msgstr "Kirjan suunnittelija"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Book producer"
@@ -57482,11 +57426,8 @@ msgid "Blurb writer"
 msgstr "Tiivistelmän kirjoittaja"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Reorder shapes"
 msgid "Binder"
-msgstr "Järjestä muodot uudestaan"
+msgstr "Sitoja"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Bookplate designer"
@@ -57521,10 +57462,8 @@ msgid "Contributor"
 msgstr "Avustaja"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "&Create"
 msgid "Curator"
-msgstr "&Luo"
+msgstr "Johtaja"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Commentator for written text"
@@ -57563,20 +57502,16 @@ msgid "Inscriber"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "License"
 msgid "Licensee"
-msgstr "Lisenssi"
+msgstr "Lisenssinhaltija"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Licensor"
 msgstr "Lisensoija"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "Photographer"
 msgid "Lithographer"
-msgstr "Kuvaaja"
+msgstr "Litografi"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Metadata contact"
@@ -57747,10 +57682,8 @@ msgid "Export size:"
 msgstr "Vientikoko:"
 
 #: plugins/python/exportlayers/uiexportlayers.py:97
-#, fuzzy
-#| msgid "&Image Selection"
 msgid "Images extensions:"
-msgstr "&Kuvan valinta"
+msgstr "Kuvapäätteet:"
 
 #: plugins/python/exportlayers/uiexportlayers.py:137
 msgid "Select one document."
@@ -57868,9 +57801,9 @@ msgstr "Skriptin tyyppi:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rb_extension)
 #: plugins/python/krita_script_starter/bbdkss.ui:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "E&xtension"
-msgstr "Laajennusten hallinta"
+msgstr "&Pääte"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rb_docker)
 #: plugins/python/krita_script_starter/bbdkss.ui:129
@@ -58151,15 +58084,12 @@ msgid "New"
 msgstr "Uusi"
 
 #: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:31
-#, fuzzy
-#| msgid "This layer cannot be saved to EXR."
 msgid "The document has been modified."
-msgstr "Tätä tasoa ei voi tallentaa EXR:ksi"
+msgstr "Tiedosto on muuttunut."
 
 #: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:32
-#, fuzzy
 msgid "Do you want to save your changes?"
-msgstr "Haluatko varmasti korvata pohjan ”%1”?"
+msgstr "Haluatko tallentaa muutokset?"
 
 #: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:22
 msgid "Open"
@@ -58178,14 +58108,12 @@ msgid "Open files with .py extension"
 msgstr "Avaa .py-päätteiset tiedostot"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:22
-#, fuzzy
 msgid "Reload File"
-msgstr "Lataa uudelleen"
+msgstr "Lataa tiedosto uudelleen"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:26
-#, fuzzy
 msgid "Reload File Alt+R"
-msgstr "Lataa uudelleen"
+msgstr "Lataa tiedosto uudelleen Alt+R"
 
 #: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:39
 msgid "No existing document"
@@ -58480,10 +58408,9 @@ msgid "Execute Script {num}"
 msgstr "Suorita skripti {num}"
 
 #: plugins/python/tenscripts/tenscripts.py:84
-#, fuzzy, python-brace-format
-#| msgid "Subscript"
+#, python-brace-format
 msgid "Script {0} executed"
-msgstr "Alaindeksi"
+msgstr "Komentosarja {0} suoritettu"
 
 #: plugins/python/tenscripts/uitenscripts.py:63
 msgid "Selected path"
@@ -58494,10 +58421,8 @@ msgid "Select the script"
 msgstr "Valitse skripti"
 
 #: plugins/python/tenscripts/uitenscripts.py:88
-#, fuzzy
-#| msgid "All files (*.*)"
 msgid "Python files (*.py)"
-msgstr "Kaikki tiedostot (*.*)"
+msgstr "Python-tiedostot (*.py)"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57
 msgctxt "(qtundo-format)"
@@ -58539,11 +58464,10 @@ msgid "Weighted"
 msgstr "Painotettu"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:350
-#, fuzzy, kde-format
-#| msgid "Stabilizer"
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
-msgstr "Vakauttaja"
+msgstr "Vakautin"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:352
 #, kde-format
@@ -58854,10 +58778,9 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:628
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid "Fill regions found from the active layer"
-msgstr "Täytä alue taustavärillä"
+msgstr "Täytä aktiiviselta tasolta löytyvät alueet"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:629
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
@@ -58867,17 +58790,15 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:630
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
-msgstr "Täytä alue taustavärillä"
+msgstr "Täytä tietyn värimerkin tasot yhdistämällä löytyvät alueet"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:632
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid "Dragging will fill regions of any color"
-msgstr "Täytä alue taustavärillä"
+msgstr "Veto täyttää minkä tahansa värisiä alueita"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
 #, kde-format
@@ -58888,45 +58809,39 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reset to default value"
+#, kde-format
 msgid "Reset the options to their default values"
-msgstr "Palauta oletusarvoon"
+msgstr "Palauta valinnat oletusarvoihinsa"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:644
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
-msgstr "Näytä"
+msgstr "Täyttötapa"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:651
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
-msgstr "&Resurssit"
+msgstr "Täytön lähde"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:665
-#, fuzzy, kde-format
-#| msgid "&Image Selection"
+#, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
-msgstr "&Kuvan valinta"
+msgstr "Täytön ala"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:677
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "HSV Adjustment"
+#, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
-msgstr "HSV:n säätö"
+msgstr "Säädöt"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:686
-#, fuzzy, kde-format
-#| msgid "References"
+#, kde-format
 msgctxt "The 'reference' section label in fill tool options"
 msgid "Reference"
-msgstr "Viitteet"
+msgstr "Viite"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:695
 #, kde-format
@@ -58980,15 +58895,14 @@ msgid "Show Preview"
 msgstr "Näytä esikatselu"
 
 #: plugins/tools/basictools/kis_tool_line.cc:98
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Guideline"
-msgstr "Näytä apuviivat"
+msgstr "Näytä apuviiva"
 
 #: plugins/tools/basictools/kis_tool_line.cc:433
-#, fuzzy, kde-format
-#| msgid "Length: "
+#, kde-format
 msgid "Length: %1 px"
-msgstr "Pituus: "
+msgstr "Pituus: %1 px"
 
 #: plugins/tools/basictools/kis_tool_line.cc:451
 #, kde-format
@@ -59005,20 +58919,20 @@ msgid "Line Tool"
 msgstr "Viivatyökalu"
 
 #: plugins/tools/basictools/kis_tool_measure.cc:76
-#, fuzzy, kde-format
-#| msgid "°"
+#, kde-format
 msgctxt "angle value in degrees"
 msgid "%1°"
-msgstr "°"
+msgstr "%1°"
 
 #: plugins/tools/basictools/kis_tool_measure.cc:150
-#, fuzzy, kde-format
-#| msgid "%1 %2"
+#, kde-format
 msgctxt "%1=distance %2=unit of distance %3=angle in degrees"
 msgid ""
 "%1 %2\n"
 "%3°"
-msgstr "%1 %2"
+msgstr ""
+"%1 %2\n"
+"%3°"
 
 #: plugins/tools/basictools/kis_tool_measure.h:102
 #, kde-format
@@ -59053,11 +58967,10 @@ msgid "Symmetry"
 msgstr "Symmetria"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:420
-#, fuzzy, kde-format
-#| msgid "Mirror"
+#, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
-msgstr "Peilaus"
+msgstr "Peilaa"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:421
 #, kde-format
@@ -59070,9 +58983,9 @@ msgid "Snowflake"
 msgstr "Lumihiutale"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:423
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy Translate"
-msgstr "Kolmio"
+msgstr "Kopioi käännös"
 
 #: plugins/tools/basictools/kis_tool_multihand.h:91
 #, kde-format
@@ -59080,11 +58993,9 @@ msgid "Multibrush Tool"
 msgstr "Monisivellintyökalu"
 
 #: plugins/tools/basictools/kis_tool_pan.cpp:79
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Path Tool"
+#, kde-format
 msgid "Pan Tool"
-msgstr "Polkutyökalu"
+msgstr "Panorointityökalu"
 
 #: plugins/tools/basictools/kis_tool_path.cc:130
 msgctxt "(qtundo-format)"
@@ -59135,12 +59046,11 @@ msgstr "Bézier-käyrätyökalu"
 #. i18n: context: iconText @ Action (KisToolPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/basictools/KisToolPath.action:9
 #: plugins/tools/basictools/KisToolPath.action:10
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Bezier Curve Tool. Shift-mouseclick ends the curve."
+#, kde-format
 msgctxt "action"
 msgid "Bezier Curve Tool. Shift-mouseclick or double-click ends the curve."
-msgstr "Bézier-käyrätyökalu. Vaihto-napsautus päättää käyrän."
+msgstr ""
+"Bézier-käyrätyökalu. Vaihto-napsautus tai kaksoisnapsautus päättää käyrän."
 
 #. i18n: context: text @ Action (KisToolPencil), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KisToolPencil), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59163,18 +59073,16 @@ msgstr "Siirrä valintaa"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ColorSamplerOptionsWidget)
 #: plugins/tools/basictools/wdgcolorsampler.ui:18
-#, fuzzy, kde-format
-#| msgid "Color Sliders"
+#, kde-format
 msgid "Color Sampler"
-msgstr "Värisäätimet"
+msgstr "Värivalitsin"
 
 #. i18n: ectx: property (text), widget (QLabel, blendLabel)
 #: plugins/tools/basictools/wdgcolorsampler.ui:29
-#, fuzzy, kde-format
-#| msgid "Blend"
+#, kde-format
 msgctxt "The color rate of sampled color setting slider"
 msgid "Blend: "
-msgstr "Sekoitus"
+msgstr "Sekoita: "
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, blend)
 #: plugins/tools/basictools/wdgcolorsampler.ui:48
@@ -59529,39 +59437,29 @@ msgstr ""
 "muodonmuutosten nollaus"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1394
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Unclip Shapes"
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
-msgstr ""
-"Poista muotojen rajaus\n"
-"muotojen rajauksen poisto"
+msgstr "Yhdistä kuviot"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1408
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
-msgstr "Risteä"
+msgstr "Leikkaa kuviot"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1418
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
-msgstr "Dynaaminen sivellin"
+msgstr "Erota kuviot"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1463
-#, fuzzy
-#| msgid "Spiral Shape"
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
-msgstr "Spiraalimuoto"
+msgstr "Jaa kuviot"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1831
-#, fuzzy, kde-format
-#| msgid "Vector Selection"
+#, kde-format
 msgid "Vector Shape Actions"
-msgstr "Vektorivalinta"
+msgstr "Vektorikuviotoiminnot"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1850
 #, kde-format
@@ -59569,9 +59467,9 @@ msgid "Logical Operations"
 msgstr "Loogiset operaatiot"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select Shapes Tool"
-msgstr "Valitse läpinäkymätön"
+msgstr "Kuvionvalintatyökalu"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:44
@@ -59665,10 +59563,9 @@ msgstr ""
 "muodonmuutosten nollaus"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
-#, fuzzy, kde-format
-#| msgid "Press ALT to hold x- or y-position."
+#, kde-format
 msgid "Press Shift to hold x- or y-position."
-msgstr "Säilytä x- tai y-sijainti painamalla Alt."
+msgstr "Säilytä x- tai y-sijainti painamalla vaihtonäppäintä."
 
 #: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:96
 #, kde-format
@@ -59689,12 +59586,13 @@ msgstr ""
 "katkaisu"
 
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:96
-#, fuzzy, kde-format
-#| msgid "The following autosave files can be recovered:"
+#, kde-format
 msgid ""
 "The following reference images could not be loaded:\n"
 "%1"
-msgstr "Seuraavat automaattitallennustiedostot voi palauttaa:"
+msgstr ""
+"Seuraavia viitekuvia ei voitu ladata:\n"
+"%1"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:97
 #, kde-format
@@ -59717,69 +59615,59 @@ msgid "Could not open '%1'."
 msgstr "Ei voitu avata: ”%1”."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:186
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not load reference images from '%1'."
-msgstr "Tason %1 metatietoja ei voitu ladata."
+msgstr "”%1”: viitekuvia ei voitu ladata."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:203
-#, fuzzy, kde-format
-#| msgid "Reference Images"
+#, kde-format
 msgid "Save Reference Images"
-msgstr "Mallikuvat"
+msgstr "Tallenna viitekuvat"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:232
-#, fuzzy, kde-format
-#| msgid "Reference image:"
+#, kde-format
 msgid "Failed to save reference images."
-msgstr "Mallikuva:"
+msgstr "Viitekuvien tallentaminen epäonnistui."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:307
-#, fuzzy, kde-format
-#| msgid "Reference Images"
+#, kde-format
 msgid "Reference Image Actions"
-msgstr "Mallikuvat"
+msgstr "Viitekuvatoiminnot"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:89
-#, fuzzy, kde-format
-#| msgid "Reference Images"
+#, kde-format
 msgid "Reference Images Tool"
-msgstr "Mallikuvat"
+msgstr "Viitekuvatyökalu"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saturation [*varies*]: "
-msgstr "Kylläisyys"
+msgstr "Kylläisyys [*vaihtelee*]: "
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:61
-#, fuzzy, kde-format
-#| msgid "Reference image:"
+#, kde-format
 msgid "Add Reference Image"
-msgstr "Mallikuva:"
+msgstr "Lisää viitekuva"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:66
-#, fuzzy, kde-format
-#| msgid "Reference image:"
+#, kde-format
 msgid "Delete all Reference Images"
-msgstr "Mallikuva:"
+msgstr "Poista kaikki viitekuvat"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid "Reference Images"
+#, kde-format
 msgid "Load Reference Images Set"
-msgstr "Mallikuvat"
+msgstr "Lataa viitekuvajoukko"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:74
-#, fuzzy, kde-format
-#| msgid "Reference Images"
+#, kde-format
 msgid "Export Reference Images Set"
-msgstr "Mallikuvat"
+msgstr "Vie viitekuvajoukko"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:78
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste frames from clipboard"
+#, kde-format
 msgid "Paste Reference Image From System Clipboard"
-msgstr "Liitä kuvat leikepöydältä"
+msgstr "Liitä viitekuva järjestelmän leikepöydältä"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:102
 #, kde-format
@@ -59805,10 +59693,9 @@ msgstr "Tallennuspaikka:"
 
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:56
-#, fuzzy, kde-format
-#| msgid "Select the frame export options"
+#, kde-format
 msgid "Add/Select an image to show options"
-msgstr "Valitse ruudun vienti asetukset"
+msgstr "Näytä valinnat lisäämällä tai valitsemalla kuva"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
@@ -59931,11 +59818,10 @@ msgstr "Piirtokynä"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.action:7
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.action:9
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.action:10
-#, fuzzy, kde-format
-#| msgid "Calligraphy: increase width"
+#, kde-format
 msgctxt "action"
 msgid "Calligraphy: increase width"
-msgstr "Kalligrafia: lisää leveyttä"
+msgstr "Kalligrafia: kasvata paksuutta"
 
 #. i18n: context: text @ Action (calligraphy_increase_angle), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (calligraphy_increase_angle), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59946,11 +59832,10 @@ msgstr "Kalligrafia: lisää leveyttä"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.action:17
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.action:19
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.action:20
-#, fuzzy, kde-format
-#| msgid "Calligraphy: increase angle"
+#, kde-format
 msgctxt "action"
 msgid "Calligraphy: increase angle"
-msgstr "Kalligrafia: lisää kulmaa"
+msgstr "Kalligrafia: kasvata kulmaa"
 
 #. i18n: context: text @ Action (calligraphy_decrease_width), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (calligraphy_decrease_width), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59961,11 +59846,10 @@ msgstr "Kalligrafia: lisää kulmaa"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.action:27
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.action:29
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.action:30
-#, fuzzy, kde-format
-#| msgid "Calligraphy: decrease width"
+#, kde-format
 msgctxt "action"
 msgid "Calligraphy: decrease width"
-msgstr "Kalligrafia: vähennä leveyttä"
+msgstr "Kalligrafia: vähennä paksuutta"
 
 #. i18n: context: text @ Action (calligraphy_decrease_angle), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (calligraphy_decrease_angle), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -59976,8 +59860,7 @@ msgstr "Kalligrafia: vähennä leveyttä"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.action:37
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.action:39
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.action:40
-#, fuzzy, kde-format
-#| msgid "Calligraphy: decrease angle"
+#, kde-format
 msgctxt "action"
 msgid "Calligraphy: decrease angle"
 msgstr "Kalligrafia: vähennä kulmaa"
@@ -60019,11 +59902,10 @@ msgid "Threshold: "
 msgstr "Kynnys: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:369
-#, fuzzy, kde-format
-#| msgid "Sp&read"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in contiguous selection tool options"
 msgid "Spread: "
-msgstr "Le&vitä"
+msgstr "Levitä: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
 #, kde-format
@@ -60034,12 +59916,10 @@ msgid "Use selection as boundary"
 msgstr "Käytä rajana valintaa"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:382
-#, fuzzy, kde-format
-#| msgctxt "Grow as in deform brush engine"
-#| msgid "Grow"
+#, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
 msgid "Grow: "
-msgstr "Kasvata"
+msgstr "Kasvata: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, fuzzy, kde-format
@@ -60082,12 +59962,11 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:416
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
-msgstr "Värimuunnosmenetelmä"
+msgstr "Valinnan ala"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:95
 #, kde-format
@@ -60202,12 +60081,11 @@ msgid "Threshold: "
 msgstr "Kynnys: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:473
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
-msgstr "Värimuunnosmenetelmä"
+msgstr "Valinnan ala"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:57
 #, kde-format
@@ -60278,25 +60156,22 @@ msgid "Filter Radius: "
 msgstr "Suodatussäde: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:741
-#, fuzzy, kde-format
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "Threshold in Magnetic Selection's Tool options"
 msgid "Threshold: "
-msgstr "Kynnys:"
+msgstr "Kynnys: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:749
-#, fuzzy, kde-format
-#| msgid "Vertical:"
+#, kde-format
 msgctxt "Search Radius in Magnetic Selection's Tool options"
 msgid "Search Radius: "
-msgstr "Pystysuunnassa:"
+msgstr "Etsintäsäde: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:758
-#, fuzzy, kde-format
-#| msgid "Anchor:"
+#, kde-format
 msgctxt "Anchor Gap in Magnetic Selection's Tool options"
 msgid "Anchor Gap: "
-msgstr "Ankkuri:"
+msgstr "Ankkurin väli: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:762
 #, kde-format
@@ -60349,11 +60224,10 @@ msgid "Discard Selection"
 msgstr "Hylkää valinta"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:792
-#, fuzzy, kde-format
-#| msgid "Patch Options"
+#, kde-format
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
-msgstr "Läikkien asetukset"
+msgstr "Polkuvalinnat"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
 #, kde-format
@@ -60428,11 +60302,9 @@ msgid "Similar Color Selection Tool"
 msgstr "Samankaltaisten värien valintatyökalu"
 
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
-#, fuzzy
-#| msgid "Change Text"
 msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
-msgstr "Muuta tekstiä"
+msgstr "Muuta SVG-tekstityökalua"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:261
 #, kde-format
@@ -60601,11 +60473,10 @@ msgstr "Muuta fonttia, fonttikokoa, lihavointia, kursivointia jne."
 
 #. i18n: context: whatsThis @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:50
-#, fuzzy, kde-format
-#| msgid "Duplicate the currently selected action"
+#, kde-format
 msgctxt "action"
 msgid "Change the attributes of the currently selected characters."
-msgstr "Monista valittu toiminto"
+msgstr "Muuta valittujen merkkien muotoilua."
 
 #. i18n: context: iconText @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -60659,10 +60530,10 @@ msgstr "Tasaa molemmat reunat"
 #: plugins/tools/svgtexttool/SvgTextTool.action:96
 #: plugins/tools/svgtexttool/SvgTextTool.action:98
 #: plugins/tools/svgtexttool/SvgTextTool.action:103
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Align Center"
-msgstr "Keskusta:"
+msgstr "Keskitä"
 
 #. i18n: context: iconText @ Action (svg_decrease_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_decrease_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -60897,10 +60768,9 @@ msgid "Kerning"
 msgstr "Varoitus"
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:134
-#, fuzzy, kde-format
-#| msgid "Create new document"
+#, kde-format
 msgid "Create new texts with..."
-msgstr "Luo uusi tiedosto"
+msgstr "Luo uutta tekstiä…"
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:171
 #, kde-format
@@ -60908,11 +60778,9 @@ msgid "Anchor text to the left."
 msgstr "Ankkuroi teksti vasemmalle."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:180
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Anchor at Middle"
+#, kde-format
 msgid "Anchor text to the middle."
-msgstr "Ankkuri keskelle"
+msgstr "Ankkuroi teksti keskelle."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:189
 #, kde-format
@@ -60941,10 +60809,9 @@ msgid "&Format"
 msgstr "&Muotoile"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:45
-#, fuzzy, kde-format
-#| msgid "Height:"
+#, kde-format
 msgid "&Weight"
-msgstr "Korkeus:"
+msgstr "&Paino"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:81
 #, kde-format
@@ -61283,21 +61150,15 @@ msgstr "Dynaaminen sivellintyökalu"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.action:7
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.action:9
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.action:10
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgctxt "action"
 msgid "Enclose and Fill Tool"
-msgstr "Aktivoi viivatyökalu"
+msgstr "Sulje ja täytä -työkalu"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:267
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Flood Fill"
 msgctxt "(qtundo-format)"
 msgid "Enclose and Fill"
-msgstr ""
-"Tasainen täyttö\n"
-"tasainen täyttö"
+msgstr "Sulje ja täytä"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:418
 #, kde-format
@@ -61326,11 +61187,10 @@ msgid "Threshold: "
 msgstr "Kynnys: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:454
-#, fuzzy, kde-format
-#| msgid "Sp&read"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
 msgid "Spread: "
-msgstr "Le&vitä"
+msgstr "Levitä: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
 #, kde-format
@@ -61347,12 +61207,10 @@ msgid "Anti-aliasing"
 msgstr "Antialiasointi"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:467
-#, fuzzy, kde-format
-#| msgctxt "Grow as in deform brush engine"
-#| msgid "Grow"
+#, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in enclose and fill tool options"
 msgid "Grow: "
-msgstr "Kasvata"
+msgstr "Kasvata: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:478
 #, fuzzy, kde-format
@@ -61389,11 +61247,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:538
-#, fuzzy, kde-format
-#| msgid "Blending Mode"
+#, kde-format
 msgctxt "The 'enclosing method' section label in enclose and fill tool options"
 msgid "Enclosing method"
-msgstr "Sekoitustila"
+msgstr "Sulkemistapa"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:545
 #, kde-format
@@ -61487,10 +61344,9 @@ msgid "Any surrounded by a specific color or transparency"
 msgstr "Kaikki tietyn värin tai läpinäkyvän ympäröimät"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Enclose and Fill Tool"
-msgstr "Aktivoi viivatyökalu"
+msgstr "Sulje ja täytä -työkalu"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.cpp:49
 #, fuzzy
@@ -61507,10 +61363,9 @@ msgid "Colorize Mask Editing Tool"
 msgstr "Liukuvärien muokkaustyökalu"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
-#, fuzzy, kde-format
-#| msgid "Edge Detection"
+#, kde-format
 msgid "Edge detection: "
-msgstr "Havaitse reunat"
+msgstr "Reunantunnistus: "
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:109
 #, kde-format
@@ -61568,9 +61423,9 @@ msgstr "Muokkaa ydintä"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowOutput)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show output"
-msgstr "Tuloste"
+msgstr "Näytä tulos"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLimitToDevice)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:53
@@ -61653,17 +61508,14 @@ msgid "Select a paint layer to use this tool"
 msgstr "Valitse tallennuskansio paketille"
 
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:172
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Smart Patch"
-msgstr "Alku"
+msgstr "Älykäs paikkaus"
 
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.h:79
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Path Tool"
+#, kde-format
 msgid "Smart Patch Tool"
-msgstr "Polkutyökalu"
+msgstr "Älykäs paikkaustyökalu"
 
 #. i18n: ectx: property (text), widget (QLabel, Fast)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:27
@@ -61688,10 +61540,9 @@ msgstr "Tarkkuus:"
 
 #. i18n: ectx: property (text), widget (QLabel, patchRadiusLabel)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:115
-#, fuzzy, kde-format
-#| msgid "Vertical:"
+#, kde-format
 msgid "Patch Radius:"
-msgstr "Pystysuunnassa:"
+msgstr "Paikkaussäde:"
 
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
@@ -61980,10 +61831,9 @@ msgstr "Tarkka"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:69
-#, fuzzy, kde-format
-#| msgid "Instant Preview"
+#, kde-format
 msgid "Accurate with Instant Preview"
-msgstr "Välitön esikatselu"
+msgstr "Tarkka välittömällä esikatselulla"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, freeTransformButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:124
@@ -62011,9 +61861,9 @@ msgstr "Osittain"
 #. i18n: ectx: property (text), widget (QToolButton, cageButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:205
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:208
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cage"
-msgstr "M_Häkki"
+msgstr "Häkki"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, liquifyButton)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyButton)
@@ -62180,16 +62030,15 @@ msgstr "Pystysuuntainen aalto:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipXButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1268
-#, fuzzy, kde-format
-#| msgid "Sobel horizontally"
+#, kde-format
 msgid "Flip selection horizontally"
-msgstr "Vaakasuuntainen sobel"
+msgstr "Käännä valinta vaakasuunnassa"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipYButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1293
-#, fuzzy, kde-format
+#, kde-format
 msgid "Flip selection vertically"
-msgstr "Valinta"
+msgstr "Käännä valinta pystysuunnassa"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCCWButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1334
@@ -62254,27 +62103,23 @@ msgstr "Vektorivalinta"
 
 #. i18n: ectx: property (text), widget (QLabel, adjustGranularity)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1711
-#, fuzzy, kde-format
-#| msgid "Arcus Tangent"
+#, kde-format
 msgid "Adjust Granularity :"
-msgstr "Arkustangentti"
+msgstr "Säädä rakeisuutta:"
 
 #. i18n: ectx: property (text), widget (QLabel, previewGranularity)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1720
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgctxt "The Granularity value for Cage Transformation Preview"
 msgid "Preview"
-msgstr "Esikatsele"
+msgstr "Esikatselu"
 
 #. i18n: ectx: property (text), widget (QLabel, realGranularity)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1737
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/brushes/Real_oil_1.gbr"
-#| msgid "Real Oil 1"
+#, kde-format
 msgctxt "The Granularity value for Cage Transformation Result"
 msgid "Real"
-msgstr "Aito Öljy 1"
+msgstr "Todellinen"
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1784
@@ -62304,18 +62149,15 @@ msgstr "Siveltimen koko"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowControlPoints)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182
-#, fuzzy, kde-format
-#| msgid "Show Changes"
+#, kde-format
 msgid "Show handles"
-msgstr "Näytä muutokset"
+msgstr "Näytä kahvat"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSymmetricalHandles)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2189
-#, fuzzy, kde-format
-#| msgctxt "the gradient will be drawn as a symmetric cone"
-#| msgid "Conical Symmetric"
+#, kde-format
 msgid "Lock handles symmetrically"
-msgstr "Symmetrinen kartio"
+msgstr "Lukitse kahvat symmetrisesti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScaleHandles)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2196

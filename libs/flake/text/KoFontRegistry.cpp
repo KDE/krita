@@ -150,9 +150,14 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
         FcPatternAddString(p.data(), FC_FAMILY, vals);
     }
-    FcValue fallback;
-    fallback.u.s = reinterpret_cast<FcChar8 *>(QString("sans-serif").toUtf8().data());
-    FcPatternAddWeak(p.data(), FC_FAMILY, fallback, true);
+
+    {
+        QByteArray fallbackBuf = QString("sans-serif").toUtf8();
+        FcValue fallback;
+        fallback.type = FcTypeString;
+        fallback.u.s = reinterpret_cast<FcChar8 *>(fallbackBuf.data());
+        FcPatternAddWeak(p.data(), FC_FAMILY, fallback, true);
+    }
 
     if (italic || slant != 0) {
         FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_ITALIC);

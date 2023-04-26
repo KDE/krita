@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-24 00:45+0000\n"
-"PO-Revision-Date: 2023-04-18 09:31+0100\n"
+"PO-Revision-Date: 2023-04-23 12:57+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -20717,11 +20717,7 @@ msgstr ""
 "primeiro o FFmpeg do pacote."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
-#, fuzzy, kde-format
-#| msgid ""
-#| "The FFmpeg that you've given us appears to be "
-#| "invalid.                                                     Please "
-#| "select the correct location of an FFmpeg executable on your system."
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
@@ -60776,6 +60772,3 @@ msgstr "Ferramenta de Ampliação"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta de Imagens de Referência"
-
-#~ msgid " sec"
-#~ msgstr " s"

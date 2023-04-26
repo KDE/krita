@@ -498,16 +498,6 @@ macro_ensure_out_of_source_build("Compiling Krita inside the source directory is
 # Note: OPTIONAL_COMPONENTS does not seem to be reliable
 # (as of ECM 5.15.0, CMake 3.2)
 
-find_package(Qt5Multimedia ${MIN_QT_VERSION})
-set_package_properties(Qt5Multimedia PROPERTIES
-        DESCRIPTION "Qt multimedia integration"
-        URL "https://www.qt.io/"
-        TYPE OPTIONAL
-        PURPOSE "Optionally used to provide sound support for animations")
-
-macro_bool_to_01(Qt5Multimedia_FOUND HAVE_QT_MULTIMEDIA)
-configure_file(config-qtmultimedia.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qtmultimedia.h )
-
 if (NOT APPLE)
 find_package(Qt5Quick ${MIN_QT_VERSION})
 set_package_properties(Qt5Quick PROPERTIES

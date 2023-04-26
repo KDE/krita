@@ -26,7 +26,6 @@
 #include "animation/KisFrameDisplayProxy.h"
 #include <KisDocument.h>
 #include <QFileInfo>
-#include <QAudioDecoder>
 #include <QThread>
 #include "kis_signal_compressor_with_param.h"
 #include "kis_image_barrier_locker.h"

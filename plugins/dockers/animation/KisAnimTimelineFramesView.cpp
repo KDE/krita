@@ -26,7 +26,6 @@
 #include <QMimeData>
 #include <QLayout>
 #include <QScreen>
-#include "config-qtmultimedia.h"
 
 #include "KSharedConfig"
 #include "KisKineticScroller.h"

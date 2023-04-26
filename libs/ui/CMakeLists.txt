@@ -516,7 +516,6 @@ endif()
         dialogs/KisAsyncAnimationFramesSaveDialog.cpp
         canvas/KisCanvasAnimationState.cpp	
         kis_animation_importer.cpp
-        KisQTMultimediaDrivenPlayback.cpp
         KisFrameDataSerializer.cpp
         KisFrameCacheStore.cpp
         KisFrameCacheSwapper.cpp
@@ -706,10 +705,6 @@ if (ANDROID)
     target_link_libraries(kritaui PRIVATE GLESv3)
     target_link_libraries(kritaui PUBLIC Qt5::Gui)
     target_link_libraries(kritaui PRIVATE Qt5::AndroidExtras)
-endif()
-
-if (HAVE_QT_MULTIMEDIA)
-    target_link_libraries(kritaui PUBLIC Qt5::Multimedia)
 endif()
 
 if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)

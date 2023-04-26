@@ -334,7 +334,7 @@ if os.path.isdir(f"{KRITA_INSTALL_DIR}\\lib\\qml"):
 
 # windeployqt
 subprocess.run(["windeployqt.exe", *QMLDIR_ARGS, "--release", "-gui", "-core", "-concurrent", "-network", "-printsupport", "-svg",
-               "-xml", "-sql", "-multimedia", "-qml", "-quick", "-quickwidgets", f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
+               "-xml", "-sql", "-qml", "-quick", "-quickwidgets", f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
 
 # ffmpeg
 if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg.exe"):

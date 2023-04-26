@@ -580,9 +580,6 @@ public:
     void setDisableAVXOptimizations(bool value);
     bool disableAVXOptimizations(bool defaultValue = false) const;
 
-    void setAnimationAllowQTMultimedia(bool value);
-    bool animationAllowQTMultimedia(bool defaultValue = false) const;
-
     void setAnimationPlaybackBackend(int value);
     int animationPlaybackBackend(bool defaultValue = false) const;
 

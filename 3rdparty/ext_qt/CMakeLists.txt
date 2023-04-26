@@ -59,7 +59,6 @@ if (WIN32)
         -opensource -confirm-license
         -feature-relocatable
         -no-feature-d3d12
-        -no-feature-wmf
         -no-feature-qdoc
         -no-direct2d
         #
@@ -129,7 +128,7 @@ if (WIN32)
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
       GIT_TAG ${QT_GIT_TAG}
-      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtmultimedia qtsvg qtwinextras qttranslations
+      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtsvg qtwinextras qttranslations
       GIT_SUBMODULES_RECURSE false
       GIT_PROGRESS true
       GIT_REMOTE_UPDATE_STRATEGY REBASE
@@ -152,7 +151,7 @@ elseif (ANDROID)
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
       GIT_TAG ${QT_GIT_TAG}
-      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtmultimedia qtsvg qttranslations qtandroidextras
+      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtsvg qttranslations qtandroidextras
       GIT_SUBMODULES_RECURSE false
       GIT_PROGRESS true
       GIT_REMOTE_UPDATE_STRATEGY REBASE
@@ -196,7 +195,7 @@ elseif (NOT APPLE)
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
       GIT_TAG ${QT_GIT_TAG}
-      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtmultimedia qtsvg qtx11extras qttranslations
+      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtsvg qtx11extras qttranslations
       GIT_SUBMODULES_RECURSE false
       GIT_PROGRESS true
       GIT_REMOTE_UPDATE_STRATEGY REBASE
@@ -231,7 +230,7 @@ else( APPLE )
 
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
       GIT_TAG ${QT_GIT_TAG}
-      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtmultimedia qtsvg qtmacextras qttranslations
+      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtsvg qtmacextras qttranslations
       GIT_SUBMODULES_RECURSE false
       GIT_PROGRESS true
       GIT_REMOTE_UPDATE_STRATEGY REBASE

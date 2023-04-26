@@ -136,15 +136,6 @@ modules:
         url: http://download.qt.io/archive/qt/5.12/5.12.9/submodules/qtx11extras-everywhere-src-5.12.9.tar.xz
         sha256: 09432392641b56205cbcda6be89d0835bfecad64ad61713a414b951b740c9cec
 
-  - name: qtmultimedia
-    buildsystem: qmake
-    cleanup:
-      - /bin"
-    sources:
-      - type: archive
-        url: http://download.qt.io/archive/qt/5.12/5.12.9/submodules/qtmultimedia-everywhere-src-5.12.9.tar.xz
-        sha256: 59a2f2418cefe030094687dff0846fb8957abbc0e060501a4fee40cb4a52838c
-
   - name: qtdeclarative
     buildsystem: qmake
     cleanup:

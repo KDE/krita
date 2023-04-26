@@ -736,7 +736,7 @@ if exist "%KRITA_INSTALL_DIR%\lib\qml" (
 )
 
 :: windeployqt
-windeployqt.exe %QMLDIR_ARGS% --release -gui -core -concurrent -network -printsupport -svg -xml -sql -multimedia -qml -quick -quickwidgets %pkg_root%\bin\krita.exe %pkg_root%\bin\krita.dll
+windeployqt.exe %QMLDIR_ARGS% --release -gui -core -concurrent -network -printsupport -svg -xml -sql -qml -quick -quickwidgets %pkg_root%\bin\krita.exe %pkg_root%\bin\krita.dll
 if errorlevel 1 (
 	echo ERROR: WinDeployQt failed! 1>&2
 	exit /B 1

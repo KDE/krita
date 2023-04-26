@@ -16,15 +16,59 @@
 #include <QTimer>
 #include "animation/KisFrameDisplayProxy.h"
 
-#include "config-qtmultimedia.h"
-#include "KisQTMultimediaDrivenPlayback.h"
-
 #include "KisPlaybackEngineQT.h"
 
 #include <QFileInfo>
 
-// ======
+// =====
 
+/** @brief Base class for different types of playback.
+ * 
+ * When `KisPlaybackEngineQT` supported audio (through QtMultimedia) it was
+ * useful to have separate playback methods for non-audio and audio situations.
+ */
+class PlaybackDriver : public QObject {
+    Q_OBJECT
+public:
+    PlaybackDriver( class KisPlaybackEngineQT* engine, QObject* parent = nullptr );
+    ~PlaybackDriver();
+
+    virtual void setPlaybackState(PlaybackState state) = 0;
+
+    virtual void setFrame(int) {}
+
+    /** @brief Optionally return which frame the playback driver thinks we should render.
+     * 
+     * This is mostly useful when the driver itself dictates the frame to be shown.
+     * However, in other cases (for example, when `drop frames` is off and we must wait)
+     * we don't rely on this method.
+    */
+    virtual boost::optional<int> desiredFrame() { return boost::none; }
+
+    virtual void setVolume(qreal) {}
+
+    virtual void setSpeed(qreal) {}
+    virtual double speed() = 0;
+
+    virtual void setFramerate(int rate) {}
+
+    virtual void setDropFrames(bool) {}
+    virtual bool dropFrames() { return true; }
+
+    virtual void setTimerDuration(int) {}
+    virtual int timerDuration() { return 1000 / 24; }
+
+    KisPlaybackEngineQT* engine() { return m_engine; }
+
+Q_SIGNALS:
+    void throttledShowFrame();
+
+private:
+    KisPlaybackEngineQT* m_engine;
+    QElapsedTimer time;
+    int m_measureRemainder = 0;
+
+};
 
 PlaybackDriver::PlaybackDriver( KisPlaybackEngineQT* engine, QObject* parent )
     : QObject(parent)
@@ -37,8 +81,11 @@ PlaybackDriver::~PlaybackDriver()
 {
 }
 
-// ======
+// =====
 
+/** @brief A simple QTimer-based playback method for situations when audio is not 
+ * used (and thus audio-video playback synchronization is not a concern).
+ */
 class LoopDrivenPlayback : public PlaybackDriver {
     Q_OBJECT
 public:
@@ -156,6 +203,7 @@ struct FrameMeasure {
     bool waitingForFrame;
 };
 
+// ====== KisPlaybackEngineQT ======
 
 struct KisPlaybackEngineQT::Private {
 public:
@@ -168,14 +216,12 @@ public:
         driver.reset();
     }
 
-    QScopedPointer< PlaybackDriver > driver;
-    QScopedPointer< FrameMeasure > measure;
+    QScopedPointer<PlaybackDriver> driver;
+    QScopedPointer<FrameMeasure> measure;
 
 private:
     KisPlaybackEngineQT* self;
 };
-
-// ======
 
 KisPlaybackEngineQT::KisPlaybackEngineQT(QObject *parent)
     : KisPlaybackEngine(parent)
@@ -213,12 +259,6 @@ void KisPlaybackEngineQT::setPlaybackSpeedNormalized(double value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->driver);
     m_d->driver->setSpeed(value);
-}
-
-bool KisPlaybackEngineQT::supportsAudio()
-{
-    KisConfig config(true);
-    return config.animationAllowQTMultimedia();
 }
 
 boost::optional<int64_t> KisPlaybackEngineQT::activeFramesPerSecond()
@@ -271,17 +311,15 @@ void KisPlaybackEngineQT::throttledDriverCallback()
         m_d->measure->remainder = m_d->measure->remainder % timePerFrame;
     }
 
-
     // We need to update the timing interval of the internal loop to be as accurate as possible...
     // This is most important for drop frames mode, where frame timing should be as consistent as possible.
     // So...
     //      - Calculate our running average of msec-per-frame
     //      - Based on the error, we adjust our loop timer to offset toward a target time per frame
     //      - We clip this value to a minimum and maximum possible time per frame -- to prevent locking the system.
-    // The only exception is the first driver callback -- here we'll just initialize our average and
-    // continue.
-    // Also another consideration is whether this needs to happen at all for non-dropframes mode or if the logic should
-    // simply be different.
+    // The only exception is the first driver callback -- here we'll just initialize our average and continue.
+    // Also another consideration is whether this needs to happen at all for non-dropframes mode 
+    // or if the logic should simply be different.
     if (m_d->measure->averageDriverCallbackTime == 0) {
         m_d->measure->averageDriverCallbackTime = timeSinceLastFrame;
     } else {
@@ -292,7 +330,7 @@ void KisPlaybackEngineQT::throttledDriverCallback()
         m_d->driver->setTimerDuration(newTargetTimerTime);
     }
 
-    // If we have an qtmultimedia playback driver: we will only go to what the audio determines to be the desired frame...
+    // If we have an audio-driver or otherwise external playback driver: we will only go to what the driver determines to be the desired frame...
     if (m_d->driver->desiredFrame()) {
         const int desiredFrame = m_d->driver->desiredFrame().get();
         const int targetFrame = frameWrap(desiredFrame, startFrame, endFrame );
@@ -305,7 +343,6 @@ void KisPlaybackEngineQT::throttledDriverCallback()
         if (targetFrame != desiredFrame) {
             m_d->driver->setFrame(targetFrame);
         }
-
     } else { // Otherwise, we just advance the frame ourselves based on the displayProxy's active frame.
         int targetFrame = currentFrame + 1 + extraFrames;
 
@@ -476,16 +513,6 @@ void KisPlaybackEngineQT::recreateDriver(boost::optional<QFileInfo> file)
         return;
 
     m_d->driver.reset(new LoopDrivenPlayback(this));
-
-#ifdef HAVE_QT_MULTIMEDIA
-    KisConfig config(true);
-    if (file && config.animationAllowQTMultimedia()) {
-        QScopedPointer<AudioDrivenPlayback> audioPlayback(new AudioDrivenPlayback(this, file.get()));
-        if (audioPlayback->deviceAvailability()) {
-            m_d->driver.reset(audioPlayback.take());
-        }
-    }
-#endif
 }
 
 

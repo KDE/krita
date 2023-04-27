@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:45+0000\n"
+"POT-Creation-Date: 2023-04-27 00:46+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -42547,7 +42547,7 @@ msgstr "ब्रश के नमूने"
 msgid "Manage Resources"
 msgstr "संसाधन प्रबंधित करें"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:223
 #, fuzzy, kde-format
 #| msgid "Duplicate layer or mask"
 msgctxt ""
@@ -42557,7 +42557,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "दोहरा परत या मास्क"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, fuzzy, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -42565,7 +42565,7 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "स्केल चयन"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Delete resource"
@@ -42573,7 +42573,7 @@ msgid "Undelete Resources"
 msgstr "संसाधन मिटाएँ"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:383
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
@@ -42581,7 +42581,7 @@ msgstr "संसाधन मिटाएँ"
 msgid "Delete Resources"
 msgstr "संसाधन मिटाएँ"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "

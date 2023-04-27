@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:45+0000\n"
+"POT-Creation-Date: 2023-04-27 00:46+0000\n"
 "PO-Revision-Date: 2021-05-15 15:07+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -42792,7 +42792,7 @@ msgstr "Preconfigurări:"
 msgid "Manage Resources"
 msgstr "&Resurse"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:223
 #, fuzzy, kde-format
 #| msgid "Duplicate layer or mask"
 msgctxt ""
@@ -42802,7 +42802,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "Duplică stratul sau masca"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, fuzzy, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -42810,19 +42810,19 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "Selecția"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
 #, fuzzy, kde-format
 msgid "Undelete Resources"
 msgstr "Șterge resursă"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:383
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, fuzzy, kde-format
 msgid "Delete Resources"
 msgstr "Șterge resursă"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
 #, fuzzy, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "

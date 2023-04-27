@@ -21,9 +21,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:45+0000\n"
-"PO-Revision-Date: 2023-04-20 09:39+0200\n"
-"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"POT-Creation-Date: 2023-04-27 00:46+0000\n"
+"PO-Revision-Date: 2023-04-26 12:56+0200\n"
+"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -20390,18 +20390,13 @@ msgstr ""
 "iz arhiva."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
-#, fuzzy, kde-format
-#| msgid ""
-#| "The FFmpeg that you've given us appears to be "
-#| "invalid.                                                     Please "
-#| "select the correct location of an FFmpeg executable on your system."
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
-"Podano mesto FFmpeg ni "
-"veljavno.                                                     Izberite pravo "
-"mesto izvršilne datoteke FFmpeg na svojem sistemu."
+"Podano mesto FFmpeg ni veljavno. Izberite pravo mesto izvršilne datoteke "
+"FFmpeg na svojem sistemu."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:688
 #, kde-format
@@ -43021,7 +43016,7 @@ msgstr "Prednastavitve čopiča"
 msgid "Manage Resources"
 msgstr "Upravljaj vire"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:223
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -43030,7 +43025,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "(več izbranih)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -43038,19 +43033,19 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "(nič ni izbrano)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
 #, kde-format
 msgid "Undelete Resources"
 msgstr "Prekliči brisanje virov"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:383
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, kde-format
 msgid "Delete Resources"
 msgstr "Izbriši vire"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "
@@ -60297,6 +60292,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid " sec"
-#~ msgstr " s"

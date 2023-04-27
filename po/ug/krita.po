@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:45+0000\n"
+"POT-Creation-Date: 2023-04-27 00:46+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -43493,7 +43493,7 @@ msgstr "رەسىم قەلىمى تاللاش"
 msgid "Manage Resources"
 msgstr "مەنبەلەر(&R)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:223
 #, fuzzy, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -43502,7 +43502,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "مەشغۇلاتنى كۆپەيت"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, fuzzy, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -43510,7 +43510,7 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "تاللانمىدى"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Delete resource"
@@ -43518,7 +43518,7 @@ msgid "Undelete Resources"
 msgstr "مەنبەنى ئۆچۈر"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:383
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
@@ -43526,7 +43526,7 @@ msgstr "مەنبەنى ئۆچۈر"
 msgid "Delete Resources"
 msgstr "مەنبەنى ئۆچۈر"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
 #, fuzzy, kde-format
 #| msgid "ICC Engine"
 msgctxt "Brush engine type, in resource manager"

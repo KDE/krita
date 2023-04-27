@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:45+0000\n"
+"POT-Creation-Date: 2023-04-27 00:46+0000\n"
 "PO-Revision-Date: 2023-02-28 16:14+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -43340,7 +43340,7 @@ msgstr "Reportator de fracasso de Krita"
 msgid "Manage Resources"
 msgstr "Gere Ressources"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:223
 #, fuzzy, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -43349,7 +43349,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "Duplica action"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -43357,7 +43357,7 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "(Necun seligite)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Delete resource"
@@ -43365,13 +43365,13 @@ msgid "Undelete Resources"
 msgstr "Dele ressource"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:383
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, kde-format
 msgid "Delete Resources"
 msgstr "Dele  ressource"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "

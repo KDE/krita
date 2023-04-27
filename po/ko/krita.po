@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:45+0000\n"
+"POT-Creation-Date: 2023-04-27 00:46+0000\n"
 "PO-Revision-Date: 2023-03-01 00:29+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -44112,7 +44112,7 @@ msgstr "브러시 사전 설정"
 msgid "Manage Resources"
 msgstr "리소스 관리"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:223
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -44121,7 +44121,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "(다중 선택)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -44129,19 +44129,19 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "(선택 없음)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
 #, kde-format
 msgid "Undelete Resources"
 msgstr "리소스 삭제 복원"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:383
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, kde-format
 msgid "Delete Resources"
 msgstr "리소스 삭제"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "

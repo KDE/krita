@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:45+0000\n"
+"POT-Creation-Date: 2023-04-27 00:46+0000\n"
 "PO-Revision-Date: 2023-04-20 12:33+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -44984,7 +44984,7 @@ msgstr "Valmiit siveltimet"
 msgid "Manage Resources"
 msgstr "Hallitse resursseja"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:223
 #, fuzzy, kde-format
 #| msgid "Duplicate layer or mask"
 msgctxt ""
@@ -44994,7 +44994,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "Monista taso tai maski"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, fuzzy, kde-format
 #| msgid "No action is selected."
 msgctxt ""
@@ -45003,7 +45003,7 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "Yhtään toimintoa ei ole valittu."
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Delete resource"
@@ -45011,13 +45011,13 @@ msgid "Undelete Resources"
 msgstr "Poista resurssi"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:383
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, kde-format
 msgid "Delete Resources"
 msgstr "Poista resursseja"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "

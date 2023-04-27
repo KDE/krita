@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:45+0000\n"
+"POT-Creation-Date: 2023-04-27 00:46+0000\n"
 "PO-Revision-Date: 2023-02-26 23:02-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -43380,7 +43380,7 @@ msgstr "ブラシプリセット"
 msgid "Manage Resources"
 msgstr "リソースを管理する"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:223
 #, fuzzy, kde-format
 #| msgid "Duplicate selected mask"
 msgctxt ""
@@ -43390,7 +43390,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "選択されたマスクを複製"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -43398,7 +43398,7 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "(選択なし)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Delete resource"
@@ -43406,13 +43406,13 @@ msgid "Undelete Resources"
 msgstr "リソースを削除"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:383
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, kde-format
 msgid "Delete Resources"
 msgstr "リソースを削除"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "

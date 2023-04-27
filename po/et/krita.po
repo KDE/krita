@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:45+0000\n"
+"POT-Creation-Date: 2023-04-27 00:46+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -45093,7 +45093,7 @@ msgstr "Valmispintslid"
 msgid "Manage Resources"
 msgstr "Ressursside haldamine"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:223
 #, fuzzy, kde-format
 #| msgid "Duplicate selected mask"
 msgctxt ""
@@ -45103,7 +45103,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "Valitud maski kloonimine"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, fuzzy, kde-format
 #| msgid "No action is selected."
 msgctxt ""
@@ -45112,7 +45112,7 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "Toimingut pole valitud."
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Delete resource"
@@ -45120,7 +45120,7 @@ msgid "Undelete Resources"
 msgstr "Ressursi kustutamine"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:383
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
@@ -45128,7 +45128,7 @@ msgstr "Ressursi kustutamine"
 msgid "Delete Resources"
 msgstr "Ressursi kustutamine"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
 #, fuzzy, kde-format
 #| msgid "Engine:"
 msgctxt "Brush engine type, in resource manager"

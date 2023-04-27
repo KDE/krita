@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:45+0000\n"
+"POT-Creation-Date: 2023-04-27 00:46+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -43835,7 +43835,7 @@ msgstr "Προρυθμίσεις πινέλου"
 msgid "Manage Resources"
 msgstr "&Πόροι"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:223
 #, fuzzy, kde-format
 #| msgid "Duplicate layer or mask"
 msgctxt ""
@@ -43845,7 +43845,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "Αντίγραφο στρώματος ή μάσκας"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, fuzzy, kde-format
 #| msgid "No action is selected."
 msgctxt ""
@@ -43854,7 +43854,7 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "Δεν επιλέχθηκε ενέργεια."
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Delete resource"
@@ -43862,7 +43862,7 @@ msgid "Undelete Resources"
 msgstr "Διαγραφή πόρου"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:383
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
@@ -43870,7 +43870,7 @@ msgstr "Διαγραφή πόρου"
 msgid "Delete Resources"
 msgstr "Διαγραφή πόρου"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
 #, fuzzy, kde-format
 #| msgid "ICC Engine"
 msgctxt "Brush engine type, in resource manager"

@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:45+0000\n"
+"POT-Creation-Date: 2023-04-27 00:46+0000\n"
 "PO-Revision-Date: 2023-02-14 11:07-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -43299,7 +43299,7 @@ msgstr "Predefinições do pincel"
 msgid "Manage Resources"
 msgstr "Gerenciar recursos"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:223
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -43309,7 +43309,7 @@ msgid "(Multiple selected)"
 msgstr "(Múltiplos selecionados)"
 
 # Manter a tradução com o menor tamanho possível para nao ocupar a maioria do espaço da janela. (Alvarenga)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
@@ -43317,19 +43317,19 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "(Nenhum selecionado)"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
 #, kde-format
 msgid "Undelete Resources"
 msgstr "Recuperar recursos"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:383
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, kde-format
 msgid "Delete Resources"
 msgstr "Excluir recursos"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
 #, kde-format
 msgctxt "Brush engine type, in resource manager"
 msgid "Engine: "

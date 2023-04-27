@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:45+0000\n"
+"POT-Creation-Date: 2023-04-27 00:46+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -46004,7 +46004,7 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 msgid "Manage Resources"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:222
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:223
 #, fuzzy, kde-format
 #| msgid "Delete the current page"
 msgctxt ""
@@ -46014,7 +46014,7 @@ msgctxt ""
 msgid "(Multiple selected)"
 msgstr "ਮੌਜੂਦਾ ਸਫ਼ਾ ਹਟਾਓ"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:241
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgctxt ""
@@ -46023,21 +46023,21 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:380
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgid "Undelete Resources"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:382
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:383
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgid "Delete Resources"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
-#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:400
+#: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "Brush engine type, in resource manager"

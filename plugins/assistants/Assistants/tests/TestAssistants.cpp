@@ -171,7 +171,7 @@ void TestAssistants::testProjectionNewMethodTest2()
 
     auto doTest = [eps] (EllipseInPolygon ellipse, QPointF point) {
 
-        QPointF res = ellipse.projectModifiedEberly(point);
+        QPointF res = ellipse.projectModifiedEberlySecond(point);
 
         auto form = [] (QPointF p, EllipseInPolygon f) {
             return f.finalFormula[0]*p.x()*p.x()

@@ -129,7 +129,6 @@ public:
 
     QPointF project(QPointF point);
 
-    QPointF projectModifiedEberly(QPointF point);
     QPointF projectModifiedEberlySecond(QPointF point);
 
 

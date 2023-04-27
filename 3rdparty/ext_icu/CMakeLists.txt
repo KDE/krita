@@ -16,83 +16,32 @@ ExternalProject_Add(
     SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/meson"
 )
 
-if(NOT APPLE)
-    # Patch 0001 is the Meson wrap, the official source of which is above
-    ExternalProject_Add(
-        ext_icu
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz
-        URL_HASH SHA256=a2d2d38217092a7ed56635e34467f92f976b370e20182ad325edea6681a71d68
+kis_ExternalProject_Add_with_separate_builds_apple(
+    ext_icu
+    MESON
 
-        PATCH_COMMAND ${CMAKE_COMMAND} -E echo Deploying Meson wrap
-            COMMAND ${CMAKE_COMMAND} -E copy_directory 
-                ${CMAKE_CURRENT_BINARY_DIR}/meson
-                <SOURCE_DIR>
-            COMMAND ${CMAKE_COMMAND} -E echo Deploying patches
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-MinGW-support-from-MSYS.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Windows-enable-C-code-generation-with-overridden-ent.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-toolutil-Fix-crash-when-trying-to-generate-MinGW-ass.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-toolutil-Fix-MASM-generation-for-x86-64-and-ARM64.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-toolutil-Add-NASM-generator.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-meson-Use-NASM-to-work-around-MSVC-compiler-performa.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-meson-Work-around-Meson-linking-bug-when-there-s-no-.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0009-meson-Enable-icudata-for-MSVC.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0010-meson-Work-around-windeployqt-expecting-no-ICU-prefi.patch
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz
+    URL_HASH SHA256=a2d2d38217092a7ed56635e34467f92f976b370e20182ad325edea6681a71d68
 
-        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
-            PYTHONPATH=${_krita_pythonpath}
-            PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
-            ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
-                --prefix=${EXTPREFIX_icu}
-                --libdir=lib
-                -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
-                ${EXTRA_MESON_FLAGS}
+    PATCH_COMMAND ${CMAKE_COMMAND} -E echo Deploying Meson wrap
+        COMMAND ${CMAKE_COMMAND} -E copy_directory 
+            ${CMAKE_CURRENT_BINARY_DIR}/meson
+            <SOURCE_DIR>
+        COMMAND ${CMAKE_COMMAND} -E echo Deploying patches
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-MinGW-support-from-MSYS.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Windows-enable-C-code-generation-with-overridden-ent.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-toolutil-Fix-crash-when-trying-to-generate-MinGW-ass.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-toolutil-Fix-MASM-generation-for-x86-64-and-ARM64.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-toolutil-Add-NASM-generator.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-meson-Use-NASM-to-work-around-MSVC-compiler-performa.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-meson-Work-around-Meson-linking-bug-when-there-s-no-.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0009-meson-Enable-icudata-for-MSVC.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0010-meson-Work-around-windeployqt-expecting-no-ICU-prefi.patch
 
-        BUILD_COMMAND ${CMAKE_COMMAND} -E env
-            PYTHONPATH=${_krita_pythonpath}
-            ${MESON_BINARY_PATH} compile -C <BINARY_DIR> -j${SUBMAKE_JOBS}
+    CONFIGURE_ARGS --prefix=${EXTPREFIX_icu} ${EXTRA_MESON_FLAGS}
 
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E env
-            PYTHONPATH=${_krita_pythonpath}
-            ${MESON_BINARY_PATH} install -C <BINARY_DIR>
+    UPDATE_COMMAND ""
 
-        UPDATE_COMMAND ""
-
-        DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ext_icu_meson
-    )
-else()
-
-    kis_ExternalProject_Add_macos(
-        ext_icu
-        MESON
-
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/unicode-org/icu/releases/download/release-72-1/icu4c-72_1-src.tgz
-        URL_HASH SHA256=a2d2d38217092a7ed56635e34467f92f976b370e20182ad325edea6681a71d68
-
-        PATCH_COMMAND ${CMAKE_COMMAND} -E echo Deploying Meson wrap
-            COMMAND ${CMAKE_COMMAND} -E copy_directory 
-                ${CMAKE_CURRENT_BINARY_DIR}/meson
-                <SOURCE_DIR>
-            COMMAND ${CMAKE_COMMAND} -E echo Deploying patches
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-MinGW-support-from-MSYS.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Windows-enable-C-code-generation-with-overridden-ent.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-toolutil-Fix-crash-when-trying-to-generate-MinGW-ass.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-toolutil-Fix-MASM-generation-for-x86-64-and-ARM64.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-toolutil-Add-NASM-generator.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-meson-Use-NASM-to-work-around-MSVC-compiler-performa.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-meson-Work-around-Meson-linking-bug-when-there-s-no-.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0009-meson-Enable-icudata-for-MSVC.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0010-meson-Work-around-windeployqt-expecting-no-ICU-prefi.patch
-
-        CONFIGURE_ARGS --prefix=${EXTPREFIX_icu}
-
-        UPDATE_COMMAND ""
-
-        DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ext_icu_meson
-    )
-
-endif(NOT APPLE)
-
-
-#  --native-file=${CMAKE_CURRENT_BINARY_DIR}/meson-compiler.ini
+    DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ext_icu_meson
+)

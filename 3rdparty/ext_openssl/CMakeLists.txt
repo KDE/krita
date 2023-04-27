@@ -62,40 +62,22 @@ elseif (ANDROID)
 )
 else (WIN32)
     
-    if(APPLE)
-
-    kis_ExternalProject_Add_macos(
+    kis_ExternalProject_Add_with_separate_builds_apple(
         ext_openssl
 
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://www.openssl.org/source/openssl-1.1.1m.tar.gz
         URL_HASH SHA256=f89199be8b23ca45fc7cb9f1d8d3ee67312318286ad030f5316aca6462db6c96
 
+        WORKING_DIRECTORY <SOURCE_DIR>
         CONFIGURE_COMMAND <SOURCE_DIR>/config --prefix=${PREFIX_ext_openssl} --openssldir=ssl
-
+        
         BUILD_COMMAND make clean COMMAND make -j${SUBMAKE_JOBS} depend COMMAND make -j${SUBMAKE_JOBS}
-
-        UPDATE_COMMAND ""
-    )
-
-    else()
-    
-    ExternalProject_Add( ext_openssl
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://www.openssl.org/source/openssl-1.1.1m.tar.gz
-        URL_HASH SHA256=f89199be8b23ca45fc7cb9f1d8d3ee67312318286ad030f5316aca6462db6c96
-
-        CONFIGURE_COMMAND <SOURCE_DIR>/config --prefix=${PREFIX_ext_openssl} --openssldir=ssl
-
-        BUILD_COMMAND make -j${SUBMAKE_JOBS} depend COMMAND make -j${SUBMAKE_JOBS}
         INSTALL_COMMAND make install
-
+        
         INSTALL_DIR ${PREFIX_ext_openssl}
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_fftw3} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
         UPDATE_COMMAND ""
     )
-
-    endif()
 
 endif (WIN32)

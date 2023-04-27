@@ -30,66 +30,27 @@ ExternalProject_Add(ext_freetype_bootstrap
     DEPENDS ext_png
 )
 
-if(APPLE)
-    # This creates universal builds
-    ExternalProject_Add(
-        ext_harfbuzz
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/harfbuzz/harfbuzz/releases/download/5.3.1/harfbuzz-5.3.1.tar.xz
-        URL_HASH SHA256=4a6ce097b75a8121facc4ba83b5b083bfec657f45b003cd5a3424f2ae6b4434d
+ExternalProject_Add(
+    ext_harfbuzz
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/harfbuzz/harfbuzz/releases/download/5.3.1/harfbuzz-5.3.1.tar.xz
+    URL_HASH SHA256=4a6ce097b75a8121facc4ba83b5b083bfec657f45b003cd5a3424f2ae6b4434d
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/harfbuzz-clang16-fix.patch
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/harfbuzz-clang16-fix.patch
 
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_harfbuzz}
-            -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
-            -DBUILD_SHARED_LIBS=ON
-            -DCMAKE_MACOSX_RPATH=ON
-            -DHB_HAVE_FREETYPE=ON 
-            -DHB_HAVE_ICU=ON
-            -DHB_HAVE_GLIB=OFF
-            -DHB_HAVE_GRAPHITE2=OFF
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_harfbuzz}
+        -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+        -DBUILD_SHARED_LIBS=ON
+        -DCMAKE_MACOSX_RPATH=ON
+        -DHB_HAVE_FREETYPE=ON 
+        -DHB_HAVE_ICU=ON
+        -DHB_HAVE_GLIB=OFF
+        -DHB_HAVE_GRAPHITE2=OFF
 
-        UPDATE_COMMAND ""
+    UPDATE_COMMAND ""
 
-        DEPENDS ext_freetype_bootstrap
-    )
-
-else()
-    ExternalProject_Add(
-        ext_harfbuzz
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/harfbuzz/harfbuzz/releases/download/5.3.1/harfbuzz-5.3.1.tar.xz
-        URL_HASH SHA256=4a6ce097b75a8121facc4ba83b5b083bfec657f45b003cd5a3424f2ae6b4434d
-
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-patch-msvc.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/harfbuzz-clang16-fix.patch
-
-        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
-            PYTHONPATH=${_krita_pythonpath}
-            PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
-            ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
-                --prefix=${EXTPREFIX_harfbuzz}
-                --libdir=lib
-                -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
-                -Dglib=disabled
-                -Dgobject=disabled
-                -Dtests=disabled
-                -Dfreetype=enabled
-                ${EXTRA_MESON_FLAGS}
-
-        BUILD_COMMAND ${CMAKE_COMMAND} -E env
-            PYTHONPATH=${_krita_pythonpath}
-            ${MESON_BINARY_PATH} compile -C <BINARY_DIR> -j${SUBMAKE_JOBS}
-
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E env
-            PYTHONPATH=${_krita_pythonpath}
-            ${MESON_BINARY_PATH} install -C <BINARY_DIR>
-
-        UPDATE_COMMAND ""
-
-        DEPENDS ext_freetype_bootstrap ${MESON_DEP} ${PKG_CONFIG_DEP}
-    )
-endif()
+    DEPENDS ext_freetype_bootstrap
+)
 
 # Amyspark: just run roughshod!
 ExternalProject_Add( ext_freetype

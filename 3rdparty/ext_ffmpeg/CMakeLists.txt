@@ -44,60 +44,31 @@ ExternalProject_Add(
     SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/theora_meson"
 )
 
-if(APPLE)
-    ExternalProject_Add(
-        ext_libtheora
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
-        URL_HASH SHA256=b6ae1ee2fa3d42ac489287d3ec34c5885730b1296f0801ae577a35193d3affbc
+kis_ExternalProject_Add_with_separate_builds_apple(
+    ext_libtheora
+    MESON
 
-        INSTALL_DIR ${PREFIX_ext_ffmpeg}
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_ffmpeg} ${GLOBAL_AUTOMAKE_PROFILE}
-            --disable-examples
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    GIT_REPOSITORY https://gitlab.xiph.org/xiph/theora.git
+    # gitlab-ci: Add scons build. Latest commit as of Nov 26, 2022
+    GIT_TAG 7180717276af1ebc7da15c83162d6c5d6203aabf
 
-        UPDATE_COMMAND ""
-        
-        DEPENDS ext_png ext_libvorbis ${PKG_CONFIG_DEP} ${OGG_DEP}
-    )
+    PATCH_COMMAND ${CMAKE_COMMAND} -E echo Deploying Meson wrap
+        COMMAND ${CMAKE_COMMAND} -E copy_directory 
+            ${CMAKE_CURRENT_BINARY_DIR}/theora_meson
+            <SOURCE_DIR>
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0010-theora-Update-to-1.2.0.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0011-theora-Add-Arm-support.patch
 
-else()
+    CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
+        -Ddoc=disabled
+        -Dspec=disabled
+        ${EXTRA_MESON_FLAGS}
 
-    ExternalProject_Add(
-        ext_libtheora
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        GIT_REPOSITORY https://gitlab.xiph.org/xiph/theora.git
-        # gitlab-ci: Add scons build. Latest commit as of Nov 26, 2022
-        GIT_TAG 7180717276af1ebc7da15c83162d6c5d6203aabf
+    UPDATE_COMMAND ""
 
-        PATCH_COMMAND ${CMAKE_COMMAND} -E echo Deploying Meson wrap
-            COMMAND ${CMAKE_COMMAND} -E copy_directory 
-                ${CMAKE_CURRENT_BINARY_DIR}/theora_meson
-                <SOURCE_DIR>
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0010-theora-Update-to-1.2.0.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0011-theora-Add-Arm-support.patch
-
-        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
-            PYTHONPATH=${_krita_pythonpath}
-            PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
-            ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
-                --prefix=${PREFIX_ext_ffmpeg}
-                --libdir=lib
-                -Ddoc=disabled
-                -Dspec=disabled
-                ${EXTRA_MESON_FLAGS}
-        BUILD_COMMAND ${CMAKE_COMMAND} -E env
-            PYTHONPATH=${_krita_pythonpath}
-            ${MESON_BINARY_PATH} compile -C <BINARY_DIR> -j${SUBMAKE_JOBS}
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E env
-            PYTHONPATH=${_krita_pythonpath}
-            ${MESON_BINARY_PATH} install -C <BINARY_DIR>
-
-        UPDATE_COMMAND ""
-
-        DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ${OGG_DEP} ext_png ext_libvorbis ext_libtheora_meson
-    )
-    
-endif()
+    DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ${OGG_DEP} ext_png ext_libvorbis ext_libtheora_meson
+)
 
 
 ExternalProject_Add(
@@ -150,72 +121,22 @@ ExternalProject_Add(
 
 # ======================== VIDEO ===========================
 
-if(APPLE)
-    # Needed as meson cannot compile universal builds
-    kis_ExternalProject_Add_macos(
-        ext_libopenh264
-        MESON
-        URL https://github.com/cisco/openh264/archive/v2.3.1.tar.gz
-        # gitlab-ci: Add scons build. Latest commit as of Nov 26, 2022
-        URL_HASH SHA256=453afa66dacb560bc5fd0468aabee90c483741571bca820a39a1c07f0362dc32
+kis_ExternalProject_Add_with_separate_builds_apple(
+    ext_libopenh264
+    MESON
 
-        CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/cisco/openh264/archive/v2.3.1.tar.gz
+    URL_HASH SHA256=453afa66dacb560bc5fd0468aabee90c483741571bca820a39a1c07f0362dc32
+
+    CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
             -Dtests=disabled
             ${EXTRA_MESON_FLAGS}
 
-        DEPENDS ext_nasm ${MESON_DEP} ${PKG_CONFIG_DEP}
-    )
+    DEPENDS ext_nasm ${MESON_DEP} ${PKG_CONFIG_DEP}
+)
 
-else()
-    ExternalProject_Add(
-        ext_libopenh264
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/cisco/openh264/archive/v2.3.1.tar.gz
-        URL_HASH SHA256=453afa66dacb560bc5fd0468aabee90c483741571bca820a39a1c07f0362dc32
 
-        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
-            PYTHONPATH=${_krita_pythonpath}
-            PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
-            ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
-                --prefix=${PREFIX_ext_ffmpeg}
-                --libdir=lib
-                -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
-                -Dtests=disabled
-                ${EXTRA_MESON_FLAGS}
-        BUILD_COMMAND ${CMAKE_COMMAND} -E env
-            PYTHONPATH=${_krita_pythonpath}
-            ${MESON_BINARY_PATH} compile -C <BINARY_DIR> -j${SUBMAKE_JOBS}
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E env
-            PYTHONPATH=${_krita_pythonpath}
-            ${MESON_BINARY_PATH} install -C <BINARY_DIR>
-
-        UPDATE_COMMAND ""
-
-        DEPENDS ext_nasm ${MESON_DEP} ${PKG_CONFIG_DEP}
-    )
-endif()
-
-if(APPLE)
-
-    # use automake version as meson does not support universal builds
-    ExternalProject_Add(
-        ext_libmp3lame
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz
-        URL_HASH SHA256=ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
-
-        INSTALL_DIR ${PREFIX_ext_ffmpeg}
-
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-lame-macos-universal.patch
-	    CONFIGURE_COMMAND DEPRECATED_OR_OBSOLETE_CODE_REMOVED=ON <SOURCE_DIR>/configure --prefix=${PREFIX_ext_ffmpeg} ${GLOBAL_AUTOMAKE_PROFILE}
-            --disable-frontend
-        
-        UPDATE_COMMAND ""
-
-        DEPENDS ${PKG_CONFIG_DEP}
-    )
-
-else()
 ExternalProject_Add(
     ext_libmp3lame_meson
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -232,9 +153,10 @@ ExternalProject_Add(
     SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/lame_meson"
 )
 
-ExternalProject_Add(
+kis_ExternalProject_Add_with_separate_builds_apple(
     ext_libmp3lame
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    MESON
+
     URL https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz
     URL_HASH SHA256=ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
 
@@ -247,29 +169,12 @@ ExternalProject_Add(
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-lame-Install-pkg-config-file.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-lame-Add-DLL-version-information.patch
 
-    CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
-        PYTHONPATH=${_krita_pythonpath}
-        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
-        ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
-            --prefix=${PREFIX_ext_ffmpeg}
-            --libdir=lib
-            -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
+    CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
             ${EXTRA_MESON_FLAGS}
-
-    BUILD_COMMAND ${CMAKE_COMMAND} -E env
-        PYTHONPATH=${_krita_pythonpath}
-        ${MESON_BINARY_PATH} compile -C <BINARY_DIR> -j${SUBMAKE_JOBS}
-
-    INSTALL_COMMAND ${CMAKE_COMMAND} -E env
-        PYTHONPATH=${_krita_pythonpath}
-        ${MESON_BINARY_PATH} install -C <BINARY_DIR>
-
-    UPDATE_COMMAND ""
 
     DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ext_libmp3lame_meson
 )
 
-endif()
 
 ExternalProject_Add(
     ext_sdl2
@@ -285,35 +190,23 @@ ExternalProject_Add(
     UPDATE_COMMAND ""
 )
 
-if(APPLE)
-    kis_ExternalProject_Add_macos(
-        ext_vpx
-        AUTOMAKE
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/webmproject/libvpx/archive/v1.12.0.tar.gz
-        URL_HASH SHA256=f1acc15d0fd0cb431f4bf6eac32d5e932e40ea1186fe78e074254d6d003957bb
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-MacOS-13-is-darwin22.patch
+kis_ExternalProject_Add_with_separate_builds_apple(
+    ext_vpx
+    AUTOMAKE
 
-        CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/webmproject/libvpx/archive/v1.12.0.tar.gz
+    URL_HASH SHA256=f1acc15d0fd0cb431f4bf6eac32d5e932e40ea1186fe78e074254d6d003957bb
 
-        UPDATE_COMMAND ""
-    )
-else()
+    WORKING_DIRECTORY <BINARY_DIR>
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-MacOS-13-is-darwin22.patch
 
-    ExternalProject_Add(
-        ext_vpx
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/webmproject/libvpx/archive/v1.12.0.tar.gz
-        URL_HASH SHA256=f1acc15d0fd0cb431f4bf6eac32d5e932e40ea1186fe78e074254d6d003957bb
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_ffmpeg} ${GLOBAL_AUTOMAKE_PROFILE}
+    CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg} #overrides CONFIGURE_COMMAND on APPLE
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-MacOS-13-is-darwin22.patch
-
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_ffmpeg} ${GLOBAL_AUTOMAKE_PROFILE}
-
-        UPDATE_COMMAND ""
-    )
-endif()
+    UPDATE_COMMAND ""
+)
 # TODO: migrate to a proper cross-platform wrap.
 
 # IMPORTANT:
@@ -323,9 +216,8 @@ endif()
 # Anything not enabled (missing or commented out) in these lists is considered unsafe and should NOT be used!
 # While unlikely, it's possible that these lists could change, so it's worth occasionally cross-referencing.
 
-if (APPLE)
 
-kis_ExternalProject_Add_macos(
+kis_ExternalProject_Add_with_separate_builds_apple(
     ext_ffmpeg
     MESON
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -385,79 +277,3 @@ kis_ExternalProject_Add_macos(
 
     DEPENDS ${FLAC_DEP} ${VPX_DEP} ${OPUS_DEP} ${SDL_DEP} ${VPX_DEP} ext_libvorbis ext_libtheora ext_libopenh264 ext_libmp3lame ext_libaom ext_webp ext_png ext_jpeg ${MESON_DEP} ${PKG_CONFIG_DEP}
 )
-else()
-
-ExternalProject_Add(
-    ext_ffmpeg
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    GIT_REPOSITORY https://gitlab.freedesktop.org/gstreamer/meson-ports/ffmpeg.git
-    GIT_TAG meson-4.4
-
-    # Workaround https://github.com/mesonbuild/meson/issues/11113
-    # See https://gitlab.freedesktop.org/gstreamer/meson-ports/ffmpeg/-/issues/31
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-meson-Fix-library-detection-in-prefixed-builds.patch
-
-    CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
-        PYTHONPATH=${_krita_pythonpath}
-        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
-        ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
-            --prefix=${PREFIX_ext_ffmpeg}
-            --libdir=lib
-            -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
-            -Ddefault_library=shared
-            -Dcli=enabled
-            -Dtests=disabled
-            -Dffprobe=enabled
-            -Dffplay=disabled
-            -Davdevice=disabled
-            -Davcodec=enabled
-            -Davformat=enabled
-            -Davutil=enabled
-            -Davresample=enabled
-            -Dswresample=enabled
-            -Dswscale=enabled
-            -Dpostproc=disabled
-            -Dsdl2=enabled
-            -Dlibaom=enabled
-            -Dzlib=enabled
-            -Dimage2_demuxer=enabled
-            -Dimage2_alias_pix_demuxer=enabled
-            -Dimage2_brender_pix_demuxer=enabled
-            # ===================== Container Formats
-            -Dwebm_muxer=enabled
-            -Dmatroska_muxer=enabled
-            -Dogg_muxer=enabled
-            -Dapng_muxer=enabled
-            # ===================== Image Formats
-            -Dlibwebp=enabled
-            -Dpng_encoder=enabled
-            -Dpng_decoder=enabled
-            -Dapng_encoder=enabled
-            -Dapng_decoder=enabled
-            # ===================== Video Codecs
-            -Dlibaom_av1_encoder=enabled
-            -Dlibvpx_vp9_encoder=auto
-            -Dlibvpx_vp8_encoder=auto
-            -Dlibopenh264=enabled
-            -Dlibtheora=enabled
-            # ===================== Audio Codecs
-            -Dflac_encoder=enabled
-            -Daac_encoder=enabled
-            -Dlibmp3lame=enabled
-            -Dlibopus=enabled
-            -Dlibvorbis=enabled
-            ${EXTRA_MESON_FLAGS}
-
-    BUILD_COMMAND ${CMAKE_COMMAND} -E env
-        PYTHONPATH=${_krita_pythonpath}
-        ${MESON_BINARY_PATH} compile -C <BINARY_DIR> -j${SUBMAKE_JOBS}
-
-    INSTALL_COMMAND ${CMAKE_COMMAND} -E env
-        PYTHONPATH=${_krita_pythonpath}
-        ${MESON_BINARY_PATH} install -C <BINARY_DIR>
-
-    UPDATE_COMMAND ""
-
-    DEPENDS ${FLAC_DEP} ${VPX_DEP} ${OPUS_DEP} ${SDL_DEP} ${VPX_DEP} ext_libvorbis ext_libtheora ext_libopenh264 ext_libmp3lame ext_libaom ext_webp ext_png ext_jpeg ${MESON_DEP} ${PKG_CONFIG_DEP}
-)
-endif()

@@ -14268,7 +14268,7 @@ msgstr "Tutturma Seçenekleri Açılır Penceresini Göster"
 #, kde-format
 msgctxt "action"
 msgid "Snap Orthogonal"
-msgstr "Dikey Tuttur"
+msgstr "Dikgeni Tuttur"
 
 #. i18n: context: text @ Action (view_snap_node), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_node), Actions (View), ActionCollection (Menu)
@@ -14281,7 +14281,7 @@ msgstr "Dikey Tuttur"
 #, kde-format
 msgctxt "action"
 msgid "Snap Node"
-msgstr "Düğüm Tuttur"
+msgstr "Düğümü Tuttur"
 
 #. i18n: context: text @ Action (view_snap_extension), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_extension), Actions (View), ActionCollection (Menu)
@@ -14294,7 +14294,7 @@ msgstr "Düğüm Tuttur"
 #, kde-format
 msgctxt "action"
 msgid "Snap Extension"
-msgstr "Uzantı Tuttur"
+msgstr "Uzantıyı Tuttur"
 
 #. i18n: context: text @ Action (view_snap_to_pixel), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_to_pixel), Actions (View), ActionCollection (Menu)
@@ -14307,7 +14307,7 @@ msgstr "Uzantı Tuttur"
 #, kde-format
 msgctxt "action"
 msgid "Snap Pixel"
-msgstr "Piksel Tuttur"
+msgstr "Pikseli Tuttur"
 
 #. i18n: context: text @ Action (view_snap_intersection), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_intersection), Actions (View), ActionCollection (Menu)
@@ -14320,7 +14320,7 @@ msgstr "Piksel Tuttur"
 #, kde-format
 msgctxt "action"
 msgid "Snap Intersection"
-msgstr "Kesişim Tuttur"
+msgstr "Kesişimi Tuttur"
 
 #. i18n: context: text @ Action (view_snap_bounding_box), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_bounding_box), Actions (View), ActionCollection (Menu)
@@ -14333,7 +14333,7 @@ msgstr "Kesişim Tuttur"
 #, kde-format
 msgctxt "action"
 msgid "Snap Bounding Box"
-msgstr "Çevreleyen Kutu Tuttur"
+msgstr "Çevreleyen Kutuyu Tuttur"
 
 #. i18n: context: text @ Action (view_snap_image_bounds), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_image_bounds), Actions (View), ActionCollection (Menu)
@@ -14346,7 +14346,7 @@ msgstr "Çevreleyen Kutu Tuttur"
 #, kde-format
 msgctxt "action"
 msgid "Snap Image Bounds"
-msgstr "Görüntü Sınırları Tuttur"
+msgstr "Görsel Sınırlarını Tuttur"
 
 #. i18n: context: text @ Action (view_snap_image_center), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_image_center), Actions (View), ActionCollection (Menu)
@@ -14359,7 +14359,7 @@ msgstr "Görüntü Sınırları Tuttur"
 #, kde-format
 msgctxt "action"
 msgid "Snap Image Center"
-msgstr "Görsel Merkezi Tuttur"
+msgstr "Görsel Merkezini Tuttur"
 
 #. i18n: context: text @ Action (view_toggle_painting_assistants), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1107
@@ -22106,7 +22106,7 @@ msgstr "Piksel"
 #: libs/ui/canvas/kis_guides_manager.cpp:779
 #, kde-format
 msgid "Orthogonal"
-msgstr "Dikey"
+msgstr "Dikgen"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:781
 #, kde-format
@@ -25725,7 +25725,7 @@ msgstr "Katman Sayısı:"
 #: libs/ui/forms/wdgimageproperties.ui:216
 #, kde-format
 msgid "Image Color Space"
-msgstr "Görüntü Renk Uzayı"
+msgstr "Görsel Renk Uzayı"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkConvertLayers)
 #: libs/ui/forms/wdgimageproperties.ui:225
@@ -33108,7 +33108,7 @@ msgstr ""
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:494
 #, kde-format
 msgid "The following conversion intents are possible: "
-msgstr "Aşağıdaki dialog amaçları olanaklı: "
+msgstr "Aşağıdaki diyalog amaçları olanaklıdır: "
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:513
 #, kde-format
@@ -57308,7 +57308,7 @@ msgstr "Mantıksal İşlemler"
 #: plugins/tools/defaulttool/defaulttool/DefaultToolFactory.cpp:19
 #, kde-format
 msgid "Select Shapes Tool"
-msgstr "Şekiller Aracını Seç"
+msgstr "Şekil Seçim Aracı"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:44
@@ -57357,7 +57357,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>&quot;Global Koordinatlar&quot; kipinde, Genişlik ve "
 "Yükseklik alanları şekil döndürülmüş veya diğer herhangi bir dönüşüme sahip "
-"olsa bile görsel yerleşim koordinatları türünden şekli saran kutunun "
+"olsa bile görsel yerleşim koordinatları türünden şekli çevreleyen kutunun "
 "boyutunu gösterir. </p><p>Eğer &quot;Global Koordinatlar&quot; kipi devre "
 "dışı ise Genişlik ve Yükseklik alanları, herhangi bir dönüşüm uygulanmadan "
 "önceki şeklin &quot;yerel&quot; boyutunu gösterir.</p></body></html>"

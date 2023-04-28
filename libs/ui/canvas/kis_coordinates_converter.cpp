@@ -22,6 +22,7 @@ struct KisCoordinatesConverter::Private {
         isXAxisMirrored(false),
         isYAxisMirrored(false),
         isRotating(false),
+        isNativeGesture(false),
         rotationAngle(0.0),
         rotationBaseAngle(0.0),
         devicePixelRatio(1.0)
@@ -33,6 +34,7 @@ struct KisCoordinatesConverter::Private {
     bool isXAxisMirrored;
     bool isYAxisMirrored;
     bool isRotating;
+    bool isNativeGesture;
     qreal rotationAngle;
     qreal rotationBaseAngle;
     QSizeF canvasWidgetSize;
@@ -222,6 +224,11 @@ qreal KisCoordinatesConverter::effectivePhysicalZoom() const
     return 0.5 * (scaleX + scaleY);
 }
 
+void KisCoordinatesConverter::enableNatureGestureFlag()
+{
+    m_d->isNativeGesture = true;
+}
+
 void KisCoordinatesConverter::beginRotation()
 {
     KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->isRotating);
@@ -236,6 +243,7 @@ void KisCoordinatesConverter::endRotation()
 {
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->isRotating);
 
+    m_d->isNativeGesture = false;
     m_d->isRotating = false;
 }
 
@@ -244,7 +252,7 @@ QPoint KisCoordinatesConverter::rotate(QPointF center, qreal angle)
     QTransform rot;
     rot.rotate(angle);
 
-    if (m_d->isRotating)
+    if (!m_d->isNativeGesture && m_d->isRotating)
     {
         // Modal (begin/end) rotation. Transform from the stable base.
         m_d->flakeToWidget = m_d->rotationBaseTransform;

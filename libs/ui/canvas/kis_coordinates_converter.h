@@ -63,6 +63,8 @@ public:
     void beginRotation();
     void endRotation();
 
+    void enableNatureGestureFlag();
+
     QPoint rotate(QPointF center, qreal angle);
     QPoint mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis);
     bool xAxisMirrored() const;

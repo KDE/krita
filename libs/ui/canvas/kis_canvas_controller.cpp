@@ -245,8 +245,11 @@ void KisCanvasController::endCanvasRotation()
     m_d->coordinatesConverter->endRotation();
 }
 
-void KisCanvasController::rotateCanvas(qreal angle, const QPointF &center)
+void KisCanvasController::rotateCanvas(qreal angle, const QPointF &center, bool isNativeGesture)
 {
+    if(isNativeGesture) {
+        m_d->coordinatesConverter->enableNatureGestureFlag();
+    }
     QPoint newOffset = m_d->coordinatesConverter->rotate(center, angle);
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);

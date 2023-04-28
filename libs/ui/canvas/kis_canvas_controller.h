@@ -52,7 +52,7 @@ public Q_SLOTS:
 
     void beginCanvasRotation();
     void endCanvasRotation();
-    void rotateCanvas(qreal angle, const QPointF &center);
+    void rotateCanvas(qreal angle, const QPointF &center, bool isNativeGesture = false);
     void rotateCanvas(qreal angle);
     void rotateCanvasRight15();
     void rotateCanvasLeft15();

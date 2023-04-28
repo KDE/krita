@@ -164,7 +164,7 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
 
             const float angle = gevent->value();
             QPoint widgetPos = canvas->canvasWidget()->mapFromGlobal(gevent->globalPos());
-            controller->rotateCanvas(angle, widgetPos);
+            controller->rotateCanvas(angle, widgetPos, true);
             return;
         }
         case QEvent::TouchUpdate: {

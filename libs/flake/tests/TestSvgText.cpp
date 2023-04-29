@@ -2427,7 +2427,7 @@ void TestSvgText::testTextBaselineAlignment()
 
     SvgRenderTester t(data.data());
     t.setFuzzyThreshold(5);
-    t.test_standard("test-text-baseline-alignment", QSize(100, 30), 72.0);
+    t.test_standard("test-text-baseline-alignment", QSize(90, 51), 72.0);
 }
 
 /**

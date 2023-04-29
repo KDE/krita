@@ -839,12 +839,11 @@ void KoSvgTextShape::relayout() const
                     TT_OS2 *os2Table = nullptr;
                     os2Table = (TT_OS2*)FT_Get_Sfnt_Table(face.data(), FT_SFNT_OS2);
                     if (os2Table) {
-                        int yppem = face.data()->size->metrics.y_ppem;
                         int yscale = face.data()->size->metrics.y_scale;
 
-                        ascender = (float(os2Table->sTypoAscender * yppem)/yscale )*yppem * ftFontUnit;
-                        descender = (float(os2Table->sTypoDescender * yppem)/yscale )*yppem * ftFontUnit;
-                        lineGap = (float(os2Table->sTypoLineGap * yppem)/yscale )*yppem * ftFontUnit;
+                        ascender = FT_MulFix(os2Table->sTypoAscender, yscale);
+                        descender = FT_MulFix(os2Table->sTypoDescender, yscale);
+                        lineGap = FT_MulFix(os2Table->sTypoLineGap, yscale);
 
                     } else {
                         if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &ascender)) {

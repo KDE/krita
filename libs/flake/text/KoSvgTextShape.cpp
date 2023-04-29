@@ -12,6 +12,7 @@
 #include <fontconfig/fontconfig.h>
 #include <raqm.h>
 #include FT_COLOR_H
+#include FT_TRUETYPE_TABLES_H
 #include <graphemebreak.h>
 #include <hb-ft.h>
 #include <hb-ot.h>
@@ -820,20 +821,42 @@ void KoSvgTextShape::relayout() const
                 hb_position_t descender = 0;
                 hb_position_t lineGap = 0;
 
-                // The inkscape devs say that this data should be gotten from the os/2 table,
-                // but at the same time, firefox and chromium are definitely getting their
-                // vertical metrics from the hvea/vvea tables, so this needs more research...
-                // https://wiki.inkscape.org/wiki/Text_Rendering_Notes#Ascent_and_Descent
                 if (isHorizontal) {
-                    if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &ascender)) {
-                        ascender = face.data()->ascender;
-                    }
-                    if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &descender)) {
-                        descender = face.data()->descender;
-                    }
-                    if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_LINE_GAP, &lineGap)) {
-                        lineGap = face.data()->height - (ascender-descender);
-                    }
+                    /**
+                     * There's 3 different definitions of the so-called vertical metrics, that is,
+                     * the ascender and descender for horizontally laid out script. WinAsc & Desc,
+                     * HHAE asc&desc, and OS/2... we need the last one, but harfbuzz doesn't return
+                     * it unless there's a flag set in the font, which is missing in a lot of fonts
+                     * that were from the transitional period, like Deja Vu Sans. Hence we need to get
+                     * the OS/2 table and calculate the values manually (and fall back in various ways).
+                     *
+                     * https://www.w3.org/TR/css-inline-3/#ascent-descent
+                     * https://www.w3.org/TR/CSS2/visudet.html#sTypoAscender
+                     * https://wiki.inkscape.org/wiki/Text_Rendering_Notes#Ascent_and_Descent
+                     *
+                     * Related HB issue: https://github.com/harfbuzz/harfbuzz/issues/1920
+                     */
+                    TT_OS2 *os2Table = nullptr;
+                    os2Table = (TT_OS2*)FT_Get_Sfnt_Table(face.data(), FT_SFNT_OS2);
+                    if (os2Table) {
+                        int yppem = face.data()->size->metrics.y_ppem;
+                        int yscale = face.data()->size->metrics.y_scale;
+
+                        ascender = (float(os2Table->sTypoAscender * yppem)/yscale )*yppem * ftFontUnit;
+                        descender = (float(os2Table->sTypoDescender * yppem)/yscale )*yppem * ftFontUnit;
+                        lineGap = (float(os2Table->sTypoLineGap * yppem)/yscale )*yppem * ftFontUnit;
+
+                    } else {
+                        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &ascender)) {
+                            ascender = face.data()->ascender;
+                        }
+                        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &descender)) {
+                            descender = face.data()->descender;
+                        }
+                        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_LINE_GAP, &lineGap)) {
+                            lineGap = face.data()->height - (ascender-descender);
+                        }
+                   }
                 } else {
                     hb_font_extents_t fontExtends;
                     hb_font_get_extents_for_direction (font.data(), HB_DIRECTION_TTB, &fontExtends);

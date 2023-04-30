@@ -170,9 +170,16 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
         portalSetter.reset(new EnvironmentSetter(QLatin1String("QT_NO_XDG_DESKTOP_PORTAL"), QLatin1String("1")));
         formatSetter.reset(new SurfaceFormatSetter(format));
 
+        // Disable this workaround for plasma (BUG:408015), because it causes
+        // a crash on Windows with Qt 5.15.7
+        // (ifdef'ing this for 5.1 -- amyspark)
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
         QGuiApplication::setDesktopSettingsAware(false);
+#endif
         application.reset(new QGuiApplication(argc, &argv));
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
         QGuiApplication::setDesktopSettingsAware(true);
+#endif
     }
 
     QWindow surface;

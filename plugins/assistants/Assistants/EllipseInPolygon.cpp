@@ -1208,6 +1208,7 @@ QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point)
     if (qAbs(f.formINegatedY.C) < 1e-12) {
         ENTER_FUNCTION() << "Weird formula: " << "C should not be 0";
         writeFormulaInAllForms(f.formINegatedY.getData(), "form I negated Y");
+        //KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false && "weird formula in Eberly", originalPoint);
         return originalPoint;
     }
 
@@ -1239,57 +1240,10 @@ QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point)
     if ((qFuzzyCompare(f.formINegatedY.D, 0) || qFuzzyCompare(f.formINegatedY.E, 0))) {
         // special case
         if (debug) ENTER_FUNCTION() << "Ellipse: and SPECIAL CASE";
+        //KIS_SAFE_ASSERT_RECOVER(false && "ellipses have D = 0 or E = 0");
     }
 
-    auto getStartingPoint = [Pt, Ptd, debug] (ConicFormula formula) {
-        qreal A = formula.A;
-        qreal C = formula.C;
-        qreal D = formula.D;
-        qreal E = formula.E;
-        qreal F = formula.F;
-
-
-        qreal t0 = 0; // starting point for newton method
-
-        // will be useful for both cases
-        qreal t0d = F/(D*D - A*F + D*sqrt(D*D - A*F));
-        qreal t0dd = F/(E*E - C*F + E*sqrt(E*E - C*F));
-
-        if (A >= 0) { // ellipses and parabolas
-            // we got to find t0 where P(t0) >= 0
-            if (F < 0) {
-                t0 = qMax(t0d, t0dd);
-            } // else t0 = 0
-        } else { // hyperbolas
-
-            qreal U = sqrt(sqrt(-A*D*D));
-            qreal V = sqrt(sqrt(C*E*E));
-            qreal tstar = - (U - V)/(C*U - A*V); // inflection point of Pt
-
-            qreal Pstar = Pt(tstar);
-            if (debug) ENTER_FUNCTION() << ppVar(Pstar);
-
-            if (Pstar > 0) { // case (a)
-                if (F <= 0) {
-                    t0 = 0;
-                } else {
-                    t0 = qMin(t0d, t0dd);
-                }
-            } else if (Pstar < 0) {
-                if (F >= 0) {
-                    t0 = 0;
-                } else {
-                    t0 = qMax(t0d, t0dd);
-                }
-            } else {
-                // we found it already!!!
-                t0 = tstar;
-            }
-        }
-        return t0;
-    };
-
-    qreal t0 = getStartingPoint(f.formINegatedY); // starting point for newton method
+    qreal t0 = ConicCalculations::getStartingPoint(f.formINegatedY, Pt, Ptd);
 
     // now we gotta find t, then when we find it, calculate x and y, undo all transformations and return the point!
 
@@ -1322,32 +1276,8 @@ QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point)
     if (debug) ENTER_FUNCTION() << "(1) reminder: " << ppVar(QPointF(foundX, foundY));
     if (debug) f.formINegatedY.printOutInAllForms();
 
-    auto undoAllChanges = [] (QPointF p, bool negateX, bool negateY, bool swapXandY, qreal u, qreal v) {
+    QPointF result = ConicCalculations::undoConicFormulaCoefficientsChanges(QPointF(foundX, foundY), swapXandY, negateX, negateY, u, v);
 
-        qreal foundX = p.x();
-        qreal foundY = p.y();
-
-        // ok, now undoing all the changes we did...
-        if (negateX) {
-            foundX = -foundX;
-        }
-        if (negateY) {
-            foundY = -foundY;
-        }
-
-        QPointF result = QPointF(foundX, foundY);
-        if (swapXandY){
-            result = QPointF(foundY, foundX);
-        }
-
-        result = result + QPointF(u, v);
-
-        return result;
-
-
-    };
-
-    QPointF result = undoAllChanges(QPointF(foundX, foundY), negateX, negateY, swapXandY, u, v);
 
     if (debug) ENTER_FUNCTION() << "(4) after moving to the origin" << ppVar(result) << ppVar(calculateFormula(result))
                                    << ppVar(f.formDRotated.calculateFormulaForPoint(result));
@@ -1361,12 +1291,7 @@ QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point)
     // Q must be transposed now
     if (debug) ENTER_FUNCTION() << "Ok, now undoing the rotation for the point:";
 
-    if (swap) {
-        result = getRotatedPoint(result, K, L, true);
-    } else {
-        //result = QPointF(Q(0, 0)*result.x() + Q(0, 1)*result.y(), Q(1, 0)*result.x() + Q(1, 1)*result.y());
-    }
-
+    result = ConicCalculations::undoRotatingFormula(result, K, L);
 
     if (debug) ENTER_FUNCTION() << "(5) after un-rotating" << ppVar(result) << ppVar(calculateFormula(result)) << ppVar(calculateFormula(canonized, result))
                                    << ppVar(f.formCCanonized.calculateFormulaForPoint(result))
@@ -1389,6 +1314,7 @@ QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point)
     if (qAbs(calculateFormula(result)) >= eps) {
         ENTER_FUNCTION() << ppVar(qAbs(calculateFormula(result))) << ppVar(qAbs(calculateFormula(result)) < eps);
         ENTER_FUNCTION() << "The values were: " << ppVar(polygon) << ppVar(originalPoint) << "and unfortunate result:" << ppVar(result);
+        //KIS_SAFE_ASSERT_RECOVER(false); // << it catches here! // "Entering "EllipseInPolygon::projectModifiedEberlyThird()" The values were:  polygon = QVector() originalPoint = QPointF(1285.92,84.726) and unfortunate result: result = QPointF(1283.45,83.2824)"
     }
     //KIS_ASSERT_RECOVER_RETURN_VALUE(qAbs(calculateFormula(result)) < eps, result);
 
@@ -2305,6 +2231,87 @@ std::tuple<ConicFormula, bool> ConicCalculations::negateY(ConicFormula formula)
         negated = true;
     }
     return std::make_tuple(response, negated);
+}
+
+QPointF ConicCalculations::undoConicFormulaCoefficientsChanges(QPointF p, bool swapXY, bool negateX, bool negateY, double u, double v)
+{
+    qreal foundX = p.x();
+    qreal foundY = p.y();
+
+    // ok, now undoing all the changes we did...
+
+
+    if (negateX) {
+        foundX = -foundX;
+    }
+
+    if (negateY) {
+        foundY = -foundY;
+    }
+
+    QPointF result = QPointF(foundX, foundY);
+    if (swapXY){
+        result = QPointF(foundY, foundX);
+    }
+
+    result = result + QPointF(u, v);
+
+    return result;
+}
+
+QPointF ConicCalculations::undoRotatingFormula(QPointF point, double K, double L)
+{
+    return EllipseInPolygon::getRotatedPoint(point, K, L, true);
+}
+
+double ConicCalculations::getStartingPoint(ConicFormula formula, std::function<double (double)> Pt, std::function<double (double)> Ptd)
+{
+    qreal A = formula.A;
+    qreal C = formula.C;
+    qreal D = formula.D;
+    qreal E = formula.E;
+    qreal F = formula.F;
+    bool debug = false;
+
+
+    qreal t0 = 0; // starting point for newton method
+
+    // will be useful for both cases
+    qreal t0d = F/(D*D - A*F + D*sqrt(D*D - A*F));
+    qreal t0dd = F/(E*E - C*F + E*sqrt(E*E - C*F));
+
+    if (A >= 0) { // ellipses and parabolas
+        // we got to find t0 where P(t0) >= 0
+        if (F < 0) {
+            t0 = qMax(t0d, t0dd);
+        } // else t0 = 0
+    } else { // hyperbolas
+
+        qreal U = sqrt(sqrt(-A*D*D));
+        qreal V = sqrt(sqrt(C*E*E));
+        qreal tstar = - (U - V)/(C*U - A*V); // inflection point of Pt
+
+        qreal Pstar = Pt(tstar);
+        if (debug) ENTER_FUNCTION() << ppVar(Pstar);
+
+        if (Pstar > 0) { // case (a)
+            if (F <= 0) {
+                t0 = 0;
+            } else {
+                t0 = qMin(t0d, t0dd);
+            }
+        } else if (Pstar < 0) {
+            if (F >= 0) {
+                t0 = 0;
+            } else {
+                t0 = qMax(t0d, t0dd);
+            }
+        } else {
+            // we found it already!!!
+            t0 = tstar;
+        }
+    }
+    return t0;
 }
 
 

@@ -98,6 +98,9 @@ public:
     static std::tuple<ConicFormula, bool> negateX(ConicFormula formula); // G => H
     static std::tuple<ConicFormula, bool> negateY(ConicFormula formula); // H => I
 
+    static QPointF undoConicFormulaCoefficientsChanges(QPointF point, bool swapXY, bool negateX, bool negateY, double u, double v);
+    static QPointF undoRotatingFormula(QPointF point, double K, double L);
+
 
     static double getStartingPoint(ConicFormula formula, std::function<double(double)> Pt, std::function<double(double)> Ptd);
 

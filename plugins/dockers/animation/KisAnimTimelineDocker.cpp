@@ -251,6 +251,8 @@ KisAnimTimelineDocker::KisAnimTimelineDocker()
             }
         }
     });
+
+    setEnabled(false);
 }
 
 KisAnimTimelineDocker::~KisAnimTimelineDocker()

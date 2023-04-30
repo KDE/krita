@@ -36,6 +36,8 @@ HistogramDockerDock::HistogramDockerDock()
     m_layout->addWidget(m_histogramWidget, 1);
     setWidget(page);
     connect(m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &HistogramDockerDock::updateHistogram);
+
+    setEnabled(false);
 }
 
 

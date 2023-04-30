@@ -80,6 +80,7 @@ SnapshotDocker::SnapshotDocker()
 
     setWidget(widget);
     setWindowTitle(i18n("Snapshot Docker"));
+    setEnabled(false);
 }
 
 SnapshotDocker::~SnapshotDocker()
@@ -108,6 +109,7 @@ void SnapshotDocker::setCanvas(KoCanvasBase *canvas)
             return;
         }
     }
+    setEnabled(canvas != 0);
     m_d->canvas = c;
     m_d->model->setCanvas(c);
 }

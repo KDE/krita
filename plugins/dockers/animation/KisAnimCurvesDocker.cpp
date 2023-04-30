@@ -308,6 +308,7 @@ KisAnimCurvesDocker::KisAnimCurvesDocker()
 
     // Titlebar Widget..
     setTitleBarWidget(m_d->titlebar);
+    setEnabled(false);
 
     connect(m_d->titlebar->btnOnionSkinsMenu, &QToolButton::released, [this](){
         if (m_d->mainWindow) {

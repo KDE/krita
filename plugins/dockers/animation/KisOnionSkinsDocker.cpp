@@ -71,6 +71,8 @@ KisOnionSkinsDocker::KisOnionSkinsDocker(QWidget *parent) :
         slotShowAdditionalSettings(isShown);
     }
 
+    setEnabled(false);
+
     {
         KisNodeViewColorScheme scm;
         m_filterButtonGroup = new KisColorLabelFilterGroup(this);
@@ -114,11 +116,12 @@ KisOnionSkinsDocker::~KisOnionSkinsDocker()
 
 void KisOnionSkinsDocker::setCanvas(KoCanvasBase *canvas)
 {
-    Q_UNUSED(canvas);
+    setEnabled(canvas != 0);
 }
 
 void KisOnionSkinsDocker::unsetCanvas()
 {
+    setCanvas(0);
 }
 
 void KisOnionSkinsDocker::setViewManager(KisViewManager *view)

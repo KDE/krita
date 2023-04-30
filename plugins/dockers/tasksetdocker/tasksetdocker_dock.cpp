@@ -107,6 +107,7 @@ TasksetDockerDock::TasksetDockerDock( )
     connect(itemChooser, SIGNAL(resourceSelected(KoResourceSP )), this, SLOT(resourceSelected(KoResourceSP )));
 
     setWidget(widget);
+    setEnabled(false);
 
     connect( tasksetView, SIGNAL(clicked(QModelIndex)),
             this, SLOT(activated(QModelIndex)) );
@@ -130,12 +131,14 @@ void TasksetDockerDock::setCanvas(KoCanvasBase * canvas)
         }
     }
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    setEnabled(canvas != 0);
 }
 
 void TasksetDockerDock::unsetCanvas()
 {
     m_canvas = 0;
     m_model->clear();
+    setCanvas(0);
 }
 
 void TasksetDockerDock::actionTriggered(QAction* action)

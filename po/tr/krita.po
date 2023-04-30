@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-04-25 00:44+0300\n"
+"PO-Revision-Date: 2023-04-30 01:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -56179,7 +56179,7 @@ msgstr "Yatay"
 #: plugins/tools/basictools/wdgmultihandtool.ui:116
 #, kde-format
 msgid "Show Origin"
-msgstr "Kaynağı Göster"
+msgstr "Kökeni Göster"
 
 #. i18n: ectx: property (text), widget (QCheckBox, verticalCheckbox)
 #: plugins/tools/basictools/wdgmultihandtool.ui:139
@@ -56222,12 +56222,12 @@ msgstr "Seçimi kırpmak için tıkla ve sürükle."
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:752
 #, kde-format
 msgid "Click and drag to resize selection."
-msgstr "Seçimi yeniden boyutlandırmak için tıkla ve sürükle."
+msgstr "Seçimi yeniden boyutlandırmak için tıklayın ve sürükleyin."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
 #, kde-format
 msgid "Click and drag to move selection."
-msgstr "Seçimi taşımak için tıkla ve sürükle."
+msgstr "Seçimi taşımak için tıklayın ve sürükleyin."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:791
 #, kde-format

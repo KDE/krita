@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-27 00:46+0000\n"
+"POT-Creation-Date: 2023-04-30 00:45+0000\n"
 "PO-Revision-Date: 2011-06-01 01:29-0400\n"
 "Last-Translator: Agron Selimaj <linuxmaster@verizon.net>\n"
 "Language-Team: Albanian <sq@li.org>\n"
@@ -33246,15 +33246,15 @@ msgstr "Përzgjedhje"
 
 #: libs/ui/widgets/kis_selection_options.cc:268
 #, fuzzy, kde-format
-msgctxt "The 'adjustments' section label in selection tools options"
-msgid "Adjustments"
-msgstr "Gjerësia:"
-
-#: libs/ui/widgets/kis_selection_options.cc:279
-#, fuzzy, kde-format
 msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "Rrotullo Imazhin"
+
+#: libs/ui/widgets/kis_selection_options.cc:277
+#, fuzzy, kde-format
+msgctxt "The 'adjustments' section label in selection tools options"
+msgid "Adjustments"
+msgstr "Gjerësia:"
 
 #: libs/ui/widgets/kis_selection_options.cc:459
 #, fuzzy, kde-format
@@ -55548,21 +55548,21 @@ msgstr "Burimi"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:665
 #, fuzzy, kde-format
+msgctxt "The 'reference' section label in fill tool options"
+msgid "Reference"
+msgstr "Rrotullo Imazhin"
+
+#: plugins/tools/basictools/kis_tool_fill.cc:674
+#, fuzzy, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
 msgstr "Përzgjedhje"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:677
+#: plugins/tools/basictools/kis_tool_fill.cc:686
 #, fuzzy, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
 msgstr "Gjerësia:"
-
-#: plugins/tools/basictools/kis_tool_fill.cc:686
-#, fuzzy, kde-format
-msgctxt "The 'reference' section label in fill tool options"
-msgid "Reference"
-msgstr "Rrotullo Imazhin"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:695
 #, kde-format
@@ -57956,89 +57956,89 @@ msgstr "Përzgjedhje"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:545
 #, fuzzy, kde-format
+msgctxt "The 'reference' section label in enclose and fill tool options"
+msgid "Reference"
+msgstr "Rrotullo Imazhin"
+
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:555
+#, fuzzy, kde-format
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
 msgstr "Shtresa e tanishme"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:555
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:565
 #, fuzzy, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
 msgstr "Burimi"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:569
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:579
 #, fuzzy, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
 msgstr "Përzgjedhje"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:588
 #, fuzzy, kde-format
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
 msgstr "Gjerësia:"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:587
-#, fuzzy, kde-format
-msgctxt "The 'reference' section label in enclose and fill tool options"
-msgid "Reference"
-msgstr "Rrotullo Imazhin"
-
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:841
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:842
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:844
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:845
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "Përzgjedhje"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:847
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "Shtresa e tanishme"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:850
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "Përzgjedhje"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:853
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "Zgjedhës i ngjyrës"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:856
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:859
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:862
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "Zgjedhës i ngjyrës"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:865
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "Zgjedhës i ngjyrës"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:868
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"

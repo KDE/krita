@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-27 00:46+0000\n"
-"PO-Revision-Date: 2023-04-21 12:14+0300\n"
+"POT-Creation-Date: 2023-04-30 00:45+0000\n"
+"PO-Revision-Date: 2023-04-30 01:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -12247,7 +12247,7 @@ msgstr "Katmanı yeni boyuta ölçekle"
 #, kde-format
 msgctxt "action"
 msgid "&Shear Layer..."
-msgstr "&Katmanı Makasla..."
+msgstr "&Katmanı Kırk..."
 
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
@@ -12257,7 +12257,7 @@ msgstr "&Katmanı Makasla..."
 #, kde-format
 msgctxt "action"
 msgid "Shear Layer"
-msgstr "Katmanı Makasla"
+msgstr "Katmanı Kırk"
 
 #. i18n: context: text @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3220
@@ -12383,7 +12383,7 @@ msgstr "Tüm katmanları yeni boyuta ölçekle"
 #, kde-format
 msgctxt "action"
 msgid "&Shear All Layers..."
-msgstr "&Tüm Katmanları Makasla..."
+msgstr "&Tüm Katmanları Kırk..."
 
 #. i18n: context: toolTip @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12393,7 +12393,7 @@ msgstr "&Tüm Katmanları Makasla..."
 #, kde-format
 msgctxt "action"
 msgid "Shear All Layers"
-msgstr "Tüm Katmanları Makasla"
+msgstr "Tüm Katmanları Kırk"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3316
@@ -14598,7 +14598,7 @@ msgstr "Görseli 180° Döndür"
 #, kde-format
 msgctxt "action"
 msgid "&Shear Image..."
-msgstr "&Görseli Makasla..."
+msgstr "&Görseli Kırk..."
 
 #. i18n: context: toolTip @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
@@ -14608,7 +14608,7 @@ msgstr "&Görseli Makasla..."
 #, kde-format
 msgctxt "action"
 msgid "Shear Image"
-msgstr "Görseli Makasla"
+msgstr "Görseli Kırk"
 
 #. i18n: context: text @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1281
@@ -16122,7 +16122,7 @@ msgstr "Gölge Ayarla"
 #: libs/flake/commands/KoShapeShearCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
-msgstr "Şekilleri makasla"
+msgstr "Şekilleri kırk"
 
 #: libs/flake/commands/KoShapeSizeCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -17070,17 +17070,17 @@ msgstr "Katmanı Döndür"
 #: libs/image/kis_image.cc:1250
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
-msgstr "Maskeyi Makasla"
+msgstr "Maskeyi Kırk"
 
 #: libs/image/kis_image.cc:1253
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
-msgstr "Katmanı Makasla"
+msgstr "Katmanı Kırk"
 
 #: libs/image/kis_image.cc:1260
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
-msgstr "Görseli Makasla"
+msgstr "Görseli Kırk"
 
 #: libs/image/kis_image.cc:1278
 msgctxt "(qtundo-format)"
@@ -17141,12 +17141,12 @@ msgstr "Ölçek (Y)"
 #: libs/image/kis_keyframe_channel.cpp:31
 #, kde-format
 msgid "Shear (X)"
-msgstr "Kırp (X)"
+msgstr "Kırk (X)"
 
 #: libs/image/kis_keyframe_channel.cpp:32
 #, kde-format
 msgid "Shear (Y)"
-msgstr "Kırp (Y)"
+msgstr "Kırk (Y)"
 
 #: libs/image/kis_keyframe_channel.cpp:33
 #, kde-format
@@ -33899,15 +33899,15 @@ msgstr "Eylem"
 
 #: libs/ui/widgets/kis_selection_options.cc:268
 #, kde-format
-msgctxt "The 'adjustments' section label in selection tools options"
-msgid "Adjustments"
-msgstr "Ayarlamalar"
-
-#: libs/ui/widgets/kis_selection_options.cc:279
-#, kde-format
 msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "Başvuru"
+
+#: libs/ui/widgets/kis_selection_options.cc:277
+#, kde-format
+msgctxt "The 'adjustments' section label in selection tools options"
+msgid "Adjustments"
+msgstr "Ayarlamalar"
 
 #: libs/ui/widgets/kis_selection_options.cc:459
 #, kde-format
@@ -34751,7 +34751,7 @@ msgstr ""
 "Karikatürist,Renklendiren,Konsept Sanatçısı,Düzeltici,Kapak Sanatçısı,"
 "Oluşturan,Tasarımcı,Mürekkep Sanatçısı,Yazı Sanatçısı,Mat Boyacısı,Boya "
 "Sanatçısı,Kalem Sanatçısı,Düzeltmen,Piksel Sanatçısı,Redliner,Sprite "
-"Sanatçısı,Dizgici,Doku Sanatçısı,Çevirmen,Yazar,Diğer,Canlandırıcı;Çizer"
+"Sanatçısı,Dizgici,Doku Sanatçısı,Çevirmen,Çizer,Diğer,Canlandırıcı;Çizer"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
@@ -43412,24 +43412,24 @@ msgstr "Geçerli kanalı etkinleştir"
 #: plugins/extensions/shearimage/wdg_shearimage.ui:18
 #, kde-format
 msgid "Shear Image"
-msgstr "Görseli Makasla"
+msgstr "Görseli Kırk"
 
 #: plugins/extensions/shearimage/shearimage.cc:72
 #, kde-format
 msgid "Shear Layer"
-msgstr "Katmanı Makasla"
+msgstr "Katmanı Kırk"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
 #, kde-format
 msgid "Shear angle X:"
-msgstr "Makas açısı X:"
+msgstr "Kırkma açısı X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngelY)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:34
 #, kde-format
 msgid "Shear angle Y:"
-msgstr "Makas açısı Y:"
+msgstr "Kırkma açısı Y:"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:54
 #, kde-format
@@ -46006,7 +46006,7 @@ msgstr "&Desen:"
 #: plugins/paintops/hairy/wdgbristleoptions.ui:118
 #, kde-format
 msgid "Shear:"
-msgstr "Kayma:"
+msgstr "Kırkma:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gb3dRotation)
 #: plugins/generators/pattern/wdgpatternoptions.ui:293
@@ -51318,7 +51318,7 @@ msgstr "Ölçek çarpanı"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:214
 #, kde-format
 msgid "Shear factor"
-msgstr "Kayma çarpanı"
+msgstr "Kırkma çarpanı"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:234
@@ -56660,21 +56660,21 @@ msgstr "Dolgu kaynağı"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:665
 #, kde-format
+msgctxt "The 'reference' section label in fill tool options"
+msgid "Reference"
+msgstr "Başvuru"
+
+#: plugins/tools/basictools/kis_tool_fill.cc:674
+#, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
 msgstr "Dolgu kapsamı"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:677
+#: plugins/tools/basictools/kis_tool_fill.cc:686
 #, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
 msgstr "Ayarlamalar"
-
-#: plugins/tools/basictools/kis_tool_fill.cc:686
-#, kde-format
-msgctxt "The 'reference' section label in fill tool options"
-msgid "Reference"
-msgstr "Başvuru"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:695
 #, kde-format
@@ -57180,7 +57180,7 @@ msgstr "Yatay"
 #: plugins/tools/basictools/wdgmultihandtool.ui:116
 #, kde-format
 msgid "Show Origin"
-msgstr "Kaynağı Göster"
+msgstr "Kökeni Göster"
 
 #. i18n: ectx: property (text), widget (QCheckBox, verticalCheckbox)
 #: plugins/tools/basictools/wdgmultihandtool.ui:139
@@ -57218,17 +57218,17 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:747
 #, kde-format
 msgid "Click and drag to shear selection."
-msgstr "Seçimi kırpmak için tıkla ve sürükle."
+msgstr "Seçimi kırkmak için tıklayın ve sürükleyin."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:752
 #, kde-format
 msgid "Click and drag to resize selection."
-msgstr "Seçimi yeniden boyutlandırmak için tıkla ve sürükle."
+msgstr "Seçimi yeniden boyutlandırmak için tıklayın ve sürükleyin."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:787
 #, kde-format
 msgid "Click and drag to move selection."
-msgstr "Seçimi taşımak için tıkla ve sürükle."
+msgstr "Seçimi taşımak için tıklayın ve sürükleyin."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:791
 #, kde-format
@@ -57387,12 +57387,12 @@ msgstr "Döndür"
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:133
 msgctxt "(qtundo-format)"
 msgid "Shear X"
-msgstr "X Kırp"
+msgstr "X'i Kırk"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:168
 msgctxt "(qtundo-format)"
 msgid "Shear Y"
-msgstr "Y Kırp"
+msgstr "Y'yi Kırk"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:208
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:242
@@ -57423,7 +57423,7 @@ msgstr "45 derecelik basamaklarla döndürmek için ALT düğmesine basın."
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 msgctxt "(qtundo-format)"
 msgid "Shear"
-msgstr "Kırp"
+msgstr "Kırk"
 
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:96
 #, kde-format
@@ -59080,89 +59080,89 @@ msgstr "Çevreleme yöntemi"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:545
 #, kde-format
+msgctxt "The 'reference' section label in enclose and fill tool options"
+msgid "Reference"
+msgstr "Başvuru"
+
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:555
+#, kde-format
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
 msgstr "Hedef bölgeler"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:555
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:565
 #, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
 msgstr "Dolgu kaynağı"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:569
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:579
 #, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
 msgstr "Dolgu kapsamı"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:588
 #, kde-format
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
 msgstr "Ayarlamalar"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:587
-#, kde-format
-msgctxt "The 'reference' section label in enclose and fill tool options"
-msgid "Reference"
-msgstr "Başvuru"
-
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:841
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:842
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Tümü"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:844
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:845
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "Belirli bir renk"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:847
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "Saydamlık"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:850
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "Belirli bir renk veya saydamlık"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:853
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "Belirli bir renk dışında tümü"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:856
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr "Saydamlık dışında tümü"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:859
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr "Belirli bir renk veya saydamlık dışında tümü"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:862
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "Belirli bir renk tarafından çevrelenmiş herhangi biri"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:865
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "Saydamlıkla çevrelenmiş herhangi biri"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:868
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
@@ -59740,7 +59740,7 @@ msgstr "Ölçekle"
 #, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Shear"
-msgstr "Makasla"
+msgstr "Kırk"
 
 #. i18n: ectx: property (text), widget (QLabel, tooBigLabelWidget)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:700
@@ -59828,7 +59828,7 @@ msgstr "y:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1143
 #, kde-format
 msgid "Shear"
-msgstr "Makasla"
+msgstr "Kırk"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearX)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearXBox)
@@ -59844,7 +59844,7 @@ msgstr "Yatay Kayma"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1213
 #, kde-format
 msgid "Vertical Shear"
-msgstr "Dikey Kayma"
+msgstr "Dikey Kırkma"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipXButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1268

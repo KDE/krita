@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-27 00:46+0000\n"
+"POT-Creation-Date: 2023-04-30 00:45+0000\n"
 "PO-Revision-Date: 2023-04-22 20:33+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -34077,15 +34077,15 @@ msgstr "Acción"
 
 #: libs/ui/widgets/kis_selection_options.cc:268
 #, kde-format
-msgctxt "The 'adjustments' section label in selection tools options"
-msgid "Adjustments"
-msgstr "Ajustes"
-
-#: libs/ui/widgets/kis_selection_options.cc:279
-#, kde-format
 msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "Referencia"
+
+#: libs/ui/widgets/kis_selection_options.cc:277
+#, kde-format
+msgctxt "The 'adjustments' section label in selection tools options"
+msgid "Adjustments"
+msgstr "Ajustes"
 
 #: libs/ui/widgets/kis_selection_options.cc:459
 #, kde-format
@@ -56998,21 +56998,21 @@ msgstr "Fuente de relleno"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:665
 #, kde-format
+msgctxt "The 'reference' section label in fill tool options"
+msgid "Reference"
+msgstr "Referencia"
+
+#: plugins/tools/basictools/kis_tool_fill.cc:674
+#, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
 msgstr "Extensión del relleno"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:677
+#: plugins/tools/basictools/kis_tool_fill.cc:686
 #, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
 msgstr "Ajustes"
-
-#: plugins/tools/basictools/kis_tool_fill.cc:686
-#, kde-format
-msgctxt "The 'reference' section label in fill tool options"
-msgid "Reference"
-msgstr "Referencia"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:695
 #, kde-format
@@ -59428,89 +59428,89 @@ msgstr "Método de cierre"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:545
 #, kde-format
+msgctxt "The 'reference' section label in enclose and fill tool options"
+msgid "Reference"
+msgstr "Referencia"
+
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:555
+#, kde-format
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
 msgstr "Regiones de destino"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:555
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:565
 #, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
 msgstr "Fuente de relleno"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:569
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:579
 #, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
 msgstr "Extensión del relleno"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:588
 #, kde-format
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
 msgstr "Ajustes"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:587
-#, kde-format
-msgctxt "The 'reference' section label in enclose and fill tool options"
-msgid "Reference"
-msgstr "Referencia"
-
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:841
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:842
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Todas"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:844
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:845
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "Color específico"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:847
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "Transparencia"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:850
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "Color específico o transparencia"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:853
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "Todas, excluyendo un color específico"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:856
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr "Todas, excluyendo transparencia"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:859
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr "Todas, excluyendo un color específico o transparencia"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:862
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "Cualquiera rodeada por un color específico"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:865
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "Cualquiera rodeada por transparencia"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:868
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"

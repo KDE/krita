@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-27 00:46+0000\n"
+"POT-Creation-Date: 2023-04-30 00:45+0000\n"
 "PO-Revision-Date: 2007-08-24 15:02+0545\n"
 "Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -33785,15 +33785,15 @@ msgstr "कार्य:"
 
 #: libs/ui/widgets/kis_selection_options.cc:268
 #, fuzzy, kde-format
-msgctxt "The 'adjustments' section label in selection tools options"
-msgid "Adjustments"
-msgstr "रङ समायोजन"
-
-#: libs/ui/widgets/kis_selection_options.cc:279
-#, fuzzy, kde-format
 msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "प्राथमिकता"
+
+#: libs/ui/widgets/kis_selection_options.cc:277
+#, fuzzy, kde-format
+msgctxt "The 'adjustments' section label in selection tools options"
+msgid "Adjustments"
+msgstr "रङ समायोजन"
 
 #: libs/ui/widgets/kis_selection_options.cc:459
 #, fuzzy, kde-format
@@ -56634,22 +56634,22 @@ msgstr "संसाधन"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:665
 #, fuzzy, kde-format
+msgctxt "The 'reference' section label in fill tool options"
+msgid "Reference"
+msgstr "प्राथमिकता"
+
+#: plugins/tools/basictools/kis_tool_fill.cc:674
+#, fuzzy, kde-format
 #| msgid "&Image Selection"
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
 msgstr "छवि चयन"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:677
+#: plugins/tools/basictools/kis_tool_fill.cc:686
 #, fuzzy, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
 msgstr "रङ समायोजन"
-
-#: plugins/tools/basictools/kis_tool_fill.cc:686
-#, fuzzy, kde-format
-msgctxt "The 'reference' section label in fill tool options"
-msgid "Reference"
-msgstr "प्राथमिकता"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:695
 #, kde-format
@@ -59088,93 +59088,93 @@ msgstr "सम्वेदनशीलता  पद्धति प्रका
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:545
 #, fuzzy, kde-format
+msgctxt "The 'reference' section label in enclose and fill tool options"
+msgid "Reference"
+msgstr "प्राथमिकता"
+
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:555
+#, fuzzy, kde-format
 #| msgid "Transparent"
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
 msgstr "पारदर्शीता"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:555
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:565
 #, fuzzy, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
 msgstr "संसाधन"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:569
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:579
 #, fuzzy, kde-format
 #| msgid "&Image Selection"
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
 msgstr "छवि चयन"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:588
 #, fuzzy, kde-format
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
 msgstr "रङ समायोजन"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:587
-#, fuzzy, kde-format
-msgctxt "The 'reference' section label in enclose and fill tool options"
-msgid "Reference"
-msgstr "प्राथमिकता"
-
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:841
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:842
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Alt+A"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:844
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:845
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "उस्तै चयन"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:847
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
 #, fuzzy, kde-format
 #| msgid "Transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "पारदर्शीता"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:850
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "उस्तै चयन"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:853
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "पृष्ठभूमि रङसँग भर्नुहोस्"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:856
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
 #, fuzzy, kde-format
 #| msgid "Burning Transparency"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr "बल्ने पारदर्शीता"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:859
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:862
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "पृष्ठभूमि रङसँग भर्नुहोस्"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:865
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "पृष्ठभूमि रङ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:868
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
 #, fuzzy, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"

@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-27 00:46+0000\n"
+"POT-Creation-Date: 2023-04-30 00:45+0000\n"
 "PO-Revision-Date: 2022-12-11 07:52+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -34114,15 +34114,15 @@ msgstr "Działanie"
 
 #: libs/ui/widgets/kis_selection_options.cc:268
 #, kde-format
-msgctxt "The 'adjustments' section label in selection tools options"
-msgid "Adjustments"
-msgstr "Dostosowania"
-
-#: libs/ui/widgets/kis_selection_options.cc:279
-#, kde-format
 msgctxt "The 'reference' section label in selection tools options"
 msgid "Reference"
 msgstr "Odniesienie"
+
+#: libs/ui/widgets/kis_selection_options.cc:277
+#, kde-format
+msgctxt "The 'adjustments' section label in selection tools options"
+msgid "Adjustments"
+msgstr "Dostosowania"
 
 #: libs/ui/widgets/kis_selection_options.cc:459
 #, kde-format
@@ -57024,23 +57024,23 @@ msgid "Fill source"
 msgstr "Wszystkie zasoby"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:665
+#, kde-format
+msgctxt "The 'reference' section label in fill tool options"
+msgid "Reference"
+msgstr "Odniesienie"
+
+#: plugins/tools/basictools/kis_tool_fill.cc:674
 #, fuzzy, kde-format
 #| msgid "File extension:"
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
 msgstr "Rozszerzenie pliku:"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:677
+#: plugins/tools/basictools/kis_tool_fill.cc:686
 #, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
 msgstr "Dostrojenia"
-
-#: plugins/tools/basictools/kis_tool_fill.cc:686
-#, kde-format
-msgctxt "The 'reference' section label in fill tool options"
-msgid "Reference"
-msgstr "Odniesienie"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:695
 #, kde-format
@@ -59444,6 +59444,12 @@ msgid "Enclosing method"
 msgstr "Sposób otaczania"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:545
+#, kde-format
+msgctxt "The 'reference' section label in enclose and fill tool options"
+msgid "Reference"
+msgstr "Odniesienie"
+
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:555
 #, fuzzy, kde-format
 #| msgctxt "Region selection method in enclose and fill tool"
 #| msgid "Transparent regions"
@@ -59451,53 +59457,47 @@ msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
 msgstr "Obszary przezroczyste"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:555
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:565
 #, fuzzy, kde-format
 #| msgid "All Resources"
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
 msgstr "Wszystkie zasoby"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:569
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:579
 #, fuzzy, kde-format
 #| msgid "File extension:"
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
 msgstr "Rozszerzenie pliku:"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:588
 #, kde-format
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
 msgstr "Dostosowania"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:587
-#, kde-format
-msgctxt "The 'reference' section label in enclose and fill tool options"
-msgid "Reference"
-msgstr "Odniesienie"
-
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:841
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:842
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Wszystkie"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:844
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:845
 #, fuzzy, kde-format
 #| msgid "Specific Color Selector"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "Wybierak danej barwy"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:847
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:848
 #, fuzzy, kde-format
 #| msgid "Transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "Przezroczystość"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:850
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:851
 #, fuzzy, kde-format
 #| msgctxt "Region selection method in enclose and fill tool"
 #| msgid "Regions of a specific color or transparent"
@@ -59505,7 +59505,7 @@ msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "Obszary o danej barwie lub przezroczyste"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:853
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
 #, fuzzy, kde-format
 #| msgctxt "Region selection method in enclose and fill tool"
 #| msgid "Regions of a specific color"
@@ -59513,20 +59513,20 @@ msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "Obszary o danej barwie"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:856
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
 #, fuzzy, kde-format
 #| msgid "Burning Transparency"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr "Płonąca przezroczystość"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:859
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr "Wszystkie, wykluczając daną barwę lub przezroczystość"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:862
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, fuzzy, kde-format
 #| msgctxt "Region selection method in enclose and fill tool"
 #| msgid "Regions surrounded by a specific color"
@@ -59534,7 +59534,7 @@ msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "Obszary sąsiadujące wg danej barwy"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:865
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
 #, fuzzy, kde-format
 #| msgctxt "Region selection method in enclose and fill tool"
 #| msgid "Regions surrounded by transparent"
@@ -59542,7 +59542,7 @@ msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "Obszary otoczone przezroczystością"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:868
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"

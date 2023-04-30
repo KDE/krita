@@ -1468,15 +1468,16 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
 
         // warning: profile is an array of uint32_t's
         if (TIFFIsByteSwapped(image) != 0) {
-            TIFFSwabArrayOfLong(iptc_profile_data, iptc_profile_size);
+            TIFFSwabArrayOfLong(iptc_profile_data,
+                                iptc_profile_size / sizeof(uint32_t));
         }
 
         KisMetaData::IOBackend *iptcIO =
             KisMetadataBackendRegistry::instance()->value("iptc");
 
         // Copy the xmp data into the byte array
-        QByteArray ba(reinterpret_cast<char *>(iptc_profile_data),
-                      static_cast<int>(sizeof(uint32_t) * iptc_profile_size));
+        QByteArray ba(reinterpret_cast<const char *>(iptc_profile_data),
+                      static_cast<int>(iptc_profile_size));
         QBuffer buf(&ba);
         iptcIO->loadFrom(layer->metaData(), &buf);
     }

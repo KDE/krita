@@ -1033,15 +1033,6 @@ QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point)
     };
 
 
-    auto stdDebug = [debug] (ConicFormula f) {
-        if (debug) f.printOutInAllForms();
-    };
-
-    auto stdDebugVec = [debug, writeFormulaInAllForms] (QVector<double> f, QString name, bool trueForm = false) {
-        if (debug) writeFormulaInAllForms(f, name, trueForm);
-    };
-
-
     if (debug) ENTER_FUNCTION() << "################ ELBERLY THIRD ###################";
     if (debug) ENTER_FUNCTION() << ppVar(polygon) << ppVar(point);
 
@@ -1116,8 +1107,6 @@ QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point)
     // Q - orthogonal, D - diagonal
     //
 
-    bool swap = true;
-
     auto resultD = ConicCalculations::rotateFormula(f.formCCanonized, point);
     f.formDRotated = std::get<0>(resultD);
     double K = std::get<1>(resultD);
@@ -1153,58 +1142,29 @@ QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point)
     f.formEMovedToOrigin = rotatedAfterMoving;
     f.formEMovedToOrigin.Name = "form E - moved to origin (cf)";
 
+    auto resultF = ConicCalculations::swapXY(f.formEMovedToOrigin);
 
-    auto adjustCoefficients = [] (Formulas& f, bool& swapXandY, bool& negateX, bool& negateY) {
+    f.formFSwappedXY = std::get<0>(resultF);
+    f.formFSwappedXY.Name = "form F - swapped X and Y (cf)";
+    bool swapXandY = std::get<1>(resultF);
 
-        swapXandY = false;
-        negateX = false;
-        negateY = false;
+    auto resultG = ConicCalculations::negateAllSigns(f.formFSwappedXY);
 
-        ConicFormula r = f.formEMovedToOrigin;
-        ConicFormula ff = f.formEMovedToOrigin;
+    f.formGNegatedAllSigns = resultG;
+    f.formGNegatedAllSigns.Name = "form G - negated all signs (cf)";
 
-        auto resultF = ConicCalculations::swapXY(ff);
+    auto resultH = ConicCalculations::negateX(f.formGNegatedAllSigns);
 
-        swapXandY = std::get<1>(resultF);
+    f.formHNegatedX = std::get<0>(resultH);
+    f.formHNegatedX.Name = "form H - negated X (cf)";
+    bool negateX = std::get<1>(resultH);
 
-        f.formFSwappedXY = std::get<0>(resultF);
-        f.formFSwappedXY.Name = "form F - swapped X and Y (cf)";
+    auto resultI = ConicCalculations::negateY(f.formHNegatedX);
 
-        r = f.formFSwappedXY;
+    f.formINegatedY = std::get<0>(resultI);
+    f.formINegatedY.Name = "form H - negated X (cf)";
+    bool negateY = std::get<1>(resultI);
 
-        auto resultG = ConicCalculations::negateAllSigns(r);
-
-        f.formGNegatedAllSigns = resultG;
-        f.formGNegatedAllSigns.Name = "form G - negated all signs (cf)";
-
-        r = resultG;
-
-        auto resultH = ConicCalculations::negateX(r);
-
-
-
-        f.formHNegatedX = std::get<0>(resultH);
-        f.formHNegatedX.Name = "form H - negated X (cf)";
-
-        r = f.formHNegatedX;
-        negateX = std::get<1>(resultH);
-
-        auto resultI = ConicCalculations::negateY(r);
-
-        f.formINegatedY = std::get<0>(resultI);
-        f.formINegatedY.Name = "form H - negated X (cf)";
-
-        negateY = std::get<1>(resultI);
-
-
-    };
-
-    bool swapXandY = false;
-    bool negateX = false;
-    bool negateY = false;
-
-
-    adjustCoefficients(f, swapXandY, negateX, negateY);
     if (qAbs(f.formINegatedY.C) < 1e-12) {
         ENTER_FUNCTION() << "Weird formula: " << "C should not be 0";
         writeFormulaInAllForms(f.formINegatedY.getData(), "form I negated Y");

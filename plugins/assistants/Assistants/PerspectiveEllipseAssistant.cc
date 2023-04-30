@@ -86,13 +86,16 @@ QPointF PerspectiveEllipseAssistant::project(const QPointF& pt, const QPointF& s
 
     if (d->isConcentric) {
         if (d->useMirrored) {
-            return d->concentricEllipseInPolygon.projectModifiedEberlySecond(pt);
+            d->concentricEllipseInPolygon.projectModifiedEberlySecond(pt);
+            return d->concentricEllipseInPolygon.projectModifiedEberlyThird(pt);
         } else {
-            return d->concentricEllipseInPolygonMirrored.projectModifiedEberlySecond(pt);
+            d->concentricEllipseInPolygonMirrored.projectModifiedEberlySecond(pt);
+            return d->concentricEllipseInPolygonMirrored.projectModifiedEberlyThird(pt);
         }
 
     } else {
-        return d->ellipseInPolygon.projectModifiedEberlySecond(pt);
+        d->ellipseInPolygon.projectModifiedEberlySecond(pt);
+        return d->ellipseInPolygon.projectModifiedEberlyThird(pt);
         d->ellipseInPolygon.setSimpleEllipseVertices(d->simpleEllipse);
         return d->simpleEllipse.project(pt);
     }

@@ -5,10 +5,12 @@
 #ifndef _ELLIPSE_IN_POLYGON_H_
 #define _ELLIPSE_IN_POLYGON_H_
 
+#include <QObject>
+#include <functional>
+
 #include "kis_abstract_perspective_grid.h"
 #include "kis_painting_assistant.h"
 #include "Ellipse.h"
-#include <QObject>
 
 
 class ConicFormula
@@ -72,8 +74,34 @@ public:
 
     QString Name {"formula"};
 
+
+
+
+
+
 private:
     void setData(qreal a, qreal b, qreal c, qreal d, qreal e, qreal f);
+
+};
+
+
+struct ConicCalculations {
+
+public:
+    // all calculations for Ellipse In Polygon
+    static std::tuple<ConicFormula, QPointF, double, bool> normalizeFormula(ConicFormula formula, QPointF point); // A => B
+    static ConicFormula canonizeFormula(ConicFormula formula); // B => C
+    static std::tuple<ConicFormula, double, double, QPointF> rotateFormula(ConicFormula formula, QPointF point); // C => D
+    static ConicFormula moveToOrigin(ConicFormula formula, double u, double v); // D => E
+    static std::tuple<ConicFormula, bool> swapXY(ConicFormula formula); // E => F
+    static ConicFormula negateAllSigns(ConicFormula formula); // F => G
+    static std::tuple<ConicFormula, bool> negateX(ConicFormula formula); // G => H
+    static std::tuple<ConicFormula, bool> negateY(ConicFormula formula); // H => I
+
+
+    static double getStartingPoint(ConicFormula formula, std::function<double(double)> Pt, std::function<double(double)> Ptd);
+
+
 
 };
 
@@ -130,6 +158,8 @@ public:
     QPointF project(QPointF point);
 
     QPointF projectModifiedEberlySecond(QPointF point);
+    QPointF projectModifiedEberlyThird(QPointF point);
+
 
 
     bool onTheCorrectSideOfHorizon(QPointF point);
@@ -164,6 +194,11 @@ public:
     // unused for now; will be used to move the ellipse towards any vanishing point
     // might need more info about vanishing points (for example, might need all points)
     // moveTowards(QPointF vanishingPoint, QPointF cursorStartPoint, QPointF cursorEndPoint);
+
+
+
+    static QVector<double> getRotatedFormula(QVector<double> original, qreal &K, qreal &L);
+    static QPointF getRotatedPoint(QPointF point, qreal K, qreal L, bool unrotate = false);
 
     // ----- data -----
     // keep the known-size-vectors the same size!
@@ -241,8 +276,6 @@ protected:
 
 
 
-    static QVector<double> getRotatedFormula(QVector<double> original, qreal &K, qreal &L);
-    static QPointF getRotatedPoint(QPointF point, qreal K, qreal L, bool unrotate = false);
 
 
 
@@ -258,8 +291,6 @@ class AlgebraFunctions
 public:
     static qreal newtonUntilOvershoot (std::function<qreal(qreal)> f, std::function<qreal(qreal)> fd, qreal t0, qreal& previousT, bool& overshoot, bool debug);
     static qreal bisectionMethod (std::function<qreal(qreal)> f, qreal ta, qreal tb, bool debug);
-    static qreal sqPow(qreal p);
-    static int sqPow(int p);
 
 
 

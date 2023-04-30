@@ -639,6 +639,8 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     qreal u = point.x();
     qreal v = point.y();
 
+    ENTER_FUNCTION() << "SECOND: move using u, v: " << u << v << point;
+
     if (debug) ENTER_FUNCTION() << "(*) after moving:" << ppVar(QPointF(0, 0));
 
     auto moveEllipseSoPointIsInOrigin = [debug] (ConicFormula formula, qreal u, qreal v) {
@@ -915,7 +917,8 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     }
     //KIS_ASSERT_RECOVER_RETURN_VALUE(qAbs(calculateFormula(result)) < eps, result);
 
-    if (debug) {
+    if (debug || true) {
+        qCritical() << "**** SECOND ****";
         f.formA.printOutInAllForms();
         f.formBNormalized.printOutInAllForms();
         f.formCCanonized.printOutInAllForms();
@@ -932,6 +935,482 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     return result;
 
 }
+
+QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point)
+{
+    QPointF originalPoint = point;
+    // method taken from https://www.sciencedirect.com/science/article/pii/S0377042713001398
+    // "Algorithms for projecting points onto conics", authors: N.Chernova, S.Wijewickrema
+    //
+
+    // Stage 1. Canonize the formula.
+
+    // "canonnical formula" is Ax^2 + 2Bxy + Cy^2 + 2Dx + 2Ey + F = 0
+    // and A^2 + B^2 + C^2 + D^2 + E^2 + F^2 = 1
+    // so we gotta change it first
+
+    // NAMING
+    // A - true formula, "final formula"
+    // B - A, but normalized (so that A^2 + B^2 + C^2... = 1)
+    // C - B, but canonized (convert from b to B=b/2 to be able to use Elberly correctly)
+    // D -
+    // E -
+    // F -
+    // G -
+    // H -
+    // I -
+
+    // ***************
+
+    bool debug = false;
+    //debug = false;
+    //debug = true;
+
+    // *************
+
+    struct Formulas {
+        ConicFormula formA;
+        ConicFormula formBNormalized;
+        ConicFormula formCCanonized;
+
+        ConicFormula formDRotated;
+        ConicFormula formDRotatedSecondVersion;
+
+        ConicFormula formEMovedToOrigin;
+        ConicFormula formFSwappedXY;
+        ConicFormula formGNegatedAllSigns;
+        ConicFormula formHNegatedX;
+        ConicFormula formINegatedY;
+
+        ConicFormula current;
+    };
+
+    Formulas f;
+
+
+
+    auto writeFormulaInWolframAlphaForm = [] (QVector<double> formula, bool trueForm = false) {
+        auto writeOutNumber = [] (double n, bool first = false) {
+            QString str;
+            if (n >= 0 && !first) {
+                str = QString("+ ") + QString::number(n);
+            } else {
+                str = (QString::number(n));
+            }
+            return str;
+        };
+
+        QString str = writeOutNumber(formula[0], true) + "x^2 "
+                + writeOutNumber(trueForm? formula[1] : 2*formula[1]) + "xy "
+                + writeOutNumber(formula[2]) + "y^2 "
+                + writeOutNumber(trueForm? formula[3] : 2*formula[3]) + "x "
+                + writeOutNumber(trueForm? formula[4] : 2*formula[4]) + "y "
+                + writeOutNumber(formula[5]) + " = 0";
+        return str;
+    };
+
+
+    auto writeFormulaInAllForms = [writeFormulaInWolframAlphaForm] (QVector<double> formula, QString name, bool trueForm = false) {
+        QString octaveForm = "[";
+        for (int i = 0; i < 6; i++) {
+            bool shouldDouble = formula[i] && (i == 1 || i == 3 || i == 4);
+            octaveForm += QString::number(shouldDouble ? 2*formula[i] : formula[i]);
+            if (i != 5) {
+                octaveForm += ",";
+            }
+        }
+        octaveForm += "];";
+
+        /*
+        qCritical() << "ModifiedElberly +Sec+ | --- (QVector, not Conic) ";
+        qCritical() << "ModifiedElberly       | formula name: " << name;
+        qCritical() << "ModifiedElberly       | true form? " << trueForm;
+        qCritical() << "ModifiedElberly       | WolframAlpha: " << writeFormulaInWolframAlphaForm(formula, trueForm);
+        qCritical() << "ModifiedElberly       | Octave: " << octaveForm;
+        qCritical() << "ModifiedElberly       | Actual data (A, B, C, D...): " << formula;
+        qCritical() << "ModifiedElberly       | ---";
+        */
+    };
+
+
+    auto stdDebug = [debug] (ConicFormula f) {
+        if (debug) f.printOutInAllForms();
+    };
+
+    auto stdDebugVec = [debug, writeFormulaInAllForms] (QVector<double> f, QString name, bool trueForm = false) {
+        if (debug) writeFormulaInAllForms(f, name, trueForm);
+    };
+
+
+    if (debug) ENTER_FUNCTION() << "################ ELBERLY THIRD ###################";
+    if (debug) ENTER_FUNCTION() << ppVar(polygon) << ppVar(point);
+
+
+
+    QVector<double> canonized;
+    canonized = QVector<double>::fromList(finalFormula.toList());
+
+    QVector<double> trueFormulaA = QVector<double>::fromList(finalFormula.toList());
+    writeFormulaInAllForms(trueFormulaA, "formula A - final", true);
+    ConicFormula formA(trueFormulaA, "formula A - final", ConicFormula::ACTUAL);
+    if (debug) formA.printOutInAllForms();
+    f.formA = ConicFormula(trueFormulaA, "formula A - final", ConicFormula::ACTUAL);
+    f.current = f.formA;
+
+    //if (debug)
+
+    if (debug) ENTER_FUNCTION() << ppVar(finalFormula) << ppVar(finalFormula.toList());
+
+
+    // I guess it should also rescale the ellipse for the points to be within 0-1?... uhhhhh...
+    // TODO: make sure it's correct and finished
+    // ACTUALLY no, it's the 'point' that should be normalized here, not the ellipse!
+
+    double normalizeBy = 1.0;
+    QPointF point3 = point;
+
+
+    normalizeBy = qMax(point.x(), point.y());
+
+    if (debug) ENTER_FUNCTION() << "NORMALIZATION VALUE HERE: " << ppVar(normalizeBy);
+    if (debug) ENTER_FUNCTION() << ppVar(canonized) << ppVar(writeFormulaInWolframAlphaForm(canonized, true)) << ppVar(writeFormulaInWolframAlphaForm(finalFormula, true));
+    // załóżmy x+y = 1 oraz nb = 5, bo mielismy x,y = 5,5 -> czyli robimy wszystko mniejsze
+    // x => nb*x
+    // (nb*x) + (nb*y) = 1
+    // 5x + 5y = 1
+
+    std::tuple<ConicFormula, QPointF, double, bool> resultA = ConicCalculations::normalizeFormula(f.formA, point3);
+    f.formBNormalized = std::get<0>(resultA);
+    normalizeBy = std::get<2>(resultA);
+    point = std::get<1>(resultA);
+    bool normalized = std::get<3>(resultA);
+
+    if (debug) ENTER_FUNCTION() << "(*) after normalization:" << ppVar(point);
+
+    if (debug) ENTER_FUNCTION() << "after normalization:" << ppVar(canonized) << ppVar(point);
+    if (debug) ENTER_FUNCTION() << ppVar(writeFormulaInWolframAlphaForm(canonized, true));
+
+    // Ax^2 + 2Bxy + Cy^2 = 0;
+    // a' ^2 + 2b' xy + c' y^2 = 0;
+
+    // 5x^2 + 8xy + 3y^2 = 0
+    // 5x^2 + (2*4)xy + 3y^2 = 0
+    // 5^2 + 4^2 + 3^2 = 25 + 16 + 9 = k^2 = 50 = 25*2 => 5*sqrt(2) = k
+    // A = 5/(5sqrt(2)) = sqrt(2)/2
+    // B = (b/2)/(k)
+
+    f.formCCanonized = ConicCalculations::canonizeFormula(f.formBNormalized);
+
+    // ok so canonized is the article's version, as in, the true equation is with 2*canonized[1] for example,
+    // and canonized = A, B, C, D...
+
+
+    // TODO
+
+    // now it should be canonized correctly
+
+    // Stage 2. Rotate the coordinates system to make B = 0.
+    // We need to decomposite the matrix:
+    // | A B |
+    // | B C | = Q*D*Q^T
+    // Q - orthogonal, D - diagonal
+    //
+
+    bool swap = true;
+
+    auto resultD = ConicCalculations::rotateFormula(f.formCCanonized, point);
+    f.formDRotated = std::get<0>(resultD);
+    double K = std::get<1>(resultD);
+    double L = std::get<2>(resultD);
+    point = std::get<3>(resultD);
+
+    KIS_ASSERT_RECOVER_NOOP(qAbs(f.formDRotated.B) < 1e-10);
+
+
+    //if (debug) ENTER_FUNCTION() << "after rotation:" << ppVar(writeFormulaInWolframAlphaForm(rotated)); // still a circle, good
+
+    if (debug) ENTER_FUNCTION() << "(6a)";
+
+
+    if (debug) ENTER_FUNCTION() << "(*) after rotation:" << ppVar(point);
+
+    if (debug) ENTER_FUNCTION() << "(6)" << ppVar(point);
+
+    // Stage 3. Moving point to the origin (x -> x - u, y -> y - v)
+    qreal u = point.x();
+    qreal v = point.y();
+
+    ENTER_FUNCTION() << "THIRD: move using u, v: " << u << v << point;
+
+    if (debug) ENTER_FUNCTION() << "(*) after moving:" << ppVar(QPointF(0, 0));
+
+    ConicFormula rotatedAfterMoving = ConicCalculations::moveToOrigin(f.formDRotated, u, v);
+
+    if (debug) rotatedAfterMoving.printOutInAllForms();
+
+    // Stage 4. Adjusting the coefficients to our needs (C, D, E >= 0)
+
+    f.formEMovedToOrigin = rotatedAfterMoving;
+    f.formEMovedToOrigin.Name = "form E - moved to origin (cf)";
+
+
+    auto adjustCoefficients = [] (Formulas& f, bool& swapXandY, bool& negateX, bool& negateY) {
+
+        swapXandY = false;
+        negateX = false;
+        negateY = false;
+
+        ConicFormula r = f.formEMovedToOrigin;
+        ConicFormula ff = f.formEMovedToOrigin;
+
+        auto resultF = ConicCalculations::swapXY(ff);
+
+        swapXandY = std::get<1>(resultF);
+
+        f.formFSwappedXY = std::get<0>(resultF);
+        f.formFSwappedXY.Name = "form F - swapped X and Y (cf)";
+
+        r = f.formFSwappedXY;
+
+        auto resultG = ConicCalculations::negateAllSigns(r);
+
+        f.formGNegatedAllSigns = resultG;
+        f.formGNegatedAllSigns.Name = "form G - negated all signs (cf)";
+
+        r = resultG;
+
+        auto resultH = ConicCalculations::negateX(r);
+
+
+
+        f.formHNegatedX = std::get<0>(resultH);
+        f.formHNegatedX.Name = "form H - negated X (cf)";
+
+        r = f.formHNegatedX;
+        negateX = std::get<1>(resultH);
+
+        auto resultI = ConicCalculations::negateY(r);
+
+        f.formINegatedY = std::get<0>(resultI);
+        f.formINegatedY.Name = "form H - negated X (cf)";
+
+        negateY = std::get<1>(resultI);
+
+
+    };
+
+    bool swapXandY = false;
+    bool negateX = false;
+    bool negateY = false;
+
+
+    adjustCoefficients(f, swapXandY, negateX, negateY);
+    if (qAbs(f.formINegatedY.C) < 1e-12) {
+        ENTER_FUNCTION() << "Weird formula: " << "C should not be 0";
+        writeFormulaInAllForms(f.formINegatedY.getData(), "form I negated Y");
+        return originalPoint;
+    }
+
+
+    // ok, first we gotta find C being bigger than A (in absolute).
+
+    // ok, now |C| >= |A|
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f.formINegatedY.C >= 0 && f.formINegatedY.D >= 0 && f.formINegatedY.E >= 0, originalPoint);
+
+    // Stage 5.
+    // Thanks to math magic, we've got:
+    // x = -Dt/(At + 1)
+    // y = -Et/(Ct + 1)
+    // hence, the function is:
+    // P(t) = -D^2 *t*((At + 2)/(At + 1)^2) - E^2 * t * (Ct+2)/((Ct+1)^2) + F
+
+    auto Pt = [f] (double t) {
+        ConicFormula ff = f.formINegatedY;
+        return -ff.D*ff.D*t*((ff.A*t + 2)/((ff.A*t + 1)*(ff.A*t + 1))) - ff.E*ff.E * t * (ff.C*t+2)/((ff.C*t+1)*(ff.C*t+1)) + ff.F;
+    };
+
+    auto Ptd = [f] (double t) {
+        ConicFormula ff = f.formINegatedY;
+        return - (2*ff.D*ff.D)/(qPow(ff.A*t*t + 1, 3)) - (2*ff.E*ff.E)/qPow(ff.C*t*t + 1, 3);
+    };
+
+
+    if ((qFuzzyCompare(f.formINegatedY.D, 0) || qFuzzyCompare(f.formINegatedY.E, 0))) {
+        // special case
+        if (debug) ENTER_FUNCTION() << "Ellipse: and SPECIAL CASE";
+    }
+
+    auto getStartingPoint = [Pt, Ptd, debug] (ConicFormula formula) {
+        qreal A = formula.A;
+        qreal C = formula.C;
+        qreal D = formula.D;
+        qreal E = formula.E;
+        qreal F = formula.F;
+
+
+        qreal t0 = 0; // starting point for newton method
+
+        // will be useful for both cases
+        qreal t0d = F/(D*D - A*F + D*sqrt(D*D - A*F));
+        qreal t0dd = F/(E*E - C*F + E*sqrt(E*E - C*F));
+
+        if (A >= 0) { // ellipses and parabolas
+            // we got to find t0 where P(t0) >= 0
+            if (F < 0) {
+                t0 = qMax(t0d, t0dd);
+            } // else t0 = 0
+        } else { // hyperbolas
+
+            qreal U = sqrt(sqrt(-A*D*D));
+            qreal V = sqrt(sqrt(C*E*E));
+            qreal tstar = - (U - V)/(C*U - A*V); // inflection point of Pt
+
+            qreal Pstar = Pt(tstar);
+            if (debug) ENTER_FUNCTION() << ppVar(Pstar);
+
+            if (Pstar > 0) { // case (a)
+                if (F <= 0) {
+                    t0 = 0;
+                } else {
+                    t0 = qMin(t0d, t0dd);
+                }
+            } else if (Pstar < 0) {
+                if (F >= 0) {
+                    t0 = 0;
+                } else {
+                    t0 = qMax(t0d, t0dd);
+                }
+            } else {
+                // we found it already!!!
+                t0 = tstar;
+            }
+        }
+        return t0;
+    };
+
+    qreal t0 = getStartingPoint(f.formINegatedY); // starting point for newton method
+
+    // now we gotta find t, then when we find it, calculate x and y, undo all transformations and return the point!
+
+    qreal previousT;
+    bool overshoot;
+    qreal tresult = AlgebraFunctions::newtonUntilOvershoot(Pt, Ptd, t0, previousT, overshoot, debug);
+    if (overshoot) {
+        if (debug) ENTER_FUNCTION() << "# NEWTON OVERSHOT # t: " << ppVar(tresult) << ppVar(previousT) << ppVar(Pt(tresult)) << ppVar(Pt(previousT));
+        tresult = AlgebraFunctions::bisectionMethod(Pt, qMin(tresult, previousT), qMax(tresult, previousT), debug);
+        if (debug) ENTER_FUNCTION() << "# AFTER BISECTION # Now it's: " << ppVar(tresult);
+    } else {
+        if (debug) ENTER_FUNCTION() << "# NO OVERSHOOT # values are: " << ppVar(tresult) << ppVar(previousT) << ppVar(Pt(tresult)) << ppVar(Pt(previousT));
+    }
+
+
+    qreal foundX = -f.formINegatedY.D*tresult/qPow(f.formINegatedY.A*tresult + 1, 1);
+    qreal foundY = -f.formINegatedY.E*tresult/qPow(f.formINegatedY.C*tresult + 1, 1);
+
+
+
+    qreal checkIfOnTheEllipse = f.formINegatedY.calculateFormulaForPoint(QPointF(foundX, foundY));
+
+    if (debug) ENTER_FUNCTION() << ppVar(checkIfOnTheEllipse);
+    if (qAbs(checkIfOnTheEllipse) >= 1e-6) {
+        if (debug) ENTER_FUNCTION() << "#### WARNING! NOT ON THE ELLIPSE AFTER BISECTION!!! ####";
+    }
+
+    if (debug) ENTER_FUNCTION() << "(1) original" << ppVar(foundX) << ppVar(foundY) << ppVar(calculateFormula(QPointF(foundX, foundY)))
+                                << ppVar(f.formINegatedY.calculateFormulaForPoint(QPointF(foundX, foundY)));
+    if (debug) ENTER_FUNCTION() << "(1) reminder: " << ppVar(QPointF(foundX, foundY));
+    if (debug) f.formINegatedY.printOutInAllForms();
+
+    auto undoAllChanges = [] (QPointF p, bool negateX, bool negateY, bool swapXandY, qreal u, qreal v) {
+
+        qreal foundX = p.x();
+        qreal foundY = p.y();
+
+        // ok, now undoing all the changes we did...
+        if (negateX) {
+            foundX = -foundX;
+        }
+        if (negateY) {
+            foundY = -foundY;
+        }
+
+        QPointF result = QPointF(foundX, foundY);
+        if (swapXandY){
+            result = QPointF(foundY, foundX);
+        }
+
+        result = result + QPointF(u, v);
+
+        return result;
+
+
+    };
+
+    QPointF result = undoAllChanges(QPointF(foundX, foundY), negateX, negateY, swapXandY, u, v);
+
+    if (debug) ENTER_FUNCTION() << "(4) after moving to the origin" << ppVar(result) << ppVar(calculateFormula(result))
+                                   << ppVar(f.formDRotated.calculateFormulaForPoint(result));
+
+    //if (debug) ENTER_FUNCTION() << "before the mistake" << ppVar(result) << ppVar(writeFormulaInWolframAlphaForm(f.formDRotated.getFormulaSpecial()))
+    //                             << ppVar((double)Q(0, 0)) << ppVar((double)Q(1, 1));
+
+    // un-rotating (with Q)
+
+    // result = QPointF(result.x()/Q(0, 0), result.y()/Q(1, 1));
+    // Q must be transposed now
+    if (debug) ENTER_FUNCTION() << "Ok, now undoing the rotation for the point:";
+
+    if (swap) {
+        result = getRotatedPoint(result, K, L, true);
+    } else {
+        //result = QPointF(Q(0, 0)*result.x() + Q(0, 1)*result.y(), Q(1, 0)*result.x() + Q(1, 1)*result.y());
+    }
+
+
+    if (debug) ENTER_FUNCTION() << "(5) after un-rotating" << ppVar(result) << ppVar(calculateFormula(result)) << ppVar(calculateFormula(canonized, result))
+                                   << ppVar(f.formCCanonized.calculateFormulaForPoint(result))
+                                   << ppVar(f.formBNormalized.calculateFormulaForPoint(result));
+
+
+    // uncanonizing ????
+
+
+    // now un-normalizing
+    if (debug) ENTER_FUNCTION() << "NORMALIZATION VALUE: " << ppVar(normalizeBy);
+
+    if (!qFuzzyCompare(normalizeBy, 0)) {
+        if (debug) ENTER_FUNCTION() << "NORMALIZATION being done: " << ppVar(normalizeBy);
+        result = result*normalizeBy;
+    }
+    if (debug) ENTER_FUNCTION() << "(6) after un-normalizing" << ppVar(result) << ppVar(calculateFormula(result)) << ppVar(calculateFormula(trueFormulaA, result));
+
+    qreal eps = 0.0001;
+    if (qAbs(calculateFormula(result)) >= eps) {
+        ENTER_FUNCTION() << ppVar(qAbs(calculateFormula(result))) << ppVar(qAbs(calculateFormula(result)) < eps);
+        ENTER_FUNCTION() << "The values were: " << ppVar(polygon) << ppVar(originalPoint) << "and unfortunate result:" << ppVar(result);
+    }
+    //KIS_ASSERT_RECOVER_RETURN_VALUE(qAbs(calculateFormula(result)) < eps, result);
+
+    if (debug || true) {
+        qCritical() << "**** THIRD ****";
+        f.formA.printOutInAllForms();
+        f.formBNormalized.printOutInAllForms();
+        f.formCCanonized.printOutInAllForms();
+        f.formDRotated.printOutInAllForms();
+        f.formDRotatedSecondVersion.printOutInAllForms();
+        f.formEMovedToOrigin.printOutInAllForms();
+        f.formFSwappedXY.printOutInAllForms();
+        f.formGNegatedAllSigns.printOutInAllForms();
+        f.formHNegatedX.printOutInAllForms();
+        f.formINegatedY.printOutInAllForms();
+    }
+
+
+    return result;
+
+}
+
 
 bool EllipseInPolygon::onTheCorrectSideOfHorizon(QPointF point)
 {
@@ -1658,6 +2137,179 @@ void ConicFormula::setData(qreal a, qreal b, qreal c, qreal d, qreal e, qreal f)
     F = f;
 }
 
+
+// -------------------------------
+
+
+std::tuple<ConicFormula, QPointF, double, bool> ConicCalculations::normalizeFormula(ConicFormula formula, QPointF point)
+{
+    bool debug = false;
+    double normalizeBy = qMax(point.x(), point.y());
+    if (debug) ENTER_FUNCTION() << ppVar(normalizeBy);
+    if (debug) ENTER_FUNCTION() << ppVar(formula.getFormulaActual()) << ppVar(formula.toWolframAlphaForm());
+    // załóżmy x+y = 1 oraz nb = 5, bo mielismy x,y = 5,5 -> czyli robimy wszystko mniejsze
+    // x => nb*x
+    // (nb*x) + (nb*y) = 1
+    // 5x + 5y = 1
+
+    ConicFormula normalized = formula;
+    normalized.Name = "form B - normalized (CF)";
+
+    bool wasNormalized = false;
+
+    // ok so,
+    if (!qFuzzyCompare(normalizeBy, 0)) {
+        normalized.A = normalizeBy*normalizeBy*formula.A; // x^2
+        normalized.B = normalizeBy*normalizeBy*formula.B; // x*y
+        normalized.C = normalizeBy*normalizeBy*formula.C; // y^2
+        normalized.D = normalizeBy*formula.D; // x
+        normalized.E = normalizeBy*formula.E; // y
+        normalized.F = formula.F;
+
+        point = point/normalizeBy;
+        wasNormalized = true;
+    }
+
+    if (debug) ENTER_FUNCTION() << ppVar(normalized.toWolframAlphaForm());
+
+    return std::make_tuple(normalized, point, normalizeBy, wasNormalized);
+
+}
+
+ConicFormula ConicCalculations::canonizeFormula(ConicFormula f)
+{
+    auto sq = [] (qreal a) {return a*a;};
+    ConicFormula result;
+
+    double canonizingNumber = sq(f.A) + sq(f.B/2) + sq(f.C) + sq(f.D/2) + sq(f.E/2) + sq(f.F);
+    canonizingNumber = sqrt(canonizingNumber);
+
+    bool debug = false;
+
+    if (debug) ENTER_FUNCTION() << ppVar(canonizingNumber);
+
+    //if (debug) writeFormulaInAllForms(canonized, "canonized raw - before canonization");
+    if (debug) f.printOutInAllForms();
+
+
+    // conversion actual -> special is included below
+    result = ConicFormula(f.getFormulaActual(), "formula C - canonized", ConicFormula::SPECIAL);
+
+    result.A = f.A/canonizingNumber;
+    result.B = f.B/(2*canonizingNumber);
+    result.C = f.C/canonizingNumber;
+    result.D = f.D/(2*canonizingNumber);
+    result.E = f.E/(2*canonizingNumber);
+    result.F = f.F/canonizingNumber;
+
+    //if (debug) ENTER_FUNCTION() << "Are those two values the same?? ___________ " << ppVar(canonized[0] - f.formCCanonized.A);
+    //if (debug) writeFormulaInAllForms(canonized, "canonized raw");
+    if (debug) result.printOutInAllForms();
+
+    qreal checkIfReallyCanonized = sq(result.A) + sq(result.B) + sq(result.C)
+            + sq(result.D) + sq(result.E) + sq(result.F);
+
+    if (debug) ENTER_FUNCTION() << ppVar(checkIfReallyCanonized == 1);
+
+    return result;
+}
+
+std::tuple<ConicFormula, double, double, QPointF> ConicCalculations::rotateFormula(ConicFormula formula, QPointF point)
+{
+    ConicFormula result;
+    QPointF pointRotatedSecondVersion = point;
+    qreal K;
+    qreal L;
+    QVector<double> formulaDRotatedAlternativeTrue = EllipseInPolygon::getRotatedFormula(formula.getFormulaActual(), K, L);
+    pointRotatedSecondVersion = EllipseInPolygon::getRotatedPoint(pointRotatedSecondVersion, K, L);
+    result = ConicFormula(formulaDRotatedAlternativeTrue, "formula D - rotated, alternative", ConicFormula::ACTUAL);
+    result.convertTo(ConicFormula::SPECIAL);
+    return std::make_tuple(result, K, L, pointRotatedSecondVersion);
+
+}
+
+ConicFormula ConicCalculations::moveToOrigin(ConicFormula formula, double u, double v)
+{
+    ConicFormula response = formula;
+    bool debug = true;
+    if (debug) ENTER_FUNCTION() << "formula to copy from: " << formula.getFormulaSpecial();
+    if (debug) ENTER_FUNCTION() << "formula copied: " << response.getFormulaSpecial();
+
+
+    // note that F depends on old D and E
+    response.D = formula.D + formula.A*u; // D -> D + A*u
+    response.E = formula.E + formula.C*v; // E -> E + C*v
+    response.F = formula.F + formula.A*u*u + 2*formula.D*u + formula.C*v*v + 2*formula.E*v;// F -> F + Au^2 + 2*Du + Cv^2 + 2Ev
+
+    if (debug) ENTER_FUNCTION() << "D = " << formula.D << " + " << formula.A << "*" << u;
+    if (debug) ENTER_FUNCTION() << "E = " << formula.E << " + " << formula.C << "*" << v;
+    if (debug) ENTER_FUNCTION() << "F = " << formula.F << " + " << formula.A << "*" << u << "*" << u << " + 2*" << formula.D << "*" << u << " + "
+                                << formula.C << "*" << v << "*" << v << " + 2*" << formula.E <<  "*" << v;
+
+
+
+    return response;
+}
+
+std::tuple<ConicFormula, bool> ConicCalculations::swapXY(ConicFormula ff)
+{
+    ConicFormula r;
+    bool swapXandY = false;
+    if (qAbs(ff.C) < qAbs(ff.A)) {
+        swapXandY = true;
+        r.A = ff.C;
+        r.B = ff.B;
+        r.C = ff.A;
+        r.D = ff.E;
+        r.E = ff.D;
+        r.F = ff.F;
+    }
+    return std::make_tuple(r, swapXandY);
+}
+
+ConicFormula ConicCalculations::negateAllSigns(ConicFormula formula)
+{
+    ConicFormula response = formula;
+    if (formula.C < 0) {
+        // negate all signs
+        response.A = -formula.A;
+        response.B = -formula.B;
+        response.C = -formula.C;
+        response.D = -formula.D;
+        response.E = -formula.E;
+        response.F = -formula.F;
+    }
+    // note: we don't need to remember whether the formula had all signs negated or not
+    return response;
+}
+
+std::tuple<ConicFormula, bool> ConicCalculations::negateX(ConicFormula formula)
+{
+    ConicFormula response = formula;
+    bool negated = false;
+    if (formula.D < 0) {
+        response.D = -formula.D;
+        response.B = -formula.B;
+        negated = true;
+    }
+    return std::make_tuple(response, negated);
+}
+
+std::tuple<ConicFormula, bool> ConicCalculations::negateY(ConicFormula formula)
+{
+    ConicFormula response = formula;
+    bool negated = false;
+    if (formula.E < 0) {
+        response.E = -formula.E;
+        response.B = -formula.B;
+        negated = true;
+    }
+    return std::make_tuple(response, negated);
+}
+
+
+// -------------------------------
+
 qreal AlgebraFunctions::newtonUntilOvershoot(std::function<qreal (qreal)> f, std::function<qreal (qreal)> fd, qreal t0, qreal &previousT, bool &overshoot, bool debug)
 {
     overshoot = false;
@@ -1765,14 +2417,4 @@ qreal AlgebraFunctions::bisectionMethod(std::function<qreal (qreal)> f, qreal ta
     if (debug) ENTER_FUNCTION() << "Actual steps = " << i;
 
     return t;
-}
-
-qreal AlgebraFunctions::sqPow(qreal p)
-{
-    return p*p;
-}
-
-int AlgebraFunctions::sqPow(int p)
-{
-    return p*p;
 }

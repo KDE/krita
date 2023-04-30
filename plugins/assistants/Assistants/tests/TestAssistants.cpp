@@ -538,6 +538,34 @@ void TestAssistants::testProjectionNewMethod()
 
 }
 
+void TestAssistants::testMoveToOrigin()
+{
+    ConicFormula f;
+    f.setFormulaSpecial(1, 2, 3, 4, 5, 0);
+
+    ConicFormula g = ConicCalculations::moveToOrigin(f, 1000, 1000);
+
+    g.printOutInAllForms();
+
+    qCritical() << "calculate (0,0) for f:" << f.calculateFormulaForPoint(QPointF(0, 0));
+    qCritical() << "calculate (1000,1000) for g:" << g.calculateFormulaForPoint(QPointF(1000, 1000));
+    qCritical() << "calculate (-1000,-1000) for g:" << g.calculateFormulaForPoint(QPointF(-1000, -1000));
+
+
+    qCritical() << "---- whatever...";
+
+
+    f.setFormulaSpecial(0.719315, 0, -0.000778898, -0.552035, -0.000705551, 0.422769);
+
+    f.printOutInAllForms();
+
+    g = ConicCalculations::moveToOrigin(f, 1000, 1000);
+
+    g.printOutInAllForms();
+
+
+}
+
 
 
 

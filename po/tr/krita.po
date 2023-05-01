@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-04-30 01:38+0300\n"
+"PO-Revision-Date: 2023-04-30 13:53+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -943,7 +943,7 @@ msgstr "Kaydırılmış Üçlü"
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Split_Complementary.kgm"
 msgid "Split Complementary"
-msgstr "Destekleyeni Ayır"
+msgstr "Destekleyeni Böl"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -7655,14 +7655,14 @@ msgstr "İlk seçili nesneden birden çok nesneyi çıkar"
 #, kde-format
 msgctxt "action"
 msgid "Split"
-msgstr "Ayır"
+msgstr "Böl"
 
 #. i18n: context: toolTip @ Action (object_split), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:292
 #, kde-format
 msgctxt "action"
 msgid "Split objects with multiple subpaths into multiple objects"
-msgstr "Nesneleri birden çok alt yolu olan birden çok nesneye ayır"
+msgstr "Nesneleri birden çok alt yolu olan birden çok nesneye böl"
 
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Actions (Path Tool), ActionCollection (Tools)
@@ -12016,7 +12016,7 @@ msgstr "Birleştirileni Kaydet"
 #, kde-format
 msgctxt "action"
 msgid "Split Layer..."
-msgstr "Katmanı Ayır..."
+msgstr "Katmanı Böl..."
 
 #. i18n: context: toolTip @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
@@ -12026,7 +12026,7 @@ msgstr "Katmanı Ayır..."
 #, kde-format
 msgctxt "action"
 msgid "Split Layer"
-msgstr "Katmanı Ayır"
+msgstr "Katmanı Böl"
 
 #. i18n: context: text @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3080
@@ -12692,12 +12692,12 @@ msgstr "Tüm Katmanları &Dönüştür"
 #: krita/krita5.xmlgui:271
 #, kde-format
 msgid "S&plit"
-msgstr "&Ayır"
+msgstr "&Böl"
 
 #: krita/krita5.xmlgui:273 plugins/dockers/layerdocker/LayerBox.cpp:1178
 #, kde-format
 msgid "S&plit Alpha"
-msgstr "Alfayı A&yır"
+msgstr "Alfayı &Böl"
 
 #: krita/krita5.xmlgui:318
 #, kde-format
@@ -14482,7 +14482,7 @@ msgstr "Tuvali Yeniden Boyutlandır"
 #, kde-format
 msgctxt "action"
 msgid "Im&age Split "
-msgstr "Gör&seli Ayır"
+msgstr "Gör&seli Böl "
 
 #. i18n: context: toolTip @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
@@ -14492,7 +14492,7 @@ msgstr "Gör&seli Ayır"
 #, kde-format
 msgctxt "action"
 msgid "Image Split"
-msgstr "Görseli Ayır"
+msgstr "Görseli Böl"
 
 #. i18n: context: text @ Action (separate), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1257
@@ -17071,7 +17071,7 @@ msgstr "Görseli Düzleştir"
 #: libs/image/kis_layer_utils.cpp:2147
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
-msgstr "Alfayı Maskelere Ayır"
+msgstr "Alfayı Maskelere Böl"
 
 #: libs/image/kis_layer_utils.cpp:2173
 msgctxt "(qtundo-format)"
@@ -32111,7 +32111,7 @@ msgstr "Bölütü ters çevir"
 #, kde-format
 msgctxt "Action to split the selected segment in the segment gradient editor"
 msgid "Split segment"
-msgstr "Bölütü ayır"
+msgstr "Bölütü böl"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:68
 #, kde-format
@@ -40136,7 +40136,7 @@ msgstr ""
 #: plugins/extensions/imagesplit/dlg_imagesplit.cpp:34
 #, kde-format
 msgid "Image Split"
-msgstr "Görsel Ayır"
+msgstr "Görseli Böl"
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
 #, kde-format
@@ -40160,7 +40160,7 @@ msgstr ""
 #: plugins/extensions/imagesplit/imagesplit.cpp:247
 #, kde-format
 msgid "Save Image on Split"
-msgstr "Ayırmada Görseli Kaydet"
+msgstr "Bölmede Görseli Kaydet"
 
 #. i18n: ectx: property (text), widget (QLabel, lblHorizontalSplitLines)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:26
@@ -40205,7 +40205,7 @@ msgstr "Dosya Türü"
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:152
 #, kde-format
 msgid "Autosave on Split"
-msgstr "Ayırmada Otomatik Kaydet"
+msgstr "Bölmede Otomatik Kaydet"
 
 #: plugins/extensions/layergroupswitcher/layergroupswitcher.cpp:31
 #, kde-format
@@ -40220,22 +40220,22 @@ msgstr "Sonraki gruba taşı"
 #: plugins/extensions/layersplit/dlg_layersplit.cpp:30
 #, kde-format
 msgid "Split Layer"
-msgstr "Katmanı Ayır"
+msgstr "Katmanı Böl"
 
 #: plugins/extensions/layersplit/layersplit.cpp:86
 #, kde-format
 msgid "Split into Layers"
-msgstr "Katmanlara Ayır"
+msgstr "Katmanlara Böl"
 
 #: plugins/extensions/layersplit/layersplit.cpp:89
 #, kde-format
 msgid "Split into Masks"
-msgstr "Maskelere Ayır"
+msgstr "Maskelere Böl"
 
 #: plugins/extensions/layersplit/layersplit.cpp:188
 msgctxt "(qtundo-format)"
 msgid "Split Layer"
-msgstr "Katmanı Ayır"
+msgstr "Katmanı Böl"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCreateGroupLayer)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:29
@@ -40295,13 +40295,13 @@ msgstr "Palet Seç"
 #: plugins/extensions/layersplit/wdg_layersplit.ui:111
 #, kde-format
 msgid "Split Into Layers"
-msgstr "Katmanlara Ayır"
+msgstr "Katmanlara Böl"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbMode)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:116
 #, kde-format
 msgid "Split Into Local Selection Masks"
-msgstr "Yerel Seçim Maskelerine Ayır"
+msgstr "Yerel Seçim Maskelerine Böl"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:129
@@ -40312,7 +40312,7 @@ msgid ""
 "active layer.</p></body></html>"
 msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Bir katmanı rengine "
-"göre ayır</span></p><p>Etkin katmandaki her renk için yeni bir katman "
+"göre böl</span></p><p>Etkin katmandaki her renk için yeni bir katman "
 "oluşturur.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -56292,7 +56292,7 @@ msgstr "Şekilleri Çıkar"
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1463
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
-msgstr "Şekilleri Ayır"
+msgstr "Şekilleri Böl"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1831
 #, kde-format

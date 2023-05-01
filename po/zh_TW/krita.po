@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-30 00:45+0000\n"
+"POT-Creation-Date: 2023-05-01 00:49+0000\n"
 "PO-Revision-Date: 2022-11-24 09:58+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -26163,7 +26163,7 @@ msgstr "儲存新視窗版面配置"
 #: libs/ui/forms/wdgnewwindowlayout.ui:30
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:41
 #: libs/ui/forms/wdgstopgradienteditor.ui:41
-#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:197
+#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:200
 #: plugins/extensions/pykrita/plugin/info.ui:217
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:262
 #: plugins/impex/brush/wdg_export_gih.ui:41
@@ -34049,14 +34049,14 @@ msgid "Enter gradient name:"
 msgstr "輸入漸變名稱："
 
 #: libs/ui/widgets/KoFillConfigWidget.cpp:655
-#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:204
+#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:207
 #, kde-format
 msgctxt "@title:window"
 msgid "Name Already Exists"
 msgstr "名稱已存在"
 
 #: libs/ui/widgets/KoFillConfigWidget.cpp:656
-#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:205
+#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:208
 #, kde-format
 msgid "The name '%1' already exists, do you wish to overwrite it?"
 msgstr "已有「%1」名稱的項目，您真的要覆寫嗎？"
@@ -37326,37 +37326,37 @@ msgstr "重設通道"
 msgid "Reset All Channels"
 msgstr "重設全部通道"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:468
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:469
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr "保持固定值，不使用插值。"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:475
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:476
 #, kde-format
 msgid "Linear interpolation."
 msgstr "線性插值"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:482
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:483
 #, kde-format
 msgid "Bezier curve interpolation."
 msgstr "貝茲曲線插值"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:489
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:490
 #, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "銳利切點插值。"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:496
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:497
 #, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "平滑切點插值。"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:503
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:504
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr "縮放檢視到適合通道範圍"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:510
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:511
 #, kde-format
 msgid "Zoom view to fit curve."
 msgstr "縮放檢視到適合曲線"
@@ -37411,22 +37411,22 @@ msgstr "自動關鍵影格：空白"
 msgid "AutoKey Duplicate"
 msgstr "自動關鍵影格：複製"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:443
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:445
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "啟用以保持播放時間"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:451
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:453
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "有效 FPS：%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:452
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:454
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "真實 FPS：%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:453
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:455
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "拋棄的影格：%1%"
@@ -39910,17 +39910,17 @@ msgstr "符號庫"
 msgid "Task Sets"
 msgstr "操作集合"
 
-#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:188
+#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:191
 #, kde-format
 msgid "Taskset"
 msgstr "操作集合"
 
-#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:196
+#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:199
 #, kde-format
 msgid "Taskset Name"
 msgstr "操作集合名稱"
 
-#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:242
+#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:245
 #, kde-format
 msgid "Task sets"
 msgstr "操作集合"

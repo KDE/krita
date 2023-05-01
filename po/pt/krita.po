@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-30 00:45+0000\n"
+"POT-Creation-Date: 2023-05-01 00:49+0000\n"
 "PO-Revision-Date: 2023-04-23 12:57+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -26631,7 +26631,7 @@ msgstr "Gravar a nova disposição da janela"
 #: libs/ui/forms/wdgnewwindowlayout.ui:30
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:41
 #: libs/ui/forms/wdgstopgradienteditor.ui:41
-#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:197
+#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:200
 #: plugins/extensions/pykrita/plugin/info.ui:217
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:262
 #: plugins/impex/brush/wdg_export_gih.ui:41
@@ -34705,14 +34705,14 @@ msgid "Enter gradient name:"
 msgstr "Indique o nome do gradiente:"
 
 #: libs/ui/widgets/KoFillConfigWidget.cpp:655
-#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:204
+#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:207
 #, kde-format
 msgctxt "@title:window"
 msgid "Name Already Exists"
 msgstr "O Nome Já Existe"
 
 #: libs/ui/widgets/KoFillConfigWidget.cpp:656
-#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:205
+#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:208
 #, kde-format
 msgid "The name '%1' already exists, do you wish to overwrite it?"
 msgstr "Já existe o nome '%1'; deseja substituí-lo?"
@@ -38045,37 +38045,37 @@ msgstr "Reiniciar o Canal"
 msgid "Reset All Channels"
 msgstr "Repor Todos os Canais"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:468
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:469
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr "Manter o valor constante. Sem interpolação."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:475
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:476
 #, kde-format
 msgid "Linear interpolation."
 msgstr "Interpolação linear."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:482
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:483
 #, kde-format
 msgid "Bezier curve interpolation."
 msgstr "Interpolação por curva Bézier."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:489
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:490
 #, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "Tangentes de interpolação nítidas."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:496
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:497
 #, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "Tangentes de interpolação suavizadas."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:503
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:504
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr "Ampliar a área para caber o intervalo do canal."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:510
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:511
 #, kde-format
 msgid "Zoom view to fit curve."
 msgstr "Ampliar a área para caber a curva."
@@ -38131,22 +38131,22 @@ msgstr "Auto-Chave em Branco"
 msgid "AutoKey Duplicate"
 msgstr "Auto-Chave Duplicada"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:443
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:445
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Active para preservar os tempos de reprodução."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:451
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:453
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "IPS Efectivas:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:452
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:454
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "IPS Reais:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:453
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:455
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Imagens perdidas:\t%1\\%"
@@ -40668,17 +40668,17 @@ msgstr "Bibliotecas de Símbolos"
 msgid "Task Sets"
 msgstr "Conjuntos de Tarefas"
 
-#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:188
+#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:191
 #, kde-format
 msgid "Taskset"
 msgstr "Conjunto de Tarefas"
 
-#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:196
+#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:199
 #, kde-format
 msgid "Taskset Name"
 msgstr "Nome do Conjunto de Tarefas"
 
-#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:242
+#: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:245
 #, kde-format
 msgid "Task sets"
 msgstr "Conjuntos de tarefas"

@@ -26,6 +26,8 @@ private Q_SLOTS:
     void testProjectionNewMethodTest2();
 
     void testProjectionNewMethod();
+    void testProjectionNewMethodTest3();
+
 
     void testMoveToOrigin();
 

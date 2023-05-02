@@ -27,7 +27,7 @@ kis_add_library(kritaassistanttool_static STATIC ${kritaassistanttool_SOURCES})
 
 generate_export_header(kritaassistanttool_static BASE_NAME kritaassistanttool EXPORT_MACRO_NAME KRITAASSISTANTTOOL_EXPORT)
 
-target_link_libraries(kritaassistanttool_static kritaui kritaflake)
+target_link_libraries(kritaassistanttool_static kritaui kritaflake gsl)
 
 kis_add_library(kritaassistanttool MODULE assistant_tool.cc)
 target_link_libraries(kritaassistanttool kritaassistanttool_static)

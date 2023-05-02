@@ -85,7 +85,19 @@ private:
 };
 
 
+double ConicFunctionsF(double x, void * params);
+double ConicFunctionsDf(double x, void * params);
+void ConicFunctionsFdf(double x, void *params, double *y, double *dy);
+void GslErrorHandler(const char * reason, const char * file, int line, int gsl_errno);
+
+
 struct ConicCalculations {
+
+    struct GslRootFunctions {
+        double f(double x, void * params);
+        double df(double x, void * params);
+        void fdf(double x, void *params, double *y, double *dy);
+    };
 
 public:
     // all calculations for Ellipse In Polygon
@@ -200,7 +212,9 @@ public:
 
 
 
-    static QVector<double> getRotatedFormula(QVector<double> original, qreal &K, qreal &L);
+    static QVector<double> rotateFormulaToAxis(QVector<double> original, qreal &K, qreal &L);
+    Q_DECL_DEPRECATED static QVector<double> getRotatedFormulaOld(QVector<double> original, qreal &K, qreal &L);
+    static QVector<double> getRotatedFormula(QVector<double> original, qreal K, qreal L, bool unrotate = false);
     static QPointF getRotatedPoint(QPointF point, qreal K, qreal L, bool unrotate = false);
 
     // ----- data -----

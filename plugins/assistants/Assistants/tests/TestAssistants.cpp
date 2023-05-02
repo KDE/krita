@@ -538,6 +538,311 @@ void TestAssistants::testProjectionNewMethod()
 
 }
 
+void TestAssistants::testProjectionNewMethodTest3()
+{
+    EllipseInPolygon concentric;
+    EllipseInPolygon original;
+    ENTER_FUNCTION() << "(1)";
+
+    qreal eps = 1e-6;
+
+    QPointF point;
+
+
+    // test 1:
+    // just a normal circle 0-1
+
+    QPolygonF poly = QPolygonF(QRectF(0.0, 0.0, 2.0, 2.0));
+    ENTER_FUNCTION() << poly;
+    poly = QPolygonF();
+    poly << QPointF(0, 0) << QPointF(1, 0) << QPointF(1, 1) << QPointF(0, 1);
+
+    original.updateToPolygon(poly, QLineF(0.0, 0.0, 1.0, 0.0));
+
+    ENTER_FUNCTION() << "(2)";
+
+    point = QPointF(3, 3);
+
+    QPointF result;
+    /*
+    QPointF result = original.projectModifiedEberly(point);
+    ENTER_FUNCTION() << ppVar(result);
+    */
+
+    auto form = [] (QPointF p, EllipseInPolygon f) {
+        return f.finalFormula[0]*p.x()*p.x()
+                + f.finalFormula[1]*p.x()*p.y()
+                + f.finalFormula[2]*p.y()*p.y()
+                + f.finalFormula[3]*p.x()
+                + f.finalFormula[4]*p.y()
+                + f.finalFormula[5];
+    };
+
+
+    /*
+    QRandomGenerator gen;
+    qreal eps = 0.00001;
+    for (int i = 0; i < 100; i++) {
+        QPointF p(gen.bounded(5.0), gen.bounded(5.0));
+        QPointF res = original.projectModifiedEberly(p);
+        ENTER_FUNCTION() << "Result is on the ellipse: " << form(res, original);
+        QVERIFY(form(res, original) < eps);
+    }
+    */
+
+    point = QPointF(0.0226453,-2.99636);
+
+    ENTER_FUNCTION() << "************************ START **************************";
+
+    result = original.projectModifiedEberlyThird(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+    QVERIFY(form(result, original) < eps);
+
+    ENTER_FUNCTION() << "************************ START 2 **************************";
+
+    poly.clear();
+    poly << QPointF(704.529,342.744)  << QPointF(1049.58,529.788) << QPointF(683.107,1006.81)
+         << QPointF(349.884,528.397);
+    original.updateToPolygon(poly, QLineF());
+    point = QPointF(749.893,461.21);
+
+    result = original.projectModifiedEberlyThird(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+    QVERIFY(form(result, original) < eps);
+
+
+    ENTER_FUNCTION() << "************************ START 3 **************************";
+    // Test 3.
+    // ellipse: 2x^2 + xy + 1y^2 = 5
+    // so: 2, 1, 2, 0, 0, -5
+
+    original.finalFormula.clear();
+    original.finalFormula << 2 << 1 << 2 << 0 << 0 << -5;
+
+    point = QPointF(5, 5);
+
+
+    result = original.projectModifiedEberlyThird(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+    QVERIFY(form(result, original) < eps);
+
+
+    ENTER_FUNCTION() << "************************ START 4 ************************";
+    // Test 3.
+    // ellipse: 2x^2 + xy + 1y^2 = 5
+    // so: 2, 1, 2, 0, 0, -5
+
+
+
+    original.finalFormula.clear();
+    original.finalFormula << 2 << 1 << 2 << 0 << 0 << -5;
+
+    point = QPointF(0, sqrt(5/2.0));
+
+
+    result = original.projectModifiedEberlyThird(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+    QVERIFY(form(result, original) < eps);
+
+
+
+    ENTER_FUNCTION() << "************************ START 5 ************************";
+    // Test 3.
+    // ellipse: 2x^2 + xy + 1y^2 = 5
+    // so: 2, 1, 2, 0, 0, -5
+
+
+    original.finalFormula.clear();
+    original.finalFormula << 2 << 1 << 2 << 0 << 0 << -5;
+
+    point = QPointF(sqrt(5/2.0), sqrt(5/2.0));
+
+    result = original.projectModifiedEberlyThird(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+    QVERIFY(form(result, original) < eps);
+
+
+    ENTER_FUNCTION() << "************************ START 6 ************************";
+    // Test 3.
+    // ellipse: 2x^2 + xy + 1y^2 = 5
+    // so: 2, 1, 2, 0, 0, -5
+
+
+
+    original.finalFormula.clear();
+    original.finalFormula << 2 << 1 << 2 << 0 << 0 << -5;
+
+    point = QPointF(0, -sqrt(5/2.0) -5.0);
+
+    result = original.projectModifiedEberlyThird(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+
+    //QVERIFY(form(result, original) < eps);
+    QVERIFY(form(result, original) < eps);
+
+
+
+    ENTER_FUNCTION() << "************************ START 7 (real, but nicer numbers) **************************";
+
+
+    poly.clear();
+    poly << QPointF(700,350)  << QPointF(1050,530) << QPointF(700,1000)
+         << QPointF(350,530);
+    original.updateToPolygon(poly, QLineF());
+    point = QPointF(750,460);
+
+    result = original.projectModifiedEberlyThird(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+    QVERIFY(form(result, original) < eps);
+
+
+    ENTER_FUNCTION() << "************************ START 8 (real 2, leading to the \"weird situation\") **************************";
+
+    // The values were:  polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(683.107,1006.81), QPointF(349.884,528.397))
+    // originalPoint = QPointF(1067.62,719.146) and unfortunate result: result = QPointF(1057.48,709.158)
+    poly.clear();
+    poly << QPointF(704.529,342.744) << QPointF(1049.58,529.788) << QPointF(683.107,1006.81) << QPointF(349.884,528.397);
+    original.updateToPolygon(poly, QLineF());
+    point = QPointF(1067.62,719.146);
+
+    result = original.projectModifiedEberlyThird(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+    QVERIFY(form(result, original) < eps);
+
+    ENTER_FUNCTION() << "************************ START 9 (real 3, leading to the fd being zero in Newton, and then nans) **************************";
+
+    // The values were:  polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(683.107,1006.81), QPointF(349.884,528.397))
+    // originalPoint = QPointF(1067.62,719.146) and unfortunate result: result = QPointF(1057.48,709.158)
+    poly.clear();
+    poly << QPointF(704.529,342.744) << QPointF(1049.58,529.788) << QPointF(722.562,626.904) << QPointF(349.884,528.397);
+    original.updateToPolygon(poly, QLineF());
+    point = QPointF(553.452,264.769);
+
+    result = original.projectModifiedEberlyThird(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+    QVERIFY(form(result, original) < eps);
+
+
+    // polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(722.562,626.904), QPointF(349.884,528.397)) point = QPointF(553.452,264.769)
+
+
+    ENTER_FUNCTION() << "************************ START 10 (mirroring A - no mirroring) **************************";
+
+    // The values were:  polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(683.107,1006.81), QPointF(349.884,528.397))
+    // originalPoint = QPointF(1067.62,719.146) and unfortunate result: result = QPointF(1057.48,709.158)
+    poly.clear();
+    poly << QPointF(0, 0) << QPointF(400, 0) << QPointF(300, 200) << QPointF(100, 200);
+    original.updateToPolygon(poly, QLineF());
+    point = QPointF(300, 300);
+
+    result = original.projectModifiedEberlyThird(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+    QVERIFY(form(result, original) < eps);
+
+
+    ENTER_FUNCTION() << "************************ START 10 (mirroring) **************************";
+
+    // The values were:  polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(683.107,1006.81), QPointF(349.884,528.397))
+    // originalPoint = QPointF(1067.62,719.146) and unfortunate result: result = QPointF(1057.48,709.158)
+    poly.clear();
+    poly << QPointF(0, 0) << QPointF(400, 0) << QPointF(300, 200) << QPointF(100, 200);
+    original.updateToPolygon(poly, QLineF());
+    // on the same side
+    point = QPointF(300, 200);
+
+
+    result = original.projectModifiedEberlyThird(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+    QVERIFY(form(result, original) < eps);
+
+    // the same but mirrored
+    point = QPointF(300, 600);
+
+
+    result = original.projectModifiedEberlyThird(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+    QVERIFY(form(result, original) < eps);
+
+    ENTER_FUNCTION() << "************************ START 11 (mirroring - better) **************************";
+
+    // The values were:  polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(683.107,1006.81), QPointF(349.884,528.397))
+    // originalPoint = QPointF(1067.62,719.146) and unfortunate result: result = QPointF(1057.48,709.158)
+    poly.clear();
+    poly << QPointF(0, 0) << QPointF(400, 0) << QPointF(300, 200) << QPointF(100, 200);
+    //original.updateToPolygon(poly, QLineF());
+    QTransform transform;
+    QTransform::squareToQuad(poly, transform);
+    original.updateToPointOnConcentricEllipse(transform, QPointF(0, 200), QLineF(QPointF(0, 400), QPointF(400, 400)));
+    // on the same side
+    point = QPointF(300, 200);
+
+
+
+    result = original.projectModifiedEberlyThird(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+    QVERIFY(form(result, original) < eps);
+
+    // the same but mirrored
+    point = QPointF(300, 600);
+
+
+    original.updateToPointOnConcentricEllipse(transform, QPointF(800, 200), QLineF(QPointF(0, 400), QPointF(400, 400)), true);
+    result = original.projectModifiedEberlyThird(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+    QVERIFY(form(result, original) < eps);
+
+
+}
+
 void TestAssistants::testMoveToOrigin()
 {
     ConicFormula f;

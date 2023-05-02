@@ -12,6 +12,9 @@
 #include <QPainterPath>
 #include <QLinearGradient>
 #include <QTransform>
+#include <gsl/gsl_roots.h>
+#include <gsl/gsl_errno.h>
+#include <gsl/gsl_math.h>
 
 
 #include <Eigen/Eigenvalues>
@@ -601,7 +604,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     QPointF pointRotatedSecondVersion = point;
     qreal K;
     qreal L;
-    QVector<double> formulaDRotatedAlternativeTrue = getRotatedFormula(f.formCCanonized.getFormulaActual(), K, L);
+    QVector<double> formulaDRotatedAlternativeTrue = getRotatedFormulaOld(f.formCCanonized.getFormulaActual(), K, L);
     pointRotatedSecondVersion = getRotatedPoint(pointRotatedSecondVersion, K, L);
     f.formDRotatedSecondVersion = ConicFormula(formulaDRotatedAlternativeTrue, "formula D - rotated, alternative", ConicFormula::ACTUAL);
     f.formDRotatedSecondVersion.convertTo(ConicFormula::SPECIAL);
@@ -1162,7 +1165,7 @@ QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point)
     auto resultI = ConicCalculations::negateY(f.formHNegatedX);
 
     f.formINegatedY = std::get<0>(resultI);
-    f.formINegatedY.Name = "form H - negated X (cf)";
+    f.formINegatedY.Name = "form I - negated Y (cf)";
     bool negateY = std::get<1>(resultI);
 
     if (qAbs(f.formINegatedY.C) < 1e-12) {
@@ -1217,6 +1220,58 @@ QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point)
     } else {
         if (debug) ENTER_FUNCTION() << "# NO OVERSHOOT # values are: " << ppVar(tresult) << ppVar(previousT) << ppVar(Pt(tresult)) << ppVar(Pt(previousT));
     }
+
+
+
+    double x = t0;
+
+    {
+        gsl_error_handler_t* oldHandler = gsl_set_error_handler(&GslErrorHandler);
+        const gsl_root_fdfsolver_type* T = gsl_root_fdfsolver_newton;
+        gsl_root_fdfsolver* s = gsl_root_fdfsolver_alloc (T);
+        gsl_function_fdf fdf;
+        fdf.f = &ConicFunctionsF;
+        fdf.df = &ConicFunctionsDf;
+        fdf.fdf = &ConicFunctionsFdf;
+        ENTER_FUNCTION() << "Before doing any gsl:";
+        f.formINegatedY.printOutInAllForms();
+        fdf.params = &f.formINegatedY;
+        int r = gsl_root_fdfsolver_set(s, &fdf, t0);
+        double x0 = t0;
+
+        double r_expected = 1e-15;
+
+        int iter = 0;
+        int status;
+        int max_iter = 1000;
+        ENTER_FUNCTION() << "########## ????";
+        do {
+          iter++;
+          status = gsl_root_fdfsolver_iterate(s);
+          x0 = x;
+          x = gsl_root_fdfsolver_root (s);
+          status = gsl_root_test_delta (x, x0, 0, 1e-10);
+                  //gsl_root_test
+
+          if (status == GSL_SUCCESS) {
+              printf ("Converged:\n");
+              ENTER_FUNCTION() << "Converged, apparently";
+          }
+
+          printf ("%5d %10.7f %+10.7f %10.7f\n",
+                  iter, x, x - r_expected, x - x0);
+          ENTER_FUNCTION() << iter << x << x - r_expected << x - x0;
+
+        } while (status == GSL_CONTINUE && iter < max_iter);
+
+        gsl_root_fdfsolver_free (s);
+        gsl_set_error_handler(oldHandler);
+    }
+
+    ENTER_FUNCTION() << "DIFFERENCE IN NEWTON:" << ppVar(tresult) << ppVar(x);
+    ENTER_FUNCTION() << "DIFFERENCE IN NEWTON, values: " << ppVar(Ptd(tresult)) << ppVar(Ptd(x)) << ppVar(Pt(tresult)) << ppVar(Pt(x));
+
+    tresult = x;
 
 
     qreal foundX = -f.formINegatedY.D*tresult/qPow(f.formINegatedY.A*tresult + 1, 1);
@@ -1610,7 +1665,7 @@ qreal EllipseInPolygon::calculateFormula(QVector<double> formula, QPointF point)
             + formula[5]; // f
 }
 
-QVector<double> EllipseInPolygon::getRotatedFormula(QVector<double> original, qreal& K, qreal& L)
+QVector<double> EllipseInPolygon::getRotatedFormulaOld(QVector<double> original, qreal& K, qreal& L)
 {
     qreal a = original[0];
     qreal b = original[1];
@@ -1649,6 +1704,60 @@ QVector<double> EllipseInPolygon::getRotatedFormula(QVector<double> original, qr
     response << aprim << bprim << cprim << dprim << eprim << fprim;
     return response;
 
+}
+
+
+QVector<double> EllipseInPolygon::rotateFormulaToAxis(QVector<double> original, qreal& K, qreal& L)
+{
+    qreal a = original[0];
+    qreal b = original[1];
+    qreal c = original[2];
+
+    qreal angle = qAtan2(b, a - c)/2;
+
+    // use finalAxisAngle to find the cos and sin
+    // and replace the final coordinate system with the rerotated one
+    K = qCos(-angle);
+    L = qSin(-angle);
+
+    return getRotatedFormula(original, K, L, false);
+
+}
+
+QVector<double> EllipseInPolygon::getRotatedFormula(QVector<double> original, qreal K, qreal L, bool unrotate)
+{
+    qreal a = original[0];
+    qreal b = original[1];
+    qreal c = original[2];
+    qreal d = original[3];
+    qreal e = original[4];
+    qreal f = original[5];
+
+    qreal k = L;
+    qreal l = unrotate ? -L : L;
+
+    // this allows to calculate the formula for the rerotated ellipse
+    qreal aprim = k*k*a - k*l*b + l*l*c;
+    qreal bprim = 2*k*l*a + k*k*b - l*l*b - 2*k*l*c;
+    qreal cprim = l*l*a + k*l*b + k*k*c;
+    qreal dprim = k*d - l*e;
+    qreal eprim = l*d + k*e;
+    qreal fprim = f;
+
+    //finalAxisReverseAngleCos = K;
+    //finalAxisReverseAngleSin = L;
+
+    // third attempt at new center:
+    // K' = K
+    // L' = -L
+    // note that this will be in a different place, because the ellipse wasn't moved to have center in (0, 0), but still rotate around point (0,0)
+    // and any point that is not (0, 0), when rotated around (0, 0) with an angle that isn't 0, 360 etc. degrees, will end up in a different place
+    //QPointF rerotatedCenter = QPointF(K*finalEllipseCenter[0] - L*finalEllipseCenter[1], K*finalEllipseCenter[1] + L*finalEllipseCenter[0]);
+
+
+    QVector<double> response;
+    response << aprim << bprim << cprim << dprim << eprim << fprim;
+    return response;
 }
 
 QPointF EllipseInPolygon::getRotatedPoint(QPointF point, qreal K, qreal L, bool unrotate)
@@ -2106,7 +2215,7 @@ std::tuple<ConicFormula, double, double, QPointF> ConicCalculations::rotateFormu
     QPointF pointRotatedSecondVersion = point;
     qreal K;
     qreal L;
-    QVector<double> formulaDRotatedAlternativeTrue = EllipseInPolygon::getRotatedFormula(formula.getFormulaActual(), K, L);
+    QVector<double> formulaDRotatedAlternativeTrue = EllipseInPolygon::getRotatedFormulaOld(formula.getFormulaActual(), K, L);
     pointRotatedSecondVersion = EllipseInPolygon::getRotatedPoint(pointRotatedSecondVersion, K, L);
     result = ConicFormula(formulaDRotatedAlternativeTrue, "formula D - rotated, alternative", ConicFormula::ACTUAL);
     result.convertTo(ConicFormula::SPECIAL);
@@ -2139,7 +2248,7 @@ ConicFormula ConicCalculations::moveToOrigin(ConicFormula formula, double u, dou
 
 std::tuple<ConicFormula, bool> ConicCalculations::swapXY(ConicFormula ff)
 {
-    ConicFormula r;
+    ConicFormula r = ff;
     bool swapXandY = false;
     if (qAbs(ff.C) < qAbs(ff.A)) {
         swapXandY = true;
@@ -2156,6 +2265,7 @@ std::tuple<ConicFormula, bool> ConicCalculations::swapXY(ConicFormula ff)
 ConicFormula ConicCalculations::negateAllSigns(ConicFormula formula)
 {
     ConicFormula response = formula;
+    response.Name = "Negated All Signs";
     if (formula.C < 0) {
         // negate all signs
         response.A = -formula.A;
@@ -2172,6 +2282,7 @@ ConicFormula ConicCalculations::negateAllSigns(ConicFormula formula)
 std::tuple<ConicFormula, bool> ConicCalculations::negateX(ConicFormula formula)
 {
     ConicFormula response = formula;
+    response.Name = "Negated X";
     bool negated = false;
     if (formula.D < 0) {
         response.D = -formula.D;
@@ -2184,6 +2295,7 @@ std::tuple<ConicFormula, bool> ConicCalculations::negateX(ConicFormula formula)
 std::tuple<ConicFormula, bool> ConicCalculations::negateY(ConicFormula formula)
 {
     ConicFormula response = formula;
+    response.Name = "Negated Y";
     bool negated = false;
     if (formula.E < 0) {
         response.E = -formula.E;
@@ -2384,4 +2496,79 @@ qreal AlgebraFunctions::bisectionMethod(std::function<qreal (qreal)> f, qreal ta
     if (debug) ENTER_FUNCTION() << "Actual steps = " << i;
 
     return t;
+}
+
+double ConicCalculations::GslRootFunctions::f(double x, void *params)
+{
+    double response, forget;
+    fdf(x, params, &response, &forget);
+    return response;
+}
+
+double ConicCalculations::GslRootFunctions::df(double x, void *params)
+{
+    double response, forget;
+    fdf(x, params, &forget, &response);
+    return response;
+}
+
+void ConicCalculations::GslRootFunctions::fdf(double x, void *params, double *y, double *dy)
+{
+    ConicFormula* f = (ConicFormula*)(params);
+    ConicFormula ff = *f;
+    auto Pt = [ff] (double t) {
+        //ConicFormula ff = f;
+        return -ff.D*ff.D*t*((ff.A*t + 2)/((ff.A*t + 1)*(ff.A*t + 1))) - ff.E*ff.E * t * (ff.C*t+2)/((ff.C*t+1)*(ff.C*t+1)) + ff.F;
+    };
+
+    auto Ptd = [ff] (double t) {
+        //ConicFormula ff = f.formINegatedY;
+        return - (2*ff.D*ff.D)/(qPow(ff.A*t*t + 1, 3)) - (2*ff.E*ff.E)/qPow(ff.C*t*t + 1, 3);
+    };
+    *y = Pt(x);
+    *dy = Ptd(x);
+
+}
+
+double ConicFunctionsF(double x, void *params)
+{
+    ConicFormula ff = *(ConicFormula*)(params);
+    ENTER_FUNCTION() << "conic in f:";
+    ff.printOutInAllForms();
+    auto Pt = [ff] (double t) {
+        //ConicFormula ff = f;
+        double r = -ff.D*ff.D*t*((ff.A*t + 2)/((ff.A*t + 1)*(ff.A*t + 1))) - ff.E*ff.E * t * (ff.C*t+2)/((ff.C*t+1)*(ff.C*t+1)) + ff.F;
+        ENTER_FUNCTION() << "returning r: " << r;
+        return r;
+    };
+    ENTER_FUNCTION() << "f result is = " << Pt(x);
+    return Pt(x);
+}
+
+double ConicFunctionsDf(double x, void *params)
+{
+    ConicFormula ff = *(ConicFormula*)(params);
+    ENTER_FUNCTION() << "conic in df:";
+    ff.printOutInAllForms();
+    auto Ptd = [ff] (double t) {
+        //ConicFormula ff = f.formINegatedY;
+        //double r = - (2*ff.D*ff.D)/(qPow(ff.A*t*t + 1, 3)) - (2*ff.E*ff.E)/qPow(ff.C*t*t + 1, 3);
+        double r = - (2*ff.D*ff.D)/(qPow(ff.A*t + 1, 3)) - (2*ff.E*ff.E)/qPow(ff.C*t + 1, 3);
+        ENTER_FUNCTION() << "returning r: " << r;
+        return r;
+    };
+    ENTER_FUNCTION() << "df result is = " << Ptd(x);
+    return Ptd(x);
+}
+
+void ConicFunctionsFdf(double x, void *params, double *y, double *dy)
+{
+    *y = ConicFunctionsF(x, params);
+    *dy = ConicFunctionsDf(x, params);
+    ENTER_FUNCTION() << "fdf results are: " << *y << *dy;
+}
+
+void GslErrorHandler(const char *reason, const char *file, int line, int gsl_errno)
+{
+    ENTER_FUNCTION() << reason << file << line << gsl_errno;
 }

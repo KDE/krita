@@ -42,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-01 00:49+0000\n"
-"PO-Revision-Date: 2023-04-20 23:30+0100\n"
+"POT-Creation-Date: 2023-05-02 00:46+0000\n"
+"PO-Revision-Date: 2023-05-01 05:19+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -16385,11 +16385,10 @@ msgstr "Malzo&mi"
 #. i18n: ectx: property (text), widget (KisColorButton, bnColor)
 #. i18n: ectx: property (text), widget (KisColorButton, bnHighlightColor)
 #. i18n: ectx: property (text), widget (KisColorButton, bnShadowColor)
-#. i18n: ectx: property (text), widget (QToolButton, filePickerButton)
 #. i18n: ectx: property (text), widget (QToolButton, ffmpegPickerButton)
 #. i18n: ectx: property (text), widget (QToolButton, ffprobePickerButton)
-#. i18n: ectx: property (text), widget (QToolButton, bnRenderOptions)
 #. i18n: ectx: property (text), widget (QToolButton, bnExportOptions)
+#. i18n: ectx: property (text), widget (QToolButton, bnRenderOptions)
 #. i18n: ectx: property (text), widget (QToolButton, m_bnFileName)
 #. i18n: ectx: property (text), widget (QToolButton, bnLandscape)
 #. i18n: ectx: property (text), widget (QToolButton, bnPortrait)
@@ -16443,11 +16442,10 @@ msgstr "Malzo&mi"
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:154
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:161
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:168
-#: libs/ui/animation/VideoImportDialog.ui:54
-#: libs/ui/animation/VideoImportDialog.ui:667
-#: libs/ui/animation/VideoImportDialog.ui:687
-#: libs/ui/animation/wdg_animationrenderer.ui:258
-#: libs/ui/animation/wdg_animationrenderer.ui:400
+#: libs/ui/animation/VideoImportDialog.ui:625
+#: libs/ui/animation/VideoImportDialog.ui:652
+#: libs/ui/animation/wdg_animationrenderer.ui:77
+#: libs/ui/animation/wdg_animationrenderer.ui:213
 #: libs/ui/forms/wdggeneralsettings.ui:460 libs/ui/forms/wdgnewimage.ui:273
 #: libs/ui/forms/wdgnewimage.ui:292
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:291
@@ -16617,8 +16615,8 @@ msgstr "Grandeco"
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinScaleWidth)
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinScaleHeight)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:40
-#: libs/ui/animation/wdg_animationrenderer.ui:157
-#: libs/ui/animation/wdg_animationrenderer.ui:196
+#: libs/ui/animation/wdg_animationrenderer.ui:150
+#: libs/ui/animation/wdg_animationrenderer.ui:164
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:749
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:753
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:956
@@ -16937,7 +16935,7 @@ msgstr "Hermite"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:72
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:122
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:123
 #: libs/ui/widgets/KoFillConfigWidget.ui:421
 #, kde-format
 msgid "Bicubic"
@@ -16953,7 +16951,7 @@ msgstr ""
 "glatajn tonajn gradaĵojn ol Bilinear."
 
 #: libs/image/kis_filter_strategy.h:86
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:125
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:126
 #, kde-format
 msgid "Nearest Neighbor"
 msgstr "Plej Proksima Najbaro"
@@ -16969,7 +16967,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:123
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
 #: libs/ui/canvas/kis_canvas_controller.cpp:369
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
@@ -16998,7 +16996,7 @@ msgid "BSpline"
 msgstr "BSpline"
 
 #: libs/image/kis_filter_strategy.h:146
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:125
 #, kde-format
 msgid "Lanczos3"
 msgstr "Lanczos3"
@@ -17434,7 +17432,7 @@ msgstr "Musrapideco:"
 #: libs/image/kis_update_time_monitor.cpp:193
 #, kde-format
 msgid "Jobs/Update:"
-msgstr "Laborpostenoj/Ĝisdatigo:"
+msgstr "Taskoj/Ĝisdatigo:"
 
 #: libs/image/kis_update_time_monitor.cpp:194
 #, kde-format
@@ -19331,7 +19329,7 @@ msgstr "Elen"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1173
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:496 libs/ui/KisView.cpp:1173
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19367,18 +19365,18 @@ msgstr "Lokaj Rimedoj"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:688
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:563
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:605
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:612
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:679
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:719
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:789
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:920
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:717
@@ -19471,7 +19469,7 @@ msgstr "Ne eblis aldoni %1 al la datumbazo"
 #: libs/resources/KisResourceLocator.cpp:1190
 #, kde-format
 msgid "Could not remove storage %1 from the database"
-msgstr "Ne eblis forigi stokadon %1 el la datumbazo"
+msgstr "Ne eblis forigi konservejon %1 el la datumbazo"
 
 #: libs/resources/KisResourceLocator.cpp:955
 #, kde-format
@@ -19623,12 +19621,12 @@ msgstr "Granda Bildeton"
 msgid "Dirty"
 msgstr "Malpura"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/resources/KisResourceModel.cpp:154
 #: libs/resources/KisTagResourceModel.cpp:656
-#: libs/ui/animation/VideoImportDialog.ui:197
+#: libs/ui/animation/VideoImportDialog.ui:149
 #: plugins/dockers/logdocker/LogDockerDock.cpp:187
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:844
@@ -20400,12 +20398,34 @@ msgstr "N/A"
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Ne donis validan FFmpeg-binarprogramon..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:445
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:463
 #, kde-format
-msgid "FFmpeg Version: "
-msgstr "FFMpeg Versio: "
+msgctxt "ffmpeg warning checks"
+msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
+msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:470
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
+#| "animated gif images cannot have a framerate higher than 50. The framerate "
+#| "will be reduced to 50 frames per second.</p></body></html>"
+msgctxt "ffmpeg warning checks"
+msgid ""
+"Animated GIF images cannot have a framerate higher than 50. The framerate "
+"will be reduced to 50 frames per second"
+msgstr ""
+"<html><head/><body><p><span style=\" font-weight:600;\">Averto:</span> "
+"viglaj gif-bildoj ne povas havi framrapidecon pli altan ol 50. La "
+"framfrekvenco estos reduktita. ĝis 50 kadroj sekundo.</p></body></html>"
+
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:477
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
+#, kde-format
+msgid "Warning(s):"
+msgstr "Averto(j):"
+
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20414,21 +20434,16 @@ msgstr ""
 "La FFmpeg, kiun vi donis, ŝajnas esti kunpremita. Bonvolu unue provu "
 "ekstrakti FFmpeg de la arkivo."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
-#, fuzzy, kde-format
-#| msgid ""
-#| "The FFmpeg that you've given us appears to be "
-#| "invalid.                                                     Please "
-#| "select the correct location of an FFmpeg executable on your system."
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
-"La FFmpeg, kiun vi donis, ŝajnas esti "
-"nevalida.                                                    Bonvolu elekti "
-"Bonvolu elekti la ĝustan lokon de FFmpeg-plenumeblaĵo en via sistemo."
+"La FFmpeg, kiun vi donis, ŝajnas esti nevalida. Bonvolu elekti la ĝustan "
+"lokon de FFmpeg-binarprogramo en via sistemo."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:688
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Bonvolu enigi dosiernomon por bildigi."
@@ -20446,34 +20461,34 @@ msgstr ""
 "FFMpeg ne trovita! Bonvolu aldoni vojon al FFMpeg en la langeto \"Altnivela"
 "\"."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:80
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:81
 #, kde-format
 msgctxt "FPS as a unit following a value, like 60 FPS"
 msgid " FPS"
 msgstr "FPS"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:87
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:93
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:666
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:88
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:94
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:645
 #, kde-format
 msgctxt "Second as a unit following a value, like 60 s"
 msgid " s"
 msgstr "s"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:99
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:100
 #, kde-format
 msgctxt "Import video to New Document"
 msgid "New Document"
 msgstr "Nova Dokumento"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:102
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:103
 #, kde-format
 msgctxt "Import video to Current Document"
 msgid "Current Document"
 msgstr "Nuna Dokumento"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:105
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:631
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:106
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:610
 #, kde-format
 msgctxt "Video importer: fps of the document you're importing into"
 msgid ""
@@ -20483,24 +20498,24 @@ msgstr ""
 "<small>Dokumento:\n"
 " %1 FPS</small>"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:126
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:127
 #, kde-format
 msgctxt "An interpolation method"
 msgid "Spline"
 msgstr "Spline"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #, kde-format
 msgid "Failed to create a work directory, make sure you have write permission"
 msgstr "Malsukcesis krei labordosierujon, certigu, ke vi havas skribpermeson"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:188
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:183
 #, kde-format
 msgctxt "Title for a messagebox"
 msgid "Krita"
 msgstr "Krito"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:189
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:184
 #, kde-format
 msgid ""
 "Warning: you are trying to import more than 100 frames into Krita.\n"
@@ -20515,7 +20530,7 @@ msgstr ""
 "Se vi volas redakti klipo pli grandan ol 100 kadrojn, konsideru uzi realan "
 "videoredaktilon, kiel Kdenlive (https://kdenlive.org)."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:241
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:236
 #, kde-format
 msgctxt ""
 "FFMPEG animated video import message. arg1: frame progress number. arg2: "
@@ -20523,59 +20538,59 @@ msgctxt ""
 msgid "Extracted %1 frames from %2 video."
 msgstr "Eltiris %1 kadrojn el %2 video."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
 #, kde-format
 msgid "Failed to export frames from video"
 msgstr "Malsukcesis eksporti kadrojn el video"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:362
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:348
 #, kde-format
 msgid "Select your Video File"
 msgstr "Elekti vian Videodosieron"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:395
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:374
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Width: %1 px"
 msgstr "Larĝo: %1 px"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:396
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:375
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Height: %1 px"
 msgstr "Alteco: %1 px"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:400
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:379
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Primaries: %1"
 msgstr "Koloraj Primaroj: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:403
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:382
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Transfer: %1"
 msgstr "Kolora Transdono: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:406
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:385
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Duration: %1 s"
 msgstr "Daŭro: %1 s"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:407
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:386
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Frames: %1"
 msgstr "Kadroj: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:408
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:387
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "FPS: %1"
 msgstr "FPS: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:412
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid ""
@@ -20585,23 +20600,27 @@ msgstr ""
 "*<font size='0.5em'><em>*FPS ne ĝuste en dosiero. Modifita por vidi plenan "
 "daŭron</em></font>"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:511
-#, kde-format
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
+#, fuzzy, kde-format
+#| msgctxt "part of warning in video importer."
+#| msgid ""
+#| "WARNING, you are trying to import %1 frames, the maximum amount you can "
+#| "import is %2."
 msgctxt "part of warning in video importer."
 msgid ""
-"WARNING, you are trying to import %1 frames, the maximum amount you can "
-"import is %2."
+"<b>Warning:</b> you are trying to import %1 frames, the maximum amount you "
+"can import is %2."
 msgstr ""
 "AVERTO, vi provas importi %1 kadrojn, la maksimuma kvanto, kiun vi povas "
 "importi, estas %2."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:518
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
 msgstr "Anstataŭe uzu <a href=\"https://kdenlive.org\">videoredaktilo</a>!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:524
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:499
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20611,7 +20630,7 @@ msgstr ""
 "Vi ne havas sufiĉan memoron por ŝargi tiom da kadroj, la komputilo estos "
 "troŝarĝita."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:531
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:507
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20620,53 +20639,57 @@ msgstr ""
 "Ĉi tio prenos pli ol duonon de la disponebla memoro, redaktado estos "
 "malfacila."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:540
-#, kde-format
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
+#, fuzzy, kde-format
+#| msgctxt "part of warning in video importer."
+#| msgid ""
+#| "Krita does not support the video transfer curve (%1), it will be loaded "
+#| "as linear"
 msgctxt "part of warning in video importer."
 msgid ""
 "Krita does not support the video transfer curve (%1), it will be loaded as "
-"linear"
+"linear."
 msgstr ""
 "Krita ne subtenas la videotransiga kurbo (%1), ĝi estos ŝarĝita kiel lineara"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:570
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
 #, kde-format
 msgid "Open FFProbe"
 msgstr "Malfermi FFProbe"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:563
 #, kde-format
 msgid "FFProbe is invalid!"
 msgstr "FFProbe estas nevalida!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:593
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:570
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
 #, kde-format
 msgid "Open FFMpeg"
 msgstr "Malfermi FFMpeg"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:605
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
 #, kde-format
 msgid "FFMpeg is invalid!"
 msgstr "FFMpeg estas malvalida!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:612
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
 #, kde-format
 msgid "No FFMpeg found!"
 msgstr "Neniu FFMpeg trovita!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:679
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
 #, kde-format
 msgid "Your FFMpeg version does not support this format"
 msgstr "Via FFMpeg-versio ne subtenas ĉi tiun formaton"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:719
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
 #, kde-format
 msgid "No video stream could be found!"
 msgstr "Neniu videofluo troveblas!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:789
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #, kde-format
 msgid "Failed to load video information"
 msgstr "Malsukcesis ŝargi videoinformojn"
@@ -20680,7 +20703,7 @@ msgstr "FFMpeg paneis"
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
-msgstr "Ŝarĝante videodatenojn... %1 kadroj ekzamenitaj."
+msgstr "Ŝargante videodatenojn... %1 kadroj ekzamenitaj."
 
 #: libs/ui/animation/KisVideoSaver.cpp:52
 #, kde-format
@@ -20701,18 +20724,31 @@ msgctxt ""
 msgid "Creating desired %1 file: %2/%3 frames."
 msgstr "Kreante deziratan %1 dosieron: %2/%3 kadroj."
 
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: libs/ui/animation/video_export_options_dialog.ui:13
+#, kde-format
+msgid "Codec:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
+#: libs/ui/animation/video_export_options_dialog.ui:23
+#, fuzzy, kde-format
+#| msgid "No options"
+msgid "Codec options"
+msgstr "Neniuj elektoj"
+
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/animation/video_export_options_dialog.ui:31
-#: libs/ui/animation/video_export_options_dialog.ui:168
+#: libs/ui/animation/video_export_options_dialog.ui:45
+#: libs/ui/animation/video_export_options_dialog.ui:223
 #, kde-format
 msgid "Bitrate:"
 msgstr "Bitrapideco:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH264)
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH265)
-#: libs/ui/animation/video_export_options_dialog.ui:52
-#: libs/ui/animation/video_export_options_dialog.ui:103
+#: libs/ui/animation/video_export_options_dialog.ui:78
+#: libs/ui/animation/video_export_options_dialog.ui:141
 #, kde-format
 msgid "Constant Rate Factor:"
 msgstr "Konstanta Indika Faktoro:"
@@ -20721,16 +20757,16 @@ msgstr "Konstanta Indika Faktoro:"
 #. i18n: ectx: property (text), widget (QLabel, lblPresetH265)
 #. i18n: ectx: property (text), widget (QLabel, lblPresetWEBP)
 #. i18n: ectx: property (text), widget (QLabel, presetLabel)
-#: libs/ui/animation/video_export_options_dialog.ui:69
-#: libs/ui/animation/video_export_options_dialog.ui:120
-#: libs/ui/animation/video_export_options_dialog.ui:351
+#: libs/ui/animation/video_export_options_dialog.ui:95
+#: libs/ui/animation/video_export_options_dialog.ui:158
+#: libs/ui/animation/video_export_options_dialog.ui:433
 #: libs/ui/widgets/KoFillConfigWidget.ui:297
 #, kde-format
 msgid "Preset:"
 msgstr "Antaŭdifinita:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileH264)
-#: libs/ui/animation/video_export_options_dialog.ui:79
+#: libs/ui/animation/video_export_options_dialog.ui:105
 #, kde-format
 msgctxt "Label of H.264 encoder profiles"
 msgid "Profile:"
@@ -20738,41 +20774,42 @@ msgstr "Profilo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTuneH264)
 #. i18n: ectx: property (text), widget (QLabel, lblTuneH265)
-#: libs/ui/animation/video_export_options_dialog.ui:89
-#: libs/ui/animation/video_export_options_dialog.ui:140
+#: libs/ui/animation/video_export_options_dialog.ui:115
+#: libs/ui/animation/video_export_options_dialog.ui:178
 #, kde-format
 msgid "Tune:"
 msgstr "Agordo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileH265)
-#: libs/ui/animation/video_export_options_dialog.ui:130
+#: libs/ui/animation/video_export_options_dialog.ui:168
 #, kde-format
 msgctxt "Label of H.265 encoder profiles"
 msgid "Profile:"
 msgstr "Profilo:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkUseHDRMetadata)
-#: libs/ui/animation/video_export_options_dialog.ui:150
+#. i18n: ectx: property (title), widget (QGroupBox, chkUseHDRMetadata)
+#: libs/ui/animation/video_export_options_dialog.ui:188
 #, kde-format
 msgid "HDR Mode"
 msgstr "HDR-Reĝimo"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnHdrMetadata)
-#: libs/ui/animation/video_export_options_dialog.ui:157
+#: libs/ui/animation/video_export_options_dialog.ui:197
 #, kde-format
 msgid "HDR Metadata..."
 msgstr "Metadatumoj HDR..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/video_export_options_dialog.ui:189
-#, kde-format
-msgid "Bitrate (MBit/s)"
+#: libs/ui/animation/video_export_options_dialog.ui:249
+#, fuzzy, kde-format
+#| msgid "Bitrate (MBit/s)"
+msgid "Bitrate (MBit/s):"
 msgstr "Bitrapideco (MBit/s)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
-#: libs/ui/animation/video_export_options_dialog.ui:203
-#: libs/ui/animation/video_export_options_dialog.ui:310
+#: libs/ui/animation/video_export_options_dialog.ui:263
+#: libs/ui/animation/video_export_options_dialog.ui:406
 #, kde-format
 msgid "Lossless"
 msgstr "Senperdo"
@@ -20780,47 +20817,48 @@ msgstr "Senperdo"
 #. i18n: ectx: property (text), widget (QCheckBox, gifLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, apngLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLoop)
-#: libs/ui/animation/video_export_options_dialog.ui:214
-#: libs/ui/animation/video_export_options_dialog.ui:289
-#: libs/ui/animation/video_export_options_dialog.ui:361
+#: libs/ui/animation/video_export_options_dialog.ui:286
+#: libs/ui/animation/video_export_options_dialog.ui:373
+#: libs/ui/animation/video_export_options_dialog.ui:443
 #, kde-format
 msgid "Loop Animation"
 msgstr "Buklo Animacio"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifTransDiff)
-#: libs/ui/animation/video_export_options_dialog.ui:221
+#: libs/ui/animation/video_export_options_dialog.ui:293
 #, kde-format
 msgid "Transparency Difference"
 msgstr "Travidebleco Diferenco"
 
-#. i18n: ectx: property (text), widget (QRadioButton, gifAutoPalette)
-#: libs/ui/animation/video_export_options_dialog.ui:228
-#, kde-format
-msgid "Auto-generate 8bit Palette"
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: libs/ui/animation/video_export_options_dialog.ui:300
+#, fuzzy, kde-format
+#| msgid "Auto-generate 8bit Palette"
+msgid "Auto-generate 8bit Palette:"
 msgstr "Aŭtomate generi 8-bitan Paleton"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
-#: libs/ui/animation/video_export_options_dialog.ui:238
+#: libs/ui/animation/video_export_options_dialog.ui:310
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:129
 #, kde-format
 msgid "Dithering:"
 msgstr "Dithering:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseBayerScaleGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:248
+#: libs/ui/animation/video_export_options_dialog.ui:320
 #, kde-format
 msgid "Bayer Scale:"
 msgstr "Bayer-skalo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDiffModeGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:265
+#: libs/ui/animation/video_export_options_dialog.ui:337
 #, kde-format
 msgid "Difference Mode:"
 msgstr "Diferenca Reĝimo:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, gifReserveTransparent)
-#: libs/ui/animation/video_export_options_dialog.ui:275
+#: libs/ui/animation/video_export_options_dialog.ui:347
 #, no-c-format, kde-format
 msgid ""
 "<html><head/><body><p>GIF format supports up to 256 colors per frame/image. "
@@ -20854,41 +20892,45 @@ msgstr ""
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifReserveTransparent)
-#: libs/ui/animation/video_export_options_dialog.ui:278
+#: libs/ui/animation/video_export_options_dialog.ui:350
 #, kde-format
 msgid "Preserve Transparency"
 msgstr "Konservi Travideblecon"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPredAPNG)
-#: libs/ui/animation/video_export_options_dialog.ui:296
+#: libs/ui/animation/video_export_options_dialog.ui:380
 #, kde-format
 msgid "Prediction Mode:"
 msgstr "Antaŭdira reĝimo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCompressWEBP)
-#: libs/ui/animation/video_export_options_dialog.ui:317
+#: libs/ui/animation/video_export_options_dialog.ui:413
 #, kde-format
 msgid "Compression Level:"
 msgstr "Kunprema Nivelo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQscaleWEBP)
-#: libs/ui/animation/video_export_options_dialog.ui:334
+#: libs/ui/animation/video_export_options_dialog.ui:423
 #, kde-format
 msgid "Image Quality:"
 msgstr "Bilda Kvalito:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkCustomLine)
-#: libs/ui/animation/video_export_options_dialog.ui:374
-#, kde-format
-msgid "Custom Options:"
+#. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
+#: libs/ui/animation/video_export_options_dialog.ui:457
+#, fuzzy, kde-format
+#| msgid "Custom Options:"
+msgid "Custom options"
 msgstr "Propraj Opcioj:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
-#: libs/ui/animation/video_export_options_dialog.ui:383
-#, kde-format
+#: libs/ui/animation/video_export_options_dialog.ui:466
+#, fuzzy, kde-format
+#| msgid ""
+#| "Add any ffmpeg filtering options here. It will be put between source and "
+#| "destination streams of the ffmpeg"
 msgid ""
-"Add any ffmpeg filtering options here. It will be put between source and "
-"destination streams of the ffmpeg"
+"Add any FFmpeg filtering options here. It will be put between source and "
+"destination streams of the FFmpeg instance"
 msgstr ""
 "Aldonu iujn ajn ffmpeg-filtrajn opciojn ĉi tie. Ĝi estos metita inter fonto "
 "kaj celfluoj de la ffmpeg"
@@ -20898,7 +20940,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
-#: libs/ui/animation/video_export_options_dialog.ui:390
+#: libs/ui/animation/video_export_options_dialog.ui:473
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:668
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:141
@@ -21249,86 +21291,86 @@ msgctxt "paleteuse diff mode option name"
 msgid "rectangle"
 msgstr "rektangulo"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:147
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:166
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:149
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:168
 #, kde-format
 msgctxt "kilo-bits-per-second, video bitrate suffix"
 msgid "kbps"
 msgstr "kbps"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:291
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:292
 #, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
 msgstr "OpenH264"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:292
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:293
 #, kde-format
 msgctxt "h264 codec name, check simplescreenrecorder for standard translations"
 msgid "H.264, MPEG-4 Part 10"
 msgstr "H.264, MPEG-4 Part 10"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:293
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:294
 #, kde-format
 msgctxt "h265 codec name, check simplescreenrecorder for standard translations"
 msgid "H.265, MPEG-H Part 2 (HEVC)"
 msgstr "H.265, MPEG-H Part 2 (HEVC)"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:296
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:297
 #, kde-format
 msgctxt "VP9 codec name"
 msgid "VP9"
 msgstr "VP9"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:301
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:302
 #, kde-format
 msgctxt ""
 "theora codec name, check simplescreenrecorder for standard translations"
 msgid "Theora"
 msgstr "Theora"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:304
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:305
 #, kde-format
 msgctxt "WEBP codec name"
 msgid "WEBP"
 msgstr "WEBP"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:307
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:308
 #, kde-format
 msgctxt "APNG codec name"
 msgid "APNG"
 msgstr "APNG"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:310
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:311
 #, kde-format
 msgctxt "GIF codec name"
 msgid "GIF"
 msgstr "GIF"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:586
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:587
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Exported animation format does not support HDR"
 msgstr "Eksportita animacia formato ne subtenas HDR"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:588
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:589
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
 msgstr "HDR-metadatenoj haveblaj nur kun profilo \"main10\"."
 
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:26
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:25
 #, kde-format
 msgid "Rec. 2100 PQ"
 msgstr "Rec. 2100 PQ"
 
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:27
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:26
 #, kde-format
 msgid "DCI-P3 D65"
 msgstr "DCI-P3 D65"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:28
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:27
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:161
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:25
 #, kde-format
@@ -21337,10 +21379,10 @@ msgstr "Propra"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgInternalColorSelector)
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgHeifImport)
-#. i18n: ectx: property (windowTitle), widget (QDialog, VideoHDRMetadataOptionsDialog)
+#. i18n: ectx: property (windowTitle), widget (QWidget, VideoHDRMetadataOptionsDialog)
 #. i18n: ectx: property (windowTitle), widget (QDialog, FilterDialog)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImportImageSequence)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:18
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:24
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:14 libs/ui/forms/wdgfilterdialog.ui:30
 #: libs/ui/forms/wdgimportimagesequence.ui:18
 #: libs/widgets/WdgDlgInternalColorSelector.ui:18
@@ -21349,7 +21391,7 @@ msgid "Dialog"
 msgstr "Dialogo"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:26
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:30
 #, kde-format
 msgid "Master Display:"
 msgstr "Majstra ekrano:"
@@ -21358,7 +21400,7 @@ msgstr "Majstra ekrano:"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:38
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2092
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2094
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
@@ -21369,7 +21411,7 @@ msgstr "Montrado"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:46
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
 #: libs/ui/kis_paintop_box.cc:299
 #: plugins/dockers/recorder/recorder_export.ui:467
 #, kde-format
@@ -21377,39 +21419,39 @@ msgid "x"
 msgstr "x"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:56
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:58
 #, kde-format
 msgid "y"
 msgstr "y"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:68
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:70
 #, kde-format
 msgid "Red Primary:"
 msgstr "Ruĝa Primara:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:105
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:107
 #, kde-format
 msgid "Green Primary:"
 msgstr "Verda Primara:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:142
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:144
 #, kde-format
 msgid "Blue Primary:"
 msgstr "Blua Primara:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #. i18n: ectx: property (text), widget (QLabel, lblWhitepoint)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:179
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:197
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:195
 #, kde-format
 msgid "White Point:"
 msgstr "Blanka Punkto:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:232
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:250
 #, kde-format
 msgid "Min Luminance:"
 msgstr "Min Lumeco:"
@@ -21419,8 +21461,8 @@ msgstr "Min Lumeco:"
 #. i18n: ectx: property (suffix), widget (QSpinBox, intMaxCLL)
 #. i18n: ectx: property (suffix), widget (QSpinBox, intMaxFALL)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:239
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:259
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:257
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:277
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:300
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:317
 #: plugins/impex/heif/WdgHeifExport.ui:116
@@ -21430,7 +21472,7 @@ msgid " cd/m²"
 msgstr " cd/m²"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:252
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:270
 #, kde-format
 msgid "Max Luminance:"
 msgstr "Maksimuma Lumo:"
@@ -21454,10 +21496,12 @@ msgid "Video Animation Import"
 msgstr "Video Animacia Importo"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGeneral)
+#. i18n: ectx: property (title), widget (QGroupBox, grpGeneralOptions)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
+#: libs/ui/animation/wdg_animationrenderer.ui:16
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2062
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2064
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
@@ -21474,53 +21518,14 @@ msgid "General"
 msgstr "Ĝenerale"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
-#: libs/ui/animation/VideoImportDialog.ui:47
-#, kde-format
-msgid "Choose a video file"
-msgstr "Elekti videodosieron"
-
-#. i18n: ectx: property (text), widget (QLabel, lblWarning)
-#: libs/ui/animation/VideoImportDialog.ui:80
-#, kde-format
-msgid ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-"\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
-"weight:500; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style=\" "
-"font-size:16pt; font-weight:400; color:#ff692e;\">This video contains more "
-"than 100 frames. Loading too many frames can overload your computer. Use a</"
-"span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;\"> </"
-"span><a href=\"https://kdenlive.org\"><span style=\" font-size:16pt; font-"
-"weight:400; text-decoration: underline; color:#2980b9;\">video editor </"
-"span></a><span style=\" font-size:16pt; font-weight:400; color:#ff692e;"
-"\">instead!</span></p></body></html>"
-msgstr ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-"\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
-"weight:500; font-style:normal;\">\n"
-"<p style=\"margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"font-"
-"size:16pt; font-weight:600; color:#ff692e;\">AVERTO: </span><span style="
-"\"font-size:16pt;font-weight:400; color:# ff692e;\">Ĉi tiu video enhavas pli "
-"ol 100 kadrojn. Ŝarĝi tro da kadroj povas troŝarĝi vian komputilon. Uzu</"
-"span><span style=\"font-size:16pt; font-weight:400; color:#ff1500;\"> </"
-"span><a href=\"https://kdenlive.org\"><span style=\"font-size:16pt; font-"
-"weight:400; text-decoration: underline; color:#2980b9;\">videoredaktilo </"
-"span></a><span style=\"font-size:16pt; font-weight:400; color:#ff692e;"
-"\">anstataŭe!</span></p></body></html>"
+#: libs/ui/animation/VideoImportDialog.ui:40
+#, fuzzy, kde-format
+#| msgid "Video FPS:"
+msgid "Video file:"
+msgstr "Video FPS:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
-#: libs/ui/animation/VideoImportDialog.ui:130
+#: libs/ui/animation/VideoImportDialog.ui:77
 #: libs/widgetutils/KisPreviewFileDialog.cpp:96
 #, kde-format
 msgid "No Preview"
@@ -21532,7 +21537,7 @@ msgstr "Neniu Antaŭrigardo"
 #. i18n: ectx: property (text), widget (QLabel, fileSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, bppLabel)
 #. i18n: ectx: property (text), widget (QLabel, colorCount)
-#: libs/ui/animation/VideoImportDialog.ui:179
+#: libs/ui/animation/VideoImportDialog.ui:133
 #: libs/ui/layerstyles/wdgblendingoptions.ui:309
 #: libs/ui/layerstyles/wdgblendingoptions.ui:337
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:160
@@ -21546,52 +21551,19 @@ msgid "0"
 msgstr "0"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLoadedDetails)
-#: libs/ui/animation/VideoImportDialog.ui:231
+#: libs/ui/animation/VideoImportDialog.ui:167
 #, kde-format
 msgid "Please choose a file."
 msgstr "Bonvolu elekti dosieron."
 
 #. i18n: ectx: property (title), widget (QGroupBox, exportOptionsGroup)
-#: libs/ui/animation/VideoImportDialog.ui:344
+#: libs/ui/animation/VideoImportDialog.ui:264
 #, kde-format
 msgid "Import Options"
 msgstr "Import-Opcioj"
 
-#. i18n: ectx: property (text), widget (QLabel, frameSkipLabel)
-#: libs/ui/animation/VideoImportDialog.ui:371
-#, kde-format
-msgid "Skip Interval:"
-msgstr "Salto-Intervalo:"
-
-#. i18n: ectx: property (text), widget (QLabel, startExportingAtLabel)
-#: libs/ui/animation/VideoImportDialog.ui:391
-#, kde-format
-msgid "Start at: "
-msgstr "Komenci ĉe:"
-
-#. i18n: ectx: property (text), widget (QLabel, exportDurationLabel)
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/animation/VideoImportDialog.ui:401
-#: plugins/paintops/libpaintop/sensors/SensorTimeConfiguration.ui:54
-#, kde-format
-msgid "Duration:"
-msgstr "Daŭro:"
-
-#. i18n: ectx: property (text), widget (QLabel, fpsLabel)
-#: libs/ui/animation/VideoImportDialog.ui:411
-#: libs/ui/animation/wdg_animationrenderer.ui:108
-#, kde-format
-msgid "FPS:"
-msgstr "FPS:"
-
-#. i18n: ectx: property (text), widget (QLabel, importDocumentLabel)
-#: libs/ui/animation/VideoImportDialog.ui:447
-#, kde-format
-msgid "Import into:"
-msgstr "Importi en:"
-
 #. i18n: ectx: property (toolTip), widget (QGroupBox, optionFilterDuplicates)
-#: libs/ui/animation/VideoImportDialog.ui:469
+#: libs/ui/animation/VideoImportDialog.ui:270
 #, kde-format
 msgid ""
 "Use ffmpeg to detect similar frames and reduce the total number of frames "
@@ -21601,19 +21573,19 @@ msgstr ""
 "importitaj kadroj."
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionFilterDuplicates)
-#: libs/ui/animation/VideoImportDialog.ui:472
+#: libs/ui/animation/VideoImportDialog.ui:273
 #, kde-format
 msgid "Filter duplicate frames"
 msgstr "Filtri duplikatajn kadrojn"
 
 #. i18n: ectx: property (text), widget (QLabel, sensitivityLabel)
-#: libs/ui/animation/VideoImportDialog.ui:496
+#: libs/ui/animation/VideoImportDialog.ui:297
 #, kde-format
 msgid "Sensitivity"
 msgstr "Sentemeco"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, sensitivitySpinbox)
-#: libs/ui/animation/VideoImportDialog.ui:514
+#: libs/ui/animation/VideoImportDialog.ui:315
 #, kde-format
 msgid ""
 "How sensitive should the duplicate frame filter be when determining\n"
@@ -21624,10 +21596,43 @@ msgstr ""
 "kiuj kadroj estas aldonitaj al Krita.\n"
 "Ju pli alta estas la sentemo, des pli da kadroj estas aldonitaj al Krita."
 
+#. i18n: ectx: property (text), widget (QLabel, importDocumentLabel)
+#: libs/ui/animation/VideoImportDialog.ui:325
+#, kde-format
+msgid "Import into:"
+msgstr "Importi en:"
+
+#. i18n: ectx: property (text), widget (QLabel, fpsLabel)
+#: libs/ui/animation/VideoImportDialog.ui:375
+#: libs/ui/animation/wdg_animationrenderer.ui:171
+#, kde-format
+msgid "FPS:"
+msgstr "FPS:"
+
+#. i18n: ectx: property (text), widget (QLabel, frameSkipLabel)
+#: libs/ui/animation/VideoImportDialog.ui:388
+#, kde-format
+msgid "Skip Interval:"
+msgstr "Salto-Intervalo:"
+
+#. i18n: ectx: property (text), widget (QLabel, startExportingAtLabel)
+#: libs/ui/animation/VideoImportDialog.ui:447
+#, kde-format
+msgid "Start at: "
+msgstr "Komenci ĉe:"
+
+#. i18n: ectx: property (text), widget (QLabel, exportDurationLabel)
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: libs/ui/animation/VideoImportDialog.ui:473
+#: plugins/paintops/libpaintop/sensors/SensorTimeConfiguration.ui:54
+#, kde-format
+msgid "Duration:"
+msgstr "Daŭro:"
+
 #. i18n: ectx: attribute (title), widget (QWidget, tabOptions)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, advanced)
-#: libs/ui/animation/VideoImportDialog.ui:532
+#: libs/ui/animation/VideoImportDialog.ui:512
 #: libs/ui/forms/wdgperformancesettings.ui:251
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:319
 #: plugins/impex/webp/kis_wdg_options_webp.ui:147
@@ -21636,7 +21641,7 @@ msgid "Advanced"
 msgstr "Altnivela"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsDocumentGroup)
-#: libs/ui/animation/VideoImportDialog.ui:540
+#: libs/ui/animation/VideoImportDialog.ui:518
 #, kde-format
 msgid "Document"
 msgstr "Dokumento"
@@ -21657,9 +21662,9 @@ msgstr "Dokumento"
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/VideoImportDialog.ui:546
-#: libs/ui/animation/VideoImportDialog.ui:603
-#: libs/ui/animation/wdg_animationrenderer.ui:170
+#: libs/ui/animation/VideoImportDialog.ui:524
+#: libs/ui/animation/VideoImportDialog.ui:559
+#: libs/ui/animation/wdg_animationrenderer.ui:143
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:71
 #: libs/ui/forms/wdg_resolution.ui:24 libs/ui/forms/wdgimageproperties.ui:48
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:133
@@ -21701,9 +21706,9 @@ msgstr "Larĝeco:"
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/animation/VideoImportDialog.ui:559
-#: libs/ui/animation/VideoImportDialog.ui:613
-#: libs/ui/animation/wdg_animationrenderer.ui:180
+#: libs/ui/animation/VideoImportDialog.ui:537
+#: libs/ui/animation/VideoImportDialog.ui:572
+#: libs/ui/animation/wdg_animationrenderer.ui:157
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:108
 #: libs/ui/forms/wdg_resolution.ui:31 libs/ui/forms/wdgimageproperties.ui:71
 #: libs/ui/imagesize/wdg_canvassize.ui:39
@@ -21729,7 +21734,7 @@ msgid "Height:"
 msgstr "Alteco:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsImportVideoScaleGroup)
-#: libs/ui/animation/VideoImportDialog.ui:575
+#: libs/ui/animation/VideoImportDialog.ui:553
 #, kde-format
 msgid "Import Video Scale"
 msgstr "Importi Video-Skalon"
@@ -21737,8 +21742,8 @@ msgstr "Importi Video-Skalon"
 #. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #. i18n: ectx: property (text), widget (QLabel, videoScaleFilterLabel)
 #. i18n: ectx: property (text), widget (QLabel, scaleFilterLabel)
-#: libs/ui/animation/VideoImportDialog.ui:593
-#: libs/ui/animation/wdg_animationrenderer.ui:206
+#: libs/ui/animation/VideoImportDialog.ui:585
+#: libs/ui/animation/wdg_animationrenderer.ui:188
 #: libs/ui/imagesize/wdg_layersize.ui:119
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:43
 #, kde-format
@@ -21747,149 +21752,60 @@ msgid "Filter:"
 msgstr "Filtri:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
-#: libs/ui/animation/VideoImportDialog.ui:636
-#, kde-format
-msgid "FFMpeg"
-msgstr "FFMpeg"
+#: libs/ui/animation/VideoImportDialog.ui:601
+#, fuzzy, kde-format
+#| msgid "FFmpeg:"
+msgid "FFmpeg"
+msgstr "FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
-#: libs/ui/animation/VideoImportDialog.ui:654
-#, kde-format
-msgid "FFMpeg Path:"
+#: libs/ui/animation/VideoImportDialog.ui:607
+#, fuzzy, kde-format
+#| msgid "FFMpeg Path:"
+msgid "FFmpeg path:"
 msgstr "FFMpeg Vojo:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
-#: libs/ui/animation/VideoImportDialog.ui:674
-#, kde-format
-msgid "FFProbe Path:"
+#: libs/ui/animation/VideoImportDialog.ui:634
+#, fuzzy, kde-format
+#| msgid "FFProbe Path:"
+msgid "FFprobe path:"
 msgstr "FFProbe Vojo:"
 
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimaterionRenderer)
-#: libs/ui/animation/wdg_animationrenderer.ui:24
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
+#: libs/ui/animation/wdg_animationrenderer.ui:10
 #, kde-format
 msgid "Animation Renderer Image"
 msgstr "Animacia Renderer Bildo"
 
-#. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/animation/wdg_animationrenderer.ui:39
-#, kde-format
-msgid "Export:"
-msgstr "Eksporto:"
-
-#. i18n: ectx: property (text), widget (QRadioButton, shouldExportOnlyImageSequence)
-#: libs/ui/animation/wdg_animationrenderer.ui:46
-#, kde-format
-msgid "Image Se&quence"
-msgstr "Bilda Sekvenco"
-
-#. i18n: ectx: property (text), widget (QRadioButton, shouldExportOnlyVideo)
-#: libs/ui/animation/wdg_animationrenderer.ui:53
-#, kde-format
-msgid "&Video"
-msgstr "&Video"
-
-#. i18n: ectx: property (text), widget (QRadioButton, shouldExportAll)
-#. i18n: ectx: property (text), widget (QRadioButton, radioBoth)
-#: libs/ui/animation/wdg_animationrenderer.ui:60
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:48
-#, kde-format
-msgid "Both"
-msgstr "Ambaŭ"
-
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/animation/wdg_animationrenderer.ui:95
+#: libs/ui/animation/wdg_animationrenderer.ui:22
 #, kde-format
 msgid "First frame:"
 msgstr "Unua kadro:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/animation/wdg_animationrenderer.ui:141
+#: libs/ui/animation/wdg_animationrenderer.ui:32
 #, kde-format
 msgid "Last frame:"
 msgstr "Lasta kadro:"
 
-#. i18n: ectx: property (title), widget (QGroupBox, videoOptionsGroup)
-#: libs/ui/animation/wdg_animationrenderer.ui:232
-#, kde-format
-msgid "Video Options"
-msgstr "Video Opcioj"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
-#: libs/ui/animation/wdg_animationrenderer.ui:255
-#, kde-format
-msgid "Select the ffmpeg render options."
-msgstr "Elekti la opciojn de bildigo de ffmpeg."
-
-#. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/animation/wdg_animationrenderer.ui:267
-#, kde-format
-msgid "FF&Mpeg: "
-msgstr "FF&Mpeg:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#. i18n: ectx: property (text), widget (QLabel, labelResolution)
-#: libs/ui/animation/wdg_animationrenderer.ui:283
-#: plugins/dockers/recorder/recorder_export.ui:524
-#, kde-format
-msgid "Render as:"
-msgstr "Bildigi kiel:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/animation/wdg_animationrenderer.ui:293
-#, kde-format
-msgid "Video Location:"
-msgstr "Loko de video:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeAudio)
-#: libs/ui/animation/wdg_animationrenderer.ui:309
-#, kde-format
-msgid "Include Audio"
-msgstr "Inkluzivi Aŭdio"
-
-#. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
-#: libs/ui/animation/wdg_animationrenderer.ui:318
-#, kde-format
-msgid "FFMpeg Version: None"
-msgstr "FFMpeg Versio: Neniu"
-
-#. i18n: ectx: property (text), widget (QLabel, lblGifWarningFPS)
-#: libs/ui/animation/wdg_animationrenderer.ui:325
-#, kde-format
-msgid ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-"animated gif images cannot have a framerate higher than 50. The framerate "
-"will be reduced to 50 frames per second.</p></body></html>"
-msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Averto:</span> "
-"viglaj gif-bildoj ne povas havi framrapidecon pli altan ol 50. La "
-"framfrekvenco estos reduktita. ĝis 50 kadroj sekundo.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QLabel, lblGifWarningFFMpeg)
-#: libs/ui/animation/wdg_animationrenderer.ui:335
-#, kde-format
-msgid ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-"FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
-"body></html>"
-msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Averto:</span> "
-"FFMpeg devas esti almenaŭ versio 4.2+ por ke gif-travidebleco funkciu</p></"
-"body></html>"
-
-#. i18n: ectx: property (title), widget (QGroupBox, imageSequenceOptionsGroup)
-#: libs/ui/animation/wdg_animationrenderer.ui:361
-#, kde-format
-msgid "Image Sequence Options"
-msgstr "Bildaj Sekvencaj Opcioj"
+#. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
+#: libs/ui/animation/wdg_animationrenderer.ui:49
+#, fuzzy, kde-format
+#| msgid "Export Images"
+msgid "Export as image sequence"
+msgstr "Eksporti Bildojn"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/animation/wdg_animationrenderer.ui:369
-#, kde-format
-msgid "Fi&le format:"
+#: libs/ui/animation/wdg_animationrenderer.ui:58
+#, fuzzy, kde-format
+#| msgid "Fi&le format:"
+msgid "File format:"
 msgstr "Dosierformato:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbMimetype)
-#: libs/ui/animation/wdg_animationrenderer.ui:390
+#: libs/ui/animation/wdg_animationrenderer.ui:67
 #, kde-format
 msgid ""
 "Select the file format for the image sequence. If you want to render to "
@@ -21899,40 +21815,113 @@ msgstr ""
 "aŭ vigla gif, vi povas nur elekti PNG"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnExportOptions)
-#: libs/ui/animation/wdg_animationrenderer.ui:397
+#: libs/ui/animation/wdg_animationrenderer.ui:74
 #, kde-format
 msgid "Select the frame export options"
 msgstr "Elekti la kadrajn eksportopciojn"
 
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/ui/animation/wdg_animationrenderer.ui:409
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: libs/ui/animation/wdg_animationrenderer.ui:86
 #, kde-format
-msgid "Start numbering at:"
-msgstr "Komenci numeradon ĉe:"
+msgid "Image location:"
+msgstr "Bilda loko:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/wdg_animationrenderer.ui:435
+#: libs/ui/animation/wdg_animationrenderer.ui:96
 #, kde-format
 msgid "Base name:"
 msgstr "Baznomo:"
 
 #. i18n: ectx: property (text), widget (QLineEdit, txtBasename)
-#: libs/ui/animation/wdg_animationrenderer.ui:445
+#: libs/ui/animation/wdg_animationrenderer.ui:103
 #, kde-format
 msgid "frame"
 msgstr "kadro"
 
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/animation/wdg_animationrenderer.ui:452
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: libs/ui/animation/wdg_animationrenderer.ui:110
 #, kde-format
-msgid "Image location:"
-msgstr "Bilda loko:"
+msgid "Start numbering at:"
+msgstr "Komenci numeradon ĉe:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOnlyUniqueFrames)
-#: libs/ui/animation/wdg_animationrenderer.ui:472
+#: libs/ui/animation/wdg_animationrenderer.ui:124
 #, kde-format
 msgid "Only Unique Frames"
 msgstr "Nur Unika Kadroj"
+
+#. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
+#: libs/ui/animation/wdg_animationrenderer.ui:134
+#, fuzzy, kde-format
+#| msgid "Export size:"
+msgid "Export as video"
+msgstr "Eksporta grandeco:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#. i18n: ectx: property (text), widget (QLabel, labelResolution)
+#: libs/ui/animation/wdg_animationrenderer.ui:198
+#: plugins/dockers/recorder/recorder_export.ui:524
+#, kde-format
+msgid "Render as:"
+msgstr "Bildigi kiel:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
+#: libs/ui/animation/wdg_animationrenderer.ui:210
+#, fuzzy, kde-format
+#| msgid "Select the ffmpeg render options."
+msgid "Select the FFmpeg render options."
+msgstr "Elekti la opciojn de bildigo de ffmpeg."
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#. i18n: ectx: property (text), widget (QLabel, labelExportTo)
+#: libs/ui/animation/wdg_animationrenderer.ui:222
+#: plugins/dockers/recorder/recorder_export.ui:374
+#, kde-format
+msgid "Video location:"
+msgstr "Loko de video:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeAudio)
+#: libs/ui/animation/wdg_animationrenderer.ui:232
+#, kde-format
+msgid "Include Audio"
+msgstr "Inkluzivi Aŭdio"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: libs/ui/animation/wdg_animationrenderer.ui:239
+#, fuzzy, kde-format
+#| msgid "Image location:"
+msgid "FFmpeg location:"
+msgstr "Bilda loko:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: libs/ui/animation/wdg_animationrenderer.ui:249
+#, fuzzy, kde-format
+#| msgid "FFmpeg Version: "
+msgid "FFmpeg version:"
+msgstr "FFMpeg Versio: "
+
+#. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
+#. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
+#. i18n: ectx: property (text), widget (QToolButton, btnNoFill)
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbGradientRepeat)
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
+#. i18n: ectx: property (text), widget (QLabel, lblNone)
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
+#. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
+#. i18n: ectx: property (text), item, widget (QComboBox, cbCommonColorsScrolling)
+#: libs/ui/animation/wdg_animationrenderer.ui:256
+#: libs/ui/forms/wdgstrokeselectionproperties.ui:204
+#: libs/ui/widgets/KoFillConfigWidget.ui:41
+#: libs/ui/widgets/KoFillConfigWidget.ui:275
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:284
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:623
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:830
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:36
+#: plugins/impex/webp/kis_wdg_options_webp.ui:424
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:441
+#, kde-format
+msgid "None"
+msgstr "Neniu"
 
 #: libs/ui/brushhud/kis_brush_hud.cpp:78
 #, kde-format
@@ -23025,11 +23014,6 @@ msgstr "Blua Ĉefa: %1, %2"
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Blanka Punkto: %1, %2"
-
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
-#, kde-format
-msgid "Warning(s):"
-msgstr "Averto(j):"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1970
 #, kde-format
@@ -26655,7 +26639,7 @@ msgstr ""
 "<html><head/><body><p>Kiam prezentas animaciajn kadrojn (en dosierojn aŭ dum "
 "animacia kaŝmemorregenerado), Krita faros la specifitan nombron da kopioj de "
 "via bildo kaj laboros pri ili paralele. Ĉiu kopio postulos pli da RAM por "
-"sia stokado (ĉirkaŭ 20% de la grandeco de via bildo), do altigu ĉi tiun "
+"sia konservejo (ĉirkaŭ 20% de la grandeco de via bildo), do altigu ĉi tiun "
 "limon nur se vi havas sufiĉe da RAM instalita.</p><p><br/></p><p><span style="
 "\" font-weight:600;\">Rekomendita valoro:</span> agordi Klonojn Limigu al la "
 "nombro da <span style=\" text-decoration: underline;\">fizika</span> (ne-"
@@ -27399,27 +27383,6 @@ msgstr "mm"
 #, kde-format
 msgid "inch"
 msgstr "colo"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
-#. i18n: ectx: property (text), widget (QToolButton, btnNoFill)
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbGradientRepeat)
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#. i18n: ectx: property (text), widget (QLabel, lblNone)
-#. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
-#. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
-#. i18n: ectx: property (text), item, widget (QComboBox, cbCommonColorsScrolling)
-#: libs/ui/forms/wdgstrokeselectionproperties.ui:204
-#: libs/ui/widgets/KoFillConfigWidget.ui:41
-#: libs/ui/widgets/KoFillConfigWidget.ui:275
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:284
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:623
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:830
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:36
-#: plugins/impex/webp/kis_wdg_options_webp.ui:424
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:441
-#, kde-format
-msgid "None"
-msgstr "Neniu"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:209
@@ -29662,7 +29625,7 @@ msgstr "Ŝargante risurcojn..."
 #: libs/ui/KisApplication.cpp:478
 #, kde-format
 msgid "Loading Main Window..."
-msgstr "Ŝarĝante Ĉeffenestron..."
+msgstr "Ŝargante Ĉeffenestron..."
 
 #: libs/ui/KisApplication.cpp:510
 #, kde-format
@@ -31536,7 +31499,8 @@ msgid ""
 "Blend inner glow, satin, and overlay with layer before blending with "
 "document."
 msgstr ""
-"Miksi internan brilon, satenon kaj tegu per tavolo antaŭ miksi kun dokumento."
+"Miksi internan brilon, satenon kaj tegon per tavolo antaŭ miksi kun "
+"dokumento."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_7)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:241
@@ -33382,8 +33346,8 @@ msgstr ""
 "<p>Ĉi tiuj profiloj estas uzataj kun RGB-bildoj kiuj estis konvertitaj al "
 "monotona grizo (nigra kaj blanka). La ĉefa kialo por konverti de RGB al "
 "Griza estas ŝpari la dosierspacon necesan por kodi la bildon. Guglo metas "
-"superpagon sur rapide ŝarĝantaj retpaĝojn, kaj bildoj estas unu el la pli "
-"malrapidaj ŝarĝaj elementoj de retpaĝo. Do konverti nigrajn kaj blankajn "
+"superpagon sur rapide ŝargantaj retpaĝojn, kaj bildoj estas unu el la pli "
+"malrapide ŝargaj elementoj de retpaĝo. Do konverti nigrajn kaj blankajn "
 "bildojn al Grizskalaj bildoj ŝparas kelkajn kilobajtojn. Por grizskalaj "
 "bildoj alŝutitaj al la interreto, konvertu la bildon al la V2 Griza profilo "
 "kun la sRGB TRC.</p>"
@@ -36592,18 +36556,18 @@ msgstr "Propra Koloro"
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:274
 #, kde-format
 msgid "Load Assistant Set"
-msgstr "Ŝarĝo Asistanto Aro"
+msgstr "Ŝarg-Asistantaro"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
 #, kde-format
 msgid "Save Assistant Set"
-msgstr "Konservi Asistantan Aron"
+msgstr "Konservi Asistantaron"
 
 #: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:24
 #, kde-format
 msgid "Concentric Ellipse assistant"
-msgstr "Koncentra Ellipse-asistanto"
+msgstr "Koncentra Elips-asistanto"
 
 #: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:221
 #, kde-format
@@ -39341,12 +39305,6 @@ msgstr "Etendi rezulton por:"
 msgid "Select a file location for the exported timelapse video"
 msgstr "Elekti dosierlokon por la eksportita timelapse video"
 
-#. i18n: ectx: property (text), widget (QLabel, labelExportTo)
-#: plugins/dockers/recorder/recorder_export.ui:374
-#, kde-format
-msgid "Video location:"
-msgstr "Loko de video:"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, resultPreviewCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:403
 #, kde-format
@@ -39677,7 +39635,7 @@ msgstr "Registradi aŭtomate"
 #: plugins/dockers/recorder/recorderdocker.ui:337
 #, kde-format
 msgid "Record"
-msgstr "Rekordo"
+msgstr "Registri"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonExport)
 #: plugins/dockers/recorder/recorderdocker.ui:360
@@ -39765,7 +39723,7 @@ msgstr "Halti"
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
-msgstr "Rekordo"
+msgstr "Registri"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:213
 #, kde-format
@@ -41157,7 +41115,7 @@ msgstr "Plibonig-eldona dato"
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
 #, kde-format
 msgid "Storages"
-msgstr "Stokejoj"
+msgstr "Konservejoj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:119
@@ -42752,7 +42710,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<p>Failure on module load <application>%1</application>:</p><pre>%2</pre>"
 msgstr ""
-"<p>Malsukceso ĉe modulo-ŝarĝo <application>%1</application>:</p><pre>%2</pre>"
+"<p>Malsukceso ĉe modulo-ŝargo <application>%1</application>:</p><pre>%2</pre>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:365
 #, kde-format
@@ -48217,7 +48175,7 @@ msgstr "Tavolo %1 havas nesubtenan tipon: %2."
 #: plugins/impex/libkra/kis_kra_loader.cpp:897
 #, kde-format
 msgid "Failure loading layer %1 of type: %2."
-msgstr "Malsukceso ŝarĝante tavolon %1 de tipo: %2."
+msgstr "Malsukceso ŝargante tavolon %1 de tipo: %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1020
 #, kde-format
@@ -49761,7 +49719,7 @@ msgstr "Foliumi..."
 #: plugins/impex/raw/wdgrawimport.ui:55
 #, kde-format
 msgid "No image loaded"
-msgstr "Neniu bildo ŝarĝita"
+msgstr "Neniu bildo ŝargita"
 
 #: plugins/impex/svg/kis_svg_import.cc:48
 #, kde-format
@@ -58677,6 +58635,12 @@ msgstr "Noto: la redaktilo de Riĉa Teksto nur subtenas subaron de SVG."
 msgid "Rich Te&xt Only"
 msgstr "Riĉa Te&ksto Nur"
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioBoth)
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:48
+#, kde-format
+msgid "Both"
+msgstr "Ambaŭ"
+
 #. i18n: ectx: property (text), widget (QRadioButton, radioSvgSource)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:55
 #, kde-format
@@ -59385,7 +59349,7 @@ msgstr "Kaĝo"
 #, kde-format
 msgctxt "Free Transform Tab Label"
 msgid "Free"
-msgstr "Senpaga"
+msgstr "Libera"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:128
 #, kde-format
@@ -59640,7 +59604,7 @@ msgstr "Preciza kun Tuja Antaŭrigardo"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:124
 #, kde-format
 msgid "Free"
-msgstr "Senpaga"
+msgstr "Libera"
 
 #. i18n: ectx: property (text), widget (QToolButton, freeTransformButton)
 #. i18n: ectx: property (text), widget (QLabel, lblTransformType)
@@ -59648,7 +59612,7 @@ msgstr "Senpaga"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:292
 #, kde-format
 msgid "Free Transform"
-msgstr "Senpaga Transformo"
+msgstr "Libera Transformo"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, warpButton)
 #. i18n: ectx: property (text), widget (QToolButton, warpButton)
@@ -60217,6 +60181,82 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referenca Bilda Ilo"
+
+#~ msgid "Choose a video file"
+#~ msgstr "Elekti videodosieron"
+
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
+#~ "\"utf-8\" /><style type=\"text/css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
+#~ "font-weight:500; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
+#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">This video contains "
+#~ "more than 100 frames. Loading too many frames can overload your computer. "
+#~ "Use a</span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;"
+#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\" font-"
+#~ "size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;"
+#~ "\">video editor </span></a><span style=\" font-size:16pt; font-"
+#~ "weight:400; color:#ff692e;\">instead!</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
+#~ "\"utf-8\" /><style type=\"text/css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
+#~ "font-weight:500; font-style:normal;\">\n"
+#~ "<p style=\"margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"font-"
+#~ "size:16pt; font-weight:600; color:#ff692e;\">AVERTO: </span><span style="
+#~ "\"font-size:16pt;font-weight:400; color:# ff692e;\">Ĉi tiu video enhavas "
+#~ "pli ol 100 kadrojn. Ŝargi tro da kadroj povas troŝarĝi vian komputilon. "
+#~ "Uzu</span><span style=\"font-size:16pt; font-weight:400; color:#ff1500;"
+#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\"font-size:16pt; "
+#~ "font-weight:400; text-decoration: underline; color:#2980b9;"
+#~ "\">videoredaktilo </span></a><span style=\"font-size:16pt; font-"
+#~ "weight:400; color:#ff692e;\">anstataŭe!</span></p></body></html>"
+
+#~ msgid "FFMpeg"
+#~ msgstr "FFMpeg"
+
+#~ msgid "Export:"
+#~ msgstr "Eksporto:"
+
+#~ msgid "Image Se&quence"
+#~ msgstr "Bilda Sekvenco"
+
+#~ msgid "&Video"
+#~ msgstr "&Video"
+
+#~ msgid "Video Options"
+#~ msgstr "Video Opcioj"
+
+#~ msgid "FF&Mpeg: "
+#~ msgstr "FF&Mpeg:"
+
+#~ msgid "Video Location:"
+#~ msgstr "Loko de video:"
+
+#~ msgid "FFMpeg Version: None"
+#~ msgstr "FFMpeg Versio: Neniu"
+
+#~ msgid ""
+#~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
+#~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
+#~ "body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p><span style=\" font-weight:600;\">Averto:</span> "
+#~ "FFMpeg devas esti almenaŭ versio 4.2+ por ke gif-travidebleco funkciu</"
+#~ "p></body></html>"
+
+#~ msgid "Image Sequence Options"
+#~ msgstr "Bildaj Sekvencaj Opcioj"
 
 #~ msgid " sec"
 #~ msgstr " sek"

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-01 00:49+0000\n"
-"PO-Revision-Date: 2023-04-30 13:53+0300\n"
+"POT-Creation-Date: 2023-05-02 00:46+0000\n"
+"PO-Revision-Date: 2023-05-02 00:41+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -5776,14 +5776,14 @@ msgstr "Craig 02"
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:brushes/DA_RGBA bluegreen_small.png"
 msgid "DA RGBA bluegreen small"
-msgstr "DA KYMA mavi yeşil küçük"
+msgstr "DA RGBA mavi yeşil küçük"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:brushes/DA_RGBA bluegreen_small1.png"
 msgid "DA RGBA bluegreen small1"
-msgstr "DA KYMA mavi yeşil küçük1"
+msgstr "DA RGBA mavi yeşil küçük1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5804,7 +5804,7 @@ msgstr "Dağ Fırçası 01"
 #, kde-format
 msgctxt "./krita/data/bundles/RGBA_brushes.bundle:brushes/RGBA anim 01.gih"
 msgid "RGBA anim 01"
-msgstr "KYMA canlandırma 01"
+msgstr "RGBA canlandırma 01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5813,7 +5813,7 @@ msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_01_Thick-dry."
 "kpp"
 msgid "m) RGBA 01 Thick-dry"
-msgstr "m) KYMA Kalın kuru"
+msgstr "m) RGBA Kalın kuru"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5822,7 +5822,7 @@ msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/"
 "m)_RGBA_02_Thickpaint.kpp"
 msgid "m) RGBA 02 Thickpaint"
-msgstr "m) KYMA 02 Kalın boya"
+msgstr "m) RGBA 02 Kalın boya"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5830,7 +5830,7 @@ msgstr "m) KYMA 02 Kalın boya"
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_03_Rake.kpp"
 msgid "m) RGBA 03 Rake"
-msgstr "m) KYMA 03 Tırmık"
+msgstr "m) RGBA 03 Tırmık"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5839,7 +5839,7 @@ msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_04_Impasto."
 "kpp"
 msgid "m) RGBA 04 Impasto"
-msgstr "m) KYMA 04 İmpasto"
+msgstr "m) RGBA 04 İmpasto"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5848,7 +5848,7 @@ msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_05_Impasto-"
 "details.kpp"
 msgid "m) RGBA 05 Impasto-details"
-msgstr "m) KYMA 05 İmpasto ayrıntıları"
+msgstr "m) RGBA 05 İmpasto ayrıntıları"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5856,7 +5856,7 @@ msgstr "m) KYMA 05 İmpasto ayrıntıları"
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_06_Rock.kpp"
 msgid "m) RGBA 06 Rock"
-msgstr "m) KYMA 06 Kaya"
+msgstr "m) RGBA 06 Kaya"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -6687,7 +6687,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-cmyk."
 "gpl"
 msgid "Swatch CMYK"
-msgstr "CMSK örneği"
+msgstr "CMYK örneği"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-colored-grey.gpl:2
@@ -6704,7 +6704,7 @@ msgstr "Gri renkli örnek"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatch-rgb.gpl"
 msgid "Swatch RGB"
-msgstr "KYM örneği"
+msgstr "RGB örneği"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatche.gpl:2
@@ -7169,7 +7169,7 @@ msgstr "Ps"
 #, kde-format
 msgctxt "./krita/data/palettes/swatch-cmyk.gpl"
 msgid "Swatch CMYK"
-msgstr "CMSK örneği"
+msgstr "CMYK örneği"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/palettes/swatch-colored-grey.gpl:2
@@ -7183,7 +7183,7 @@ msgstr "Gri renkli örnek"
 #, kde-format
 msgctxt "./krita/data/palettes/swatch-rgb.gpl"
 msgid "Swatch RGB"
-msgstr "KYM örneği"
+msgstr "RGB örneği"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/palettes/swatche.gpl:2
@@ -11318,21 +11318,21 @@ msgstr "Süzgeç Maskesi"
 #, kde-format
 msgctxt "action"
 msgid "Add &Colorize Mask"
-msgstr "Maske &Renklendirme Ekle"
+msgstr "&Renklendirme Maskesi Ekle"
 
 #. i18n: context: toolTip @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2574
 #, kde-format
 msgctxt "action"
 msgid "Add a new Colorize Mask"
-msgstr "Yeni Bir Maske Renklendirme Ekle"
+msgstr "Yeni Bir Renklendirme Maskesi Ekle"
 
 #. i18n: context: iconText @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2575
 #, kde-format
 msgctxt "action"
 msgid "Colorize Mask"
-msgstr "Maske Renklendirme"
+msgstr "Renklendirme Maskesi"
 
 #. i18n: context: text @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2584
@@ -16361,11 +16361,10 @@ msgstr "&Uzaklaştır"
 #. i18n: ectx: property (text), widget (KisColorButton, bnColor)
 #. i18n: ectx: property (text), widget (KisColorButton, bnHighlightColor)
 #. i18n: ectx: property (text), widget (KisColorButton, bnShadowColor)
-#. i18n: ectx: property (text), widget (QToolButton, filePickerButton)
 #. i18n: ectx: property (text), widget (QToolButton, ffmpegPickerButton)
 #. i18n: ectx: property (text), widget (QToolButton, ffprobePickerButton)
-#. i18n: ectx: property (text), widget (QToolButton, bnRenderOptions)
 #. i18n: ectx: property (text), widget (QToolButton, bnExportOptions)
+#. i18n: ectx: property (text), widget (QToolButton, bnRenderOptions)
 #. i18n: ectx: property (text), widget (QToolButton, m_bnFileName)
 #. i18n: ectx: property (text), widget (QToolButton, bnLandscape)
 #. i18n: ectx: property (text), widget (QToolButton, bnPortrait)
@@ -16419,11 +16418,10 @@ msgstr "&Uzaklaştır"
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:154
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:161
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:168
-#: libs/ui/animation/VideoImportDialog.ui:54
-#: libs/ui/animation/VideoImportDialog.ui:667
-#: libs/ui/animation/VideoImportDialog.ui:687
-#: libs/ui/animation/wdg_animationrenderer.ui:258
-#: libs/ui/animation/wdg_animationrenderer.ui:400
+#: libs/ui/animation/VideoImportDialog.ui:625
+#: libs/ui/animation/VideoImportDialog.ui:652
+#: libs/ui/animation/wdg_animationrenderer.ui:77
+#: libs/ui/animation/wdg_animationrenderer.ui:213
 #: libs/ui/forms/wdggeneralsettings.ui:460 libs/ui/forms/wdgnewimage.ui:273
 #: libs/ui/forms/wdgnewimage.ui:292
 #: libs/ui/layerstyles/wdgBevelAndEmboss.ui:291
@@ -16593,8 +16591,8 @@ msgstr "Boyut"
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinScaleWidth)
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinScaleHeight)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:40
-#: libs/ui/animation/wdg_animationrenderer.ui:157
-#: libs/ui/animation/wdg_animationrenderer.ui:196
+#: libs/ui/animation/wdg_animationrenderer.ui:150
+#: libs/ui/animation/wdg_animationrenderer.ui:164
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:749
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:753
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:956
@@ -16913,7 +16911,7 @@ msgstr "Hermite"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:72
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:122
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:123
 #: libs/ui/widgets/KoFillConfigWidget.ui:421
 #, kde-format
 msgid "Bicubic"
@@ -16929,7 +16927,7 @@ msgstr ""
 "olanlardan daha yumuşak ton geçişleri sağlar."
 
 #: libs/image/kis_filter_strategy.h:86
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:125
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:126
 #, kde-format
 msgid "Nearest Neighbor"
 msgstr "En Yakın Komşu"
@@ -16945,7 +16943,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:123
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
 #: libs/ui/canvas/kis_canvas_controller.cpp:369
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
@@ -16974,7 +16972,7 @@ msgid "BSpline"
 msgstr "BSpline"
 
 #: libs/image/kis_filter_strategy.h:146
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:125
 #, kde-format
 msgid "Lanczos3"
 msgstr "Lanczos3"
@@ -17630,7 +17628,7 @@ msgstr "Renklendir"
 #: libs/image/lazybrush/kis_colorize_stroke_strategy.cpp:74
 msgctxt "(qtundo-format)"
 msgid "Prefilter Colorize Mask"
-msgstr "Maske Renklendirmeyi Önden Süz"
+msgstr "Renklendirme Maskesini Önden Süz"
 
 #: libs/impex/AnimationCheck.h:25
 #, kde-format
@@ -17765,7 +17763,7 @@ msgstr "Üreteç Katman"
 #: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_mask_manager.cc:274
 #, kde-format
 msgid "Colorize Mask"
-msgstr "Maske Renklenedirme"
+msgstr "Renklendirme Maskesi"
 
 #: libs/impex/KisExportCheckRegistry.cpp:118
 #: libs/ui/dialogs/kis_dlg_filter.cpp:218 libs/ui/kis_mask_manager.cc:223
@@ -18244,13 +18242,13 @@ msgstr "b*"
 #: libs/pigment/colorspaces/KoRgbU16ColorSpace.h:55
 #, kde-format
 msgid "RGB (16-bit integer/channel, unmanaged)"
-msgstr "KYM (16 bit tamsayı/kanal, yönetilmeyen)"
+msgstr "RGB (16 bit tamsayı/kanal, yönetilmeyen)"
 
 #: libs/pigment/colorspaces/KoRgbU8ColorSpace.cpp:30
 #: libs/pigment/colorspaces/KoRgbU8ColorSpace.h:55
 #, kde-format
 msgid "RGB (8-bit integer/channel, unmanaged)"
-msgstr "KYM (8 bit tamsayı/kanal, yönetilmeyen)"
+msgstr "RGB (8 bit tamsayı/kanal, yönetilmeyen)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/pigment/colorspaces/KoRgbU8ColorSpace.cpp:35
@@ -18320,7 +18318,7 @@ msgstr "Basit Renk Dönüşüm İşletkesi"
 #: libs/pigment/KoBasicHistogramProducers.cpp:427
 #, kde-format
 msgid "Generic RGB Histogram"
-msgstr "Genel KYM Sütun Grafiği"
+msgstr "Genel RGB Sütun Grafiği"
 
 #: libs/pigment/KoBasicHistogramProducers.cpp:364
 #, kde-format
@@ -18362,7 +18360,7 @@ msgstr "Alpha maskesi"
 #: libs/pigment/KoColorModelStandardIds.cpp:13
 #, kde-format
 msgid "RGB/Alpha"
-msgstr "KYM/Alfa"
+msgstr "RGB/Alfa"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:14
 #, kde-format
@@ -18377,7 +18375,7 @@ msgstr "L*a*b*/Alfa"
 #: libs/pigment/KoColorModelStandardIds.cpp:16
 #, kde-format
 msgid "CMYK/Alpha"
-msgstr "CMSK/Alfa"
+msgstr "CMYK/Alfa"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:17
 #, kde-format
@@ -19304,7 +19302,7 @@ msgstr "Dış"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465 libs/ui/KisView.cpp:1173
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:496 libs/ui/KisView.cpp:1173
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19340,18 +19338,18 @@ msgstr "Yerel Özkaynaklar"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:688
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:563
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:605
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:612
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:679
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:719
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:789
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:920
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:717
@@ -19596,12 +19594,12 @@ msgstr "Büyük Boyutlu Küçük Görsel"
 msgid "Dirty"
 msgstr "Kirli"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/resources/KisResourceModel.cpp:154
 #: libs/resources/KisTagResourceModel.cpp:656
-#: libs/ui/animation/VideoImportDialog.ui:197
+#: libs/ui/animation/VideoImportDialog.ui:149
 #: plugins/dockers/logdocker/LogDockerDock.cpp:187
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:844
@@ -20377,12 +20375,34 @@ msgstr "KULLANILAMIYOR"
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Geçerli bir FFmpeg ikilisi verilmedi..."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:445
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:463
 #, kde-format
-msgid "FFmpeg Version: "
-msgstr "FFmpeg Sürümü: "
+msgctxt "ffmpeg warning checks"
+msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
+msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:662
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:470
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
+#| "animated gif images cannot have a framerate higher than 50. The framerate "
+#| "will be reduced to 50 frames per second.</p></body></html>"
+msgctxt "ffmpeg warning checks"
+msgid ""
+"Animated GIF images cannot have a framerate higher than 50. The framerate "
+"will be reduced to 50 frames per second"
+msgstr ""
+"<html><head/><body><p><span style=\" font-weight:600;\">Uyarı:</span> "
+"hareketli gif görseller 50'den daha yüksek kare hızına sahip olamaz. Kare "
+"hızı saniyede 50 kareye düşürülür.</p></body></html>"
+
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:477
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
+#, kde-format
+msgid "Warning(s):"
+msgstr "Uyarılar:"
+
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20391,7 +20411,7 @@ msgstr ""
 "Bize verdiğiniz FFmpeg ikilisi sıkıştırılmış gibi görünüyor. Lütfen önce "
 "FFmpeg'i arşivden çıkarmayı deneyin."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:676
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20400,7 +20420,7 @@ msgstr ""
 "Bize verdiğiniz FFmpeg geçersiz gibi görünüyor. Lütfen sisteminizdeki FFmpeg "
 "yürütülebilirinin doğru konumunu seçin."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:688
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Sunumun yapılacağı dosyanın adını girin."
@@ -20417,34 +20437,34 @@ msgid "FFMpeg not found! Please add a path to FFMpeg in the \"Advanced\" tab"
 msgstr ""
 "FFmpeg bulunamadı! Lütfen, \"Gelişmiş\" sekmesinde FFmpeg yolunu ekleyin"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:80
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:81
 #, kde-format
 msgctxt "FPS as a unit following a value, like 60 FPS"
 msgid " FPS"
 msgstr " FPS"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:87
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:93
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:666
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:88
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:94
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:645
 #, kde-format
 msgctxt "Second as a unit following a value, like 60 s"
 msgid " s"
 msgstr " sn"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:99
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:100
 #, kde-format
 msgctxt "Import video to New Document"
 msgid "New Document"
 msgstr "Yeni Belge"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:102
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:103
 #, kde-format
 msgctxt "Import video to Current Document"
 msgid "Current Document"
 msgstr "Geçerli Belge"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:105
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:631
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:106
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:610
 #, kde-format
 msgctxt "Video importer: fps of the document you're importing into"
 msgid ""
@@ -20454,24 +20474,24 @@ msgstr ""
 "<small>Belge:\n"
 " %1 FPS</small>"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:126
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:127
 #, kde-format
 msgctxt "An interpolation method"
 msgid "Spline"
 msgstr "Şerit"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:178
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #, kde-format
 msgid "Failed to create a work directory, make sure you have write permission"
 msgstr "Bir çalışma dizini oluşturulamadı; yazma izniniz olduğundan emin olun"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:188
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:183
 #, kde-format
 msgctxt "Title for a messagebox"
 msgid "Krita"
 msgstr "Krita"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:189
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:184
 #, kde-format
 msgid ""
 "Warning: you are trying to import more than 100 frames into Krita.\n"
@@ -20486,7 +20506,7 @@ msgstr ""
 "100 kareden daha büyük bir klip düzenlemek istiyorsanız Kdenlive (https://"
 "kdenlive.org) gibi gerçek bir video düzenleyici kullanmayı düşünün."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:241
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:236
 #, kde-format
 msgctxt ""
 "FFMPEG animated video import message. arg1: frame progress number. arg2: "
@@ -20494,59 +20514,59 @@ msgctxt ""
 msgid "Extracted %1 frames from %2 video."
 msgstr "%2 videodan %1 kare çıkarıldı."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:290
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
 #, kde-format
 msgid "Failed to export frames from video"
 msgstr "Videodan kareler çıkarılamadı"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:362
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:348
 #, kde-format
 msgid "Select your Video File"
 msgstr "Video dosyası seç"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:395
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:374
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Width: %1 px"
 msgstr "Genişlik: %1 pks"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:396
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:375
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Height: %1 px"
 msgstr "Uzunluk: %1 pks"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:400
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:379
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Primaries: %1"
 msgstr "Renk Öncelikleri: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:403
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:382
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Transfer: %1"
 msgstr "Renk Aktar: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:406
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:385
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Duration: %1 s"
 msgstr "Süre: %1 sn"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:407
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:386
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Frames: %1"
 msgstr "Kareler: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:408
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:387
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "FPS: %1"
 msgstr "FPS: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:412
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid ""
@@ -20556,17 +20576,21 @@ msgstr ""
 "*<font size='0.5em'><em>*Dosyadaki FPS doğru değil. Tüm süreyi görmek için "
 "değiştirildi</em></font>"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:511
-#, kde-format
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
+#, fuzzy, kde-format
+#| msgctxt "part of warning in video importer."
+#| msgid ""
+#| "WARNING, you are trying to import %1 frames, the maximum amount you can "
+#| "import is %2."
 msgctxt "part of warning in video importer."
 msgid ""
-"WARNING, you are trying to import %1 frames, the maximum amount you can "
-"import is %2."
+"<b>Warning:</b> you are trying to import %1 frames, the maximum amount you "
+"can import is %2."
 msgstr ""
 "UYARI, %1 kare içe aktarmaya çalışıyorsunuz; ancak içe aktarabileceğiniz en "
 "fazla sayı %2."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:518
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
@@ -20574,7 +20598,7 @@ msgstr ""
 "Bunun yerine bir <a href=\"https://kdenlive.org\">video düzenleyici</a> "
 "kullanın!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:524
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:499
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20584,7 +20608,7 @@ msgstr ""
 "Bu kadar çok kareyi yüklemek için yeterli belleğiniz yok. Bilgisayar aşırı "
 "yüklenir."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:531
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:507
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20593,53 +20617,57 @@ msgstr ""
 "Bu işlem, kullanılabilir belleğin yarısından fazlasını alır; düzenleme "
 "işlemi yavaşlayabilir."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:540
-#, kde-format
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
+#, fuzzy, kde-format
+#| msgctxt "part of warning in video importer."
+#| msgid ""
+#| "Krita does not support the video transfer curve (%1), it will be loaded "
+#| "as linear"
 msgctxt "part of warning in video importer."
 msgid ""
 "Krita does not support the video transfer curve (%1), it will be loaded as "
-"linear"
+"linear."
 msgstr ""
 "Krita, video aktarım eğrisini desteklemiyor (%1), doğrusal olarak yüklenecek"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:570
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
 #, kde-format
 msgid "Open FFProbe"
 msgstr "FFProbe Aç"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:563
 #, kde-format
 msgid "FFProbe is invalid!"
 msgstr "FFProbe geçersiz!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:593
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:570
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
 #, kde-format
 msgid "Open FFMpeg"
 msgstr "FFmpeg Aç"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:605
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
 #, kde-format
 msgid "FFMpeg is invalid!"
 msgstr "FFmpeg geçersiz!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:612
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
 #, kde-format
 msgid "No FFMpeg found!"
 msgstr "FFmpeg bulunamadı!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:679
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
 #, kde-format
 msgid "Your FFMpeg version does not support this format"
 msgstr "Kurulu FFmpeg sürümü, bu biçimi desteklemiyor"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:719
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
 #, kde-format
 msgid "No video stream could be found!"
 msgstr "Video akışı bulunamadı!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:789
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #, kde-format
 msgid "Failed to load video information"
 msgstr "Video bilgisi yüklenemedi"
@@ -20674,18 +20702,31 @@ msgctxt ""
 msgid "Creating desired %1 file: %2/%3 frames."
 msgstr "İstenen %1 dosya oluşturuluyor: %2/%3 kare."
 
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: libs/ui/animation/video_export_options_dialog.ui:13
+#, kde-format
+msgid "Codec:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
+#: libs/ui/animation/video_export_options_dialog.ui:23
+#, fuzzy, kde-format
+#| msgid "No options"
+msgid "Codec options"
+msgstr "Seçenek yok"
+
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/animation/video_export_options_dialog.ui:31
-#: libs/ui/animation/video_export_options_dialog.ui:168
+#: libs/ui/animation/video_export_options_dialog.ui:45
+#: libs/ui/animation/video_export_options_dialog.ui:223
 #, kde-format
 msgid "Bitrate:"
 msgstr "Bit oranı:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH264)
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH265)
-#: libs/ui/animation/video_export_options_dialog.ui:52
-#: libs/ui/animation/video_export_options_dialog.ui:103
+#: libs/ui/animation/video_export_options_dialog.ui:78
+#: libs/ui/animation/video_export_options_dialog.ui:141
 #, kde-format
 msgid "Constant Rate Factor:"
 msgstr "Sabit Oran Faktörü:"
@@ -20694,16 +20735,16 @@ msgstr "Sabit Oran Faktörü:"
 #. i18n: ectx: property (text), widget (QLabel, lblPresetH265)
 #. i18n: ectx: property (text), widget (QLabel, lblPresetWEBP)
 #. i18n: ectx: property (text), widget (QLabel, presetLabel)
-#: libs/ui/animation/video_export_options_dialog.ui:69
-#: libs/ui/animation/video_export_options_dialog.ui:120
-#: libs/ui/animation/video_export_options_dialog.ui:351
+#: libs/ui/animation/video_export_options_dialog.ui:95
+#: libs/ui/animation/video_export_options_dialog.ui:158
+#: libs/ui/animation/video_export_options_dialog.ui:433
 #: libs/ui/widgets/KoFillConfigWidget.ui:297
 #, kde-format
 msgid "Preset:"
 msgstr "Önayar:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileH264)
-#: libs/ui/animation/video_export_options_dialog.ui:79
+#: libs/ui/animation/video_export_options_dialog.ui:105
 #, kde-format
 msgctxt "Label of H.264 encoder profiles"
 msgid "Profile:"
@@ -20711,41 +20752,42 @@ msgstr "Profil:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTuneH264)
 #. i18n: ectx: property (text), widget (QLabel, lblTuneH265)
-#: libs/ui/animation/video_export_options_dialog.ui:89
-#: libs/ui/animation/video_export_options_dialog.ui:140
+#: libs/ui/animation/video_export_options_dialog.ui:115
+#: libs/ui/animation/video_export_options_dialog.ui:178
 #, kde-format
 msgid "Tune:"
 msgstr "Ayarla:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileH265)
-#: libs/ui/animation/video_export_options_dialog.ui:130
+#: libs/ui/animation/video_export_options_dialog.ui:168
 #, kde-format
 msgctxt "Label of H.265 encoder profiles"
 msgid "Profile:"
 msgstr "Profil:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkUseHDRMetadata)
-#: libs/ui/animation/video_export_options_dialog.ui:150
+#. i18n: ectx: property (title), widget (QGroupBox, chkUseHDRMetadata)
+#: libs/ui/animation/video_export_options_dialog.ui:188
 #, kde-format
 msgid "HDR Mode"
 msgstr "HDR Kipi"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnHdrMetadata)
-#: libs/ui/animation/video_export_options_dialog.ui:157
+#: libs/ui/animation/video_export_options_dialog.ui:197
 #, kde-format
 msgid "HDR Metadata..."
 msgstr "HDR Üstveri..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/video_export_options_dialog.ui:189
-#, kde-format
-msgid "Bitrate (MBit/s)"
+#: libs/ui/animation/video_export_options_dialog.ui:249
+#, fuzzy, kde-format
+#| msgid "Bitrate (MBit/s)"
+msgid "Bitrate (MBit/s):"
 msgstr "Bit Hızı (MBit/sn)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
-#: libs/ui/animation/video_export_options_dialog.ui:203
-#: libs/ui/animation/video_export_options_dialog.ui:310
+#: libs/ui/animation/video_export_options_dialog.ui:263
+#: libs/ui/animation/video_export_options_dialog.ui:406
 #, kde-format
 msgid "Lossless"
 msgstr "Kayıpsız"
@@ -20753,47 +20795,48 @@ msgstr "Kayıpsız"
 #. i18n: ectx: property (text), widget (QCheckBox, gifLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, apngLoop)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLoop)
-#: libs/ui/animation/video_export_options_dialog.ui:214
-#: libs/ui/animation/video_export_options_dialog.ui:289
-#: libs/ui/animation/video_export_options_dialog.ui:361
+#: libs/ui/animation/video_export_options_dialog.ui:286
+#: libs/ui/animation/video_export_options_dialog.ui:373
+#: libs/ui/animation/video_export_options_dialog.ui:443
 #, kde-format
 msgid "Loop Animation"
 msgstr "Canlandırmayı Döngüle"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifTransDiff)
-#: libs/ui/animation/video_export_options_dialog.ui:221
+#: libs/ui/animation/video_export_options_dialog.ui:293
 #, kde-format
 msgid "Transparency Difference"
 msgstr "Saydamlık Farkı"
 
-#. i18n: ectx: property (text), widget (QRadioButton, gifAutoPalette)
-#: libs/ui/animation/video_export_options_dialog.ui:228
-#, kde-format
-msgid "Auto-generate 8bit Palette"
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: libs/ui/animation/video_export_options_dialog.ui:300
+#, fuzzy, kde-format
+#| msgid "Auto-generate 8bit Palette"
+msgid "Auto-generate 8bit Palette:"
 msgstr "8 Bit Paleti Otomatik Oluştur"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
-#: libs/ui/animation/video_export_options_dialog.ui:238
+#: libs/ui/animation/video_export_options_dialog.ui:310
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:129
 #, kde-format
 msgid "Dithering:"
 msgstr "Titreme:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseBayerScaleGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:248
+#: libs/ui/animation/video_export_options_dialog.ui:320
 #, kde-format
 msgid "Bayer Scale:"
 msgstr "Bayer Ölçeği:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDiffModeGIF)
-#: libs/ui/animation/video_export_options_dialog.ui:265
+#: libs/ui/animation/video_export_options_dialog.ui:337
 #, kde-format
 msgid "Difference Mode:"
 msgstr "Fark Kipi:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, gifReserveTransparent)
-#: libs/ui/animation/video_export_options_dialog.ui:275
+#: libs/ui/animation/video_export_options_dialog.ui:347
 #, no-c-format, kde-format
 msgid ""
 "<html><head/><body><p>GIF format supports up to 256 colors per frame/image. "
@@ -20827,41 +20870,45 @@ msgstr ""
 "kullanmayı düşünün.</span><br/></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifReserveTransparent)
-#: libs/ui/animation/video_export_options_dialog.ui:278
+#: libs/ui/animation/video_export_options_dialog.ui:350
 #, kde-format
 msgid "Preserve Transparency"
 msgstr "Saydamlığı Koru"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPredAPNG)
-#: libs/ui/animation/video_export_options_dialog.ui:296
+#: libs/ui/animation/video_export_options_dialog.ui:380
 #, kde-format
 msgid "Prediction Mode:"
 msgstr "Öngörü Kipi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCompressWEBP)
-#: libs/ui/animation/video_export_options_dialog.ui:317
+#: libs/ui/animation/video_export_options_dialog.ui:413
 #, kde-format
 msgid "Compression Level:"
 msgstr "Sıkıştırma Düzeyi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQscaleWEBP)
-#: libs/ui/animation/video_export_options_dialog.ui:334
+#: libs/ui/animation/video_export_options_dialog.ui:423
 #, kde-format
 msgid "Image Quality:"
 msgstr "Görsel Kalitesi:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkCustomLine)
-#: libs/ui/animation/video_export_options_dialog.ui:374
-#, kde-format
-msgid "Custom Options:"
+#. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
+#: libs/ui/animation/video_export_options_dialog.ui:457
+#, fuzzy, kde-format
+#| msgid "Custom Options:"
+msgid "Custom options"
 msgstr "Özel Seçenekler:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
-#: libs/ui/animation/video_export_options_dialog.ui:383
-#, kde-format
+#: libs/ui/animation/video_export_options_dialog.ui:466
+#, fuzzy, kde-format
+#| msgid ""
+#| "Add any ffmpeg filtering options here. It will be put between source and "
+#| "destination streams of the ffmpeg"
 msgid ""
-"Add any ffmpeg filtering options here. It will be put between source and "
-"destination streams of the ffmpeg"
+"Add any FFmpeg filtering options here. It will be put between source and "
+"destination streams of the FFmpeg instance"
 msgstr ""
 "Herhangi bir ffmpeg süzgeç seçeneğini buraya ekleyin. Kaynak ve hedef ffmpeg "
 "akışları arasına koyulacaktır"
@@ -20871,7 +20918,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
-#: libs/ui/animation/video_export_options_dialog.ui:390
+#: libs/ui/animation/video_export_options_dialog.ui:473
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:668
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:141
@@ -21222,86 +21269,86 @@ msgctxt "paleteuse diff mode option name"
 msgid "rectangle"
 msgstr "dikdörtgen"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:147
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:166
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:149
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:168
 #, kde-format
 msgctxt "kilo-bits-per-second, video bitrate suffix"
 msgid "kbps"
 msgstr "kbps"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:291
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:292
 #, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
 msgstr "OpenH264"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:292
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:293
 #, kde-format
 msgctxt "h264 codec name, check simplescreenrecorder for standard translations"
 msgid "H.264, MPEG-4 Part 10"
 msgstr "H.264, MPEG-4 Bölüm 10"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:293
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:294
 #, kde-format
 msgctxt "h265 codec name, check simplescreenrecorder for standard translations"
 msgid "H.265, MPEG-H Part 2 (HEVC)"
 msgstr "H.265, MPEG-H Bölüm 2 (HEVC)"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:296
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:297
 #, kde-format
 msgctxt "VP9 codec name"
 msgid "VP9"
 msgstr "VP9"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:301
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:302
 #, kde-format
 msgctxt ""
 "theora codec name, check simplescreenrecorder for standard translations"
 msgid "Theora"
 msgstr "Theora"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:304
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:305
 #, kde-format
 msgctxt "WEBP codec name"
 msgid "WEBP"
 msgstr "WEBP"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:307
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:308
 #, kde-format
 msgctxt "APNG codec name"
 msgid "APNG"
 msgstr "APNG"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:310
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:311
 #, kde-format
 msgctxt "GIF codec name"
 msgid "GIF"
 msgstr "GIF"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:586
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:587
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Exported animation format does not support HDR"
 msgstr "Dışa aktarılan canlandırma HDR biçimini desteklemiyor"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:588
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:589
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
 msgstr "HDR üst verisi yalnızca \"main10\" profiliyle kullanılabilir"
 
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:26
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:25
 #, kde-format
 msgid "Rec. 2100 PQ"
 msgstr "Rec. 2100 PQ"
 
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:27
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:26
 #, kde-format
 msgid "DCI-P3 D65"
 msgstr "DCI-P3 D65"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:28
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:27
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:161
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:25
 #, kde-format
@@ -21310,10 +21357,10 @@ msgstr "Özel"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgInternalColorSelector)
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgHeifImport)
-#. i18n: ectx: property (windowTitle), widget (QDialog, VideoHDRMetadataOptionsDialog)
+#. i18n: ectx: property (windowTitle), widget (QWidget, VideoHDRMetadataOptionsDialog)
 #. i18n: ectx: property (windowTitle), widget (QDialog, FilterDialog)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImportImageSequence)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:18
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:24
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:14 libs/ui/forms/wdgfilterdialog.ui:30
 #: libs/ui/forms/wdgimportimagesequence.ui:18
 #: libs/widgets/WdgDlgInternalColorSelector.ui:18
@@ -21322,7 +21369,7 @@ msgid "Dialog"
 msgstr "İletişim Kutusu"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:26
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:30
 #, kde-format
 msgid "Master Display:"
 msgstr "Ana Ekran:"
@@ -21331,7 +21378,7 @@ msgstr "Ana Ekran:"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:38
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2092
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2094
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
@@ -21342,7 +21389,7 @@ msgstr "Ekran"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:46
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:48
 #: libs/ui/kis_paintop_box.cc:299
 #: plugins/dockers/recorder/recorder_export.ui:467
 #, kde-format
@@ -21350,39 +21397,39 @@ msgid "x"
 msgstr "x"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:56
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:58
 #, kde-format
 msgid "y"
 msgstr "y"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:68
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:70
 #, kde-format
 msgid "Red Primary:"
 msgstr "Kırmızı Öncelik:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:105
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:107
 #, kde-format
 msgid "Green Primary:"
 msgstr "Yeşil Öncelik:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:142
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:144
 #, kde-format
 msgid "Blue Primary:"
 msgstr "Mavi Öncelik:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #. i18n: ectx: property (text), widget (QLabel, lblWhitepoint)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:179
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:197
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:195
 #, kde-format
 msgid "White Point:"
 msgstr "Beyaz Nokta:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:232
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:250
 #, kde-format
 msgid "Min Luminance:"
 msgstr "En Az Renk Parlaklığı:"
@@ -21392,8 +21439,8 @@ msgstr "En Az Renk Parlaklığı:"
 #. i18n: ectx: property (suffix), widget (QSpinBox, intMaxCLL)
 #. i18n: ectx: property (suffix), widget (QSpinBox, intMaxFALL)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:239
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:259
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:257
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:277
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:300
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:317
 #: plugins/impex/heif/WdgHeifExport.ui:116
@@ -21403,7 +21450,7 @@ msgid " cd/m²"
 msgstr " cd/m²"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:252
+#: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:270
 #, kde-format
 msgid "Max Luminance:"
 msgstr "En Fazla Renk Parlaklığı:"
@@ -21427,10 +21474,12 @@ msgid "Video Animation Import"
 msgstr "Video Canlandırma İçe Aktar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGeneral)
+#. i18n: ectx: property (title), widget (QGroupBox, grpGeneralOptions)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
+#: libs/ui/animation/wdg_animationrenderer.ui:16
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2062
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2064
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
@@ -21447,53 +21496,14 @@ msgid "General"
 msgstr "Genel"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
-#: libs/ui/animation/VideoImportDialog.ui:47
-#, kde-format
-msgid "Choose a video file"
-msgstr "Bir video dosyası seç"
-
-#. i18n: ectx: property (text), widget (QLabel, lblWarning)
-#: libs/ui/animation/VideoImportDialog.ui:80
-#, kde-format
-msgid ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-"\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
-"weight:500; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style=\" "
-"font-size:16pt; font-weight:400; color:#ff692e;\">This video contains more "
-"than 100 frames. Loading too many frames can overload your computer. Use a</"
-"span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;\"> </"
-"span><a href=\"https://kdenlive.org\"><span style=\" font-size:16pt; font-"
-"weight:400; text-decoration: underline; color:#2980b9;\">video editor </"
-"span></a><span style=\" font-size:16pt; font-weight:400; color:#ff692e;"
-"\">instead!</span></p></body></html>"
-msgstr ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-"\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
-"weight:500; font-style:normal;\">\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"size:16pt; font-weight:600; color:#ff692e;\">UYARI: </span><span style=\" "
-"font-size:16pt; font-weight:400; color:#ff692e;\">Bu video, 100'den çok kare "
-"içeriyor. Çok fazla kare yüklemek, bilgisayarınızı aşırı yükleyebilir. Bunun "
-"yerine bir </span><span style=\" font-size:16pt; font-weight:400; color:"
-"#ff1500;\"> </span><a href=\"https://kdenlive.org\"><span style=\" font-"
-"size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;"
-"\">video düzenleyici </span></a><span style=\" font-size:16pt; font-"
-"weight:400; color:#ff692e;\">kullanın!</span></p></body></html>"
+#: libs/ui/animation/VideoImportDialog.ui:40
+#, fuzzy, kde-format
+#| msgid "Video FPS:"
+msgid "Video file:"
+msgstr "Video FPS'si:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
-#: libs/ui/animation/VideoImportDialog.ui:130
+#: libs/ui/animation/VideoImportDialog.ui:77
 #: libs/widgetutils/KisPreviewFileDialog.cpp:96
 #, kde-format
 msgid "No Preview"
@@ -21505,7 +21515,7 @@ msgstr "Önizleme Yok"
 #. i18n: ectx: property (text), widget (QLabel, fileSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, bppLabel)
 #. i18n: ectx: property (text), widget (QLabel, colorCount)
-#: libs/ui/animation/VideoImportDialog.ui:179
+#: libs/ui/animation/VideoImportDialog.ui:133
 #: libs/ui/layerstyles/wdgblendingoptions.ui:309
 #: libs/ui/layerstyles/wdgblendingoptions.ui:337
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:160
@@ -21519,52 +21529,19 @@ msgid "0"
 msgstr "0"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLoadedDetails)
-#: libs/ui/animation/VideoImportDialog.ui:231
+#: libs/ui/animation/VideoImportDialog.ui:167
 #, kde-format
 msgid "Please choose a file."
 msgstr "Bir dosya seçin."
 
 #. i18n: ectx: property (title), widget (QGroupBox, exportOptionsGroup)
-#: libs/ui/animation/VideoImportDialog.ui:344
+#: libs/ui/animation/VideoImportDialog.ui:264
 #, kde-format
 msgid "Import Options"
 msgstr "İçe Aktarma Seçenekleri"
 
-#. i18n: ectx: property (text), widget (QLabel, frameSkipLabel)
-#: libs/ui/animation/VideoImportDialog.ui:371
-#, kde-format
-msgid "Skip Interval:"
-msgstr "Atlama Aralığı:"
-
-#. i18n: ectx: property (text), widget (QLabel, startExportingAtLabel)
-#: libs/ui/animation/VideoImportDialog.ui:391
-#, kde-format
-msgid "Start at: "
-msgstr "Burada başlat: "
-
-#. i18n: ectx: property (text), widget (QLabel, exportDurationLabel)
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/animation/VideoImportDialog.ui:401
-#: plugins/paintops/libpaintop/sensors/SensorTimeConfiguration.ui:54
-#, kde-format
-msgid "Duration:"
-msgstr "Süre:"
-
-#. i18n: ectx: property (text), widget (QLabel, fpsLabel)
-#: libs/ui/animation/VideoImportDialog.ui:411
-#: libs/ui/animation/wdg_animationrenderer.ui:108
-#, kde-format
-msgid "FPS:"
-msgstr "FPS:"
-
-#. i18n: ectx: property (text), widget (QLabel, importDocumentLabel)
-#: libs/ui/animation/VideoImportDialog.ui:447
-#, kde-format
-msgid "Import into:"
-msgstr "Şuraya içe aktar:"
-
 #. i18n: ectx: property (toolTip), widget (QGroupBox, optionFilterDuplicates)
-#: libs/ui/animation/VideoImportDialog.ui:469
+#: libs/ui/animation/VideoImportDialog.ui:270
 #, kde-format
 msgid ""
 "Use ffmpeg to detect similar frames and reduce the total number of frames "
@@ -21574,19 +21551,19 @@ msgstr ""
 "sayısını azaltın."
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionFilterDuplicates)
-#: libs/ui/animation/VideoImportDialog.ui:472
+#: libs/ui/animation/VideoImportDialog.ui:273
 #, kde-format
 msgid "Filter duplicate frames"
 msgstr "Yinelenen kareleri süz"
 
 #. i18n: ectx: property (text), widget (QLabel, sensitivityLabel)
-#: libs/ui/animation/VideoImportDialog.ui:496
+#: libs/ui/animation/VideoImportDialog.ui:297
 #, kde-format
 msgid "Sensitivity"
 msgstr "Hassaslık"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, sensitivitySpinbox)
-#: libs/ui/animation/VideoImportDialog.ui:514
+#: libs/ui/animation/VideoImportDialog.ui:315
 #, kde-format
 msgid ""
 "How sensitive should the duplicate frame filter be when determining\n"
@@ -21597,10 +21574,43 @@ msgstr ""
 "süzgecinin ne kadar hassas olacağı.\n"
 "Hassaslık ne kadar yüksekse Krita'ya o kadar çok kare eklenir."
 
+#. i18n: ectx: property (text), widget (QLabel, importDocumentLabel)
+#: libs/ui/animation/VideoImportDialog.ui:325
+#, kde-format
+msgid "Import into:"
+msgstr "Şuraya içe aktar:"
+
+#. i18n: ectx: property (text), widget (QLabel, fpsLabel)
+#: libs/ui/animation/VideoImportDialog.ui:375
+#: libs/ui/animation/wdg_animationrenderer.ui:171
+#, kde-format
+msgid "FPS:"
+msgstr "FPS:"
+
+#. i18n: ectx: property (text), widget (QLabel, frameSkipLabel)
+#: libs/ui/animation/VideoImportDialog.ui:388
+#, kde-format
+msgid "Skip Interval:"
+msgstr "Atlama Aralığı:"
+
+#. i18n: ectx: property (text), widget (QLabel, startExportingAtLabel)
+#: libs/ui/animation/VideoImportDialog.ui:447
+#, kde-format
+msgid "Start at: "
+msgstr "Burada başlat: "
+
+#. i18n: ectx: property (text), widget (QLabel, exportDurationLabel)
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: libs/ui/animation/VideoImportDialog.ui:473
+#: plugins/paintops/libpaintop/sensors/SensorTimeConfiguration.ui:54
+#, kde-format
+msgid "Duration:"
+msgstr "Süre:"
+
 #. i18n: ectx: attribute (title), widget (QWidget, tabOptions)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #. i18n: ectx: attribute (title), widget (QWidget, advanced)
-#: libs/ui/animation/VideoImportDialog.ui:532
+#: libs/ui/animation/VideoImportDialog.ui:512
 #: libs/ui/forms/wdgperformancesettings.ui:251
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:319
 #: plugins/impex/webp/kis_wdg_options_webp.ui:147
@@ -21609,7 +21619,7 @@ msgid "Advanced"
 msgstr "Gelişmiş"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsDocumentGroup)
-#: libs/ui/animation/VideoImportDialog.ui:540
+#: libs/ui/animation/VideoImportDialog.ui:518
 #, kde-format
 msgid "Document"
 msgstr "Belge"
@@ -21630,9 +21640,9 @@ msgstr "Belge"
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/VideoImportDialog.ui:546
-#: libs/ui/animation/VideoImportDialog.ui:603
-#: libs/ui/animation/wdg_animationrenderer.ui:170
+#: libs/ui/animation/VideoImportDialog.ui:524
+#: libs/ui/animation/VideoImportDialog.ui:559
+#: libs/ui/animation/wdg_animationrenderer.ui:143
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:71
 #: libs/ui/forms/wdg_resolution.ui:24 libs/ui/forms/wdgimageproperties.ui:48
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:133
@@ -21674,9 +21684,9 @@ msgstr "Genişlik:"
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/animation/VideoImportDialog.ui:559
-#: libs/ui/animation/VideoImportDialog.ui:613
-#: libs/ui/animation/wdg_animationrenderer.ui:180
+#: libs/ui/animation/VideoImportDialog.ui:537
+#: libs/ui/animation/VideoImportDialog.ui:572
+#: libs/ui/animation/wdg_animationrenderer.ui:157
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:108
 #: libs/ui/forms/wdg_resolution.ui:31 libs/ui/forms/wdgimageproperties.ui:71
 #: libs/ui/imagesize/wdg_canvassize.ui:39
@@ -21702,7 +21712,7 @@ msgid "Height:"
 msgstr "Yükseklik:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsImportVideoScaleGroup)
-#: libs/ui/animation/VideoImportDialog.ui:575
+#: libs/ui/animation/VideoImportDialog.ui:553
 #, kde-format
 msgid "Import Video Scale"
 msgstr "Video Ölçeği İçe Aktar"
@@ -21710,8 +21720,8 @@ msgstr "Video Ölçeği İçe Aktar"
 #. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #. i18n: ectx: property (text), widget (QLabel, videoScaleFilterLabel)
 #. i18n: ectx: property (text), widget (QLabel, scaleFilterLabel)
-#: libs/ui/animation/VideoImportDialog.ui:593
-#: libs/ui/animation/wdg_animationrenderer.ui:206
+#: libs/ui/animation/VideoImportDialog.ui:585
+#: libs/ui/animation/wdg_animationrenderer.ui:188
 #: libs/ui/imagesize/wdg_layersize.ui:119
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:43
 #, kde-format
@@ -21720,149 +21730,60 @@ msgid "Filter:"
 msgstr "Süz:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
-#: libs/ui/animation/VideoImportDialog.ui:636
-#, kde-format
-msgid "FFMpeg"
-msgstr "FFmpeg"
+#: libs/ui/animation/VideoImportDialog.ui:601
+#, fuzzy, kde-format
+#| msgid "FFmpeg:"
+msgid "FFmpeg"
+msgstr "FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
-#: libs/ui/animation/VideoImportDialog.ui:654
-#, kde-format
-msgid "FFMpeg Path:"
+#: libs/ui/animation/VideoImportDialog.ui:607
+#, fuzzy, kde-format
+#| msgid "FFMpeg Path:"
+msgid "FFmpeg path:"
 msgstr "FFmpeg Yolu:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
-#: libs/ui/animation/VideoImportDialog.ui:674
-#, kde-format
-msgid "FFProbe Path:"
+#: libs/ui/animation/VideoImportDialog.ui:634
+#, fuzzy, kde-format
+#| msgid "FFProbe Path:"
+msgid "FFprobe path:"
 msgstr "FFProbe Yolu:"
 
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimaterionRenderer)
-#: libs/ui/animation/wdg_animationrenderer.ui:24
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
+#: libs/ui/animation/wdg_animationrenderer.ui:10
 #, kde-format
 msgid "Animation Renderer Image"
 msgstr "Canlandırma Sunucusu Görseli"
 
-#. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/animation/wdg_animationrenderer.ui:39
-#, kde-format
-msgid "Export:"
-msgstr "Dışa Aktar:"
-
-#. i18n: ectx: property (text), widget (QRadioButton, shouldExportOnlyImageSequence)
-#: libs/ui/animation/wdg_animationrenderer.ui:46
-#, kde-format
-msgid "Image Se&quence"
-msgstr "Görsel Sı&ralaması"
-
-#. i18n: ectx: property (text), widget (QRadioButton, shouldExportOnlyVideo)
-#: libs/ui/animation/wdg_animationrenderer.ui:53
-#, kde-format
-msgid "&Video"
-msgstr "&Video"
-
-#. i18n: ectx: property (text), widget (QRadioButton, shouldExportAll)
-#. i18n: ectx: property (text), widget (QRadioButton, radioBoth)
-#: libs/ui/animation/wdg_animationrenderer.ui:60
-#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:48
-#, kde-format
-msgid "Both"
-msgstr "İkisi"
-
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/animation/wdg_animationrenderer.ui:95
+#: libs/ui/animation/wdg_animationrenderer.ui:22
 #, kde-format
 msgid "First frame:"
 msgstr "İlk kare:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/animation/wdg_animationrenderer.ui:141
+#: libs/ui/animation/wdg_animationrenderer.ui:32
 #, kde-format
 msgid "Last frame:"
 msgstr "Son kare:"
 
-#. i18n: ectx: property (title), widget (QGroupBox, videoOptionsGroup)
-#: libs/ui/animation/wdg_animationrenderer.ui:232
-#, kde-format
-msgid "Video Options"
-msgstr "Video Seçenekleri"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
-#: libs/ui/animation/wdg_animationrenderer.ui:255
-#, kde-format
-msgid "Select the ffmpeg render options."
-msgstr "ffmpeg sunum seçeneklerini Seç."
-
-#. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/animation/wdg_animationrenderer.ui:267
-#, kde-format
-msgid "FF&Mpeg: "
-msgstr "FF&mpeg: "
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#. i18n: ectx: property (text), widget (QLabel, labelResolution)
-#: libs/ui/animation/wdg_animationrenderer.ui:283
-#: plugins/dockers/recorder/recorder_export.ui:524
-#, kde-format
-msgid "Render as:"
-msgstr "Şöyle sun:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/animation/wdg_animationrenderer.ui:293
-#, kde-format
-msgid "Video Location:"
-msgstr "Video Konumu:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeAudio)
-#: libs/ui/animation/wdg_animationrenderer.ui:309
-#, kde-format
-msgid "Include Audio"
-msgstr "Sesi İçer"
-
-#. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
-#: libs/ui/animation/wdg_animationrenderer.ui:318
-#, kde-format
-msgid "FFMpeg Version: None"
-msgstr "FFmpeg Sürümü: Yok"
-
-#. i18n: ectx: property (text), widget (QLabel, lblGifWarningFPS)
-#: libs/ui/animation/wdg_animationrenderer.ui:325
-#, kde-format
-msgid ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-"animated gif images cannot have a framerate higher than 50. The framerate "
-"will be reduced to 50 frames per second.</p></body></html>"
-msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Uyarı:</span> "
-"hareketli gif görseller 50'den daha yüksek kare hızına sahip olamaz. Kare "
-"hızı saniyede 50 kareye düşürülür.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QLabel, lblGifWarningFFMpeg)
-#: libs/ui/animation/wdg_animationrenderer.ui:335
-#, kde-format
-msgid ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-"FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
-"body></html>"
-msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Uyarı:</span> "
-"Saydamlığın çalışması için FFmpeg sürümünün en az 4.2 veya üzeri olması "
-"gerekmektedir</p></body></html>"
-
-#. i18n: ectx: property (title), widget (QGroupBox, imageSequenceOptionsGroup)
-#: libs/ui/animation/wdg_animationrenderer.ui:361
-#, kde-format
-msgid "Image Sequence Options"
-msgstr "Görsel Sıralaması Seçenekleri"
+#. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
+#: libs/ui/animation/wdg_animationrenderer.ui:49
+#, fuzzy, kde-format
+#| msgid "Export Images"
+msgid "Export as image sequence"
+msgstr "Görselleri Dışa Aktar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/animation/wdg_animationrenderer.ui:369
-#, kde-format
-msgid "Fi&le format:"
+#: libs/ui/animation/wdg_animationrenderer.ui:58
+#, fuzzy, kde-format
+#| msgid "Fi&le format:"
+msgid "File format:"
 msgstr "Dosya &biçimi:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbMimetype)
-#: libs/ui/animation/wdg_animationrenderer.ui:390
+#: libs/ui/animation/wdg_animationrenderer.ui:67
 #, kde-format
 msgid ""
 "Select the file format for the image sequence. If you want to render to "
@@ -21872,40 +21793,113 @@ msgstr ""
 "istiyorsanız yalnızca PNG seçebilirsiniz"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnExportOptions)
-#: libs/ui/animation/wdg_animationrenderer.ui:397
+#: libs/ui/animation/wdg_animationrenderer.ui:74
 #, kde-format
 msgid "Select the frame export options"
 msgstr "Kare dışa aktarma seçeneklerini seç"
 
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: libs/ui/animation/wdg_animationrenderer.ui:409
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: libs/ui/animation/wdg_animationrenderer.ui:86
 #, kde-format
-msgid "Start numbering at:"
-msgstr "Numaralandırmayı şuradan başlat:"
+msgid "Image location:"
+msgstr "Görsel konumu:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/animation/wdg_animationrenderer.ui:435
+#: libs/ui/animation/wdg_animationrenderer.ui:96
 #, kde-format
 msgid "Base name:"
 msgstr "Temel ad:"
 
 #. i18n: ectx: property (text), widget (QLineEdit, txtBasename)
-#: libs/ui/animation/wdg_animationrenderer.ui:445
+#: libs/ui/animation/wdg_animationrenderer.ui:103
 #, kde-format
 msgid "frame"
 msgstr "kare"
 
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/animation/wdg_animationrenderer.ui:452
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: libs/ui/animation/wdg_animationrenderer.ui:110
 #, kde-format
-msgid "Image location:"
-msgstr "Görsel konumu:"
+msgid "Start numbering at:"
+msgstr "Numaralandırmayı şuradan başlat:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOnlyUniqueFrames)
-#: libs/ui/animation/wdg_animationrenderer.ui:472
+#: libs/ui/animation/wdg_animationrenderer.ui:124
 #, kde-format
 msgid "Only Unique Frames"
 msgstr "Yalnızca Benzersiz Kareler"
+
+#. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
+#: libs/ui/animation/wdg_animationrenderer.ui:134
+#, fuzzy, kde-format
+#| msgid "Export size:"
+msgid "Export as video"
+msgstr "Dışa aktarma boyutu:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#. i18n: ectx: property (text), widget (QLabel, labelResolution)
+#: libs/ui/animation/wdg_animationrenderer.ui:198
+#: plugins/dockers/recorder/recorder_export.ui:524
+#, kde-format
+msgid "Render as:"
+msgstr "Şöyle sun:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
+#: libs/ui/animation/wdg_animationrenderer.ui:210
+#, fuzzy, kde-format
+#| msgid "Select the ffmpeg render options."
+msgid "Select the FFmpeg render options."
+msgstr "ffmpeg sunum seçeneklerini Seç."
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#. i18n: ectx: property (text), widget (QLabel, labelExportTo)
+#: libs/ui/animation/wdg_animationrenderer.ui:222
+#: plugins/dockers/recorder/recorder_export.ui:374
+#, kde-format
+msgid "Video location:"
+msgstr "Video konumu:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeAudio)
+#: libs/ui/animation/wdg_animationrenderer.ui:232
+#, kde-format
+msgid "Include Audio"
+msgstr "Sesi İçer"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: libs/ui/animation/wdg_animationrenderer.ui:239
+#, fuzzy, kde-format
+#| msgid "Image location:"
+msgid "FFmpeg location:"
+msgstr "Görsel konumu:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: libs/ui/animation/wdg_animationrenderer.ui:249
+#, fuzzy, kde-format
+#| msgid "FFmpeg Version: "
+msgid "FFmpeg version:"
+msgstr "FFmpeg Sürümü: "
+
+#. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
+#. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
+#. i18n: ectx: property (text), widget (QToolButton, btnNoFill)
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbGradientRepeat)
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
+#. i18n: ectx: property (text), widget (QLabel, lblNone)
+#. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
+#. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
+#. i18n: ectx: property (text), item, widget (QComboBox, cbCommonColorsScrolling)
+#: libs/ui/animation/wdg_animationrenderer.ui:256
+#: libs/ui/forms/wdgstrokeselectionproperties.ui:204
+#: libs/ui/widgets/KoFillConfigWidget.ui:41
+#: libs/ui/widgets/KoFillConfigWidget.ui:275
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:284
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:623
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:830
+#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:36
+#: plugins/impex/webp/kis_wdg_options_webp.ui:424
+#: plugins/tools/tool_crop/wdg_tool_crop.ui:441
+#, kde-format
+msgid "None"
+msgstr "Yok"
 
 #: libs/ui/brushhud/kis_brush_hud.cpp:78
 #, kde-format
@@ -22998,11 +22992,6 @@ msgstr "Mavi Öncelik: %1, %2"
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Beyaz Nokta: %1, %2"
-
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
-#, kde-format
-msgid "Warning(s):"
-msgstr "Uyarılar:"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1970
 #, kde-format
@@ -24175,7 +24164,7 @@ msgstr "Siyah Nokta Karşılaması Kullan"
 msgid ""
 "Allow Little CMS optimizations (uncheck when using linear light RGB or XYZ)"
 msgstr ""
-"Küçük CMS iyileştirmelerine izin ver (doğrusal ışık KYM veya XYZ kullanırkan "
+"Küçük CMS iyileştirmelerine izin ver (doğrusal ışık RGB veya XYZ kullanırkan "
 "işaretleme)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkForcePaletteColor)
@@ -27269,7 +27258,7 @@ msgstr "Sphere Dec."
 #: plugins/filters/palettize/palettize.ui:72
 #, kde-format
 msgid "RGB"
-msgstr "KYM"
+msgstr "RGB"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, segmentColorInterpolationTypeComboBox)
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:385
@@ -27393,27 +27382,6 @@ msgstr "mm"
 #, kde-format
 msgid "inch"
 msgstr "inç"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
-#. i18n: ectx: property (text), widget (QToolButton, btnNoFill)
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbGradientRepeat)
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#. i18n: ectx: property (text), widget (QLabel, lblNone)
-#. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
-#. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
-#. i18n: ectx: property (text), item, widget (QComboBox, cbCommonColorsScrolling)
-#: libs/ui/forms/wdgstrokeselectionproperties.ui:204
-#: libs/ui/widgets/KoFillConfigWidget.ui:41
-#: libs/ui/widgets/KoFillConfigWidget.ui:275
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:284
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:623
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:830
-#: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:36
-#: plugins/impex/webp/kis_wdg_options_webp.ui:424
-#: plugins/tools/tool_crop/wdg_tool_crop.ui:441
-#, kde-format
-msgid "None"
-msgstr "Yok"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:209
@@ -28837,7 +28805,7 @@ msgstr "%1 süzgeci, %2 verinizi 16 bit L*a*b*'ye veya tam tersine dönüştür�
 #, kde-format
 msgid "The %1 filter will convert your %2 data to 16-bit RGBA and vice versa. "
 msgstr ""
-"%1 süzgeci, %2 verinizi 16 bit KYMA'ya veya tam tersine dönüştürecektir. "
+"%1 süzgeci, %2 verinizi 16 bit RGBA'ya veya tam tersine dönüştürecektir. "
 
 #: libs/ui/kis_filter_manager.cc:355
 #, kde-format
@@ -28998,7 +28966,7 @@ msgstr "Yeni Süzgeç Maskesi"
 #: libs/ui/kis_mask_manager.cc:274
 msgctxt "(qtundo-format)"
 msgid "Add Colorize Mask"
-msgstr "Renklendirilmiş Maske Ekle"
+msgstr "Renklendirme Maskesi Ekle"
 
 #: libs/ui/kis_mask_manager.cc:286
 msgctxt "(qtundo-format)"
@@ -29805,10 +29773,10 @@ msgid ""
 msgstr ""
 "Yeni bir görsel oluştur.\n"
 "Renk uzayı olası değerleri:\n"
-"    * KYMA\n"
+"    * RGBA\n"
 "    * XYZA\n"
 "    * LABA\n"
-"    * CMSKA\n"
+"    * CMYKA\n"
 "    * GRAY\n"
 "    * YCbCrA\n"
 "Kanal derinliği olası argümanları:\n"
@@ -32833,7 +32801,7 @@ msgstr "Bu renk uzayının Ton Yanıt Eğrisi hem sRGB, L* hem de rec709 TRC."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Estimated Gamma cannot be retrieved for CMYK."
-msgstr "Tahmini gama, CMSK için alınamadı."
+msgstr "Tahmini gama, CMYK için alınamadı."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:357
 #, kde-format
@@ -32885,12 +32853,12 @@ msgid ""
 "convert to other spaces. RGB is also the recommended colorspace for HDR "
 "editing."
 msgstr ""
-"<b><a href=\"https://en.wikipedia.org/wiki/KYM_color_space\">KYM (Kırmızı, "
+"<b><a href=\"https://en.wikipedia.org/wiki/RGB_color_space\">RGB (Kırmızı, "
 "Yeşil, Mavi)</a></b>, ekranlar ve diğer ışık tabanlı ortamlar tarafından "
-"kullanılan renk modelidir.<br/>KYM bir katma renk modelidir: Renkleri bir "
+"kullanılan renk modelidir.<br/>RGB bir katma renk modelidir: Renkleri bir "
 "araya getirmek onları daha parlak yapar. Bu renk modeli, tüm renk "
 "modellerinin en kapsamlısıdır ve boyama için daha sonra diğer alanlara "
-"dönüştürebileceğiniz bir model olarak önerilir. KYM, HDR düzenleme için "
+"dönüştürebileceğiniz bir model olarak önerilir. RGB, HDR düzenleme için "
 "önerilen renk aralığıdır."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:408
@@ -32908,11 +32876,11 @@ msgid ""
 msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/CMYK_color_model\">CMYK (Cam "
 "göbeği, Macenta, Sarı, Anahtar)</a></b>, yazıcılar ve diğer mürekkep tabanlı "
-"medyalar tarafından kullanılan modeldir.<br/>CMSK, renkleri bir araya "
-"getirmenin onları daha koyu hale getireceği, çıkarımcı bir modeldir. CMSK "
-"profilleri yazıcı başına çok spesifik olduğundan, KYM alanında çalışılması "
-"ve daha sonra tercihen CMSK profiline, tercihen yazıcınız tarafından "
-"gönderilen bir profile dönüştürülmesi önerilir.<br/>CMSK boyama için "
+"medyalar tarafından kullanılan modeldir.<br/>CMYK, renkleri bir araya "
+"getirmenin onları daha koyu hale getireceği, çıkarımcı bir modeldir. CMYK "
+"profilleri yazıcı başına çok spesifik olduğundan, RGB alanında çalışılması "
+"ve daha sonra tercihen CMYK profiline, tercihen yazıcınız tarafından "
+"gönderilen bir profile dönüştürülmesi önerilir.<br/>CMYK boyama için "
 "<b>önerilmez</b>. Maalesef, Krita bu alan için renklendiriciler veya TRC'yi "
 "alamaz."
 
@@ -32946,9 +32914,9 @@ msgid ""
 msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/Grayscale\">Gri tonlama</a></b> "
 "yalnızca gri değerlere ve saydam değerlere izin verir. Gri tonlamalı "
-"görseller, aynı bit derinlikli bir KYM görseline kıyasla bellek ve disk "
+"görseller, aynı bit derinlikli bir RGB görseline kıyasla bellek ve disk "
 "alanının yarısını kullanır.<br/> Gri tonlama, mürekkep püskürtme ve gri "
-"tonlamalı görseller için kullanışlıdır. Krita'da, Gri Tonlama ve KYM "
+"tonlamalı görseller için kullanışlıdır. Krita'da, Gri Tonlama ve RGB "
 "katmanlarını aynı görselde karıştırabilirsiniz."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:431
@@ -33179,7 +33147,7 @@ msgstr ""
 "sRGB'den daha fazla gerçek dünya camgöbeği renklerini, yeşil ve sarı "
 "yeşillikleri kapsar, ancak günümüzün en üst sınıf geniş menzil, mürekkep "
 "püskürtmeli yazıcılar kullanarak yazdırırken, özellikle yazdırılabilir "
-"camgöbeği renklerini, yeşil, sarı-yeşili içermez. BetaKYM (profil paketine "
+"camgöbeği renklerini, yeşil, sarı-yeşili içermez. BetaRGB (profil paketine "
 "dahil değildir) ve Rec.2020, bugünün geniş gam yazıcılarının renk gamları "
 "için daha iyi eşleşmelerdir.</p><p>Adobe RGB 1998 renk yelpazesi, günümüzün "
 "ileri düzey geniş gam monitörlerinin makul bir yaklaşımıdır.</p>"
@@ -33209,7 +33177,7 @@ msgstr ""
 "kullanır.</p><p>ACES renk uzayında olduğu gibi, AllColorsRGB da yüksek "
 "oranda hayali renk tutar. Hayali renkler için Tamamen <a href=\"http://"
 "ninedegreesbelow.com/photography/xyz-rgb.html\">Acısız Programcıların XYZ, "
-"KYM, ICC, xyY ve TRCs Kılavuzu</a>na bakınız.</p><p>Eğer birisinin renk "
+"RGB, ICC, xyY ve TRCs Kılavuzu</a>na bakınız.</p><p>Eğer birisinin renk "
 "uzayının gerçekten olası tüm gerçek renkleri taşıyıp taşımadığından emin "
 "olması gerekmiyorsa birinin neden bu profili düzenlemek için kullanmak "
 "isteyeceğinin belirli bir gerekçesi yoktur.</p>"
@@ -33229,9 +33197,9 @@ msgid ""
 msgstr ""
 "<p>Bu profil, çoğunlukla tarihsel önemi için eklenmiştir. Özgün renk "
 "eşleştirme denemelerinde XYZ başvuru renk uzayının oluşturulmasına yol açan "
-"renk uzayı budur.</p><p>ASTM E beyaz nokta, büyük olasılıkla CIEKYM renk "
+"renk uzayı budur.</p><p>ASTM E beyaz nokta, büyük olasılıkla CIERGB renk "
 "alanı profilini oluştururken kullanmak için doğru E beyaz noktadır. Doğru "
-"CIEKYM birincillerinin gerçekten ne olduğu benim için açık değil. Lindbloom "
+"CIERGB birincillerinin gerçekten ne olduğu benim için açık değil. Lindbloom "
 "bir küme verir. LCMS sürüm 1 öğreticisi farklı bir küme sunar. Alanındaki "
 "uzmanlar, gerçek önceliklerin, tayfsal dalga boylarından hesaplanması "
 "gerektiğini iddia ediyorlardı.</p>"
@@ -33248,8 +33216,8 @@ msgid ""
 msgstr ""
 "<p>ACES ve AllColorsRGB renk alanlarından daha yüksek bir sanal renk "
 "yüzdesine sahip olsa da, olası tüm görünür renkleri dahil etmek için "
-"matematiksel açıdan açık bir yoldur çünkü IdentityKYM çalışma alanı profil "
-"paketinde bulunur. IdentityKYM çalışma alanındaki görüntüleri neden "
+"matematiksel açıdan açık bir yoldur çünkü IdentityRGB çalışma alanı profil "
+"paketinde bulunur. IdentityRGB çalışma alanındaki görüntüleri neden "
 "gerçekten düzenlemeyi istediğinizi bilemiyorum.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:586
@@ -33274,18 +33242,18 @@ msgid ""
 msgstr ""
 "<p>Olası telif hakkı ihlali sorunlarından kaçınmak için, bu profillerin "
 "temel adı olarak 'LargeRGB' (aşağıdaki RawTherapee'yi kullandım) kullandım.</"
-"p><p>Kodak, RIMM / ROMM (ProPhotoKYM) renk gamını yazdırılabilir ve en "
+"p><p>Kodak, RIMM / ROMM (ProPhotoRGB) renk gamını yazdırılabilir ve en "
 "gerçek dünya renklerini içerecek şekilde tasarladı. Bazı hayali renkleri "
 "içerir ve sayısal kameralar tarafından yakalanabilecek gerçek dünya mavileri "
 "ve mor renklerinden bazılarını dışlar. Ayrıca, bazı (ve muhtemelen çok "
 "sayıda) kamera matrisi giriş profilleri tarafından yorumlandığı şekliyle, "
 "bazı çok doymuş \"kamera tarafından yakalanan\" sarıları hariç tutuyor.</"
-"p><p>ProPhotoKYM ana renkleri, Lightroom ve Dng-DCP kamera 'profilleri' gibi "
+"p><p>ProPhotoRGB ana renkleri, Lightroom ve Dng-DCP kamera 'profilleri' gibi "
 "Adobe ürünlerine kodlanmış. Bununla birlikte, çok renk tutabilecek kadar "
-"büyük olmanın ötesinde, ProPhotoKYM, KYM çalışma alanı olarak herhangi bir "
-"özelliğe sahip değildir. Şahsen BetaKYM, Rec2020 veya ACEScg profilleri "
-"ProPhotoKYM öneririm. Ancak, ProPhotoKYM kullanarak önceden belirlenmiş bir "
-"iş akışınız varsa en azından ilk başta başka bir KYM çalışma alanına geçişi "
+"büyük olmanın ötesinde, ProPhotoRGB, RGB çalışma alanı olarak herhangi bir "
+"özelliğe sahip değildir. Şahsen BetaRGB, Rec2020 veya ACEScg profilleri "
+"ProPhotoRGB öneririm. Ancak, ProPhotoRGB kullanarak önceden belirlenmiş bir "
+"iş akışınız varsa en azından ilk başta başka bir RGB çalışma alanına geçişi "
 "garip bulabilirsiniz. İş akışınızı değiştirmenin artılarını ve eksilerini "
 "değerlendirmeniz gerekir.</p>"
 
@@ -33307,7 +33275,7 @@ msgstr ""
 "görüntüleyebilir. Bununla birlikte, ekran teknolojisi Rec.2020'de kapanıyor, "
 "filmler zaten Rec.2020 için yapılmış ve çeşitli kameralar Rec.2020 için "
 "destek sunuyor. Ve sayısal karanlık oda Rec.2020, son derece küçük sRGB renk "
-"alanına kıyasla genel bir KYM çalışma alanı olarak çok daha uygundur.</p>"
+"alanına kıyasla genel bir RGB çalışma alanı olarak çok daha uygundur.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:613
 #, kde-format
@@ -33330,9 +33298,9 @@ msgid ""
 "profile, and matrix profiles don't have perceptual intent tables.</p>"
 msgstr ""
 "<p>Hewlett-Packard ve Microsoft, 1990'lı yıllardan gelen tüketici dereceli "
-"CRT'lerin renk gamıyla eşleştirmek için sRGB'yi tasarladılar. SKYM, dünya "
+"CRT'lerin renk gamıyla eşleştirmek için sRGB'yi tasarladılar. SRGB, dünya "
 "çapında web için standart renk alanıdır ve halen görüntüleri internete "
-"aktarmak için en iyi seçimdir.</p><p>SKYM renk gamı, kalibre edilmiş iyi "
+"aktarmak için en iyi seçimdir.</p><p>SRGB renk gamı, kalibre edilmiş iyi "
 "kalite CRT'lerle iyi bir eşleşme oluşturuyordu. Ancak sRGB, daha doymuş sRGB "
 "blues ve magentalarını sık sık görüntüleyemeyen tüketici sınıfı LCD "
 "monitörlerle iyi bir uyum oluşturmaz (iyi haber: teknoloji ilerledikçe, daha "
@@ -33342,7 +33310,7 @@ msgstr ""
 "genellikle sRGB renk gamını da aşar.</p><p>Algılama amacı sRGB'ye "
 "dönüştürülürken sihirli bir şekilde gam renklerinin dışına çıkarmamasını "
 "sRGB renk gamına dahil etmemektedir! Standart sRGB renk alanı (profil "
-"paketinde sağlanan diğer tüm KYM profilleri ile birlikte) bir matris "
+"paketinde sağlanan diğer tüm RGB profilleri ile birlikte) bir matris "
 "profilidir ve matris profilleri algılama amaçlı tablolara sahip değildir.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:629
@@ -33358,11 +33326,11 @@ msgid ""
 "color space.</p>"
 msgstr ""
 "<p>Olası telif hakkı ihlali sorunlarından kaçınmak için bu profillerin temel "
-"adı olarak 'WideRGB' kullandım.</p><p>WideGamutKYM, tayfsal renkleri "
+"adı olarak 'WideRGB' kullandım.</p><p>WideGamutRGB, tayfsal renkleri "
 "birincil alanlar olarak kullanan geniş bir renk gama alanı olarak Adobe "
 "tarafından tasarlandı. Pascale'ın temel değerleri, Adobe ve Canon'un eski V2 "
 "Widegamut profilleriyle eşleşen bir profil oluşturuyor. İlginç bir renk "
-"alanı; ancak tanıtımından kısa süre sonra Adobe, vurgularını ProPhotoKYM "
+"alanı; ancak tanıtımından kısa süre sonra Adobe, vurgularını ProPhotoRGB "
 "renk alanına değiştirdi.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:637
@@ -33377,8 +33345,8 @@ msgid ""
 "images does save some kilobytes.  For grayscale images uploaded to the "
 "internet, convert the image to the V2 Gray profile with the sRGB TRC.</p>"
 msgstr ""
-"<p>Bu profiller, monoton griye (siyah beyaz) dönüştürülen KYM görüntüleriyle "
-"kullanılır. KYM'den Gri'ye dönüştürmenin başlıca nedeni, görseli kodlamak "
+"<p>Bu profiller, monoton griye (siyah beyaz) dönüştürülen RGB görüntüleriyle "
+"kullanılır. RGB'den Gri'ye dönüştürmenin başlıca nedeni, görseli kodlamak "
 "için gereken dosya alanını kurtarmaktır. Google, hızlı yüklenen web "
 "sayfalarına prim yüklemektedir ve görseller bir web sayfasının yavaş "
 "yükleyen unsurlarından biridir. Bu nedenle siyah beyaz görselleri Gri "
@@ -33410,7 +33378,7 @@ msgid ""
 "Make sure you use the V4 versions for editing high bit depth images.</p>"
 msgstr ""
 "<p>'-labl.icc' ile biten profillerin algısal olarak tek biçimli TRC'leri "
-"var. Algısal olarak tekdüze KYM üzerinde birkaç düzenleme işlemi "
+"var. Algısal olarak tekdüze RGB üzerinde birkaç düzenleme işlemi "
 "yapılmalıdır. Yüksek bit derinlikli görüntüleri düzenlemek için V4 "
 "sürümlerini kullandığınızdan emin olun.</p>"
 
@@ -33423,7 +33391,7 @@ msgid ""
 "gamma=1.8 TRC is not quite as close to being perceptually uniform.</p>"
 msgstr ""
 "<p>'-srgbtrc.icc', '-g22.icc' ve '-rec709.icc' ile biten profillerin "
-"yaklaşık olarak algısal olarak tekdüze TRC'leri yoktur. ProPhotoKYM'ın gama "
+"yaklaşık olarak algısal olarak tekdüze TRC'leri yoktur. ProPhotoRGB'ın gama "
 "= 1,8 TRC, algısal olarak tek biçimli olma kadar yakın değildir.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
@@ -33441,7 +33409,7 @@ msgstr ""
 "<p>8 bitlik görüntüleri düzenlerken, küçük bir renk gamı ve yaklaşık veya "
 "tamamen algısal olarak üniform TRC olan bir profil kullanmalısınız. Profil "
 "paketinde verilen profillerden yalnızca 8-bit düzenleme için sRGB ve "
-"AdobeKYM1998 (ClayKYM) renk alanları yeterince küçük. AdobeKYM1998 renk "
+"AdobeRGB1998 (ClayRGB) renk alanları yeterince küçük. AdobeRGB1998 renk "
 "alanıyla bile, posterizasyona neden olmamak için dikkatli olmanız gerekir. "
 "Ve tabii ki 8 bit düzenleme için bu profillerin doğrusal gama sürümlerini "
 "kullanamazsınız.</p>"
@@ -33574,11 +33542,11 @@ msgid ""
 "Press \"Ok\" to create a 8-bit integer linear RGB color space or \"Cancel\" "
 "to return to the settings dialog."
 msgstr ""
-"Doğrusal gama KYM renk uzaylarının 8 bitlik tamsayı kiplerinde kullanılması "
+"Doğrusal gama RGB renk uzaylarının 8 bitlik tamsayı kiplerinde kullanılması "
 "beklenmemektedir. Doğrusal profiller için 16 bitlik tamsayı veya herhangi "
 "bir kayan noktalı renk alanı kullanmanız önerilir.\n"
 "\n"
-"8 bit tamsayılı doğrusal KYM renk alanı oluşturmak için \"Sürdür\"e basın "
+"8 bit tamsayılı doğrusal RGB renk alanı oluşturmak için \"Sürdür\"e basın "
 "veya ayarlar diyaloğuna dönmek için \"İptal\" düğmesine basın."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:535
@@ -36974,22 +36942,22 @@ msgstr "L*a*b*/32 Histogram"
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:182
 #, kde-format
 msgid "RGBA/8 Histogram"
-msgstr "KYMA/8 Histogram"
+msgstr "RGBA/8 Histogram"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:186
 #, kde-format
 msgid "RGBA/16 Histogram"
-msgstr "KYMA/16 Histogram"
+msgstr "RGBA/16 Histogram"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:192
 #, kde-format
 msgid "RGBA/F16 Histogram"
-msgstr "KYMA/F16 Histogram"
+msgstr "RGBA/F16 Histogram"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:198
 #, kde-format
 msgid "RGBA/F32 Histogram"
-msgstr "KYMA/F32 Histogram"
+msgstr "RGBA/F32 Histogram"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:219
 #, kde-format
@@ -37014,17 +36982,17 @@ msgstr "GRAY/F32 float Histogram"
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:244
 #, kde-format
 msgid "CMYK/8 Histogram"
-msgstr "CMSK/8 Histogram"
+msgstr "CMYK/8 Histogram"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:248
 #, kde-format
 msgid "CMYK/16 Histogram"
-msgstr "CMSK/16 Histogram"
+msgstr "CMYK/16 Histogram"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:252
 #, kde-format
 msgid "CMYK/F32 Histogram"
-msgstr "CMSK/F32 Histogram"
+msgstr "CMYK/F32 Histogram"
 
 #: plugins/color/lcms2engine/LcmsEnginePlugin.cpp:270
 #, kde-format
@@ -37149,7 +37117,7 @@ msgstr "Açıklık siyahtan beyaza gider, orta gri en doygun renge eşittir."
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:274
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
-msgstr "Yoğunluk KYM bileşenlerinin toplamına eşleşir"
+msgstr "Yoğunluk RGB bileşenlerinin toplamına eşleşir"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:277
 #, kde-format
@@ -39347,12 +39315,6 @@ msgstr "Şunun için sonucu genişlet:"
 msgid "Select a file location for the exported timelapse video"
 msgstr "Dışa aktarılan yavaş çekim video için bir dosya konumu seç"
 
-#. i18n: ectx: property (text), widget (QLabel, labelExportTo)
-#: plugins/dockers/recorder/recorder_export.ui:374
-#, kde-format
-msgid "Video location:"
-msgstr "Video konumu:"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, resultPreviewCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:403
 #, kde-format
@@ -39701,7 +39663,7 @@ msgid ""
 "Only \"RGB/Alpha 8-bit\" is supported."
 msgstr ""
 "⚠ Desteklenmeyen renk uzayı.\n"
-"Yalnızca \"KYM/Alfa 8 bit\" desteklenir."
+"Yalnızca \"RGB/Alfa 8 bit\" desteklenir."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:110
 #, kde-format
@@ -48755,7 +48717,7 @@ msgid ""
 "html>"
 msgstr ""
 "<html><head/><body><p><span style=\"font-weight:600;\"> PNG</span> "
-"dosyaları, <span style=\" font-weight:600;\">aKYM</span> bilgisini kaydetmek "
+"dosyaları, <span style=\" font-weight:600;\">aRGB</span> bilgisini kaydetmek "
 "için <span style=\" font-style:italic;\">iki</span> seçeneğe sahiptir: "
 "etiket olarak veya harici bir profil olarak. Websiteleri ile kullanmak için, "
 "bu seçeneği <span style=\"font-style:italic;\">devre dışı bırakın</span>. "
@@ -48876,7 +48838,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Interpolate RGB as four colors"
-msgstr "KYM dört renk olarak aradeğerle"
+msgstr "RGB dört renk olarak aradeğerle"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:285
 #, kde-format
@@ -48890,7 +48852,7 @@ msgid ""
 "it eliminates false 2x2 mesh patterns with VNG quality method or mazes with "
 "AHD quality method.</p>"
 msgstr ""
-"<title>KYM'yi dört renk olarak ekle</title><p>Tüm yeşil piksellerin aynı "
+"<title>RGB'yi dört renk olarak ekle</title><p>Tüm yeşil piksellerin aynı "
 "olduğunu varsaymak öntanımlıdır. Çift satır yeşil pikselleri bile "
 "ultraviyole ışınlara tek satırdan daha hassassa bu fark çıktıda kafes deseni "
 "oluşmasına yol açar; bu seçeneği kullanmak bu problemi en az ayrıntı "
@@ -49685,7 +49647,7 @@ msgstr ""
 "çıktı renk uzayını seçin.</p><p><ul><li><emphasis strong='true'>Ham "
 "(doğrusal)</emphasis>: Bu kipte, RAW çözme sırasında hiçbir çıktı renk uzayı "
 "kullanılmaz.</li><li><emphasis strong='true'>sRGB</emphasis>: bu Hewlett-"
-"Packard ve Microsoft tarafından ortak oluşturulan bir KYM renk uzayıdır. Bu "
+"Packard ve Microsoft tarafından ortak oluşturulan bir RGB renk uzayıdır. Bu "
 "Web ve portre fotoğrafçılığı için amaçlanmış görseller için en iyi "
 "seçenektir.</li><li><emphasis strong='true'>Adobe RGB</emphasis>: Bu renk "
 "uzayı, Adobe tarafından geliştirilen, genişletilmiş bir renk uzayıdır. "
@@ -49694,7 +49656,7 @@ msgstr ""
 "renk uzayının genişletilmiş bir sürümüdür.</li><li><emphasis "
 "strong='true'>Pro-Photo</emphasis>: Bu renk uzayı, Kodak tarafından "
 "geliştirilmiş, fotoğrafsal çıktılar düşünülerek tasarlanmış özellikle geniş "
-"bir aralık sunan bir KYM renk uzayıdır.</li><li><emphasis "
+"bir aralık sunan bir RGB renk uzayıdır.</li><li><emphasis "
 "strong='true'>Özel</emphasis>: Özel bir çıktı renk uzayı profili kullan.</"
 "li></ul></p>"
 
@@ -50454,8 +50416,8 @@ msgid ""
 "Otherwise, discard this invisible RGB information for better compression. "
 "The default is disabled."
 msgstr ""
-"Etkinleştirilmişse tam KYM değerini saydam alanlar altında koru. Aksi "
-"takdirde bu görünmez KYM bilgisini daha iyi sıkıştırmak için at. Öntanımlı "
+"Etkinleştirilmişse tam RGB değerini saydam alanlar altında koru. Aksi "
+"takdirde bu görünmez RGB bilgisini daha iyi sıkıştırmak için at. Öntanımlı "
 "olarak devre dışıdır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblExact)
@@ -50471,7 +50433,7 @@ msgstr "Tam"
 #, kde-format
 msgid "If enabled, allows use of the sharp (and slow) RGB to YUV conversion."
 msgstr ""
-"Etkinleştirilmişse keskin (ve yavaş) KYM-YUV dönüştürmesine izin verir."
+"Etkinleştirilmişse keskin (ve yavaş) RGB-YUV dönüştürmesine izin verir."
 
 #. i18n: ectx: property (text), widget (QLabel, lblUseSharpYUV)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:720
@@ -51207,14 +51169,14 @@ msgstr "Kıl Fırça (çizgiler önizlemedekinden ince olacak)"
 #: plugins/paintops/hairy/KisHairyBristleOptionWidget.cpp:55
 #, kde-format
 msgid "Bristle options"
-msgstr "Fırça seçenekleri"
+msgstr "Kıl Seçenekleri"
 
 #. i18n: ectx: attribute (title), widget (QWidget, inkTab)
 #: plugins/paintops/hairy/KisHairyInkOptionWidget.cpp:51
 #: plugins/paintops/hairy/wdghairyeoptions.ui:263
 #, kde-format
 msgid "Ink depletion"
-msgstr "Mürekkep tükenmesi"
+msgstr "Mürekkep Tükenmesi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/hairy/wdgbristleoptions.ui:66
@@ -53325,7 +53287,7 @@ msgstr "Mıknatısla"
 #: plugins/paintops/sketch/wdgsketchoptions.ui:162
 #, kde-format
 msgid "Random RGB"
-msgstr "Rastgele KYM"
+msgstr "Rastgele RGB"
 
 #. i18n: ectx: property (text), widget (QCheckBox, distanceOpacityCHbox)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:169
@@ -53906,7 +53868,7 @@ msgstr "Katmanlar kanallara"
 
 #: plugins/python/channels2layers/channels2layers.py:67
 msgid "RGB Colors"
-msgstr "KYM Renkleri"
+msgstr "RGB Renkleri"
 
 #: plugins/python/channels2layers/channels2layers.py:68
 msgid "CMY Colors"
@@ -53914,11 +53876,11 @@ msgstr "CMV Renkleri"
 
 #: plugins/python/channels2layers/channels2layers.py:69
 msgid "CMYK Colors"
-msgstr "CMSK Renkleri"
+msgstr "CMYK Renkleri"
 
 #: plugins/python/channels2layers/channels2layers.py:70
 msgid "RGB Grayscale levels"
-msgstr "KYM Gri Tonlu Düzeyleri"
+msgstr "RGB Gri Tonlu Düzeyleri"
 
 #: plugins/python/channels2layers/channels2layers.py:71
 msgid "CMY Grayscale levels"
@@ -53926,7 +53888,7 @@ msgstr "CMY Gri Tonlu Düzeyleri"
 
 #: plugins/python/channels2layers/channels2layers.py:72
 msgid "CMYK Grayscale levels"
-msgstr "CMSK Gri Tonlu düzeyleri"
+msgstr "CMYK Gri Tonlu düzeyleri"
 
 #: plugins/python/channels2layers/channels2layers.py:77
 msgid "Unchanged"
@@ -58693,6 +58655,12 @@ msgstr ""
 msgid "Rich Te&xt Only"
 msgstr "Yalnızca &Zengin Metin"
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioBoth)
+#: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:48
+#, kde-format
+msgid "Both"
+msgstr "İkisi"
+
 #. i18n: ectx: property (text), widget (QRadioButton, radioSvgSource)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:55
 #, kde-format
@@ -59176,12 +59144,12 @@ msgstr "Çevreleme ve Dolgu Aracı"
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.cpp:49
 msgctxt "(qtundo-format)"
 msgid "Colorize Mask Key Stroke"
-msgstr "Maske Anahtar Vuruşunu Renklendir"
+msgstr "Renklendirme Maskesi Anahtar Vuruşu"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.h:84
 #, kde-format
 msgid "Colorize Mask Editing Tool"
-msgstr "Maske Düzenleme Aracını Renklendir"
+msgstr "Renklendirme Maskesi Düzenleme Aracı"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #, kde-format
@@ -60031,7 +59999,7 @@ msgstr "Çoklu Fırça Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Colorize Mask Tool"
-msgstr "Maske Renklendir Aracı"
+msgstr "Renklendirme Maskesi Aracı"
 
 #. i18n: context: text @ Action (KritaShape/KisToolSmartPatch), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolSmartPatch), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -60237,6 +60205,83 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
+
+#~ msgid "Choose a video file"
+#~ msgstr "Bir video dosyası seç"
+
+#~ msgid ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
+#~ "\"utf-8\" /><style type=\"text/css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
+#~ "font-weight:500; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
+#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">This video contains "
+#~ "more than 100 frames. Loading too many frames can overload your computer. "
+#~ "Use a</span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;"
+#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\" font-"
+#~ "size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;"
+#~ "\">video editor </span></a><span style=\" font-size:16pt; font-"
+#~ "weight:400; color:#ff692e;\">instead!</span></p></body></html>"
+#~ msgstr ""
+#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#~ "REC-html40/strict.dtd\">\n"
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
+#~ "\"utf-8\" /><style type=\"text/css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
+#~ "font-weight:500; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+#~ "size:16pt; font-weight:600; color:#ff692e;\">UYARI: </span><span style=\" "
+#~ "font-size:16pt; font-weight:400; color:#ff692e;\">Bu video, 100'den çok "
+#~ "kare içeriyor. Çok fazla kare yüklemek, bilgisayarınızı aşırı "
+#~ "yükleyebilir. Bunun yerine bir </span><span style=\" font-size:16pt; font-"
+#~ "weight:400; color:#ff1500;\"> </span><a href=\"https://kdenlive.org"
+#~ "\"><span style=\" font-size:16pt; font-weight:400; text-decoration: "
+#~ "underline; color:#2980b9;\">video düzenleyici </span></a><span style=\" "
+#~ "font-size:16pt; font-weight:400; color:#ff692e;\">kullanın!</span></p></"
+#~ "body></html>"
+
+#~ msgid "FFMpeg"
+#~ msgstr "FFmpeg"
+
+#~ msgid "Export:"
+#~ msgstr "Dışa Aktar:"
+
+#~ msgid "Image Se&quence"
+#~ msgstr "Görsel Sı&ralaması"
+
+#~ msgid "&Video"
+#~ msgstr "&Video"
+
+#~ msgid "Video Options"
+#~ msgstr "Video Seçenekleri"
+
+#~ msgid "FF&Mpeg: "
+#~ msgstr "FF&mpeg: "
+
+#~ msgid "Video Location:"
+#~ msgstr "Video Konumu:"
+
+#~ msgid "FFMpeg Version: None"
+#~ msgstr "FFmpeg Sürümü: Yok"
+
+#~ msgid ""
+#~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
+#~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
+#~ "body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p><span style=\" font-weight:600;\">Uyarı:</span> "
+#~ "Saydamlığın çalışması için FFmpeg sürümünün en az 4.2 veya üzeri olması "
+#~ "gerekmektedir</p></body></html>"
+
+#~ msgid "Image Sequence Options"
+#~ msgstr "Görsel Sıralaması Seçenekleri"
 
 #~ msgid " sec"
 #~ msgstr " san"

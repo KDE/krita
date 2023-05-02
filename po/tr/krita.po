@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-04-30 13:53+0300\n"
+"PO-Revision-Date: 2023-05-02 00:41+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -11240,21 +11240,21 @@ msgstr "Süzgeç Maskesi"
 #, kde-format
 msgctxt "action"
 msgid "Add &Colorize Mask"
-msgstr "Maske &Renklendirme Ekle"
+msgstr "&Renklendirme Maskesi Ekle"
 
 #. i18n: context: toolTip @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2542
 #, kde-format
 msgctxt "action"
 msgid "Add a new Colorize Mask"
-msgstr "Yeni Bir Maske Renklendirme Ekle"
+msgstr "Yeni Bir Renklendirme Maskesi Ekle"
 
 #. i18n: context: iconText @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2543
 #, kde-format
 msgctxt "action"
 msgid "Colorize Mask"
-msgstr "Maske Renklendirme"
+msgstr "Renklendirme Maskesi"
 
 #. i18n: context: text @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2552
@@ -17389,7 +17389,7 @@ msgstr "Renklendir"
 #: libs/image/lazybrush/kis_colorize_stroke_strategy.cpp:73
 msgctxt "(qtundo-format)"
 msgid "Prefilter Colorize Mask"
-msgstr "Maske Renklendirmeyi Önden Süz"
+msgstr "Renklendirme Maskesini Önden Süz"
 
 #: libs/impex/AnimationCheck.h:25
 #, kde-format
@@ -17512,7 +17512,7 @@ msgstr "Üreteç Katman"
 #: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_mask_manager.cc:274
 #, kde-format
 msgid "Colorize Mask"
-msgstr "Maske Renklenedirme"
+msgstr "Renklendirme Maskesi"
 
 #: libs/impex/KisExportCheckRegistry.cpp:114
 #: libs/ui/dialogs/kis_dlg_filter.cpp:218 libs/ui/kis_mask_manager.cc:223
@@ -28511,7 +28511,7 @@ msgstr "Yeni Süzgeç Maskesi"
 #: libs/ui/kis_mask_manager.cc:274
 msgctxt "(qtundo-format)"
 msgid "Add Colorize Mask"
-msgstr "Renklendirilmiş Maske Ekle"
+msgstr "Renklendirme Maskesi Ekle"
 
 #: libs/ui/kis_mask_manager.cc:286
 msgctxt "(qtundo-format)"
@@ -50145,7 +50145,7 @@ msgstr "Kıl"
 #: plugins/paintops/hairy/kis_hairy_bristle_option.cpp:39
 #, kde-format
 msgid "Bristle options"
-msgstr "Fırça seçenekleri"
+msgstr "Kıl Seçenekleri"
 
 #: plugins/paintops/hairy/kis_hairy_bristle_option.cpp:94
 #, kde-format
@@ -50158,7 +50158,7 @@ msgstr "Kıl Fırça (çizgiler önizlemedekinden ince olacak)"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:263
 #, kde-format
 msgid "Ink depletion"
-msgstr "Mürekkep tükenmesi"
+msgstr "Mürekkep Tükenmesi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/hairy/wdgbristleoptions.ui:66
@@ -58198,12 +58198,12 @@ msgstr "Çevreleme ve Dolgu Aracı"
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.cpp:49
 msgctxt "(qtundo-format)"
 msgid "Colorize Mask Key Stroke"
-msgstr "Maske Anahtar Vuruşunu Renklendir"
+msgstr "Renklendirme Maskesi Anahtar Vuruşu"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush.h:84
 #, kde-format
 msgid "Colorize Mask Editing Tool"
-msgstr "Maske Düzenleme Aracını Renklendir"
+msgstr "Renklendirme Maskesi Düzenleme Aracı"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:107
 #, kde-format
@@ -59061,7 +59061,7 @@ msgstr "Çoklu Fırça Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Colorize Mask Tool"
-msgstr "Maske Renklendir Aracı"
+msgstr "Renklendirme Maskesi Aracı"
 
 #. i18n: context: text @ Action (KritaShape/KisToolSmartPatch), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolSmartPatch), Actions (tool-shortcuts), ActionCollection (Tools)

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-03-30 19:45+0200\n"
+"PO-Revision-Date: 2023-05-02 10:02+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 20.12.0\n"
 "X-Accelerator-Marker: &\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -20208,7 +20208,7 @@ msgstr "Importació d'una animació de vídeo"
 #, kde-format
 msgid "FFMpeg not found! Please add a path to FFMpeg in the \"Advanced\" tab"
 msgstr ""
-"No s'ha trobat el FFMpeg! Afegiu un camí al FFMpeg a la pestanya «Avançat»"
+"No s'ha trobat el FFmpeg! Afegiu un camí al FFmpeg a la pestanya «Avançat»"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:80
 #, kde-format
@@ -20401,33 +20401,33 @@ msgstr ""
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:567
 #, kde-format
 msgid "Open FFProbe"
-msgstr "Obre el FFProbe"
+msgstr "Obre el FFprobe"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:579
 #, kde-format
 msgid "FFProbe is invalid!"
-msgstr "El FFProbe no és vàlid!"
+msgstr "El FFprobe no és vàlid!"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:586
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:588
 #, kde-format
 msgid "Open FFMpeg"
-msgstr "Obre el FFMpeg"
+msgstr "Obre el FFmpeg"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:600
 #, kde-format
 msgid "FFMpeg is invalid!"
-msgstr "El FFMpeg no és vàlid!"
+msgstr "El FFmpeg no és vàlid!"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:607
 #, kde-format
 msgid "No FFMpeg found!"
-msgstr "No s'ha trobat el FFMpeg!"
+msgstr "No s'ha trobat el FFmpeg!"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:676
 #, kde-format
 msgid "Your FFMpeg version does not support this format"
-msgstr "La vostra versió de FFMpeg no admet aquest format"
+msgstr "La vostra versió de FFmpeg no admet aquest format"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:716
 #, kde-format
@@ -20442,7 +20442,7 @@ msgstr "Ha fallat en carregar la informació del vídeo"
 #: libs/ui/animation/KisFFMpegWrapper.cpp:329
 #, kde-format
 msgid "FFMpeg Crashed"
-msgstr "El FFMpeg ha fallat"
+msgstr "El FFmpeg ha fallat"
 
 #: libs/ui/animation/KisFFMpegWrapper.cpp:535
 #, kde-format
@@ -20619,9 +20619,9 @@ msgstr ""
 "vostre GIF per a obtenir una sortida de millor qualitat.</p><p><span style="
 "\"font-style:italic;\">Nota 1: Perquè la transparència funcioni "
 "correctament, haureu d'assegurar-vos que la seqüència d'imatges s'estigui "
-"exportant amb la transparència habilitada i que la versió de FFMpeg sigui "
+"exportant amb la transparència habilitada i que la versió de FFmpeg sigui "
 "almenys 4.2+. Si la vostra sortida GIF mostra signes d'esquinçament de la "
-"pantalla, es recomana fermament la versió 4.4+ de FFMpeg.</span></p><p><span "
+"pantalla, es recomana fermament la versió 4.4+ de FFmpeg.</span></p><p><span "
 "style=\"font-style:italic;\">Nota 2: El format GIF només admet el 100% o el "
 "0% de transparència. </span><span style=\"font-style:italic; text-decoration:"
 "underline;\">No</span><span style=\"font-style:italic;\"> admet la "
@@ -38945,7 +38945,7 @@ msgstr "Activa la vista prèvia del resultat"
 #: plugins/dockers/recorder/recorder_export.ui:280
 #, kde-format
 msgid "Setup ffmpeg executable location"
-msgstr "Configuració de la ubicació de l'executable del FFMpeg"
+msgstr "Configuració de la ubicació de l'executable del FFmpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFps)
 #: plugins/dockers/recorder/recorder_export.ui:343
@@ -39071,7 +39071,7 @@ msgstr "Insereix una variable:"
 #: plugins/dockers/recorder/recorder_profile_settings.ui:167
 #, kde-format
 msgid "FFMpeg arguments:"
-msgstr "Arguments del FFMpeg:"
+msgstr "Arguments del FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelProfileName)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:194

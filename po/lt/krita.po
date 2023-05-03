@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-02 00:46+0000\n"
+"POT-Creation-Date: 2023-05-03 00:46+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -16577,7 +16577,7 @@ msgstr "%1 parinktys"
 msgid "Active tool: %1"
 msgstr "Aktyvus įrankis: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1776
+#: libs/flake/svg/SvgParser.cpp:1788
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -16586,26 +16586,26 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:2703
+#: libs/flake/text/KoSvgTextShape.cpp:3704
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekstas"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2705
-#: libs/flake/text/KoSvgTextShape.cpp:2713
+#: libs/flake/text/KoSvgTextShape.cpp:3706
+#: libs/flake/text/KoSvgTextShape.cpp:3714
 #, fuzzy, kde-format
 msgid "SVG Text Shape"
 msgstr "teksto šešėlis"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2711
+#: libs/flake/text/KoSvgTextShape.cpp:3712
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Tekstas"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2725
-#: libs/flake/text/KoSvgTextShape.cpp:2740
+#: libs/flake/text/KoSvgTextShape.cpp:3726
+#: libs/flake/text/KoSvgTextShape.cpp:3741
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17320,7 +17320,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:369
+#: libs/ui/canvas/kis_canvas_controller.cpp:372
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -22528,13 +22528,13 @@ msgid "Horizontal mirroring: %1 "
 msgstr "Horizontalūs tarpai:"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:357
+#: libs/ui/canvas/kis_canvas_controller.cpp:360
 #, kde-format
 msgid "OFF"
 msgstr ""
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:357
+#: libs/ui/canvas/kis_canvas_controller.cpp:360
 #, kde-format
 msgid "ON"
 msgstr ""
@@ -22545,31 +22545,31 @@ msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Sukimas:"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:290
+#: libs/ui/canvas/kis_canvas_controller.cpp:293
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
 "To visualize wrap-around mode, enable OpenGL."
 msgstr ""
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:356
+#: libs/ui/canvas/kis_canvas_controller.cpp:359
 #, fuzzy, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Peržiūrėti paveikslėlį"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:363
+#: libs/ui/canvas/kis_canvas_controller.cpp:366
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:369
+#: libs/ui/canvas/kis_canvas_controller.cpp:372
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr ""
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:370
+#: libs/ui/canvas/kis_canvas_controller.cpp:373
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -22577,7 +22577,7 @@ msgid ""
 "Current mode is %1"
 msgstr ""
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:374
+#: libs/ui/canvas/kis_canvas_controller.cpp:377
 #, fuzzy, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -58806,7 +58806,7 @@ msgid "Line height"
 msgstr "eilutės aukštis"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1458
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:205
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, fuzzy, kde-format
 #| msgid "Line Spacing"
 msgid "Letter Spacing"
@@ -59203,32 +59203,32 @@ msgctxt "action"
 msgid "Kerning"
 msgstr "Dėmesio"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:134
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:135
 #, fuzzy, kde-format
 msgid "Create new texts with..."
 msgstr "Paskutiniai dokumentai"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:171
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:172
 #, kde-format
 msgid "Anchor text to the left."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:180
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:181
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:189
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:190
 #, kde-format
 msgid "Anchor text to the right."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:219
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
 #, fuzzy, kde-format
 msgid "Edit Text"
 msgstr "Tekstas"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:255
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:256
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

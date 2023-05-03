@@ -61,15 +61,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-02 00:46+0000\n"
-"PO-Revision-Date: 2023-04-21 12:04+0200\n"
+"POT-Creation-Date: 2023-05-03 00:46+0000\n"
+"PO-Revision-Date: 2023-05-02 11:00+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.04.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -16309,7 +16309,7 @@ msgstr "Opties voor %1"
 msgid "Active tool: %1"
 msgstr "Actief gereedschap: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1776
+#: libs/flake/svg/SvgParser.cpp:1788
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -16321,25 +16321,25 @@ msgstr ""
 "document opslaat, dan zal het tekstobject naar Krita 5 formaat worden "
 "geconverteerd die niet compatibel is met Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2703
+#: libs/flake/text/KoSvgTextShape.cpp:3704
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2705
-#: libs/flake/text/KoSvgTextShape.cpp:2713
+#: libs/flake/text/KoSvgTextShape.cpp:3706
+#: libs/flake/text/KoSvgTextShape.cpp:3714
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG-tekstvorm"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2711
+#: libs/flake/text/KoSvgTextShape.cpp:3712
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2725
-#: libs/flake/text/KoSvgTextShape.cpp:2740
+#: libs/flake/text/KoSvgTextShape.cpp:3726
+#: libs/flake/text/KoSvgTextShape.cpp:3741
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17032,7 +17032,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:369
+#: libs/ui/canvas/kis_canvas_controller.cpp:372
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -20477,22 +20477,17 @@ msgstr "Geen geldig binair bestand FFmpeg geleverd..."
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
+"FFMpeg moet minstens versie 4.2+ zijn om gif-transparantie te laten werken"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:470
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#| "animated gif images cannot have a framerate higher than 50. The framerate "
-#| "will be reduced to 50 frames per second.</p></body></html>"
+#, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
 "Animated GIF images cannot have a framerate higher than 50. The framerate "
 "will be reduced to 50 frames per second"
 msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Waarschuwing:</span> "
-"geanimeerde gif-afbeeldingen kunnen geen framesnelheid hoger dan 50 hebben. "
-"De framesnelheid zal gereduceerd worden tot 50 frames per seconde.</p></"
-"body></html>"
+"Geanimeerde GIF-afbeeldingen kunnen geen framesnelheid hoger dan 50 hebben. "
+"De framesnelheid zal gereduceerd worden tot 50 frames per seconde"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:477
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1824
@@ -20676,18 +20671,14 @@ msgstr ""
 "tijdsduur te zien</em></font>"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
-#, fuzzy, kde-format
-#| msgctxt "part of warning in video importer."
-#| msgid ""
-#| "WARNING, you are trying to import %1 frames, the maximum amount you can "
-#| "import is %2."
+#, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "<b>Warning:</b> you are trying to import %1 frames, the maximum amount you "
 "can import is %2."
 msgstr ""
-"WAARSCHUWING, u probeert %1 frames te importeren, de maximale hoeveelheid "
-"die u kunt importeren is %2."
+"<b>Waarschuwing:</b> u probeert %1 frames te importeren, de maximale "
+"hoeveelheid die u kunt importeren is %2."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
 #, kde-format
@@ -20717,18 +20708,14 @@ msgstr ""
 "moeilijk zijn."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
-#, fuzzy, kde-format
-#| msgctxt "part of warning in video importer."
-#| msgid ""
-#| "Krita does not support the video transfer curve (%1), it will be loaded "
-#| "as linear"
+#, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "Krita does not support the video transfer curve (%1), it will be loaded as "
 "linear."
 msgstr ""
 "Krita ondersteunt geen video-overdrachtskromme (%1), het zal geladen worden "
-"als lineair"
+"als lineair."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
@@ -20806,14 +20793,13 @@ msgstr "Vereist %1 bestand wordt gemaakt: %2/%3 frames."
 #: libs/ui/animation/video_export_options_dialog.ui:13
 #, kde-format
 msgid "Codec:"
-msgstr ""
+msgstr "Codec:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
 #: libs/ui/animation/video_export_options_dialog.ui:23
-#, fuzzy, kde-format
-#| msgid "No options"
+#, kde-format
 msgid "Codec options"
-msgstr "Geen opties"
+msgstr "Codec-opties"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -20879,8 +20865,7 @@ msgstr "HDR-metagegevens..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
-#, fuzzy, kde-format
-#| msgid "Bitrate (MBit/s)"
+#, kde-format
 msgid "Bitrate (MBit/s):"
 msgstr "Bitsnelheid (Mbit/s)"
 
@@ -20910,10 +20895,9 @@ msgstr "Verschil in transparantie"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/animation/video_export_options_dialog.ui:300
-#, fuzzy, kde-format
-#| msgid "Auto-generate 8bit Palette"
+#, kde-format
 msgid "Auto-generate 8bit Palette:"
-msgstr "8-bit palet automatisch genereren"
+msgstr "8-bit palet automatisch genereren:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
@@ -20996,23 +20980,19 @@ msgstr "Afbeeldingskwaliteit:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:457
-#, fuzzy, kde-format
-#| msgid "Custom Options:"
+#, kde-format
 msgid "Custom options"
-msgstr "Aangepaste opties:"
+msgstr "Aangepaste opties"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:466
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add any ffmpeg filtering options here. It will be put between source and "
-#| "destination streams of the ffmpeg"
+#, kde-format
 msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
 "destination streams of the FFmpeg instance"
 msgstr ""
-"Voeg elke filteroptie voor ffmpeg hier toe. Het zal ingevuld worden tussen "
-"bron en bestemmingsstromen van de ffmpeg"
+"Voeg elke filteroptie voor FFmpeg hier toe. Het zal ingevuld worden tussen "
+"bron en bestemmingsstromen van het exemplaar van FFmpeg"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -21598,10 +21578,9 @@ msgstr "Algemeen"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:40
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video file:"
-msgstr "Video-FPS:"
+msgstr "Videobestand:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
@@ -21832,24 +21811,21 @@ msgstr "Filter:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
-#, fuzzy, kde-format
-#| msgid "FFmpeg:"
+#, kde-format
 msgid "FFmpeg"
-msgstr "FFmpeg:"
+msgstr "FFmpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
-#, fuzzy, kde-format
-#| msgid "FFMpeg Path:"
+#, kde-format
 msgid "FFmpeg path:"
-msgstr "FFMpeg-pad:"
+msgstr "FFmpeg-pad:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
-#, fuzzy, kde-format
-#| msgid "FFProbe Path:"
+#, kde-format
 msgid "FFprobe path:"
-msgstr "FFProbe-pad:"
+msgstr "FFprobe-pad:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
 #: libs/ui/animation/wdg_animationrenderer.ui:10
@@ -21871,18 +21847,15 @@ msgstr "Laatste frame:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:49
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Export sequence"
+#, kde-format
 msgid "Export as image sequence"
-msgstr "Volgorde van exporteren"
+msgstr "Als afbeeldingensequentie exporteren"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:58
-#, fuzzy, kde-format
-#| msgid "Fi&le format:"
+#, kde-format
 msgid "File format:"
-msgstr "Bestan&dsformaat:"
+msgstr "Bestandsformaat:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbMimetype)
 #: libs/ui/animation/wdg_animationrenderer.ui:67
@@ -21932,10 +21905,9 @@ msgstr "Alleen unieke frames"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
-#, fuzzy, kde-format
-#| msgid "Export size:"
+#, kde-format
 msgid "Export as video"
-msgstr "Exporteergrootte:"
+msgstr "Als video exporteren"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
@@ -21947,10 +21919,9 @@ msgstr "Renderen als:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:210
-#, fuzzy, kde-format
-#| msgid "Select the ffmpeg render options."
+#, kde-format
 msgid "Select the FFmpeg render options."
-msgstr "Selecteer de ffmpeg renderopties"
+msgstr "Selecteer de FFmpeg renderopties"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, labelExportTo)
@@ -21968,15 +21939,13 @@ msgstr "Geluid invoegen"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
-#, fuzzy, kde-format
-#| msgid "Image location:"
+#, kde-format
 msgid "FFmpeg location:"
-msgstr "Afbeeldingslocatie:"
+msgstr "FFmpeg-locatie:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
-#, fuzzy, kde-format
-#| msgid "FFmpeg Version: "
+#, kde-format
 msgid "FFmpeg version:"
 msgstr "FFmpeg-versie: "
 
@@ -22076,13 +22045,13 @@ msgid "Horizontal mirroring: %1 "
 msgstr "Horizontale spiegeling: %1 "
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:357
+#: libs/ui/canvas/kis_canvas_controller.cpp:360
 #, kde-format
 msgid "OFF"
 msgstr "UIT"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:357
+#: libs/ui/canvas/kis_canvas_controller.cpp:360
 #, kde-format
 msgid "ON"
 msgstr "AAN"
@@ -22093,7 +22062,7 @@ msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Rotatie: %1° "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:290
+#: libs/ui/canvas/kis_canvas_controller.cpp:293
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -22102,24 +22071,24 @@ msgstr ""
 "U activeert modus regel afbreken, maar OpenGL is niet ingeschakeld.\n"
 "Om modus regel afbreken zichtbaar te maken, moet OpenGL ingeschakeld zijn."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:356
+#: libs/ui/canvas/kis_canvas_controller.cpp:359
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Modus &Permanent miniatuur: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:363
+#: libs/ui/canvas/kis_canvas_controller.cpp:366
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "Permanent miniatuur werkt alleen als OpenGL is geactiveerd"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:369
+#: libs/ui/canvas/kis_canvas_controller.cpp:372
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Naaste buur"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:370
+#: libs/ui/canvas/kis_canvas_controller.cpp:373
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -22130,7 +22099,7 @@ msgstr ""
 " in trilineaire of hoge kwaliteitsfilteringmodi.\n"
 "Huidige modus is %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:374
+#: libs/ui/canvas/kis_canvas_controller.cpp:377
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -58494,7 +58463,7 @@ msgid "Line height"
 msgstr "Lijnhoogte"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1458
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:205
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"
 msgstr "Afstand tussen letters"
@@ -58883,32 +58852,32 @@ msgctxt "action"
 msgid "Kerning"
 msgstr "Kerning"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:134
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:135
 #, kde-format
 msgid "Create new texts with..."
 msgstr "Nieuwe teksten aanmaken met..."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:171
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:172
 #, kde-format
 msgid "Anchor text to the left."
 msgstr "Anker van tekst links."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:180
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:181
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "Anker van tekst in het midden."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:189
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:190
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "Anker van tekst rechts."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:219
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
 #, kde-format
 msgid "Edit Text"
 msgstr "Tekst bewerken"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:255
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:256
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

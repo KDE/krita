@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-02 00:46+0000\n"
-"PO-Revision-Date: 2023-04-21 09:16+0200\n"
+"POT-Creation-Date: 2023-05-03 00:46+0000\n"
+"PO-Revision-Date: 2023-05-02 10:02+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -16255,7 +16255,7 @@ msgstr "Opcions de %1"
 msgid "Active tool: %1"
 msgstr "Eina activa: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1776
+#: libs/flake/svg/SvgParser.cpp:1788
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -16267,25 +16267,25 @@ msgstr ""
 "document, l'objecte de text es convertirà al format de Krita 5, el qual ja "
 "no serà admés per Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2703
+#: libs/flake/text/KoSvgTextShape.cpp:3704
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2705
-#: libs/flake/text/KoSvgTextShape.cpp:2713
+#: libs/flake/text/KoSvgTextShape.cpp:3706
+#: libs/flake/text/KoSvgTextShape.cpp:3714
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma de text SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2711
+#: libs/flake/text/KoSvgTextShape.cpp:3712
 #, kde-format
 msgid "SVG Text"
 msgstr "Text SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2725
-#: libs/flake/text/KoSvgTextShape.cpp:2740
+#: libs/flake/text/KoSvgTextShape.cpp:3726
+#: libs/flake/text/KoSvgTextShape.cpp:3741
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16979,7 +16979,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:369
+#: libs/ui/canvas/kis_canvas_controller.cpp:372
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -20421,22 +20421,19 @@ msgstr "No s'ha proporcionat un binari vàlid de FFmpeg..."
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
+"Cal que FFmpeg tinga almenys la versió 4.2+ perquè funcione la transparència "
+"en els GIF"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:470
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#| "animated gif images cannot have a framerate higher than 50. The framerate "
-#| "will be reduced to 50 frames per second.</p></body></html>"
+#, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
 "Animated GIF images cannot have a framerate higher than 50. The framerate "
 "will be reduced to 50 frames per second"
 msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Avís:</span> les "
-"imatges GIF animades no poden tindre una velocitat de fotogrames superior a "
-"50. La velocitat dels fotogrames es reduirà a 50 fotogrames per segon.</p></"
-"body></html>"
+"Les imatges GIF animades no poden tindre una velocitat de fotogrames "
+"superior a 50. La velocitat dels fotogrames es reduirà a 50 fotogrames per "
+"segon."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:477
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1824
@@ -20620,18 +20617,14 @@ msgstr ""
 "per a veure tota la duració</em></font>"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
-#, fuzzy, kde-format
-#| msgctxt "part of warning in video importer."
-#| msgid ""
-#| "WARNING, you are trying to import %1 frames, the maximum amount you can "
-#| "import is %2."
+#, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "<b>Warning:</b> you are trying to import %1 frames, the maximum amount you "
 "can import is %2."
 msgstr ""
-"Avís, esteu intentant importar %1 fotogrames, la quantitat màxima que es pot "
-"importar és de %2."
+"<b>Avís:</b> Esteu intentant importar %1 fotogrames, la quantitat màxima que "
+"es pot importar és de %2."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
 #, kde-format
@@ -20660,18 +20653,14 @@ msgstr ""
 "Ocuparà més de la meitat de la memòria disponible, l'edició serà dificultosa."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
-#, fuzzy, kde-format
-#| msgctxt "part of warning in video importer."
-#| msgid ""
-#| "Krita does not support the video transfer curve (%1), it will be loaded "
-#| "as linear"
+#, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "Krita does not support the video transfer curve (%1), it will be loaded as "
 "linear."
 msgstr ""
 "Krita no admet la corba de transferència del vídeo (%1), es carregarà com a "
-"lineal"
+"lineal."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
@@ -20749,14 +20738,13 @@ msgstr "S'està creant el fitxer %1 desitjat: %2/%3 fotogrames."
 #: libs/ui/animation/video_export_options_dialog.ui:13
 #, kde-format
 msgid "Codec:"
-msgstr ""
+msgstr "Còdec:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
 #: libs/ui/animation/video_export_options_dialog.ui:23
-#, fuzzy, kde-format
-#| msgid "No options"
+#, kde-format
 msgid "Codec options"
-msgstr "Sense opcions"
+msgstr "Opcions del còdec"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -20822,10 +20810,9 @@ msgstr "Metadades HDR..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
-#, fuzzy, kde-format
-#| msgid "Bitrate (MBit/s)"
+#, kde-format
 msgid "Bitrate (MBit/s):"
-msgstr "Taxa de bits (MBits)"
+msgstr "Taxa de bits (MBits):"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
@@ -20853,10 +20840,9 @@ msgstr "Diferència de la transparència"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/animation/video_export_options_dialog.ui:300
-#, fuzzy, kde-format
-#| msgid "Auto-generate 8bit Palette"
+#, kde-format
 msgid "Auto-generate 8bit Palette:"
-msgstr "Genera automàticament una paleta de 8 bits"
+msgstr "Genera automàticament una paleta de 8 bits:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
@@ -20939,23 +20925,19 @@ msgstr "Qualitat de la imatge:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:457
-#, fuzzy, kde-format
-#| msgid "Custom Options:"
+#, kde-format
 msgid "Custom options"
-msgstr "Opcions personalitzades:"
+msgstr "Opcions personalitzades"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:466
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add any ffmpeg filtering options here. It will be put between source and "
-#| "destination streams of the ffmpeg"
+#, kde-format
 msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
 "destination streams of the FFmpeg instance"
 msgstr ""
-"Afegiu ací qualsevol opció de filtratge de «ffmpeg». S'utilitzarà entre els "
-"fluxos d'origen i de destinació de «ffmpeg»"
+"Afegiu ací qualsevol opció de filtratge de FFmpeg. S'utilitzarà entre els "
+"fluxos d'origen i de destinació de la instància de FFmpeg"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -21541,10 +21523,9 @@ msgstr "General"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:40
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video file:"
-msgstr "FPS del vídeo:"
+msgstr "Fitxer de vídeo:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
@@ -21775,22 +21756,19 @@ msgstr "Filtre:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
-#, fuzzy, kde-format
-#| msgid "FFmpeg:"
+#, kde-format
 msgid "FFmpeg"
-msgstr "FFmpeg:"
+msgstr "FFmpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
-#, fuzzy, kde-format
-#| msgid "FFMpeg Path:"
+#, kde-format
 msgid "FFmpeg path:"
 msgstr "Camí de FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
-#, fuzzy, kde-format
-#| msgid "FFProbe Path:"
+#, kde-format
 msgid "FFprobe path:"
 msgstr "Camí de FFprobe:"
 
@@ -21814,17 +21792,15 @@ msgstr "Últim fotograma:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:49
-#, fuzzy, kde-format
-#| msgid "Export Images"
+#, kde-format
 msgid "Export as image sequence"
-msgstr "Exporta imatges"
+msgstr "Exporta com a seqüència d'imatges"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:58
-#, fuzzy, kde-format
-#| msgid "Fi&le format:"
+#, kde-format
 msgid "File format:"
-msgstr "&Format de fitxer:"
+msgstr "Format de fitxer:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbMimetype)
 #: libs/ui/animation/wdg_animationrenderer.ui:67
@@ -21874,10 +21850,9 @@ msgstr "Només fotogrames únics"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
-#, fuzzy, kde-format
-#| msgid "Export size:"
+#, kde-format
 msgid "Export as video"
-msgstr "Mida de l'exportació:"
+msgstr "Exporta com a vídeo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
@@ -21889,8 +21864,7 @@ msgstr "Renderitza com a:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:210
-#, fuzzy, kde-format
-#| msgid "Select the ffmpeg render options."
+#, kde-format
 msgid "Select the FFmpeg render options."
 msgstr "Seleccioneu les opcions de renderització de FFmpeg."
 
@@ -21910,15 +21884,13 @@ msgstr "Inclou l'àudio"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
-#, fuzzy, kde-format
-#| msgid "Image location:"
+#, kde-format
 msgid "FFmpeg location:"
-msgstr "Ubicació de la imatge:"
+msgstr "Ubicació de FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
-#, fuzzy, kde-format
-#| msgid "FFmpeg Version: "
+#, kde-format
 msgid "FFmpeg version:"
 msgstr "Versió de FFmpeg: "
 
@@ -22018,13 +21990,13 @@ msgid "Horizontal mirroring: %1 "
 msgstr "Emmirallat horitzontal: %1 "
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:357
+#: libs/ui/canvas/kis_canvas_controller.cpp:360
 #, kde-format
 msgid "OFF"
 msgstr "Inactiu"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:357
+#: libs/ui/canvas/kis_canvas_controller.cpp:360
 #, kde-format
 msgid "ON"
 msgstr "Actiu"
@@ -22035,7 +22007,7 @@ msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Gir: %1° "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:290
+#: libs/ui/canvas/kis_canvas_controller.cpp:293
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -22044,24 +22016,24 @@ msgstr ""
 "Esteu activant el mode d'ajust cíclic, però no heu activat OpenGL.\n"
 "Per a visualitzar el mode d'ajust cíclic, activeu OpenGL."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:356
+#: libs/ui/canvas/kis_canvas_controller.cpp:359
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Mode de vista prèvia instantània: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:363
+#: libs/ui/canvas/kis_canvas_controller.cpp:366
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "La vista prèvia instantània només funciona amb OpenGL activat"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:369
+#: libs/ui/canvas/kis_canvas_controller.cpp:372
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Proximitat"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:370
+#: libs/ui/canvas/kis_canvas_controller.cpp:373
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -22072,7 +22044,7 @@ msgstr ""
 "en els modes de filtratge trilineal i alta qualitat.\n"
 "El mode actual és %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:374
+#: libs/ui/canvas/kis_canvas_controller.cpp:377
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -58445,7 +58417,7 @@ msgid "Line height"
 msgstr "Alçària de la línia"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1458
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:205
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"
 msgstr "Espaiat de les lletres"
@@ -58829,32 +58801,32 @@ msgctxt "action"
 msgid "Kerning"
 msgstr "Entre les lletres"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:134
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:135
 #, kde-format
 msgid "Create new texts with..."
 msgstr "Crea textos nous amb..."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:171
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:172
 #, kde-format
 msgid "Anchor text to the left."
 msgstr "Ancora el text a l'esquerra."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:180
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:181
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "Ancora el text al mig."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:189
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:190
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "Ancora el text a la dreta."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:219
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
 #, kde-format
 msgid "Edit Text"
 msgstr "Edita el text"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:255
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:256
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -60479,80 +60451,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Choose a video file"
-#~ msgstr "Escolliu un fitxer de vídeo"
-
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
-#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">This video contains "
-#~ "more than 100 frames. Loading too many frames can overload your computer. "
-#~ "Use a</span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;"
-#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\" font-"
-#~ "size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;"
-#~ "\">video editor </span></a><span style=\" font-size:16pt; font-"
-#~ "weight:400; color:#ff692e;\">instead!</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Note Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">Avís: </span><span style=\" "
-#~ "font-size:16pt; font-weight:400; color:#ff692e;\">Este vídeo conté més de "
-#~ "100 fotogrames. Carregar massa fotogrames pot sobrecarregar el vostre "
-#~ "ordinador. En el seu lloc, utilitzeu un </span><span style=\" font-"
-#~ "size:16pt; font-weight:400; color:#ff1500;\"> </span><a href=\"https://"
-#~ "kdenlive.org\"><span style=\" font-size:16pt; font-weight:400; text-"
-#~ "decoration: underline; color:#2980b9;\"> editor de vídeo</span></a><span "
-#~ "style=\" font-size:16pt; font-weight:400; color:#ff692e;\">.</span></p></"
-#~ "body></html>"
-
-#~ msgid "FFMpeg"
-#~ msgstr "FFmpeg"
-
-#~ msgid "Export:"
-#~ msgstr "Exporta:"
-
-#~ msgid "Image Se&quence"
-#~ msgstr "Se&qüència d'imatges"
-
-#~ msgid "&Video"
-#~ msgstr "&Vídeo"
-
-#~ msgid "Video Options"
-#~ msgstr "Opcions del vídeo"
-
-#~ msgid "FF&Mpeg: "
-#~ msgstr "FF&Mpeg: "
-
-#~ msgid "Video Location:"
-#~ msgstr "Ubicació del vídeo:"
-
-#~ msgid "FFMpeg Version: None"
-#~ msgstr "Versió FFmpeg: Cap"
-
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
-#~ "body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Avís:</span> "
-#~ "FFmpeg haurà de ser almenys la versió 4.2+ perquè funcione la "
-#~ "transparència en els GIF.</p></body></html>"
-
-#~ msgid "Image Sequence Options"
-#~ msgstr "Opcions de la seqüència d'imatges"

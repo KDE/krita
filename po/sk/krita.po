@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-02 00:46+0000\n"
+"POT-Creation-Date: 2023-05-03 00:46+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -16254,7 +16254,7 @@ msgstr "Voľby %1"
 msgid "Active tool: %1"
 msgstr "Aktívny nástroj: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1776
+#: libs/flake/svg/SvgParser.cpp:1788
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -16266,25 +16266,25 @@ msgstr ""
 "sa textový objekt prevedie do formátu Krita 5, ktorý už nebude kompatibilný "
 "s Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2703
+#: libs/flake/text/KoSvgTextShape.cpp:3704
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Text"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2705
-#: libs/flake/text/KoSvgTextShape.cpp:2713
+#: libs/flake/text/KoSvgTextShape.cpp:3706
+#: libs/flake/text/KoSvgTextShape.cpp:3714
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Tvar textu SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2711
+#: libs/flake/text/KoSvgTextShape.cpp:3712
 #, kde-format
 msgid "SVG Text"
 msgstr "Text SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2725
-#: libs/flake/text/KoSvgTextShape.cpp:2740
+#: libs/flake/text/KoSvgTextShape.cpp:3726
+#: libs/flake/text/KoSvgTextShape.cpp:3741
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16975,7 +16975,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:369
+#: libs/ui/canvas/kis_canvas_controller.cpp:372
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -22008,13 +22008,13 @@ msgid "Horizontal mirroring: %1 "
 msgstr "Horizontálne zrkadlenie: %1 "
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:357
+#: libs/ui/canvas/kis_canvas_controller.cpp:360
 #, kde-format
 msgid "OFF"
 msgstr "Vypnuté"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:357
+#: libs/ui/canvas/kis_canvas_controller.cpp:360
 #, kde-format
 msgid "ON"
 msgstr "Zapnuté"
@@ -22025,7 +22025,7 @@ msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Otočenie: %1° "
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:290
+#: libs/ui/canvas/kis_canvas_controller.cpp:293
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -22034,24 +22034,24 @@ msgstr ""
 "Aktivujete režim wrap-around, ale nemáte povolené OpenGL.\n"
 "Na vizualizáciu wrap-around režimu povoľte OpenGL."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:356
+#: libs/ui/canvas/kis_canvas_controller.cpp:359
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Režim okamžitého náhľadu: %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:363
+#: libs/ui/canvas/kis_canvas_controller.cpp:366
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "Okamžitý náhľad je podporovaný iba s aktivovaným OpenGL"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:369
+#: libs/ui/canvas/kis_canvas_controller.cpp:372
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Najbližší sused"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:370
+#: libs/ui/canvas/kis_canvas_controller.cpp:373
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -22062,7 +22062,7 @@ msgstr ""
 " v režimoch Trilineárneho alebo Vysoko kvalitného filtrovania.\n"
 "Aktuálny režim je %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:374
+#: libs/ui/canvas/kis_canvas_controller.cpp:377
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -58375,7 +58375,7 @@ msgid "Line height"
 msgstr "Výška riadka"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1458
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:205
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"
 msgstr "Rozstup písmen"
@@ -58761,32 +58761,32 @@ msgctxt "action"
 msgid "Kerning"
 msgstr "Kerning"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:134
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:135
 #, kde-format
 msgid "Create new texts with..."
 msgstr "Vytvoriť nový text s..."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:171
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:172
 #, kde-format
 msgid "Anchor text to the left."
 msgstr "Ukotviť text vľavo."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:180
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:181
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "Ukotviť text do stredu."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:189
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:190
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "Ukotviť text vpravo."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:219
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
 #, kde-format
 msgid "Edit Text"
 msgstr "Upraviť text"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:255
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:256
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-02 00:46+0000\n"
+"POT-Creation-Date: 2023-05-03 00:46+0000\n"
 "PO-Revision-Date: 2023-02-10 21:36+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -16470,7 +16470,7 @@ msgstr "%1 Aukerak"
 msgid "Active tool: %1"
 msgstr "Tresna aktiboa: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1776
+#: libs/flake/svg/SvgParser.cpp:1788
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -16479,25 +16479,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:2703
+#: libs/flake/text/KoSvgTextShape.cpp:3704
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Testua"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2705
-#: libs/flake/text/KoSvgTextShape.cpp:2713
+#: libs/flake/text/KoSvgTextShape.cpp:3706
+#: libs/flake/text/KoSvgTextShape.cpp:3714
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG testu forma"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2711
+#: libs/flake/text/KoSvgTextShape.cpp:3712
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG testua"
 
-#: libs/flake/text/KoSvgTextShape.cpp:2725
-#: libs/flake/text/KoSvgTextShape.cpp:2740
+#: libs/flake/text/KoSvgTextShape.cpp:3726
+#: libs/flake/text/KoSvgTextShape.cpp:3741
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17190,7 +17190,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
 #: libs/image/kis_filter_strategy.h:108
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:124
-#: libs/ui/canvas/kis_canvas_controller.cpp:369
+#: libs/ui/canvas/kis_canvas_controller.cpp:372
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
@@ -22237,13 +22237,13 @@ msgid "Horizontal mirroring: %1 "
 msgstr "Isla horizontala: %1"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:357
+#: libs/ui/canvas/kis_canvas_controller.cpp:360
 #, kde-format
 msgid "OFF"
 msgstr "ITZALITA"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#: libs/ui/canvas/kis_canvas_controller.cpp:357
+#: libs/ui/canvas/kis_canvas_controller.cpp:360
 #, kde-format
 msgid "ON"
 msgstr "PIZTUTA"
@@ -22254,7 +22254,7 @@ msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
 msgstr "Biraketa: %1º"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:290
+#: libs/ui/canvas/kis_canvas_controller.cpp:293
 #, kde-format
 msgid ""
 "You are activating wrap-around mode, but have not enabled OpenGL.\n"
@@ -22263,24 +22263,24 @@ msgstr ""
 "Modu inguratzailea aktibatzen ari zara, baina ez duzu OpenGL gaitu.\n"
 "Modu inguratzailea irudikatzeko, gaitu OpenGL."
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:356
+#: libs/ui/canvas/kis_canvas_controller.cpp:359
 #, kde-format
 msgid "Instant Preview Mode: %1"
 msgstr "Bat-batean aurreikusteko modua:  %1"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:363
+#: libs/ui/canvas/kis_canvas_controller.cpp:366
 #, kde-format
 msgid "Instant Preview is only supported with OpenGL activated"
 msgstr "Bat-batean aurreikustea onartzen da soilik OpenGL aktibatuta dagoenean"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
-#: libs/ui/canvas/kis_canvas_controller.cpp:369
+#: libs/ui/canvas/kis_canvas_controller.cpp:372
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
 msgstr "Bizilagun hurbilena"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:370
+#: libs/ui/canvas/kis_canvas_controller.cpp:373
 #, kde-format
 msgid ""
 "Instant Preview is supported\n"
@@ -22291,7 +22291,7 @@ msgstr ""
 " iragazteko modu trilinialean edo Kalitate handikoan.\n"
 "Uneko modua %1 da"
 
-#: libs/ui/canvas/kis_canvas_controller.cpp:374
+#: libs/ui/canvas/kis_canvas_controller.cpp:377
 #, kde-format
 msgid ""
 "Failed activating Instant Preview mode!\n"
@@ -58380,7 +58380,7 @@ msgid "Line height"
 msgstr "Lerroaren altuera"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1458
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:205
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"
 msgstr "Letra-tartea"
@@ -58764,32 +58764,32 @@ msgctxt "action"
 msgid "Kerning"
 msgstr "Karaktere-tartea doitzea"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:134
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:135
 #, kde-format
 msgid "Create new texts with..."
 msgstr "Sortu testu berria ... erabiliz"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:171
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:172
 #, kde-format
 msgid "Anchor text to the left."
 msgstr "Ainguratu testua ezkerrean."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:180
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:181
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "Ainguratu testua erdian."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:189
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:190
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "Ainguratu testua eskuinean."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:219
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:220
 #, kde-format
 msgid "Edit Text"
 msgstr "Editatu testua"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:255
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:256
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

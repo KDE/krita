@@ -395,9 +395,9 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
             dbgFile << "Info";
             dbgFile << "Size:" << d.m_info.xsize << "x" << d.m_info.ysize;
             dbgFile << "Depth:" << d.m_info.bits_per_sample << d.m_info.exponent_bits_per_sample;
-            dbgFile << "Number of channels:" << d.m_info.num_color_channels;
-            dbgFile << "Has alpha" << d.m_info.num_extra_channels << d.m_info.alpha_bits
-                    << d.m_info.alpha_exponent_bits;
+            dbgFile << "Number of color channels:" << d.m_info.num_color_channels;
+            dbgFile << "Number of extra channels:" << d.m_info.num_extra_channels;
+            dbgFile << "Extra channels depth:" << d.m_info.alpha_bits << d.m_info.alpha_exponent_bits;
             dbgFile << "Has animation:" << d.m_info.have_animation << "loops:" << d.m_info.animation.num_loops
                     << "tick:" << d.m_info.animation.tps_numerator << d.m_info.animation.tps_denominator;
             JxlResizableParallelRunnerSetThreads(

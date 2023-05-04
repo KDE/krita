@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-03 00:46+0000\n"
-"PO-Revision-Date: 2023-04-26 12:56+0200\n"
+"PO-Revision-Date: 2023-05-03 09:16+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -20377,22 +20377,17 @@ msgstr "Veljavna izvršljiva datoteka FFmpeg ni podana …"
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
-msgstr ""
+msgstr "FFmpeg mora biti vsaj različice 4.2+, da prosojnost GIF deluje"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:470
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#| "animated gif images cannot have a framerate higher than 50. The framerate "
-#| "will be reduced to 50 frames per second.</p></body></html>"
+#, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
 "Animated GIF images cannot have a framerate higher than 50. The framerate "
 "will be reduced to 50 frames per second"
 msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Opozorilo:</span> "
-"animirane slike gif ne morejo imeti hitrosti, višje od 50 sl/s. Hitrost bo "
-"zmanjšana na 50 sličic na sekundo.</p></body></html>"
+"Animirane slike GIF ne morejo imeti hitrosti, višje od 50 sl/s. Hitrost bo "
+"zmanjšana na 50 sličic na sekundo."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:477
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1824
@@ -20577,18 +20572,14 @@ msgstr ""
 "Spremenjena je, da vidite celotno trajanje</em></font>"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
-#, fuzzy, kde-format
-#| msgctxt "part of warning in video importer."
-#| msgid ""
-#| "WARNING, you are trying to import %1 frames, the maximum amount you can "
-#| "import is %2."
+#, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "<b>Warning:</b> you are trying to import %1 frames, the maximum amount you "
 "can import is %2."
 msgstr ""
-"OPOZORILO, poskušate uvoziti %1 sličic, največja količina sličic, ki jih "
-"lahko uvozite, je %2."
+"<b>Opozorilo:</b> poskušate uvoziti %1 sličic, največja količina sličic, ki "
+"jih lahko uvozite, je %2."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
 #, kde-format
@@ -20617,17 +20608,13 @@ msgstr ""
 "To bo prevzelo polovico razpoložljivega pomnilnika, urejanje bo oteženo."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
-#, fuzzy, kde-format
-#| msgctxt "part of warning in video importer."
-#| msgid ""
-#| "Krita does not support the video transfer curve (%1), it will be loaded "
-#| "as linear"
+#, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "Krita does not support the video transfer curve (%1), it will be loaded as "
 "linear."
 msgstr ""
-"Krita ne podpira krivulje prenosa videa (%1), zato bo naloženo kot linearno"
+"Krita ne podpira krivulje prenosa videa (%1), zato bo naloženo kot linearno."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
@@ -20705,14 +20692,13 @@ msgstr "Ustvarjanje želene datoteke %1: %2/%3 sličic."
 #: libs/ui/animation/video_export_options_dialog.ui:13
 #, kde-format
 msgid "Codec:"
-msgstr ""
+msgstr "Kodek:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
 #: libs/ui/animation/video_export_options_dialog.ui:23
-#, fuzzy, kde-format
-#| msgid "No options"
+#, kde-format
 msgid "Codec options"
-msgstr "Ni možnosti"
+msgstr "Možnosti kodeka"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -20778,10 +20764,9 @@ msgstr "Metapodatki HDR …"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
-#, fuzzy, kde-format
-#| msgid "Bitrate (MBit/s)"
+#, kde-format
 msgid "Bitrate (MBit/s):"
-msgstr "Bitna hitrost (Mbit/s)"
+msgstr "Bitna hitrost (Mbit/s):"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
@@ -20809,10 +20794,9 @@ msgstr "Razlika v prosojnosti"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/animation/video_export_options_dialog.ui:300
-#, fuzzy, kde-format
-#| msgid "Auto-generate 8bit Palette"
+#, kde-format
 msgid "Auto-generate 8bit Palette:"
-msgstr "Samodejno tvori 8-bitno paleto"
+msgstr "Samodejno tvori 8-bitno paleto:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
@@ -20893,23 +20877,19 @@ msgstr "Kakovost slike:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:457
-#, fuzzy, kde-format
-#| msgid "Custom Options:"
+#, kde-format
 msgid "Custom options"
-msgstr "Možnosti po meri:"
+msgstr "Možnosti po meri"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:466
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add any ffmpeg filtering options here. It will be put between source and "
-#| "destination streams of the ffmpeg"
+#, kde-format
 msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
 "destination streams of the FFmpeg instance"
 msgstr ""
-"Tukaj dodajte vse možnosti filtriranja ffmpeg. Vstavi se med izvorne in "
-"ciljne tokove ffmpega"
+"Tukaj dodajte vse možnosti filtriranja FFmpeg. Vstavi se med izvorne in "
+"ciljne tokove instance FFmpeg."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -21495,10 +21475,9 @@ msgstr "Splošno"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:40
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video file:"
-msgstr "Hitrost videa (sl/s):"
+msgstr "Video datoteka:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
@@ -21729,24 +21708,21 @@ msgstr "Filter:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
-#, fuzzy, kde-format
-#| msgid "FFmpeg:"
+#, kde-format
 msgid "FFmpeg"
-msgstr "FFmpeg:"
+msgstr "FFmpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
-#, fuzzy, kde-format
-#| msgid "FFMpeg Path:"
+#, kde-format
 msgid "FFmpeg path:"
-msgstr "Pot FFMpeg:"
+msgstr "Pot FFMpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
-#, fuzzy, kde-format
-#| msgid "FFProbe Path:"
+#, kde-format
 msgid "FFprobe path:"
-msgstr "Pot FFProbe:"
+msgstr "Pot FFProbe"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
 #: libs/ui/animation/wdg_animationrenderer.ui:10
@@ -21768,17 +21744,15 @@ msgstr "Zadnja sličica:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:49
-#, fuzzy, kde-format
-#| msgid "Export Images"
+#, kde-format
 msgid "Export as image sequence"
-msgstr "Izvozi slike"
+msgstr "Izvozi kot zaporedje slik"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:58
-#, fuzzy, kde-format
-#| msgid "Fi&le format:"
+#, kde-format
 msgid "File format:"
-msgstr "Vrsta &datoteke:"
+msgstr "Vrsta datoteke:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbMimetype)
 #: libs/ui/animation/wdg_animationrenderer.ui:67
@@ -21828,10 +21802,9 @@ msgstr "Samo enolične sličice"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
-#, fuzzy, kde-format
-#| msgid "Export size:"
+#, kde-format
 msgid "Export as video"
-msgstr "Velikost izvoza:"
+msgstr "Izvozi kot video"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
@@ -21843,10 +21816,9 @@ msgstr "Upodobi kot:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:210
-#, fuzzy, kde-format
-#| msgid "Select the ffmpeg render options."
+#, kde-format
 msgid "Select the FFmpeg render options."
-msgstr "Izberite možnosti upodabljanja FFMPEG."
+msgstr "Izberite možnosti upodabljanja FFmpeg."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, labelExportTo)
@@ -21864,15 +21836,13 @@ msgstr "Vključi zvok"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
-#, fuzzy, kde-format
-#| msgid "Image location:"
+#, kde-format
 msgid "FFmpeg location:"
-msgstr "Mesto slike:"
+msgstr "Mesto FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
-#, fuzzy, kde-format
-#| msgid "FFmpeg Version: "
+#, kde-format
 msgid "FFmpeg version:"
 msgstr "Različica FFMpeg: "
 
@@ -60260,80 +60230,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "Choose a video file"
-#~ msgstr "Izbiranje video datoteko"
-
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
-#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">This video contains "
-#~ "more than 100 frames. Loading too many frames can overload your computer. "
-#~ "Use a</span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;"
-#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\" font-"
-#~ "size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;"
-#~ "\">video editor </span></a><span style=\" font-size:16pt; font-"
-#~ "weight:400; color:#ff692e;\">instead!</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">OPOZORILO: </span><span "
-#~ "style=\" font-size:16pt; font-weight:400; color:#ff692e;\">Ta video "
-#~ "vsebuje več kot 100 sličic. Nalaganje preveč sličic lahko prekomerno "
-#~ "obremeni vaš računalnik. Raje uporabite </span><span style=\" font-"
-#~ "size:16pt; font-weight:400; color:#ff1500;\"> </span><a href=\"https://"
-#~ "kdenlive.org\"><span style=\" font-size:16pt; font-weight:400; text-"
-#~ "decoration: underline; color:#2980b9;\">program za montažo</span></"
-#~ "a><span style=\" font-size:16pt; font-weight:400; color:#ff692e;\">!</"
-#~ "span></p></body></html>"
-
-#~ msgid "FFMpeg"
-#~ msgstr "FFMpeg"
-
-#~ msgid "Export:"
-#~ msgstr "Izvozi:"
-
-#~ msgid "Image Se&quence"
-#~ msgstr "Se&kvenca slik"
-
-#~ msgid "&Video"
-#~ msgstr "&Video"
-
-#~ msgid "Video Options"
-#~ msgstr "Možnosti videa"
-
-#~ msgid "FF&Mpeg: "
-#~ msgstr "FF&Mpeg: "
-
-#~ msgid "Video Location:"
-#~ msgstr "Mesto videa:"
-
-#~ msgid "FFMpeg Version: None"
-#~ msgstr "Različica FFMpeg: Brez"
-
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
-#~ "body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Opozorilo:</span> "
-#~ "FFMpeg mora biti vsaj različice 4.2+, da bo prosojnost gif delovala.</p></"
-#~ "body></html>"
-
-#~ msgid "Image Sequence Options"
-#~ msgstr "Možnosti sekvence slik"

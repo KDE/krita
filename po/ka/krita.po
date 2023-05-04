@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-03 00:46+0000\n"
-"PO-Revision-Date: 2023-04-19 06:10+0200\n"
+"PO-Revision-Date: 2023-05-03 06:40+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -605,7 +605,7 @@ msgstr "12 ვერტიკალური ნახატი"
 #, kde-format
 msgctxt "./krita/data/patterns/13_drawed_swirl.png"
 msgid "13 drawed swirl"
-msgstr ""
+msgstr "13 დახატული მორევი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -689,7 +689,7 @@ msgstr "25-დინამიკური-სკრინტონი-C"
 #, kde-format
 msgctxt "./krita/data/patterns/26_brush-marks.png"
 msgid "26 brush-marks"
-msgstr ""
+msgstr "26 ფუნჯის-ნიშნები"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -915,7 +915,7 @@ msgstr ""
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Atmospheric_Triad.kgm"
 msgid "Atmospheric Triad"
-msgstr ""
+msgstr "ატმოსფერული ტრიადა"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -927,7 +927,7 @@ msgstr "შემცვლელი"
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Dominant_Hue_With_Accent.kgm"
 msgid "Dominant Hue With Accent"
-msgstr ""
+msgstr "დომინანტური ტონი აქცენტით"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -994,7 +994,7 @@ msgstr ""
 #, kde-format
 msgctxt "./krita/data/symbols/BalloonSymbols.svg"
 msgid "Word Balloons"
-msgstr ""
+msgstr "სიტყვის ბუშტები"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2018,7 +2018,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Brush_dotted.kpp"
 msgid "Brush dotted"
-msgstr ""
+msgstr "წერტილოვანი ფუნჯი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2026,7 +2026,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Brush_textured.kpp"
 msgid "Brush textured"
-msgstr ""
+msgstr "ტექსტურული ფუნჯი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2034,7 +2034,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Clone_tool.kpp"
 msgid "Clone tool"
-msgstr ""
+msgstr "კლონირების ხელსაწყო"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2042,7 +2042,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Curve_curvy.kpp"
 msgid "Curve curvy"
-msgstr ""
+msgstr "გამრუდებული მრუდი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2050,7 +2050,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Curve_ink.kpp"
 msgid "Curve ink"
-msgstr ""
+msgstr "მელნის მრუდი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2058,7 +2058,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Curve_recurvy.kpp"
 msgid "Curve recurvy"
-msgstr ""
+msgstr "მეორედ გამრუდებული მრუდი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2066,7 +2066,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Curve_smooth.kpp"
 msgid "Curve smooth"
-msgstr ""
+msgstr "მოგლუვებული მრუდი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2074,7 +2074,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Eraser_circle.kpp"
 msgid "Eraser circle"
-msgstr ""
+msgstr "მრგვალი საშლელი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2082,7 +2082,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Eraser_hard.kpp"
 msgid "Eraser hard"
-msgstr ""
+msgstr "მაგარი საშლელი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2090,7 +2090,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Eraser_soft.kpp"
 msgid "Eraser soft"
-msgstr ""
+msgstr "რბილი საშლელი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2146,7 +2146,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Fill_block.kpp"
 msgid "Fill block"
-msgstr ""
+msgstr "ბლოკის შევსება"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2154,7 +2154,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Fill_circle.kpp"
 msgid "Fill circle"
-msgstr ""
+msgstr "წრეწირის შევსება"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2306,7 +2306,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Layout_oval.kpp"
 msgid "Layout oval"
-msgstr ""
+msgstr "ოვალური განლაგება"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2314,7 +2314,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Layout_pen.kpp"
 msgid "Layout pen"
-msgstr ""
+msgstr "ფანქრით განლაგება"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2322,7 +2322,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Move_tool.kpp"
 msgid "Move tool"
-msgstr ""
+msgstr "გადატანის ხელსაწყო"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2474,7 +2474,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Shape_fill.kpp"
 msgid "Shape fill"
-msgstr ""
+msgstr "ფორმის შევსება:"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2482,7 +2482,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Shape_smooth.kpp"
 msgid "Shape smooth"
-msgstr ""
+msgstr "ფორმის მოგლუვება"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2530,7 +2530,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sketch_line.kpp"
 msgid "Sketch line"
-msgstr ""
+msgstr "ესკიზური ხაზი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2802,7 +2802,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/pixel1."
 "kpp"
 msgid "pixel1"
-msgstr ""
+msgstr "პიქსელი1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3103,7 +3103,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/Canvas_Hard."
 "pat"
 msgid "Canvas 01"
-msgstr ""
+msgstr "ტილო 01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3119,7 +3119,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "Canvas_small_01.pat"
 msgid "Canvas 02"
-msgstr ""
+msgstr "ტილო 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3127,7 +3127,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "Canvas_small_02.pat"
 msgid "Canvas 03"
-msgstr ""
+msgstr "ტილო 03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3462,7 +3462,7 @@ msgstr "ჩვეულებრივი ქაღალდი 3"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/granite.pat"
 msgid "Granite 1b"
-msgstr ""
+msgstr "გრანიტი 1b"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3638,7 +3638,7 @@ msgstr "თმა"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/leaves.png"
 msgid "leaves"
-msgstr ""
+msgstr "ფოთლები"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3753,7 +3753,7 @@ msgstr "კვამლი"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/sparkle.png"
 msgid "sparkle"
-msgstr ""
+msgstr "ნაპერწკალი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3944,7 +3944,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-2.kpp"
 msgid "c) Pencil-2"
-msgstr ""
+msgstr "c) ფანქარი-2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3953,7 +3953,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-3_Large_4B.kpp"
 msgid "c) Pencil-3 Large 4B"
-msgstr ""
+msgstr "c) ფანქარი-3 დიდი 4B"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3962,7 +3962,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-4_Soft.kpp"
 msgid "c) Pencil-4 Soft"
-msgstr ""
+msgstr "c) ფანქარი-4 რბილი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3971,7 +3971,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-5_Tilted.kpp"
 msgid "c) Pencil-5 Tilted"
-msgstr ""
+msgstr "c) ფანქარი-5 დახრილი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4610,7 +4610,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "x)_Filter_Blur.kpp"
 msgid "x) Filter Blur"
-msgstr ""
+msgstr "x) ბუნდოვნების ფილტრი"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -20543,14 +20543,13 @@ msgstr ""
 #: libs/ui/animation/video_export_options_dialog.ui:13
 #, kde-format
 msgid "Codec:"
-msgstr ""
+msgstr "კოდეკი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
 #: libs/ui/animation/video_export_options_dialog.ui:23
-#, fuzzy, kde-format
-#| msgid "No options"
+#, kde-format
 msgid "Codec options"
-msgstr "პარამეტრების გარეშე"
+msgstr "კოდეკის მორგება"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -20616,10 +20615,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
-#, fuzzy, kde-format
-#| msgid "Bitrate (MBit/s)"
+#, kde-format
 msgid "Bitrate (MBit/s):"
-msgstr "ბიტური სიჩქარე (მბიტ/წმ)"
+msgstr "ბიტური სიჩქარე (მბიტ/წმ):"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
@@ -20717,10 +20715,9 @@ msgstr "გამოსახულების ხარისხი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:457
-#, fuzzy, kde-format
-#| msgid "Custom Options:"
+#, kde-format
 msgid "Custom options"
-msgstr "ხელით მითითებული პარამეტრები:"
+msgstr "ხელით მითითებული პარამეტრები"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:466
@@ -21314,10 +21311,9 @@ msgstr "მთავარი"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:40
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video file:"
-msgstr "ვიდეოს კადრი/წმ:"
+msgstr "ვიდეოფაილი:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
@@ -21543,24 +21539,21 @@ msgstr "ფილტრი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
-#, fuzzy, kde-format
-#| msgid "FFmpeg:"
+#, kde-format
 msgid "FFmpeg"
-msgstr "FFmpeg:"
+msgstr "FFmpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
-#, fuzzy, kde-format
-#| msgid "FFMpeg Path:"
+#, kde-format
 msgid "FFmpeg path:"
-msgstr "FFMpeg ბილიკი:"
+msgstr "FFMpeg-ის ბილიკი:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
-#, fuzzy, kde-format
-#| msgid "FFProbe Path:"
+#, kde-format
 msgid "FFprobe path:"
-msgstr "FFProbe ბილიკი:"
+msgstr "FFProbe-ის ბილიკი:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
 #: libs/ui/animation/wdg_animationrenderer.ui:10
@@ -21582,17 +21575,15 @@ msgstr "ბოლო კადრი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:49
-#, fuzzy, kde-format
-#| msgid "Image Se&quence"
+#, kde-format
 msgid "Export as image sequence"
-msgstr "გამოსახულებების &მიმდევრობა"
+msgstr "გამოსახულებების &მიმდევრობის სახით გატანა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:58
-#, fuzzy, kde-format
-#| msgid "Fi&le format:"
+#, kde-format
 msgid "File format:"
-msgstr "&ფაილის ფორმატი:"
+msgstr "ფაილის ფორმატი:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbMimetype)
 #: libs/ui/animation/wdg_animationrenderer.ui:67
@@ -21640,10 +21631,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
-#, fuzzy, kde-format
-#| msgid "Export size:"
+#, kde-format
 msgid "Export as video"
-msgstr "გატანის ზომა:"
+msgstr "ვიდეოს სახით გატანა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
@@ -21675,17 +21665,15 @@ msgstr "აუდიოს ჩათვლით"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
-#, fuzzy, kde-format
-#| msgid "Image location:"
+#, kde-format
 msgid "FFmpeg location:"
-msgstr "გამოსახულების მდებარეობა:"
+msgstr "FFmpeg-ის მდებარეობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
-#, fuzzy, kde-format
-#| msgid "FFmpeg Version: "
+#, kde-format
 msgid "FFmpeg version:"
-msgstr "FFMpeg-ის ვერსია: "
+msgstr "FFMpeg-ის ვერსია:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -33944,17 +33932,17 @@ msgstr "პალიტრა"
 #: libs/widgets/KoEditColorSetDialog.cpp:216
 #, kde-format
 msgid "Add/Remove Colors"
-msgstr ""
+msgstr "ფერების დამატება/წაშლა"
 
 #: libs/widgets/KoResourceServerProvider.cpp:46
 #, kde-format
 msgid "1. Foreground to Transparent"
-msgstr ""
+msgstr "1.წინა პლანიდან გამჭვირვალემდე"
 
 #: libs/widgets/KoResourceServerProvider.cpp:59
 #, kde-format
 msgid "0. Foreground to Background"
-msgstr ""
+msgstr "0. წინა პლანიდან ფონამდე"
 
 #: libs/widgets/KoRuler.cpp:1329
 #, kde-format
@@ -33974,7 +33962,7 @@ msgstr "მარჯვნივ შეწევა"
 #: libs/widgets/KoShadowConfigWidget.cpp:55
 #, kde-format
 msgid "Change the color of the shadow"
-msgstr ""
+msgstr "ჩრდილის ფერის შეცვლა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/widgets/KoShadowConfigWidget.ui:71
@@ -34037,13 +34025,13 @@ msgstr ""
 #: libs/widgets/wdg_file_name_requester.ui:39
 #, kde-format
 msgid "Selected file name"
-msgstr ""
+msgstr "მონიშნული ფაილის სახელი"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, btnSelectFile)
 #: libs/widgets/wdg_file_name_requester.ui:46
 #, kde-format
 msgid "Select file name..."
-msgstr ""
+msgstr "აირჩიეთ ფაილის სახელი..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
@@ -34367,12 +34355,12 @@ msgstr "გადიდების დონე"
 #: libs/widgetutils/config/kstandardaction_p.h:62
 #, kde-format
 msgid "&Redisplay"
-msgstr ""
+msgstr "&თავიდან ჩვენება"
 
 #: libs/widgetutils/config/kstandardaction_p.h:62
 #, kde-format
 msgid "Redisplay document"
-msgstr ""
+msgstr "დოკუმენტის ხელახლა ჩვენება"
 
 #: libs/widgetutils/config/kstandardaction_p.h:64
 #, kde-format
@@ -34632,7 +34620,7 @@ msgstr ""
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "degrees (°)"
-msgstr ""
+msgstr "გრადუსი (°)"
 
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
@@ -34647,32 +34635,32 @@ msgstr ""
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "radians (rad)"
-msgstr ""
+msgstr "რადიანები (rad)"
 
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
 #, kde-format
 msgid "frames (f)"
-msgstr ""
+msgstr "კადრი (f)"
 
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "percent of animation (%)"
-msgstr ""
+msgstr "ანიმაციის პროცენტი (%)"
 
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "seconds (s)"
-msgstr ""
+msgstr "წამი (წმ)"
 
 #: libs/widgetutils/KisPreviewFileDialog.cpp:58
 #, kde-format
 msgid "Toggle Preview"
-msgstr ""
+msgstr "მინიატურების გადრთვა"
 
 #: libs/widgetutils/KoFileDialog.cpp:243
 #, kde-format
 msgid "Save As:"
-msgstr ""
+msgstr "შენახვა, როგორც:"
 
 #: libs/widgetutils/KoFileDialog.cpp:326
 #, kde-format
@@ -35252,7 +35240,7 @@ msgstr "ახალი..."
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:67
 #, kde-format
 msgid "Save/Load"
-msgstr ""
+msgstr "შენახვა/ჩატვირთვა"
 
 #. i18n("Save as Scheme Defaults"),
 #. this, SLOT(saveAsDefaultsForScheme()));
@@ -35569,19 +35557,19 @@ msgstr ""
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:84
 #, kde-format
 msgid "Enable vertical ruler"
-msgstr ""
+msgstr "ვერტიკალური სახაზავის ჩართვა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, fixedLengthCheckbox)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:117
 #, kde-format
 msgid "Fixed Length"
-msgstr ""
+msgstr "ფიქსირებული სიგრძე"
 
 #. i18n: ectx: property (text), widget (QLabel, globalColorLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:160
 #, kde-format
 msgid "Global Color:"
-msgstr ""
+msgstr "გლობალური ფერი:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useCustomAssistantColor)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:209
@@ -35661,7 +35649,7 @@ msgstr ""
 #: plugins/assistants/Assistants/InfiniteRulerAssistant.cc:265
 #, kde-format
 msgid "Infinite Ruler"
-msgstr ""
+msgstr "უსასრულო სახაზავი"
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1205
 #, kde-format
@@ -35682,12 +35670,12 @@ msgstr "დამხმარის შენახვა"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1543
 #, kde-format
 msgid "Density: "
-msgstr ""
+msgstr "სიმკვრივე: "
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1548
 #, kde-format
 msgid "Subdivisions: "
-msgstr ""
+msgstr "ქვედანაყოფები: "
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1552
 #, kde-format
@@ -35780,7 +35768,7 @@ msgstr ""
 #: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
 #, kde-format
 msgid "Parallel Ruler"
-msgstr ""
+msgstr "პარალელური სახაზავი"
 
 #: plugins/assistants/Assistants/PerspectiveAssistant.cc:31
 #, kde-format
@@ -36095,7 +36083,7 @@ msgstr ""
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:61
 #, kde-format
 msgid "On Mouse Over"
-msgstr ""
+msgstr "თაგუნას გადატარებისას"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
 #, kde-format
@@ -36122,7 +36110,7 @@ msgstr "აღარ მაჩვენო"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:24
 #, kde-format
 msgid "Color Selector Settings"
-msgstr ""
+msgstr "ფერის ამრჩევის მორგება"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:268
 #, kde-format
@@ -36183,7 +36171,7 @@ msgstr ""
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:36
 #, kde-format
 msgid "Color Selector"
-msgstr ""
+msgstr "ფერის ამრჩევი"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkShowColorSelector)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:72
@@ -36353,13 +36341,13 @@ msgstr ""
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:513
 #, kde-format
 msgid "Line Count: "
-msgstr ""
+msgstr "ხაზების რაოდენობა: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:533
 #, kde-format
 msgid "Line Height: "
-msgstr ""
+msgstr "ხაზის სიმაღლე: "
 
 #. i18n: ectx: property (text), widget (QLabel, patchesPerLineLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:556
@@ -36561,7 +36549,7 @@ msgstr ""
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:130
 #, kde-format
 msgid "Audio menu"
-msgstr ""
+msgstr "აუდიოს მენიუ"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:178
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:138
@@ -36706,7 +36694,7 @@ msgstr ""
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:454
 #, kde-format
 msgid "Real FPS:\t%1"
-msgstr ""
+msgstr "რეალური FPS:\t%1"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:455
 #, kde-format
@@ -36779,13 +36767,13 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Open audio..."
-msgstr ""
+msgstr "აუდიოს გახსნა..."
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:835
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Change audio (%1)..."
-msgstr ""
+msgstr "აუდიოს შეცვლა (%1)..."
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1580
 #, kde-format
@@ -36797,18 +36785,18 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
-msgstr ""
+msgstr "შეიყვანეთ კადრების რაოდენობა"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1688
 #, kde-format
 msgid "Edit Frames:"
-msgstr ""
+msgstr "კადრების ჩასწორება:"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1715
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
-msgstr ""
+msgstr "საკვანძო კადრები"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1723
 #, kde-format
@@ -37043,13 +37031,13 @@ msgstr ""
 #: plugins/dockers/artisticcolorselector/artisticcolorselector_dock.cpp:118
 #, kde-format
 msgid "Continuous Mode"
-msgstr ""
+msgstr "უწყვეტი რეჟიმი"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:21
 #, kde-format
 msgid "Selector Appearance"
-msgstr ""
+msgstr "ამრჩევის გარეგნობა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showBgColor)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:27
@@ -37151,7 +37139,7 @@ msgstr ""
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:134
 #, kde-format
 msgid "Invert Saturation"
-msgstr ""
+msgstr "გაჯერებულობის ინვერსია"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDefault)
 #: plugins/dockers/artisticcolorselector/forms/wdgWheelPreferencesPopup.ui:157
@@ -37192,7 +37180,7 @@ msgstr ""
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:87
 #, kde-format
 msgid "Export Images"
-msgstr ""
+msgstr "გამოსახულებების გატანა"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:90
 #, kde-format
@@ -37710,7 +37698,7 @@ msgstr ""
 #: plugins/dockers/logdocker/LogDockerDock.cpp:147
 #, kde-format
 msgid "Plugin Management"
-msgstr ""
+msgstr "დამატებების მართვა"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:151
 #, kde-format
@@ -37720,17 +37708,17 @@ msgstr "სამომხმარებლო ინტერფეისი"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:155
 #, kde-format
 msgid "File loading and saving"
-msgstr ""
+msgstr "ფაილის ჩატვირთვა და შენახვა"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:159
 #, kde-format
 msgid "Mathematics and calculations"
-msgstr ""
+msgstr "მათემატიკა და გამოთვლები"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:163
 #, kde-format
 msgid "Image Rendering"
-msgstr ""
+msgstr "გამოსახულების რენდერი"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:167
 #, kde-format
@@ -37740,7 +37728,7 @@ msgstr "სკრიპტები"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:171
 #, kde-format
 msgid "Input handling"
-msgstr ""
+msgstr "შეყვანის მართვა"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: plugins/dockers/logdocker/LogDockerDock.cpp:175
@@ -37752,12 +37740,12 @@ msgstr "ქმედებები"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:179
 #, kde-format
 msgid "Tablet Handling"
-msgstr ""
+msgstr "ტაბლეტის მართვა"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:183
 #, kde-format
 msgid "GPU Canvas"
-msgstr ""
+msgstr "GPU ტილო"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnToggle)
 #: plugins/dockers/logdocker/WdgLogDocker.ui:46
@@ -37769,19 +37757,19 @@ msgstr "ჟურნალის ჩართვა"
 #: plugins/dockers/logdocker/WdgLogDocker.ui:62
 #, kde-format
 msgid "Clear the log"
-msgstr ""
+msgstr "ჟურნალის გასუფთავება"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSave)
 #: plugins/dockers/logdocker/WdgLogDocker.ui:75
 #, kde-format
 msgid "Save the log"
-msgstr ""
+msgstr "ჟურნალის შენახვა"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSettings)
 #: plugins/dockers/logdocker/WdgLogDocker.ui:101
 #, kde-format
 msgid "Configure Logging"
-msgstr ""
+msgstr "ჟურნალის მორგება"
 
 #: plugins/dockers/lut/black_white_point_chooser.cpp:43
 #, kde-format
@@ -37796,7 +37784,7 @@ msgstr "თეთრი:"
 #: plugins/dockers/lut/lutdocker_dock.cpp:84
 #, kde-format
 msgid "LUT Management"
-msgstr ""
+msgstr "LUT-ის მართვა"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:102
 #, kde-format
@@ -37872,7 +37860,7 @@ msgstr "OpenColorIO-ის გამოყენება"
 #: plugins/dockers/lut/wdglut.ui:93
 #, kde-format
 msgid "Display Device:"
-msgstr ""
+msgstr "ეკრანის მოწყობილობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/lut/wdglut.ui:106
@@ -37916,7 +37904,7 @@ msgstr "ხედი:"
 #: plugins/dockers/lut/wdglut.ui:296
 #, kde-format
 msgid "Color Engine:"
-msgstr ""
+msgstr "ფერების ძრავა:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_colorManagement)
 #: plugins/dockers/lut/wdglut.ui:310
@@ -37934,7 +37922,7 @@ msgstr "OCIO"
 #: plugins/dockers/lut/wdglut.ui:320
 #, kde-format
 msgid "OCIO (environment)"
-msgstr ""
+msgstr "OCIO (გარემო)"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblLook)
 #: plugins/dockers/lut/wdglut.ui:328
@@ -37997,12 +37985,12 @@ msgstr ""
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:125
 #, kde-format
 msgid "Load a palette"
-msgstr ""
+msgstr "პალიტრის ჩატვირთვა"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:226
 #, kde-format
 msgid "Export Palette"
-msgstr ""
+msgstr "პალიტრის გატანა"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:239
 #, kde-format
@@ -38049,7 +38037,7 @@ msgstr ""
 #: plugins/dockers/presethistory/presethistory_dock.cpp:61
 #, kde-format
 msgid "Static Positions"
-msgstr ""
+msgstr "სტატიკური პოზიციები"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:63
 #, kde-format
@@ -38079,7 +38067,7 @@ msgstr "ისტორიის გაწმენდა"
 #: plugins/dockers/presethistory/presethistory_dock.cpp:311
 #, kde-format
 msgid "History Behavior:"
-msgstr ""
+msgstr "ისტორიის ქცევა:"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:316
 #, kde-format
@@ -38145,7 +38133,7 @@ msgstr ""
 #, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting FFmpeg..."
-msgstr ""
+msgstr "FFmpeg-ის გაშვება..."
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
 #: plugins/dockers/recorder/recorder_export.cpp:343
@@ -38159,13 +38147,13 @@ msgstr "გატანა"
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
-msgstr ""
+msgstr "გასატანი კადრების გარეშე"
 
 #: plugins/dockers/recorder/recorder_export.cpp:374
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
-msgstr ""
+msgstr "ჩანაწერის ინფორმაცია"
 
 #: plugins/dockers/recorder/recorder_export.cpp:377
 #, kde-format
@@ -38177,7 +38165,7 @@ msgstr "px"
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
-msgstr ""
+msgstr "კადრი"
 
 #: plugins/dockers/recorder/recorder_export.cpp:434
 #, kde-format
@@ -38188,7 +38176,7 @@ msgstr ""
 #: plugins/dockers/recorder/recorder_export.cpp:522
 #, kde-format
 msgid "Select FFmpeg Executable File"
-msgstr ""
+msgstr "აირჩიეთ FFmpeg გასაშვები ფაილი"
 
 #: plugins/dockers/recorder/recorder_export.cpp:568
 #, kde-format
@@ -38361,7 +38349,7 @@ msgstr "შესრულებულია!"
 #, kde-format
 msgctxt "Watch the video which is just created"
 msgid "Watch it!"
-msgstr ""
+msgstr "ყურება!"
 
 #. i18n: ectx: property (text), widget (QLabel, labelWritten)
 #: plugins/dockers/recorder/recorder_export.ui:941
@@ -38414,7 +38402,7 @@ msgstr "პროფილის ჩასწორება"
 #: plugins/dockers/recorder/recorder_profile_settings.ui:26
 #, kde-format
 msgid "Profile settings"
-msgstr ""
+msgstr "პროფილის მორგება"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonPresetRevert)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:33
@@ -38428,7 +38416,7 @@ msgstr "დაბრუნება"
 #, kde-format
 msgctxt "Title: variables for FFMpeg arguments"
 msgid "Insert variable:"
-msgstr ""
+msgstr "შეიყვანეთ ცვლადი"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleFFMpegArguments)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:167
@@ -38503,7 +38491,7 @@ msgstr ""
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:18
 #, kde-format
 msgid "Clean up Recordings"
-msgstr ""
+msgstr "ჩანაწერების გასუფთავება"
 
 #. i18n: ectx: property (text), widget (QLabel, labelProgress)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:95
@@ -38534,25 +38522,25 @@ msgstr "0 ბ"
 #, kde-format
 msgctxt "A folder where recordings are stored"
 msgid "Recordings directory:"
-msgstr ""
+msgstr "ჩანაწერების საქაღალდე:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonManageRecordings)
 #: plugins/dockers/recorder/recorderdocker.ui:105
 #, kde-format
 msgid "Manage recordings..."
-msgstr ""
+msgstr "ჩანაწერების მართვა..."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowse)
 #: plugins/dockers/recorder/recorderdocker.ui:130
 #, kde-format
 msgid "Select the recordings directory..."
-msgstr ""
+msgstr "აირჩიეთ ჩანაწერების საქაღალდე..."
 
 #. i18n: ectx: property (text), widget (QLabel, labelCaptureRate)
 #: plugins/dockers/recorder/recorderdocker.ui:155
 #, kde-format
 msgid "Capture interval:"
-msgstr ""
+msgstr "გადაღების ინტერვალი:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelQuality)
 #: plugins/dockers/recorder/recorderdocker.ui:199
@@ -38620,7 +38608,7 @@ msgstr ""
 #: plugins/dockers/recorder/recorderdocker.ui:318
 #, kde-format
 msgid "Record automatically"
-msgstr ""
+msgstr "ავტომატურად ჩაწერა"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRecordToggle)
 #: plugins/dockers/recorder/recorderdocker.ui:337
@@ -38711,17 +38699,17 @@ msgstr "ჩაწერა"
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
-msgstr ""
+msgstr "ჩაწ"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:214
 #, kde-format
 msgid "Recorder is active"
-msgstr ""
+msgstr "ჩამწერი აქტიურია"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:214
 #, kde-format
 msgid "Recorder is paused"
-msgstr ""
+msgstr "ჩამწერი შეჩერებულია"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:227
 #, kde-format
@@ -39194,7 +39182,7 @@ msgstr ""
 #: plugins/dockers/throttle/ThrottlePlugin.h:23
 #, kde-format
 msgid "CPU Throttle"
-msgstr ""
+msgstr "CPU-ის შეზღუდვა"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:86
 #, kde-format
@@ -39271,7 +39259,7 @@ msgstr ""
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
 #, kde-format
 msgid "Pop-ups"
-msgstr ""
+msgstr "მხტუნარები"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
@@ -39704,7 +39692,7 @@ msgstr "&ფენა"
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:31
 #, kde-format
 msgid "Create Clones Array"
-msgstr ""
+msgstr "კლონების მასივის შექმნა"
 
 #: plugins/extensions/clonesarray/dlg_clonesarray.cpp:219
 #, kde-format
@@ -39767,7 +39755,7 @@ msgstr "მანძილი"
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:298
 #, kde-format
 msgid "Column Preference"
-msgstr ""
+msgstr "სვეტის მორგება"
 
 #: plugins/extensions/colorrange/colorrange.xmlgui:4
 #, kde-format
@@ -39780,12 +39768,12 @@ msgstr "აირჩიეთ"
 #: plugins/extensions/colorrange/wdg_colorrange.ui:18
 #, kde-format
 msgid "Color Range"
-msgstr ""
+msgstr "ფერების დიაპაზონი"
 
 #: plugins/extensions/colorrange/dlg_colorrange.cc:246
 msgctxt "(qtundo-format)"
 msgid "Color Range Selection"
-msgstr ""
+msgstr "ფერების დიაპაზონის არჩევანი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:27
@@ -49160,7 +49148,7 @@ msgstr "ხაზის სიგანე"
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:91
 #, kde-format
 msgid "History Size"
-msgstr ""
+msgstr "ისტორიის ზომა"
 
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:120
 #, kde-format

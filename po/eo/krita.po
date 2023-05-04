@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-03 00:46+0000\n"
-"PO-Revision-Date: 2023-05-01 05:19+0100\n"
+"PO-Revision-Date: 2023-05-03 21:29+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -17750,8 +17750,8 @@ msgid ""
 "millisecond</b>. The format cannot represent this, and the frame duration "
 "will be rounded to the nearest millisecond."
 msgstr ""
-"La bildo estas vigla kun framdaŭro en <b>frakcioj de milisekundo</b>. La "
-"formato ne povas reprezenti ĉi tion, kaj la framdaŭro estos rondigita al la "
+"La bildo estas vigla kun filmer-daŭro en <b>frakcioj de milisekundo</b>. La "
+"formato ne povas reprezenti ĉi tion, kaj la bilddaŭro estos rondigita al la "
 "plej proksima milisekundo."
 
 #: libs/impex/KisExportCheckRegistry.cpp:104 libs/ui/kis_layer_manager.cc:652
@@ -20088,7 +20088,7 @@ msgstr "Ne povas renomi la etikedon"
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
-msgstr "Vi ne povas uzi ĉi tiun nomon por viaj kutimaj etikedoj."
+msgstr "Vi ne povas uzi ĉi tiun nomon por viaj propraj etikedoj."
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:158
 #, kde-format
@@ -20405,19 +20405,14 @@ msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:470
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#| "animated gif images cannot have a framerate higher than 50. The framerate "
-#| "will be reduced to 50 frames per second.</p></body></html>"
+#, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
 "Animated GIF images cannot have a framerate higher than 50. The framerate "
 "will be reduced to 50 frames per second"
 msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Averto:</span> "
-"viglaj gif-bildoj ne povas havi framrapidecon pli altan ol 50. La "
-"framfrekvenco estos reduktita. ĝis 50 kadroj sekundo.</p></body></html>"
+"Viglaj GIF-bildoj ne povas havi bildrapidecon pli altan ol 50. La "
+"bildfrekvenco estos reduktita al 50 bildoj sekunde"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:477
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1824
@@ -20601,17 +20596,13 @@ msgstr ""
 "daŭron</em></font>"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
-#, fuzzy, kde-format
-#| msgctxt "part of warning in video importer."
-#| msgid ""
-#| "WARNING, you are trying to import %1 frames, the maximum amount you can "
-#| "import is %2."
+#, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "<b>Warning:</b> you are trying to import %1 frames, the maximum amount you "
 "can import is %2."
 msgstr ""
-"AVERTO, vi provas importi %1 kadrojn, la maksimuma kvanto, kiun vi povas "
+"Averto: Vi provas importi %1 bildojn, la maksimuma kvanto, kiun vi povas "
 "importi, estas %2."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
@@ -20640,17 +20631,14 @@ msgstr ""
 "malfacila."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
-#, fuzzy, kde-format
-#| msgctxt "part of warning in video importer."
-#| msgid ""
-#| "Krita does not support the video transfer curve (%1), it will be loaded "
-#| "as linear"
+#, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "Krita does not support the video transfer curve (%1), it will be loaded as "
 "linear."
 msgstr ""
-"Krita ne subtenas la videotransiga kurbo (%1), ĝi estos ŝarĝita kiel lineara"
+"Krita ne subtenas la videotransigan kurbon (%1), ĝi estos ŝargata kiel "
+"lineara."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
@@ -20732,10 +20720,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
 #: libs/ui/animation/video_export_options_dialog.ui:23
-#, fuzzy, kde-format
-#| msgid "No options"
+#, kde-format
 msgid "Codec options"
-msgstr "Neniuj elektoj"
+msgstr "Kodekaj elektoj"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -20801,10 +20788,9 @@ msgstr "Metadatumoj HDR..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
-#, fuzzy, kde-format
-#| msgid "Bitrate (MBit/s)"
+#, kde-format
 msgid "Bitrate (MBit/s):"
-msgstr "Bitrapideco (MBit/s)"
+msgstr "Bitrapideco (MBit/s):"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
@@ -20832,10 +20818,9 @@ msgstr "Travidebleco Diferenco"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/animation/video_export_options_dialog.ui:300
-#, fuzzy, kde-format
-#| msgid "Auto-generate 8bit Palette"
+#, kde-format
 msgid "Auto-generate 8bit Palette:"
-msgstr "Aŭtomate generi 8-bitan Paleton"
+msgstr "Aŭtomate generi 8-bitan paleton:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
@@ -20917,23 +20902,19 @@ msgstr "Bilda Kvalito:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:457
-#, fuzzy, kde-format
-#| msgid "Custom Options:"
+#, kde-format
 msgid "Custom options"
-msgstr "Propraj Opcioj:"
+msgstr "Propraj opcioj"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:466
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add any ffmpeg filtering options here. It will be put between source and "
-#| "destination streams of the ffmpeg"
+#, kde-format
 msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
 "destination streams of the FFmpeg instance"
 msgstr ""
-"Aldonu iujn ajn ffmpeg-filtrajn opciojn ĉi tie. Ĝi estos metita inter fonto "
-"kaj celfluoj de la ffmpeg"
+"Aldonu iujn ajn FFmpeg-filtrajn opciojn ĉi tie. Ili estos metataj inter "
+"fonta kaj cela fluo de la FFmpeg-instanco"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -21519,10 +21500,9 @@ msgstr "Ĝenerale"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:40
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video file:"
-msgstr "Video FPS:"
+msgstr "Video-dosiero:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
@@ -21753,24 +21733,21 @@ msgstr "Filtri:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
-#, fuzzy, kde-format
-#| msgid "FFmpeg:"
+#, kde-format
 msgid "FFmpeg"
-msgstr "FFmpeg:"
+msgstr "FFmpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
-#, fuzzy, kde-format
-#| msgid "FFMpeg Path:"
+#, kde-format
 msgid "FFmpeg path:"
-msgstr "FFMpeg Vojo:"
+msgstr "FFmpeg-vojo:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
-#, fuzzy, kde-format
-#| msgid "FFProbe Path:"
+#, kde-format
 msgid "FFprobe path:"
-msgstr "FFProbe Vojo:"
+msgstr "FFprobe-vojo:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
 #: libs/ui/animation/wdg_animationrenderer.ui:10
@@ -21792,15 +21769,13 @@ msgstr "Lasta kadro:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:49
-#, fuzzy, kde-format
-#| msgid "Export Images"
+#, kde-format
 msgid "Export as image sequence"
-msgstr "Eksporti Bildojn"
+msgstr "Eksporti kiel bildsekvenco"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:58
-#, fuzzy, kde-format
-#| msgid "Fi&le format:"
+#, kde-format
 msgid "File format:"
 msgstr "Dosierformato:"
 
@@ -21852,10 +21827,9 @@ msgstr "Nur Unika Kadroj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
-#, fuzzy, kde-format
-#| msgid "Export size:"
+#, kde-format
 msgid "Export as video"
-msgstr "Eksporta grandeco:"
+msgstr "Eksporti kiel video"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
@@ -21867,10 +21841,9 @@ msgstr "Bildigi kiel:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:210
-#, fuzzy, kde-format
-#| msgid "Select the ffmpeg render options."
+#, kde-format
 msgid "Select the FFmpeg render options."
-msgstr "Elekti la opciojn de bildigo de ffmpeg."
+msgstr "Elektu la bildigajn opciojn de FFmpeg."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, labelExportTo)
@@ -21888,17 +21861,15 @@ msgstr "Inkluzivi Aŭdio"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
-#, fuzzy, kde-format
-#| msgid "Image location:"
+#, kde-format
 msgid "FFmpeg location:"
-msgstr "Bilda loko:"
+msgstr "Loko de FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
-#, fuzzy, kde-format
-#| msgid "FFmpeg Version: "
+#, kde-format
 msgid "FFmpeg version:"
-msgstr "FFMpeg Versio: "
+msgstr "FFmpeg-versio: "
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -23298,7 +23269,7 @@ msgstr "Uzi informojn provizitajn de tablojdo"
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:46
 #, kde-format
 msgid "Map to custom area"
-msgstr "Mapo al kutima areo"
+msgstr "Mapo al propra areo"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, intWidth)
 #. i18n: ectx: property (suffix), widget (QSpinBox, intXOffset)
@@ -25037,7 +25008,7 @@ msgstr "Ne montri enhavon dum movo de subfenestroj"
 #: libs/ui/forms/wdggeneralsettings.ui:526
 #, kde-format
 msgid "Use custom interface font"
-msgstr "Uzi kutiman interfacan tiparon"
+msgstr "Uzi propran interfacan tiparon"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -26695,7 +26666,7 @@ msgstr "Sencimigaj opcioj"
 #: libs/ui/forms/wdgperformancesettings.ui:352
 #, kde-format
 msgid "Debug logging of OpenGL framerate"
-msgstr "Sencimiga protokolado de OpenGL-framfrekvenco"
+msgstr "Sencimiga protokolado de OpenGL-bildfrekvenco"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBrushSpeedLogging)
 #: libs/ui/forms/wdgperformancesettings.ui:359
@@ -37213,7 +37184,7 @@ msgstr ""
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:211
 #, kde-format
 msgid "Use custom color for selector background."
-msgstr "Uzi kutiman koloron por elektila fono."
+msgstr "Uzi propran koloron por elektila fono."
 
 #. i18n: ectx: property (title), widget (QGroupBox, useDifferentColorSpaceCheckbox)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:233
@@ -37557,7 +37528,7 @@ msgstr "Clip Fino:"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:159
 #, kde-format
 msgid "Frame Rate: "
-msgstr "Framfrekvenco:"
+msgstr "Bildfrekvenco:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:274
 #, kde-format
@@ -38783,7 +38754,7 @@ msgstr "LUT-Administrado"
 #: plugins/dockers/lut/lutdocker_dock.cpp:102
 #, kde-format
 msgid "Select custom configuration file."
-msgstr "Elektu kutiman agordan dosieron."
+msgstr "Elektu propran agordan dosieron."
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:109
 #: plugins/dockers/lut/lutdocker_dock.cpp:615
@@ -42387,7 +42358,7 @@ msgid ""
 msgstr ""
 "La piktogramo asociita kun ĉi tiu ago. Ĝi estas montrita apud teksto en la "
 "menubreto kaj en ilbretoj laŭbezone. Ĉeno por uzi la bildŝargan sistemon de "
-"KDE, aŭ kutiman QPixmap aŭ QIcon, aŭ Neniun."
+"KDE, aŭ propran QPixmap aŭ QIcon, aŭ Neniun."
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, shortcut)
 #: plugins/extensions/pykrita/plugin/info.ui:41
@@ -47209,7 +47180,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."
-msgstr "La animacio deklaras framfrekvencon de pli ol 240 FPS."
+msgstr "La animacio deklaras bildfrekvencon de pli ol 240 FPS."
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:19
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
@@ -48099,13 +48070,13 @@ msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
 "Error message: %4"
 msgstr ""
-"analiza eraro en la ŝlosilframa dosiero %1 ĉe linio %2, kolumno %3\n"
+"analiza eraro en la ĉefkadra dosiero %1 ĉe linio %2, kolumno %3\n"
 "Erara mesaĝo: %4"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
-msgstr "nekonata ŝlosilframa kanaltipo: %1 en %2"
+msgstr "nekonata ĉefkadra kanaltipo: %1 en %2"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:206
 #, kde-format
@@ -49125,8 +49096,8 @@ msgstr ""
 "revenas al defaŭlta neŭtrala blankbalanco.</li><li><emphasis "
 "strong='true'>Aŭtomata</emphasis>: Kalkulas aŭtomatan blankbalancon "
 "averaĝante la tutan bildon.</li><li><emphasis strong='true'>Manlibro</"
-"emphasis>: Agordu kutimajn temperaturojn kaj verdajn nivelajn valorojn.</"
-"li></ul></p>"
+"emphasis>: Agordu proprajn temperaturojn kaj verdonivelajn valorojn.</li></"
+"ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:483
 #, kde-format
@@ -49543,7 +49514,7 @@ msgstr "Enigita"
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Custom"
-msgstr "Kutimo"
+msgstr "Propra"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
 #, kde-format
@@ -49609,7 +49580,7 @@ msgstr "Por-Foto"
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Custom"
-msgstr "Kutimo"
+msgstr "Propra"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:746
 #, kde-format
@@ -53304,7 +53275,7 @@ msgid ""
 "The higher the curve at a given angle, the more particles will end at that "
 "angle."
 msgstr ""
-"Agordu kutiman distribuon de la partikloj.\n"
+"Agordu propran distribuon de la partikloj.\n"
 "La horizontala akso reprezentas la angulon de 0 ĝis 360 gradoj.\n"
 "La vertikala akso reprezentas kiom probable ĝi estas por partiklo finiĝanta "
 "je tiu angulo.\n"

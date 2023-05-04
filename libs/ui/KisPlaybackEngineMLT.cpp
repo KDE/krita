@@ -266,11 +266,11 @@ void KisPlaybackEngineMLT::seek(int frameIndex, SeekOptionFlags flags)
 void KisPlaybackEngineMLT::setupProducer(boost::optional<QFileInfo> file)
 {
     //First, assign to "count" producer.
-    m_d->canvasProducers[activeCanvas()] = QSharedPointer<Mlt::Producer>(new Mlt::Producer(*m_d->profile, "ranged", "count"));
+    m_d->canvasProducers[activeCanvas()] = QSharedPointer<Mlt::Producer>(new Mlt::Producer(*m_d->profile, "krita", "count"));
 
     //If we have a file and the file has a valid producer, use that. Otherwise, stick to our "default" producer.
     if (file.has_value()) {
-        QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->profile, "ranged", file->absoluteFilePath().toUtf8().data()));
+        QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->profile, "krita", file->absoluteFilePath().toUtf8().data()));
         if (producer->is_valid()) {
             m_d->canvasProducers[activeCanvas()] = producer;
         } else {

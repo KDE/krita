@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-03 00:46+0000\n"
-"PO-Revision-Date: 2023-05-02 11:25+0300\n"
+"PO-Revision-Date: 2023-05-04 11:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -9980,7 +9980,7 @@ msgstr "Dalgacık Gürültüsü Azaltıcı"
 #, kde-format
 msgctxt "action"
 msgid "&HSV Adjustment..."
-msgstr "&TDD Ayarlamaları..."
+msgstr "&HSV Ayarlamaları..."
 
 #. i18n: context: toolTip @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
@@ -9990,7 +9990,7 @@ msgstr "&TDD Ayarlamaları..."
 #, kde-format
 msgctxt "action"
 msgid "HSV Adjustment"
-msgstr "TDD Ayarlamaları"
+msgstr "HSV Ayarlamaları"
 
 #. i18n: context: text @ Actions (Blending Modes), ActionCollection (Krita)
 #: krita/krita.action:1456
@@ -18475,25 +18475,25 @@ msgstr "Diğer"
 #, kde-format
 msgctxt "Blending mode - category HSY"
 msgid "HSY"
-msgstr "TDY"
+msgstr "HSY"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:40
 #, kde-format
 msgctxt "Blending mode - category HSI"
 msgid "HSI"
-msgstr "TDY"
+msgstr "HSI"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:41
 #, kde-format
 msgctxt "Blending mode - category HSL"
 msgid "HSL"
-msgstr "TDA"
+msgstr "HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:42
 #, kde-format
 msgctxt "Blending mode - category HSV"
 msgid "HSV"
-msgstr "TDD"
+msgstr "HSV"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:43
 #, kde-format
@@ -19093,19 +19093,19 @@ msgstr "Parlaklığı Artır"
 #, kde-format
 msgctxt "Blending mode - Color HSI"
 msgid "Color HSI"
-msgstr "Renk TDY"
+msgstr "Renk HSI"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:154
 #, kde-format
 msgctxt "Blending mode - Hue HSI"
 msgid "Hue HSI"
-msgstr "Ton TDY"
+msgstr "Ton HSI"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:155
 #, kde-format
 msgctxt "Blending mode - Saturation HSI"
 msgid "Saturation HSI"
-msgstr "Doygunluk TDY"
+msgstr "Doygunluk HSI"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:156
 #, kde-format
@@ -19117,13 +19117,13 @@ msgstr "Yoğunluk"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSI"
 msgid "Decrease Saturation HSI"
-msgstr "Doygunluk TDY Azalt"
+msgstr "Doygunluk HSI Azalt"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:158
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSI"
 msgid "Increase Saturation HSI"
-msgstr "Doygunluk TDY Artır"
+msgstr "Doygunluk HSI Artır"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:159
 #, kde-format
@@ -19141,19 +19141,19 @@ msgstr "Yoğunluğu Artır"
 #, kde-format
 msgctxt "Blending mode - Color HSL"
 msgid "Color HSL"
-msgstr "Renk TDA"
+msgstr "Renk HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:163
 #, kde-format
 msgctxt "Blending mode - Hue HSL"
 msgid "Hue HSL"
-msgstr "Renk TDA"
+msgstr "Renk HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:164
 #, kde-format
 msgctxt "Blending mode - Saturation HSL"
 msgid "Saturation HSL"
-msgstr "Doygunluk TDA"
+msgstr "Doygunluk HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:165
 #, kde-format
@@ -19165,13 +19165,13 @@ msgstr "Açıklık"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSL"
 msgid "Decrease Saturation HSL"
-msgstr "Doygunluk TDA Azalt"
+msgstr "Doygunluk HSL Azalt"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:167
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSL"
 msgid "Increase Saturation HSL"
-msgstr "Doygunluk TDA Artır"
+msgstr "Doygunluk HSL Artır"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:168
 #, kde-format
@@ -19189,19 +19189,19 @@ msgstr "Açıklığı Artır"
 #, kde-format
 msgctxt "Blending mode - Color HSV"
 msgid "Color HSV"
-msgstr "Renk TDD"
+msgstr "Renk HSV"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:172
 #, kde-format
 msgctxt "Blending mode - Hue HSV"
 msgid "Hue HSV"
-msgstr "Renk TDD"
+msgstr "Renk HSV"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:173
 #, kde-format
 msgctxt "Blending mode - Saturation HSV"
 msgid "Saturation HSV"
-msgstr "Doygunluk TDD"
+msgstr "Doygunluk HSV"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:174
 #, kde-format
@@ -19213,13 +19213,13 @@ msgstr "Değer"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSV"
 msgid "Decrease Saturation HSV"
-msgstr "Doygunluk TDD Azalt"
+msgstr "Doygunluk HSV Azalt"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:176
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSV"
 msgid "Increase Saturation HSV"
-msgstr "Doygunluk TDD Artır"
+msgstr "Doygunluk HSV Artır"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:177
 #, kde-format
@@ -27236,13 +27236,13 @@ msgstr "RGB"
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:385
 #, kde-format
 msgid "HSV CW"
-msgstr "TDD CW"
+msgstr "HSV CW"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, segmentColorInterpolationTypeComboBox)
 #: libs/ui/forms/wdgsegmentgradienteditor.ui:390
 #, kde-format
 msgid "HSV CCW"
-msgstr "TDD CCW"
+msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
 #: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:352
@@ -34561,7 +34561,7 @@ msgstr ""
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:79
 #, kde-format
 msgid "HSV"
-msgstr "TDD"
+msgstr "HSV"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsl)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSL)
@@ -34575,7 +34575,7 @@ msgstr "TDD"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:84
 #, kde-format
 msgid "HSL"
-msgstr "TDA"
+msgstr "HSL"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsi)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSI)
@@ -34589,7 +34589,7 @@ msgstr "TDA"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:89
 #, kde-format
 msgid "HSI"
-msgstr "TDY"
+msgstr "HSI"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSY)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
@@ -43944,12 +43944,12 @@ msgstr "Yeşil-Kırmızı"
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:254
 #, kde-format
 msgid "&HSV Adjustment..."
-msgstr "&TDD Ayarlamaları..."
+msgstr "&HSV Ayarlamaları..."
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.h:38
 #, kde-format
 msgid "HSV/HSL Adjustment"
-msgstr "TDD/TDA Ayarlaması"
+msgstr "HSV/HSL Ayarlaması"
 
 #: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:352
 #, kde-format
@@ -51604,7 +51604,7 @@ msgstr "Alfayı koru"
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:33
 #, kde-format
 msgid "Random HSV"
-msgstr "Rastgele TDD"
+msgstr "Rastgele HSV"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomOpacityCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, randomOpacityCHbox)
@@ -52972,12 +52972,12 @@ msgstr "Renk V Değiştir"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:133
 #, kde-format
 msgid "Change Color HSL S"
-msgstr "Renk TDA S Değiştir"
+msgstr "Renk HSL S Değiştir"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:142
 #, kde-format
 msgid "Change Color HSV S"
-msgstr "Renk TDD S Değiştir"
+msgstr "Renk HSV S Değiştir"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:151
 #, kde-format

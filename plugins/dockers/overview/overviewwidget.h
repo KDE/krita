@@ -13,8 +13,7 @@
 #include <QPixmap>
 #include <QPointer>
 
-#include <QMutex>
-#include "kis_idle_watcher.h"
+#include "KisIdleTasksManager.h"
 
 #include <kis_canvas2.h>
 
@@ -43,7 +42,6 @@ public:
 
 public Q_SLOTS:
     void startUpdateCanvasProjection();
-    void generateThumbnail();
     void updateThumbnail(QImage pixmap);
     void slotThemeChanged();
 
@@ -54,6 +52,7 @@ Q_SIGNALS:
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
     void mousePressEvent(QMouseEvent* event) override;
@@ -63,6 +62,7 @@ protected:
 
 private:
     void recalculatePreviewDimensions();
+    void registerIdleTask();
     ///
     /// \brief isPixelArt checks if the preview is bigger than the image itself
     ///
@@ -96,9 +96,7 @@ private:
     QPointF m_lastPos {QPointF(0, 0)};
 
     QColor m_outlineColor;
-    KisIdleWatcher m_imageIdleWatcher;
-    KisStrokeId strokeId;
-    QMutex mutex;
+    KisIdleTasksManager::TaskGuard m_idleTaskGuard;
 };
 
 

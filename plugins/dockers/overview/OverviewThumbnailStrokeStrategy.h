@@ -13,14 +13,14 @@
 #include <QSize>
 #include <QImage>
 
-#include <KoColorConversionTransformation.h>
 #include "kis_types.h"
-#include "kis_simple_stroke_strategy.h"
+#include <KoColorConversionTransformation.h>
+#include "KisIdleTaskStrokeStrategy.h"
 
 class KoColorProfile;
 
 
-class OverviewThumbnailStrokeStrategy : public QObject, public KisSimpleStrokeStrategy
+class OverviewThumbnailStrokeStrategy : public KisIdleTaskStrokeStrategy
 {
     Q_OBJECT
 public:
@@ -33,13 +33,9 @@ public:
                                     KoColorConversionTransformation::ConversionFlags conversionFlags);
     ~OverviewThumbnailStrokeStrategy() override;
 
-    KisStrokeStrategy* createLodClone(int levelOfDetail) override;
-
 private:
     void initStrokeCallback() override;
-    void doStrokeCallback(KisStrokeJobData *data) override;
     void finishStrokeCallback() override;
-    void cancelStrokeCallback() override;
 
 Q_SIGNALS:
     //Emitted when thumbnail is updated and overviewImage is fully generated.
@@ -47,8 +43,6 @@ Q_SIGNALS:
 
 
 private:
-    class ProcessData;
-
     KisPaintDeviceSP m_device;
     QRect m_rect;
     QSize m_thumbnailSize;

@@ -14,21 +14,12 @@
 #include "kis_filter_strategy.h"
 #include <KoColorSpaceRegistry.h>
 #include <KoUpdater.h>
+#include "KisRunnableStrokeJobUtils.h"
+#include "KisRunnableStrokeJobsInterface.h"
 
 const qreal oversample = 2.;
 const int thumbnailTileDim = 128;
 
-
-class OverviewThumbnailStrokeStrategy::ProcessData : public KisStrokeJobData
-{
-public:
-    ProcessData(const QRect &_rect)
-        : KisStrokeJobData(CONCURRENT),
-          tileRect(_rect)
-    {}
-
-    QRect tileRect;
-};
 
 OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisPaintDeviceSP device,
                                                                  const QRect& rect,
@@ -37,7 +28,7 @@ OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisPaintDeviceS
                                                                  const KoColorProfile *profile,
                                                                  KoColorConversionTransformation::Intent renderingIntent,
                                                                  KoColorConversionTransformation::ConversionFlags conversionFlags)
-    : KisSimpleStrokeStrategy(QLatin1String("OverviewThumbnail")),
+    : KisIdleTaskStrokeStrategy(QLatin1String("OverviewThumbnail")),
       m_device(device),
       m_rect(rect),
       m_thumbnailSize(thumbnailSize),
@@ -46,39 +37,17 @@ OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisPaintDeviceS
       m_renderingIntent(renderingIntent),
       m_conversionFlags(conversionFlags)
 {
-    enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
-    enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
-    enableJob(KisSimpleStrokeStrategy::JOB_FINISH, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
-    enableJob(KisSimpleStrokeStrategy::JOB_CANCEL, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
-
-    setRequestsOtherStrokesToEnd(false);
-    setClearsRedoOnStart(false);
-    setCanForgetAboutMe(true);
 }
 
 OverviewThumbnailStrokeStrategy::~OverviewThumbnailStrokeStrategy()
 {
 }
 
-KisStrokeStrategy *OverviewThumbnailStrokeStrategy::createLodClone(int levelOfDetail)
-{
-    Q_UNUSED(levelOfDetail);
-    /**
-     * We do not generate preview for Instant Preview mode. Even though we
-     * could do that, it is not very needed, because KisIdleWatcher ensures
-     * that overview preview is generated only when all the background jobs
-     * are completed.
-     *
-     * The only thing we should do about Instant Preview is to avoid resetting
-     * LoDN planes, when the thumbnail is running. Therefore we should return
-     * a fake noop strategy as our LoDN clone (that is a marker of non-legacy
-     * stroke for the scheduler)
-     */
-    return new KisSimpleStrokeStrategy(QLatin1String("OverviewThumbnail_FakeLodN"));
-}
-
 void OverviewThumbnailStrokeStrategy::initStrokeCallback()
 {
+    using KritaUtils::addJobConcurrent;
+    KisIdleTaskStrokeStrategy::initStrokeCallback();
+
     const QRect imageRect = m_device->defaultBounds()->bounds();
 
     m_thumbnailOversampledSize = oversample * m_thumbnailSize;
@@ -89,25 +58,18 @@ void OverviewThumbnailStrokeStrategy::initStrokeCallback()
 
     m_thumbnailDevice = new KisPaintDevice(m_device->colorSpace());
 
-    QVector<KisStrokeJobData*> jobsData;
+    QVector<KisRunnableStrokeJobData*> jobs;
 
     QVector<QRect> tileRects = KritaUtils::splitRectIntoPatches(QRect(QPoint(0, 0), m_thumbnailOversampledSize), QSize(thumbnailTileDim, thumbnailTileDim));
-    Q_FOREACH (const QRect &tileRect, tileRects) {
-        jobsData << new OverviewThumbnailStrokeStrategy::ProcessData(tileRect);
+    Q_FOREACH (const QRect &rc, tileRects) {
+        addJobConcurrent(jobs, [this, tileRect = rc] () {
+            //we aren't going to use oversample capability of createThumbnailDevice because it recomputes exact bounds for each small patch, which is
+            //slow. We'll handle scaling separately.
+            KisPaintDeviceSP thumbnailTile = m_device->createThumbnailDeviceOversampled(m_thumbnailOversampledSize.width(), m_thumbnailOversampledSize.height(), 1, m_device->defaultBounds()->bounds(), tileRect);
+            KisPainter::copyAreaOptimized(tileRect.topLeft(), thumbnailTile, m_thumbnailDevice, tileRect);
+        });
     }
-
-    addMutatedJobs(jobsData);
-}
-
-void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
-{
-    ProcessData *d_pd = dynamic_cast<ProcessData*>(data);
-    if (d_pd) {
-        //we aren't going to use oversample capability of createThumbnailDevice because it recomputes exact bounds for each small patch, which is
-        //slow. We'll handle scaling separately.
-        KisPaintDeviceSP thumbnailTile = m_device->createThumbnailDeviceOversampled(m_thumbnailOversampledSize.width(), m_thumbnailOversampledSize.height(), 1, m_device->defaultBounds()->bounds(), d_pd->tileRect);
-        KisPainter::copyAreaOptimized(d_pd->tileRect.topLeft(), thumbnailTile, m_thumbnailDevice, d_pd->tileRect);
-    }
+    runnableJobsInterface()->addRunnableJobs(jobs);
 }
 
 void OverviewThumbnailStrokeStrategy::finishStrokeCallback()
@@ -127,8 +89,4 @@ void OverviewThumbnailStrokeStrategy::finishStrokeCallback()
                                                        m_renderingIntent,
                                                        m_conversionFlags);
     emit thumbnailUpdated(overviewImage);
-}
-
-void OverviewThumbnailStrokeStrategy::cancelStrokeCallback()
-{
 }

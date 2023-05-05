@@ -261,6 +261,13 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(runner && dec, ImportExportCodes::InternalError);
 
+    // Set coalescing FALSE to enable layered JXL
+    if (JXL_DEC_SUCCESS != JxlDecoderSetCoalescing(dec.get(), JXL_FALSE)) {
+        errFile << "JxlDecoderSetCoalescing failed";
+        return ImportExportCodes::InternalError;
+    }
+    bool decSetCoalescing = false;
+
     if (JXL_DEC_SUCCESS
         != JxlDecoderSubscribeEvents(dec.get(),
                                      JXL_DEC_BASIC_INFO | JXL_DEC_COLOR_ENCODING | JXL_DEC_FULL_IMAGE | JXL_DEC_BOX
@@ -307,9 +314,48 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
     KisLayerSP layer{nullptr};
     std::multimap<QByteArray, QByteArray> metadataBoxes;
     std::vector<JxlImpSpcChannels> specialChannels;
+    std::vector<KisLayerSP> additionalLayers;
+    bool bgLayerSet = false;
     QByteArray boxType(5, 0x0);
     QByteArray box(16384, 0x0);
     auto boxSize = box.size();
+
+    // List of blend mode that we can currently support
+    static constexpr std::array<JxlBlendMode, 2> supportedBlendMode = {JXL_BLEND_REPLACE, JXL_BLEND_BLEND};
+
+    // Internal function to rewind decoder and enable coalescing
+    auto rewindDecoderWithCoalesce = [&]() {
+        JxlDecoderRewind(dec.get());
+        if (JXL_DEC_SUCCESS != JxlDecoderSetCoalescing(dec.get(), JXL_TRUE)) {
+            errFile << "JxlDecoderSetCoalescing failed";
+            return false;
+        }
+        if (JXL_DEC_SUCCESS
+            != JxlDecoderSubscribeEvents(dec.get(),
+                                         JXL_DEC_BASIC_INFO | JXL_DEC_COLOR_ENCODING | JXL_DEC_FULL_IMAGE | JXL_DEC_BOX
+                                             | JXL_DEC_FRAME)) {
+            errFile << "JxlDecoderSubscribeEvents failed";
+            return false;
+        }
+        if (JXL_DEC_SUCCESS != JxlDecoderSetParallelRunner(dec.get(), JxlResizableParallelRunner, runner.get())) {
+            errFile << "JxlDecoderSetParallelRunner failed";
+            return false;
+        }
+        if (JXL_DEC_SUCCESS
+            != JxlDecoderSetInput(dec.get(),
+                                  reinterpret_cast<const uint8_t *>(data.constData()),
+                                  static_cast<size_t>(data.size()))) {
+            errFile << "JxlDecoderSetInput failed";
+            return false;
+        };
+        JxlDecoderCloseInput(dec.get());
+        if (JXL_DEC_SUCCESS != JxlDecoderSetDecompressBoxes(dec.get(), JXL_TRUE)) {
+            errFile << "JxlDecoderSetDecompressBoxes failed";
+            return false;
+        };
+        decSetCoalescing = true;
+        return true;
+    };
 
     for (;;) {
         JxlDecoderStatus status = JxlDecoderProcessInput(dec.get());
@@ -324,6 +370,14 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
             if (JXL_DEC_SUCCESS != JxlDecoderGetBasicInfo(dec.get(), &d.m_info)) {
                 errFile << "JxlDecoderGetBasicInfo failed";
                 return ImportExportCodes::ErrorWhileReading;
+            }
+            // Coalesce frame on animation import
+            if (d.m_info.have_animation && !decSetCoalescing) {
+                if (!rewindDecoderWithCoalesce()) {
+                    return ImportExportCodes::InternalError;
+                } else {
+                    continue;
+                }
             }
 
             dbgFile << "Extra Channel[s] info:";
@@ -661,13 +715,65 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 }
             }
         } else if (status == JXL_DEC_FRAME) {
-            if (d.m_info.have_animation) {
-                if (JXL_DEC_SUCCESS != JxlDecoderGetFrameHeader(dec.get(), &d.m_header)) {
-                    document->setErrorMessage(i18nc("JPEG-XL errors", "JPEG-XL image is animated, but cannot retrieve animation frame header."));
-                    return ImportExportCodes::ErrorWhileReading;
+            if (JXL_DEC_SUCCESS != JxlDecoderGetFrameHeader(dec.get(), &d.m_header)) {
+                errFile << "JxlDecoderGetFrameHeader failed";
+                return ImportExportCodes::ErrorWhileReading;
+            }
+
+            const JxlBlendMode blendMode = d.m_header.layer_info.blend_info.blendmode;
+            const bool isBlendSupported =
+                std::find(supportedBlendMode.begin(), supportedBlendMode.end(), blendMode) != supportedBlendMode.end();
+
+            if (!isBlendSupported && !decSetCoalescing) {
+                warnFile << "Blending mode unsupported! Rewinding decoder with coalescing enabled";
+                document->setWarningMessage(i18nc("JPEG-XL errors",
+                                                  "Detected multi layer JPEG-XL image with unsupported blending mode, "
+                                                  "importing flattened image."));
+                if (!rewindDecoderWithCoalesce()) {
+                    return ImportExportCodes::InternalError;
+                } else {
+                    additionalLayers.clear();
+                    bgLayerSet = false;
+                    if (d.haveSpecialChannels) {
+                        specialChannels.clear();
+                    }
+                    continue;
+                }
+            }
+
+            if (!d.m_info.have_animation) {
+                QString layerName;
+                QByteArray layerNameRaw;
+                if (d.m_header.name_length) {
+                    KIS_SAFE_ASSERT_RECOVER(d.m_header.name_length < std::numeric_limits<int>::max())
+                    {
+                        document->setErrorMessage(i18nc("JPEG-XL", "Invalid JPEG-XL layer name length"));
+                        return ImportExportCodes::FormatFeaturesUnsupported;
+                    }
+                    layerNameRaw.resize(static_cast<int>(d.m_header.name_length + 1));
+                    if (JXL_DEC_SUCCESS
+                        != JxlDecoderGetFrameName(dec.get(),
+                                                  layerNameRaw.data(),
+                                                  static_cast<size_t>(layerNameRaw.size()))) {
+                        errFile << "JxlDecoderGetFrameName failed";
+                        break;
+                    }
+                    dbgFile << "\tlayer name:" << QString(layerNameRaw);
+                    layerName = QString(layerNameRaw);
+                } else {
+                    layerName = QString("Layer");
+                }
+                // Set the first layer name (if any)
+                if (!bgLayerSet) {
+                    if (!layerNameRaw.isEmpty()) {
+                        layer->setName(layerName);
+                    }
+                } else {
+                    additionalLayers.emplace_back(new KisPaintLayer(image, layerName, UCHAR_MAX));
                 }
             }
         } else if (status == JXL_DEC_FULL_IMAGE) {
+            const JxlLayerInfo layerInfo = d.m_header.layer_info;
             if (d.m_info.have_animation) {
                 dbgFile << "Importing frame @" << d.m_nextFrameTime
                         << d.m_header.duration;
@@ -722,11 +828,18 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 d.m_nextFrameTime += static_cast<int>(d.m_header.duration);
             } else {
                 if (d.isCMYK) {
-                    QVector<quint8*> planes = d.m_currentFrame->readPlanarBytes(0, 0, d.m_info.xsize, d.m_info.ysize);
+                    QVector<quint8 *> planes = d.m_currentFrame->readPlanarBytes(0,
+                                                                                 0,
+                                                                                 static_cast<int>(layerInfo.xsize),
+                                                                                 static_cast<int>(layerInfo.ysize));
 
                     // Planar buffer insertion for key channel
                     planes[3] = reinterpret_cast<quint8 *>(d.kPlane.data());
-                    d.m_currentFrame->writePlanarBytes(planes, 0, 0, d.m_info.xsize, d.m_info.ysize);
+                    d.m_currentFrame->writePlanarBytes(planes,
+                                                       0,
+                                                       0,
+                                                       static_cast<int>(layerInfo.xsize),
+                                                       static_cast<int>(layerInfo.ysize));
 
                     // JPEG-XL decode outputs an inverted CMYK colors
                     // This one I took from kis_filter_test for inverting the colors..
@@ -735,9 +848,11 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     const KisFilterConfigurationSP kfc =
                         f->defaultConfiguration(KisGlobalResourcesInterface::instance());
                     KIS_ASSERT(kfc);
-                    f->process(d.m_currentFrame, {0, 0, static_cast<int>(d.m_info.xsize), static_cast<int>(d.m_info.ysize)}, kfc->cloneWithResourcesSnapshot());
+                    f->process(d.m_currentFrame,
+                               {0, 0, static_cast<int>(layerInfo.xsize), static_cast<int>(layerInfo.ysize)},
+                               kfc->cloneWithResourcesSnapshot());
                 }
-                if (d.haveSpecialChannels) {
+                if (d.haveSpecialChannels && !bgLayerSet) {
                     const quint8 *alphaRef =
                         d.m_currentFrame
                             ->readPlanarBytes(0, 0, static_cast<int>(d.m_info.xsize), static_cast<int>(d.m_info.ysize))
@@ -766,7 +881,14 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                                                                      static_cast<int>(d.m_info.ysize));
                     }
                 }
-                layer->paintDevice()->makeCloneFrom(d.m_currentFrame, image->bounds());
+                if (!bgLayerSet) {
+                    layer->paintDevice()->makeCloneFrom(d.m_currentFrame, image->bounds());
+                    bgLayerSet = true;
+                } else {
+                    additionalLayers.back()->paintDevice()->makeCloneFrom(d.m_currentFrame, image->bounds());
+                    additionalLayers.back()->setX(static_cast<int>(layerInfo.crop_x0));
+                    additionalLayers.back()->setY(static_cast<int>(layerInfo.crop_y0));
+                }
             }
         } else if (status == JXL_DEC_SUCCESS || status == JXL_DEC_BOX) {
             if (std::strlen(boxType.data()) != 0) {
@@ -821,6 +943,10 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 // It's not required to call JxlDecoderReleaseInput(dec.get()) here since
                 // the decoder will be destroyed.
                 image->addNode(layer, image->rootLayer().data());
+                // Slip additional layers into layer stack
+                for (const KisLayerSP &addLayer : additionalLayers) {
+                    image->addNode(addLayer, image->rootLayer().data());
+                }
                 // Slip special channel layers into layer stack
                 for (const JxlImpSpcChannels &spc : specialChannels) {
                     image->addNode(spc.chLayer, image->rootLayer().data());

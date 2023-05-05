@@ -157,8 +157,8 @@ void KisJPEGXLTest::testSpecialChannels()
 
     KisImageSP image = doc1->image();
 
-    const KisNodeSP depthLayer = KisLayerUtils::findNodeByName(image->root(), "JXL-Depth");
-    const KisNodeSP thermalLayer = KisLayerUtils::findNodeByName(image->root(), "JXL-Thermal");
+    KisNodeSP depthLayer = KisLayerUtils::findNodeByName(image->root(), "JXL-Depth");
+    KisNodeSP thermalLayer = KisLayerUtils::findNodeByName(image->root(), "JXL-Thermal");
 
     QVERIFY(depthLayer);
     QVERIFY(thermalLayer);
@@ -176,8 +176,8 @@ void KisJPEGXLTest::testSpecialChannels()
 
         KisImageSP imageOut = doc2->image();
 
-        const KisNodeSP depthLayerOut = KisLayerUtils::findNodeByName(imageOut->root(), "JXL-Depth");
-        const KisNodeSP thermalLayerOut = KisLayerUtils::findNodeByName(imageOut->root(), "JXL-Thermal");
+        KisNodeSP depthLayerOut = KisLayerUtils::findNodeByName(imageOut->root(), "JXL-Depth");
+        KisNodeSP thermalLayerOut = KisLayerUtils::findNodeByName(imageOut->root(), "JXL-Thermal");
 
         QVERIFY(depthLayerOut);
         QVERIFY(thermalLayerOut);
@@ -192,6 +192,70 @@ void KisJPEGXLTest::testSpecialChannels()
         QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(thermalLayer->paintDevice(),
                                                              thermalLayerOut->paintDevice(),
                                                              0));
+
+        delete doc2;
+    }
+}
+
+void KisJPEGXLTest::testCmykWithLayers()
+{
+    const QString inputFileName = TestUtil::fetchDataFileLazy("/sources/extralayers/cmyk-layers.jxl");
+
+    QScopedPointer<KisDocument> doc1(qobject_cast<KisDocument *>(KisPart::instance()->createDocument()));
+
+    KisImportExportManager manager(doc1.data());
+    doc1->setFileBatchMode(true);
+
+    const KisImportExportErrorCode status = manager.importDocument(inputFileName, {});
+    QVERIFY(status.isOk());
+
+    KisImageSP image = doc1->image();
+
+    KisNodeSP background = KisLayerUtils::findNodeByName(image->root(), "Background");
+    KisNodeSP layerOne = KisLayerUtils::findNodeByName(image->root(), "Layer 1");
+    KisNodeSP testName = KisLayerUtils::findNodeByName(image->root(), "Test Name");
+    KisNodeSP black = KisLayerUtils::findNodeByName(image->root(), "Black");
+
+    QVERIFY(background);
+    QVERIFY(layerOne);
+    QVERIFY(testName);
+    QVERIFY(black);
+
+    {
+        const QString outputFileName = TestUtil::fetchDataFileLazy("/results/cmyk-layers.kra");
+
+        KisDocument *doc2 = KisPart::instance()->createDocument();
+        doc2->setFileBatchMode(true);
+        const bool r = doc2->importDocument(outputFileName);
+
+        QVERIFY(r);
+        QVERIFY(doc2->errorMessage().isEmpty());
+        QVERIFY(doc2->image());
+
+        KisImageSP imageOut = doc2->image();
+
+        KisNodeSP backgroundOut = KisLayerUtils::findNodeByName(imageOut->root(), "Background");
+        KisNodeSP layerOneOut = KisLayerUtils::findNodeByName(imageOut->root(), "Layer 1");
+        KisNodeSP testNameOut = KisLayerUtils::findNodeByName(imageOut->root(), "Test Name");
+        KisNodeSP blackOut = KisLayerUtils::findNodeByName(imageOut->root(), "Black");
+
+        QVERIFY(backgroundOut);
+        QVERIFY(layerOneOut);
+        QVERIFY(testNameOut);
+        QVERIFY(blackOut);
+
+        QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(doc1->image()->root()->firstChild()->paintDevice(),
+                                                             doc2->image()->root()->firstChild()->paintDevice(),
+                                                             0));
+
+        QVERIFY(
+            TestUtil::comparePaintDevicesClever<uint8_t>(background->paintDevice(), backgroundOut->paintDevice(), 0));
+
+        QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(layerOne->paintDevice(), layerOneOut->paintDevice(), 0));
+
+        QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(testName->paintDevice(), testNameOut->paintDevice(), 0));
+
+        QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(black->paintDevice(), blackOut->paintDevice(), 0));
 
         delete doc2;
     }

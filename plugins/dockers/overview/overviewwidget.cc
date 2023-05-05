@@ -119,13 +119,13 @@ QTransform OverviewWidget::canvasToPreviewTransform()
 
 void OverviewWidget::startUpdateCanvasProjection()
 {
-    m_imageIdleWatcher.startCountdown();
+    m_imageIdleWatcher.forceImageModified();
 }
 
 void OverviewWidget::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event);
-    m_imageIdleWatcher.startCountdown();
+    m_imageIdleWatcher.forceImageModified();
 }
 
 void OverviewWidget::resizeEvent(QResizeEvent *event)
@@ -136,7 +136,7 @@ void OverviewWidget::resizeEvent(QResizeEvent *event)
             recalculatePreviewDimensions();
             m_pixmap = m_oldPixmap.scaled(m_previewSize, Qt::KeepAspectRatio, Qt::FastTransformation);
         }
-        m_imageIdleWatcher.startCountdown();
+        m_imageIdleWatcher.forceImageModified();
     }
 }
 
@@ -211,7 +211,7 @@ void OverviewWidget::generateThumbnail()
                  * for the next event
                  */
                 if (!strokeId.isNull()) {
-                    m_imageIdleWatcher.startCountdown();
+                    m_imageIdleWatcher.forceImageModified();
                     return;
                 }
 

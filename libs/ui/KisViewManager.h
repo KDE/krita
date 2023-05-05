@@ -43,6 +43,7 @@ class KoProgressUpdater;
 class KisMainWindow;
 class KoZoomController;
 class KoCanvasResourceProvider;
+class KisIdleTasksManager;
 
 /**
  * KisViewManager manages the collection of views shown in a single mainwindow.
@@ -124,6 +125,8 @@ public:  // Krita specific interfaces
 
     /// Filters events and sends them to canvas actions
     KisInputManager *inputManager() const;
+
+    KisIdleTasksManager *idleTasksManager();
 
     /// Convenience method to get at the active selection (the
     /// selection of the current layer, or, if that does not exist,

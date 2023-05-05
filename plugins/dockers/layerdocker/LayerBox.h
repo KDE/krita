@@ -134,8 +134,6 @@ private Q_SLOTS:
 
     void slotImageTimeChanged(int time);
     void slotForgetAboutSavedNodeBeforeEditSelectionMode();
-    void notifyThumbnailDirty();
-    void updateDirtyThumbnails();
 
 Q_SIGNALS:
     void imageChanged();
@@ -169,7 +167,6 @@ private:
     KisAction *m_changeCloneSourceAction;
     KisAction *m_layerToggleSolo;
     KisAction *m_showGlobalSelectionMask;
-    KisSignalCompressor m_thumbnailCompressor;
     KisSignalCompressor m_colorLabelCompressor;
     KisSignalCompressor m_thumbnailSizeCompressor;
     KisSignalCompressor m_treeIndentationCompressor;
@@ -187,8 +184,6 @@ private:
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;
     bool m_blockOpacityUpdate {false};
     KisSignalAutoConnectionsStore m_activeNodeConnections;
-    QSet<QPersistentModelIndex> m_dirtyThumbnailNodes;
-    KisIdleWatcher m_idleWatcher;
 };
 
 class KRITALAYERDOCKER_EXPORT LayerBoxFactory : public KoDockFactoryBase

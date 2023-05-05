@@ -183,7 +183,7 @@ void KisNodeFilterProxyModel::slotBeforeBeginRemoveRows(const QModelIndex &paren
 
 void KisNodeFilterProxyModel::unsetDummiesFacade()
 {
-    m_d->nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
+    m_d->nodeModel->setDummiesFacade(0, 0, 0, 0, 0, 0);
     m_d->pendingActiveNode = 0;
     m_d->activeNode = 0;
 }

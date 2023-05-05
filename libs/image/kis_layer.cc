@@ -904,6 +904,12 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectR
                                            KoColorConversionTransformation::internalConversionFlags()) : QImage();
 }
 
+int KisLayer::thumbnailSeqNo() const
+{
+    KisPaintDeviceSP originalDevice = original();
+    return originalDevice ? originalDevice->sequenceNumber() : -1;
+}
+
 QImage KisLayer::createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode)
 {
     if (w == 0 || h == 0) {

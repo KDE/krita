@@ -152,6 +152,8 @@ public:
      */
     QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) override;
 
+    int thumbnailSeqNo() const override;
+
 
 protected:
     // override from KisLayer

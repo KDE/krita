@@ -374,3 +374,11 @@ QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h, Qt::AspectRat
            QImage();
 }
 
+int KisSelectionBasedLayer::thumbnailSeqNo() const
+{
+    KisSelectionSP originalSelection = internalSelection();
+    KisPaintDeviceSP originalDevice = original();
+
+    return originalDevice && originalSelection ? originalDevice->sequenceNumber() : -1;
+}
+

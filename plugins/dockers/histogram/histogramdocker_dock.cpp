@@ -61,7 +61,7 @@ void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
 
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(startUpdateCanvasProjection()), Qt::UniqueConnection);
         connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), this, SLOT(sigColorSpaceChanged(const KoColorSpace*)), Qt::UniqueConnection);
-        m_imageIdleWatcher->startCountdown();
+        m_imageIdleWatcher->forceImageModified();
     }
 }
 
@@ -69,27 +69,27 @@ void HistogramDockerDock::unsetCanvas()
 {
     setEnabled(false);
     m_canvas = 0;
-    m_imageIdleWatcher->startCountdown();
+    m_imageIdleWatcher->forceImageModified();
 }
 
 void HistogramDockerDock::startUpdateCanvasProjection()
 {
     if (isVisible()) {
-        m_imageIdleWatcher->startCountdown();
+        m_imageIdleWatcher->forceImageModified();
     }
 }
 
 void HistogramDockerDock::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event);
-    m_imageIdleWatcher->startCountdown();
+    m_imageIdleWatcher->forceImageModified();
 }
 
 
 void HistogramDockerDock::sigColorSpaceChanged(const KoColorSpace */*cs*/)
 {
     if (isVisible()) {
-        m_imageIdleWatcher->startCountdown();
+        m_imageIdleWatcher->forceImageModified();
     }
 }
 

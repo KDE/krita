@@ -45,6 +45,7 @@
 #include "kis_config_notifier.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_signal_compressor.h"
+#include "KisLayerThumbnailCache.h"
 
 
 struct KisNodeModel::Private
@@ -76,6 +77,8 @@ struct KisNodeModel::Private
     QPointer<KisNodeDummy> parentOfRemovedNode = 0;
 
     QSet<quintptr> dropEnabled;
+
+    KisLayerThumbnailCache thumbnalCache;
 };
 
 KisNodeModel::KisNodeModel(QObject * parent, int clonedColumns)
@@ -84,6 +87,7 @@ KisNodeModel::KisNodeModel(QObject * parent, int clonedColumns)
 {
     m_d->dummyColumns = qMax(0, clonedColumns);
     connect(&m_d->updateCompressor, SIGNAL(timeout()), SLOT(processUpdateQueue()));
+    connect(&m_d->thumbnalCache, SIGNAL(sigLayerThumbnailUpdated(KisNodeSP)), SLOT(slotLayerThumbnailUpdated(KisNodeSP)));
 }
 
 KisNodeModel::~KisNodeModel()
@@ -179,6 +183,11 @@ bool KisNodeModel::showGlobalSelection() const
         false;
 }
 
+void KisNodeModel::setPreferredThumnalSize(int preferredSize) const
+{
+    m_d->thumbnalCache.setMaxSize(preferredSize);
+}
+
 void KisNodeModel::setShowGlobalSelection(bool value)
 {
     if (m_d->nodeDisplayModeAdapter) {
@@ -211,6 +220,14 @@ void KisNodeModel::progressPercentageChanged(int, const KisNodeSP node)
 
         emit dataChanged(index, index);
     }
+}
+
+void KisNodeModel::slotLayerThumbnailUpdated(KisNodeSP node)
+{
+    QModelIndex index = indexFromNode(node);
+    if (!index.isValid()) return;
+
+    emit dataChanged(index, index);
 }
 
 KisModelIndexConverterBase * KisNodeModel::indexConverter() const
@@ -256,7 +273,8 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
                                     KisImageWSP image,
                                     KisShapeController *shapeController,
                                     KisSelectionActionsAdapter *selectionActionsAdapter,
-                                    KisNodeManager *nodeManager)
+                                    KisNodeManager *nodeManager,
+                                    KisIdleTasksManager *idleTasksManager)
 {
     QPointer<KisDummiesFacadeBase> oldDummiesFacade(m_d->dummiesFacade);
     KisShapeController  *oldShapeController = m_d->shapeController;
@@ -288,6 +306,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
     m_d->image = image;
     m_d->dummiesFacade = dummiesFacade;
     m_d->parentOfRemovedNode = 0;
+    m_d->thumbnalCache.setImage(image, idleTasksManager);
     resetIndexConverter();
 
     if (m_d->dummiesFacade) {
@@ -367,6 +386,8 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
         beginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         m_d->needFinishRemoveRows = true;
     }
+
+    m_d->thumbnalCache.notifyNodeRemoved(dummy->node());
 }
 
 void KisNodeModel::slotEndRemoveDummy()
@@ -589,7 +610,12 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
              */
 
             const int maxSize = role - int(KisNodeModel::BeginThumbnailRole);
-            return node->createThumbnail(maxSize, maxSize, Qt::KeepAspectRatio);
+
+            if (maxSize == m_d->thumbnalCache.maxSize()) {
+                return m_d->thumbnalCache.thumbnail(node);
+            } else {
+                return node->createThumbnail(maxSize, maxSize, Qt::KeepAspectRatio);
+            }
         } else {
             return QVariant();
         }

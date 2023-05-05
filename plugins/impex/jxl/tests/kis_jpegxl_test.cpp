@@ -197,6 +197,70 @@ void KisJPEGXLTest::testSpecialChannels()
     }
 }
 
+void KisJPEGXLTest::testCmykWithLayers()
+{
+    const auto inputFileName = TestUtil::fetchDataFileLazy("/sources/extralayers/cmyk-layers.jxl");
+
+    QScopedPointer<KisDocument> doc1(qobject_cast<KisDocument *>(KisPart::instance()->createDocument()));
+
+    KisImportExportManager manager(doc1.data());
+    doc1->setFileBatchMode(true);
+
+    const auto status = manager.importDocument(inputFileName, {});
+    QVERIFY(status.isOk());
+
+    KisImageSP image = doc1->image();
+
+    const KisNodeSP background = KisLayerUtils::findNodeByName(image->root(), "Background");
+    const KisNodeSP layerOne = KisLayerUtils::findNodeByName(image->root(), "Layer 1");
+    const KisNodeSP testName = KisLayerUtils::findNodeByName(image->root(), "Test Name");
+    const KisNodeSP black = KisLayerUtils::findNodeByName(image->root(), "Black");
+
+    QVERIFY(background);
+    QVERIFY(layerOne);
+    QVERIFY(testName);
+    QVERIFY(black);
+
+    {
+        const auto outputFileName = TestUtil::fetchDataFileLazy("/results/cmyk-layers.kra");
+
+        KisDocument *doc2 = KisPart::instance()->createDocument();
+        doc2->setFileBatchMode(true);
+        const auto r = doc2->importDocument(outputFileName);
+
+        QVERIFY(r);
+        QVERIFY(doc2->errorMessage().isEmpty());
+        QVERIFY(doc2->image());
+
+        KisImageSP imageOut = doc2->image();
+
+        const KisNodeSP backgroundOut = KisLayerUtils::findNodeByName(imageOut->root(), "Background");
+        const KisNodeSP layerOneOut = KisLayerUtils::findNodeByName(imageOut->root(), "Layer 1");
+        const KisNodeSP testNameOut = KisLayerUtils::findNodeByName(imageOut->root(), "Test Name");
+        const KisNodeSP blackOut = KisLayerUtils::findNodeByName(imageOut->root(), "Black");
+
+        QVERIFY(backgroundOut);
+        QVERIFY(layerOneOut);
+        QVERIFY(testNameOut);
+        QVERIFY(blackOut);
+
+        QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(doc1->image()->root()->firstChild()->paintDevice(),
+                                                             doc2->image()->root()->firstChild()->paintDevice(),
+                                                             0));
+
+        QVERIFY(
+            TestUtil::comparePaintDevicesClever<uint8_t>(background->paintDevice(), backgroundOut->paintDevice(), 0));
+
+        QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(layerOne->paintDevice(), layerOneOut->paintDevice(), 0));
+
+        QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(testName->paintDevice(), testNameOut->paintDevice(), 0));
+
+        QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(black->paintDevice(), blackOut->paintDevice(), 0));
+
+        delete doc2;
+    }
+}
+
 inline void testSaveColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
 {
     const KoColorSpace *space = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, colorProfile);

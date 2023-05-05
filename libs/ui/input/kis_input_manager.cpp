@@ -132,12 +132,12 @@ void KisInputManager::attachPriorityEventFilter(QObject *filter, int priority)
     Private::PriorityList::iterator end = d->priorityEventFilter.end();
 
     it = std::find_if(begin, end,
-                      [filter] (const Private::PriorityPair &a) { return a.second == filter; });
+                      kismpl::mem_equal_to(&Private::PriorityPair::second, filter));
 
     if (it != end) return;
 
     it = std::find_if(begin, end,
-                      [priority] (const Private::PriorityPair &a) { return a.first > priority; });
+                      kismpl::mem_greater(&Private::PriorityPair::first, priority));
 
     d->priorityEventFilter.insert(it, qMakePair(priority, filter));
     d->priorityEventFilterSeqNo++;
@@ -149,7 +149,7 @@ void KisInputManager::detachPriorityEventFilter(QObject *filter)
     Private::PriorityList::iterator end = d->priorityEventFilter.end();
 
     it = std::find_if(it, end,
-                      [filter] (const Private::PriorityPair &a) { return a.second == filter; });
+                      kismpl::mem_equal_to(&Private::PriorityPair::second, filter));
 
     if (it != end) {
         d->priorityEventFilter.erase(it);

@@ -622,9 +622,7 @@ void KisView::dropEvent(QDropEvent *event)
                 if (reference) {
                     if (data->hasUrls()) {
                         const auto &urls = data->urls();
-                        const auto url = std::find_if(urls.constBegin(), urls.constEnd(), [&](const QUrl &url) {
-                            return url.isLocalFile();
-                        });
+                        const auto url = std::find_if(urls.constBegin(), urls.constEnd(), std::mem_fn(&QUrl::isLocalFile));
                         if (url != urls.constEnd()) {
                             reference->setFilename((*url).toLocalFile());
                         }

@@ -57,6 +57,9 @@ class KisSharedPtr
 {
     friend class KisWeakSharedPtr<T>;
 public:
+    using element_type = T;
+    using weak_type = KisWeakSharedPtr<T>;
+
     /**
      * Creates a null pointer.
      */
@@ -235,6 +238,8 @@ class KisWeakSharedPtr
 {
     friend class KisSharedPtr<T>;
 public:
+    using element_type = T;
+
     /**
      * Creates a null pointer.
      */

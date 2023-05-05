@@ -12,7 +12,16 @@ class KisMplTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void test();
+    void testFoldOptional();
+    void testMemberOperatorsEqualTo();
+    void testMemberOperatorsEqualToPointer();
+    void testMemberOperatorsEqualToStdSharedPtr();
+    void testMemberOperatorsEqualToQSharedPointer();
+
+    void testMemberOperatorsLess();
+    void testMemberOperatorsLessEqual();
+    void testMemberOperatorsGreater();
+    void testMemberOperatorsGreaterEqual();
 };
 
 #endif // KISMPLTEST_H

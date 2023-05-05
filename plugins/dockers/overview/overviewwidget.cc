@@ -27,8 +27,7 @@
 #include "KisIdleTasksManager.h"
 
 OverviewWidget::OverviewWidget(QWidget * parent)
-    : QWidget(parent)
-    , m_canvas(0)
+    : KisWidgetWithIdleTask<QWidget>(parent)
     , m_dragging(false)
 {
     setMouseTracking(true);
@@ -41,24 +40,19 @@ OverviewWidget::~OverviewWidget()
 {
 }
 
-void OverviewWidget::setCanvas(KoCanvasBase * canvas)
+void OverviewWidget::setCanvas(KisCanvas2 *canvas)
 {
     if (m_canvas) {
         m_canvas->image()->disconnect(this);
         m_canvas->displayColorConverter()->disconnect(this);
-        m_idleTaskGuard = KisIdleTasksManager::TaskGuard();
     }
 
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    KisWidgetWithIdleTask<QWidget>::setCanvas(canvas);
 
     if (m_canvas) {
         connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()), SLOT(startUpdateCanvasProjection()));
         connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
         connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()), Qt::UniqueConnection);
-
-        if (isVisible()) {
-            registerIdleTask();
-        }
     }
 }
 
@@ -79,15 +73,11 @@ void OverviewWidget::recalculatePreviewDimensions()
 
 }
 
-void OverviewWidget::registerIdleTask()
+KisIdleTasksManager::TaskGuard OverviewWidget::registerIdleTask(KisCanvas2 *canvas)
 {
-    if (!m_canvas) return;
-
-    m_idleTaskGuard =
-        m_canvas->viewManager()->idleTasksManager()->
+    return
+        canvas->viewManager()->idleTasksManager()->
         addIdleTaskWithGuard([this](KisImageSP image) {
-            qDebug() << ppVar(isVisible());
-
             const KoColorProfile *profile =
                 m_canvas->displayColorConverter()->monitorProfile();
             KoColorConversionTransformation::ConversionFlags conversionFlags =
@@ -102,6 +92,12 @@ void OverviewWidget::registerIdleTask()
 
             return strategy;
         });
+}
+
+void OverviewWidget::clearCachedState()
+{
+    m_pixmap = QPixmap();
+    m_oldPixmap = QPixmap();
 }
 
 bool OverviewWidget::isPixelArt()
@@ -140,31 +136,7 @@ QTransform OverviewWidget::canvasToPreviewTransform()
 
 void OverviewWidget::startUpdateCanvasProjection()
 {
-    if (m_idleTaskGuard.isValid()) {
-        m_idleTaskGuard.trigger();
-    }
-}
-
-void OverviewWidget::showEvent(QShowEvent *event)
-{
-    QWidget::showEvent(event);
-
-    KIS_SAFE_ASSERT_RECOVER(!m_idleTaskGuard.isValid()) {
-        m_idleTaskGuard = KisIdleTasksManager::TaskGuard();
-    }
-
-    registerIdleTask();
-    if (m_idleTaskGuard.isValid()) {
-        m_idleTaskGuard.trigger();
-    }
-}
-
-void OverviewWidget::hideEvent(QHideEvent *event)
-{
-    QWidget::hideEvent(event);
-
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_idleTaskGuard.isValid());
-    m_idleTaskGuard = KisIdleTasksManager::TaskGuard();
+    triggerCacheUpdate();
 }
 
 void OverviewWidget::resizeEvent(QResizeEvent *event)
@@ -175,9 +147,7 @@ void OverviewWidget::resizeEvent(QResizeEvent *event)
             recalculatePreviewDimensions();
             m_pixmap = m_oldPixmap.scaled(m_previewSize, Qt::KeepAspectRatio, Qt::FastTransformation);
         }
-        if (m_idleTaskGuard.isValid()) {
-            m_idleTaskGuard.trigger();
-        }
+        triggerCacheUpdate();
     }
 }
 
@@ -241,7 +211,6 @@ void OverviewWidget::updateThumbnail(QImage pixmap)
 {
     m_pixmap = QPixmap::fromImage(pixmap);
     m_oldPixmap = m_pixmap.copy();
-    m_image = pixmap;
     update();
 }
 

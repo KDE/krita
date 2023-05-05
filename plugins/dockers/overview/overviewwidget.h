@@ -13,14 +13,14 @@
 #include <QPixmap>
 #include <QPointer>
 
-#include "KisIdleTasksManager.h"
+#include "KisWidgetWithIdleTask.h"
 
 #include <kis_canvas2.h>
 
 class KisSignalCompressor;
 class KoCanvasBase;
 
-class OverviewWidget : public QWidget
+class OverviewWidget : public KisWidgetWithIdleTask<QWidget>
 {
     Q_OBJECT
 
@@ -29,11 +29,7 @@ public:
 
     ~OverviewWidget() override;
 
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas()
-    {
-        m_canvas = 0;
-    }
+    void setCanvas(KisCanvas2 *canvas) override;
 
     inline bool isDragging() const
     {
@@ -51,8 +47,6 @@ Q_SIGNALS:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
-    void showEvent(QShowEvent *event) override;
-    void hideEvent(QHideEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
     void mousePressEvent(QMouseEvent* event) override;
@@ -62,7 +56,8 @@ protected:
 
 private:
     void recalculatePreviewDimensions();
-    void registerIdleTask();
+    KisIdleTasksManager::TaskGuard registerIdleTask(KisCanvas2 *canvas) override;
+    void clearCachedState() override;
     ///
     /// \brief isPixelArt checks if the preview is bigger than the image itself
     ///
@@ -84,19 +79,14 @@ private:
     qreal m_previewScale {1.0};
     QPixmap m_oldPixmap;
     QPixmap m_pixmap;
-    QImage m_image;
-    QPointer<KisCanvas2> m_canvas;
-
 
     QPointF m_previewOrigin; // in the same coordinates space as m_previewSize
     QSize m_previewSize {QSize(100, 100)};
-
 
     bool m_dragging {false};
     QPointF m_lastPos {QPointF(0, 0)};
 
     QColor m_outlineColor;
-    KisIdleTasksManager::TaskGuard m_idleTaskGuard;
 };
 
 

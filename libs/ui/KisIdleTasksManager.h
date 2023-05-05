@@ -65,6 +65,7 @@ public:
     void removeIdleTask(int id);
     void triggerIdleTask(int id);
 
+    [[nodiscard]]
     TaskGuard addIdleTaskWithGuard(KisIdleTaskStrokeStrategyFactory factory);
 
 

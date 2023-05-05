@@ -89,4 +89,6 @@ void OverviewThumbnailStrokeStrategy::finishStrokeCallback()
                                                        m_renderingIntent,
                                                        m_conversionFlags);
     emit thumbnailUpdated(overviewImage);
+
+    KisIdleTaskStrokeStrategy::finishStrokeCallback();
 }

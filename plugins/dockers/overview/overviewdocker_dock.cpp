@@ -124,7 +124,7 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
-    m_overviewWidget->setCanvas(canvas);
+    m_overviewWidget->setCanvas(m_canvas);
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->zoomController() && m_canvas->viewManager()->zoomController()->zoomAction()) {
         m_zoomSlider = m_canvas->viewManager()->zoomController()->zoomAction()->createWidget(m_canvas->imageView()->KisView::statusBar());
         static_cast<KoZoomWidget*>(m_zoomSlider)->setZoomInputFlat(false);
@@ -188,7 +188,7 @@ void OverviewDockerDock::unsetCanvas()
 {
     setEnabled(false);
     m_canvas = nullptr;
-    m_overviewWidget->unsetCanvas();
+    m_overviewWidget->setCanvas(0);
 }
 
 void OverviewDockerDock::mirrorUpdateIcon()

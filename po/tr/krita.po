@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-05-02 11:21+0300\n"
+"PO-Revision-Date: 2023-05-05 12:35+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -42687,7 +42687,7 @@ msgstr "Yatay Yarıçap:"
 #: plugins/filters/blur/wdg_lens_blur.ui:27
 #, kde-format
 msgid "Iris"
-msgstr "Iris"
+msgstr "İris"
 
 #. i18n: ectx: property (text), widget (QLabel, shapeLbl)
 #. i18n: ectx: property (text), widget (QLabel, lblMaskShape)
@@ -49899,12 +49899,12 @@ msgstr "Taşı"
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:135
 #, kde-format
 msgid "Lens Zoom In"
-msgstr "Lens Yakınlaştır"
+msgstr "Mercek Yakınlaştır"
 
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:136
 #, kde-format
 msgid "Lens Zoom Out"
-msgstr "Lens Uzaklaştır"
+msgstr "Mercek Uzaklaştır"
 
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:137
 #, kde-format
@@ -49923,13 +49923,13 @@ msgstr "Renk deformesi"
 #: plugins/paintops/deform/wdgdeformoptions.ui:93
 #, kde-format
 msgid "Lens zoom out"
-msgstr "Lens uzaklaştır"
+msgstr "Mercek uzaklaştır"
 
 #. i18n: ectx: property (text), widget (QRadioButton, lensBtn)
 #: plugins/paintops/deform/wdgdeformoptions.ui:100
 #, kde-format
 msgid "Lens zoom in"
-msgstr "Lens yakınlaştır"
+msgstr "Mercek yakınlaştır"
 
 #. i18n: ectx: property (text), widget (QLabel, deformAmountLbl)
 #: plugins/paintops/deform/wdgdeformoptions.ui:135

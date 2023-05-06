@@ -67,38 +67,23 @@ bool KisPropertiesConfiguration::fromXML(const QString & xml, bool clear)
     return retval;
 }
 
-void KisPropertiesConfiguration::fromXML(const QDomElement& e)
+void KisPropertiesConfiguration::fromXML(const QDomElement &root)
 {
-    QDomNode n = e.firstChild();
+    QDomElement e;
+    for (e = root.firstChildElement("param"); !e.isNull(); e = e.nextSiblingElement("param")) {
+        QString name = e.attribute("name");
+        QString value = e.text();
 
-    while (!n.isNull()) {
-        // We don't nest elements in filter configuration. For now...
-        QDomElement e = n.toElement();
-        if (!e.isNull()) {
-            if (e.tagName() == "param") {
-                // If the file contains the new type parameter introduced in Krita act on it
-                // Else invoke old behaviour
-                if(e.attributes().contains("type"))
-                {
-                    QString type = e.attribute("type");
-                    QString name = e.attribute("name");
-                    QString value = e.text();
-
-                    if (type == "bytearray") {
-                        d->properties[name] = QVariant(QByteArray::fromBase64(value.toLatin1()));
-                    }
-                    else {
-                        d->properties[name] = value;
-                    }
-                }
-                else {
-                    d->properties[e.attribute("name")] = QVariant(e.text());
-                }
-            }
+        // Older versions didn't have a "type" parameter,
+        // so fall back to the old behavior if it's missing.
+        if (!e.hasAttribute("type")) {
+            d->properties[name] = QVariant(value);
+        } else if (e.attribute("type") == "bytearray") {
+            d->properties[name] = QVariant(QByteArray::fromBase64(value.toLatin1()));
+        } else {
+            d->properties[name] = value;
         }
-        n = n.nextSibling();
     }
-    //dump();
 }
 
 void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) const

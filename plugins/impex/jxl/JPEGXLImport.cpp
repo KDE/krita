@@ -54,6 +54,7 @@ public:
     JxlExtraChannelInfo m_extra{};
     JxlPixelFormat m_pixelFormat{};
     JxlFrameHeader m_header{};
+    std::vector<quint8> m_rawData{};
     KisPaintDeviceSP m_currentFrame{nullptr};
     uint32_t cmykChannelID = 0;
     int m_nextFrameTime{0};
@@ -114,114 +115,118 @@ inline float value(const T *src, size_t ch)
 }
 
 template<typename channelsType, bool swap, LinearizePolicy policy, bool applyOOTF>
-inline void imageOutCallback(void *that, size_t x, size_t y, size_t numPixels, const void *pixels)
+inline void imageOutCallback(JPEGXLImportData &d)
 {
-    auto *data = static_cast<JPEGXLImportData *>(that);
-    KIS_ASSERT(data);
+    const uint32_t width = d.m_header.layer_info.xsize;
+    const uint32_t height = d.m_header.layer_info.ysize;
+    KisHLineIteratorSP it = d.m_currentFrame->createHLineIteratorNG(0, 0, width);
 
-    KisHLineIteratorSP it = data->m_currentFrame->createHLineIteratorNG(static_cast<int>(x),
-                                                                        static_cast<int>(y),
-                                                                        static_cast<int>(data->m_info.xsize));
-
-    const auto *src = static_cast<const channelsType *>(pixels);
-    const uint32_t channels = data->m_pixelFormat.num_channels;
+    const auto *src = static_cast<const channelsType *>(reinterpret_cast<void*>(d.m_rawData.data()));
+    const uint32_t channels = d.m_pixelFormat.num_channels;
 
     if (policy != LinearizePolicy::KeepTheSame) {
-        const KoColorSpace *cs = data->cs;
-        const double *lCoef = data->lCoef.constData();
+        const KoColorSpace *cs = d.cs;
+        const double *lCoef = d.lCoef.constData();
         QVector<float> pixelValues(static_cast<int>(cs->channelCount()));
         float *tmp = pixelValues.data();
         const quint32 alphaPos = cs->alphaPos();
 
-        for (size_t i = 0; i < numPixels; i++) {
-            for (size_t i = 0; i < channels; i++) {
-                tmp[i] = 1.0;
-            }
-
-            for (size_t ch = 0; ch < channels; ch++) {
-                if (ch == alphaPos) {
-                    tmp[ch] =
-                        value<LinearizePolicy::KeepTheSame, channelsType>(src,
-                                                                          ch);
-                } else {
-                    tmp[ch] = value<policy, channelsType>(src, ch);
+        for (size_t j = 0; j < height; j++) {
+            for (size_t i = 0; i < width; i++) {
+                for (size_t i = 0; i < channels; i++) {
+                    tmp[i] = 1.0;
                 }
+
+                for (size_t ch = 0; ch < channels; ch++) {
+                    if (ch == alphaPos) {
+                        tmp[ch] = value<LinearizePolicy::KeepTheSame, channelsType>(src, ch);
+                    } else {
+                        tmp[ch] = value<policy, channelsType>(src, ch);
+                    }
+                }
+
+                if (swap) {
+                    std::swap(tmp[0], tmp[2]);
+                }
+
+                if (policy == LinearizePolicy::LinearFromHLG && applyOOTF) {
+                    applyHLGOOTF(tmp, lCoef, d.displayGamma, d.displayNits);
+                }
+
+                cs->fromNormalisedChannelsValue(it->rawData(), pixelValues);
+
+                src += d.m_pixelFormat.num_channels;
+
+                it->nextPixel();
             }
-
-            if (swap) {
-                std::swap(tmp[0], tmp[2]);
-            }
-
-            if (policy == LinearizePolicy::LinearFromHLG && applyOOTF) {
-                applyHLGOOTF(tmp, lCoef, data->displayGamma, data->displayNits);
-            }
-
-            cs->fromNormalisedChannelsValue(it->rawData(), pixelValues);
-
-            src += data->m_pixelFormat.num_channels;
-
-            it->nextPixel();
+            it->nextRow();
         }
     } else {
-        for (size_t i = 0; i < numPixels; i++) {
-            auto *dst = reinterpret_cast<channelsType *>(it->rawData());
+        for (size_t j = 0; j < height; j++) {
+            for (size_t i = 0; i < width; i++) {
+                auto *dst = reinterpret_cast<channelsType *>(it->rawData());
 
-            std::memcpy(dst, src, channels * sizeof(channelsType));
+                std::memcpy(dst, src, channels * sizeof(channelsType));
 
-            if (swap) {
-                std::swap(dst[0], dst[2]);
-            } else if (data->isCMYK) {
-                // Swap alpha and key channel for CMYK
-                std::swap(dst[3], dst[4]);
+                if (swap) {
+                    std::swap(dst[0], dst[2]);
+                } else if (d.isCMYK) {
+                    // Swap alpha and key channel for CMYK
+                    std::swap(dst[3], dst[4]);
+                }
+
+                src += d.m_pixelFormat.num_channels;
+
+                it->nextPixel();
             }
-
-            src += data->m_pixelFormat.num_channels;
-
-            it->nextPixel();
+            it->nextRow();
         }
     }
 }
 
 template<typename channelsType, bool swap, LinearizePolicy policy>
-inline JxlImageOutCallback generateCallbackWithPolicy(const JPEGXLImportData &d)
+inline void generateCallbackWithPolicy(JPEGXLImportData &d)
 {
     if (d.applyOOTF) {
-        return &::imageOutCallback<channelsType, swap, policy, true>;
+        imageOutCallback<channelsType, swap, policy, true>(d);
     } else {
-        return &::imageOutCallback<channelsType, swap, policy, false>;
+        imageOutCallback<channelsType, swap, policy, false>(d);
     }
 }
 
 template<typename channelsType, bool swap>
-inline JxlImageOutCallback generateCallbackWithSwap(const JPEGXLImportData &d)
+inline void generateCallbackWithSwap(JPEGXLImportData &d)
 {
     switch (d.linearizePolicy) {
     case LinearizePolicy::LinearFromPQ:
-        return generateCallbackWithPolicy<channelsType, swap, LinearizePolicy::LinearFromPQ>(d);
+        generateCallbackWithPolicy<channelsType, swap, LinearizePolicy::LinearFromPQ>(d);
+        break;
     case LinearizePolicy::LinearFromHLG:
-        return generateCallbackWithPolicy<channelsType, swap, LinearizePolicy::LinearFromHLG>(d);
+        generateCallbackWithPolicy<channelsType, swap, LinearizePolicy::LinearFromHLG>(d);
+        break;
     case LinearizePolicy::LinearFromSMPTE428:
-        return generateCallbackWithPolicy<channelsType, swap, LinearizePolicy::LinearFromSMPTE428>(d);
+        generateCallbackWithPolicy<channelsType, swap, LinearizePolicy::LinearFromSMPTE428>(d);
+        break;
     case LinearizePolicy::KeepTheSame:
     default:
-        return generateCallbackWithPolicy<channelsType, swap, LinearizePolicy::KeepTheSame>(d);
+        generateCallbackWithPolicy<channelsType, swap, LinearizePolicy::KeepTheSame>(d);
         break;
     };
 }
 
 template<typename channelsType>
-inline JxlImageOutCallback generateCallbackWithType(const JPEGXLImportData &d)
+inline void generateCallbackWithType(JPEGXLImportData &d)
 {
     if (d.m_colorID == RGBAColorModelID
         && (d.m_depthID == Integer8BitsColorDepthID || d.m_depthID == Integer16BitsColorDepthID)
         && d.linearizePolicy == LinearizePolicy::KeepTheSame) {
-        return generateCallbackWithSwap<channelsType, true>(d);
+        generateCallbackWithSwap<channelsType, true>(d);
     } else {
-        return generateCallbackWithSwap<channelsType, false>(d);
+        generateCallbackWithSwap<channelsType, false>(d);
     }
 }
 
-inline JxlImageOutCallback generateCallback(const JPEGXLImportData &d)
+inline void generateCallback(JPEGXLImportData &d)
 {
     switch (d.m_pixelFormat.data_type) {
     case JXL_TYPE_FLOAT:
@@ -237,7 +242,6 @@ inline JxlImageOutCallback generateCallback(const JPEGXLImportData &d)
 #endif
     default:
         KIS_ASSERT_X(false, "JPEGXL::generateCallback", "Unknown image format!");
-        return nullptr;
     }
 }
 
@@ -666,10 +670,20 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
             }
         } else if (status == JXL_DEC_NEED_IMAGE_OUT_BUFFER) {
             d.m_currentFrame = new KisPaintDevice(image->colorSpace());
-            const JxlImageOutCallback callback = generateCallback(d);
 
-            if (JXL_DEC_SUCCESS != JxlDecoderSetImageOutCallback(dec.get(), &d.m_pixelFormat, callback, &d)) {
-                errFile << "JxlDecoderSetImageOutBuffer failed";
+            // Use raw byte buffer instead of image callback
+            size_t rawSize = 0;
+            if (JXL_DEC_SUCCESS != JxlDecoderImageOutBufferSize(dec.get(), &d.m_pixelFormat, &rawSize)) {
+                qWarning() << "JxlDecoderImageOutBufferSize failed";
+                return ImportExportCodes::InternalError;
+            }
+            d.m_rawData.resize(rawSize);
+            if (JXL_DEC_SUCCESS
+                != JxlDecoderSetImageOutBuffer(dec.get(),
+                                               &d.m_pixelFormat,
+                                               reinterpret_cast<uint8_t *>(d.m_rawData.data()),
+                                               static_cast<size_t>(d.m_rawData.size()))) {
+                qWarning() << "JxlDecoderSetImageOutBuffer failed";
                 return ImportExportCodes::InternalError;
             }
 
@@ -774,6 +788,8 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 }
             }
         } else if (status == JXL_DEC_FULL_IMAGE) {
+            // Parse raw data using existing callback function
+            generateCallback(d);
             const JxlLayerInfo layerInfo = d.m_header.layer_info;
             if (d.m_info.have_animation) {
                 dbgFile << "Importing frame @" << d.m_nextFrameTime

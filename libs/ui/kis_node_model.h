@@ -117,8 +117,8 @@ public: // from QAbstractItemModel
                           KisImageWSP image,
                           KisShapeController *shapeController,
                           KisSelectionActionsAdapter *selectionActionsAdapter,
-                          KisNodeManager *nodeManager,
-                          KisIdleTasksManager *idleTasksManager);
+                          KisNodeManager *nodeManager);
+    void setIdleTaskManager(KisIdleTasksManager *idleTasksManager);
     KisNodeSP nodeFromIndex(const QModelIndex &index) const;
     QModelIndex indexFromNode(KisNodeSP node) const;
 

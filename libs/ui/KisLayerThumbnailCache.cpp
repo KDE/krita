@@ -127,6 +127,14 @@ void KisLayerThumbnailCache::setImage(KisImageSP image)
     }
 }
 
+void KisLayerThumbnailCache::setIdleTaskManager(KisIdleTasksManager *manager)
+{
+    setIdleTaskManagerImpl(manager);
+    if (m_d->image && m_d->taskGuard.isValid()) {
+        m_d->taskGuard.trigger();
+    }
+}
+
 void KisLayerThumbnailCache::setImage(KisImageSP image, KisIdleTasksManager *manager)
 {
     setIdleTaskManagerImpl(manager);

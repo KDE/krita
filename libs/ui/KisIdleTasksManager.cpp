@@ -39,16 +39,23 @@ void KisIdleTasksManager::setImage(KisImageSP image)
     m_d->idleWatcher.setTrackedImage(image);
     m_d->image = image;
     m_d->queue.clear();
+
+    slotImageIsModified();
 }
 
 int KisIdleTasksManager::addIdleTask(KisIdleTaskStrokeStrategyFactory factory)
 {
+    /**
+     * TODO: don't restart the whole queue on the the task change, just
+     * restart the currently added task
+     */
+
     const int newId =
         !m_d->tasks.isEmpty() ?
         m_d->tasks.last().id + 1 : 0;
 
     m_d->tasks.append({newId, factory});
-    m_d->queue.clear();
+    slotImageIsModified();
 
     return newId;
 }
@@ -68,7 +75,11 @@ void KisIdleTasksManager::triggerIdleTask(int id)
                            kismpl::mem_equal_to(&TaskStruct::id, id));
     KIS_SAFE_ASSERT_RECOVER_NOOP(it != m_d->tasks.end());
 
-    m_d->queue.enqueue(std::distance(m_d->tasks.begin(), it));
+    const int index = std::distance(m_d->tasks.begin(), it);
+    if (std::find(m_d->queue.begin(), m_d->queue.end(), index) == m_d->queue.end()) {
+        m_d->queue.enqueue(index);
+    }
+
     m_d->idleWatcher.restartCountdown();
 }
 
@@ -81,6 +92,10 @@ KisIdleTasksManager::addIdleTaskWithGuard(KisIdleTaskStrokeStrategyFactory facto
 void KisIdleTasksManager::slotImageIsModified()
 {
     m_d->queue.clear();
+    m_d->queue.reserve(m_d->tasks.size());
+    for (int i = 0; i < m_d->tasks.size(); i++) {
+        m_d->queue.enqueue(i);
+    }
 }
 
 void KisIdleTasksManager::slotImageIsIdle()
@@ -91,13 +106,6 @@ void KisIdleTasksManager::slotImageIsIdle()
     if (m_d->currentTaskCookie) {
         m_d->idleWatcher.restartCountdown();
         return;
-    }
-
-    if (m_d->queue.isEmpty()) {
-        m_d->queue.reserve(m_d->tasks.size());
-        for (int i = 0; i < m_d->tasks.size(); i++) {
-            m_d->queue.enqueue(i);
-        }
     }
 
     const int newTaskIndex = m_d->queue.dequeue();

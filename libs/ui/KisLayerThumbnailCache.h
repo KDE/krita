@@ -21,6 +21,7 @@ public:
     ~KisLayerThumbnailCache();
 
     void setImage(KisImageSP image);
+    void setIdleTaskManager(KisIdleTasksManager *manager);
     void setImage(KisImageSP image, KisIdleTasksManager *manager);
     void setMaxSize(int maxSize);
     int maxSize() const;

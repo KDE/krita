@@ -537,7 +537,8 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-        m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0, 0);
+        m_nodeModel->setIdleTaskManager(0);
+        m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
         m_selectionActionsAdapter.reset();
 
         if (m_image) {
@@ -569,8 +570,11 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
                                       m_image,
                                       kritaShapeController,
                                       m_selectionActionsAdapter.data(),
-                                      m_nodeManager,
-                                      m_canvas->viewManager()->idleTasksManager());
+                                      m_nodeManager);
+
+        if (isVisible()) {
+            m_nodeModel->setIdleTaskManager(m_canvas->viewManager()->idleTasksManager());
+        }
 
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
         connect(m_image, SIGNAL(sigNodeCollapsedChanged()), SLOT(slotNodeCollapsedChanged()));
@@ -634,6 +638,21 @@ void LayerBox::unsetCanvas()
     m_nodeManager->slotSetSelectedNodes(KisNodeList());
 
     m_canvas = 0;
+}
+
+void LayerBox::showEvent(QShowEvent *event)
+{
+    QDockWidget::showEvent(event);
+
+    if (m_canvas) {
+        m_nodeModel->setIdleTaskManager(m_canvas->viewManager()->idleTasksManager());
+    }
+}
+
+void LayerBox::hideEvent(QHideEvent *event)
+{
+    QDockWidget::hideEvent(event);
+    m_nodeModel->setIdleTaskManager(0);
 }
 
 void LayerBox::notifyImageDeleted()

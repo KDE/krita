@@ -273,8 +273,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
                                     KisImageWSP image,
                                     KisShapeController *shapeController,
                                     KisSelectionActionsAdapter *selectionActionsAdapter,
-                                    KisNodeManager *nodeManager,
-                                    KisIdleTasksManager *idleTasksManager)
+                                    KisNodeManager *nodeManager)
 {
     QPointer<KisDummiesFacadeBase> oldDummiesFacade(m_d->dummiesFacade);
     KisShapeController  *oldShapeController = m_d->shapeController;
@@ -306,7 +305,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
     m_d->image = image;
     m_d->dummiesFacade = dummiesFacade;
     m_d->parentOfRemovedNode = 0;
-    m_d->thumbnalCache.setImage(image, idleTasksManager);
+    m_d->thumbnalCache.setImage(image);
     resetIndexConverter();
 
     if (m_d->dummiesFacade) {
@@ -336,6 +335,11 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
         beginResetModel();
         endResetModel();
     }
+}
+
+void KisNodeModel::setIdleTaskManager(KisIdleTasksManager *idleTasksManager)
+{
+    m_d->thumbnalCache.setIdleTaskManager(idleTasksManager);
 }
 
 void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType)

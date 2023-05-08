@@ -244,7 +244,7 @@ void LayerModel::setView(QObject *newView)
         d->layers.clear();
         d->activeNode.clear();
         d->canvas = 0;
-        d->nodeModel->setDummiesFacade(0, 0, 0, 0, 0, 0);
+        d->nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
         d->selectionActionsAdapter.reset();
 
     }
@@ -273,8 +273,7 @@ void LayerModel::setView(QObject *newView)
                                        d->image,
                                        shapeController,
                                        d->selectionActionsAdapter.data(),
-                                       d->nodeManager,
-                                       d->view->idleTasksManager());
+                                       d->nodeManager);
 
         connect(d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
         connect(d->image, SIGNAL(sigNodeChanged(KisNodeSP)), SLOT(nodeChanged(KisNodeSP)));

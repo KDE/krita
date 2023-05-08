@@ -137,6 +137,7 @@ set(kritaui_LIB_SRCS
     kis_model_index_converter_base.cpp
     kis_model_index_converter.cpp
     kis_model_index_converter_show_all.cpp
+    KisLayerThumbnailCache.cpp
     kis_painting_assistant.cc
     kis_painting_assistants_decoration.cpp
     KisDecorationsManager.cpp
@@ -164,6 +165,8 @@ set(kritaui_LIB_SRCS
     KisWelcomePageWidget.cpp
     KisChangeCloneLayersCommand.cpp
     KisUiFont.cpp
+    KisIdleTasksManager.cpp
+    KisIdleTaskStrokeStrategy.cpp
 
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp

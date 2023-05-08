@@ -143,6 +143,393 @@ std::optional<T> fold_optional(Fun &&fun, Args &&...args) {
 template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
 template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
+namespace detail {
+
+template<typename Op, typename Class, typename MemType, typename PtrType>
+struct mem_checker;
+
+template<typename Op, typename Class, typename MemType>
+struct mem_checker<Op, Class, MemType, MemType Class::*>
+{
+    bool operator() (const Class &object) const {
+        Op op;
+        return op(object.*ptr, value);
+    }
+
+    bool operator() (Class *object) const {
+        Op op;
+        return op((*object).*ptr, value);
+    }
+
+    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
+    bool operator() (const Ptr &object) const {
+        Op op;
+        return op((*object).*ptr, value);
+    }
+
+    MemType Class::* ptr;
+    const MemType value;
+};
+
+template<typename Op, typename Class, typename MemType>
+struct mem_checker<Op, Class, MemType, MemType (Class::*)() const>
+{
+    bool operator() (const Class &object) const {
+        Op op;
+        return op((object.*ptr)(), value);
+    }
+
+    bool operator() (Class *object) const {
+        Op op;
+        return op(((*object).*ptr)(), value);
+    }
+
+    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
+    bool operator() (const Ptr &object) const {
+        Op op;
+        return op(((*object).*ptr)(), value);
+    }
+
+    MemType (Class::*ptr)() const;
+    const MemType value;
+};
+
+template<typename Op, typename Class, typename MemType, typename PtrType>
+struct mem_compare;
+
+template<typename Op, typename Class, typename MemType>
+struct mem_compare<Op, Class, MemType, MemType Class::*>
+{
+    bool operator() (const Class &lhs, const Class &rhs) const {
+        Op op;
+        return op(lhs.*ptr, rhs.*ptr);
+    }
+
+    bool operator() (const Class &lhs, const MemType &rhs) const {
+        Op op;
+        return op(lhs.*ptr, rhs);
+    }
+
+    bool operator() (const MemType &lhs, const Class &rhs) const {
+        Op op;
+        return op(lhs, rhs.*ptr);
+    }
+
+    bool operator() (Class *lhs, Class *rhs) const {
+        Op op;
+        return op((*lhs).*ptr, (*rhs).*ptr);
+    }
+
+    bool operator() (Class *lhs, const MemType &rhs) const {
+        Op op;
+        return op((*lhs).*ptr, rhs);
+    }
+
+    bool operator() (const MemType &lhs, Class *rhs) const {
+        Op op;
+        return op(lhs, (*rhs).*ptr);
+    }
+
+    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
+    bool operator() (const Ptr &lhs, const Ptr &rhs) const {
+        Op op;
+        return op((*lhs).*ptr, (*rhs).*ptr);
+    }
+
+    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
+    bool operator() (const Ptr &lhs, const MemType &rhs) const {
+        Op op;
+        return op((*lhs).*ptr, rhs);
+    }
+
+    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
+    bool operator() (const MemType &lhs, const Ptr &rhs) const {
+        Op op;
+        return op(lhs, (*rhs).*ptr);
+    }
+
+    MemType Class::* ptr;
+};
+
+template<typename Op, typename Class, typename MemType>
+struct mem_compare<Op, Class, MemType, MemType (Class::*)() const>
+{
+    bool operator() (const Class &lhs, const Class &rhs) const {
+        Op op;
+        return op((lhs.*ptr)(), (rhs.*ptr)());
+    }
+
+    bool operator() (const Class &lhs, const MemType &rhs) const {
+        Op op;
+        return op((lhs.*ptr)(), rhs);
+    }
+
+    bool operator() (const MemType &lhs, const Class &rhs) const {
+        Op op;
+        return op(lhs, (rhs.*ptr)());
+    }
+
+    bool operator() (Class *lhs, Class *rhs) const {
+        Op op;
+        return op(((*lhs).*ptr)(), ((*rhs).*ptr)());
+    }
+
+    bool operator() (Class *lhs, const MemType &rhs) const {
+        Op op;
+        return op(((*lhs).*ptr)(), rhs);
+    }
+
+    bool operator() (const MemType &lhs, Class *rhs) const {
+        Op op;
+        return op(lhs, ((*rhs).*ptr)());
+    }
+
+    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
+    bool operator() (const Ptr &lhs, const Ptr &rhs) const {
+        Op op;
+        return op(((*lhs).*ptr)(), ((*rhs).*ptr)());
+    }
+
+    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
+    bool operator() (const Ptr &lhs, const MemType &rhs) const {
+        Op op;
+        return op(((*lhs).*ptr)(), rhs);
+    }
+
+    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
+    bool operator() (const MemType &lhs, const Ptr &rhs) const {
+        Op op;
+        return op(lhs, ((*rhs).*ptr)());
+    }
+
+    MemType (Class::*ptr)() const;
+};
+
+
+} // detail
+
+/**
+ * @brief mem_equal_to is an unary functor that compares a member of the object to
+ *                     a given value
+ *
+ * The functor is supposed to be used in `std::find_if` and other standard algorithms.
+ * It can automatically dereference a pointer-to-member or a pointer-to-method.
+ *
+ *  * Usage:
+ *
+ *        \code{.cpp}
+ *
+ *        struct Struct {
+ *            Struct (int _id) : id(_id) {}
+ *
+ *            int id = -1;
+ *            int idConstFunc() const {
+ *                return id;
+ *            }
+ *        };
+ *
+ *        std::vector<Struct> vec({{0},{1},{2},{3}});
+ *
+ *        // find an element, which has member 'id' set to 1
+ *        auto it1 = std::find_if(vec.begin(), vec.end(), kismpl::mem_equal_to(&Struct::id, 1));
+ *
+ *        // find an element, whose member function 'idConstFunc()' returns 1
+ *        auto it2 = std::find_if(vec.begin(), vec.end(), kismpl::mem_equal_to(&Struct::idConstFunc, 1));
+ *
+ *        // the functor can automatically dereference pointers and shared pointers
+ *        std::vector<std::shared_ptr<Struct>> vec({std::make_shared<Struct>(0),
+ *                                                  std::make_shared<Struct>(1),
+ *                                                  std::make_shared<Struct>(2),
+ *                                                  std::make_shared<Struct>(3),
+ *                                                  std::make_shared<Struct>(4)});
+ *
+ *        // the shared pointer is automatically lifted by the functor
+ *        auto it3 = std::find_if(vec.begin(), vec.end(), kismpl::mem_equal_to(&Struct::id, 1));
+ *
+ *        \endcode
+ */
+
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_equal_to(MemTypeNoRef Class::*ptr, MemType &&value) {
+    return detail::mem_checker<std::equal_to<>, Class, MemTypeNoRef, MemTypeNoRef Class::*>{ptr, std::forward<MemType>(value)};
+}
+
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_equal_to(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
+    return detail::mem_checker<std::equal_to<>, Class, MemTypeNoRef, MemTypeNoRef (Class::*)() const>{ptr, std::forward<MemType>(value)};
+}
+
+/**
+ * @brief mem_less is an unary functor that compares a member of the object to
+ *                 a given value
+ *
+ * @see mem_equal_to
+ */
+
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_less(MemTypeNoRef Class::*ptr, MemType &&value) {
+    return detail::mem_checker<std::less<>, Class, MemTypeNoRef, MemTypeNoRef Class::*>{ptr, std::forward<MemType>(value)};
+}
+
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_less(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
+    return detail::mem_checker<std::less<>, Class, MemTypeNoRef, MemTypeNoRef (Class::*)() const>{ptr, std::forward<MemType>(value)};
+}
+
+/**
+ * @brief mem_less_equal is an unary functor that compares a member of the object to
+ *                       a given value
+ *
+ * @see mem_equal_to
+ */
+
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_less_equal(MemTypeNoRef Class::*ptr, MemType &&value) {
+    return detail::mem_checker<std::less_equal<>, Class, MemTypeNoRef, MemTypeNoRef Class::*>{ptr, std::forward<MemType>(value)};
+}
+
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_less_equal(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
+    return detail::mem_checker<std::less_equal<>, Class, MemTypeNoRef, MemTypeNoRef (Class::*)() const>{ptr, std::forward<MemType>(value)};
+}
+
+/**
+ * @brief mem_greater is an unary functor that compares a member of the object to
+ *                    a given value
+ *
+ * @see mem_equal_to
+ */
+
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_greater(MemTypeNoRef Class::*ptr, MemType &&value) {
+    return detail::mem_checker<std::greater<>, Class, MemTypeNoRef, MemTypeNoRef Class::*>{ptr, std::forward<MemType>(value)};
+}
+
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_greater(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
+    return detail::mem_checker<std::greater<>, Class, MemTypeNoRef, MemTypeNoRef (Class::*)() const>{ptr, std::forward<MemType>(value)};
+}
+
+/**
+ * @brief mem_greater_equal is an unary functor that compares a member of the object to
+ *                          a given value
+ *
+ * @see mem_equal_to
+ */
+
+
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_greater_equal(MemTypeNoRef Class::*ptr, MemType &&value) {
+    return detail::mem_checker<std::greater_equal<>, Class, MemTypeNoRef, MemTypeNoRef Class::*>{ptr, std::forward<MemType>(value)};
+}
+
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_greater_equal(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
+    return detail::mem_checker<std::greater_equal<>, Class, MemTypeNoRef, MemTypeNoRef (Class::*)() const>{ptr, std::forward<MemType>(value)};
+}
+
+/**
+ * @brief mem_less is a binary functor that compares a member of the object to a
+ *                 given value or two objects based on the value of their members
+ *
+ * The functor is supposed to be used in `std::lower_bound` and other standard algorithms.
+ * It can automatically dereference a pointer-to-member or a pointer-to-method.
+ *
+ *  * Usage:
+ *
+ *        \code{.cpp}
+ *
+ *        struct Struct {
+ *            Struct (int _id) : id(_id) {}
+ *
+ *            int id = -1;
+ *            int idConstFunc() const {
+ *                return id;
+ *            }
+ *        };
+ *
+ *        std::vector<Struct> vec({{0},{1},{2},{3}});
+ *
+ *        // find the first element, whose 'id' is not less that 1
+ *        auto it1 = std::lower_bound(vec.begin(), vec.end(), 1, kismpl::mem_less(&Struct::id));
+ *
+ *        // find the first element, whose 'id' retunred by 'idConstFunc()' is not less that 1
+ *        auto it2 = std::lower_bound(vec.begin(), vec.end(), 1, kismpl::mem_less(&Struct::idConstFunc, 1));
+ *
+ *        // the functor can automatically dereference pointers and shared pointers
+ *        std::vector<std::shared_ptr<Struct>> vec({std::make_shared<Struct>(0),
+ *                                                  std::make_shared<Struct>(1),
+ *                                                  std::make_shared<Struct>(2),
+ *                                                  std::make_shared<Struct>(3),
+ *                                                  std::make_shared<Struct>(4)});
+ *
+ *        // the shared pointer is automatically lifted by the functor
+ *        auto it3 = std::lower_bound(vec.begin(), vec.end(), 1, kismpl::mem_less(&Struct::id));
+ *
+ *        \endcode
+ */
+
+template<typename Class, typename MemType>
+inline auto mem_less(MemType Class::*ptr) {
+    return detail::mem_compare<std::less<>, Class, MemType, MemType Class::*>{ptr};
+}
+
+template<typename Class, typename MemType>
+inline auto mem_less(MemType (Class::*ptr)() const) {
+    return detail::mem_compare<std::less<>, Class, MemType, MemType (Class::*)() const>{ptr};
+}
+
+/**
+ * @brief mem_less_equal is a binary functor that compares a member of the object to a
+ *                       given value or two objects based on the value of their members
+ *
+ * @see mem_less
+ */
+template<typename Class, typename MemType>
+inline auto mem_less_equal(MemType Class::*ptr) {
+    return detail::mem_compare<std::less_equal<>, Class, MemType, MemType Class::*>{ptr};
+}
+
+template<typename Class, typename MemType>
+inline auto mem_less_equal(MemType (Class::*ptr)() const) {
+    return detail::mem_compare<std::less_equal<>, Class, MemType, MemType (Class::*)() const>{ptr};
+}
+
+/**
+ * @brief mem_greater is a binary functor that compares a member of the object to a
+ *                    given value or two objects based on the value of their members
+ *
+ * @see mem_less
+ */
+
+template<typename Class, typename MemType>
+inline auto mem_greater(MemType Class::*ptr) {
+    return detail::mem_compare<std::greater<>, Class, MemType, MemType Class::*>{ptr};
+}
+
+template<typename Class, typename MemType>
+inline auto mem_greater(MemType (Class::*ptr)() const) {
+    return detail::mem_compare<std::greater<>, Class, MemType, MemType (Class::*)() const>{ptr};
+}
+
+/**
+ * @brief mem_greater_equal is a binary functor that compares a member of the object to a
+ *                          given value or two objects based on the value of their members
+ *
+ * @see mem_less
+ */
+
+template<typename Class, typename MemType>
+inline auto mem_greater_equal(MemType Class::*ptr) {
+    return detail::mem_compare<std::greater_equal<>, Class, MemType, MemType Class::*>{ptr};
+}
+
+template<typename Class, typename MemType>
+inline auto mem_greater_equal(MemType (Class::*ptr)() const) {
+    return detail::mem_compare<std::greater_equal<>, Class, MemType, MemType (Class::*)() const>{ptr};
+}
+
+
 } // namespace kismpl
 
 #endif // KISMPL_H

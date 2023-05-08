@@ -12,16 +12,10 @@
 
 #include "kis_canvas2.h"
 #include <KisViewManager.h>
-#include <kis_zoom_manager.h>
-#include "kis_image.h"
-#include "kis_paint_device.h"
-#include "kis_idle_watcher.h"
 #include "histogramdockerwidget.h"
 
 HistogramDockerDock::HistogramDockerDock()
-    : QDockWidget(i18n("Histogram")),
-      m_imageIdleWatcher(new KisIdleWatcher(250, this)),
-      m_canvas(0)
+    : QDockWidget(i18n("Histogram"))
 {
     QWidget *page = new QWidget(this);
     m_layout = new QVBoxLayout(page);
@@ -35,8 +29,6 @@ HistogramDockerDock::HistogramDockerDock()
     //m_histogramWidget->setSmoothHistogram(false);
     m_layout->addWidget(m_histogramWidget, 1);
     setWidget(page);
-    connect(m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &HistogramDockerDock::updateHistogram);
-
     setEnabled(false);
 }
 
@@ -48,54 +40,14 @@ void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
 
     setEnabled(canvas != 0);
 
-    if (m_canvas) {
-        m_canvas->disconnectCanvasObserver(this);
-        m_canvas->image()->disconnect(this);
-    }
-
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    if (m_canvas) {
-
-        m_imageIdleWatcher->setTrackedImage(m_canvas->image());
-        connect(m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &HistogramDockerDock::updateHistogram, Qt::UniqueConnection);
-
-        connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(startUpdateCanvasProjection()), Qt::UniqueConnection);
-        connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), this, SLOT(sigColorSpaceChanged(const KoColorSpace*)), Qt::UniqueConnection);
-        m_imageIdleWatcher->startCountdown();
-    }
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2*>(canvas);
+    m_canvas = canvas2;
+    m_histogramWidget->setCanvas(canvas2);
 }
 
 void HistogramDockerDock::unsetCanvas()
 {
     setEnabled(false);
     m_canvas = 0;
-    m_imageIdleWatcher->startCountdown();
-}
-
-void HistogramDockerDock::startUpdateCanvasProjection()
-{
-    if (isVisible()) {
-        m_imageIdleWatcher->startCountdown();
-    }
-}
-
-void HistogramDockerDock::showEvent(QShowEvent *event)
-{
-    Q_UNUSED(event);
-    m_imageIdleWatcher->startCountdown();
-}
-
-
-void HistogramDockerDock::sigColorSpaceChanged(const KoColorSpace */*cs*/)
-{
-    if (isVisible()) {
-        m_imageIdleWatcher->startCountdown();
-    }
-}
-
-void HistogramDockerDock::updateHistogram()
-{
-    if (isVisible()) {
-        m_histogramWidget->updateHistogram(m_canvas);
-    }
+    m_histogramWidget->setCanvas(0);
 }

@@ -202,9 +202,7 @@ QList<KisDabRenderingJobSP> KisDabRenderingQueue::notifyJobFinished(int seqNo, i
      */
     auto finishedJobIt =
         std::lower_bound(m_d->jobs.begin(), m_d->jobs.end(), seqNo,
-                         [] (KisDabRenderingJobSP job, int seqNo) {
-                             return job->seqNo < seqNo;
-                         });
+                         kismpl::mem_less(&KisDabRenderingJob::seqNo));
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(finishedJobIt != m_d->jobs.end(), dependentJobs);
     KisDabRenderingJobSP finishedJob = *finishedJobIt;

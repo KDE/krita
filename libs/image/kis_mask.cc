@@ -477,6 +477,13 @@ QImage KisMask::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRa
                                            KoColorConversionTransformation::internalConversionFlags()) : QImage();
 }
 
+int KisMask::thumbnailSeqNo() const
+{
+    KisPaintDeviceSP originalDevice =
+        selection() ? selection()->projection() : 0;
+    return originalDevice ? originalDevice->sequenceNumber() : -1;
+}
+
 void KisMask::testingInitSelection(const QRect &rect, KisLayerSP parentLayer)
 {
     if (parentLayer) {

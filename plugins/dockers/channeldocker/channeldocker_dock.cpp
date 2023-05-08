@@ -79,7 +79,7 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_model, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
         connect(m_model, SIGNAL(channelFlagsChanged()), m_canvas, SLOT(channelSelectionChanged()));
-        m_imageIdleWatcher->startCountdown();
+        m_imageIdleWatcher->forceImageModified();
     }
 
 }
@@ -94,12 +94,12 @@ void ChannelDockerDock::unsetCanvas()
 void ChannelDockerDock::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event);
-    m_imageIdleWatcher->startCountdown();
+    m_imageIdleWatcher->forceImageModified();
 }
 
 void ChannelDockerDock::startUpdateCanvasProjection()
 {
-    m_imageIdleWatcher->startCountdown();
+    m_imageIdleWatcher->forceImageModified();
 }
 
 void ChannelDockerDock::updateChannelTable()

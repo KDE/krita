@@ -417,8 +417,7 @@ void KisVideoExportOptionsDialog::setHDRConfiguration(bool value) {
 int findIndexById(const QString &id, const QVector<KoID> &ids)
 {
     int index = -1;
-    auto it = std::find_if(ids.begin(), ids.end(),
-                           [id] (const KoID &item) { return item.id() == id; });
+    auto it = std::find_if(ids.begin(), ids.end(), kismpl::mem_equal_to(&KoID::id, id));
     if (it != ids.end()) {
         index = std::distance(ids.begin(), it);
     }

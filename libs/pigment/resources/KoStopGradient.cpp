@@ -143,9 +143,8 @@ bool KoStopGradient::stopsAt(KoGradientStop& leftStop, KoGradientStop& rightStop
     } else {
         // we have at least two color stops
         // -> find the two stops which frame our t
-        auto it = std::lower_bound(m_stops.begin(), m_stops.end(), KoGradientStop(t, KoColor(), COLORSTOP), [](const KoGradientStop& a, const KoGradientStop& b) {
-            return a.position < b.position;
-            });
+        auto it = std::lower_bound(m_stops.begin(), m_stops.end(), KoGradientStop(t, KoColor(), COLORSTOP),
+                                   kismpl::mem_less(&KoGradientStop::position));
         leftStop = *(it - 1);
         rightStop = *(it);
         return true;
@@ -257,10 +256,9 @@ QList<int> KoStopGradient::requiredCanvasResources() const
 {
     QList<int> result;
 
-    if (std::find_if(m_stops.begin(), m_stops.end(),
-                     [] (const KoGradientStop &stop) {
-                         return stop.type != COLORSTOP;
-                     }) != m_stops.end()) {
+    if (std::find_if_not(m_stops.begin(), m_stops.end(),
+                         kismpl::mem_equal_to(&KoGradientStop::type, COLORSTOP))
+        != m_stops.end()) {
 
         result << KoCanvasResource::ForegroundColor << KoCanvasResource::BackgroundColor;
     }

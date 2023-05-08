@@ -61,6 +61,11 @@ bool KisIdleWatcher::isIdle() const
     return idle;
 }
 
+bool KisIdleWatcher::isCounting() const
+{
+    return m_d->idleCheckTimer.isActive();
+}
+
 void KisIdleWatcher::setTrackedImages(const QVector<KisImageSP> &images)
 {
     m_d->connectionsStore.clear();
@@ -85,10 +90,16 @@ void KisIdleWatcher::setTrackedImage(KisImageSP image)
     setTrackedImages(images);
 }
 
-void KisIdleWatcher::slotImageModified()
+void KisIdleWatcher::restartCountdown()
 {
     stopIdleCheck();
     m_d->imageModifiedCompressor.start();
+}
+
+void KisIdleWatcher::slotImageModified()
+{
+    restartCountdown();
+    Q_EMIT imageModified();
 }
 
 void KisIdleWatcher::startIdleCheck()
@@ -116,6 +127,6 @@ void KisIdleWatcher::slotIdleCheckTick()
             m_d->idleCheckTimer.start();
         }
     } else {
-        slotImageModified();
+        restartCountdown();
     }
 }

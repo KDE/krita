@@ -82,6 +82,7 @@
 #include "kis_processing_applicator.h"
 #include "commands/kis_set_global_selection_command.h"
 #include "KisSelectionActionsAdapter.h"
+#include "KisIdleTasksManager.h"
 
 #include "kis_layer_utils.h"
 
@@ -159,7 +160,6 @@ LayerBox::LayerBox()
     : QDockWidget(i18n("Layers"))
     , m_canvas(0)
     , m_wdgLayerBox(new Ui_WdgLayerBox)
-    , m_thumbnailCompressor(200, KisSignalCompressor::FIRST_INACTIVE)
     , m_colorLabelCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_thumbnailSizeCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
     , m_treeIndentationCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
@@ -306,8 +306,6 @@ LayerBox::LayerBox()
 
     setEnabled(false);
 
-    connect(&m_idleWatcher, SIGNAL(startedIdleMode()), SLOT(updateDirtyThumbnails()));
-    connect(&m_thumbnailCompressor, SIGNAL(timeout()), SLOT(notifyThumbnailDirty()));
     connect(&m_colorLabelCompressor, SIGNAL(timeout()), SLOT(updateAvailableLabels()));
 
 
@@ -332,7 +330,7 @@ LayerBox::LayerBox()
     thumbnailSizeSlider->setMinimumHeight(20);
     thumbnailSizeSlider->setMinimumWidth(40);
     thumbnailSizeSlider->setTickInterval(5);
-
+    m_nodeModel->setPreferredThumnalSize(cfg.layerThumbnailSize());
 
     QWidgetAction *sliderAction= new QWidgetAction(this);
     sliderAction->setDefaultWidget(thumbnailSizeSlider);
@@ -539,6 +537,7 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
+        m_nodeModel->setIdleTaskManager(0);
         m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
         m_selectionActionsAdapter.reset();
 
@@ -551,7 +550,6 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
         disconnect(m_nodeManager, 0, this, 0);
         disconnect(m_nodeModel, 0, m_nodeManager, 0);
         m_nodeManager->slotSetSelectedNodes(KisNodeList());
-        m_idleWatcher.setTrackedImages({});
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
@@ -559,8 +557,6 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
     if (m_canvas) {
         m_image = m_canvas->image();
         emit imageChanged();
-        connect(m_image, SIGNAL(sigImageUpdated(QRect)), &m_thumbnailCompressor, SLOT(start()));
-        m_idleWatcher.setTrackedImage(m_image);
 
         KisDocument* doc = static_cast<KisDocument*>(m_canvas->imageView()->document());
         KisShapeController *kritaShapeController =
@@ -575,6 +571,10 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
                                       kritaShapeController,
                                       m_selectionActionsAdapter.data(),
                                       m_nodeManager);
+
+        if (isVisible()) {
+            m_nodeModel->setIdleTaskManager(m_canvas->viewManager()->idleTasksManager());
+        }
 
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
         connect(m_image, SIGNAL(sigNodeCollapsedChanged()), SLOT(slotNodeCollapsedChanged()));
@@ -638,6 +638,22 @@ void LayerBox::unsetCanvas()
     m_nodeManager->slotSetSelectedNodes(KisNodeList());
 
     m_canvas = 0;
+}
+
+void LayerBox::showEvent(QShowEvent *event)
+{
+    QDockWidget::showEvent(event);
+
+    if (m_canvas) {
+        m_nodeModel->setIdleTaskManager(m_canvas->viewManager()->idleTasksManager());
+    }
+}
+
+void LayerBox::hideEvent(QHideEvent *event)
+{
+    QDockWidget::hideEvent(event);
+    m_nodeModel->setIdleTaskManager(0);
+    m_nodeModel->clearThumbnailsCache();
 }
 
 void LayerBox::notifyImageDeleted()
@@ -1093,20 +1109,6 @@ void LayerBox::slotNodeManagerChangedSelection(const KisNodeList &nodes)
     model->select(selection, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
 }
 
-void LayerBox::notifyThumbnailDirty()
-{
-    m_dirtyThumbnailNodes.insert(m_wdgLayerBox->listLayers->currentIndex());
-}
-
-void LayerBox::updateDirtyThumbnails()
-{
-    Q_FOREACH (const QPersistentModelIndex &index, m_dirtyThumbnailNodes) {
-        if (!index.isValid()) continue;
-        m_wdgLayerBox->listLayers->updateNode(index);
-    }
-    m_dirtyThumbnailNodes.clear();
-}
-
 void LayerBox::slotRenameCurrentNode()
 {
     m_wdgLayerBox->listLayers->edit(m_wdgLayerBox->listLayers->currentIndex());
@@ -1305,6 +1307,7 @@ void LayerBox::slotUpdateThumbnailIconSize()
     KisConfig cfg(false);
     cfg.setLayerThumbnailSize(thumbnailSizeSlider->value());
 
+    m_nodeModel->setPreferredThumnalSize(thumbnailSizeSlider->value());
     m_wdgLayerBox->listLayers->slotConfigurationChanged();
 }
 

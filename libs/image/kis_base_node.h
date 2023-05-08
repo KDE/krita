@@ -323,6 +323,12 @@ public:
     virtual QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
 
     /**
+     * @return a sequence number of the thumbnail of the node. Every time the layer changes,
+     * the sequence number increases.
+     */
+    virtual int thumbnailSeqNo() const;
+
+    /**
      * @return a thumbnail in requested size for the defined timestamp.
      * The thumbnail is a rgba Image and may have transparent parts.
      * Returns a fully transparent QImage of the requested size if the

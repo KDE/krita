@@ -20,49 +20,39 @@
 #include <kis_image.h>
 #include <kis_signal_compressor.h>
 #include <kis_config.h>
-#include "kis_idle_watcher.h"
 #include <QApplication>
 #include "OverviewThumbnailStrokeStrategy.h"
 #include <kis_display_color_converter.h>
 #include <KisMainWindow.h>
+#include "KisIdleTasksManager.h"
 
 OverviewWidget::OverviewWidget(QWidget * parent)
-    : QWidget(parent)
-    , m_canvas(0)
+    : KisWidgetWithIdleTask<QWidget>(parent)
     , m_dragging(false)
-    , m_imageIdleWatcher(150)
 {
     setMouseTracking(true);
     KisConfig cfg(true);
     slotThemeChanged();
     recalculatePreviewDimensions();
-
-    connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &OverviewWidget::generateThumbnail);
 }
 
 OverviewWidget::~OverviewWidget()
 {
 }
 
-void OverviewWidget::setCanvas(KoCanvasBase * canvas)
+void OverviewWidget::setCanvas(KisCanvas2 *canvas)
 {
     if (m_canvas) {
         m_canvas->image()->disconnect(this);
         m_canvas->displayColorConverter()->disconnect(this);
     }
 
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    KisWidgetWithIdleTask<QWidget>::setCanvas(canvas);
 
     if (m_canvas) {
-        m_imageIdleWatcher.setTrackedImage(m_canvas->image());
-
-        connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)),SLOT(startUpdateCanvasProjection()));
-        connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),SLOT(startUpdateCanvasProjection()));
         connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()), SLOT(startUpdateCanvasProjection()));
-
         connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
         connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()), Qt::UniqueConnection);
-        generateThumbnail();
     }
 }
 
@@ -81,6 +71,33 @@ void OverviewWidget::recalculatePreviewDimensions()
     m_previewSize = imageSize * m_previewScale;
     m_previewOrigin = calculatePreviewOrigin(m_previewSize);
 
+}
+
+KisIdleTasksManager::TaskGuard OverviewWidget::registerIdleTask(KisCanvas2 *canvas)
+{
+    return
+        canvas->viewManager()->idleTasksManager()->
+        addIdleTaskWithGuard([this](KisImageSP image) {
+            const KoColorProfile *profile =
+                m_canvas->displayColorConverter()->monitorProfile();
+            KoColorConversionTransformation::ConversionFlags conversionFlags =
+                m_canvas->displayColorConverter()->conversionFlags();
+            KoColorConversionTransformation::Intent renderingIntent =
+                m_canvas->displayColorConverter()->renderingIntent();
+
+            OverviewThumbnailStrokeStrategy *strategy =
+                new OverviewThumbnailStrokeStrategy(image->projection(), image->bounds(), m_previewSize, isPixelArt(), profile, renderingIntent, conversionFlags);
+
+            connect(strategy, SIGNAL(thumbnailUpdated(QImage)), this, SLOT(updateThumbnail(QImage)));
+
+            return strategy;
+        });
+}
+
+void OverviewWidget::clearCachedState()
+{
+    m_pixmap = QPixmap();
+    m_oldPixmap = QPixmap();
 }
 
 bool OverviewWidget::isPixelArt()
@@ -119,13 +136,7 @@ QTransform OverviewWidget::canvasToPreviewTransform()
 
 void OverviewWidget::startUpdateCanvasProjection()
 {
-    m_imageIdleWatcher.startCountdown();
-}
-
-void OverviewWidget::showEvent(QShowEvent *event)
-{
-    Q_UNUSED(event);
-    m_imageIdleWatcher.startCountdown();
+    triggerCacheUpdate();
 }
 
 void OverviewWidget::resizeEvent(QResizeEvent *event)
@@ -136,7 +147,7 @@ void OverviewWidget::resizeEvent(QResizeEvent *event)
             recalculatePreviewDimensions();
             m_pixmap = m_oldPixmap.scaled(m_previewSize, Qt::KeepAspectRatio, Qt::FastTransformation);
         }
-        m_imageIdleWatcher.startCountdown();
+        triggerCacheUpdate();
     }
 }
 
@@ -196,49 +207,10 @@ void OverviewWidget::wheelEvent(QWheelEvent* event)
     }
 }
 
-void OverviewWidget::generateThumbnail()
-{
-    if (isVisible()) {
-        QMutexLocker locker(&mutex);
-        if (m_canvas) {
-            recalculatePreviewDimensions();
-            if(m_previewSize.isValid()){
-                KisImageSP image = m_canvas->image();
-
-                /**
-                 * Compress the updates: if our previous stroke is still running
-                 * then idle watcher has missed something. Just poke it and wait
-                 * for the next event
-                 */
-                if (!strokeId.isNull()) {
-                    m_imageIdleWatcher.startCountdown();
-                    return;
-                }
-
-                const KoColorProfile *profile =
-                   m_canvas->displayColorConverter()->monitorProfile();
-                KoColorConversionTransformation::ConversionFlags conversionFlags =
-                    m_canvas->displayColorConverter()->conversionFlags();
-                KoColorConversionTransformation::Intent renderingIntent =
-                    m_canvas->displayColorConverter()->renderingIntent();
-
-                OverviewThumbnailStrokeStrategy* stroke;
-                stroke = new OverviewThumbnailStrokeStrategy(image->projection(), image->bounds(), m_previewSize, isPixelArt(), profile, renderingIntent, conversionFlags);
-
-                connect(stroke, SIGNAL(thumbnailUpdated(QImage)), this, SLOT(updateThumbnail(QImage)));
-
-                strokeId = image->startStroke(stroke);
-                image->endStroke(strokeId);
-            }
-        }
-    }
-}
-
 void OverviewWidget::updateThumbnail(QImage pixmap)
 {
     m_pixmap = QPixmap::fromImage(pixmap);
     m_oldPixmap = m_pixmap.copy();
-    m_image = pixmap;
     update();
 }
 

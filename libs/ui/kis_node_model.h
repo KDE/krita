@@ -25,6 +25,7 @@ class KisNodeInsertionAdapter;
 class KisSelectionActionsAdapter;
 class KisNodeDisplayModeAdapter;
 class KisNodeManager;
+class KisIdleTasksManager;
 
 /**
  * KisNodeModel offers a Qt model-view compatible view of the node
@@ -117,10 +118,14 @@ public: // from QAbstractItemModel
                           KisShapeController *shapeController,
                           KisSelectionActionsAdapter *selectionActionsAdapter,
                           KisNodeManager *nodeManager);
+    void setIdleTaskManager(KisIdleTasksManager *idleTasksManager);
     KisNodeSP nodeFromIndex(const QModelIndex &index) const;
     QModelIndex indexFromNode(KisNodeSP node) const;
 
     bool showGlobalSelection() const;
+    void setPreferredThumnalSize(int preferredSize) const;
+
+    void clearThumbnailsCache();
 
 public Q_SLOTS:
     void setShowGlobalSelection(bool value);
@@ -163,6 +168,8 @@ protected Q_SLOTS:
 
     void processUpdateQueue();
     void progressPercentageChanged(int, const KisNodeSP);
+
+    void slotLayerThumbnailUpdated(KisNodeSP node);
 
 protected:
     virtual KisModelIndexConverterBase *createIndexConverter();

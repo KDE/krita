@@ -611,7 +611,7 @@ void StoryboardModel::setImage(KisImageWSP image)
     }
     m_lastScene = m_items.size();
 
-    m_imageIdleWatcher.startCountdown();
+    m_imageIdleWatcher.forceImageModified();
 
     connect(m_image, SIGNAL(sigImageUpdated(const QRect &)), &m_renderSchedulingCompressor, SLOT(start()));
 

@@ -123,6 +123,7 @@
 #include "kis_signals_blocker.h"
 #include "imagesize/imagesize.h"
 #include <KoToolDocker.h>
+#include <KisIdleTasksManager.h>
 
 #include "kis_filter_configuration.h"
 
@@ -231,6 +232,7 @@ public:
     KisKActionCollection *actionCollection {nullptr};
     KisMirrorManager mirrorManager;
     KisInputManager inputManager;
+    KisIdleTasksManager idleTasksManager;
 
     KisSignalAutoConnectionsStore viewConnections;
     KSelectAction *actionAuthor {nullptr}; // Select action for author profile.
@@ -413,6 +415,7 @@ void KisViewManager::setCurrentView(KisView *view)
         }
         d->currentImageView->canvasController()->proxyObject->disconnect(&d->statusBar);
         d->viewConnections.clear();
+        d->idleTasksManager.setImage(0);
     }
 
 
@@ -420,6 +423,10 @@ void KisViewManager::setCurrentView(KisView *view)
     d->currentImageView = imageView;
 
     if (imageView) {
+        /// idle tasks managed should be reconnected to the new image the first,
+        /// because other dockers may request it to recalcualte stuff
+        d->idleTasksManager.setImage(d->currentImageView->image());
+
         d->softProof->setChecked(imageView->softProofing());
         d->gamutCheck->setChecked(imageView->gamutCheck());
 
@@ -554,7 +561,6 @@ void KisViewManager::setCurrentView(KisView *view)
                     d->currentImageView->zoomManager()->zoomController(),
                     SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
                     canvasResourceProvider(), SLOT(slotOnScreenResolutionChanged()));
-
     }
 
     d->actionManager.updateGUI();
@@ -664,6 +670,11 @@ KisImageManager * KisViewManager::imageManager()
 KisInputManager* KisViewManager::inputManager() const
 {
     return &d->inputManager;
+}
+
+KisIdleTasksManager *KisViewManager::idleTasksManager()
+{
+    return &d->idleTasksManager;
 }
 
 KisSelectionSP KisViewManager::selection()

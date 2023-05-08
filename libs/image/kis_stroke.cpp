@@ -89,10 +89,7 @@ void KisStroke::addMutatedJobs(const QVector<KisStrokeJobData *> list)
     // the stroke.
 
     auto it = std::find_if(m_jobsQueue.begin(), m_jobsQueue.end(),
-        [] (KisStrokeJob *job) {
-            return job->isOwnJob();
-        });
-
+                           std::mem_fn(&KisStrokeJob::isOwnJob));
 
     Q_FOREACH (KisStrokeJobData *data, list) {
         it = m_jobsQueue.insert(it, new KisStrokeJob(m_dabStrategy.data(), data, worksOnLevelOfDetail(), true));

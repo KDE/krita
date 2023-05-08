@@ -236,6 +236,8 @@ public:
 
     QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) override;
 
+    int thumbnailSeqNo() const override;
+
     QImage createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) override;
 
     /**

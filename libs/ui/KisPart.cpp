@@ -189,7 +189,7 @@ void KisPart::updateIdleWatcherConnections()
     /**
      * Update memory stats on changing the amount of images open in Krita
      */
-    d->idleWatcher.startCountdown();
+    d->idleWatcher.forceImageModified();
 }
 
 void KisPart::addDocument(KisDocument *document, bool notify)

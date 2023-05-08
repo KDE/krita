@@ -684,9 +684,7 @@ void KisColorizeMask::setCurrentColor(const KoColor &_color)
     QList<KeyStroke>::const_iterator it =
         std::find_if(m_d->keyStrokes.constBegin(),
                      m_d->keyStrokes.constEnd(),
-                     [color] (const KeyStroke &s) {
-                         return s.color == color;
-                     });
+                     kismpl::mem_equal_to(&KeyStroke::color, color));
 
     KisPaintDeviceSP activeDevice;
     bool newKeyStroke = false;
@@ -958,9 +956,7 @@ void KisColorizeMask::removeKeyStroke(const KoColor &_color)
     QList<KeyStroke>::iterator it =
         std::find_if(m_d->keyStrokes.begin(),
                      m_d->keyStrokes.end(),
-                     [color] (const KeyStroke &s) {
-                         return s.color == color;
-                     });
+                     kismpl::mem_equal_to(&KeyStroke::color, color));
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(it != m_d->keyStrokes.end());
 

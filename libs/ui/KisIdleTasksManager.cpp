@@ -5,6 +5,7 @@
  */
 #include "KisIdleTasksManager.h"
 
+#include <QQueue>
 #include <kis_idle_watcher.h>
 #include <kis_image.h>
 #include <KisMpl.h>

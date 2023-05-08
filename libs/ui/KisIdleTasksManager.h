@@ -8,6 +8,7 @@
 
 #include "kritaui_export.h"
 #include <KisIdleTaskStrokeStrategy.h>
+#include <QPointer>
 
 class KRITAUI_EXPORT KisIdleTasksManager : public QObject
 {

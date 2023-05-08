@@ -117,9 +117,11 @@ inline float value(const T *src, size_t ch)
 template<typename channelsType, bool swap, LinearizePolicy policy, bool applyOOTF>
 inline void imageOutCallback(JPEGXLImportData &d)
 {
+    const uint32_t xPos = d.m_header.layer_info.crop_x0;
+    const uint32_t yPos = d.m_header.layer_info.crop_y0;
     const uint32_t width = d.m_header.layer_info.xsize;
     const uint32_t height = d.m_header.layer_info.ysize;
-    KisHLineIteratorSP it = d.m_currentFrame->createHLineIteratorNG(0, 0, width);
+    KisHLineIteratorSP it = d.m_currentFrame->createHLineIteratorNG(xPos, yPos, width);
 
     const auto *src = static_cast<const channelsType *>(reinterpret_cast<void*>(d.m_rawData.data()));
     const uint32_t channels = d.m_pixelFormat.num_channels;
@@ -791,6 +793,10 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
             // Parse raw data using existing callback function
             generateCallback(d);
             const JxlLayerInfo layerInfo = d.m_header.layer_info;
+            const QRect layerBounds = QRect(static_cast<int>(layerInfo.crop_x0),
+                                            static_cast<int>(layerInfo.crop_y0),
+                                            static_cast<int>(layerInfo.xsize),
+                                            static_cast<int>(layerInfo.ysize));
             if (d.m_info.have_animation) {
                 dbgFile << "Importing frame @" << d.m_nextFrameTime
                         << d.m_header.duration;
@@ -845,18 +851,18 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 d.m_nextFrameTime += static_cast<int>(d.m_header.duration);
             } else {
                 if (d.isCMYK) {
-                    QVector<quint8 *> planes = d.m_currentFrame->readPlanarBytes(0,
-                                                                                 0,
-                                                                                 static_cast<int>(layerInfo.xsize),
-                                                                                 static_cast<int>(layerInfo.ysize));
+                    QVector<quint8 *> planes = d.m_currentFrame->readPlanarBytes(layerBounds.x(),
+                                                                                 layerBounds.y(),
+                                                                                 layerBounds.width(),
+                                                                                 layerBounds.height());
 
                     // Planar buffer insertion for key channel
                     planes[3] = reinterpret_cast<quint8 *>(d.kPlane.data());
                     d.m_currentFrame->writePlanarBytes(planes,
-                                                       0,
-                                                       0,
-                                                       static_cast<int>(layerInfo.xsize),
-                                                       static_cast<int>(layerInfo.ysize));
+                                                       layerBounds.x(),
+                                                       layerBounds.y(),
+                                                       layerBounds.width(),
+                                                       layerBounds.height());
 
                     // JPEG-XL decode outputs an inverted CMYK colors
                     // This one I took from kis_filter_test for inverting the colors..
@@ -865,9 +871,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     const KisFilterConfigurationSP kfc =
                         f->defaultConfiguration(KisGlobalResourcesInterface::instance());
                     KIS_ASSERT(kfc);
-                    f->process(d.m_currentFrame,
-                               {0, 0, static_cast<int>(layerInfo.xsize), static_cast<int>(layerInfo.ysize)},
-                               kfc->cloneWithResourcesSnapshot());
+                    f->process(d.m_currentFrame, layerBounds, kfc->cloneWithResourcesSnapshot());
                 }
                 if (d.haveSpecialChannels && !bgLayerSet) {
                     const quint8 *alphaRef =
@@ -899,12 +903,10 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     }
                 }
                 if (!bgLayerSet) {
-                    layer->paintDevice()->makeCloneFrom(d.m_currentFrame, image->bounds());
+                    layer->paintDevice()->makeCloneFrom(d.m_currentFrame, layerBounds);
                     bgLayerSet = true;
                 } else {
-                    additionalLayers.back()->paintDevice()->makeCloneFrom(d.m_currentFrame, image->bounds());
-                    additionalLayers.back()->setX(static_cast<int>(layerInfo.crop_x0));
-                    additionalLayers.back()->setY(static_cast<int>(layerInfo.crop_y0));
+                    additionalLayers.back()->paintDevice()->makeCloneFrom(d.m_currentFrame, layerBounds);
                 }
             }
         } else if (status == JXL_DEC_SUCCESS || status == JXL_DEC_BOX) {

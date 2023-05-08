@@ -125,6 +125,8 @@ public: // from QAbstractItemModel
     bool showGlobalSelection() const;
     void setPreferredThumnalSize(int preferredSize) const;
 
+    void clearThumbnailsCache();
+
 public Q_SLOTS:
     void setShowGlobalSelection(bool value);
 

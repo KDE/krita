@@ -35,6 +35,9 @@ public:
                 m_idleTaskGuard = registerIdleTask(m_canvas);
             }
         }
+
+        clearCachedState();
+        this->update();
     }
 
     void showEvent(QShowEvent *event) override {

@@ -74,6 +74,14 @@ struct KoCmykTraits : public KoColorSpaceTrait<_channels_type_, 5, 4> {
         channels_type* d = parent::nativeArray(data);
         d[k_pos] = nv;
     }
+
+    inline static channels_type toBlendSpace(channels_type value) {
+        return parent::math_trait::unitValue - value;
+    }
+
+    inline static channels_type fromBlendSpace(channels_type value) {
+        return parent::math_trait::unitValue - value;
+    }
 };
 
 struct KoCmykU8Traits : public KoCmykTraits<quint8> {

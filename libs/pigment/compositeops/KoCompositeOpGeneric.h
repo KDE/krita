@@ -45,8 +45,15 @@ public:
         if(alphaLocked) {
             if(dstAlpha != zeroValue<channels_type>()) {
                 for(qint32 i=0; i <channels_nb; i++) {
-                    if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
-                        dst[i] = lerp(dst[i], compositeFunc(src[i],dst[i]), srcAlpha);
+                    if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
+                        const channels_type srcInBlendSpace = Traits::toBlendSpace(src[i]);
+                        const channels_type dstInBlendSpace = Traits::toBlendSpace(dst[i]);
+
+                        dst[i] = Traits::fromBlendSpace(
+                            lerp(dstInBlendSpace,
+                                 compositeFunc(srcInBlendSpace, dstInBlendSpace),
+                                 srcAlpha));
+                    }
                 }
             }
             
@@ -58,8 +65,14 @@ public:
             if(newDstAlpha != zeroValue<channels_type>()) {
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
-                        channels_type result = blend(src[i], srcAlpha, dst[i], dstAlpha, compositeFunc(src[i],dst[i]));
-                        dst[i] = div(result, newDstAlpha);
+                        const channels_type srcInBlendSpace = Traits::toBlendSpace(src[i]);
+                        const channels_type dstInBlendSpace = Traits::toBlendSpace(dst[i]);
+
+                        channels_type result =
+                            blend(srcInBlendSpace, srcAlpha,
+                                  dstInBlendSpace, dstAlpha,
+                                  compositeFunc(srcInBlendSpace, dstInBlendSpace));
+                        dst[i] = Traits::fromBlendSpace(div(result, newDstAlpha));
                     }
                 }
             }

@@ -13,7 +13,14 @@
 #include <kis_types.h>
 #include <KisRunnableBasedStrokeStrategy.h>
 
-
+/**
+ * A base class for strategies used in "idle tasks". Such strategy
+ * does **not** modify any undo stack and can be cancelled by the
+ * image at any moment (e.g. when the user starts a real brush stroke).
+ *
+ * If you need to handle the cancellation event, implement
+ * cancelStrokeCallback() function.
+ */
 class KRITAUI_EXPORT KisIdleTaskStrokeStrategy: public QObject, public KisRunnableBasedStrokeStrategy {
     Q_OBJECT
 public:

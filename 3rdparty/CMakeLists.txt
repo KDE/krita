@@ -58,10 +58,11 @@ endif (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 
 # Tools must be obtained to work with:
 include (ExternalProject)
-include (KritaExternalProject)
 
 LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake/kde_macro")
+LIST (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR})
 include (KritaToNativePath)
+include (KritaExternalProject)
 
 # allow specification of a directory with pre-downloaded
 # requirements
@@ -262,8 +263,6 @@ if (MSYS)
 endif()
 
 if (APPLE)
-    set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR})
-
     set(PARENT_CMAKE_SOURCE_DIR ${CMAKE_SOURCE_DIR})
     string(REPLACE ";" "$<SEMICOLON>" CMAKE_OSX_ARCHITECTURES_ESCAPED "${CMAKE_OSX_ARCHITECTURES}")
     set(GLOBAL_PROFILE ${GLOBAL_PROFILE}

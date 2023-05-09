@@ -302,6 +302,10 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 groupLayer->setName(layerRecord->layerName);
                 groupLayer->setVisible(layerRecord->visible);
 
+                if (layerRecord->infoBlocks.sectionDividerType == psd_closed_folder) {
+                    groupLayer->setCollapsed(true);
+                }
+
                 QString compositeOp = psd_blendmode_to_composite_op(layerRecord->infoBlocks.sectionDividerBlendMode);
 
                 // Krita doesn't support pass-through blend

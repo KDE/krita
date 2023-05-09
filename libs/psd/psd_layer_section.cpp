@@ -507,7 +507,11 @@ void flattenNodes(KisNodeSP node, QList<FlattenedNode> &nodes)
             {
                 FlattenedNode item;
                 item.node = child;
-                item.type = FlattenedNode::FOLDER_OPEN;
+                if (child->collapsed()) {
+                    item.type = FlattenedNode::FOLDER_CLOSED;
+                } else {
+                    item.type = FlattenedNode::FOLDER_OPEN;
+                }
                 nodes << item;
             }
         } else if (shapeLayer) {

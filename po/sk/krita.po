@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-03 00:46+0000\n"
+"POT-Creation-Date: 2023-05-09 00:45+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -12764,7 +12764,7 @@ msgstr "&Import/Export"
 msgid "Import"
 msgstr "Importovať"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1238
 #, kde-format
 msgid "&Convert"
 msgstr "Previesť"
@@ -12772,14 +12772,14 @@ msgstr "Previesť"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1210
+#: plugins/dockers/layerdocker/LayerBox.cpp:1212
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Vybrať"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1216
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1218
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12800,7 +12800,7 @@ msgstr "Transformovať všetky vrstvy"
 msgid "S&plit"
 msgstr "Rozdeliť"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1243
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1245
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Rozdeliť alfu"
@@ -16715,7 +16715,7 @@ msgstr " px"
 #: libs/image/kis_keyframe_channel.cpp:26 libs/image/kis_layer.cc:276
 #: libs/widgets/KoColorPopupAction.cpp:85
 #: plugins/dockers/layerdocker/LayerBox.cpp:207
-#: plugins/dockers/layerdocker/LayerBox.cpp:389
+#: plugins/dockers/layerdocker/LayerBox.cpp:387
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
@@ -17641,12 +17641,12 @@ msgstr "Prekrytie (režim)"
 msgid "Satin (style)"
 msgstr "Satén (štýl)"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:945
+#: libs/image/lazybrush/kis_colorize_mask.cpp:943
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
 msgstr "Zmeniť farbu kľúčových ťahov"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:972
+#: libs/image/lazybrush/kis_colorize_mask.cpp:968
 msgctxt "(qtundo-format)"
 msgid "Remove Key Stroke"
 msgstr "Odstrániť kľúčový ťah"
@@ -19332,13 +19332,13 @@ msgstr "Von"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:496 libs/ui/KisView.cpp:1173
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:496 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
 msgstr "Nepomenované"
 
-#: libs/pigment/resources/KoStopGradient.cpp:375
+#: libs/pigment/resources/KoStopGradient.cpp:373
 #, kde-format
 msgid "SVG Gradient"
 msgstr "Prechod SVG"
@@ -19402,8 +19402,8 @@ msgstr "Lokálne zdroje"
 #: libs/ui/KisPart.cpp:558 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
 #: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:691
-#: libs/ui/KisView.cpp:1176 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
+#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20247,7 +20247,7 @@ msgid "Select All"
 msgstr "Vybrať všetko"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:786
+#: libs/ui/KisView.cpp:784
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Vyplnenie vrstvy"
@@ -21360,13 +21360,13 @@ msgctxt "GIF codec name"
 msgid "GIF"
 msgstr "GIF"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:587
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:586
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Exported animation format does not support HDR"
 msgstr "Formát exportovanej animácie nepodporuje HDR"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:589
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:588
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
@@ -22482,8 +22482,8 @@ msgstr "Vlastnosti vrstvy"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:568
-#: libs/ui/kis_node_model.cpp:571 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:598
+#: libs/ui/kis_node_model.cpp:601 libs/ui/kis_paintop_box.cc:269
 #: libs/ui/kis_paintop_box.cc:277 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -22497,7 +22497,7 @@ msgstr "Vlastnosti vrstvy"
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:246
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:390
+#: plugins/dockers/layerdocker/LayerBox.cpp:388
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:47
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:51
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:54
@@ -28753,7 +28753,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Zmeniť vrstvu súborov"
 
-#: libs/ui/kis_clipboard.cc:718 libs/ui/KisView.cpp:692
+#: libs/ui/kis_clipboard.cc:718 libs/ui/KisView.cpp:690
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -29222,13 +29222,13 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Rýchle zrušenie zoskupenia"
 
-#: libs/ui/kis_node_model.cpp:525
+#: libs/ui/kis_node_model.cpp:555
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr "Zakázané: masky na prechodových skupinách nie sú podporované!"
 
-#: libs/ui/kis_node_model.cpp:527
+#: libs/ui/kis_node_model.cpp:557
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
@@ -30469,6 +30469,13 @@ msgstr "Zmeniť veľkosť"
 msgid "Also save your image as a Krita file."
 msgstr "Uložte tiež svoj obrázok ako súbor Krita."
 
+#: libs/ui/KisLayerThumbnailCache.cpp:30
+#, fuzzy
+#| msgid "Hide layer thumbnail popup"
+msgctxt "(qtundo-format)"
+msgid "Update layer thumbnails"
+msgstr "Skryť vyskakovacie okno náhľadu vrstvy"
+
 #: libs/ui/KisMainWindow.cpp:184
 #, kde-format
 msgctxt "@action:inmenu"
@@ -30987,96 +30994,96 @@ msgstr "Nie je dostupný žiadny obrázok."
 msgid "Use This Template"
 msgstr "Použiť túto šablónu"
 
-#: libs/ui/KisView.cpp:761
+#: libs/ui/KisView.cpp:759
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Na vybraný typ vrstvy nemôžete pretiahnuť farby."
 
-#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Vrstva je zamknutá a neviditeľná."
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "Vrstva je zamknutá."
 
-#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Vrstva je neviditeľná."
 
-#: libs/ui/KisView.cpp:1177
+#: libs/ui/KisView.cpp:1175
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Dokument <b>'%1'</b> bol zmenený.</p><p>Chcete ho uložiť?</p>"
 
-#: libs/ui/KisView.cpp:1366
+#: libs/ui/KisView.cpp:1364
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Mäkké overenie nefunguje s reálnymi číslami."
 
-#: libs/ui/KisView.cpp:1371
+#: libs/ui/KisView.cpp:1369
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Mäkké overenie je zapnuté"
 
-#: libs/ui/KisView.cpp:1373
+#: libs/ui/KisView.cpp:1371
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Mäkké overenie je vypnuté"
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1383
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Upozornenia škály nefungujú s reálnymi číslami."
 
-#: libs/ui/KisView.cpp:1391
+#: libs/ui/KisView.cpp:1389
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Upozornenia škály zapnuté."
 
-#: libs/ui/KisView.cpp:1393
+#: libs/ui/KisView.cpp:1391
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Mäkké overenie je stále vypnuté."
 
-#: libs/ui/KisView.cpp:1396
+#: libs/ui/KisView.cpp:1394
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Upozornenia škály vypnuté."
 
-#: libs/ui/KisViewManager.cpp:780
+#: libs/ui/KisViewManager.cpp:791
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Aktívny profil autora"
 
-#: libs/ui/KisViewManager.cpp:910
+#: libs/ui/KisViewManager.cpp:921
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (kopírovať)"
 
-#: libs/ui/KisViewManager.cpp:1053 libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1064 libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr "Alternatívne názvy vyčerpané, skúste ručne uložiť s vyšším číslom"
 
-#: libs/ui/KisViewManager.cpp:1053
+#: libs/ui/KisViewManager.cpp:1064
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Nebolo možné uložiť inkrementálnu verziu"
 
-#: libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Nebolo možné uložiť inkrementálnu zálohu"
 
-#: libs/ui/KisViewManager.cpp:1317
+#: libs/ui/KisViewManager.cpp:1328
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31085,13 +31092,13 @@ msgstr ""
 "Prechádzam do režimu iba plátna.\n"
 "Stlačte %1 pre návrat."
 
-#: libs/ui/KisViewManager.cpp:1357
+#: libs/ui/KisViewManager.cpp:1368
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Otvoriť priečinok zdrojov"
 
-#: libs/ui/KisViewManager.cpp:1361
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31116,19 +31123,19 @@ msgstr ""
 "<p><b>Súkromné umiestnenie aplikácie</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1376
+#: libs/ui/KisViewManager.cpp:1387
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Otvoriť v AppData po&užívateľa"
 
-#: libs/ui/KisViewManager.cpp:1377
+#: libs/ui/KisViewManager.cpp:1388
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Otvoriť v súkromnom umiestnení a&plikácie"
 
-#: libs/ui/KisViewManager.cpp:1495 libs/ui/KisViewManager.cpp:1513
+#: libs/ui/KisViewManager.cpp:1506 libs/ui/KisViewManager.cpp:1524
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -38589,7 +38596,12 @@ msgstr "Vodiace čiary:"
 msgid "Grid and Guides"
 msgstr "Mriežka alebo vodiace čiary"
 
-#: plugins/dockers/histogram/histogramdocker_dock.cpp:22
+#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+msgctxt "(qtundo-format)"
+msgid "fkdfjkdjfk"
+msgstr ""
+
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
 msgid "Histogram"
 msgstr "Histogram"
@@ -38599,7 +38611,7 @@ msgstr "Histogram"
 msgid "Undo History"
 msgstr "História vrátení späť"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:159
+#: plugins/dockers/layerdocker/LayerBox.cpp:160
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
 #, kde-format
 msgid "Layers"
@@ -38618,25 +38630,25 @@ msgid ""
 msgstr ""
 "Zobrazí globálny výber ako zvyčajnú masku výberu v paneli <b>Vrstvy</b>"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:317
+#: plugins/dockers/layerdocker/LayerBox.cpp:315
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Veľkosti náhľadov"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:345
+#: plugins/dockers/layerdocker/LayerBox.cpp:343
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Stromové odsadenie"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:368
+#: plugins/dockers/layerdocker/LayerBox.cpp:366
 #, fuzzy, kde-format
 #| msgid "Blending Mode"
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Režim miešania"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:370
+#: plugins/dockers/layerdocker/LayerBox.cpp:368
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -38651,21 +38663,21 @@ msgstr ""
 "nich zmení.\n"
 "Podrobné: Zobrazenie nepriehľadnosti aj režimu miešania, aj keď sa nezmenia."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:375
+#: plugins/dockers/layerdocker/LayerBox.cpp:373
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Žiadne"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:376
+#: plugins/dockers/layerdocker/LayerBox.cpp:374
 #, fuzzy, kde-format
 #| msgid "Simple"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Jednoduchý"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:377
+#: plugins/dockers/layerdocker/LayerBox.cpp:375
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Layer Docker subtitle style"
 #| msgid "Balanced"
@@ -38673,7 +38685,7 @@ msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Vyvážený"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:378
+#: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Layer Docker subtitle style"
 #| msgid "Detailed"
@@ -38681,7 +38693,7 @@ msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Podrobné"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:391
+#: plugins/dockers/layerdocker/LayerBox.cpp:389
 #, fuzzy, kde-format
 #| msgctxt "@item:tooltip"
 #| msgid "Subtitle text opacity"
@@ -38689,13 +38701,13 @@ msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Nepriehľadnosť textu titulkov"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:409
+#: plugins/dockers/layerdocker/LayerBox.cpp:407
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "Vnorené"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:411
+#: plugins/dockers/layerdocker/LayerBox.cpp:409
 #, fuzzy, kde-format
 #| msgctxt "@item:tooltip"
 #| msgid ""
@@ -38709,35 +38721,35 @@ msgstr ""
 "Ak je povolené, zobrazia sa vedľa názvov vrstiev titulky..\n"
 "Ak je zakázané, zobrazia sa pod názvami vrstiev (ak je dostatok miesta)."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:423
+#: plugins/dockers/layerdocker/LayerBox.cpp:421
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Zlúčiť vybrané vrstvy"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:424
+#: plugins/dockers/layerdocker/LayerBox.cpp:422
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:974
+#: plugins/dockers/layerdocker/LayerBox.cpp:990
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Rýchla maska výberu"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:996
+#: plugins/dockers/layerdocker/LayerBox.cpp:1012
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Zrušiť rýchlu masku výberu"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1220
+#: plugins/dockers/layerdocker/LayerBox.cpp:1222
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Prepnúť zámky a viditeľnosť"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1227
-#: plugins/dockers/layerdocker/LayerBox.cpp:1248
+#: plugins/dockers/layerdocker/LayerBox.cpp:1229
+#: plugins/dockers/layerdocker/LayerBox.cpp:1250
 #, kde-format
 msgid "&Add"
 msgstr "&Pridať"

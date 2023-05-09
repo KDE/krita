@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-03 00:46+0000\n"
+"POT-Creation-Date: 2023-05-09 00:45+0000\n"
 "PO-Revision-Date: 2023-04-20 12:33+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -13605,7 +13605,7 @@ msgstr "&Tuonti/vienti"
 msgid "Import"
 msgstr "Tuo"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1238
 #, kde-format
 msgid "&Convert"
 msgstr "M&uunna"
@@ -13613,14 +13613,14 @@ msgstr "M&uunna"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1210
+#: plugins/dockers/layerdocker/LayerBox.cpp:1212
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Valitse"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1216
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1218
 #, fuzzy, kde-format
 #| msgid "&Group"
 msgctxt "A group of layers"
@@ -13644,7 +13644,7 @@ msgstr "Muunna taso"
 msgid "S&plit"
 msgstr "&Jaa"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1243
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1245
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Jaa al&fa"
@@ -17714,7 +17714,7 @@ msgstr " px"
 #: libs/image/kis_keyframe_channel.cpp:26 libs/image/kis_layer.cc:276
 #: libs/widgets/KoColorPopupAction.cpp:85
 #: plugins/dockers/layerdocker/LayerBox.cpp:207
-#: plugins/dockers/layerdocker/LayerBox.cpp:389
+#: plugins/dockers/layerdocker/LayerBox.cpp:387
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
@@ -18772,7 +18772,7 @@ msgstr "Kerrostus (tyyli)"
 msgid "Satin (style)"
 msgstr "Satiini (tyyli)"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:945
+#: libs/image/lazybrush/kis_colorize_mask.cpp:943
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
@@ -18780,7 +18780,7 @@ msgstr ""
 "Muuta kytköstä\n"
 "kytköksen muuttaminen"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:972
+#: libs/image/lazybrush/kis_colorize_mask.cpp:968
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Remove Keyframe"
@@ -20576,13 +20576,13 @@ msgstr "Ulos"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:496 libs/ui/KisView.cpp:1173
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:496 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
 msgstr "Nimetön"
 
-#: libs/pigment/resources/KoStopGradient.cpp:375
+#: libs/pigment/resources/KoStopGradient.cpp:373
 #, kde-format
 msgid "SVG Gradient"
 msgstr "SVG-väriliuku"
@@ -20647,8 +20647,8 @@ msgstr "Ladataan resursseja…"
 #: libs/ui/KisPart.cpp:558 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
 #: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:691
-#: libs/ui/KisView.cpp:1176 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
+#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -21543,7 +21543,7 @@ msgstr ""
 "kaikkien valinta"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:786
+#: libs/ui/KisView.cpp:784
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr ""
@@ -22694,13 +22694,13 @@ msgctxt "GIF codec name"
 msgid "GIF"
 msgstr "GIF"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:587
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:586
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Exported animation format does not support HDR"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:589
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:588
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
@@ -23816,8 +23816,8 @@ msgstr "Tason ominaisuudet"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:568
-#: libs/ui/kis_node_model.cpp:571 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:598
+#: libs/ui/kis_node_model.cpp:601 libs/ui/kis_paintop_box.cc:269
 #: libs/ui/kis_paintop_box.cc:277 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -23831,7 +23831,7 @@ msgstr "Tason ominaisuudet"
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:246
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:390
+#: plugins/dockers/layerdocker/LayerBox.cpp:388
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:47
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:51
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:54
@@ -30206,7 +30206,7 @@ msgstr ""
 "Vaihda suodinta\n"
 "suotimen vaihto"
 
-#: libs/ui/kis_clipboard.cc:718 libs/ui/KisView.cpp:692
+#: libs/ui/kis_clipboard.cc:718 libs/ui/KisView.cpp:690
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open %2.\n"
@@ -30741,13 +30741,13 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Pikapura ryhmä"
 
-#: libs/ui/kis_node_model.cpp:525
+#: libs/ui/kis_node_model.cpp:555
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr ""
 
-#: libs/ui/kis_node_model.cpp:527
+#: libs/ui/kis_node_model.cpp:557
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
@@ -32021,6 +32021,13 @@ msgstr ""
 msgid "Also save your image as a Krita file."
 msgstr "Tallenna kuvasi myös Krita tiedostona."
 
+#: libs/ui/KisLayerThumbnailCache.cpp:30
+#, fuzzy
+#| msgid "Thumbnails"
+msgctxt "(qtundo-format)"
+msgid "Update layer thumbnails"
+msgstr "Pienoiskuvat"
+
 #: libs/ui/KisMainWindow.cpp:184
 #, kde-format
 msgctxt "@action:inmenu"
@@ -32561,28 +32568,28 @@ msgstr "Ei kuvaa."
 msgid "Use This Template"
 msgstr "Käytä tätä pohjaa"
 
-#: libs/ui/KisView.cpp:761
+#: libs/ui/KisView.cpp:759
 #, fuzzy, kde-format
 #| msgid "You cannot use this tool with the selected layer type"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Tätä työkalua ei voi käyttää valitun tason tyypin kanssa"
 
-#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Taso on lukittu ja näkymätön."
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "Taso on lukittu."
 
-#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Taso on näkymätön."
 
-#: libs/ui/KisView.cpp:1177
+#: libs/ui/KisView.cpp:1175
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -32590,75 +32597,75 @@ msgid ""
 msgstr ""
 "<p>Tiedostoa <b>”%1”</b> on muutettu.</p><p>Haluatko tallentaa muutokset?</p>"
 
-#: libs/ui/KisView.cpp:1366
+#: libs/ui/KisView.cpp:1364
 #, fuzzy, kde-format
 #| msgid "Soft Proofing turned on."
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Näyttövedostus päällä."
 
-#: libs/ui/KisView.cpp:1371
+#: libs/ui/KisView.cpp:1369
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Näyttövedostus päällä."
 
-#: libs/ui/KisView.cpp:1373
+#: libs/ui/KisView.cpp:1371
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Näyttövedostus pois päältä."
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1383
 #, fuzzy, kde-format
 #| msgid "Gamut Warnings turned on."
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Toistoalavaroitus päällä."
 
-#: libs/ui/KisView.cpp:1391
+#: libs/ui/KisView.cpp:1389
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Toistoalavaroitus päällä."
 
-#: libs/ui/KisView.cpp:1393
+#: libs/ui/KisView.cpp:1391
 #, fuzzy, kde-format
 #| msgid "Soft Proofing turned off."
 msgid "But Soft Proofing is still off."
 msgstr "Näyttövedostus pois päältä."
 
-#: libs/ui/KisView.cpp:1396
+#: libs/ui/KisView.cpp:1394
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Toistoalavaroitus pois päältä."
 
-#: libs/ui/KisViewManager.cpp:780
+#: libs/ui/KisViewManager.cpp:791
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Aktiivinen tekijäprofiili"
 
-#: libs/ui/KisViewManager.cpp:910
+#: libs/ui/KisViewManager.cpp:921
 #, fuzzy, kde-format
 #| msgctxt "@option:radio"
 #| msgid "%1 (Qt)"
 msgid "%1 (Copy)"
 msgstr "%1 (Qt)"
 
-#: libs/ui/KisViewManager.cpp:1053 libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1064 libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Vaihtoehtoiset nimet lopussa: yritä tallentaa itse suuremmalle numerolle"
 
-#: libs/ui/KisViewManager.cpp:1053
+#: libs/ui/KisViewManager.cpp:1064
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Ei voitu tallentaa täydentävää versiota"
 
-#: libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Ei voitu tallentaa täydentävää varmuuskopiota"
 
-#: libs/ui/KisViewManager.cpp:1317
+#: libs/ui/KisViewManager.cpp:1328
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -32667,14 +32674,14 @@ msgstr ""
 "Siirrytään vain kangas -tilaan.\n"
 "Palaa takaisin painamalla %1."
 
-#: libs/ui/KisViewManager.cpp:1357
+#: libs/ui/KisViewManager.cpp:1368
 #, fuzzy, kde-format
 #| msgid "Open Resource Folder"
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Avaa resurssikansio"
 
-#: libs/ui/KisViewManager.cpp:1361
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -32689,19 +32696,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1376
+#: libs/ui/KisViewManager.cpp:1387
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1377
+#: libs/ui/KisViewManager.cpp:1388
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1495 libs/ui/KisViewManager.cpp:1513
+#: libs/ui/KisViewManager.cpp:1506 libs/ui/KisViewManager.cpp:1524
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -40292,7 +40299,12 @@ msgstr "Apuviivat:"
 msgid "Grid and Guides"
 msgstr "Ruudukko ja apuviivat"
 
-#: plugins/dockers/histogram/histogramdocker_dock.cpp:22
+#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+msgctxt "(qtundo-format)"
+msgid "fkdfjkdjfk"
+msgstr ""
+
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
 msgid "Histogram"
 msgstr "Histogrammi"
@@ -40302,7 +40314,7 @@ msgstr "Histogrammi"
 msgid "Undo History"
 msgstr "Toimintohistoria"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:159
+#: plugins/dockers/layerdocker/LayerBox.cpp:160
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
 #, kde-format
 msgid "Layers"
@@ -40320,26 +40332,26 @@ msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:317
+#: plugins/dockers/layerdocker/LayerBox.cpp:315
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Pienoiskuvan koko"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:345
+#: plugins/dockers/layerdocker/LayerBox.cpp:343
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Suunta"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:368
+#: plugins/dockers/layerdocker/LayerBox.cpp:366
 #, fuzzy, kde-format
 #| msgid "Blending Mode"
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Sekoitustila"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:370
+#: plugins/dockers/layerdocker/LayerBox.cpp:368
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -40349,44 +40361,44 @@ msgid ""
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:375
+#: plugins/dockers/layerdocker/LayerBox.cpp:373
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Ei mitään"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:376
+#: plugins/dockers/layerdocker/LayerBox.cpp:374
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Yksinkertainen"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:377
+#: plugins/dockers/layerdocker/LayerBox.cpp:375
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Tasapainoinen"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:378
+#: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Yksityiskohtainen"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:391
+#: plugins/dockers/layerdocker/LayerBox.cpp:389
 #, fuzzy, kde-format
 #| msgid "Line Opacity"
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Viivan peittävyys"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:409
+#: plugins/dockers/layerdocker/LayerBox.cpp:407
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "BSpline"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:411
+#: plugins/dockers/layerdocker/LayerBox.cpp:409
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -40394,7 +40406,7 @@ msgid ""
 "If disabled, show below layer names (when enough space)."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:423
+#: plugins/dockers/layerdocker/LayerBox.cpp:421
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Merge Selected Layers"
@@ -40402,13 +40414,13 @@ msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Yhdistä valitut tasot"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:424
+#: plugins/dockers/layerdocker/LayerBox.cpp:422
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:974
+#: plugins/dockers/layerdocker/LayerBox.cpp:990
 #, fuzzy
 #| msgctxt "action"
 #| msgid "as Selection Mask"
@@ -40416,7 +40428,7 @@ msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "valintamaskina"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:996
+#: plugins/dockers/layerdocker/LayerBox.cpp:1012
 #, fuzzy
 #| msgctxt "action"
 #| msgid "as Selection Mask"
@@ -40424,15 +40436,15 @@ msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "valintamaskina"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1220
+#: plugins/dockers/layerdocker/LayerBox.cpp:1222
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "New layer from visible"
 msgid "&Toggle Locks && Visibility"
 msgstr "Uusi taso näkyvistä"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1227
-#: plugins/dockers/layerdocker/LayerBox.cpp:1248
+#: plugins/dockers/layerdocker/LayerBox.cpp:1229
+#: plugins/dockers/layerdocker/LayerBox.cpp:1250
 #, kde-format
 msgid "&Add"
 msgstr "&Lisää"

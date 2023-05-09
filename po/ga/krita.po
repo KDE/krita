@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-03 00:46+0000\n"
+"POT-Creation-Date: 2023-05-09 00:45+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -13010,7 +13010,7 @@ msgstr "Iompórtáil Íomhá"
 msgid "Import"
 msgstr "Iompórtáil Íomhá"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1238
 #, fuzzy, kde-format
 msgid "&Convert"
 msgstr "&Inbhéartaigh"
@@ -13018,14 +13018,14 @@ msgstr "&Inbhéartaigh"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1210
+#: plugins/dockers/layerdocker/LayerBox.cpp:1212
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Roghnaigh"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1216
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1218
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -13047,7 +13047,7 @@ msgstr "Uirlis Trasfhoirmithe"
 msgid "S&plit"
 msgstr "B-Splíona"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1243
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1245
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "Spás datha:"
@@ -17001,7 +17001,7 @@ msgstr " pct"
 #: libs/image/kis_keyframe_channel.cpp:26 libs/image/kis_layer.cc:276
 #: libs/widgets/KoColorPopupAction.cpp:85
 #: plugins/dockers/layerdocker/LayerBox.cpp:207
-#: plugins/dockers/layerdocker/LayerBox.cpp:389
+#: plugins/dockers/layerdocker/LayerBox.cpp:387
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
@@ -18011,13 +18011,13 @@ msgstr "Forleag"
 msgid "Satin (style)"
 msgstr "Íomhá á scaradh..."
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:945
+#: libs/image/lazybrush/kis_colorize_mask.cpp:943
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
 msgstr "Athraigh Ceangal"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:972
+#: libs/image/lazybrush/kis_colorize_mask.cpp:968
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Key Stroke"
@@ -19732,13 +19732,13 @@ msgstr "Amach"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:496 libs/ui/KisView.cpp:1173
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:496 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
 msgstr "ganteideal-1"
 
-#: libs/pigment/resources/KoStopGradient.cpp:375
+#: libs/pigment/resources/KoStopGradient.cpp:373
 #, kde-format
 msgid "SVG Gradient"
 msgstr "Grádán SVG"
@@ -19802,8 +19802,8 @@ msgstr "&Acmhainní"
 #: libs/ui/KisPart.cpp:558 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
 #: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:691
-#: libs/ui/KisView.cpp:1176 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
+#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20648,7 +20648,7 @@ msgid "Select All"
 msgstr "Roghnaigh Uile"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:786
+#: libs/ui/KisView.cpp:784
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
@@ -21749,13 +21749,13 @@ msgctxt "GIF codec name"
 msgid "GIF"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:587
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:586
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Exported animation format does not support HDR"
 msgstr ""
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:589
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:588
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
@@ -22828,8 +22828,8 @@ msgstr "Airíonna na Sraithe"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:568
-#: libs/ui/kis_node_model.cpp:571 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:598
+#: libs/ui/kis_node_model.cpp:601 libs/ui/kis_paintop_box.cc:269
 #: libs/ui/kis_paintop_box.cc:277 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -22843,7 +22843,7 @@ msgstr "Airíonna na Sraithe"
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:246
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:390
+#: plugins/dockers/layerdocker/LayerBox.cpp:388
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:47
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:51
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:54
@@ -28991,7 +28991,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Athraigh Scagaire"
 
-#: libs/ui/kis_clipboard.cc:718 libs/ui/KisView.cpp:692
+#: libs/ui/kis_clipboard.cc:718 libs/ui/KisView.cpp:690
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -29488,13 +29488,13 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Díghrúpáil"
 
-#: libs/ui/kis_node_model.cpp:525
+#: libs/ui/kis_node_model.cpp:555
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr ""
 
-#: libs/ui/kis_node_model.cpp:527
+#: libs/ui/kis_node_model.cpp:557
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
@@ -30641,6 +30641,13 @@ msgstr "Athraigh an mhéid"
 msgid "Also save your image as a Krita file."
 msgstr ""
 
+#: libs/ui/KisLayerThumbnailCache.cpp:30
+#, fuzzy
+#| msgid "Thumbnails"
+msgctxt "(qtundo-format)"
+msgid "Update layer thumbnails"
+msgstr "Mionsamhlacha"
+
 #: libs/ui/KisMainWindow.cpp:184
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
@@ -31164,27 +31171,27 @@ msgstr "Níl aon phictiúr ar fáil."
 msgid "Use This Template"
 msgstr "Úsáid an Teimpléad Seo"
 
-#: libs/ui/KisView.cpp:761
+#: libs/ui/KisView.cpp:759
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool.cc:673
 #, fuzzy, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Méid an tSratha"
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:675
 #, fuzzy, kde-format
 msgid "Layer is locked."
 msgstr "Méid an tSratha"
 
-#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:677
 #, fuzzy, kde-format
 msgid "Layer is invisible."
 msgstr "Méid an tSratha"
 
-#: libs/ui/KisView.cpp:1177
+#: libs/ui/KisView.cpp:1175
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -31193,85 +31200,85 @@ msgstr ""
 "<p>Athraíodh an cháipéis <b>'%1'</b>.</p><p>An bhfuil fonn ort í a shábháil?"
 "</p>"
 
-#: libs/ui/KisView.cpp:1366
+#: libs/ui/KisView.cpp:1364
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Roghanna Uirlise"
 
-#: libs/ui/KisView.cpp:1371
+#: libs/ui/KisView.cpp:1369
 #, fuzzy, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Roghanna Uirlise"
 
-#: libs/ui/KisView.cpp:1373
+#: libs/ui/KisView.cpp:1371
 #, fuzzy, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Roghanna Uirlise"
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1383
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Rabhadh"
 
-#: libs/ui/KisView.cpp:1391
+#: libs/ui/KisView.cpp:1389
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned on."
 msgstr "Rabhadh"
 
-#: libs/ui/KisView.cpp:1393
+#: libs/ui/KisView.cpp:1391
 #, fuzzy, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Roghanna Uirlise"
 
-#: libs/ui/KisView.cpp:1396
+#: libs/ui/KisView.cpp:1394
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned off."
 msgstr "Rabhadh"
 
-#: libs/ui/KisViewManager.cpp:780
+#: libs/ui/KisViewManager.cpp:791
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Cuir an Phróifíl i bhFeidhm"
 
-#: libs/ui/KisViewManager.cpp:910
+#: libs/ui/KisViewManager.cpp:921
 #, fuzzy, kde-format
 msgid "%1 (Copy)"
 msgstr "Cóipeáil Ó"
 
-#: libs/ui/KisViewManager.cpp:1053 libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1064 libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1053
+#: libs/ui/KisViewManager.cpp:1064
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Incriminteach"
 
-#: libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1145
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Incriminteach"
 
-#: libs/ui/KisViewManager.cpp:1317
+#: libs/ui/KisViewManager.cpp:1328
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
 "Press %1 to go back."
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1357
+#: libs/ui/KisViewManager.cpp:1368
 #, fuzzy, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "&Acmhainní"
 
-#: libs/ui/KisViewManager.cpp:1361
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31286,19 +31293,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1376
+#: libs/ui/KisViewManager.cpp:1387
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1377
+#: libs/ui/KisViewManager.cpp:1388
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1495 libs/ui/KisViewManager.cpp:1513
+#: libs/ui/KisViewManager.cpp:1506 libs/ui/KisViewManager.cpp:1524
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -38594,7 +38601,12 @@ msgstr "Cuir Grádán in Eagar"
 msgid "Grid and Guides"
 msgstr "Cuir Grádán in Eagar"
 
-#: plugins/dockers/histogram/histogramdocker_dock.cpp:22
+#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+msgctxt "(qtundo-format)"
+msgid "fkdfjkdjfk"
+msgstr ""
+
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
 msgid "Histogram"
 msgstr "Histeagram"
@@ -38604,7 +38616,7 @@ msgstr "Histeagram"
 msgid "Undo History"
 msgstr "Stair an Chealaithe"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:159
+#: plugins/dockers/layerdocker/LayerBox.cpp:160
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
 #, kde-format
 msgid "Layers"
@@ -38622,26 +38634,26 @@ msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:317
+#: plugins/dockers/layerdocker/LayerBox.cpp:315
 #, fuzzy, kde-format
 #| msgid "Thumbnail View"
 msgid "Thumbnail Size"
 msgstr "Amharc Mionsamhlacha"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:345
+#: plugins/dockers/layerdocker/LayerBox.cpp:343
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Treoshuíomh"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:368
+#: plugins/dockers/layerdocker/LayerBox.cpp:366
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Mód cumaisc"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:370
+#: plugins/dockers/layerdocker/LayerBox.cpp:368
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -38651,46 +38663,46 @@ msgid ""
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:375
+#: plugins/dockers/layerdocker/LayerBox.cpp:373
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Neamhní"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:376
+#: plugins/dockers/layerdocker/LayerBox.cpp:374
 #, fuzzy, kde-format
 #| msgid "simple"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "simplí"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:377
+#: plugins/dockers/layerdocker/LayerBox.cpp:375
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Spás Datha"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:378
+#: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, fuzzy, kde-format
 #| msgid "Details"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Mionsonraithe"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:391
+#: plugins/dockers/layerdocker/LayerBox.cpp:389
 #, fuzzy, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Teimhneacht"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:409
+#: plugins/dockers/layerdocker/LayerBox.cpp:407
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "B-Splíona"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:411
+#: plugins/dockers/layerdocker/LayerBox.cpp:409
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -38698,37 +38710,37 @@ msgid ""
 "If disabled, show below layer names (when enough space)."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:423
+#: plugins/dockers/layerdocker/LayerBox.cpp:421
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Scálaigh Sraith"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:424
+#: plugins/dockers/layerdocker/LayerBox.cpp:422
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:974
+#: plugins/dockers/layerdocker/LayerBox.cpp:990
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Masc Roghnaithe"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:996
+#: plugins/dockers/layerdocker/LayerBox.cpp:1012
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Masc Roghnaithe"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1220
+#: plugins/dockers/layerdocker/LayerBox.cpp:1222
 #, fuzzy, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Cruthaigh"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1227
-#: plugins/dockers/layerdocker/LayerBox.cpp:1248
+#: plugins/dockers/layerdocker/LayerBox.cpp:1229
+#: plugins/dockers/layerdocker/LayerBox.cpp:1250
 #, kde-format
 msgid "&Add"
 msgstr ""

@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-03 00:46+0000\n"
+"POT-Creation-Date: 2023-05-09 00:45+0000\n"
 "PO-Revision-Date: 2023-03-12 19:06+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -12826,7 +12826,7 @@ msgstr "&Импорт/экспорт"
 msgid "Import"
 msgstr "Импорт"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1238
 #, kde-format
 msgid "&Convert"
 msgstr "&Преобразовать"
@@ -12834,14 +12834,14 @@ msgstr "&Преобразовать"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1210
+#: plugins/dockers/layerdocker/LayerBox.cpp:1212
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "В&ыделение"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1216
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1218
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12862,7 +12862,7 @@ msgstr "Преобразовать &все слои"
 msgid "S&plit"
 msgstr "Раз&делить"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1243
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1245
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "О&тделить альфа-канал"
@@ -16891,7 +16891,7 @@ msgstr " пикс."
 #: libs/image/kis_keyframe_channel.cpp:26 libs/image/kis_layer.cc:276
 #: libs/widgets/KoColorPopupAction.cpp:85
 #: plugins/dockers/layerdocker/LayerBox.cpp:207
-#: plugins/dockers/layerdocker/LayerBox.cpp:389
+#: plugins/dockers/layerdocker/LayerBox.cpp:387
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
@@ -17932,14 +17932,14 @@ msgstr "Наложение (стиль)"
 msgid "Satin (style)"
 msgstr "Глянец (стиль)"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:945
+#: libs/image/lazybrush/kis_colorize_mask.cpp:943
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
 msgstr ""
 "Изменение цвета ключевого мазка\n"
 "изменение цвета ключевого мазка"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:972
+#: libs/image/lazybrush/kis_colorize_mask.cpp:968
 msgctxt "(qtundo-format)"
 msgid "Remove Key Stroke"
 msgstr ""
@@ -19636,13 +19636,13 @@ msgstr "Выходной"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:496 libs/ui/KisView.cpp:1173
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:496 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
 msgstr "Безымянный"
 
-#: libs/pigment/resources/KoStopGradient.cpp:375
+#: libs/pigment/resources/KoStopGradient.cpp:373
 #, kde-format
 msgid "SVG Gradient"
 msgstr "Градиент SVG"
@@ -19706,8 +19706,8 @@ msgstr "Локальные источники"
 #: libs/ui/KisPart.cpp:558 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
 #: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:691
-#: libs/ui/KisView.cpp:1176 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
+#: libs/ui/KisView.cpp:1174 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:373
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -20548,7 +20548,7 @@ msgstr ""
 "выделение всего"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:225
-#: libs/ui/KisView.cpp:786
+#: libs/ui/KisView.cpp:784
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr ""
@@ -21684,13 +21684,13 @@ msgctxt "GIF codec name"
 msgid "GIF"
 msgstr "GIF"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:587
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:586
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Exported animation format does not support HDR"
 msgstr "Формат экспортированной анимации не поддерживает HDR"
 
-#: libs/ui/animation/VideoExportOptionsDialog.cpp:589
+#: libs/ui/animation/VideoExportOptionsDialog.cpp:588
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
@@ -22823,8 +22823,8 @@ msgstr "Свойства слоя"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:568
-#: libs/ui/kis_node_model.cpp:571 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:598
+#: libs/ui/kis_node_model.cpp:601 libs/ui/kis_paintop_box.cc:269
 #: libs/ui/kis_paintop_box.cc:277 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -22838,7 +22838,7 @@ msgstr "Свойства слоя"
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:246
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:390
+#: plugins/dockers/layerdocker/LayerBox.cpp:388
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:47
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:51
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:54
@@ -29139,7 +29139,7 @@ msgstr ""
 "Изменение слоя из файла\n"
 "изменение слоя из файла"
 
-#: libs/ui/kis_clipboard.cc:718 libs/ui/KisView.cpp:692
+#: libs/ui/kis_clipboard.cc:718 libs/ui/KisView.cpp:690
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -29670,14 +29670,14 @@ msgstr ""
 "Быстрая разгруппировка\n"
 "быструю разгруппировку"
 
-#: libs/ui/kis_node_model.cpp:525
+#: libs/ui/kis_node_model.cpp:555
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr ""
 "Выключено: поддержка маскирования групп с пропусканием не предусмотрена."
 
-#: libs/ui/kis_node_model.cpp:527
+#: libs/ui/kis_node_model.cpp:557
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
@@ -30937,6 +30937,13 @@ msgstr "Изменить размер"
 msgid "Also save your image as a Krita file."
 msgstr "Также сохранить изображение в файл Krita."
 
+#: libs/ui/KisLayerThumbnailCache.cpp:30
+#, fuzzy
+#| msgid "Hide layer thumbnail popup"
+msgctxt "(qtundo-format)"
+msgid "Update layer thumbnails"
+msgstr "Скрыть всплывающие миниатюры слоёв"
+
 #: libs/ui/KisMainWindow.cpp:184
 #, kde-format
 msgctxt "@action:inmenu"
@@ -31459,99 +31466,99 @@ msgstr "Нет доступных рисунков."
 msgid "Use This Template"
 msgstr "Использовать этот шаблон"
 
-#: libs/ui/KisView.cpp:761
+#: libs/ui/KisView.cpp:759
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Нельзя перетаскивать цвета на выбранный тип слоя."
 
-#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool.cc:673
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Слой заблокирован и невидим."
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
 msgstr "Слой заблокирован."
 
-#: libs/ui/KisView.cpp:773 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:677
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Слой невидим."
 
-#: libs/ui/KisView.cpp:1177
+#: libs/ui/KisView.cpp:1175
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Документ <b>«%1»</b> был изменён.</p><p>Сохранить его?</p>"
 
-#: libs/ui/KisView.cpp:1366
+#: libs/ui/KisView.cpp:1364
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr ""
 "Мягкая цветопроба не работает в цветовых пространствах с плавающей запятой."
 
-#: libs/ui/KisView.cpp:1371
+#: libs/ui/KisView.cpp:1369
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Режим мягкой цветопробы включён."
 
-#: libs/ui/KisView.cpp:1373
+#: libs/ui/KisView.cpp:1371
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Режим мягкой цветопробы выключен."
 
-#: libs/ui/KisView.cpp:1385
+#: libs/ui/KisView.cpp:1383
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Предупреждения о цветовом охвате не работают с плавающей точкой."
 
-#: libs/ui/KisView.cpp:1391
+#: libs/ui/KisView.cpp:1389
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Предупреждения о цветовом охвате включены."
 
-#: libs/ui/KisView.cpp:1393
+#: libs/ui/KisView.cpp:1391
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Но мягкаяцветопроба всё ещё отключена."
 
-#: libs/ui/KisView.cpp:1396
+#: libs/ui/KisView.cpp:1394
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Предупреждения о цветовом охвате отключены."
 
-#: libs/ui/KisViewManager.cpp:780
+#: libs/ui/KisViewManager.cpp:791
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Активный профиль автора"
 
-#: libs/ui/KisViewManager.cpp:910
+#: libs/ui/KisViewManager.cpp:921
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (копия)"
 
-#: libs/ui/KisViewManager.cpp:1053 libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1064 libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Альтернативные имена исчерпались, попробуйте сохранить вручную с более "
 "высоким номером."
 
-#: libs/ui/KisViewManager.cpp:1053
+#: libs/ui/KisViewManager.cpp:1064
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Не удалось сохранить инкрементальную версию"
 
-#: libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1145
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Не удалось сохранить инкрементальную резервную копию"
 
-#: libs/ui/KisViewManager.cpp:1317
+#: libs/ui/KisViewManager.cpp:1328
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31560,13 +31567,13 @@ msgstr ""
 "Переход в режим «Только холст».\n"
 "Чтобы вернуться, нажмите %1."
 
-#: libs/ui/KisViewManager.cpp:1357
+#: libs/ui/KisViewManager.cpp:1368
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Открытие папки ресурсов"
 
-#: libs/ui/KisViewManager.cpp:1361
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31590,19 +31597,19 @@ msgstr ""
 "<p><b>Частное место программы</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1376
+#: libs/ui/KisViewManager.cpp:1387
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Открыть в AppData &пользователя"
 
-#: libs/ui/KisViewManager.cpp:1377
+#: libs/ui/KisViewManager.cpp:1388
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Открыть в &частном расположении программы"
 
-#: libs/ui/KisViewManager.cpp:1495 libs/ui/KisViewManager.cpp:1513
+#: libs/ui/KisViewManager.cpp:1506 libs/ui/KisViewManager.cpp:1524
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -39194,7 +39201,12 @@ msgstr "Направляющие:"
 msgid "Grid and Guides"
 msgstr "Сетка и направляющие"
 
-#: plugins/dockers/histogram/histogramdocker_dock.cpp:22
+#: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+msgctxt "(qtundo-format)"
+msgid "fkdfjkdjfk"
+msgstr ""
+
+#: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
 msgid "Histogram"
 msgstr "Гистограмма"
@@ -39204,7 +39216,7 @@ msgstr "Гистограмма"
 msgid "Undo History"
 msgstr "Журнал отмены"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:159
+#: plugins/dockers/layerdocker/LayerBox.cpp:160
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
 #, kde-format
 msgid "Layers"
@@ -39224,25 +39236,25 @@ msgstr ""
 "Показывать глобальное выделение как обычную маску выделения на панели "
 "<b>Слои</b>"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:317
+#: plugins/dockers/layerdocker/LayerBox.cpp:315
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Размер миниатюр"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:345
+#: plugins/dockers/layerdocker/LayerBox.cpp:343
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Отступы в иерархии"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:368
+#: plugins/dockers/layerdocker/LayerBox.cpp:366
 #, fuzzy, kde-format
 #| msgid "Blending Mode"
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Режим наложения"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:370
+#: plugins/dockers/layerdocker/LayerBox.cpp:368
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39258,21 +39270,21 @@ msgstr ""
 "Подробный: Показывать и прозрачность, и режим смешивания, даже если ничего "
 "не изменилось."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:375
+#: plugins/dockers/layerdocker/LayerBox.cpp:373
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Нет"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:376
+#: plugins/dockers/layerdocker/LayerBox.cpp:374
 #, fuzzy, kde-format
 #| msgid "Simple"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Простое"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:377
+#: plugins/dockers/layerdocker/LayerBox.cpp:375
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Layer Docker subtitle style"
 #| msgid "Balanced"
@@ -39280,7 +39292,7 @@ msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Сбалансированный"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:378
+#: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Layer Docker subtitle style"
 #| msgid "Detailed"
@@ -39288,7 +39300,7 @@ msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Подробный"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:391
+#: plugins/dockers/layerdocker/LayerBox.cpp:389
 #, fuzzy, kde-format
 #| msgctxt "@item:tooltip"
 #| msgid "Subtitle text opacity"
@@ -39296,13 +39308,13 @@ msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Непрозрачность текста субтитров"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:409
+#: plugins/dockers/layerdocker/LayerBox.cpp:407
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "В тексте"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:411
+#: plugins/dockers/layerdocker/LayerBox.cpp:409
 #, fuzzy, kde-format
 #| msgctxt "@item:tooltip"
 #| msgid ""
@@ -39316,19 +39328,19 @@ msgstr ""
 "Если включено, показывать субтитры рядом с именами слоёв.\n"
 "Если отключено, показывать ниже имён слоёв (когда достаточно места)."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:423
+#: plugins/dockers/layerdocker/LayerBox.cpp:421
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Свести выбранные слои"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:424
+#: plugins/dockers/layerdocker/LayerBox.cpp:422
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:974
+#: plugins/dockers/layerdocker/LayerBox.cpp:990
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr ""
@@ -39336,20 +39348,20 @@ msgstr ""
 "маску быстрого выделения"
 
 # BUGME: please remove ellipsis because no dialogs are opened --aspotashev
-#: plugins/dockers/layerdocker/LayerBox.cpp:996
+#: plugins/dockers/layerdocker/LayerBox.cpp:1012
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr ""
 "Отмена маски быстрого выделения\n"
 "отмену маски быстрого выделения"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1220
+#: plugins/dockers/layerdocker/LayerBox.cpp:1222
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "&Переключить блокировки и видимость"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1227
-#: plugins/dockers/layerdocker/LayerBox.cpp:1248
+#: plugins/dockers/layerdocker/LayerBox.cpp:1229
+#: plugins/dockers/layerdocker/LayerBox.cpp:1250
 #, kde-format
 msgid "&Add"
 msgstr "&Добавить"

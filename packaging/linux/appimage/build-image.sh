@@ -13,7 +13,7 @@ export KRITA_SOURCES=$2
 export CHANNEL="${3}"
 
 # Save some frequently referenced locations in variables for ease of use / updating
-export APPDIR=$BUILD_PREFIX/krita.appdir
+export APPDIR=${KRITA_APPDIR_PATH:-$BUILD_PREFIX/krita.appdir}
 export PLUGINS=$APPDIR/usr/lib/kritaplugins/
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment.
@@ -22,7 +22,8 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
 
 # We want to use $prefix/deps/usr/ for all our dependencies
-export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr
+export DEPS_INSTALL_PREFIX=${KRITA_DEPS_PATH:-$BUILD_PREFIX/deps/usr}
+export BUILD_DIR=${KRITA_BUILD_PATH:-$BUILD_PREFIX/krita-build/}
 export DOWNLOADS_DIR=$BUILD_PREFIX/downloads/
 
 # Setup variables needed to help everything find what we built
@@ -51,6 +52,14 @@ cd $BUILD_PREFIX
 if [ -d $APPDIR/usr/share/locale ] ; then
     rsync -prul $APPDIR/usr/share/locale $APPDIR/usr/share/krita
     rm -rf $APPDIR/usr/share/locale
+fi
+
+# Depending on the status of qt.conf file, qml destination path might be different,
+# fix that
+if [ -d $APPDIR/usr/lib/qml ] ; then
+    mkdir -p $APPDIR/qml
+    rsync -prul $APPDIR/usr/lib/qml/ $APPDIR/usr/qml/
+    rm -rf $APPDIR/usr/qml
 fi
 
 # Step 1: Copy over all necessary resources required by dependencies or libraries that are missed by linuxdeployqt
@@ -148,15 +157,15 @@ for lib in $APPDIR/usr/lib/python3.10/lib-dynload/*.so*; do
   patchelf --set-rpath '$ORIGIN/../..' $lib;
 done
 
-patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so
-patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/sketch/libkritasketchplugin.so
+patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/qml/org/krita/draganddrop/libdraganddropplugin.so
+patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/qml/org/krita/sketch/libkritasketchplugin.so
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so
 if [ -f $APPDIR/usr/lib/python3.10/site-packages/PyQt5/sip.so ] ; then
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/python3.10/site-packages/PyQt5/sip.so
 fi
 
 # Step 4: Find out what version of Krita we built and give the Appimage a proper name
-cd $BUILD_PREFIX/krita-build
+cd $BUILD_DIR
 
 KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h | cut -d '"' -f 2)
 # Also find out the revision of Git we built
@@ -183,7 +192,7 @@ if git rev-parse --is-inside-work-tree; then
 else
 	export VERSION=$KRITA_VERSION
 
-    pushd $BUILD_PREFIX/krita-build
+    pushd $BUILD_DIR
 
     #if KRITA_BETA is set, set channel to Beta, otherwise set it to stable
     is_beta=0
@@ -291,7 +300,7 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -qmldir=$DEPS_INSTALL_PREFIX/qml \
   -verbose=2 \
   -bundle-non-qt-libs \
-  -extra-plugins=mediaservice,$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so,$APPDIR/usr/lib//qml/org/krita/sketch/libkritasketchplugin.so,$APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so  \
+  -extra-plugins=$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so,$APPDIR/usr/qml/org/krita/sketch/libkritasketchplugin.so,$APPDIR/usr/qml/org/krita/draganddrop/libdraganddropplugin.so  \
   -updateinformation="${ZSYNC_URL}" \
   -appimage
 

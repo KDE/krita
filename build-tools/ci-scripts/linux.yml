@@ -1,0 +1,76 @@
+workflow:
+  rules:
+    # Prevent branch pipelines if an MR is open on the branch.
+    - if: $CI_COMMIT_BRANCH && $CI_PIPELINE_SOURCE == "push" && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    # Allow merge request pipelines.
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # Build tags and branches too
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == "krita/*"
+
+linux-build:
+  stage: build
+  image: invent-registry.kde.org/sysadmin/ci-images/krita-appimage-builder:latest
+  tags:
+    - Linux
+  variables:
+    KDECI_CC_CACHE: /mnt/caches/krita-appimage/
+    KDECI_CACHE_PATH: /mnt/artifacts/krita-appimage/
+    KDECI_GITLAB_SERVER: https://invent.kde.org/
+    KDECI_PACKAGE_PROJECT: teams/ci-artifacts/krita-appimage
+  interruptible: true
+  before_script:
+    - git clone https://invent.kde.org/dkazakov/ci-utilities
+    - git clone https://invent.kde.org/sysadmin/repo-metadata ci-utilities/repo-metadata/
+    - export PATH="$HOME/tools/bin:$PATH"
+  script:
+    - git config --global --add safe.directory $CI_PROJECT_DIR
+    - python3 -u build-tools/ci-scripts/download-deps.py
+    - python3 -u ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Linux/Qt5/Shared
+    - python3 -u build-tools/ci-scripts/build-appimage.py
+  coverage: '/^TOTAL.*\s+(\d+\%)$/'
+  artifacts:
+    name: krita-$CI_COMMIT_REF_SLUG
+    expire_in: 1 hour
+    when: always
+    paths:
+      - "**/failed_test_shot_*.png" # deprecated use appium_artifact_ instead
+      - "**/appium_artifact_*"
+      - "_packaging/*.appimage"
+      - "_packaging/*.zsync"
+    reports:
+      junit: JUnitTestResults.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: CoberturaLcovResults.xml
+
+cppcheck:
+  stage: build
+  image: invent-registry.kde.org/sysadmin/ci-images/krita-appimage-builder:latest
+  tags:
+    - Linux
+  interruptible: true
+  before_script:
+    - git clone https://invent.kde.org/sysadmin/ci-utilities
+  script:
+    - python3 -u ci-utilities/run-cppcheck.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME
+  rules:
+    - changes:
+      - "**/*.c"
+      - "**/*.h"
+      - "**/*.cc"
+      - "**/*.hh"
+      - "**/*.cpp"
+      - "**/*.hpp"
+      - "**/*.cxx"
+      - "**/*.hxx"
+      - "**/*.ii"
+      - "**/*.ipp"
+      - "**/*.ixx"
+  artifacts:
+    expire_in: 1 week
+    when: on_success
+    reports:
+      codequality: cppcheck.json

@@ -1,25 +1,11 @@
 # SPDX-FileCopyrightText: 2022 Nicolás Alvarez <nicolas.alvarez@gmail.com>
 # SPDX-License-Identifier: CC0-1.0
 
-Dependencies:
-- 'on': ['@all']
-  'require':
-    'frameworks/extra-cmake-modules': '@stable'
-    'frameworks/kconfig': '@stable'
-    'frameworks/kwidgetsaddons': '@stable'
-    'frameworks/kcompletion': '@stable'
-    'frameworks/kcoreaddons': '@stable'
-    'frameworks/kguiaddons': '@stable'
-    'frameworks/ki18n': '@stable'
-    'frameworks/kitemmodels': '@stable'
-    'frameworks/kitemviews': '@stable'
-    'frameworks/kwindowsystem': '@stable'
-    'graphics/kseexpr': 'master'
-
-- 'on': ['Linux', 'FreeBSD']
-  'require':
-    'frameworks/kcrash': '@stable'
-
 Options:
+    release-build: True
     use-ccache: True
+    use-asan: False
+    run-gcovr: False
     per-test-timeout: 4:00
+    cmake-options: '-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=ON -DKRITA_ENABLE_PCH=OFF'
+    ctest-run-in-parallel: True

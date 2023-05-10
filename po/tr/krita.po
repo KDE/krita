@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-09 00:45+0000\n"
-"PO-Revision-Date: 2023-05-05 12:35+0300\n"
+"PO-Revision-Date: 2023-05-09 11:22+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -30356,11 +30356,9 @@ msgid "Also save your image as a Krita file."
 msgstr "Ayrıca, görselinizi Krita dosyası olarak kaydedin."
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "Katman küçük görsel açılır penceresini gizle"
+msgstr "Katman küçük görsellerini güncelle"
 
 #: libs/ui/KisMainWindow.cpp:184
 #, kde-format
@@ -38455,7 +38453,7 @@ msgstr "Izgara ve Kılavuzlar"
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
 msgctxt "(qtundo-format)"
 msgid "fkdfjkdjfk"
-msgstr ""
+msgstr "fkdfjkdjfk"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -56390,7 +56388,7 @@ msgstr "Bu aracı seçili katman türüyle kullanamazsınız"
 #: plugins/tools/basictools/kis_tool_fill.cc:240
 msgctxt "(qtundo-format)"
 msgid "Flood Fill"
-msgstr "Akıcı Doldur"
+msgstr "Taşkın Dolgu"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:526
 #, kde-format

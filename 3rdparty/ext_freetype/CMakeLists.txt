@@ -30,22 +30,22 @@ ExternalProject_Add(ext_freetype_bootstrap
     DEPENDS ext_png
 )
 
-ExternalProject_Add(
+kis_ExternalProject_Add_with_separate_builds_apple(
     ext_harfbuzz
+    MESON
+
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://github.com/harfbuzz/harfbuzz/releases/download/5.3.1/harfbuzz-5.3.1.tar.xz
     URL_HASH SHA256=4a6ce097b75a8121facc4ba83b5b083bfec657f45b003cd5a3424f2ae6b4434d
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/harfbuzz-clang16-fix.patch
 
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_harfbuzz}
-        -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
-        -DBUILD_SHARED_LIBS=ON
-        -DCMAKE_MACOSX_RPATH=ON
-        -DHB_HAVE_FREETYPE=ON 
-        -DHB_HAVE_ICU=ON
-        -DHB_HAVE_GLIB=OFF
-        -DHB_HAVE_GRAPHITE2=OFF
+    CONFIGURE_ARGS --prefix=${EXTPREFIX_harfbuzz}
+        -Dglib=disabled
+        -Dgobject=disabled
+        -Dtests=disabled
+        -Dfreetype=enabled
+        ${EXTRA_MESON_FLAGS}
 
     UPDATE_COMMAND ""
 

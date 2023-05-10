@@ -93,7 +93,7 @@ class comic_page_delegate(QStyledItemDelegate):
         topSizeThumbnail = ((rect.height()-imageSize.height())/2)+rect.top()
         thumbImage = icon.pixmap(imageSizeHighDPI).toImage()
         thumbImage.setDevicePixelRatio(self.devicePixelRatioF)
-        painter.drawImage(QRect(leftSideThumbnail, topSizeThumbnail, imageSize.width(), imageSize.height()), thumbImage)
+        painter.drawImage(QRect(int(leftSideThumbnail), int(topSizeThumbnail), int(imageSize.width()), int(imageSize.height())), thumbImage)
         
         labelWidth = rect.width()-decoratonSize.width()-(margin*3)
         

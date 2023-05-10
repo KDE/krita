@@ -26,6 +26,20 @@
 
 # buildinstall: Runs build, install and fixboost steps.#
 
+
+# jenkins is a x86_64 process running in rosetta mode
+# we need to force launch in native arch for subprojects to
+# correctly detect universal builds.
+if [[ $(sysctl -n sysctl.proc_translated) -eq 1 ]]; then
+    echo "Main process running in rosetta mode!"
+    echo "Relaunching as native process"
+
+    REL_CMD=(${0} ${@})
+    printf -v REL_CMD_STRING '%s ' "${REL_CMD[@]}"
+    env /usr/bin/arch -arm64e -arm64 -x86_64 ${SHELL} -c "${REL_CMD_STRING}"
+    exit
+fi
+
 if test -z $BUILDROOT; then
     echo "ERROR: BUILDROOT env not set, exiting!"
     echo "\t Must point to the root of the buildfiles as stated in 3rdparty Readme"

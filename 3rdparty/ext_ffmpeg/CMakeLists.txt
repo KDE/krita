@@ -33,10 +33,10 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_libtheora_meson
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://wrapdb.mesonbuild.com/v2/theora_1.1.1-3/get_patch
-    URL_HASH SHA256=a3cd07c8e81abbfd693a35c296ecceeed0990ae86f5dc2b75043eaec6603cc59
+    URL https://wrapdb.mesonbuild.com/v2/theora_1.1.1-4/get_patch
+    URL_HASH SHA256=210af99fbc5a1b34d0f32270c25ecfb6fae7e76c1ae9dc6971b063317c97a826
 
-    DOWNLOAD_NAME "theora_1.1.1-3_patch.zip"
+    DOWNLOAD_NAME "theora_1.1.1-4_patch.zip"
 
     BUILD_COMMAND ""
     CONFIGURE_COMMAND ""

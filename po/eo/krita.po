@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-09 00:45+0000\n"
-"PO-Revision-Date: 2023-05-08 19:55+0100\n"
+"PO-Revision-Date: 2023-05-10 20:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -30352,11 +30352,9 @@ msgid "Also save your image as a Krita file."
 msgstr "Konservi ankaŭ vian bildon kiel Krita dosiero."
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "Kaŝi tavolbildetan ŝprucfenestron"
+msgstr "Ĝisdatigi tavolbildetojn"
 
 #: libs/ui/KisMainWindow.cpp:184
 #, kde-format

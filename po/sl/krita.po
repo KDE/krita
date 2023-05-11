@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-09 00:45+0000\n"
-"PO-Revision-Date: 2023-05-03 09:16+0200\n"
+"PO-Revision-Date: 2023-05-10 11:13+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -30356,11 +30356,9 @@ msgid "Also save your image as a Krita file."
 msgstr "Shrani sliko tudi kot datoteko Krita."
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "Skrij pojavno ogledno sličico plasti"
+msgstr "Posodobi pojavno ogledno sličico plasti"
 
 #: libs/ui/KisMainWindow.cpp:184
 #, kde-format
@@ -38502,7 +38500,7 @@ msgstr "Mreža in vodila"
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
 msgctxt "(qtundo-format)"
 msgid "fkdfjkdjfk"
-msgstr ""
+msgstr "fkdfjkdjfk"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-09 00:45+0000\n"
-"PO-Revision-Date: 2023-05-02 10:02+0200\n"
+"PO-Revision-Date: 2023-05-09 09:33+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -30453,11 +30453,9 @@ msgid "Also save your image as a Krita file."
 msgstr "També guarda la imatge com un fitxer de Krita."
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "Oculta la finestra emergent de miniatures de la capa"
+msgstr "Actualitza les miniatures de la capa"
 
 #: libs/ui/KisMainWindow.cpp:184
 #, kde-format
@@ -38601,7 +38599,7 @@ msgstr "Quadrícula i guies"
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
 msgctxt "(qtundo-format)"
 msgid "fkdfjkdjfk"
-msgstr ""
+msgstr "fkdfjkdjfk"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format

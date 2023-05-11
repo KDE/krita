@@ -20,7 +20,6 @@
 #include <array>
 #include <cstdint>
 #include <cstring>
-#include <map>
 
 #include <KisDocument.h>
 #include <KisExportCheckRegistry.h>
@@ -30,7 +29,6 @@
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoColorTransferFunctions.h>
-#include <KoColor.h>
 #include <KoConfig.h>
 #include <KoDocumentInfo.h>
 #include <KoProperties.h>
@@ -51,26 +49,12 @@
 #include <kis_meta_data_schema_registry.h>
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_value.h>
-#include <kis_painter.h>
 #include <kis_raster_keyframe_channel.h>
 #include <kis_time_span.h>
 
 #include "kis_wdg_options_jpegxl.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_jxl_export.json", registerPlugin<JPEGXLExport>();)
-
-struct JxlExpSpcChannels {
-    uint32_t index;
-    JxlExtraChannelType chType;
-    QByteArray rawData;
-
-    JxlExpSpcChannels(uint32_t index, JxlExtraChannelType chType, QByteArray rawData)
-        : index(index)
-        , chType(chType)
-        , rawData(rawData)
-    {
-    }
-};
 
 namespace JXLCMYK
 {
@@ -428,16 +412,6 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
     const float hlgNominalPeak = cfg->getFloat("HLGnominalPeak", 1000.0f);
     const bool removeHGLOOTF = cfg->getBool("removeHGLOOTF", true);
 
-    // Kampidh: Preliminary support for JPEG-XL's special extra channels.
-    // In theory, it can be simply added more if needed. And for now,
-    // it relies on layer name to flag the extra channels.
-    // List of channel names can be viewed on JPEGXLImport.cpp
-    std::vector<JxlExpSpcChannels> specialChannels;
-    const std::map<QString, JxlExtraChannelType> supportedSChannels = {
-        {"JXL-Depth", JXL_CHANNEL_DEPTH},
-        {"JXL-Thermal", JXL_CHANNEL_THERMAL},
-        {"JXL-SelectionMask", JXL_CHANNEL_SELECTION_MASK}};
-
     const bool hasPrimaries = cs->profile()->hasColorants();
     const TransferCharacteristics gamma = cs->profile()->getTransferCharacteristics();
     static constexpr std::array<TransferCharacteristics, 14> supportedTRC = {TRC_LINEAR,
@@ -485,55 +459,6 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         return ImportExportCodes::InternalError;
     }
 
-    // Special channel handling
-    //
-    // XXX: only input special channels if the flatten is on.
-    // Otherwise there have to be special channels per frame / layer.
-    if (cfg->getBool("spcChannels") && cfg->getBool("flattenLayers")) {
-        // Extra channel index 0 is reserved for Alpha
-        // For CMYK: 0 reserved for Black, and 1 for Alpha
-        uint32_t chIndex = (cs->colorModelId() != CMYKAColorModelID) ? 0 : 1;
-
-        // Make sure layers for special extra channels are grayscale by desaturating them
-        const KisFilterSP f = KisFilterRegistry::instance()->value("desaturate");
-        KIS_ASSERT(f);
-        const KisFilterConfigurationSP kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
-        KIS_ASSERT(kfc);
-
-        // If transparency exists, fill background with opaque black
-        const KoColor bgColor(Qt::black, image->colorSpace());
-
-        for (const auto &sName : supportedSChannels) {
-            if (KisLayerUtils::findNodeByName(image->root(), sName.first)) {
-                if (image->animationInterface()->hasAnimation() && cfg->getBool("haveAnimation", true)) {
-                    warnFile << "Special channels will not be saved on animated JXL";
-                    break;
-                }
-                dbgFile << "Found extra channels for JXL:" << sName.first;
-                const KisNodeSP spLayer = KisLayerUtils::findNodeByName(image->root(), sName.first);
-                KisPaintDeviceSP dev = new KisPaintDevice(image->colorSpace());
-                KisPainter gc(dev);
-
-                dev->fill(QRect(0, 0, image->width(), image->height()), bgColor);
-                gc.bitBlt(QPoint(0, 0), spLayer->projection(), QRect(0, 0, image->width(), image->height()));
-                gc.end();
-                f->process(dev, bounds, kfc->cloneWithResourcesSnapshot());
-
-                KisHLineConstIteratorSP it = dev->createHLineConstIteratorNG(0, 0, image->width());
-
-                // JXLCMYK::writeCMYKLayer can be used for single channel buffer write
-                // regardless of color models. So it can be used here as well.
-                // And since it's grayscale or desaturated, we only took single channel from it.
-                const int chPos = (cs->colorModelId() != CMYKAColorModelID) ? 0 : 3;
-                const QByteArray tmpData =
-                    JXLCMYK::writeCMYKLayer(cs->colorDepthId(), false, chPos, image->width(), image->height(), it);
-
-                chIndex++;
-                specialChannels.emplace_back(chIndex, sName.second, tmpData);
-            }
-        }
-    }
-
     const auto basicInfo = [&]() {
         auto info{std::make_unique<JxlBasicInfo>()};
         JxlEncoderInitBasicInfo(info.get());
@@ -566,13 +491,13 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         }
         if (cs->colorModelId() == RGBAColorModelID) {
             info->num_color_channels = 3;
-            info->num_extra_channels = static_cast<uint32_t>(1 + specialChannels.size());
+            info->num_extra_channels = 1;
         } else if (cs->colorModelId() == GrayAColorModelID) {
             info->num_color_channels = 1;
-            info->num_extra_channels = static_cast<uint32_t>(1 + specialChannels.size());
+            info->num_extra_channels = 1;
         } else if (cs->colorModelId() == CMYKAColorModelID) {
             info->num_color_channels = 3;
-            info->num_extra_channels = static_cast<uint32_t>(2 + specialChannels.size());
+            info->num_extra_channels = 2;
         }
         // Use original profile on lossless, non-matrix profile or unsupported transfer curve.
         if (cfg->getBool("lossless") || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID))
@@ -623,19 +548,6 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         }
         if (JXL_ENC_SUCCESS != JxlEncoderSetExtraChannelInfo(enc.get(), 1, alphaInfo.get())) {
             errFile << "JxlEncoderSetBasicInfo Alpha failed";
-            return ImportExportCodes::InternalError;
-        }
-    }
-
-    // Initialize special channels info
-    for (const JxlExpSpcChannels &spc : specialChannels) {
-        auto spcInfo = std::make_unique<JxlExtraChannelInfo>();
-        JxlEncoderInitExtraChannelInfo(spc.chType, spcInfo.get());
-        spcInfo->bits_per_sample = basicInfo->bits_per_sample;
-        spcInfo->exponent_bits_per_sample = basicInfo->exponent_bits_per_sample;
-
-        if (JXL_ENC_SUCCESS != JxlEncoderSetExtraChannelInfo(enc.get(), spc.index, spcInfo.get())) {
-            errFile << "JxlEncoderSetBasicInfo Extra failed";
             return ImportExportCodes::InternalError;
         }
     }
@@ -1249,19 +1161,6 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                     break;
                 }
             }
-
-            // Set buffer for special channels
-            for (const JxlExpSpcChannels &spc : specialChannels) {
-                if (JxlEncoderSetExtraChannelBuffer(frameSettings,
-                                                    &pixelFormat,
-                                                    spc.rawData.data(),
-                                                    static_cast<size_t>(spc.rawData.size()),
-                                                    spc.index)
-                    != JXL_ENC_SUCCESS) {
-                    errFile << "JxlEncoderSetExtraChannelBuffer Extra failed";
-                    return ImportExportCodes::InternalError;
-                }
-            }
         }
         JxlEncoderCloseInput(enc.get());
 
@@ -1358,7 +1257,6 @@ KisPropertiesConfigurationSP JPEGXLExport::defaultConfiguration(const QByteArray
     cfg->setProperty("HLGgamma", 1.2);
     cfg->setProperty("removeHGLOOTF", true);
 
-    cfg->setProperty("spcChannels", false);
     cfg->setProperty("resampling", -1);
     cfg->setProperty("extraChannelResampling", -1);
     cfg->setProperty("photonNoise", 0);

@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>480</width>
-    <height>496</height>
+    <height>474</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -332,34 +332,6 @@ Default is 0.</string>
        <string>Advanced</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QWidget" name="wdgAdditionalOptions" native="true">
-         <layout class="QFormLayout" name="formLayout_2">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="chkSpcChannels">
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, store the root layer as a base image and specific layers as grayscale extra channels.&lt;/p&gt;&lt;p&gt;The following layers can be stored as extra channels:&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;JXL-Depth&lt;/span&gt; → Depth channel&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;JXL-Thermal&lt;/span&gt; → Thermal channel&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;JXL-SelectionMask&lt;/span&gt; → Selection Mask channel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="text">
-             <string>Save special layers as channels</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item>
         <widget class="QTabWidget" name="advancedParameters">
          <property name="currentIndex">

@@ -18,7 +18,6 @@ private Q_SLOTS:
     void testAnimationWithTail();
     void testFiles();
     void testHDR();
-    void testSpecialChannels();
     void testCmykWithLayers();
     void testSaveRgbaColorSpace();
     void testSaveGreyAColorSpace();

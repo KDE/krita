@@ -142,10 +142,10 @@ kis_ExternalProject_Add_with_separate_builds_apple(
 ExternalProject_Add(
     ext_libmp3lame_meson
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://wrapdb.mesonbuild.com/v2/lame_3.100-5/get_patch
-    URL_HASH SHA256=ed9d897e8ce69e521551812b232de0a651da710d6b0f91606cad4e3afdfd137f
+    URL https://wrapdb.mesonbuild.com/v2/lame_3.100-9/get_patch
+    URL_HASH SHA256=bedda639a621b2046fb04110a51870d6c9640f2f4282b5d877bc452e9943c22e
 
-    DOWNLOAD_NAME "lame_3.100-5_patch.zip"
+    DOWNLOAD_NAME "lame_3.100-9_patch.zip"
 
     BUILD_COMMAND ""
     CONFIGURE_COMMAND ""
@@ -167,9 +167,7 @@ kis_ExternalProject_Add_with_separate_builds_apple(
             ${CMAKE_CURRENT_BINARY_DIR}/lame_meson
             <SOURCE_DIR>
         COMMAND ${CMAKE_COMMAND} -E echo Deploying patches
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-lame-Add-SOVERSION-to-the-library-for-disambiguation.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-lame-Install-pkg-config-file.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-lame-Add-DLL-version-information.patch
 
     CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
             ${EXTRA_MESON_FLAGS}
@@ -195,21 +193,24 @@ ExternalProject_Add(
 
 kis_ExternalProject_Add_with_separate_builds_apple(
     ext_vpx
-    AUTOMAKE
+    MESON
 
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/webmproject/libvpx/archive/v1.12.0.tar.gz
-    URL_HASH SHA256=f1acc15d0fd0cb431f4bf6eac32d5e932e40ea1186fe78e074254d6d003957bb
+    GIT_REPOSITORY https://gitlab.freedesktop.org/amyspark/libvpx.git
+    GIT_TAG amyspark/add-ci
 
     WORKING_DIRECTORY <BINARY_DIR>
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-MacOS-13-is-darwin22.patch
 
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_ffmpeg} ${GLOBAL_AUTOMAKE_PROFILE}
-    CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg} #overrides CONFIGURE_COMMAND on APPLE
+    CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
+            -Ddefault_library=shared
+            -Dunit_tests=false
+            -Dtools=false
+            -Ddocs=false
+            ${EXTRA_MESON_FLAGS}
 
     UPDATE_COMMAND ""
 )
-# TODO: migrate to a proper cross-platform wrap.
 
 # IMPORTANT:
 # OpenSUSE's list of whitelisted encoders: https://build.opensuse.org/package/view_file/openSUSE:Factory/ffmpeg-5/enable_encoders

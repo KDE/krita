@@ -7,6 +7,7 @@
 
 #include <QObject>
 #include <functional>
+#include <QRandomGenerator>
 
 #include "kis_abstract_perspective_grid.h"
 #include "kis_painting_assistant.h"
@@ -75,6 +76,14 @@ public:
     QString Name {"formula"};
 
 
+    // info about the conic
+    double getAxisAngle();
+    static double getAxisAngle(QVector<double> formula);
+
+    QList<QPointF> getRandomPoints(QRandomGenerator &generator, int number, double xmin, double xmax);
+    QPointF getPointFromX(double x, int sign, bool &needsSecondLoop);
+
+
 
 
 
@@ -85,19 +94,21 @@ private:
 };
 
 
-double ConicFunctionsF(double x, void * params);
-double ConicFunctionsDf(double x, void * params);
-void ConicFunctionsFdf(double x, void *params, double *y, double *dy);
-void GslErrorHandler(const char * reason, const char * file, int line, int gsl_errno);
+namespace GSLEllipseHelper {
+
+
+    double ConicFunctionsF(double x, void * params);
+    double ConicFunctionsDf(double x, void * params);
+    void ConicFunctionsFdf(double x, void *params, double *y, double *dy);
+    void GslErrorHandler(const char * reason, const char * file, int line, int gsl_errno);
+
+
+    double RunGslNewton(double t0, ConicFormula &formula);
+
+}
 
 
 struct ConicCalculations {
-
-    struct GslRootFunctions {
-        double f(double x, void * params);
-        double df(double x, void * params);
-        void fdf(double x, void *params, double *y, double *dy);
-    };
 
 public:
     // all calculations for Ellipse In Polygon
@@ -126,6 +137,7 @@ class EllipseInPolygon
 public:
 
     EllipseInPolygon();
+
 
     // nomenclature:
     // "final ellipse" - ellipse that the user wants
@@ -174,6 +186,8 @@ public:
 
     QPointF projectModifiedEberlySecond(QPointF point);
     QPointF projectModifiedEberlyThird(QPointF point);
+    QPointF projectModifiedEberlyFourthNoDebug(QPointF point);
+
 
 
 
@@ -204,6 +218,7 @@ public:
     static CURVE_TYPE curveTypeForFormula(double a, double b, double c);
 
     void paintParametric(QPainter& gc, const QRectF& updateRect, const QTransform &initialTransform);
+
 
 
     // unused for now; will be used to move the ellipse towards any vanishing point
@@ -298,6 +313,8 @@ protected:
 
     bool m_valid {false};
     bool m_mirrored {false};
+
+    friend class TestEllipseInPolygon;
 
 };
 

@@ -10,13 +10,20 @@
 #include <simpletest.h>
 #include "empty_nodes_test.h"
 
+#include <QRandomGenerator>
+
+#include <EllipseInPolygon.h>
 #include "kis_painting_assistant.h"
+
 
 
 class TestEllipseInPolygon : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+
+    //
+    void testRandomPointsOnEllipse();
 
 // test all ConicCalculations
     void testConicCalculationsPhaseAB();
@@ -28,7 +35,18 @@ private Q_SLOTS:
     void testConicCalculationsPhaseGH();
     void testConicCalculationsPhaseHI();
 
+    void testProjectInEllipseInPolygon();
+    void testDifferentCodes();
 
+private:
+    ConicFormula randomFormula(QRandomGenerator& random, ConicFormula::TYPE type);
+    QPointF randomPoint(QRandomGenerator& random);
+    EllipseInPolygon randomEllipseInPolygon(QRandomGenerator& random);
+    QPolygonF randomTetragon(QRandomGenerator &random);
+
+
+
+    const int N = 6;
 
 
 };

@@ -61,18 +61,17 @@ endif()
 if(PERL_FOUND OR USE_STRAWBERRYPERL)
     message(STATUS "Building AVIF support using libaom.")
 
-    
     kis_ExternalProject_Add_with_separate_builds_apple(
         ext_libaom
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-        URL https://storage.googleapis.com/aom-releases/libaom-3.6.0.tar.gz
-        URL_HASH SHA256=a4a6c0fab685da743b796662a928fcdf7ae60594edc306efb73e78a17ea6cde6
+        URL https://storage.googleapis.com/aom-releases/libaom-3.6.1.tar.gz
+        URL_HASH SHA256=42b862f58b3d00bd3902d2dc469526574f5b012e5b178e6a9652845a113d6887
 
-        # Shared libraries cause a race condition in MSVC because
-        # both export and static targets output the same file.
-        # Do NOT build them that way unless you want the FFmpeg build
-        # to fail in turn!
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-cdef-Disable-MSVC-optimizations-for-filter_block.patch
+
+        # Static library is needed because ffmpeg accesses aom_codec_av1_dx_algo
+        # which is not exported in Windows compilers.
         CMAKE_ARGS ${LIBAOM_EXTRA_CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_SHARED_LIBS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_TESTDATA=OFF -DENABLE_TESTS=OFF -DENABLE_TOOLS=OFF ${GLOBAL_PROFILE}
 
         UPDATE_COMMAND ""

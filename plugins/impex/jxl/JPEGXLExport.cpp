@@ -33,6 +33,7 @@
 #include <KoColor.h>
 #include <KoConfig.h>
 #include <KoDocumentInfo.h>
+#include <KoProperties.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <filter/kis_filter_registry.h>
@@ -485,7 +486,10 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
     }
 
     // Special channel handling
-    if (cfg->getBool("spcChannels")) {
+    //
+    // XXX: only input special channels if the flatten is on.
+    // Otherwise there have to be special channels per frame / layer.
+    if (cfg->getBool("spcChannels") && cfg->getBool("flattenLayers")) {
         // Extra channel index 0 is reserved for Alpha
         // For CMYK: 0 reserved for Black, and 1 for Alpha
         uint32_t chIndex = (cs->colorModelId() != CMYKAColorModelID) ? 0 : 1;
@@ -908,13 +912,20 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         // See: https://github.com/libjxl/libjxl/issues/2064
         const int setModular = (cs->colorDepthId() == Float32BitsColorDepthID) ? -1 : cfg->getInt("modular", -1);
 
+        // XXX: Workaround for a buggy lossless patches. Set to disable instead.
+        // TODO Kampidh: revisit this when upstream got fixed.
+        //
+        // See: https://github.com/libjxl/libjxl/issues/2463
+        const int setPatches =
+            ((cfg->getInt("effort", 7) > 4) && !cfg->getBool("flattenLayers", true)) ? 0 : cfg->getInt("patches", -1);
+
         if (!setFrameLossless(cfg->getBool("lossless"))
             || !setSetting(JXL_ENC_FRAME_SETTING_EFFORT, cfg->getInt("effort", 7))
             || !setSetting(JXL_ENC_FRAME_SETTING_DECODING_SPEED, cfg->getInt("decodingSpeed", 0))
             || !setSetting(JXL_ENC_FRAME_SETTING_RESAMPLING, cfg->getInt("resampling", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_EXTRA_CHANNEL_RESAMPLING, cfg->getInt("extraChannelResampling", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_DOTS, cfg->getInt("dots", -1))
-            || !setSetting(JXL_ENC_FRAME_SETTING_PATCHES, cfg->getInt("patches", -1))
+            || !setSetting(JXL_ENC_FRAME_SETTING_PATCHES, setPatches)
             || !setSetting(JXL_ENC_FRAME_SETTING_EPF, cfg->getInt("epf", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_GABORISH, cfg->getInt("gaborish", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_MODULAR, setModular)
@@ -1045,100 +1056,197 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 }
             }
         } else {
-            // Insert the projection itself only
-            // Or took the first layer as base if there are special layers exist
-            KisPaintDeviceSP dev;
-            if (!specialChannels.empty()) {
-                dev = image->root()->firstChild()->projection();
-            } else {
-                dev = image->projection();
-            }
+            auto frameHeader = std::make_unique<JxlFrameHeader>();
+            const bool flattenLayers = cfg->getBool("flattenLayers", true);
 
-            if (cs->colorModelId() == CMYKAColorModelID) {
-                // Inverting colors for CMYK
-                const KisFilterSP f = KisFilterRegistry::instance()->value("invert");
-                KIS_ASSERT(f);
-                const KisFilterConfigurationSP kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
-                KIS_ASSERT(kfc);
-                f->process(dev, bounds, kfc->cloneWithResourcesSnapshot());
-            }
+            // Iterate through the layers (non-recursively)
+            Q_FOREACH (KisNodeSP node, image->root()->childNodes(QStringList(), KoProperties())) {
+                // Skip invalid and invisible layers
+                if (!node || !node->visible() || node->isFakeNode()) {
+                    continue;
+                }
+                const bool isFirstLayer = (node == image->root()->firstChild());
 
-            const QByteArray pixels = [&]() {
-                const KoID colorModel = cs->colorModelId();
-                const KoID colorDepth = cs->colorDepthId();
+                if (!node->inherits("KisPaintLayer")) {
+                    std::future<KisNodeSP> convertedNode = KisLayerUtils::convertToPaintLayer(image, node);
+                    node = convertedNode.get();
+                }
 
-                if (colorModel != RGBAColorModelID
-                    || (colorDepth != Integer8BitsColorDepthID && colorDepth != Integer16BitsColorDepthID
-                        && conversionPolicy == ConversionPolicy::KeepTheSame)) {
-                    // CMYK
-                    if (colorModel == CMYKAColorModelID) {
-                        KisHLineConstIteratorSP it = dev->createHLineConstIteratorNG(0, 0, image->width());
+                const KoColorSpace *lcs = node->colorSpace();
+                if (lcs && (lcs != cs)) {
+                    node->paintDevice()->convertTo(cs);
+                }
 
-                        // interleaved CMY buffer
-                        return JXLCMYK::writeCMYKLayer(cs->colorDepthId(),
-                                                       true,
-                                                       0,
-                                                       image->width(),
-                                                       image->height(),
-                                                       it);
+                const QRect layerBounds = [&]() {
+                    if (node->exactBounds().isEmpty() || flattenLayers) {
+                        return image->bounds();
                     }
-                    // blast it wholesale
-                    QByteArray p;
-                    p.resize(bounds.width() * bounds.height() * static_cast<int>(cs->pixelSize()));
-                    dev->readBytes(reinterpret_cast<quint8 *>(p.data()), bounds);
-                    return p;
+                    return node->exactBounds();
+                }();
+
+                KisPaintDeviceSP dev;
+                if (flattenLayers) {
+                    dev = image->projection();
                 } else {
-                    KisHLineConstIteratorSP it = dev->createHLineConstIteratorNG(0, 0, image->width());
-
-                    // detect traits based on depth
-                    // if u8 or u16, also trigger swap
-                    return HDR::writeLayer(cs->colorDepthId(),
-                                           convertToRec2020,
-                                           cs->profile()->isLinear(),
-                                           conversionPolicy,
-                                           removeHGLOOTF,
-                                           image->width(),
-                                           image->height(),
-                                           it,
-                                           hlgGamma,
-                                           hlgNominalPeak,
-                                           cs);
+                    // Do not allow zero dimension (empty) layers
+                    if (node->exactBounds().isEmpty()) {
+                        dev = node->projection();
+                    } else {
+                        dev = node->paintDevice();
+                    }
                 }
-            }();
 
-            if (JxlEncoderAddImageFrame(frameSettings, &pixelFormat, pixels.data(), static_cast<size_t>(pixels.size()))
-                != JXL_ENC_SUCCESS) {
-                errFile << "JxlEncoderAddImageFrame failed";
-                return ImportExportCodes::InternalError;
-            }
+                if (cs->colorModelId() == CMYKAColorModelID) {
+                    // Inverting colors for CMYK
+                    const KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+                    KIS_ASSERT(f);
+                    const KisFilterConfigurationSP kfc =
+                        f->defaultConfiguration(KisGlobalResourcesInterface::instance());
+                    KIS_ASSERT(kfc);
+                    f->process(dev, layerBounds, kfc->cloneWithResourcesSnapshot());
+                }
 
-            // CMYKA separate planar buffer for Key and Alpha
-            if (cs->colorModelId() == CMYKAColorModelID) {
-                KisHLineConstIteratorSP it = dev->createHLineConstIteratorNG(0, 0, image->width());
+                const QByteArray pixels = [&]() {
+                    const KoID colorModel = cs->colorModelId();
+                    const KoID colorDepth = cs->colorDepthId();
 
-                const QByteArray chaK =
-                    JXLCMYK::writeCMYKLayer(cs->colorDepthId(), false, 3, image->width(), image->height(), it);
-                it->resetRowPos();
-                const QByteArray chaA =
-                    JXLCMYK::writeCMYKLayer(cs->colorDepthId(), false, 4, image->width(), image->height(), it);
+                    if (colorModel != RGBAColorModelID
+                        || (colorDepth != Integer8BitsColorDepthID && colorDepth != Integer16BitsColorDepthID
+                            && conversionPolicy == ConversionPolicy::KeepTheSame)) {
+                        // CMYK
+                        if (colorModel == CMYKAColorModelID) {
+                            KisHLineConstIteratorSP it =
+                                dev->createHLineConstIteratorNG(layerBounds.x(), layerBounds.y(), layerBounds.width());
 
-                if (JxlEncoderSetExtraChannelBuffer(frameSettings,
-                                                    &pixelFormat,
-                                                    chaK,
-                                                    static_cast<size_t>(chaK.size()),
-                                                    0)
+                            // interleaved CMY buffer
+                            return JXLCMYK::writeCMYKLayer(cs->colorDepthId(),
+                                                           true,
+                                                           0,
+                                                           layerBounds.width(),
+                                                           layerBounds.height(),
+                                                           it);
+                        }
+                        // blast it wholesale
+                        QByteArray p;
+                        p.resize(layerBounds.width() * layerBounds.height() * static_cast<int>(cs->pixelSize()));
+                        dev->readBytes(reinterpret_cast<quint8 *>(p.data()), layerBounds);
+                        return p;
+                    } else {
+                        KisHLineConstIteratorSP it =
+                            dev->createHLineConstIteratorNG(layerBounds.x(), layerBounds.y(), layerBounds.width());
+
+                        // detect traits based on depth
+                        // if u8 or u16, also trigger swap
+                        return HDR::writeLayer(cs->colorDepthId(),
+                                               convertToRec2020,
+                                               cs->profile()->isLinear(),
+                                               conversionPolicy,
+                                               removeHGLOOTF,
+                                               layerBounds.width(),
+                                               layerBounds.height(),
+                                               it,
+                                               hlgGamma,
+                                               hlgNominalPeak,
+                                               cs);
+                    }
+                }();
+
+                if (!flattenLayers) {
+                    JxlEncoderInitFrameHeader(frameHeader.get());
+
+                    // Set frame duration to 0 to indicate a multi-layered image
+                    frameHeader->duration = 0;
+
+                    // Enable crop info if layer dimension is different than main
+                    // This also enables out-of-bound pixels to be preserved
+                    if (node->exactBounds() == image->bounds()) {
+                        frameHeader->layer_info.have_crop = false;
+                    } else {
+                        frameHeader->layer_info.have_crop = true;
+                    }
+                    frameHeader->layer_info.crop_x0 = layerBounds.x();
+                    frameHeader->layer_info.crop_y0 = layerBounds.y();
+                    frameHeader->layer_info.xsize = layerBounds.width();
+                    frameHeader->layer_info.ysize = layerBounds.height();
+
+                    if (cs->colorModelId() == CMYKAColorModelID) {
+                        frameHeader->layer_info.blend_info.alpha = 1;
+                    } else {
+                        frameHeader->layer_info.blend_info.alpha = 0;
+                    }
+
+                    // EXPERIMENTAL! Additive blending mode on JPEG-XL produces
+                    // slightly different result than Krita.
+                    const QString frameName = node->name();
+                    if (!isFirstLayer) {
+                        if (node->compositeOpId() == QString("add")) {
+                            frameHeader->layer_info.blend_info.blendmode = JXL_BLEND_MULADD;
+                        } else {
+                            frameHeader->layer_info.blend_info.blendmode = JXL_BLEND_BLEND;
+                        }
+                    }
+
+                    if (JxlEncoderSetFrameHeader(frameSettings, frameHeader.get()) != JXL_ENC_SUCCESS) {
+                        errFile << "JxlEncoderSetFrameHeader failed";
+                        return ImportExportCodes::InternalError;
+                    }
+                    if (JxlEncoderSetFrameName(frameSettings, frameName.toLocal8Bit()) != JXL_ENC_SUCCESS) {
+                        errFile << "JxlEncoderSetFrameName failed";
+                        return ImportExportCodes::InternalError;
+                    }
+                }
+
+                if (JxlEncoderAddImageFrame(frameSettings,
+                                            &pixelFormat,
+                                            pixels.data(),
+                                            static_cast<size_t>(pixels.size()))
                     != JXL_ENC_SUCCESS) {
-                    errFile << "JxlEncoderSetExtraChannelBuffer Key failed";
+                    errFile << "JxlEncoderAddImageFrame failed";
                     return ImportExportCodes::InternalError;
                 }
-                if (JxlEncoderSetExtraChannelBuffer(frameSettings,
-                                                    &pixelFormat,
-                                                    chaA,
-                                                    static_cast<size_t>(chaA.size()),
-                                                    1)
-                    != JXL_ENC_SUCCESS) {
-                    errFile << "JxlEncoderSetExtraChannelBuffer Alpha failed";
-                    return ImportExportCodes::InternalError;
+
+                // CMYKA separate planar buffer for Key and Alpha
+                if (cs->colorModelId() == CMYKAColorModelID) {
+                    KisHLineConstIteratorSP it =
+                        dev->createHLineConstIteratorNG(layerBounds.x(), layerBounds.y(), layerBounds.width());
+
+                    const QByteArray chaK = JXLCMYK::writeCMYKLayer(cs->colorDepthId(),
+                                                                    false,
+                                                                    3,
+                                                                    layerBounds.width(),
+                                                                    layerBounds.height(),
+                                                                    it);
+                    it->resetRowPos();
+                    const QByteArray chaA = JXLCMYK::writeCMYKLayer(cs->colorDepthId(),
+                                                                    false,
+                                                                    4,
+                                                                    layerBounds.width(),
+                                                                    layerBounds.height(),
+                                                                    it);
+
+                    if (JxlEncoderSetExtraChannelBuffer(frameSettings,
+                                                        &pixelFormat,
+                                                        chaK,
+                                                        static_cast<size_t>(chaK.size()),
+                                                        0)
+                        != JXL_ENC_SUCCESS) {
+                        errFile << "JxlEncoderSetExtraChannelBuffer Key failed";
+                        return ImportExportCodes::InternalError;
+                    }
+                    if (JxlEncoderSetExtraChannelBuffer(frameSettings,
+                                                        &pixelFormat,
+                                                        chaA,
+                                                        static_cast<size_t>(chaA.size()),
+                                                        1)
+                        != JXL_ENC_SUCCESS) {
+                        errFile << "JxlEncoderSetExtraChannelBuffer Alpha failed";
+                        return ImportExportCodes::InternalError;
+                    }
+                }
+
+                // Quit loop if flatten is active
+                if (flattenLayers) {
+                    break;
                 }
             }
 
@@ -1237,6 +1345,7 @@ KisPropertiesConfigurationSP JPEGXLExport::defaultConfiguration(const QByteArray
     //   JXL_ENC_FRAME_SETTING_COLOR_TRANSFORM
 
     cfg->setProperty("haveAnimation", true);
+    cfg->setProperty("flattenLayers", true);
     cfg->setProperty("lossless", true);
     cfg->setProperty("effort", 7);
     cfg->setProperty("decodingSpeed", 0);

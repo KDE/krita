@@ -327,7 +327,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
     auto boxSize = box.size();
 
     // List of blend mode that we can currently support
-    static constexpr std::array<JxlBlendMode, 2> supportedBlendMode = {JXL_BLEND_REPLACE, JXL_BLEND_BLEND};
+    static constexpr std::array<JxlBlendMode, 3> supportedBlendMode = {JXL_BLEND_REPLACE, JXL_BLEND_BLEND, JXL_BLEND_MULADD};
 
     // Internal function to rewind decoder and enable coalescing
     auto rewindDecoderWithCoalesce = [&]() {
@@ -786,6 +786,9 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     }
                 } else {
                     additionalLayers.emplace_back(new KisPaintLayer(image, layerName, UCHAR_MAX));
+                    if (blendMode == JXL_BLEND_MULADD) {
+                        additionalLayers.back()->setCompositeOpId(QString("add"));
+                    }
                 }
             }
         } else if (status == JXL_DEC_FULL_IMAGE) {

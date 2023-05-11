@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>480</width>
-    <height>432</height>
+    <height>496</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -41,20 +41,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>17</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="0" colspan="2">
+       <item row="2" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string>Encoding options</string>
@@ -225,6 +212,32 @@ Default is 0.</string>
            </layout>
           </item>
          </layout>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>17</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="flattenLayers">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Note:&lt;/span&gt; Animated exports are &lt;span style=&quot; font-weight:600;&quot;&gt;always&lt;/span&gt; flattened regardless of this setting.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Flatten the image</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
       </layout>

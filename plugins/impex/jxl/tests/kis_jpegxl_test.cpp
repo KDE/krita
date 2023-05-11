@@ -145,7 +145,7 @@ void KisJPEGXLTest::testHDR()
 
 void KisJPEGXLTest::testSpecialChannels()
 {
-    const auto inputFileName = TestUtil::fetchDataFileLazy("/sources/extrachannels/JXL-extrachannels.jxl");
+    const QString inputFileName = TestUtil::fetchDataFileLazy("/sources/extrachannels/JXL-extrachannels.jxl");
 
     QScopedPointer<KisDocument> doc1(qobject_cast<KisDocument *>(KisPart::instance()->createDocument()));
 

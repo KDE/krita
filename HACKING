@@ -135,6 +135,9 @@ Variable/Parameter names
     Variable/parameter names start with a lower case letter. A name composed of different
     words is done in camelBackedStyle.
 
+    Try to avoid abbreviations except for the most common cases, like cs for KoColorSpace. 
+    It's okay for variable names to be long and explicit and derived from the type name.
+
 Designer
 
     Krita has started to use designer. All dialogs and all widgets that have a layout

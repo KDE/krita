@@ -1049,13 +1049,11 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             }
         } else {
             // Insert the projection itself only
-            // Or took the first layer as base if there are special layers exist
-            const KisPaintDeviceSP dev = [&]() {
-                if (!specialChannels.empty()) {
-                    return image->root()->firstChild()->projection();
-                }
-                return image->projection();
-            }();
+            // Or take the first layer as base if there are special layers exist
+            KisPaintDeviceSP dev = image->projection();
+            if (!specialChannels.empty()) {
+                dev = image->root()->firstChild()->projection();
+            }
 
             if (cs->colorModelId() == CMYKAColorModelID) {
                 // Inverting colors for CMYK

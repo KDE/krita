@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-09 00:45+0000\n"
-"PO-Revision-Date: 2023-05-02 11:00+0100\n"
+"POT-Creation-Date: 2023-05-12 00:45+0000\n"
+"PO-Revision-Date: 2023-05-11 19:52+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -16971,7 +16971,7 @@ msgstr "Tamanho"
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:176
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:42
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:44
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:59
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:56
 #: plugins/paintops/roundmarker/KisRoundMarkerOpOptionWidget.cpp:29
 #: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:25
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:32
@@ -21831,9 +21831,9 @@ msgstr "Sem Antevisão"
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:160
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:49
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:192
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:39
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:39
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:39
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:37
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:37
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:37
 #, kde-format
 msgid "0"
 msgstr "0"
@@ -22812,9 +22812,9 @@ msgstr "Propriedades da Camada"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
-#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:45
-#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:46
-#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:47
+#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:48
+#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:49
+#: plugins/paintops/mypaint/MyPaintSensorPack.cpp:50
 #: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:29
 #: plugins/paintops/sketch/KisSketchOpOptionWidget.cpp:32
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:166
@@ -30734,11 +30734,9 @@ msgid "Also save your image as a Krita file."
 msgstr "Grave também a sua imagem como um ficheiro do Krita."
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "Esconder a janela de miniaturas das camadas"
+msgstr "Actualizar as miniaturas das camadas"
 
 #: libs/ui/KisMainWindow.cpp:184
 #, kde-format
@@ -38883,7 +38881,7 @@ msgstr "Grelha e Guias"
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
 msgctxt "(qtundo-format)"
 msgid "fkdfjkdjfk"
-msgstr ""
+msgstr "fkdfjkdjfk"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -52781,12 +52779,12 @@ msgstr "Origem"
 msgid "Strength: "
 msgstr "Força: "
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:72
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:69
 #, kde-format
 msgid "%1 px"
 msgstr "%1 pt"
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:42
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:40
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
@@ -52796,16 +52794,16 @@ msgstr "%1 pt"
 msgid "0°"
 msgstr "0°"
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:42
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:40
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
 #, kde-format
 msgid "360°"
 msgstr "360°"
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:43
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:66
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:72
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:40
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:63
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:69
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
@@ -52816,24 +52814,24 @@ msgstr "360°"
 msgid "°"
 msgstr "°"
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:57
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:54
 #, kde-format
 msgctxt "Lock Drawing angle at start of each stroke"
 msgid "Lock"
 msgstr "Bloquear"
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:60
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:57
 #, kde-format
 msgctxt "Smoothing Drawing angle when a stroke is making a sharp turn"
 msgid "Fan Corners"
 msgstr "Arredondar os Cantos"
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:79
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:76
 #, kde-format
 msgid "Angle Offset"
 msgstr "Posição do Ângulo"
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:71
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryFade.cpp:68
 #, kde-format
 msgid "%1"
 msgstr "%1"
@@ -52864,13 +52862,13 @@ msgstr "-60°"
 msgid "90°"
 msgstr "90°"
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:40
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:61
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:37
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:58
 #, kde-format
 msgid " ms"
 msgstr " ms"
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:73
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:70
 #, kde-format
 msgid "%1 ms"
 msgstr "%1 ms"

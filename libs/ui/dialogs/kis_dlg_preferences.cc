@@ -329,6 +329,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     //
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
     cmbFlowMode->setCurrentIndex((int)!cfg.readEntry<bool>("useCreamyAlphaDarken", true));
+    cmbCmykBlendingMode->setCurrentIndex((int)!cfg.readEntry<bool>("useSubtractiveBlendingForCmykColorSpaces", true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
     chkEnableTranformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste());
@@ -2329,6 +2330,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setToolOptionsInDocker(m_general->toolOptionsInDocker());
 
         cfg.writeEntry<bool>("useCreamyAlphaDarken", (bool)!m_general->cmbFlowMode->currentIndex());
+        cfg.writeEntry<bool>("useSubtractiveBlendingForCmykColorSpaces", (bool)!m_general->cmbCmykBlendingMode->currentIndex());
 
         cfg.setZoomSteps(m_general->zoomSteps());
         cfg.setKineticScrollingEnabled(m_general->kineticScrollingEnabled());

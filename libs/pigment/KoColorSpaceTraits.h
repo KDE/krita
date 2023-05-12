@@ -288,14 +288,6 @@ struct KoColorSpaceTrait {
             }
         }
     }
-
-    inline static channels_type toBlendSpace(channels_type value) {
-        return value;
-    }
-
-    inline static channels_type fromBlendSpace(channels_type value) {
-        return value;
-    }
 };
 
 #include "KoRgbColorSpaceTraits.h"

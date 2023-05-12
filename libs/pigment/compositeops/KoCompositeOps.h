@@ -26,6 +26,7 @@
 #include "compositeops/KoCompositeOpDestinationAtop.h"
 #include "compositeops/KoCompositeOpGreater.h"
 #include "compositeops/KoAlphaDarkenParamsWrapper.h"
+#include "compositeops/KoColorSpaceBlendingPolicy.h"
 #include "KoOptimizedCompositeOpFactory.h"
 
 namespace _Private {
@@ -132,7 +133,15 @@ struct AddGeneralOps<Traits, true>
 
      template<CompositeFunc func>
      static void add(KoColorSpace* cs, const QString& id, const QString& category) {
-         cs->addCompositeOp(new KoCompositeOpGenericSC<Traits, func>(cs, id, category));
+        if constexpr (std::is_base_of_v<KoCmykTraits<typename Traits::channels_type>, Traits>) {
+            if (useSubtractiveBlendingForCmykColorSpaces()) {
+                cs->addCompositeOp(new KoCompositeOpGenericSC<Traits, func, KoSubtractiveBlendingPolicy<Traits>>(cs, id, category));
+            } else {
+                cs->addCompositeOp(new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, category));
+            }
+        } else {
+            cs->addCompositeOp(new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, category));
+        }
      }
 
      static void add(KoColorSpace* cs) {
@@ -140,10 +149,29 @@ struct AddGeneralOps<Traits, true>
          cs->addCompositeOp(OptimizedOpsSelector<Traits>::createAlphaDarkenOp(cs));
          cs->addCompositeOp(OptimizedOpsSelector<Traits>::createCopyOp(cs));
          cs->addCompositeOp(new KoCompositeOpErase<Traits>(cs));
-         cs->addCompositeOp(new KoCompositeOpBehind<Traits>(cs));
+
+         if constexpr (std::is_base_of_v<KoCmykTraits<typename Traits::channels_type>, Traits>) {
+            if (useSubtractiveBlendingForCmykColorSpaces()) {
+                cs->addCompositeOp(new KoCompositeOpBehind<Traits, KoSubtractiveBlendingPolicy<Traits>>(cs));
+            } else {
+                cs->addCompositeOp(new KoCompositeOpBehind<Traits, KoAdditiveBlendingPolicy<Traits>>(cs));
+            }
+         } else {
+            cs->addCompositeOp(new KoCompositeOpBehind<Traits, KoAdditiveBlendingPolicy<Traits>>(cs));
+         }
+
          cs->addCompositeOp(new KoCompositeOpDestinationIn<Traits>(cs));
          cs->addCompositeOp(new KoCompositeOpDestinationAtop<Traits>(cs));
-         cs->addCompositeOp(new KoCompositeOpGreater<Traits>(cs));
+
+         if constexpr (std::is_base_of_v<KoCmykTraits<typename Traits::channels_type>, Traits>) {
+            if (useSubtractiveBlendingForCmykColorSpaces()) {
+                cs->addCompositeOp(new KoCompositeOpGreater<Traits, KoSubtractiveBlendingPolicy<Traits>>(cs));
+            } else {
+                cs->addCompositeOp(new KoCompositeOpGreater<Traits, KoAdditiveBlendingPolicy<Traits>>(cs));
+            }
+         } else {
+            cs->addCompositeOp(new KoCompositeOpGreater<Traits, KoAdditiveBlendingPolicy<Traits>>(cs));
+         }
 
          add<&cfOverlay<Arg>       >(cs, COMPOSITE_OVERLAY       , KoCompositeOp::categoryMix());
          add<&cfGrainMerge<Arg>    >(cs, COMPOSITE_GRAIN_MERGE   , KoCompositeOp::categoryMix());
@@ -328,7 +356,15 @@ struct AddGeneralAlphaOps<Traits, true>
 
     static void add(KoColorSpace* cs, const QString& id, const QString& category)
     {
-        cs->addCompositeOp(new KoCompositeOpGenericSCAlpha<Traits, compositeFunc>(cs, id, category));
+        if constexpr (std::is_base_of_v<KoCmykTraits<typename Traits::channels_type>, Traits>) {
+            if (useSubtractiveBlendingForCmykColorSpaces()) {
+                cs->addCompositeOp(new KoCompositeOpGenericSCAlpha<Traits, compositeFunc, KoSubtractiveBlendingPolicy<Traits>>(cs, id, category));
+            } else {
+                cs->addCompositeOp(new KoCompositeOpGenericSCAlpha<Traits, compositeFunc, KoAdditiveBlendingPolicy<Traits>>(cs, id, category));
+            }
+        } else {
+            cs->addCompositeOp(new KoCompositeOpGenericSCAlpha<Traits, compositeFunc, KoAdditiveBlendingPolicy<Traits>>(cs, id, category));
+        }
     }
 
     static void add(KoColorSpace* cs)

@@ -25,10 +25,10 @@
 /**
  * Greater-than compositor - uses the greater of two alpha values to determine the color
  */
-template<class CS_Traits>
-class KoCompositeOpGreater : public KoCompositeOpBase<CS_Traits, KoCompositeOpGreater<CS_Traits> >
+template<class CS_Traits, typename BlendingPolicy>
+class KoCompositeOpGreater : public KoCompositeOpBase<CS_Traits, KoCompositeOpGreater<CS_Traits, BlendingPolicy>>
 {
-    typedef KoCompositeOpBase<CS_Traits, KoCompositeOpGreater<CS_Traits> > base_class;
+    typedef KoCompositeOpBase<CS_Traits, KoCompositeOpGreater<CS_Traits, BlendingPolicy>> base_class;
     typedef typename CS_Traits::channels_type channels_type;
     typedef typename KoColorSpaceMathsTraits<typename CS_Traits::channels_type>::compositetype composite_type;
    
@@ -77,15 +77,15 @@ public:
                 {
                     typedef typename KoColorSpaceMathsTraits<channels_type>::compositetype composite_type;
 
-                    channels_type dstMult = mul(dst[channel], dstAlpha);
-                    channels_type srcMult = mul(src[channel], unitValue<channels_type>());
+                    channels_type dstMult = mul(BlendingPolicy::toAdditiveSpace(dst[channel]), dstAlpha);
+                    channels_type srcMult = mul(BlendingPolicy::toAdditiveSpace(src[channel]), unitValue<channels_type>());
                     channels_type blendedValue = lerp(dstMult, srcMult, scale<channels_type>(fakeOpacity));
                     // CID 249016 (#1 of 15):
                     // Division or modulo by zero (DIVIDE_BY_ZERO)12. divide_by_zero: In function call divide, division by expression newDstAlpha which may be zero has undefined behavior.
                     if (newDstAlpha == 0) newDstAlpha = 1;
                     composite_type normedValue = KoColorSpaceMaths<channels_type>::divide(blendedValue, newDstAlpha);
 
-                    dst[channel] = KoColorSpaceMaths<channels_type>::clampAfterScale(normedValue);
+                    dst[channel] = BlendingPolicy::fromAdditiveSpace(KoColorSpaceMaths<channels_type>::clampAfterScale(normedValue));
 				}
         }       
         else {

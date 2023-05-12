@@ -17,6 +17,7 @@ kis_add_tests(
     TestKoColorSpaceSanity.cpp
     TestFallBackColorTransformation.cpp
     TestKoChannelInfo.cpp
+    TestCompositeOpInversion.cpp
     NAME_PREFIX "libs-pigment-"
     LINK_LIBRARIES kritapigment KF5::I18n kritatestsdk
     )

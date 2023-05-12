@@ -362,7 +362,13 @@ KisImportExportErrorCode KraConverter::loadXML(const QDomDocument &doc, KoStore 
         return ImportExportCodes::FileFormatIncorrect;
     }
 
-    m_kraLoader = new KisKraLoader(m_doc, syntaxVersion);
+    QString kritaVersionTag = root.attribute("kritaVersion", "6.0");
+    QVersionNumber kritaVersionNumber = QVersionNumber::fromString(kritaVersionTag);
+    if (kritaVersionNumber.isNull()) {
+        kritaVersionNumber = QVersionNumber::fromString(KritaVersionWrapper::versionString(false));
+    }
+
+    m_kraLoader = new KisKraLoader(m_doc, syntaxVersion, kritaVersionNumber);
 
     // reset the old image before loading the next one
     m_doc->setCurrentImage(0, false);

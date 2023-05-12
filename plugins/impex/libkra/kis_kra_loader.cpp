@@ -122,6 +122,7 @@ public:
     QString imageComment; // used to be stored in the image, is now in the documentInfo block
     QMap<KisNode*, QString> layerFilenames; // temp storage during loading
     int syntaxVersion; // version of the fileformat we are loading
+    QVersionNumber kritaVersion;
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
     QMap<QString, QString> assistantsFilenames;
     StoryboardItemList storyboardItemList;
@@ -174,11 +175,12 @@ void convertColorSpaceNames(QString &colorspacename, QString &profileProductName
     }
 }
 
-KisKraLoader::KisKraLoader(KisDocument * document, int syntaxVersion)
+KisKraLoader::KisKraLoader(KisDocument * document, int syntaxVersion, const QVersionNumber &kritaVersion)
     : m_d(new Private())
 {
     m_d->document = document;
     m_d->syntaxVersion = syntaxVersion;
+    m_d->kritaVersion = kritaVersion;
 }
 
 
@@ -789,6 +791,8 @@ KisNodeSP KisKraLoader::loadNodes(const QDomElement& element, KisImageSP image, 
     return parent;
 }
 
+#include <KoColorSpaceBlendingPolicy.h>
+
 KisNodeSP KisKraLoader::loadNode(const QDomElement& element, KisImageSP image)
 {
     // Nota bene: If you add new properties to layers, you should
@@ -858,6 +862,7 @@ KisNodeSP KisKraLoader::loadNode(const QDomElement& element, KisImageSP image)
     }
 
 
+
     KisNodeSP node = 0;
 
     if (nodeType == PAINT_LAYER)
@@ -912,6 +917,18 @@ KisNodeSP KisKraLoader::loadNode(const QDomElement& element, KisImageSP image)
     if (node->inherits("KisLayer") || node->inherits("KisColorizeMask")) {
         QString compositeOpName = element.attribute(COMPOSITE_OP, "normal");
         node->setCompositeOpId(compositeOpName);
+
+        if (m_d->kritaVersion < QVersionNumber(5, 2) &&
+            colorSpace->colorModelId() == CMYKAColorModelID &&
+            subtractiveBlendingModesInCmyk().contains(compositeOpName)) {
+
+            m_d->warningMessages <<
+                i18n("Layer %1 has blending mode \"%2\" that has changed its "
+                    "behavior for CMYK color in Krita 5.2. Please check the "
+                    "result and consider enabling legacy support in "
+                    "Preferences->General->Tools->CMYK blending mode",
+                    name, KoCompositeOpRegistry::instance().getKoID(compositeOpName).name());
+        }
     }
 
     if (node->inherits("KisLayer")) {

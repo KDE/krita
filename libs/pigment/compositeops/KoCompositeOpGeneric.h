@@ -19,11 +19,12 @@
  */
 template<
     class Traits,
-    typename Traits::channels_type compositeFunc(typename Traits::channels_type, typename Traits::channels_type)
+    typename Traits::channels_type compositeFunc(typename Traits::channels_type, typename Traits::channels_type),
+    typename BlendingPolicy
 >
-class KoCompositeOpGenericSC: public KoCompositeOpBase< Traits, KoCompositeOpGenericSC<Traits,compositeFunc> >
+class KoCompositeOpGenericSC: public KoCompositeOpBase< Traits, KoCompositeOpGenericSC<Traits,compositeFunc,BlendingPolicy> >
 {
-    typedef KoCompositeOpBase< Traits, KoCompositeOpGenericSC<Traits,compositeFunc> > base_class;
+    typedef KoCompositeOpBase< Traits, KoCompositeOpGenericSC<Traits,compositeFunc,BlendingPolicy> > base_class;
     typedef typename Traits::channels_type                                            channels_type;
     
     static const qint32 channels_nb = Traits::channels_nb;
@@ -41,15 +42,15 @@ public:
         using namespace Arithmetic;
         
         srcAlpha = mul(srcAlpha, maskAlpha, opacity);
-        
+
         if(alphaLocked) {
             if(dstAlpha != zeroValue<channels_type>()) {
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
-                        const channels_type srcInBlendSpace = Traits::toBlendSpace(src[i]);
-                        const channels_type dstInBlendSpace = Traits::toBlendSpace(dst[i]);
+                        const channels_type srcInBlendSpace = BlendingPolicy::toAdditiveSpace(src[i]);
+                        const channels_type dstInBlendSpace = BlendingPolicy::toAdditiveSpace(dst[i]);
 
-                        dst[i] = Traits::fromBlendSpace(
+                        dst[i] = BlendingPolicy::fromAdditiveSpace(
                             lerp(dstInBlendSpace,
                                  compositeFunc(srcInBlendSpace, dstInBlendSpace),
                                  srcAlpha));
@@ -63,16 +64,17 @@ public:
             channels_type newDstAlpha = unionShapeOpacity(srcAlpha, dstAlpha);
             
             if(newDstAlpha != zeroValue<channels_type>()) {
+
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
-                        const channels_type srcInBlendSpace = Traits::toBlendSpace(src[i]);
-                        const channels_type dstInBlendSpace = Traits::toBlendSpace(dst[i]);
+                        const channels_type srcInBlendSpace = BlendingPolicy::toAdditiveSpace(src[i]);
+                        const channels_type dstInBlendSpace = BlendingPolicy::toAdditiveSpace(dst[i]);
 
                         channels_type result =
                             blend(srcInBlendSpace, srcAlpha,
                                   dstInBlendSpace, dstAlpha,
                                   compositeFunc(srcInBlendSpace, dstInBlendSpace));
-                        dst[i] = Traits::fromBlendSpace(div(result, newDstAlpha));
+                        dst[i] = BlendingPolicy::fromAdditiveSpace(div(result, newDstAlpha));
                     }
                 }
             }
@@ -179,10 +181,10 @@ public:
  * needs to make alpha blending itself - the value of color that is written onto the projection
  * is the same that the composite function gives (compare with KoCompositeOpGenericHSL and KoCompositeOpGenericSC).
  */
-template<class Traits, void compositeFunc(float, float, float&, float&)>
-class KoCompositeOpGenericSCAlpha: public KoCompositeOpBase< Traits, KoCompositeOpGenericSCAlpha<Traits,compositeFunc> >
+template<class Traits, void compositeFunc(float, float, float&, float&), typename BlendingPolicy>
+class KoCompositeOpGenericSCAlpha: public KoCompositeOpBase< Traits, KoCompositeOpGenericSCAlpha<Traits,compositeFunc,BlendingPolicy> >
 {
-    typedef KoCompositeOpBase< Traits, KoCompositeOpGenericSCAlpha<Traits,compositeFunc> > base_class;
+    typedef KoCompositeOpBase< Traits, KoCompositeOpGenericSCAlpha<Traits,compositeFunc,BlendingPolicy> > base_class;
     typedef typename Traits::channels_type                                             channels_type;
 
     static const qint32 channels_nb = Traits::channels_nb;
@@ -207,10 +209,10 @@ public:
             if(dstAlpha != zeroValue<channels_type>()) {
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
-                        float dstValueFloat = scale<float>(dst[i]);
+                        float dstValueFloat = scale<float>(BlendingPolicy::toAdditiveSpace(dst[i]));
                         float dstAlphaFloat = scale<float>(oldAlpha);
-                        compositeFunc(scale<float>(src[i]), scale<float>(srcAlpha), dstValueFloat, dstAlphaFloat);
-                        dst[i] = scale<channels_type>(dstValueFloat);
+                        compositeFunc(scale<float>(BlendingPolicy::toAdditiveSpace(src[i])), scale<float>(srcAlpha), dstValueFloat, dstAlphaFloat);
+                        dst[i] = BlendingPolicy::fromAdditiveSpace(scale<channels_type>(dstValueFloat));
                     }
                 }
             }
@@ -224,10 +226,10 @@ public:
             if(newDstAlpha != zeroValue<channels_type>()) {
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
-                        float dstFloat = scale<float>(dst[i]);
+                        float dstFloat = scale<float>(BlendingPolicy::toAdditiveSpace(dst[i]));
                         float dstAlphaFloat = scale<float>(oldAlpha);
-                        compositeFunc(scale<float>(src[i]), scale<float>(srcAlpha), dstFloat, dstAlphaFloat);
-                        dst[i] = scale<channels_type>(dstFloat);
+                        compositeFunc(scale<float>(BlendingPolicy::toAdditiveSpace(src[i])), scale<float>(srcAlpha), dstFloat, dstAlphaFloat);
+                        dst[i] = BlendingPolicy::fromAdditiveSpace(scale<channels_type>(dstFloat));
                     }
                 }
             }

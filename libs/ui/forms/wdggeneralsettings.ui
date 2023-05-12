@@ -697,35 +697,35 @@
          </item>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="3" column="1">
         <widget class="QCheckBox" name="m_chkSwitchSelectionCtrlAlt">
          <property name="text">
           <string>Switch Control/Alt Selection Modifiers</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="4" column="1">
         <widget class="QCheckBox" name="chkEnableTouch">
          <property name="text">
           <string>Enable Touch Painting</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="5" column="1">
         <widget class="QCheckBox" name="chkEnableTranformToolAfterPaste">
          <property name="text">
           <string>Activate transform tool after pasting</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item row="6" column="0">
         <widget class="QLabel" name="lblZoomSteps">
          <property name="text">
           <string>Zoom steps between powers of 2</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item row="6" column="1">
         <widget class="QSpinBox" name="spnZoomSteps">
          <property name="minimum">
           <number>1</number>
@@ -735,7 +735,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0" colspan="2">
+       <item row="7" column="0" colspan="2">
         <widget class="QGroupBox" name="m_groupBoxKineticScrollingSettings">
          <property name="title">
           <string>Kinetic Scrolling (needs restart)</string>
@@ -814,7 +814,7 @@
          </layout>
         </widget>
        </item>
-       <item row="7" column="0" colspan="2">
+       <item row="8" column="0" colspan="2">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -826,6 +826,27 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="cmbCmykBlendingMode">
+         <item>
+          <property name="text">
+           <string>Subtractive (Krita 5.2+)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Additive (Krita 5.1 and earlier versions)</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lblCmykBlendingMode">
+         <property name="text">
+          <string>CMYK blending mode (needs restart):</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -1116,7 +1137,7 @@
             <x>0</x>
             <y>0</y>
             <width>577</width>
-            <height>510</height>
+            <height>504</height>
            </rect>
           </property>
           <property name="sizePolicy">

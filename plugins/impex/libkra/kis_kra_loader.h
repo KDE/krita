@@ -16,6 +16,7 @@ class KisDocument;
 class KoColorSpace;
 class KisPaintingAssistant;
 class StoryboardComment;
+class QVersionNumber;
 
 #include <kis_types.h>
 #include "kritalibkra_export.h"
@@ -29,7 +30,7 @@ class KRITALIBKRA_EXPORT KisKraLoader
 
 public:
 
-    KisKraLoader(KisDocument * document, int syntaxVersion);
+    KisKraLoader(KisDocument * document, int syntaxVersion, const QVersionNumber &kritaVersion);
 
     ~KisKraLoader();
 

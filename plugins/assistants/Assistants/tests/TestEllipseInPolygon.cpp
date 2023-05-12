@@ -348,10 +348,8 @@ void TestEllipseInPolygon::testConicCalculationsPhaseHI()
     }
 }
 
-void TestEllipseInPolygon::testProjectInEllipseInPolygon()
+void TestEllipseInPolygon::testProjectInEllipseInPolygonHelper(EllipseInPolygon &eip, QPointF &original)
 {
-    // test plan:
-    // - get random points
     // - project using EiP code
     // - project using our own test code, make sure it's the same
     // - transform the original point using the transformations
@@ -359,39 +357,54 @@ void TestEllipseInPolygon::testProjectInEllipseInPolygon()
     // - check it's distance to focal points is not infinite (I guess I'll have to calculate focal points, then?)
     // - check the distance of the original point to the nearest point is sane
     // - check it's in the same quadrant of the ellipse (again, calculating :/ )
+
+    QPointF projected = eip.project(original);
+    QPointF center = QPointF(eip.finalEllipseCenter[0], eip.finalEllipseCenter[1]);
+    ENTER_FUNCTION() << kisDistance(projected, original) + kisDistance(projected, center) << kisDistance(original, center);
+    // now, maybe angle between ori - center and ori-proj
+    QPointF vector1 = center - projected;
+    QPointF vector2 = center - original;
+    //qreal cosinus = KisAlgebra2D::dotProduct(vec1, vec2)/(kisDistance(vec1, QPointF()), kisDistance(vec2, QPointF()));
+    //ENTER_FUNCTION() << "cosinus is = " << cosinus;
+
+    qreal angle = qAtan2(vector2.y(), vector2.x()) - atan2(vector1.y(), vector1.x());
+
+    if (angle > M_PI) {
+        angle -= 2 * M_PI;
+    } else if (angle <= -M_PI) {
+        angle += 2 * M_PI;
+    }
+
+
+    ENTER_FUNCTION() << "angle is: " << angle << kisRadiansToDegrees(angle);
+    //maxAbsAngle = qMax(maxAbsAngle, qAbs(angle));
+
+    QVERIFY(qAbs(angle) < M_PI_2);
+    QVERIFY(eip.calculateFormula(projected) < 1e-13);
+}
+
+void TestEllipseInPolygon::testProjectInEllipseInPolygon()
+{
+    // test plan:
+    // - get random points
+
     QRandomGenerator random(1234);
 
     int n = 100;
-    qreal maxAbsAngle = 0;
+    //qreal maxAbsAngle = 0;
     for (int i = 0; i < n; i++) {
         EllipseInPolygon eip = randomEllipseInPolygon(random);
         QPointF original = randomPoint(random);
-        QPointF projected = eip.project(original);
-        QPointF center = QPointF(eip.finalEllipseCenter[0], eip.finalEllipseCenter[1]);
-        ENTER_FUNCTION() << kisDistance(projected, original) + kisDistance(projected, center) << kisDistance(original, center);
-        // now, maybe angle between ori - center and ori-proj
-        QPointF vector1 = center - projected;
-        QPointF vector2 = center - original;
-        //qreal cosinus = KisAlgebra2D::dotProduct(vec1, vec2)/(kisDistance(vec1, QPointF()), kisDistance(vec2, QPointF()));
-        //ENTER_FUNCTION() << "cosinus is = " << cosinus;
+        testProjectInEllipseInPolygonHelper(eip, original);
 
-        qreal angle = qAtan2(vector2.y(), vector2.x()) - atan2(vector1.y(), vector1.x());
-
-        if (angle > M_PI) {
-            angle -= 2 * M_PI;
-        } else if (angle <= -M_PI) {
-            angle += 2 * M_PI;
-        }
-
-
-        ENTER_FUNCTION() << "angle is: " << angle << kisRadiansToDegrees(angle);
-        maxAbsAngle = qMax(maxAbsAngle, qAbs(angle));
-
-        QVERIFY(qAbs(angle) < M_PI_2);
-        QVERIFY(eip.calculateFormula(projected) < 1e-13);
     }
 
-    ENTER_FUNCTION() << "angles: " << ppVar(kisRadiansToDegrees(maxAbsAngle));
+    //ENTER_FUNCTION() << "angles: " << ppVar(kisRadiansToDegrees(maxAbsAngle));
+
+}
+
+void TestEllipseInPolygon::testProjectInEllipseInPolygonManual()
+{
 
 }
 

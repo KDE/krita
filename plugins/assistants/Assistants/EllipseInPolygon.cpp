@@ -184,7 +184,7 @@ bool EllipseInPolygon::updateToPointOnConcentricEllipse(QTransform _originalTran
 
 QPointF EllipseInPolygon::project(QPointF point)
 {
-    return projectModifiedEberlyThird(point);
+    return projectModifiedEberlyFourthNoDebug(point);
 }
 
 QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
@@ -744,6 +744,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     qreal previousT;
     bool overshoot;
+    /*
     qreal tresult = AlgebraFunctions::newtonUntilOvershoot(Pt, Ptd, t0, previousT, overshoot, debug);
     if (overshoot) {
         if (debug) ENTER_FUNCTION() << "# NEWTON OVERSHOT # t: " << ppVar(tresult) << ppVar(previousT) << ppVar(Pt(tresult)) << ppVar(Pt(previousT));
@@ -752,6 +753,8 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     } else {
         if (debug) ENTER_FUNCTION() << "# NO OVERSHOOT # values are: " << ppVar(tresult) << ppVar(previousT) << ppVar(Pt(tresult)) << ppVar(Pt(previousT));
     }
+    */
+    qreal tresult = GSLEllipseHelper::RunGslNewton(t0, f.formINegatedY);
 
 
     qreal foundX = -f.formINegatedY.D*tresult/qPow(f.formINegatedY.A*tresult + 1, 1);
@@ -1410,6 +1413,7 @@ QPointF EllipseInPolygon::projectModifiedEberlyFourthNoDebug(QPointF point)
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f.formINegatedY.C >= 0 && f.formINegatedY.D >= 0 && f.formINegatedY.E >= 0, originalPoint);
 
+    /*
     auto Pt = [f] (double t) {
         ConicFormula ff = f.formINegatedY;
         return -ff.D*ff.D*t*((ff.A*t + 2)/((ff.A*t + 1)*(ff.A*t + 1))) - ff.E*ff.E * t * (ff.C*t+2)/((ff.C*t+1)*(ff.C*t+1)) + ff.F;
@@ -1419,6 +1423,20 @@ QPointF EllipseInPolygon::projectModifiedEberlyFourthNoDebug(QPointF point)
         ConicFormula ff = f.formINegatedY;
         return - (2*ff.D*ff.D)/(qPow(ff.A*t*t + 1, 3)) - (2*ff.E*ff.E)/qPow(ff.C*t*t + 1, 3);
     };
+    */
+    auto Pt = [f] (double t) {
+        ConicFormula ff = f.formINegatedY;
+        return GSLEllipseHelper::ConicFunctionsF(t, &ff);
+    };
+
+    auto Ptd = [f] (double t) {
+        ConicFormula ff = f.formINegatedY;
+        return GSLEllipseHelper::ConicFunctionsDf(t, &ff);
+    };
+
+
+
+
 
 
     if ((qFuzzyCompare(f.formINegatedY.D, 0) || qFuzzyCompare(f.formINegatedY.E, 0))) {
@@ -1428,6 +1446,16 @@ QPointF EllipseInPolygon::projectModifiedEberlyFourthNoDebug(QPointF point)
     qreal t0 = ConicCalculations::getStartingPoint(f.formINegatedY, Pt, Ptd);
 
     qreal tresult = GSLEllipseHelper::RunGslNewton(t0, f.formINegatedY);
+    if (!qIsFinite(Pt(t0)) || qIsNaN(t0)) {
+        fprintf(stderr, "polygon...");
+        ENTER_FUNCTION() << "polygon was: ";
+        Q_FOREACH(QPointF p, polygon) {
+            ENTER_FUNCTION() << p;
+            fprintf(stderr, "%d, ");
+        }
+        fprintf(stderr, "| end of polygon \n");
+        ENTER_FUNCTION();
+    }
 
     qreal foundX = -f.formINegatedY.D*tresult/qPow(f.formINegatedY.A*tresult + 1, 1);
     qreal foundY = -f.formINegatedY.E*tresult/qPow(f.formINegatedY.C*tresult + 1, 1);
@@ -2118,7 +2146,7 @@ void ConicFormula::setFormulaSpecial(qreal a, qreal b, qreal c, qreal d, qreal e
     setData(a, b, c, d, e, f);
 }
 
-QVector<double> ConicFormula::getFormulaSpecial()
+QVector<double> ConicFormula::getFormulaSpecial() const
 {
     QVector<double> response;
     if (isSpecial()) {
@@ -2129,7 +2157,7 @@ QVector<double> ConicFormula::getFormulaSpecial()
     return response;
 }
 
-QVector<double> ConicFormula::getFormulaActual()
+QVector<double> ConicFormula::getFormulaActual() const
 {
     QVector<double> response;
     if (isSpecial()) {
@@ -2140,7 +2168,7 @@ QVector<double> ConicFormula::getFormulaActual()
     return response;
 }
 
-QVector<double> ConicFormula::getData()
+QVector<double> ConicFormula::getData() const
 {
     QVector<double> response;
     response << A << B << C << D << E << F;
@@ -2160,7 +2188,7 @@ void ConicFormula::convertTo(TYPE type)
     }
 }
 
-QString ConicFormula::toWolframAlphaForm()
+QString ConicFormula::toWolframAlphaForm() const
 {
     auto writeOutNumber = [] (double n, bool first = false) {
         QString str;
@@ -2181,7 +2209,7 @@ QString ConicFormula::toWolframAlphaForm()
     return str;
 }
 
-void ConicFormula::printOutInAllForms()
+void ConicFormula::printOutInAllForms() const
 {
 
     QVector<double> actualForm = getFormulaActual();
@@ -2506,6 +2534,64 @@ QPointF ConicCalculations::undoRotatingFormula(QPointF point, double K, double L
     return EllipseInPolygon::getRotatedPoint(point, K, L, true);
 }
 
+double getStartingPointDebug(ConicFormula formula, std::function<double (double)> Pt)
+{
+    qreal A = formula.A;
+    qreal C = formula.C;
+    qreal D = formula.D;
+    qreal E = formula.E;
+    qreal F = formula.F;
+    bool debug = true;
+
+
+    ENTER_FUNCTION() << "Formula: " << ppVar(A) << ppVar(C) << ppVar(D) << ppVar(E) << ppVar(F);
+
+
+    qreal t0 = 0; // starting point for newton method
+
+    // will be useful for both cases
+    qreal t0d = F/(D*D - A*F + D*sqrt(D*D - A*F));
+    qreal t0dd = F/(E*E - C*F + E*sqrt(E*E - C*F));
+
+    ENTER_FUNCTION() << ppVar(t0d) << ppVar(t0dd) << ", at first t0 = 0";
+
+
+    if (A >= 0) { // ellipses and parabolas
+        // we got to find t0 where P(t0) >= 0
+        if (F < 0) {
+            t0 = qMax(t0d, t0dd);
+            ENTER_FUNCTION() << "Case 1: max(tod, todd)" << ppVar(t0);
+        } // else t0 = 0
+    } else { // hyperbolas
+
+        qreal U = sqrt(sqrt(-A*D*D));
+        qreal V = sqrt(sqrt(C*E*E));
+        qreal tstar = - (U - V)/(C*U - A*V); // inflection point of Pt
+
+        qreal Pstar = Pt(tstar);
+        if (debug) ENTER_FUNCTION() << ppVar(Pstar) << ppVar(tstar) << ppVar(U) << ppVar(V);
+
+        if (Pstar > 0) { // case (a)
+            if (F <= 0) {
+                t0 = 0;
+            } else {
+                t0 = qMin(t0d, t0dd);
+            }
+        } else if (Pstar < 0) {
+            if (F >= 0) {
+                t0 = 0;
+            } else {
+                t0 = qMax(t0d, t0dd);
+            }
+        } else {
+            // we found it already!!!
+            t0 = tstar;
+        }
+    }
+    return t0;
+
+}
+
 double ConicCalculations::getStartingPoint(ConicFormula formula, std::function<double (double)> Pt, std::function<double (double)> Ptd)
 {
     qreal A = formula.A;
@@ -2521,6 +2607,7 @@ double ConicCalculations::getStartingPoint(ConicFormula formula, std::function<d
     // will be useful for both cases
     qreal t0d = F/(D*D - A*F + D*sqrt(D*D - A*F));
     qreal t0dd = F/(E*E - C*F + E*sqrt(E*E - C*F));
+
 
     if (A >= 0) { // ellipses and parabolas
         // we got to find t0 where P(t0) >= 0
@@ -2552,6 +2639,9 @@ double ConicCalculations::getStartingPoint(ConicFormula formula, std::function<d
             // we found it already!!!
             t0 = tstar;
         }
+    }
+    if (!qIsFinite(Pt(t0)) || qIsNaN(t0)) {
+        getStartingPointDebug(formula, Pt);
     }
     return t0;
 }
@@ -2670,6 +2760,7 @@ qreal AlgebraFunctions::bisectionMethod(std::function<qreal (qreal)> f, qreal ta
 
 double GSLEllipseHelper::ConicFunctionsF(double x, void *params)
 {
+    fprintf(stderr, "is x nan or infinite? %d\n", qIsNaN(x) || !qIsFinite(x));
     ConicFormula ff = *(ConicFormula*)(params);
     //ENTER_FUNCTION() << "conic in f:";
     //ff.printOutInAllForms();
@@ -2677,8 +2768,27 @@ double GSLEllipseHelper::ConicFunctionsF(double x, void *params)
         //ConicFormula ff = f;
         double r = -ff.D*ff.D*t*((ff.A*t + 2)/((ff.A*t + 1)*(ff.A*t + 1))) - ff.E*ff.E * t * (ff.C*t+2)/((ff.C*t+1)*(ff.C*t+1)) + ff.F;
         //ENTER_FUNCTION() << "returning r: " << r;
+        if (!qIsFinite(r)) {
+            ENTER_FUNCTION() << "Why is it not finite?";
+            ENTER_FUNCTION() << "So, the function is like this:";
+            ENTER_FUNCTION() << "-ff.D*ff.D*t*((ff.A*t + 2)/((ff.A*t + 1)*(ff.A*t + 1))) - ff.E*ff.E * t * (ff.C*t+2)/((ff.C*t+1)*(ff.C*t+1)) + ff.F";
+            ff.printOutInAllForms();
+            ENTER_FUNCTION() << ppVar(t);
+            fprintf(stderr, "this should be between t and isnan t\n");
+            ENTER_FUNCTION() << ppVar(qIsNaN(t));
+
+
+            //KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false, r);
+        }
         return r;
     };
+    if (qIsNaN(x)) {
+        //ENTER_FUNCTION() << "still nan";
+        fprintf(stderr, "still nan!\n");
+    } else if (!qIsFinite(Pt(x))) {
+        //ENTER_FUNCTION() << "weird...";
+        fprintf(stderr, "weird...\n");
+    }
     //ENTER_FUNCTION() << "f result is = " << Pt(x);
     return Pt(x);
 }
@@ -2722,7 +2832,9 @@ double GSLEllipseHelper::RunGslNewton(double t0, ConicFormula& formula)
     fdf.df = &GSLEllipseHelper::ConicFunctionsDf;
     fdf.fdf = &GSLEllipseHelper::ConicFunctionsFdf;
     fdf.params = &formula;
+
     int r = gsl_root_fdfsolver_set(s, &fdf, t0);
+
     double x0 = t0;
 
     int iter = 0;

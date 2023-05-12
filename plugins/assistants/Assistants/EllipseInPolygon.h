@@ -42,19 +42,19 @@ public:
 
     // return the formula in the special ("canonical" by the article authors) form
     // (with Ax^2 + 2Bxy + Cy^2... etc.)
-    QVector<double> getFormulaSpecial();
+    QVector<double> getFormulaSpecial() const;
     // return the formula in the actual form (with Ax^2 + Bxy + Cy^2... etc.)
-    QVector<double> getFormulaActual();
+    QVector<double> getFormulaActual() const;
     // return the data as they are stored (A, B, C, ...)
-    QVector<double> getData();
+    QVector<double> getData() const;
 
     void convertTo(TYPE type);
 
     // functions helpful for debugging
-    QString toWolframAlphaForm();
-    void printOutInAllForms();
+    QString toWolframAlphaForm() const;
+    void printOutInAllForms() const;
 
-    bool isSpecial() { return Type == SPECIAL; }
+    bool isSpecial() const { return Type == SPECIAL; }
 
 
     bool operator ==(ConicFormula f);

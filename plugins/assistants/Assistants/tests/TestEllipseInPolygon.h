@@ -36,6 +36,8 @@ private Q_SLOTS:
     void testConicCalculationsPhaseHI();
 
     void testProjectInEllipseInPolygon();
+    void testProjectInEllipseInPolygonManual();
+
     void testDifferentCodes();
 
 private:
@@ -43,6 +45,8 @@ private:
     QPointF randomPoint(QRandomGenerator& random);
     EllipseInPolygon randomEllipseInPolygon(QRandomGenerator& random);
     QPolygonF randomTetragon(QRandomGenerator &random);
+
+    void testProjectInEllipseInPolygonHelper(EllipseInPolygon& eip, QPointF& original);
 
 
 

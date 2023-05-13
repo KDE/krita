@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-12 00:45+0000\n"
-"PO-Revision-Date: 2023-05-05 21:15+0200\n"
+"PO-Revision-Date: 2023-05-10 11:53+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -30642,11 +30642,9 @@ msgid "Also save your image as a Krita file."
 msgstr "Enregistrer aussi votre image comme un fichier Krita."
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "Masquer la fenêtre de vignette du calque"
+msgstr "Mettre à jour les vignettes de calques"
 
 #: libs/ui/KisMainWindow.cpp:184
 #, kde-format
@@ -38871,7 +38869,7 @@ msgstr "Grille et Guides"
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
 msgctxt "(qtundo-format)"
 msgid "fkdfjkdjfk"
-msgstr ""
+msgstr "fkdfjkdjfk"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format

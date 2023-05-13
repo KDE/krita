@@ -694,5 +694,6 @@
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>
     <value key="KDE::google_play">https://play.google.com/store/apps/details?id=org.krita</value>
+    <value key="KDE::mastodon">https://mastodon.art/@Krita/106413722232002973</value>
   </custom>
 </component>

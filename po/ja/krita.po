@@ -34,7 +34,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-02-26 23:02-0800\n"
+"PO-Revision-Date: 2023-05-13 11:23-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
 "Language: ja\n"
@@ -22815,11 +22815,13 @@ msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
+"ブラシの速度計算にタブレットドライバのタイムスタンプを使用する(WinTabタブレッ"
+"トAPIを使用している場合、かなり不自然な結果になる恐れがあります)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1105
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
-msgstr ""
+msgstr "ブラシの速度計算にタブレットドライバのタイムスタンプを使用する"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1213
@@ -25029,7 +25031,7 @@ msgstr "保存時にファイルをトリムする"
 #: libs/ui/forms/wdggeneralsettings.ui:915
 #, kde-format
 msgid "Trim frames when importing animations"
-msgstr ""
+msgstr "アニメーションをインポートするときにフレームをトリムする"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdggeneralsettings.ui:996
@@ -25189,6 +25191,7 @@ msgstr ""
 #, kde-format
 msgid "Prefer downloading the original source (this requires Internet access)"
 msgstr ""
+"オリジナルのダウンロードを優先する(インターネットへのアクセスが必要です)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteContext)
 #: libs/ui/forms/wdggeneralsettings.ui:1331
@@ -25197,12 +25200,16 @@ msgid ""
 "Some applications, like Google Chrome, provide multiple formats when pasting "
 "or dropping an image."
 msgstr ""
+"Google Chromeのようないくつかのアプリケーションは、貼り付け時やドロップ時に複"
+"数のフォーマットを提供します。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnLocal)
 #: libs/ui/forms/wdggeneralsettings.ui:1338
 #, kde-format
 msgid "Prefer a local copy (if available; metadata may be lost)"
 msgstr ""
+"ローカルのコピーを優先する(利用可能な場合。メタデータが失われる恐れがありま"
+"す)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnBitmap)
 #: libs/ui/forms/wdggeneralsettings.ui:1345
@@ -25211,6 +25218,8 @@ msgid ""
 "Paste the attached sRGB bitmap (no filesystem or Internet access required, "
 "but metadata will be lost)"
 msgstr ""
+"付随するsRGBビットマップを貼り付ける(ファイルシステムやインターネットへのアク"
+"セスは必要ありませんが、メタデータは失われます)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsk)
 #: libs/ui/forms/wdggeneralsettings.ui:1352
@@ -46347,7 +46356,7 @@ msgstr "このアニメーションは 240fps 以上のフレームレートを�
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (only for low quality)"
-msgstr "通常（低品質の場合のみ）"
+msgstr "通常(低品質の場合のみ)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:33

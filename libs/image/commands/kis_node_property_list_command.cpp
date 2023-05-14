@@ -84,7 +84,7 @@ void KisNodePropertyListCommand::redo()
 void KisNodePropertyListCommand::undo()
 {
     const KisBaseNode::PropertyList propsBefore = m_node->sectionModelProperties();
-    const QSet<QString> changed = changedProperties(propsBefore, m_newPropertyList);
+    const QSet<QString> changed = changedProperties(propsBefore, m_oldPropertyList);
     if (changed.isEmpty()) return;
 
     const QRect oldExtent = m_node->projectionPlane()->tightUserVisibleBounds();

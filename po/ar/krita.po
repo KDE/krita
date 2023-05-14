@@ -305,13 +305,13 @@ msgstr "نمط كسيرة"
 #, kde-format
 msgctxt "./krita/data/patterns/generic_paper1.pat"
 msgid "Generic Paper 2"
-msgstr "ورقة عامّة ٢"
+msgstr "ورقة عامّة 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/generic_paper2.pat"
 msgid "Generic Paper 3"
-msgstr "ورقة عامّة ٣"
+msgstr "ورقة عامّة 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2503,7 +2503,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Pixelart_square.kpp"
 msgid "Pixelart square"
-msgstr "فنّ بكسليّ ١٦"
+msgstr "فنّ بكسليّ 16"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3591,7 +3591,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "generic_paper1.pat"
 msgid "Generic Paper 2"
-msgstr "ورقة عامّة ٢"
+msgstr "ورقة عامّة 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3599,7 +3599,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "generic_paper2.pat"
 msgid "Generic Paper 3"
-msgstr "ورقة عامّة ٣"
+msgstr "ورقة عامّة 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4664,7 +4664,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "u)_Pixel_Art.kpp"
 msgid "u) Pixel Art"
-msgstr "فنّ بكسليّ ١٦"
+msgstr "فنّ بكسليّ 16"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4684,7 +4684,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "u)_Pixel_Art_Fill.kpp"
 msgid "u) Pixel Art Fill"
-msgstr "فنّ بكسليّ ١٦"
+msgstr "فنّ بكسليّ 16"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5386,7 +5386,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "generic_paper1.pat"
 msgid "Generic Paper 2"
-msgstr "ورقة عامّة ٢"
+msgstr "ورقة عامّة 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5394,7 +5394,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "generic_paper2.pat"
 msgid "Generic Paper 3"
-msgstr "ورقة عامّة ٣"
+msgstr "ورقة عامّة 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -6700,7 +6700,7 @@ msgstr "استخدم ضغط القلم"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:gradients/BG-Krita2.ggr"
 msgid "BG-Krita2. Gradient background for brush preset icons."
-msgstr "خلفيّة-كريتا٢. خلفيّة تدرّج لأيقونات الفُرش مسبقة الضّبط."
+msgstr "خلفيّة-كريتا2. خلفيّة تدرّج لأيقونات الفُرش مسبقة الضّبط."
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:gradients/GPS-eye-_Blue_.ggr:2
@@ -6887,7 +6887,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-16."
 "gpl"
 msgid "PixelArt 16"
-msgstr "فنّ بكسليّ ١٦"
+msgstr "فنّ بكسليّ 16"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-32.gpl:2
@@ -6896,7 +6896,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-32."
 "gpl"
 msgid "PixelArt 32"
-msgstr "فنّ بكسليّ ٣٢"
+msgstr "فنّ بكسليّ 32"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/ps.gpl:2
@@ -7232,7 +7232,7 @@ msgstr "ألوان مائية"
 #, fuzzy, kde-format
 msgctxt "./krita/data/gradients/BG-Krita2.ggr"
 msgid "BG-Krita2. Gradient background for brush preset icons."
-msgstr "خلفيّة-كريتا٢. خلفيّة تدرّج لأيقونات الفُرش مسبقة الضّبط."
+msgstr "خلفيّة-كريتا2. خلفيّة تدرّج لأيقونات الفُرش مسبقة الضّبط."
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/gradients/GPS-eye-_Blue_.ggr:2
@@ -7387,14 +7387,14 @@ msgstr "المؤشرات"
 #, kde-format
 msgctxt "./krita/data/palettes/pixelart-16.gpl"
 msgid "PixelArt 16"
-msgstr "فنّ بكسليّ ١٦"
+msgstr "فنّ بكسليّ 16"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/palettes/pixelart-32.gpl:2
 #, kde-format
 msgctxt "./krita/data/palettes/pixelart-32.gpl"
 msgid "PixelArt 32"
-msgstr "فنّ بكسليّ ٣٢"
+msgstr "فنّ بكسليّ 32"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/palettes/ps.gpl:2
@@ -7778,42 +7778,42 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate 90° CW"
-msgstr "دوّر ٩٠° مع عقارب السّاعة"
+msgstr "دوّر 90° مع عقارب السّاعة"
 
 #. i18n: context: toolTip @ Action (object_transform_rotate_90_cw), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:202
 #, kde-format
 msgctxt "action"
 msgid "Rotate object 90° clockwise"
-msgstr "دوّر الكائن ٩٠° مع عقارب السّاعة"
+msgstr "دوّر الكائن 90° مع عقارب السّاعة"
 
 #. i18n: context: text @ Action (object_transform_rotate_90_ccw), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:211
 #, kde-format
 msgctxt "action"
 msgid "Rotate 90° CCW"
-msgstr "دوّر ٩٠° عكس عقارب السّاعة"
+msgstr "دوّر 90° عكس عقارب السّاعة"
 
 #. i18n: context: toolTip @ Action (object_transform_rotate_90_ccw), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:212
 #, kde-format
 msgctxt "action"
 msgid "Rotate object 90° counterclockwise"
-msgstr "دوّر الكائن ٩٠° عكس عقارب السّاعة"
+msgstr "دوّر الكائن 90° عكس عقارب السّاعة"
 
 #. i18n: context: text @ Action (object_transform_rotate_180), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:221
 #, kde-format
 msgctxt "action"
 msgid "Rotate 180°"
-msgstr "دوّر ١٨٠°"
+msgstr "دوّر 180°"
 
 #. i18n: context: toolTip @ Action (object_transform_rotate_180), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:222
 #, kde-format
 msgctxt "action"
 msgid "Rotate object 180°"
-msgstr "دوّر الكائن ١٨٠°"
+msgstr "دوّر الكائن 180°"
 
 #. i18n: context: text @ Action (object_transform_mirror_horizontally), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:231
@@ -12701,7 +12701,7 @@ msgstr "دوّر الطّبقة"
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Layer 90° to the Right"
-msgstr "دوّر ال&طّبقة ٩٠° يمينًا"
+msgstr "دوّر ال&طّبقة 90° يمينًا"
 
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
@@ -12711,14 +12711,14 @@ msgstr "دوّر ال&طّبقة ٩٠° يمينًا"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 90° to the Right"
-msgstr "دوّر الطّبقة ٩٠° يمينًا"
+msgstr "دوّر الطّبقة 90° يمينًا"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3172
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer &90° to the Left"
-msgstr "دوّر الطّبقة ٩٠° &يسارًا"
+msgstr "دوّر الطّبقة 90° &يسارًا"
 
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
@@ -12728,7 +12728,7 @@ msgstr "دوّر الطّبقة ٩٠° &يسارًا"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 90° to the Left"
-msgstr "دوّر الطّبقة ٩٠° يسارًا"
+msgstr "دوّر الطّبقة 90° يسارًا"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3184
@@ -12745,7 +12745,7 @@ msgstr "دوّر الطّبقة &180°"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 180°"
-msgstr "دوّر الطّبقة ١٨٠°"
+msgstr "دوّر الطّبقة 180°"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3196
@@ -12855,7 +12855,7 @@ msgstr "دوّر الطّبقة"
 #| msgid "Rotate &Layer 90° to the Right"
 msgctxt "action"
 msgid "Rotate All &Layers 90° to the Right"
-msgstr "دوّر ال&طّبقة ٩٠° يمينًا"
+msgstr "دوّر ال&طّبقة 90° يمينًا"
 
 #. i18n: context: toolTip @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
@@ -12867,14 +12867,14 @@ msgstr "دوّر ال&طّبقة ٩٠° يمينًا"
 #| msgid "Rotate Layer 90° to the Right"
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Right"
-msgstr "دوّر الطّبقة ٩٠° يمينًا"
+msgstr "دوّر الطّبقة 90° يمينًا"
 
 #. i18n: context: text @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3268
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &90° to the Left"
-msgstr "دوّر الطّبقة &٩٠° يسارًا"
+msgstr "دوّر الطّبقة &90° يسارًا"
 
 #. i18n: context: toolTip @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
@@ -12886,14 +12886,14 @@ msgstr "دوّر الطّبقة &٩٠° يسارًا"
 #| msgid "Rotate Layer 90° to the Left"
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Left"
-msgstr "دوّر الطّبقة ٩٠° يسارًا"
+msgstr "دوّر الطّبقة 90° يسارًا"
 
 #. i18n: context: text @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3280
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &180°"
-msgstr "دوّر الطّبقة ١٨٠°"
+msgstr "دوّر الطّبقة 180°"
 
 #. i18n: context: toolTip @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
@@ -12905,7 +12905,7 @@ msgstr "دوّر الطّبقة ١٨٠°"
 #| msgid "Rotate Layer 180°"
 msgctxt "action"
 msgid "Rotate All Layers 180°"
-msgstr "دوّر الطّبقة ١٨٠°"
+msgstr "دوّر الطّبقة 180°"
 
 #. i18n: context: text @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3292
@@ -14485,7 +14485,7 @@ msgstr "اعكس المنظور"
 #| msgid "Zoom to 100%"
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "قرّب إلى ١٠٠٪"
+msgstr "قرّب إلى 100٪"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
@@ -14496,7 +14496,7 @@ msgstr "قرّب إلى ١٠٠٪"
 #| msgid "Zoom to 100%"
 msgctxt "action"
 msgid "Zoom to 100%"
-msgstr "قرّب إلى ١٠٠٪"
+msgstr "قرّب إلى 100٪"
 
 #. i18n: context: text @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:774
@@ -16518,7 +16518,7 @@ msgstr ""
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
-msgstr "التّباعد > ٠٫٥، من الأفضل تعطيل المعاينة اللحظيّة"
+msgstr "التّباعد > 0٫5، من الأفضل تعطيل المعاينة اللحظيّة"
 
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:28
 #: libs/brush/KisBrushTypeMetaDataFixup.cpp:35
@@ -28875,42 +28875,42 @@ msgstr "وضع غاما"
 #: libs/ui/input/kis_gamma_exposure_action.cpp:70
 #, kde-format
 msgid "Exposure +0.5"
-msgstr "التّعريض +٠٫٥"
+msgstr "التّعريض +0٫5"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:71
 #, kde-format
 msgid "Exposure -0.5"
-msgstr "التّعريض -٠٫٥"
+msgstr "التّعريض -0٫5"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:72
 #, kde-format
 msgid "Gamma +0.5"
-msgstr "غاما +٠٫٥"
+msgstr "غاما +0٫5"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:73
 #, kde-format
 msgid "Gamma -0.5"
-msgstr "غاما -٠٫٥"
+msgstr "غاما -0٫5"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:75
 #, kde-format
 msgid "Exposure +0.2"
-msgstr "التّعريض +٠٫٢"
+msgstr "التّعريض +0٫2"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:76
 #, kde-format
 msgid "Exposure -0.2"
-msgstr "التّعريض -٠٫٢"
+msgstr "التّعريض -0٫2"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:77
 #, kde-format
 msgid "Gamma +0.2"
-msgstr "غاما +٠٫٢"
+msgstr "غاما +0٫2"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:78
 #, kde-format
 msgid "Gamma -0.2"
-msgstr "غاما -٠٫٢"
+msgstr "غاما -0٫2"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:80
 #, kde-format
@@ -29415,7 +29415,7 @@ msgstr "بعّد"
 #: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
-msgstr "قرّب إلى ١٠٠٪"
+msgstr "قرّب إلى 100٪"
 
 #: libs/ui/input/kis_zoom_action.cpp:118
 #, fuzzy, kde-format
@@ -29727,7 +29727,7 @@ msgstr "سيحوّل مرشّح %1 بيانات %2 إلىى "
 #: libs/ui/kis_filter_manager.cc:244
 #, kde-format
 msgid "The %1 filter will convert your %2 data to 16-bit RGBA and vice versa. "
-msgstr "سيحوّل مرشّح %1 بيانات %2 إلىى RGBA ‏١٦-بتّ والعكس صحيح."
+msgstr "سيحوّل مرشّح %1 بيانات %2 إلىى RGBA ‏16-بتّ والعكس صحيح."
 
 #: libs/ui/kis_filter_manager.cc:355
 #, kde-format
@@ -41134,37 +41134,37 @@ msgstr "حجم الصفحة:"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:51
 #, kde-format
 msgid "A0"
-msgstr "إيه٠"
+msgstr "إيه0"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:56
 #, kde-format
 msgid "A1"
-msgstr "إيه١"
+msgstr "إيه1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:61
 #, kde-format
 msgid "A2"
-msgstr "إيه٢"
+msgstr "إيه2"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:66
 #, kde-format
 msgid "A3"
-msgstr "إيه٣"
+msgstr "إيه3"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:71
 #, kde-format
 msgid "A4"
-msgstr "إيه٤"
+msgstr "إيه4"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:76
 #, kde-format
 msgid "A5"
-msgstr "إيه٥"
+msgstr "إيه5"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, pageSizeComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:81
@@ -43102,28 +43102,28 @@ msgstr "ضوء عادي C"
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "D55"
-msgstr "دي٥٥"
+msgstr "دي55"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:690
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "D65"
-msgstr "دي٦٥"
+msgstr "دي65"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:695
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "D75"
-msgstr "دي٧٥"
+msgstr "دي75"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:700
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "D50"
-msgstr "دي٥٠"
+msgstr "دي50"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:705
@@ -44299,7 +44299,7 @@ msgstr "http://"
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:319
 #, kde-format
 msgid "(256 x 256)"
-msgstr "(٢٥٦ × ٢٥٦)"
+msgstr "(256 × 256)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:341
@@ -44425,19 +44425,19 @@ msgstr "ي&سارًا"
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:56
 #, kde-format
 msgid "90 &degrees"
-msgstr "٩٠ &درجة"
+msgstr "90 &درجة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radio180)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:63
 #, kde-format
 msgid "&180 degrees"
-msgstr "١٨٠ در&جة"
+msgstr "180 در&جة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radio270)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:70
 #, kde-format
 msgid "270 de&grees"
-msgstr "٢٧٠ درج&ة"
+msgstr "270 درج&ة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCustom)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:91
@@ -44637,7 +44637,7 @@ msgstr ""
 #| msgid "Rotate object 90° counterclockwise"
 msgctxt "action"
 msgid "S-Pen Gesture Circle Counter-Clockwise"
-msgstr "دوّر الكائن ٩٠° عكس عقارب السّاعة"
+msgstr "دوّر الكائن 90° عكس عقارب السّاعة"
 
 #. i18n: context: text @ Action (spen_show_popup_palette), Actions (Krita), ActionCollection (Krita)
 #: plugins/extensions/spensettings/SPenSettings.action:112
@@ -48232,7 +48232,7 @@ msgid ""
 "set to 0 will be updated."
 msgstr ""
 "خمّن العرض والارتفاع حسب حجم الملفّ والبِتّات في كلّ بكسل. ستُحدّث القيم المضبوطة "
-"على ٠ فقط."
+"على 0 فقط."
 
 #. i18n: ectx: property (text), widget (QPushButton, guessButton)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:105
@@ -51777,7 +51777,7 @@ msgstr "أداة الوصل"
 #, fuzzy, kde-format
 #| msgid "50%"
 msgid "0%"
-msgstr "٥٠٪"
+msgstr "50٪"
 
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:55
 #, kde-format
@@ -52342,13 +52342,13 @@ msgstr "شكل الفرشاة:"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:53
 #, fuzzy, kde-format
 msgid "1D"
-msgstr "دي٧٥"
+msgstr "دي75"
 
 #. i18n: ectx: property (text), widget (QRadioButton, twoDimBrushBtn)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:63
 #, fuzzy, kde-format
 msgid "2D"
-msgstr "دي٧٥"
+msgstr "دي75"
 
 #. i18n: ectx: property (title), widget (QGroupBox, brushGroup)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:101
@@ -52469,13 +52469,13 @@ msgstr "التّشبّع"
 #: plugins/paintops/hairy/wdghairyshapeoptions.ui:94
 #, fuzzy, kde-format
 msgid "&1D"
-msgstr "دي٧٥"
+msgstr "دي75"
 
 #. i18n: ectx: property (text), widget (QRadioButton, twoDimBrushBtn)
 #: plugins/paintops/hairy/wdghairyshapeoptions.ui:104
 #, fuzzy, kde-format
 msgid "&2D"
-msgstr "دي٧٥"
+msgstr "دي75"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, soakInkCBox)
 #: plugins/paintops/hairy/wdgInkOptions.ui:88
@@ -53960,7 +53960,7 @@ msgstr ""
 #| msgid "Spacing > 0.5, consider disabling Instant Preview"
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
-msgstr "التّباعد > ٠٫٥، من الأفضل تعطيل المعاينة اللحظيّة"
+msgstr "التّباعد > 0٫5، من الأفضل تعطيل المعاينة اللحظيّة"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
 #, fuzzy, kde-format
@@ -54090,7 +54090,7 @@ msgstr "نصف القطر:"
 #| msgid "Spacing > 0.5, consider disabling Instant Preview"
 msgctxt "PaintOp instant preview limitation"
 msgid "Radius by Random, consider disabling Instant Preview"
-msgstr "التّباعد > ٠٫٥، من الأفضل تعطيل المعاينة اللحظيّة"
+msgstr "التّباعد > 0٫5، من الأفضل تعطيل المعاينة اللحظيّة"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:48
 #, kde-format
@@ -54217,7 +54217,7 @@ msgstr ""
 #| msgid "Spacing > 0.5, consider disabling Instant Preview"
 msgctxt "PaintOp instant preview limitation"
 msgid "Offset by Random, consider disabling Instant Preview"
-msgstr "التّباعد > ٠٫٥، من الأفضل تعطيل المعاينة اللحظيّة"
+msgstr "التّباعد > 0٫5، من الأفضل تعطيل المعاينة اللحظيّة"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:250
 #, fuzzy, kde-format
@@ -57423,70 +57423,70 @@ msgstr "عشرُ فُرش"
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 1"
-msgstr "فعّل الفرشاة مسبقة الضّبط ١"
+msgstr "فعّل الفرشاة مسبقة الضّبط 1"
 
 #. i18n: context: text @ Action (activate_preset_2), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:34
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 2"
-msgstr "فعّل الفرشاة مسبقة الضّبط ٢"
+msgstr "فعّل الفرشاة مسبقة الضّبط 2"
 
 #. i18n: context: text @ Action (activate_preset_3), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:47
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 3"
-msgstr "فعّل الفرشاة مسبقة الضّبط ٣"
+msgstr "فعّل الفرشاة مسبقة الضّبط 3"
 
 #. i18n: context: text @ Action (activate_preset_4), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:60
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 4"
-msgstr "فعّل الفرشاة مسبقة الضّبط ٤"
+msgstr "فعّل الفرشاة مسبقة الضّبط 4"
 
 #. i18n: context: text @ Action (activate_preset_5), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:73
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 5"
-msgstr "فعّل الفرشاة مسبقة الضّبط ٥"
+msgstr "فعّل الفرشاة مسبقة الضّبط 5"
 
 #. i18n: context: text @ Action (activate_preset_6), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:86
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 6"
-msgstr "فعّل الفرشاة مسبقة الضّبط ٦"
+msgstr "فعّل الفرشاة مسبقة الضّبط 6"
 
 #. i18n: context: text @ Action (activate_preset_7), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:99
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 7"
-msgstr "فعّل الفرشاة مسبقة الضّبط ٧"
+msgstr "فعّل الفرشاة مسبقة الضّبط 7"
 
 #. i18n: context: text @ Action (activate_preset_8), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:112
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 8"
-msgstr "فعّل الفرشاة مسبقة الضّبط ٨"
+msgstr "فعّل الفرشاة مسبقة الضّبط 8"
 
 #. i18n: context: text @ Action (activate_preset_9), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:125
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 9"
-msgstr "فعّل الفرشاة مسبقة الضّبط ٩"
+msgstr "فعّل الفرشاة مسبقة الضّبط 9"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 10"
-msgstr "فعّل الفرشاة مسبقة الضّبط ١٠"
+msgstr "فعّل الفرشاة مسبقة الضّبط 10"
 
 #: plugins/python/tenbrushes/tenbrushes.py:28
 msgid "Ten Brushes"
@@ -57501,7 +57501,7 @@ msgstr ""
 #| msgctxt "action"
 #| msgid "Activate Brush Preset 1"
 msgid "Activate Brush Preset {num}"
-msgstr "فعّل الفرشاة مسبقة الضّبط ١"
+msgstr "فعّل الفرشاة مسبقة الضّبط 1"
 
 #: plugins/python/tenbrushes/tenbrushes.py:105
 #, fuzzy
@@ -57546,70 +57546,70 @@ msgstr "عشرُ سكربتات"
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 1"
-msgstr "نفّذ السّكربت ١"
+msgstr "نفّذ السّكربت 1"
 
 #. i18n: context: text @ Action (execute_script_2), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:19
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 2"
-msgstr "نفّذ السّكربت ٢"
+msgstr "نفّذ السّكربت 2"
 
 #. i18n: context: text @ Action (execute_script_3), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:31
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 3"
-msgstr "نفّذ السّكربت ٣"
+msgstr "نفّذ السّكربت 3"
 
 #. i18n: context: text @ Action (execute_script_4), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:43
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 4"
-msgstr "نفّذ السّكربت ٤"
+msgstr "نفّذ السّكربت 4"
 
 #. i18n: context: text @ Action (execute_script_5), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:55
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 5"
-msgstr "نفّذ السّكربت ٥"
+msgstr "نفّذ السّكربت 5"
 
 #. i18n: context: text @ Action (execute_script_6), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:67
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 6"
-msgstr "نفّذ السّكربت ٦"
+msgstr "نفّذ السّكربت 6"
 
 #. i18n: context: text @ Action (execute_script_7), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:79
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 7"
-msgstr "نفّذ السّكربت ٧"
+msgstr "نفّذ السّكربت 7"
 
 #. i18n: context: text @ Action (execute_script_8), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:91
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 8"
-msgstr "نفّذ السّكربت ٨"
+msgstr "نفّذ السّكربت 8"
 
 #. i18n: context: text @ Action (execute_script_9), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:103
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 9"
-msgstr "نفّذ السّكربت ٩"
+msgstr "نفّذ السّكربت 9"
 
 #. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 10"
-msgstr "نفّذ السّكربت ١٠"
+msgstr "نفّذ السّكربت 10"
 
 #: plugins/python/tenscripts/tenscripts.py:26
 msgid "Ten Scripts"
@@ -57624,7 +57624,7 @@ msgstr ""
 #| msgctxt "action"
 #| msgid "Execute Script 1"
 msgid "Execute Script {num}"
-msgstr "نفّذ السّكربت ١"
+msgstr "نفّذ السّكربت 1"
 
 #: plugins/python/tenscripts/tenscripts.py:84
 #, python-brace-format
@@ -58639,17 +58639,17 @@ msgstr "تعمل هذه الأداة مع الطّبقات المتّجهيّة 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
-msgstr "تدوير الكائن ٩٠° مع عقارب السّاعة"
+msgstr "تدوير الكائن 90° مع عقارب السّاعة"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
-msgstr "تدوير الكائن ٩٠° عكس عقارب السّاعة"
+msgstr "تدوير الكائن 90° عكس عقارب السّاعة"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
-msgstr "تدوير الكائن ١٨٠°"
+msgstr "تدوير الكائن 180°"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
 msgctxt "(qtundo-format)"
@@ -60929,14 +60929,14 @@ msgstr "اعكس رأسيًّا"
 #| msgctxt "action"
 #| msgid "Rotate object 90° clockwise"
 msgid "Rotate 90 degrees Clockwise"
-msgstr "دوّر الكائن ٩٠° مع عقارب السّاعة"
+msgstr "دوّر الكائن 90° مع عقارب السّاعة"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Rotate object 90° counterclockwise"
 msgid "Rotate 90 degrees CounterClockwise"
-msgstr "دوّر الكائن ٩٠° عكس عقارب السّاعة"
+msgstr "دوّر الكائن 90° عكس عقارب السّاعة"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:136
 #, kde-format
@@ -61373,7 +61373,7 @@ msgstr "اقلب التّحديد أفقيًّا"
 #| msgctxt "action"
 #| msgid "Rotate object 90° counterclockwise"
 msgid "Rotate selection counter-clockwise 90 degrees"
-msgstr "دوّر الكائن ٩٠° عكس عقارب السّاعة"
+msgstr "دوّر الكائن 90° عكس عقارب السّاعة"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCWButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1359
@@ -62055,7 +62055,7 @@ msgstr "الصّور المرجع"
 #~ msgstr "كرّر اللاحة الحاليّة"
 
 #~ msgid "Reset Zoom to 100%"
-#~ msgstr "صفّر مستوى التّقريب إلى ١٠٠٪"
+#~ msgstr "صفّر مستوى التّقريب إلى 100٪"
 
 #~ msgid "Fit Page"
 #~ msgstr "لائم إلى الصّفحة"
@@ -63986,7 +63986,7 @@ msgstr "الصّور المرجع"
 #~ msgstr "الأ&صليّة"
 
 #~ msgid "1 : 1"
-#~ msgstr "١ : ١"
+#~ msgstr "1 : 1"
 
 #~ msgid "Update preview"
 #~ msgstr "حدّث المعاين"
@@ -64877,13 +64877,13 @@ msgstr "الصّور المرجع"
 #~ msgstr "اضبط"
 
 #~ msgid "Tab 1"
-#~ msgstr "لسان ١"
+#~ msgstr "لسان 1"
 
 #~ msgid "CheckBox"
 #~ msgstr "مربّع تأشير"
 
 #~ msgid "Tab 2"
-#~ msgstr "لسان ٢"
+#~ msgstr "لسان 2"
 
 #~ msgid "Level %1"
 #~ msgstr "مستوى %1"
@@ -66556,7 +66556,7 @@ msgstr "الصّور المرجع"
 #~ msgstr "اضبط"
 
 #~ msgid "25%"
-#~ msgstr "٢٥٪"
+#~ msgstr "25٪"
 
 #, fuzzy
 #~| msgid "Brush size"

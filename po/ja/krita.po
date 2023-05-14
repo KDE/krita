@@ -34,7 +34,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-12 00:45+0000\n"
-"PO-Revision-Date: 2023-02-26 23:02-0800\n"
+"PO-Revision-Date: 2023-05-13 11:23-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
 "Language: ja\n"
@@ -23063,11 +23063,13 @@ msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
+"ブラシの速度計算にタブレットドライバのタイムスタンプを使用する(WinTabタブレッ"
+"トAPIを使用している場合、かなり不自然な結果になる恐れがあります)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1325
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
-msgstr ""
+msgstr "ブラシの速度計算にタブレットドライバのタイムスタンプを使用する"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1433
@@ -25465,7 +25467,7 @@ msgstr "保存時にファイルをトリムする"
 #: libs/ui/forms/wdggeneralsettings.ui:999
 #, kde-format
 msgid "Trim frames when importing animations"
-msgstr ""
+msgstr "アニメーションをインポートするときにフレームをトリムする"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1023
@@ -25480,6 +25482,7 @@ msgstr "描画"
 #, kde-format
 msgid "Prefer downloading the original source (this requires Internet access)"
 msgstr ""
+"オリジナルのダウンロードを優先する(インターネットへのアクセスが必要です)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteNote)
 #: libs/ui/forms/wdggeneralsettings.ui:1042
@@ -25496,12 +25499,16 @@ msgid ""
 "Some applications, like Google Chrome, provide multiple formats when pasting "
 "or dropping an image."
 msgstr ""
+"Google Chromeのようないくつかのアプリケーションは、貼り付け時やドロップ時に複"
+"数のフォーマットを提供します。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnLocal)
 #: libs/ui/forms/wdggeneralsettings.ui:1056
 #, kde-format
 msgid "Prefer a local copy (if available; metadata may be lost)"
 msgstr ""
+"ローカルのコピーを優先する(利用可能な場合。メタデータが失われる恐れがありま"
+"す)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnBitmap)
 #: libs/ui/forms/wdggeneralsettings.ui:1063
@@ -25510,6 +25517,8 @@ msgid ""
 "Paste the attached sRGB bitmap (no filesystem or Internet access required, "
 "but metadata will be lost)"
 msgstr ""
+"付随するsRGBビットマップを貼り付ける(ファイルシステムやインターネットへのアク"
+"セスは必要ありませんが、メタデータは失われます)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsk)
 #: libs/ui/forms/wdggeneralsettings.ui:1070
@@ -47649,7 +47658,7 @@ msgstr "このアニメーションは 240fps 以上のフレームレートを�
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (only for low quality)"
-msgstr "通常（低品質の場合のみ）"
+msgstr "通常(低品質の場合のみ)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:20
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
@@ -60742,89 +60751,3 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
-
-#~ msgid "Choose a video file"
-#~ msgstr "動画ファイルを選択"
-
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
-#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">This video contains "
-#~ "more than 100 frames. Loading too many frames can overload your computer. "
-#~ "Use a</span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;"
-#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\" font-"
-#~ "size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;"
-#~ "\">video editor </span></a><span style=\" font-size:16pt; font-"
-#~ "weight:400; color:#ff692e;\">instead!</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
-#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">この動画は100フレーム"
-#~ "以上あります。大量のフレームの読み込みは PC に負荷をかけます。Krita より</"
-#~ "span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;\"> </"
-#~ "span><a href=\"https://kdenlive.org\"><span style=\" font-size:16pt; font-"
-#~ "weight:400; text-decoration: underline; color:#2980b9;\">動画エディタ </"
-#~ "span></a><span style=\" font-size:16pt; font-weight:400; color:#ff692e;\">"
-#~ "を使用してください!</span></p></body></html>"
-
-#~ msgid "FFMpeg"
-#~ msgstr "FFMpeg"
-
-#~ msgid "Export:"
-#~ msgstr "エクスポート:"
-
-#~ msgid "Image Se&quence"
-#~ msgstr "画像シーケンス"
-
-#~ msgid "&Video"
-#~ msgstr "動画(&V)"
-
-#~ msgid "Video Options"
-#~ msgstr "動画のオプション"
-
-#~ msgid "FF&Mpeg: "
-#~ msgstr "FFMpeg(&M):"
-
-#~ msgid "Video Location:"
-#~ msgstr "動画の保存場所:"
-
-#~ msgid "FFMpeg Version: None"
-#~ msgstr "FFMpeg のバージョン: なし"
-
-#, fuzzy
-#~| msgid ""
-#~| "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
-#~| "need to restart Krita to enable or disable plugins.</p></body></html>"
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
-#~ "body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">注意: </span>プラ"
-#~ "グインを有効または無効にするには、Krita を再起動する必要があります。</p></"
-#~ "body></html>"
-
-#~ msgid "Image Sequence Options"
-#~ msgstr "連番画像のオプション"
-
-#, fuzzy
-#~| msgctxt "suffix for \"seconds\""
-#~| msgid " sec"
-#~ msgid " sec"
-#~ msgstr "秒"

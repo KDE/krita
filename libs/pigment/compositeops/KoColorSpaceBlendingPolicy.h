@@ -8,6 +8,9 @@
 
 #include <kritapigment_export.h>
 
+/**
+ * @brief default blending policy used in additive color spaces
+ */
 template<typename Traits>
 struct KoAdditiveBlendingPolicy
 {
@@ -21,6 +24,12 @@ struct KoAdditiveBlendingPolicy
     }
 };
 
+/**
+ * @brief a plending policy used for subtractive color spaces (e.g. CMYK)
+ *
+ * In CMYK we should first invert the colors to make them "additive",
+ * and then blend.
+ */
 template<typename Traits>
 struct KoSubtractiveBlendingPolicy
 {
@@ -35,9 +44,15 @@ struct KoSubtractiveBlendingPolicy
     }
 };
 
+/**
+ * @return false if the user seleceted the legacy behavior of the blendmodes in CMYK color spaces
+ */
 KRITAPIGMENT_EXPORT
 bool useSubtractiveBlendingForCmykColorSpaces();
 
+/**
+ * @brief the list of blendmodes that perform channel-inversion in CMYK color space
+ */
 KRITAPIGMENT_EXPORT
 QStringList subtractiveBlendingModesInCmyk();
 

@@ -660,15 +660,12 @@ const QString KisConfig::getScreenStringIdentfier(int screenNo) const {
     QString manufacturer = screen->manufacturer();
     QString model = screen->model();
     QString serialNumber = screen->serialNumber();
-    QString resolution = QString::number(screen->geometry().width()) + "x" + QString::number(screen->geometry().width());
-    QString dpi = QString::number(screen->physicalDotsPerInch()) + "_" + QString::number(screen->logicalDotsPerInch());
-    QString scale = QString::number(screen->devicePixelRatio());
 
     if (manufacturer == "" && model == "" && serialNumber == "") {
         return QString(); // it would be scary to base the profile just on resolution
     }
 
-    QString identifier = QStringList({manufacturer, model, serialNumber, resolution, dpi, scale}).join("_");
+    QString identifier = QStringList({manufacturer, model, serialNumber}).join("_");
     return identifier;
 }
 

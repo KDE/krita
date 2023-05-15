@@ -8,6 +8,8 @@
 
 #include <kritapigment_export.h>
 
+class QStringList;
+
 /**
  * @brief default blending policy used in additive color spaces
  */

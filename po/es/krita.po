@@ -66,14 +66,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-12 00:45+0000\n"
-"PO-Revision-Date: 2023-05-04 00:25+0100\n"
+"PO-Revision-Date: 2023-05-14 11:00+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.0\n"
+"X-Generator: Lokalize 23.04.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -30486,11 +30486,9 @@ msgid "Also save your image as a Krita file."
 msgstr "Guardar también la imagen como archivo de Krita."
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "Ocultar la ventana emergente de la miniatura de la capa"
+msgstr "Actualizar miniaturas de la capa"
 
 #: libs/ui/KisMainWindow.cpp:184
 #, kde-format
@@ -38658,7 +38656,7 @@ msgstr "Cuadrícula y guías"
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
 msgctxt "(qtundo-format)"
 msgid "fkdfjkdjfk"
-msgstr ""
+msgstr "fkdfjkdjfk"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format

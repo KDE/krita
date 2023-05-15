@@ -108,35 +108,18 @@
  */
 Q_GUI_EXPORT int qt_defaultDpi();
 
-QString shortNameOfDisplay(QScreen* screen)
+QString shortNameOfDisplay(int index)
 {
-    // Depending on the display, all of those properties might be
-    // or might not be useful
-    // Example:
-    //	Screen: 0
-    //    Name: eDP-1
-    //    Manufacturer: BOE
-    //    Model:
-    //	Screen: 1
-    //    Name: DP-2
-    //    Manufacturer: Toshiba America Info Systems Inc
-    //    Model: TOSHIBA-TV-
-    // In the first case, model is empty, manufacturer is BOE
-    // The second case model is more useful than manufacturer because it's short
-    // and it gives basically the same amount of information
-    QString name = screen->name();
-    QString model = screen->model();
-    QString manufacturer = screen->manufacturer();
-    QString resolution = QString::number(screen->geometry().width()).append("x").append(QString::number(screen->geometry().height()));
-
-    QString shortName = name + " ";
-    if (!model.isEmpty()) {
-        shortName += model;
-    } else {
-        shortName += manufacturer;
+    if (QGuiApplication::screens().length() <= index) {
+        return QString();
     }
-    shortName = shortName.left(15);
-    shortName = shortName.append(" ").append(resolution);
+    QScreen* screen = QGuiApplication::screens()[index];
+    QString resolution = QString::number(screen->geometry().width()).append("x").append(QString::number(screen->geometry().height()));
+    QString name = screen->name();
+    // name and resolution for a specific screen can change, so they are not used in the identifier; but they can help people understand which screen is which
+
+    KisConfig cfg(true);
+    QString shortName = resolution + " " + name + " " + cfg.getScreenStringIdentfier(index);
     return shortName;
 }
 
@@ -1040,8 +1023,8 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     QFormLayout *monitorProfileGrid = new QFormLayout(m_page->monitorprofileholder);
     monitorProfileGrid->setContentsMargins(0, 0, 0, 0);
     for(int i = 0; i < QGuiApplication::screens().count(); ++i) {
-        QScreen* screen = QGuiApplication::screens()[i];
-        QLabel *lbl = new QLabel(i18nc("The number of the screen (ordinal) and shortened 'name' of the screen (model + resolution)", "Screen %1 (%2):", i + 1, shortNameOfDisplay(screen)));
+        QLabel *lbl = new QLabel(i18nc("The number of the screen (ordinal) and shortened 'name' of the screen (model + resolution)", "Screen %1 (%2):", i + 1, shortNameOfDisplay(i)));
+        lbl->setWordWrap(true);
         m_monitorProfileLabels << lbl;
         KisSqueezedComboBox *cmb = new KisSqueezedComboBox();
         cmb->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
@@ -1148,9 +1131,8 @@ void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
             for(int i = 0; i < QApplication::screens().count(); ++i) {
                 m_monitorProfileWidgets[i]->clear();
                 QString monitorForScreen = cfg.monitorForScreen(i, devices[i]);
-                QScreen* screen = QGuiApplication::screens()[i];
                 Q_FOREACH (const QString &device, devices) {
-                    m_monitorProfileLabels[i]->setText(i18nc("The number of the screen (ordinal) and shortened 'name' of the screen (model + resolution)", "Screen %1 (%2):", i + 1, shortNameOfDisplay(screen)));
+                    m_monitorProfileLabels[i]->setText(i18nc("The number of the screen (ordinal) and shortened 'name' of the screen (model + resolution)", "Screen %1 (%2):", i + 1, shortNameOfDisplay(i)));
                     m_monitorProfileWidgets[i]->addSqueezedItem(KisColorManager::instance()->deviceName(device), device);
                     if (devices[i] == monitorForScreen) {
                         m_monitorProfileWidgets[i]->setCurrentIndex(i);
@@ -1231,8 +1213,7 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & colorSpaceId)
     }
 
     for (int i = 0; i < QApplication::screens().count(); ++i) {
-        QScreen* screen = QGuiApplication::screens()[i];
-        m_monitorProfileLabels[i]->setText(i18nc("The number of the screen (ordinal) and shortened 'name' of the screen (model + resolution)", "Screen %1 (%2):", i + 1, shortNameOfDisplay(screen)));
+        m_monitorProfileLabels[i]->setText(i18nc("The number of the screen (ordinal) and shortened 'name' of the screen (model + resolution)", "Screen %1 (%2):", i + 1, shortNameOfDisplay(i)));
         m_monitorProfileWidgets[i]->setCurrent(KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId.id()));
     }
 }

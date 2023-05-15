@@ -13,6 +13,7 @@
 
 #include <QUrl>
 #include <QBuffer>
+#include <QVersionNumber>
 
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>

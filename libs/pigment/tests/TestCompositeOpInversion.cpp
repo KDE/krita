@@ -18,6 +18,8 @@
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics.hpp>
 
+#include "kis_debug.h"
+
 void TestCompositeOpInversion::test()
 {
     /**

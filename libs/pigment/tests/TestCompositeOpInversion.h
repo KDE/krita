@@ -15,13 +15,6 @@ public:
 private Q_SLOTS:
     void test();
     void test_data();
-
-#if 0
-    void testCmyk();
-    void testCmyk_data();
-#endif
-private:
-    void test(const QString &id);
 };
 
 #endif // TESTCOMPOSITEOPINVERSION_H

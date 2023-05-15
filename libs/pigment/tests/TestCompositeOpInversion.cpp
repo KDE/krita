@@ -20,6 +20,28 @@
 
 void TestCompositeOpInversion::test()
 {
+    /**
+     * Comparing of CMYK against RGB would be more preferrable, but it just
+     * doesn't work, the color space difference is too high. So we use an
+     * alternative approach and just compare, which blend modes are invariant
+     * to channel inversion.
+     *
+     * Basically, only few blendmodes are invariant to channel inversion:
+     *
+     *  - COMPOSITE_OVER
+     *  - COMPOSITE_ALPHA_DARKEN;
+     *  - COMPOSITE_COPY;
+     *  - COMPOSITE_ERASE;
+     *  - COMPOSITE_DESTINATION_IN;
+     *  - COMPOSITE_DESTINATION_ATOP;
+     *  - COMPOSITE_DISSOLVE;
+     *
+     *  All other blendmodes have too comlicated formulas (or alpha-composition),
+     *  so they change their look on subtracted color spaces. Which means that
+     *  all the blendmodes except the listed ones should be subjected to conversion
+     *  to additive color space in CMYK mode.
+     */
+
     QFETCH(QString, id);
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -180,96 +202,5 @@ void TestCompositeOpInversion::test_data()
         QTest::addRow("%s", id.toLatin1().data()) << id;
     }
 }
-#if 0
-#include <KoColorProfile.h>
 
-void TestCompositeOpInversion::testCmyk()
-{
-    QFETCH(QString, id);
-
-    const KoColorSpace* csRgb = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), "ClayRGB-elle-V2-g22.icc");
-    const KoColorSpace* csCmyk = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Float32BitsColorDepthID.id(), "Coated_Fogra39L_VIGC_300.icc");
-
-    QVERIFY(csRgb);
-//    qDebug() << ppVar(csRgb->profile()->name());
-//    qDebug() << ppVar(csCmyk->profile()->name()) << ppVar(csCmyk->profile()->fileName());
-
-    const KoCompositeOp *opRgb = csRgb->compositeOp(id);
-    const KoCompositeOp *opCmyk = csCmyk->compositeOp(id);
-
-    QCOMPARE(opCmyk->id(), id);
-
-    using namespace boost::accumulators;
-    accumulator_set<qreal, stats<tag::max, tag::mean> > error;
-
-    std::vector<int> alphaValues({16, 32, 64, 92, 128, 160, 192, 224, 255});
-    std::vector<int> values({0, 16, 32, 64, 92, 128, 160, 192, 224, 255});
-
-    Q_FOREACH (int opacity, alphaValues) {
-        Q_FOREACH (int srcAlphaValue, alphaValues) {
-            Q_FOREACH (int dstAlphaValue, alphaValues) {
-                Q_FOREACH (int srcColorValue, values) {
-                    Q_FOREACH (int dstColorValue, values) {
-                        KoColor srcColorCmyk(Qt::white, csCmyk);
-                        KoColor dstColorCmyk(Qt::white, csCmyk);
-
-                        KoCmykF32Traits::Pixel *srcPixel = reinterpret_cast<KoCmykF32Traits::Pixel*>(srcColorCmyk.data());
-                        KoCmykF32Traits::Pixel *dstPixel = reinterpret_cast<KoCmykF32Traits::Pixel*>(dstColorCmyk.data());
-
-                        srcPixel->magenta = srcColorValue/255.0;
-                        srcPixel->cyan = 128.0/255.0;
-                        srcPixel->yellow = 128/255.0;
-                        srcPixel->black = 128/255.0;
-                        srcPixel->alpha = srcAlphaValue/255.0;
-
-                        dstPixel->magenta = dstColorValue/255.0;
-                        dstPixel->cyan = 128/255.0;
-                        dstPixel->yellow = 128/255.0;
-                        dstPixel->black = 128/255.0;
-                        dstPixel->alpha = dstAlphaValue/255.0;
-
-                        KoColor origDstColorCmyk = dstColorCmyk;
-                        KoColor srcColorRgb = srcColorCmyk.convertedTo(csRgb, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::HighQuality);
-                        KoColor dstColorRgb = dstColorCmyk.convertedTo(csRgb, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::HighQuality);
-
-//                        qDebug() << "---";
-//                        qDebug() << ppVar(srcColorCmyk) << ppVar(dstColorCmyk);
-//                        qDebug() << ppVar(srcColorRgb) << ppVar(dstColorRgb);
-
-
-                        opRgb->composite(dstColorRgb.data(), 0, srcColorRgb.data(), 0, 0, 0, 1, 1, opacity);
-                        opCmyk->composite(dstColorCmyk.data(), 0, srcColorCmyk.data(), 0, 0, 0, 1, 1, opacity);
-
-//                        qDebug() << ppVar(dstColorCmyk);
-//                        qDebug() << ppVar(dstColorRgb);
-
-                        KoColor dstColorRoundTrip = dstColorRgb.convertedTo(csCmyk, KoColorConversionTransformation::IntentAbsoluteColorimetric, KoColorConversionTransformation::HighQuality);
-
-//                        qDebug() << ppVar(dstColorRoundTrip);
-
-                        KoCmykF32Traits::Pixel *dstPixelRoundTrip = reinterpret_cast<KoCmykF32Traits::Pixel*>(dstColorRoundTrip.data());
-
-                        const qreal difference = dstPixel->magenta - dstPixelRoundTrip->magenta;
-
-                        //error(csCmyk->difference(dstColorCmyk.data(), dstColorRoundTrip.data()));
-                        error(qAbs(difference));
-//                        qDebug() << ppVar(difference);
-
-                        if (qAbs(difference) > 1) {
-                            //qDebug() << difference << srcColorRgb << "+" << origDstColorRgb << "->" << dstColorRgb << dstColorRoundTrip;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    qDebug() << id << ppVar(max(error)) << ppVar(mean(error));
-}
-
-void TestCompositeOpInversion::testCmyk_data()
-{
-    test_data();
-}
-#endif
 SIMPLE_TEST_MAIN(TestCompositeOpInversion)

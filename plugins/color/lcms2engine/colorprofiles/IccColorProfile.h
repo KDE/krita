@@ -129,7 +129,6 @@ public:
     LcmsColorProfileContainer *asLcms() const;
 protected:
     bool init();
-    void calculateFloatUIMinMax(void);
 private:
     struct Private;
     QScopedPointer<Private> d;

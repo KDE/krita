@@ -22,6 +22,10 @@
 
 #include "LcmsColorProfileContainer.h"
 
+#include <KisLazyStorage.h>
+#include <KisLazyValueWrapper.h>
+
+
 struct IccColorProfile::Data::Private {
     QByteArray rawData;
 };
@@ -59,11 +63,17 @@ IccColorProfile::Container::~Container()
 }
 
 struct IccColorProfile::Private {
+    struct ProfileInfo {
+        QVector<KoChannelInfo::DoubleRange> uiMinMaxes;
+        bool canCreateCyclicTransform = false;
+    };
+
+    using LazyProfileInfo = KisLazyStorage<KisLazyValueWrapper<ProfileInfo>, std::function<ProfileInfo()>>;
+
     struct Shared {
         QScopedPointer<IccColorProfile::Data> data;
         QScopedPointer<LcmsColorProfileContainer> lcmsProfile;
-        QVector<KoChannelInfo::DoubleRange> uiMinMaxes;
-        bool canCreateCyclicTransform = false;
+        LazyProfileInfo profileInfo = LazyProfileInfo(LazyProfileInfo::init_value_tag{}, {});
 
         Shared()
             : data(new IccColorProfile::Data())
@@ -76,6 +86,8 @@ struct IccColorProfile::Private {
     {
     }
     QSharedPointer<Shared> shared;
+
+    ProfileInfo calculateFloatUIMinMax() const;
 };
 
 IccColorProfile::IccColorProfile(const QString &fileName)
@@ -238,7 +250,7 @@ QString IccColorProfile::colorModelID() const
 bool IccColorProfile::isSuitableForOutput() const
 {
     if (d->shared->lcmsProfile) {
-        return d->shared->lcmsProfile->isSuitableForOutput() && d->shared->canCreateCyclicTransform;
+        return d->shared->lcmsProfile->isSuitableForOutput() && d->shared->profileInfo->value.canCreateCyclicTransform;
     }
     return false;
 }
@@ -416,7 +428,9 @@ bool IccColorProfile::init()
         setManufacturer(d->shared->lcmsProfile->manufacturer());
         setCopyright(d->shared->lcmsProfile->copyright());
         if (d->shared->lcmsProfile->valid()) {
-            calculateFloatUIMinMax();
+            d->shared->profileInfo = Private::LazyProfileInfo([this] () {
+                return d->calculateFloatUIMinMax();
+            });
         }
         return true;
     } else {
@@ -441,15 +455,17 @@ bool IccColorProfile::operator==(const KoColorProfile &rhs) const
 
 const QVector<KoChannelInfo::DoubleRange> &IccColorProfile::getFloatUIMinMax(void) const
 {
-    Q_ASSERT(!d->shared->uiMinMaxes.isEmpty());
-    return d->shared->uiMinMaxes;
+    Q_ASSERT(!d->shared->profileInfo->value.uiMinMaxes.isEmpty());
+    return d->shared->profileInfo->value.uiMinMaxes;
 }
 
-void IccColorProfile::calculateFloatUIMinMax(void)
+IccColorProfile::Private::ProfileInfo
+IccColorProfile::Private::calculateFloatUIMinMax() const
 {
-    QVector<KoChannelInfo::DoubleRange> &ret = d->shared->uiMinMaxes;
+    Private::ProfileInfo info;
+    QVector<KoChannelInfo::DoubleRange> &ret = info.uiMinMaxes;
 
-    cmsHPROFILE cprofile = d->shared->lcmsProfile->lcmsProfile();
+    cmsHPROFILE cprofile = shared->lcmsProfile->lcmsProfile();
     Q_ASSERT(cprofile);
 
     cmsColorSpaceSignature color_space_sig = cmsGetColorSpace(cprofile);
@@ -493,7 +509,7 @@ void IccColorProfile::calculateFloatUIMinMax(void)
     // is created successfully, then this profile is probably suitable for
     // usage as a working color space.
 
-    d->shared->canCreateCyclicTransform = bool(trans);
+    info.canCreateCyclicTransform = bool(trans);
 
     ret.resize(num_channels);
     for (unsigned int i = 0; i < num_channels; ++i) {
@@ -517,5 +533,7 @@ void IccColorProfile::calculateFloatUIMinMax(void)
             ret[i].maxVal = 1;
         }
     }
+
+    return info;
 }
 

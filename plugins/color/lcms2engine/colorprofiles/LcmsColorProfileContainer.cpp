@@ -21,10 +21,45 @@
 
 #include "kis_debug.h"
 
+#include <KisLazyStorage.h>
+#include <KisLazyValueWrapper.h>
+
+namespace {
+struct ReverseCurveWrapper
+{
+    ReverseCurveWrapper() : reverseCurve(0) {}
+
+    explicit ReverseCurveWrapper(cmsToneCurve *curve) {
+        reverseCurve = cmsReverseToneCurve(curve);
+    }
+
+    ~ReverseCurveWrapper() {
+        if (reverseCurve) {
+            cmsFreeToneCurve(reverseCurve);
+        }
+    }
+
+    operator cmsToneCurve*() const {
+        return reverseCurve;
+    }
+
+    operator cmsToneCurve*() {
+        return reverseCurve;
+    }
+
+    ReverseCurveWrapper(const ReverseCurveWrapper&rhs) = delete;
+    ReverseCurveWrapper& operator=(const ReverseCurveWrapper&rhs) = delete;
+
+    ReverseCurveWrapper(ReverseCurveWrapper&&rhs) = default;
+    ReverseCurveWrapper& operator=(ReverseCurveWrapper&&rhs) = default;
+
+    cmsToneCurve *reverseCurve {0};
+};
+} // namespace
+
 class LcmsColorProfileContainer::Private
 {
 public:
-
     cmsHPROFILE profile;
     cmsColorSpaceSignature colorSpaceSignature;
     cmsProfileClassSignature deviceClass;
@@ -37,8 +72,12 @@ public:
     bool valid {false};
     bool suitableForOutput {false};
     bool hasColorants;
-    bool hasTRC;
-    bool isLinear {false};
+
+    using LazyBool = KisLazyStorage<KisLazyValueWrapper<bool>, std::function<bool()>>;
+
+    LazyBool hasTRC = LazyBool(LazyBool::init_value_tag{}, {});
+    LazyBool isLinear = LazyBool(LazyBool::init_value_tag{}, {});
+
     bool adaptedFromD50;
     cmsCIEXYZ mediaWhitePoint;
     cmsCIExyY whitePoint;
@@ -47,10 +86,13 @@ public:
     cmsToneCurve *greenTRC {0};
     cmsToneCurve *blueTRC {0};
     cmsToneCurve *grayTRC {0};
-    cmsToneCurve *redTRCReverse {0};
-    cmsToneCurve *greenTRCReverse {0};
-    cmsToneCurve *blueTRCReverse {0};
-    cmsToneCurve *grayTRCReverse {0};
+
+    using LazyReverseCurve = KisLazyStorage<ReverseCurveWrapper, cmsToneCurve*>;
+
+    LazyReverseCurve redTRCReverse = LazyReverseCurve(LazyReverseCurve::init_value_tag{}, {});
+    LazyReverseCurve greenTRCReverse = LazyReverseCurve(LazyReverseCurve::init_value_tag{}, {});
+    LazyReverseCurve blueTRCReverse = LazyReverseCurve(LazyReverseCurve::init_value_tag{}, {});
+    LazyReverseCurve grayTRCReverse = LazyReverseCurve(LazyReverseCurve::init_value_tag{}, {});
 
     cmsUInt32Number defaultIntent;
     bool isPerceptualCLUT;
@@ -224,21 +266,34 @@ bool LcmsColorProfileContainer::init()
             d->redTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigRedTRCTag));
             d->greenTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGreenTRCTag));
             d->blueTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigBlueTRCTag));
-            if (d->redTRC) d->redTRCReverse = cmsReverseToneCurve(d->redTRC);
-            if (d->greenTRC) d->greenTRCReverse = cmsReverseToneCurve(d->greenTRC);
-            if (d->blueTRC) d->blueTRCReverse = cmsReverseToneCurve(d->blueTRC);
-            d->hasTRC = (d->redTRC && d->greenTRC && d->blueTRC && d->redTRCReverse && d->greenTRCReverse && d->blueTRCReverse);
-            if (d->hasTRC) d->isLinear = cmsIsToneCurveLinear(d->redTRC)
-                                      && cmsIsToneCurveLinear(d->greenTRC)
-                                      && cmsIsToneCurveLinear(d->blueTRC);
+            if (d->redTRC) d->redTRCReverse = Private::LazyReverseCurve(d->redTRC);
+            if (d->greenTRC) d->greenTRCReverse = Private::LazyReverseCurve(d->greenTRC);
+            if (d->blueTRC) d->blueTRCReverse = Private::LazyReverseCurve(d->blueTRC);
+
+            d->hasTRC = Private::LazyBool([d = d] () {
+                return d->redTRC && d->greenTRC && d->blueTRC && *d->redTRCReverse && *d->greenTRCReverse && *d->blueTRCReverse;
+            });
+
+            d->isLinear = Private::LazyBool([d = d] () {
+                return *d->hasTRC
+                    && cmsIsToneCurveLinear(d->redTRC)
+                    && cmsIsToneCurveLinear(d->greenTRC)
+                    && cmsIsToneCurveLinear(d->blueTRC);
+            });
 
         } else if (cmsIsTag(d->profile, cmsSigGrayTRCTag)) {
             d->grayTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGrayTRCTag));
-            if (d->grayTRC) d->grayTRCReverse = cmsReverseToneCurve(d->grayTRC);
-            d->hasTRC = (d->grayTRC && d->grayTRCReverse);
-            if (d->hasTRC) d->isLinear = cmsIsToneCurveLinear(d->grayTRC);
+            if (d->grayTRC) d->grayTRCReverse = Private::LazyReverseCurve(d->grayTRC);
+
+            d->hasTRC = Private::LazyBool([d = d] () {
+                return d->grayTRC && *d->grayTRCReverse;
+            });
+
+            d->isLinear = Private::LazyBool([d = d] () {
+                return *d->hasTRC && cmsIsToneCurveLinear(d->grayTRC);
+            });
         } else {
-            d->hasTRC = false;
+            d->hasTRC = Private::LazyBool(Private::LazyBool::init_value_tag{}, {});
         }
 
         // Check if the profile can convert (something->this)
@@ -335,11 +390,11 @@ bool LcmsColorProfileContainer::hasColorants() const
 }
 bool LcmsColorProfileContainer::hasTRC() const
 {
-    return d->hasTRC;
+    return *d->hasTRC;
 }
 bool LcmsColorProfileContainer::isLinear() const
 {
-    return d->isLinear;
+    return *d->isLinear;
 }
 QVector <double> LcmsColorProfileContainer::getColorantsXYZ() const
 {
@@ -467,18 +522,18 @@ void LcmsColorProfileContainer::DelinearizeFloatValue(QVector <double> & Value) 
 {
     if (d->hasColorants) {
         if (!cmsIsToneCurveLinear(d->redTRC)) {
-            Value[0] = cmsEvalToneCurveFloat(d->redTRCReverse, Value[0]);
+            Value[0] = cmsEvalToneCurveFloat(*d->redTRCReverse, Value[0]);
         }
         if (!cmsIsToneCurveLinear(d->greenTRC)) {
-            Value[1] = cmsEvalToneCurveFloat(d->greenTRCReverse, Value[1]);
+            Value[1] = cmsEvalToneCurveFloat(*d->greenTRCReverse, Value[1]);
         }
         if (!cmsIsToneCurveLinear(d->blueTRC)) {
-            Value[2] = cmsEvalToneCurveFloat(d->blueTRCReverse, Value[2]);
+            Value[2] = cmsEvalToneCurveFloat(*d->blueTRCReverse, Value[2]);
         }
 
     } else {
         if (cmsIsTag(d->profile, cmsSigGrayTRCTag)) {
-            Value[0] = cmsEvalToneCurveFloat(d->grayTRCReverse, Value[0]);
+            Value[0] = cmsEvalToneCurveFloat(*d->grayTRCReverse, Value[0]);
         }
     }
 }
@@ -519,20 +574,20 @@ void LcmsColorProfileContainer::DelinearizeFloatValueFast(QVector <double> & Val
         //we can only reliably delinearise in the 0-1.0 range, outside of that leave the value alone.
 
         if (!cmsIsToneCurveLinear(d->redTRC) && Value[0]<1.0) {
-            quint16 newValue = cmsEvalToneCurve16(d->redTRCReverse, Value[0] * scale);
+            quint16 newValue = cmsEvalToneCurve16(*d->redTRCReverse, Value[0] * scale);
             Value[0] = newValue * invScale;
         }
         if (!cmsIsToneCurveLinear(d->greenTRC) && Value[1]<1.0) {
-            quint16 newValue = cmsEvalToneCurve16(d->greenTRCReverse, Value[1] * scale);
+            quint16 newValue = cmsEvalToneCurve16(*d->greenTRCReverse, Value[1] * scale);
             Value[1] = newValue * invScale;
         }
         if (!cmsIsToneCurveLinear(d->blueTRC) && Value[2]<1.0) {
-            quint16 newValue = cmsEvalToneCurve16(d->blueTRCReverse, Value[2] * scale);
+            quint16 newValue = cmsEvalToneCurve16(*d->blueTRCReverse, Value[2] * scale);
             Value[2] = newValue * invScale;
         }
     } else {
         if (cmsIsTag(d->profile, cmsSigGrayTRCTag) && Value[0]<1.0) {
-            quint16 newValue = cmsEvalToneCurve16(d->grayTRCReverse, Value[0] * scale);
+            quint16 newValue = cmsEvalToneCurve16(*d->grayTRCReverse, Value[0] * scale);
             Value[0] = newValue * invScale;
         }
     }
@@ -574,7 +629,7 @@ QByteArray LcmsColorProfileContainer::getProfileUniqueId() const
 
 bool LcmsColorProfileContainer::compareTRC(TransferCharacteristics characteristics, float error) const
 {
-    if (!d->hasTRC) {
+    if (!*d->hasTRC) {
         return false;
     }
 

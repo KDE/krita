@@ -10,9 +10,8 @@
 #include <functional>
 #include <memory>
 #include <atomic>
+#include <mutex>
 
-#include <QMutex>
-#include <QMutexLocker>
 #include "KisMpl.h"
 
 /**
@@ -51,9 +50,23 @@ public:
     {
     }
 
-    KisLazyStorage(const KisLazyStorage &rgh) = delete;
-    KisLazyStorage(KisLazyStorage &&rgh) = delete;
+    KisLazyStorage(const KisLazyStorage &rhs) = delete;
+    KisLazyStorage& operator=(const KisLazyStorage &rhs) = delete;
 
+    KisLazyStorage(KisLazyStorage &&rhs) {
+        *this = std::move(rhs);
+    }
+
+    KisLazyStorage& operator=(KisLazyStorage &&rhs) {
+        std::scoped_lock lock(m_mutex, rhs.m_mutex);
+
+        m_constructionArgs = std::move(rhs.m_constructionArgs);
+        delete m_data.load();
+        m_data.store(rhs.m_data.load());
+        rhs.m_data.store(0);
+
+        return *this;
+    }
 
     ~KisLazyStorage() {
         delete m_data.load();
@@ -70,7 +83,7 @@ public:
 private:
     T* getPointer() {
         if(!m_data) {
-            QMutexLocker l(&m_mutex);
+            std::unique_lock l(m_mutex);
             if(!m_data) {
                 m_data = std::apply(&constructObject, m_constructionArgs);
             }
@@ -85,7 +98,7 @@ private:
 private:
     std::tuple<Args...> m_constructionArgs;
     std::atomic<T*> m_data;
-    QMutex m_mutex;
+    std::mutex m_mutex;
 };
 
 #endif // KISLAZYSTORAGE_H

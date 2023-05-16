@@ -24,6 +24,11 @@ warnings about being uninitialized). See [1] for discussion on
 the matter.
 
 [1] https://reviews.llvm.org/D105169#3069555
+
+Original commit:
+
+https://github.com/FFmpeg/FFmpeg/commit/ab792634197e364ca1bb194f9abe36836e42f12d
+
 ---
  libavformat/utils.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)

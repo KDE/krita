@@ -924,10 +924,10 @@ KisNodeSP KisKraLoader::loadNode(const QDomElement& element, KisImageSP image)
             subtractiveBlendingModesInCmyk().contains(compositeOpName)) {
 
             m_d->warningMessages <<
-                i18n("Layer %1 has blending mode \"%2\" that has changed its "
+                i18n("Layer \"%1\" has blending mode \"%2\" that has changed its "
                     "behavior for CMYK color in Krita 5.2. Please check the "
-                    "result and consider enabling legacy support in "
-                    "Preferences->General->Tools->CMYK blending mode",
+                    "result and consider enabling legacy \"Additive\" algorithm in "
+                    "Settings->Configure Krita->General->Tools->CMYK blending mode",
                     name, KoCompositeOpRegistry::instance().getKoID(compositeOpName).name());
         }
     }

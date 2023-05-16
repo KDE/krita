@@ -177,7 +177,7 @@ QRect KisBezierTransformMesh::approxNeedRect(const QRect &rc) const
 
         result = alignedRect;
 
-        if (dstRectSampler.numSamples() > qMax(2000, samplesLimit)) {
+        if (dstRectSampler.numSamples() > qMin(2000, samplesLimit)) {
             /**
              * We don't warn if the "found" rect is empty, that is a perfectly
              * valid case.

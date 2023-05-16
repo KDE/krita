@@ -928,24 +928,24 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
         device = tmp;
     }
 
-    if (device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
-            || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
-            || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID
-            || options.saveAsHDR
-            || (device->colorSpace()->colorDepthId() != Integer8BitsColorDepthID && options.downsample)) {
+    KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.forceSRGB) {
+        options.forceSRGB = false;
+    }
 
+    QStringList colormodels = QStringList() << RGBAColorModelID.id() << GrayAColorModelID.id();
+    if (options.saveAsHDR || options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
         const KoColorSpace *dstCS =
             KoColorSpaceRegistry::instance()->colorSpace(
-                device->colorSpace()->colorModelId().id(),
-                options.downsample ? Integer8BitsColorDepthID.id() : Integer16BitsColorDepthID.id(),
-                device->colorSpace()->profile());
+                RGBAColorModelID.id(),
+                device->colorSpace()->colorDepthId().id(),
+                "sRGB built-in - (lcms internal)");
 
         if (options.saveAsHDR) {
             dstCS =
                 KoColorSpaceRegistry::instance()->colorSpace(
-                        RGBAColorModelID.id(),
-                        Integer16BitsColorDepthID.id(),
-                        KoColorSpaceRegistry::instance()->p2020PQProfile());
+                    RGBAColorModelID.id(),
+                    device->colorSpace()->colorDepthId().id(),
+                    KoColorSpaceRegistry::instance()->p2020PQProfile());
         }
 
         KisPaintDeviceSP tmp = new KisPaintDevice(device->colorSpace());
@@ -955,19 +955,30 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
         device = tmp;
     }
 
-    KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.forceSRGB) {
-        options.forceSRGB = false;
+    if (options.downsample
+            || device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
+            || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
+            || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID) {
+        const KoColorSpace* cs = 
+            KoColorSpaceRegistry::instance()->colorSpace(
+                RGBAColorModelID.id(),
+                Integer16BitsColorDepthID.id(),
+                device->colorSpace()->profile());
+
+        if (options.downsample) {
+            cs = 
+                KoColorSpaceRegistry::instance()->colorSpace(
+                    RGBAColorModelID.id(),
+                    Integer8BitsColorDepthID.id(),
+                    device->colorSpace()->profile());
+        }
+
+        device = new KisPaintDevice(*device);
+        device->convertTo(cs);
     }
 
     KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.tryToSaveAsIndexed) {
         options.tryToSaveAsIndexed = false;
-    }
-
-    QStringList colormodels = QStringList() << RGBAColorModelID.id() << GrayAColorModelID.id();
-    if (options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), options.downsample ? Integer8BitsColorDepthID.id() : device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
-        device = new KisPaintDevice(*device);
-        device->convertTo(cs);
     }
 
     // Initialize structures

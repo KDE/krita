@@ -94,6 +94,8 @@ struct KisLayerThumbnailCache::Private
     KisIdleTasksManager::TaskGuard taskGuard;
     int maxSize = 32;
     QMap<KisNodeWSP, ThumbnailRecord> cache;
+
+    void cleanupDeletedNodes();
 };
 
 
@@ -174,9 +176,27 @@ QImage KisLayerThumbnailCache::thumbnail(KisNodeSP node) const
     return image;
 }
 
+void KisLayerThumbnailCache::Private::cleanupDeletedNodes()
+{
+    for (auto it = cache.begin(); it != cache.end();) {
+        if (!it.key()) {
+            it = cache.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
 void KisLayerThumbnailCache::notifyNodeRemoved(KisNodeSP node)
 {
-    m_d->cache.remove(node);
+    Q_UNUSED(node);
+    m_d->cleanupDeletedNodes();
+}
+
+void KisLayerThumbnailCache::notifyNodeAdded(KisNodeSP node)
+{
+    Q_UNUSED(node);
+    m_d->cleanupDeletedNodes();
 }
 
 void KisLayerThumbnailCache::clear()

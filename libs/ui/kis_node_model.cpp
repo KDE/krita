@@ -342,11 +342,6 @@ void KisNodeModel::setIdleTaskManager(KisIdleTasksManager *idleTasksManager)
     m_d->thumbnalCache.setIdleTaskManager(idleTasksManager);
 }
 
-void KisNodeModel::clearThumbnailsCache()
-{
-    m_d->thumbnalCache.clear();
-}
-
 void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType)
 {
     int row = 0;
@@ -370,6 +365,8 @@ void KisNodeModel::slotEndInsertDummy(KisNodeDummy *dummy)
         endInsertRows();
         m_d->needFinishInsertRows = false;
     }
+
+    m_d->thumbnalCache.notifyNodeAdded(dummy->node());
 }
 
 void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)

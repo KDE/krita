@@ -28,7 +28,9 @@ public:
 
     QImage thumbnail(KisNodeSP node) const;
 
+    void notifyNodeAdded(KisNodeSP node);
     void notifyNodeRemoved(KisNodeSP node);
+
     void startThumbnailsUpdate();
 
     void clear();

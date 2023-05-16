@@ -109,6 +109,8 @@ void KisIdleTasksManager::slotImageIsIdle()
         return;
     }
 
+    if (m_d->queue.isEmpty()) return;
+
     const int newTaskIndex = m_d->queue.dequeue();
 
     KisIdleTaskStrokeStrategy *strategy = m_d->tasks[newTaskIndex].factory(image);

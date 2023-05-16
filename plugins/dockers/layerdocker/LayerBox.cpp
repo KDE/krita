@@ -653,7 +653,6 @@ void LayerBox::hideEvent(QHideEvent *event)
 {
     QDockWidget::hideEvent(event);
     m_nodeModel->setIdleTaskManager(0);
-    m_nodeModel->clearThumbnailsCache();
 }
 
 void LayerBox::notifyImageDeleted()

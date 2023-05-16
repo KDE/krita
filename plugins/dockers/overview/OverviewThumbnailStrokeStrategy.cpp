@@ -28,7 +28,7 @@ OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisPaintDeviceS
                                                                  const KoColorProfile *profile,
                                                                  KoColorConversionTransformation::Intent renderingIntent,
                                                                  KoColorConversionTransformation::ConversionFlags conversionFlags)
-    : KisIdleTaskStrokeStrategy(QLatin1String("OverviewThumbnail")),
+    : KisIdleTaskStrokeStrategy(QLatin1String("OverviewThumbnail"), kundo2_i18n("Update overview thumbnail")),
       m_device(device),
       m_rect(rect),
       m_thumbnailSize(thumbnailSize),

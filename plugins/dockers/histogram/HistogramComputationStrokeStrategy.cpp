@@ -34,7 +34,7 @@ struct HistogramComputationStrokeStrategy::Private
 
 
 HistogramComputationStrokeStrategy::HistogramComputationStrokeStrategy(KisImageSP image)
-    : KisIdleTaskStrokeStrategy(QLatin1String("ComputeHistogram"), kundo2_i18n("fkdfjkdjfk"))
+    : KisIdleTaskStrokeStrategy(QLatin1String("ComputeHistogram"), kundo2_i18n("Update histogram"))
     , m_d(new Private)
 {
     m_d->image = image;

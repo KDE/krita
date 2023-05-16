@@ -938,7 +938,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
             KoColorSpaceRegistry::instance()->colorSpace(
                 RGBAColorModelID.id(),
                 device->colorSpace()->colorDepthId().id(),
-                "sRGB built-in - (lcms internal)");
+                KoColorSpaceRegistry::instance()->p709SRGBProfile());
 
         if (options.saveAsHDR) {
             dstCS =

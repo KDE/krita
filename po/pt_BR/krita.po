@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-12 00:45+0000\n"
+"POT-Creation-Date: 2023-05-16 00:44+0000\n"
 "PO-Revision-Date: 2023-02-14 11:07-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -16618,7 +16618,7 @@ msgstr "Tamanho"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1348
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1351
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1415
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1464
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1446
 #: libs/ui/forms/wdgdisplaysettings.ui:336
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -16899,7 +16899,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (incorporado)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:482
+#: libs/ui/dialogs/kis_dlg_preferences.cc:466
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -19377,7 +19377,7 @@ msgstr "Recursos locais"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
-#: libs/ui/dialogs/kis_dlg_preferences.cc:920
+#: libs/ui/dialogs/kis_dlg_preferences.cc:904
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:717
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
@@ -19640,8 +19640,8 @@ msgstr "Metadados"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1796
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1800
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1778
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1782
 #: libs/ui/forms/wdgdisplaysettings.ui:165 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:326
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -20431,7 +20431,7 @@ msgstr ""
 "A taxa de quadrosserá reduzida para 50 quadros por segundo.</p></body></html>"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:477
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1806
 #, kde-format
 msgid "Warning(s):"
 msgstr "Aviso(s):"
@@ -21416,8 +21416,8 @@ msgstr "Tela principal:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2092
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2094
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2074
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2076
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -21517,8 +21517,8 @@ msgstr "Importação de animação de vídeo"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2062
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2064
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2044
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2046
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22662,10 +22662,10 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1422
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1425
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1379
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1383
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1387
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1469
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1361
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1365
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1369
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1451
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:45
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:52
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:123
@@ -22723,17 +22723,17 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "(Múltiplos selecionados)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:224
+#: libs/ui/dialogs/kis_dlg_preferences.cc:207
 #, kde-format
 msgid "No Cursor"
 msgstr "Sem cursor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:225
+#: libs/ui/dialogs/kis_dlg_preferences.cc:208
 #, kde-format
 msgid "Tool Icon"
 msgstr "Ícone de Ferramenta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:226
+#: libs/ui/dialogs/kis_dlg_preferences.cc:209
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -22742,129 +22742,129 @@ msgstr "Ícone de Ferramenta"
 msgid "Arrow"
 msgstr "Seta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:227
+#: libs/ui/dialogs/kis_dlg_preferences.cc:210
 #, kde-format
 msgid "Small Circle"
 msgstr "Pequeno círculo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:228
+#: libs/ui/dialogs/kis_dlg_preferences.cc:211
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
 msgstr "Mira"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:229
+#: libs/ui/dialogs/kis_dlg_preferences.cc:212
 #, kde-format
 msgid "Triangle Righthanded"
 msgstr "Triângulo para a direita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:230
+#: libs/ui/dialogs/kis_dlg_preferences.cc:213
 #, kde-format
 msgid "Triangle Lefthanded"
 msgstr "Triângulo para a esquerda"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:231
+#: libs/ui/dialogs/kis_dlg_preferences.cc:214
 #, kde-format
 msgid "Black Pixel"
 msgstr "Ponto preto"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:232
+#: libs/ui/dialogs/kis_dlg_preferences.cc:215
 #, kde-format
 msgid "White Pixel"
 msgstr "Ponto branco"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:235
+#: libs/ui/dialogs/kis_dlg_preferences.cc:218
 #, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "Sem contorno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:236
+#: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #, kde-format
 msgid "Circle Outline"
 msgstr "Contorno do círculo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:237
+#: libs/ui/dialogs/kis_dlg_preferences.cc:220
 #, kde-format
 msgid "Preview Outline"
 msgstr "Contorno da visualização"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:238
+#: libs/ui/dialogs/kis_dlg_preferences.cc:221
 #, kde-format
 msgid "Tilt Outline"
 msgstr "Contorno da pressão"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:262
+#: libs/ui/dialogs/kis_dlg_preferences.cc:245
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
 msgid "Eraser"
 msgstr "Borracha"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:338
+#: libs/ui/dialogs/kis_dlg_preferences.cc:322
 #, kde-format
 msgid "On Touch Drag"
 msgstr "Arrastar ao Tocar"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:339
+#: libs/ui/dialogs/kis_dlg_preferences.cc:323
 #, kde-format
 msgid "On Click Drag"
 msgstr "Arrastar ao Clicar"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:340
+#: libs/ui/dialogs/kis_dlg_preferences.cc:324
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr "Arraste ao clicar com o botão do meio"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:377
+#: libs/ui/dialogs/kis_dlg_preferences.cc:361
 #, kde-format
 msgid "Open default window"
 msgstr "Abrir janela padrão"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:378
+#: libs/ui/dialogs/kis_dlg_preferences.cc:362
 #, kde-format
 msgid "Load previous session"
 msgstr "Ler sessão anterior"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:379
+#: libs/ui/dialogs/kis_dlg_preferences.cc:363
 #, kde-format
 msgid "Show session manager"
 msgstr "Mostrar gerenciador de sessão"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:447
+#: libs/ui/dialogs/kis_dlg_preferences.cc:431
 #, fuzzy, kde-format
 #| msgid "Note: Krita will need to be restarted for changes to take effect"
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr ""
 "Nota: É necessário reiniciar o Krita para que as mudanças tenham efeito"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:453
+#: libs/ui/dialogs/kis_dlg_preferences.cc:437
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:485
+#: libs/ui/dialogs/kis_dlg_preferences.cc:469
 #, fuzzy, kde-format
 #| msgid "Internal error"
 msgid "Internal Storage"
 msgstr "Erro interno"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:487
+#: libs/ui/dialogs/kis_dlg_preferences.cc:471
 #, kde-format
 msgid "SD-Card"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:525
+#: libs/ui/dialogs/kis_dlg_preferences.cc:509
 #, fuzzy, kde-format
 #| msgid "User Manual"
 msgid "Choose Manually"
 msgstr "Manual do Usuário"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:590
+#: libs/ui/dialogs/kis_dlg_preferences.cc:574
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -22890,27 +22890,27 @@ msgstr ""
 "<br/>\n"
 "%2</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:908
+#: libs/ui/dialogs/kis_dlg_preferences.cc:892
 #, kde-format
 msgid "Select a Background Image"
 msgstr "Selecionar uma imagem de fundo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:920
+#: libs/ui/dialogs/kis_dlg_preferences.cc:904
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 não é um arquivo de imagem válido!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:940
+#: libs/ui/dialogs/kis_dlg_preferences.cc:924
 #, fuzzy, kde-format
 #| msgid "2. The resource location at %1 is not writable."
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "2. O local do recurso em %1 não é gravável."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1043
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1152
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1234
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1026
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1135
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1216
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -22918,14 +22918,14 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "Tela %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1111
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1095
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "Instalar os perfis de cor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1323
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1305
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -22935,20 +22935,20 @@ msgstr ""
 "velocidade do pincel (pode causar artefatos graves ao usar a API do tablet "
 "WinTab)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1325
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1307
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr ""
 "Use carimbos de data/hora do driver do tablet para velocidade do pincel"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1433
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1415
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1454
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1436
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -22957,182 +22957,182 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr "seg"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1458
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1440
 #, kde-format
 msgid " fps"
 msgstr "fps/quadros por segundo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1668
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1650
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1669
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1651
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Renderizado por software (muito lento)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1671
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1653
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 via ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1673
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1655
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1680
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1662
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1700
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1682
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Automático (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1782
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1764
 #, kde-format
 msgid "Display Id: %1"
 msgstr "ID de exibição: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1783
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1765
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Nome de exibição: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1784
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1766
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "Luminância mínima: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1785
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1767
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "Luminância máxima: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1786
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1768
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "Luminância máxima do quadro completo: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1787
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1769
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Primário Vermelho: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1788
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1770
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Primário Verde: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1789
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1771
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Primário Azul: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1790
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1772
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Ponto branco: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1970
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1952
 #, fuzzy, kde-format
 #| msgid "WARNING: current display doesn't support HDR rendering"
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "AVISO: a tela atual não suporta renderização HDR"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2037
 #, kde-format
 msgid "Configure Krita"
 msgstr "Configurar o Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2072
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2054
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Atalhos de teclado"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2074
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2056
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Atalhos"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2084
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2066
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Configurações da interação da área de desenho"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2085
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2067
 #, kde-format
 msgid "Canvas Input"
 msgstr "Interação da área de desenho"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2102
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2084
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #, kde-format
 msgid "Color Management"
 msgstr "Gerenciamento de Cores"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2104
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2086
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Cor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2112
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2114
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2094
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2096
 #, kde-format
 msgid "Performance"
 msgstr "Desempenho"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2122
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2104
 #, kde-format
 msgid "Tablet settings"
 msgstr "Configurações da mesa digitalizadora"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2124
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2106
 #, kde-format
 msgid "Tablet"
 msgstr "Mesa digitalizadora"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2132
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2114
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Configurações do modo somente a tela"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2134
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2116
 #, kde-format
 msgid "Canvas-only"
 msgstr "Somente a tela"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2142
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2144
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2124
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2126
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Paleta Pop-up"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2152
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2134
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2154
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2136
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Autor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2161
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -24158,7 +24158,7 @@ msgstr "Use o modelo de cores padrão para novas imagens"
 #. i18n: ectx: property (title), widget (QGroupBox, grpPasteFrom)
 #. i18n: ectx: property (title), widget (QGroupBox, grpPasteBehaviour)
 #: libs/ui/forms/wdgcolorsettings.ui:69
-#: libs/ui/forms/wdggeneralsettings.ui:1029
+#: libs/ui/forms/wdggeneralsettings.ui:1050
 #, kde-format
 msgid "When Pasting Into Krita From Other Applications"
 msgstr "Quando Colar no Krita de Outros Aplicativos"
@@ -24664,7 +24664,7 @@ msgstr "Opacidade global:"
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:481
-#: libs/ui/forms/wdggeneralsettings.ui:1081
+#: libs/ui/forms/wdggeneralsettings.ui:1102
 #, kde-format
 msgid "Miscellaneous"
 msgstr "Diversos"
@@ -25213,100 +25213,121 @@ msgstr ""
 "Ocultar barras de rolagem da janela de encaixe se a rolagem cinética estiver "
 "ativada (é necessário reiniciar)"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:834
+#, fuzzy, kde-format
+#| msgid "Creamy (Krita 4.2+)"
+msgid "Subtractive (Krita 5.2+)"
+msgstr "Cremoso (Krita 4.2+)"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
+#: libs/ui/forms/wdggeneralsettings.ui:839
+#, fuzzy, kde-format
+#| msgid "Hard (Krita 4.1 and earlier versions)"
+msgid "Additive (Krita 5.1 and earlier versions)"
+msgstr "Difícil (Krita 4.1 e versões anteriores)"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
+#: libs/ui/forms/wdggeneralsettings.ui:847
+#, fuzzy, kde-format
+#| msgid "Brush Flow Mode (needs restart):"
+msgid "CMYK blending mode (needs restart):"
+msgstr "Modo de fluxo do pincel (é necessário reiniciar):"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: libs/ui/forms/wdggeneralsettings.ui:855
 #, kde-format
 msgid "File Handling"
 msgstr "Manipulação de arquivos"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_autosaveCheckBox)
-#: libs/ui/forms/wdggeneralsettings.ui:840
+#: libs/ui/forms/wdggeneralsettings.ui:861
 #, kde-format
 msgid "Enable Autosaving"
 msgstr "Ativar o salvamento automático"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: libs/ui/forms/wdggeneralsettings.ui:849
+#: libs/ui/forms/wdggeneralsettings.ui:870
 #, kde-format
 msgid "Autosave Interval:"
 msgstr "Intervalo de salvamento automático:"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, m_autosaveSpinBox)
-#: libs/ui/forms/wdggeneralsettings.ui:856
+#: libs/ui/forms/wdggeneralsettings.ui:877
 #, kde-format
 msgctxt "Suffix: “Every x min”"
 msgid " min"
 msgstr " min"
 
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, m_autosaveSpinBox)
-#: libs/ui/forms/wdggeneralsettings.ui:859
+#: libs/ui/forms/wdggeneralsettings.ui:880
 #, kde-format
 msgctxt "Prefix: “Every x min”"
 msgid "Every "
 msgstr "Cada"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHideAutosaveFiles)
-#: libs/ui/forms/wdggeneralsettings.ui:878
+#: libs/ui/forms/wdggeneralsettings.ui:899
 #, kde-format
 msgid "Unnamed autosave files are hidden by default"
 msgstr "Arquivos de salvamento automático sem nome estão ocultos por padrão"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_backupFileCheckBox)
-#: libs/ui/forms/wdggeneralsettings.ui:891
+#: libs/ui/forms/wdggeneralsettings.ui:912
 #, kde-format
 msgid "Create a Backup File on Saving"
 msgstr "Criar cópia de segurança ao salvar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
-#: libs/ui/forms/wdggeneralsettings.ui:900
+#: libs/ui/forms/wdggeneralsettings.ui:921
 #, kde-format
 msgid "Backup File Location"
 msgstr "Localização do arquivo de backup"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
-#: libs/ui/forms/wdggeneralsettings.ui:908
+#: libs/ui/forms/wdggeneralsettings.ui:929
 #, kde-format
 msgid "Same Folder as Original File"
 msgstr "Mesma pasta que o arquivo original"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
-#: libs/ui/forms/wdggeneralsettings.ui:913
+#: libs/ui/forms/wdggeneralsettings.ui:934
 #, kde-format
 msgid "User Folder"
 msgstr "Pasta do usuário"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
-#: libs/ui/forms/wdggeneralsettings.ui:918
+#: libs/ui/forms/wdggeneralsettings.ui:939
 #, kde-format
 msgid "Temporary File Location"
 msgstr "Local do arquivo temporário"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/forms/wdggeneralsettings.ui:926
+#: libs/ui/forms/wdggeneralsettings.ui:947
 #, kde-format
 msgid "Backup File Suffix:"
 msgstr "Sufixo do arquivo de backup:"
 
 #. i18n: ectx: property (text), widget (QLineEdit, txtBackupFileSuffix)
-#: libs/ui/forms/wdggeneralsettings.ui:933
+#: libs/ui/forms/wdggeneralsettings.ui:954
 #, kde-format
 msgid "~"
 msgstr "~"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/forms/wdggeneralsettings.ui:943
+#: libs/ui/forms/wdggeneralsettings.ui:964
 #, kde-format
 msgid "Number of Backup Files Kept:"
 msgstr "Número de arquivos de backup mantidos:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: libs/ui/forms/wdggeneralsettings.ui:963
+#: libs/ui/forms/wdggeneralsettings.ui:984
 #, kde-format
 msgid "KRA File Compression"
 msgstr "Compressão do arquivo KRA"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkZip64)
-#: libs/ui/forms/wdggeneralsettings.ui:969
+#: libs/ui/forms/wdggeneralsettings.ui:990
 #, kde-format
 msgid ""
 "<html><head/><body><p>Only use this option for <span style=\" font-"
@@ -25318,7 +25339,7 @@ msgstr ""
 "body> </html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkZip64)
-#: libs/ui/forms/wdggeneralsettings.ui:972
+#: libs/ui/forms/wdggeneralsettings.ui:993
 #, kde-format
 msgid ""
 "Use Zip64 (for very large files: cannot be opened in versions of Krita older "
@@ -25328,25 +25349,25 @@ msgstr ""
 "Krita anteriores à 4.2.0)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkCompressKra)
-#: libs/ui/forms/wdggeneralsettings.ui:979
+#: libs/ui/forms/wdggeneralsettings.ui:1000
 #, kde-format
 msgid "Compress .kra files more (slows loading/saving)"
 msgstr "Comprimir mais os arquivos .kra (atrasa a leitura/gravação)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkTrimKra)
-#: libs/ui/forms/wdggeneralsettings.ui:989
+#: libs/ui/forms/wdggeneralsettings.ui:1010
 #, kde-format
 msgid "Trim files before saving"
 msgstr "Cortar arquivos antes de salvar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkTrimFramesImport)
-#: libs/ui/forms/wdggeneralsettings.ui:999
+#: libs/ui/forms/wdggeneralsettings.ui:1020
 #, kde-format
 msgid "Trim frames when importing animations"
 msgstr "Cortar quadros ao importar animações"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
-#: libs/ui/forms/wdggeneralsettings.ui:1023
+#: libs/ui/forms/wdggeneralsettings.ui:1044
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Painting"
@@ -25354,13 +25375,13 @@ msgid "Pasting"
 msgstr "Pintura"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
-#: libs/ui/forms/wdggeneralsettings.ui:1035
+#: libs/ui/forms/wdggeneralsettings.ui:1056
 #, fuzzy, kde-format
 msgid "Prefer downloading the original source (this requires Internet access)"
 msgstr "Optar por baixar a fonte original (necessária conexão à Internet)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteNote)
-#: libs/ui/forms/wdggeneralsettings.ui:1042
+#: libs/ui/forms/wdggeneralsettings.ui:1063
 #, fuzzy, kde-format
 msgid ""
 "Note: This applies to drops in the Info window, the canvas, and paste "
@@ -25370,7 +25391,7 @@ msgstr ""
 "desenho, e ações de colagem."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteContext)
-#: libs/ui/forms/wdggeneralsettings.ui:1049
+#: libs/ui/forms/wdggeneralsettings.ui:1070
 #, fuzzy, kde-format
 msgid ""
 "Some applications, like Google Chrome, provide multiple formats when pasting "
@@ -25380,13 +25401,13 @@ msgstr ""
 "colando ou arranstando uma imagem."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnLocal)
-#: libs/ui/forms/wdggeneralsettings.ui:1056
+#: libs/ui/forms/wdggeneralsettings.ui:1077
 #, fuzzy, kde-format
 msgid "Prefer a local copy (if available; metadata may be lost)"
 msgstr "Optar por uma cópia local (se disponível, metadado será perdido)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnBitmap)
-#: libs/ui/forms/wdggeneralsettings.ui:1063
+#: libs/ui/forms/wdggeneralsettings.ui:1084
 #, fuzzy, kde-format
 msgid ""
 "Paste the attached sRGB bitmap (no filesystem or Internet access required, "
@@ -25396,25 +25417,25 @@ msgstr ""
 "necessários, mas os metadados serão perdidos)."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsk)
-#: libs/ui/forms/wdggeneralsettings.ui:1070
+#: libs/ui/forms/wdggeneralsettings.ui:1091
 #, kde-format
 msgid "Ask each time"
 msgstr "Perguntar cada vez"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: libs/ui/forms/wdggeneralsettings.ui:1138
+#: libs/ui/forms/wdggeneralsettings.ui:1159
 #, kde-format
 msgid "When Krita starts:"
 msgstr "Quando o Krita iniciar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveSessionOnQuit)
-#: libs/ui/forms/wdggeneralsettings.ui:1158
+#: libs/ui/forms/wdggeneralsettings.ui:1179
 #, kde-format
 msgid "Save session when Krita closes"
 msgstr "Salvar sessão quando o Krita fechar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkConvertOnImport)
-#: libs/ui/forms/wdggeneralsettings.ui:1165
+#: libs/ui/forms/wdggeneralsettings.ui:1186
 #, kde-format
 msgid "On importing images as layers, convert to the image colorspace"
 msgstr ""
@@ -25423,32 +25444,32 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, m_undoStackSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1178
-#: libs/ui/forms/wdggeneralsettings.ui:1191
+#: libs/ui/forms/wdggeneralsettings.ui:1199
+#: libs/ui/forms/wdggeneralsettings.ui:1212
 #, kde-format
 msgid "Only applies to new or newly opened images."
 msgstr "Aplica-se apenas a imagens novas ou recém-abertas."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdggeneralsettings.ui:1181
+#: libs/ui/forms/wdggeneralsettings.ui:1202
 #, kde-format
 msgid "Undo stack size:"
 msgstr "Tamanho da pilha de anulações:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRootLayer)
-#: libs/ui/forms/wdggeneralsettings.ui:1210
+#: libs/ui/forms/wdggeneralsettings.ui:1231
 #, kde-format
 msgid "Show root layer"
 msgstr "Mostrar camada base"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUsageLogging)
-#: libs/ui/forms/wdggeneralsettings.ui:1217
+#: libs/ui/forms/wdggeneralsettings.ui:1238
 #, kde-format
 msgid "Enable Logging for bug reports"
 msgstr "Ativar o log para relatórios de erros"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1248
+#: libs/ui/forms/wdggeneralsettings.ui:1269
 #, kde-format
 msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
@@ -25458,68 +25479,68 @@ msgstr ""
 "coisas malucas, não reporte um bug."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
-#: libs/ui/forms/wdggeneralsettings.ui:1251
+#: libs/ui/forms/wdggeneralsettings.ui:1272
 #, kde-format
 msgid "Enable native file dialogs"
 msgstr "Ativar diálogos de arquivos nativos"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
-#: libs/ui/forms/wdggeneralsettings.ui:1274
+#: libs/ui/forms/wdggeneralsettings.ui:1295
 #, kde-format
 msgid "(Warning: may not work correctly on some systems)"
 msgstr "(Aviso: talvez não funcione corretamente em alguns sistemas)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: libs/ui/forms/wdggeneralsettings.ui:1284
+#: libs/ui/forms/wdggeneralsettings.ui:1305
 #, kde-format
 msgid "Maximum brush size:"
 msgstr "Tamanho máximo do pincel:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1312
+#: libs/ui/forms/wdggeneralsettings.ui:1333
 #, kde-format
 msgid "The maximum diameter of a brush in pixels."
 msgstr "O diâmetro máximo de um pincel em pixels."
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, intMaxBrushSize)
-#: libs/ui/forms/wdggeneralsettings.ui:1315
+#: libs/ui/forms/wdggeneralsettings.ui:1336
 #, kde-format
 msgctxt "pixel"
 msgid "px"
 msgstr "px "
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: libs/ui/forms/wdggeneralsettings.ui:1350
+#: libs/ui/forms/wdggeneralsettings.ui:1371
 #, kde-format
 msgid "(Needs restart)"
 msgstr "(é necessário reiniciar o Krita)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/forms/wdggeneralsettings.ui:1363
+#: libs/ui/forms/wdggeneralsettings.ui:1384
 #, kde-format
 msgid "Animation"
 msgstr "Animação"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAutoPin)
-#: libs/ui/forms/wdggeneralsettings.ui:1372
+#: libs/ui/forms/wdggeneralsettings.ui:1393
 #, kde-format
 msgid "Automatically pin new layers to timeline"
 msgstr "Fixar automaticamente novas camadas na linha do tempo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
-#: libs/ui/forms/wdggeneralsettings.ui:1382
+#: libs/ui/forms/wdggeneralsettings.ui:1403
 #, kde-format
 msgid "Adapt playback range to keyframes"
 msgstr "Adapte o intervalo de reprodução aos quadros-chave"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1392
+#: libs/ui/forms/wdggeneralsettings.ui:1413
 #, kde-format
 msgid "Font DPI Workaround"
 msgstr "Solução alternativa de fonte DPI"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1407
+#: libs/ui/forms/wdggeneralsettings.ui:1428
 #, kde-format
 msgid ""
 "In some Krita versions before 5.0 text size could be dependent on the "
@@ -25549,7 +25570,7 @@ msgstr ""
 "conversão será mais necessária."
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
-#: libs/ui/forms/wdggeneralsettings.ui:1410
+#: libs/ui/forms/wdggeneralsettings.ui:1431
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:66
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:177
 #, kde-format
@@ -25557,7 +25578,7 @@ msgid "DPI:"
 msgstr "DPI:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, intForcedFontDPI)
-#: libs/ui/forms/wdggeneralsettings.ui:1419
+#: libs/ui/forms/wdggeneralsettings.ui:1440
 #, kde-format
 msgid ""
 "In some versions of Krita before 4.4.3 text size could be dependent on the "
@@ -25575,7 +25596,7 @@ msgstr ""
 "Mostrar DPI para os tipos de letra inserindo-o neste campo."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
-#: libs/ui/forms/wdggeneralsettings.ui:1432
+#: libs/ui/forms/wdggeneralsettings.ui:1453
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Automatic color axis adjustments"
@@ -25583,26 +25604,26 @@ msgid "Automatic layer suffixes"
 msgstr "Ajustes automáticos nos eixos das cores"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1438
+#: libs/ui/forms/wdggeneralsettings.ui:1459
 #, fuzzy, kde-format
 msgid "Add \"Merged\" to merged group layers"
 msgstr "Adicionar \"Mesclado\" a grupo de camadas mescladas"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
-#: libs/ui/forms/wdggeneralsettings.ui:1445
+#: libs/ui/forms/wdggeneralsettings.ui:1466
 #, fuzzy, kde-format
 msgid "Add \"(pasted)\" to pasted layers"
 msgstr "Adicionar \"(colada)\" a camadas coladas"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1470
+#: libs/ui/forms/wdggeneralsettings.ui:1491
 #, fuzzy, kde-format
 #| msgid "Disable Cumulative Undo"
 msgid "Use cumulative undo"
 msgstr "Desativar o 'Desfazer' cumulativo"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
-#: libs/ui/forms/wdggeneralsettings.ui:1490
+#: libs/ui/forms/wdggeneralsettings.ui:1511
 #, fuzzy, kde-format
 #| msgctxt "Tablet mapping settings"
 #| msgid "Advanced..."
@@ -25611,14 +25632,14 @@ msgstr "Avançada..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
-#: libs/ui/forms/wdggeneralsettings.ui:1504
+#: libs/ui/forms/wdggeneralsettings.ui:1525
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
 #, kde-format
 msgid "Resources"
 msgstr "Recursos"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
-#: libs/ui/forms/wdggeneralsettings.ui:1510
+#: libs/ui/forms/wdggeneralsettings.ui:1531
 #, kde-format
 msgid "Resource Folder:"
 msgstr "Pasta de recursos:"
@@ -30322,8 +30343,8 @@ msgid "The action was cancelled by the user."
 msgstr "A ação foi cancelada pelo usuário."
 
 #: libs/ui/KisImportExportErrorCode.cpp:178
-#: plugins/impex/libkra/kra_converter.cpp:378
-#: plugins/impex/libkra/kra_converter.cpp:407
+#: plugins/impex/libkra/kra_converter.cpp:384
+#: plugins/impex/libkra/kra_converter.cpp:413
 #, kde-format
 msgid "Unknown error."
 msgstr "Erro desconhecido."
@@ -48457,8 +48478,8 @@ msgstr ""
 "Você quer selecionar outro local?"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
-#: plugins/impex/libkra/kis_kra_loader.cpp:1025
-#: plugins/impex/libkra/kis_kra_loader.cpp:1394
+#: plugins/impex/libkra/kis_kra_loader.cpp:1043
+#: plugins/impex/libkra/kis_kra_loader.cpp:1412
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -48562,27 +48583,27 @@ msgstr ""
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "tipo de canal keyframe desconhecido: %1 em %2"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:206
+#: plugins/impex/libkra/kis_kra_loader.cpp:209
 #, kde-format
 msgid "Image does not have a name."
 msgstr "A imagem não tem um nome."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:211
+#: plugins/impex/libkra/kis_kra_loader.cpp:214
 #, kde-format
 msgid "Image does not specify a width."
 msgstr "A imagem não especifica a largura."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:217
+#: plugins/impex/libkra/kis_kra_loader.cpp:220
 #, kde-format
 msgid "Image does not specify a height."
 msgstr "A imagem não especifica a altura."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:267
+#: plugins/impex/libkra/kis_kra_loader.cpp:270
 #, kde-format
 msgid "Image specifies an unsupported color model: %1."
 msgstr "A imagem especifica um modelo de cores sem suporte: %1."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:563
+#: plugins/impex/libkra/kis_kra_loader.cpp:566
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid ""
@@ -48591,14 +48612,14 @@ msgstr ""
 "A paleta incorporada está vazia e não pode ser carregada. O nome da paleta: "
 "%1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:574
+#: plugins/impex/libkra/kis_kra_loader.cpp:577
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be read. The filename of the resource: %1"
 msgstr ""
 "O recurso incorporado não pode ser lido. O nome do arquivo do recurso: %1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:583
+#: plugins/impex/libkra/kis_kra_loader.cpp:586
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be imported. The filename of the resource: %1"
@@ -48606,7 +48627,7 @@ msgstr ""
 "O recurso incorporado não pode ser importado. O nome do arquivo do recurso: "
 "%1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:775
+#: plugins/impex/libkra/kis_kra_loader.cpp:778
 #, fuzzy, kde-format
 msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
@@ -48615,27 +48636,35 @@ msgstr ""
 "Duas máscaras de seleção global foram encontradas ativas. \"%1\" será "
 "mantida ativa, \"%2\" será desativada."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:828
+#: plugins/impex/libkra/kis_kra_loader.cpp:833
 #, kde-format
 msgid "Layer %1 specifies an unsupported color model: %2."
 msgstr "A camada %1 define um modelo de cores sem suporte: %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:856
+#: plugins/impex/libkra/kis_kra_loader.cpp:861
 #, kde-format
 msgid "Layer %1 has an unsupported type."
 msgstr "A camada %1 tem um tipo não suportado."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:890
+#: plugins/impex/libkra/kis_kra_loader.cpp:896
 #, kde-format
 msgid "Layer %1 has an unsupported type: %2."
 msgstr "A camada %1 tem um tipo não suportado: %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:897
+#: plugins/impex/libkra/kis_kra_loader.cpp:903
 #, kde-format
 msgid "Failure loading layer %1 of type: %2."
 msgstr "Ocorreu um erro ao carregar a camada %1 do tipo: %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1020
+#: plugins/impex/libkra/kis_kra_loader.cpp:927
+#, kde-format
+msgid ""
+"Layer %1 has blending mode \"%2\" that has changed its behavior for CMYK "
+"color in Krita 5.2. Please check the result and consider enabling legacy "
+"support in Preferences->General->Tools->CMYK blending mode"
+msgstr ""
+
+#: plugins/impex/libkra/kis_kra_loader.cpp:1038
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -48654,7 +48683,7 @@ msgstr ""
 "\n"
 "Deseja localizá-lo manualmente?"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1389
+#: plugins/impex/libkra/kis_kra_loader.cpp:1407
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -48911,7 +48940,7 @@ msgstr "O arquivo é muito recente para esta versão do Krita (%1)."
 msgid "The file has no layers."
 msgstr "O arquivo não tem camadas."
 
-#: plugins/impex/libkra/kra_converter.cpp:394
+#: plugins/impex/libkra/kra_converter.cpp:400
 #, kde-format
 msgid "The file does not contain an image."
 msgstr "O arquivo não contém uma imagem."

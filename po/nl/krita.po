@@ -61,15 +61,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-16 00:44+0000\n"
-"PO-Revision-Date: 2023-05-09 10:33+0200\n"
+"POT-Creation-Date: 2023-05-17 00:45+0000\n"
+"PO-Revision-Date: 2023-05-16 13:21+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.0\n"
+"X-Generator: Lokalize 23.04.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -12834,7 +12834,7 @@ msgstr "&Importeren/Exporteren"
 msgid "Import"
 msgstr "Importeren"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1238
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1237
 #, kde-format
 msgid "&Convert"
 msgstr "&Converteren"
@@ -12842,14 +12842,14 @@ msgstr "&Converteren"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1212
+#: plugins/dockers/layerdocker/LayerBox.cpp:1211
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Selecteren"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1218
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1217
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12870,7 +12870,7 @@ msgstr "Alle lagen transformeren"
 msgid "S&plit"
 msgstr "S&plitsen"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1245
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1244
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Alfa s&plitsen"
@@ -22526,8 +22526,8 @@ msgstr "Laageigenschappen"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:598
-#: libs/ui/kis_node_model.cpp:601 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:595
+#: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:269
 #: libs/ui/kis_paintop_box.cc:277 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -25241,24 +25241,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:834
-#, fuzzy, kde-format
-#| msgid "Creamy (Krita 4.2+)"
+#, kde-format
 msgid "Subtractive (Krita 5.2+)"
-msgstr "Creamy (Krita 4.2+)"
+msgstr "Aftrekkend (Krita 5.2+)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:839
-#, fuzzy, kde-format
-#| msgid "Hard (Krita 4.1 and earlier versions)"
+#, kde-format
 msgid "Additive (Krita 5.1 and earlier versions)"
-msgstr "Moeilijk (Krita 4.1 en eerdere versies)"
+msgstr "Optellend (Krita 5.1 en eerdere versies)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:847
-#, fuzzy, kde-format
-#| msgid "Brush Flow Mode (needs restart):"
+#, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "Modus penseelvloeien (heeft opnieuw starten nodig):"
+msgstr "Modus CMYK mengen (heeft opnieuw starten nodig):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -29300,13 +29297,13 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Snel groepering opheffen"
 
-#: libs/ui/kis_node_model.cpp:555
+#: libs/ui/kis_node_model.cpp:552
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr "Uitgeschakeld: maskeren bij doorvoergroepen wordt niet ondersteund!"
 
-#: libs/ui/kis_node_model.cpp:557
+#: libs/ui/kis_node_model.cpp:554
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
@@ -38685,9 +38682,11 @@ msgid "Grid and Guides"
 msgstr "Rooster en hulplijnen"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+#, fuzzy
+#| msgid "Reshape Histogram"
 msgctxt "(qtundo-format)"
-msgid "fkdfjkdjfk"
-msgstr "fkdfjkdjfk"
+msgid "Update histogram"
+msgstr "Histogram vervormen"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -38809,23 +38808,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Keuzevakje tonen om lagen te selecteren/dit ongedaan maken"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:990
+#: plugins/dockers/layerdocker/LayerBox.cpp:989
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Snel selectiemasker"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1012
+#: plugins/dockers/layerdocker/LayerBox.cpp:1011
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Snel selectiemasker annuleren"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: plugins/dockers/layerdocker/LayerBox.cpp:1221
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Vergrendeling && zichtbaarheid &omschakelen"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1229
-#: plugins/dockers/layerdocker/LayerBox.cpp:1250
+#: plugins/dockers/layerdocker/LayerBox.cpp:1228
+#: plugins/dockers/layerdocker/LayerBox.cpp:1249
 #, kde-format
 msgid "&Add"
 msgstr "&Toevoegen"
@@ -39182,6 +39181,14 @@ msgstr "Overzicht"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Pin navigatie"
+
+#: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Update layer thumbnails"
+msgctxt "(qtundo-format)"
+msgid "Update overview thumbnail"
+msgstr "Miniatuurlaag bijwerken"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -48438,12 +48445,21 @@ msgid "Failure loading layer %1 of type: %2."
 msgstr "Laden is mislukt van laag %1 van type: %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:927
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Layer %1 has blending mode \"%2\" that has changed its behavior for CMYK "
+#| "color in Krita 5.2. Please check the result and consider enabling legacy "
+#| "support in Preferences->General->Tools->CMYK blending mode"
 msgid ""
-"Layer %1 has blending mode \"%2\" that has changed its behavior for CMYK "
+"Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
 "color in Krita 5.2. Please check the result and consider enabling legacy "
-"support in Preferences->General->Tools->CMYK blending mode"
+"\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
+"blending mode"
 msgstr ""
+"Laag %1 heeft mengmodus \"%2\" die zijn gedrag heeft gewijzigd voor CMYK "
+"kleur in Krita 5.2. Controleer het resultaat en overweeg inschakelen van "
+"eerdere ondersteuning in Voorkeuren->Algemeen->Hulpmiddelen->Modus CMYK "
+"mengen"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1038
 #, kde-format
@@ -55056,7 +55072,7 @@ msgid "Project Settings"
 msgstr "Projectinstellingen"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:122
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Meta Data"
 msgstr "Metagegevens"
 
@@ -55250,7 +55266,7 @@ msgstr ""
 "niet in de projectconfiguratie."
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:119
 msgid "Project name:"
 msgstr "Projectnaam:"
 
@@ -55302,19 +55318,19 @@ msgstr ""
 msgid "Comic Project Setup"
 msgstr "Opzet van stripproject"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:69
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:70
 msgid "Basic Comic Project Settings"
 msgstr "Basisinstellingen van stripprojecten"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:75
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:76
 msgid "A Project name. This can be different from the eventual title"
 msgstr "Een projectnaam. Dit kan verschillen van de eventuele titel"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:77
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:78
 msgid "Generate"
 msgstr "Genereren"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:78
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:79
 msgid ""
 "If you cannot come up with a project name, our highly sophisticated project "
 "name generator will serve to give a classy yet down to earth name."
@@ -55322,7 +55338,7 @@ msgstr ""
 "Als u geen projectnaam kan verzinnen, zal onze zeer geavanceerde generator "
 "van projectnamen u bedienen met een sjieke doch eenvoudige naam."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:84
 msgid ""
 "What is your comic about? This is mostly for your own convenience so do not "
 "worry about what it says too much."
@@ -55330,15 +55346,15 @@ msgstr ""
 "Waar gaat uw strip over? Dit is vooral voor uw eigen gemak, maak u geen "
 "zorgen over wat het teveel vertelt."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:85
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:86
 msgid "The main language the comic is in"
 msgstr "De hoofdtaal van de strip is in"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:98
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:99
 msgid "Make a new directory with the project name."
 msgstr "Een nieuwe map met de projectnaam aanmaken."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:100
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:101
 msgid ""
 "This allows you to select a generic comics project directory, in which a new "
 "folder will be made for the project using the given project name."
@@ -55347,11 +55363,11 @@ msgstr ""
 "waarin een nieuwe map gemaakt zal worden voor het project met de gegeven "
 "projectnaam."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:105
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
 msgid "pages"
 msgstr "pagina's"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:107
 msgid ""
 "The name for the folder where the pages are contained. If it does not exist, "
 "it will be created."
@@ -55359,11 +55375,11 @@ msgstr ""
 "De naam voor de map die de pagina's bevat. Als deze niet bestaat, zal deze "
 "worden aangemaakt."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:108
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:109
 msgid "export"
 msgstr "exporteren"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:109
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:110
 msgid ""
 "The name for the folder where the export is put. If it does not exist, it "
 "will be created."
@@ -55371,47 +55387,47 @@ msgstr ""
 "De naam voor de map waar de export wordt gezet. Als deze niet bestaat, zal "
 "deze worden aangemaakt."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
 msgid "templates"
 msgstr "sjablonen"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:113
 msgid "The name for the folder where the page templates are sought in."
 msgstr "De naam voor de maap waar de paginasjablonen in gezocht worden."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:115
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:116
 msgid "translations"
 msgstr "vertalingen"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
 msgid "Comic concept:"
 msgstr "Stripconcept:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:119
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:120
 msgid "Main language:"
 msgstr "Hoofdtaal:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:128
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:129
 msgid "Folder names and other."
 msgstr "Mapnamen en overige."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:131
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:132
 msgid "Project directory:"
 msgstr "Projectmap:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:133
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
 msgid "Pages directory"
 msgstr "Map met pagina's"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:135
 msgid "Export directory"
 msgstr "Map voor exporteren"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:135
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
 msgid "Template directory"
 msgstr "Map met sjablonen"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:137
 msgid "Translation directory"
 msgstr "Map met vertalingen"
 
@@ -60544,6 +60560,10 @@ msgstr "Zoomen"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referentie-afbeeldingen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "fkdfjkdjfk"
+#~ msgstr "fkdfjkdjfk"
 
 #~ msgid "Choose a video file"
 #~ msgstr "Een video-bestand kiezen"
@@ -95558,9 +95578,6 @@ msgstr "Referentie-afbeeldingen"
 
 #~ msgid "Demonstrates how to change the colorspace in a script"
 #~ msgstr "Demonstreert hoe de kleurruimte in een script te wijzigen"
-
-#~ msgid "Reshape Histogram"
-#~ msgstr "Histogram vervormen"
 
 #~ msgid ""
 #~ "An experimental script to try to reshape the histogram.  While the "

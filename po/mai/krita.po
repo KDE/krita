@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-16 00:44+0000\n"
+"POT-Creation-Date: 2023-05-17 00:45+0000\n"
 "PO-Revision-Date: 2009-04-22 00:18+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -12909,7 +12909,7 @@ msgstr "निर्यात"
 msgid "Import"
 msgstr "निर्यात"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1238
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1237
 #, fuzzy, kde-format
 msgid "&Convert"
 msgstr "उनटू"
@@ -12917,14 +12917,14 @@ msgstr "उनटू"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1212
+#: plugins/dockers/layerdocker/LayerBox.cpp:1211
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, fuzzy, kde-format
 msgid "&Select"
 msgstr "चुनू"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1218
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1217
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -12946,7 +12946,7 @@ msgstr "रूपांतरित करू"
 msgid "S&plit"
 msgstr "अल्फामे रंग"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1245
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1244
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "अल्फामे रंग"
@@ -22656,8 +22656,8 @@ msgstr "चित्र विशेषता"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:598
-#: libs/ui/kis_node_model.cpp:601 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:595
+#: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:269
 #: libs/ui/kis_paintop_box.cc:277 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -29241,13 +29241,13 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "विसमूह"
 
-#: libs/ui/kis_node_model.cpp:555
+#: libs/ui/kis_node_model.cpp:552
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr ""
 
-#: libs/ui/kis_node_model.cpp:557
+#: libs/ui/kis_node_model.cpp:554
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
@@ -38226,9 +38226,10 @@ msgid "Grid and Guides"
 msgstr "गाइड देखाबू"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+#, fuzzy
 msgctxt "(qtundo-format)"
-msgid "fkdfjkdjfk"
-msgstr ""
+msgid "Update histogram"
+msgstr "नकल"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -38344,25 +38345,25 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:990
+#: plugins/dockers/layerdocker/LayerBox.cpp:989
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "चुनाव"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1012
+#: plugins/dockers/layerdocker/LayerBox.cpp:1011
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "चुनाव"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: plugins/dockers/layerdocker/LayerBox.cpp:1221
 #, fuzzy, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "बनाबू"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1229
-#: plugins/dockers/layerdocker/LayerBox.cpp:1250
+#: plugins/dockers/layerdocker/LayerBox.cpp:1228
+#: plugins/dockers/layerdocker/LayerBox.cpp:1249
 #, kde-format
 msgid "&Add"
 msgstr ""
@@ -38718,6 +38719,12 @@ msgstr "सारांश"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr ""
+
+#: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Update overview thumbnail"
+msgstr "विकल्प"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, fuzzy, kde-format
@@ -47927,9 +47934,10 @@ msgstr ""
 #: plugins/impex/libkra/kis_kra_loader.cpp:927
 #, kde-format
 msgid ""
-"Layer %1 has blending mode \"%2\" that has changed its behavior for CMYK "
+"Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
 "color in Krita 5.2. Please check the result and consider enabling legacy "
-"support in Preferences->General->Tools->CMYK blending mode"
+"\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
+"blending mode"
 msgstr ""
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1038
@@ -54292,7 +54300,7 @@ msgid "Project Settings"
 msgstr "अनुच्छेद स्टाइल"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:122
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 #, fuzzy
 #| msgid "Metadata"
 msgid "Meta Data"
@@ -54504,7 +54512,7 @@ msgid ""
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:119
 #, fuzzy
 msgid "Project name:"
 msgstr "आँशिक"
@@ -54564,120 +54572,120 @@ msgstr ""
 msgid "Comic Project Setup"
 msgstr "अनुच्छेद स्टाइल"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:69
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:70
 #, fuzzy
 msgid "Basic Comic Project Settings"
 msgstr "अनुच्छेद स्टाइल"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:75
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:76
 msgid "A Project name. This can be different from the eventual title"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:77
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:78
 #, fuzzy
 #| msgid "General"
 msgid "Generate"
 msgstr "सामान्य"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:78
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:79
 msgid ""
 "If you cannot come up with a project name, our highly sophisticated project "
 "name generator will serve to give a classy yet down to earth name."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:84
 msgid ""
 "What is your comic about? This is mostly for your own convenience so do not "
 "worry about what it says too much."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:85
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:86
 msgid "The main language the comic is in"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:98
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:99
 msgid "Make a new directory with the project name."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:100
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:101
 msgid ""
 "This allows you to select a generic comics project directory, in which a new "
 "folder will be made for the project using the given project name."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:105
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
 #, fuzzy
 #| msgid "Pages"
 msgid "pages"
 msgstr "पृष्ठ"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:107
 msgid ""
 "The name for the folder where the pages are contained. If it does not exist, "
 "it will be created."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:108
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:109
 #, fuzzy
 msgid "export"
 msgstr "निर्यात"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:109
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:110
 msgid ""
 "The name for the folder where the export is put. If it does not exist, it "
 "will be created."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
 #, fuzzy
 msgid "templates"
 msgstr "बनाबू"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:113
 msgid "The name for the folder where the page templates are sought in."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:115
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:116
 #, fuzzy
 msgid "translations"
 msgstr "त्रिभुज"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
 #, fuzzy
 #| msgid "Saturation:"
 msgid "Comic concept:"
 msgstr "संतृप्ति:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:119
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:120
 #, fuzzy
 msgid "Main language:"
 msgstr "पृष्ठ जोड़ू"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:128
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:129
 msgid "Folder names and other."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:131
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:132
 #, fuzzy
 msgid "Project directory:"
 msgstr "सभ चुनू"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:133
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
 #, fuzzy
 msgid "Pages directory"
 msgstr "सभ चुनू"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:135
 #, fuzzy
 msgid "Export directory"
 msgstr "सभ चुनू"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:135
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
 #, fuzzy
 msgid "Template directory"
 msgstr "सभ चुनू"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:137
 #, fuzzy
 msgid "Translation directory"
 msgstr "सभ चुनू"

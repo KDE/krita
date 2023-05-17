@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-16 00:44+0000\n"
-"PO-Revision-Date: 2023-05-09 08:37+0300\n"
+"POT-Creation-Date: 2023-05-17 00:45+0000\n"
+"PO-Revision-Date: 2023-05-16 08:55+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -12746,7 +12746,7 @@ msgstr "&Імпортування/Експортування"
 msgid "Import"
 msgstr "Імпортувати"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1238
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1237
 #, kde-format
 msgid "&Convert"
 msgstr "П&еретворити"
@@ -12754,14 +12754,14 @@ msgstr "П&еретворити"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1212
+#: plugins/dockers/layerdocker/LayerBox.cpp:1211
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Вибір"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1218
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1217
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12782,7 +12782,7 @@ msgstr "Перетворити &усі шари"
 msgid "S&plit"
 msgstr "П&оділ"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1245
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1244
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "&Розділити прозорість"
@@ -22698,8 +22698,8 @@ msgstr "Властивості шару"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:598
-#: libs/ui/kis_node_model.cpp:601 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:595
+#: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:269
 #: libs/ui/kis_paintop_box.cc:277 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -25417,24 +25417,21 @@ msgstr "Приховувати смужки гортання, якщо увім�
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:834
-#, fuzzy, kde-format
-#| msgid "Creamy (Krita 4.2+)"
+#, kde-format
 msgid "Subtractive (Krita 5.2+)"
-msgstr "Крем (Krita 4.2+)"
+msgstr "Різницевий (Krita 5.2+)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:839
-#, fuzzy, kde-format
-#| msgid "Hard (Krita 4.1 and earlier versions)"
+#, kde-format
 msgid "Additive (Krita 5.1 and earlier versions)"
-msgstr "Жорстко (Krita 4.1 і попередні версії)"
+msgstr "Кумулятивний (Krita 5.1 і попередні версії)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:847
-#, fuzzy, kde-format
-#| msgid "Brush Flow Mode (needs restart):"
+#, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "Режим стікання на пензлі (потребує перезапуску):"
+msgstr "Режим злиття CMYK (потребує перезапуску):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -29541,13 +29538,13 @@ msgstr ""
 "Швидко розгрупувати\n"
 "швидке розгруповування"
 
-#: libs/ui/kis_node_model.cpp:555
+#: libs/ui/kis_node_model.cpp:552
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr "Вимкнено: підтримки масок у групах із пропусканням не передбачено!"
 
-#: libs/ui/kis_node_model.cpp:557
+#: libs/ui/kis_node_model.cpp:554
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
@@ -39078,9 +39075,11 @@ msgid "Grid and Guides"
 msgstr "Ґратка і напрямні"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+#, fuzzy
+#| msgid "Update color"
 msgctxt "(qtundo-format)"
-msgid "fkdfjkdjfk"
-msgstr "fkdfjkdjfk"
+msgid "Update histogram"
+msgstr "Оновити колір"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -39203,27 +39202,27 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Показати пункт для позначення шарів та зняття з них позначення."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:990
+#: plugins/dockers/layerdocker/LayerBox.cpp:989
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr ""
 "Маска швидкого позначення\n"
 "маску швидкого позначення"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1012
+#: plugins/dockers/layerdocker/LayerBox.cpp:1011
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr ""
 "Скасувати маску швидкого позначення\n"
 "скасування маски швидкого позначення"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: plugins/dockers/layerdocker/LayerBox.cpp:1221
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Пе&ремкнути блокування і видимість"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1229
-#: plugins/dockers/layerdocker/LayerBox.cpp:1250
+#: plugins/dockers/layerdocker/LayerBox.cpp:1228
+#: plugins/dockers/layerdocker/LayerBox.cpp:1249
 #, kde-format
 msgid "&Add"
 msgstr "&Додати"
@@ -39580,6 +39579,14 @@ msgstr "Огляд"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Пришпилити керування навігацією"
+
+#: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Update layer thumbnails"
+msgctxt "(qtundo-format)"
+msgid "Update overview thumbnail"
+msgstr "Оновити мініатюри шару"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -48882,12 +48889,21 @@ msgid "Failure loading layer %1 of type: %2."
 msgstr "Помилка під час спроби завантажити шар %1 типу: %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:927
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Layer %1 has blending mode \"%2\" that has changed its behavior for CMYK "
+#| "color in Krita 5.2. Please check the result and consider enabling legacy "
+#| "support in Preferences->General->Tools->CMYK blending mode"
 msgid ""
-"Layer %1 has blending mode \"%2\" that has changed its behavior for CMYK "
+"Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
 "color in Krita 5.2. Please check the result and consider enabling legacy "
-"support in Preferences->General->Tools->CMYK blending mode"
+"\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
+"blending mode"
 msgstr ""
+"У шарі %1 визначено режим злиття «%2», який змінив поведінку для кольорів "
+"CMYK у Krita 5.2. Будь ласка, ознайомтеся із результатом і, якщо потрібно, "
+"увімкніть підтримку застарілого режиму за допомогою пункту «Налаштування-"
+">Загальне->Інструменти->Режим злиття CMYK»"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1038
 #, kde-format
@@ -55499,7 +55515,7 @@ msgid "Project Settings"
 msgstr "Параметри проєкту"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:122
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Meta Data"
 msgstr "Метадані"
 
@@ -55693,7 +55709,7 @@ msgstr ""
 "Krita, а не у налаштуваннях проєкту."
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:119
 msgid "Project name:"
 msgstr "Назва проєкту:"
 
@@ -55745,19 +55761,19 @@ msgstr ""
 msgid "Comic Project Setup"
 msgstr "Налаштування проєкту коміксу"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:69
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:70
 msgid "Basic Comic Project Settings"
 msgstr "Основні параметри проєкту коміксу"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:75
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:76
 msgid "A Project name. This can be different from the eventual title"
 msgstr "Назва проєкту. Може відрізнятися від заголовка."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:77
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:78
 msgid "Generate"
 msgstr "Створити"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:78
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:79
 msgid ""
 "If you cannot come up with a project name, our highly sophisticated project "
 "name generator will serve to give a classy yet down to earth name."
@@ -55765,7 +55781,7 @@ msgstr ""
 "Якщо ви не можете вигадати назву для свого коміксу, наш дивовижно "
 "інтелектуальний засіб створення назв створить чудову, але реалістичну назву."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:84
 msgid ""
 "What is your comic about? This is mostly for your own convenience so do not "
 "worry about what it says too much."
@@ -55773,15 +55789,15 @@ msgstr ""
 "Про що цей комікс? Вміст цього поля, здебільшого, корисний лише вам, тому не "
 "дуже переймайтеся тим, що у ньому міститиметься."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:85
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:86
 msgid "The main language the comic is in"
 msgstr "Основна мові коміксу"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:98
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:99
 msgid "Make a new directory with the project name."
 msgstr "Створити каталог із назвою проєкту."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:100
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:101
 msgid ""
 "This allows you to select a generic comics project directory, in which a new "
 "folder will be made for the project using the given project name."
@@ -55790,11 +55806,11 @@ msgstr ""
 "проєктів коміксів, у якому буде створено теку із назвою на основі вказаної "
 "назви проєкту."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:105
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
 msgid "pages"
 msgstr "сторінки"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:107
 msgid ""
 "The name for the folder where the pages are contained. If it does not exist, "
 "it will be created."
@@ -55802,11 +55818,11 @@ msgstr ""
 "Назва теки, де зберігатимуться сторінки. Якщо теки не існує, її буде "
 "створено."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:108
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:109
 msgid "export"
 msgstr "експорт"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:109
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:110
 msgid ""
 "The name for the folder where the export is put. If it does not exist, it "
 "will be created."
@@ -55814,47 +55830,47 @@ msgstr ""
 "Назва теки, до якої слід експортувати дані. Якщо теки не існує, її буде "
 "створено."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
 msgid "templates"
 msgstr "шаблони"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:113
 msgid "The name for the folder where the page templates are sought in."
 msgstr "Назва теки, де програма шукатиме шаблони сторінок."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:115
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:116
 msgid "translations"
 msgstr "переклади"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
 msgid "Comic concept:"
 msgstr "Концепт коміксу:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:119
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:120
 msgid "Main language:"
 msgstr "Основна мова:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:128
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:129
 msgid "Folder names and other."
 msgstr "Назви тек та інше."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:131
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:132
 msgid "Project directory:"
 msgstr "Каталог проєктів:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:133
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
 msgid "Pages directory"
 msgstr "Каталог сторінок"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:135
 msgid "Export directory"
 msgstr "Каталог експортування"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:135
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
 msgid "Template directory"
 msgstr "Каталог шаблонів"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:137
 msgid "Translation directory"
 msgstr "Каталог перекладів"
 
@@ -61058,6 +61074,10 @@ msgstr "Інструмент масштабування"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Інструмент еталонних зображень"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "fkdfjkdjfk"
+#~ msgstr "fkdfjkdjfk"
 
 #~ msgid "Choose a video file"
 #~ msgstr "Виберіть відеофайл"

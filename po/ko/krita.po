@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-16 00:44+0000\n"
+"POT-Creation-Date: 2023-05-17 00:45+0000\n"
 "PO-Revision-Date: 2023-03-01 00:29+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -13563,7 +13563,7 @@ msgstr "가져오기/내보내기(&I)"
 msgid "Import"
 msgstr "가져오기"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1238
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1237
 #, kde-format
 msgid "&Convert"
 msgstr "변환(&C)"
@@ -13571,14 +13571,14 @@ msgstr "변환(&C)"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1212
+#: plugins/dockers/layerdocker/LayerBox.cpp:1211
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "선택(&S)"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1218
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1217
 #, fuzzy, kde-format
 #| msgid "&Group"
 msgctxt "A group of layers"
@@ -13600,7 +13600,7 @@ msgstr "모든 레이어 변형(&A)"
 msgid "S&plit"
 msgstr "분할(&P)"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1245
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1244
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "알파 분할(&P)"
@@ -23360,8 +23360,8 @@ msgstr "레이어 속성"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:598
-#: libs/ui/kis_node_model.cpp:601 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:595
+#: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:269
 #: libs/ui/kis_paintop_box.cc:277 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -30166,13 +30166,13 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "빠른 그룹 해제"
 
-#: libs/ui/kis_node_model.cpp:555
+#: libs/ui/kis_node_model.cpp:552
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr "사용 안 함: 패스스루 그룹의 마스크는 지원하지 않습니다!"
 
-#: libs/ui/kis_node_model.cpp:557
+#: libs/ui/kis_node_model.cpp:554
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
@@ -39525,9 +39525,11 @@ msgid "Grid and Guides"
 msgstr "격자 및 안내선"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+#, fuzzy
+#| msgid "Update color"
 msgctxt "(qtundo-format)"
-msgid "fkdfjkdjfk"
-msgstr ""
+msgid "Update histogram"
+msgstr "색상 업데이트"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -39650,23 +39652,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:990
+#: plugins/dockers/layerdocker/LayerBox.cpp:989
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "빠른 선택 마스크"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1012
+#: plugins/dockers/layerdocker/LayerBox.cpp:1011
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "빠른 선택 마스크 취소"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: plugins/dockers/layerdocker/LayerBox.cpp:1221
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "잠금 및 표시 전환(&T)"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1229
-#: plugins/dockers/layerdocker/LayerBox.cpp:1250
+#: plugins/dockers/layerdocker/LayerBox.cpp:1228
+#: plugins/dockers/layerdocker/LayerBox.cpp:1249
 #, kde-format
 msgid "&Add"
 msgstr "추가(&A)"
@@ -40020,6 +40022,13 @@ msgstr "미리 보기"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "탐색 컨트롤 고정"
+
+#: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
+#, fuzzy
+#| msgid "Hide layer thumbnail popup"
+msgctxt "(qtundo-format)"
+msgid "Update overview thumbnail"
+msgstr "레이어 미리 보기 팝업 숨기기"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, fuzzy, kde-format
@@ -49412,9 +49421,10 @@ msgstr "%2 형식의 %1 레이어를 불러올 수 없습니다."
 #: plugins/impex/libkra/kis_kra_loader.cpp:927
 #, kde-format
 msgid ""
-"Layer %1 has blending mode \"%2\" that has changed its behavior for CMYK "
+"Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
 "color in Krita 5.2. Please check the result and consider enabling legacy "
-"support in Preferences->General->Tools->CMYK blending mode"
+"\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
+"blending mode"
 msgstr ""
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1038
@@ -55941,7 +55951,7 @@ msgid "Project Settings"
 msgstr "프로젝트 설정"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:122
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Meta Data"
 msgstr "메타데이터"
 
@@ -56133,7 +56143,7 @@ msgstr ""
 "는 프로젝트 구성이 아닌 Krita 설정에 저장됩니다."
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:119
 msgid "Project name:"
 msgstr "프로젝트 이름:"
 
@@ -56185,19 +56195,19 @@ msgstr ""
 msgid "Comic Project Setup"
 msgstr "만화 프로젝트 설정"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:69
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:70
 msgid "Basic Comic Project Settings"
 msgstr "기본 만화 프로젝트 설정"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:75
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:76
 msgid "A Project name. This can be different from the eventual title"
 msgstr "프로젝트 이름입니다. 최종 타이틀 제목과 다를 수 있습니다"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:77
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:78
 msgid "Generate"
 msgstr "자동 생성"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:78
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:79
 msgid ""
 "If you cannot come up with a project name, our highly sophisticated project "
 "name generator will serve to give a classy yet down to earth name."
@@ -56205,7 +56215,7 @@ msgstr ""
 "프로젝트 이름이 생각나지 않는다면 고도로 발전된 프로젝트 이름 생성기를 사용하"
 "십시오."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:84
 msgid ""
 "What is your comic about? This is mostly for your own convenience so do not "
 "worry about what it says too much."
@@ -56213,15 +56223,15 @@ msgstr ""
 "이 만화는 무엇에 관한 것입니까? 편의상 기재하는 것이므로 오래 생각하지 마십시"
 "오."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:85
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:86
 msgid "The main language the comic is in"
 msgstr "만화에서 주로 사용되는 언어"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:98
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:99
 msgid "Make a new directory with the project name."
 msgstr "프로젝트 이름으로 새 폴더를 만듭니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:100
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:101
 msgid ""
 "This allows you to select a generic comics project directory, in which a new "
 "folder will be made for the project using the given project name."
@@ -56229,67 +56239,67 @@ msgstr ""
 "이 옵션을 사용하면 일반 만화 프로젝트 디렉터리를 선택할 수 있습니다. 프로젝"
 "트 이름으로 새 폴더를 만듭니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:105
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
 msgid "pages"
 msgstr "쪽"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:107
 msgid ""
 "The name for the folder where the pages are contained. If it does not exist, "
 "it will be created."
 msgstr "쪽이 들어 있는 폴더의 이름입니다. 없다면 생성합니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:108
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:109
 msgid "export"
 msgstr "내보내기"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:109
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:110
 msgid ""
 "The name for the folder where the export is put. If it does not exist, it "
 "will be created."
 msgstr "쪽이 들어 있는 폴더의 이름입니다. 없다면 생성합니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
 msgid "templates"
 msgstr "서식"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:113
 msgid "The name for the folder where the page templates are sought in."
 msgstr "쪽 서식을 찾을 폴더의 이름입니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:115
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:116
 msgid "translations"
 msgstr "번역"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
 msgid "Comic concept:"
 msgstr "만화 컨셉:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:119
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:120
 msgid "Main language:"
 msgstr "주 언어:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:128
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:129
 msgid "Folder names and other."
 msgstr "폴더 이름 및 기타 설정입니다."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:131
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:132
 msgid "Project directory:"
 msgstr "프로젝트 디렉터리:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:133
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
 msgid "Pages directory"
 msgstr "쪽 디렉터리"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:135
 msgid "Export directory"
 msgstr "내보내기 디렉터리"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:135
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
 msgid "Template directory"
 msgstr "서식 디렉터리"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:137
 msgid "Translation directory"
 msgstr "번역 디렉터리"
 

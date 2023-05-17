@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-16 00:44+0000\n"
-"PO-Revision-Date: 2023-05-10 11:13+0200\n"
+"POT-Creation-Date: 2023-05-17 00:45+0000\n"
+"PO-Revision-Date: 2023-05-16 09:08+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -12749,7 +12749,7 @@ msgstr "&Uvozi/izvozi"
 msgid "Import"
 msgstr "Uvozi"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1238
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1237
 #, kde-format
 msgid "&Convert"
 msgstr "P&retvori"
@@ -12757,14 +12757,14 @@ msgstr "P&retvori"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1212
+#: plugins/dockers/layerdocker/LayerBox.cpp:1211
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "Iz&beri"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1218
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1217
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12785,7 +12785,7 @@ msgstr "Preoblikuj &vse plasti"
 msgid "S&plit"
 msgstr "&Razdeli"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1245
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1244
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "&Razdeli alfo"
@@ -22415,8 +22415,8 @@ msgstr "Lastnosti plasti"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:598
-#: libs/ui/kis_node_model.cpp:601 libs/ui/kis_paintop_box.cc:269
+#: libs/ui/forms/wdgdisplaysettings.ui:402 libs/ui/kis_node_model.cpp:595
+#: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:269
 #: libs/ui/kis_paintop_box.cc:277 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -25113,24 +25113,21 @@ msgstr "Skrij drsnike zloženih oken, če je omogočeno kinetično drsenje"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:834
-#, fuzzy, kde-format
-#| msgid "Creamy (Krita 4.2+)"
+#, kde-format
 msgid "Subtractive (Krita 5.2+)"
-msgstr "Kremasto (Krita 4.2+)"
+msgstr "Subtraktivno (odštevalno, Krita 5.2+)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:839
-#, fuzzy, kde-format
-#| msgid "Hard (Krita 4.1 and earlier versions)"
+#, kde-format
 msgid "Additive (Krita 5.1 and earlier versions)"
-msgstr "Trdo (Krita 4.1 in starejše različice)"
+msgstr "Aditivno (prištevalno, Krita 5.1 in starejše različice)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:847
-#, fuzzy, kde-format
-#| msgid "Brush Flow Mode (needs restart):"
+#, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "Način pretoka čopiča (potrebuje ponoven zagon):"
+msgstr "Način mešanja CMYK (potreben je ponoven zagon):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -29150,13 +29147,13 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Hitro razdruži"
 
-#: libs/ui/kis_node_model.cpp:555
+#: libs/ui/kis_node_model.cpp:552
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr "Onemogočeno: maske na skupinah v prehodu niso podprte!"
 
-#: libs/ui/kis_node_model.cpp:557
+#: libs/ui/kis_node_model.cpp:554
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
@@ -31510,7 +31507,7 @@ msgid ""
 "Blend inner glow, satin, and overlay with layer before blending with "
 "document."
 msgstr ""
-"Zmešaj notranje žarenje, saten in prekrivanje s plastjo pred zmešanjem z "
+"Zlij notranje žarenje, saten in prekrivanje s plastjo pred zlivanjem z "
 "dokumentom."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_7)
@@ -31523,7 +31520,7 @@ msgstr "Zmešaj notranje uč&inke kot skupino"
 #: libs/ui/layerstyles/wdgblendingoptions.ui:248
 #, kde-format
 msgid "Blend clipping group before blending with document"
-msgstr "Zmešaj porezano skupino pred zmešanjem z dokumentom"
+msgstr "Zlij porezano skupino pred zlivanjem z dokumentom"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_8)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:251
@@ -38519,9 +38516,11 @@ msgid "Grid and Guides"
 msgstr "Mreža in vodila"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
+#, fuzzy
+#| msgid "Update color"
 msgctxt "(qtundo-format)"
-msgid "fkdfjkdjfk"
-msgstr "fkdfjkdjfk"
+msgid "Update histogram"
+msgstr "Posodobi barvo"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -38642,23 +38641,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Pokaži potrditveno polje za izbor/preklic izbora plasti."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:990
+#: plugins/dockers/layerdocker/LayerBox.cpp:989
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Maska za hiter izbor"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1012
+#: plugins/dockers/layerdocker/LayerBox.cpp:1011
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Prekliči masko za hitri izbor"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: plugins/dockers/layerdocker/LayerBox.cpp:1221
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "&Preklopi zaklepe in vidljivost"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1229
-#: plugins/dockers/layerdocker/LayerBox.cpp:1250
+#: plugins/dockers/layerdocker/LayerBox.cpp:1228
+#: plugins/dockers/layerdocker/LayerBox.cpp:1249
 #, kde-format
 msgid "&Add"
 msgstr "Dod&aj"
@@ -39015,6 +39014,14 @@ msgstr "Pregled"
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
 msgstr "Pripni kontrolnike za krmarjenje"
+
+#: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Update layer thumbnails"
+msgctxt "(qtundo-format)"
+msgid "Update overview thumbnail"
+msgstr "Posodobi pojavno ogledno sličico plasti"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -48252,12 +48259,20 @@ msgid "Failure loading layer %1 of type: %2."
 msgstr "Napaka pri nalaganju plasti %1 vrste %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:927
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Layer %1 has blending mode \"%2\" that has changed its behavior for CMYK "
+#| "color in Krita 5.2. Please check the result and consider enabling legacy "
+#| "support in Preferences->General->Tools->CMYK blending mode"
 msgid ""
-"Layer %1 has blending mode \"%2\" that has changed its behavior for CMYK "
+"Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
 "color in Krita 5.2. Please check the result and consider enabling legacy "
-"support in Preferences->General->Tools->CMYK blending mode"
+"\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
+"blending mode"
 msgstr ""
+"Plast %1 ima način mešanja »%2«, ki je spremenilo svoje vedenje za barve "
+"CMYK v Kriti 5.2. Preverite rezultat in razmislite o omogočanju podpore "
+"opuščenega načina pod Nastavitve -> Splošno -> Orodja -> Način mešanja CMYK."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1038
 #, kde-format
@@ -54817,7 +54832,7 @@ msgid "Project Settings"
 msgstr "Nastavitve projekta"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:122
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Meta Data"
 msgstr "Metapodatki"
 
@@ -55010,7 +55025,7 @@ msgstr ""
 "v prilagoditvi programa Krita in ne v prilagoditvi projekta."
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:119
 msgid "Project name:"
 msgstr "Ime projekta:"
 
@@ -55062,19 +55077,19 @@ msgstr ""
 msgid "Comic Project Setup"
 msgstr "Nastavitev projekta stripa"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:69
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:70
 msgid "Basic Comic Project Settings"
 msgstr "Osnovne nastavitve projekta stripa"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:75
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:76
 msgid "A Project name. This can be different from the eventual title"
 msgstr "Ime projekta. To se lahko razlikuje od dejanskega naslova"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:77
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:78
 msgid "Generate"
 msgstr "Generiraj"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:78
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:79
 msgid ""
 "If you cannot come up with a project name, our highly sophisticated project "
 "name generator will serve to give a classy yet down to earth name."
@@ -55083,7 +55098,7 @@ msgstr ""
 "projektov poskrbel za to, da projektor poimenuje na imeniten, a še vedno "
 "smiseln način."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:84
 msgid ""
 "What is your comic about? This is mostly for your own convenience so do not "
 "worry about what it says too much."
@@ -55091,15 +55106,15 @@ msgstr ""
 "O čem govori vaš strip? To je večinoma za vašo rabo, zato ne skrbite preveč "
 "o tem, kaj je tu zapisano."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:85
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:86
 msgid "The main language the comic is in"
 msgstr "Glavni jezik stripa je"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:98
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:99
 msgid "Make a new directory with the project name."
 msgstr "Ustvarite novo mapo z imenom projekta."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:100
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:101
 msgid ""
 "This allows you to select a generic comics project directory, in which a new "
 "folder will be made for the project using the given project name."
@@ -55107,67 +55122,67 @@ msgstr ""
 "To vam omogoča, da izberete splošno mapo projektov stripov, v katerem bo "
 "izdelana nova mapa za projekt z uporabo danega imena projekta."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:105
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
 msgid "pages"
 msgstr "strani"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:107
 msgid ""
 "The name for the folder where the pages are contained. If it does not exist, "
 "it will be created."
 msgstr "Ime mape, v kateri so strani. Če ne obstaja, bo ustvarjena."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:108
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:109
 msgid "export"
 msgstr "izvoz"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:109
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:110
 msgid ""
 "The name for the folder where the export is put. If it does not exist, it "
 "will be created."
 msgstr "Ime mape, v kateri se postavi izvoz. Če ne obstaja, bo ustvarjena."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
 msgid "templates"
 msgstr "predloge"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:113
 msgid "The name for the folder where the page templates are sought in."
 msgstr "Ime mape, v kateri se iščejo predloge strani."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:115
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:116
 msgid "translations"
 msgstr "prevodi"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
 msgid "Comic concept:"
 msgstr "Koncept stripa:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:119
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:120
 msgid "Main language:"
 msgstr "Glavni jezik:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:128
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:129
 msgid "Folder names and other."
 msgstr "Imena map in drugo."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:131
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:132
 msgid "Project directory:"
 msgstr "Mapa projekta:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:133
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
 msgid "Pages directory"
 msgstr "Mapa s stranmi"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:135
 msgid "Export directory"
 msgstr "Izvozna mapa"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:135
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
 msgid "Template directory"
 msgstr "Mapa s predlogami"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:137
 msgid "Translation directory"
 msgstr "Mapa s prevodi"
 
@@ -60269,3 +60284,7 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "fkdfjkdjfk"
+#~ msgstr "fkdfjkdjfk"

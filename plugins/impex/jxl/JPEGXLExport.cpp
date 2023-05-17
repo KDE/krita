@@ -971,22 +971,43 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             auto frameHeader = std::make_unique<JxlFrameHeader>();
             const bool flattenLayers = cfg->getBool("flattenLayers", true);
 
+            // (On layered export) Convert group layer to paint layer to preserve
+            // out-of-bound pixels so that it won't get clipped to canvas size
+            if (!flattenLayers) {
+                Q_FOREACH (KisNodeSP node, image->root()->childNodes(QStringList(), KoProperties())) {
+                    if (node && (node->inherits("KisGroupLayer") || node->childCount() > 0) && node->visible()) {
+                        dbgFile << "Flattening group layer" << node->name();
+                        KisGroupLayer *group = qobject_cast<KisGroupLayer *>(node.data());
+                        KisLayerUtils::flattenLayer(image, group);
+                    }
+                }
+                image->waitForDone();
+            }
+
             // Iterate through the layers (non-recursively)
             Q_FOREACH (KisNodeSP node, image->root()->childNodes(QStringList(), KoProperties())) {
                 // Skip invalid and invisible layers
-                if (!node || !node->visible() || node->isFakeNode()) {
+                if (!flattenLayers && (!node || !node->visible() || node->isFakeNode())) {
+                    dbgFile << "Skipping hidden layer" << node->name();
                     continue;
                 }
                 const bool isFirstLayer = (node == image->root()->firstChild());
 
-                if (!node->inherits("KisPaintLayer")) {
-                    std::future<KisNodeSP> convertedNode = KisLayerUtils::convertToPaintLayer(image, node);
-                    node = convertedNode.get();
-                }
+                if (!flattenLayers) {
+                    dbgFile << "Visiting on layer" << node->name();
 
-                const KoColorSpace *lcs = node->colorSpace();
-                if (lcs && (lcs != cs)) {
-                    node->paintDevice()->convertTo(cs);
+                    if (!node->inherits("KisPaintLayer")) {
+                        std::future<KisNodeSP> convertedNode = KisLayerUtils::convertToPaintLayer(image, node);
+                        node = convertedNode.get();
+                    }
+
+                    const KoColorSpace *lcs = node->colorSpace();
+                    if (lcs && (lcs != cs)) {
+                        node->paintDevice()->convertTo(cs);
+                        // Kampidh: Do I also need to call waitForDone() here?
+                    }
+                } else {
+                    dbgFile << "Saving flattened image";
                 }
 
                 const QRect layerBounds = [&]() {
@@ -1000,12 +1021,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 if (flattenLayers) {
                     dev = image->projection();
                 } else {
-                    // Do not allow zero dimension (empty) layers
-                    if (node->exactBounds().isEmpty()) {
-                        dev = node->projection();
-                    } else {
-                        dev = node->paintDevice();
-                    }
+                    dev = node->projection();
                 }
 
                 if (cs->colorModelId() == CMYKAColorModelID) {

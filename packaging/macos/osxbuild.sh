@@ -459,6 +459,10 @@ build_krita () {
         -DMACOS_UNIVERSAL="${OSXBUILD_UNIVERSAL}"
         )
 
+    if [[ ${OSXBUILD_TYPE} = "Debug" ]]; then
+        CMAKE_CMD+=(-DKRITA_DEVS=ON)
+    fi
+
     printf -v CMAKE_CMD_STRING '%s ' "${CMAKE_CMD[@]}"
     # hack:: Jenkins runs in x86_64 env, force run cmake in arm64 env.
     if [[ ${OSXBUILD_UNIVERSAL} ]]; then

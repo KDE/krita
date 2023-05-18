@@ -87,11 +87,15 @@ for arg in "${@}"; do
     fi
 done
 
-export KIS_SRC_DIR=${BUILDROOT}/krita
+if [[ -z "${KIS_SRC_DIR}" ]]; then
+    export KIS_SRC_DIR=${BUILDROOT}/krita
+fi
+if [[ -z "${KIS_BUILD_DIR}" ]]; then
+    export KIS_BUILD_DIR=${BUILDROOT}/kisbuild
+fi
 export KIS_TBUILD_DIR=${BUILDROOT}/depbuild
 export KIS_TDEPINSTALL_DIR=${BUILDROOT}/depinstall
 export KIS_DOWN_DIR=${BUILDROOT}/down
-export KIS_BUILD_DIR=${BUILDROOT}/kisbuild
 export KIS_PLUGIN_BUILD_DIR=${BUILDROOT}/plugins_build
 export KIS_INSTALL_DIR=${BUILDROOT}/i
 

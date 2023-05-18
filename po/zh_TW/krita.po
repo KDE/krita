@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-17 00:45+0000\n"
-"PO-Revision-Date: 2023-05-16 09:54+0000\n"
+"PO-Revision-Date: 2023-05-17 09:36+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
 "krita/zh_Hant/>\n"
@@ -38085,11 +38085,9 @@ msgid "Grid and Guides"
 msgstr "格線與參考線"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
-#| msgid "Update color"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "更新前景色"
+msgstr "更新色階分佈圖"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -38577,12 +38575,9 @@ msgid "Pin navigation controls"
 msgstr "固定瀏覽控制項"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Update layer thumbnails"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "更新圖層縮圖"
+msgstr "更新總覽圖縮圖"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -39968,10 +39963,9 @@ msgstr "垂直(&V)"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:289
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:628
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:835
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Along Orientation"
-msgstr "依照方向"
+msgstr "順向"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -39979,8 +39973,7 @@ msgstr "依照方向"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:294
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:633
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:840
-#, fuzzy, kde-format
-#| msgid "Vertically"
+#, kde-format
 msgid "Laterally"
 msgstr "側向"
 
@@ -47702,16 +47695,16 @@ msgid "Failure loading layer %1 of type: %2."
 msgstr "載入類型為：%2 的圖層 %1 時出錯。"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:927
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
 "color in Krita 5.2. Please check the result and consider enabling legacy "
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
-"圖層「%1」使用的「%2」混色模式，由 Krita 5.2 版本起改變了在 CMYK 色彩模型下的"
-"行為。請檢查影像效果，並考慮在設定中將「CMYK 混色模式」選項更改為「加色法」以"
-"保持與舊版相容 (設定 Krita→一般→工具→CMYK 混色模式)"
+"圖層「%1」所使用的「%2」混色模式，由 Krita 5.2 版本起改變了在 CMYK 色彩模型下"
+"的行為。請檢查影像效果，並考慮到設定中啟用與舊版相容的「加色法」混色方法 (設"
+"定→設定 Krita→一般→工具→CMYK 混色模式)"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1038
 #, kde-format

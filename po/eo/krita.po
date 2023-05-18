@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-17 00:45+0000\n"
-"PO-Revision-Date: 2023-05-10 20:10+0100\n"
+"PO-Revision-Date: 2023-05-17 11:58+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -23181,6 +23181,8 @@ msgid ""
 "The amount of time during which the strokes will be kept unmerged. When a "
 "stroke becomes old enough, Krita will try to merge it"
 msgstr ""
+"La tempokvanto dum kiu la strekoj estas tenataj nekunfanditaj. Kiam streko "
+"sufiĉe aĝiĝas, Krita provos ties kunfandadon"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
@@ -23200,7 +23202,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr "Ekskludi lastajn strekojn el kunfundado:"
+msgstr "Ekskludi lastajn strekojn el kunfandado:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -23209,6 +23211,8 @@ msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
 msgstr ""
+"Se du strekoj havas mallongan tempintervalon (prokraston) inter ili, tiam "
+"ili estos konsiderataj kiel apartenantaj al la sama grupo kaj kunfanditaj"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
@@ -23223,6 +23227,9 @@ msgid ""
 "to be longer than this limit in the result of the merge, this merge will not "
 "happen."
 msgstr ""
+"Malsimume permesita daŭro de la grupo post la kunfando. Se la grupo estas "
+"daŭronta pli longe ol ĉi tiu limo en la kunfandorezulto, la kunfando ne "
+"estiĝos."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
 #, kde-format
@@ -25125,24 +25132,21 @@ msgstr "Kaŝi docker-rulumbretojn se kinetika rulumo estas ebligita"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:834
-#, fuzzy, kde-format
-#| msgid "Creamy (Krita 4.2+)"
+#, kde-format
 msgid "Subtractive (Krita 5.2+)"
-msgstr "Krema (Krita 4.2+)"
+msgstr "Subtraha (Krita 5.2+)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:839
-#, fuzzy, kde-format
-#| msgid "Hard (Krita 4.1 and earlier versions)"
+#, kde-format
 msgid "Additive (Krita 5.1 and earlier versions)"
-msgstr "Malmola (Krita 4.1 kaj pli fruaj versioj)"
+msgstr "Adicia (Krita 5.1 kaj pli fruaj versioj)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:847
-#, fuzzy, kde-format
-#| msgid "Brush Flow Mode (needs restart):"
+#, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "Penikflua Reĝimo (bezonas restarton):"
+msgstr "CMYK-miksreĝimo (bezonas restarton):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -32469,7 +32473,7 @@ msgstr "Segmentita gradiento"
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:252
 #, kde-format
 msgid "Edit..."
-msgstr "Redaktu..."
+msgstr "Redakti..."
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:490
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:499
@@ -38461,11 +38465,9 @@ msgid "Grid and Guides"
 msgstr "Krado kaj Gvidiloj"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
-#| msgid "Update color"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "Ĝisdatigi koloron"
+msgstr "Ĝisdatigi histogramon"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -38960,12 +38962,9 @@ msgid "Pin navigation controls"
 msgstr "Alpinglaj navigaj kontroloj"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Update layer thumbnails"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Ĝisdatigi tavolbildetojn"
+msgstr "Ĝisdatigi superrigardajn bildetojn"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -40568,6 +40567,8 @@ msgid ""
 "Increase value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
+"Pliigi valoron, lumecon, intensecon aŭ 'luma' de la elektita koloro, depende "
+"de elektita kolormodelo"
 
 #. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
@@ -40588,6 +40589,8 @@ msgid ""
 "Decreases value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
+"Malpliigas valoron, lumecon, intensecon aŭ 'luma' de la elektita koloro, "
+"depende de elektita kolormodelo"
 
 #. i18n: context: text @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
@@ -60202,82 +60205,3 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referenca Bilda Ilo"
-
-#~ msgid "Choose a video file"
-#~ msgstr "Elekti videodosieron"
-
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
-#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">This video contains "
-#~ "more than 100 frames. Loading too many frames can overload your computer. "
-#~ "Use a</span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;"
-#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\" font-"
-#~ "size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;"
-#~ "\">video editor </span></a><span style=\" font-size:16pt; font-"
-#~ "weight:400; color:#ff692e;\">instead!</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\"margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">AVERTO: </span><span style="
-#~ "\"font-size:16pt;font-weight:400; color:# ff692e;\">Ĉi tiu video enhavas "
-#~ "pli ol 100 kadrojn. Ŝargi tro da kadroj povas troŝarĝi vian komputilon. "
-#~ "Uzu</span><span style=\"font-size:16pt; font-weight:400; color:#ff1500;"
-#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\"font-size:16pt; "
-#~ "font-weight:400; text-decoration: underline; color:#2980b9;"
-#~ "\">videoredaktilo </span></a><span style=\"font-size:16pt; font-"
-#~ "weight:400; color:#ff692e;\">anstataŭe!</span></p></body></html>"
-
-#~ msgid "FFMpeg"
-#~ msgstr "FFMpeg"
-
-#~ msgid "Export:"
-#~ msgstr "Eksporto:"
-
-#~ msgid "Image Se&quence"
-#~ msgstr "Bilda Sekvenco"
-
-#~ msgid "&Video"
-#~ msgstr "&Video"
-
-#~ msgid "Video Options"
-#~ msgstr "Video Opcioj"
-
-#~ msgid "FF&Mpeg: "
-#~ msgstr "FF&Mpeg:"
-
-#~ msgid "Video Location:"
-#~ msgstr "Loko de video:"
-
-#~ msgid "FFMpeg Version: None"
-#~ msgstr "FFMpeg Versio: Neniu"
-
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
-#~ "body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Averto:</span> "
-#~ "FFMpeg devas esti almenaŭ versio 4.2+ por ke gif-travidebleco funkciu</"
-#~ "p></body></html>"
-
-#~ msgid "Image Sequence Options"
-#~ msgstr "Bildaj Sekvencaj Opcioj"
-
-#~ msgid " sec"
-#~ msgstr " sek"

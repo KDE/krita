@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-17 00:45+0000\n"
-"PO-Revision-Date: 2023-05-16 09:39+0100\n"
+"PO-Revision-Date: 2023-05-17 11:30+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -38898,11 +38898,9 @@ msgid "Grid and Guides"
 msgstr "Grelha e Guias"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
-#| msgid "Update color"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "Actualizar a cor"
+msgstr "Actualizar o histograma"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -39400,12 +39398,9 @@ msgid "Pin navigation controls"
 msgstr "Fixar os controlos de navegação"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Update layer thumbnails"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Actualizar as miniaturas das camadas"
+msgstr "Actualizar a miniatura da visão geral"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -48670,21 +48665,17 @@ msgid "Failure loading layer %1 of type: %2."
 msgstr "Ocorreu um erro ao carregar a camada %1 do tipo: %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:927
-#, fuzzy, kde-format
-#| msgid ""
-#| "Layer %1 has blending mode \"%2\" that has changed its behavior for CMYK "
-#| "color in Krita 5.2. Please check the result and consider enabling legacy "
-#| "support in Preferences->General->Tools->CMYK blending mode"
+#, kde-format
 msgid ""
 "Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
 "color in Krita 5.2. Please check the result and consider enabling legacy "
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
-"A camada %1 tem o modo de mistura \"%2\", que mudou o seu comportamento para "
-"as cores CMYK no Krita 5.2. Verifique por favor o resultado e pense em "
-"activar o suporte para o funcionamento activo nas Preferências->Geral-"
-">Ferramentas->modo de mistura CMYK"
+"A camada \"%1\" tem o modo de mistura \"%2\", que mudou o seu comportamento "
+"para as cores CMYK no Krita 5.2. Verifique por favor o resultado e pense em "
+"activar o suporte para o funcionamento \"Aditivo\" nas Preferências->Geral-"
+">Ferramentas->Modo de mistura CMYK"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1038
 #, kde-format
@@ -60769,7 +60760,3 @@ msgstr "Ferramenta de Ampliação"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta de Imagens de Referência"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "fkdfjkdjfk"
-#~ msgstr "fkdfjkdjfk"

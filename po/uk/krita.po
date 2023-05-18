@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-17 00:45+0000\n"
-"PO-Revision-Date: 2023-05-16 08:55+0300\n"
+"PO-Revision-Date: 2023-05-17 08:36+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -39075,11 +39075,9 @@ msgid "Grid and Guides"
 msgstr "Ґратка і напрямні"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
-#| msgid "Update color"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "Оновити колір"
+msgstr "Оновити гістограму"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -39581,12 +39579,9 @@ msgid "Pin navigation controls"
 msgstr "Пришпилити керування навігацією"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Update layer thumbnails"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Оновити мініатюри шару"
+msgstr "Оновити мініатюру огляду"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -48889,11 +48884,7 @@ msgid "Failure loading layer %1 of type: %2."
 msgstr "Помилка під час спроби завантажити шар %1 типу: %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:927
-#, fuzzy, kde-format
-#| msgid ""
-#| "Layer %1 has blending mode \"%2\" that has changed its behavior for CMYK "
-#| "color in Krita 5.2. Please check the result and consider enabling legacy "
-#| "support in Preferences->General->Tools->CMYK blending mode"
+#, kde-format
 msgid ""
 "Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
 "color in Krita 5.2. Please check the result and consider enabling legacy "
@@ -48902,8 +48893,8 @@ msgid ""
 msgstr ""
 "У шарі %1 визначено режим злиття «%2», який змінив поведінку для кольорів "
 "CMYK у Krita 5.2. Будь ласка, ознайомтеся із результатом і, якщо потрібно, "
-"увімкніть підтримку застарілого режиму за допомогою пункту «Налаштування-"
-">Загальне->Інструменти->Режим злиття CMYK»"
+"увімкніть підтримку застарілого кумулятивного алгоритму за допомогою пункту "
+"«Параметри->Налаштувати Krita->Загальне->Інструменти->Режим злиття CMYK»"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1038
 #, kde-format

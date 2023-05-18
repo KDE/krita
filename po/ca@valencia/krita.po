@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-17 00:45+0000\n"
-"PO-Revision-Date: 2023-05-09 09:33+0200\n"
+"PO-Revision-Date: 2023-05-17 09:55+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -25188,24 +25188,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:834
-#, fuzzy, kde-format
-#| msgid "Creamy (Krita 4.2+)"
+#, kde-format
 msgid "Subtractive (Krita 5.2+)"
-msgstr "Cremós (Krita 4.2+)"
+msgstr "Subtractiu (Krita 5.2+)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:839
-#, fuzzy, kde-format
-#| msgid "Hard (Krita 4.1 and earlier versions)"
+#, kde-format
 msgid "Additive (Krita 5.1 and earlier versions)"
-msgstr "Dur (Krita 4.1 i versions anteriors)"
+msgstr "Additiu (Krita 5.1 i versions anteriors)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:847
-#, fuzzy, kde-format
-#| msgid "Brush Flow Mode (needs restart):"
+#, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "Mode de fluir del pinzell (cal reiniciar):"
+msgstr "Mode de barreja CMYK (cal reiniciar):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -38618,11 +38615,9 @@ msgid "Grid and Guides"
 msgstr "Quadrícula i guies"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
-#| msgid "Update color"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "Actualitza el color"
+msgstr "Actualitza l'histograma"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -39120,12 +39115,9 @@ msgid "Pin navigation controls"
 msgstr "Controls de navegació amb pins"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Update layer thumbnails"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Actualitza les miniatures de la capa"
+msgstr "Actualitza les miniatures de la vista general"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -48412,6 +48404,10 @@ msgid ""
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
+"La capa «%1x té el mode de barreja «%2», que ha canviat el seu comportament "
+"per al color CMYK en Krita 5.2. Comproveu el resultat i considereu habilitar "
+"l'algorisme «Additiu» antic en «Configuració -> Configura Krita... -> "
+"General -> Eines -> Mode de barreja CMYK»"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1038
 #, kde-format
@@ -60501,7 +60497,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "fkdfjkdjfk"
-#~ msgstr "fkdfjkdjfk"

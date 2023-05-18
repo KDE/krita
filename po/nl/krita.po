@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-17 00:45+0000\n"
-"PO-Revision-Date: 2023-05-16 13:21+0200\n"
+"PO-Revision-Date: 2023-05-17 11:54+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -25255,7 +25255,7 @@ msgstr "Optellend (Krita 5.1 en eerdere versies)"
 #: libs/ui/forms/wdggeneralsettings.ui:847
 #, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "Modus CMYK mengen (heeft opnieuw starten nodig):"
+msgstr "Mengmodus CMYK (heeft opnieuw starten nodig):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -38682,11 +38682,9 @@ msgid "Grid and Guides"
 msgstr "Rooster en hulplijnen"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
-#| msgid "Reshape Histogram"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "Histogram vervormen"
+msgstr "Histogram bijwerken"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -39183,12 +39181,9 @@ msgid "Pin navigation controls"
 msgstr "Pin navigatie"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Update layer thumbnails"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Miniatuurlaag bijwerken"
+msgstr "Miniatuur van overzicht bijwerken"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -48445,21 +48440,17 @@ msgid "Failure loading layer %1 of type: %2."
 msgstr "Laden is mislukt van laag %1 van type: %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:927
-#, fuzzy, kde-format
-#| msgid ""
-#| "Layer %1 has blending mode \"%2\" that has changed its behavior for CMYK "
-#| "color in Krita 5.2. Please check the result and consider enabling legacy "
-#| "support in Preferences->General->Tools->CMYK blending mode"
+#, kde-format
 msgid ""
 "Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
 "color in Krita 5.2. Please check the result and consider enabling legacy "
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
-"Laag %1 heeft mengmodus \"%2\" die zijn gedrag heeft gewijzigd voor CMYK "
-"kleur in Krita 5.2. Controleer het resultaat en overweeg inschakelen van "
-"eerdere ondersteuning in Voorkeuren->Algemeen->Hulpmiddelen->Modus CMYK "
-"mengen"
+"Laag \"%1\" heeft mengmodus \"%2\" die zijn gedrag heeft gewijzigd voor CMYK "
+"kleur in Krita 5.2. Controleer het resultaat en overweeg inschakelen van het "
+"oudere algoritme \"Additief\" in Instellingen->Krita configureren->Algemeen-"
+">Hulpmiddelen->Mengmodus CMYK"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1038
 #, kde-format

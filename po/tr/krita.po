@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-17 00:45+0000\n"
-"PO-Revision-Date: 2023-05-16 12:10+0300\n"
+"PO-Revision-Date: 2023-05-17 11:52+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -38469,11 +38469,9 @@ msgid "Grid and Guides"
 msgstr "Izgara ve Kılavuzlar"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
-#| msgid "Update color"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "Rengi güncelle"
+msgstr "Histogramı güncelle"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -38969,12 +38967,9 @@ msgid "Pin navigation controls"
 msgstr "Dolaşım denetimlerini sabitle"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Update layer thumbnails"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Katman küçük görsellerini güncelle"
+msgstr "Genel görünüm küçük görsellerini güncelle"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -48198,21 +48193,17 @@ msgid "Failure loading layer %1 of type: %2."
 msgstr "Şu türün %1 katmanı yüklenemedi: %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:927
-#, fuzzy, kde-format
-#| msgid ""
-#| "Layer %1 has blending mode \"%2\" that has changed its behavior for CMYK "
-#| "color in Krita 5.2. Please check the result and consider enabling legacy "
-#| "support in Preferences->General->Tools->CMYK blending mode"
+#, kde-format
 msgid ""
 "Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
 "color in Krita 5.2. Please check the result and consider enabling legacy "
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
-"%1 katmanı, Krita 5.2'de CMYK için davranışını değiştiren \"%2\" harmanlama "
-"kipine sahip. Lütfen sonucu denetleyin ve gerekirse Tercihler->Genel-"
-">Araçlar->CMYK Harmanlama Kipi yolunu izleyerek eski yöntem desteğini "
-"etkinleştirin."
+"\"%1\" katmanı, Krita 5.2'de CMYK için davranışını değiştiren \"%2\" "
+"harmanlama kipine sahip. Lütfen sonucu denetleyin ve gerekirse Tercihler-"
+">Genel->Araçlar->CMYK Harmanlama Kipi yolunu izleyerek eski \"Toplamalı\" "
+"algoritmasını etkinleştirmeyi düşünün."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1038
 #, kde-format

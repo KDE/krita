@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-17 00:45+0000\n"
-"PO-Revision-Date: 2023-05-16 09:08+0200\n"
+"PO-Revision-Date: 2023-05-18 09:18+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 3.3\n"
+"X-Generator: Poedit 3.3.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -18833,7 +18833,7 @@ msgstr "Ekvivalenca"
 #, kde-format
 msgctxt "Blending mode - Additive Subtractive"
 msgid "Additive Subtractive"
-msgstr "Seštevno odštevno"
+msgstr "Prištevalno odštevalno"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:105
 #, kde-format
@@ -32863,9 +32863,9 @@ msgid ""
 msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/RGB_color_space\">RGB (rdeča, "
 "zelena, modra)</a></b> je barvni model, ki ga uporabljajo zasloni in drugi "
-"na svetlobi zasnovani mediji.<br/>RGB je aditiven barvni model: dodajanje "
-"barv jih naredi svetlejše. Ta barvni model je najbolj obsežen od vseh "
-"barvnih modelov in je priporočljiv kot model za slikanje, ki ga lahko "
+"na svetlobi zasnovani mediji.<br/>RGB je aditiven, prištevalen barvni model: "
+"dodajanje barv jih naredi svetlejše. Ta barvni model je najbolj obsežen od "
+"vseh barvnih modelov in je priporočljiv kot model za slikanje, ki ga lahko "
 "kasneje pretvorite v druge prostore. RGB je tudi priporočen barvni prostor "
 "za urejanje HDR."
 
@@ -32904,10 +32904,10 @@ msgid ""
 msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/CIE_1931_color_space\">CIE XYZ</"
 "a></b> je prostor, ki ga določi CIE kot prostor, ki zajema vse druge barve, "
-"in se uporablja za pretvorbo barv med profili. XYZ je aditiven barvni model, "
-"kar pomeni, da seštevanje barv naredi le-te svetlejše. XYZ <b>ni</b> "
-"priporočljivo za slikanje, vendar je lahko koristen za prekodiranje. Velja "
-"domneva, da je krivulja odziva tona linearna."
+"in se uporablja za pretvorbo barv med profili. XYZ je aditiven, prištevalen "
+"barvni model, kar pomeni, da seštevanje barv naredi le-te svetlejše. XYZ "
+"<b>ni</b> priporočljivo za slikanje, vendar je lahko koristen za "
+"prekodiranje. Velja domneva, da je krivulja odziva tona linearna."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:424
 #, kde-format
@@ -38516,11 +38516,9 @@ msgid "Grid and Guides"
 msgstr "Mreža in vodila"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
-#| msgid "Update color"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "Posodobi barvo"
+msgstr "Posodobi histogram"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -39016,12 +39014,9 @@ msgid "Pin navigation controls"
 msgstr "Pripni kontrolnike za krmarjenje"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Update layer thumbnails"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Posodobi pojavno ogledno sličico plasti"
+msgstr "Posodobi splošno ogledno sličico"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -48259,20 +48254,17 @@ msgid "Failure loading layer %1 of type: %2."
 msgstr "Napaka pri nalaganju plasti %1 vrste %2."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:927
-#, fuzzy, kde-format
-#| msgid ""
-#| "Layer %1 has blending mode \"%2\" that has changed its behavior for CMYK "
-#| "color in Krita 5.2. Please check the result and consider enabling legacy "
-#| "support in Preferences->General->Tools->CMYK blending mode"
+#, kde-format
 msgid ""
 "Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
 "color in Krita 5.2. Please check the result and consider enabling legacy "
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
-"Plast %1 ima način mešanja »%2«, ki je spremenilo svoje vedenje za barve "
-"CMYK v Kriti 5.2. Preverite rezultat in razmislite o omogočanju podpore "
-"opuščenega načina pod Nastavitve -> Splošno -> Orodja -> Način mešanja CMYK."
+"Plast »%1« ima način mešanja »%2«, ki ima spremenjeno vedenje za barve CMYK "
+"v Kriti 5.2. Preverite rezultat in razmislite o omogočanju podpore "
+"opuščenega »aditivnega« (prištevalnega) načina pod Nastavitve -> Splošno -> "
+"Orodja -> Način mešanja CMYK."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1038
 #, kde-format
@@ -60284,7 +60276,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "fkdfjkdjfk"
-#~ msgstr "fkdfjkdjfk"

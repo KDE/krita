@@ -974,7 +974,8 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             // (On layered export) Convert group layer to paint layer to preserve
             // out-of-bound pixels so that it won't get clipped to canvas size
             if (!flattenLayers) {
-                Q_FOREACH (KisNodeSP node, image->root()->childNodes(QStringList(), KoProperties())) {
+                for (quint32 pos = 0; pos < image->root()->childCount(); pos++) {
+                    KisNodeSP node = image->root()->at(pos);
                     if (node && (node->inherits("KisGroupLayer") || node->childCount() > 0) && node->visible()) {
                         dbgFile << "Flattening group layer" << node->name();
                         KisGroupLayer *group = qobject_cast<KisGroupLayer *>(node.data());
@@ -985,7 +986,8 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             }
 
             // Iterate through the layers (non-recursively)
-            Q_FOREACH (KisNodeSP node, image->root()->childNodes(QStringList(), KoProperties())) {
+            for (quint32 pos = 0; pos < image->root()->childCount(); pos++) {
+                KisNodeSP node = image->root()->at(pos);
                 // Skip invalid and invisible layers
                 if (!flattenLayers && (!node || !node->visible() || node->isFakeNode())) {
                     dbgFile << "Skipping hidden layer" << node->name();

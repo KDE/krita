@@ -608,6 +608,7 @@ if (NOT SDL_FOUND)
     set(SDL_DEP ext_sdl2)
 endif()
 
+set(QT_DEP "ext_qt")
 # ================== END OF FFMPEG DEPS =====================
 
 # this list must be dependency-ordered

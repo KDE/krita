@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-17 00:45+0000\n"
+"POT-Creation-Date: 2023-05-20 00:43+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -16051,27 +16051,27 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Darbalaukiai"
 
-#: krita/main.cc:521
+#: krita/main.cc:517
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "&Skiriamoji geba:"
 
-#: krita/main.cc:522
+#: krita/main.cc:518
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:618 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:614 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:681
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Įspėjimas"
 
-#: krita/main.cc:619
+#: krita/main.cc:615
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16079,12 +16079,12 @@ msgid ""
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
 
-#: krita/main.cc:641 krita/main.cc:646
+#: krita/main.cc:637 krita/main.cc:642
 #, fuzzy, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita %1"
 
-#: krita/main.cc:642
+#: krita/main.cc:638
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16092,7 +16092,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:647
+#: krita/main.cc:643
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -17379,7 +17379,7 @@ msgstr "Paveikslėliams"
 msgid "Selection Mask"
 msgstr "Nieko nepažymėta"
 
-#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2524
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2551
 #: plugins/impex/psd/psd_loader.cpp:189
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -17734,8 +17734,8 @@ msgid "Processing"
 msgstr "Papildomas apdorojimas"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1419
-#: libs/ui/KisMainWindow.cpp:1699 libs/ui/KisMainWindow.cpp:1712
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1702 libs/ui/KisMainWindow.cpp:1715
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18484,8 +18484,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Perrašyti esamą dokumentą"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2063
-#: libs/ui/KisMainWindow.cpp:2146
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2066
+#: libs/ui/KisMainWindow.cpp:2149
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Paveikslėliams"
@@ -19830,7 +19830,7 @@ msgstr "Iš"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:496 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:498 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -19866,9 +19866,9 @@ msgstr "Valyti resursų failus"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:708
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:720
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19887,17 +19887,17 @@ msgstr "Valyti resursų failus"
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
 #: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
 #: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
-#: libs/ui/KisApplication.cpp:1073 libs/ui/KisDocument.cpp:937
-#: libs/ui/KisDocument.cpp:944 libs/ui/KisDocument.cpp:964
-#: libs/ui/KisDocument.cpp:1872 libs/ui/KisDocument.cpp:1916
-#: libs/ui/KisDocument.cpp:1922 libs/ui/KisDocument.cpp:1935
-#: libs/ui/KisDocument.cpp:1939 libs/ui/KisMainWindow.cpp:976
-#: libs/ui/KisMainWindow.cpp:1092 libs/ui/KisMainWindow.cpp:1218
-#: libs/ui/KisMainWindow.cpp:1317 libs/ui/KisMainWindow.cpp:1923
-#: libs/ui/KisMainWindow.cpp:1932 libs/ui/KisMainWindow.cpp:2071
-#: libs/ui/KisMainWindow.cpp:2132 libs/ui/KisMainWindow.cpp:2153
-#: libs/ui/KisMainWindow.cpp:2766 libs/ui/KisPart.cpp:555
-#: libs/ui/KisPart.cpp:558 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisApplication.cpp:1073 libs/ui/KisDocument.cpp:943
+#: libs/ui/KisDocument.cpp:950 libs/ui/KisDocument.cpp:970
+#: libs/ui/KisDocument.cpp:1878 libs/ui/KisDocument.cpp:1922
+#: libs/ui/KisDocument.cpp:1928 libs/ui/KisDocument.cpp:1941
+#: libs/ui/KisDocument.cpp:1945 libs/ui/KisMainWindow.cpp:979
+#: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
+#: libs/ui/KisMainWindow.cpp:1320 libs/ui/KisMainWindow.cpp:1926
+#: libs/ui/KisMainWindow.cpp:1935 libs/ui/KisMainWindow.cpp:2074
+#: libs/ui/KisMainWindow.cpp:2135 libs/ui/KisMainWindow.cpp:2156
+#: libs/ui/KisMainWindow.cpp:2772 libs/ui/KisPart.cpp:584
+#: libs/ui/KisPart.cpp:587 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
 #: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
@@ -20417,7 +20417,7 @@ msgid "Delete resource"
 msgstr "Trinti resursą"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:333
-#: libs/ui/KisMainWindow.cpp:2565
+#: libs/ui/KisMainWindow.cpp:2571
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -20896,61 +20896,61 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Nepavyko sukurti veiksmo."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2173
+#: libs/ui/KisMainWindow.cpp:2176
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "Orientacija"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:90
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:95
 #, kde-format
 msgctxt "bicubic filtering"
 msgid "bicubic"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:91
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:96
 #, fuzzy, kde-format
 #| msgid "Bilinear"
 msgctxt "bilinear filtering"
 msgid "bilinear"
 msgstr "Bilinijinis"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:92
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:97
 #, kde-format
 msgctxt "lanczos3 filtering"
 msgid "lanczos3"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:93
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:98
 #, kde-format
 msgctxt "nearest neighbor filtering"
 msgid "neighbor"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:94
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:99
 #, fuzzy, kde-format
 #| msgid "Spline"
 msgctxt "spline filtering"
 msgid "spline"
 msgstr "Lekalas"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:101
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:106
 #, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:390
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:392
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:463
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:470
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:472
 #, fuzzy, kde-format
 #| msgid "<html><head/><body><p><br/></p></body></html>"
 msgctxt "ffmpeg warning checks"
@@ -20959,28 +20959,28 @@ msgid ""
 "will be reduced to 50 frames per second"
 msgstr "<html><head/><body><p><br/></p></body></html>"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:477
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:479
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1806
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Warning(s):"
 msgstr "Dėmesio"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:708
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:720
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr ""
@@ -21235,7 +21235,7 @@ msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
 msgstr ""
 
-#: libs/ui/animation/KisVideoSaver.cpp:200
+#: libs/ui/animation/KisVideoSaver.cpp:202
 #, kde-format
 msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "
@@ -22513,14 +22513,6 @@ msgstr "Aukštyn"
 msgid "Down"
 msgstr ""
 
-#: libs/ui/canvas/kis_animation_player.cpp:247
-#, kde-format
-msgctxt "floating on-canvas message"
-msgid ""
-"Cannot open audio: \"%1\"\n"
-"Error: %2"
-msgstr ""
-
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
 #, fuzzy, kde-format
 msgctxt "floating message about mirroring"
@@ -22931,7 +22923,7 @@ msgid "Numerical"
 msgstr "Kūginis"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1186
+#: libs/ui/KisMainWindow.cpp:1189
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "Paveikslėliams"
@@ -22977,7 +22969,7 @@ msgstr "Sluoksnio savybės"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:246
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:388
@@ -23079,7 +23071,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Įveskite grupės pavadinimą:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2576
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2582
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -26791,7 +26783,7 @@ msgstr "Dabartinis teptuko ruošinys"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
 #: libs/ui/widgets/kis_workspace_chooser.cpp:111
 #: libs/ui/widgets/kis_workspace_chooser.cpp:190
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -30305,52 +30297,52 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Užverti dokumentą"
 
-#: libs/ui/KisDocument.cpp:713
+#: libs/ui/KisDocument.cpp:719
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:751
+#: libs/ui/KisDocument.cpp:757
 #, fuzzy, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/KisDocument.cpp:768
+#: libs/ui/KisDocument.cpp:774
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:790
+#: libs/ui/KisDocument.cpp:796
 #, fuzzy, kde-format
 msgid "Exporting Document..."
 msgstr "Perrašyti esamą dokumentą"
 
-#: libs/ui/KisDocument.cpp:791
+#: libs/ui/KisDocument.cpp:797
 #, fuzzy, kde-format
 msgid "Saving Document..."
 msgstr "Išsaugoti dokumentą"
 
-#: libs/ui/KisDocument.cpp:801
+#: libs/ui/KisDocument.cpp:807
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:930
+#: libs/ui/KisDocument.cpp:936
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:938 libs/ui/KisDocument.cpp:945
+#: libs/ui/KisDocument.cpp:944 libs/ui/KisDocument.cpp:951
 #, fuzzy, kde-format
 msgid "Could not save %1."
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/KisDocument.cpp:967
+#: libs/ui/KisDocument.cpp:973
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30358,47 +30350,47 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:973
+#: libs/ui/KisDocument.cpp:979
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:990
+#: libs/ui/KisDocument.cpp:996
 #, fuzzy, kde-format
 msgid "Finished saving %1"
 msgstr "Pirmoji eilutė"
 
-#: libs/ui/KisDocument.cpp:1393
+#: libs/ui/KisDocument.cpp:1399
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosaving... %1"
 msgstr "Automatiškai išsaugoma..."
 
-#: libs/ui/KisDocument.cpp:1401
+#: libs/ui/KisDocument.cpp:1407
 #, kde-format
 msgid "Autosaving..."
 msgstr "Automatiškai išsaugoma..."
 
-#: libs/ui/KisDocument.cpp:1407
+#: libs/ui/KisDocument.cpp:1413
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1550
+#: libs/ui/KisDocument.cpp:1556
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1564
+#: libs/ui/KisDocument.cpp:1570
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Finished autosaving %1"
 msgstr "Automatiškai išsaugoma..."
 
-#: libs/ui/KisDocument.cpp:1806
+#: libs/ui/KisDocument.cpp:1812
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -30410,41 +30402,41 @@ msgstr ""
 "Neteisingas URL\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1872
+#: libs/ui/KisDocument.cpp:1878
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "File %1 does not exist."
 msgstr "Failas %1 neegzistuoja."
 
-#: libs/ui/KisDocument.cpp:1901
+#: libs/ui/KisDocument.cpp:1907
 #, fuzzy, kde-format
 msgid "Opening document"
 msgstr "Perrašyti esamą dokumentą"
 
-#: libs/ui/KisDocument.cpp:1917 libs/ui/KisDocument.cpp:1923
+#: libs/ui/KisDocument.cpp:1923 libs/ui/KisDocument.cpp:1929
 #, fuzzy, kde-format
 msgid "Could not open %1."
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/KisDocument.cpp:1936 libs/ui/KisDocument.cpp:1940
+#: libs/ui/KisDocument.cpp:1942 libs/ui/KisDocument.cpp:1946
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2071
+#: libs/ui/KisDocument.cpp:2077
 #, fuzzy, kde-format
 #| msgid "Save"
 msgid "Not Saved"
 msgstr "Išsaugoti"
 
-#: libs/ui/KisDocument.cpp:2531
+#: libs/ui/KisDocument.cpp:2558
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Fonas"
 
-#: libs/ui/KisDocument.cpp:2585
+#: libs/ui/KisDocument.cpp:2612
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30614,8 +30606,8 @@ msgid "The action was cancelled by the user."
 msgstr ""
 
 #: libs/ui/KisImportExportErrorCode.cpp:178
-#: plugins/impex/libkra/kra_converter.cpp:384
-#: plugins/impex/libkra/kra_converter.cpp:413
+#: plugins/impex/libkra/kra_converter.cpp:390
+#: plugins/impex/libkra/kra_converter.cpp:419
 #, fuzzy, kde-format
 msgid "Unknown error."
 msgstr "Nežinoma"
@@ -30807,76 +30799,76 @@ msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "Miniatiūros"
 
-#: libs/ui/KisMainWindow.cpp:184
+#: libs/ui/KisMainWindow.cpp:185
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "Stilius"
 
-#: libs/ui/KisMainWindow.cpp:185
+#: libs/ui/KisMainWindow.cpp:186
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "Užrakinta"
 
-#: libs/ui/KisMainWindow.cpp:186
+#: libs/ui/KisMainWindow.cpp:187
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "Palaikytojas"
 
-#: libs/ui/KisMainWindow.cpp:187
+#: libs/ui/KisMainWindow.cpp:188
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "Paveikslėlio dydis"
 
-#: libs/ui/KisMainWindow.cpp:188
+#: libs/ui/KisMainWindow.cpp:189
 #, fuzzy, kde-format
 #| msgid "Workspace"
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Darbalaukis"
 
-#: libs/ui/KisMainWindow.cpp:584
+#: libs/ui/KisMainWindow.cpp:585
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Rodyti šakninį sluoksnį"
 
-#: libs/ui/KisMainWindow.cpp:586
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Slinkties juostos"
 
-#: libs/ui/KisMainWindow.cpp:1034
+#: libs/ui/KisMainWindow.cpp:1037
 #, fuzzy, kde-format
 msgid "Write Protected"
 msgstr "Filtro sluoksnio savybės"
 
-#: libs/ui/KisMainWindow.cpp:1038
+#: libs/ui/KisMainWindow.cpp:1041
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgid "Recovered"
 msgstr "Įrašymas"
 
-#: libs/ui/KisMainWindow.cpp:1068
+#: libs/ui/KisMainWindow.cpp:1071
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "Išsaugoti makro"
 
-#: libs/ui/KisMainWindow.cpp:1092
+#: libs/ui/KisMainWindow.cpp:1095
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Failas %1 neegzistuoja."
 
-#: libs/ui/KisMainWindow.cpp:1186
+#: libs/ui/KisMainWindow.cpp:1189
 #, fuzzy, kde-format
 msgid "Open Images"
 msgstr "Paveikslėliai"
 
-#: libs/ui/KisMainWindow.cpp:1318
+#: libs/ui/KisMainWindow.cpp:1321
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30885,46 +30877,46 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1374
+#: libs/ui/KisMainWindow.cpp:1377
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "Ekspozicija"
 
-#: libs/ui/KisMainWindow.cpp:1374
+#: libs/ui/KisMainWindow.cpp:1377
 #, fuzzy, kde-format
 #| msgid "Saving Format"
 msgid "Saving As"
 msgstr "Išsaugojimo formatas"
 
-#: libs/ui/KisMainWindow.cpp:1678
+#: libs/ui/KisMainWindow.cpp:1681
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "Paskutiniai dokumentai"
 
-#: libs/ui/KisMainWindow.cpp:1702
+#: libs/ui/KisMainWindow.cpp:1705
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "Savitas gradientas"
 
-#: libs/ui/KisMainWindow.cpp:1714
+#: libs/ui/KisMainWindow.cpp:1717
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "&Pirmas sluoksnis Iš iškarpinės"
 
-#: libs/ui/KisMainWindow.cpp:1892
+#: libs/ui/KisMainWindow.cpp:1895
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "Išsaugoti sluoksnį/Kaukę..."
 
-#: libs/ui/KisMainWindow.cpp:1918
+#: libs/ui/KisMainWindow.cpp:1921
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:181
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:286
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/KisMainWindow.cpp:1922
+#: libs/ui/KisMainWindow.cpp:1925
 #, kde-format
 msgid ""
 "\n"
@@ -30932,7 +30924,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1932
+#: libs/ui/KisMainWindow.cpp:1935
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
 #, kde-format
@@ -30941,7 +30933,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2071 libs/ui/KisMainWindow.cpp:2153
+#: libs/ui/KisMainWindow.cpp:2074 libs/ui/KisMainWindow.cpp:2156
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30950,62 +30942,62 @@ msgstr ""
 "Nepavyko atverti\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2132
+#: libs/ui/KisMainWindow.cpp:2135
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Nepavyko sukurti veiksmo."
 
-#: libs/ui/KisMainWindow.cpp:2556
+#: libs/ui/KisMainWindow.cpp:2562
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Darbalaukiai"
 
-#: libs/ui/KisMainWindow.cpp:2571
+#: libs/ui/KisMainWindow.cpp:2577
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Darbalaukiai"
 
-#: libs/ui/KisMainWindow.cpp:2575
+#: libs/ui/KisMainWindow.cpp:2581
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Darbalaukiai"
 
-#: libs/ui/KisMainWindow.cpp:2619
+#: libs/ui/KisMainWindow.cpp:2625
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "&%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2622
+#: libs/ui/KisMainWindow.cpp:2628
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2789
+#: libs/ui/KisMainWindow.cpp:2795
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2805
+#: libs/ui/KisMainWindow.cpp:2811
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Diegimo klaida"
 
-#: libs/ui/KisMainWindow.cpp:2914
+#: libs/ui/KisMainWindow.cpp:2920
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2972
+#: libs/ui/KisMainWindow.cpp:2978
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -31144,7 +31136,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Grupiniai pažymėjimai"
 
-#: libs/ui/KisPart.cpp:555
+#: libs/ui/KisPart.cpp:584
 #, fuzzy, kde-format
 #| msgid "Could not create the filter plugin"
 msgid ""
@@ -31152,7 +31144,7 @@ msgid ""
 "%1"
 msgstr "Nepavyko sukurti filtro įskiepio"
 
-#: libs/ui/KisPart.cpp:558
+#: libs/ui/KisPart.cpp:587
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open %1\n"
@@ -37762,131 +37754,130 @@ msgstr "Žalia:"
 msgid "Bluer/Yellower: "
 msgstr "Geltona"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:55
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:254
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:58
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:257
 #, fuzzy, kde-format
 #| msgid "&Paint Layer"
 msgid "Animation Curves"
 msgstr "&Piešimo sluoksnis"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:64
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:64
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:67
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:67
 #, fuzzy, kde-format
 msgid "Frame register"
 msgstr "Liudas Ališauskas"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:80
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:81
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:83
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:84
 #, fuzzy, kde-format
 #| msgid "Speed"
 msgctxt "preview playback speed percentage prefix"
 msgid "Speed: "
 msgstr "Greitis"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:82
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:83
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:85
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:86
 #, kde-format
 msgid "Preview playback speed"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:125
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:128
 #, kde-format
 msgctxt "Value (Keep short!)"
 msgid "Val:"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:162
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:122
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
 #, fuzzy, kde-format
 msgid "Onion skins menu"
 msgstr "&Išlaikyti proporcijas"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:170
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:130
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:173
 #, kde-format
 msgid "Audio menu"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:178
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:138
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
 #, fuzzy, kde-format
 #| msgid "&Paint Layer"
 msgid "Animation settings menu"
 msgstr "&Piešimo sluoksnis"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:190
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:150
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
 #, fuzzy, kde-format
 msgid "Clip Start: "
 msgstr "Pradėti nuo"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:194
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:154
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
 #, kde-format
 msgid "Clip End: "
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:199
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:159
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
 #, fuzzy, kde-format
 msgid "Frame Rate: "
 msgstr "Liudas Ališauskas"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:274
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:277
 #, fuzzy, kde-format
 #| msgid "Operation"
 msgid "Channel Operations"
 msgstr "Operacija"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:275
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:278
 #, fuzzy, kde-format
 #| msgid "Operation"
 msgid "Layer Operations"
 msgstr "Operacija"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:278
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:281
 #, fuzzy, kde-format
 #| msgid "Rectangle"
 msgid "Reset Channel"
 msgstr "Stačiakampis"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:284
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:287
 #, fuzzy, kde-format
 #| msgid "All Channels"
 msgid "Reset All Channels"
 msgstr "Visi kanalai"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:469
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:476
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
 #, fuzzy, kde-format
 msgid "Linear interpolation."
 msgstr "&Skiriamoji geba:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:483
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
 #, fuzzy, kde-format
 msgid "Bezier curve interpolation."
 msgstr "&Skiriamoji geba:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:490
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
 #, fuzzy, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "&Skiriamoji geba:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:497
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
 #, fuzzy, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "&Skiriamoji geba:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:504
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:511
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
 #, fuzzy, kde-format
 #| msgid "zoom to size"
 msgid "Zoom view to fit curve."
@@ -37934,48 +37925,79 @@ msgstr[1] "Įterpti pavadinimą"
 msgstr[2] "Įterpti pavadinimą"
 msgstr[3] "Įterpti pavadinimą"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:51
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:238
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
 #, fuzzy, kde-format
 msgid "Animation Timeline"
 msgstr "Linijos plotis:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
+#, fuzzy, kde-format
+#| msgid "&Paint Layer"
+msgid "Animation audio menu"
+msgstr "&Piešimo sluoksnis"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#, fuzzy, kde-format
+msgctxt "@item:inmenu Load audio file into Krita from disk."
+msgid "Import Audio..."
+msgstr "Valyti resursų failus"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#, fuzzy, kde-format
+msgctxt "@item:inmenu"
+msgid "Remove audio"
+msgstr "Pašalinti"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#, kde-format
+msgctxt "@item:inmenu Mute audio playback."
+msgid "Mute"
+msgstr ""
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#, fuzzy, kde-format
+#| msgid "Volume:"
+msgctxt "@item:inmenu Volume slider"
+msgid "Volume: "
+msgstr "Skirsnis:"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:169
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
 #, fuzzy, kde-format
 msgid "AutoKey Duplicate"
 msgstr "Dubliuoti"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:445
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:453
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:454
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:455
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:701
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:695
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:882
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:876
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -37985,8 +38007,8 @@ msgstr[1] "Įterpti pavadinimą"
 msgstr[2] "Įterpti pavadinimą"
 msgstr[3] "Įterpti pavadinimą"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:928
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:976
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
 #, fuzzy, kde-format
 #| msgid "Insert name"
 msgctxt "(qtundo-format)"
@@ -37997,105 +38019,61 @@ msgstr[1] "Įterpti pavadinimą"
 msgstr[2] "Įterpti pavadinimą"
 msgstr[3] "Įterpti pavadinimą"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:195
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:188
 #, fuzzy, kde-format
 msgid "Edit Layers:"
 msgstr "Sluoksniai"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:224
-#, fuzzy, kde-format
-#| msgid "Edition:"
-msgid "Edit Audio:"
-msgstr "Leidimas:"
-
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:228
-#, kde-format
-msgctxt "@item:inmenu"
-msgid "Audio playback is not supported in this build!"
-msgstr ""
-
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:235
-#, kde-format
-msgctxt "@item:inmenu"
-msgid "Mute"
-msgstr ""
-
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:240
-#, fuzzy, kde-format
-msgctxt "@item:inmenu"
-msgid "Remove audio"
-msgstr "Pašalinti"
-
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:247
-#, fuzzy, kde-format
-#| msgid "Volume:"
-msgctxt "@item:inmenu, slider"
-msgid "Volume:"
-msgstr "Skirsnis:"
-
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:286
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:234
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:832
-#, fuzzy, kde-format
-msgctxt "@item:inmenu"
-msgid "Open audio..."
-msgstr "Perrašyti esamą dokumentą"
-
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:835
-#, fuzzy, kde-format
-#| msgid "Save..."
-msgctxt "@item:inmenu"
-msgid "Change audio (%1)..."
-msgstr "Išsaugoti..."
-
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1580
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
 #, fuzzy, kde-format
 #| msgid "Insert Name"
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Įterpti pavadinimą"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1581
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1499
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Įveskite grupės pavadinimą:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1688
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1606
 #, fuzzy, kde-format
 msgid "Edit Frames:"
 msgstr "Išsaugoti dabartinius dydžius"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1715
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Įterpti pavadinimą"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1723
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1641
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
 msgstr "Paveikslėlis"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:494
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:496
 #, fuzzy, kde-format
 #| msgid "Volume:"
 msgid "Edit Columns:"
 msgstr "Skirsnis:"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:504
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:506
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframe Columns"
 msgstr "Pašalinti sluoksnį"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:512
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:514
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frame Columns"
@@ -38246,7 +38224,7 @@ msgstr "&Filtras"
 msgid "Next frames"
 msgstr "Pašalinti sluoksnį"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:401
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:422
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -38256,7 +38234,7 @@ msgstr[1] "Pašalinti sluoksnį"
 msgstr[2] "Pašalinti sluoksnį"
 msgstr[3] "Pašalinti sluoksnį"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:431
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:452
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
@@ -48533,8 +48511,8 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
-#: plugins/impex/libkra/kis_kra_loader.cpp:1043
-#: plugins/impex/libkra/kis_kra_loader.cpp:1412
+#: plugins/impex/libkra/kis_kra_loader.cpp:674
+#: plugins/impex/libkra/kis_kra_loader.cpp:1108
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgctxt "@title:window"
@@ -48669,34 +48647,46 @@ msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be imported. The filename of the resource: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:778
+#: plugins/impex/libkra/kis_kra_loader.cpp:669
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Audio channel file \"%1\" doesn't exist!\n"
+"\n"
+"Expected path:\n"
+"%2\n"
+"\n"
+"Do you want to locate it manually?"
+msgstr ""
+
+#: plugins/impex/libkra/kis_kra_loader.cpp:843
 #, kde-format
 msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
 "\"%2\" is deactivated"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:833
+#: plugins/impex/libkra/kis_kra_loader.cpp:898
 #, fuzzy, kde-format
 msgid "Layer %1 specifies an unsupported color model: %2."
 msgstr "Sluoksnis yra užrakintas."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:861
+#: plugins/impex/libkra/kis_kra_loader.cpp:926
 #, fuzzy, kde-format
 msgid "Layer %1 has an unsupported type."
 msgstr "Sluoksnis yra užrakintas."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:896
+#: plugins/impex/libkra/kis_kra_loader.cpp:961
 #, fuzzy, kde-format
 msgid "Layer %1 has an unsupported type: %2."
 msgstr "Sluoksnis yra užrakintas."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:903
+#: plugins/impex/libkra/kis_kra_loader.cpp:968
 #, kde-format
 msgid "Failure loading layer %1 of type: %2."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:927
+#: plugins/impex/libkra/kis_kra_loader.cpp:992
 #, kde-format
 msgid ""
 "Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
@@ -48705,23 +48695,11 @@ msgid ""
 "blending mode"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1038
+#: plugins/impex/libkra/kis_kra_loader.cpp:1103
 #, kde-format
 msgctxt "@info"
 msgid ""
 "The file associated to a file layer with the name \"%1\" is not found.\n"
-"\n"
-"Expected path:\n"
-"%2\n"
-"\n"
-"Do you want to locate it manually?"
-msgstr ""
-
-#: plugins/impex/libkra/kis_kra_loader.cpp:1407
-#, kde-format
-msgctxt "@info"
-msgid ""
-"Audio channel file \"%1\" doesn't exist!\n"
 "\n"
 "Expected path:\n"
 "%2\n"
@@ -48830,87 +48808,94 @@ msgstr "Nepavyko sukurti veiksmo."
 msgid "Could not write for %1 metadata to the file."
 msgstr "Pasirinkti maišymo veikseną sluoksniui."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:196
+#: plugins/impex/libkra/kis_kra_saver.cpp:195
 #, fuzzy, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not export resource for embedding: %1"
 msgstr "Monitoriaus profilis: "
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:211
+#: plugins/impex/libkra/kis_kra_saver.cpp:210
 #, fuzzy, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
 msgstr "Pažymėjimas"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:223
+#: plugins/impex/libkra/kis_kra_saver.cpp:222
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is empty: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:229
+#: plugins/impex/libkra/kis_kra_saver.cpp:228
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is incomplete: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:246
-#: plugins/impex/libkra/kis_kra_saver.cpp:268
+#: plugins/impex/libkra/kis_kra_saver.cpp:245
+#: plugins/impex/libkra/kis_kra_saver.cpp:267
 #, fuzzy, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save storyboards."
 msgstr "Pažymėjimas"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:280
-#: plugins/impex/libkra/kis_kra_saver.cpp:304
+#: plugins/impex/libkra/kis_kra_saver.cpp:279
+#: plugins/impex/libkra/kis_kra_saver.cpp:303
 #, fuzzy, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save animation meta data."
 msgstr "Pažymėjimas"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:417
+#: plugins/impex/libkra/kis_kra_saver.cpp:316
+#: plugins/impex/libkra/kis_kra_saver.cpp:339
+#, fuzzy, kde-format
+msgctxt "Error message when saving a .kra file"
+msgid "Could not save audio meta data."
+msgstr "Pažymėjimas"
+
+#: plugins/impex/libkra/kis_kra_saver.cpp:452
 #, fuzzy, kde-format
 msgctxt "Error message on saving a .kra file"
 msgid "Could not save keyframes."
 msgstr "Pažymėjimas"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:461
+#: plugins/impex/libkra/kis_kra_saver.cpp:496
 #, fuzzy, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save annotations."
 msgstr "Pažymėjimas"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:495
+#: plugins/impex/libkra/kis_kra_saver.cpp:530
 #, fuzzy, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save image profile."
 msgstr "Monitoriaus profilis: "
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:525
+#: plugins/impex/libkra/kis_kra_saver.cpp:560
 #, fuzzy, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save softproofing color profile."
 msgstr "Monitoriaus profilis: "
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:560
+#: plugins/impex/libkra/kis_kra_saver.cpp:595
 #, fuzzy, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save additional annotations."
 msgstr "Pažymėjimas"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:593
+#: plugins/impex/libkra/kis_kra_saver.cpp:628
 #, fuzzy, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save layer styles."
 msgstr "Monitoriaus profilis: "
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:608
+#: plugins/impex/libkra/kis_kra_saver.cpp:643
 #, fuzzy, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save merged image."
 msgstr "Monitoriaus profilis: "
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:703
+#: plugins/impex/libkra/kis_kra_saver.cpp:738
 #, fuzzy, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save assistants."
@@ -48931,40 +48916,40 @@ msgstr ""
 msgid "Could not create the file for saving"
 msgstr "Monitoriaus profilis: "
 
-#: plugins/impex/libkra/kra_converter.cpp:222
+#: plugins/impex/libkra/kra_converter.cpp:228
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr ""
 
-#: plugins/impex/libkra/kra_converter.cpp:314
+#: plugins/impex/libkra/kra_converter.cpp:320
 #, fuzzy, kde-format
 msgid "Could not find %1"
 msgstr "Monitoriaus profilis: "
 
-#: plugins/impex/libkra/kra_converter.cpp:326
+#: plugins/impex/libkra/kra_converter.cpp:332
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
 "Error message: %4"
 msgstr ""
 
-#: plugins/impex/libkra/kra_converter.cpp:344
+#: plugins/impex/libkra/kra_converter.cpp:350
 #, kde-format
 msgid "The format is not supported or the file is corrupted"
 msgstr ""
 
-#: plugins/impex/libkra/kra_converter.cpp:355
+#: plugins/impex/libkra/kra_converter.cpp:361
 #, kde-format
 msgid "The file is too new for this version of Krita (%1)."
 msgstr ""
 
-#: plugins/impex/libkra/kra_converter.cpp:361
+#: plugins/impex/libkra/kra_converter.cpp:367
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "The file has no layers."
 msgstr "Failas %1 neegzistuoja."
 
-#: plugins/impex/libkra/kra_converter.cpp:400
+#: plugins/impex/libkra/kra_converter.cpp:406
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "The file does not contain an image."
@@ -60928,6 +60913,22 @@ msgid "Reference Images Tool"
 msgstr "Pasirinkimai"
 
 #, fuzzy
+#~| msgid "Edition:"
+#~ msgid "Edit Audio:"
+#~ msgstr "Leidimas:"
+
+#, fuzzy
+#~ msgctxt "@item:inmenu"
+#~ msgid "Open audio..."
+#~ msgstr "Perrašyti esamą dokumentą"
+
+#, fuzzy
+#~| msgid "Save..."
+#~ msgctxt "@item:inmenu"
+#~ msgid "Change audio (%1)..."
+#~ msgstr "Išsaugoti..."
+
+#, fuzzy
 #~| msgid "Choose workspace"
 #~ msgid "Choose a video file"
 #~ msgstr "Pasirinkite darbo erdvę"
@@ -61629,10 +61630,6 @@ msgstr "Pasirinkimai"
 #, fuzzy
 #~ msgid "Please enter a name"
 #~ msgstr "Išsaugoti dokumentą"
-
-#, fuzzy
-#~ msgid "Import Bundles..."
-#~ msgstr "Valyti resursų failus"
 
 #, fuzzy
 #~ msgid "Import Brushes..."

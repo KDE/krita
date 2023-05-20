@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-17 00:45+0000\n"
+"POT-Creation-Date: 2023-05-20 00:43+0000\n"
 "PO-Revision-Date: 2023-05-17 08:36+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -15743,13 +15743,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Робочі простори"
 
-#: krita/main.cc:521
+#: krita/main.cc:517
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Критична помилка"
 
-#: krita/main.cc:522
+#: krita/main.cc:518
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15758,14 +15758,14 @@ msgstr ""
 "У Krita не передбачено підтримки платформи Wayland. Для запуску Krita у "
 "Wayland скористайтеся XWayland. Зараз Krita завершить роботу."
 
-#: krita/main.cc:618 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:614 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: попередження"
 
-#: krita/main.cc:619
+#: krita/main.cc:615
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15777,12 +15777,12 @@ msgstr ""
 "Будь ласка, оновіть систему до підтримуваної версії Windows: Windows 7, 8, "
 "8.1 або 10."
 
-#: krita/main.cc:641 krita/main.cc:646
+#: krita/main.cc:637 krita/main.cc:642
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Підтримка планшетів у Krita"
 
-#: krita/main.cc:642
+#: krita/main.cc:638
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15793,7 +15793,7 @@ msgstr ""
 "Ink. Якщо у вас є планшет для малювання, переконайтеся, що драйвер планшета "
 "встановлено належним чином."
 
-#: krita/main.cc:647
+#: krita/main.cc:643
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -17152,7 +17152,7 @@ msgstr "Імпортоване зображення"
 msgid "Selection Mask"
 msgstr "Маска вибору"
 
-#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2524
+#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2551
 #: plugins/impex/psd/psd_loader.cpp:189
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -17516,8 +17516,8 @@ msgid "Processing"
 msgstr "Обробка"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1419
-#: libs/ui/KisMainWindow.cpp:1699 libs/ui/KisMainWindow.cpp:1712
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1422
+#: libs/ui/KisMainWindow.cpp:1702 libs/ui/KisMainWindow.cpp:1715
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18288,8 +18288,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "документ CSV"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2063
-#: libs/ui/KisMainWindow.cpp:2146
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2066
+#: libs/ui/KisMainWindow.cpp:2149
 #, kde-format
 msgid "Import frames"
 msgstr "Імпортувати кадри"
@@ -19539,7 +19539,7 @@ msgstr "Вихідний"
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
 #: libs/ui/actions/KisPasteActionFactories.cpp:354
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:496 libs/ui/KisView.cpp:1171
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:498 libs/ui/KisView.cpp:1171
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19575,9 +19575,9 @@ msgstr "Локальні ресурси"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:708
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:720
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -19596,17 +19596,17 @@ msgstr "Локальні ресурси"
 #: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
 #: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
 #: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
-#: libs/ui/KisApplication.cpp:1073 libs/ui/KisDocument.cpp:937
-#: libs/ui/KisDocument.cpp:944 libs/ui/KisDocument.cpp:964
-#: libs/ui/KisDocument.cpp:1872 libs/ui/KisDocument.cpp:1916
-#: libs/ui/KisDocument.cpp:1922 libs/ui/KisDocument.cpp:1935
-#: libs/ui/KisDocument.cpp:1939 libs/ui/KisMainWindow.cpp:976
-#: libs/ui/KisMainWindow.cpp:1092 libs/ui/KisMainWindow.cpp:1218
-#: libs/ui/KisMainWindow.cpp:1317 libs/ui/KisMainWindow.cpp:1923
-#: libs/ui/KisMainWindow.cpp:1932 libs/ui/KisMainWindow.cpp:2071
-#: libs/ui/KisMainWindow.cpp:2132 libs/ui/KisMainWindow.cpp:2153
-#: libs/ui/KisMainWindow.cpp:2766 libs/ui/KisPart.cpp:555
-#: libs/ui/KisPart.cpp:558 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisApplication.cpp:1073 libs/ui/KisDocument.cpp:943
+#: libs/ui/KisDocument.cpp:950 libs/ui/KisDocument.cpp:970
+#: libs/ui/KisDocument.cpp:1878 libs/ui/KisDocument.cpp:1922
+#: libs/ui/KisDocument.cpp:1928 libs/ui/KisDocument.cpp:1941
+#: libs/ui/KisDocument.cpp:1945 libs/ui/KisMainWindow.cpp:979
+#: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
+#: libs/ui/KisMainWindow.cpp:1320 libs/ui/KisMainWindow.cpp:1926
+#: libs/ui/KisMainWindow.cpp:1935 libs/ui/KisMainWindow.cpp:2074
+#: libs/ui/KisMainWindow.cpp:2135 libs/ui/KisMainWindow.cpp:2156
+#: libs/ui/KisMainWindow.cpp:2772 libs/ui/KisPart.cpp:584
+#: libs/ui/KisPart.cpp:587 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
 #: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
@@ -20103,7 +20103,7 @@ msgid "Delete resource"
 msgstr "Вилучити ресурс"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:333
-#: libs/ui/KisMainWindow.cpp:2565
+#: libs/ui/KisMainWindow.cpp:2571
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20582,55 +20582,55 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Не вдалося обробити кадри анімації! Файли результату є неповними."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2173
+#: libs/ui/KisMainWindow.cpp:2176
 #, kde-format
 msgid "Render Animation"
 msgstr ""
 "Обробити анімацію\n"
 "обробку анімації"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:90
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:95
 #, kde-format
 msgctxt "bicubic filtering"
 msgid "bicubic"
 msgstr "бікубічний"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:91
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:96
 #, kde-format
 msgctxt "bilinear filtering"
 msgid "bilinear"
 msgstr "білінійний"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:92
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:97
 #, kde-format
 msgctxt "lanczos3 filtering"
 msgid "lanczos3"
 msgstr "ланцош3"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:93
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:98
 #, kde-format
 msgctxt "nearest neighbor filtering"
 msgid "neighbor"
 msgstr "сусідній"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:94
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:99
 #, kde-format
 msgctxt "spline filtering"
 msgid "spline"
 msgstr "сплайни"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:101
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:106
 #, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "н/д"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:390
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:392
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
 msgstr "Не надано коректного виконуваного файла FFmpeg…"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:463
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:465
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
@@ -20638,7 +20638,7 @@ msgstr ""
 "Щоб можна було працювати з прозорістю у GIF, має бути встановлено FFmpeg "
 "принаймні версії 4.2+"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:470
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:472
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
@@ -20648,13 +20648,13 @@ msgstr ""
 "Частота кадрів в анімованих зображеннях gif не може перевищувати 50 кадрів "
 "за секунду. Частоту кадрів буде зменшено до 50 кадрів за секунду."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:477
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:479
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1806
 #, kde-format
 msgid "Warning(s):"
 msgstr "Попередження:"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20663,7 +20663,7 @@ msgstr ""
 "Здається, вказаний вами файл FFmpeg стиснуто. Будь ласка, спочатку виконайте "
 "видобування ffmpeg з архіву."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:708
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20672,7 +20672,7 @@ msgstr ""
 "Вказане розташування FFmpeg є некоректним. Будь ласка, виберіть належне "
 "розташування виконуваного файла FFmpeg у вашій системі."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:720
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Будь ласка, введіть назву файла, до якого буде записано результат."
@@ -20939,7 +20939,7 @@ msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
 msgstr "Створюємо палітру для формату файлів %1."
 
-#: libs/ui/animation/KisVideoSaver.cpp:200
+#: libs/ui/animation/KisVideoSaver.cpp:202
 #, kde-format
 msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "
@@ -22190,16 +22190,6 @@ msgstr "Вгору"
 msgid "Down"
 msgstr "Вниз"
 
-#: libs/ui/canvas/kis_animation_player.cpp:247
-#, kde-format
-msgctxt "floating on-canvas message"
-msgid ""
-"Cannot open audio: \"%1\"\n"
-"Error: %2"
-msgstr ""
-"Не вдалося відкрити файл звукових даних: «%1»\n"
-"Помилка: %2"
-
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
 #, kde-format
 msgctxt "floating message about mirroring"
@@ -22664,7 +22654,7 @@ msgid "Numerical"
 msgstr "За номером"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1186
+#: libs/ui/KisMainWindow.cpp:1189
 #, kde-format
 msgid "Import Images"
 msgstr "Імпортування зображень"
@@ -22710,7 +22700,7 @@ msgstr "Властивості шару"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:246
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:388
@@ -22812,7 +22802,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Введіть назву нового стилю"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2576
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2582
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -26611,7 +26601,7 @@ msgstr "Поточний набір пензлів"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1071
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
 #: libs/ui/widgets/kis_workspace_chooser.cpp:111
 #: libs/ui/widgets/kis_workspace_chooser.cpp:190
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -30287,35 +30277,35 @@ msgstr ""
 "Клонувати документ\n"
 "клонування документа"
 
-#: libs/ui/KisDocument.cpp:713
+#: libs/ui/KisDocument.cpp:719
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 "Запис до %1 неможливий. Будь ласка, збережіть дані до файла з іншою назвою."
 
-#: libs/ui/KisDocument.cpp:751
+#: libs/ui/KisDocument.cpp:757
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Не вдалося створити файл резервної копії"
 
-#: libs/ui/KisDocument.cpp:768
+#: libs/ui/KisDocument.cpp:774
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Не вдалося створити нумерований файл резервної копії"
 
-#: libs/ui/KisDocument.cpp:790
+#: libs/ui/KisDocument.cpp:796
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Експортуємо документ…"
 
-#: libs/ui/KisDocument.cpp:791
+#: libs/ui/KisDocument.cpp:797
 #, kde-format
 msgid "Saving Document..."
 msgstr "Зберігаємо документ…"
 
-#: libs/ui/KisDocument.cpp:801
+#: libs/ui/KisDocument.cpp:807
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30324,18 +30314,18 @@ msgstr ""
 "Не вдалося розпочати збереження %1. Зачекайте, доки буде завершено поточну "
 "дію зі збереження."
 
-#: libs/ui/KisDocument.cpp:930
+#: libs/ui/KisDocument.cpp:936
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Помилка під час збереження %1: %2"
 
-#: libs/ui/KisDocument.cpp:938 libs/ui/KisDocument.cpp:945
+#: libs/ui/KisDocument.cpp:944 libs/ui/KisDocument.cpp:951
 #, kde-format
 msgid "Could not save %1."
 msgstr "Не вдалося зберегти %1."
 
-#: libs/ui/KisDocument.cpp:967
+#: libs/ui/KisDocument.cpp:973
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30343,45 +30333,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 було записано, але дані є неповними."
 
-#: libs/ui/KisDocument.cpp:973
+#: libs/ui/KisDocument.cpp:979
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "Під час збереження виникли певні проблеми."
 
-#: libs/ui/KisDocument.cpp:990
+#: libs/ui/KisDocument.cpp:996
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Завершено збереження %1"
 
-#: libs/ui/KisDocument.cpp:1393
+#: libs/ui/KisDocument.cpp:1399
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Автозбереження… %1"
 
-#: libs/ui/KisDocument.cpp:1401
+#: libs/ui/KisDocument.cpp:1407
 #, kde-format
 msgid "Autosaving..."
 msgstr "Автозбереження…"
 
-#: libs/ui/KisDocument.cpp:1407
+#: libs/ui/KisDocument.cpp:1413
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Автозберення відкладено: документ зайнято…"
 
-#: libs/ui/KisDocument.cpp:1550
+#: libs/ui/KisDocument.cpp:1556
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Помилка під час автозбереження %1: %2"
 
-#: libs/ui/KisDocument.cpp:1564
+#: libs/ui/KisDocument.cpp:1570
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Завершено автозбереження %1"
 
-#: libs/ui/KisDocument.cpp:1806
+#: libs/ui/KisDocument.cpp:1812
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30390,38 +30380,38 @@ msgstr ""
 "Помилкове форматування шляху\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1872
+#: libs/ui/KisDocument.cpp:1878
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Файла %1 не існує."
 
-#: libs/ui/KisDocument.cpp:1901
+#: libs/ui/KisDocument.cpp:1907
 #, kde-format
 msgid "Opening document"
 msgstr "Відкриваємо документ"
 
-#: libs/ui/KisDocument.cpp:1917 libs/ui/KisDocument.cpp:1923
+#: libs/ui/KisDocument.cpp:1923 libs/ui/KisDocument.cpp:1929
 #, kde-format
 msgid "Could not open %1."
 msgstr "Не вдалось відкрити %1."
 
-#: libs/ui/KisDocument.cpp:1936 libs/ui/KisDocument.cpp:1940
+#: libs/ui/KisDocument.cpp:1942 libs/ui/KisDocument.cpp:1946
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Під час спроби відкрити %1 виникли проблеми."
 
-#: libs/ui/KisDocument.cpp:2071
+#: libs/ui/KisDocument.cpp:2077
 #, kde-format
 msgid "Not Saved"
 msgstr "Не збережено"
 
-#: libs/ui/KisDocument.cpp:2531
+#: libs/ui/KisDocument.cpp:2558
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Заповнення тла"
 
-#: libs/ui/KisDocument.cpp:2585
+#: libs/ui/KisDocument.cpp:2612
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30583,8 +30573,8 @@ msgid "The action was cancelled by the user."
 msgstr "Дію було скасовано користувачем."
 
 #: libs/ui/KisImportExportErrorCode.cpp:178
-#: plugins/impex/libkra/kra_converter.cpp:384
-#: plugins/impex/libkra/kra_converter.cpp:413
+#: plugins/impex/libkra/kra_converter.cpp:390
+#: plugins/impex/libkra/kra_converter.cpp:419
 #, kde-format
 msgid "Unknown error."
 msgstr "Невідома помилка."
@@ -30797,74 +30787,74 @@ msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "Оновити мініатюри шару"
 
-#: libs/ui/KisMainWindow.cpp:184
+#: libs/ui/KisMainWindow.cpp:185
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "Стилі"
 
-#: libs/ui/KisMainWindow.cpp:185
+#: libs/ui/KisMainWindow.cpp:186
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "&Бічні панелі"
 
-#: libs/ui/KisMainWindow.cpp:186
+#: libs/ui/KisMainWindow.cpp:187
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "&Вікно"
 
-#: libs/ui/KisMainWindow.cpp:187
+#: libs/ui/KisMainWindow.cpp:188
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "Нова п&анель перегляду"
 
-#: libs/ui/KisMainWindow.cpp:188
+#: libs/ui/KisMainWindow.cpp:189
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "&Робочий простір"
 
-#: libs/ui/KisMainWindow.cpp:584
+#: libs/ui/KisMainWindow.cpp:585
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Показати пенал %1"
 
-#: libs/ui/KisMainWindow.cpp:586
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Сховати пенал %1"
 
-#: libs/ui/KisMainWindow.cpp:1034
+#: libs/ui/KisMainWindow.cpp:1037
 #, kde-format
 msgid "Write Protected"
 msgstr "Захищено від запису"
 
-#: libs/ui/KisMainWindow.cpp:1038
+#: libs/ui/KisMainWindow.cpp:1041
 #, kde-format
 msgid "Recovered"
 msgstr "Відновлено"
 
-#: libs/ui/KisMainWindow.cpp:1068
+#: libs/ui/KisMainWindow.cpp:1071
 #, kde-format
 msgid "Save as %1"
 msgstr "Зберегти як %1"
 
-#: libs/ui/KisMainWindow.cpp:1092
+#: libs/ui/KisMainWindow.cpp:1095
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Файл %1 не існує."
 
-#: libs/ui/KisMainWindow.cpp:1186
+#: libs/ui/KisMainWindow.cpp:1189
 #, kde-format
 msgid "Open Images"
 msgstr "Відкриття зображень"
 
-#: libs/ui/KisMainWindow.cpp:1318
+#: libs/ui/KisMainWindow.cpp:1321
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30878,45 +30868,45 @@ msgstr ""
 "Будь ласка, виберіть для збереженого файла нове місце так, щоб початковий "
 "файл не було пошкоджено!"
 
-#: libs/ui/KisMainWindow.cpp:1374
+#: libs/ui/KisMainWindow.cpp:1377
 #, kde-format
 msgid "Exporting"
 msgstr "Експортування"
 
-#: libs/ui/KisMainWindow.cpp:1374
+#: libs/ui/KisMainWindow.cpp:1377
 #, kde-format
 msgid "Saving As"
 msgstr "Збереження у іншому файлі"
 
-#: libs/ui/KisMainWindow.cpp:1678
+#: libs/ui/KisMainWindow.cpp:1681
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Створити новий документ"
 
-#: libs/ui/KisMainWindow.cpp:1702
+#: libs/ui/KisMainWindow.cpp:1705
 #, kde-format
 msgid "Custom Document"
 msgstr "Нетиповий документ"
 
-#: libs/ui/KisMainWindow.cpp:1714
+#: libs/ui/KisMainWindow.cpp:1717
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Створити на основі вмісту буфера обміну"
 
-#: libs/ui/KisMainWindow.cpp:1892
+#: libs/ui/KisMainWindow.cpp:1895
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Шари/Маски"
 
-#: libs/ui/KisMainWindow.cpp:1918
+#: libs/ui/KisMainWindow.cpp:1921
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:181
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:286
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "У вас немає увімкнених пакунків ресурсів."
 
-#: libs/ui/KisMainWindow.cpp:1922
+#: libs/ui/KisMainWindow.cpp:1925
 #, kde-format
 msgid ""
 "\n"
@@ -30927,7 +30917,7 @@ msgstr ""
 "Немає доступних наборів пензлів. Будь ласка, перш ніж продовжувати, "
 "увімкніть пакунок, який містить набори пензлів.\n"
 
-#: libs/ui/KisMainWindow.cpp:1932
+#: libs/ui/KisMainWindow.cpp:1935
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
 #, kde-format
@@ -30938,7 +30928,7 @@ msgstr ""
 "\n"
 "Доступні лише ваші локальні ресурси."
 
-#: libs/ui/KisMainWindow.cpp:2071 libs/ui/KisMainWindow.cpp:2153
+#: libs/ui/KisMainWindow.cpp:2074 libs/ui/KisMainWindow.cpp:2156
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30947,40 +30937,40 @@ msgstr ""
 "Не вдалося завершити імпортування анімації:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2132
+#: libs/ui/KisMainWindow.cpp:2135
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Не вдалося створити документ. Імпортування анімації перервано."
 
-#: libs/ui/KisMainWindow.cpp:2556
+#: libs/ui/KisMainWindow.cpp:2562
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Імпортувати робочий простір…"
 
-#: libs/ui/KisMainWindow.cpp:2571
+#: libs/ui/KisMainWindow.cpp:2577
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "С&творити робочий простір…"
 
-#: libs/ui/KisMainWindow.cpp:2575
+#: libs/ui/KisMainWindow.cpp:2581
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Створити робочий простір…"
 
-#: libs/ui/KisMainWindow.cpp:2619
+#: libs/ui/KisMainWindow.cpp:2625
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2622
+#: libs/ui/KisMainWindow.cpp:2628
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2789
+#: libs/ui/KisMainWindow.cpp:2795
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -30989,19 +30979,19 @@ msgstr ""
 "Додаток керування кольорами LittleCMS для Krita не встановлено. Зараз Krita "
 "завершить роботу."
 
-#: libs/ui/KisMainWindow.cpp:2805
+#: libs/ui/KisMainWindow.cpp:2811
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Помилка під час встановлення"
 
-#: libs/ui/KisMainWindow.cpp:2914
+#: libs/ui/KisMainWindow.cpp:2920
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Теми"
 
-#: libs/ui/KisMainWindow.cpp:2972
+#: libs/ui/KisMainWindow.cpp:2978
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Розширюваний заповнювач"
@@ -31132,7 +31122,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Нова група %1"
 
-#: libs/ui/KisPart.cpp:555
+#: libs/ui/KisPart.cpp:584
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -31141,7 +31131,7 @@ msgstr ""
 "Не вдалося створити документ з шаблона\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:558
+#: libs/ui/KisPart.cpp:587
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -38015,124 +38005,123 @@ msgstr "Червоніше/Зеленіше: "
 msgid "Bluer/Yellower: "
 msgstr "Синіше/Жовтіше: "
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:55
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:254
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:58
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:257
 #, kde-format
 msgid "Animation Curves"
 msgstr "Криві анімації"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:64
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:64
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:67
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:67
 #, kde-format
 msgid "Frame register"
 msgstr "Список кадрів"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:80
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:81
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:83
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:84
 #, kde-format
 msgctxt "preview playback speed percentage prefix"
 msgid "Speed: "
 msgstr "Швидкість: "
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:82
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:83
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:85
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:86
 #, kde-format
 msgid "Preview playback speed"
 msgstr "Швидкість відтворення попереднього перегляду"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:125
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:128
 #, kde-format
 msgctxt "Value (Keep short!)"
 msgid "Val:"
 msgstr "Зн.:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:162
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:122
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
 #, kde-format
 msgid "Onion skins menu"
 msgstr "Меню воскової калька"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:170
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:130
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:173
 #, kde-format
 msgid "Audio menu"
 msgstr "Звукове меню"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:178
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:138
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
 #, kde-format
 msgid "Animation settings menu"
 msgstr "Меню параметрів анімації"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:190
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:150
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
 #, kde-format
 msgid "Clip Start: "
 msgstr "Початок кліпу:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:194
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:154
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
 #, kde-format
 msgid "Clip End: "
 msgstr "Кінець кліпу:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:199
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:159
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
 #, kde-format
 msgid "Frame Rate: "
 msgstr "Частота кадрів: "
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:274
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:277
 #, kde-format
 msgid "Channel Operations"
 msgstr "Дії з каналами"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:275
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:278
 #, kde-format
 msgid "Layer Operations"
 msgstr "Дії з шарами"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:278
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:281
 #, kde-format
 msgid "Reset Channel"
 msgstr "Скинути канал"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:284
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:287
 #, kde-format
 msgid "Reset All Channels"
 msgstr "Скинути усі канали"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:469
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr "Зберігати стале значення. Без інтерполяції."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:476
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
 #, kde-format
 msgid "Linear interpolation."
 msgstr "Лінійна інтерполяція"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:483
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
 #, kde-format
 msgid "Bezier curve interpolation."
 msgstr "Інтерполяція кривими Безьє."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:490
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
 #, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "Незгладжена інтерполяція дотичними."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:497
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
 #, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "Згладжена інтерполяція дотичними."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:504
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr "Масштабувати область перегляду за діапазоном каналів."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:511
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
 #, kde-format
 msgid "Zoom view to fit curve."
 msgstr "Масштабувати перегляд за кривою."
@@ -38190,48 +38179,83 @@ msgstr[3] ""
 "Скоригувати %1 ключовий кадр\n"
 "коригування %1 ключового кадру"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:51
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:238
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
 #, kde-format
 msgid "Animation Timeline"
 msgstr "Монтажний стіл анімації"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
+#, fuzzy, kde-format
+#| msgid "Animation settings menu"
+msgid "Animation audio menu"
+msgstr "Меню параметрів анімації"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#, fuzzy, kde-format
+#| msgid "Import Bundles..."
+msgctxt "@item:inmenu Load audio file into Krita from disk."
+msgid "Import Audio..."
+msgstr "Імпортувати комплекти…"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Remove audio"
+msgstr "Вилучити звук"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#, fuzzy, kde-format
+#| msgctxt "@item:inmenu"
+#| msgid "Mute"
+msgctxt "@item:inmenu Mute audio playback."
+msgid "Mute"
+msgstr "Вимкнути звук"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#, fuzzy, kde-format
+#| msgctxt "@item:inmenu, slider"
+#| msgid "Volume:"
+msgctxt "@item:inmenu Volume slider"
+msgid "Volume: "
+msgstr "Гучність:"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
 #, kde-format
 msgid "AutoKey Blank"
 msgstr "Автоключовий порожній"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:169
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
 #, kde-format
 msgid "AutoKey Duplicate"
 msgstr "Автоключовий дублікат"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:445
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Увімкнути збереження тривалості відтворення."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:453
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Ефективна частота кадрів:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:454
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Справжня частота кадрів:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:455
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Викинутих кадрів:\t%1%"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:701
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:695
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr "Пропущені кадри у цьому екземплярі Krita не є доступними"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:882
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:876
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -38241,8 +38265,8 @@ msgstr[1] "Додати %1 порожніх кадри"
 msgstr[2] "Додати %1 порожніх кадрів"
 msgstr[3] "Додати порожній кадр"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:928
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:976
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -38260,41 +38284,12 @@ msgstr[3] ""
 "Вставити кадр\n"
 "вставлення кадру"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:195
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:188
 #, kde-format
 msgid "Edit Layers:"
 msgstr "Редагувати шари:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:224
-#, kde-format
-msgid "Edit Audio:"
-msgstr "Редагувати звук:"
-
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:228
-#, kde-format
-msgctxt "@item:inmenu"
-msgid "Audio playback is not supported in this build!"
-msgstr "У цій збірці не передбачено підтримки відтворення звукових даних!"
-
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:235
-#, kde-format
-msgctxt "@item:inmenu"
-msgid "Mute"
-msgstr "Вимкнути звук"
-
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:240
-#, kde-format
-msgctxt "@item:inmenu"
-msgid "Remove audio"
-msgstr "Вилучити звук"
-
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:247
-#, kde-format
-msgctxt "@item:inmenu, slider"
-msgid "Volume:"
-msgstr "Гучність:"
-
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:286
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:234
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
@@ -38302,59 +38297,47 @@ msgstr ""
 "Змінити масштаб на монтажному столі. Натисніть і перетягніть ліворуч або "
 "праворуч."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:832
-#, kde-format
-msgctxt "@item:inmenu"
-msgid "Open audio..."
-msgstr "Відкрити звукові дані…"
-
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:835
-#, kde-format
-msgctxt "@item:inmenu"
-msgid "Change audio (%1)..."
-msgstr "Змінити звук (%1)…"
-
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1580
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Вставлення або вилучення кадрів затримки"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1581
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1499
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Вкажіть кількість кадрів"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1688
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1606
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Редагувати кадри:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1715
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Ключові кадри"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1723
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1641
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
 msgstr "Кадри затримки"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:494
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:496
 #, kde-format
 msgid "Edit Columns:"
 msgstr "Редагувати стовпчики:"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:504
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:506
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframe Columns"
 msgstr "Стовпчики ключових кадрів"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:512
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:514
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frame Columns"
@@ -38533,7 +38516,7 @@ msgstr "Попередні кадри"
 msgid "Next frames"
 msgstr "Наступні кадри"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:401
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:422
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -38551,7 +38534,7 @@ msgstr[3] ""
 "Вилучити кадр і посунути\n"
 "вилучення кадру із посуванням"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:431
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:452
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
 msgstr ""
@@ -48711,8 +48694,8 @@ msgstr ""
 "Хочете вибрати інше місце на диску?"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
-#: plugins/impex/libkra/kis_kra_loader.cpp:1043
-#: plugins/impex/libkra/kis_kra_loader.cpp:1412
+#: plugins/impex/libkra/kis_kra_loader.cpp:674
+#: plugins/impex/libkra/kis_kra_loader.cpp:1108
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -48854,67 +48837,7 @@ msgid "Embedded resource cannot be imported. The filename of the resource: %1"
 msgstr ""
 "Не вдалося імпортувати вбудований ресурс. Назва файла цього ресурсу: %1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:778
-#, kde-format
-msgid ""
-"Two global selection masks in active state found. \"%1\" is kept active, "
-"\"%2\" is deactivated"
-msgstr ""
-"Виявлено дві загальні маски вибору в активному стані. «%1» лишиться "
-"активною, а «%2» буде вимкнено"
-
-#: plugins/impex/libkra/kis_kra_loader.cpp:833
-#, kde-format
-msgid "Layer %1 specifies an unsupported color model: %2."
-msgstr "У шарі %1 вказано непідтримувану модель кольорів: %2."
-
-#: plugins/impex/libkra/kis_kra_loader.cpp:861
-#, kde-format
-msgid "Layer %1 has an unsupported type."
-msgstr "Шар %1 належить до непідтримуваного типу."
-
-#: plugins/impex/libkra/kis_kra_loader.cpp:896
-#, kde-format
-msgid "Layer %1 has an unsupported type: %2."
-msgstr "Шар %1 належить до непідтримуваного типу: %2"
-
-#: plugins/impex/libkra/kis_kra_loader.cpp:903
-#, kde-format
-msgid "Failure loading layer %1 of type: %2."
-msgstr "Помилка під час спроби завантажити шар %1 типу: %2."
-
-#: plugins/impex/libkra/kis_kra_loader.cpp:927
-#, kde-format
-msgid ""
-"Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
-"color in Krita 5.2. Please check the result and consider enabling legacy "
-"\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
-"blending mode"
-msgstr ""
-"У шарі %1 визначено режим злиття «%2», який змінив поведінку для кольорів "
-"CMYK у Krita 5.2. Будь ласка, ознайомтеся із результатом і, якщо потрібно, "
-"увімкніть підтримку застарілого кумулятивного алгоритму за допомогою пункту "
-"«Параметри->Налаштувати Krita->Загальне->Інструменти->Режим злиття CMYK»"
-
-#: plugins/impex/libkra/kis_kra_loader.cpp:1038
-#, kde-format
-msgctxt "@info"
-msgid ""
-"The file associated to a file layer with the name \"%1\" is not found.\n"
-"\n"
-"Expected path:\n"
-"%2\n"
-"\n"
-"Do you want to locate it manually?"
-msgstr ""
-"Не знайдено файла, пов’язаного з файловим шаром. Назва файла: «%1».\n"
-"\n"
-"Очікуваний шлях до файла:\n"
-">%2\n"
-"\n"
-"Хочете вказати потрібний файл вручну?"
-
-#: plugins/impex/libkra/kis_kra_loader.cpp:1407
+#: plugins/impex/libkra/kis_kra_loader.cpp:669
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -48929,6 +48852,66 @@ msgstr ""
 "\n"
 "Очікуваний шлях до файла:\n"
 "%2\n"
+"\n"
+"Хочете вказати потрібний файл вручну?"
+
+#: plugins/impex/libkra/kis_kra_loader.cpp:843
+#, kde-format
+msgid ""
+"Two global selection masks in active state found. \"%1\" is kept active, "
+"\"%2\" is deactivated"
+msgstr ""
+"Виявлено дві загальні маски вибору в активному стані. «%1» лишиться "
+"активною, а «%2» буде вимкнено"
+
+#: plugins/impex/libkra/kis_kra_loader.cpp:898
+#, kde-format
+msgid "Layer %1 specifies an unsupported color model: %2."
+msgstr "У шарі %1 вказано непідтримувану модель кольорів: %2."
+
+#: plugins/impex/libkra/kis_kra_loader.cpp:926
+#, kde-format
+msgid "Layer %1 has an unsupported type."
+msgstr "Шар %1 належить до непідтримуваного типу."
+
+#: plugins/impex/libkra/kis_kra_loader.cpp:961
+#, kde-format
+msgid "Layer %1 has an unsupported type: %2."
+msgstr "Шар %1 належить до непідтримуваного типу: %2"
+
+#: plugins/impex/libkra/kis_kra_loader.cpp:968
+#, kde-format
+msgid "Failure loading layer %1 of type: %2."
+msgstr "Помилка під час спроби завантажити шар %1 типу: %2."
+
+#: plugins/impex/libkra/kis_kra_loader.cpp:992
+#, kde-format
+msgid ""
+"Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
+"color in Krita 5.2. Please check the result and consider enabling legacy "
+"\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
+"blending mode"
+msgstr ""
+"У шарі %1 визначено режим злиття «%2», який змінив поведінку для кольорів "
+"CMYK у Krita 5.2. Будь ласка, ознайомтеся із результатом і, якщо потрібно, "
+"увімкніть підтримку застарілого кумулятивного алгоритму за допомогою пункту "
+"«Параметри->Налаштувати Krita->Загальне->Інструменти->Режим злиття CMYK»"
+
+#: plugins/impex/libkra/kis_kra_loader.cpp:1103
+#, kde-format
+msgctxt "@info"
+msgid ""
+"The file associated to a file layer with the name \"%1\" is not found.\n"
+"\n"
+"Expected path:\n"
+"%2\n"
+"\n"
+"Do you want to locate it manually?"
+msgstr ""
+"Не знайдено файла, пов’язаного з файловим шаром. Назва файла: «%1».\n"
+"\n"
+"Очікуваний шлях до файла:\n"
+">%2\n"
 "\n"
 "Хочете вказати потрібний файл вручну?"
 
@@ -49035,87 +49018,96 @@ msgstr "Модуль обробки метаданих не змін збере�
 msgid "Could not write for %1 metadata to the file."
 msgstr "Не вдалося записати метадані %1 до файла."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:196
+#: plugins/impex/libkra/kis_kra_saver.cpp:195
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not export resource for embedding: %1"
 msgstr "Не вдалося експортувати ресурс для вбудовування: %1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:211
+#: plugins/impex/libkra/kis_kra_saver.cpp:210
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
 msgstr "Не вдалося записати ресурс: %1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:223
+#: plugins/impex/libkra/kis_kra_saver.cpp:222
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is empty: %1"
 msgstr "Записаний ресурс є порожнім: %1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:229
+#: plugins/impex/libkra/kis_kra_saver.cpp:228
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is incomplete: %1"
 msgstr "Записаний ресурс є неповним: %1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:246
-#: plugins/impex/libkra/kis_kra_saver.cpp:268
+#: plugins/impex/libkra/kis_kra_saver.cpp:245
+#: plugins/impex/libkra/kis_kra_saver.cpp:267
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save storyboards."
 msgstr "Не вдалося зберегти розкадрування."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:280
-#: plugins/impex/libkra/kis_kra_saver.cpp:304
+#: plugins/impex/libkra/kis_kra_saver.cpp:279
+#: plugins/impex/libkra/kis_kra_saver.cpp:303
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save animation meta data."
 msgstr "Не вдалося зберегти метадані анімації."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:417
+#: plugins/impex/libkra/kis_kra_saver.cpp:316
+#: plugins/impex/libkra/kis_kra_saver.cpp:339
+#, fuzzy, kde-format
+#| msgctxt "Error message when saving a .kra file"
+#| msgid "Could not save animation meta data."
+msgctxt "Error message when saving a .kra file"
+msgid "Could not save audio meta data."
+msgstr "Не вдалося зберегти метадані анімації."
+
+#: plugins/impex/libkra/kis_kra_saver.cpp:452
 #, kde-format
 msgctxt "Error message on saving a .kra file"
 msgid "Could not save keyframes."
 msgstr "Не вдалося зберегти ключові кадри."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:461
+#: plugins/impex/libkra/kis_kra_saver.cpp:496
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save annotations."
 msgstr "Не вдалося зберегти анотації."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:495
+#: plugins/impex/libkra/kis_kra_saver.cpp:530
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save image profile."
 msgstr "Не вдалося зберегти профіль зображення."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:525
+#: plugins/impex/libkra/kis_kra_saver.cpp:560
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save softproofing color profile."
 msgstr "Не вдалося зберегти профіль проби кольорів."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:560
+#: plugins/impex/libkra/kis_kra_saver.cpp:595
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save additional annotations."
 msgstr "Не вдалося зберегти додаткові анотації."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:593
+#: plugins/impex/libkra/kis_kra_saver.cpp:628
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save layer styles."
 msgstr "Не вдалося зберегти стилі шарів."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:608
+#: plugins/impex/libkra/kis_kra_saver.cpp:643
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save merged image."
 msgstr "Не вдалося зберегти об'єднане зображення."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:703
+#: plugins/impex/libkra/kis_kra_saver.cpp:738
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save assistants."
@@ -49136,17 +49128,17 @@ msgstr "Неправильний документ: немає «maindoc.xml»."
 msgid "Could not create the file for saving"
 msgstr "Неможливо створити файл для збереження"
 
-#: plugins/impex/libkra/kra_converter.cpp:222
+#: plugins/impex/libkra/kra_converter.cpp:228
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "Не вдається записати «%1». Розділ на диску повний?"
 
-#: plugins/impex/libkra/kra_converter.cpp:314
+#: plugins/impex/libkra/kra_converter.cpp:320
 #, kde-format
 msgid "Could not find %1"
 msgstr "Не вдалось знайти %1"
 
-#: plugins/impex/libkra/kra_converter.cpp:326
+#: plugins/impex/libkra/kra_converter.cpp:332
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -49155,22 +49147,22 @@ msgstr ""
 "Помилка розбору синтаксису в %1, рядок — %2, позиція — %3\n"
 "Повідомлення: %4"
 
-#: plugins/impex/libkra/kra_converter.cpp:344
+#: plugins/impex/libkra/kra_converter.cpp:350
 #, kde-format
 msgid "The format is not supported or the file is corrupted"
 msgstr "Підтримки формату файла не передбачено або файл пошкоджено."
 
-#: plugins/impex/libkra/kra_converter.cpp:355
+#: plugins/impex/libkra/kra_converter.cpp:361
 #, kde-format
 msgid "The file is too new for this version of Krita (%1)."
 msgstr "Цей файл є надто новим для цієї версії Krita (%1)."
 
-#: plugins/impex/libkra/kra_converter.cpp:361
+#: plugins/impex/libkra/kra_converter.cpp:367
 #, kde-format
 msgid "The file has no layers."
 msgstr "У файлі немає даних шарів."
 
-#: plugins/impex/libkra/kra_converter.cpp:400
+#: plugins/impex/libkra/kra_converter.cpp:406
 #, kde-format
 msgid "The file does not contain an image."
 msgstr "У файлі не міститься зображення."
@@ -61066,6 +61058,29 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Інструмент еталонних зображень"
 
+#~ msgctxt "floating on-canvas message"
+#~ msgid ""
+#~ "Cannot open audio: \"%1\"\n"
+#~ "Error: %2"
+#~ msgstr ""
+#~ "Не вдалося відкрити файл звукових даних: «%1»\n"
+#~ "Помилка: %2"
+
+#~ msgid "Edit Audio:"
+#~ msgstr "Редагувати звук:"
+
+#~ msgctxt "@item:inmenu"
+#~ msgid "Audio playback is not supported in this build!"
+#~ msgstr "У цій збірці не передбачено підтримки відтворення звукових даних!"
+
+#~ msgctxt "@item:inmenu"
+#~ msgid "Open audio..."
+#~ msgstr "Відкрити звукові дані…"
+
+#~ msgctxt "@item:inmenu"
+#~ msgid "Change audio (%1)..."
+#~ msgstr "Змінити звук (%1)…"
+
 #~ msgctxt "(qtundo-format)"
 #~ msgid "fkdfjkdjfk"
 #~ msgstr "fkdfjkdjfk"
@@ -61987,9 +62002,6 @@ msgstr "Інструмент еталонних зображень"
 
 #~ msgid "Please enter a name"
 #~ msgstr "Будь ласка, введіть назву"
-
-#~ msgid "Import Bundles..."
-#~ msgstr "Імпортувати комплекти…"
 
 #~ msgid "Import Brushes..."
 #~ msgstr "Імпортувати пензлі…"

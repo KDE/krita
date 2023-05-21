@@ -24,6 +24,8 @@ import org.qtproject.qt5.android.QtNative;
 import org.qtproject.qt5.android.QtInputEventDispatcher;
 import org.qtproject.qt5.android.bindings.QtActivity;
 
+import org.libsdl.app.SDLAudioManager;
+
 public class MainActivity extends QtActivity {
 
     private boolean haveLibsLoaded = false;
@@ -40,6 +42,10 @@ public class MainActivity extends QtActivity {
             // this will be passed as a command line argument to main()
             i.putExtra("applicationArguments", uri);
         }
+
+        SDLAudioManager.initialize();
+        SDLAudioManager.setContext(this);
+        SDLAudioManager.nativeSetupJNI();
 
         super.onCreate(savedInstanceState);
         Log.i(TAG, "TouchSlop: " + ViewConfiguration.get(this).getScaledTouchSlop());

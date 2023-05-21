@@ -465,6 +465,7 @@ set(kritaui_LIB_SRCS
     StoryboardItem.cpp
 
     KisNodeActivationActionCreatorVisitor.cpp
+    KisAndroidFileProxy.cpp
 )
 
 if (KSeExpr_FOUND)

@@ -85,6 +85,13 @@ task copyLocaleFiles(type: Copy) {
     include '**'
 }
 
+task copyExtraMltFiles(type: Copy) {
+    def libsDir = "../i/"
+    from "$libsDir/share/mlt-7"
+    into 'assets/mlt'
+    include '**'
+}
+
 /*
  * Remove "share" folder in assets. It is copied both manually and by
  * androiddeployqt(reason in copyAssets task).
@@ -179,10 +186,12 @@ android {
     configure.finalizedBy(copyFonts)
     configure.finalizedBy(copyAssets)
     configure.finalizedBy(copyLocaleFiles)
+    configure.finalizedBy(copyExtraMltFiles)
     configure.finalizedBy(removeDuplicateAssets)
 }
 
 dependencies {
     implementation 'com.android.billingclient:billing:5.0.0'
     implementation 'androidx.annotation:annotation:1.4.0'
+    implementation files('../i/jar/SDL2Android.jar')
 }

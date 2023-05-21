@@ -175,6 +175,29 @@ kis_ExternalProject_Add_with_separate_builds_apple(
     DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ext_libmp3lame_meson
 )
 
+if (ANDROID)
+    ExternalProject_Add(
+        ext_sdl2
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        GIT_REPOSITORY https://github.com/sh-zam/SDL-android-glue.git
+        GIT_COMMIT 0d18f667ff42fc8998f317921a95ea32dbd73413
+
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ffmpeg}
+            -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
+            -DBUILD_SHARED_LIBS=TRUE -DSDL_ANDROID_AUDIO_STRIPPED=ON -DSDL_HAPTIC=OFF
+            -DSDL_JOYSTICK=OFF -DSDL_VIDEO=OFF -DSDL_SENSOR=OFF -DSDL_MISC=OFF -DSDL_POWER=OFF
+            -DSDL_LOCALE=OFF -DSDL_FILESYSTEM=OFF
+            ${GLOBAL_PROFILE}
+
+
+        UPDATE_COMMAND ""
+    )
+elseif (NOT APPLE)
+    ExternalProject_Add(
+        ext_sdl2
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://github.com/libsdl-org/SDL/releases/download/release-2.26.0/SDL2-2.26.0.tar.gz
+        URL_HASH SHA256=8000d7169febce93c84b6bdf376631f8179132fd69f7015d4dadb8b9c2bdb295
 
 ExternalProject_Add(
     ext_sdl2

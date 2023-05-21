@@ -24,6 +24,10 @@
 #include <mlt++/MltFilter.h>
 #include <mlt-7/framework/mlt_service.h>
 
+#ifdef Q_OS_ANDROID
+#include <KisAndroidFileProxy.h>
+#endif
+
 #include "kis_debug.h"
 
 const float SCRUB_AUDIO_SECONDS = 0.128f;
@@ -270,7 +274,15 @@ void KisPlaybackEngineMLT::setupProducer(boost::optional<QFileInfo> file)
 
     //If we have a file and the file has a valid producer, use that. Otherwise, stick to our "default" producer.
     if (file.has_value()) {
-        QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->profile, "krita", file->absoluteFilePath().toUtf8().data()));
+        QSharedPointer<Mlt::Producer> producer(
+
+#ifdef Q_OS_ANDROID
+            new Mlt::Producer(*m_d->profile,
+                              "krita",
+                              KisAndroidFileProxy::getFileFromContentUri(file->absoluteFilePath()).toUtf8().data()));
+#else
+        new Mlt::Producer(*m_d->profile, "krita", file->absoluteFilePath().toUtf8().data());
+#endif
         if (producer->is_valid()) {
             m_d->canvasProducers[activeCanvas()] = producer;
         } else {

@@ -141,6 +141,7 @@ build_ext() {
     cmake --build . --config $BUILD_TYPE --target ext_fontconfig -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_lager -- -j$PROC_COUNT
 
+    cmake --build . --config $BUILD_TYPE --target ext_mlt -- -j$PROC_COUNT
     cd $BUILD_ROOT
 }
 

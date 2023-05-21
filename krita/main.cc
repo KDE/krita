@@ -362,7 +362,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     }
 
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     {
         QByteArray originalXdgDataDirs = qgetenv("XDG_DATA_DIRS");
         if (originalXdgDataDirs.isEmpty()) {
@@ -570,7 +570,21 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 #elif defined USE_DRMINGW
     tryInitDrMingw();
 #endif
+#if defined Q_OS_ANDROID
+    // because we need qApp
+    qputenv("MLT_REPOSITORY", QFile::encodeName(qApp->applicationDirPath()));
 
+    QString loc;
+    if (QStandardPaths::standardLocations(QStandardPaths::HomeLocation).size() > 1) {
+        loc = QStandardPaths::standardLocations(QStandardPaths::HomeLocation)[1];
+    } else {
+        loc = QStandardPaths::standardLocations(QStandardPaths::HomeLocation)[0];
+    }
+    qputenv("MLT_DATA", QFile::encodeName(loc + "/share/mlt/"));
+    qputenv("MLT_ROOT_DIR", QFile::encodeName(loc));
+    qputenv("MLT_PROFILES_PATH", QFile::encodeName(loc + "/share/mlt/profiles/"));
+    qputenv("MLT_PRESETS_PATH", QFile::encodeName(loc + "/share/mlt/presets/"));
+#endif
     KisApplicationArguments args(app);
 
     if (app.isRunning()) {

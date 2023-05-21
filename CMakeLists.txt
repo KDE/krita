@@ -978,6 +978,14 @@ if (Mlt7_FOUND)
     set_package_properties(SDL2 PROPERTIES DESCRIPTION "Simple DirectMedia Layer 2"
                 URL "https://www.libsdl.org/"
                 PURPOSE "Required for MLT to render audio buffers. Required **only** when MLT is found on the system." )
+
+  if (ANDROID)
+      # Get the first item in the CMAKE_FIND_ROOT_PATH, hopefully it will be where plugins are saved.
+      list(GET CMAKE_FIND_ROOT_PATH 0 FIRST_FIND_PATH)
+      # TODO(sh_zam): Hardcoded, apparently generators doesn't work for this purpose?
+      file(GLOB MLT_PLUGINS "${FIRST_FIND_PATH}/lib/mlt-7/*.so")
+      list(APPEND ANDROID_EXTRA_LIBS ${MLT_PLUGINS})
+  endif()
 endif()
 macro_bool_to_01(Mlt7_FOUND HAVE_MLT)
 configure_file(config-mlt.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-mlt.h)

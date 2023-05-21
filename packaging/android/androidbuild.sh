@@ -112,6 +112,8 @@ build_ext() {
         exit
     fi
 
+    export PKG_CONFIG_LIBDIR="$BUILD_ROOT/i"
+
     configure_ext
     cd $DEPS_BUILD
     # Please do not change the order

@@ -22,6 +22,7 @@
 #include <FillLayerTypeCheck.h>
 #include <ImageSizeCheck.h>
 #include <IntegralFrameDuration.h>
+#include <LayerOpacityCheck.h>
 #include <MultiLayerCheck.h>
 #include <MultiTransparencyMaskCheck.h>
 #include <NodeTypeCheck.h>
@@ -80,6 +81,9 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
     add(chkFactory->id(), chkFactory);
 
     chkFactory = new IntegralFrameDurationCheckFactory();
+    add(chkFactory->id(), chkFactory);
+
+    chkFactory = new LayerOpacityCheckFactory();
     add(chkFactory->id(), chkFactory);
 
     QList<KoID> allColorModels = KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces);

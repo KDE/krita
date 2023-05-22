@@ -20,7 +20,7 @@ set(DLFCN_WIN32_DEP ext_dlfcn_win32)
 set(WIN32_CMAKE_ARGS -DWINDOWS_DEPLOY=OFF)
 endif()
 
-ExternalProject_Add(
+kis_ExternalProject_Add_with_separate_builds_apple(
   ext_mlt
   DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
   GIT_REPOSITORY https://github.com/Eoin-ONeill-Yokai/mlt.git

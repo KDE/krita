@@ -33499,30 +33499,32 @@ msgid ""
 "Grow (positive values) or shrink (negative values) the selection by the set "
 "amount"
 msgstr ""
+"設定された値だけ選択範囲を拡張（正の値の場合）または縮小（負の値の場合）しま"
+"す。"
 
 #: libs/ui/widgets/kis_selection_options.cc:227
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:286
 #, kde-format
 msgid "Blur the selection by the set amount"
-msgstr ""
+msgstr "設定した値だけ選択範囲をぼかします"
 
 #: libs/ui/widgets/kis_selection_options.cc:230
 #, kde-format
 msgid "Make the selection using the active layer"
-msgstr ""
+msgstr "アクティブなレイヤーを使用して選択範囲を作成します"
 
 #: libs/ui/widgets/kis_selection_options.cc:232
 #, kde-format
 msgid "Make the selection using a merged copy of all layers"
-msgstr ""
+msgstr "すべてのレイヤーを統合した際のコピーを使用して選択範囲を作成します"
 
 #: libs/ui/widgets/kis_selection_options.cc:234
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set the source for the selected clone layer(s)."
+#, kde-format
 msgid ""
 "Make the selection using a merged copy of the selected color-labeled layers"
-msgstr "選択したクローンレイヤーのソースを設定します。"
+msgstr ""
+"選択した色ラベルが付いているレイヤーを統合した際のコピーを使用して選択範囲を"
+"作成します"
 
 #: libs/ui/widgets/kis_selection_options.cc:243
 #, kde-format
@@ -55827,6 +55829,7 @@ msgid ""
 "Set how far the region should extend from the selected pixel in terms of "
 "color similarity"
 msgstr ""
+"選択したピクセルから、色の類似度に基づいて範囲をどの程度広げるかを設定します"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:426
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:426
@@ -55837,6 +55840,9 @@ msgid ""
 "pixel.\n"
 "100% will make opaque all the pixels in the region up to its boundary."
 msgstr ""
+"完全に不透明な領域をどの程度広げるかを設定します。\n"
+"0%にすると、選択したピクセルと完全に等しいピクセルのみを不透明にします。\n"
+"100%にすると、境界までの領域内のすべてのピクセルを不透明にします。"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:429
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:429
@@ -57063,12 +57069,11 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:293
-#, fuzzy, kde-format
-#| msgid "Selection Mode"
+#, kde-format
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
-msgstr "選択モード"
+msgstr "選択の拡張"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:70
 #, kde-format
@@ -57176,15 +57181,14 @@ msgstr "しきい値: "
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:437
 #, kde-format
 msgid "Set how far the selection should extend in terms of color similarity"
-msgstr ""
+msgstr "色の類似度に基づいて選択をどの程度拡張するかを設定します"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:444
-#, fuzzy, kde-format
-#| msgid "Selection Mode"
+#, kde-format
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
-msgstr "選択モード"
+msgstr "選択の拡張"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:52
 #, kde-format

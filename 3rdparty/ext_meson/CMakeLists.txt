@@ -4,8 +4,8 @@ if (WIN32)
 
     ExternalProject_Add( ext_meson
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/mesonbuild/meson/releases/download/0.63.0rc1/meson-0.63.0rc1.tar.gz
-        URL_HASH SHA256=4980031c700bd3dfbdda1b69ed6d568b2312690a26998ea145be3b36451df8bc
+        URL https://github.com/mesonbuild/meson/releases/download/1.1.0/meson-1.1.0.tar.gz
+        URL_HASH SHA256=d9616c44cd6c53689ff8f05fc6958a693f2e17c3472a8daf83cee55dabff829f
 
         CONFIGURE_COMMAND ""
 
@@ -28,8 +28,8 @@ elseif(NOT CMAKE_CROSSCOMPILING)
 
     ExternalProject_Add( ext_meson
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/mesonbuild/meson/releases/download/0.63.0rc1/meson-0.63.0rc1.tar.gz
-        URL_HASH SHA256=4980031c700bd3dfbdda1b69ed6d568b2312690a26998ea145be3b36451df8bc
+        URL https://github.com/mesonbuild/meson/releases/download/1.1.0/meson-1.1.0.tar.gz
+        URL_HASH SHA256=d9616c44cd6c53689ff8f05fc6958a693f2e17c3472a8daf83cee55dabff829f
 
         CONFIGURE_COMMAND chmod u+x <SOURCE_DIR>/setup.py
 
@@ -58,7 +58,7 @@ else()
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E echo "Installing meson natively"
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
             PYTHONUSERBASE=${_meson_prefix}
-            ${Python_EXECUTABLE} -m pip install --upgrade meson==0.63.0 --user --ignore-installed --verbose
+            ${Python_EXECUTABLE} -m pip install --upgrade meson==1.1.0 --user --ignore-installed --verbose
         INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
             PYTHONPATH=${_krita_pythonpath}
             ${Python_EXECUTABLE} -m pip show -f meson

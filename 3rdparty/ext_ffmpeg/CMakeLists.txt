@@ -203,9 +203,9 @@ kis_ExternalProject_Add_with_separate_builds_apple(
 
     CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
             -Ddefault_library=shared
-            -Dunit_tests=false
-            -Dtools=false
-            -Ddocs=false
+            -Dunit_tests=disabled
+            -Dtools=disabled
+            -Ddocs=disabled
             ${EXTRA_MESON_FLAGS}
 
     UPDATE_COMMAND ""
@@ -219,7 +219,7 @@ kis_ExternalProject_Add_with_separate_builds_apple(
 # While unlikely, it's possible that these lists could change, so it's worth occasionally cross-referencing.
 
 if (NOT MSVC)
-    set(_stack_guard_flag "-Denable-ssp=true")
+    set(_stack_guard_flag "-Denable-ssp=enabled")
 endif() 
 
 kis_ExternalProject_Add_with_separate_builds_apple(

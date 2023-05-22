@@ -23,7 +23,7 @@ index a14241eb45..8e0d2fa713 100644
 +  message('Enabled CFGuard')
 +endif
 +
-+if get_option('enable-ssp').require(cc.has_argument('-fstack-protector-strong'), , error_message : 'Compiler does not support -fstack-protector-strong')
++if get_option('enable-ssp').require(cc.has_argument('-fstack-protector-strong'), error_message : 'Compiler does not support -fstack-protector-strong').allowed()
 +  add_global_arguments('-fstack-protector-strong', language : ['c', 'cpp'])
 +  add_global_link_arguments('-fstack-protector-strong', language : ['c', 'cpp'])
 +  message('Enabled SSP')
@@ -40,7 +40,7 @@ index d02877e76c..4452ddce72 100644
  option('cli', type: 'feature', value: 'disabled')
  option('tests', type : 'feature', value : 'auto', description : 'Build tests', yield : true)
  option('no_uninit_ub', type: 'boolean', value: false, description: 'Disable UB in av_uninit optimization')
-+option('enable-ssp', type: 'boolean', value: true, description: 'Enable -fstack-protector-strong')
++option('enable-ssp', type: 'feature', value: 'enabled', description: 'Enable -fstack-protector-strong')
 +option('enable-cfguard', type: 'feature', value: 'auto', description: 'Enable control flow guard')
 -- 
 2.40.1.windows.1

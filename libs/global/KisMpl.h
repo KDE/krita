@@ -146,165 +146,44 @@ template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 namespace detail {
 
 template<typename Op, typename Class, typename MemType, typename PtrType>
-struct mem_checker;
-
-template<typename Op, typename Class, typename MemType>
-struct mem_checker<Op, Class, MemType, MemType Class::*>
+struct mem_checker
 {
-    bool operator() (const Class &object) const {
+    template <typename Object>
+    bool operator() (Object &&obj) const {
         Op op;
-        return op(object.*ptr, value);
+        return op(std::invoke(ptr, std::forward<Object>(obj)), value);
     }
 
-    bool operator() (Class *object) const {
-        Op op;
-        return op((*object).*ptr, value);
-    }
-
-    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
-    bool operator() (const Ptr &object) const {
-        Op op;
-        return op((*object).*ptr, value);
-    }
-
-    MemType Class::* ptr;
-    const MemType value;
-};
-
-template<typename Op, typename Class, typename MemType>
-struct mem_checker<Op, Class, MemType, MemType (Class::*)() const>
-{
-    bool operator() (const Class &object) const {
-        Op op;
-        return op((object.*ptr)(), value);
-    }
-
-    bool operator() (Class *object) const {
-        Op op;
-        return op(((*object).*ptr)(), value);
-    }
-
-    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
-    bool operator() (const Ptr &object) const {
-        Op op;
-        return op(((*object).*ptr)(), value);
-    }
-
-    MemType (Class::*ptr)() const;
+    PtrType ptr;
     const MemType value;
 };
 
 template<typename Op, typename Class, typename MemType, typename PtrType>
-struct mem_compare;
-
-template<typename Op, typename Class, typename MemType>
-struct mem_compare<Op, Class, MemType, MemType Class::*>
+struct mem_compare
 {
-    bool operator() (const Class &lhs, const Class &rhs) const {
+    template <typename Object>
+    bool operator() (Object &&lhs, Object &&rhs) const {
         Op op;
-        return op(lhs.*ptr, rhs.*ptr);
+        return op(std::invoke(ptr, std::forward<Object>(lhs)),
+                  std::invoke(ptr, std::forward<Object>(rhs)));
     }
 
-    bool operator() (const Class &lhs, const MemType &rhs) const {
+    template <typename Object>
+    bool operator() (Object &&lhs, const MemType &rhs) const {
         Op op;
-        return op(lhs.*ptr, rhs);
+        return op(std::invoke(ptr, std::forward<Object>(lhs)),
+                  rhs);
     }
 
-    bool operator() (const MemType &lhs, const Class &rhs) const {
+    template <typename Object>
+    bool operator() (const MemType &lhs, Object &&rhs) const {
         Op op;
-        return op(lhs, rhs.*ptr);
+        return op(lhs,
+                  std::invoke(ptr, std::forward<Object>(rhs)));
     }
 
-    bool operator() (Class *lhs, Class *rhs) const {
-        Op op;
-        return op((*lhs).*ptr, (*rhs).*ptr);
-    }
-
-    bool operator() (Class *lhs, const MemType &rhs) const {
-        Op op;
-        return op((*lhs).*ptr, rhs);
-    }
-
-    bool operator() (const MemType &lhs, Class *rhs) const {
-        Op op;
-        return op(lhs, (*rhs).*ptr);
-    }
-
-    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
-    bool operator() (const Ptr &lhs, const Ptr &rhs) const {
-        Op op;
-        return op((*lhs).*ptr, (*rhs).*ptr);
-    }
-
-    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
-    bool operator() (const Ptr &lhs, const MemType &rhs) const {
-        Op op;
-        return op((*lhs).*ptr, rhs);
-    }
-
-    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
-    bool operator() (const MemType &lhs, const Ptr &rhs) const {
-        Op op;
-        return op(lhs, (*rhs).*ptr);
-    }
-
-    MemType Class::* ptr;
+    PtrType ptr;
 };
-
-template<typename Op, typename Class, typename MemType>
-struct mem_compare<Op, Class, MemType, MemType (Class::*)() const>
-{
-    bool operator() (const Class &lhs, const Class &rhs) const {
-        Op op;
-        return op((lhs.*ptr)(), (rhs.*ptr)());
-    }
-
-    bool operator() (const Class &lhs, const MemType &rhs) const {
-        Op op;
-        return op((lhs.*ptr)(), rhs);
-    }
-
-    bool operator() (const MemType &lhs, const Class &rhs) const {
-        Op op;
-        return op(lhs, (rhs.*ptr)());
-    }
-
-    bool operator() (Class *lhs, Class *rhs) const {
-        Op op;
-        return op(((*lhs).*ptr)(), ((*rhs).*ptr)());
-    }
-
-    bool operator() (Class *lhs, const MemType &rhs) const {
-        Op op;
-        return op(((*lhs).*ptr)(), rhs);
-    }
-
-    bool operator() (const MemType &lhs, Class *rhs) const {
-        Op op;
-        return op(lhs, ((*rhs).*ptr)());
-    }
-
-    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
-    bool operator() (const Ptr &lhs, const Ptr &rhs) const {
-        Op op;
-        return op(((*lhs).*ptr)(), ((*rhs).*ptr)());
-    }
-
-    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
-    bool operator() (const Ptr &lhs, const MemType &rhs) const {
-        Op op;
-        return op(((*lhs).*ptr)(), rhs);
-    }
-
-    template <typename Ptr, typename = std::void_t<typename Ptr::element_type>>
-    bool operator() (const MemType &lhs, const Ptr &rhs) const {
-        Op op;
-        return op(lhs, ((*rhs).*ptr)());
-    }
-
-    MemType (Class::*ptr)() const;
-};
-
 
 } // detail
 
@@ -351,12 +230,12 @@ struct mem_compare<Op, Class, MemType, MemType (Class::*)() const>
 
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_equal_to(MemTypeNoRef Class::*ptr, MemType &&value) {
-    return detail::mem_checker<std::equal_to<>, Class, MemTypeNoRef, MemTypeNoRef Class::*>{ptr, std::forward<MemType>(value)};
+    return detail::mem_checker<std::equal_to<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_equal_to(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
-    return detail::mem_checker<std::equal_to<>, Class, MemTypeNoRef, MemTypeNoRef (Class::*)() const>{ptr, std::forward<MemType>(value)};
+    return detail::mem_checker<std::equal_to<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
 /**
@@ -368,12 +247,12 @@ inline auto mem_equal_to(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
 
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_less(MemTypeNoRef Class::*ptr, MemType &&value) {
-    return detail::mem_checker<std::less<>, Class, MemTypeNoRef, MemTypeNoRef Class::*>{ptr, std::forward<MemType>(value)};
+    return detail::mem_checker<std::less<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_less(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
-    return detail::mem_checker<std::less<>, Class, MemTypeNoRef, MemTypeNoRef (Class::*)() const>{ptr, std::forward<MemType>(value)};
+    return detail::mem_checker<std::less<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
 /**
@@ -385,12 +264,12 @@ inline auto mem_less(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
 
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_less_equal(MemTypeNoRef Class::*ptr, MemType &&value) {
-    return detail::mem_checker<std::less_equal<>, Class, MemTypeNoRef, MemTypeNoRef Class::*>{ptr, std::forward<MemType>(value)};
+    return detail::mem_checker<std::less_equal<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_less_equal(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
-    return detail::mem_checker<std::less_equal<>, Class, MemTypeNoRef, MemTypeNoRef (Class::*)() const>{ptr, std::forward<MemType>(value)};
+    return detail::mem_checker<std::less_equal<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
 /**
@@ -402,12 +281,12 @@ inline auto mem_less_equal(MemTypeNoRef (Class::*ptr)() const, MemType &&value) 
 
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_greater(MemTypeNoRef Class::*ptr, MemType &&value) {
-    return detail::mem_checker<std::greater<>, Class, MemTypeNoRef, MemTypeNoRef Class::*>{ptr, std::forward<MemType>(value)};
+    return detail::mem_checker<std::greater<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_greater(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
-    return detail::mem_checker<std::greater<>, Class, MemTypeNoRef, MemTypeNoRef (Class::*)() const>{ptr, std::forward<MemType>(value)};
+    return detail::mem_checker<std::greater<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
 /**
@@ -420,12 +299,12 @@ inline auto mem_greater(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
 
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_greater_equal(MemTypeNoRef Class::*ptr, MemType &&value) {
-    return detail::mem_checker<std::greater_equal<>, Class, MemTypeNoRef, MemTypeNoRef Class::*>{ptr, std::forward<MemType>(value)};
+    return detail::mem_checker<std::greater_equal<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
 template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
 inline auto mem_greater_equal(MemTypeNoRef (Class::*ptr)() const, MemType &&value) {
-    return detail::mem_checker<std::greater_equal<>, Class, MemTypeNoRef, MemTypeNoRef (Class::*)() const>{ptr, std::forward<MemType>(value)};
+    return detail::mem_checker<std::greater_equal<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
 }
 
 /**
@@ -471,12 +350,12 @@ inline auto mem_greater_equal(MemTypeNoRef (Class::*ptr)() const, MemType &&valu
 
 template<typename Class, typename MemType>
 inline auto mem_less(MemType Class::*ptr) {
-    return detail::mem_compare<std::less<>, Class, MemType, MemType Class::*>{ptr};
+    return detail::mem_compare<std::less<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
 template<typename Class, typename MemType>
 inline auto mem_less(MemType (Class::*ptr)() const) {
-    return detail::mem_compare<std::less<>, Class, MemType, MemType (Class::*)() const>{ptr};
+    return detail::mem_compare<std::less<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
 /**
@@ -487,12 +366,12 @@ inline auto mem_less(MemType (Class::*ptr)() const) {
  */
 template<typename Class, typename MemType>
 inline auto mem_less_equal(MemType Class::*ptr) {
-    return detail::mem_compare<std::less_equal<>, Class, MemType, MemType Class::*>{ptr};
+    return detail::mem_compare<std::less_equal<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
 template<typename Class, typename MemType>
 inline auto mem_less_equal(MemType (Class::*ptr)() const) {
-    return detail::mem_compare<std::less_equal<>, Class, MemType, MemType (Class::*)() const>{ptr};
+    return detail::mem_compare<std::less_equal<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
 /**
@@ -504,12 +383,12 @@ inline auto mem_less_equal(MemType (Class::*ptr)() const) {
 
 template<typename Class, typename MemType>
 inline auto mem_greater(MemType Class::*ptr) {
-    return detail::mem_compare<std::greater<>, Class, MemType, MemType Class::*>{ptr};
+    return detail::mem_compare<std::greater<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
 template<typename Class, typename MemType>
 inline auto mem_greater(MemType (Class::*ptr)() const) {
-    return detail::mem_compare<std::greater<>, Class, MemType, MemType (Class::*)() const>{ptr};
+    return detail::mem_compare<std::greater<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
 /**
@@ -521,12 +400,12 @@ inline auto mem_greater(MemType (Class::*ptr)() const) {
 
 template<typename Class, typename MemType>
 inline auto mem_greater_equal(MemType Class::*ptr) {
-    return detail::mem_compare<std::greater_equal<>, Class, MemType, MemType Class::*>{ptr};
+    return detail::mem_compare<std::greater_equal<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
 template<typename Class, typename MemType>
 inline auto mem_greater_equal(MemType (Class::*ptr)() const) {
-    return detail::mem_compare<std::greater_equal<>, Class, MemType, MemType (Class::*)() const>{ptr};
+    return detail::mem_compare<std::greater_equal<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
 

@@ -17,6 +17,7 @@ private Q_SLOTS:
     void testMemberOperatorsEqualToPointer();
     void testMemberOperatorsEqualToStdSharedPtr();
     void testMemberOperatorsEqualToQSharedPointer();
+    void testMemberOperatorsEqualToKisSharedPtr();
 
     void testMemberOperatorsLess();
     void testMemberOperatorsLessEqual();

@@ -11,6 +11,7 @@
 #include <QDebug>
 
 #include <KisMpl.h>
+#include <kis_shared.h>
 
 
 void KisMplTest::testFoldOptional()
@@ -64,6 +65,16 @@ struct StructExplicit {
         return id;
     }
 };
+
+struct StructWithShared : KisShared {
+    StructWithShared (int _id) : id(_id) {}
+
+    int id = -1;
+    int idConstFunc() const {
+        return id;
+    }
+};
+
 }
 
 void KisMplTest::testMemberOperatorsEqualTo()
@@ -193,6 +204,21 @@ void KisMplTest::testMemberOperatorsEqualToQSharedPointer()
         QCOMPARE(std::distance(vec.begin(), it), 1);
     }
 }
+
+void KisMplTest::testMemberOperatorsEqualToKisSharedPtr()
+{
+    std::vector<KisSharedPtr<StructWithShared>> vec({new StructWithShared(0),
+                                                     new StructWithShared(1),
+                                                     new StructWithShared(2),
+                                                     new StructWithShared(3),
+                                                     new StructWithShared(4)});
+    {
+        auto it = std::find_if(vec.begin(), vec.end(), kismpl::mem_equal_to(&StructWithShared::id, 1));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 1);
+    }
+}
+
 
 void KisMplTest::testMemberOperatorsLess()
 {

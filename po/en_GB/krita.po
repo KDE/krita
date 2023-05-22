@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-20 00:43+0000\n"
-"PO-Revision-Date: 2023-05-02 19:26+0100\n"
+"PO-Revision-Date: 2023-05-21 15:01+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -25144,24 +25144,21 @@ msgstr "Hide docker scrollbars if kinetic scrolling is enabled"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:834
-#, fuzzy, kde-format
-#| msgid "Creamy (Krita 4.2+)"
+#, kde-format
 msgid "Subtractive (Krita 5.2+)"
-msgstr "Creamy (Krita 4.2+)"
+msgstr "Subtractive (Krita 5.2+)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:839
-#, fuzzy, kde-format
-#| msgid "Hard (Krita 4.1 and earlier versions)"
+#, kde-format
 msgid "Additive (Krita 5.1 and earlier versions)"
-msgstr "Hard (Krita 4.1 and earlier versions)"
+msgstr "Additive (Krita 5.1 and earlier versions)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:847
-#, fuzzy, kde-format
-#| msgid "Brush Flow Mode (needs restart):"
+#, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "Brush Flow Mode (needs restart):"
+msgstr "CMYK blending mode (needs restart):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -30401,11 +30398,9 @@ msgid "Also save your image as a Krita file."
 msgstr "Also save your image as a Krita file."
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "Hide layer thumbnail popup"
+msgstr "Update layer thumbnails"
 
 #: libs/ui/KisMainWindow.cpp:185
 #, kde-format
@@ -37683,17 +37678,15 @@ msgid "Animation Timeline"
 msgstr "Animation Timeline"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animation settings menu"
+#, kde-format
 msgid "Animation audio menu"
-msgstr "Animation settings menu"
+msgstr "Animation audio menu"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
-#, fuzzy, kde-format
-#| msgid "Import Bundles..."
+#, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
-msgstr "Import Bundles..."
+msgstr "Import Audio..."
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
 #, kde-format
@@ -37702,19 +37695,16 @@ msgid "Remove audio"
 msgstr "Remove audio"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "Mute"
+#, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Mute"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
-#, fuzzy, kde-format
-#| msgid "Volume:"
+#, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
-msgstr "Volume:"
+msgstr "Volume: "
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
 #, kde-format
@@ -38484,11 +38474,9 @@ msgid "Grid and Guides"
 msgstr "Grid and Guides"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
-#| msgid "Reshape Histogram"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "Reshape Histogram"
+msgstr "Update histogram"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -38983,11 +38971,9 @@ msgid "Pin navigation controls"
 msgstr "Pin navigation controls"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "Hide layer thumbnail popup"
+msgstr "Update overview thumbnail"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -48226,6 +48212,10 @@ msgid ""
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
+"Layer \"%1\" has blending mode \"%2\" that has changed its behaviour for "
+"CMYK colour in Krita 5.2. Please check the result and consider enabling "
+"legacy \"Additive\" algorithm in Settings->Configure Krita->General->Tools-"
+">CMYK blending mode"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1103
 #, kde-format
@@ -48386,12 +48376,10 @@ msgstr "Could not save animation meta data."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:316
 #: plugins/impex/libkra/kis_kra_saver.cpp:339
-#, fuzzy, kde-format
-#| msgctxt "Error message when saving a .kra file"
-#| msgid "Could not save animation meta data."
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
-msgstr "Could not save animation meta data."
+msgstr "Could not save audio meta data."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:452
 #, kde-format

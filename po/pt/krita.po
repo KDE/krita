@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-20 00:43+0000\n"
-"PO-Revision-Date: 2023-05-17 11:30+0100\n"
+"PO-Revision-Date: 2023-05-20 22:27+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -38076,17 +38076,15 @@ msgid "Animation Timeline"
 msgstr "Linha Temporal da Animação"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animation settings menu"
+#, kde-format
 msgid "Animation audio menu"
-msgstr "Menu de configuração da animação"
+msgstr "Menu de áudio da animação"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
-#, fuzzy, kde-format
-#| msgid "&Import..."
+#, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
-msgstr "&Importar..."
+msgstr "Importar o Áudio..."
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
 #, kde-format
@@ -38095,20 +38093,16 @@ msgid "Remove audio"
 msgstr "Remover o áudio"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "Mute"
+#, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Silenciar"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu, slider"
-#| msgid "Volume:"
+#, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
-msgstr "Volume:"
+msgstr "Volume: "
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
 #, kde-format
@@ -48840,12 +48834,10 @@ msgstr "Não foi possível gravar os meta-dados da animação."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:316
 #: plugins/impex/libkra/kis_kra_saver.cpp:339
-#, fuzzy, kde-format
-#| msgctxt "Error message when saving a .kra file"
-#| msgid "Could not save animation meta data."
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
-msgstr "Não foi possível gravar os meta-dados da animação."
+msgstr "Não foi possível gravar os meta-dados do áudio."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:452
 #, kde-format
@@ -60752,26 +60744,3 @@ msgstr "Ferramenta de Ampliação"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta de Imagens de Referência"
-
-#~ msgctxt "floating on-canvas message"
-#~ msgid ""
-#~ "Cannot open audio: \"%1\"\n"
-#~ "Error: %2"
-#~ msgstr ""
-#~ "Não é possível aceder ao áudio: \"%1\"\n"
-#~ "Erro: %2"
-
-#~ msgid "Edit Audio:"
-#~ msgstr "Editar o Áudio:"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Audio playback is not supported in this build!"
-#~ msgstr "A reprodução do áudio não é suportada nesta versão!"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "Abrir o áudio..."
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "Modificar o áudio (%1)..."

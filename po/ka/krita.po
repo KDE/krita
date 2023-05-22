@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-20 00:43+0000\n"
-"PO-Revision-Date: 2023-05-17 05:42+0200\n"
+"PO-Revision-Date: 2023-05-21 05:22+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -8545,7 +8545,7 @@ msgstr "გაუმჭვირვალობის აწევა"
 #, kde-format
 msgctxt "action"
 msgid "Increase brush Opacity"
-msgstr ""
+msgstr "ფუნჯის გაუმჭვირვალობის გაზრდა"
 
 #. i18n: context: text @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_opacity), Actions (Painting), ActionCollection (Krita)
@@ -8562,7 +8562,7 @@ msgstr "გაუმჭვირვალობის დაწევა"
 #, kde-format
 msgctxt "action"
 msgid "Decrease brush Opacity"
-msgstr ""
+msgstr "ფუნჯის გაუმჭვირვალობის შემცირება"
 
 #. i18n: context: text @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
@@ -8579,7 +8579,7 @@ msgstr "ნაკადის გაზრდა"
 #, kde-format
 msgctxt "action"
 msgid "Increase brush Flow"
-msgstr ""
+msgstr "ფუნჯის ნაკადის გაზრდა"
 
 #. i18n: context: text @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
@@ -8596,7 +8596,7 @@ msgstr "ნაკადის შემცირება"
 #, kde-format
 msgctxt "action"
 msgid "Decrease brush Flow"
-msgstr ""
+msgstr "ფუნჯის ნაკადის შემცირება"
 
 #. i18n: context: text @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
@@ -8613,7 +8613,7 @@ msgstr "მინავლების გაზრდა"
 #, kde-format
 msgctxt "action"
 msgid "Increase brush Fade"
-msgstr ""
+msgstr "ფუნჯის მინავლების გაზრდა"
 
 #. i18n: context: text @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
@@ -8630,7 +8630,7 @@ msgstr "მინავლების შემცირება"
 #, kde-format
 msgctxt "action"
 msgid "Decrease brush Fade"
-msgstr ""
+msgstr "ფუნჯის მინავლების შემცირება"
 
 #. i18n: context: text @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
@@ -8676,7 +8676,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Set eraser mode"
-msgstr ""
+msgstr "საშლელის რეჟიმის დაყენება"
 
 #. i18n: context: text @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -8688,7 +8688,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle eraser preset"
-msgstr ""
+msgstr "საშლელის პრესეტის გადართვა"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -8700,7 +8700,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Reload Original Preset"
-msgstr ""
+msgstr "საწყისი პრესეტის თავიდან ჩატვირთვა"
 
 #. i18n: context: text @ Action (preserve_alpha), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (preserve_alpha), Actions (Painting), ActionCollection (Krita)
@@ -8712,7 +8712,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Preserve Alpha"
-msgstr ""
+msgstr "ალფას შენარჩუნება"
 
 #. i18n: context: text @ Action (disable_pressure), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (disable_pressure), Actions (Painting), ActionCollection (Krita)
@@ -11194,14 +11194,14 @@ msgstr "ვექტორული ფენა"
 #, kde-format
 msgctxt "action"
 msgid "Add &Filter Layer..."
-msgstr ""
+msgstr "&ფილტრის ფენის დამატება..."
 
 #. i18n: context: toolTip @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2514
 #, kde-format
 msgctxt "action"
 msgid "Add a new Filter Layer"
-msgstr ""
+msgstr "ახალი ფილტრის ფენის დამატება"
 
 #. i18n: context: iconText @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2515
@@ -11215,14 +11215,14 @@ msgstr "ფენის ფილტრი"
 #, kde-format
 msgctxt "action"
 msgid "Add &Fill Layer..."
-msgstr ""
+msgstr "&შევსების ფენის დამატება..."
 
 #. i18n: context: toolTip @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2526
 #, kde-format
 msgctxt "action"
 msgid "Add a new Fill Layer"
-msgstr ""
+msgstr "ახალი შევსების ფენის ადმატება"
 
 #. i18n: context: iconText @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2527
@@ -11236,14 +11236,14 @@ msgstr "ფენის შევსება"
 #, kde-format
 msgctxt "action"
 msgid "Add &File Layer..."
-msgstr ""
+msgstr "&ფაილის ფენის დამატება..."
 
 #. i18n: context: toolTip @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2538
 #, kde-format
 msgctxt "action"
 msgid "Add a new File Layer"
-msgstr ""
+msgstr "ახალი ფაილის ფენის დამატება"
 
 #. i18n: context: iconText @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2539
@@ -11257,14 +11257,14 @@ msgstr "ფენის ფაილი"
 #, kde-format
 msgctxt "action"
 msgid "Add &Transparency Mask"
-msgstr ""
+msgstr "&გამჭვირვალობის ნიღბის დამატება"
 
 #. i18n: context: toolTip @ Action (add_new_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2550
 #, kde-format
 msgctxt "action"
 msgid "Add a new Transparency Mask"
-msgstr ""
+msgstr "ახალი გამჭვირვალობის ნიღბის დამატება"
 
 #. i18n: context: iconText @ Action (add_new_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2551
@@ -11278,14 +11278,14 @@ msgstr "გამჭვირვალობის ნიღაბი"
 #, kde-format
 msgctxt "action"
 msgid "Add &Filter Mask..."
-msgstr ""
+msgstr "ფილტრის ნიღბის დამატება..."
 
 #. i18n: context: toolTip @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2562
 #, kde-format
 msgctxt "action"
 msgid "Add a new Filter Mask"
-msgstr ""
+msgstr "ახალი ფილტრის ნიღბის დამატება"
 
 #. i18n: context: iconText @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2563
@@ -11362,7 +11362,7 @@ msgstr "ლოკალური მონიშნული"
 #, kde-format
 msgctxt "action"
 msgid "&Isolate Active Layer"
-msgstr ""
+msgstr "&აქტიური ფენის იზოლაცია"
 
 #. i18n: context: toolTip @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
@@ -11372,14 +11372,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Isolate Active Layer"
-msgstr ""
+msgstr "აქტიური ფენის იზოლაცია"
 
 #. i18n: context: text @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2620
 #, kde-format
 msgctxt "action"
 msgid "&Isolate Active Group"
-msgstr ""
+msgstr "აქტიური &ჯგუფის იზოლაცია"
 
 #. i18n: context: toolTip @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
@@ -11389,7 +11389,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Isolate Active Group"
-msgstr ""
+msgstr "აქტიური ჯგუფის იზოლაცია"
 
 #. i18n: context: text @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2632
@@ -11576,7 +11576,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Copy Layer"
-msgstr ""
+msgstr "ფენის კოპირება"
 
 #. i18n: context: toolTip @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
@@ -11610,7 +11610,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste Layer"
-msgstr ""
+msgstr "ფენის ჩასმა"
 
 #. i18n: context: toolTip @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
@@ -11620,7 +11620,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste layer from clipboard"
-msgstr ""
+msgstr "ფენის ჩასმა ბუფერიდან"
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
@@ -11647,7 +11647,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Quick Ungroup"
-msgstr ""
+msgstr "სწრაფი განჯგუფება"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2802
@@ -11869,7 +11869,7 @@ msgstr "ფაილის ფენად გარდაქმნა"
 #, kde-format
 msgctxt "action"
 msgid "I&mport Layer..."
-msgstr ""
+msgstr "&ფენის შემოტანა..."
 
 #. i18n: context: toolTip @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
@@ -11879,7 +11879,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Import Layer"
-msgstr ""
+msgstr "ფენის შემოტანა"
 
 #. i18n: context: text @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2968
@@ -12066,14 +12066,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Save Merged"
-msgstr ""
+msgstr "შერწყმულის შენახვა"
 
 #. i18n: context: text @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3100
 #, kde-format
 msgctxt "action"
 msgid "Split Layer..."
-msgstr ""
+msgstr "ფენის გაყოფა..."
 
 #. i18n: context: toolTip @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
@@ -12491,14 +12491,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Flatten Layer"
-msgstr ""
+msgstr "ფენის გაბრტყელება"
 
 #. i18n: context: text @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3400
 #, kde-format
 msgctxt "action"
 msgid "Flatten ima&ge"
-msgstr ""
+msgstr "&გამოსახულების გაბრტყელება"
 
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
@@ -12508,14 +12508,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Flatten image"
-msgstr ""
+msgstr "გამოსახულების გაბრტყელება"
 
 #. i18n: context: text @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3412
 #, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
-msgstr ""
+msgstr "ფენის &სტილი..."
 
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
@@ -12525,7 +12525,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Layer Style"
-msgstr ""
+msgstr "ფენის სტილი"
 
 #. i18n: context: text @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
@@ -12561,7 +12561,7 @@ msgstr "შემდეგ ჯგუფში გადატანა"
 #, kde-format
 msgctxt "action"
 msgid "Rename current layer"
-msgstr ""
+msgstr "მიმდინარე ფენის სახელის გადარქმევა"
 
 #. i18n: context: text @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3460
@@ -12657,7 +12657,7 @@ msgstr "რ&ედაქტირება"
 #: krita/krita5.xmlgui:68
 #, kde-format
 msgid "Fill Special"
-msgstr ""
+msgstr "სპეციალური შევსება"
 
 #: krita/krita5.xmlgui:83 libs/widgetutils/xmlgui/ui_standards.xmlgui:101
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:28
@@ -13535,7 +13535,7 @@ msgstr "შაბლონით შევსება"
 #, kde-format
 msgctxt "action"
 msgid "Fill Special"
-msgstr ""
+msgstr "სპეციალური შევსება"
 
 #. i18n: context: text @ Action (stroke_shapes), Actions (EditFill), ActionCollection (Menu)
 #: krita/kritamenu.action:535
@@ -13788,7 +13788,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Soft Proofing"
-msgstr ""
+msgstr "ფერების პროგრამული დამუშავება"
 
 #. i18n: context: toolTip @ Action (softProof), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (softProof), Actions (View), ActionCollection (Menu)
@@ -21657,7 +21657,7 @@ msgstr ""
 #: plugins/dockers/recorder/recorder_export.ui:374
 #, kde-format
 msgid "Video location:"
-msgstr ""
+msgstr "ვიდეოს მდებარეობა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIncludeAudio)
 #: libs/ui/animation/wdg_animationrenderer.ui:232
@@ -22166,7 +22166,7 @@ msgstr "გამოსახულებების შემოტანა"
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:166
 #, kde-format
 msgid "Source fps: %1"
-msgstr ""
+msgstr "წყაროს კადრი/წმ: %1"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:78
 #, kde-format
@@ -24516,7 +24516,7 @@ msgstr "კურსორი"
 #: libs/ui/forms/wdggeneralsettings.ui:61
 #, kde-format
 msgid "Brush Cursor Icon:"
-msgstr "ფუნჯის კურსორის ხატულა"
+msgstr "ფუნჯის კურსორის ხატულა:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: libs/ui/forms/wdggeneralsettings.ui:83
@@ -30277,7 +30277,7 @@ msgstr "ფენა დაბლოკილი და უხილავია
 #: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:675
 #, kde-format
 msgid "Layer is locked."
-msgstr "ფენა დაბლოკილია"
+msgstr "ფენა დაბლოკილია."
 
 #: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:677
 #, kde-format
@@ -36694,17 +36694,15 @@ msgid "Animation Timeline"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animation Cache"
+#, kde-format
 msgid "Animation audio menu"
-msgstr "ანიმაციის კეში"
+msgstr "აუდიოს მენიუს ანიმაცია"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
-#, fuzzy, kde-format
-#| msgid "&Import..."
+#, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
-msgstr "&შემოტანა..."
+msgstr "აუდიოს შემოტანა..."
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
 #, kde-format
@@ -36713,20 +36711,16 @@ msgid "Remove audio"
 msgstr "ხმის მოცილება"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "Mute"
+#, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "დადუმება"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu, slider"
-#| msgid "Volume:"
+#, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
-msgstr "ტომი:"
+msgstr "ხმა: "
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
 #, kde-format
@@ -47115,11 +47109,10 @@ msgstr ""
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:316
 #: plugins/impex/libkra/kis_kra_saver.cpp:339
-#, fuzzy, kde-format
-#| msgid "Could not save %1."
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
-msgstr "%1-ის შენახვის შეცდომა."
+msgstr "აუდიოს მეტამონაცემების შენახვა შეუძლებელია."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:452
 #, kde-format

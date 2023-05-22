@@ -34076,32 +34076,30 @@ msgstr "設定された量で選択範囲を拡大/縮小"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
-msgstr ""
+msgstr "最も暗い、または最も不透明なピクセルで拡張を停止します"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:409
 #, kde-format
 msgid "Blur the selection by the set amount"
-msgstr ""
+msgstr "設定した値だけ選択範囲をぼかします"
 
 #: libs/ui/widgets/kis_selection_options.cc:242
-#, fuzzy, kde-format
-#| msgid "Select the blending mode for the layer."
+#, kde-format
 msgid "Select regions found from the active layer"
-msgstr "レイヤーの合成モードを選択"
+msgstr "アクティブなレイヤーに存在する領域を選択します"
 
 #: libs/ui/widgets/kis_selection_options.cc:244
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Set the source for the selected clone layer(s)."
+#, kde-format
 msgid "Select regions found from the merging of all layers"
-msgstr "選択したクローンレイヤーのソースを設定します。"
+msgstr "すべてのレイヤーを統合したものに存在する領域を選択します"
 
 #: libs/ui/widgets/kis_selection_options.cc:246
 #, kde-format
 msgid ""
 "Select regions found from the merging of layers with specific color labels"
 msgstr ""
+"特定の色ラベルが付いているレイヤーを統合したものに存在する領域を選択します"
 
 #: libs/ui/widgets/kis_selection_options.cc:254
 #, kde-format
@@ -58311,14 +58309,15 @@ msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
+"チェックすると、新たに選択する際に現在の選択範囲の境界線を境界として扱いま"
+"す。"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:416
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
-msgstr "色空間変換の方法"
+msgstr "選択の拡張"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.h:95
 #, kde-format
@@ -58424,12 +58423,11 @@ msgid "Threshold: "
 msgstr "しきい値: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:473
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
-msgstr "色空間変換の方法"
+msgstr "選択の拡張"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.h:57
 #, kde-format
@@ -60780,27 +60778,3 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
-
-#~ msgctxt "floating on-canvas message"
-#~ msgid ""
-#~ "Cannot open audio: \"%1\"\n"
-#~ "Error: %2"
-#~ msgstr ""
-#~ "音声ファイル\"%1\"を開けません\n"
-#~ "エラー: %2"
-
-# normal distance + absolute value
-#~ msgid "Edit Audio:"
-#~ msgstr "音声を編集:"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Audio playback is not supported in this build!"
-#~ msgstr "このビルドでは音声の再生に対応していません!"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "音声を開く..."
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "音声を変更 (%1)..."

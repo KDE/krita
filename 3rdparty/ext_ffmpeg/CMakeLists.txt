@@ -200,7 +200,6 @@ kis_ExternalProject_Add_with_separate_builds_apple(
     GIT_TAG amyspark/add-ci
 
     WORKING_DIRECTORY <BINARY_DIR>
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-MacOS-13-is-darwin22.patch
 
     CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
             -Ddefault_library=shared

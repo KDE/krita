@@ -80,7 +80,7 @@ public:
     TransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
                             const QString &filterId,
                             bool forceReset,
-                            KisNodeSP rootNode,
+                            KisNodeList rootNodes,
                             KisSelectionSP selection,
                             KisStrokeUndoFacade *undoFacade, KisUpdatesFacade *updatesFacade);
 
@@ -131,11 +131,11 @@ private:
 
     ToolTransformArgs m_initialTransformArgs;
     boost::optional<ToolTransformArgs> m_savedTransformArgs;
-    KisNodeSP m_rootNode;
+    KisNodeList m_rootNodes;
     KisNodeList m_processedNodes;
     QList<KisSelectionSP> m_deactivatedSelections;
     QList<KisNodeSP> m_hiddenProjectionLeaves;
-    KisSelectionMaskSP m_deactivatedOverlaySelectionMask;
+    QList<KisSelectionMaskSP> m_deactivatedOverlaySelectionMasks;
     QVector<KisDecoratedNodeInterface*> m_disabledDecoratedNodes;
 
     const KisSavedMacroCommand *m_overriddenCommand = 0;

@@ -51,7 +51,7 @@
 TransformStrokeStrategy::TransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
                                                  const QString &filterId,
                                                  bool forceReset,
-                                                 KisNodeSP rootNode,
+                                                 KisNodeList rootNodes,
                                                  KisSelectionSP selection,
                                                  KisStrokeUndoFacade *undoFacade,
                                                  KisUpdatesFacade *updatesFacade)
@@ -62,9 +62,13 @@ TransformStrokeStrategy::TransformStrokeStrategy(ToolTransformArgs::TransformMod
       m_forceReset(forceReset),
       m_selection(selection)
 {
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!selection || !dynamic_cast<KisTransformMask*>(rootNode.data()));
+    if (selection) {
+        Q_FOREACH(KisNodeSP node, rootNodes) {
+            KIS_SAFE_ASSERT_RECOVER_NOOP(!dynamic_cast<KisTransformMask*>(node.data()));
+        }
+    }
 
-    m_rootNode = rootNode;
+    m_rootNodes = rootNodes;
     setMacroId(KisCommandUtils::TransformToolId);
 }
 
@@ -134,12 +138,49 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         // finish job
         m_savedTransformArgs = runAllData->config;
     } else if (ppd) {
-        KisNodeSP rootNode = m_rootNode;
+        KisNodeSP rootNode = m_rootNodes[0];
         KisNodeList processedNodes = m_processedNodes;
         KisPaintDeviceSP previewDevice;
 
 
-        if (rootNode->childCount() || !rootNode->paintDevice()) {
+        if (m_rootNodes.size() > 1) {
+            const QRect bounds = rootNode->image()->bounds();
+            const int desiredAnimTime = rootNode->image()->animationInterface()->currentTime();
+
+            KisImageSP clonedImage = new KisImage(0,
+                                                  bounds.width(),
+                                                  bounds.height(),
+                                                  rootNode->image()->colorSpace(),
+                                                  "transformed_image");
+
+            // BUG: 413968
+            // Workaround: Group layers wouldn't properly render the right frame
+            // since `clonedImage` would always have a time value of 0.
+            clonedImage->animationInterface()->explicitlySetCurrentTime(desiredAnimTime);
+
+            KisNodeSP cloneRoot = clonedImage->rootLayer();
+
+            Q_FOREACH(KisNodeSP node, m_rootNodes) {
+                // Masks with unselected parents can't be added.
+                if (!node->inherits("KisMask")) {
+                    clonedImage->addNode(node->clone().data(), cloneRoot);
+                }
+            }
+
+            clonedImage->refreshGraph();
+            KisLayerUtils::refreshHiddenAreaAsync(clonedImage, cloneRoot, clonedImage->bounds());
+
+            KisLayerUtils::forceAllDelayedNodesUpdate(cloneRoot);
+            clonedImage->waitForDone();
+
+            previewDevice = createDeviceCache(clonedImage->projection());
+            previewDevice->setDefaultBounds(cloneRoot->projection()->defaultBounds());
+
+            // we delete the cloned image in GUI thread to ensure
+            // no signals are still pending
+            makeKisDeleteLaterWrapper(clonedImage)->deleteLater();
+        }
+        else if (rootNode->childCount() || !rootNode->paintDevice()) {
             if (KisTransformMask* tmask =
                 dynamic_cast<KisTransformMask*>(rootNode.data())) {
                 previewDevice = createDeviceCache(tmask->buildPreviewDevice());
@@ -394,7 +435,7 @@ void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
 
     KisTransformUtils::postProcessToplevelCommand(command,
                                                   *m_savedTransformArgs,
-                                                  m_rootNode,
+                                                  m_rootNodes,
                                                   m_processedNodes,
                                                   m_overriddenCommand);
 
@@ -410,40 +451,45 @@ void TransformStrokeStrategy::initStrokeCallback()
         m_deactivatedSelections.append(m_selection);
     }
 
-    KisSelectionMaskSP overlaySelectionMask =
-        dynamic_cast<KisSelectionMask*>(m_rootNode->graphListener()->graphOverlayNode());
-    if (overlaySelectionMask) {
-        overlaySelectionMask->setDecorationsVisible(false);
-        m_deactivatedOverlaySelectionMask = overlaySelectionMask;
+    Q_FOREACH(KisNodeSP node, m_rootNodes) {
+        KisSelectionMaskSP overlaySelectionMask =
+                dynamic_cast<KisSelectionMask*>(node->graphListener()->graphOverlayNode());
+        if (overlaySelectionMask) {
+            overlaySelectionMask->setDecorationsVisible(false);
+            m_deactivatedOverlaySelectionMasks.append(overlaySelectionMask);
+        }
     }
 
-    m_rootNode = KisTransformUtils::tryOverrideRootToTransformMask(m_rootNode);
+    if (m_rootNodes.size() == 1){
+        KisNodeSP rootNode = m_rootNodes[0];
+        rootNode = KisTransformUtils::tryOverrideRootToTransformMask(rootNode);
 
-    if (m_rootNode->inherits("KisTransformMask") && m_rootNode->projectionLeaf()->isDroppedNode()) {
-        m_rootNode.clear();
-        m_processedNodes.clear();
+        if (rootNode->inherits("KisTransformMask") && rootNode->projectionLeaf()->isDroppedNode()) {
+            rootNode.clear();
+            m_processedNodes.clear();
 
-        TransformTransactionProperties transaction(QRect(), &m_initialTransformArgs, m_rootNode, m_processedNodes);
-        Q_EMIT sigTransactionGenerated(transaction, m_initialTransformArgs, this);
-        return;
+            TransformTransactionProperties transaction(QRect(), &m_initialTransformArgs, m_rootNodes, m_processedNodes);
+            Q_EMIT sigTransactionGenerated(transaction, m_initialTransformArgs, this);
+            return;
+        }
     }
 
     ToolTransformArgs initialTransformArgs;
     bool isExternalSourcePresent = false;
-    m_processedNodes = KisTransformUtils::fetchNodesList(m_mode, m_rootNode, isExternalSourcePresent, m_selection);
+    m_processedNodes = KisTransformUtils::fetchNodesList(m_mode, m_rootNodes, isExternalSourcePresent, m_selection);
 
     bool argsAreInitialized = false;
     QVector<KisStrokeJobData *> lastCommandUndoJobs;
 
     if (!m_forceReset && KisTransformUtils::tryFetchArgsFromCommandAndUndo(&initialTransformArgs,
                                                                            m_mode,
-                                                                           m_rootNode,
+                                                                           m_rootNodes,
                                                                            m_processedNodes,
                                                                            undoFacade(),
                                                                            &lastCommandUndoJobs,
                                                                            &m_overriddenCommand)) {
         argsAreInitialized = true;
-    } else if (!m_forceReset && KisTransformUtils::tryInitArgsFromNode(m_rootNode, &initialTransformArgs)) {
+    } else if (!m_forceReset && KisTransformUtils::tryInitArgsFromNode(m_rootNodes, &initialTransformArgs)) {
         argsAreInitialized = true;
     }
 
@@ -480,7 +526,9 @@ void TransformStrokeStrategy::initStrokeCallback()
         /**
          * We must request shape layers to rerender areas outside image bounds
          */
-        KisLayerUtils::forceAllHiddenOriginalsUpdate(m_rootNode);
+        Q_FOREACH(KisNodeSP node, m_rootNodes) {
+            KisLayerUtils::forceAllHiddenOriginalsUpdate(node);
+        }
     });
 
     KritaUtils::addJobBarrier(extraInitJobs, [this]() {
@@ -488,7 +536,9 @@ void TransformStrokeStrategy::initStrokeCallback()
          * We must ensure that the currently selected subtree
          * has finished all its updates.
          */
-        KisLayerUtils::forceAllDelayedNodesUpdate(m_rootNode);
+        Q_FOREACH(KisNodeSP node, m_rootNodes) {
+            KisLayerUtils::forceAllDelayedNodesUpdate(node);
+        }
     });
 
     /// Disable all decorated nodes to generate outline
@@ -528,7 +578,7 @@ void TransformStrokeStrategy::initStrokeCallback()
             }
         }
 
-        TransformTransactionProperties transaction(srcRect, &initialTransformArgs, m_rootNode, m_processedNodes);
+        TransformTransactionProperties transaction(srcRect, &initialTransformArgs, m_rootNodes, m_processedNodes);
         if (!argsAreInitialized) {
             initialTransformArgs = KisTransformUtils::resetArgsForMode(m_mode, m_filterId, transaction, 0);
         }
@@ -623,7 +673,7 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
         }
         mutatedJobs << new TransformData(TransformData::SELECTION,
                                          args,
-                                         m_rootNode);
+                                         m_rootNodes[0]);
 
         KritaUtils::addJobBarrier(mutatedJobs, restoreTemporaryHiddenNodes);
 
@@ -643,9 +693,9 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
             selection->setVisible(true);
         }
 
-        if (m_deactivatedOverlaySelectionMask) {
-            m_deactivatedOverlaySelectionMask->selection()->setVisible(true);
-            m_deactivatedOverlaySelectionMask->setDirty();
+        Q_FOREACH(KisSelectionMaskSP deactivatedOverlaySelectionMask, m_deactivatedOverlaySelectionMasks) {
+            deactivatedOverlaySelectionMask->selection()->setVisible(true);
+            deactivatedOverlaySelectionMask->setDirty();
         }
 
         if (applyTransform) {

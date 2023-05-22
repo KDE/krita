@@ -120,7 +120,7 @@ public:
     InplaceTransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
                                    const QString &filterId,
                                    bool forceReset,
-                                   KisNodeSP rootNode,
+                                   KisNodeList rootNodes,
                                    KisSelectionSP selection,
                                    KisPaintDeviceSP externalSource,
                                    KisStrokeUndoFacade *undoFacade,

@@ -176,20 +176,20 @@ public:
 
     static void postProcessToplevelCommand(KUndo2Command *command,
                                            const ToolTransformArgs &args,
-                                           KisNodeSP rootNode,
+                                           KisNodeList rootNodes,
                                            KisNodeList processedNodes,
                                            const KisSavedMacroCommand *overriddenCommand);
 
     static bool fetchArgsFromCommand(const KUndo2Command *command,
                                      ToolTransformArgs *args,
-                                     KisNodeSP *rootNode,
+                                     KisNodeList *rootNodes,
                                      KisNodeList *transformedNodes);
 
     static KisNodeSP tryOverrideRootToTransformMask(KisNodeSP root);
 
-    static QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool isExternalSourcePresent, KisSelectionSP selection);
-    static bool tryInitArgsFromNode(KisNodeSP node, ToolTransformArgs *args);
-    static bool tryFetchArgsFromCommandAndUndo(ToolTransformArgs *outArgs, ToolTransformArgs::TransformMode mode, KisNodeSP currentNode, KisNodeList selectedNodes, KisStrokeUndoFacade *undoFacade, QVector<KisStrokeJobData *> *undoJobs, const KisSavedMacroCommand **overriddenCommand);
+    static QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeList rootNodes, bool isExternalSourcePresent, KisSelectionSP selection);
+    static bool tryInitArgsFromNode(KisNodeList rootNodes, ToolTransformArgs *args);
+    static bool tryFetchArgsFromCommandAndUndo(ToolTransformArgs *outArgs, ToolTransformArgs::TransformMode mode, KisNodeList currentNodes, KisNodeList selectedNodes, KisStrokeUndoFacade *undoFacade, QVector<KisStrokeJobData *> *undoJobs, const KisSavedMacroCommand **overriddenCommand);
 
 };
 

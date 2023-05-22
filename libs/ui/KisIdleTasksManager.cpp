@@ -9,6 +9,8 @@
 #include <kis_idle_watcher.h>
 #include <kis_image.h>
 #include <KisMpl.h>
+#include <boost/none.hpp>
+
 
 namespace {
 struct TaskStruct {
@@ -23,7 +25,7 @@ struct KisIdleTasksManager::Private
     KisIdleWatcher idleWatcher;
     QVector<TaskStruct> tasks;
     QQueue<int> queue;
-    QWeakPointer<bool> currentTaskCookie;
+    QWeakPointer<boost::none_t> currentTaskCookie;
 };
 
 KisIdleTasksManager::KisIdleTasksManager()

@@ -10,6 +10,7 @@
 
 #include <functional>
 
+#include <boost/none.hpp>
 #include <kis_types.h>
 #include <KisRunnableBasedStrokeStrategy.h>
 
@@ -28,7 +29,7 @@ public:
     ~KisIdleTaskStrokeStrategy();
 
     KisStrokeStrategy* createLodClone(int levelOfDetail) override;
-    QWeakPointer<bool> idleTaskCookie();
+    QWeakPointer<boost::none_t> idleTaskCookie();
 
 protected:
     void finishStrokeCallback() override;
@@ -37,7 +38,7 @@ Q_SIGNALS:
     void sigIdleTaskFinished();
 
 private:
-    QSharedPointer<bool> m_idleTaskCookie;
+    QSharedPointer<boost::none_t> m_idleTaskCookie;
 };
 
 using KisIdleTaskStrokeStrategyFactory = std::function<KisIdleTaskStrokeStrategy*(KisImageSP image)>;

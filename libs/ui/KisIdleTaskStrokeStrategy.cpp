@@ -44,9 +44,9 @@ void KisIdleTaskStrokeStrategy::finishStrokeCallback()
     emit sigIdleTaskFinished();
 }
 
-QWeakPointer<bool> KisIdleTaskStrokeStrategy::idleTaskCookie()
+QWeakPointer<boost::none_t> KisIdleTaskStrokeStrategy::idleTaskCookie()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!m_idleTaskCookie, m_idleTaskCookie);
-    m_idleTaskCookie.reset(new bool(true));
+    m_idleTaskCookie.reset(new boost::none_t(boost::none));
     return m_idleTaskCookie;
 }

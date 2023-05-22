@@ -40,7 +40,7 @@ struct Q_DECL_HIDDEN KisGeneratorLayer::Private
     QRect preparedRect;
     QRect preparedImageBounds;
     KisFilterConfigurationSP preparedForFilter;
-    QWeakPointer<bool> updateCookie;
+    QWeakPointer<boost::none_t> updateCookie;
     QMutex mutex;
 };
 
@@ -130,7 +130,7 @@ void KisGeneratorLayer::requestUpdateJobsWithStroke(KisStrokeId strokeId, KisFil
 
     KisPaintDeviceSP originalDevice = original();
 
-    QSharedPointer<bool> cookie(new bool(true));
+    QSharedPointer<boost::none_t> cookie(new boost::none_t(boost::none));
 
     auto jobs = KisGeneratorStrokeStrategy::createJobsData(this, cookie, f, originalDevice, processRegion, filterConfig);
 
@@ -144,10 +144,10 @@ void KisGeneratorLayer::requestUpdateJobsWithStroke(KisStrokeId strokeId, KisFil
     m_d->preparedForFilter = filterConfig;
 }
 
-QWeakPointer<bool> KisGeneratorLayer::previewWithStroke(const KisStrokeId strokeId)
+QWeakPointer<boost::none_t> KisGeneratorLayer::previewWithStroke(const KisStrokeId strokeId)
 {
     KisFilterConfigurationSP filterConfig = filter();
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(filterConfig, QWeakPointer<bool>());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(filterConfig, QWeakPointer<boost::none_t>());
 
     requestUpdateJobsWithStroke(strokeId, filterConfig);
     return m_d->updateCookie;

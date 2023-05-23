@@ -33,6 +33,7 @@ macro(kis_ExternalProject_Add_with_separate_builds_apple)
             kis_ExternalProject_Add_meson(${EXT_UNPARSED_ARGUMENTS})
         else()
             # parsed arguments will not pass to child macro
+            set(oneValueArgs WORKING_DIRECTORY)
             set(multiValueArgs CONFIGURE_ARGS)
             cmake_parse_arguments(EXT "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
@@ -57,8 +58,6 @@ macro(kis_ExternalProject_Add_meson EXT_NAME)
         GIT_TAG ${EXT_GIT_TAG}
 
         PATCH_COMMAND ${EXT_PATCH_COMMAND}
-
-        WORKING_DIRECTORY ${EXT_WORKING_DIRECTORY}
 
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
             PYTHONPATH=${_krita_pythonpath}

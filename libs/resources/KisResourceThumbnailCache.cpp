@@ -190,7 +190,7 @@ QImage KisResourceThumbnailCache::getImage(const QModelIndex &index,
         // Why there? Because most of the API usage for Thumbnail is going to be from index.data(), so we just
         // remove the dependency that our user has to know this class for just accessing the cached original
         // thumbnail.
-        KIS_ASSERT(m_d->containsOriginal(key));
+        KIS_SAFE_ASSERT_RECOVER_NOOP(result.isNull() || m_d->containsOriginal(key));
     }
     // if the size that the has been demanded, we will then cache the size and then pass it.
     if (!result.isNull() && param.size.isValid()) {

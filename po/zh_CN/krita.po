@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-04-29 08:36\n"
+"PO-Revision-Date: 2023-05-22 14:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -17283,7 +17283,7 @@ msgstr "克隆"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "In Betweening"
-msgstr "补间"
+msgstr "中间画"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:79
 #, kde-format

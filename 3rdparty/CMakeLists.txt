@@ -68,10 +68,14 @@ include (KritaExternalProject)
 # requirements
 if(NOT IS_DIRECTORY ${EXTERNALS_DOWNLOAD_DIR})
     message(FATAL_ERROR "No externals download dir set. Use -DEXTERNALS_DOWNLOAD_DIR")
+else()
+    file(TO_CMAKE_PATH "${EXTERNALS_DOWNLOAD_DIR}" EXTERNALS_DOWNLOAD_DIR)
 endif()
 
 if(NOT IS_DIRECTORY ${INSTALL_ROOT})
     message(FATAL_ERROR "No install dir set. Use -DINSTALL_ROOT")
+else()
+    file(TO_CMAKE_PATH "${INSTALL_ROOT}" INSTALL_ROOT)
 endif()
 
 set(TOP_INST_DIR ${INSTALL_ROOT})

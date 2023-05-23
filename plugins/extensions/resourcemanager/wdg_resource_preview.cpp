@@ -32,21 +32,36 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
     m_ui->resourceItemView->setFixedToolTipThumbnailSize(QSize(128, 128));
 
     // resource type combo box code
-    m_resourceTypeModel = new KisResourceTypeModel(this);
-    m_ui->cmbResourceType->setModel(m_resourceTypeModel);
-    m_ui->cmbResourceType->setModelColumn(KisResourceTypeModel::Name);
-    for (int i = 0; i < m_resourceTypeModel->rowCount(); i++) {
-        QModelIndex idx = m_resourceTypeModel->index(i, 0);
-        QString resourceType = m_resourceTypeModel->data(idx, Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
-        if (resourceType == "paintoppresets") {
-            m_ui->cmbResourceType->setCurrentIndex(i);
-            break;
+    if (m_type == 1) {
+        m_resourceTypeModel = new KisResourceTypeModel(this);
+        m_ui->cmbResourceType->setModel(m_resourceTypeModel);
+        m_ui->cmbResourceType->setModelColumn(KisResourceTypeModel::Name);
+        for (int i = 0; i < m_resourceTypeModel->rowCount(); i++) {
+            QModelIndex idx = m_resourceTypeModel->index(i, 0);
+            QString resourceType = m_resourceTypeModel->data(idx, Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
+            if (resourceType == "paintoppresets") {
+                m_ui->cmbResourceType->setCurrentIndex(i);
+                break;
+            }
+        }
+    } else {
+        QStringList resourceTypes = QStringList() << ResourceType::Brushes << ResourceType::PaintOpPresets << ResourceType::Gradients << ResourceType::GamutMasks;
+        #if defined HAVE_SEEXPR
+        resourceTypes << ResourceType::SeExprScripts;
+        #endif
+        resourceTypes << ResourceType::Patterns << ResourceType::Palettes << ResourceType::Workspaces;
+
+        for (int i = 0; i < resourceTypes.size(); i++) {
+            m_ui->cmbResourceType->addItem(ResourceName::resourceTypeToName(resourceTypes[i]), resourceTypes[i]);
         }
     }
+
     connect(m_ui->cmbResourceType, SIGNAL(activated(int)), SLOT(slotResourceTypeSelected(int)));
+    connect(m_ui->cmbResourceType, SIGNAL(activated(int)), SIGNAL(resourceTypeSelected(int)));
 
     // tag type combo box code
     QString selectedResourceType = getCurrentResourceType();
+
 
     KisTagModel* tagModel = new KisTagModel(selectedResourceType);
     tagModel->sort(KisAllTagsModel::Name);
@@ -54,7 +69,9 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
 
     m_ui->cmbTag->setModel(tagModel);
     m_ui->cmbTag->setModelColumn(KisAllTagsModel::Name);
+
     connect(m_ui->cmbTag, SIGNAL(activated(int)), SLOT(slotTagSelected(int)));
+
 
     // storage type combo box
     if (m_type == 0) {
@@ -70,14 +87,25 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
 
     // resource item view code
     // the model will be owned by `proxyModel`
-    KisResourceModel* resourceModel = new KisResourceModel(selectedResourceType);
-    resourceModel->setStorageFilter(KisResourceModel::ShowAllStorages);
-    resourceModel->setResourceFilter(m_ui->chkShowDeleted->isChecked() ? KisResourceModel::ShowAllResources : KisResourceModel::ShowActiveResources);
+    KisResourceModel* resourceModel;
+
+    if (m_type == 1) {
+        resourceModel = new KisResourceModel(selectedResourceType);
+        resourceModel->setStorageFilter(KisResourceModel::ShowAllStorages);
+        resourceModel->setResourceFilter(m_ui->chkShowDeleted->isChecked() ? KisResourceModel::ShowAllResources : KisResourceModel::ShowActiveResources);
+
+    } else {
+
+        QString standarizedResourceType = (selectedResourceType == "presets" ? ResourceType::PaintOpPresets : selectedResourceType);
+        resourceModel = new KisResourceModel(standarizedResourceType);
+    }
 
     KisTagFilterResourceProxyModel* proxyModel = new KisTagFilterResourceProxyModel(selectedResourceType);
     proxyModel->setResourceModel(resourceModel);
     proxyModel->setTagFilter(0);
-    proxyModel->setStorageFilter(true, getCurrentStorageId());
+    if (m_type == 1) {
+        proxyModel->setStorageFilter(true, getCurrentStorageId());
+    }
     proxyModel->sort(KisAbstractResourceModel::Name);
     m_resourceProxyModelsForResourceType.insert(selectedResourceType, proxyModel);
 
@@ -107,7 +135,8 @@ WdgResourcePreview::~WdgResourcePreview()
 
 void WdgResourcePreview::slotResourceTypeSelected(int)
 {
-        QString selectedResourceType = getCurrentResourceType();
+
+    QString selectedResourceType = getCurrentResourceType();
     if (!m_tagModelsForResourceType.contains(selectedResourceType)) {
         m_tagModelsForResourceType.insert(selectedResourceType, new KisTagModel(selectedResourceType));
         m_tagModelsForResourceType[selectedResourceType]->sort(KisAllTagsModel::Name);
@@ -117,10 +146,17 @@ void WdgResourcePreview::slotResourceTypeSelected(int)
 
     if (!m_resourceProxyModelsForResourceType.contains(selectedResourceType)) {
         // the model will be owned by `proxyModel`
-        KisResourceModel* resourceModel = new KisResourceModel(selectedResourceType);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(resourceModel);
-        resourceModel->setStorageFilter(KisResourceModel::ShowAllStorages);
-        resourceModel->setResourceFilter(m_ui->chkShowDeleted->isChecked() ? KisResourceModel::ShowAllResources : KisResourceModel::ShowActiveResources);
+        KisResourceModel* resourceModel;
+        if (m_type == 1) {
+            resourceModel = new KisResourceModel(selectedResourceType);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(resourceModel);
+            resourceModel->setStorageFilter(KisResourceModel::ShowAllStorages);
+            resourceModel->setResourceFilter(m_ui->chkShowDeleted->isChecked() ? KisResourceModel::ShowAllResources : KisResourceModel::ShowActiveResources);
+        } else {
+            QString standarizedResourceType = (selectedResourceType == "presets" ? ResourceType::PaintOpPresets : selectedResourceType);
+            resourceModel = new KisResourceModel(standarizedResourceType);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(resourceModel);
+        }
 
         KisTagFilterResourceProxyModel* proxyModel = new KisTagFilterResourceProxyModel(selectedResourceType);
         KIS_SAFE_ASSERT_RECOVER_RETURN(proxyModel);
@@ -128,7 +164,10 @@ void WdgResourcePreview::slotResourceTypeSelected(int)
         proxyModel->sort(KisAbstractResourceModel::Name);
         m_resourceProxyModelsForResourceType.insert(selectedResourceType, proxyModel);
     }
-    m_resourceProxyModelsForResourceType[selectedResourceType]->setStorageFilter(true, getCurrentStorageId());
+
+    if (m_type == 1) {
+        m_resourceProxyModelsForResourceType[selectedResourceType]->setStorageFilter(true, getCurrentStorageId());
+    }
     m_resourceProxyModelsForResourceType[selectedResourceType]->setTagFilter(getCurrentTag());
 
     m_ui->resourceItemView->setModel(m_resourceProxyModelsForResourceType[selectedResourceType]);
@@ -177,7 +216,20 @@ void WdgResourcePreview::slotShowDeletedChanged(int newState)
 
 QString WdgResourcePreview::getCurrentResourceType()
 {
-    return m_ui->cmbResourceType->currentData(Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
+    if (m_type == 1) {
+        return m_ui->cmbResourceType->currentData(Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
+    } else {
+        QString s = m_ui->cmbResourceType->currentText();
+        if (s == "Brush Presets") return "paintoppresets";
+        if (s == "Brush Tips") return "brushes";
+        if (s == "Gradients") return "gradients";
+        if (s == "Gamut Masks") return "gamutmasks";
+        if (s == "SeExpr Scripts") return "seexpr_scripts";
+        if (s == "Palettes") return "palettes";
+        if (s == "Patterns") return "patterns";
+        if (s == "Workspaces") return "workspaces";
+    }
+    return "";
 }
 
 QSharedPointer<KisTag> WdgResourcePreview::getCurrentTag()
@@ -191,13 +243,12 @@ QModelIndexList WdgResourcePreview::geResourceItemsSelected()
     return list;
 }
 
+QMap<QString, KisTagFilterResourceProxyModel*> WdgResourcePreview::getResourceProxyModelsForResourceType()
+{
+    return m_resourceProxyModelsForResourceType;
+}
+
 int WdgResourcePreview::getCurrentStorageId()
 {
-    if (m_type == 0) {
-        return 1;
-    } else if (m_type == 1) {
-        return m_ui->cmbStorage->currentData(Qt::UserRole + KisStorageModel::Id).toInt();
-    } else {
-        return 0;
-    }
+    return m_ui->cmbStorage->currentData(Qt::UserRole + KisStorageModel::Id).toInt();
 }

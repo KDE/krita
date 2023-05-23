@@ -31,6 +31,7 @@ public:
 
 Q_SIGNALS:
     void signalResourcesSelectionChanged(QModelIndex selected);
+    void resourceTypeSelected(int);
 
 private Q_SLOTS:
     void slotResourceTypeSelected(int);
@@ -45,14 +46,18 @@ public:
     QSharedPointer<KisTag> getCurrentTag();
     QModelIndexList geResourceItemsSelected();
     int getCurrentStorageId();
+    QMap<QString, KisTagFilterResourceProxyModel*> getResourceProxyModelsForResourceType();
 
 private:
     Ui::WdgResourcePreview *m_ui;
+    int m_type;
+
+    QList<int> m_selectedResourcesIds;
+
     KisResourceTypeModel *m_resourceTypeModel {0};
     KisStorageModel *m_storageModel {0};
     QMap<QString, KisTagModel*> m_tagModelsForResourceType;
     KisResourceModel *m_resourceModel {nullptr};
-    int m_type;
 
     QMap<QString, KisTagFilterResourceProxyModel*> m_resourceProxyModelsForResourceType;
     KisResourceThumbnailPainter m_thumbnailPainter;

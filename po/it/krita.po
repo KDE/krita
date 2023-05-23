@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-20 00:43+0000\n"
+"POT-Creation-Date: 2023-05-23 00:44+0000\n"
 "PO-Revision-Date: 2023-05-03 21:54+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -59755,13 +59755,13 @@ msgstr "Applica"
 msgid "Transform Tool Actions"
 msgstr "Azioni strumento Trasforma"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:855
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:860
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Il tipo di livello non può utilizzare lo strumento Trasforma"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:862
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:867
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -59769,7 +59769,7 @@ msgstr ""
 "Il tipo di livello non può utilizzare lo strumento Trasforma. Usa invece la "
 "maschera di trasformazione."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:882
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:887
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59779,7 +59779,7 @@ msgstr ""
 "Il livello ha figli con maschere di trasformazione. Disabilitali prima di "
 "eseguire la trasformazione."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:899
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:901
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
@@ -59787,14 +59787,14 @@ msgstr ""
 "Le selezioni non vengono utilizzate durante la modifica delle maschere di "
 "trasformazione "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:982
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1021
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Impossibile trasformare un livello vuoto "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1008
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

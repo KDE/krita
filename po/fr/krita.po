@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-20 00:43+0000\n"
-"PO-Revision-Date: 2023-05-18 15:27+0200\n"
+"POT-Creation-Date: 2023-05-23 00:44+0000\n"
+"PO-Revision-Date: 2023-05-21 07:28+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -38058,17 +38058,15 @@ msgid "Animation Timeline"
 msgstr "Frise chronologique de l'animation"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animation settings menu"
+#, kde-format
 msgid "Animation audio menu"
-msgstr "Menu pour les paramètres d'animation"
+msgstr "Menu pour animation audio"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
-#, fuzzy, kde-format
-#| msgid "Import Bundles..."
+#, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
-msgstr "Importer des packs..."
+msgstr "Importer de l'audio..."
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
 #, kde-format
@@ -38077,16 +38075,13 @@ msgid "Remove audio"
 msgstr "Supprimer le fichier audio"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "Mute"
+#, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
-msgstr "Muet"
+msgstr "Couper le son"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
-#, fuzzy, kde-format
-#| msgid "Volume:"
+#, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Volume :"
@@ -48877,12 +48872,10 @@ msgstr "Impossible d'enregistrer les métadonnées d'animation."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:316
 #: plugins/impex/libkra/kis_kra_saver.cpp:339
-#, fuzzy, kde-format
-#| msgctxt "Error message when saving a .kra file"
-#| msgid "Could not save animation meta data."
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
-msgstr "Impossible d'enregistrer les métadonnées d'animation."
+msgstr "Impossible d'enregistrer les métadonnées pour l'audio."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:452
 #, kde-format
@@ -60061,13 +60054,13 @@ msgstr "Appliquer"
 msgid "Transform Tool Actions"
 msgstr "Actions des outils de transformation"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:855
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:860
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Le type de calque ne peut être utilisé par l'outil de transformation."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:862
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:867
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -60075,7 +60068,7 @@ msgstr ""
 "Le type de calque ne peut être utiliser par l'outil de transformation. "
 "Utiliser le masque de transformation à la place."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:882
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:887
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60085,7 +60078,7 @@ msgstr ""
 "Le calque possède des enfants avec des masques de transformation. Veuillez "
 "les désactiver avant de procéder à la transformation."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:899
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:901
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
@@ -60093,14 +60086,14 @@ msgstr ""
 "Les sélections ne sont pas utilisées lors de l'édition de masques de "
 "transformation"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:982
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1021
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Impossible transformer un calque vide "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1008
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

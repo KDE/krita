@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-20 00:43+0000\n"
-"PO-Revision-Date: 2023-04-29 08:33\n"
+"POT-Creation-Date: 2023-05-23 00:44+0000\n"
+"PO-Revision-Date: 2023-05-22 14:00\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -17521,7 +17521,7 @@ msgstr "克隆"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "In Betweening"
-msgstr "补间"
+msgstr "中间画"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:79
 #, kde-format
@@ -20305,21 +20305,15 @@ msgstr "没有提供有效的 FFmpeg 可执行程序..."
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
-msgstr ""
+msgstr "FFmpeg 必须是 4.2 版本以上才能支持 GIF 透明度"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:472
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#| "animated gif images cannot have a framerate higher than 50. The framerate "
-#| "will be reduced to 50 frames per second.</p></body></html>"
+#, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
 "Animated GIF images cannot have a framerate higher than 50. The framerate "
 "will be reduced to 50 frames per second"
-msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">警告：</span>GIF 动画"
-"图像的每秒帧数不能超过 50，它将被降低到每秒 50 帧。</p></body></html>"
+msgstr "GIF 动画图像的每秒帧数不能超过 50，它将被降低到每秒 50 帧。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:479
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1806
@@ -20500,16 +20494,12 @@ msgstr ""
 "em></font>"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
-#, fuzzy, kde-format
-#| msgctxt "part of warning in video importer."
-#| msgid ""
-#| "WARNING, you are trying to import %1 frames, the maximum amount you can "
-#| "import is %2."
+#, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "<b>Warning:</b> you are trying to import %1 frames, the maximum amount you "
 "can import is %2."
-msgstr "警告，您正在尝试导入 %1 帧，可导入的最大帧数为 %2。"
+msgstr "<b>警告：</b>您正在尝试导入 %1 帧，可导入的最大帧数为 %2。"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
 #, kde-format
@@ -20533,16 +20523,12 @@ msgid ""
 msgstr "这将占用一半以上的可用运行内存，进而影响编辑效率。"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
-#, fuzzy, kde-format
-#| msgctxt "part of warning in video importer."
-#| msgid ""
-#| "Krita does not support the video transfer curve (%1), it will be loaded "
-#| "as linear"
+#, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "Krita does not support the video transfer curve (%1), it will be loaded as "
 "linear."
-msgstr "Krita 不支持视频迁移曲线 (%1)，它将被加载为线性"
+msgstr "Krita 不支持视频迁移曲线 (%1)，它将被加载为线性."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
@@ -20620,14 +20606,13 @@ msgstr "正在创建所需的 %1 文件：%2/%3 帧。"
 #: libs/ui/animation/video_export_options_dialog.ui:13
 #, kde-format
 msgid "Codec:"
-msgstr ""
+msgstr "编解器："
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
 #: libs/ui/animation/video_export_options_dialog.ui:23
-#, fuzzy, kde-format
-#| msgid "No options"
+#, kde-format
 msgid "Codec options"
-msgstr "无选项"
+msgstr "编码器选项"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -20693,10 +20678,9 @@ msgstr "HDR 元数据..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
-#, fuzzy, kde-format
-#| msgid "Bitrate (MBit/s)"
+#, kde-format
 msgid "Bitrate (MBit/s):"
-msgstr "码率 (MBit/s)"
+msgstr "码率 (MBit/s)："
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
@@ -20724,10 +20708,9 @@ msgstr "透明度差异"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/animation/video_export_options_dialog.ui:300
-#, fuzzy, kde-format
-#| msgid "Auto-generate 8bit Palette"
+#, kde-format
 msgid "Auto-generate 8bit Palette:"
-msgstr "自动生成 8 位色板"
+msgstr "自动生成 8 位色板："
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
@@ -20805,21 +20788,17 @@ msgstr "图像画质："
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:457
-#, fuzzy, kde-format
-#| msgid "Custom Options:"
+#, kde-format
 msgid "Custom options"
-msgstr "自定义设置："
+msgstr "自定义选项"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:466
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add any ffmpeg filtering options here. It will be put between source and "
-#| "destination streams of the ffmpeg"
+#, kde-format
 msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
 "destination streams of the FFmpeg instance"
-msgstr "添加到此的 FFmpeg 的过滤选项将插入到源数据和 FFmpeg 的目标流之间"
+msgstr "添加到此的 FFmpeg 的过滤选项将插入到来源数据和 FFmpeg 示例的目标流之间"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -21405,10 +21384,9 @@ msgstr "常规"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:40
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video file:"
-msgstr "视频每秒帧数："
+msgstr "视频文件："
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
@@ -21637,22 +21615,19 @@ msgstr "平滑方式："
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
-#, fuzzy, kde-format
-#| msgid "FFmpeg:"
+#, kde-format
 msgid "FFmpeg"
-msgstr "FFmpeg："
+msgstr "FFmpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
-#, fuzzy, kde-format
-#| msgid "FFMpeg Path:"
+#, kde-format
 msgid "FFmpeg path:"
 msgstr "FFmpeg 路径："
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
-#, fuzzy, kde-format
-#| msgid "FFProbe Path:"
+#, kde-format
 msgid "FFprobe path:"
 msgstr "FFprobe 路径："
 
@@ -21676,17 +21651,15 @@ msgstr "结束帧编号："
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:49
-#, fuzzy, kde-format
-#| msgid "Export Images"
+#, kde-format
 msgid "Export as image sequence"
-msgstr "导出为图像"
+msgstr "导出为图像序列"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:58
-#, fuzzy, kde-format
-#| msgid "Fi&le format:"
+#, kde-format
 msgid "File format:"
-msgstr "文件格式(&L)："
+msgstr "文件格式："
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbMimetype)
 #: libs/ui/animation/wdg_animationrenderer.ui:67
@@ -21736,10 +21709,9 @@ msgstr "只输出独立帧"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
-#, fuzzy, kde-format
-#| msgid "Export size:"
+#, kde-format
 msgid "Export as video"
-msgstr "导出大小："
+msgstr "导出为视频"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
@@ -21751,10 +21723,9 @@ msgstr "视频格式："
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:210
-#, fuzzy, kde-format
-#| msgid "Select the ffmpeg render options."
+#, kde-format
 msgid "Select the FFmpeg render options."
-msgstr "选择 FFmpeg 处理选项。"
+msgstr "选择 FFmpeg 渲染器选项。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, labelExportTo)
@@ -21772,15 +21743,13 @@ msgstr "包含音频"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
-#, fuzzy, kde-format
-#| msgid "Image location:"
+#, kde-format
 msgid "FFmpeg location:"
-msgstr "图像输出位置："
+msgstr "FFmpeg 位置："
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
-#, fuzzy, kde-format
-#| msgid "FFmpeg Version: "
+#, kde-format
 msgid "FFmpeg version:"
 msgstr "FFmpeg 版本："
 
@@ -23089,7 +23058,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "The number of last strokes that Krita will not merge (even if they are old "
 "enough)"
-msgstr "Krita 不进行历史记录合并的最近笔画数 (即使经过了足够长的时间)"
+msgstr "最近多少笔的笔画将不被合并 (即使经过了足够长的时间)"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
@@ -23102,7 +23071,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
-msgstr "如果前后两个笔画之间的时间间隔足够近，它们将被视作同一组笔画然后合并"
+msgstr ""
+"前后两个笔画之间的时间间隔不超过此值时，它们可以被视作同一组笔画然后合并"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
@@ -23117,8 +23087,8 @@ msgid ""
 "to be longer than this limit in the result of the merge, this merge will not "
 "happen."
 msgstr ""
-"笔画组合并后的持续时间上限。如果笔画组合并后的持续时间超过了此限制值，将不合"
-"并该笔画组。"
+"一个笔画组的总时间长度上限。如果一个笔画组的总时间长度会在下一次合并时突破此"
+"限制值，Krita 将不合并到此笔画组，而是新建一个笔画组。"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
 #, kde-format
@@ -25011,24 +24981,21 @@ msgstr "隐藏面板的滚动条"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:834
-#, fuzzy, kde-format
-#| msgid "Creamy (Krita 4.2+)"
+#, kde-format
 msgid "Subtractive (Krita 5.2+)"
-msgstr "柔和 (Krita 4.2 以及之后版本的默认值)"
+msgstr "减色法 (Krita 5.2 以及之后版本的默认值)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:839
-#, fuzzy, kde-format
-#| msgid "Hard (Krita 4.1 and earlier versions)"
+#, kde-format
 msgid "Additive (Krita 5.1 and earlier versions)"
-msgstr "坚硬 (Krita 4.1 以及之前版本的默认值)"
+msgstr "加色法 (Krita 5.1 以及之前版本的默认值)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:847
-#, fuzzy, kde-format
-#| msgid "Brush Flow Mode (needs restart):"
+#, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "笔刷工具流量模式 (需要重启)："
+msgstr "CMYK 混合模式 (需要重启)："
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -30181,11 +30148,9 @@ msgid "Also save your image as a Krita file."
 msgstr "同时保存一份 Krita 格式图像。"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "图层面板：光标悬停图层时不弹出显示缩略图"
+msgstr "更新图层缩略图"
 
 #: libs/ui/KisMainWindow.cpp:185
 #, kde-format
@@ -37320,17 +37285,15 @@ msgid "Animation Timeline"
 msgstr "动画时间轴"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animation settings menu"
+#, kde-format
 msgid "Animation audio menu"
-msgstr "动画选项菜单"
+msgstr "动画音频菜单"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
-#, fuzzy, kde-format
-#| msgid "&Import..."
+#, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
-msgstr "导入(&I)..."
+msgstr "导入音频..."
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
 #, kde-format
@@ -37339,17 +37302,13 @@ msgid "Remove audio"
 msgstr "移除音频"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "Mute"
+#, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "静音"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu, slider"
-#| msgid "Volume:"
+#, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "音量："
@@ -38115,11 +38074,9 @@ msgid "Grid and Guides"
 msgstr "网格与参考线"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
-#| msgid "Update color"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "更新前景色"
+msgstr "更新直方图"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -38607,11 +38564,9 @@ msgid "Pin navigation controls"
 msgstr "始终显示导航控件"
 
 #: plugins/dockers/overview/OverviewThumbnailStrokeStrategy.cpp:31
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr "图层面板：光标悬停图层时不弹出显示缩略图"
+msgstr "更新导航器缩略图"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
@@ -47744,6 +47699,9 @@ msgid ""
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
+"图层“%1”使用了“%2”混合模式，它在 CMYK 色彩空间中的行为在 Krita 5.2 已被更改。"
+"请检查图像的效果是否正确。如果图像显示效果异常，可在“配置 Krita->常规->工具-"
+">CMYK 混合模式”中将该选项设置为旧版的“加色法”"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1103
 #, kde-format
@@ -47904,12 +47862,10 @@ msgstr "无法保存动画元数据。"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:316
 #: plugins/impex/libkra/kis_kra_saver.cpp:339
-#, fuzzy, kde-format
-#| msgctxt "Error message when saving a .kra file"
-#| msgid "Could not save animation meta data."
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
-msgstr "无法保存动画元数据。"
+msgstr "无法保存音频元数据。"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:452
 #, kde-format
@@ -58734,19 +58690,19 @@ msgstr "应用"
 msgid "Transform Tool Actions"
 msgstr "变形工具操作"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:855
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:860
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "图层类型不支持变形工具"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:862
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:867
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "该图层类型不支持变形工具。请改用变形蒙版。"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:882
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:887
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -58754,20 +58710,20 @@ msgid ""
 "transformation."
 msgstr "图层包含变形蒙版子图层。请在进行变形之前禁用这些子图层。"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:899
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:901
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "编辑变形蒙版时，选区不被使用"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:982
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1021
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "无法对空图层进行变形操作"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1008
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59520,101 +59476,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgctxt "floating on-canvas message"
-#~ msgid ""
-#~ "Cannot open audio: \"%1\"\n"
-#~ "Error: %2"
-#~ msgstr ""
-#~ "无法打开音频：“%1”\n"
-#~ "错误：%2"
-
-#~ msgid "Edit Audio:"
-#~ msgstr "编辑音频："
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Audio playback is not supported in this build!"
-#~ msgstr "此 Krita 构建版本不支持音频播放！"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "打开音频..."
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "更改音频 (%1)..."
-
-#~ msgid "Choose a video file"
-#~ msgstr "选择视频文件"
-
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
-#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">This video contains "
-#~ "more than 100 frames. Loading too many frames can overload your computer. "
-#~ "Use a</span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;"
-#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\" font-"
-#~ "size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;"
-#~ "\">video editor </span></a><span style=\" font-size:16pt; font-"
-#~ "weight:400; color:#ff692e;\">instead!</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">警告：</span><span style=\" "
-#~ "font-size:16pt; font-weight:400; color:#ff692e;\">此视频包含超过 100 帧。"
-#~ "加载帧数过多时，电脑的运行速度可能会受影响。请改为使用一款专门的</"
-#~ "span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;\"> </"
-#~ "span><a href=\"https://kdenlive.org\"><span style=\" font-size:16pt; font-"
-#~ "weight:400; text-decoration: underline; color:#2980b9;\">视频编辑软件</"
-#~ "span></a><span style=\" font-size:16pt; font-weight:400; color:#ff692e;\">"
-#~ "进行操作。</span></p></body></html>"
-
-#~ msgid "FFMpeg"
-#~ msgstr "FFmpeg"
-
-#~ msgid "Export:"
-#~ msgstr "导出："
-
-#~ msgid "Image Se&quence"
-#~ msgstr "图像序列(&Q)"
-
-#~ msgid "&Video"
-#~ msgstr "视频(&V)"
-
-#~ msgid "Video Options"
-#~ msgstr "视频选项"
-
-#~ msgid "FF&Mpeg: "
-#~ msgstr "FF&mpeg 位置："
-
-#~ msgid "Video Location:"
-#~ msgstr "视频输出位置："
-
-#~ msgid "FFMpeg Version: None"
-#~ msgstr "FFmpeg 版本：无"
-
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
-#~ "body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">警告：</span> "
-#~ "FFmpeg 必须为 4.2 或更高版本才能支持 GIF 透明度</p></body></html>"
-
-#~ msgid "Image Sequence Options"
-#~ msgstr "图像序列选项"

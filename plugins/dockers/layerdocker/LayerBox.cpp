@@ -89,7 +89,7 @@
 #include "ui_WdgLayerBox.h"
 #include "NodeView.h"
 #include "SyncButtonAndAction.h"
-
+#include "KisMenuStyleDontCloseOnAlt.h"
 
 class LayerBoxStyle : public QProxyStyle
 {
@@ -303,6 +303,11 @@ LayerBox::LayerBox()
     QWidgetAction *layerFilterMenuAction = new QWidgetAction(this);
     layerFilterMenuAction->setDefaultWidget(layerFilterWidget);
     layerFilterMenu->addAction(layerFilterMenuAction);
+
+
+    KisMenuStyleDontCloseOnAlt *menuStyle = new KisMenuStyleDontCloseOnAlt(layerFilterMenu->style());
+    menuStyle->setParent(layerFilterMenu);
+    layerFilterMenu->setStyle(menuStyle);
 
     setEnabled(false);
 

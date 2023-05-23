@@ -45,6 +45,7 @@ set(kritawidgetutils_LIB_SRCS
     KisOptionCollectionWidget.cpp
     KisOptionButtonStrip.cpp
     KisRepaintDebugger.cpp
+    KisMenuStyleDontCloseOnAlt.cpp
     KisSpinBoxPluralHelper.cpp
 
     config/kcolorscheme.cpp

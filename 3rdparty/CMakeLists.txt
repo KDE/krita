@@ -539,6 +539,11 @@ configure_file(
     ${CMAKE_CURRENT_BINARY_DIR}/meson-compiler.ini
 )
 
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/meson-host.ini.in
+    ${CMAKE_CURRENT_BINARY_DIR}/meson-host.ini
+)
+
 # Prepare file for crosscompile multiple archs
 if (CMAKE_OSX_ARCHITECTURES)
     foreach(arch ${CMAKE_OSX_ARCHITECTURES})

@@ -520,15 +520,17 @@ if (NOT MESON_BINARY_PATH)
     add_subdirectory(ext_meson)
 endif()
 
-if (NOT PKG_CONFIG_FOUND)
+if (NOT PKG_CONFIG_FOUND OR WIN32)
     set(PKG_CONFIG_DEP ext_pkgconfig)
     if (NOT WIN32)
-        # TODO: should we just use pkgconf everywhere?
-        set(PKG_CONFIG_EXECUTABLE ${EXTPREFIX}/bin/pkg-config)
+        set(ENV{PKG_CONFIG} ${EXTPREFIX}/bin/pkg-config)
     else()
-        set(PKG_CONFIG_EXECUTABLE ${EXTPREFIX}/bin/pkgconf)
+        set(ENV{PKG_CONFIG} ${EXTPREFIX}/bin/pkgconf)
     endif()
+    # meson currently reads from the variable directly
+    set(PKG_CONFIG_EXECUTABLE $ENV{PKG_CONFIG})
     message(STATUS "pkg-config not available, building 3rdparty version.")
+    message(STATUS "$PKG_CONFIG is set to $ENV{PKG_CONFIG}")
     add_subdirectory(ext_pkgconfig)
 endif()
 

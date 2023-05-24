@@ -78,7 +78,7 @@ Initializers
     Note the location of the colon and comma.
 
     It is also preferred to use {}-initialization for class members and
-    glabal namespace scope variables, e.g.
+    global namespace scope variables, e.g.
 
     class Foo
     {

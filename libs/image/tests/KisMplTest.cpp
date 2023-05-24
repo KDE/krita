@@ -12,6 +12,7 @@
 
 #include <KisMpl.h>
 #include <kis_shared.h>
+#include <kis_shared_ptr.h>
 
 
 void KisMplTest::testFoldOptional()

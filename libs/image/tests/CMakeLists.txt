@@ -128,8 +128,13 @@ kis_add_tests(
     kis_mesh_transform_worker_test.cpp
     KisKeyframeAnimationInterfaceSignalTest.cpp
     KisOverlayPaintDeviceWrapperTest.cpp
-    KisMplTest.cpp
     LINK_LIBRARIES kritaimage kritatestsdk
+    NAME_PREFIX "libs-image-"
+    )
+
+kis_add_test(
+    KisMplTest.cpp
+    LINK_LIBRARIES kritaimage kritatestsdk kritaglobal
     NAME_PREFIX "libs-image-"
     )
 

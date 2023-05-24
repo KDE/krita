@@ -48,6 +48,8 @@ public:
     int getCurrentStorageId();
     QMap<QString, KisTagFilterResourceProxyModel*> getResourceProxyModelsForResourceType();
 
+    QAbstractItemModel* getModel();
+
 private:
     Ui::WdgResourcePreview *m_ui;
     int m_type;

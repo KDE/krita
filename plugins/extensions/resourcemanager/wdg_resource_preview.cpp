@@ -84,6 +84,9 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
         connect(m_ui->cmbStorage, SIGNAL(activated(int)), SLOT(slotStorageSelected(int)));
     }
 
+    if (m_type == 1) {
+        m_ui->label->setVisible(false);
+    }
 
     // resource item view code
     // the model will be owned by `proxyModel`
@@ -115,6 +118,7 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
 
     if (m_type == 0) {
         m_ui->chkShowDeleted->setVisible(false);
+    } else {
         connect(m_ui->chkShowDeleted, SIGNAL(stateChanged(int)), SLOT(slotShowDeletedChanged(int)));
     }
 
@@ -251,4 +255,9 @@ QMap<QString, KisTagFilterResourceProxyModel*> WdgResourcePreview::getResourcePr
 int WdgResourcePreview::getCurrentStorageId()
 {
     return m_ui->cmbStorage->currentData(Qt::UserRole + KisStorageModel::Id).toInt();
+}
+
+QAbstractItemModel* WdgResourcePreview::getModel()
+{
+    return m_ui->resourceItemView->model();
 }

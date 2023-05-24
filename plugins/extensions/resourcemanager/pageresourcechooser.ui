@@ -27,6 +27,9 @@
        <property name="fieldGrowthPolicy">
         <enum>QFormLayout::ExpandingFieldsGrow</enum>
        </property>
+       <property name="horizontalSpacing">
+        <number>0</number>
+       </property>
       </layout>
      </item>
      <item>

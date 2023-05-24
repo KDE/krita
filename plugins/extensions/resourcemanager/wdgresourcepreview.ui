@@ -78,27 +78,31 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="chkShowDeleted">
-       <property name="text">
-        <string>Show deleted resources</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="KisResourceItemListView" name="resourceItemView"/>
      </item>
      <item>
-      <widget class="QLineEdit" name="lneFilterText">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="placeholderText">
-        <string>Search</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLineEdit" name="lneFilterText">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="placeholderText">
+          <string>Search</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chkShowDeleted">
+         <property name="text">
+          <string>Show deleted resources</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>

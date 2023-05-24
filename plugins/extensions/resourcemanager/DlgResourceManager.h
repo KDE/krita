@@ -13,6 +13,8 @@
 #include <QSharedPointer>
 #include <QItemSelection>
 #include <KisResourceThumbnailPainter.h>
+#include "wdg_resource_preview.h"
+
 
 class KisActionManager;
 class KisResourceTypeModel;
@@ -36,13 +38,7 @@ public:
     ~DlgResourceManager() override;
 
 private Q_SLOTS:
-    void slotResourceTypeSelected(int);
-    void slotStorageSelected(int);
-    void slotTagSelected(int);
-
     void slotResourcesSelectionChanged(QModelIndex selected);
-    void slotFilterTextChanged(const QString& filterText);
-    void slotShowDeletedChanged(int newState);
 
     void slotDeleteResources();
     void slotImportResources();
@@ -50,9 +46,6 @@ private Q_SLOTS:
     void slotCreateBundle();
     void slotSaveTags();
 private:
-    QString getCurrentResourceType();
-    int getCurrentStorageId();
-    QSharedPointer<KisTag> getCurrentTag();
     void updateDeleteButtonState(const QModelIndexList &list);
 
     static QString constructMetadata(const QMap<QString, QVariant> &metadata, const QString &resourceType);
@@ -61,18 +54,14 @@ private:
     QWidget *m_page {nullptr};
     QScopedPointer<Ui::WdgDlgResourceManager> m_ui;
     KisActionManager *m_actionManager {nullptr};
-    KisResourceTypeModel *m_resourceTypeModel {0};
-    KisStorageModel *m_storageModel {0};
-    QMap<QString, KisTagModel*> m_tagModelsForResourceType;
-
-    KisResourceModel *m_resourceModel {nullptr};
-    QMap<QString, KisTagFilterResourceProxyModel*> m_resourceProxyModelsForResourceType;
 
     QScopedPointer<KisWdgTagSelectionControllerOneResource> m_tagsController;
 
     KisResourceThumbnailPainter m_thumbnailPainter;
 
     bool m_undeleteMode {false};
+
+    WdgResourcePreview *m_wdgResourcePreview;
 };
 
 #endif // DLGRESOURCEMANAGER_H

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-23 00:44+0000\n"
-"PO-Revision-Date: 2023-05-21 21:01+0300\n"
+"PO-Revision-Date: 2023-05-24 00:44+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.03.70\n"
+"X-Generator: Lokalize 23.07.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -11248,7 +11248,7 @@ msgstr "Yeni bir dolgu katman ekle"
 #, kde-format
 msgctxt "action"
 msgid "Fill Layer"
-msgstr "Dolgu Katmanı"
+msgstr "Dolgu Katman"
 
 #. i18n: context: text @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2536
@@ -16867,7 +16867,7 @@ msgstr "Oluşturucu"
 #: libs/image/generator/kis_generator_stroke_strategy.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Fill Layer Render"
-msgstr "Dolgu Katmanı Sunumu"
+msgstr "Dolgu Katman Sunumu"
 
 #: libs/image/kis_adjustment_layer.cc:124
 #, kde-format
@@ -17712,7 +17712,7 @@ msgid ""
 "The image contains a Fill Layer of type <b>%1</b>, which is not supported, "
 "the layer will be converted to a paintlayer"
 msgstr ""
-"Görselde <b>%1</b> türünden desteklenmeyen bir dolgu katmanı var; katman bir "
+"Görselde <b>%1</b> türünden desteklenmeyen bir dolgu katman var; katman bir "
 "boya katmanına dönüştürülecek"
 
 #: libs/impex/IntegralFrameDuration.h:32
@@ -20218,7 +20218,7 @@ msgstr "Tümünü Seç"
 #: libs/ui/KisView.cpp:784
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
-msgstr "Taşkın Dolgu Katmanı"
+msgstr "Taşkın Dolgu Katman"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:346
 msgctxt "(qtundo-format)"
@@ -27155,7 +27155,7 @@ msgstr "Karalama Defteri Küçük Görselini Yükle"
 #, kde-format
 msgctxt "Load Image as Thumbnail button"
 msgid "Load Image"
-msgstr "Görseli Yükle"
+msgstr "Görsel Yükle"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadIconLibraryThumbnailButton)
 #: libs/ui/forms/wdgsavebrushpreset.ui:164

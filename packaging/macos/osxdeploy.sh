@@ -581,15 +581,18 @@ krita_deploy () {
     rsync -prul ${KIS_INSTALL_DIR}/qml Resources/qml
 
     echo "Copying plugins..."
+    local KRITA_DMG_PLUGIN_DIR="${KRITA_DMG}/krita.app/Contents/PlugIns"
     # exclude kritaquicklook.qlgenerator/
     cd ${KIS_INSTALL_DIR}/plugins/
     rsync -prul --delete --delete-excluded ./ \
         --exclude kritaquicklook.qlgenerator \
         --exclude kritaspotlight.mdimporter \
-        ${KRITA_DMG}/krita.app/Contents/PlugIns
+        ${KRITA_DMG_PLUGIN_DIR}
 
     cd ${BUILDROOT}
-    rsync -prul ${KIS_INSTALL_DIR}/lib/kritaplugins/ ${KRITA_DMG}/krita.app/Contents/PlugIns
+    rsync -prul ${KIS_INSTALL_DIR}/lib/kritaplugins/* ${KRITA_DMG_PLUGIN_DIR}
+
+    rsync -prul ${KIS_INSTALL_DIR}/lib/mlt ${KRITA_DMG_PLUGIN_DIR}
 
     # rsync -prul {KIS_INSTALL_DIR}/lib/libkrita* Frameworks/
 

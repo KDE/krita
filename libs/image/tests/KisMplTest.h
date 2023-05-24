@@ -6,7 +6,7 @@
 #ifndef KISMPLTEST_H
 #define KISMPLTEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisMplTest : public QObject
 {

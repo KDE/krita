@@ -3,7 +3,7 @@
 #
 # Sebastià Pla <sastia@retemail.es>, 2000.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2006, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2006, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Pau Tallada Crespí <pau_tallada@telefonica.net>, 2006, 2007.
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
@@ -14,15 +14,15 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-05-02 10:02+0200\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2023-05-23 20:18+0200\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 23.07.70\n"
 "X-Accelerator-Marker: &\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -23438,7 +23438,7 @@ msgstr ""
 ">El progrés és possible gràcies al suport continu de la nostra comunitat de "
 "<a href=\"https://docs.krita.org/ca/contributors_manual.html"
 "\">col·laboradors</a>, mecenes i membres del <a href=\"https://fund.krita."
-"org/\">fons de desenvolupament</a>.</p></body></html>"
+"org/\">patrocini de desenvolupament</a>.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -32442,7 +32442,7 @@ msgstr "Quant a %1/%2"
 #, kde-format
 msgctxt "ICC profile version"
 msgid "ICC Version: %1"
-msgstr "Versió de l'ICC: %1"
+msgstr "Versió d'ICC: %1"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:376
 #, kde-format

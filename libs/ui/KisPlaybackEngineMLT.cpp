@@ -281,7 +281,7 @@ void KisPlaybackEngineMLT::setupProducer(boost::optional<QFileInfo> file)
                               "krita",
                               KisAndroidFileProxy::getFileFromContentUri(file->absoluteFilePath()).toUtf8().data()));
 #else
-        new Mlt::Producer(*m_d->profile, "krita", file->absoluteFilePath().toUtf8().data());
+        new Mlt::Producer(*m_d->profile, "krita", file->absoluteFilePath().toUtf8().data()));
 #endif
         if (producer->is_valid()) {
             m_d->canvasProducers[activeCanvas()] = producer;

@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-23 00:44+0000\n"
+"POT-Creation-Date: 2023-05-25 00:44+0000\n"
 "PO-Revision-Date: 2023-05-17 11:58+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -15780,14 +15780,14 @@ msgstr ""
 "Krita ne subtenas la Wayland-platformon. Uzu XWayland por ruli Krita sur "
 "Wayland. Krita fermos nun."
 
-#: krita/main.cc:614 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:628 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Averto"
 
-#: krita/main.cc:615
+#: krita/main.cc:629
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15798,12 +15798,12 @@ msgstr ""
 "Ĉi tio ne estas rekomendita. Ne raportu cimojn.\n"
 "Bonvolu ĝisdatigi al subtenata versio de Vindozo: Windows 7, 8, 8.1 aŭ 10."
 
-#: krita/main.cc:637 krita/main.cc:642
+#: krita/main.cc:651 krita/main.cc:656
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita Tabuleta Subteno"
 
-#: krita/main.cc:638
+#: krita/main.cc:652
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15814,7 +15814,7 @@ msgstr ""
 "trovitaj. Se vi havas desegnan tablojdon, bonvolu certigi, ke la tablojda "
 "pelilo estas ĝuste instalita."
 
-#: krita/main.cc:643
+#: krita/main.cc:657
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "

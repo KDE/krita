@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-23 00:44+0000\n"
-"PO-Revision-Date: 2023-05-18 09:18+0200\n"
+"POT-Creation-Date: 2023-05-25 00:44+0000\n"
+"PO-Revision-Date: 2023-05-22 12:18+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -15756,14 +15756,14 @@ msgstr ""
 "Krita ne podpira platforme Wayland. Uporabite XWayland za izvajanje Krite na "
 "Waylandu. Krita se bo zaprla."
 
-#: krita/main.cc:614 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:628 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: opozorilo"
 
-#: krita/main.cc:615
+#: krita/main.cc:629
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15775,12 +15775,12 @@ msgstr ""
 "Posodobite sistem na podprto različico sistema Windows: Windows 7, 8, 8.1 "
 "ali 10."
 
-#: krita/main.cc:637 krita/main.cc:642
+#: krita/main.cc:651 krita/main.cc:656
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Podpora Krita za grafične tablice"
 
-#: krita/main.cc:638
+#: krita/main.cc:652
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15791,7 +15791,7 @@ msgstr ""
 "Windows. Če imate grafično tablico, se prepričajte, da je gonilnik za "
 "grafično tablico pravilno nameščen."
 
-#: krita/main.cc:643
+#: krita/main.cc:657
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -37683,17 +37683,15 @@ msgid "Animation Timeline"
 msgstr "Časovnica animacije"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animation settings menu"
+#, kde-format
 msgid "Animation audio menu"
-msgstr "Meni nastavitev animacije"
+msgstr "Meni zvoka animacije"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
-#, fuzzy, kde-format
-#| msgid "&Import..."
+#, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
-msgstr "&Uvozi ..."
+msgstr "Uvozi zvok ..."
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
 #, kde-format
@@ -37702,17 +37700,13 @@ msgid "Remove audio"
 msgstr "Odstrani zvok"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "Mute"
+#, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Nemo"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu, slider"
-#| msgid "Volume:"
+#, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Glasnost:"
@@ -48426,9 +48420,7 @@ msgstr "Metapodatkov animacije ni mogoče shraniti."
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:316
 #: plugins/impex/libkra/kis_kra_saver.cpp:339
-#, fuzzy, kde-format
-#| msgctxt "Error message when saving a .kra file"
-#| msgid "Could not save animation meta data."
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
 msgstr "Metapodatkov animacije ni mogoče shraniti."
@@ -60268,26 +60260,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgctxt "floating on-canvas message"
-#~ msgid ""
-#~ "Cannot open audio: \"%1\"\n"
-#~ "Error: %2"
-#~ msgstr ""
-#~ "Zvoka ni mogoče odpreti: »%1«\n"
-#~ "Napaka: %2"
-
-#~ msgid "Edit Audio:"
-#~ msgstr "Uredi zvok:"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Audio playback is not supported in this build!"
-#~ msgstr "Predvajanje zvoka ni podprto v tej graditvi!"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "Odpri zvok …"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "Spremeni zvok (%1) ..."

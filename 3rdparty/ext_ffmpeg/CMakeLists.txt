@@ -192,27 +192,20 @@ if (ANDROID)
 
         UPDATE_COMMAND ""
     )
-elseif (NOT APPLE)
+else()
     ExternalProject_Add(
         ext_sdl2
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://github.com/libsdl-org/SDL/releases/download/release-2.26.0/SDL2-2.26.0.tar.gz
         URL_HASH SHA256=8000d7169febce93c84b6bdf376631f8179132fd69f7015d4dadb8b9c2bdb295
-        )
-else()
-ExternalProject_Add(
-    ext_sdl2
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/libsdl-org/SDL/releases/download/release-2.26.0/SDL2-2.26.0.tar.gz
-    URL_HASH SHA256=8000d7169febce93c84b6bdf376631f8179132fd69f7015d4dadb8b9c2bdb295
 
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ffmpeg}
-        -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
-        -DBUILD_SHARED_LIBS=TRUE
-        ${GLOBAL_PROFILE}
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ffmpeg}
+            -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
+            -DBUILD_SHARED_LIBS=TRUE
+            ${GLOBAL_PROFILE}
 
-    UPDATE_COMMAND ""
-)
+        UPDATE_COMMAND ""
+    )
 endif()
 
 

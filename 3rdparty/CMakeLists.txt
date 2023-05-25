@@ -304,13 +304,14 @@ if (ANDROID)
   set(SECURITY_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
   set(SECURITY_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
 
+  string(REPLACE ";" "|" _escape_find_root_path "${CMAKE_FIND_ROOT_PATH}")
   # stl must be consistent: https://github.com/android/ndk/issues/1441
   set (GLOBAL_PROFILE ${GLOBAL_PROFILE}
                      -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
                      -DANDROID_PLATFORM=${ANDROID_PLATFORM}
                      -DANDROID_ABI=${ANDROID_ABI}
                      -DANDROID_STL=${ANDROID_STL}
-                     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
+                     -DCMAKE_FIND_ROOT_PATH="${_escape_find_root_path}"
                      -DCMAKE_EXE_LINKER_FLAGS=${SECURITY_EXE_LINKER_FLAGS}
                      -DCMAKE_SHARED_LINKER_FLAGS=${SECURITY_SHARED_LINKER_FLAGS}
                      -DCMAKE_MODULE_LINKER_FLAGS=${SECURITY_MODULE_LINKER_FLAGS})

@@ -1254,7 +1254,7 @@ feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 if (ANDROID)
   # ECM passes this to Qt, which was already capable of detecting it..
-  set (ANDROID_SDK_COMPILE_API "31")
+  set (ANDROID_SDK_COMPILE_API "33")
 
   # To assist stdcpp-path in deployment.json file
   set(ANDROID_SYSROOT_PREFIX "${ANDROID_TOOLCHAIN_ROOT}/sysroot/usr" CACHE STRING "" FORCE)

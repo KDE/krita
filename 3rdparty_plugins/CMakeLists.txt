@@ -126,7 +126,7 @@ if (ANDROID)
   set(SECURITY_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
   set(SECURITY_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
 
-  string(REPLACE ";" "|" _escape_find_root_path "${CMAKE_FIND_ROOT_PATH}")
+  string(REPLACE ";" "$<SEMICOLON>" _escape_find_root_path "${CMAKE_FIND_ROOT_PATH}")
   set (GLOBAL_PROFILE ${GLOBAL_PROFILE}
                      -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
                      -DANDROID_PLATFORM=${ANDROID_PLATFORM}

@@ -11,8 +11,8 @@ diff --git a/meson.build b/meson.build
 index c29d68e..798048f 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -164,3 +164,12 @@ subdir('libmp3lame')
- if build_tools
+@@ -246,3 +246,12 @@ subdir('libmp3lame')
+ if curses_dep.found()
    subdir('frontend')
  endif
 +

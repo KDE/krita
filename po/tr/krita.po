@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-25 00:44+0000\n"
-"PO-Revision-Date: 2023-05-24 00:44+0300\n"
+"PO-Revision-Date: 2023-05-26 01:03+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -13051,7 +13051,7 @@ msgstr "&Canlandırmayı Sun..."
 #, kde-format
 msgctxt "action"
 msgid "Render Animation to GIF, Image Sequence or Video"
-msgstr "Canlandırmayı GIF, Görsel Sıralaması veya Video Olarak Sun"
+msgstr "Canlandırmayı GIF, Görsel Sekansı veya Video Olarak Sun"
 
 #. i18n: context: iconText @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
@@ -20845,14 +20845,14 @@ msgstr ""
 "etkinken GIF'ler için yalnızca 255 renk kullanılır. Bu seçeneği devre dışı "
 "bırakmak, daha iyi kalite çıktısı için 256 rengin tümünü kullanmanıza izin "
 "verir.</p><p><span style=\" font-style:italic;\">Not 1: Saydamlığın düzgün "
-"çalışması için görsel sıralamasının saydamlık etkin olarak dışa "
-"aktardığından ve FFmpeg sürümünün en az 4.2 ve üzeri olduğundan emin olun. "
-"Eğer GIF çıktınız ekran yırtılması işaretleri gösteriyorsa FFmpeg 4.4 ve "
-"üzeri sürümler şiddetle tavsiye edilir.</span></p><p><span style=\" font-"
-"style:italic;\">Not 2: GIF biçimi, yalnızca ya %​100  ya da %​0 saydamlık "
-"destekler. Kısımsal saydamlık </span><span style=\" font-style:italic; text-"
-"decoration: underline;\">desteklenmez</span><span style=\" font-style:italic;"
-"\">. Kısımsal saydamlığa gereksiniminiz varsa APNG veya WEBP biçimlerini "
+"çalışması için görsel sekansının saydamlık etkin olarak dışa aktardığından "
+"ve FFmpeg sürümünün en az 4.2 ve üzeri olduğundan emin olun. Eğer GIF "
+"çıktınız ekran yırtılması işaretleri gösteriyorsa FFmpeg 4.4 ve üzeri "
+"sürümler şiddetle tavsiye edilir.</span></p><p><span style=\" font-style:"
+"italic;\">Not 2: GIF biçimi, yalnızca ya %​100  ya da %​0 saydamlık destekler. "
+"Kısımsal saydamlık </span><span style=\" font-style:italic; text-decoration: "
+"underline;\">desteklenmez</span><span style=\" font-style:italic;\">. "
+"Kısımsal saydamlığa gereksiniminiz varsa APNG veya WEBP biçimlerini "
 "kullanmayı düşünün.</span><br/></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifReserveTransparent)
@@ -21750,7 +21750,7 @@ msgstr "Son kare:"
 #: libs/ui/animation/wdg_animationrenderer.ui:49
 #, kde-format
 msgid "Export as image sequence"
-msgstr "Görsel Sırası Olarak Dışa Aktar"
+msgstr "Görsel Sekansı Olarak Dışa Aktar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:58
@@ -21765,8 +21765,8 @@ msgid ""
 "Select the file format for the image sequence. If you want to render to "
 "video or animated gif, you can only select PNG"
 msgstr ""
-"Görsel sıralaması için dosya biçimini seçin. Video veya canlandırılmış GIF "
-"sunmak istiyorsanız yalnızca PNG seçebilirsiniz"
+"Görsel sekansı dosya biçimini seçin. Video veya canlandırılmış GIF sunmak "
+"istiyorsanız yalnızca PNG seçebilirsiniz"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnExportOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:74
@@ -25800,8 +25800,8 @@ msgid ""
 "<html><head/><body><p>Adds the imported frames in their respective slots as "
 "per the sequence numbers in the file name</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Dosya adındaki sıralama numaralarına istinaden, içe "
-"aktarılan kareleri kendilerinin sıralı yuvalarına ekler</p></body></html>"
+"<html><head/><body><p>İçe aktarılan kareleri, dosya adındaki sekans "
+"numaralarına göre ilgili yuvalarına ekler.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoAddHoldframesBox)
 #: libs/ui/forms/wdgimportimagesequence.ui:75
@@ -60207,26 +60207,3 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
-
-#~ msgctxt "floating on-canvas message"
-#~ msgid ""
-#~ "Cannot open audio: \"%1\"\n"
-#~ "Error: %2"
-#~ msgstr ""
-#~ "Ses açılamadı: \"%1\"\n"
-#~ "Hata: %2"
-
-#~ msgid "Edit Audio:"
-#~ msgstr "Sesi Düzenle:"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Audio playback is not supported in this build!"
-#~ msgstr "Ses çalma bu yapıda desteklenmiyor!"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "Sesi aç..."
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "Ses değiştir (%1)..."

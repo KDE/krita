@@ -1,14 +1,20 @@
-#include "wdg_resource_preview.h"
 #include "ui_wdgresourcepreview.h"
+#include "wdg_resource_preview.h"
 
+#include <QAction>
+#include <QDebug>
 #include <QItemSelection>
+#include <QMenu>
+#include <QMenuBar>
 #include <QPainter>
 
 #include <kis_action.h>
 #include <kis_action_manager.h>
+#include <kis_icon.h>
 #include <KisResourceTypeModel.h>
 #include <KisStorageModel.h>
 #include <KisTagModel.h>
+#include <KisResourceLocator.h>
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <kis_assert.h>
@@ -18,8 +24,7 @@
 #include <kis_paintop_registry.h>
 #include <dlg_create_bundle.h>
 #include <ResourceImporter.h>
-#include <KisResourceLocator.h>
-#include <QDebug>
+
 
 WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
     QWidget(parent),
@@ -126,6 +131,41 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
 
     connect(m_ui->resourceItemView, SIGNAL(currentResourceChanged(QModelIndex)), SIGNAL(signalResourcesSelectionChanged(QModelIndex)));
 
+    // Add code for gridview to listview menu (preferably as a seperate class)
+//     QMenu* viewModeMenu = new QMenu(this);
+//
+//     viewModeMenu->setStyleSheet("margin: 6px");
+//
+//             // View Modes Btns
+//     viewModeMenu->addSection(i18nc("@title Which elements to display (e.g., thumbnails or details)", "Display"));
+//             // KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)cfg.presetChooserViewMode();
+//     QActionGroup *actionGroup = new QActionGroup(viewModeMenu);
+//
+//     QAction* action = viewModeMenu->addAction(KisIconUtils::loadIcon("view-preview"), i18n("Thumbnails"));
+//     action->setCheckable(true);
+//             // action->setChecked(mode == KisPresetChooser::THUMBNAIL);
+//     action->setActionGroup(actionGroup);
+//
+// //             connect(action, &QAction::triggered,
+// //                 m_d->uiWdgPaintOpPresetSettings.presetWidget, &KisPresetChooser::setViewModeToThumbnail);
+//
+//     action = viewModeMenu->addAction(KisIconUtils::loadIcon("view-list-details"), i18n("Details"));
+//     action->setCheckable(true);
+//             // action->setChecked(mode == KisPresetChooser::DETAIL);
+//     action->setActionGroup(actionGroup);
+// /*
+//             connect(action, &QAction::triggered,
+//                 m_d->uiWdgPaintOpPresetSettings.presetWidget, &KisPresetChooser::setViewModeToDetail);*/
+//
+//
+//     QMenuBar* menuBar = new QMenuBar();
+//     QMenu *fileMenu = new QMenu("File");
+//     menuBar->addMenu(fileMenu);
+//     fileMenu->addAction("Save");
+//     fileMenu->addAction("Exit");
+//     menuBar->addMenu(viewModeMenu);
+//         this->layout()->setMenuBar(menuBar);
+//     viewModeMenu->exec();
 
 }
 

@@ -1,8 +1,8 @@
 #include "wdg_side.h"
 #include "ui_wdgside.h"
 
-#include <QVBoxLayout>
 #include <QLabel>
+#include <QVBoxLayout>
 
 WdgSide::WdgSide(QWidget *parent) :
     QWidget(parent),

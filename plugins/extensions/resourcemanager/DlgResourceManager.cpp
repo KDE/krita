@@ -41,7 +41,7 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     setButtons(Close);
     setDefaultButton(Close);
 
-    m_wdgResourcePreview = new WdgResourcePreview(1);
+    m_wdgResourcePreview = new WdgResourcePreview(1, this);
     m_ui->formLayout->addWidget(m_wdgResourcePreview);
 
     connect(m_wdgResourcePreview, SIGNAL(signalResourcesSelectionChanged(QModelIndex)), this, SLOT(slotResourcesSelectionChanged(QModelIndex)));

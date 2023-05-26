@@ -1,11 +1,11 @@
 #ifndef WDG_RESOURCE_PREVIEW_H
 #define WDG_RESOURCE_PREVIEW_H
 
-#include <QWidget>
 #include <QScopedPointer>
-// #include <QSortFilterProxyModel>
 #include <QSharedPointer>
 #include <QItemSelection>
+#include <QWidget>
+
 #include <KisResourceThumbnailPainter.h>
 
 class KisActionManager;
@@ -16,6 +16,7 @@ class KisResourceModel;
 class KisTagFilterResourceProxyModel;
 class KisTag;
 class KisWdgTagSelectionControllerOneResource;
+
 
 namespace Ui {
 class WdgResourcePreview;

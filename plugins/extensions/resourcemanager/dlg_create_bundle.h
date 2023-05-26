@@ -2,17 +2,16 @@
 #ifndef KOBUNDLECREATIONWIDGET_H
 #define KOBUNDLECREATIONWIDGET_H
 
-#include <KoDialog.h>
-#include <QWizard>
-#include "wdg_side.h"
-#include <QWidget>
-
-
+#include "page_bundle_saver.h"
+#include "page_metadata_info.h"
 #include "page_resource_chooser.h"
 #include "page_tag_chooser.h"
-#include "page_metadata_info.h"
-#include "page_bundle_saver.h"
+#include "wdg_side.h"
 
+#include <QWidget>
+#include <QWizard>
+
+#include <KoDialog.h>
 #include <KoResourceBundle.h>
 
 namespace Ui
@@ -28,27 +27,12 @@ public:
     explicit DlgCreateBundle(KoResourceBundleSP bundle = nullptr, QWidget *parent = 0);
     ~DlgCreateBundle() override;
 
-    // old
-    QString bundleName() const;
-    QString authorName() const;
-    QString email() const;
-    QString website() const;
-    QString license() const;
-    QString description() const;
-    QString saveLocation() const;
-    QString previewImage() const;
-
 private Q_SLOTS:
 
-    // void next() override;
-    /* void reject() override;*/
+    void accept() override;
+    void reject() override;
 
     // old
-    void selectSaveLocation();
-    void addSelected();
-    void removeSelected();
-    void resourceTypeSelected(int idx);
-    void getPreviewImage();
     void saveToConfiguration(bool full);
     void slotEmbedTags();
     QVector<KisTagSP> getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags) const;
@@ -75,10 +59,10 @@ private:
     KoResourceBundleSP m_bundle;
 
     // new
-    PageResourceChooser *pageResourceChooser;
-    PageTagChooser *pageTagChooser;
-    PageMetadataInfo *pageMetadataInfo;
-    PageBundleSaver *pageBundleSaver;
+    PageResourceChooser *m_pageResourceChooser;
+    PageTagChooser *m_pageTagChooser;
+    PageMetadataInfo *m_pageMetadataInfo;
+    PageBundleSaver *m_pageBundleSaver;
 
 };
 

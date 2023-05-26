@@ -2,20 +2,21 @@
 #include "ui_pageresourcechooser.h"
 #include "wdg_resource_preview.h"
 
-#include <KisTagFilterResourceProxyModel.h>
-
 #include <QPainter>
 #include <QDebug>
 
+#include <KisTagFilterResourceProxyModel.h>
+
 #define ICON_SIZE 48
 
-PageResourceChooser::PageResourceChooser(QWidget *parent) :
+PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *parent) :
     QWizardPage(parent),
     m_ui(new Ui::PageResourceChooser)
+    , m_bundle(bundle)
 {
     m_ui->setupUi(this);
 
-    m_wdgResourcePreview = new WdgResourcePreview(0);
+    m_wdgResourcePreview = new WdgResourcePreview(0, this);
     m_ui->formLayout->addWidget(m_wdgResourcePreview);
 
     connect(m_wdgResourcePreview, SIGNAL(signalResourcesSelectionChanged(QModelIndex)), this, SLOT(slotResourcesSelectionChanged(QModelIndex)));
@@ -55,6 +56,7 @@ void PageResourceChooser::slotResourcesSelectionChanged(QModelIndex selected)
             m_selectedResourcesIds.append(id);
         }
     }
+
     m_ui->tableSelected->sortItems();
 }
 
@@ -92,7 +94,6 @@ void PageResourceChooser::slotresourceTypeSelected(int idx)
     }
 
     m_ui->tableSelected->sortItems();
-    qDebug() << m_selectedResourcesIds.count();
 }
 
 void PageResourceChooser::slotRemoveSelected(bool)
@@ -107,7 +108,8 @@ void PageResourceChooser::slotRemoveSelected(bool)
     m_ui->tableSelected->setCurrentRow(row);
 }
 
-QPixmap PageResourceChooser::imageToIcon(const QImage &img, Qt::AspectRatioMode aspectRatioMode) {
+QPixmap PageResourceChooser::imageToIcon(const QImage &img, Qt::AspectRatioMode aspectRatioMode)
+{
     QPixmap pixmap(ICON_SIZE, ICON_SIZE);
     pixmap.fill();
     QImage scaled = img.scaled(ICON_SIZE, ICON_SIZE, aspectRatioMode, Qt::SmoothTransformation);
@@ -117,6 +119,11 @@ QPixmap PageResourceChooser::imageToIcon(const QImage &img, Qt::AspectRatioMode 
     gc.drawImage(x, y, scaled);
     gc.end();
     return pixmap;
+}
+
+QList<int> PageResourceChooser::getSelectedResourcesIds()
+{
+    return m_selectedResourcesIds;
 }
 
 PageResourceChooser::~PageResourceChooser()

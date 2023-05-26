@@ -1,0 +1,48 @@
+From 5ebcafa8a992d72e9f58a9895a051ef608ad966f Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Sat, 22 Apr 2023 15:52:02 +1000
+Subject: [PATCH 2/3] Ifdef away Xlib and RTAudio
+
+---
+ src/modules/plusgpl/CMakeLists.txt | 2 +-
+ src/modules/qt/common.cpp          | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/modules/plusgpl/CMakeLists.txt b/src/modules/plusgpl/CMakeLists.txt
+index 4a916373..e8f146aa 100644
+--- a/src/modules/plusgpl/CMakeLists.txt
++++ b/src/modules/plusgpl/CMakeLists.txt
+@@ -22,7 +22,7 @@ target_link_libraries(mltplusgpl PRIVATE mlt m Threads::Threads)
+ if(WIN32)
+   target_link_libraries(mltplusgpl PRIVATE ws2_32)
+ elseif(UNIX AND NOT APPLE)
+-  target_link_libraries(mltplusgpl PRIVATE rt)
++  target_link_libraries(mltplusgpl)
+ endif()
+ 
+ set_target_properties(mltplusgpl PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${MLT_MODULE_OUTPUT_DIRECTORY}")
+diff --git a/src/modules/qt/common.cpp b/src/modules/qt/common.cpp
+index 334d6d75..8aff70fb 100644
+--- a/src/modules/qt/common.cpp
++++ b/src/modules/qt/common.cpp
+@@ -21,7 +21,7 @@
+ #include <QLocale>
+ #include <QImage>
+ 
+-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
++#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
+ #include <X11/Xlib.h>
+ #include <cstdlib>
+ #endif
+@@ -33,7 +33,7 @@ bool createQApplicationIfNeeded(mlt_service service)
+ 		QCoreApplication::addLibraryPath(QString(mlt_environment("MLT_APPDIR"))+QStringLiteral("/bin"));
+ 		QCoreApplication::addLibraryPath(QString(mlt_environment("MLT_APPDIR"))+QStringLiteral("/plugins"));
+ #endif
+-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
++#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
+ 		if (getenv("DISPLAY") == 0) {
+ 			mlt_log_error(service,
+ 				"The MLT Qt module requires a X11 environment.\n"
+-- 
+2.39.2
+

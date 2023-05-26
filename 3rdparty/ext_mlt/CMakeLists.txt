@@ -20,13 +20,22 @@ if (WIN32)
   set(WIN32_CMAKE_ARGS -DWINDOWS_DEPLOY=OFF)
 endif()
 
+if (ANDROID)
+  set(BUILD_EXTRA_OPTS "-DMOD_RTAUDIO=OFF")
+else()
+  set(BUILD_EXTRA_OPTS "")
+endif()
+
 kis_ExternalProject_Add_with_separate_builds_apple(
   ext_mlt
   DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
   GIT_REPOSITORY https://github.com/Eoin-ONeill-Yokai/mlt.git
   GIT_TAG origin/mlt-krita-plugins
+  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Android-ifdef-the-pthread_attr_setinheritsched.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Ifdef-away-Xlib-and-RTAudio.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Do-not-build-bin-melt-on-Android.patch
 
-  CMAKE_ARGS ${GLOBAL_PROFILE} -DMOD_OPENCV=OFF ${WIN32_CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_mlt}
+  CMAKE_ARGS ${GLOBAL_PROFILE} -DMOD_OPENCV=OFF ${WIN32_CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_mlt} ${BUILD_EXTRA_OPTS}
 
   DEPENDS ext_ffmpeg ${DLFCN_WIN32_DEP}
 )

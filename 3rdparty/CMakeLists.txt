@@ -311,7 +311,7 @@ if (ANDROID)
                      -DANDROID_PLATFORM=${ANDROID_PLATFORM}
                      -DANDROID_ABI=${ANDROID_ABI}
                      -DANDROID_STL=${ANDROID_STL}
-                     -DCMAKE_FIND_ROOT_PATH="${_escape_find_root_path}"
+                     -DCMAKE_FIND_ROOT_PATH=${_escape_find_root_path}
                      -DCMAKE_EXE_LINKER_FLAGS=${SECURITY_EXE_LINKER_FLAGS}
                      -DCMAKE_SHARED_LINKER_FLAGS=${SECURITY_SHARED_LINKER_FLAGS}
                      -DCMAKE_MODULE_LINKER_FLAGS=${SECURITY_MODULE_LINKER_FLAGS})

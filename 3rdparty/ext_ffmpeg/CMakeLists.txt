@@ -180,7 +180,7 @@ if (ANDROID)
         ext_sdl2
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         GIT_REPOSITORY https://github.com/sh-zam/SDL-android-glue.git
-        GIT_COMMIT 0d18f667ff42fc8998f317921a95ea32dbd73413
+        GIT_TAG 0d18f667ff42fc8998f317921a95ea32dbd73413
 
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ffmpeg}
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}

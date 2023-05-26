@@ -68,7 +68,7 @@ configure_ext() {
         -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL                                    \
         -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT                                            \
         -DCMAKE_FIND_ROOT_PATH="$BUILD_ROOT/i"                                          \
-        -DANDROID_SDK_COMPILE_API="33"
+        -DANDROID_SDK_COMPILE_API="android-33"                                          \
         -G Ninja
     cd $BUILD_ROOT
 }

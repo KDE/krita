@@ -12,5 +12,5 @@ ExternalProject_Add( ext_poppler
 
     UPDATE_COMMAND ""
 
-    DEPENDS ext_freetype
+    DEPENDS ext_freetype ext_fontconfig
 )

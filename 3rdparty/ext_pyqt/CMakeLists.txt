@@ -1,14 +1,12 @@
 SET(PREFIX_ext_pyqt "${EXTPREFIX}" )
 
 if(UNIX)
-    SET(Python_EXECUTABLE ${PREFIX_ext_pyqt}/bin/python3)
-    if(NOT EXISTS ${Python_EXECUTABLE})
-      message("WARNING: using system python3!")
-      SET(Python_EXECUTABLE python3)
-    endif()
-
     if (QT_ENABLE_ASAN)
        set(_extra_pyqt_config --qmake-setting QMAKE_LFLAGS+=-fsanitize=address --qmake-setting QMAKE_CFLAGS+=-fsanitize=address --qmake-setting QMAKE_CXXFLAGS+=-fsanitize=address)
+    elseif(APPLE)
+        if(MACOS_ARCHS GREATER 1)
+            set(_extra_pyqt_config --qmake-setting "QMAKE_APPLE_DEVICE_ARCHS=${CMAKE_OSX_ARCHITECTURES_STR}")
+        endif()
     else ()
        unset(_extra_pyqt_config)
     endif ()
@@ -37,6 +35,8 @@ if(UNIX)
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://pypi.python.org/packages/source/P/PyQt5/PyQt5-5.15.7.tar.gz
         URL_HASH SHA256=755121a52b3a08cb07275c10ebb96576d36e320e572591db16cfdbc558101594
+
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-Qt-composite-module-lacking-a-platform-tag-on-ma.patch
 
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${KRITA_PYTHONPATH}"
@@ -138,6 +138,8 @@ elseif(WIN32)
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://pypi.python.org/packages/source/P/PyQt5/PyQt5-5.15.7.tar.gz
         URL_HASH SHA256=755121a52b3a08cb07275c10ebb96576d36e320e572591db16cfdbc558101594
+
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-Qt-composite-module-lacking-a-platform-tag-on-ma.patch
 
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env 
             PYTHONPATH=${_krita_pythonpath}

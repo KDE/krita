@@ -24,10 +24,13 @@ ExternalProject_Add(
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Android-Skip-setting-up-fastlane.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Android-Recursively-find-dependency-of-dependencies.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Revert-Use-BIN_INSTALL_DIR-data-for-DATAROOTDIR-on-W.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-ANDROID-Find-dependencies-of-manually-specified-libr.patch
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
+
+    DEPENDS ${QT_DEP}
 )
 
 ExternalProject_Add(
@@ -44,8 +47,13 @@ ExternalProject_Add(
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF -DKCONFIG_USE_DBUS=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_extra_cmake_modules
+    DEPENDS ${QT_DEP} ext_extra_cmake_modules
 )
+
+set (_karchive_extra_flags "")
+if (ANDROID)
+    set(_karchive_extra_flags "-DCMAKE_DISABLE_FIND_PACKAGE_PkgConfig=1")
+endif()
 
 ExternalProject_Add(
     ext_karchive
@@ -53,10 +61,10 @@ ExternalProject_Add(
     URL https://download.kde.org/stable/frameworks/5.101/karchive-5.101.0.tar.xz
     URL_HASH SHA256=58bcb6c61bc4a3fe48a0cbeaf392d42b6b8d33e1bc4c51faf24db0912ecfa9b0
 
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE} ${_karchive_extra_flags}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_extra_cmake_modules
+    DEPENDS ${QT_DEP} ext_extra_cmake_modules
 )
 
 ExternalProject_Add(
@@ -68,7 +76,7 @@ ExternalProject_Add(
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_kconfig
+    DEPENDS ${QT_DEP} ext_kconfig
 )
 
 ExternalProject_Add(
@@ -80,7 +88,7 @@ ExternalProject_Add(
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_kwidgetsaddons
+    DEPENDS ${QT_DEP} ext_kwidgetsaddons
 )
 
 ExternalProject_Add(
@@ -92,7 +100,7 @@ ExternalProject_Add(
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_kcompletion
+    DEPENDS ${QT_DEP} ext_kcompletion
 )
 
 
@@ -107,13 +115,13 @@ ExternalProject_Add(
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF -DWITH_WAYLAND=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_kcoreaddons
+    DEPENDS ${QT_DEP} ext_kcoreaddons
 )
 
 if (ANDROID)
     set (KI18N_DEP ext_libintl-lite)
 elseif (APPLE)
-    set (KI18N_DEP ext_gettext)
+    set (KI18N_DEP ${GETTEXT_DEP})
 endif()
 
 ExternalProject_Add(
@@ -129,7 +137,7 @@ ExternalProject_Add(
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_kguiaddons ${KI18N_DEP}
+    DEPENDS ${QT_DEP} ext_kguiaddons ${KI18N_DEP}
 )
 
 ExternalProject_Add(
@@ -141,7 +149,7 @@ ExternalProject_Add(
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_ki18n
+    DEPENDS ${QT_DEP} ext_ki18n
 )
 
 ExternalProject_Add(
@@ -153,7 +161,7 @@ ExternalProject_Add(
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_kitemmodels
+    DEPENDS ${QT_DEP} ext_kitemmodels
 )
 
 ExternalProject_Add(
@@ -165,7 +173,7 @@ ExternalProject_Add(
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_karchive ext_kitemviews
+    DEPENDS ${QT_DEP} ext_karchive ext_kitemviews
 )
 
 ExternalProject_Add(
@@ -177,7 +185,7 @@ ExternalProject_Add(
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_kimageformats
+    DEPENDS ${QT_DEP} ext_kimageformats
 )
 
 ExternalProject_Add(
@@ -189,5 +197,5 @@ ExternalProject_Add(
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_kwindowsystem
+    DEPENDS ${QT_DEP} ext_kwindowsystem
 )

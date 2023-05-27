@@ -1,0 +1,103 @@
+From f5f548479894a801738a8cdd109ca3cf310ef40c Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Tue, 6 Dec 2022 12:21:50 +0000
+Subject: [PATCH 2/2] Android: Recursively find dependency of dependencies.
+
+---
+ toolchain/specifydependencies.cmake | 70 ++++++++++++++++-------------
+ 1 file changed, 39 insertions(+), 31 deletions(-)
+
+diff --git a/toolchain/specifydependencies.cmake b/toolchain/specifydependencies.cmake
+index fac7c71d..b5cdc898 100644
+--- a/toolchain/specifydependencies.cmake
++++ b/toolchain/specifydependencies.cmake
+@@ -1,37 +1,10 @@
++set(indexed_libraries "")
+ 
+-function(list_dependencies target libs)
+-    execute_process(COMMAND readelf --wide --dynamic ${target} ERROR_VARIABLE readelf_errors OUTPUT_VARIABLE out RESULT_VARIABLE result)
+-
+-    if (NOT result EQUAL 0)
+-        message(FATAL_ERROR "readelf failed on ${target} exit(${result}): ${readelf_errors}")
+-    endif()
+-
+-    string(REPLACE "\n" ";" lines "${out}")
+-    set(extralibs ${${libs}})
+-    foreach(line ${lines})
+-        string(REGEX MATCH ".*\\(NEEDED\\) +Shared library: +\\[(.+)\\]$" matched ${line})
+-        set(currentLib ${CMAKE_MATCH_1})
+-
+-        if(NOT ${currentLib} MATCHES "libQt5.*" AND matched)
+-            find_file(ourlib-${currentLib} ${currentLib} HINTS ${OUTPUT_DIR} ${EXPORT_DIR} ${ECM_ADDITIONAL_FIND_ROOT_PATH} NO_DEFAULT_PATH PATH_SUFFIXES lib)
+-
+-            if(ourlib-${currentLib})
+-                list(APPEND extralibs "${ourlib-${currentLib}}")
+-            else()
+-                message(STATUS "could not find ${currentLib} in ${OUTPUT_DIR} ${EXPORT_DIR} ${ECM_ADDITIONAL_FIND_ROOT_PATH}")
+-            endif()
+-        endif()
+-    endforeach()
+-    set(${libs} ${extralibs} PARENT_SCOPE)
+-endfunction()
+-
+-list_dependencies(${TARGET} extralibs)
+-
+-function(contains_library libpath IS_EQUAL)
++function(contains_library libraries libpath IS_EQUAL)
+     get_filename_component (name ${libpath} NAME)
+     unset (IS_EQUAL PARENT_SCOPE)
+ 
+-    foreach (extralib ${extralibs})
++    foreach (extralib ${libraries})
+         get_filename_component (extralibname ${extralib} NAME)
+         if (${extralibname} STREQUAL ${name})
+             set (IS_EQUAL TRUE PARENT_SCOPE)
+@@ -40,9 +13,44 @@ function(contains_library libpath IS_EQUAL)
+     endforeach()
+ endfunction()
+ 
++macro(list_dependencies target libs)
++    contains_library("${indexed_libraries}" ${target} IS_EQUAL)
++    if(NOT IS_EQUAL)
++        list(APPEND indexed_libraries ${target})
++
++        execute_process(COMMAND readelf --wide --dynamic ${target} ERROR_VARIABLE readelf_errors OUTPUT_VARIABLE out RESULT_VARIABLE result)
++
++        if (NOT result EQUAL 0)
++            message(FATAL_ERROR "readelf failed on ${target} exit(${result}): ${readelf_errors}")
++        endif()
++
++        string(REPLACE "\n" ";" lines "${out}")
++        set(extralibs ${${libs}})
++        foreach(line ${lines})
++            string(REGEX MATCH ".*\\(NEEDED\\) +Shared library: +\\[(.+)\\]$" matched ${line})
++            set(currentLib ${CMAKE_MATCH_1})
++
++            if(NOT ${currentLib} MATCHES "libQt5.*" AND matched)
++                find_file(ourlib-${currentLib} ${currentLib} HINTS ${OUTPUT_DIR} ${EXPORT_DIR} ${ECM_ADDITIONAL_FIND_ROOT_PATH} NO_DEFAULT_PATH PATH_SUFFIXES lib)
++
++                if(ourlib-${currentLib})
++                    set(_found_lib ${ourlib-${currentLib}})
++                    list(APPEND extralibs "${_found_lib}")
++                    list_dependencies(${_found_lib} extralibs)
++                else()
++                    message(STATUS "could not find ${currentLib} in ${OUTPUT_DIR} ${EXPORT_DIR}/lib/ ${ECM_ADDITIONAL_FIND_ROOT_PATH}")
++                endif()
++            endif()
++        endforeach()
++        set(${libs} ${extralibs})
++    endif()
++endmacro()
++
++list_dependencies(${TARGET} extralibs)
++
+ if (ANDROID_EXTRA_LIBS)
+     foreach (extralib ${ANDROID_EXTRA_LIBS})
+-        contains_library(${extralib} IS_EQUAL)
++        contains_library("${extralibs}" ${extralib} IS_EQUAL)
+ 
+         if (IS_EQUAL)
+             message (STATUS "found duplicate, skipping: " ${extralib})
+-- 
+2.37.1.windows.1
+

@@ -1,0 +1,90 @@
+From 4622cea47c248db71b423e1662ec3f01a3c0802f Mon Sep 17 00:00:00 2001
+From: Boudewijn Rempt <boud@valdyas.org>
+Date: Thu, 12 May 2016 20:15:40 +0200
+Subject: [PATCH 1/2] Patch kconfig to save the config to AppConfigLocation
+
+I don't know why anyone would want an application to save its
+configuration to GenericConfigLocation, after all, we're an
+application, not a system level component. But this seems the
+only way to fix kconfig to do the sane thing.
+---
+ docs/options.md                   | 2 +-
+ src/core/kdesktopfile.cpp         | 8 +++++---
+ src/kconf_update/kconf_update.cpp | 6 +++---
+ 3 files changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/docs/options.md b/docs/options.md
+index b57713de..404a3238 100644
+--- a/docs/options.md
++++ b/docs/options.md
+@@ -93,4 +93,4 @@ They are:
+ 
+ * `$QT_CACHE_HOME` - QStandardPaths::GenericCacheLocation
+ * `$QT_CONFIG_HOME` - QStandardPaths::GenericConfigLocation
+-* `$QT_DATA_HOME` - QStandardPaths::GenericDataLocation
++* `$QT_DATA_HOME` - QStandardPaths::AppDataLocation
+diff --git a/src/core/kdesktopfile.cpp b/src/core/kdesktopfile.cpp
+index 95645a63..50048e5f 100644
+--- a/src/core/kdesktopfile.cpp
++++ b/src/core/kdesktopfile.cpp
+@@ -71,13 +71,14 @@ QString KDesktopFile::locateLocal(const QString &path)
+     static const QLatin1Char slash('/');
+ 
+     // Relative to config? (e.g. for autostart)
+-    const QStringList genericConfig = QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation);
++    const QStringList genericConfig =
++        QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+     // Iterate from the last item since some items may be subfolders of others.
+     auto it = std::find_if(genericConfig.crbegin(), genericConfig.crend(), [&path](const QString &dir) {
+         return path.startsWith(dir + slash);
+     });
+     if (it != genericConfig.crend()) {
+-        return QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + slash + QStringView(path).mid(it->size() + 1);
++        return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + slash + QStringView(path).mid(it->size() + 1);
+     }
+ 
+     QString relativePath;
+@@ -132,7 +133,8 @@ bool KDesktopFile::isAuthorizedDesktopFile(const QString &path)
+     }
+ 
+     const QString servicesDir = QStringLiteral("kservices5/"); // KGlobal::dirs()->xdgDataRelativePath("services")
+-    const QStringList genericData = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
++    const QStringList genericData =
++        QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+     auto genericIt = std::find_if(genericData.cbegin(), genericData.cend(), [&realPath, &servicesDir, sensitivity](const QString &xdgDataPrefix) {
+         QFileInfo info(xdgDataPrefix);
+         if (info.exists() && info.isDir()) {
+diff --git a/src/kconf_update/kconf_update.cpp b/src/kconf_update/kconf_update.cpp
+index 18692e3a..5ba9f531 100644
+--- a/src/kconf_update/kconf_update.cpp
++++ b/src/kconf_update/kconf_update.cpp
+@@ -146,7 +146,7 @@ KonfUpdate::KonfUpdate(QCommandLineParser *parser)
+     if (parser->isSet(QStringLiteral("check"))) {
+         m_bUseConfigInfo = true;
+         const QString file =
+-            QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String{"kconf_update/"} + parser->value(QStringLiteral("check")));
++            QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String{"kconf_update/"} + parser->value(QStringLiteral("check")));
+         if (file.isEmpty()) {
+             qWarning("File '%s' not found.", parser->value(QStringLiteral("check")).toLocal8Bit().data());
+             qCDebug(KCONF_UPDATE_LOG) << "File" << parser->value(QStringLiteral("check")) << "passed on command line not found";
+@@ -192,7 +192,7 @@ QStringList KonfUpdate::findUpdateFiles(bool dirtyOnly)
+ {
+     QStringList result;
+ 
+-    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kconf_update"), QStandardPaths::LocateDirectory);
++    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, QStringLiteral("kconf_update"), QStandardPaths::LocateDirectory);
+     for (const QString &d : dirs) {
+         const QDir dir(d);
+ 
+@@ -762,7 +762,7 @@ void KonfUpdate::gotScript(const QString &_script)
+         return;
+     }
+ 
+-    QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("kconf_update/") + script);
++    QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("kconf_update/") + script);
+     if (path.isEmpty()) {
+         if (interpreter.isEmpty()) {
+             path = QLatin1String{CMAKE_INSTALL_PREFIX "/" LIB_INSTALL_DIR "/kconf_update_bin/"} + script;
+-- 
+2.37.1.windows.1
+

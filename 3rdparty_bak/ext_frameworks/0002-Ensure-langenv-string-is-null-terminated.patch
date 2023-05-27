@@ -1,0 +1,25 @@
+From 410e2c11ec505d1ca562a319ec971bc104c6c0e4 Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvin@alvinhc.com>
+Date: Sat, 30 Oct 2021 22:04:02 +0800
+Subject: [PATCH 2/3] Ensure `langenv` string is null-terminated
+
+See: https://bugs.kde.org/show_bug.cgi?id=444614
+---
+ src/i18n/kcatalog.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/i18n/kcatalog.cpp b/src/i18n/kcatalog.cpp
+index 6bd728b..3bc605f 100644
+--- a/src/i18n/kcatalog.cpp
++++ b/src/i18n/kcatalog.cpp
+@@ -166,6 +166,7 @@ KCatalog::KCatalog(const QByteArray &domain, const QString &language_)
+             // This doesn't work on Windows though, so there we need putenv calls on every change
+             s_langenv = new char[s_langenvMaxlen];
+             copyToLangArr(qgetenv("LANGUAGE"));
++            s_langenv[s_langenvMaxlen - 1] = '\0';
+             putenv(s_langenv);
+         }
+     }
+-- 
+2.37.1.windows.1
+

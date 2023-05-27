@@ -15,7 +15,6 @@ if(WIN32)
 
        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-Krita-builds-with-Clang.patch
              COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-building-Boost.Build-with-a-chosen-toolset.patch
-             COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-compilation-with-clang-15.patch
 
        CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat gcc --prefix=${PREFIX_ext_boost}
        BUILD_COMMAND <SOURCE_DIR>/b2.exe -j${SUBMAKE_JOBS} linkflags=${SECURITY_SHARED_LINKER_FLAGS} --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=gcc variant=release link=shared threading=multi architecture=x86 address-model=64 install
@@ -110,16 +109,13 @@ elseif(ANDROID)
        DEPENDEES install
    )
 else()
-  if(APPLE)
-      set(MACOS_BOOST_ARGS architecture=arm+x86 cxxflags="${MACOS_ARCH_FLAGS}")
-  endif()
 	ExternalProject_Add( ext_boost
         	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
           URL https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.gz
           URL_HASH SHA256=4b2136f98bdd1f5857f1c3dea9ac2018effe65286cf251534b6ae20cc45e1847
 
         	CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.sh --prefix=${PREFIX_ext_boost} --with-libraries=system
-	        BUILD_COMMAND <SOURCE_DIR>/b2 ${MACOS_BOOST_ARGS} -j${SUBMAKE_JOBS} install
+	        BUILD_COMMAND <SOURCE_DIR>/b2 -j${SUBMAKE_JOBS} install
 	        INSTALL_COMMAND ""
         	INSTALL_DIR ${PREFIX_ext_boost}
 

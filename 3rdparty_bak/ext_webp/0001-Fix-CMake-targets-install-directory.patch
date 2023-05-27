@@ -1,0 +1,25 @@
+From 63b57144f0cfea10abbd50674bc20a2fa33cb549 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sun, 6 Jun 2021 13:47:25 +0000
+Subject: [PATCH] Fix CMake targets install directory
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7c0e98e..3054fbc 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -668,7 +668,7 @@ install(TARGETS ${INSTALLED_LIBRARIES}
+         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+-set(ConfigPackageLocation ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/cmake/)
++set(ConfigPackageLocation ${CMAKE_INSTALL_DATADIR}/cmake/${PROJECT_NAME})
+ install(EXPORT ${PROJECT_NAME}Targets
+         NAMESPACE ${PROJECT_NAME}::
+         DESTINATION ${ConfigPackageLocation})
+-- 
+2.31.1
+

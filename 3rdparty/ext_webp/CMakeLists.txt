@@ -1,7 +1,6 @@
 SET(EXTPREFIX_webp "${EXTPREFIX}" )
 
-kis_ExternalProject_Add_with_separate_builds_apple(
-    ext_webp
+ExternalProject_Add( ext_webp
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.2.4.tar.gz
     URL_HASH SHA256=7bf5a8a28cc69bcfa8cb214f2c3095703c6b73ac5fba4d5480c205331d9494df

@@ -1,0 +1,72 @@
+From ef114659f068dba2e6d966c48c2c3adf865d0d03 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Thu, 13 Jan 2022 13:59:01 +0000
+Subject: [PATCH] Add install property and cmake config file
+
+---
+ cmake/CMakeLists.txt              | 24 ++++++++++++++++++++++++
+ cmake/unwindstack-config.cmake.in | 10 ++++++++++
+ 2 files changed, 34 insertions(+)
+ create mode 100644 cmake/unwindstack-config.cmake.in
+
+diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
+index 68fd086..02ddb56 100644
+--- a/cmake/CMakeLists.txt
++++ b/cmake/CMakeLists.txt
+@@ -1,6 +1,8 @@
+ project(unwindstack LANGUAGES C CXX ASM)
+ cmake_minimum_required(VERSION 3.10)
+ 
++include(GNUInstallDirs)
++
+ set(UNWINDSTACK_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../)
+ 
+ include_directories(${UNWINDSTACK_ROOT} ${UNWINDSTACK_ROOT}/include)
+@@ -98,6 +100,28 @@ add_library(unwindstack STATIC
+ target_link_libraries(unwindstack log)
+ set_property(TARGET unwindstack PROPERTY CXX_STANDARD 17)
+ 
++include(CMakePackageConfigHelpers)
++configure_package_config_file(unwindstack-config.cmake.in
++  ${CMAKE_CURRENT_BINARY_DIR}/unwindstack-config.cmake
++  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/unwindstack/cmake
++  PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR CMAKE_INSTALL_PREFIX)
++
+ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+     target_compile_options(unwindstack PRIVATE $<BUILD_INTERFACE:-Wno-unknown-attributes>)
+ endif()
++
++install(TARGETS unwindstack
++    EXPORT ${PROJECT_NAME}Targets
++    RUNTIME DESTINATION bin
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    )
++
++install(EXPORT ${PROJECT_NAME}Targets
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
++    )
++
++install(DIRECTORY ${UNWINDSTACK_ROOT}/include/ ${UNWINDSTACK_ROOT}/include/unwindstack DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++install(FILES
++    "${CMAKE_CURRENT_BINARY_DIR}/unwindstack-config.cmake"
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+diff --git a/cmake/unwindstack-config.cmake.in b/cmake/unwindstack-config.cmake.in
+new file mode 100644
+index 0000000..39032c1
+--- /dev/null
++++ b/cmake/unwindstack-config.cmake.in
+@@ -0,0 +1,10 @@
++@PACKAGE_INIT@
++
++set_and_check(@PROJECT_NAME@_INCLUDE_DIR @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
++
++include("@PACKAGE_CMAKE_INSTALL_LIBDIR@/cmake/@PROJECT_NAME@/@PROJECT_NAME@Targets.cmake")
++get_target_property(unwindstack_lib_location unwindstack "LOCATION")
++set_and_check(@PROJECT_NAME@_LIBRARIES ${unwindstack_lib_location})
++set_and_check(unwindstack_DIR @PACKAGE_CMAKE_INSTALL_PREFIX@)
++
++set(unwindstack_FOUND TRUE)
+-- 
+2.37.1
+

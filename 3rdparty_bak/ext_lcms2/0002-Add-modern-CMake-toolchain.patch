@@ -1,0 +1,324 @@
+From b6dc4548ccb41c67b3a2989ef1a801274abdc9e2 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Thu, 20 Oct 2022 20:13:00 -0300
+Subject: [PATCH 2/2] Add modern CMake toolchain
+
+Co-authored-by: Halla Rempt <halla@valdyas.org>
+---
+ CMakeLists.txt                    | 59 ++++++++++++++++++++++
+ plugins/fast_float/CMakeLists.txt | 51 +++++++++++++++++++
+ src/CMakeLists.txt                | 82 +++++++++++++++++++++++++++++++
+ testbed/CMakeLists.txt            |  3 ++
+ utils/CMakeLists.txt              | 77 +++++++++++++++++++++++++++++
+ 5 files changed, 272 insertions(+)
+ create mode 100644 CMakeLists.txt
+ create mode 100644 plugins/fast_float/CMakeLists.txt
+ create mode 100644 src/CMakeLists.txt
+ create mode 100644 testbed/CMakeLists.txt
+ create mode 100644 utils/CMakeLists.txt
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..7ea5907
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,59 @@
++cmake_minimum_required(VERSION 3.1)
++
++project(lcms2 VERSION "2.12")
++
++option(BUILD_TESTS "build the test executable" OFF)
++option(BUILD_SHARED_LIBS "build as shared library" ON)
++option(BUILD_UTILS "build the utilities executables" OFF)
++option(BUILD_PLUGINS "build the plugins" ON)
++
++set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
++
++include(CheckLibraryExists)
++CHECK_LIBRARY_EXISTS(m sqrt "" HAVE_LIBM)
++
++include(CheckCSourceCompiles)
++
++check_c_source_compiles("__attribute__((visibility(\"hidden\"))) int foo() { return 0; } int main() { return 0; }" HAVE_FUNC_ATTRIBUTE_VISIBILITY)
++
++include(CheckCCompilerFlag)
++
++check_c_compiler_flag("-fvisibility=hidden" HAVE_VISIBILITY_HIDDEN)
++
++include(FindThreads)
++
++add_subdirectory(src)
++
++if(BUILD_PLUGINS)
++    add_subdirectory(plugins/fast_float)
++endif()
++
++if(BUILD_TESTS)
++    add_subdirectory(testbed)
++endif(BUILD_TESTS)
++
++if(BUILD_UTILS)
++    add_subdirectory(utils)
++endif(BUILD_UTILS)
++
++set(prefix ${CMAKE_INSTALL_PREFIX})
++set(exec_prefix "\${prefix}")
++set(libdir "\${prefix}/lib")
++set(includedir "\${exec_prefix}/include")
++set(PACKAGE ${PROJECT_NAME})
++set(VERSION ${lcms2_VERSION})
++if(BUILD_PLUGINS)
++    set(LIB_PLUGINS "-llcms2_fast_float")
++endif()
++if(HAVE_LIBM)
++    set(LIB_MATH "-lm")
++endif()
++if(Threads_FOUND)
++    set(LIB_THREAD ${CMAKE_THREAD_LIBS_INIT})
++endif()
++
++configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lcms2.pc.in ${CMAKE_CURRENT_BINARY_DIR}/lcms2.pc @ONLY)
++install(
++    FILES ${CMAKE_CURRENT_BINARY_DIR}/lcms2.pc
++    DESTINATION lib/pkgconfig
++)
+diff --git a/plugins/fast_float/CMakeLists.txt b/plugins/fast_float/CMakeLists.txt
+new file mode 100644
+index 0000000..49b0825
+--- /dev/null
++++ b/plugins/fast_float/CMakeLists.txt
+@@ -0,0 +1,51 @@
++include(CheckCXXSourceCompiles)
++check_cxx_source_compiles ("#include <emmintrin.h>
++int main() { __m128i n = _mm_set1_epi8(42); }" HAVE_SSE2)
++
++set(lcms_plugin_SRCS 
++    src/fast_16_tethra.c
++    src/fast_8_curves.c
++    src/fast_8_matsh.c
++    src/fast_8_tethra.c
++    src/fast_float_15bits.c
++    src/fast_float_15mats.c
++    src/fast_float_cmyk.c
++    src/fast_float_curves.c
++    src/fast_float_lab.c
++    src/fast_float_matsh.c
++    src/fast_float_separate.c
++    src/fast_float_sup.c
++    src/fast_float_tethra.c
++)
++
++add_library(lcms2_fast_float SHARED ${lcms_plugin_SRCS})
++
++target_include_directories(lcms2_fast_float PUBLIC
++    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
++    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
++    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
++    $<INSTALL_INTERFACE:include>
++)
++
++if (NOT HAVE_SSE)
++    target_compile_definitions(lcms2_fast_float PUBLIC CMS_DONT_USE_SSE2=1)
++endif()
++
++set_target_properties(lcms2_fast_float PROPERTIES VERSION ${lcms2_VERSION}
++                                      SOVERSION ${lcms2_VERSION_MAJOR})
++
++if(WIN32)
++    set_target_properties(lcms2_fast_float PROPERTIES COMPILE_FLAGS -DCMS_DLL_BUILD=1)
++endif()
++
++target_link_libraries(lcms2_fast_float PUBLIC lcms2)
++
++install(TARGETS lcms2_fast_float RUNTIME DESTINATION bin
++                                LIBRARY DESTINATION lib
++                                ARCHIVE DESTINATION lib)
++
++install(FILES
++    ${CMAKE_CURRENT_SOURCE_DIR}/../../include/lcms2_plugin.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/include/lcms2_fast_float.h
++    DESTINATION include
++)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+new file mode 100644
+index 0000000..66409a5
+--- /dev/null
++++ b/src/CMakeLists.txt
+@@ -0,0 +1,82 @@
++set(lcms_SRCS
++    cmscnvrt.c
++    cmserr.c
++    cmsgamma.c
++    cmsgmt.c
++    cmsintrp.c
++    cmsio0.c
++    cmsio1.c
++    cmslut.c
++    cmsplugin.c
++    cmssm.c
++    cmsmd5.c
++    cmsmtrx.c
++    cmspack.c
++    cmspcs.c
++    cmswtpnt.c
++    cmsxform.c
++    cmssamp.c
++    cmsnamed.c
++    cmscam02.c
++    cmsvirt.c
++    cmstypes.c
++    cmscgats.c
++    cmsps2.c
++    cmsopt.c
++    cmshalf.c
++    cmsalpha.c
++)
++
++if (MSVC)
++    set(lcms_SRCS ${lcms_SRCS}
++        lcms2.def
++    )
++endif()
++
++if (BUILD_SHARED_LIBS)
++    add_library(lcms2 SHARED ${lcms_SRCS})
++else()
++    add_library(lcms2 STATIC ${lcms_SRCS})
++endif()
++
++set_target_properties(lcms2 PROPERTIES VERSION ${lcms2_VERSION}
++                                      SOVERSION ${lcms2_VERSION_MAJOR})
++
++if(BUILD_SHARED_LIBS AND WIN32)
++    target_compile_definitions(lcms2 PUBLIC CMS_DLL_BUILD=1)
++elseif(NOT BUILD_SHARED_LIBS)
++    target_compile_definitions(lcms2 PUBLIC CMS_STATIC=1)
++endif()
++
++if(HAVE_LIBM)
++    target_link_libraries(lcms2 PUBLIC m)
++endif()
++
++if(HAVE_FUNC_ATTRIBUTE_VISIBILITY)
++    target_compile_definitions(lcms2 PUBLIC HAVE_FUNC_ATTRIBUTE_VISIBILITY=1)
++endif()
++
++if(HAVE_VISIBILITY_HIDDEN)
++    target_compile_options(lcms2 PUBLIC "-fvisibility=hidden")
++endif()
++
++if(Threads_FOUND)
++    target_compile_definitions(lcms2 PRIVATE HasTHREADS=1)
++    target_link_libraries(lcms2 PUBLIC Threads::Threads)
++endif()
++
++target_include_directories(lcms2 PUBLIC
++    $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
++    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
++    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
++    $<INSTALL_INTERFACE:include>
++)
++
++install(TARGETS lcms2
++    RUNTIME DESTINATION bin
++    LIBRARY DESTINATION lib
++    ARCHIVE DESTINATION lib)
++
++install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../include/lcms2.h
++    DESTINATION include
++)
+diff --git a/testbed/CMakeLists.txt b/testbed/CMakeLists.txt
+new file mode 100644
+index 0000000..9f213e4
+--- /dev/null
++++ b/testbed/CMakeLists.txt
+@@ -0,0 +1,3 @@
++add_executable(testcms testcms2.c testplugin.c zoo_icc.c)
++target_link_libraries(testcms PUBLIC lcms2 lcms2_fast_float)
++target_compile_definitions(testcms PRIVATE LCMS_FAST_EXTENSIONS=1)
+diff --git a/utils/CMakeLists.txt b/utils/CMakeLists.txt
+new file mode 100644
+index 0000000..ed2f211
+--- /dev/null
++++ b/utils/CMakeLists.txt
+@@ -0,0 +1,77 @@
++include_directories(
++    ${CMAKE_CURRENT_SOURCE_DIR}/common
++    ${CMAKE_SOURCE_DIR}/include # override search path if LCMS is already installed
++)
++
++find_package(JPEG)
++find_package(TIFF)
++
++set(UTILS_EXECUTABLES )
++set(UTILS_MANPAGES )
++
++###############################################################################
++if(JPEG_FOUND)
++    set(JPGICC_SRCS
++        jpgicc/jpgicc.c
++        jpgicc/iccjpeg.c
++        common/xgetopt.c
++        common/vprf.c
++    )
++    add_executable(jpgicc ${JPGICC_SRCS})
++    target_link_libraries(jpgicc PUBLIC lcms2 ${JPEG_LIBRARIES})
++    target_include_directories(jpgicc AFTER PRIVATE ${JPEG_INCLUDE_DIR})
++    list(APPEND UTILS_EXECUTABLES jpgicc)
++    list(APPEND UTILS_MANPAGES jpgicc/jpgicc.1)
++endif(JPEG_FOUND)
++
++###############################################################################
++set(LINKICC_SRCS
++    linkicc/linkicc.c
++    common/xgetopt.c
++    common/vprf.c
++)
++add_executable(linkicc ${LINKICC_SRCS})
++target_link_libraries(linkicc PUBLIC lcms2)
++list(APPEND UTILS_EXECUTABLES linkicc)
++list(APPEND UTILS_MANPAGES linkicc/linkicc.1)
++
++###############################################################################
++set(PSICC_SRCS
++    psicc/psicc.c
++    common/xgetopt.c
++    common/vprf.c
++)
++add_executable(psicc ${PSICC_SRCS})
++target_link_libraries(psicc PUBLIC lcms2)
++list(APPEND UTILS_EXECUTABLES psicc)
++list(APPEND UTILS_MANPAGES psicc/psicc.1)
++
++###############################################################################
++if(TIFF_FOUND)
++    set(TIFICC_SRCS
++        tificc/tificc.c
++        common/xgetopt.c
++        common/vprf.c
++    )
++    add_executable(tificc ${TIFICC_SRCS})
++    target_link_libraries(tificc PUBLIC lcms2 ${TIFF_LIBRARIES})
++    target_include_directories(tificc AFTER PRIVATE ${TIFF_INCLUDE_DIR})
++    list(APPEND UTILS_EXECUTABLES tificc)
++    list(APPEND UTILS_MANPAGES tificc/tificc.1)
++endif(TIFF_FOUND)
++
++###############################################################################
++set(TRANSICC_SRCS
++    transicc/transicc.c
++    common/xgetopt.c
++    common/vprf.c
++)
++add_executable(transicc ${TRANSICC_SRCS})
++target_link_libraries(transicc PUBLIC lcms2)
++list(APPEND UTILS_EXECUTABLES transicc)
++list(APPEND UTILS_MANPAGES transicc/transicc.1)
++
++install(TARGETS ${UTILS_EXECUTABLES} RUNTIME DESTINATION bin
++                                     LIBRARY DESTINATION lib
++                                     ARCHIVE DESTINATION lib)
++install(FILES ${UTILS_MANPAGES} DESTINATION share/man/man1)
+-- 
+2.37.1.windows.1
+

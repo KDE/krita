@@ -1,0 +1,48 @@
+SET(PREFIX_ext_jpegxl "${EXTPREFIX}" )
+
+if (MINGW)
+    include(CheckCXXSymbolExists)
+    include(CheckCXXCompilerFlag)
+    check_cxx_symbol_exists(PRIu64 "inttypes.h" CAN_BUILD_HIGHWAY)
+    check_cxx_compiler_flag("-mavx512f" CAN_TARGET_AVX512F)
+    if (NOT CAN_BUILD_HIGHWAY OR NOT CAN_TARGET_AVX512F)
+        message(WARNING "Skipping libjxl, compiler cannot build highway.")
+        return()
+    endif()
+endif()
+
+ExternalProject_Add( ext_highway
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/google/highway/archive/refs/tags/1.0.2.tar.gz
+    URL_HASH SHA256=e8ef71236ac0d97f12d553ec1ffc5b6375d57b5f0b860c7447dd69b6ed1072db
+
+    INSTALL_DIR ${PREFIX_ext_jpegxl}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_jpegxl} DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF ${GLOBAL_PROFILE} 
+
+    UPDATE_COMMAND ""
+)
+
+ExternalProject_Add( ext_brotli
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/google/brotli/archive/v1.0.9.tar.gz
+    URL_HASH SHA512=b8e2df955e8796ac1f022eb4ebad29532cb7e3aa6a4b6aee91dbd2c7d637eee84d9a144d3e878895bb5e62800875c2c01c8f737a1261020c54feacf9f676b5f5
+
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-PATCH-revert-add-runtime-linker-path.patch
+
+    INSTALL_DIR ${PREFIX_ext_jpegxl}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_jpegxl} DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE} 
+
+    UPDATE_COMMAND ""
+)
+
+ExternalProject_Add( ext_jpegxl
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/libjxl/libjxl/archive/refs/tags/v0.8.1.tar.gz
+    URL_HASH SHA256=60f43921ad3209c9e180563025eda0c0f9b1afac51a2927b9ff59fff3950dc56
+
+    INSTALL_DIR ${PREFIX_ext_jpegxl}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_jpegxl} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DJPEGXL_VERSION=0.8.1 -DJPEGXL_ENABLE_BENCHMARK=OFF -DJPEGXL_ENABLE_COVERAGE=OFF -DJPEGXL_ENABLE_EXAMPLES=OFF -DJPEGXL_ENABLE_FUZZERS=OFF -DJPEGXL_ENABLE_JNI=OFF -DJPEGXL_ENABLE_SJPEG=OFF -DJPEGXL_ENABLE_SKCMS=OFF -DJPEGXL_ENABLE_TOOLS=OFF -DJPEGXL_ENABLE_VIEWERS=OFF -DJPEGXL_ENABLE_JPEGLI_LIBJPEG=OFF "-DCMAKE_CXX_FLAGS:STRING=-DJXL_DEBUG_ON_ERROR -DJX_DEBUG_WARNING" ${GLOBAL_PROFILE} 
+
+    UPDATE_COMMAND ""
+    DEPENDS ext_brotli ext_highway ext_lcms2
+)

@@ -1,6 +1,6 @@
 SET(EXTPREFIX_qt  "${EXTPREFIX}")
 
-set(QT_GIT_TAG "647b9ed4b50cd3e30b260a896980836e37400746")
+set(QT_GIT_TAG "d736e0845fdd4624cfa64346a5fb0456027bfbe1")
 
 if (MINGW)
   set(QT_BUILD_COMMAND   mingw32-make -j${SUBMAKE_JOBS})
@@ -47,7 +47,7 @@ if (WIN32)
         -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview
         -skip qtxmlpatterns -nomake examples -nomake tools
         -no-compile-examples -no-dbus -no-iconv -no-qml-debug
-        -no-libproxy -no-system-proxies -icu -no-mtdev
+        -no-libproxy -no-system-proxies -no-icu -no-mtdev
         -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtnetworkauth
         -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus
         -skip qtspeech -skip qtvirtualkeyboard -qt-sqlite
@@ -59,6 +59,7 @@ if (WIN32)
         -opensource -confirm-license
         -feature-relocatable
         -no-feature-d3d12
+        -no-feature-wmf
         -no-feature-qdoc
         -no-direct2d
         #
@@ -128,7 +129,7 @@ if (WIN32)
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
       GIT_TAG ${QT_GIT_TAG}
-      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtsvg qtwinextras qttranslations
+      GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtwinextras qttranslations
       GIT_SUBMODULES_RECURSE false
       GIT_PROGRESS true
       GIT_REMOTE_UPDATE_STRATEGY REBASE
@@ -143,7 +144,7 @@ if (WIN32)
       # Use a short name to reduce the chance of exceeding path length limit
       SOURCE_DIR s
       BINARY_DIR b
-      DEPENDS ext_googleangle ${OPENSSL_DEP} ${QT_EXTRA_DEPS} ${ZLIB_DEP} ext_icu
+      DEPENDS ext_googleangle ${OPENSSL_DEP} ${QT_EXTRA_DEPS} ${ZLIB_DEP}
   )
 elseif (ANDROID)
   ExternalProject_Add(
@@ -151,7 +152,7 @@ elseif (ANDROID)
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
       GIT_TAG ${QT_GIT_TAG}
-      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtsvg qttranslations qtandroidextras
+      GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qttranslations qtandroidextras
       GIT_SUBMODULES_RECURSE false
       GIT_PROGRESS true
       GIT_REMOTE_UPDATE_STRATEGY REBASE
@@ -166,9 +167,6 @@ elseif (ANDROID)
           -skip qtwebsockets -skip qtwebview -skip qtserialport  -skip qtvirtualkeyboard -skip qtspeech
           -skip qtsensors  -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth
           -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing  -skip qtserialbus
-          -icu
-          -I ${EXTPREFIX_qt}/include
-          -L ${EXTPREFIX_qt}/lib
 
       BUILD_COMMAND ${QT_BUILD_COMMAND}
       INSTALL_COMMAND ${QT_INSTALL_COMMAND}
@@ -178,7 +176,7 @@ elseif (ANDROID)
       UPDATE_COMMAND ""
       BUILD_IN_SOURCE 0
 
-      DEPENDS ext_openssl ${ZLIB_DEP} ext_icu
+      DEPENDS ext_openssl ${ZLIB_DEP}
 )
 elseif (NOT APPLE)
     if (QT_ENABLE_DEBUG_INFO)
@@ -195,7 +193,7 @@ elseif (NOT APPLE)
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
       GIT_TAG ${QT_GIT_TAG}
-      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtsvg qtx11extras qttranslations
+      GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtx11extras qttranslations
       GIT_SUBMODULES_RECURSE false
       GIT_PROGRESS true
       GIT_REMOTE_UPDATE_STRATEGY REBASE
@@ -216,40 +214,36 @@ elseif (NOT APPLE)
   )
 else( APPLE )
 
-    set(MACOS_QT_CONFIGURE_OPS
+      if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "arm64")
+        set(QT_DEVICE_OPTION "-device-option" "QMAKE_APPLE_DEVICE_ARCHS=arm64")
+      endif()
+
+      ExternalProject_Add(
+        ext_qt
+        GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
+        GIT_TAG ${QT_GIT_TAG}
+        GIT_SUBMODULES qtbase qtdeclarative qttools qtmultimedia qtsvg qtmacextras qttranslations
+        GIT_SUBMODULES_RECURSE false
+        GIT_PROGRESS true
+        GIT_REMOTE_UPDATE_STRATEGY REBASE
+
+        CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
+
+        INSTALL_DIR ${EXTPREFIX_qt}
+        CONFIGURE_COMMAND <SOURCE_DIR>/configure
         -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdoc -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland
-        -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtwebengine -skip qtxmlpatterns
-        -skip qtcharts -skip qtdatavis3d  -skip qtgamepad -skip qtnetworkauth
-        -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -nomake examples -nomake tools -no-compile-examples
-        -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -icu -no-mtdev -system-zlib -qt-pcre -qt-sqlite
-        -opensource -confirm-license -openssl-linked -prefix ${EXTPREFIX_qt}
-    )
+            -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtwebengine -skip qtxmlpatterns
+            -skip qtcharts -skip qtdatavis3d  -skip qtgamepad -skip qtnetworkauth
+            -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -nomake examples -nomake tools -no-compile-examples
+            -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -no-icu -no-mtdev -system-zlib -qt-pcre -qt-sqlite
+            -opensource -confirm-license  -openssl-linked -prefix ${EXTPREFIX_qt}
+            ${QT_DEVICE_OPTION}
 
-    kis_ExternalProject_Add_macos(
-      ext_qt
+        BUILD_COMMAND ${QT_BUILD_COMMAND}
+        INSTALL_COMMAND ${QT_INSTALL_COMMAND}
 
-      GIT_REPOSITORY https://invent.kde.org/szaman/qt5.git
-      GIT_TAG ${QT_GIT_TAG}
-      GIT_SUBMODULES qtbase qtdeclarative qtimageformats qttools qtsvg qtmacextras qttranslations
-      GIT_SUBMODULES_RECURSE false
-      GIT_PROGRESS true
-      GIT_REMOTE_UPDATE_STRATEGY REBASE
-
-      WORKING_DIRECTORY <BINARY_DIR>-@ARCH@
-
-      CONFIGURE_COMMAND -e "OPENSSL_LIBS=-L${EXTPREFIX_qt}/lib -lssl -lcrypto"
-          <SOURCE_DIR>/configure
-          ${MACOS_QT_CONFIGURE_OPS}
-          -device-option QMAKE_APPLE_DEVICE_ARCHS=@ARCH@
-
-      BUILD_COMMAND ${QT_BUILD_COMMAND}
-
-      DEPENDS ${ZLIB_DEP} ext_icu ext_openssl
-    )
-
-    # Qt needs separate builds for universal compilation before qt6
-    foreach(ARCH ${CMAKE_OSX_ARCHITECTURES})
-        mkdir_build_arch_dir(${ARCH})
-    endforeach()
-
+        UPDATE_COMMAND ""
+        BUILD_IN_SOURCE OFF
+        DEPENDS ${ZLIB_DEP}
+      )
 endif()

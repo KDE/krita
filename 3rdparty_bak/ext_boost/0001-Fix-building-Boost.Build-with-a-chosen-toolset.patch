@@ -1,0 +1,25 @@
+From 460261c63622ece9406071d1616cdef0d1ebd4ad Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sun, 12 Sep 2021 11:30:51 +0300
+Subject: [PATCH] Fix building Boost.Build with a chosen toolset
+
+---
+ bootstrap.bat | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bootstrap.bat b/bootstrap.bat
+index 03c98ff..5e9d605 100644
+--- a/bootstrap.bat
++++ b/bootstrap.bat
+@@ -12,7 +12,7 @@ ECHO Building Boost.Build engine
+ if exist ".\tools\build\src\engine\b2.exe" del tools\build\src\engine\b2.exe
+ pushd tools\build\src\engine
+ 
+-call .\build.bat
++call .\build.bat %1
+ @ECHO OFF
+ 
+ popd
+-- 
+2.20.1.windows.1
+

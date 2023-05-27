@@ -42,6 +42,6 @@ ExternalProject_Add( ext_gettext
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_gettext} --disable-java ${GLOBAL_AUTOMAKE_PROFILE} --disable-native-java 
 
     UPDATE_COMMAND ""
-    DEPENDS ${ICONV_DEP}
+    DEPENDS ext_iconv
 )
 endif ()

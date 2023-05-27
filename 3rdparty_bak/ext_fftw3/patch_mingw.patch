@@ -1,0 +1,15 @@
+diff --git a/kernel/kalloc.c b/kernel/kalloc.c
+--- a/kernel/kalloc.c
++++ b/kernel/kalloc.c
+@@ -125,6 +125,11 @@ void *X(kernel_malloc)(size_t n)
+ #    undef real_free
+ #    define real_free MPFree
+ 
++#  elif defined(__MINGW32__) || defined(__MINGW64__)
++     p = (void *) __mingw_aligned_malloc(n, MIN_ALIGNMENT);
++#    undef real_free
++#    define real_free __mingw_aligned_free
++
+ #  else
+      /* Add your machine here and send a patch to fftw@fftw.org 
+         or (e.g. for Windows) configure --with-our-malloc */

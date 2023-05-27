@@ -1,0 +1,21 @@
+diff --git a/src/convert.cpp b/src/convert.cpp
+index ef83a23..89c3ae1 100644
+--- a/src/convert.cpp
++++ b/src/convert.cpp
+@@ -1540,13 +1540,15 @@ namespace {
+         }
+         std::string outstr;
+         EXV_ICONV_CONST char* inptr = const_cast<char*>(str.c_str());
++               const char** inptr_const = const_cast<const char**>(&inptr);
++
+         size_t inbytesleft = str.length();
+         while (inbytesleft) {
+             char outbuf[256];
+             char* outptr = outbuf;
+             size_t outbytesleft = sizeof(outbuf);
+             size_t rc = iconv(cd,
+-                              &inptr,
++                              inptr_const,
+                               &inbytesleft,
+                               &outptr,
+                               &outbytesleft);

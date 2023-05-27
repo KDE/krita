@@ -1,0 +1,64 @@
+diff --git a/matrix/test_complex_source.c b/matrix/test_complex_source.c
+index 5f480ff..a3958e3 100644
+--- a/matrix/test_complex_source.c
++++ b/matrix/test_complex_source.c
+@@ -17,6 +17,8 @@
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
++#include <unistd.h>
++
+ void FUNCTION (test, func) (const size_t M, const size_t N);
+ void FUNCTION (test, ops) (const size_t P, const size_t Q);
+ void FUNCTION (test, trap) (const size_t M, const size_t N);
+diff --git a/matrix/test_source.c b/matrix/test_source.c
+index 5f5f26d..dd1b727 100644
+--- a/matrix/test_source.c
++++ b/matrix/test_source.c
+@@ -17,6 +17,8 @@
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
++#include <unistd.h>
++
+ void FUNCTION (test, func) (const size_t M, const size_t N);
+ void FUNCTION (test, ops) (const size_t M, const size_t N);
+ void FUNCTION (test, trap) (const size_t M, const size_t N);
+diff --git a/spmatrix/test.c b/spmatrix/test.c
+index 08e0f67..3d7811e 100644
+--- a/spmatrix/test.c
++++ b/spmatrix/test.c
+@@ -17,6 +17,7 @@
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
++#include <unistd.h>
+ #include <config.h>
+ #include <stdlib.h>
+ #include <math.h>
+diff --git a/vector/test_complex_source.c b/vector/test_complex_source.c
+index c48d631..79a8fda 100644
+--- a/vector/test_complex_source.c
++++ b/vector/test_complex_source.c
+@@ -17,6 +17,8 @@
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
++#include <unistd.h>
++
+ void FUNCTION (test, func) (size_t stride, size_t N);
+ void FUNCTION (test, ops) (size_t stride1, size_t stride2, size_t N);
+ void FUNCTION (test, file) (size_t stride, size_t N);
+diff --git a/vector/test_source.c b/vector/test_source.c
+index 2a80266..03fc46a 100644
+--- a/vector/test_source.c
++++ b/vector/test_source.c
+@@ -17,6 +17,8 @@
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+  */
+ 
++#include <unistd.h>
++
+ void FUNCTION (test, func) (size_t stride, size_t N);
+ void FUNCTION (test, ops) (size_t stride1, size_t stride2, size_t N);
+ void FUNCTION (test, file) (size_t stride, size_t N);

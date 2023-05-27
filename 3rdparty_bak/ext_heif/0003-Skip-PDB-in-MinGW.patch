@@ -1,0 +1,25 @@
+From 92eb7b933de20a47d69ac99d22983a8ee8376f55 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Mon, 22 Feb 2021 13:59:19 +0000
+Subject: [PATCH 3/3] Skip PDB in MinGW
+
+---
+ source/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
+index 95218f5..6de921d 100644
+--- a/source/CMakeLists.txt
++++ b/source/CMakeLists.txt
+@@ -599,7 +599,7 @@ if(SVTHEVC_FOUND)
+ endif()
+ 
+ install(FILES x265.h "${PROJECT_BINARY_DIR}/x265_config.h" DESTINATION include)
+-if((WIN32 AND ENABLE_CLI) OR (WIN32 AND ENABLE_SHARED))
++if((WIN32 AND NOT MINGW AND ENABLE_CLI) OR (WIN32 AND NOT MINGW AND ENABLE_SHARED))
+     if(MSVC_IDE)
+         install(FILES "${PROJECT_BINARY_DIR}/Debug/x265.pdb" DESTINATION ${BIN_INSTALL_DIR} CONFIGURATIONS Debug)
+         install(FILES "${PROJECT_BINARY_DIR}/RelWithDebInfo/x265.pdb" DESTINATION ${BIN_INSTALL_DIR} CONFIGURATIONS RelWithDebInfo)
+-- 
+2.30.1.windows.1
+

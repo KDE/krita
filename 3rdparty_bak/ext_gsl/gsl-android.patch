@@ -1,0 +1,20 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -386,6 +386,7 @@
+ # Compiles the source code, runs the program and sets ${VAR} to 1 if the
+ # return value is equal to ${RESULT}.
+ macro(check_run_result SRC RESULT VAR)
++  if (NOT ANDROID)
+   set(SRC_FILE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/src.c)
+   file(WRITE ${SRC_FILE} "${SRC}")
+   try_run(RUN_RESULT COMPILE_RESULT ${CMAKE_BINARY_DIR} ${SRC_FILE}
+@@ -393,6 +394,9 @@
+   if (RUN_RESULT EQUAL ${RESULT})
+     set(${VAR} 1)
+   endif ()
++  else()
++    set(${VAR} 1)
++  endif()
+ endmacro()
+ 
+ # Check IEEE comparisons, whether "x != x" is true for NaNs.

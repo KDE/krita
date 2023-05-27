@@ -1,0 +1,46 @@
+From fdd6f9cd842a57529be1452eaaa0153c68a5c82a Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvinhochun@gmail.com>
+Date: Thu, 17 Mar 2022 16:12:08 +0800
+Subject: [PATCH 16/17] Reduce flickering when resizing window
+
+* Do not swap buffers when resizing swapchain, because it may cause
+  visual artifacts when resizing the window.
+* Do not stretch buffer with DXGI 1.2 swap chain. This stops the window
+  content from being stretched when resizing the window.
+---
+ src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp              | 5 -----
+ .../renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp         | 2 +-
+ 2 files changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp b/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+index c69d84eb5..2fe62a162 100644
+--- a/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
++++ b/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+@@ -375,11 +375,6 @@ EGLint SwapChain11::resetOffscreenColorBuffer(DisplayD3D *displayD3D,
+         const int yoffset                  = std::max(backbufferHeight - previousHeight, 0);
+         deviceContext->CopySubresourceRegion(mOffscreenTexture.get(), 0, 0, yoffset, 0,
+                                              previousOffscreenTexture.get(), 0, &sourceBox);
+-
+-        if (mSwapChain)
+-        {
+-            swapRect(displayD3D, 0, 0, backbufferWidth, backbufferHeight);
+-        }
+     }
+ 
+     return EGL_SUCCESS;
+diff --git a/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp b/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
+index 10462a970..d30f888d3 100644
+--- a/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
++++ b/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
+@@ -163,7 +163,7 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
+         swapChainDesc.BufferUsage =
+             DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT | DXGI_USAGE_BACK_BUFFER;
+         swapChainDesc.BufferCount   = 2;
+-        swapChainDesc.Scaling       = DXGI_SCALING_STRETCH;
++        swapChainDesc.Scaling       = DXGI_SCALING_NONE;
+         swapChainDesc.SwapEffect    = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+         swapChainDesc.AlphaMode     = DXGI_ALPHA_MODE_UNSPECIFIED;
+         swapChainDesc.Flags         = 0;
+-- 
+2.24.1.windows.2
+

@@ -1,0 +1,88 @@
+From bceab06e99595db3ff6d84cf18af3f6b576a1e5b Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sat, 20 Feb 2021 20:05:25 +0000
+Subject: [PATCH 3/4] Fix win unicode paths
+
+---
+ gettext-runtime/intl/libgnuintl.in.h |  4 +++
+ gettext-runtime/intl/loadmsgcat.c    | 49 ++++++++++++++++++++++++++++
+ 2 files changed, 53 insertions(+)
+
+diff --git a/gettext-runtime/intl/libgnuintl.in.h b/gettext-runtime/intl/libgnuintl.in.h
+index 6fb1920..93cd4b5 100644
+--- a/gettext-runtime/intl/libgnuintl.in.h
++++ b/gettext-runtime/intl/libgnuintl.in.h
+@@ -37,6 +37,10 @@
+    implementation of gettext.  */
+ #define __USE_GNU_GETTEXT 1
+ 
++/* We define an additional symbol to signal that this version of
++   gettext is patched to use UTF-8 paths on Windows.  */
++#define __WIN32_USE_UTF8 1
++
+ /* Provide information about the supported file formats.  Returns the
+    maximum minor revision number supported for a given major revision.  */
+ #define __GNU_GETTEXT_SUPPORTED_REVISION(major) \
+diff --git a/gettext-runtime/intl/loadmsgcat.c b/gettext-runtime/intl/loadmsgcat.c
+index 016fe57..030b861 100644
+--- a/gettext-runtime/intl/loadmsgcat.c
++++ b/gettext-runtime/intl/loadmsgcat.c
+@@ -388,6 +388,55 @@ char *alloca ();
+ # define munmap(addr, len)	__munmap (addr, len)
+ #endif
+ 
++#ifdef _WIN32
++/* Provide wrapper of "open" for Windows that supports UTF-8 filenames. */
++# ifndef WIN32_LEAN_AND_MEAN
++#  define WIN32_LEAN_AND_MEAN
++# endif
++# ifndef WIN32_EXTRA_LEAN
++#  define WIN32_EXTRA_LEAN
++# endif
++# undef NOMINMAX
++# define NOMINMAX
++# include <windows.h>	// For: MultiByteToWideChar
++# include <io.h>
++# include <wchar.h>
++
++int _open_utf8_windows_wrapper(
++   const char *filename,
++   int flags
++)
++{
++	int wstr_len = -1;
++	wchar_t* pUtf16FileName = NULL;
++	int fh = -1;
++
++	// on Windows, convert the filename from UTF-8 to UTF-16
++	wstr_len = MultiByteToWideChar(CP_UTF8, 0, filename, -1, NULL, 0);
++	if (wstr_len <= 0)
++	{
++		// MultiByteToWideChar failed
++		errno = ENOENT;
++		return -1;
++	}
++	pUtf16FileName = malloc(wstr_len * sizeof(wchar_t));
++	if (MultiByteToWideChar(CP_UTF8, 0, filename, -1, pUtf16FileName, wstr_len) == 0)
++	{
++		// MultiByteToWideChar failed
++		free(pUtf16FileName);
++		errno = ENOENT;
++		return -1;
++	}
++
++	// and call _wopen
++	fh = _wopen(pUtf16FileName, flags);
++
++	free(pUtf16FileName);
++	return fh;
++}
++# define open(name, flags)	_open_utf8_windows_wrapper(name, flags)
++#endif // #ifdef _WIN32
++
+ /* For those losing systems which don't have `alloca' we have to add
+    some additional code emulating it.  */
+ #ifdef HAVE_ALLOCA
+-- 
+2.31.1.windows.1
+

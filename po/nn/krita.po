@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-20 00:43+0000\n"
+"POT-Creation-Date: 2023-05-25 00:44+0000\n"
 "PO-Revision-Date: 2023-02-26 09:47+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -15789,14 +15789,14 @@ msgstr ""
 "Krita støttar ikkje Wayland-plattforma. Bruk XWayland for å køyra Krita på "
 "Wayland. Krita vert no lukka."
 
-#: krita/main.cc:614 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:628 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: åtvaring"
 
-#: krita/main.cc:615
+#: krita/main.cc:629
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15807,12 +15807,12 @@ msgstr ""
 "Dette er ikkje tilrådd. Ikkje meld frå om eventuelle feil du opplever.\n"
 "Du bør oppdatera til ein versjon som er støtta: Windows 7, 8, 8.1 eller 10."
 
-#: krita/main.cc:637 krita/main.cc:642
+#: krita/main.cc:651 krita/main.cc:656
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Teikneplate-støtte i Krita"
 
-#: krita/main.cc:638
+#: krita/main.cc:652
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15823,7 +15823,7 @@ msgstr ""
 "penneeining. Viss du har ei teikneplate, sjå til at drivaren til teikneplata "
 "er rett installert."
 
-#: krita/main.cc:643
+#: krita/main.cc:657
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -59523,13 +59523,13 @@ msgstr "Bruk"
 msgid "Transform Tool Actions"
 msgstr "Transformeringshandlingar"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:855
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:860
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Lagtypen kan ikkje bruka transformeringsverktøyet"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:862
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:867
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -59537,7 +59537,7 @@ msgstr ""
 "Lagtypen kan ikkje bruka transformerings­verktøyet. Bruk heller ei "
 "transformerings­maske."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:882
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:887
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59547,20 +59547,20 @@ msgstr ""
 "Laget har barnelag med transformerings­masker. Slå av maskene før du gjer "
 "transformeringa."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:899
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:901
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Utval vert ikkje brukte ved redigering av transformeringsmasker "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:980
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1019
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:982
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1021
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Kan ikkje transformera tomt lag "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1006
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1008
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

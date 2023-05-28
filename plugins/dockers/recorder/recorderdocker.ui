@@ -364,17 +364,6 @@ Depending on timelapse speed, this may cause flickering in the resulting video.<
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="labelUnsupportedColorSpace">
-         <property name="text">
-          <string>⚠ Unsupported color space.
-Only &quot;RGB/Alpha 8-bit&quot; is supported.</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

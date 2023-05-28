@@ -61,7 +61,6 @@ public:
 
     QLabel* statusBarLabel;
     QLabel* statusBarWarningLabel;
-    bool isColorSpaceSupported = false;
     QTimer warningTimer;
 
     QMap<QString, bool> enabledIds;
@@ -169,25 +168,17 @@ public:
         ui->comboResolution->setCurrentIndex(currentIndex);
     }
 
-    void validateColorSpace(const KoColorSpace *colorSpace)
-    {
-        isColorSpaceSupported = colorSpace->colorModelId().id() == "RGBA" &&
-                                colorSpace->colorDepthId().id() == "U8";
-        ui->labelUnsupportedColorSpace->setVisible(!isColorSpaceSupported);
-        ui->buttonRecordToggle->setEnabled(isColorSpaceSupported);
-    }
-
     void updateRecordStatus(bool isRecording)
     {
         recordToggleAction->setChecked(isRecording);
-        recordToggleAction->setEnabled(isColorSpaceSupported);
+        recordToggleAction->setEnabled(true);
 
         QSignalBlocker blocker(ui->buttonRecordToggle);
         ui->buttonRecordToggle->setChecked(isRecording);
         ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon(isRecording ? "media-playback-stop" : "media-record"));
         ui->buttonRecordToggle->setText(isRecording ? i18nc("Stop recording the canvas", "Stop")
                                         : i18nc("Start recording the canvas", "Record"));
-        ui->buttonRecordToggle->setEnabled(isColorSpaceSupported);
+        ui->buttonRecordToggle->setEnabled(true);
 
         ui->widgetSettings->setEnabled(!isRecording);
 
@@ -229,7 +220,6 @@ RecorderDockerDock::RecorderDockerDock()
 {
     QWidget* page = new QWidget(this);
     d->ui->setupUi(page);
-    d->ui->labelUnsupportedColorSpace->setVisible(false);
 
     d->ui->buttonManageRecordings->setIcon(KisIconUtils::loadIcon("configure-thicker"));
     d->ui->buttonBrowse->setIcon(KisIconUtils::loadIcon("folder"));
@@ -304,7 +294,6 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
         return;
 
     KisDocument *document = d->canvas->imageView()->document();
-    d->validateColorSpace(document->image()->projection()->colorSpace());
     if (d->recordAutomatically && !d->enabledIds.contains(document->linkedResourcesStorageId()))
         onRecordButtonToggled(true);
 
@@ -315,8 +304,8 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
     d->updateUiFormat();
 
     bool enabled = d->enabledIds.value(document->linkedResourcesStorageId(), false);
-    d->writer.setEnabled(enabled && d->isColorSpaceSupported);
-    d->updateRecordStatus(enabled && d->isColorSpaceSupported);
+    d->writer.setEnabled(enabled);
+    d->updateRecordStatus(enabled);
 }
 
 void RecorderDockerDock::unsetCanvas()
@@ -363,7 +352,7 @@ void RecorderDockerDock::onRecordButtonToggled(bool checked)
 
     d->ui->buttonRecordToggle->setEnabled(false);
 
-    if (checked && d->isColorSpaceSupported) {
+    if (checked) {
         d->updateWriterSettings();
         d->updateUiFormat();
         d->writer.start();

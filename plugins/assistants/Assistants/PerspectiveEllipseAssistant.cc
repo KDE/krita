@@ -78,26 +78,22 @@ KisPaintingAssistantSP PerspectiveEllipseAssistant::clone(QMap<KisPaintingAssist
 
 QPointF PerspectiveEllipseAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
-    //return d->concentricEllipseInPolygon.project(pt);
-    Q_UNUSED(strokeBegin);
-
-
     Q_ASSERT(isAssistantComplete());
 
     if (d->isConcentric) {
         if (d->useMirrored) {
-            d->concentricEllipseInPolygon.projectModifiedEberlySecond(pt);
-            return d->concentricEllipseInPolygon.projectModifiedEberlyThird(pt);
+            //d->concentricEllipseInPolygon.projectModifiedEberlySecond(pt);
+            return d->concentricEllipseInPolygon.project(pt, &strokeBegin);
         } else {
-            d->concentricEllipseInPolygonMirrored.projectModifiedEberlySecond(pt);
-            return d->concentricEllipseInPolygonMirrored.projectModifiedEberlyThird(pt);
+            //d->concentricEllipseInPolygonMirrored.projectModifiedEberlySecond(pt);
+            return d->concentricEllipseInPolygonMirrored.project(pt, &strokeBegin);
         }
 
     } else {
-        d->ellipseInPolygon.projectModifiedEberlySecond(pt);
-        return d->ellipseInPolygon.projectModifiedEberlyThird(pt);
-        d->ellipseInPolygon.setSimpleEllipseVertices(d->simpleEllipse);
-        return d->simpleEllipse.project(pt);
+        //d->ellipseInPolygon.projectModifiedEberlySecond(pt);
+        return d->ellipseInPolygon.project(pt, &strokeBegin);
+        //d->ellipseInPolygon.setSimpleEllipseVertices(d->simpleEllipse);
+        //return d->simpleEllipse.project(pt);
     }
 }
 

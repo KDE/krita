@@ -182,9 +182,9 @@ bool EllipseInPolygon::updateToPointOnConcentricEllipse(QTransform _originalTran
     return updateToFivePoints(points, horizonLine);
 }
 
-QPointF EllipseInPolygon::project(QPointF point)
+QPointF EllipseInPolygon::project(QPointF point, const QPointF *strokeStart = nullptr)
 {
-    return projectModifiedEberlyFourthNoDebug(point);
+    return projectModifiedEberlyFourthNoDebug(point, strokeStart);
 }
 
 QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
@@ -863,7 +863,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
 }
 
-QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point)
+QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point, const QPointF *strokeStart = nullptr)
 {
     QPointF originalPoint = point;
     // method taken from https://www.sciencedirect.com/science/article/pii/S0377042713001398
@@ -1130,7 +1130,8 @@ QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point)
         //KIS_SAFE_ASSERT_RECOVER(false && "ellipses have D = 0 or E = 0");
     }
 
-    qreal t0 = ConicCalculations::getStartingPoint(f.formINegatedY, Pt, Ptd);
+    QPointF strokeStartSemiConverted = *strokeStart;
+    qreal t0 = ConicCalculations::getStartingPoint(f.formINegatedY, Pt, &strokeStartSemiConverted);
 
     // now we gotta find t, then when we find it, calculate x and y, undo all transformations and return the point!
 
@@ -1276,9 +1277,10 @@ QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point)
 
 }
 
-QPointF EllipseInPolygon::projectModifiedEberlyFourthNoDebug(QPointF point)
+QPointF EllipseInPolygon::projectModifiedEberlyFourthNoDebug(QPointF point, const QPointF *strokeStart = nullptr)
 {
     QPointF originalPoint = point;
+    QPointF strokeStartConverted = *strokeStart;
     // method taken from https://www.sciencedirect.com/science/article/pii/S0377042713001398
     // "Algorithms for projecting points onto conics", authors: N.Chernova, S.Wijewickrema
     //
@@ -1332,7 +1334,7 @@ QPointF EllipseInPolygon::projectModifiedEberlyFourthNoDebug(QPointF point)
     // ACTUALLY no, it's the 'point' that should be normalized here, not the ellipse!
 
     QPointF point3 = point;
-    double normalizeBy = qMax(point.x(), point.y());
+    double normalizeBy = qMax(qAbs(point.x()), qAbs(point.y()));
 
     // załóżmy x+y = 1 oraz nb = 5, bo mielismy x,y = 5,5 -> czyli robimy wszystko mniejsze
     // x => nb*x
@@ -1344,6 +1346,9 @@ QPointF EllipseInPolygon::projectModifiedEberlyFourthNoDebug(QPointF point)
     normalizeBy = std::get<2>(resultA);
     point = std::get<1>(resultA);
     bool normalized = std::get<3>(resultA);
+    if (normalized) {
+        strokeStartConverted = strokeStartConverted/normalizeBy;
+    }
     // Ax^2 + 2Bxy + Cy^2 = 0;
     // a' ^2 + 2b' xy + c' y^2 = 0;
 
@@ -1367,6 +1372,7 @@ QPointF EllipseInPolygon::projectModifiedEberlyFourthNoDebug(QPointF point)
     double K = std::get<1>(resultD);
     double L = std::get<2>(resultD);
     point = std::get<3>(resultD);
+    strokeStartConverted = EllipseInPolygon::getRotatedPoint(strokeStartConverted, K, L);
 
     KIS_ASSERT_RECOVER_NOOP(qAbs(f.formDRotated.B) < 1e-10);
 
@@ -1375,6 +1381,7 @@ QPointF EllipseInPolygon::projectModifiedEberlyFourthNoDebug(QPointF point)
     qreal v = point.y();
 
     ConicFormula rotatedAfterMoving = ConicCalculations::moveToOrigin(f.formDRotated, u, v);
+    strokeStartConverted -= QPointF(u, v);
 
     // Stage 4. Adjusting the coefficients to our needs (C, D, E >= 0)
 
@@ -1386,6 +1393,9 @@ QPointF EllipseInPolygon::projectModifiedEberlyFourthNoDebug(QPointF point)
     f.formFSwappedXY = std::get<0>(resultF);
     f.formFSwappedXY.Name = "form F - swapped X and Y (cf)";
     bool swapXandY = std::get<1>(resultF);
+    if (swapXandY) {
+        strokeStartConverted = QPointF(strokeStartConverted.y(), strokeStartConverted.x());
+    }
 
     auto resultG = ConicCalculations::negateAllSigns(f.formFSwappedXY);
 
@@ -1403,6 +1413,8 @@ QPointF EllipseInPolygon::projectModifiedEberlyFourthNoDebug(QPointF point)
     f.formINegatedY = std::get<0>(resultI);
     f.formINegatedY.Name = "form I - negated Y (cf)";
     bool negateY = std::get<1>(resultI);
+
+    strokeStartConverted = QPointF((negateX ? -1 : 1)*strokeStartConverted.x(), (negateY ? -1 : 1)*strokeStartConverted.y());
 
     if (qAbs(f.formINegatedY.C) < 1e-12) {
         //KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false && "weird formula in Eberly", originalPoint);
@@ -1443,7 +1455,7 @@ QPointF EllipseInPolygon::projectModifiedEberlyFourthNoDebug(QPointF point)
         // special case
     }
 
-    qreal t0 = ConicCalculations::getStartingPoint(f.formINegatedY, Pt, Ptd);
+    qreal t0 = ConicCalculations::getStartingPoint(f.formINegatedY, Pt, &strokeStartConverted);
 
     qreal tresult = GSLEllipseHelper::RunGslNewton(t0, f.formINegatedY);
     if (!qIsFinite(Pt(t0)) || qIsNaN(t0)) {
@@ -2337,7 +2349,7 @@ void ConicFormula::setData(qreal a, qreal b, qreal c, qreal d, qreal e, qreal f)
 std::tuple<ConicFormula, QPointF, double, bool> ConicCalculations::normalizeFormula(ConicFormula formula, QPointF point)
 {
     bool debug = false;
-    double normalizeBy = qMax(point.x(), point.y());
+    double normalizeBy = qMax(qAbs(point.x()), qAbs(point.y()));
     if (debug) ENTER_FUNCTION() << ppVar(normalizeBy);
     if (debug) ENTER_FUNCTION() << ppVar(formula.getFormulaActual()) << ppVar(formula.toWolframAlphaForm());
     // załóżmy x+y = 1 oraz nb = 5, bo mielismy x,y = 5,5 -> czyli robimy wszystko mniejsze
@@ -2409,13 +2421,11 @@ ConicFormula ConicCalculations::canonizeFormula(ConicFormula f)
 
 std::tuple<ConicFormula, double, double, QPointF> ConicCalculations::rotateFormula(ConicFormula formula, QPointF point)
 {
-    ConicFormula result;
-    QPointF pointRotatedSecondVersion = point;
     qreal K;
     qreal L;
     QVector<double> formulaDRotatedAlternativeTrue = EllipseInPolygon::getRotatedFormulaOld(formula.getFormulaActual(), K, L);
-    pointRotatedSecondVersion = EllipseInPolygon::getRotatedPoint(pointRotatedSecondVersion, K, L);
-    result = ConicFormula(formulaDRotatedAlternativeTrue, "formula D - rotated, alternative", ConicFormula::ACTUAL);
+    QPointF pointRotatedSecondVersion = EllipseInPolygon::getRotatedPoint(point, K, L);
+    ConicFormula result = ConicFormula(formulaDRotatedAlternativeTrue, "formula D - rotated, alternative", ConicFormula::ACTUAL);
     result.convertTo(ConicFormula::SPECIAL);
     return std::make_tuple(result, K, L, pointRotatedSecondVersion);
 
@@ -2592,7 +2602,7 @@ double getStartingPointDebug(ConicFormula formula, std::function<double (double)
 
 }
 
-double ConicCalculations::getStartingPoint(ConicFormula formula, std::function<double (double)> Pt, std::function<double (double)> Ptd)
+double ConicCalculations::getStartingPoint(ConicFormula formula, std::function<double (double)> Pt, QPointF* strokeStart)
 {
     qreal A = formula.A;
     qreal C = formula.C;
@@ -2605,8 +2615,27 @@ double ConicCalculations::getStartingPoint(ConicFormula formula, std::function<d
     qreal t0 = 0; // starting point for newton method
 
     // will be useful for both cases
-    qreal t0d = F/(D*D - A*F + D*sqrt(D*D - A*F));
-    qreal t0dd = F/(E*E - C*F + E*sqrt(E*E - C*F));
+    // NOTE: t0 values may not be valid due to taking square root of of negative value.
+    // For Hyperbolas A<0 and C>0 though, so one of (D^2 - AF) and (E^2 - CF) must be positive
+    bool t0d_valid = false;
+    bool t0dd_valid = false;
+    qreal t0d;
+    if (D*D - A*F >= 0) {
+        t0d = F/(D*D - A*F + D*sqrt(D*D - A*F));
+        t0d_valid = true;
+    }
+    qreal t0dd;
+    if (E*E - C*F >= 0) {
+        t0dd = F/(E*E - C*F + E*sqrt(E*E - C*F));
+        t0dd_valid = true;
+    }
+
+    auto chooseCorrectT0 = [t0d, t0d_valid, t0dd, t0dd_valid] (bool min) {
+        if (!t0d_valid) return t0dd;
+        if (!t0dd_valid) return t0d;
+        return min ? qMin(t0d, t0dd) :  qMax(t0d, t0dd);
+    };
+
 
 
     if (A >= 0) { // ellipses and parabolas
@@ -2627,22 +2656,88 @@ double ConicCalculations::getStartingPoint(ConicFormula formula, std::function<d
             if (F <= 0) {
                 t0 = 0;
             } else {
-                t0 = qMin(t0d, t0dd);
+                t0 = chooseCorrectT0(true);
             }
         } else if (Pstar < 0) {
             if (F >= 0) {
                 t0 = 0;
             } else {
-                t0 = qMax(t0d, t0dd);
+                t0 = chooseCorrectT0(false);
             }
         } else {
             // we found it already!!!
             t0 = tstar;
         }
     }
+
     if (!qIsFinite(Pt(t0)) || qIsNaN(t0)) {
         getStartingPointDebug(formula, Pt);
     }
+
+    if (strokeStart) {
+        // Hyperbolas have two mirrored branches. To stick to the one where we started the stroke,
+        // we need to figure out if strokeStart is on the same side of the symmetry axis;
+        // for this we check if the transformed start is on the same side of the Hyperbola minor axis.
+        // First we need to figure out the axis orientation, which depends on whether the formula
+        // is of the shape a(x - c_x)^2 - b(y - c_y)^2 = 1 or b(y - c_y)^2 - a(x - c_x)^2 = 1.
+        // To do this, we check the sign of F - D²/A - E²/C; Same sign as A (negative) means vertical.
+        // Then we just need to check if the transformed start is beyond the minor axis,
+        // which is at either x = -D/A or y = -E/C
+        // Reminder: The point to be projected is now the origin.
+        bool verticalMajorAxis = (F - D*D/A - E*E/C) < 0.0;
+        /*
+        KIS_SAFE_ASSERT_RECOVER_NOOP(-1.0/C < -1.0/A && !(qIsNaN(-1.0/C)));
+        QPointF ss = *strokeStart;
+        if (!qFuzzyCompare(normalizeBy, 0)) {
+            ss = ss/normalizeBy;
+        }
+        QPointF uvStart(Q(0, 0)*ss.x() + Q(1, 0)*ss.y(), Q(0, 1)*ss.x() + Q(1, 1)*ss.y());
+        uvStart = uvStart - QPointF(u, v);
+        if (swapXandY) {
+            uvStart = uvStart.transposed();
+        }
+        if (negateX) {
+            uvStart.setX(-uvStart.x());
+        }
+        if (negateY) {
+            uvStart.setY(-uvStart.y());
+        }
+        */
+        QPointF uvStart = *strokeStart;
+        bool otherSide = verticalMajorAxis ? uvStart.y() < -E/C : uvStart.x() > -D/A;
+
+        if (otherSide) {
+            // now we need to search the second root of P(t); For this check the lim_(t->inf) P(t)
+            // on the right, P(t) comes from negative infinity, so if for t->+inf the function is positive,
+            // it must cross zero on this side, otherwise we need to search the opposite side
+            qreal Pt_inf = F - D*D/A - E*E/C;
+            if (Pt_inf > 0) {
+                // we need any starting point where P(t) < 0 here, in lack of better knowledge,
+                // mirror t0 at -1/A and keep halving the distance until it is negative,
+                // as towards -1/A it definitely goes -inf from both sides.
+                // Looks like this lucky guess is always right though, never seen itr > 0 :P
+                t0 = -2/A - t0;
+                int itr = 0;
+                while (Pt(t0) > 0 && itr < 100) {
+                    t0 = 0.5*(t0 - 1/A);
+                    ++itr;
+                }
+                if (itr > 0) qDebug() << "t0 on the right, got negative after" << itr << "iterations";
+            }
+            else {
+                // everything is reverse from above, it goes from +inf at -1/C to Pt_inf (< 0)
+                t0 = -2/C - t0;
+                int itr = 0;
+                while (Pt(t0) < 0 && itr < 100) {
+                    t0 = 0.5*(t0 - 1/C);
+                    ++itr;
+                }
+                if (itr > 0) qDebug() << "t0 on the left, got positive after" << itr << "iterations";
+            }
+        }
+    }
+
+
     return t0;
 }
 
@@ -2760,7 +2855,7 @@ qreal AlgebraFunctions::bisectionMethod(std::function<qreal (qreal)> f, qreal ta
 
 double GSLEllipseHelper::ConicFunctionsF(double x, void *params)
 {
-    fprintf(stderr, "is x nan or infinite? %d\n", qIsNaN(x) || !qIsFinite(x));
+    //fprintf(stderr, "is x nan or infinite? %d\n", qIsNaN(x) || !qIsFinite(x));
     ConicFormula ff = *(ConicFormula*)(params);
     //ENTER_FUNCTION() << "conic in f:";
     //ff.printOutInAllForms();

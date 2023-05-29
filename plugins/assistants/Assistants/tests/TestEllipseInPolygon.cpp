@@ -358,7 +358,7 @@ void TestEllipseInPolygon::testProjectInEllipseInPolygonHelper(EllipseInPolygon 
     // - check the distance of the original point to the nearest point is sane
     // - check it's in the same quadrant of the ellipse (again, calculating :/ )
 
-    QPointF projected = eip.project(original);
+    QPointF projected = eip.project(original, &original);
     QPointF center = QPointF(eip.finalEllipseCenter[0], eip.finalEllipseCenter[1]);
     ENTER_FUNCTION() << kisDistance(projected, original) + kisDistance(projected, center) << kisDistance(original, center);
     // now, maybe angle between ori - center and ori-proj
@@ -418,8 +418,8 @@ void TestEllipseInPolygon::testDifferentCodes()
         EllipseInPolygon eip = randomEllipseInPolygon(random);
         QPointF original = randomPoint(random);
         QPointF projectedSecond = eip.projectModifiedEberlySecond(original);
-        QPointF projectedThird = eip.projectModifiedEberlyThird(original);
-        QPointF projectedFourth = eip.projectModifiedEberlyFourthNoDebug(original);
+        QPointF projectedThird = eip.projectModifiedEberlyThird(original, &original);
+        QPointF projectedFourth = eip.projectModifiedEberlyFourthNoDebug(original, &original);
 
 
         if (kisDistance(projectedSecond, projectedThird) >= eps || kisDistance(projectedSecond, projectedFourth) >= eps) {

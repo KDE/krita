@@ -125,7 +125,7 @@ public:
     static QPointF undoRotatingFormula(QPointF point, double K, double L);
 
 
-    static double getStartingPoint(ConicFormula formula, std::function<double(double)> Pt, std::function<double(double)> Ptd);
+    static double getStartingPoint(ConicFormula formula, std::function<double(double)> Pt, QPointF *strokeStart);
 
 
 
@@ -182,11 +182,11 @@ public:
 
     bool updateToPointOnConcentricEllipse(QTransform _originalTransform, QPointF pointOnConcetric, QLineF horizonLine, bool mirrored = false);
 
-    QPointF project(QPointF point);
+    QPointF project(QPointF point, const QPointF *strokeStart);
 
     QPointF projectModifiedEberlySecond(QPointF point);
-    QPointF projectModifiedEberlyThird(QPointF point);
-    QPointF projectModifiedEberlyFourthNoDebug(QPointF point);
+    QPointF projectModifiedEberlyThird(QPointF point, const QPointF *strokeStart);
+    QPointF projectModifiedEberlyFourthNoDebug(QPointF point, const QPointF *strokeStart);
 
 
 

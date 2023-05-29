@@ -133,12 +133,12 @@ void TestAssistants::testProjection()
 
     concentric.updateToPointOnConcentricEllipse(original.originalTransform, point, original.horizon);
 
-    qCritical() << concentric.project(point) << "should be " << point;
+    qCritical() << concentric.project(point, &point) << "should be " << point;
     qCritical() << ppVar(concentric.curveType);
     qCritical() << ppVar(concentric.finalEllipseCenter);
     qCritical() << ppVar(concentric.finalVertices);
 
-    QCOMPARE(concentric.project(point), point);
+    QCOMPARE(concentric.project(point, &point), point);
 
     // test 2: ellipse with axis parallel to the 0X
 
@@ -148,7 +148,7 @@ void TestAssistants::testProjection()
 
     concentric.updateToPointOnConcentricEllipse(original.originalTransform, point, original.horizon);
 
-    qCritical() << concentric.project(point) << "should be " << point;
+    qCritical() << concentric.project(point, &point) << "should be " << point;
     qCritical() << ppVar(concentric.curveType);
     qCritical() << ppVar(concentric.finalEllipseCenter);
     qCritical() << ppVar(concentric.finalVertices);
@@ -594,7 +594,7 @@ void TestAssistants::testProjectionNewMethodTest3()
 
     ENTER_FUNCTION() << "************************ START **************************";
 
-    result = original.projectModifiedEberlyThird(point);
+    result = original.projectModifiedEberlyThird(point, &point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -609,7 +609,7 @@ void TestAssistants::testProjectionNewMethodTest3()
     original.updateToPolygon(poly, QLineF());
     point = QPointF(749.893,461.21);
 
-    result = original.projectModifiedEberlyThird(point);
+    result = original.projectModifiedEberlyThird(point, &point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -628,7 +628,7 @@ void TestAssistants::testProjectionNewMethodTest3()
     point = QPointF(5, 5);
 
 
-    result = original.projectModifiedEberlyThird(point);
+    result = original.projectModifiedEberlyThird(point, &point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -649,7 +649,7 @@ void TestAssistants::testProjectionNewMethodTest3()
     point = QPointF(0, sqrt(5/2.0));
 
 
-    result = original.projectModifiedEberlyThird(point);
+    result = original.projectModifiedEberlyThird(point, &point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -669,7 +669,7 @@ void TestAssistants::testProjectionNewMethodTest3()
 
     point = QPointF(sqrt(5/2.0), sqrt(5/2.0));
 
-    result = original.projectModifiedEberlyThird(point);
+    result = original.projectModifiedEberlyThird(point, &point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -689,7 +689,7 @@ void TestAssistants::testProjectionNewMethodTest3()
 
     point = QPointF(0, -sqrt(5/2.0) -5.0);
 
-    result = original.projectModifiedEberlyThird(point);
+    result = original.projectModifiedEberlyThird(point, &point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -710,7 +710,7 @@ void TestAssistants::testProjectionNewMethodTest3()
     original.updateToPolygon(poly, QLineF());
     point = QPointF(750,460);
 
-    result = original.projectModifiedEberlyThird(point);
+    result = original.projectModifiedEberlyThird(point, &point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -727,7 +727,7 @@ void TestAssistants::testProjectionNewMethodTest3()
     original.updateToPolygon(poly, QLineF());
     point = QPointF(1067.62,719.146);
 
-    result = original.projectModifiedEberlyThird(point);
+    result = original.projectModifiedEberlyThird(point, &point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -743,7 +743,7 @@ void TestAssistants::testProjectionNewMethodTest3()
     original.updateToPolygon(poly, QLineF());
     point = QPointF(553.452,264.769);
 
-    result = original.projectModifiedEberlyThird(point);
+    result = original.projectModifiedEberlyThird(point, &point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -764,7 +764,7 @@ void TestAssistants::testProjectionNewMethodTest3()
     original.updateToPolygon(poly, QLineF());
     point = QPointF(300, 300);
 
-    result = original.projectModifiedEberlyThird(point);
+    result = original.projectModifiedEberlyThird(point, &point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -784,7 +784,7 @@ void TestAssistants::testProjectionNewMethodTest3()
     point = QPointF(300, 200);
 
 
-    result = original.projectModifiedEberlyThird(point);
+    result = original.projectModifiedEberlyThird(point, &point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -796,7 +796,7 @@ void TestAssistants::testProjectionNewMethodTest3()
     point = QPointF(300, 600);
 
 
-    result = original.projectModifiedEberlyThird(point);
+    result = original.projectModifiedEberlyThird(point, &point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -819,7 +819,7 @@ void TestAssistants::testProjectionNewMethodTest3()
 
 
 
-    result = original.projectModifiedEberlyThird(point);
+    result = original.projectModifiedEberlyThird(point, &point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -832,7 +832,7 @@ void TestAssistants::testProjectionNewMethodTest3()
 
 
     original.updateToPointOnConcentricEllipse(transform, QPointF(800, 200), QLineF(QPointF(0, 400), QPointF(400, 400)), true);
-    result = original.projectModifiedEberlyThird(point);
+    result = original.projectModifiedEberlyThird(point, &point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 

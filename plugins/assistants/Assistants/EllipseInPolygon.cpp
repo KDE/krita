@@ -1277,30 +1277,54 @@ QPointF EllipseInPolygon::projectModifiedEberlyThird(QPointF point, const QPoint
 
 }
 
+// method taken from https://www.sciencedirect.com/science/article/pii/S0377042713001398
+// "Algorithms for projecting points onto conics", authors: N.Chernova, S.Wijewickrema
+//
+// Stages are assigned letters instead of numbers to easier follow along the code. The formula name/letter
+//   is the formula at the end of that stage.
+// "Normal" form refers to the formula in the form of: Ax^2 + Bxy + Cy^2 + Dx + Ey + F = 0
+// "Special" form refers to the formula in the form of: Ax^2 + 2Bxy + Cy^2 + 2Dx + 2Ey + F = 0
+
+// Phase 1. Converting formulas
+// Stage A. Start (base ellipse formula in "our"/normal form: Ax^2 + Bxy + Cy^2 + Dx + Ey + F = 0).
+// Stage B. Normalize the starting point
+//             Make sure the point is of order 1 by scaling both the point and the formula
+//               by qMax(qAbs(x), qAbs(y)) of the starting point
+//             Changes: both the mathematic formula and the ellipse (and the point).
+//             Form: normal
+// Stage C. Canonize the formula
+//            Their "canonical formula" form is Ax^2 + 2Bxy + Cy^2 + 2Dx + 2Ey + F = 0
+//            And the requirement for the formula is that A^2 + B^2 + C^2 + D^2 + E^2 + F^2 = 1
+//            Changes: formula, but not the ellipse
+//            Form: special
+// Stage D. Rotate the ellipse so the axis are horizontal and vertical
+//            Changes: formula, ellipse and the point
+//            Form: special
+// Stage E. Move the point to the origin
+//            Note: it's the point moved to the origin, not the center of the ellipse!
+//            Changes: formula, ellipse and the point
+//            Form: special
+// Stage F. Swap X and Y if needed (to ensure qAbs(A) <= qAbs(C))
+//            Changes: only formula
+//            Form: special
+// Stage G. Negate all signs if needed (to ensure C >= 0)
+//            Changes: only formula
+//            Form: special
+// Stage H. Negate X if needed (to ensure D >= 0)
+// Stage I. Negate Y if needed (to ensure E >= 0)
+//            Changes: only formula
+//            Form: special
+// Phase 2. Calculating the starting point for the Newton algorithm
+// Phase 3. Calculating the closest point on the ellipse using the Newton algorithm
+// Phase 4. Reverting all geometrical changes done in Phase 1 to get the closest point on the base formula of the ellipse
+
+
 QPointF EllipseInPolygon::projectModifiedEberlyFourthNoDebug(QPointF point, const QPointF *strokeStart = nullptr)
 {
     QPointF originalPoint = point;
     QPointF strokeStartConverted = *strokeStart;
     // method taken from https://www.sciencedirect.com/science/article/pii/S0377042713001398
     // "Algorithms for projecting points onto conics", authors: N.Chernova, S.Wijewickrema
-    //
-
-    // Stage 1. Canonize the formula.
-
-    // "canonnical formula" is Ax^2 + 2Bxy + Cy^2 + 2Dx + 2Ey + F = 0
-    // and A^2 + B^2 + C^2 + D^2 + E^2 + F^2 = 1
-    // so we gotta change it first
-
-    // NAMING
-    // A - true formula, "final formula"
-    // B - A, but normalized (so that A^2 + B^2 + C^2... = 1)
-    // C - B, but canonized (convert from b to B=b/2 to be able to use Elberly correctly)
-    // D -
-    // E -
-    // F -
-    // G -
-    // H -
-    // I -
 
     struct Formulas {
         ConicFormula formA;

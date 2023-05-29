@@ -19,7 +19,14 @@ class KRITAWIDGETS_EXPORT KisStackedWidget : public QStackedWidget
 public:
     KisStackedWidget(QWidget *parent = nullptr);
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
     Q_DISABLE_COPY_MOVE(KisStackedWidget);
+#else
+    //Q_DISABLE_MOVE(KisStackedWidget);
+    Q_DISABLE_COPY(KisStackedWidget)
+    KisStackedWidget(KisStackedWidget&&) = delete;
+    KisStackedWidget& operator=(KisStackedWidget &&) = delete;
+#endif
 
     ~KisStackedWidget() override = default;
 

@@ -1482,7 +1482,12 @@ QList<QPainterPath> KoSvgTextShape::Private::getShapes(QList<KoShape *> shapesIn
                     subpathPolygons.append(precisionTF.map(subPath).toPolygon());
                 }
                 subpathPolygons = KoPolygonUtils::offsetPolygons(subpathPolygons, shapeMargin);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
                 p.clear();
+#else
+                p = QPainterPath();
+#endif
+
                 Q_FOREACH (const QPolygon poly, subpathPolygons) {
                     p.addPolygon(poly);
                 }
@@ -2085,7 +2090,11 @@ bool getFirstPosition(QPointF &firstPoint,
             for (int j=i; j< offsetPoly.size(); j++){
                 QLineF line2 = offsetPoly.at(j);
                 QPointF intersectPoint;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
                 QLineF::IntersectType intersect = line.intersects(line2, &intersectPoint);
+#else
+                QLineF::IntersectType intersect = line.intersect(line2, &intersectPoint);
+#endif
                 if (intersect != QLineF::NoIntersection) {
                     // should proly handle 'reflex' vertices better.
                     if (!p.contains(intersectPoint)) {
@@ -2212,12 +2221,20 @@ QVector<QLineF> findLineBoxesForFirstPos(QPainterPath shape, QPointF firstPos, Q
         QPointF intersectA;
         QPointF intersectB;
         QPointF intersect;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
         if (topLine.intersects(line, &intersect) == QLineF::BoundedIntersection) {
+#else
+        if (topLine.intersect(line, &intersect) == QLineF::BoundedIntersection) {
+#endif
             intersectA = intersect-lineTop;
             intersects.append(intersectA);
             addedA = true;
         }
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
         if (bottomLine.intersects(line, &intersect) == QLineF::BoundedIntersection) {
+#else
+        if (bottomLine.intersect(line, &intersect) == QLineF::BoundedIntersection) {
+#endif
             intersectB = intersect-lineBottom;
             if (intersectA != intersectB || !addedA) {
                 intersects.append(intersectB);

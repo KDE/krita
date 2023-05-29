@@ -41,7 +41,12 @@ public:
     virtual Result askUser(AskCallback callback) = 0;
 
 private:
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
     Q_DISABLE_COPY_MOVE(KisImportUserFeedbackInterface);
+#else
+    KisImportUserFeedbackInterface(const KisImportUserFeedbackInterface&) = delete;
+    KisImportUserFeedbackInterface(KisImportUserFeedbackInterface&&) = delete;
+#endif
 };
 
 #endif // KISIMPORTUSERFEEDBACKINTERFACE_H

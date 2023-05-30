@@ -48,6 +48,7 @@
 # edito <prod@d-booker.net>, 2018.
 # Patricia Moncorgé <patricia.moncorge@d-booker.fr>, 2018, 2021.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019, 2020.
+# Xavier BESNARD <xavier.besnard@neuf.fr>, 2022, 2023.
 #
 # -- kritalibs
 # translation of kplatomodels.po to français
@@ -97,7 +98,6 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Durand Daniel, 2010.
-# Xavier BESNARD <xavier.besnard]neuf.fr>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"

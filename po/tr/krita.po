@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-25 00:44+0000\n"
-"PO-Revision-Date: 2023-05-26 01:03+0300\n"
+"PO-Revision-Date: 2023-05-29 12:41+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8938,7 +8938,7 @@ msgstr "Ön plan ve arka plan renklerini yer değiştir"
 #, kde-format
 msgctxt "action"
 msgid "Toggle Brush Outline"
-msgstr "Fırça Ana Hatını Aç/Kapat"
+msgstr "Fırça Ana Hattını Aç/Kapat"
 
 #. i18n: context: toolTip @ Action (toggle_brush_outline), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:733
@@ -8948,7 +8948,7 @@ msgid ""
 "Disable the brush outline, or enable the previously used brush outline shape "
 "if already disabled"
 msgstr ""
-"Fırça ana hatını devre dışı bırak veya halihazırda devre dışı bırakılmışsa "
+"Fırça ana hattını devre dışı bırak veya halihazırda devre dışı bırakılmışsa "
 "bir önceki fırça ana hat şeklini etkinleştir"
 
 #. i18n: context: text @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
@@ -22701,17 +22701,17 @@ msgstr "Ana Hat Yok"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #, kde-format
 msgid "Circle Outline"
-msgstr "Çember Ana Hatı"
+msgstr "Çember Ana Hattı"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:220
 #, kde-format
 msgid "Preview Outline"
-msgstr "Ana Hatı Önizle"
+msgstr "Ana Hattı Önizle"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:221
 #, kde-format
 msgid "Tilt Outline"
-msgstr "Ana Hatı Eğ"
+msgstr "Ana Hattı Eğ"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
@@ -24612,7 +24612,7 @@ msgstr "Renklerdeki renk kanalları"
 #: libs/ui/forms/wdgdisplaysettings.ui:534
 #, kde-format
 msgid "Enable selection outline anti-aliasing"
-msgstr "Seçim ana hatı yumuşatmayı etkinleştir"
+msgstr "Seçim ana hattı yumuşatmasını etkinleştir"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoving)
 #: libs/ui/forms/wdgdisplaysettings.ui:541
@@ -24851,7 +24851,7 @@ msgstr "Fırça İmleci Simgesi:"
 #: libs/ui/forms/wdggeneralsettings.ui:83
 #, kde-format
 msgid "Brush Outline Shape:"
-msgstr "Fırça Ana Hatı Şekli:"
+msgstr "Fırça Ana Hattı Şekli:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdggeneralsettings.ui:111
@@ -24865,7 +24865,7 @@ msgstr "Boyarken..."
 #: libs/ui/forms/wdggeneralsettings.ui:247
 #, kde-format
 msgid "Show outline"
-msgstr "Ana hatı göster"
+msgstr "Ana hattı göster"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeBrushOutline)
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeEraserBrushOutline)
@@ -26065,7 +26065,7 @@ msgstr ""
 #: libs/ui/forms/wdgMissingColorProfile.ui:115
 #, kde-format
 msgid "Remember"
-msgstr "Hatırla"
+msgstr "Anımsa"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpImage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImagesplit)
@@ -55020,8 +55020,8 @@ msgid ""
 "What is your comic about? This is mostly for your own convenience so do not "
 "worry about what it says too much."
 msgstr ""
-"Çizgi roman ne hakkında? Bu çoğunlukla kendi rahatınız için. Bu yüzden ne "
-"dediği hakkında endişelenmeyin."
+"Çizgi roman ne hakkında? B,u çoğunlukla kendi rahatınız içindir. Bu yüzden "
+"ne söylediği üzerine kendinizi pek yormayın."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:86
 msgid "The main language the comic is in"

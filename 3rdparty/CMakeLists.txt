@@ -540,6 +540,13 @@ configure_file(
     ${CMAKE_CURRENT_BINARY_DIR}/meson-compiler.ini
 )
 
+# Meson's CPU family is a bit different from what
+# Android SDK exports as CMAKE_SYSTEM_PROCESSOR
+set (MESON_CPU_FAMILY ${CMAKE_SYSTEM_PROCESSOR})
+if (${MESON_CPU_FAMILY} STREQUAL "armv7-a")
+    set(MESON_CPU_FAMILY "arm")
+endif()
+
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/meson-host.ini.in
     ${CMAKE_CURRENT_BINARY_DIR}/meson-host.ini

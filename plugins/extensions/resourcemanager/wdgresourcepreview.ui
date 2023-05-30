@@ -41,11 +41,11 @@
       <enum>QLayout::SetFixedSize</enum>
      </property>
      <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Search</string>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="spacing">
+        <number>7</number>
        </property>
-      </widget>
+      </layout>
      </item>
      <item>
       <widget class="QComboBox" name="cmbResourceType">

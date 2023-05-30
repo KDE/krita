@@ -7,6 +7,8 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QPainter>
+#include <QLabel>
+#include <QToolButton>
 
 #include <kis_action.h>
 #include <kis_action_manager.h>
@@ -14,6 +16,7 @@
 #include <KisResourceTypeModel.h>
 #include <KisStorageModel.h>
 #include <KisTagModel.h>
+#include <KisResourceItemListView.h>
 #include <KisResourceLocator.h>
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
@@ -24,6 +27,10 @@
 #include <kis_paintop_registry.h>
 #include <dlg_create_bundle.h>
 #include <ResourceImporter.h>
+#include <KoIcon.h>
+#include "ResourceListViewModes.h"
+#include <kis_config.h>
+#include "kisresourceitemviwer.h"
 
 
 WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
@@ -35,6 +42,7 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
     m_ui->setupUi(this);
 
     m_ui->resourceItemView->setFixedToolTipThumbnailSize(QSize(128, 128));
+    // m_ui->resourceItemView->setListViewMode(ListViewMode::Detail);
 
     // resource type combo box code
     if (m_type == 1) {
@@ -89,10 +97,6 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
         connect(m_ui->cmbStorage, SIGNAL(activated(int)), SLOT(slotStorageSelected(int)));
     }
 
-    if (m_type == 1) {
-        m_ui->label->setVisible(false);
-    }
-
     // resource item view code
     // the model will be owned by `proxyModel`
     KisResourceModel* resourceModel;
@@ -118,7 +122,8 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
     m_resourceProxyModelsForResourceType.insert(selectedResourceType, proxyModel);
 
     m_ui->resourceItemView->setModel(proxyModel);
-    m_ui->resourceItemView->setItemDelegate(new KisResourceItemDelegate(this));
+    m_kisResourceItemDelegate = new KisResourceItemDelegate(this);
+    m_ui->resourceItemView->setItemDelegate(m_kisResourceItemDelegate);
     m_ui->resourceItemView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     if (m_type == 0) {
@@ -131,41 +136,38 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
 
     connect(m_ui->resourceItemView, SIGNAL(currentResourceChanged(QModelIndex)), SIGNAL(signalResourcesSelectionChanged(QModelIndex)));
 
-    // Add code for gridview to listview menu (preferably as a seperate class)
-//     QMenu* viewModeMenu = new QMenu(this);
-//
-//     viewModeMenu->setStyleSheet("margin: 6px");
-//
-//             // View Modes Btns
-//     viewModeMenu->addSection(i18nc("@title Which elements to display (e.g., thumbnails or details)", "Display"));
-//             // KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)cfg.presetChooserViewMode();
-//     QActionGroup *actionGroup = new QActionGroup(viewModeMenu);
-//
-//     QAction* action = viewModeMenu->addAction(KisIconUtils::loadIcon("view-preview"), i18n("Thumbnails"));
-//     action->setCheckable(true);
-//             // action->setChecked(mode == KisPresetChooser::THUMBNAIL);
-//     action->setActionGroup(actionGroup);
-//
-// //             connect(action, &QAction::triggered,
-// //                 m_d->uiWdgPaintOpPresetSettings.presetWidget, &KisPresetChooser::setViewModeToThumbnail);
-//
-//     action = viewModeMenu->addAction(KisIconUtils::loadIcon("view-list-details"), i18n("Details"));
-//     action->setCheckable(true);
-//             // action->setChecked(mode == KisPresetChooser::DETAIL);
-//     action->setActionGroup(actionGroup);
-// /*
-//             connect(action, &QAction::triggered,
-//                 m_d->uiWdgPaintOpPresetSettings.presetWidget, &KisPresetChooser::setViewModeToDetail);*/
-//
-//
-//     QMenuBar* menuBar = new QMenuBar();
-//     QMenu *fileMenu = new QMenu("File");
-//     menuBar->addMenu(fileMenu);
-//     fileMenu->addAction("Save");
-//     fileMenu->addAction("Exit");
-//     menuBar->addMenu(viewModeMenu);
-//         this->layout()->setMenuBar(menuBar);
-//     viewModeMenu->exec();
+    KisResourceItemViwer *viewModeButton;
+
+    if (m_type == 0) {
+        viewModeButton = new KisResourceItemViwer(0, this);
+    } else {
+        viewModeButton = new KisResourceItemViwer(1, this);
+    }
+
+    KisConfig cfg(true);
+
+    if (m_type == 0) {
+        m_mode = (cfg.readEntry<quint32>("ResourceItemsBCSearch.viewMode", 1) == 1)? ListViewMode::IconGrid : ListViewMode::Detail;
+    } else {
+        m_mode = (cfg.readEntry<quint32>("ResourceItemsRM.viewMode", 1) == 1)? ListViewMode::IconGrid : ListViewMode::Detail;
+    }
+
+    if (m_mode == ListViewMode::IconGrid) {
+        slotViewThumbnail();
+    } else {
+        slotViewDetails();
+    }
+
+    connect(viewModeButton, SIGNAL(onViewThumbnail()), this, SLOT(slotViewThumbnail()));
+    connect(viewModeButton, SIGNAL(onViewDetails()), this, SLOT(slotViewDetails()));
+
+    if (m_type == 0) {
+        QLabel *label = new QLabel("Search");
+        m_ui->horizontalLayout_2->addWidget(label);
+    } else {
+        m_ui->horizontalLayout_2->setAlignment(Qt::AlignRight);
+    }
+    m_ui->horizontalLayout_2->addWidget(viewModeButton);
 
 }
 
@@ -175,6 +177,21 @@ WdgResourcePreview::~WdgResourcePreview()
     qDeleteAll(m_resourceProxyModelsForResourceType);
     delete m_storageModel;
     delete m_resourceTypeModel;
+}
+
+void WdgResourcePreview::slotViewThumbnail()
+{
+    m_kisResourceItemDelegate->setShowText(false);
+    m_ui->resourceItemView->setItemDelegate(m_kisResourceItemDelegate);
+    m_ui->resourceItemView->setListViewMode(ListViewMode::IconGrid);
+}
+
+void WdgResourcePreview::slotViewDetails()
+{
+    m_kisResourceItemDelegate->setShowText(true);
+    m_ui->resourceItemView->setItemDelegate(m_kisResourceItemDelegate);
+    m_ui->resourceItemView->setListViewMode(ListViewMode::Detail);
+    m_ui->resourceItemView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void WdgResourcePreview::slotResourceTypeSelected(int)

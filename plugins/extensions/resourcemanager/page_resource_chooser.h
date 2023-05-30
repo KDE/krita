@@ -2,6 +2,8 @@
 #define PAGE_RESOURCE_CHOOSER_H
 
 #include "wdg_resource_preview.h"
+#include "ResourceListViewModes.h"
+
 
 #include <QPainter>
 #include <QWizardPage>
@@ -24,6 +26,8 @@ private Q_SLOTS:
     void slotResourcesSelectionChanged(QModelIndex selected);
     void slotresourceTypeSelected(int);
     void slotRemoveSelected(bool);
+    void slotViewThumbnail();
+    void slotViewDetails();
 
 public:
     QPixmap imageToIcon(const QImage &img, Qt::AspectRatioMode aspectRatioMode);
@@ -35,6 +39,8 @@ private:
     QList<int> m_selectedResourcesIds;
 
     KoResourceBundleSP m_bundle;
+    ListViewMode m_mode;
+    KisResourceItemDelegate *m_kisResourceItemDelegate;
 
 };
 

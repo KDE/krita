@@ -13,6 +13,7 @@ set(kritaresourcemanager_SOURCES
     page_bundle_saver.cpp
     page_metadata_info.cpp
     wdg_resource_preview.cpp
+    kisresourceitemviwer.cpp
 )
 
 ki18n_wrap_ui(kritaresourcemanager_SOURCES
@@ -26,6 +27,7 @@ ki18n_wrap_ui(kritaresourcemanager_SOURCES
     pagebundlesaver.ui
     pagemetadatainfo.ui
     wdgresourcepreview.ui
+    kisresourceitemviwer.ui
 
 )
 

@@ -7,6 +7,10 @@
 #include <QWidget>
 
 #include <KisResourceThumbnailPainter.h>
+#include "ResourceListViewModes.h"
+#include <KisResourceItemDelegate.h>
+
+
 
 class KisActionManager;
 class KisResourceTypeModel;
@@ -41,6 +45,8 @@ private Q_SLOTS:
 
     void slotFilterTextChanged(const QString& filterText);
     void slotShowDeletedChanged(int newState);
+    void slotViewThumbnail();
+    void slotViewDetails();
 
 public:
     QString getCurrentResourceType();
@@ -64,6 +70,10 @@ private:
 
     QMap<QString, KisTagFilterResourceProxyModel*> m_resourceProxyModelsForResourceType;
     KisResourceThumbnailPainter m_thumbnailPainter;
+
+    KisResourceItemDelegate *m_kisResourceItemDelegate;
+    ListViewMode m_mode;
+
 };
 
 #endif // WDG_RESOURCE_PREVIEW_H

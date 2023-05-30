@@ -1,10 +1,14 @@
 #include "page_resource_chooser.h"
 #include "ui_pageresourcechooser.h"
 #include "wdg_resource_preview.h"
+#include "kisresourceitemviwer.h"
+#include <kis_config.h>
 
 #include <QPainter>
 #include <QDebug>
+#include <QLabel>
 
+#include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
 
 #define ICON_SIZE 48
@@ -22,22 +26,64 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
     connect(m_wdgResourcePreview, SIGNAL(signalResourcesSelectionChanged(QModelIndex)), this, SLOT(slotResourcesSelectionChanged(QModelIndex)));
     connect(m_wdgResourcePreview, SIGNAL(resourceTypeSelected(int)), this, SLOT(slotresourceTypeSelected(int)));
 
+//     m_ui->resourceItemSelectedView->setFixedToolTipThumbnailSize(QSize(128, 128));
+
     m_ui->tableSelected->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_ui->tableSelected->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     // btnRemoveSelected
     connect(m_ui->btnRemoveSelected, SIGNAL(clicked(bool)), this, SLOT(slotRemoveSelected(bool)));
+
+    KisResourceItemViwer *viewModeButton;
+    viewModeButton = new KisResourceItemViwer(2, this);
+
+    KisConfig cfg(true);
+    m_mode = (cfg.readEntry<quint32>("ResourceItemsBCSelected.viewMode", 1) == 1)? ListViewMode::IconGrid : ListViewMode::Detail;
+
+    if (m_mode == ListViewMode::IconGrid) {
+        slotViewThumbnail();
+    } else {
+        slotViewDetails();
+    }
+
+    connect(viewModeButton, SIGNAL(onViewThumbnail()), this, SLOT(slotViewThumbnail()));
+    connect(viewModeButton, SIGNAL(onViewDetails()), this, SLOT(slotViewDetails()));
+
+    QLabel *label = new QLabel("Selected");
+    m_ui->horizontalLayout_2->addWidget(label);
+
+    m_ui->horizontalLayout_2->addWidget(viewModeButton);
+}
+
+void PageResourceChooser::slotViewThumbnail()
+{
+//     m_kisResourceItemDelegate->setShowText(false);
+//     m_ui->resourceItemView->setItemDelegate(m_kisResourceItemDelegate);
+//     m_ui->resourceItemView->setListViewMode(ListViewMode::IconGrid);
+}
+
+void PageResourceChooser::slotViewDetails()
+{
+//     m_kisResourceItemDelegate->setShowText(true);
+//     m_ui->resourceItemView->setItemDelegate(m_kisResourceItemDelegate);
+//     m_ui->resourceItemView->setListViewMode(ListViewMode::Detail);
+//     m_ui->resourceItemView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void PageResourceChooser::slotResourcesSelectionChanged(QModelIndex selected)
 {
     QModelIndexList list = m_wdgResourcePreview->geResourceItemsSelected();
-    KisTagFilterResourceProxyModel* model = m_wdgResourcePreview->getResourceProxyModelsForResourceType()[m_wdgResourcePreview->getCurrentResourceType()];
+    KisTagFilterResourceProxyModel* proxyModel = m_wdgResourcePreview->getResourceProxyModelsForResourceType()[m_wdgResourcePreview->getCurrentResourceType()];
+
+//     m_ui->resourceItemSelectedView->setModel(proxyModel);
+//     m_kisResourceItemDelegate = new KisResourceItemDelegate(this);
+//     m_ui->resourceItemSelectedView->setItemDelegate(m_kisResourceItemDelegate);
+//     m_ui->resourceItemSelectedView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     Q_FOREACH (QModelIndex idx, list) {
-        int id = model->data(idx, Qt::UserRole + KisAllResourcesModel::Id).toInt();
-        QImage image = (model->data(idx, Qt::UserRole + KisAllResourcesModel::Thumbnail)).value<QImage>();
-        QString name = model->data(idx, Qt::UserRole + KisAllResourcesModel::Name).toString();
+        int id = proxyModel->data(idx, Qt::UserRole + KisAllResourcesModel::Id).toInt();
+        QImage image = (proxyModel->data(idx, Qt::UserRole + KisAllResourcesModel::Thumbnail)).value<QImage>();
+        QString name = proxyModel->data(idx, Qt::UserRole + KisAllResourcesModel::Name).toString();
 
         // Function imageToIcon(QImage()) returns a square white pixmap and a warning "QImage::scaled: Image is a null image"
         //  while QPixmap() returns an empty pixmap.

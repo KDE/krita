@@ -230,6 +230,8 @@ kis_ExternalProject_Add_with_separate_builds_apple(
             ${EXTRA_MESON_FLAGS}
 
     UPDATE_COMMAND ""
+
+    DEPENDS ext_nasm ${MESON_DEP} ${PKG_CONFIG_DEP}
 )
 
 # IMPORTANT:

@@ -1,0 +1,25 @@
+From 16cb12ce46eb3cfe8f2a8fed2f26bcd5682fdc68 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Tue, 30 May 2023 21:52:58 +0300
+Subject: [PATCH] Disable ebp_available on android
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index b3f1877346..09f08e03f7 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1922,7 +1922,7 @@ if conf.get('x86') == 1
+     endif
+   endif
+ 
+-  ebp_available = cc.run('''
++  ebp_available = host_machine.system() != 'android' && cc.run('''
+   int main() {
+     volatile int i=0;
+     __asm__ volatile ("xorl %%ebp, %%ebp" ::: "%ebp");
+-- 
+2.25.1
+

@@ -254,7 +254,7 @@ option(ENABLE_UPDATERS "Enable updaters/update notifications" ON)
 configure_file(config-updaters.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-updaters.h)
 add_feature_info("Enable updaters" ENABLE_UPDATERS "Enable updaters/update notifications.")
 
-option(KRITA_ENABLE_PCH "Enable precompiled headers support" ON)
+option(KRITA_ENABLE_PCH "Enable precompiled headers support" OFF)
 add_feature_info("Precompiled Headers" KRITA_ENABLE_PCH "precompiled headers make build process faster on some systems")
 
 option(DISABLE_PO_INSTALLATION "Disable installation of po files" OFF)

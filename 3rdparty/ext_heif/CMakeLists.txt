@@ -69,6 +69,7 @@ if(PERL_FOUND OR USE_STRAWBERRYPERL)
         URL_HASH SHA256=42b862f58b3d00bd3902d2dc469526574f5b012e5b178e6a9652845a113d6887
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-cdef-Disable-MSVC-optimizations-for-filter_block.patch
+              COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/android-cpu-features.patch
 
         # Static library is needed because ffmpeg accesses aom_codec_av1_dx_algo
         # which is not exported in Windows compilers.

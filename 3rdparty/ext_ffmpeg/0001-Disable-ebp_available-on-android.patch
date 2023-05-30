@@ -16,7 +16,7 @@ index b3f1877346..09f08e03f7 100644
    endif
  
 -  ebp_available = cc.run('''
-+  ebp_available = host_machine.system() != 'android' && cc.run('''
++  ebp_available = host_machine.system() != 'android' and cc.run('''
    int main() {
      volatile int i=0;
      __asm__ volatile ("xorl %%ebp, %%ebp" ::: "%ebp");

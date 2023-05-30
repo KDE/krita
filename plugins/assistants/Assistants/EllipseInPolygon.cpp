@@ -2698,7 +2698,7 @@ double ConicCalculations::getStartingPoint(ConicFormula formula, std::function<d
         getStartingPointDebug(formula, Pt);
     }
 
-    if (strokeStart) {
+    if (strokeStart && A < 0) {
         // Hyperbolas have two mirrored branches. To stick to the one where we started the stroke,
         // we need to figure out if strokeStart is on the same side of the symmetry axis;
         // for this we check if the transformed start is on the same side of the Hyperbola minor axis.
@@ -2709,24 +2709,6 @@ double ConicCalculations::getStartingPoint(ConicFormula formula, std::function<d
         // which is at either x = -D/A or y = -E/C
         // Reminder: The point to be projected is now the origin.
         bool verticalMajorAxis = (F - D*D/A - E*E/C) < 0.0;
-        /*
-        KIS_SAFE_ASSERT_RECOVER_NOOP(-1.0/C < -1.0/A && !(qIsNaN(-1.0/C)));
-        QPointF ss = *strokeStart;
-        if (!qFuzzyCompare(normalizeBy, 0)) {
-            ss = ss/normalizeBy;
-        }
-        QPointF uvStart(Q(0, 0)*ss.x() + Q(1, 0)*ss.y(), Q(0, 1)*ss.x() + Q(1, 1)*ss.y());
-        uvStart = uvStart - QPointF(u, v);
-        if (swapXandY) {
-            uvStart = uvStart.transposed();
-        }
-        if (negateX) {
-            uvStart.setX(-uvStart.x());
-        }
-        if (negateY) {
-            uvStart.setY(-uvStart.y());
-        }
-        */
         QPointF uvStart = *strokeStart;
         bool otherSide = verticalMajorAxis ? uvStart.y() < -E/C : uvStart.x() > -D/A;
 

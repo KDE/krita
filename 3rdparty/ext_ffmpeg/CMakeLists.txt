@@ -61,6 +61,7 @@ kis_ExternalProject_Add_with_separate_builds_apple(
             <SOURCE_DIR>
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0010-theora-Update-to-1.2.0.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0011-theora-Add-Arm-support.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-libtheora-Fix-build-on-android-x86.patch
 
     CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
         -Ddoc=disabled

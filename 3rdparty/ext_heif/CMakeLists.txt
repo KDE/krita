@@ -72,7 +72,10 @@ if(PERL_FOUND OR USE_STRAWBERRYPERL)
 
         # Static library is needed because ffmpeg accesses aom_codec_av1_dx_algo
         # which is not exported in Windows compilers.
-        CMAKE_ARGS ${LIBAOM_EXTRA_CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_SHARED_LIBS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_TESTDATA=OFF -DENABLE_TESTS=OFF -DENABLE_TOOLS=OFF ${GLOBAL_PROFILE} -DCONFIG_RUNTIME_CPU_DETECT=ON
+        #
+        # All boolean libaom-specific 'CONFIG_*' options should have value 0 or 1, because
+        # they are passed straight to asm files. We cannot use CMake's ON/OFF for them
+        CMAKE_ARGS ${LIBAOM_EXTRA_CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_SHARED_LIBS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_TESTDATA=OFF -DENABLE_TESTS=OFF -DENABLE_TOOLS=OFF ${GLOBAL_PROFILE} -DCONFIG_RUNTIME_CPU_DETECT=1
 
         UPDATE_COMMAND ""
 

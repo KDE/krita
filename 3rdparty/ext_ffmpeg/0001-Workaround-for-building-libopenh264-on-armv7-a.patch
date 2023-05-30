@@ -1,0 +1,25 @@
+From 254cb72d779f725690205c3ac55300e49c481943 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Tue, 30 May 2023 16:24:10 +0300
+Subject: [PATCH] Workaround for building libopenh264 on armv7-a
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 55467c3..4e1102f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -76,7 +76,7 @@ if ['linux', 'android', 'ios', 'darwin'].contains(system)
+     add_project_arguments('-DHAVE_AVX2', language: 'cpp')
+     add_project_arguments('-DHAVE_AVX2', '-DX86_ASM', language: 'c')
+     asm_inc = join_paths(meson.current_source_dir(), 'codec', 'common', 'x86', '')
+-  elif cpu_family == 'arm'
++  elif cpu_family == 'arm' or cpu_family == 'armv7-a'
+     asm_format = asm_format32
+     add_project_arguments('-DHAVE_NEON', language: 'c')
+     add_project_arguments('-DHAVE_NEON', language: 'c')
+-- 
+2.25.1
+

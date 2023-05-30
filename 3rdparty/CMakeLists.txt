@@ -545,6 +545,8 @@ configure_file(
 set (MESON_CPU_FAMILY ${CMAKE_SYSTEM_PROCESSOR})
 if (${MESON_CPU_FAMILY} STREQUAL "armv7-a")
     set(MESON_CPU_FAMILY "arm")
+elseif (${MESON_CPU_FAMILY} STREQUAL "i686")
+    set(MESON_CPU_FAMILY "x86")
 endif()
 
 configure_file(

@@ -132,6 +132,8 @@ kis_ExternalProject_Add_with_separate_builds_apple(
     URL https://github.com/cisco/openh264/archive/v2.3.1.tar.gz
     URL_HASH SHA256=453afa66dacb560bc5fd0468aabee90c483741571bca820a39a1c07f0362dc32
 
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-libopenh264-Enable-PIC-for-the-assembler-code-on-x86.patch
+
     CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
             -Dtests=disabled
             ${EXTRA_MESON_FLAGS}

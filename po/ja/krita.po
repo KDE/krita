@@ -42,7 +42,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 22.12.2\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 "X-Language: ja_JP\n"
@@ -16238,8 +16238,7 @@ msgstr "シェイプをクリップ"
 msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgid_plural "Create %1 shapes"
-msgstr[0] "シェイプを作成"
-msgstr[1] "シェイプを作成 %1"
+msgstr[0] "シェイプを作成 %1"
 
 #: libs/flake/commands/KoShapeDeleteCommand.cpp:43
 msgctxt "(qtundo-format) Delete one shape"
@@ -16251,7 +16250,6 @@ msgctxt "(qtundo-format)"
 msgid "Delete shape"
 msgid_plural "Delete shapes"
 msgstr[0] "シェイプを削除"
-msgstr[1] "シェイプを削除"
 
 #: libs/flake/commands/KoShapeDistributeCommand.cpp:117
 msgctxt "(qtundo-format)"
@@ -28432,7 +28430,6 @@ msgctxt ""
 msgid "%1 Button"
 msgid_plural "%1 Buttons"
 msgstr[0] "%1 ボタン"
-msgstr[1] "%1 ボタン"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:370
 #, kde-format
@@ -29121,7 +29118,6 @@ msgctxt "floating message in layer manager"
 msgid "Layer is locked"
 msgid_plural "Layers are locked"
 msgstr[0] "レイヤーはロックされています"
-msgstr[1] "レイヤーはロックされています"
 
 #: libs/ui/kis_layer_manager.cc:863
 #, kde-format
@@ -31344,35 +31340,30 @@ msgstr "';' を使用 (例: Office;KDE;Calligra)"
 msgid "%1 week"
 msgid_plural "%1 weeks"
 msgstr[0] "%1週"
-msgstr[1] "%1週"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:297 libs/ui/KoDocumentInfoDlg.cpp:299
 #, kde-format
 msgid "%1 day"
 msgid_plural "%1 days"
 msgstr[0] "%1日"
-msgstr[1] "%1日"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:300 libs/ui/KoDocumentInfoDlg.cpp:302
 #, kde-format
 msgid "%1 hour"
 msgid_plural "%1 hours"
 msgstr[0] "%1時"
-msgstr[1] "%1時"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:303 libs/ui/KoDocumentInfoDlg.cpp:305
 #, kde-format
 msgid "%1 minute"
 msgid_plural "%1 minutes"
 msgstr[0] "%1分"
-msgstr[1] "%1分"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:306 libs/ui/KoDocumentInfoDlg.cpp:308
 #, kde-format
 msgid "%1 second"
 msgid_plural "%1 seconds"
 msgstr[0] "%1秒"
-msgstr[1] "%1秒"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:314
 #, kde-format
@@ -36358,7 +36349,6 @@ msgctxt "%1 is the number of conflicts"
 msgid "Shortcut Conflict"
 msgid_plural "Shortcut Conflicts"
 msgstr[0] "ショートカット干渉"
-msgstr[1] "ショートカット干渉"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:171
 #, kde-format
@@ -36377,10 +36367,6 @@ msgid_plural ""
 "Do you want to assign an empty shortcut to these actions?\n"
 "%3"
 msgstr[0] ""
-"ショートカット \"%2\" は以下のショートカットと重複しています。\n"
-"この操作に空のショートカットを割り当てますか？\n"
-"%3 "
-msgstr[1] ""
 "ショートカット \"%2\" は以下のショートカットと重複しています。\n"
 "この操作に空のショートカットを割り当てますか？\n"
 "%3"
@@ -37920,8 +37906,7 @@ msgstr "補間モードを設定"
 msgctxt "(qtundo-format)"
 msgid "Adjust Keyframe"
 msgid_plural "Adjust %1 Keyframes"
-msgstr[0] "キーフレームを調整"
-msgstr[1] "キーフレーム%1つを調整"
+msgstr[0] "キーフレーム%1つを調整"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
@@ -38005,8 +37990,7 @@ msgstr "フレーム落ちしたフレームはこの Krita インスタンス�
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
-msgstr[0] "空フレームを追加"
-msgstr[1] "%1 空フレームを 追加"
+msgstr[0] "%1 空フレームを 追加"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
@@ -38014,8 +37998,7 @@ msgstr[1] "%1 空フレームを 追加"
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
 msgid_plural "Insert %1 frames"
-msgstr[0] "フレームを挿入"
-msgstr[1] "%1 フレームを挿入"
+msgstr[0] "%1 フレームを挿入"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:188
 #, kde-format
@@ -38125,31 +38108,27 @@ msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
 msgstr[0] "キーフレームを削除"
-msgstr[1] "キーフレームを削除"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:304
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
 msgid_plural "Move %1 Keyframes"
-msgstr[0] "キーフレームを移動"
-msgstr[1] "%1キーフレームを移動"
+msgstr[0] "%1キーフレームを移動"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:308
 #, kde-format
 msgctxt "(qtundo-format) Copy one or several keyframes"
 msgid "Copy Keyframe"
 msgid_plural "Copy %1 Keyframes"
-msgstr[0] "キーフレームをコピー"
-msgstr[1] "%1 キーフレームをコピー"
+msgstr[0] "%1 キーフレームをコピー"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:381
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Clone Keyframe"
 msgid_plural "Clone %1 Keyframes"
-msgstr[0] "キーフレームを複製"
-msgstr[1] "%1 キーフレームを複製"
+msgstr[0] "%1 キーフレームを複製"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:412
 #, fuzzy
@@ -38212,8 +38191,7 @@ msgstr "後のフレーム"
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
 msgid_plural "Remove %1 frames and shift"
-msgstr[0] "フレームを削除してずらす"
-msgstr[1] "%1 フレームを削除してずらす"
+msgstr[0] "%1 フレームを削除してずらす"
 
 #: plugins/dockers/animation/KisTimeBasedItemModel.cpp:452
 msgctxt "(qtundo-format)"
@@ -45140,7 +45118,6 @@ msgctxt "suffix for a spinbox"
 msgid " color"
 msgid_plural " colors"
 msgstr[0] "色"
-msgstr[1] "色"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:33
@@ -46483,7 +46460,6 @@ msgctxt ""
 msgid "Every {n} cell horizontally"
 msgid_plural "Every {n} cells horizontally"
 msgstr[0] "水平 {n} セルごと"
-msgstr[1] "水平 {n} セルごと"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -46496,7 +46472,6 @@ msgctxt ""
 msgid "Every {n} cell vertically"
 msgid_plural "Every {n} cells vertically"
 msgstr[0] "垂直 {n} セルごと"
-msgstr[1] "垂直 {n} セルごと"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
 #, kde-format

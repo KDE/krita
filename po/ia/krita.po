@@ -55,7 +55,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-25 00:44+0000\n"
-"PO-Revision-Date: 2023-02-28 16:14+0100\n"
+"PO-Revision-Date: 2023-05-30 22:55+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -63,7 +63,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -20239,8 +20239,7 @@ msgid "Tag Url"
 msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:670
-#, fuzzy, kde-format
-#| msgid "Resource"
+#, kde-format
 msgid "Resource"
 msgstr "Ressource"
 
@@ -22131,7 +22130,7 @@ msgstr "Filtro:"
 #, fuzzy, kde-format
 #| msgid "FFmpeg:"
 msgid "FFmpeg"
-msgstr "FFMpeg:"
+msgstr "FFMpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
@@ -22174,10 +22173,9 @@ msgstr "Exposition"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:58
-#, fuzzy, kde-format
-#| msgid "Fi&le format:"
+#, kde-format
 msgid "File format:"
-msgstr "Formato de fi&le:"
+msgstr "Formato de file:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbMimetype)
 #: libs/ui/animation/wdg_animationrenderer.ui:67
@@ -23177,9 +23175,9 @@ msgid "Internal Storage"
 msgstr "Error Interne"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:471
-#, kde-format
+#, fuzzy, kde-format
 msgid "SD-Card"
-msgstr ""
+msgstr "Sd Card"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:509
 #, fuzzy, kde-format
@@ -25869,9 +25867,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1511
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "Avantiate..."
 
@@ -28468,9 +28464,7 @@ msgid "Select from Menu (Add to Selection)"
 msgstr "Inverte selection"
 
 #: libs/ui/input/kis_select_layer_action.cpp:246
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select all layers"
+#, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
 msgstr "Selige omne stratos (Layer)"
@@ -29156,10 +29150,9 @@ msgid "Apply Filter Again: %1"
 msgstr "Applica Filtro de novo: %1"
 
 #: libs/ui/kis_image_manager.cc:106
-#, fuzzy, kde-format
-#| msgid "Import Images"
+#, kde-format
 msgid "Import Image"
-msgstr "Importa imagines"
+msgstr "Importa Imagine"
 
 #: libs/ui/kis_image_manager.cc:197 libs/ui/widgets/KoDualColorButton.cpp:92
 #, fuzzy, kde-format
@@ -29963,9 +29956,9 @@ msgid "Adding resource types..."
 msgstr "Adde Ressources"
 
 #: libs/ui/KisApplication.cpp:463
-#, fuzzy, kde-format
+#, kde-format
 msgid "Loading plugins..."
-msgstr "Crea insimul de Ressources"
+msgstr "Cargante plugins..."
 
 #: libs/ui/KisApplication.cpp:469
 #, fuzzy, kde-format
@@ -29981,7 +29974,7 @@ msgstr "Gradiente"
 #, fuzzy, kde-format
 #| msgid "Scanning..."
 msgid "Launching..."
-msgstr "On scande..."
+msgstr "Il es lanceante %1"
 
 #: libs/ui/KisApplication.cpp:579
 #, kde-format
@@ -30036,7 +30029,7 @@ msgstr ""
 #: libs/ui/KisApplication.cpp:847
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
-msgstr "Il non pote cargar a selection de vector %1."
+msgstr "Non poteva aperir file %1:%2"
 
 #: libs/ui/KisApplication.cpp:866
 #, kde-format
@@ -30253,7 +30246,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgid "Could not save %1"
 msgid "Could not save %1."
-msgstr "Non pote salveguardar '%1'"
+msgstr "Non pote salvar '%1'"
 
 #: libs/ui/KisDocument.cpp:973
 #, kde-format
@@ -30357,7 +30350,7 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
 msgid "An unspecified error occurred."
-msgstr ""
+msgstr "Un error non specificate ha occurrite."
 
 #: libs/ui/KisImportExportErrorCode.cpp:24
 #: libs/ui/KisImportExportErrorCode.cpp:185
@@ -33176,11 +33169,10 @@ msgid "Estimated Gamma cannot be retrieved for YCbCr."
 msgstr ""
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:384
-#, fuzzy, kde-format
-#| msgid "&About %1"
+#, kde-format
 msgctxt "About <Profilename>"
 msgid "About %1/%2"
-msgstr "A proposito"
+msgstr "A proposito %1/%2"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:386
 #, kde-format
@@ -37925,7 +37917,7 @@ msgstr "Surdina (Mute)"
 #| msgid "Volume:"
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
-msgstr "Tomo:"
+msgstr "Volumine:"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
 #, kde-format
@@ -40613,7 +40605,7 @@ msgstr "Favoritos"
 #, fuzzy, kde-format
 #| msgid "&Select..."
 msgid "Select..."
-msgstr "Selige"
+msgstr "Selige..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
@@ -40823,9 +40815,9 @@ msgstr "Monstrator:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
-#, kde-format
+#, fuzzy, kde-format
 msgid "S&lider"
-msgstr ""
+msgstr "Glissator"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
@@ -41804,8 +41796,7 @@ msgstr "Pro&gramma de exposition:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:126
-#, fuzzy, kde-format
-#| msgid "Undefined"
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Not defined"
 msgstr "Non definite"
@@ -42545,7 +42536,7 @@ msgstr "Modo de Metrar"
 #| msgid "Not implemented"
 msgctxt "EXIF: misc - sensing method type"
 msgid "Not Defined"
-msgstr "Non actuate"
+msgstr "Non definite"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:888
@@ -47456,9 +47447,9 @@ msgstr "Little-endian"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioLittle)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:68
-#, kde-format
+#, fuzzy, kde-format
 msgid "&Little"
-msgstr ""
+msgstr "Parve"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBig)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:81
@@ -52879,7 +52870,7 @@ msgstr "ms"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:70
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, fuzzy, kde-format
@@ -53296,8 +53287,7 @@ msgid "repeat"
 msgstr "repete"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
 msgstr "Basic"
@@ -55903,10 +55893,8 @@ msgid "Owner"
 msgstr "Proprietario"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "Strong"
 msgid "Patron"
-msgstr "Forte"
+msgstr "Patrono"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, fuzzy
@@ -56467,7 +56455,7 @@ msgstr "Script {0}"
 #: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:36
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggerwidget.py:16
 msgid "Debugger"
-msgstr ""
+msgstr "Cribrator (Debugger)"
 
 #: plugins/python/scripter/scripter.py:20
 #: plugins/python/scripter/uicontroller.py:86
@@ -56817,22 +56805,17 @@ msgid "Execute Script {num}"
 msgstr "Crea objecto"
 
 #: plugins/python/tenscripts/tenscripts.py:84
-#, fuzzy, python-brace-format
-#| msgid "Subscript"
+#, python-brace-format
 msgid "Script {0} executed"
-msgstr "Subscribite"
+msgstr "Script {0} executate"
 
 #: plugins/python/tenscripts/uitenscripts.py:63
-#, fuzzy
 msgid "Selected path"
-msgstr "Selige opac"
+msgstr "Percurso seligite"
 
 #: plugins/python/tenscripts/uitenscripts.py:64
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Invert Selection"
 msgid "Select the script"
-msgstr "Inverte selection"
+msgstr "Selectiona le script"
 
 #: plugins/python/tenscripts/uitenscripts.py:88
 msgid "Python files (*.py)"
@@ -56955,10 +56938,9 @@ msgid "Assistant Magnetism"
 msgstr "Assistente:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:464
-#, fuzzy, kde-format
-#| msgid "Assistant:"
+#, kde-format
 msgid "Magnetism:"
-msgstr "Assistente:"
+msgstr "Magnetismo:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:467
 #, fuzzy, kde-format
@@ -57301,9 +57283,9 @@ msgid "Show Preview"
 msgstr "Monstrar vista preliminar"
 
 #: plugins/tools/basictools/kis_tool_line.cc:98
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Guideline"
-msgstr "Monstra guidas"
+msgstr "Monstra  Lineaguidas"
 
 #: plugins/tools/basictools/kis_tool_line.cc:433
 #, kde-format
@@ -57339,9 +57321,9 @@ msgstr ""
 "%3°"
 
 #: plugins/tools/basictools/kis_tool_measure.h:102
-#, fuzzy, kde-format
+#, kde-format
 msgid "Measure Tool"
-msgstr "Instrumento de Rectangulo"
+msgstr "Instrumento de Mesura"
 
 #: plugins/tools/basictools/kis_tool_move.cc:293
 #, kde-format
@@ -57368,10 +57350,9 @@ msgid "Multibrush Stroke"
 msgstr "Divide in stratos (Layers)"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:419
-#, fuzzy, kde-format
-#| msgid "Geometry"
+#, kde-format
 msgid "Symmetry"
-msgstr "Geometria"
+msgstr "Symmetria"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:420
 #, kde-format
@@ -57584,10 +57565,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
 #: plugins/tools/basictools/wdgcolorsampler.ui:238
-#, fuzzy, kde-format
-#| msgid "Duplicate current profile"
+#, kde-format
 msgid "Update color"
-msgstr "Duplica profilo currente"
+msgstr "actualisa color"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionMethod)
 #: plugins/tools/basictools/wdgmovetool.ui:27
@@ -57638,9 +57618,9 @@ msgstr "Remove strato (layer)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMoveStep)
 #: plugins/tools/basictools/wdgmovetool.ui:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move Shortcut"
-msgstr "Configura..."
+msgstr "Move Vias Breve"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spinMoveScale)
 #: plugins/tools/basictools/wdgmovetool.ui:90
@@ -58114,11 +58094,9 @@ msgstr "Salveguarda Location:"
 
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:56
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Invert Selection"
+#, kde-format
 msgid "Add/Select an image to show options"
-msgstr "Inverte selection"
+msgstr "Adde/Selige un imagine per monstrar optiones"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format

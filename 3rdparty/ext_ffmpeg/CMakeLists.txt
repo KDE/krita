@@ -264,6 +264,7 @@ kis_ExternalProject_Add_with_separate_builds_apple(
           COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-ffmpeg-Fix-crashes-in-ff_seek_frame_binary-if-built-with-la.patch
           COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-ffmpeg-Add-options-for-SSP-and-CFGuard.patch
           COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Disable-ebp_available-on-android.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-libavutil-Don-t-disable-PIC-on-x86_32.patch
 
     CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
             --libdir=lib

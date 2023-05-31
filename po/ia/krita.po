@@ -55,7 +55,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-02-28 15:46+0100\n"
+"PO-Revision-Date: 2023-05-30 22:42+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -63,7 +63,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -28625,10 +28625,9 @@ msgid "Apply Filter Again: %1"
 msgstr "Applica Filtro de novo: %1"
 
 #: libs/ui/kis_image_manager.cc:106
-#, fuzzy, kde-format
-#| msgid "Import Images"
+#, kde-format
 msgid "Import Image"
-msgstr "Importa imagines"
+msgstr "Importa Imagine"
 
 #: libs/ui/kis_image_manager.cc:197 libs/ui/widgets/KoDualColorButton.cpp:92
 #, fuzzy, kde-format
@@ -29498,7 +29497,7 @@ msgstr ""
 #: libs/ui/KisApplication.cpp:841
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
-msgstr "Il non pote cargar a selection de vector %1."
+msgstr "Non poteva aperir file %1:%2"
 
 #: libs/ui/KisApplication.cpp:860
 #, kde-format
@@ -29807,7 +29806,7 @@ msgstr ""
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
 msgid "An unspecified error occurred."
-msgstr ""
+msgstr "Un error non specificate ha occurrite."
 
 #: libs/ui/KisImportExportErrorCode.cpp:24
 #: libs/ui/KisImportExportErrorCode.cpp:185
@@ -40590,8 +40589,7 @@ msgstr "Pro&gramma de exposition:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:126
-#, fuzzy, kde-format
-#| msgid "Undefined"
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Not defined"
 msgstr "Non definite"
@@ -41331,7 +41329,7 @@ msgstr "Modo de Metrar"
 #| msgid "Not implemented"
 msgctxt "EXIF: misc - sensing method type"
 msgid "Not Defined"
-msgstr "Non actuate"
+msgstr "Non definite"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:888
@@ -43370,7 +43368,7 @@ msgstr "         Exito:"
 #: plugins/filters/threshold/wdg_threshold.ui:59
 #, fuzzy, kde-format
 msgid "Logarithmic"
-msgstr "Logarithmic"
+msgstr "&Logarithmic"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:359
@@ -46204,9 +46202,9 @@ msgstr "Little-endian"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioLittle)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:68
-#, kde-format
+#, fuzzy, kde-format
 msgid "&Little"
-msgstr ""
+msgstr "Parve"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBig)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:81
@@ -54773,10 +54771,8 @@ msgid "Owner"
 msgstr "Proprietario"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "Strong"
 msgid "Patron"
-msgstr "Forte"
+msgstr "Patrono"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, fuzzy
@@ -55337,7 +55333,7 @@ msgstr "Script {0}"
 #: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:36
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggerwidget.py:16
 msgid "Debugger"
-msgstr ""
+msgstr "Cribrator (Debugger)"
 
 #: plugins/python/scripter/scripter.py:20
 #: plugins/python/scripter/uicontroller.py:86
@@ -55687,26 +55683,19 @@ msgid "Execute Script {num}"
 msgstr "Crea objecto"
 
 #: plugins/python/tenscripts/tenscripts.py:84
-#, fuzzy, python-brace-format
-#| msgid "Subscript"
+#, python-brace-format
 msgid "Script {0} executed"
-msgstr "Subscribite"
+msgstr "Script {0} executate"
 
 #: plugins/python/tenscripts/uitenscripts.py:63
-#, fuzzy
 msgid "Selected path"
-msgstr "Selige opac"
+msgstr "Percurso seligite"
 
 #: plugins/python/tenscripts/uitenscripts.py:64
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Invert Selection"
 msgid "Select the script"
-msgstr "Inverte selection"
+msgstr "Selectiona le script"
 
 #: plugins/python/tenscripts/uitenscripts.py:88
-#, fuzzy
-#| msgid "All Files"
 msgid "Python files (*.py)"
 msgstr "Files de Python (*.py)"
 
@@ -55826,10 +55815,9 @@ msgid "Assistant Magnetism"
 msgstr "Assistente:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:464
-#, fuzzy, kde-format
-#| msgid "Assistant:"
+#, kde-format
 msgid "Magnetism:"
-msgstr "Assistente:"
+msgstr "Magnetismo:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:467
 #, fuzzy, kde-format
@@ -55906,8 +55894,7 @@ msgid "Threshold: "
 msgstr "Limine: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:371
-#, fuzzy, kde-format
-#| msgid "Spread:"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in fill tool options"
 msgid "Spread: "
 msgstr "Propagation:"
@@ -55934,8 +55921,7 @@ msgid "Feather: "
 msgstr "Pluma: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:413
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "The 'reset' button in fill tool options"
 msgid "Reset"
 msgstr "Re-fixa"
@@ -56119,9 +56105,9 @@ msgid "Show Preview"
 msgstr "Monstrar vista preliminar"
 
 #: plugins/tools/basictools/kis_tool_line.cc:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Guideline"
-msgstr "Monstra guidas"
+msgstr "Monstra  Lineaguidas"
 
 #: plugins/tools/basictools/kis_tool_line.cc:372
 #, kde-format
@@ -56157,9 +56143,9 @@ msgstr ""
 "%3°"
 
 #: plugins/tools/basictools/kis_tool_measure.h:101
-#, fuzzy, kde-format
+#, kde-format
 msgid "Measure Tool"
-msgstr "Instrumento de Rectangulo"
+msgstr "Instrumento de Mesura"
 
 #: plugins/tools/basictools/kis_tool_move.cc:284
 #, kde-format
@@ -56186,10 +56172,9 @@ msgid "Multibrush Stroke"
 msgstr "Divide in stratos (Layers)"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:419
-#, fuzzy, kde-format
-#| msgid "Geometry"
+#, kde-format
 msgid "Symmetry"
-msgstr "Geometria"
+msgstr "Symmetria"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:420
 #, kde-format
@@ -56402,10 +56387,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
 #: plugins/tools/basictools/wdgcolorsampler.ui:238
-#, fuzzy, kde-format
-#| msgid "Duplicate current profile"
+#, kde-format
 msgid "Update color"
-msgstr "Duplica profilo currente"
+msgstr "actualisa color"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionMethod)
 #: plugins/tools/basictools/wdgmovetool.ui:27
@@ -56456,9 +56440,9 @@ msgstr "Remove strato (layer)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMoveStep)
 #: plugins/tools/basictools/wdgmovetool.ui:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move Shortcut"
-msgstr "Configura..."
+msgstr "Move Vias Breve"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spinMoveScale)
 #: plugins/tools/basictools/wdgmovetool.ui:90
@@ -56932,11 +56916,9 @@ msgstr "Salveguarda Location:"
 
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:56
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Invert Selection"
+#, kde-format
 msgid "Add/Select an image to show options"
-msgstr "Inverte selection"
+msgstr "Adde/Selige un imagine per monstrar optiones"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
@@ -57144,8 +57126,7 @@ msgid "Threshold: "
 msgstr "Limine: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:247
-#, fuzzy, kde-format
-#| msgid "Spread:"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in contiguous selection tool options"
 msgid "Spread: "
 msgstr "Propagation:"

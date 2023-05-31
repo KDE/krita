@@ -250,6 +250,10 @@ if (NOT MSVC)
     set(_stack_guard_flag "-Denable-ssp=enabled")
 endif() 
 
+if (ANDROID AND ${CMAKE_SYSTEM_PROCESSOR} STREQUAL "i686")
+    set(DISABLE_ASM_ON_ANDROID_x86_32 "-Dasm=disabled")
+endif()
+
 kis_ExternalProject_Add_with_separate_builds_apple(
     ext_ffmpeg
     MESON
@@ -274,6 +278,7 @@ kis_ExternalProject_Add_with_separate_builds_apple(
             -Denable-cfguard=disabled # TODO: change to 'auto' when Krita enabled cfguard internally
             -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
             -Ddefault_library=shared
+            ${DISABLE_ASM_ON_ANDROID_x86_32}
             -Dcli=enabled
             -Dtests=disabled
             -Dffprobe=enabled

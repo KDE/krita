@@ -1,20 +1,21 @@
-From b6d2c792026325c880c52ba555ac85dbb39ded96 Mon Sep 17 00:00:00 2001
+From 0b115a65c37ae75c8110e8f93b3f158bee8f506a Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Tue, 30 May 2023 22:39:57 +0300
 Subject: [PATCH] [libtheora] Fix build on android-x86
 
 ---
- lib/meson.build | 1 +
- 1 file changed, 1 insertion(+)
+ lib/meson.build | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/lib/meson.build b/lib/meson.build
-index da89dba..b401af1 100644
+index da89dba..c196ceb 100644
 --- a/lib/meson.build
 +++ b/lib/meson.build
-@@ -72,6 +72,7 @@ if asm
+@@ -72,6 +72,8 @@ if asm
          'x86/mmxfrag.c',
          'x86/mmxidct.c',
          'x86/mmxstate.c',
++        'x86/sse2idct.c',
 +        'x86/x86cpu.c',
          'x86/x86state.c',
        )

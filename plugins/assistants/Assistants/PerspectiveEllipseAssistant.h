@@ -56,6 +56,7 @@ private:
 
     bool isEllipseValid();
     void updateCache();
+    void paintConcentricEllipse(QPainter& gc, const QRectF& updateRect, const QTransform &initialTransform);
 
 
      

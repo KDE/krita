@@ -46,6 +46,7 @@ public:
     bool isConcentric {false};
     bool ellipsesCorrectInStroke {false};
     bool useMirrored {false};
+    bool useMirroredPreview {false};
 
     PerspectiveBasedAssistantHelper::CacheData cache;
 
@@ -159,6 +160,15 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
             d->concentricEllipseInPolygonMirrored.updateToPointOnConcentricEllipse(d->ellipseInPolygon.originalTransform, initialTransform.inverted().map(mousePos), d->cache.horizon, true);
             //d->concentricEllipseInPolygonMirrored.setSimpleEllipseVertices(d->simpleConcentricEllipse);
             d->concentricEllipseInPolygonMirrored.setSimpleEllipseVertices(d->simpleConcentricEllipseMirrored);
+
+            if (true || !d->ellipsesCorrectInStroke) {
+                if (!d->concentricEllipseInPolygon.onTheCorrectSideOfHorizon(initialTransform.inverted().map(mousePos))) {
+                    d->useMirroredPreview = false;
+                } else {
+                    d->useMirroredPreview = true;
+                }
+            }
+
         //}
 
         //ENTER_FUNCTION() << "Set points to simple ellipse:" << d->concentricEllipseInPolygon.finalVertices[0]
@@ -201,7 +211,8 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
             gc.save();
             gc.setPen(pen);
 
-            d->concentricEllipseInPolygon.paintParametric(gc, updateRect, initialTransform);
+
+            paintConcentricEllipse(gc, updateRect, initialTransform);
             gc.restore();
         }
         if (!isEditing && d->isConcentric) {
@@ -219,7 +230,7 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
             gc.save();
             gc.setPen(pen);
 
-            d->concentricEllipseInPolygon.paintParametric(gc, updateRect, initialTransform);
+            paintConcentricEllipse(gc, updateRect, initialTransform);
             gc.restore();
         }
 
@@ -414,6 +425,27 @@ void PerspectiveEllipseAssistant::updateCache()
 
     d->cacheValid = true;
 
+}
+
+void PerspectiveEllipseAssistant::paintConcentricEllipse(QPainter &gc, const QRectF &updateRect, const QTransform& initialTransform)
+{
+    if (d->useMirroredPreview) {
+        d->concentricEllipseInPolygon.paintParametric(gc, updateRect, initialTransform);
+    } else {
+        d->concentricEllipseInPolygonMirrored.paintParametric(gc, updateRect, initialTransform);
+    }
+
+    gc.save();
+
+    gc.setPen(QPen(Qt::blue));
+
+    if (!d->useMirroredPreview) {
+        d->concentricEllipseInPolygon.paintParametric(gc, updateRect, initialTransform);
+    } else {
+        d->concentricEllipseInPolygonMirrored.paintParametric(gc, updateRect, initialTransform);
+    }
+
+    gc.restore();
 }
 
 bool PerspectiveEllipseAssistant::isAssistantComplete() const

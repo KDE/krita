@@ -15,6 +15,7 @@
 #include <gsl/gsl_roots.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
+#include <functional>
 
 
 #include <Eigen/Eigenvalues>
@@ -1571,11 +1572,14 @@ void EllipseInPolygon::paintParametric(QPainter &gc, const QRectF &updateRect, c
     QPointF beginPoint = updateRect.topLeft();
 
     // go left and right from that point
-    paintParametric(gc, updateRect, initialTransform, beginPoint, true);
-    paintParametric(gc, updateRect, initialTransform, beginPoint, false);
+    paintParametric(finalFormula, gc, updateRect, initialTransform, beginPoint, false);
+    QVector<double> swappedXYFormula;
+    swappedXYFormula << finalFormula[2] << finalFormula[1] << finalFormula[0] << finalFormula[4] << finalFormula[3] << finalFormula[5];
+
+    paintParametric(swappedXYFormula, gc, updateRect, initialTransform, beginPoint, true);
 }
 
-void EllipseInPolygon::paintParametric(QPainter& gc, const QRectF& updateRect, const QTransform &initialTransform, const QPointF& begin, bool goesLeft)
+void EllipseInPolygon::paintParametric(QVector<double> formula, QPainter& gc, const QRectF& updateRect, const QTransform &initialTransform, const QPointF& begin, bool swapXY)
 {
     gc.save();
     gc.resetTransform();
@@ -1591,12 +1595,12 @@ void EllipseInPolygon::paintParametric(QPainter& gc, const QRectF& updateRect, c
     // parametric formula for x is symmetric (a <=> c, d <=> e)
 
 
-    qreal a = finalFormula[0];
-    qreal b = finalFormula[1];
-    qreal c = finalFormula[2];
-    qreal d = finalFormula[3];
-    qreal e = finalFormula[4];
-    qreal f = finalFormula[5];
+    qreal a = formula[0];
+    qreal b = formula[1];
+    qreal c = formula[2];
+    qreal d = formula[3];
+    qreal e = formula[4];
+    qreal f = formula[5];
 
     //QPointF beingWidget = initialTransform.map(begin);
 
@@ -1640,10 +1644,8 @@ void EllipseInPolygon::paintParametric(QPainter& gc, const QRectF& updateRect, c
 
     QPointF concentricStaticPoint = originalTransform.map(QPointF(0.5, 0.5)); // this is the center of the original (TM) circle
 
-    qreal horizonSideForMovingPoint = horizonLineSign(concentricMovingPoint);
     qreal horizonSideForStaticPoints = horizonLineSign(concentricStaticPoint);
 
-    bool showMirrored = horizonSideForMovingPoint != horizonSideForStaticPoints;
 
 
     auto formulaWithSquare = [a, b, c, d, e, f, &needsSecondLoop, this, initialTransform, horizonSideForStaticPoints] (qreal x, int sign) mutable {
@@ -1687,16 +1689,13 @@ void EllipseInPolygon::paintParametric(QPainter& gc, const QRectF& updateRect, c
         return newPoint;
     };
 
-    auto formula = formulaWithSquare;
+    std::function<QPointF(qreal, int)> pointFormula = formulaWithSquare;
     if (c == 0) {
-        //formula = formulaWithoutSquare;
+        pointFormula = formulaWithoutSquare;
     }
-    //auto formula = (c == 0 ? formulaWithoutSquare : formulaWithSquare);
 
 
-
-
-    if (c != 0) {
+    //if (c != 0) {
 
         //QPointF lastPoint = QPointF();
 
@@ -1708,49 +1707,20 @@ void EllipseInPolygon::paintParametric(QPainter& gc, const QRectF& updateRect, c
 
 
         Q_FOREACH(int sign, signs) {
-            for (int i = viewport.left(); i <= viewport.right(); i += jump) {
+            for (int i = (swapXY ? viewport.top() : viewport.left()); i <= (swapXY ? viewport.bottom() : viewport.right()); i += jump) {
 
+                QPointF orig = QPointF(i, begin.y());
+                if (swapXY) {
+                    orig = QPointF(begin.y(), i);
+                }
 
-                //QPointF converted = QPointF(i, begin.y());//reverseInitial.map(QPointF(i, begin.y()));
-                QPointF converted = reverseInitial.map(QPointF(i, begin.y()));
-
-
-
+                QPointF converted = reverseInitial.map(orig);
                 qreal x = converted.x();
 
-
-                /*
-
-                //qreal underSqrt = e*e + b*b*i*i + 2*e*b*i - 4*c*f - 4*c*a*i*i - 4*c*d*i;
-                qreal underSqrt = e*e + b*b*x*x + 2*e*b*x - 4*c*f - 4*c*a*x*x - 4*c*d*x;
-
-                if (underSqrt < 0) {
-                    path.addPolygon(QPolygonF(points));
-                    points.clear();
-                    continue;
-                } else if (underSqrt > 0) {
-                    needsSecondLoop = true;
+                QPointF newPoint = pointFormula(x, sign);
+                if (swapXY) {
+                    newPoint = QPointF(newPoint.y(), newPoint.x());
                 }
-
-                qreal y = (-e - b*i + sign*sqrt(underSqrt))/(2*c);
-
-                int horizonSide = horizonLineSign(QPointF(x, y));
-                if (horizonSide != horizonSideForStaticPoints) {
-                    path.addPolygon(QPolygonF(points));
-                    points.clear();
-                    continue;
-                }
-
-                QPointF newPoint = initialTransform.map(QPointF(x, y));
-
-
-                if (i == viewport.left()) {
-                    gc.drawEllipse(newPoint, 5, 5);
-                    gc.drawEllipse(QPointF(x, y), 5, 5);
-                }
-
-                */
-                QPointF newPoint = formulaWithSquare(x, sign);
 
                 if (newPoint.isNull()) {
                     path.addPolygon(points);
@@ -1772,11 +1742,12 @@ void EllipseInPolygon::paintParametric(QPainter& gc, const QRectF& updateRect, c
 
         gc.drawPath(path);
 
-        gc.drawRect(kisGrowRect(updateRect, -10));
-        gc.drawRect(kisGrowRect(viewport, -10));
+        //gc.drawRect(kisGrowRect(updateRect, -10));
+        //gc.drawRect(kisGrowRect(viewport, -10));
 
 
-    }
+    //}
+
     gc.restore();
 
 }

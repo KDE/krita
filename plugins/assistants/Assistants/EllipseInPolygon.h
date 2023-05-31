@@ -276,7 +276,7 @@ protected:
 
     bool updateToFivePoints(QVector<QPointF> points, QLineF _horizon);
 
-    void paintParametric(QPainter& gc, const QRectF& updateRect, const QTransform &initialTransform, const QPointF& begin, bool goesLeft);
+    void paintParametric(QVector<double> formula, QPainter& gc, const QRectF& updateRect, const QTransform &initialTransform, const QPointF& begin, bool swapXY);
 
     /**
      * @brief horizonLineSign says on which side of the horizon (using the same, saved formula) the specific point is

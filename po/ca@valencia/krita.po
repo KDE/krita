@@ -51105,7 +51105,7 @@ msgstr "Text:"
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:139
 #, kde-format
 msgid "The Quick Brown Fox Jumps Over The Lazy Dog"
-msgstr "Jove xef, porte ací per beure whisky amb quinze glaçons d'hidrogen"
+msgstr "Jove xef, porte ací per a beure whisky amb quinze glaçons d'hidrogen"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, pipeModeChbox)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:171

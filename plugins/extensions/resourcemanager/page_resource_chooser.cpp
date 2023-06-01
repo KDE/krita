@@ -92,7 +92,7 @@ void PageResourceChooser::slotResourcesSelectionChanged(QModelIndex selected)
         // The difference between them is relevant in case of Workspaces which has no images.
         // Using QPixmap() makes them appear in a dense list without icons, while imageToIcon(QImage())
         //  would give a list with big white rectangles and names of the workspaces.
-        Qt::AspectRatioMode scalingAspectRatioMode = Qt::KeepAspectRatio;
+        Qt::AspectRatioMode scalingAspectRatioMode = Qt::IgnoreAspectRatio;
         if (image.height() == 1) { // affects mostly gradients, which are very long but only 1px tall
             scalingAspectRatioMode = Qt::IgnoreAspectRatio;
         }
@@ -128,7 +128,7 @@ void PageResourceChooser::slotresourceTypeSelected(int idx)
         QImage image = (model.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail)).value<QImage>();
         QString name = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
 
-        Qt::AspectRatioMode scalingAspectRatioMode = Qt::KeepAspectRatio;
+        Qt::AspectRatioMode scalingAspectRatioMode = Qt::IgnoreAspectRatio;
         if (image.height() == 1) { // affects mostly gradients, which are very long but only 1px tall
             scalingAspectRatioMode = Qt::IgnoreAspectRatio;
         }

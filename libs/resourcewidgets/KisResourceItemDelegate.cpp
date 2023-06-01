@@ -69,7 +69,7 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
             QSize pixSize(paintRect.height(), paintRect.height());
 
             QSize size = pixSize * devicePixelRatioF;
-            Qt::AspectRatioMode aspectMode = Qt::KeepAspectRatio;
+            Qt::AspectRatioMode aspectMode = Qt::IgnoreAspectRatio;
             Qt::TransformationMode transformMode = Qt::SmoothTransformation;
             QImage previewHighDpi = preview.scaled(size, aspectMode, transformMode);
 
@@ -80,7 +80,7 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
             QSize pixSize(paintRect.height(), paintRect.height());
 
             QSize size = pixSize * devicePixelRatioF;
-            Qt::AspectRatioMode aspectMode = Qt::KeepAspectRatio;
+            Qt::AspectRatioMode aspectMode = Qt::IgnoreAspectRatio;
             Qt::TransformationMode transformMode = Qt::SmoothTransformation;
             QImage previewHighDpi = preview.scaled(size, aspectMode, transformMode);
 
@@ -139,15 +139,27 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
                                                              Qt::IgnoreAspectRatio,
                                                              Qt::SmoothTransformation);
         previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
+
+        QImage destBackground(previewHighDpi.size(), QImage::Format_RGB32);
+        destBackground.fill(Qt::white);
+        destBackground.setDevicePixelRatio(devicePixelRatioF);
+
+        painter->drawImage(paintRect.x(), paintRect.y(), destBackground);
         painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
     }
     else {
         QSize pixSize(paintRect.height(), paintRect.height());
         QImage previewHighDpi = KisResourceThumbnailCache::instance()->getImage(index,
                                                                                 pixSize * devicePixelRatioF,
-                                                                                Qt::KeepAspectRatio,
+                                                                                Qt::IgnoreAspectRatio,
                                                                                 Qt::SmoothTransformation);
         previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
+
+        QImage destBackground(previewHighDpi.size(), QImage::Format_RGB32);
+        destBackground.fill(Qt::white);
+        destBackground.setDevicePixelRatio(devicePixelRatioF);
+
+        painter->drawImage(paintRect.x(), paintRect.y(), destBackground);
         painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
 
         // Put an asterisk after the preset if it is dirty. This will help in case the pixmap icon is too small

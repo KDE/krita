@@ -24,6 +24,7 @@ public:
 
     void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const override;
     void setShowText(bool);
+    void setIsWidget(bool);
 
     QSize sizeHint ( const QStyleOptionViewItem &, const QModelIndex & ) const override;
 
@@ -31,6 +32,7 @@ private:
     KoCheckerBoardPainter m_checkerPainter;
     KisResourceThumbnailPainter m_thumbnailPainter;
     bool m_showText;
+    bool m_isWidget;
 };
 
 #endif

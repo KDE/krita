@@ -3,15 +3,20 @@
 #include "wdg_resource_preview.h"
 #include "kisresourceitemviwer.h"
 #include <kis_config.h>
+#include "KisResourceItemListView.h"
 
 #include <QPainter>
 #include <QDebug>
 #include <QLabel>
+#include <QScroller>
+#include <QScrollBar>
 
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
+#include "KisResourceItemListWidget.h"
 
-#define ICON_SIZE 48
+
+#define ICON_SIZE 128
 
 PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *parent) :
     QWizardPage(parent),
@@ -26,10 +31,12 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
     connect(m_wdgResourcePreview, SIGNAL(signalResourcesSelectionChanged(QModelIndex)), this, SLOT(slotResourcesSelectionChanged(QModelIndex)));
     connect(m_wdgResourcePreview, SIGNAL(resourceTypeSelected(int)), this, SLOT(slotresourceTypeSelected(int)));
 
-//     m_ui->resourceItemSelectedView->setFixedToolTipThumbnailSize(QSize(128, 128));
+    m_resourceItemWidget = new KisResourceItemListWidget(this);
+    m_ui->verticalLayout_2->insertWidget(1, m_resourceItemWidget);
 
-    m_ui->tableSelected->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    m_ui->tableSelected->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_kisResourceItemDelegate = new KisResourceItemDelegate(this);
+    m_kisResourceItemDelegate->setIsWidget(true);
+    m_resourceItemWidget->setItemDelegate(m_kisResourceItemDelegate);
 
     // btnRemoveSelected
     connect(m_ui->btnRemoveSelected, SIGNAL(clicked(bool)), this, SLOT(slotRemoveSelected(bool)));
@@ -51,23 +58,22 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
 
     QLabel *label = new QLabel("Selected");
     m_ui->horizontalLayout_2->addWidget(label);
-
     m_ui->horizontalLayout_2->addWidget(viewModeButton);
+
 }
 
 void PageResourceChooser::slotViewThumbnail()
 {
-//     m_kisResourceItemDelegate->setShowText(false);
-//     m_ui->resourceItemView->setItemDelegate(m_kisResourceItemDelegate);
-//     m_ui->resourceItemView->setListViewMode(ListViewMode::IconGrid);
+    m_kisResourceItemDelegate->setShowText(false);
+    m_resourceItemWidget->setItemDelegate(m_kisResourceItemDelegate);
+    m_resourceItemWidget->setViewMode(QListView::IconMode);
 }
 
 void PageResourceChooser::slotViewDetails()
 {
-//     m_kisResourceItemDelegate->setShowText(true);
-//     m_ui->resourceItemView->setItemDelegate(m_kisResourceItemDelegate);
-//     m_ui->resourceItemView->setListViewMode(ListViewMode::Detail);
-//     m_ui->resourceItemView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_kisResourceItemDelegate->setShowText(true);
+    m_resourceItemWidget->setItemDelegate(m_kisResourceItemDelegate);
+    m_resourceItemWidget->setViewMode(QListView::ListMode);
 }
 
 void PageResourceChooser::slotResourcesSelectionChanged(QModelIndex selected)
@@ -75,10 +81,6 @@ void PageResourceChooser::slotResourcesSelectionChanged(QModelIndex selected)
     QModelIndexList list = m_wdgResourcePreview->geResourceItemsSelected();
     KisTagFilterResourceProxyModel* proxyModel = m_wdgResourcePreview->getResourceProxyModelsForResourceType()[m_wdgResourcePreview->getCurrentResourceType()];
 
-//     m_ui->resourceItemSelectedView->setModel(proxyModel);
-//     m_kisResourceItemDelegate = new KisResourceItemDelegate(this);
-//     m_ui->resourceItemSelectedView->setItemDelegate(m_kisResourceItemDelegate);
-//     m_ui->resourceItemSelectedView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     Q_FOREACH (QModelIndex idx, list) {
         int id = proxyModel->data(idx, Qt::UserRole + KisAllResourcesModel::Id).toInt();
@@ -98,18 +100,17 @@ void PageResourceChooser::slotResourcesSelectionChanged(QModelIndex selected)
         item->setData(Qt::UserRole, id);
 
         if (m_selectedResourcesIds.contains(id) == false) {
-            m_ui->tableSelected->addItem(item);
+            m_resourceItemWidget->addItem(item);
             m_selectedResourcesIds.append(id);
         }
     }
-
-    m_ui->tableSelected->sortItems();
+    m_resourceItemWidget->sortItems();
 }
 
 void PageResourceChooser::slotresourceTypeSelected(int idx)
 {
     QString resourceType = m_wdgResourcePreview->getCurrentResourceType();
-    m_ui->tableSelected->clear();
+    m_resourceItemWidget->clear();
     QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
 
     KisResourceModel model(standarizedResourceType);
@@ -135,23 +136,24 @@ void PageResourceChooser::slotresourceTypeSelected(int idx)
         item->setData(Qt::UserRole, id);
 
         if (m_selectedResourcesIds.contains(id)) {
-            m_ui->tableSelected->addItem(item);
+            m_resourceItemWidget->addItem(item);
         }
     }
 
-    m_ui->tableSelected->sortItems();
+    m_resourceItemWidget->sortItems();
+
 }
 
 void PageResourceChooser::slotRemoveSelected(bool)
 {
-    int row = m_ui->tableSelected->currentRow();
+    int row = m_resourceItemWidget->currentRow();
 
-    Q_FOREACH (QListWidgetItem *item, m_ui->tableSelected->selectedItems()) {
-        m_ui->tableSelected->takeItem(m_ui->tableSelected->row(item));
+    Q_FOREACH (QListWidgetItem *item, m_resourceItemWidget->selectedItems()) {
+        m_resourceItemWidget->takeItem(m_resourceItemWidget->row(item));
         m_selectedResourcesIds.removeAll(item->data(Qt::UserRole).toInt());
     }
 
-    m_ui->tableSelected->setCurrentRow(row);
+    m_resourceItemWidget->setCurrentRow(row);
 }
 
 QPixmap PageResourceChooser::imageToIcon(const QImage &img, Qt::AspectRatioMode aspectRatioMode)

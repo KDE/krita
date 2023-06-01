@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
+    <width>710</width>
     <height>510</height>
    </rect>
   </property>
@@ -49,16 +49,6 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2"/>
-       </item>
-       <item>
-        <widget class="QListWidget" name="tableSelected">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>350</height>
-          </size>
-         </property>
-        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="btnRemoveSelected">

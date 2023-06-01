@@ -17,12 +17,18 @@ KisResourceItemDelegate::KisResourceItemDelegate(QObject *parent)
     : QAbstractItemDelegate(parent)
     , m_checkerPainter(4)
     , m_showText(false)
+    , m_isWidget(false)
 {
 }
 
 void KisResourceItemDelegate::setShowText(bool showText)
 {
     m_showText = showText;
+}
+
+void KisResourceItemDelegate::setIsWidget(bool isWidget)
+{
+    m_isWidget = isWidget;
 }
 
 void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem & option, const QModelIndex &index) const
@@ -37,6 +43,82 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
     if (!index.isValid()) {
         painter->restore();
         return;
+    }
+
+    if (m_isWidget) {
+
+        bool dirty = index.data(Qt::UserRole + KisAbstractResourceModel::Dirty).toBool();
+        QIcon icon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));
+
+        QImage preview;
+        if (!icon.isNull()) {
+            QSize iconSize = option.decorationSize; // or specify a desired size
+            QPixmap pixmap = icon.pixmap(iconSize);
+            preview = pixmap.toImage();
+        }
+
+        if (preview.isNull()) {
+            preview = QImage(512, 512, QImage::Format_RGB32);
+            preview.fill(Qt::red);
+        }
+
+        qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
+        QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
+
+        if (!m_showText) {
+            QSize pixSize(paintRect.height(), paintRect.height());
+
+            QSize size = pixSize * devicePixelRatioF;
+            Qt::AspectRatioMode aspectMode = Qt::KeepAspectRatio;
+            Qt::TransformationMode transformMode = Qt::SmoothTransformation;
+            QImage previewHighDpi = preview.scaled(size, aspectMode, transformMode);
+
+            previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
+            painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
+        }
+        else {
+            QSize pixSize(paintRect.height(), paintRect.height());
+
+            QSize size = pixSize * devicePixelRatioF;
+            Qt::AspectRatioMode aspectMode = Qt::KeepAspectRatio;
+            Qt::TransformationMode transformMode = Qt::SmoothTransformation;
+            QImage previewHighDpi = preview.scaled(size, aspectMode, transformMode);
+
+            previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
+            painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
+
+            // Put an asterisk after the preset if it is dirty. This will help in case the pixmap icon is too small
+
+            QString dirtyPresetIndicator = QString("");
+            if (dirty) {
+                dirtyPresetIndicator = QString("*");
+            }
+
+            // QString presetDisplayName = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().replace("_", " "); // don't need underscores that might be part of the file name
+            QString presetDisplayName = index.data(Qt::DisplayRole).toString();
+            painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, presetDisplayName.append(dirtyPresetIndicator));
+        }
+
+        if (dirty) {
+            const QIcon icon = KisIconUtils::loadIcon("dirty-preset");
+            QPixmap pixmap = icon.pixmap(QSize(16,16));
+            painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
+        }
+
+        if (option.state & QStyle::State_Selected) {
+            painter->setCompositionMode(QPainter::CompositionMode_HardLight);
+            painter->setOpacity(1.0);
+            painter->fillRect(option.rect, option.palette.highlight());
+
+            // highlight is not strong enough to pick out preset. draw border around it.
+            painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
+            painter->setPen(QPen(option.palette.highlight(), 4, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+            QRect selectedBorder = option.rect.adjusted(2 , 2, -2, -2); // constrict the rectangle so it doesn't bleed into other presets
+            painter->drawRect(selectedBorder);
+        }
+        painter->restore();
+        return;
+
     }
 
     bool dirty = index.data(Qt::UserRole + KisAbstractResourceModel::Dirty).toBool();
@@ -97,6 +179,7 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
         painter->drawRect(selectedBorder);
     }
     painter->restore();
+
 }
 
 

@@ -4,11 +4,14 @@
 #include "wdg_resource_preview.h"
 #include "ResourceListViewModes.h"
 
-
 #include <QPainter>
 #include <QWizardPage>
 
 #include <KoResourceBundle.h>
+#include "KisResourceItemListView.h"
+#include <KisResourceModel.h>
+#include <KisResourceItemDelegate.h>
+#include "KisResourceItemListWidget.h"
 
 namespace Ui {
 class PageResourceChooser;
@@ -41,6 +44,7 @@ private:
     KoResourceBundleSP m_bundle;
     ListViewMode m_mode;
     KisResourceItemDelegate *m_kisResourceItemDelegate;
+    KisResourceItemListWidget *m_resourceItemWidget;
 
 };
 

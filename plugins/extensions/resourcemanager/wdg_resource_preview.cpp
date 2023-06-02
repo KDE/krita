@@ -152,12 +152,6 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
         m_mode = (cfg.readEntry<quint32>("ResourceItemsRM.viewMode", 1) == 1)? ListViewMode::IconGrid : ListViewMode::Detail;
     }
 
-    if (m_mode == ListViewMode::IconGrid) {
-        slotViewThumbnail();
-    } else {
-        slotViewDetails();
-    }
-
     connect(viewModeButton, SIGNAL(onViewThumbnail()), this, SLOT(slotViewThumbnail()));
     connect(viewModeButton, SIGNAL(onViewDetails()), this, SLOT(slotViewDetails()));
 
@@ -168,6 +162,12 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
         m_ui->horizontalLayout_2->setAlignment(Qt::AlignRight);
     }
     m_ui->horizontalLayout_2->addWidget(viewModeButton);
+
+    if (m_mode == ListViewMode::IconGrid) {
+        slotViewThumbnail();
+    } else {
+        slotViewDetails();
+    }
 
 }
 
@@ -191,7 +191,6 @@ void WdgResourcePreview::slotViewDetails()
     m_kisResourceItemDelegate->setShowText(true);
     m_ui->resourceItemView->setItemDelegate(m_kisResourceItemDelegate);
     m_ui->resourceItemView->setListViewMode(ListViewMode::Detail);
-    m_ui->resourceItemView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void WdgResourcePreview::slotResourceTypeSelected(int)

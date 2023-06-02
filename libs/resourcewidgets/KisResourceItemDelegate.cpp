@@ -7,6 +7,8 @@
 
 
 #include <QPainter>
+#include <QDebug>
+#include <QStyledItemDelegate>
 
 #include "KisResourceItemDelegate.h"
 #include "KisResourceModel.h"
@@ -195,7 +197,7 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 }
 
 
-QSize KisResourceItemDelegate::sizeHint(const QStyleOptionViewItem &optionItem, const QModelIndex &) const
+QSize KisResourceItemDelegate::sizeHint(const QStyleOptionViewItem &optionItem, const QModelIndex &index) const
 {
     return optionItem.decorationSize;
 }

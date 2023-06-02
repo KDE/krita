@@ -10,10 +10,12 @@
 #include <QLabel>
 #include <QScroller>
 #include <QScrollBar>
+#include <QScrollArea>
 
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include "KisResourceItemListWidget.h"
+#include "ResourceListViewModes.h"
 
 
 #define ICON_SIZE 128
@@ -47,11 +49,6 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
     KisConfig cfg(true);
     m_mode = (cfg.readEntry<quint32>("ResourceItemsBCSelected.viewMode", 1) == 1)? ListViewMode::IconGrid : ListViewMode::Detail;
 
-    if (m_mode == ListViewMode::IconGrid) {
-        slotViewThumbnail();
-    } else {
-        slotViewDetails();
-    }
 
     connect(viewModeButton, SIGNAL(onViewThumbnail()), this, SLOT(slotViewThumbnail()));
     connect(viewModeButton, SIGNAL(onViewDetails()), this, SLOT(slotViewDetails()));
@@ -60,20 +57,27 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
     m_ui->horizontalLayout_2->addWidget(label);
     m_ui->horizontalLayout_2->addWidget(viewModeButton);
 
+    if (m_mode == ListViewMode::IconGrid) {
+        slotViewThumbnail();
+    } else {
+        slotViewDetails();
+    }
+
+
 }
 
 void PageResourceChooser::slotViewThumbnail()
 {
     m_kisResourceItemDelegate->setShowText(false);
     m_resourceItemWidget->setItemDelegate(m_kisResourceItemDelegate);
-    m_resourceItemWidget->setViewMode(QListView::IconMode);
+    m_resourceItemWidget->setListViewMode(ListViewMode::IconGrid);
 }
 
 void PageResourceChooser::slotViewDetails()
 {
     m_kisResourceItemDelegate->setShowText(true);
     m_resourceItemWidget->setItemDelegate(m_kisResourceItemDelegate);
-    m_resourceItemWidget->setViewMode(QListView::ListMode);
+    m_resourceItemWidget->setListViewMode(ListViewMode::Detail);
 }
 
 void PageResourceChooser::slotResourcesSelectionChanged(QModelIndex selected)

@@ -6,6 +6,7 @@
 #include <QHelpEvent>
 #include <QScroller>
 #include <QScrollBar>
+#include <QScrollArea>
 
 #include "KisIconToolTip.h"
 
@@ -27,9 +28,9 @@ KisResourceItemListWidget::KisResourceItemListWidget(QWidget *parent)
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setContextMenuPolicy(Qt::DefaultContextMenu);
     setViewMode(QListView::IconMode);
-    setGridSize(QSize(64, 64));
-    setIconSize(QSize(64, 64));
-    setResizeMode(QListView::Adjust);
+    setGridSize(QSize(56, 56));
+    setIconSize(QSize(56, 56));
+    setResizeMode(QListWidget::Adjust);
     setUniformItemSizes(true);
 
     m_d->scroller = KisKineticScroller::createPreconfiguredScroller(this);
@@ -73,8 +74,9 @@ void KisResourceItemListWidget::setListViewMode(ListViewMode viewMode)
         setViewMode(ViewMode::ListMode);
         setFlow(Flow::TopToBottom);
         setWrapping(false);
-        horizontalScrollBar()->setStyleSheet(m_d->prev_scrollbar_style);
+        // horizontalScrollBar()->setStyleSheet(m_d->prev_scrollbar_style);
         setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
+        setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
         break;
     }
     }
@@ -132,13 +134,13 @@ void KisResourceItemListWidget::rowsAboutToBeRemoved(const QModelIndex &parent, 
 
         selectionModel()->clear();
     }
-    QListView::rowsAboutToBeRemoved(parent, start, end);
+    QListWidget::rowsAboutToBeRemoved(parent, start, end);
 }
 
 void KisResourceItemListWidget::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     // base class takes care of viewport updates
-    QListView::selectionChanged(selected, deselected);
+    QListWidget::selectionChanged(selected, deselected);
 
     if (selected.isEmpty()) {
         emit currentResourceChanged(QModelIndex());
@@ -150,7 +152,7 @@ void KisResourceItemListWidget::selectionChanged(const QItemSelection &selected,
 
 QItemSelectionModel::SelectionFlags KisResourceItemListWidget::selectionCommand(const QModelIndex &index, const QEvent *event) const
 {
-    QItemSelectionModel::SelectionFlags cmd = QListView::selectionCommand(index, event);
+    QItemSelectionModel::SelectionFlags cmd = QListWidget::selectionCommand(index, event);
 
     // avoid deselecting the current item by Ctrl-clicking in single selection mode
     if (selectionMode() == SingleSelection
@@ -164,13 +166,13 @@ QItemSelectionModel::SelectionFlags KisResourceItemListWidget::selectionCommand(
 
 void KisResourceItemListWidget::contextMenuEvent(QContextMenuEvent *event)
 {
-    QListView::contextMenuEvent(event);
+    QListWidget::contextMenuEvent(event);
     emit contextMenuRequested(event->globalPos());
 }
 
 bool KisResourceItemListWidget::viewportEvent(QEvent *event)
 {
-    return QListView::viewportEvent(event);
+    return QListWidget::viewportEvent(event);
 }
 
 void KisResourceItemListWidget::resizeEvent(QResizeEvent *event)

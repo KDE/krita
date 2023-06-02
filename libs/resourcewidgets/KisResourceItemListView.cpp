@@ -37,8 +37,10 @@ KisResourceItemListView::KisResourceItemListView(QWidget *parent)
 
     // Default configuration
     setViewMode(QListView::IconMode);
-    setGridSize(QSize(64, 64));
-    setIconSize(QSize(64, 64));
+    setGridSize(QSize(56, 56));
+    setIconSize(QSize(56, 56));
+    setResizeMode(QListView::Adjust);
+    setUniformItemSizes(true);
 
     m_d->scroller = KisKineticScroller::createPreconfiguredScroller(this);
     if (m_d->scroller) {
@@ -89,9 +91,9 @@ void KisResourceItemListView::setListViewMode(ListViewMode viewMode)
         setViewMode(ViewMode::ListMode);
         setFlow(Flow::TopToBottom);
         setWrapping(false);
-        restoreScrollbar();
-
-        setItemSize(m_d->requestedItemSize);
+        // horizontalScrollBar()->setStyleSheet(m_d->prev_scrollbar_style);
+        setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
+        setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
         break;
     }
     }

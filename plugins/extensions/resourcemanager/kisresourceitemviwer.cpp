@@ -33,12 +33,6 @@ KisResourceItemViwer::KisResourceItemViwer(int type, QWidget *parent) :
         m_mode = (cfg.readEntry<quint32>("ResourceItemsBCSelected.viewMode", 1) == 1)? ListViewMode::IconGrid : ListViewMode::Detail;
     }
 
-    if (m_mode == ListViewMode::IconGrid) {
-        slotViewThumbnail();
-    } else {
-        slotViewDetails();
-    }
-
     QActionGroup *actionGroup = new QActionGroup(viewModeMenu);
 
     QAction* action = viewModeMenu->addAction(KisIconUtils::loadIcon("view-preview"), i18n("Thumbnails"));
@@ -56,6 +50,13 @@ KisResourceItemViwer::KisResourceItemViwer(int type, QWidget *parent) :
     setPopupWidget(viewModeMenu);
     setPopupMode(QToolButton::InstantPopup);
     setIcon(KisIconUtils::loadIcon("view-choose"));
+
+    if (m_mode == ListViewMode::IconGrid) {
+        slotViewThumbnail();
+    } else {
+        slotViewDetails();
+    }
+
 }
 
 KisResourceItemViwer::~KisResourceItemViwer()

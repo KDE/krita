@@ -84,11 +84,10 @@ struct KisPlaybackEngineMLT::Private {
     }
 
     void pushAudio(int frame) {
-        if (pushConsumer->is_stopped())
-            return;
 
-        KIS_ASSERT(pullConsumer->is_stopped());
-        KIS_ASSERT(m_self->activeCanvas());
+        if (pushConsumer->is_stopped() || !m_self->activeCanvas()) {
+            return;
+        }
 
         QSharedPointer<Mlt::Producer> activeProducer = canvasProducers[m_self->activeCanvas()];
         if (activePlaybackMode() == PLAYBACK_PUSH && activeProducer) {

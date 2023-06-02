@@ -54,14 +54,6 @@ if [ -d $APPDIR/usr/share/locale ] ; then
     rm -rf $APPDIR/usr/share/locale
 fi
 
-# Depending on the status of qt.conf file, qml destination path might be different,
-# fix that
-if [ -d $APPDIR/usr/lib/qml ] ; then
-    mkdir -p $APPDIR/qml
-    rsync -prul $APPDIR/usr/lib/qml/ $APPDIR/usr/qml/
-    rm -rf $APPDIR/usr/qml
-fi
-
 # Step 1: Copy over all necessary resources required by dependencies or libraries that are missed by linuxdeployqt
 cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/krita
 cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
@@ -142,6 +134,14 @@ done;
 if [[ -d "$APPDIR/usr/lib/$TRIPLET" ]] ; then
   rsync -prul $APPDIR/usr/lib/$TRIPLET/ $APPDIR/usr/lib/
   rm -rf $APPDIR/usr/lib/$TRIPLET/
+fi
+
+# Depending on the status of qt.conf file, qml destination path might be different,
+# fix that
+if [ -d $APPDIR/usr/lib/qml ] ; then
+    mkdir -p $APPDIR/usr/qml
+    rsync -prul $APPDIR/usr/lib/qml/ $APPDIR/usr/qml/
+    rm -rf $APPDIR/usr/lib/qml
 fi
 
 # Step 3: Update the rpath in the various plugins we have to make sure they'll be loadable in an Appimage context

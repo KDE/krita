@@ -252,7 +252,14 @@ KisPlaybackEngineMLT::~KisPlaybackEngineMLT()
 
 void KisPlaybackEngineMLT::seek(int frameIndex, SeekOptionFlags flags)
 {
-    KIS_ASSERT(activeCanvas() && activeCanvas()->animationState());
+    if (!activeCanvas()) {
+        return;
+    }
+
+    if (activeCanvas() && !activeCanvas()->animationState()) {
+        return;
+    }
+
     KisCanvasAnimationState* animationState = activeCanvas()->animationState();
 
     if (m_d->activePlaybackMode() == PLAYBACK_PUSH) {
@@ -307,9 +314,16 @@ void KisPlaybackEngineMLT::setupProducer(boost::optional<QFileInfo> file)
 
 void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)
 {
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(p_canvas);
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(p_canvas);
 
     if (activeCanvas() == canvas) {
+        return;
+    }
+
+    KisPlaybackEngine::setCanvas(p_canvas); // But make sure this class knows about the canvas anyway...
+
+    // Don't do all this stuff if there isn't an animation
+    if (canvas && canvas->image() && canvas->image()->animationInterface() && !canvas->image()->animationInterface()->hasAnimation()) {
         return;
     }
 
@@ -331,8 +345,6 @@ void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)
     }
 
     StopAndResume stopResume(m_d.data(), true);
-
-    KisPlaybackEngine::setCanvas(p_canvas);
 
     // Connect new player..
     if (activeCanvas()) {

@@ -279,22 +279,16 @@ bool loadValue(const QDomElement &e, QColor *value)
     return true;
 }
 
-QDomElement findElementByAttibute(QDomNode parent,
-                                  const QString &tag,
-                                  const QString &attribute,
-                                  const QString &key)
+QDomElement findElementByAttribute(QDomNode parent,
+                                   const QString &tag,
+                                   const QString &attribute,
+                                   const QString &value)
 {
-    QDomNode node = parent.firstChild();
-
-    while (!node.isNull()) {
-        QDomElement el = node.toElement();
-
-        if (!el.isNull() && el.tagName() == tag) {
-            QString value = el.attribute(attribute, "<undefined>");
-            if (value == key) return el;
+    QDomElement e;
+    for (e = parent.firstChildElement(tag); !e.isNull(); e = e.nextSiblingElement(tag)) {
+        if (value == e.attribute(attribute, "<undefined>")) {
+            return e;
         }
-
-        node = node.nextSibling();
     }
 
     return QDomElement();

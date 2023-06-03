@@ -487,7 +487,7 @@ QDomDocument fetchLayerStyleXmlData(KisNodeSP node)
 
 inline QDomNode findNodeByKey(const QString &key, QDomNode parent)
 {
-    return KisDomUtils::findElementByAttibute(parent, "node", "key", key);
+    return KisDomUtils::findElementByAttribute(parent, "node", "key", key);
 }
 
 void mergePatternsXMLSection(const QDomDocument &src, QDomDocument &dst)

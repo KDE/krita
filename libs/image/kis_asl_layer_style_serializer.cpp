@@ -711,7 +711,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
 }
 
 inline QDomNode findNodeByClassId(const QString &classId, QDomNode parent) {
-    return KisDomUtils::findElementByAttibute(parent, "node", "classId", classId);
+    return KisDomUtils::findElementByAttribute(parent, "node", "classId", classId);
 }
 
 void replaceAllChildren(QDomNode src, QDomNode dst)

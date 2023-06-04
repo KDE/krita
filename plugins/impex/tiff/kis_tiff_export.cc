@@ -206,7 +206,11 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
         try {
             KisExiv2IODevice::ptr_type basicIoDevice(new KisExiv2IODevice(filename()));
 
+#if EXIV2_TEST_VERSION(0,28,0)
+            const std::unique_ptr<Exiv2::Image> img = Exiv2::ImageFactory::open(std::move(basicIoDevice));
+#else
             const std::unique_ptr<Exiv2::Image> img(Exiv2::ImageFactory::open(basicIoDevice).release());
+#endif
 
             img->readMetadata();
 
@@ -241,9 +245,14 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
             }
             // Write metadata
             img->writeMetadata();
+#if EXIV2_TEST_VERSION(0,28,0)
+        } catch (Exiv2::Error &e) {
+            errFile << "Failed injecting TIFF metadata:" << Exiv2::Error(e.code()).what();
+#else
         } catch (Exiv2::AnyError &e) {
             errFile << "Failed injecting TIFF metadata:" << e.code()
                     << e.what();
+#endif
         }
     }
     return ImportExportCodes::OK;

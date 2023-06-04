@@ -39,7 +39,11 @@ int KisExiv2IODevice::close()
     return 0;
 }
 
+#if EXIV2_TEST_VERSION(0,28,0)
+size_t KisExiv2IODevice::write(const Exiv2::byte *data, size_t wcount)
+#else
 long KisExiv2IODevice::write(const Exiv2::byte *data, long wcount)
+#endif
 {
     if (!m_file.isWritable()) {
         qWarning() << "KisExiv2IODevice: File not open for writing.";
@@ -53,7 +57,11 @@ long KisExiv2IODevice::write(const Exiv2::byte *data, long wcount)
     return 0;
 }
 
+#if EXIV2_TEST_VERSION(0,28,0)
+size_t KisExiv2IODevice::write(Exiv2::BasicIo &src)
+#else
 long KisExiv2IODevice::write(Exiv2::BasicIo &src)
+#endif
 {
     if (static_cast<BasicIo *>(this) == &src) {
         return 0;
@@ -88,15 +96,28 @@ int KisExiv2IODevice::putb(Exiv2::byte data)
     }
 }
 
+#if EXIV2_TEST_VERSION(0,28,0)
+Exiv2::DataBuf KisExiv2IODevice::read(size_t rcount)
+#else
 Exiv2::DataBuf KisExiv2IODevice::read(long rcount)
+#endif
 {
     Exiv2::DataBuf buf(rcount);
+#if EXIV2_TEST_VERSION(0,28,0)
+    const size_t readCount = read(buf.data(), buf.size());
+    buf.resize(readCount);
+#else
     const long readCount = read(buf.pData_, buf.size_);
     buf.size_ = readCount;
+#endif
     return buf;
 }
 
+#if EXIV2_TEST_VERSION(0,28,0)
+size_t KisExiv2IODevice::read(Exiv2::byte *buf, size_t rcount)
+#else
 long KisExiv2IODevice::read(Exiv2::byte *buf, long rcount)
+#endif
 {
     const qint64 bytesRead = m_file.read(reinterpret_cast<char *>(buf), rcount);
     if (bytesRead > 0) {
@@ -202,7 +223,18 @@ int KisExiv2IODevice::munmap()
     return 0;
 }
 
+#if EXIV2_TEST_VERSION(0,28,0)
+void KisExiv2IODevice::populateFakeData()
+{
+    return;
+}
+#endif
+
+#if EXIV2_TEST_VERSION(0,28,0)
+size_t KisExiv2IODevice::tell() const
+#else
 long KisExiv2IODevice::tell() const
+#endif
 {
     return m_file.pos();
 }
@@ -231,7 +263,11 @@ bool KisExiv2IODevice::eof() const
     return m_file.atEnd();
 }
 
+#if EXIV2_TEST_VERSION(0,28,0)
+const std::string& KisExiv2IODevice::path() const noexcept
+#else
 std::string KisExiv2IODevice::path() const
+#endif
 {
     return filePathQString().toStdString();
 }

@@ -20,6 +20,10 @@ extern "C" {
 }
 
 #include <exiv2/jpgimage.hpp>
+#include <exiv2/version.hpp>
+#if EXIV2_TEST_VERSION(0,28,0)
+#include <exiv2/photoshop.hpp>
+#endif
 
 #include <QFile>
 #include <QBuffer>
@@ -376,7 +380,11 @@ KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
             uint32_t sizeHdr = 0;
             // Find actual Iptc data within the APP13 segment
             if (!Exiv2::Photoshop::locateIptcIrb((Exiv2::byte*)(marker->data + 14),
+#if EXIV2_TEST_VERSION(0,28,0)
+                                                 marker->data_length - 14, &record, sizeHdr, sizeIptc)) {
+#else
                                                  marker->data_length - 14, &record, &sizeHdr, &sizeIptc)) {
+#endif
                 if (sizeIptc) {
                     // Decode the IPTC data
                     QByteArray byteArray((const char*)(record + sizeHdr), sizeIptc);

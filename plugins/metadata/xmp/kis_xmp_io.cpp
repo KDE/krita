@@ -249,8 +249,11 @@ bool KisXMPIO::loadFrom(KisMetaData::Store *store, QIODevice *ioDevice) const
                     Q_ASSERT(schema);
                 }
             }
+#if EXIV2_TEST_VERSION(0,28,0)
+            const Exiv2::Value::UniquePtr value = it->getValue();
+#else
             const Exiv2::Value::AutoPtr value = it->getValue();
-
+#endif
             QString structName;
             int arrayIndex = -1;
             QString tagName;
@@ -279,7 +282,11 @@ bool KisXMPIO::loadFrom(KisMetaData::Store *store, QIODevice *ioDevice) const
                 const Exiv2::XmpArrayValue *xav = dynamic_cast<const Exiv2::XmpArrayValue *>(value.get());
                 Q_ASSERT(xav);
                 QList<KisMetaData::Value> array;
+#if EXIV2_TEST_VERSION(0,28,0)
+                for (size_t i = 0; i < xav->count(); ++i) {
+#else
                 for (int i = 0; i < xav->count(); ++i) {
+#endif
                     QString value = QString::fromStdString(xav->toString(i));
                     if (parser) {
                         array.push_back(parser->parse(value));

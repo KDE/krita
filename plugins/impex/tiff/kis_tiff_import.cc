@@ -1842,7 +1842,11 @@ KisTIFFImport::convert(KisDocument *document,
         try {
             KisExiv2IODevice::ptr_type basicIoDevice(new KisExiv2IODevice(filename()));
 
+#if EXIV2_TEST_VERSION(0,28,0)
+            const std::unique_ptr<Exiv2::Image> readImg = Exiv2::ImageFactory::open(std::move(basicIoDevice));
+#else
             const std::unique_ptr<Exiv2::Image> readImg(Exiv2::ImageFactory::open(basicIoDevice).release());
+#endif
 
             readImg->readMetadata();
 
@@ -1910,8 +1914,13 @@ KisTIFFImport::convert(KisDocument *document,
 
             // Inject the data as any other IOBackend
             io->loadFrom(layer->metaData(), &ioDevice);
+#if EXIV2_TEST_VERSION(0,28,0)
+        } catch (Exiv2::Error &e) {
+            errFile << "Failed metadata import:" << Exiv2::Error(e.code()).what();
+#else
         } catch (Exiv2::AnyError &e) {
             errFile << "Failed metadata import:" << e.code() << e.what();
+#endif
         }
     }
 

@@ -20,7 +20,11 @@
 
 // Convert an exiv value to a KisMetaData value
 inline KisMetaData::Value
+#if EXIV2_TEST_VERSION(0,28,0)
+exivValueToKMDValue(const Exiv2::Value::UniquePtr &value, bool forceSeq, KisMetaData::Value::ValueType arrayType = KisMetaData::Value::UnorderedArray)
+#else
 exivValueToKMDValue(const Exiv2::Value::AutoPtr &value, bool forceSeq, KisMetaData::Value::ValueType arrayType = KisMetaData::Value::UnorderedArray)
+#endif
 {
     switch (value->typeId()) {
     case Exiv2::signedByte:
@@ -41,11 +45,19 @@ exivValueToKMDValue(const Exiv2::Value::AutoPtr &value, bool forceSeq, KisMetaDa
     case Exiv2::signedShort:
     case Exiv2::signedLong: {
         if (value->count() == 1 && !forceSeq) {
+#if EXIV2_TEST_VERSION(0,28,0)
+            return {static_cast<int>(value->toUint32())};
+#else
             return {static_cast<int>(value->toLong())};
+#endif
         } else {
             QList<KisMetaData::Value> array;
             for (int i = 0; i < value->count(); i++)
+#if EXIV2_TEST_VERSION(0,28,0)
+                array.push_back({static_cast<int>(value->toUint32(i))});
+#else
                 array.push_back({static_cast<int>(value->toLong(i))});
+#endif
             return {array, arrayType};
         }
     }
@@ -62,7 +74,11 @@ exivValueToKMDValue(const Exiv2::Value::AutoPtr &value, bool forceSeq, KisMetaDa
             return {KisMetaData::Rational(value->toRational().first, value->toRational().second)};
         } else {
             QList<KisMetaData::Value> array;
+#if EXIV2_TEST_VERSION(0,28,0)
+            for (size_t i = 0; i < value->count(); i++) {
+#else
             for (long i = 0; i < value->count(); i++) {
+#endif
                 array.push_back(KisMetaData::Rational(value->toRational(i).first, value->toRational(i).second));
             }
             return {array, arrayType};
@@ -76,7 +92,11 @@ exivValueToKMDValue(const Exiv2::Value::AutoPtr &value, bool forceSeq, KisMetaDa
             return {KisMetaData::Rational(value->toRational().first, value->toRational().second)};
         } else {
             QList<KisMetaData::Value> array;
+#if EXIV2_TEST_VERSION(0,28,0)
+            for (size_t i = 0; i < value->count(); i++) {
+#else
             for (long i = 0; i < value->count(); i++) {
+#endif
                 array.push_back(KisMetaData::Rational(value->toRational(i).first, value->toRational(i).second));
             }
             return {array, arrayType};

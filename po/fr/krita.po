@@ -103,8 +103,8 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-03-08 14:41+0100\n"
-"Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
+"PO-Revision-Date: 2023-05-21 07:28+0200\n"
+"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -39213,7 +39213,7 @@ msgid ""
 "The preview will show the last frame of the video for the specified duration"
 msgstr ""
 "Préparer un aperçu de la vidéo exportée. \n"
-"L’aperçu affichera la dernière trame de la vidéo pour la durée spécifiée."
+"L'aperçu affichera la dernière trame de la vidéo pour la durée spécifiée."
 
 #. i18n: ectx: property (text), widget (QCheckBox, resultPreviewCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:273
@@ -46822,8 +46822,8 @@ msgid ""
 "The image will be stored without conversion, the ICC profile will be "
 "converted to CICP or embedded if it was not possible."
 msgstr ""
-"L’image sera enregistrée sans aucune conversion, le profil « ICC » sera "
-"converti en profil « CICP  »ou intégré si ce n’était pas possible."
+"L'image sera enregistrée sans aucune conversion, le profil « ICC » sera "
+"converti en profil « CICP  »ou intégré si ce n'était pas possible."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:37
@@ -47091,7 +47091,7 @@ msgid ""
 "Determines the order in which 256x256 regions are stored in the codestream "
 "for progressive rendering."
 msgstr ""
-"Détermine l’ordre dans lequel 256 x 256 régions sont enregistrées dans le "
+"Détermine l'ordre dans lequel 256 x 256 régions sont enregistrées dans le "
 "flux de codage pour un rendu progressif."
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
@@ -47142,7 +47142,7 @@ msgstr "Basse résolution « DC »"
 #, kde-format
 msgid "Set the progressive mode using lower-resolution DC images for VarDCT."
 msgstr ""
-"Définir le mode progressif à l’aide d’images « DC » de résolution inférieure "
+"Définir le mode progressif à l'aide d'images « DC » de résolution inférieure "
 "pour « VarDCT »."
 
 #. i18n: ectx: property (title), widget (QGroupBox, modularEncodingParameters)
@@ -52263,7 +52263,7 @@ msgstr "Netteté"
 #: plugins/paintops/libpaintop/kis_pressure_sharpness_option_widget.cpp:26
 #, kde-format
 msgid "Align the brush preview outline to the pixel grid"
-msgstr "Aligner le contour de l’aperçu de la brosse sur la grille de pixels"
+msgstr "Aligner le contour de l'aperçu de la brosse sur la grille de pixels"
 
 #: plugins/paintops/libpaintop/kis_pressure_sharpness_option_widget.cpp:30
 #, kde-format
@@ -56132,10 +56132,10 @@ msgid ""
 "100% will make opaque all the pixels in the region up to its boundary."
 msgstr ""
 "Définir de combien la partie totalement opaque de la région doit "
-"s’étendre. \n"
+"s'étendre. \n"
 "Une valeur de 0 % rendra opaque uniquement les pixels exactement égaux au "
 "pixel sélectionné. \n"
-"Une valeur de 100 %rendra opaque tous les pixels de la région jusqu’à sa "
+"Une valeur de 100 %rendra opaque tous les pixels de la région jusqu'à sa "
 "limite."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:429
@@ -57347,7 +57347,7 @@ msgstr ""
 "étendue. \n"
 "Une valeur de 0 % rendra la sélection opaque uniquement aux endroits où les "
 "pixels sont exactement égaux au pixel sélectionné. \n"
-"Une valeur de 100 %rendra la sélection opaque jusqu’à sa limite."
+"Une valeur de 100 %rendra la sélection opaque jusqu'à sa limite."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:280
 #, kde-format

@@ -104,7 +104,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-25 00:44+0000\n"
 "PO-Revision-Date: 2023-05-21 07:28+0200\n"
-"Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
+"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -8502,7 +8502,7 @@ msgid ""
 "Sample a color from the screen while sampling a real color from the canvas "
 "if the cursor is over it"
 msgstr ""
-"Échantillonner une couleur d’écran tout en échantillonnant une couleur "
+"Échantillonner une couleur d'écran tout en échantillonnant une couleur "
 "réelle du tableau lorsque le curseur la survole"
 
 #. i18n: context: iconText @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
@@ -23328,7 +23328,7 @@ msgid ""
 "enough)"
 msgstr ""
 "Le nombre de derniers appuis de touches que Krita ne fusionnera pas (même "
-"s’ils sont assez vieux)"
+"s'ils sont assez vieux)"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
@@ -23379,12 +23379,12 @@ msgid ""
 "try  to merge this action into a group. The groups are formed using \"Max "
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
-"L'annulation cumulative permet à Krita de fusionner les actions d’annulation "
-"et de rendre l’historique d’annulation plus propre. Krita gardera encore "
+"L'annulation cumulative permet à Krita de fusionner les actions d'annulation "
+"et de rendre l'historique d'annulation plus propre. Krita gardera encore "
 "quelques dernières actions non fusionnées selon les options « Attendre avant "
 "de fusionner les appuis de touches » et « Exclure les derniers appuis de "
-"touches de la fusion ». Chaque fois qu’une action devient obsolète en "
-"utilisant la limite de temps et que cette action n’est pas exclue en "
+"touches de la fusion ». Chaque fois qu'une action devient obsolète en "
+"utilisant la limite de temps et que cette action n'est pas exclue en "
 "utilisant « Exclure les derniers appuis de touches de la fusion », Krita "
 "essaiera de fusionner cette action dans un groupe. Les groupes sont formés "
 "en utilisant les options « Durée maximale pour le regroupement des appuis de "
@@ -24870,7 +24870,7 @@ msgstr "Adapter la résolution de l'image (ppp)"
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
 #, kde-format
 msgid "&Scaling Filter:"
-msgstr "&Filtre de mise à l’échelle :"
+msgstr "&Filtre de mise à l'échelle :"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -31028,9 +31028,9 @@ msgid ""
 "Do you want to download the image from %1?\n"
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
-"Voulez-vous vraiment télécharger l’image à partir de %1 ?\n"
+"Voulez-vous vraiment télécharger l'image à partir de %1 ?\n"
 "Veuillez cliquer sur « Afficher les détails » pour afficher le lien complet "
-"vers l’image."
+"vers l'image."
 
 #: libs/ui/KisRemoteFileFetcher.cpp:61
 #, kde-format
@@ -39733,7 +39733,7 @@ msgid ""
 "The preview will show the last frame of the video for the specified duration"
 msgstr ""
 "Préparer un aperçu de la vidéo exportée. \n"
-"L’aperçu affichera la dernière trame de la vidéo pour la durée spécifiée."
+"L'aperçu affichera la dernière trame de la vidéo pour la durée spécifiée."
 
 #. i18n: ectx: property (text), widget (QCheckBox, resultPreviewCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:409
@@ -47949,8 +47949,8 @@ msgid ""
 "The image will be stored without conversion, the ICC profile will be "
 "converted to CICP or embedded if it was not possible."
 msgstr ""
-"L’image sera enregistrée sans aucune conversion, le profil « ICC » sera "
-"converti en profil « CICP  »ou intégré si ce n’était pas possible."
+"L'image sera enregistrée sans aucune conversion, le profil « ICC » sera "
+"converti en profil « CICP  »ou intégré si ce n'était pas possible."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:37
@@ -48259,7 +48259,7 @@ msgid ""
 "Determines the order in which 256x256 regions are stored in the codestream "
 "for progressive rendering."
 msgstr ""
-"Détermine l’ordre dans lequel 256 x 256 régions sont enregistrées dans le "
+"Détermine l'ordre dans lequel 256 x 256 régions sont enregistrées dans le "
 "flux de codage pour un rendu progressif."
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
@@ -48323,7 +48323,7 @@ msgstr "Basse résolution « DC »"
 #, kde-format
 msgid "Set the progressive mode using lower-resolution DC images for VarDCT."
 msgstr ""
-"Définir le mode progressif à l’aide d’images « DC » de résolution inférieure "
+"Définir le mode progressif à l'aide d'images « DC » de résolution inférieure "
 "pour « VarDCT »."
 
 #. i18n: ectx: attribute (title), widget (QWidget, modularEncodingParameters)
@@ -48695,7 +48695,7 @@ msgid ""
 msgstr ""
 "Le calque « %1 » possède un mode de mélange « %2 » qui a modifié son "
 "comportement pour la couleur « CMJN » dans Krita 5.2. Veuillez vérifier le "
-"résultat et envisager d’activer l’ancien algorithme « Additif » dans le menu "
+"résultat et envisager d'activer l'ancien algorithme « Additif » dans le menu "
 "Configuration / Configurer Krita / Général / Outils / Mode de mélange "
 "« CMJN »"
 
@@ -57154,7 +57154,7 @@ msgid ""
 "increases the range of similar colors to be filled."
 msgstr ""
 "Définissez la tolérance de similarité pour la couleur du remplissage. "
-"L’augmentation du seuil augmente la gamme de couleurs similaires pour le "
+"L'augmentation du seuil augmente la gamme de couleurs similaires pour le "
 "remplissage."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:620
@@ -57164,8 +57164,8 @@ msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
 "decreases opacity of fill areas depending on color similarity."
 msgstr ""
-"Définir l’étendue de la partie opaque du remplissage. L’étalement "
-"décroissant diminue l’opacité des zones de remplissage en fonction de la "
+"Définir l'étendue de la partie opaque du remplissage. L'étalement "
+"décroissant diminue l'opacité des zones de remplissage en fonction de la "
 "similarité des couleurs."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:621
@@ -58382,7 +58382,7 @@ msgid ""
 "increases the range of similar colors to be selected."
 msgstr ""
 "Définissez la tolérance de similarité de couleur de la sélection. "
-"L’augmentation du seuil augmente la plage de couleurs similaires à "
+"L'augmentation du seuil augmente la plage de couleurs similaires à "
 "sélectionner."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
@@ -58391,8 +58391,8 @@ msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
-"Définir l’étendue de la partie opaque de la sélection. La décroissance de "
-"l'étalement diminue l’opacité des zones de sélection en fonction de la "
+"Définir l'étendue de la partie opaque de la sélection. La décroissance de "
+"l'étalement diminue l'opacité des zones de sélection en fonction de la "
 "similarité des couleurs."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405

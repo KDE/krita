@@ -142,21 +142,25 @@ QString KoDocumentInfo::aboutInfo(const QString &info) const
 }
 
 
-bool KoDocumentInfo::loadAuthorInfo(const QDomElement &e)
+bool KoDocumentInfo::loadAuthorInfo(const QDomElement &root)
 {
     m_contact.clear();
-    QDomNode n = e.namedItem("author").firstChild();
-    for (; !n.isNull(); n = n.nextSibling()) {
-        QDomElement e = n.toElement();
-        if (e.isNull())
-            continue;
 
-        if (e.tagName() == "full-name") {
-            setActiveAuthorInfo("creator", e.text().trimmed());
-        } else if (e.tagName() == "contact") {
-            m_contact.insert(e.text(), e.attribute("type"));
+    QDomElement e = root.firstChildElement("author");
+    if(e.isNull()) {
+        return false;
+    }
+
+    for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+        QString field = e.tagName();
+        QString value = e.text();
+
+        if (field == "full-name") {
+            setActiveAuthorInfo("creator", value.trimmed());
+        } else if (field == "contact") {
+            m_contact.insert(value, e.attribute("type"));
         } else {
-            setActiveAuthorInfo(e.tagName(), e.text().trimmed());
+            setActiveAuthorInfo(field, value.trimmed());
         }
     }
 

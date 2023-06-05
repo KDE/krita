@@ -189,19 +189,15 @@ QDomElement KoDocumentInfo::saveAuthorInfo(QDomDocument &doc)
 }
 
 
-bool KoDocumentInfo::loadAboutInfo(const QDomElement &e)
+bool KoDocumentInfo::loadAboutInfo(const QDomElement &root)
 {
-    QDomNode n = e.namedItem("about").firstChild();
-    QDomElement tmp;
-    for (; !n.isNull(); n = n.nextSibling()) {
-        tmp = n.toElement();
-        if (tmp.isNull())
-            continue;
+    QDomElement e = root.firstChildElement("about");
+    if(e.isNull()) {
+        return false;
+    }
 
-        if (tmp.tagName() == "abstract")
-            setAboutInfo("abstract", tmp.text());
-
-        setAboutInfo(tmp.tagName(), tmp.text());
+    for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+        setAboutInfo(e.tagName(), e.text());
     }
 
     return true;

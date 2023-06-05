@@ -445,18 +445,23 @@ KoColor KoColor::fromXML(const QString &xml)
 {
     KoColor c;
     QDomDocument doc;
-    if (doc.setContent(xml)) {
-        QDomElement e = doc.documentElement().firstChild().toElement();
-        QString channelDepthID = doc.documentElement().attribute("channeldepth", Integer16BitsColorDepthID.id());
-        bool ok;
-        if (e.hasAttribute("space") || e.tagName().toLower() == "srgb") {
-            c = KoColor::fromXML(e, channelDepthID, &ok);
-        } else if (doc.documentElement().hasAttribute("space") || doc.documentElement().tagName().toLower() == "srgb"){
-            c = KoColor::fromXML(doc.documentElement(), channelDepthID, &ok);
-        } else {
-            qWarning() << "Cannot parse color from xml" << xml;
-        }
+    if (!doc.setContent(xml)) {
+        return c;
     }
+
+    QDomElement root = doc.documentElement();
+    QDomElement child = root.firstChildElement();
+    QString channelDepthID = root.attribute("channeldepth", Integer16BitsColorDepthID.id());
+
+    bool ok;
+    if (child.hasAttribute("space") || child.tagName().toLower() == "srgb") {
+        c = KoColor::fromXML(child, channelDepthID, &ok);
+    } else if (root.hasAttribute("space") || root.tagName().toLower() == "srgb"){
+        c = KoColor::fromXML(root, channelDepthID, &ok);
+    } else {
+        qWarning() << "Cannot parse color from xml" << xml;
+    }
+
     return c;
 }
 

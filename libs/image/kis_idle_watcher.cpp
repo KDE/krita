@@ -31,6 +31,13 @@ struct KisIdleWatcher::Private
     KisSignalCompressor imageModifiedCompressor;
 
     QTimer idleCheckTimer;
+
+    /**
+     * We wait until the counter reaches IDLE_CHECK_COUNT, then consider the
+     * image to be really "idle". If the counter is negative, it means that
+     * "no delay" update is triggered, which desables couting and the event
+     * is triggered on the next non-busy tick.
+     */
     int idleCheckCounter;
 };
 
@@ -96,9 +103,18 @@ void KisIdleWatcher::restartCountdown()
     m_d->imageModifiedCompressor.start();
 }
 
+void KisIdleWatcher::triggerCountdownNoDelay()
+{
+    stopIdleCheck();
+    m_d->idleCheckCounter = -1;
+    m_d->idleCheckTimer.start();
+}
+
 void KisIdleWatcher::slotImageModified()
 {
-    restartCountdown();
+    if (m_d->idleCheckCounter >= 0) {
+        restartCountdown();
+    }
     Q_EMIT imageModified();
 }
 
@@ -117,7 +133,9 @@ void KisIdleWatcher::stopIdleCheck()
 void KisIdleWatcher::slotIdleCheckTick()
 {
     if (isIdle()) {
-        if (m_d->idleCheckCounter >= Private::IDLE_CHECK_COUNT) {
+        if (m_d->idleCheckCounter < 0 ||
+            m_d->idleCheckCounter >= Private::IDLE_CHECK_COUNT) {
+
             stopIdleCheck();
             if (!m_d->trackedImages.isEmpty()) {
                 emit startedIdleMode();
@@ -127,6 +145,10 @@ void KisIdleWatcher::slotIdleCheckTick()
             m_d->idleCheckTimer.start();
         }
     } else {
-        restartCountdown();
+        if (m_d->idleCheckCounter >= 0) {
+            restartCountdown();
+        } else {
+            m_d->idleCheckTimer.start();
+        }
     }
 }

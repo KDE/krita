@@ -32,6 +32,7 @@ public:
     //Force to image modified state and start countdown to event
     void forceImageModified() { slotImageModified(); }
     void restartCountdown();
+    void triggerCountdownNoDelay();
 
 Q_SIGNALS:
     void startedIdleMode();

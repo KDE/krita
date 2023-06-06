@@ -43,7 +43,10 @@ void KisIdleTasksManager::setImage(KisImageSP image)
     m_d->image = image;
     m_d->queue.clear();
 
-    slotImageIsModified();
+    if (image) {
+        slotImageIsModified();
+        m_d->idleWatcher.triggerCountdownNoDelay();
+    }
 }
 
 int KisIdleTasksManager::addIdleTask(KisIdleTaskStrokeStrategyFactory factory)
@@ -58,32 +61,41 @@ int KisIdleTasksManager::addIdleTask(KisIdleTaskStrokeStrategyFactory factory)
         m_d->tasks.last().id + 1 : 0;
 
     m_d->tasks.append({newId, factory});
-    slotImageIsModified();
+    triggerIdleTask(newId);
 
     return newId;
 }
 
 void KisIdleTasksManager::removeIdleTask(int id)
 {
-    auto it = std::remove_if(m_d->tasks.begin(), m_d->tasks.end(),
-                             kismpl::mem_equal_to(&TaskStruct::id, id));
-    KIS_SAFE_ASSERT_RECOVER_NOOP(it != m_d->tasks.end());
-    m_d->tasks.erase(it, m_d->tasks.end());
-    m_d->queue.clear();
+    {
+        auto it = std::remove_if(m_d->tasks.begin(), m_d->tasks.end(),
+                                 kismpl::mem_equal_to(&TaskStruct::id, id));
+        KIS_SAFE_ASSERT_RECOVER_NOOP(it != m_d->tasks.end());
+        m_d->tasks.erase(it, m_d->tasks.end());
+    }
+
+    {
+        auto it = std::remove(m_d->queue.begin(), m_d->queue.end(), id);
+        m_d->queue.erase(it, m_d->queue.end());
+    }
 }
 
 void KisIdleTasksManager::triggerIdleTask(int id)
 {
-    auto it = std::find_if(m_d->tasks.begin(), m_d->tasks.end(),
-                           kismpl::mem_equal_to(&TaskStruct::id, id));
-    KIS_SAFE_ASSERT_RECOVER_NOOP(it != m_d->tasks.end());
-
-    const int index = std::distance(m_d->tasks.begin(), it);
-    if (std::find(m_d->queue.begin(), m_d->queue.end(), index) == m_d->queue.end()) {
-        m_d->queue.enqueue(index);
+    {
+        // just verify that this tasks actually exists
+        auto it = std::find_if(m_d->tasks.begin(), m_d->tasks.end(),
+                               kismpl::mem_equal_to(&TaskStruct::id, id));
+        KIS_SAFE_ASSERT_RECOVER_NOOP(it != m_d->tasks.end());
     }
 
-    m_d->idleWatcher.restartCountdown();
+    auto it = std::find(m_d->queue.begin(), m_d->queue.end(), id);
+    if (it == m_d->queue.end()) {
+        m_d->queue.enqueue(id);
+    }
+
+    m_d->idleWatcher.triggerCountdownNoDelay();
 }
 
 KisIdleTasksManager::TaskGuard
@@ -96,9 +108,9 @@ void KisIdleTasksManager::slotImageIsModified()
 {
     m_d->queue.clear();
     m_d->queue.reserve(m_d->tasks.size());
-    for (int i = 0; i < m_d->tasks.size(); i++) {
-        m_d->queue.enqueue(i);
-    }
+    std::transform(m_d->tasks.begin(), m_d->tasks.end(),
+                   std::back_inserter(m_d->queue),
+                   std::mem_fn(&TaskStruct::id));
 }
 
 void KisIdleTasksManager::slotImageIsIdle()
@@ -113,9 +125,14 @@ void KisIdleTasksManager::slotImageIsIdle()
 
     if (m_d->queue.isEmpty()) return;
 
-    const int newTaskIndex = m_d->queue.dequeue();
+    const int newTaskId = m_d->queue.dequeue();
 
-    KisIdleTaskStrokeStrategy *strategy = m_d->tasks[newTaskIndex].factory(image);
+    auto it = std::find_if(m_d->tasks.begin(), m_d->tasks.end(),
+                           kismpl::mem_equal_to(&TaskStruct::id, newTaskId));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(it != m_d->tasks.end());
+
+    KisIdleTaskStrokeStrategy *strategy = it->factory(image);
+
     connect(strategy, SIGNAL(sigIdleTaskFinished()), SLOT(slotTaskIsCompleted()));
     m_d->currentTaskCookie = strategy->idleTaskCookie();
 

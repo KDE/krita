@@ -197,6 +197,10 @@ void KisLayerThumbnailCache::notifyNodeAdded(KisNodeSP node)
 {
     Q_UNUSED(node);
     m_d->cleanupDeletedNodes();
+
+    if (m_d->image && m_d->taskGuard.isValid()) {
+        m_d->taskGuard.trigger();
+    }
 }
 
 void KisLayerThumbnailCache::clear()

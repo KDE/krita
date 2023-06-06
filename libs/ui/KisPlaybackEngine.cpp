@@ -295,11 +295,17 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
             stop();
         });
 
-        KisImageAnimationInterface* animInterface = m_d->activeCanvas->image()->animationInterface();
-        KisFrameDisplayProxy* displayProxy = animState->displayProxy();
-        if (animState->playbackState() != PLAYING) {
-            displayProxy->displayFrame(animInterface->currentTime(), true);
-        }
+        /**
+         * TODO: This forced updates causes image recalculation on every document
+         * switch, which is weird and even causes some crashes on closing
+         * many documents at once (which is a separate bug it seems). Why
+         * document switch should forcefully regeneare the canvas?
+         */
+//        KisImageAnimationInterface* animInterface = m_d->activeCanvas->image()->animationInterface();
+//        KisFrameDisplayProxy* displayProxy = animState->displayProxy();
+//        if (animState->playbackState() != PLAYING) {
+//            displayProxy->displayFrame(animInterface->currentTime(), false);
+//        }
     }
 }
 

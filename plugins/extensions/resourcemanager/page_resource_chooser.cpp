@@ -4,6 +4,7 @@
 #include "kisresourceitemviwer.h"
 #include <kis_config.h>
 #include "KisResourceItemListView.h"
+#include "dlg_create_bundle.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -13,6 +14,7 @@
 #include <QScrollArea>
 
 #include <KisResourceModel.h>
+#include <KisResourceTypeModel.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include "KisResourceItemListWidget.h"
 #include "ResourceListViewModes.h"
@@ -63,7 +65,6 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
         slotViewDetails();
     }
 
-
 }
 
 void PageResourceChooser::slotViewThumbnail()
@@ -106,6 +107,7 @@ void PageResourceChooser::slotResourcesSelectionChanged(QModelIndex selected)
         if (m_selectedResourcesIds.contains(id) == false) {
             m_resourceItemWidget->addItem(item);
             m_selectedResourcesIds.append(id);
+            updateCount(true);
         }
     }
     m_resourceItemWidget->sortItems();
@@ -155,6 +157,7 @@ void PageResourceChooser::slotRemoveSelected(bool)
     Q_FOREACH (QListWidgetItem *item, m_resourceItemWidget->selectedItems()) {
         m_resourceItemWidget->takeItem(m_resourceItemWidget->row(item));
         m_selectedResourcesIds.removeAll(item->data(Qt::UserRole).toInt());
+        updateCount(false);
     }
 
     m_resourceItemWidget->setCurrentRow(row);
@@ -176,6 +179,17 @@ QPixmap PageResourceChooser::imageToIcon(const QImage &img, Qt::AspectRatioMode 
 QList<int> PageResourceChooser::getSelectedResourcesIds()
 {
     return m_selectedResourcesIds;
+}
+
+void PageResourceChooser::updateCount(bool flag)
+{
+    DlgCreateBundle *wizard = qobject_cast<DlgCreateBundle*>(this->wizard());
+    if (wizard) {
+        flag == true? wizard->m_count[m_wdgResourcePreview->getCurrentResourceType()] += 1 : wizard->m_count[m_wdgResourcePreview->getCurrentResourceType()] -= 1;
+        qDebug() << m_wdgResourcePreview->getCurrentResourceType() << ": " << wizard->m_count[m_wdgResourcePreview->getCurrentResourceType()];
+    }
+
+    emit countUpdated();
 }
 
 PageResourceChooser::~PageResourceChooser()

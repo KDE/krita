@@ -1,5 +1,6 @@
 #include "page_bundle_saver.h"
 #include "ui_pagebundlesaver.h"
+#include "dlg_create_bundle.h"
 
 #include <kis_config.h>
 #include <KoFileDialog.h>
@@ -18,6 +19,7 @@ PageBundleSaver::PageBundleSaver(KoResourceBundleSP bundle, QWidget *parent) :
     }
 
     connect(m_ui->bnSelectSaveLocation, SIGNAL(clicked()), SLOT(selectSaveLocation()));
+
 }
 
 PageBundleSaver::~PageBundleSaver()
@@ -42,6 +44,24 @@ void PageBundleSaver::selectSaveLocation()
 void PageBundleSaver::showWarning()
 {
      m_ui->lblSaveLocation->setStyleSheet(QString(" border: 1px solid red"));
+}
+
+void PageBundleSaver::onCountUpdated()
+{
+    DlgCreateBundle *wizard = qobject_cast<DlgCreateBundle*>(this->wizard());
+    QString bundleDetails;
+    QMap<QString, int> map = wizard->m_count;
+    bool resPresent = false, tagPresent = false, namePresent = false;
+    for (auto i = map.cbegin(), end = map.cend(); i != end; ++i) {
+        if (i.value() != 0) {
+            if (!resPresent) {
+                resPresent = true;
+                bundleDetails = bundleDetails + "<b>Resources</b>" + "<br>";
+            }
+            bundleDetails = bundleDetails + ResourceName::resourceTypeToName(i.key()) + ": " + QString::number(i.value()) + "<br>";
+        }
+    }
+    m_ui->lblDetails->setText(bundleDetails);
 }
 
 void PageBundleSaver::removeWarning()

@@ -27,6 +27,8 @@ public:
     explicit DlgCreateBundle(KoResourceBundleSP bundle = nullptr, QWidget *parent = 0);
     ~DlgCreateBundle() override;
 
+    QMap<QString, int> m_count;
+
 private Q_SLOTS:
 
     void accept() override;

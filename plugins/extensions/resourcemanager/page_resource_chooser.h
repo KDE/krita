@@ -25,6 +25,9 @@ public:
     explicit PageResourceChooser(KoResourceBundleSP bundle = nullptr, QWidget *parent = nullptr);
     ~PageResourceChooser();
 
+Q_SIGNALS:
+    void countUpdated();
+
 private Q_SLOTS:
     void slotResourcesSelectionChanged(QModelIndex selected);
     void slotresourceTypeSelected(int);
@@ -35,6 +38,7 @@ private Q_SLOTS:
 public:
     QPixmap imageToIcon(const QImage &img, Qt::AspectRatioMode aspectRatioMode);
     QList<int> getSelectedResourcesIds();
+    void updateCount(bool);
 
 private:
     Ui::PageResourceChooser *m_ui;

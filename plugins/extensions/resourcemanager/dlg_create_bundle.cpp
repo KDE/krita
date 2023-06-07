@@ -74,6 +74,15 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
 
     connect(this, SIGNAL(currentIdChanged(int)), wdgSide, SLOT(focusLabel(int)));
     connect(this, SIGNAL(currentIdChanged(int)), this, SLOT(updateTitle(int)));
+
+    KisResourceTypeModel resourceTypesModel;
+    for (int i = 0; i < resourceTypesModel.rowCount(); i++) {
+        QModelIndex idx = resourceTypesModel.index(i, 0);
+        QString resourceType = resourceTypesModel.data(idx, Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
+        m_count.insert(resourceType, 0);
+    }
+
+    connect(m_pageResourceChooser, SIGNAL(countUpdated()), m_pageBundleSaver, SLOT(onCountUpdated()));
 }
 
 void DlgCreateBundle::updateTitle(int id)

@@ -24,10 +24,13 @@ public:
 private Q_SLOTS:
     void selectSaveLocation();
 
+public Q_SLOTS:
+    void onCountUpdated();
 
 private:
     Ui::PageBundleSaver *m_ui;
     KoResourceBundleSP m_bundle;
+    QMap<QString, int> m_count;
 };
 
 #endif // PAGE_BUNDLE_SAVER_H

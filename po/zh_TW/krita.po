@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-25 00:44+0000\n"
+"POT-Creation-Date: 2023-06-07 00:45+0000\n"
 "PO-Revision-Date: 2023-05-20 13:57+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -19310,7 +19310,7 @@ msgstr "本機資源"
 #: libs/ui/KisMainWindow.cpp:1320 libs/ui/KisMainWindow.cpp:1926
 #: libs/ui/KisMainWindow.cpp:1935 libs/ui/KisMainWindow.cpp:2074
 #: libs/ui/KisMainWindow.cpp:2135 libs/ui/KisMainWindow.cpp:2156
-#: libs/ui/KisMainWindow.cpp:2772 libs/ui/KisPart.cpp:584
+#: libs/ui/KisMainWindow.cpp:2771 libs/ui/KisPart.cpp:584
 #: libs/ui/KisPart.cpp:587 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
 #: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
@@ -30334,26 +30334,26 @@ msgstr "&%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2795
+#: libs/ui/KisMainWindow.cpp:2794
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr "未安裝 Krita 的 LittleCMS 色彩管理外掛程式。Krita 將立即退出。"
 
-#: libs/ui/KisMainWindow.cpp:2811
+#: libs/ui/KisMainWindow.cpp:2810
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "安裝錯誤"
 
-#: libs/ui/KisMainWindow.cpp:2920
+#: libs/ui/KisMainWindow.cpp:2919
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "主題(&T)"
 
-#: libs/ui/KisMainWindow.cpp:2978
+#: libs/ui/KisMainWindow.cpp:2977
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "擴張空白佔位符"

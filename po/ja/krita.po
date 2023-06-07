@@ -33,8 +33,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-25 00:44+0000\n"
-"PO-Revision-Date: 2023-05-13 11:23-0700\n"
+"POT-Creation-Date: 2023-06-07 00:45+0000\n"
+"PO-Revision-Date: 2023-06-06 00:31-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
 "Language: ja\n"
@@ -19586,7 +19586,7 @@ msgstr "ローカルリソース"
 #: libs/ui/KisMainWindow.cpp:1320 libs/ui/KisMainWindow.cpp:1926
 #: libs/ui/KisMainWindow.cpp:1935 libs/ui/KisMainWindow.cpp:2074
 #: libs/ui/KisMainWindow.cpp:2135 libs/ui/KisMainWindow.cpp:2156
-#: libs/ui/KisMainWindow.cpp:2772 libs/ui/KisPart.cpp:584
+#: libs/ui/KisMainWindow.cpp:2771 libs/ui/KisPart.cpp:584
 #: libs/ui/KisPart.cpp:587 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
 #: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
@@ -30100,17 +30100,16 @@ msgid "%1 cannot be written to. Please save under a different name."
 msgstr "%1 には書き込みできません。別の名前で保存してください。"
 
 #: libs/ui/KisDocument.cpp:757
-#, fuzzy, kde-format
-#| msgid "Could not load profile: %1."
+#, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
-msgstr "プロファイルを読み込めませんでした: %1"
+msgstr "バックアップファイルの作成に失敗しました。"
 
 #: libs/ui/KisDocument.cpp:774
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
-msgstr ""
+msgstr "番号付きバックアップファイルの作成に失敗しました。"
 
 #: libs/ui/KisDocument.cpp:796
 #, kde-format
@@ -30128,6 +30127,7 @@ msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
+"%1 の保存を開始できませんでした。現在の保存操作が終了するまでお待ちください。"
 
 #: libs/ui/KisDocument.cpp:936
 #, kde-format
@@ -30136,14 +30136,9 @@ msgid "Error during saving %1: %2"
 msgstr "保存中のエラー %1: %2"
 
 #: libs/ui/KisDocument.cpp:944 libs/ui/KisDocument.cpp:951
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not save\n"
-#| "%1"
+#, kde-format
 msgid "Could not save %1."
-msgstr ""
-"保存に失敗しました\n"
-"%1"
+msgstr "%1 の保存に失敗しました。"
 
 #: libs/ui/KisDocument.cpp:973
 #, kde-format
@@ -30154,19 +30149,11 @@ msgid "%1 has been saved but is incomplete."
 msgstr ""
 
 #: libs/ui/KisDocument.cpp:979
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "dialog box shown to the user if there were warnings while saving the "
-#| "document, %1 is the file path"
-#| msgid ""
-#| "%1 has been saved but is incomplete.\n"
-#| "The following problems were encountered when saving:"
+#, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
-msgstr ""
-"%1 は保存されましたが、不完全です。\n"
-"保存時に次の問題が発生しました:"
+msgstr "保存時に問題が発生しました。"
 
 #: libs/ui/KisDocument.cpp:996
 #, kde-format
@@ -30793,7 +30780,7 @@ msgstr "&%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2795
+#: libs/ui/KisMainWindow.cpp:2794
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -30802,19 +30789,19 @@ msgstr ""
 "Krita LittleCMS 色管理プラグインはインストールされていません。Krita は終了し"
 "ます。"
 
-#: libs/ui/KisMainWindow.cpp:2811
+#: libs/ui/KisMainWindow.cpp:2810
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "インストールのエラー"
 
-#: libs/ui/KisMainWindow.cpp:2920
+#: libs/ui/KisMainWindow.cpp:2919
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "テーマ(&T)"
 
-#: libs/ui/KisMainWindow.cpp:2978
+#: libs/ui/KisMainWindow.cpp:2977
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "スペーサーを拡大"

@@ -24,7 +24,7 @@ export LANG=en_us.UTF-8
 # We want to use $prefix/deps/usr/ for all our dependencies
 export DEPS_INSTALL_PREFIX=${KRITA_DEPS_PATH:-$BUILD_PREFIX/deps/usr}
 export BUILD_DIR=${KRITA_BUILD_PATH:-$BUILD_PREFIX/krita-build/}
-export DOWNLOADS_DIR=$BUILD_PREFIX/downloads/
+export DOWNLOADS_DIR=${KRITA_DOWNLOADS_PATH:-$BUILD_PREFIX/downloads/}
 
 # Setup variables needed to help everything find what we built
 ARCH=`dpkg --print-architecture`

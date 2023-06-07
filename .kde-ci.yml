@@ -8,4 +8,5 @@ Options:
     run-gcovr: False
     per-test-timeout: 4:00
     cmake-options: '-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=ON -DKRITA_ENABLE_PCH=OFF'
-    ctest-run-in-parallel: True
+    tests-run-in-parallel: True
+    ccache-large-cache: True

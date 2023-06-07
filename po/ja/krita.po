@@ -34,7 +34,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-05-13 11:23-0700\n"
+"PO-Revision-Date: 2023-06-06 00:31-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
 "Language: ja\n"
@@ -29573,6 +29573,7 @@ msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
+"%1 の保存を開始できませんでした。現在の保存操作が終了するまでお待ちください。"
 
 #: libs/ui/KisDocument.cpp:926
 #, kde-format

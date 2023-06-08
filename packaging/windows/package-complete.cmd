@@ -822,11 +822,13 @@ echo Packaging stripped binaries...
 "%SEVENZIP_EXE%" a -tzip %pkg_name%.zip %pkg_root%\ "-xr^!.debug"
 echo --------
 
-echo.
-echo Packaging debug info...
-:: (note that the top-level package dir is not included)
-"%SEVENZIP_EXE%" a -tzip %pkg_name%-dbg.zip -r %pkg_root%\*.debug
-echo --------
+if "%KRITA_SKIP_DEBUG_PACKAGE%" == "" (
+    echo.
+    echo Packaging debug info...
+    :: (note that the top-level package dir is not included)
+    "%SEVENZIP_EXE%" a -tzip %pkg_name%-dbg.zip -r %pkg_root%\*.debug
+    echo --------
+)
 
 echo.
 echo.

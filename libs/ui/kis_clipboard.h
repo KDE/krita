@@ -72,9 +72,8 @@ public:
      *   The boolean indicates acceptance of the paste event.
      *   If set, the PasteFormatBehaviour member indicates the chosen source.
      */
-    QPair<bool, PasteFormatBehaviour>
-    askUserForSource(const QMimeData *data,
-                     bool useClipboardFallback = false) const;
+    QPair<bool, PasteFormatBehaviour> askUserForSource(const QMimeData *data,
+                                                       bool useClipboardFallback = false) const;
 
     /**
      * Get the contents of the specified mimedata buffer in the form of a paint device.
@@ -89,8 +88,7 @@ public:
     KisPaintDeviceSP clipFromKritaLayers(const QRect &imageBounds,
                                          const KoColorSpace *cs) const;
 
-    KisPaintDeviceSP
-    clipFromBoardContents(const QMimeData *data,
+    KisPaintDeviceSP clipFromBoardContents(const QMimeData *data,
                           const QRect &imageBounds,
                           bool showPopup,
                           int overridePasteBehaviour = -1,

@@ -1,26 +1,44 @@
 #!/bin/python3
 
 import requests
-import tarfile
+
 import shutil
 import os
+from sys import platform
+
+projectURL = ""
+projectArtifact = ""
+
+if platform == "linux":
+    import tarfile
+    projectURL = "https://binary-factory.kde.org/job/Krita_Nightly_Appimage_Dependency_Build/api/json/"
+    projectArtifact = "krita-appimage-deps.tar"
+elif platform == "darwin":
+    raise RuntimeError("MacOS support is not yet implemented")
+elif platform == "win32":
+    import zipfile
+    projectURL = "https://binary-factory.kde.org/job/Krita_Nightly_Windows_Dependency_Build/api/json/"
+    projectArtifact = "krita-deps.zip"
+    
 
 localCachePath = os.environ.pop('KDECI_CACHE_PATH')
 
 def download_url_with_compression(url, filePath):
     headers = {'Accept-Encoding': 'gzip, deflate'}
-    res = requests.get(depsUrl, headers=headers)
-
-    if not res:
-        res.raise_for_status()
-	
-    with open(filePath, 'wb') as f:
-        f.write(res.content)
-        f.flush()
+    
+    with requests.get(depsUrl, stream=True, headers=headers) as r:
+        r.raise_for_status()
+        with open(filePath, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192): 
+                # If you have chunk encoded response uncomment if
+                # and set chunk_size parameter to None.
+                #if chunk: 
+                f.write(chunk)
+            f.flush()
 
 print ("Fetching job metadata...")
 
-res = requests.get("https://binary-factory.kde.org/job/Krita_Nightly_Appimage_Dependency_Build/api/json/")
+res = requests.get(projectURL)
 
 if not res:
     print("Couldn't fetch the API object: {}".format(res.reason))
@@ -33,14 +51,14 @@ print ("Last successful job URL: {}".format(jobUrl))
 if jobUrl is None:
     raise FileNotFoundError()
 
-depsUrl = '{}artifact/krita-appimage-deps.tar'.format(jobUrl)
+depsUrl = '{}artifact/{}'.format(jobUrl, projectArtifact)
 
 kritaCacheDir = os.path.join(localCachePath, 'krita-deps')
 if not os.path.isdir(kritaCacheDir):
     os.makedirs(kritaCacheDir)
 
-filePath = os.path.join(kritaCacheDir, 'krita-appimage-deps.tar')
-urlFilePath = os.path.join(kritaCacheDir, 'krita-appimage-deps.tar.url')
+filePath = os.path.join(kritaCacheDir, projectArtifact)
+urlFilePath = os.path.join(kritaCacheDir, '{}.url'.format(projectArtifact))
 
 shouldDownloadNewFile = True
 
@@ -74,11 +92,24 @@ if shouldDownloadNewFile:
 
 print ("Extracting deps...")
 
-file = tarfile.open(filePath, mode='r')
+file = None
+
+if platform == "linux":
+    file = tarfile.open(filePath, mode='r')
+elif platform == "darwin":
+    raise RuntimeError("MacOS support is not yet implemented")
+elif platform == "win32":
+    file = zipfile.ZipFile(filePath, mode='r')
+    
 file.extractall(path='_tmp')
 file.close()
 
 if os.path.isdir('_install'):
     shutil.rmtree('_install')
-shutil.move('_tmp/deps/usr', '_install')
-shutil.rmtree('_tmp')
+
+if platform == "linux":
+    shutil.move('_tmp/deps/usr', '_install')
+elif platform == "win32":
+    shutil.move('_tmp\\deps-install', '_install')
+
+    shutil.rmtree('_tmp')

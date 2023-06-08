@@ -17,9 +17,23 @@ public:
     explicit PageTagChooser(KoResourceBundleSP bundle = nullptr, QWidget *parent = nullptr);
     ~PageTagChooser();
 
+    QList<int> selectedTagIds();
+    void updateTags(bool flag, QString tag);
+
+Q_SIGNALS:
+    void tagsUpdated();
+
+private Q_SLOTS:
+
+    void addSelected();
+    void removeSelected();
+    void resourceTypeSelected(int idx);
+
 private:
     Ui::PageTagChooser *m_ui;
     KoResourceBundleSP m_bundle;
+
+    QList<int> m_selectedTagIds;
 };
 
 #endif // PAGE_TAG_CHOOSER_H

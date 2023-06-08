@@ -83,6 +83,7 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
     }
 
     connect(m_pageResourceChooser, SIGNAL(countUpdated()), m_pageBundleSaver, SLOT(onCountUpdated()));
+    connect(m_pageTagChooser, SIGNAL(tagsUpdated()), m_pageBundleSaver, SLOT(onTagsUpdated()));
 }
 
 void DlgCreateBundle::updateTitle(int id)
@@ -122,6 +123,12 @@ void DlgCreateBundle::updateTitle(int id)
 QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags) const
 {
     QVector<KisTagSP> tagsToEmbed;
+
+    Q_FOREACH(KisTagSP tag, resourceTags) {
+        if (m_selectedTagIds.contains(tag->id())) {
+            tagsToEmbed << tag;
+        }
+    }
     return tagsToEmbed;
 }
 
@@ -177,6 +184,8 @@ bool DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle)
         }
 
         usedFilenames[{res->resourceType().first, prettyFilename}]+= 1;
+
+        m_selectedTagIds = m_pageTagChooser->selectedTagIds();
 
         QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id));
         bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5Sum(), res->resourceId(), prettyFilename);

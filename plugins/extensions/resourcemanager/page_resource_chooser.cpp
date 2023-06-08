@@ -186,7 +186,7 @@ void PageResourceChooser::updateCount(bool flag)
     DlgCreateBundle *wizard = qobject_cast<DlgCreateBundle*>(this->wizard());
     if (wizard) {
         flag == true? wizard->m_count[m_wdgResourcePreview->getCurrentResourceType()] += 1 : wizard->m_count[m_wdgResourcePreview->getCurrentResourceType()] -= 1;
-        qDebug() << m_wdgResourcePreview->getCurrentResourceType() << ": " << wizard->m_count[m_wdgResourcePreview->getCurrentResourceType()];
+        // qDebug() << m_wdgResourcePreview->getCurrentResourceType() << ": " << wizard->m_count[m_wdgResourcePreview->getCurrentResourceType()];
     }
 
     emit countUpdated();

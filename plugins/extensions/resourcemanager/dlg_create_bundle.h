@@ -28,6 +28,7 @@ public:
     ~DlgCreateBundle() override;
 
     QMap<QString, int> m_count;
+    QSet<QString> m_tags;
 
 private Q_SLOTS:
 

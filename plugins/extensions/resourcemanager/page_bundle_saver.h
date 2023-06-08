@@ -26,11 +26,14 @@ private Q_SLOTS:
 
 public Q_SLOTS:
     void onCountUpdated();
+    void onTagsUpdated();
 
 private:
     Ui::PageBundleSaver *m_ui;
     KoResourceBundleSP m_bundle;
     QMap<QString, int> m_count;
+    QString m_resourceCount;
+    QString m_tags;
 };
 
 #endif // PAGE_BUNDLE_SAVER_H

@@ -49,19 +49,43 @@ void PageBundleSaver::showWarning()
 void PageBundleSaver::onCountUpdated()
 {
     DlgCreateBundle *wizard = qobject_cast<DlgCreateBundle*>(this->wizard());
-    QString bundleDetails;
+    // QString bundleDetails;
+    m_resourceCount = "";
     QMap<QString, int> map = wizard->m_count;
-    bool resPresent = false, tagPresent = false, namePresent = false;
+    bool resPresent = false;
     for (auto i = map.cbegin(), end = map.cend(); i != end; ++i) {
         if (i.value() != 0) {
             if (!resPresent) {
                 resPresent = true;
-                bundleDetails = bundleDetails + "<b>Resources</b>" + "<br>";
+                m_resourceCount = m_resourceCount + "<b>Resources</b>" + "<br>";
             }
-            bundleDetails = bundleDetails + ResourceName::resourceTypeToName(i.key()) + ": " + QString::number(i.value()) + "<br>";
+            m_resourceCount = m_resourceCount + ResourceName::resourceTypeToName(i.key()) + ": " + QString::number(i.value()) + "<br>";
         }
     }
-    m_ui->lblDetails->setText(bundleDetails);
+    m_ui->lblDetails->setText(m_resourceCount + m_tags);
+}
+
+void PageBundleSaver::onTagsUpdated()
+{
+    DlgCreateBundle *wizard = qobject_cast<DlgCreateBundle*>(this->wizard());
+    // QString bundleDetails;
+    m_tags = "";
+    QSet<QString> set = wizard->m_tags;
+    bool tagPresent = false;
+    for (QSet<QString>::const_iterator it = set.constBegin(); it != set.constEnd(); ++it) {
+        if (!tagPresent) {
+            tagPresent = true;
+            m_tags = m_tags + "<b>Tags</b>" + "<br>";
+        }
+        if (it + 1 == set.constEnd()) {
+            m_tags = m_tags + *it;
+        } else {
+            m_tags = m_tags + *it + ", ";
+        }
+    }
+
+    m_tags = m_tags + "<br>";
+    m_ui->lblDetails->setText(m_resourceCount + m_tags);
 }
 
 void PageBundleSaver::removeWarning()

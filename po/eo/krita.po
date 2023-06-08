@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-07 00:45+0000\n"
-"PO-Revision-Date: 2023-05-25 20:33+0100\n"
+"PO-Revision-Date: 2023-06-07 21:45+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -20402,7 +20402,7 @@ msgstr "Ne donis validan FFmpeg-binarprogramon..."
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
-msgstr ""
+msgstr "FFmpeg devas esti almenaŭ versio 4.2+ por ke GIF-travideblo funkciu"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:472
 #, kde-format
@@ -20716,7 +20716,7 @@ msgstr "Kreante deziratan %1 dosieron: %2/%3 kadroj."
 #: libs/ui/animation/video_export_options_dialog.ui:13
 #, kde-format
 msgid "Codec:"
-msgstr ""
+msgstr "Kodeko:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
 #: libs/ui/animation/video_export_options_dialog.ui:23
@@ -22785,6 +22785,7 @@ msgstr "Noto: Vi devos restarti Krita por ke la ŝanĝoj efektiviĝu."
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
+"Konservado ĉe loko elektita el la File-Picker povas malrapidigi la startigon!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:469
 #, kde-format
@@ -23237,6 +23238,14 @@ msgid ""
 "try  to merge this action into a group. The groups are formed using \"Max "
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
+"Akumula Malfaro permesas al Krita kunfandi malfar-agojn kaj igi malfaran "
+"historion pli pura. Krita ankoraŭ konservos kelkajn lastajn agojn "
+"nekunfanditaj laŭ opcioj \"Atendu antaŭ kunfandi strekojn\" kaj \"Ekskludi "
+"lastajn strekojn el kunfandado\". Kiam ajn ago malnoviĝas uzante la "
+"tempolimon kaj ĉi tiu ago ne estas ekskludita per \"Ekskludi lastajn "
+"strekojn el kunfandado\", Krita provos kunfandi ĉi tiun agon en grupon. La "
+"grupoj estas formitaj per la opcioj \"Maksimuma grupa strekoprokrasto\" kaj "
+"\"Maksimuma grupo-daŭro\"."
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -36123,7 +36132,13 @@ msgid_plural ""
 "Do you want to assign an empty shortcut to these actions?\n"
 "%3"
 msgstr[0] ""
+"La \"%2\" ŝparvojo estas ambigua kun la sekvanta ŝparvojo.\n"
+"Ĉu vi volas atribui malplenan ŝparvojon al ĉi tiu ago?\n"
+"%3"
 msgstr[1] ""
+"La \"%2\" ŝparvojo estas ambigua kun la sekvantaj ŝparvojoj.\n"
+"Ĉu vi volas atribui malplenan ŝparvojon al ĉi tiuj agoj?\n"
+"%3"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:186
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:542
@@ -48195,6 +48210,10 @@ msgid ""
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
+"Tavolo \"%1\" havas miksan reĝimon \"%2\" kiu ŝanĝis sian konduton por CMYK-"
+"koloro en Krita 5.2. Bonvolu kontroli la rezulton kaj pripensi ebligi "
+"heredaĵan algoritmon \"Aldonaĵo\" en Agordoj->Agordi Krita->Ĝenerala->Iloj-"
+">CMYK-miksa reĝimo"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1103
 #, kde-format

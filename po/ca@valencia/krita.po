@@ -7694,7 +7694,7 @@ msgstr "Eina de camí"
 #, kde-format
 msgctxt "action"
 msgid "Move up"
-msgstr "Mou amunt"
+msgstr "Mou cap amunt"
 
 #. i18n: context: iconText @ Action (movetool-move-down), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (movetool-move-down), Actions (Path Tool), ActionCollection (Tools)
@@ -7707,7 +7707,7 @@ msgstr "Mou amunt"
 #, kde-format
 msgctxt "action"
 msgid "Move down"
-msgstr "Mou avall"
+msgstr "Mou cap avall"
 
 #. i18n: context: iconText @ Action (movetool-show-coordinates), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (movetool-show-coordinates), Actions (Path Tool), ActionCollection (Tools)
@@ -7738,7 +7738,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Move left"
-msgstr "Mou a l'esquerra"
+msgstr "Mou cap a l'esquerra"
 
 #. i18n: context: iconText @ Action (movetool-move-right), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (movetool-move-right), Actions (Path Tool), ActionCollection (Tools)
@@ -7748,7 +7748,7 @@ msgstr "Mou a l'esquerra"
 #, kde-format
 msgctxt "action"
 msgid "Move right"
-msgstr "Mou a la dreta"
+msgstr "Mou cap a la dreta"
 
 #. i18n: context: iconText @ Action (movetool-move-up-more), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (movetool-move-up-more), Actions (Path Tool), ActionCollection (Tools)
@@ -12631,7 +12631,7 @@ msgstr "Elimina la capa"
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Up"
-msgstr "Mou amunt la capa o màscara"
+msgstr "Mou cap amunt la capa o màscara"
 
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
@@ -12641,7 +12641,7 @@ msgstr "Mou amunt la capa o màscara"
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Down"
-msgstr "Mou avall la capa o màscara"
+msgstr "Mou cap avall la capa o màscara"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492
@@ -38775,13 +38775,13 @@ msgstr "Duplica la capa o màscara"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:238
 #, kde-format
 msgid "Move layer or mask down"
-msgstr "Mou avall la capa o màscara"
+msgstr "Mou cap avall la capa o màscara"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRaise)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:263
 #, kde-format
 msgid "Move layer or mask up"
-msgstr "Mou amunt la capa o màscara"
+msgstr "Mou cap amunt la capa o màscara"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnProperties)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:288

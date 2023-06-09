@@ -194,19 +194,23 @@ void KisToolPolylineBase::mouseMoveEvent(KoPointerEvent *event)
 void KisToolPolylineBase::undoSelection()
 {
     if (m_dragging) {
-        //Update canvas for drag before undo
+        // Initialize with the dragging segment's rect
         QRectF updateRect = dragBoundingRect();
-        updateCanvasViewRect(updateRect);
 
-        //Update canvas for last segment
-        QRectF rect;
         if (m_points.size() > 1) {
-            rect = pixelToView(QRectF(m_points.last(), m_points.at(m_points.size() - 2)).normalized());
-            rect.adjust(-PREVIEW_LINE_WIDTH, -PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH);
-            updateCanvasViewRect(rect);
+            // Add the rect for the last segment
+            const QRectF lastSegmentRect =
+                pixelToView(QRectF(m_points.last(), m_points.at(m_points.size() - 2)).normalized())
+                .adjusted(-PREVIEW_LINE_WIDTH, -PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH);
+            updateRect = updateRect.united(lastSegmentRect);
+
             m_points.pop_back();
         }
         m_dragStart = m_points.last();
+
+        // Add the new dragging segment's rect
+        updateRect = updateRect.united(dragBoundingRect());
+        updateCanvasViewRect(updateRect);
     }
 }
 

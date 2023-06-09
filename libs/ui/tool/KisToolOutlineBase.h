@@ -68,6 +68,7 @@ private:
     void updateCanvas();
     void endStroke();
     void cancelStroke();
+    QRectF dragBoundingRect();
 };
 
 #endif

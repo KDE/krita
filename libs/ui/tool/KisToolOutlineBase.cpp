@@ -131,18 +131,23 @@ bool KisToolOutlineBase::eventFilter(QObject *obj, QEvent *event)
 void KisToolOutlineBase::undoLastPoint()
 {
     if(!m_points.isEmpty() && m_continuedMode && mode() != PAINT_MODE && m_numberOfContinuedModePoints > 0) {
-        //Update canvas for drag before undo
-        updateContinuedMode();
+        // Initialize with the dragging segment's rect
+        QRectF updateRect = dragBoundingRect();
 
-        //Update canvas for last segment
-        QRectF rect;
         if (m_points.size() > 1) {
-            rect = pixelToView(QRectF(m_points.last(), m_points.at(m_points.size()-2)).normalized());
-            rect.adjust(-FEEDBACK_LINE_WIDTH, -FEEDBACK_LINE_WIDTH, FEEDBACK_LINE_WIDTH, FEEDBACK_LINE_WIDTH);
-            updateCanvasViewRect(rect);
+            // Add the rect for the last segment
+            const QRectF lastSegmentRect =
+                pixelToView(QRectF(m_points.last(), m_points.at(m_points.size() - 2)).normalized())
+                .adjusted(-FEEDBACK_LINE_WIDTH, -FEEDBACK_LINE_WIDTH, FEEDBACK_LINE_WIDTH, FEEDBACK_LINE_WIDTH);
+            updateRect = updateRect.united(lastSegmentRect);
+
             m_points.pop_back();
             --m_numberOfContinuedModePoints;
         }
+
+        // Add the new dragging segment's rect
+        updateRect = updateRect.united(dragBoundingRect());
+        updateCanvasViewRect(updateRect);
     }
 }
 
@@ -239,13 +244,17 @@ void KisToolOutlineBase::updateFeedback()
     }
 }
 
+QRectF KisToolOutlineBase::dragBoundingRect()
+{
+    QRectF updateRect = pixelToView(QRectF(m_points.last(), m_lastCursorPos).normalized());
+    updateRect = kisGrowRect(updateRect, FEEDBACK_LINE_WIDTH);
+    return updateRect;
+}
+
 void KisToolOutlineBase::updateContinuedMode()
 {
     if (!m_points.isEmpty()) {
-        QRectF updateRect = QRectF(m_points.last(), m_lastCursorPos).normalized();
-        updateRect = kisGrowRect(updateRect, FEEDBACK_LINE_WIDTH);
-
-        updateCanvasPixelRect(updateRect);
+        updateCanvasViewRect(dragBoundingRect());
     }
 }
 

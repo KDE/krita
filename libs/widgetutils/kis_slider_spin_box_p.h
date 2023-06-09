@@ -731,8 +731,7 @@ public:
                 m_lastMousePressPosition = e->pos();
                 const QPoint currentValuePosition = pointForValue(m_q->value());
                 m_relativeDraggingOffset = currentValuePosition.x() - e->x();
-                m_useRelativeDragging = (e->modifiers() & Qt::ShiftModifier)
-                                        || qAbs(m_relativeDraggingOffset) <= relativeDraggingMargin;
+                m_useRelativeDragging = (e->modifiers() & Qt::ShiftModifier);
                 m_timerStartEditing.start(qApp->styleHints()->mousePressAndHoldInterval());
             }
             return true;
@@ -927,9 +926,6 @@ private:
     // Margin around the spinbox for which the dragging gives same results,
     // regardless of the vertical distance
     static constexpr double constantDraggingMargin{32.0};
-    // Margin around the current value that marks if the dragging should be
-    // relative to the current value (inside the margin) or absolute (outside)
-    static constexpr int relativeDraggingMargin{15};
     // Height of the collapsed slider bar
     static constexpr double heightOfCollapsedSlider{3.0};
     // Height of the space between the soft and hard range sliders

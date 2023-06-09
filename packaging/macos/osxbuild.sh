@@ -478,13 +478,13 @@ build_krita () {
     print_if_error "Configuration error! ${filename}" "exit"
 
     # copiling phase
-    log_cmd cmake --build . -j${MAKE_THREADS}
+    log_cmd cmake --build . -- -j ${MAKE_THREADS}
     print_if_error "Krita compilation failed! ${filename}" "exit"
 
     # compile integrations
     if test "${OSTYPE}" == "darwin*"; then
         cd "${KIS_BUILD_DIR}/krita/integration/kritaquicklook"
-        cmake --build . -j${MAKE_THREADS}
+        cmake --build . -- -j ${MAKE_THREADS}
     fi
 }
 

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-07 00:45+0000\n"
+"POT-Creation-Date: 2023-06-09 00:45+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -20119,7 +20119,7 @@ msgstr "يحمّل حزم الموارد..."
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:904
-#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:717
+#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:714
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
@@ -29603,7 +29603,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "تغيير الطّبقة الملفّ"
 
-#: libs/ui/kis_clipboard.cc:718 libs/ui/KisView.cpp:690
+#: libs/ui/kis_clipboard.cc:715 libs/ui/KisView.cpp:690
 #, kde-format
 msgid ""
 "Could not open %2.\n"

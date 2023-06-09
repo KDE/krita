@@ -47,7 +47,8 @@ private:
     QRectF dragBoundingRect();
 
 private Q_SLOTS:
-    virtual void undoSelection();
+    void undoSelection();
+    void undoSelectionOrCancel();
 
 private:
 

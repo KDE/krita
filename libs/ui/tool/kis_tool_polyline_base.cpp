@@ -39,7 +39,7 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolyline
 void KisToolPolylineBase::activate(const QSet<KoShape *> &shapes)
 {
     KisToolShape::activate(shapes);
-    connect(action("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoSelection()), Qt::UniqueConnection);
+    connect(action("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoSelectionOrCancel()), Qt::UniqueConnection);
 
     KisInputManager *inputManager = (static_cast<KisCanvas2*>(canvas()))->globalInputManager();
     if (inputManager) {
@@ -88,13 +88,13 @@ bool KisToolPolylineBase::eventFilter(QObject *obj, QEvent *event)
         event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         if (mouseEvent->button() == Qt::RightButton) {
-            undoSelection();
+            undoSelectionOrCancel();
             return true;
         }
     } else if (event->type() == QEvent::TabletPress) {
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
         if (tabletEvent->button() == Qt::RightButton) {
-            undoSelection();
+            undoSelectionOrCancel();
             return true;
         }
     }
@@ -193,7 +193,7 @@ void KisToolPolylineBase::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolPolylineBase::undoSelection()
 {
-    if(m_dragging) {
+    if (m_dragging) {
         //Update canvas for drag before undo
         QRectF updateRect = dragBoundingRect();
         updateCanvasViewRect(updateRect);
@@ -201,12 +201,21 @@ void KisToolPolylineBase::undoSelection()
         //Update canvas for last segment
         QRectF rect;
         if (m_points.size() > 1) {
-            rect = pixelToView(QRectF(m_points.last(), m_points.at(m_points.size()-2)).normalized());
+            rect = pixelToView(QRectF(m_points.last(), m_points.at(m_points.size() - 2)).normalized());
             rect.adjust(-PREVIEW_LINE_WIDTH, -PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH);
             updateCanvasViewRect(rect);
             m_points.pop_back();
         }
         m_dragStart = m_points.last();
+    }
+}
+
+void KisToolPolylineBase::undoSelectionOrCancel()
+{
+    if (m_points.size() > 1) {
+        undoSelection();
+    } else {
+        cancelStroke();
     }
 }
 

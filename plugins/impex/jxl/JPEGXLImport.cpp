@@ -52,6 +52,7 @@ public:
     JxlBasicInfo m_info{};
     JxlExtraChannelInfo m_extra{};
     JxlPixelFormat m_pixelFormat{};
+    JxlPixelFormat m_pixelFormat_target{};
     JxlFrameHeader m_header{};
     std::vector<quint8> m_rawData{};
     KisPaintDeviceSP m_currentFrame{nullptr};
@@ -59,13 +60,18 @@ public:
     int m_nextFrameTime{0};
     int m_durationFrameInTicks{0};
     KoID m_colorID;
+    KoID m_colorID_target;
     KoID m_depthID;
+    KoID m_depthID_target;
+    KoColorConversionTransformation::Intent m_intent;
     bool isCMYK = false;
     bool applyOOTF = true;
     float displayGamma = 1.2f;
     float displayNits = 1000.0;
     LinearizePolicy linearizePolicy = LinearizePolicy::KeepTheSame;
     const KoColorSpace *cs = nullptr;
+    const KoColorSpace *cs_target = nullptr;
+    const KoColorSpace *cs_intermediate = nullptr;
     std::vector<quint8> kPlane;
     QVector<qreal> lCoef;
 };
@@ -157,7 +163,7 @@ inline void imageOutCallback(JPEGXLImportData &d)
 
                 if (swap) {
                     std::swap(dst[0], dst[2]);
-                } else if (d.isCMYK) {
+                } else if (d.isCMYK && d.m_info.uses_original_profile) {
                     // Swap alpha and key channel for CMYK
                     std::swap(dst[3], dst[4]);
                 }
@@ -307,6 +313,8 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
     std::multimap<QByteArray, QByteArray> metadataBoxes;
     std::vector<KisLayerSP> additionalLayers;
     bool bgLayerSet = false;
+    bool needColorTransform = false;
+    bool needIntermediateTransform = false;
     QByteArray boxType(5, 0x0);
     QByteArray box(16384, 0x0);
     auto boxSize = box.size();
@@ -428,6 +436,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
             dbgFile << "Extra channels depth:" << d.m_info.alpha_bits << d.m_info.alpha_exponent_bits;
             dbgFile << "Has animation:" << d.m_info.have_animation << "loops:" << d.m_info.animation.num_loops
                     << "tick:" << d.m_info.animation.tps_numerator << d.m_info.animation.tps_denominator;
+            dbgFile << "Internal pixel format:" << (d.m_info.uses_original_profile ? "Original" : "XYB");
             JxlResizableParallelRunnerSetThreads(
                 runner.get(),
                 JxlResizableParallelRunnerSuggestThreads(d.m_info.xsize, d.m_info.ysize));
@@ -473,9 +482,20 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 d.m_pixelFormat.num_channels = 4;
                 d.m_colorID = RGBAColorModelID;
             }
+
+            if (!d.m_info.uses_original_profile) {
+                d.m_pixelFormat_target.data_type = d.m_pixelFormat.data_type;
+                d.m_pixelFormat.data_type = JXL_TYPE_FLOAT;
+                d.m_depthID_target = d.m_depthID;
+                d.m_colorID_target = d.m_colorID;
+                d.m_depthID = Float32BitsColorDepthID;
+                d.m_colorID = RGBAColorModelID;
+            }
         } else if (status == JXL_DEC_COLOR_ENCODING) {
             // Determine color space information
             const KoColorProfile *profile = nullptr;
+            const KoColorProfile *profileTarget = nullptr;
+            const KoColorProfile *profileIntermediate = nullptr;
 
             // Chrome way of decoding JXL implies first scanning
             // the CICP encoding for HDR, and only afterwards
@@ -572,6 +592,19 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     }
                 }();
 
+                if (colorEncoding.rendering_intent == JXL_RENDERING_INTENT_PERCEPTUAL) {
+                    d.m_intent = KoColorConversionTransformation::IntentPerceptual;
+                } else if (colorEncoding.rendering_intent == JXL_RENDERING_INTENT_RELATIVE) {
+                    d.m_intent = KoColorConversionTransformation::IntentRelativeColorimetric;
+                } else if (colorEncoding.rendering_intent == JXL_RENDERING_INTENT_ABSOLUTE) {
+                    d.m_intent = KoColorConversionTransformation::IntentAbsoluteColorimetric;
+                } else if (colorEncoding.rendering_intent == JXL_RENDERING_INTENT_SATURATION) {
+                    d.m_intent = KoColorConversionTransformation::IntentSaturation;
+                } else {
+                    warnFile << "Cannot determine color rendering intent, set to Perceptual instead";
+                    d.m_intent = KoColorConversionTransformation::IntentPerceptual;
+                }
+
                 profile = KoColorSpaceRegistry::instance()->profileFor(colorants, colorPrimaries, transferFunction);
 
                 dbgFile << "CICP profile data:" << colorants << colorPrimaries << transferFunction;
@@ -582,14 +615,15 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     if (d.linearizePolicy != LinearizePolicy::KeepTheSame) {
                         // Override output format!
                         d.m_depthID = Float32BitsColorDepthID;
-                    }
+                        d.m_pixelFormat.data_type = d.m_pixelFormat_target.data_type;
 
-                    d.cs = KoColorSpaceRegistry::instance()->colorSpace(d.m_colorID.id(), d.m_depthID.id(), profile);
+                        // HDR is a special case because we need to linearize in-house
+                        d.cs = KoColorSpaceRegistry::instance()->colorSpace(d.m_colorID.id(), d.m_depthID.id(), profile);
+                    }
                 }
             }
 
             if (!d.cs) {
-                dbgFile << "JXL CICP data couldn't be handled, falling back to ICC profile retrieval";
                 size_t iccSize = 0;
                 QByteArray iccProfile;
                 if (JXL_DEC_SUCCESS
@@ -598,7 +632,6 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     document->setErrorMessage(i18nc("JPEG-XL errors", "Unable to read the image profile."));
                     return ImportExportCodes::ErrorWhileReading;
                 }
-                dbgFile << "JxlDecoderGetICCProfileSize succeeded, ICC profile available";
                 iccProfile.resize(static_cast<int>(iccSize));
                 if (JXL_DEC_SUCCESS
                     != JxlDecoderGetColorAsICCProfile(dec.get(),
@@ -610,14 +643,102 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     return ImportExportCodes::ErrorWhileReading;
                 }
 
-                // With the profile in hand, now we can create the image.
-                profile = KoColorSpaceRegistry::instance()->createColorProfile(d.m_colorID.id(),
-                                                                               d.m_depthID.id(),
-                                                                               iccProfile);
-                d.cs = KoColorSpaceRegistry::instance()->colorSpace(d.m_colorID.id(), d.m_depthID.id(), profile);
+                // Get original profile if XYB is used
+                size_t iccTargetSize = 0;
+                QByteArray iccTargetProfile;
+                if (!d.m_info.uses_original_profile) {
+                    if (JXL_DEC_SUCCESS
+                        != JxlDecoderGetICCProfileSize(dec.get(),
+                                                       nullptr,
+                                                       JXL_COLOR_PROFILE_TARGET_ORIGINAL,
+                                                       &iccTargetSize)) {
+                        errFile << "ICC profile size retrieval failed";
+                        document->setErrorMessage(i18nc("JPEG-XL errors", "Unable to read the image profile."));
+                        return ImportExportCodes::ErrorWhileReading;
+                    }
+                    iccTargetProfile.resize(static_cast<int>(iccTargetSize));
+                    if (JXL_DEC_SUCCESS
+                        != JxlDecoderGetColorAsICCProfile(dec.get(),
+                                                          nullptr,
+                                                          JXL_COLOR_PROFILE_TARGET_ORIGINAL,
+                                                          reinterpret_cast<uint8_t *>(iccTargetProfile.data()),
+                                                          static_cast<size_t>(iccTargetProfile.size()))) {
+                        document->setErrorMessage(i18nc("JPEG-XL errors", "Unable to read the image profile."));
+                        return ImportExportCodes::ErrorWhileReading;
+                    }
+                }
+
+                if (iccTargetSize && (iccProfile != iccTargetProfile)) {
+                    // If the icc target is not 0 and different than target data.
+                    // Meaning that the JXL is in XYB format and needing to convert back to
+                    // the original color profile.
+                    //
+                    // Here we need to provide an intermediate transform space in float to prevent
+                    // gamut clipping to sRGB if the target depth is integer.
+                    dbgFile << "XYB with color transform needed";
+                    needColorTransform = true;
+                    profile = KoColorSpaceRegistry::instance()->createColorProfile(d.m_colorID.id(),
+                                                                                   d.m_depthID.id(),
+                                                                                   iccProfile);
+                    d.cs = KoColorSpaceRegistry::instance()->colorSpace(d.m_colorID.id(), d.m_depthID.id(), profile);
+                    profileIntermediate = KoColorSpaceRegistry::instance()->createColorProfile(d.m_colorID_target.id(),
+                                                                                               d.m_depthID.id(),
+                                                                                               iccTargetProfile);
+                    d.cs_intermediate = KoColorSpaceRegistry::instance()->colorSpace(d.m_colorID_target.id(),
+                                                                                     d.m_depthID.id(),
+                                                                                     profileIntermediate);
+                    profileTarget = KoColorSpaceRegistry::instance()->createColorProfile(d.m_colorID_target.id(),
+                                                                                         d.m_depthID_target.id(),
+                                                                                         iccTargetProfile);
+                    d.cs_target = KoColorSpaceRegistry::instance()->colorSpace(d.m_colorID_target.id(),
+                                                                               d.m_depthID_target.id(),
+                                                                               profileTarget);
+
+                    // No need for intermediate transform on float since it won't get clipped.
+                    if (!(d.m_depthID_target == Float16BitsColorDepthID
+                          || d.m_depthID_target == Float32BitsColorDepthID)) {
+                        needIntermediateTransform = true;
+                    }
+                } else if (!d.m_info.uses_original_profile) {
+                    // If XYB is used but the profiles are same, skip conversion.
+                    // Also set the color depth target to default.
+                    //
+                    // Try to fetch profile from CICP first...
+                    dbgFile << "XYB without color transform needed";
+                    needColorTransform = false;
+                    d.m_depthID = d.m_depthID_target;
+                    d.m_colorID = d.m_colorID_target;
+                    d.m_pixelFormat.data_type = d.m_pixelFormat_target.data_type;
+                    d.cs = KoColorSpaceRegistry::instance()->colorSpace(d.m_colorID.id(), d.m_depthID.id(), profile);
+
+                    // ...or use ICC instead if CICP fetch failed.
+                    if (!d.cs) {
+                        dbgFile << "JXL CICP data couldn't be handled, falling back to ICC profile retrieval";
+                        profile = KoColorSpaceRegistry::instance()->createColorProfile(d.m_colorID_target.id(),
+                                                                                       d.m_depthID_target.id(),
+                                                                                       iccProfile);
+                        d.cs = KoColorSpaceRegistry::instance()->colorSpace(d.m_colorID_target.id(),
+                                                                            d.m_depthID_target.id(),
+                                                                            profile);
+                    }
+                } else {
+                    // Skip conversion on original profile.
+                    dbgFile << "Original without color transform needed";
+                    needColorTransform = false;
+                    profile = KoColorSpaceRegistry::instance()->createColorProfile(d.m_colorID.id(),
+                                                                                   d.m_depthID.id(),
+                                                                                   iccProfile);
+                    d.cs = KoColorSpaceRegistry::instance()->colorSpace(d.m_colorID.id(), d.m_depthID.id(), profile);
+                }
             }
 
-            dbgFile << "Color space:" << d.cs->name() << d.cs->colorModelId() << d.cs->colorDepthId();
+            if (d.cs_target) {
+                dbgFile << "Target profile:" << d.cs_target->profile()->name();
+                dbgFile << "Color space:" << d.cs_target->name() << d.cs_target->colorModelId()
+                        << d.cs_target->colorDepthId();
+            } else {
+                dbgFile << "Color space:" << d.cs->name() << d.cs->colorModelId() << d.cs->colorDepthId();
+            }
             dbgFile << "JXL depth" << d.m_pixelFormat.data_type;
 
             d.lCoef = d.cs->lumaCoefficients();
@@ -788,7 +909,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 frame->importFrame(currentFrameTime, d.m_currentFrame, nullptr);
                 d.m_nextFrameTime += static_cast<int>(d.m_header.duration);
             } else {
-                if (d.isCMYK) {
+                if (d.isCMYK && d.m_info.uses_original_profile) {
                     QVector<quint8 *> planes = d.m_currentFrame->readPlanarBytes(layerBounds.x(),
                                                                                  layerBounds.y(),
                                                                                  layerBounds.width(),
@@ -874,6 +995,20 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 // Slip additional layers into layer stack
                 for (const KisLayerSP &addLayer : additionalLayers) {
                     image->addNode(addLayer, image->rootLayer().data());
+                }
+                if (needColorTransform) {
+                    if (needIntermediateTransform) {
+                        dbgFile << "Transforming to intermediate color space";
+                        image->convertImageColorSpace(d.cs_intermediate,
+                                                      d.m_intent,
+                                                      KoColorConversionTransformation::internalConversionFlags());
+                        image->waitForDone();
+                    }
+                    dbgFile << "Transforming to target color space";
+                    image->convertImageColorSpace(d.cs_target,
+                                                  d.m_intent,
+                                                  KoColorConversionTransformation::internalConversionFlags());
+                    image->waitForDone();
                 }
                 document->setCurrentImage(image);
                 return ImportExportCodes::OK;

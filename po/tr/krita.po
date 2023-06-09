@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-05-29 12:41+0300\n"
+"PO-Revision-Date: 2023-06-08 12:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.07.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -56412,7 +56412,8 @@ msgstr "x- veya y- konumunu tutmak için Shift'e basın."
 #: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:97
 #, kde-format
 msgid "Press CTRL to resize from center."
-msgstr "Merkezden başlayarak yeniden boyutlandırmak için CTRL düğmesine basın."
+msgstr ""
+"Merkezden başlayarak yeniden boyutlandırmak için Kontrol düğmesine basın."
 
 #: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:44
 #, kde-format

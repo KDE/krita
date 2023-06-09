@@ -89,9 +89,13 @@ SCRIPT_SOURCE_DIR="$(get_script_dir)"
 
 # There is some duplication between build and deploy scripts
 # a config env file could would be a nice idea.
-KIS_SRC_DIR=${BUILDROOT}/krita
+if [[ -z "${KIS_SRC_DIR}" ]]; then
+    KIS_SRC_DIR=${BUILDROOT}/krita
+fi
+if [[ -z "${KIS_BUILD_DIR}" ]]; then
+    KIS_BUILD_DIR=${BUILDROOT}/kisbuild
+fi
 KIS_INSTALL_DIR=${BUILDROOT}/i
-KIS_BUILD_DIR=${BUILDROOT}/kisbuild # only used for getting git sha number
 KRITA_DMG=${BUILDROOT}/kritadmg
 KRITA_DMG_TEMPLATE=${BUILDROOT}/kritadmg-template
 

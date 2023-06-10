@@ -40,6 +40,8 @@ private Q_SLOTS:
 
     void testDifferentCodes();
 
+    void testMirroredOrNot();
+
 private:
     ConicFormula randomFormula(QRandomGenerator& random, ConicFormula::TYPE type);
     QPointF randomPoint(QRandomGenerator& random);

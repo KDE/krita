@@ -1529,16 +1529,21 @@ bool EllipseInPolygon::onTheCorrectSideOfHorizon(QPointF point)
     int here = horizonLineSign(point);
     ENTER_FUNCTION() << "Concentric point is: " << point << "and it's horizon side is: " << here;
 
+    int sum = 0;
     Q_FOREACH(QPointF p, originalPoints) {
         int pSign = horizonLineSign(p);
+        sum += pSign;
         ENTER_FUNCTION() << "Point on the ellipse is: " << p << "and it's horizon sign is: " << pSign;
     }
     ENTER_FUNCTION() << "----";
 
+
     if (here == 0) {
         return !m_mirrored; // let's keep points on the horizon on the not-mirrored side
     }
-    return here >= 0;
+
+    return (sum > 0 ? 1 : -1) != here;
+    //return here >= 0;
 }
 
 bool EllipseInPolygon::setSimpleEllipseVertices(Ellipse &ellipse) const

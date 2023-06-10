@@ -438,6 +438,44 @@ void TestEllipseInPolygon::testDifferentCodes()
     }
 }
 
+void TestEllipseInPolygon::testMirroredOrNot()
+{
+    // <handles><handle id="0" x="633.960" y="753.840"/><handle id="1" x="758.165" y="753.840"/><handle id="2" x="875.880" y="900.720"/><handle id="3" x="521.640" y="898.560"/></handles>
+
+    EllipseInPolygon eip;
+    QPolygonF poly;
+    poly << QPointF(633.960,753.840) << QPointF(758.165, 753.840) << QPointF(875.880, 900.720) << QPointF(521.640, 898.560);
+    PerspectiveBasedAssistantHelper::CacheData cache;
+    PerspectiveBasedAssistantHelper::updateCacheData(cache, poly);
+    eip.updateToPolygon(poly, cache.horizon);
+
+    EllipseInPolygon eipConcentric;
+    EllipseInPolygon eipConcentricMirrored;
+
+    QPointF point(0,0);
+
+    eipConcentric.updateToPointOnConcentricEllipse(eip.originalTransform, point, cache.horizon, false);
+    eipConcentricMirrored.updateToPointOnConcentricEllipse(eip.originalTransform, point, cache.horizon, true);
+
+    ENTER_FUNCTION() << eipConcentric.onTheCorrectSideOfHorizon(point) << eipConcentric.horizonLineSign(point);
+    ENTER_FUNCTION() << eipConcentricMirrored.onTheCorrectSideOfHorizon(point) << eipConcentricMirrored.horizonLineSign(point);
+
+    ENTER_FUNCTION() << eipConcentric.horizon << eipConcentricMirrored.horizon;
+    ENTER_FUNCTION() << eipConcentric.horizonFormula[0] << eipConcentric.horizonFormula[1] << eipConcentric.horizonFormula[2];
+    ENTER_FUNCTION() << eipConcentricMirrored.horizonFormula[0] << eipConcentricMirrored.horizonFormula[1] << eipConcentricMirrored.horizonFormula[2];
+    ENTER_FUNCTION() << eipConcentric.horizonLineSign(eipConcentric.horizon.p1()) << eipConcentric.horizonLineSign(eipConcentric.horizon.p2());
+    ENTER_FUNCTION() << eipConcentric.horizonLineSign(eipConcentricMirrored.horizon.p1()) << eipConcentric.horizonLineSign(eipConcentricMirrored.horizon.p2());
+
+
+    auto calculateHorizonResult = [] (EllipseInPolygon& eip, QPointF point) {
+        return eip.horizonFormula[0]*point.x() + eip.horizonFormula[1]*point.y() + eip.horizonFormula[2];
+    };
+    ENTER_FUNCTION() << calculateHorizonResult(eipConcentric, eipConcentric.horizon.p1()) << calculateHorizonResult(eipConcentric, eipConcentric.horizon.p2());
+    ENTER_FUNCTION() << calculateHorizonResult(eipConcentricMirrored, eipConcentricMirrored.horizon.p1()) << calculateHorizonResult(eipConcentricMirrored, eipConcentricMirrored.horizon.p2());
+
+
+}
+
 ConicFormula TestEllipseInPolygon::randomFormula(QRandomGenerator &random, ConicFormula::TYPE type)
 {
     auto rand = [random] () mutable {return random.generateDouble();};

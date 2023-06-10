@@ -162,7 +162,7 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
             d->concentricEllipseInPolygonMirrored.setSimpleEllipseVertices(d->simpleConcentricEllipseMirrored);
 
             if (true || !d->ellipsesCorrectInStroke) {
-                if (!d->concentricEllipseInPolygon.onTheCorrectSideOfHorizon(initialTransform.inverted().map(mousePos))) {
+                if (d->concentricEllipseInPolygon.onTheCorrectSideOfHorizon(initialTransform.inverted().map(mousePos))) {
                     d->useMirroredPreview = false;
                 } else {
                     d->useMirroredPreview = true;
@@ -484,7 +484,7 @@ void PerspectiveEllipseAssistant::setAdjustedBrushPosition(const QPointF positio
     KisPaintingAssistant::setAdjustedBrushPosition(position);
     // beginning of the stroke
     if (d->isConcentric && !d->ellipsesCorrectInStroke) {
-        if (!d->concentricEllipseInPolygon.onTheCorrectSideOfHorizon(position)) {
+        if (d->concentricEllipseInPolygon.onTheCorrectSideOfHorizon(position)) {
             d->concentricEllipseInPolygon.updateToPointOnConcentricEllipse(d->ellipseInPolygon.originalTransform, position, d->cache.horizon, false);
             d->useMirrored = false;
         } else {

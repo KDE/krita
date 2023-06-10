@@ -46,7 +46,7 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
     connect(m_ui->btnRemoveSelected, SIGNAL(clicked(bool)), this, SLOT(slotRemoveSelected(bool)));
 
     KisResourceItemViwer *viewModeButton;
-    viewModeButton = new KisResourceItemViwer(2, this);
+    viewModeButton = new KisResourceItemViwer(Viewer::TableSelected, this);
 
     KisConfig cfg(true);
     m_mode = (cfg.readEntry<quint32>("ResourceItemsBCSelected.viewMode", 1) == 1)? ListViewMode::IconGrid : ListViewMode::Detail;

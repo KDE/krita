@@ -7,6 +7,8 @@
 #include "ResourceListViewModes.h"
 
 
+enum class Viewer {TableAvailable, ResourceManager, TableSelected};
+
 namespace Ui {
 class KisResourceItemViwer;
 }
@@ -16,7 +18,7 @@ class KisResourceItemViwer : public KisPopupButton
     Q_OBJECT
 
 public:
-    explicit KisResourceItemViwer(int type, QWidget *parent = nullptr);
+    explicit KisResourceItemViwer(Viewer type, QWidget *parent = nullptr);
     ~KisResourceItemViwer();
 
     void updateViewSettings();
@@ -33,7 +35,7 @@ private:
     Ui::KisResourceItemViwer *m_ui;
 
     ListViewMode m_mode;
-    int m_type;
+    Viewer m_type;
 
 };
 

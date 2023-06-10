@@ -139,9 +139,9 @@ WdgResourcePreview::WdgResourcePreview(WidgetType type, QWidget *parent) :
     KisResourceItemViwer *viewModeButton;
 
     if (m_type == WidgetType::BundleCreator) {
-        viewModeButton = new KisResourceItemViwer(0, this);
+        viewModeButton = new KisResourceItemViwer(Viewer::TableAvailable, this);
     } else {
-        viewModeButton = new KisResourceItemViwer(1, this);
+        viewModeButton = new KisResourceItemViwer(Viewer::ResourceManager, this);
     }
 
     KisConfig cfg(true);

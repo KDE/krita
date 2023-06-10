@@ -7,7 +7,7 @@
 #include <kis_config.h>
 #include <QMenu>
 
-KisResourceItemViwer::KisResourceItemViwer(int type, QWidget *parent) :
+KisResourceItemViwer::KisResourceItemViwer(Viewer type, QWidget *parent) :
     KisPopupButton(parent),
     m_ui(new Ui::KisResourceItemViwer),
     m_mode(ListViewMode::IconGrid),
@@ -25,9 +25,9 @@ KisResourceItemViwer::KisResourceItemViwer(int type, QWidget *parent) :
     // View Modes Btns
     viewModeMenu->addSection(i18nc("@title Which elements to display (e.g., thumbnails or details)", "Display"));
 
-    if (m_type == 0) {
+    if (m_type == Viewer::TableAvailable) {
         m_mode = (cfg.readEntry<quint32>("ResourceItemsBCSearch.viewMode", 1) == 1)? ListViewMode::IconGrid : ListViewMode::Detail;
-    } else if (m_type == 1) {
+    } else if (m_type == Viewer::ResourceManager) {
         m_mode = (cfg.readEntry<quint32>("ResourceItemsRM.viewMode", 1) == 1)? ListViewMode::IconGrid : ListViewMode::Detail;
     } else {
         m_mode = (cfg.readEntry<quint32>("ResourceItemsBCSelected.viewMode", 1) == 1)? ListViewMode::IconGrid : ListViewMode::Detail;
@@ -67,9 +67,9 @@ KisResourceItemViwer::~KisResourceItemViwer()
 void KisResourceItemViwer::slotViewThumbnail()
 {
     KisConfig cfg(false);
-    if (m_type == 0) {
+    if (m_type == Viewer::TableAvailable) {
         cfg.writeEntry("ResourceItemsBCSearch.viewMode", qint32(1));
-    } else if (m_type == 1) {
+    } else if (m_type == Viewer::ResourceManager) {
         cfg.writeEntry("ResourceItemsRM.viewMode", qint32(1));
     } else {
         cfg.writeEntry("ResourceItemsBCSelected.viewMode", qint32(1));
@@ -80,9 +80,9 @@ void KisResourceItemViwer::slotViewThumbnail()
 void KisResourceItemViwer::slotViewDetails()
 {
     KisConfig cfg(false);
-    if (m_type == 0) {
+    if (m_type == Viewer::TableAvailable) {
         cfg.writeEntry("ResourceItemsBCSearch.viewMode", qint32(0));
-    } else if (m_type == 1) {
+    } else if (m_type == Viewer::ResourceManager) {
         cfg.writeEntry("ResourceItemsRM.viewMode", qint32(0));
     } else {
         cfg.writeEntry("ResourceItemsBCSelected.viewMode", qint32(0));

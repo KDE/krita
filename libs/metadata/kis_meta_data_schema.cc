@@ -147,21 +147,22 @@ void Schema::Private::parseProperties(QDomElement& elt)
 {
     Q_ASSERT(elt.tagName() == "properties");
     dbgMetaData << "Parse properties";
-    QDomNode n = elt.firstChild();
-    while (!n.isNull()) {
-        QDomElement e = n.toElement();
-        if (!e.isNull()) {
-            EntryInfo info;
-            QString name;
-            if (parseEltType(e, info, name, false, false)) {
-                if (types.contains(name)) {
-                    errMetaData << name << " already defined.";
-                } else {
-                    types[ name ] = info;
-                }
-            }
+
+    QDomElement e;
+    for (e = elt.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+        EntryInfo info;
+        QString name;
+
+        if (!parseEltType(e, info, name, false, false)) {
+            continue;
         }
-        n = n.nextSibling();
+
+        if (types.contains(name)) {
+            errMetaData << name << " already defined.";
+            continue;
+        }
+
+        types[ name ] = info;
     }
 }
 

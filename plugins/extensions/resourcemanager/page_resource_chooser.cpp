@@ -29,7 +29,7 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
 {
     m_ui->setupUi(this);
 
-    m_wdgResourcePreview = new WdgResourcePreview(0, this);
+    m_wdgResourcePreview = new WdgResourcePreview(WidgetType::BundleCreator, this);
     m_ui->formLayout->addWidget(m_wdgResourcePreview);
 
     connect(m_wdgResourcePreview, SIGNAL(signalResourcesSelectionChanged(QModelIndex)), this, SLOT(slotResourcesSelectionChanged(QModelIndex)));

@@ -11,7 +11,6 @@
 #include <KisResourceItemDelegate.h>
 
 
-
 class KisActionManager;
 class KisResourceTypeModel;
 class KisStorageModel;
@@ -21,6 +20,7 @@ class KisTagFilterResourceProxyModel;
 class KisTag;
 class KisWdgTagSelectionControllerOneResource;
 
+enum class WidgetType {BundleCreator, ResourceManager};
 
 namespace Ui {
 class WdgResourcePreview;
@@ -31,7 +31,7 @@ class WdgResourcePreview : public QWidget
     Q_OBJECT
 
 public:
-    explicit WdgResourcePreview(int type, QWidget *parent = nullptr);
+    explicit WdgResourcePreview(WidgetType type, QWidget *parent = nullptr);
     ~WdgResourcePreview();
 
 Q_SIGNALS:
@@ -59,7 +59,7 @@ public:
 
 private:
     Ui::WdgResourcePreview *m_ui;
-    int m_type;
+    WidgetType m_type;
 
     QList<int> m_selectedResourcesIds;
 

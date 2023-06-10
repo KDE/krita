@@ -33,7 +33,7 @@
 #include "kisresourceitemviwer.h"
 
 
-WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
+WdgResourcePreview::WdgResourcePreview(WidgetType type, QWidget *parent) :
     QWidget(parent),
     m_ui(new Ui::WdgResourcePreview),
     m_type(type)
@@ -45,7 +45,7 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
     // m_ui->resourceItemView->setListViewMode(ListViewMode::Detail);
 
     // resource type combo box code
-    if (m_type == 1) {
+    if (m_type == WidgetType::ResourceManager) {
         m_resourceTypeModel = new KisResourceTypeModel(this);
         m_ui->cmbResourceType->setModel(m_resourceTypeModel);
         m_ui->cmbResourceType->setModelColumn(KisResourceTypeModel::Name);
@@ -87,7 +87,7 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
 
 
     // storage type combo box
-    if (m_type == 0) {
+    if (m_type == WidgetType::BundleCreator) {
         m_ui->cmbStorage->setVisible(false);
     } else {
         m_storageModel = new KisStorageModel(this);
@@ -101,7 +101,7 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
     // the model will be owned by `proxyModel`
     KisResourceModel* resourceModel;
 
-    if (m_type == 1) {
+    if (m_type == WidgetType::ResourceManager) {
         resourceModel = new KisResourceModel(selectedResourceType);
         resourceModel->setStorageFilter(KisResourceModel::ShowAllStorages);
         resourceModel->setResourceFilter(m_ui->chkShowDeleted->isChecked() ? KisResourceModel::ShowAllResources : KisResourceModel::ShowActiveResources);
@@ -115,7 +115,7 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
     KisTagFilterResourceProxyModel* proxyModel = new KisTagFilterResourceProxyModel(selectedResourceType);
     proxyModel->setResourceModel(resourceModel);
     proxyModel->setTagFilter(0);
-    if (m_type == 1) {
+    if (m_type == WidgetType::ResourceManager) {
         proxyModel->setStorageFilter(true, getCurrentStorageId());
     }
     proxyModel->sort(KisAbstractResourceModel::Name);
@@ -126,7 +126,7 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
     m_ui->resourceItemView->setItemDelegate(m_kisResourceItemDelegate);
     m_ui->resourceItemView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    if (m_type == 0) {
+    if (m_type == WidgetType::BundleCreator) {
         m_ui->chkShowDeleted->setVisible(false);
     } else {
         connect(m_ui->chkShowDeleted, SIGNAL(stateChanged(int)), SLOT(slotShowDeletedChanged(int)));
@@ -138,7 +138,7 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
 
     KisResourceItemViwer *viewModeButton;
 
-    if (m_type == 0) {
+    if (m_type == WidgetType::BundleCreator) {
         viewModeButton = new KisResourceItemViwer(0, this);
     } else {
         viewModeButton = new KisResourceItemViwer(1, this);
@@ -146,7 +146,7 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
 
     KisConfig cfg(true);
 
-    if (m_type == 0) {
+    if (m_type == WidgetType::BundleCreator) {
         m_mode = (cfg.readEntry<quint32>("ResourceItemsBCSearch.viewMode", 1) == 1)? ListViewMode::IconGrid : ListViewMode::Detail;
     } else {
         m_mode = (cfg.readEntry<quint32>("ResourceItemsRM.viewMode", 1) == 1)? ListViewMode::IconGrid : ListViewMode::Detail;
@@ -155,7 +155,7 @@ WdgResourcePreview::WdgResourcePreview(int type, QWidget *parent) :
     connect(viewModeButton, SIGNAL(onViewThumbnail()), this, SLOT(slotViewThumbnail()));
     connect(viewModeButton, SIGNAL(onViewDetails()), this, SLOT(slotViewDetails()));
 
-    if (m_type == 0) {
+    if (m_type == WidgetType::BundleCreator) {
         QLabel *label = new QLabel("Search");
         m_ui->horizontalLayout_2->addWidget(label);
     } else {
@@ -207,7 +207,7 @@ void WdgResourcePreview::slotResourceTypeSelected(int)
     if (!m_resourceProxyModelsForResourceType.contains(selectedResourceType)) {
         // the model will be owned by `proxyModel`
         KisResourceModel* resourceModel;
-        if (m_type == 1) {
+        if (m_type == WidgetType::ResourceManager) {
             resourceModel = new KisResourceModel(selectedResourceType);
             KIS_SAFE_ASSERT_RECOVER_RETURN(resourceModel);
             resourceModel->setStorageFilter(KisResourceModel::ShowAllStorages);
@@ -225,7 +225,7 @@ void WdgResourcePreview::slotResourceTypeSelected(int)
         m_resourceProxyModelsForResourceType.insert(selectedResourceType, proxyModel);
     }
 
-    if (m_type == 1) {
+    if (m_type == WidgetType::ResourceManager) {
         m_resourceProxyModelsForResourceType[selectedResourceType]->setStorageFilter(true, getCurrentStorageId());
     }
     m_resourceProxyModelsForResourceType[selectedResourceType]->setTagFilter(getCurrentTag());
@@ -276,7 +276,7 @@ void WdgResourcePreview::slotShowDeletedChanged(int newState)
 
 QString WdgResourcePreview::getCurrentResourceType()
 {
-    if (m_type == 1) {
+    if (m_type == WidgetType::ResourceManager) {
         return m_ui->cmbResourceType->currentData(Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
     } else {
         QString s = m_ui->cmbResourceType->currentText();

@@ -1622,19 +1622,6 @@ void EllipseInPolygon::paintParametric(QVector<double> formula, QPainter& gc, co
 
     QTransform reverseInitial = initialTransform.inverted();
 
-    for (int i = 0; i < originalPoints.size(); i++) {
-        gc.drawEllipse(initialTransform.map(originalPoints[i]), 10, 10); // good points!!!
-        gc.drawEllipse(originalPoints[i], 15, 15); // they are in that bad rectangle
-    }
-
-    gc.drawEllipse(initialTransform.map(updateRect.topLeft()), 25, 25); // good points!!!
-    gc.drawEllipse(updateRect.topLeft(), 25, 25); // they are in that bad rectangle
-    gc.drawEllipse(initialTransform.map(updateRect.bottomRight()), 25, 25); // good points!!!
-    gc.drawEllipse(updateRect.bottomRight(), 25, 25); // they are in that bad rectangle
-
-
-
-
     if (!formulaRepresentsAnEllipse(a, b, c)) {
         needsSecondLoop = true;
     }

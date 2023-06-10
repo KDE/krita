@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-09 00:45+0000\n"
+"POT-Creation-Date: 2023-06-10 00:46+0000\n"
 "PO-Revision-Date: 2023-04-20 12:33+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -33875,7 +33875,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool_freehand.cc:212
 #: libs/ui/tool/kis_tool_polyline_base.cpp:119
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
-#: libs/ui/tool/KisToolOutlineBase.cpp:162
+#: libs/ui/tool/KisToolOutlineBase.cpp:167
 #: plugins/tools/basictools/kis_tool_line.cc:202
 #: plugins/tools/basictools/kis_tool_path.cc:78
 #: plugins/tools/basictools/kis_tool_pencil.cc:53
@@ -33893,7 +33893,7 @@ msgstr "Siveltimen koko"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:113
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
-#: libs/ui/tool/KisToolOutlineBase.cpp:156
+#: libs/ui/tool/KisToolOutlineBase.cpp:161
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:65
 #, fuzzy, kde-format
 #| msgid ""

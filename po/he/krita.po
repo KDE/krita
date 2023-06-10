@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-09 00:45+0000\n"
+"POT-Creation-Date: 2023-06-10 00:46+0000\n"
 "PO-Revision-Date: 2017-05-16 06:47-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <kde-l10n-he@kde.org>\n"
@@ -31771,7 +31771,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool_freehand.cc:212
 #: libs/ui/tool/kis_tool_polyline_base.cpp:119
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
-#: libs/ui/tool/KisToolOutlineBase.cpp:162
+#: libs/ui/tool/KisToolOutlineBase.cpp:167
 #: plugins/tools/basictools/kis_tool_line.cc:202
 #: plugins/tools/basictools/kis_tool_path.cc:78
 #: plugins/tools/basictools/kis_tool_pencil.cc:53
@@ -31788,7 +31788,7 @@ msgstr "מברשות"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:113
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
-#: libs/ui/tool/KisToolOutlineBase.cpp:156
+#: libs/ui/tool/KisToolOutlineBase.cpp:161
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:65
 #, kde-format
 msgid ""

@@ -272,28 +272,26 @@ const TypeInfo* Schema::Private::parseAttType(QDomElement& elt, bool ignoreStruc
 const TypeInfo* Schema::Private::parseEmbType(QDomElement& elt, bool ignoreStructure)
 {
     dbgMetaData << "Parse embedded type for " << elt.tagName();
-    QDomNode n = elt.firstChild();
-    while (!n.isNull()) {
-        QDomElement e = n.toElement();
-        if (!e.isNull()) {
-            QString type = e.tagName();
-            if (type == "integer") {
-                return TypeInfo::Private::Integer;
-            } else if (type == "boolean") {
-                return TypeInfo::Private::Boolean;
-            } else if (type == "date") {
-                return TypeInfo::Private::Date;
-            } else if (type == "text") {
-                return TypeInfo::Private::Text;
-            } else if (type == "openedchoice" || type == "closedchoice") {
-                return parseChoice(e);
-            } else if (!ignoreStructure && structures.contains(type)) {
-                return structures[type];
-            }
+
+    QDomElement e;
+    for (e = elt.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+        QString type = e.tagName();
+        if (type == "integer") {
+            return TypeInfo::Private::Integer;
+        } else if (type == "boolean") {
+            return TypeInfo::Private::Boolean;
+        } else if (type == "date") {
+            return TypeInfo::Private::Date;
+        } else if (type == "text") {
+            return TypeInfo::Private::Text;
+        } else if (type == "openedchoice" || type == "closedchoice") {
+            return parseChoice(e);
+        } else if (!ignoreStructure && structures.contains(type)) {
+            return structures[type];
         }
-        n = n.nextSibling();
     }
-    return 0;
+
+    return nullptr;
 }
 
 const TypeInfo* Schema::Private::parseChoice(QDomElement& elt)

@@ -249,6 +249,7 @@ const TypeInfo* Schema::Private::parseAttType(QDomElement& elt, bool ignoreStruc
     if (!elt.hasAttribute("type")) {
         return 0;
     }
+
     QString type = elt.attribute("type");
     if (type == "integer") {
         return TypeInfo::Private::Integer;
@@ -263,8 +264,9 @@ const TypeInfo* Schema::Private::parseAttType(QDomElement& elt, bool ignoreStruc
     } else if (!ignoreStructure && structures.contains(type)) {
         return structures[type];
     }
+
     errMetaData << "Unsupported type: " << type << " in an attribute";
-    return 0;
+    return nullptr;
 }
 
 const TypeInfo* Schema::Private::parseEmbType(QDomElement& elt, bool ignoreStructure)

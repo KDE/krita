@@ -123,21 +123,21 @@ void Schema::Private::parseStructure(QDomElement& elt)
     dbgMetaData << ppVar(structurePrefix) << ppVar(structureUri);
 
     Schema* schema = new Schema(structureUri, structurePrefix);
-    QDomNode n = elt.firstChild();
-    while (!n.isNull()) {
-        QDomElement e = n.toElement();
-        if (!e.isNull()) {
-            EntryInfo info;
-            QString name;
-            if (parseEltType(e, info, name, false, false)) {
-                if (schema->d->types.contains(name)) {
-                    errMetaData << structureName << " already contains a field " << name;
-                } else {
-                    schema->d->types[ name ] = info;
-                }
-            }
+    QDomElement e;
+    for (e = elt.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+        EntryInfo info;
+        QString name;
+
+        if (!parseEltType(e, info, name, false, false)) {
+            continue;
         }
-        n = n.nextSibling();
+
+        if (schema->d->types.contains(name)) {
+            errMetaData << structureName << " already contains a field " << name;
+            continue;
+        }
+
+        schema->d->types[ name ] = info;
     }
 
     structures[ structureName ] = TypeInfo::Private::createStructure(schema, structureName);

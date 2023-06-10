@@ -304,31 +304,39 @@ const TypeInfo* Schema::Private::parseChoice(QDomElement& elt)
         Q_ASSERT(elt.tagName() == "closedchoice");
         propertyType = TypeInfo::ClosedChoice;
     }
-    QDomNode n = elt.firstChild();
-    QList< TypeInfo::Choice > choices;
-    while (!n.isNull()) {
-        QDomElement e = n.toElement();
-        if (!e.isNull()) {
-            EntryInfo info;
-            QString name;
-            if (parseEltType(e, info, name, true, true)) {
-                if (! choiceType) choiceType = info.propertyType;
-                if (choiceType == info.propertyType) {
-                    QString text = e.text();
-                    QVariant var = text;
-                    if (choiceType->propertyType() == TypeInfo::IntegerType) {
-                        var = var.toInt();
-                    } else if (choiceType->propertyType() == TypeInfo::DateType) { // TODO QVariant date parser isn't very good with XMP date (it doesn't support YYYY and YYYY-MM
-                        var = var.toDateTime();
-                    }
-                    choices.push_back(TypeInfo::Choice(Value(var), name));
-                } else {
-                    errMetaData << "All members of a choice need to be of the same type";
-                }
-            }
+
+    QDomElement e;
+    QList<TypeInfo::Choice> choices;
+    for (e = elt.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+        EntryInfo info;
+        QString name;
+
+        if (!parseEltType(e, info, name, true, true)) {
+            continue;
         }
-        n = n.nextSibling();
+
+        if (!choiceType) {
+            choiceType = info.propertyType;
+        }
+
+        if (choiceType != info.propertyType) {
+            errMetaData << "All members of a choice need to be of the same type";
+            continue;
+        }
+
+        QString text = e.text();
+        QVariant var = text;
+
+        if (choiceType->propertyType() == TypeInfo::IntegerType) {
+            var = var.toInt();
+        } else if (choiceType->propertyType() == TypeInfo::DateType) {
+            // TODO: QVariant date parser isn't very good with XMP date
+            // (it doesn't support YYYY and YYYY-MM)
+            var = var.toDateTime();
+        }
+        choices.push_back(TypeInfo::Choice(Value(var), name));
     }
+
     return TypeInfo::Private::createChoice(propertyType, choiceType, choices);
 }
 

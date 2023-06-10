@@ -252,24 +252,19 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
         QDomDocument doc;
         doc.setContent(nodeXml);
 
-        QDomElement element = doc.documentElement();
-        qint64 pid = element.attribute("application_pid").toLongLong();
-        forceCopy = element.attribute("force_copy").toInt();
-        qint64 imagePointerValue = element.attribute("image_pointer_value").toLongLong();
+        QDomElement root = doc.documentElement();
+        qint64 pid = root.attribute("application_pid").toLongLong();
+        forceCopy = root.attribute("force_copy").toInt();
+        qint64 imagePointerValue = root.attribute("image_pointer_value").toLongLong();
         sourceImage = reinterpret_cast<KisImage*>(imagePointerValue);
 
         if (pid == QApplication::applicationPid()) {
-
-            QDomNode n = element.firstChild();
-            while (!n.isNull()) {
-                QDomElement e = n.toElement();
-                if (!e.isNull()) {
-                    qint64 pointerValue = e.attribute("pointer_value").toLongLong();
-                    if (pointerValue) {
-                        nodes << reinterpret_cast<KisNode*>(pointerValue);
-                    }
+            QDomElement e;
+            for (e = root.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+                qint64 pointerValue = e.attribute("pointer_value").toLongLong();
+                if (pointerValue) {
+                    nodes << reinterpret_cast<KisNode*>(pointerValue);
                 }
-                n = n.nextSibling();
             }
         }
     }

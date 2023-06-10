@@ -31,44 +31,50 @@ const QString Schema::PhotoshopSchemaUri = "http://ns.adobe.com/photoshop/1.0/";
 bool Schema::Private::load(const QString& _fileName)
 {
     dbgMetaData << "Loading from " << _fileName;
+
     QDomDocument document;
     QString error;
-    int ligne, column;
+    int line, column;
     QFile file(_fileName);
-    if (document.setContent(&file, &error, &ligne, &column)) {
-        QDomElement docElem = document.documentElement();
-        if (docElem.tagName() != "schema") {
-            dbgMetaData << _fileName << ": invalid root name";
-            return false;
-        }
-        if (!docElem.hasAttribute("prefix")) {
-            dbgMetaData << _fileName << ": missing prefix.";
-            return false;
-        }
-        if (!docElem.hasAttribute("uri")) {
-            dbgMetaData << _fileName << ": missing uri.";
-            return false;
-        }
-        prefix = docElem.attribute("prefix");
-        uri = docElem.attribute("uri");
-        dbgMetaData << ppVar(prefix) << ppVar(uri);
-        QDomNode n = docElem.firstChild();
-        while (!n.isNull()) {
-            QDomElement e = n.toElement();
-            if (!e.isNull()) {
-                if (e.tagName() == "structures") {
-                    parseStructures(e);
-                } else if (e.tagName() == "properties") {
-                    parseProperties(e);
-                }
-            }
-            n = n.nextSibling();
-        }
-        return true;
-    } else {
-        dbgMetaData << error << " at " << ligne << ", " << column << " in " << _fileName;
+    if (!document.setContent(&file, &error, &line, &column)) {
+        dbgMetaData << error << " at " << line << ", " << column << " in " << _fileName;
         return false;
     }
+
+    QDomElement docElem = document.documentElement();
+    if (docElem.tagName() != "schema") {
+        dbgMetaData << _fileName << ": invalid root name";
+        return false;
+    }
+
+    if (!docElem.hasAttribute("prefix")) {
+        dbgMetaData << _fileName << ": missing prefix.";
+        return false;
+    }
+
+    if (!docElem.hasAttribute("uri")) {
+        dbgMetaData << _fileName << ": missing uri.";
+        return false;
+    }
+
+    prefix = docElem.attribute("prefix");
+    uri = docElem.attribute("uri");
+    dbgMetaData << ppVar(prefix) << ppVar(uri);
+
+    QDomElement structuresElt = docElem.firstChildElement("structures");
+    if (structuresElt.isNull()) {
+        return false;
+    }
+
+    QDomElement propertiesElt = docElem.firstChildElement("properties");
+    if (propertiesElt.isNull()) {
+        return false;
+    }
+
+    parseStructures(structuresElt);
+    parseProperties(propertiesElt);
+
+    return true;
 }
 
 void Schema::Private::parseStructures(QDomElement& elt)

@@ -81,44 +81,47 @@ void Schema::Private::parseStructures(QDomElement& elt)
 {
     Q_ASSERT(elt.tagName() == "structures");
     dbgMetaData << "Parse structures";
-    QDomNode n = elt.firstChild();
-    while (!n.isNull()) {
-        QDomElement e = n.toElement();
-        if (!e.isNull()) {
-            if (e.tagName() == "structure") {
-                parseStructure(e);
-            } else {
-                errMetaData << "Invalid tag: " << e.tagName() << " in structures section";
-            }
+
+    QDomElement e = elt.firstChildElement();
+    for (; !e.isNull(); e = e.nextSiblingElement()) {
+        if (e.tagName() == "structure") {
+            parseStructure(e);
+        } else {
+            errMetaData << "Invalid tag: " << e.tagName() << " in structures section";
         }
-        n = n.nextSibling();
     }
 }
 
 void Schema::Private::parseStructure(QDomElement& elt)
 {
     Q_ASSERT(elt.tagName() == "structure");
+
     if (!elt.hasAttribute("name")) {
         errMetaData << "Name is required for a structure";
         return;
     }
+
     QString structureName = elt.attribute("name");
     if (structures.contains(structureName)) {
         errMetaData << structureName << " is defined twice";
         return;
     }
     dbgMetaData << "Parsing structure " << structureName;
+
     if (!elt.hasAttribute("prefix")) {
         errMetaData << "prefix is required for structure " << structureName;
         return;
     }
+
     if (!elt.hasAttribute("uri")) {
         errMetaData << "uri is required for structure " << structureName;
         return;
     }
+
     QString structurePrefix = elt.attribute("prefix");
     QString structureUri = elt.attribute("uri");
     dbgMetaData << ppVar(structurePrefix) << ppVar(structureUri);
+
     Schema* schema = new Schema(structureUri, structurePrefix);
     QDomNode n = elt.firstChild();
     while (!n.isNull()) {
@@ -136,6 +139,7 @@ void Schema::Private::parseStructure(QDomElement& elt)
         }
         n = n.nextSibling();
     }
+
     structures[ structureName ] = TypeInfo::Private::createStructure(schema, structureName);
 }
 

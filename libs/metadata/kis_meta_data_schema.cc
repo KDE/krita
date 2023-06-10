@@ -166,79 +166,82 @@ void Schema::Private::parseProperties(QDomElement& elt)
     }
 }
 
-bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QString& name, bool ignoreStructure, bool ignoreName)
+bool Schema::Private::parseEltType(QDomElement &elt,
+                                   EntryInfo &entryInfo,
+                                   QString &name,
+                                   bool ignoreStructure,
+                                   bool ignoreName)
 {
     dbgMetaData << elt.tagName() << elt.attributes().count() << name << ignoreStructure << ignoreName;
+
     QString tagName = elt.tagName();
     if (!ignoreName && !elt.hasAttribute("name")) {
         errMetaData << "Missing name attribute for tag " << tagName;
         return false;
     }
     name = elt.attribute("name");
+
     // TODO parse qualifier
     if (tagName == "integer") {
         entryInfo.propertyType = TypeInfo::Private::Integer;
-        return true;
     } else if (tagName == "boolean") {
         entryInfo.propertyType = TypeInfo::Private::Boolean;
-        return true;
     } else if (tagName == "date") {
         entryInfo.propertyType = TypeInfo::Private::Date;
-        return true;
     } else if (tagName == "text") {
         entryInfo.propertyType = TypeInfo::Private::Text;
-        return true;
     } else if (tagName == "seq") {
         const TypeInfo* ei = parseAttType(elt, ignoreStructure);
         if (!ei) {
             ei = parseEmbType(elt, ignoreStructure);
         }
+
         if (!ei) {
             errMetaData << "No type defined for " << name;
             return false;
         }
+
         entryInfo.propertyType = TypeInfo::Private::orderedArray(ei);
-        return true;
     } else if (tagName == "bag") {
         const TypeInfo* ei = parseAttType(elt, ignoreStructure);
         if (!ei) {
             ei = parseEmbType(elt, ignoreStructure);
         }
+
         if (!ei) {
             errMetaData << "No type defined for " << name;
             return false;
         }
+
         entryInfo.propertyType = TypeInfo::Private::unorderedArray(ei);
-        return true;
     } else if (tagName == "alt") {
         const TypeInfo* ei = parseAttType(elt, ignoreStructure);
         if (!ei) {
             ei = parseEmbType(elt, ignoreStructure);
         }
+
         if (!ei) {
             errMetaData << "No type defined for " << name;
             return false;
         }
+
         entryInfo.propertyType = TypeInfo::Private::alternativeArray(ei);
-        return true;
     } else if (tagName == "lang") {
         entryInfo.propertyType = TypeInfo::Private::LangArray;
-        return true;
     } else if (tagName == "rational") {
         entryInfo.propertyType = TypeInfo::Private::Rational;
-        return true;
     } else if (tagName == "gpscoordinate") {
         entryInfo.propertyType = TypeInfo::Private::GPSCoordinate;
-        return true;
     } else if (tagName == "openedchoice" || tagName == "closedchoice") {
         entryInfo.propertyType = parseChoice(elt);
-        return true;
     } else if (!ignoreStructure && structures.contains(tagName)) {
         entryInfo.propertyType = structures.value(tagName);
-        return true;
+    } else {
+        errMetaData << tagName << " isn't a type.";
+        return false;
     }
-    errMetaData << tagName << " isn't a type.";
-    return false;
+
+    return true;
 }
 
 const TypeInfo* Schema::Private::parseAttType(QDomElement& elt, bool ignoreStructure)

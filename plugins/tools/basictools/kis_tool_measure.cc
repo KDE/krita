@@ -103,6 +103,28 @@ KisToolMeasure::KisToolMeasure(KoCanvasBase * canvas)
 KisToolMeasure::~KisToolMeasure()
 {
 }
+QPointF KisToolMeasure::lockedAngle(QPointF pos)
+{
+    const QPointF lineVector = pos - m_startPos;
+    qreal lineAngle = std::atan2(lineVector.y(), lineVector.x());
+
+    if (lineAngle < 0) {
+        lineAngle += 2 * M_PI;
+    }
+
+    const qreal ANGLE_BETWEEN_CONSTRAINED_LINES = (2 * M_PI) / 24;
+
+    const quint32 constrainedLineIndex = static_cast<quint32>((lineAngle / ANGLE_BETWEEN_CONSTRAINED_LINES) + 0.5);
+    const qreal constrainedLineAngle = constrainedLineIndex * ANGLE_BETWEEN_CONSTRAINED_LINES;
+
+    const qreal lineLength = std::sqrt((lineVector.x() * lineVector.x()) + (lineVector.y() * lineVector.y()));
+
+    const QPointF constrainedLineVector(lineLength * std::cos(constrainedLineAngle), lineLength * std::sin(constrainedLineAngle));
+
+    const QPointF result = m_startPos + constrainedLineVector;
+
+    return result;
+}
 
 void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
 {
@@ -176,10 +198,12 @@ void KisToolMeasure::continuePrimaryAction(KoPointerEvent *event)
 
     QPointF pos = convertToPixelCoord(event);
 
-    if (event->modifiers() == Qt::AltModifier) {
+    if (event->modifiers() & Qt::AltModifier) {
         QPointF trans = pos - m_endPos;
         m_startPos += trans;
         m_endPos += trans;
+    } else if(event->modifiers() & Qt::ShiftModifier){
+        m_endPos = lockedAngle(pos);
     } else {
         m_endPos = pos;
     }

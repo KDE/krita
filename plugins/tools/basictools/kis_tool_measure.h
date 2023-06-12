@@ -63,6 +63,8 @@ public:
     void endPrimaryAction(KoPointerEvent *event) override;
     void showDistanceAngleOnCanvas();
 
+    QPointF lockedAngle(QPointF pos);
+
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 
     QWidget * createOptionWidget() override;

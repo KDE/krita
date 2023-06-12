@@ -213,6 +213,11 @@ else()
 endif()
 
 
+if (ANDROID AND ${CMAKE_SYSTEM_PROCESSOR} STREQUAL "i686")
+    set (_extra_meson_flags_orig  ${EXTRA_MESON_FLAGS})
+    set (EXTRA_MESON_FLAGS -Dmultithread=disabled "${EXTRA_MESON_FLAGS}")
+endif()
+
 kis_ExternalProject_Add_with_separate_builds_apple(
     ext_vpx
     MESON
@@ -239,6 +244,10 @@ kis_ExternalProject_Add_with_separate_builds_apple(
     DEPENDS ext_nasm ${MESON_DEP} ${PKG_CONFIG_DEP}
 )
 
+if (ANDROID AND ${CMAKE_SYSTEM_PROCESSOR} STREQUAL "i686")
+    set (EXTRA_MESON_FLAGS ${_extra_meson_flags_orig})
+    set(DISABLE_ASM_ON_ANDROID_x86_32 "-Dasm=disabled" "-Dinline_asm=disabled")
+endif()
 # IMPORTANT:
 # OpenSUSE's list of whitelisted encoders: https://build.opensuse.org/package/view_file/openSUSE:Factory/ffmpeg-5/enable_encoders
 # OpenSUSE's list of whitelisted decoders: https://build.opensuse.org/package/view_file/openSUSE:Factory/ffmpeg-5/enable_decoders
@@ -249,10 +258,6 @@ kis_ExternalProject_Add_with_separate_builds_apple(
 if (NOT MSVC)
     set(_stack_guard_flag "-Denable-ssp=enabled")
 endif() 
-
-if (ANDROID AND ${CMAKE_SYSTEM_PROCESSOR} STREQUAL "i686")
-    set(DISABLE_ASM_ON_ANDROID_x86_32 "-Dasm=disabled")
-endif()
 
 kis_ExternalProject_Add_with_separate_builds_apple(
     ext_ffmpeg

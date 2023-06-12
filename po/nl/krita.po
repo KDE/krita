@@ -62,14 +62,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-11 00:45+0000\n"
-"PO-Revision-Date: 2023-05-20 10:46+0200\n"
+"PO-Revision-Date: 2023-06-11 14:03+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.04.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -17879,18 +17879,14 @@ msgid "Transparency Mask"
 msgstr "Transparantiemasker"
 
 #: libs/impex/LayerOpacityCheck.h:109
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Your image contains layers with a color model that is different from the "
-#| "image. The layers will be converted."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Your image contains layers with a partial opacity. The layers will be "
 "exported at full opacity."
 msgstr ""
-"Uw afbeelding bevat lagen met een kleurmodel dat anders is dan de "
-"afbeelding. De lagen zullen geconverteerd worden."
+"Uw afbeelding bevat lagen met een gedeeltelijke dekking. De lagen zullen "
+"geëxporteerd worden naar volledige dekking."
 
 #: libs/impex/MultiLayerCheck.h:24
 #, kde-format
@@ -47445,6 +47441,8 @@ msgctxt "JPEG-XL errors"
 msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
+"JPEG-XL afbeelding gedetecteerd met spot kleurkanalen, vlak gemaakte "
+"afbeelding wordt geïmporteerd."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:632
 #: plugins/impex/jxl/JPEGXLImport.cpp:642
@@ -47462,12 +47460,14 @@ msgid ""
 "Detected multi layer JPEG-XL image with unsupported blending mode, importing "
 "flattened image."
 msgstr ""
+"Meerlaagse JPEG-XL afbeelding gedetecteerd met niet ondersteunde mengmodus, "
+"vlak gemaakte afbeelding wordt geïmporteerd."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:823
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
-msgstr ""
+msgstr "Ongeldige JPEG-XL laagnaamlengte"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:882
 #, kde-format
@@ -47880,25 +47880,21 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:233
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
-#| "need to restart Krita to enable or disable plugins.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
 "Animated exports are <span style=\" font-weight:600;\">always</span> "
 "flattened regardless of this setting.</p></body></html>"
 msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Opmerking:</span> u "
-"moet Krita opnieuw starten om plug-ins in of uit te schakelen.</p></body></"
-"html>"
+"<html><head/><body><p><span style=\" font-weight:600;\">Opmerking:</span> "
+"geanimeerde exports worden <span style=\" font-weight:600;\">altijd</span> "
+"vlak gemaakt ongeacht deze instelling.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:236
-#, fuzzy, kde-format
-#| msgid "Flatten the &image"
+#, kde-format
 msgid "Flatten the image"
-msgstr "Afbeeld&ing plat maken"
+msgstr "Afbeelding vlak maken"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:253

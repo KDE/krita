@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-11 00:45+0000\n"
-"PO-Revision-Date: 2023-06-07 21:45+0100\n"
+"PO-Revision-Date: 2023-06-11 15:14+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -17814,18 +17814,14 @@ msgid "Transparency Mask"
 msgstr "Masko de travidebleco"
 
 #: libs/impex/LayerOpacityCheck.h:109
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Your image contains layers with a color model that is different from the "
-#| "image. The layers will be converted."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Your image contains layers with a partial opacity. The layers will be "
 "exported at full opacity."
 msgstr ""
-"Via bildo enhavas tavolojn kun kolora modelo diferenca de la bildo. La "
-"tavoloj estos konvertitaj."
+"Via bildo enhavas tavolojn kun parta opakeco. La tavoloj estos eksportitaj "
+"je plena opakeco."
 
 #: libs/impex/MultiLayerCheck.h:24
 #, kde-format
@@ -47218,6 +47214,8 @@ msgctxt "JPEG-XL errors"
 msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
+"Detektis JPEG-XL-bildon kun makulkoloraj kanaloj, importante platigitan "
+"bildon."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:632
 #: plugins/impex/jxl/JPEGXLImport.cpp:642
@@ -47235,12 +47233,14 @@ msgid ""
 "Detected multi layer JPEG-XL image with unsupported blending mode, importing "
 "flattened image."
 msgstr ""
+"Detektis plurtavolan JPEG-XL-bildon kun nesubtenata miksreĝimo, importante "
+"platigitan bildon."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:823
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
-msgstr ""
+msgstr "Nevalida JPEG-XL-tavola nomlongeco"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:882
 #, kde-format
@@ -47651,24 +47651,21 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:233
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
-#| "need to restart Krita to enable or disable plugins.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
 "Animated exports are <span style=\" font-weight:600;\">always</span> "
 "flattened regardless of this setting.</p></body></html>"
 msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Noto:</span> vi "
-"devas rekomenci Krita por ebligi aŭ malŝalti kromaĵojn.</p></body></html>"
+"<html><head/><body><p><span style=\" font-weight:600;\">Noto:</span> "
+"Vigligitaj eksportoj estas <span style=\" font-weight:600;\">ĉiam</span> "
+"platigataj sendepende de ĉi tiu agordo.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:236
-#, fuzzy, kde-format
-#| msgid "Flatten the &image"
+#, kde-format
 msgid "Flatten the image"
-msgstr "Platigi la b&ildon"
+msgstr "Platigi la bildon"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:253
@@ -60258,11 +60255,4 @@ msgstr "Zomi Ilo"
 #, kde-format
 msgctxt "action"
 msgid "Reference Images Tool"
-msgstr "Referenca Bilda Ilo"
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid ""
-#~ "JPEG-XL image is animated, but cannot retrieve animation frame header."
-#~ msgstr ""
-#~ "JPEG-XL-bildo estas vigla, sed ne povas retrovi animacian kadron "
-#~ "kaplinion."
+msgstr "Ilo por Referencbildoj"

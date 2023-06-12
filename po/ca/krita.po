@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-11 00:45+0000\n"
-"PO-Revision-Date: 2023-05-23 20:18+0200\n"
-"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"PO-Revision-Date: 2023-06-11 10:53+0200\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -17821,18 +17821,14 @@ msgid "Transparency Mask"
 msgstr "Màscara de transparència"
 
 #: libs/impex/LayerOpacityCheck.h:109
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Your image contains layers with a color model that is different from the "
-#| "image. The layers will be converted."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Your image contains layers with a partial opacity. The layers will be "
 "exported at full opacity."
 msgstr ""
-"La imatge conté capes amb un model de color que és diferent del de la "
-"imatge. Les capes es convertiran."
+"La imatge conté capes amb una opacitat parcial. Les capes s'exportaran amb "
+"una opacitat completa."
 
 #: libs/impex/MultiLayerCheck.h:24
 #, kde-format
@@ -47390,6 +47386,8 @@ msgctxt "JPEG-XL errors"
 msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
+"S'ha detectat una imatge JPEG-XL amb canals de color directe. S'importarà "
+"una imatge aplanada."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:632
 #: plugins/impex/jxl/JPEGXLImport.cpp:642
@@ -47407,12 +47405,14 @@ msgid ""
 "Detected multi layer JPEG-XL image with unsupported blending mode, importing "
 "flattened image."
 msgstr ""
+"S'ha detectat una imatge JPEG-XL multicapa amb un mode de barreja no "
+"implementat. S'importarà una imatge aplanada."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:823
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
-msgstr ""
+msgstr "Longitud no vàlida de nom de capa JPEG-XL"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:882
 #, kde-format
@@ -47827,25 +47827,21 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:233
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
-#| "need to restart Krita to enable or disable plugins.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
 "Animated exports are <span style=\" font-weight:600;\">always</span> "
 "flattened regardless of this setting.</p></body></html>"
 msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Nota:</span> cal que "
-"reinicieu el Krita per a habilitar o inhabilitar els connectors.</p></body></"
-"html>"
+"<html><head/><body><p><span style=\" font-weight:600;\">Nota:</span> Les "
+"exportacions d'animacions <span style=\" font-weight:600;\">sempre</span> "
+"s'aplanaran independentment d'aquesta configuració.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:236
-#, fuzzy, kde-format
-#| msgid "Flatten the &image"
+#, kde-format
 msgid "Flatten the image"
-msgstr "Aplana la &imatge"
+msgstr "Aplana la imatge"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:253
@@ -60528,38 +60524,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid ""
-#~ "JPEG-XL image is animated, but cannot retrieve animation frame header."
-#~ msgstr ""
-#~ "La imatge JPEG-XL està animada, però no pot recuperar la capçalera del "
-#~ "marc d'animació."
-
-#~ msgctxt "floating on-canvas message"
-#~ msgid ""
-#~ "Cannot open audio: \"%1\"\n"
-#~ "Error: %2"
-#~ msgstr ""
-#~ "No s'ha pogut obrir l'àudio: «%1»\n"
-#~ "Error: %2"
-
-#~ msgid "Edit Audio:"
-#~ msgstr "Edita l'àudio:"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Audio playback is not supported in this build!"
-#~ msgstr ""
-#~ "En aquesta compilació no està implementada la reproducció de l'àudio!"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "Obre l'àudio..."
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "Canvia l'àudio (%1)..."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "fkdfjkdjfk"
-#~ msgstr "fkdfjkdjfk"

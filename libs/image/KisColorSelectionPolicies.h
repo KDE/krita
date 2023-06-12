@@ -24,13 +24,16 @@ public:
         : m_colorSpace(referenceColor.colorSpace())
         , m_referenceColor(referenceColor)
         , m_referenceColorPtr(m_referenceColor.data())
+        , m_referenceColorIsTransparent(m_colorSpace->opacityU8(m_referenceColorPtr) == OPACITY_TRANSPARENT_U8)
         , m_threshold(threshold)
     {}
 
     ALWAYS_INLINE quint8 difference(const quint8 *colorPtr) const
     {
         if (m_threshold == 1) {
-            if (memcmp(m_referenceColorPtr, colorPtr, m_colorSpace->pixelSize()) == 0) {
+            const bool colorIsTransparent = (m_colorSpace->opacityU8(colorPtr) == OPACITY_TRANSPARENT_U8);
+            if ((m_referenceColorIsTransparent && colorIsTransparent) ||
+                memcmp(m_referenceColorPtr, colorPtr, m_colorSpace->pixelSize()) == 0) {
                 return 0;
             }
             return quint8_MAX;
@@ -44,6 +47,7 @@ protected:
     const KoColorSpace *m_colorSpace;
     KoColor m_referenceColor;
     const quint8 *m_referenceColorPtr;
+    const bool m_referenceColorIsTransparent;
     int m_threshold;
 };
 
@@ -66,17 +70,7 @@ public:
         if (it != m_differences.end()) {
             result = *it;
         } else {
-            if (m_threshold == 1) {
-                if (memcmp(m_referenceColorPtr, colorPtr, m_colorSpace->pixelSize()) == 0) {
-                    result = 0;
-                }
-                else {
-                    result = quint8_MAX;
-                }
-            }
-            else {
-                result = m_colorSpace->differenceA(m_referenceColorPtr, colorPtr);
-            }
+            result = SlowDifferencePolicy::difference(colorPtr);
             m_differences.insert(key, result);
         }
 

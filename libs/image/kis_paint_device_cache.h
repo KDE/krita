@@ -9,7 +9,9 @@
 
 #include "kis_lock_free_cache.h"
 #include <QElapsedTimer>
-
+#include <QReadWriteLock>
+#include <QReadLocker>
+#include <QWriteLocker>
 
 class KisPaintDeviceCache
 {
@@ -80,18 +82,28 @@ public:
             return thumbnail;
         }
 
-        if (m_thumbnailsValid) {
-            thumbnail = findThumbnail(w, h, oversample);
-        }
-        else {
-            m_thumbnails.clear();
-            m_thumbnailsValid = true;
+        {
+            QReadLocker readLocker(&m_thumbnailsLock);
+            if (m_thumbnailsValid) {
+                if (m_thumbnails.contains(w) && m_thumbnails[w].contains(h) && m_thumbnails[w][h].contains(oversample)) {
+                    thumbnail = m_thumbnails[w][h][oversample];
+                }
+            }
+            else {
+                readLocker.unlock();
+                QWriteLocker writeLocker(&m_thumbnailsLock);
+                m_thumbnails.clear();
+                m_thumbnailsValid = true;
+            }
         }
 
         if (thumbnail.isNull()) {
             // the thumbnails in the cache are always generated from exact bounds
             thumbnail = m_paintDevice->createThumbnail(w, h, m_paintDevice->exactBounds(), oversample, renderingIntent, conversionFlags);
-            cacheThumbnail(w, h, oversample, thumbnail);
+
+            QWriteLocker writeLocker(&m_thumbnailsLock);
+            m_thumbnails[w][h][oversample] = thumbnail;
+            m_thumbnailsValid = true;
         }
 
         return thumbnail;
@@ -99,19 +111,6 @@ public:
 
     int sequenceNumber() const {
         return m_sequenceNumber;
-    }
-
-private:
-    inline QImage findThumbnail(qint32 w, qint32 h, qreal oversample) {
-        QImage resultImage;
-        if (m_thumbnails.contains(w) && m_thumbnails[w].contains(h) && m_thumbnails[w][h].contains(oversample)) {
-            resultImage = m_thumbnails[w][h][oversample];
-        }
-        return resultImage;
-    }
-
-    inline void cacheThumbnail(qint32 w, qint32 h, qreal oversample, QImage image) {
-        m_thumbnails[w][h][oversample] = image;
     }
 
 private:
@@ -151,8 +150,10 @@ private:
     NonDefaultPixelCache m_nonDefaultPixelAreaCache;
     RegionCache m_regionCache;
 
+    QReadWriteLock m_thumbnailsLock;
     bool m_thumbnailsValid {false};
     QMap<int, QMap<int, QMap<qreal,QImage> > > m_thumbnails;
+
     QAtomicInt m_sequenceNumber;
 };
 

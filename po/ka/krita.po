@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-11 00:45+0000\n"
-"PO-Revision-Date: 2023-05-21 05:22+0200\n"
+"PO-Revision-Date: 2023-06-12 05:47+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -12678,7 +12678,7 @@ msgstr ""
 #: krita/krita5.xmlgui:131
 #, kde-format
 msgid "&Snap To"
-msgstr ""
+msgstr "&მიმაგრებ"
 
 #: krita/krita5.xmlgui:154
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.xmlgui:4
@@ -12764,7 +12764,7 @@ msgstr "ალფას &გაყოფა"
 #: krita/krita5.xmlgui:326
 #, kde-format
 msgid "Select &Opaque"
-msgstr ""
+msgstr "აირჩიეთ &გაუმჭვირვალე"
 
 #: krita/krita5.xmlgui:341
 #, kde-format
@@ -12802,7 +12802,7 @@ msgstr "ფაილი"
 #: krita/krita5.xmlgui:419
 #, kde-format
 msgid "Brushes and Stuff"
-msgstr ""
+msgstr "ფუნჯები და სხვა"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -12989,7 +12989,7 @@ msgstr "გაუმჯობესებული გატანა"
 #, kde-format
 msgctxt "action"
 msgid "Import animation frames..."
-msgstr ""
+msgstr "ანიმაციის კადრების შემოტანა..."
 
 #. i18n: context: toolTip @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
@@ -12999,14 +12999,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Import animation frames"
-msgstr ""
+msgstr "ანიმაციის კადრების შემოტანა"
 
 #. i18n: context: text @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:129
 #, kde-format
 msgctxt "action"
 msgid "Import video animation..."
-msgstr ""
+msgstr "ვიდეო ანიმაციის შემოტანა..."
 
 #. i18n: context: toolTip @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
@@ -13016,14 +13016,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Import video animation"
-msgstr ""
+msgstr "ვიდეო ანიმაციის შემოტანა"
 
 #. i18n: context: text @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:141
 #, kde-format
 msgctxt "action"
 msgid "&Render Animation..."
-msgstr ""
+msgstr "ანიმაციის &რენდერი..."
 
 #. i18n: context: toolTip @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:143
@@ -13047,21 +13047,21 @@ msgstr "ანიმაციის რენდერი"
 #, kde-format
 msgctxt "action"
 msgid "&Render Animation Again"
-msgstr ""
+msgstr "ანიმაციის &თავიდან რენდერი"
 
 #. i18n: context: toolTip @ Action (render_animation_again), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:155
 #, kde-format
 msgctxt "action"
 msgid "Render Animation Again"
-msgstr ""
+msgstr "ანიმაციის თავიდან რენდერი"
 
 #. i18n: context: text @ Action (save_incremental_version), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:165
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental &Version"
-msgstr ""
+msgstr "ინკრემენტული &ვერსიის შენახვა"
 
 #. i18n: context: toolTip @ Action (save_incremental_version), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (save_incremental_version), Actions (File), ActionCollection (Menu)
@@ -13071,14 +13071,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental Version"
-msgstr ""
+msgstr "ინკრემენტული ვერსიის შენახვა"
 
 #. i18n: context: text @ Action (save_incremental_backup), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:177
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental &Backup"
-msgstr ""
+msgstr "ინკრემენტული მარქაფის &შენახვა"
 
 #. i18n: context: toolTip @ Action (save_incremental_backup), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (save_incremental_backup), Actions (File), ActionCollection (Menu)
@@ -13088,7 +13088,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental Backup"
-msgstr ""
+msgstr "ინკრემენტული მარქაფის შენახვა"
 
 #. i18n: context: text @ Action (create_template), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:189
@@ -14210,7 +14210,7 @@ msgstr "ბადის ჩვენება"
 #, kde-format
 msgctxt "action"
 msgid "Snap To Grid"
-msgstr ""
+msgstr "ბადეზე მიბმა"
 
 #. i18n: context: text @ Action (show_snap_options_popup), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (show_snap_options_popup), Actions (View), ActionCollection (Menu)
@@ -14236,7 +14236,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Orthogonal"
-msgstr ""
+msgstr "ორთოგონალურად მიბმა"
 
 #. i18n: context: text @ Action (view_snap_node), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_node), Actions (View), ActionCollection (Menu)
@@ -14249,7 +14249,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Node"
-msgstr ""
+msgstr "კვანძის მიბმა"
 
 #. i18n: context: text @ Action (view_snap_extension), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_extension), Actions (View), ActionCollection (Menu)
@@ -14262,7 +14262,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Extension"
-msgstr ""
+msgstr "გაფართოების მიბმა"
 
 #. i18n: context: text @ Action (view_snap_to_pixel), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_to_pixel), Actions (View), ActionCollection (Menu)
@@ -14275,7 +14275,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Pixel"
-msgstr ""
+msgstr "პიქსელის მიბმა"
 
 #. i18n: context: text @ Action (view_snap_intersection), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_intersection), Actions (View), ActionCollection (Menu)
@@ -14288,7 +14288,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Intersection"
-msgstr ""
+msgstr "კვეთის მიბმა"
 
 #. i18n: context: text @ Action (view_snap_bounding_box), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_bounding_box), Actions (View), ActionCollection (Menu)
@@ -14301,7 +14301,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Bounding Box"
-msgstr ""
+msgstr "შემომსაზღვრელი ჩარჩოს მიმაგრება"
 
 #. i18n: context: text @ Action (view_snap_image_bounds), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_image_bounds), Actions (View), ActionCollection (Menu)
@@ -14314,7 +14314,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Image Bounds"
-msgstr ""
+msgstr "გამოსახულების საზღვრების მიმაგრება"
 
 #. i18n: context: text @ Action (view_snap_image_center), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_image_center), Actions (View), ActionCollection (Menu)
@@ -14327,7 +14327,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Snap Image Center"
-msgstr ""
+msgstr "გამოსახულების ცენტრის მიმაგრება"
 
 #. i18n: context: text @ Action (view_toggle_painting_assistants), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1107
@@ -14634,7 +14634,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Offset Image..."
-msgstr ""
+msgstr "&გამოსახულების წანაცვლება..."
 
 #. i18n: context: toolTip @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
@@ -14644,14 +14644,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Offset Image"
-msgstr ""
+msgstr "გამოსახულების წანაცვლება"
 
 #. i18n: context: text @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1329
 #, kde-format
 msgctxt "action"
 msgid "R&esize Canvas..."
-msgstr ""
+msgstr "&ტილოს ზომის შეცვლა..."
 
 #. i18n: context: toolTip @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
@@ -16204,22 +16204,22 @@ msgstr "SVG ტექსტი"
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
-msgstr ""
+msgstr "<text>ადგილმჭერი ტექსტი</text>"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:133
 #, kde-format
 msgid "More than one 'text' node found!"
-msgstr ""
+msgstr "ნაპოვნია ერთზე მეტი 'text' ტიპის კვანძი!"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:142
 #, kde-format
 msgid "Unknown node of type '%1' found!"
-msgstr ""
+msgstr "ნაპოვნია უცნობი კვანძი ტიპით '%1'!"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:148
 #, kde-format
 msgid "No 'text' node found!"
-msgstr ""
+msgstr "კვანძი ტიპით 'text' აღმოჩენილი არაა"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:356
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:725
@@ -16706,12 +16706,12 @@ msgstr ""
 #: libs/image/commands/kis_node_opacity_command.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Opacity Change"
-msgstr ""
+msgstr "გაუმჭვირვალობის ცვლილება"
 
 #: libs/image/commands/kis_node_property_list_command.cpp:59
 msgctxt "(qtundo-format)"
 msgid "Property Changes"
-msgstr ""
+msgstr "თვისების ცვლილებები"
 
 #: libs/image/commands/kis_reselect_global_selection_command.cpp:18
 msgctxt "(qtundo-format)"
@@ -16721,7 +16721,7 @@ msgstr "თავიდან არჩევა"
 #: libs/image/commands/KisNodeRenameCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Node Rename"
-msgstr ""
+msgstr "კვანძის სახელის გადარქმევა"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
 #: libs/image/kis_image.cc:855
@@ -16732,7 +16732,7 @@ msgstr "გამოსახულების ზომის შეცვლ�
 #: libs/image/commands_new/kis_image_set_resolution_command.cpp:14
 msgctxt "(qtundo-format)"
 msgid "Set Image Resolution"
-msgstr ""
+msgstr "გამოსახულების გაფართოების დაყენება"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
 #: libs/ui/tool/strokes/move_stroke_strategy.cpp:224
@@ -16743,12 +16743,12 @@ msgstr "გადატანა"
 #: libs/image/commands_new/kis_set_layer_style_command.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Change Layer Style"
-msgstr ""
+msgstr "ფენის სტილის შეცვლა"
 
 #: libs/image/commands_new/kis_switch_current_time_command.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Switch current time"
-msgstr ""
+msgstr "მიმდინარე დროის გადართვა"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -17020,32 +17020,32 @@ msgstr "გამოსახულების დახრა"
 #: libs/image/kis_image.cc:1278
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
-msgstr ""
+msgstr "ფენის ფერის სივრცის გარდაქმნა"
 
 #: libs/image/kis_image.cc:1329
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
-msgstr ""
+msgstr "გამოსახულების ფერის სივრცის გარდაქმნა"
 
 #: libs/image/kis_image.cc:1330
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
-msgstr ""
+msgstr "პროექციის ფერის სივრცის გარდაქმნა"
 
 #: libs/image/kis_image.cc:1388
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
-msgstr ""
+msgstr "პროფილის ფენაზე მინიჭება"
 
 #: libs/image/kis_image.cc:1429
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
-msgstr ""
+msgstr "პროფილის მინიჭება"
 
 #: libs/image/kis_image.cc:2489
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
-msgstr ""
+msgstr "მონიშნულების ამოჭრა"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/image/kis_keyframe_channel.cpp:25 libs/ui/forms/wdgnewimage.ui:424
@@ -17066,37 +17066,37 @@ msgstr "მდებარეობა (Y)"
 #: libs/image/kis_keyframe_channel.cpp:29
 #, kde-format
 msgid "Scale (X)"
-msgstr ""
+msgstr "მასშტაბი (X)"
 
 #: libs/image/kis_keyframe_channel.cpp:30
 #, kde-format
 msgid "Scale (Y)"
-msgstr ""
+msgstr "მასშტაბი (Y)"
 
 #: libs/image/kis_keyframe_channel.cpp:31
 #, kde-format
 msgid "Shear (X)"
-msgstr ""
+msgstr "დახრა (X)"
 
 #: libs/image/kis_keyframe_channel.cpp:32
 #, kde-format
 msgid "Shear (Y)"
-msgstr ""
+msgstr "დახრა (Y)"
 
 #: libs/image/kis_keyframe_channel.cpp:33
 #, kde-format
 msgid "Rotation (X)"
-msgstr ""
+msgstr "შებრუნება (X)"
 
 #: libs/image/kis_keyframe_channel.cpp:34
 #, kde-format
 msgid "Rotation (Y)"
-msgstr ""
+msgstr "შებრუნება (Y)"
 
 #: libs/image/kis_keyframe_channel.cpp:35
 #, kde-format
 msgid "Rotation (Z)"
-msgstr ""
+msgstr "შებრუნება (Z)"
 
 #: libs/image/kis_layer.cc:276 libs/widgets/KoZoomAction.cpp:195
 #: libs/widgets/KoZoomAction.cpp:206 libs/widgets/KoZoomMode.cpp:13
@@ -17124,9 +17124,9 @@ msgid "Visible"
 msgstr "ხილული"
 
 #: libs/image/kis_layer_properties_icons.cpp:22
-#, kde-format
+#, fuzzy, kde-format
 msgid "Layer Style"
-msgstr ""
+msgstr "ფენის სტილი"
 
 #: libs/image/kis_layer_properties_icons.cpp:23
 #, kde-format
@@ -17230,9 +17230,10 @@ msgid "Merge Selection Masks"
 msgstr ""
 
 #: libs/image/kis_layer_utils.cpp:1944
+#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
-msgstr ""
+msgstr "ფენის გაბრტყელება"
 
 #: libs/image/kis_layer_utils.cpp:1957
 msgctxt "(qtundo-format)"
@@ -17340,22 +17341,22 @@ msgstr ""
 #: libs/image/kis_update_time_monitor.cpp:192
 #, kde-format
 msgid "Mouse Speed:"
-msgstr ""
+msgstr "თაგუნას სიჩქარე:"
 
 #: libs/image/kis_update_time_monitor.cpp:193
 #, kde-format
 msgid "Jobs/Update:"
-msgstr ""
+msgstr "დავალებები/განახლება:"
 
 #: libs/image/kis_update_time_monitor.cpp:194
 #, kde-format
 msgid "Non Update Time:"
-msgstr ""
+msgstr "დრო განახლების გრეშე:"
 
 #: libs/image/kis_update_time_monitor.cpp:195
 #, kde-format
 msgid "Response Time:"
-msgstr ""
+msgstr "პასუხის დრო:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:43
@@ -20902,7 +20903,7 @@ msgstr "მარცვალი"
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "stillimage"
-msgstr ""
+msgstr "stillimage"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:65
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:73
@@ -20926,14 +20927,14 @@ msgstr "ssim"
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "fastdecode"
-msgstr ""
+msgstr "fastdecode"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:68
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "zerolatency"
-msgstr ""
+msgstr "zerolatency"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:70
 #, kde-format
@@ -20947,7 +20948,7 @@ msgstr "არა"
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "zero-latency"
-msgstr ""
+msgstr "zero-latency"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:78
 #, kde-format
@@ -21709,9 +21710,9 @@ msgid "None"
 msgstr "არაფერი"
 
 #: libs/ui/brushhud/kis_brush_hud.cpp:78
-#, kde-format
+#, fuzzy, kde-format
 msgid "Reload Original Preset"
-msgstr ""
+msgstr "საწყისი პრესეტის თავიდან ჩატვირთვა"
 
 #: libs/ui/brushhud/kis_brush_hud.cpp:82
 #, kde-format
@@ -21929,7 +21930,7 @@ msgstr "Krita-ის შესახებ"
 #: libs/ui/dialogs/kis_about_application.cpp:44
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
-msgstr ""
+msgstr "<html><head/><body><h1 align=\"center\">ავტორი</h1></p><p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:67
 #, kde-format
@@ -21947,6 +21948,7 @@ msgstr "Temuri.doghonadze@gmail.com"
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\"><b>მთარგმნელები</b></h1><p><ul>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:91
 #, kde-format
@@ -21963,12 +21965,14 @@ msgstr ""
 #: libs/ui/dialogs/kis_about_application.cpp:99
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-msgstr ""
+msgstr "<html><head/><body><h1 align=\"center\">მხარდაჭერა</h1><p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:116
 #, kde-format
 msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
 msgstr ""
+".</p><p><i>მადლობა! ყველანი <b>შესანიშნავები</b> ბრძანდებით!</i></p></body></"
+"html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:119
 #, kde-format
@@ -33164,10 +33168,10 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:136
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "Midtones enhancement section in auto levels"
 msgid "Midtones"
-msgstr ""
+msgstr "შუატონები"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:163
@@ -39855,9 +39859,9 @@ msgstr "განათება"
 #: plugins/extensions/colorrange/wdg_colorrange.ui:62
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:185
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:37
-#, kde-format
+#, fuzzy, kde-format
 msgid "Midtones"
-msgstr ""
+msgstr "შუატონები"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonShadows)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -46459,9 +46463,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:236
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten image"
+#, kde-format
 msgid "Flatten the image"
 msgstr "გამოსახულების გაბრტყელება"
 

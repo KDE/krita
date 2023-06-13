@@ -46620,25 +46620,18 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:233
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p align=\"left\"><span style=\" font-weight:600;"
-#| "\">Links</span></p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
 "Animated exports are <span style=\" font-weight:600;\">always</span> "
 "flattened regardless of this setting.</p></body></html>"
 msgstr ""
-"<html><head/><body><p align=\"center\"><span style=\" font-weight:600;"
-"\">Odkazy</span></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:236
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten image"
+#, kde-format
 msgid "Flatten the image"
-msgstr "Sloučit obraz"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:253

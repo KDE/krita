@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-11 00:45+0000\n"
-"PO-Revision-Date: 2023-05-22 12:18+0200\n"
+"PO-Revision-Date: 2023-06-12 08:47+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -17793,18 +17793,14 @@ msgid "Transparency Mask"
 msgstr "Maska prozornosti"
 
 #: libs/impex/LayerOpacityCheck.h:109
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Your image contains layers with a color model that is different from the "
-#| "image. The layers will be converted."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Your image contains layers with a partial opacity. The layers will be "
 "exported at full opacity."
 msgstr ""
-"Vaša slika vsebuje plasti z barvnim modelom, ki se razlikuje od barvnega "
-"modela slike. Plasti bodo pretvorjene."
+"Vaša slika vsebuje plasti z delno prekrivnostjo. Plasti bodo izvožene s "
+"polno prekrivnostjo."
 
 #: libs/impex/MultiLayerCheck.h:24
 #, kde-format
@@ -47264,6 +47260,7 @@ msgctxt "JPEG-XL errors"
 msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
+"Zaznana slika JPEG-XL s točkovnimi barvnimi kanali, uvoz sploščene slike."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:632
 #: plugins/impex/jxl/JPEGXLImport.cpp:642
@@ -47281,12 +47278,14 @@ msgid ""
 "Detected multi layer JPEG-XL image with unsupported blending mode, importing "
 "flattened image."
 msgstr ""
+"Zaznana večplastna slika JPEG-XL z nepodprtim načinom mešanja, uvoz "
+"sploščene slike."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:823
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
-msgstr ""
+msgstr "Nepravilna dolžina imena plasti JPEG-XL"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:882
 #, kde-format
@@ -47698,25 +47697,21 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:233
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
-#| "need to restart Krita to enable or disable plugins.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
 "Animated exports are <span style=\" font-weight:600;\">always</span> "
 "flattened regardless of this setting.</p></body></html>"
 msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Opomba:</span> če "
-"želite omogočiti ali onemogočiti vstavke, morate znova zagnati Krito.</p></"
-"body></html>"
+"<html><head/><body><p><span style=\" font-weight:600;\">Opomba:</span> "
+"animirani izvozi so <span style=\" font-weight:600;\">vedno</span> "
+"sploščeni, ne glede na to nastavitev.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:236
-#, fuzzy, kde-format
-#| msgid "Flatten the &image"
+#, kde-format
 msgid "Flatten the image"
-msgstr "&Splošči sliko"
+msgstr "Splošči sliko"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:253
@@ -60312,10 +60307,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid ""
-#~ "JPEG-XL image is animated, but cannot retrieve animation frame header."
-#~ msgstr ""
-#~ "Slika JPEG-XL je animirana, vendar ne more pridobiti glave sličice "
-#~ "animacije."

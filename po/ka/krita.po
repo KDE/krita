@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-11 00:45+0000\n"
-"PO-Revision-Date: 2023-06-12 05:47+0200\n"
+"PO-Revision-Date: 2023-06-13 05:47+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16219,7 +16219,7 @@ msgstr "ნაპოვნია უცნობი კვანძი ტიპ
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:148
 #, kde-format
 msgid "No 'text' node found!"
-msgstr "კვანძი ტიპით 'text' აღმოჩენილი არაა"
+msgstr "კვანძი ტიპით 'text' აღმოჩენილი არაა!"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:356
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:725
@@ -17124,7 +17124,7 @@ msgid "Visible"
 msgstr "ხილული"
 
 #: libs/image/kis_layer_properties_icons.cpp:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layer Style"
 msgstr "ფენის სტილი"
 
@@ -17230,7 +17230,6 @@ msgid "Merge Selection Masks"
 msgstr ""
 
 #: libs/image/kis_layer_utils.cpp:1944
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "ფენის გაბრტყელება"
@@ -21710,7 +21709,7 @@ msgid "None"
 msgstr "არაფერი"
 
 #: libs/ui/brushhud/kis_brush_hud.cpp:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reload Original Preset"
 msgstr "საწყისი პრესეტის თავიდან ჩატვირთვა"
 
@@ -33168,7 +33167,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:136
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Midtones enhancement section in auto levels"
 msgid "Midtones"
 msgstr "შუატონები"
@@ -39859,7 +39858,7 @@ msgstr "განათება"
 #: plugins/extensions/colorrange/wdg_colorrange.ui:62
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:185
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Midtones"
 msgstr "შუატონები"
 

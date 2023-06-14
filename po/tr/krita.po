@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-11 00:45+0000\n"
-"PO-Revision-Date: 2023-06-11 22:00+0300\n"
+"PO-Revision-Date: 2023-06-13 13:48+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -11658,7 +11658,7 @@ msgstr "Tez Grupla"
 #, kde-format
 msgctxt "action"
 msgid "Create a group layer containing selected layers"
-msgstr "Seçilmiş katmanları içeren bir grup katmanı oluştur"
+msgstr "Seçili katmanları içeren bir grup katman oluştur"
 
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
@@ -25506,7 +25506,7 @@ msgstr "Otomatik katman sonekleri"
 #: libs/ui/forms/wdggeneralsettings.ui:1459
 #, kde-format
 msgid "Add \"Merged\" to merged group layers"
-msgstr "Birleştirilmiş grup katmanlarına \"Birleştirilmiş\"i ekle"
+msgstr "Birleştirilmiş grup katmanlara \"Birleştirilmiş\"i ekle"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1466
@@ -26928,7 +26928,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:576
 #, kde-format
 msgid "in Transform Tool"
-msgstr "Dönüştürme Aracında"
+msgstr "Dönüşüm Aracında"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoveToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:583
@@ -56367,7 +56367,7 @@ msgid ""
 "visually constant whatever zoom level is chosen"
 msgstr ""
 "Ölçeklenebilir uzaklık yakınlaştırma düzeyini dikkate alır ve hangi "
-"yakınlaştırma düzeyi seçilmiş olursa olsun uzaklığı görsel olarak sabit yapar"
+"yakınlaştırma düzeyi seçili olursa olsun uzaklığı görsel olarak sabit yapar"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:435
 #, kde-format
@@ -59459,7 +59459,7 @@ msgstr "Uygula"
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:376
 #, kde-format
 msgid "Transform Tool Actions"
-msgstr "Dönüştürme Aracı Eylemleri"
+msgstr "Dönüşüm Aracı Eylemleri"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:860
 #, kde-format
@@ -59644,7 +59644,7 @@ msgstr "Başlamak için tuvalde 3 nokta oluştur"
 #, kde-format
 msgctxt "action"
 msgid "Transform Tool"
-msgstr "Dönüştürme Aracı"
+msgstr "Dönüşüm Aracı"
 
 #. i18n: context: toolTip @ Action (KisToolTransform), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KisToolTransform), Actions (tool-shortcuts), ActionCollection (Tools)

@@ -324,6 +324,11 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
 
     // Internal function to rewind decoder and enable coalescing
     auto rewindDecoderWithCoalesce = [&]() {
+        // Check to make sure coalescing only called once,
+        // otherwise it can trigger an infinite loop if we forgot to check decSetCoalescing when decoding below
+        if (decSetCoalescing) {
+            return false;
+        }
         JxlDecoderRewind(dec.get());
         if (JXL_DEC_SUCCESS != JxlDecoderSetCoalescing(dec.get(), JXL_TRUE)) {
             errFile << "JxlDecoderSetCoalescing failed";
@@ -415,7 +420,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     d.isCMYK = true;
                     d.cmykChannelID = i;
                 }
-                if (d.m_extra.type == JXL_CHANNEL_SPOT_COLOR) {
+                if (d.m_extra.type == JXL_CHANNEL_SPOT_COLOR && !decSetCoalescing) {
                     warnFile << "Spot color channels unsupported! Rewinding decoder with coalescing enabled";
                     document->setWarningMessage(i18nc("JPEG-XL errors",
                                                       "Detected JPEG-XL image with spot color channels, "

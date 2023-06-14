@@ -113,7 +113,7 @@ build_ext() {
         exit
     fi
 
-    export PKG_CONFIG_LIBDIR="$BUILD_ROOT/i"
+    export PKG_CONFIG_LIBDIR="$BUILD_ROOT/i/lib/pkgconfig"
 
     configure_ext
     cd $DEPS_BUILD

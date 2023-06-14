@@ -22,7 +22,7 @@ index 5b074d92..818a7e19 100644
  {
  	int error = 1;
  
-+	if (!self) return;
++	if (!self) return error;
 +
  	// Get the service associated to the consumer
  	mlt_service service = MLT_CONSUMER_SERVICE( self );

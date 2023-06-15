@@ -178,30 +178,35 @@ void KisJPEGXLTest::testCmykWithLayers()
         QVERIFY(doc2->errorMessage().isEmpty());
         QVERIFY(doc2->image());
 
-        KisImageSP imageOut = doc2->image();
+        {
+            KisImageSP imageOut = doc2->image();
 
-        KisNodeSP backgroundOut = KisLayerUtils::findNodeByName(imageOut->root(), "Background");
-        KisNodeSP layerOneOut = KisLayerUtils::findNodeByName(imageOut->root(), "Layer 1");
-        KisNodeSP testNameOut = KisLayerUtils::findNodeByName(imageOut->root(), "Test Name");
-        KisNodeSP blackOut = KisLayerUtils::findNodeByName(imageOut->root(), "Black");
+            KisNodeSP backgroundOut = KisLayerUtils::findNodeByName(imageOut->root(), "Background");
+            KisNodeSP layerOneOut = KisLayerUtils::findNodeByName(imageOut->root(), "Layer 1");
+            KisNodeSP testNameOut = KisLayerUtils::findNodeByName(imageOut->root(), "Test Name");
+            KisNodeSP blackOut = KisLayerUtils::findNodeByName(imageOut->root(), "Black");
 
-        QVERIFY(backgroundOut);
-        QVERIFY(layerOneOut);
-        QVERIFY(testNameOut);
-        QVERIFY(blackOut);
+            QVERIFY(backgroundOut);
+            QVERIFY(layerOneOut);
+            QVERIFY(testNameOut);
+            QVERIFY(blackOut);
 
-        QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(doc1->image()->root()->firstChild()->paintDevice(),
-                                                             doc2->image()->root()->firstChild()->paintDevice(),
-                                                             0));
+            QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(doc1->image()->root()->firstChild()->paintDevice(),
+                                                                 doc2->image()->root()->firstChild()->paintDevice(),
+                                                                 0));
 
-        QVERIFY(
-            TestUtil::comparePaintDevicesClever<uint8_t>(background->paintDevice(), backgroundOut->paintDevice(), 0));
+            QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(background->paintDevice(),
+                                                                 backgroundOut->paintDevice(),
+                                                                 0));
 
-        QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(layerOne->paintDevice(), layerOneOut->paintDevice(), 0));
+            QVERIFY(
+                TestUtil::comparePaintDevicesClever<uint8_t>(layerOne->paintDevice(), layerOneOut->paintDevice(), 0));
 
-        QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(testName->paintDevice(), testNameOut->paintDevice(), 0));
+            QVERIFY(
+                TestUtil::comparePaintDevicesClever<uint8_t>(testName->paintDevice(), testNameOut->paintDevice(), 0));
 
-        QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(black->paintDevice(), blackOut->paintDevice(), 0));
+            QVERIFY(TestUtil::comparePaintDevicesClever<uint8_t>(black->paintDevice(), blackOut->paintDevice(), 0));
+        }
 
         delete doc2;
     }

@@ -36,6 +36,7 @@ public:
         Filename,
         Tooltip,
         Thumbnail,
+        /// Whether the resource is active. Duplicate of ResourceActive.
         Status,
         Location,
         ResourceType,

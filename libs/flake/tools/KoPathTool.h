@@ -17,6 +17,7 @@
 #include <QList>
 #include <QCursor>
 #include <KoShapeFillResourceConnector.h>
+#include "KoPathPointTypeCommand.h"
 
 class QActionGroup;
 class QButtonGroup;
@@ -26,7 +27,6 @@ class KoPathToolHandle;
 class KoParameterShape;
 class KUndo2Command;
 
-class QAction;
 class QMenu;
 
 
@@ -80,7 +80,10 @@ private:
     PathSegment* segmentAtPoint(const QPointF &point);
 
 private Q_SLOTS:
-    void pointTypeChanged(QAction *type);
+    void pointTypeChangedCorner();
+    void pointTypeChangedSmooth();
+    void pointTypeChangedSymmetric();
+    void pointTypeChanged(KoPathPointTypeCommand::PointType type);
     void insertPoints();
     void removePoints();
     void segmentToLine();
@@ -116,7 +119,6 @@ private:
 
     QScopedPointer<KoInteractionStrategy> m_currentStrategy; ///< the rubber selection strategy
 
-    QActionGroup *m_points;
     QAction *m_actionPathPointCorner;
     QAction *m_actionPathPointSmooth;
     QAction *m_actionPathPointSymmetric;

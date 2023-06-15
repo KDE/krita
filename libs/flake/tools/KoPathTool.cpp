@@ -131,26 +131,9 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_pointSelection(this)
 {
-    m_points = new QActionGroup(this);
-    // m_pointTypeGroup->setExclusive(true);
-
     m_actionPathPointCorner = action("pathpoint-corner");
-    if (m_actionPathPointCorner) {
-        m_actionPathPointCorner->setData(KoPathPointTypeCommand::Corner);
-        m_points->addAction(m_actionPathPointCorner);
-    }
     m_actionPathPointSmooth = action("pathpoint-smooth");
-    if (m_actionPathPointSmooth) {
-        m_actionPathPointSmooth->setData(KoPathPointTypeCommand::Smooth);
-        m_points->addAction(m_actionPathPointSmooth);
-    }
-
     m_actionPathPointSymmetric = action("pathpoint-symmetric");
-    if (m_actionPathPointSymmetric) {
-        m_actionPathPointSymmetric->setData(KoPathPointTypeCommand::Symmetric);
-        m_points->addAction(m_actionPathPointSymmetric);
-    }
-
     m_actionCurvePoint = action("pathpoint-curve");
     m_actionLinePoint = action("pathpoint-line");
     m_actionLineSegment = action("pathsegment-line");
@@ -190,7 +173,17 @@ QList<QPointer<QWidget> >  KoPathTool::createOptionWidgets()
     return list;
 }
 
-void KoPathTool::pointTypeChanged(QAction *type)
+void KoPathTool::pointTypeChangedCorner() {
+    pointTypeChanged(KoPathPointTypeCommand::Corner);
+}
+void KoPathTool::pointTypeChangedSmooth() {
+    pointTypeChanged(KoPathPointTypeCommand::Smooth);
+}
+void KoPathTool::pointTypeChangedSymmetric() {
+    pointTypeChanged(KoPathPointTypeCommand::Symmetric);
+}
+
+void KoPathTool::pointTypeChanged(KoPathPointTypeCommand::PointType type)
 {
     Q_D(KoToolBase);
     if (m_pointSelection.hasSelection()) {
@@ -205,8 +198,7 @@ void KoPathTool::pointTypeChanged(QAction *type)
         }
 
         KUndo2Command *command =
-                new KoPathPointTypeCommand(selectedPoints,
-                                           static_cast<KoPathPointTypeCommand::PointType>(type->data().toInt()));
+                new KoPathPointTypeCommand(selectedPoints, type);
 
         if (initialConversionCommand) {
             using namespace KisCommandUtils;
@@ -940,7 +932,9 @@ void KoPathTool::activate(const QSet<KoShape*> &shapes)
     connect(m_actionJoinSegment, SIGNAL(triggered()), this, SLOT(joinPoints()), Qt::UniqueConnection);
     connect(m_actionMergePoints, SIGNAL(triggered()), this, SLOT(mergePoints()), Qt::UniqueConnection);
     connect(m_actionConvertToPath, SIGNAL(triggered()), this, SLOT(convertToPath()), Qt::UniqueConnection);
-    connect(m_points, SIGNAL(triggered(QAction*)), this, SLOT(pointTypeChanged(QAction*)), Qt::UniqueConnection);
+    connect(m_actionPathPointCorner, SIGNAL(triggered()), this, SLOT(pointTypeChangedCorner()), Qt::UniqueConnection);
+    connect(m_actionPathPointSmooth, SIGNAL(triggered()), this, SLOT(pointTypeChangedSmooth()), Qt::UniqueConnection);
+    connect(m_actionPathPointSymmetric, SIGNAL(triggered()), this, SLOT(pointTypeChangedSymmetric()), Qt::UniqueConnection);
     connect(&m_pointSelection, SIGNAL(selectionChanged()), this, SLOT(pointSelectionChanged()), Qt::UniqueConnection);
 
 }
@@ -1134,7 +1128,9 @@ void KoPathTool::deactivate()
     disconnect(m_actionJoinSegment, 0, this, 0);
     disconnect(m_actionMergePoints, 0, this, 0);
     disconnect(m_actionConvertToPath, 0, this, 0);
-    disconnect(m_points, 0, this, 0);
+    disconnect(m_actionPathPointCorner, 0, this, 0);
+    disconnect(m_actionPathPointSmooth, 0, this, 0);
+    disconnect(m_actionPathPointSymmetric, 0, this, 0);
     disconnect(&m_pointSelection, 0, this, 0);
 
     KoToolBase::deactivate();

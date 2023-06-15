@@ -640,6 +640,10 @@ void KisToolFreehandHelper::endPaint()
      */
     m_d->strokeInfos.clear();
 
+    // last update to complete rendering if there is still something pending
+    m_d->strokesFacade->addJob(m_d->strokeId,
+       new KisAsyncronousStrokeUpdateHelper::UpdateData(true));
+
     m_d->strokesFacade->endStroke(m_d->strokeId);
     m_d->strokeId.clear();
     m_d->infoBuilder->reset();

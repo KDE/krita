@@ -14,20 +14,9 @@
 QString KisAndroidFileProxy::getFileFromContentUri(QString contentUri)
 {
     QFile file = contentUri;
-    const QString documentsLocation = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    const QString savePath = documentsLocation + "/audio-files";
+    const QString savePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
 
     QDir dirPath = savePath;
-
-    if (!dirPath.exists()) {
-        QDir(documentsLocation).mkpath("audio-files");
-    }
-
-    const int maxDirCount = 10;
-    if (dirPath.count() > maxDirCount) {
-        // if the number of files in the directory is greater than 10, delete the oldest file
-        dirPath.remove(dirPath.entryList(QDir::NoDotAndDotDot | QDir::Files, QDir::Time).first());
-    }
 
     QString filename = file.fileName();
     if (dirPath.exists(filename)) {

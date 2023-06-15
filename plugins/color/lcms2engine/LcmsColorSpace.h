@@ -259,7 +259,7 @@ public:
         return (p && p->asLcms()->colorSpaceSignature() == colorSpaceSignature());
     }
 
-    void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *koprofile = 0) const override
+    void fromQColor(const QColor &color, quint8 *dst) const override
     {
         std::array<quint8, 3> qcolordata;
 
@@ -267,91 +267,43 @@ public:
         qcolordata[1] = static_cast<quint8>(color.green());
         qcolordata[0] = static_cast<quint8>(color.blue());
 
-        LcmsColorProfileContainer *profile = asLcmsProfile(koprofile);
-        if (profile == 0) {
-            // Default sRGB
-            KIS_ASSERT(d->defaultTransformations && d->defaultTransformations->fromRGB);
-
-            cmsDoTransform(d->defaultTransformations->fromRGB, qcolordata.data(), dst, 1);
-        } else {
-            KisLcmsLastTransformationSP last;
-            while (d->fromRGBCachedTransformations.pop(last) && last->transform && last->profile != profile->lcmsProfile()) {
-                last.reset();
-            }
-
-            if (!last) {
-                last.reset(new KisLcmsLastTransformation());
-                last->transform = cmsCreateTransform(
-                    profile->lcmsProfile(), TYPE_BGR_8, d->profile->lcmsProfile(), this->colorSpaceType(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-                last->profile = profile->lcmsProfile();
-            }
-
-            KIS_ASSERT(last->transform);
-            cmsDoTransform(last->transform, qcolordata.data(), dst, 1);
-            d->fromRGBCachedTransformations.push(last);
-        }
+        // Default sRGB
+        KIS_ASSERT(d->defaultTransformations && d->defaultTransformations->fromRGB);
+        cmsDoTransform(d->defaultTransformations->fromRGB, qcolordata.data(), dst, 1);
 
         this->setOpacity(dst, static_cast<quint8>(color.alpha()), 1);
     }
 
-    void toQColor(const quint8 *src, QColor *c, const KoColorProfile *koprofile = 0) const override
+    void toQColor(const quint8 *src, QColor *color) const override
     {
         std::array<quint8, 3> qcolordata;
 
-        LcmsColorProfileContainer *profile = asLcmsProfile(koprofile);
-        if (profile == 0) {
-            // Default sRGB transform
-            Q_ASSERT(d->defaultTransformations && d->defaultTransformations->toRGB);
-            cmsDoTransform(d->defaultTransformations->toRGB, src, qcolordata.data(), 1);
-        } else {
-            KisLcmsLastTransformationSP last;
-            while (d->toRGBCachedTransformations.pop(last) && last->transform && last->profile != profile->lcmsProfile()) {
-                last.reset();
-            }
+        qcolordata[2] = static_cast<quint8>(color->red());
+        qcolordata[1] = static_cast<quint8>(color->green());
+        qcolordata[0] = static_cast<quint8>(color->blue());
 
-            if (!last) {
-                last.reset(new KisLcmsLastTransformation());
-                last->transform = cmsCreateTransform(
-                    d->profile->lcmsProfile(), this->colorSpaceType(), profile->lcmsProfile(), TYPE_BGR_8, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-                last->profile = profile->lcmsProfile();
-            }
+        // Default sRGB transform
+        KIS_ASSERT(d->defaultTransformations && d->defaultTransformations->toRGB);
+        cmsDoTransform(d->defaultTransformations->toRGB, src, qcolordata.data(), 1);
 
-            KIS_ASSERT(last->transform);
-            cmsDoTransform(last->transform, src, qcolordata.data(), 1);
-            d->toRGBCachedTransformations.push(last);
-        }
-        c->setRgb(qcolordata[2], qcolordata[1], qcolordata[0]);
-        c->setAlpha(this->opacityU8(src));
+        color->setRgb(qcolordata[2], qcolordata[1], qcolordata[0]);
+        color->setAlpha(this->opacityU8(src));
     }
 
-    void toQColor16(const quint8 *src, QColor *c, const KoColorProfile *koprofile = 0) const override
+    void toQColor16(const quint8 *src, QColor *color) const override
     {
-        std::array<quint16, 3> qcolordata;
+        std::array<quint8, 3> qcolordata;
 
-        LcmsColorProfileContainer *profile = asLcmsProfile(koprofile);
-        if (profile == 0) {
-            // Default sRGB transform
-            Q_ASSERT(d->defaultTransformations && d->defaultTransformations->toRGB16);
-            cmsDoTransform(d->defaultTransformations->toRGB16, src, qcolordata.data(), 1);
-        } else {
-            KisLcmsLastTransformationSP last;
-            while (d->toRGB16CachedTransformations.pop(last) && last->transform && last->profile != profile->lcmsProfile()) {
-                last.reset();
-            }
+        qcolordata[2] = static_cast<quint8>(color->red());
+        qcolordata[1] = static_cast<quint8>(color->green());
+        qcolordata[0] = static_cast<quint8>(color->blue());
 
-            if (!last) {
-                last.reset(new KisLcmsLastTransformation());
-                last->transform = cmsCreateTransform(
-                    d->profile->lcmsProfile(), this->colorSpaceType(), profile->lcmsProfile(), TYPE_BGR_16, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-                last->profile = profile->lcmsProfile();
-            }
+        // Default sRGB transform
+        Q_ASSERT(d->defaultTransformations && d->defaultTransformations->toRGB16);
+        cmsDoTransform(d->defaultTransformations->toRGB16, src, qcolordata.data(), 1);
 
-            KIS_ASSERT(last->transform);
-            cmsDoTransform(last->transform, src, qcolordata.data(), 1);
-            d->toRGB16CachedTransformations.push(last);
-        }
-        c->setRgba64(QRgba64::fromRgba64(qcolordata[2], qcolordata[1], qcolordata[0], 0x0000));
-        c->setAlpha(this->opacityU8(src));
+        color->setRgba64(QRgba64::fromRgba64(qcolordata[2], qcolordata[1], qcolordata[0], 0x0000));
+        color->setAlpha(this->opacityU8(src));
     }
 
     KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const override

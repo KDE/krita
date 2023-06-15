@@ -56,7 +56,7 @@ KoColorSpace* KoLabColorSpace::clone() const
     return new KoLabColorSpace();
 }
 
-void KoLabColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
+void KoLabColorSpace::fromQColor(const QColor& c, quint8 *dst) const
 {
     // Convert between RGB and CIE-Lab color spaces
     // Uses ITU-R recommendation BT.709 with D65 as reference white.
@@ -104,7 +104,7 @@ void KoLabColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProf
     dst[CHANNEL_ALPHA] = UINT8_TO_UINT16(A);
 }
 
-void KoLabColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
+void KoLabColorSpace::toQColor(const quint8 * src, QColor *c) const
 {
     // Convert between RGB and CIE-Lab color spaces
     // Uses ITU-R recommendation BT.709 with D65 as reference white.

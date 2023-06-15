@@ -143,8 +143,8 @@ public:
     /**
      * By default this does the same as toQColor
      */
-    void toQColor16(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const override {
-        this->toQColor(src, c, profile);
+    void toQColor16(const quint8 *src, QColor *c) const override {
+        this->toQColor(src, c);
     }
 
     quint8 intensity8(const quint8 * src) const override {

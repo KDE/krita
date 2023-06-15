@@ -70,7 +70,7 @@ void KisMyPaintPaintOpPreset::setColor(const KoColor color, const KoColorSpace *
     QColor dstColor;
 
     if (colorSpace->colorModelId() == RGBAColorModelID) {
-        colorSpace->toQColor(color.data(), &dstColor, colorSpace->profile());
+        colorSpace->toQColor(color.data(), &dstColor);
         dstColor.getRgbF(&r, &g, &b);
     }
 

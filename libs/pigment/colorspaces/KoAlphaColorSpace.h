@@ -85,9 +85,9 @@ public:
         return false;
     }
 
-    void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const override;
+    void fromQColor(const QColor& color, quint8 *dst) const override;
 
-    void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const override;
+    void toQColor(const quint8 *src, QColor *c) const override;
 
     quint8 difference(const quint8 *src1, const quint8 *src2) const override;
     quint8 differenceA(const quint8 *src1, const quint8 *src2) const override;

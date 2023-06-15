@@ -93,13 +93,13 @@ KoAlphaColorSpaceImpl<_CSTrait>::~KoAlphaColorSpaceImpl()
 }
 
 template <class _CSTrait>
-void KoAlphaColorSpaceImpl<_CSTrait>::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
+void KoAlphaColorSpaceImpl<_CSTrait>::fromQColor(const QColor& c, quint8 *dst) const
 {
     _CSTrait::nativeArray(dst)[0] = _MathsFromU8::scaleToA(c.alpha());
 }
 
 template <class _CSTrait>
-void KoAlphaColorSpaceImpl<_CSTrait>::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
+void KoAlphaColorSpaceImpl<_CSTrait>::toQColor(const quint8 * src, QColor *c) const
 {
     c->setRgba(qRgba(255, 255, 255, _MathsToU8::scaleToA(_CSTrait::nativeArray(src)[0])));
 }

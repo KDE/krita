@@ -124,7 +124,7 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
             QColor c = qRgb(static_cast<int>((double)randr.doubleRandomAt(it.x(), it.y()) * 255),
                             static_cast<int>((double)randg.doubleRandomAt(it.x(), it.y()) * 255),
                             static_cast<int>((double)randb.doubleRandomAt(it.x(), it.y()) * 255));
-            cs->fromQColor(c, interm, 0);
+            cs->fromQColor(c, interm);
             pixels[1] = it.oldRawData();
             mixOp->mixColors(pixels, weights, 2, it.rawData());
         }

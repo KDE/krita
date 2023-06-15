@@ -59,14 +59,14 @@ KoColorSpace* KoRgbU8ColorSpace::clone() const
 }
 
 
-void KoRgbU8ColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
+void KoRgbU8ColorSpace::fromQColor(const QColor& c, quint8 *dst) const
 {
     QVector<float> channelValues;
     channelValues << c.blueF() << c.greenF() << c.redF() << c.alphaF();
     fromNormalisedChannelsValue(dst, channelValues);
 }
 
-void KoRgbU8ColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
+void KoRgbU8ColorSpace::toQColor(const quint8 * src, QColor *c) const
 {
     QVector<float> channelValues(4);
     normalisedChannelsValue(src, channelValues);

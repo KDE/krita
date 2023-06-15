@@ -298,7 +298,6 @@ public:
      *
      * @param src a pointer to the source pixel
      * @param c the QColor that will be filled with the color at src
-     * @param profile the optional profile that describes the color in c, for instance the monitor profile
      */
     virtual void toQColor(const quint8 *src, QColor *c) const = 0;
 
@@ -309,7 +308,6 @@ public:
      *
      * @param src a pointer to the source pixel
      * @param c the QColor that will be filled with the color at src
-     * @param profile the optional profile that describes the color in c, for instance the monitor profile
      */
     virtual void toQColor16(const quint8 *src, QColor *c) const = 0;
 

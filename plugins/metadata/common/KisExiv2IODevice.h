@@ -44,7 +44,7 @@ public:
 #endif
     int getb() override;
     void transfer(BasicIo &src) override;
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) || EXIV2_TEST_VERSION(0,28,0)
     int seek(int64_t offset, Position pos) override;
 #else
     int seek(long offset, Position pos) override;

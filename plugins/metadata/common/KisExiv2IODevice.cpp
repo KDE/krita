@@ -175,7 +175,7 @@ void KisExiv2IODevice::transfer(Exiv2::BasicIo &src)
     }
 }
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) || EXIV2_TEST_VERSION(0,28,0)
 int KisExiv2IODevice::seek(int64_t offset, Exiv2::BasicIo::Position position)
 #else
 int KisExiv2IODevice::seek(long offset, Exiv2::BasicIo::Position position)

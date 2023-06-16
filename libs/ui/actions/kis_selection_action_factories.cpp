@@ -83,7 +83,7 @@ namespace ActionHelper {
         // We need to allow for trimming from non-transparent defaultPixel layers.
         // Default color should be phased out of use when the area in question is not aligned with image bounds.
         // Otherwise, we can maintain default pixel.
-        const bool hasNonTransparentDefaultPixel = device->defaultPixel() != KoColor(Qt::transparent, device->colorSpace());
+        const bool hasNonTransparentDefaultPixel = device->defaultPixel() != KoColor::createTransparent(device->colorSpace());
         const bool needsTransparentPixel = selection && rc != image->bounds() && hasNonTransparentDefaultPixel;
 
         if (selection) {
@@ -117,7 +117,7 @@ namespace ActionHelper {
 
 
         if ( needsTransparentPixel ) {
-            device->setDefaultPixel(KoColor(Qt::transparent, device->colorSpace()));
+            device->setDefaultPixel(KoColor::createTransparent(device->colorSpace()));
             device->purgeDefaultPixels();
         }
 

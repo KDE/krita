@@ -7,6 +7,7 @@
 #ifndef __KIS_IMAGE_BARRIER_LOCK_ADAPTER_H
 #define __KIS_IMAGE_BARRIER_LOCK_ADAPTER_H
 
+#include <kis_types.h>
 
 template <typename ImagePointer>
 class KisImageBarrierLockAdapterImpl {

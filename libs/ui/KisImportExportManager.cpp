@@ -60,9 +60,35 @@
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 
+#include <KisImportUserFeedbackInterface.h>
+
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;
 QStringList KisImportExportManager::m_exportMimeTypes;
+
+namespace {
+struct SynchronousUserFeedbackInterface : KisImportUserFeedbackInterface
+{
+    SynchronousUserFeedbackInterface(QWidget *parent, bool batchMode)
+        : m_parent(parent)
+        , m_batchMode(batchMode)
+    {
+    }
+
+    Result askUser(AskCallback callback) override
+    {
+        if (m_batchMode) return SuppressedByBatchMode;
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_parent, SuppressedByBatchMode);
+
+        return callback(m_parent) ? Success : UserCancelled;
+    }
+
+    QWidget *m_parent {nullptr};
+    bool m_batchMode {false};
+};
+
+}
+
 
 class Q_DECL_HIDDEN KisImportExportManager::Private
 {
@@ -348,6 +374,12 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
     filter->setRealFilename(realLocation);
     filter->setBatchMode(batchMode());
     filter->setMimeType(typeName);
+
+    if (direction == Import) {
+        KisMainWindow *kisMain = KisPart::instance()->currentMainwindow();
+        KIS_SAFE_ASSERT_RECOVER_NOOP(kisMain);
+        filter->setImportUserFeedBackInterface(new SynchronousUserFeedbackInterface(kisMain, batchMode()));
+    }
 
     if (!d->updater.isNull()) {
         // WARNING: The updater is not guaranteed to be persistent! If you ever want

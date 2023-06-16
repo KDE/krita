@@ -360,7 +360,7 @@ void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
             const KoColor color =
                 !stroke.isTransparent ?
                 stroke.color :
-                KoColor(Qt::transparent, stroke.color.colorSpace());
+                KoColor::createTransparent(stroke.color.colorSpace());
 
             strategy->addKeyStroke(stroke.dev, color);
         }

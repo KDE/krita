@@ -75,6 +75,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_hlg_import.cpp
     dialogs/KisDlgConfigureCumulativeUndo.cpp
     dialogs/KisCumulativeUndoModel.cpp
+    dialogs/dlg_colorspaceconversion.cc
 
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
@@ -412,6 +413,7 @@ set(kritaui_LIB_SRCS
     KisImportExportFilter.cpp
     KisImportExportManager.cpp
     KisImportExportUtils.cpp
+    KisImportUserFeedbackInterface.cpp
     kis_async_action_feedback.cpp
     KisMainWindow.cpp
     KisOpenPane.cpp
@@ -617,6 +619,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/WdgPopupPaletteSettings.ui
     forms/wdgMissingColorProfile.ui
     forms/wdgPasteFormat.ui
+    forms/wdgconvertcolorspace.ui
 
 
     brushhud/kis_dlg_brush_hud_config.ui

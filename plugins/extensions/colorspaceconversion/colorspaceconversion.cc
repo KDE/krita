@@ -33,7 +33,7 @@
 #include <kis_action.h>
 #include <kis_group_layer.h>
 
-#include "dlg_colorspaceconversion.h"
+#include <dialogs/dlg_colorspaceconversion.h>
 #include "kis_action_manager.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(ColorSpaceConversionFactory, "kritacolorspaceconversion.json", registerPlugin<ColorSpaceConversion>();)
@@ -68,13 +68,12 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
 
-        const KoColorSpace * cs = dlgColorSpaceConversion->m_page->colorSpaceSelector->currentColorSpace();
+        const KoColorSpace * cs = dlgColorSpaceConversion->colorSpace();
         if (cs) {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
-            KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::HighQuality;
-            if (dlgColorSpaceConversion->m_page->chkBlackpointCompensation->isChecked()) conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
-            if (!dlgColorSpaceConversion->m_page->chkAllowLCMSOptimization->isChecked()) conversionFlags |= KoColorConversionTransformation::NoOptimization;
-            image->convertImageColorSpace(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId(), conversionFlags);
+            image->convertImageColorSpace(cs,
+                                          dlgColorSpaceConversion->conversionIntent(),
+                                          dlgColorSpaceConversion->conversionFlags());
             QApplication::restoreOverrideCursor();
         }
     }

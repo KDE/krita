@@ -329,7 +329,7 @@ void KisPixelSelection::clear(const QRect & r)
 
 void KisPixelSelection::clear()
 {
-    setDefaultPixel(KoColor(Qt::transparent, colorSpace()));
+    setDefaultPixel(KoColor::createTransparent(colorSpace()));
     KisPaintDevice::clear();
 
     m_d->outlineCacheValid = true;

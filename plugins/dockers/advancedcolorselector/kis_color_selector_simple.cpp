@@ -331,7 +331,7 @@ KoColor KisColorSelectorSimple::colorAt(float x, float y)
     else
         relPos = x/qreal(width());
 
-    KoColor color(Qt::transparent, m_parent->colorSpace());
+    KoColor color = KoColor::createTransparent(m_parent->colorSpace());
 
     switch(m_parameter) {
     case KisColorSelectorConfiguration::SL:

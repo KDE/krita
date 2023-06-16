@@ -346,7 +346,7 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
         num_colors += 1;
     }
 
-    KoColor color(Qt::transparent, activeDev->colorSpace());
+    KoColor color = KoColor::createTransparent(activeDev->colorSpace());
     activeDev->colorSpace()->mixColorsOp()->mixColors(m_blendDevice->data(), weights, size, color.data(), sum_weight);
 
     if (sum_weight > 0.0f) {

@@ -36,7 +36,7 @@ namespace KisToolUtils {
         }
 
         const KoColorSpace *cs = dev->colorSpace();
-        KoColor sampledColor(Qt::transparent, cs);
+        KoColor sampledColor = KoColor::createTransparent(cs);
 
         // Sampling radius.
         if (!pure && radius > 1) {

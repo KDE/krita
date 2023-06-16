@@ -242,7 +242,7 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
     if (*projection->defaultPixel().data() == OPACITY_TRANSPARENT_U8) {
         projection->clear(requestedRect);
     } else {
-        KoColor transparentColor(Qt::transparent, projection->colorSpace());
+        KoColor transparentColor = KoColor::createTransparent(projection->colorSpace());
         projection->fill(requestedRect, transparentColor);
     }
     const QRect r = requestedRect & selectionOutline.boundingRect().toAlignedRect();

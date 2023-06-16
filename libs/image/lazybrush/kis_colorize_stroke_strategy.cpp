@@ -244,7 +244,7 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
             Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
                 KoColor color =
                     !stroke.isTransparent ?
-                        stroke.color : KoColor(Qt::transparent, m_d->dst->colorSpace());
+                    stroke.color : KoColor::createTransparent(m_d->dst->colorSpace());
 
                 worker.addKeyStroke(stroke.dev, color);
             }

@@ -1743,7 +1743,7 @@ void KisImage::setDefaultProjectionColor(const KoColor &color)
 KoColor KisImage::defaultProjectionColor() const
 {
     KIS_ASSERT_RECOVER(m_d->rootLayer) {
-        return KoColor(Qt::transparent, m_d->colorSpace);
+        return KoColor::createTransparent(m_d->colorSpace);
     }
 
     return m_d->rootLayer->defaultProjectionColor();
@@ -1753,7 +1753,7 @@ void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
     emit sigInternalStopIsolatedModeRequested();
 
-    KoColor defaultProjectionColor(Qt::transparent, m_d->colorSpace);
+    KoColor defaultProjectionColor = KoColor::createTransparent(m_d->colorSpace);
 
     if (m_d->rootLayer) {
         m_d->rootLayer->setGraphListener(0);

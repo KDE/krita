@@ -272,6 +272,14 @@ public:
 
 //================= Conversion functions ==================================//
 
+    /**
+     * Fills the provided buffer with fully transparent color in this
+     * color space.
+     *
+     * Not all color spaces support conversion from QColor (e.g. InputClass
+     * spaces), so for them we need to generate this color separately.
+     */
+    virtual void transparentColor(quint8 *dst, quint32 nPixels) const;
 
     /**
      * The fromQColor methods take a given color defined as an RGB QColor

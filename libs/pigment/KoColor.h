@@ -295,6 +295,14 @@ public:
      */
     void clearMetadata();
 
+    /**
+     * Not all color spaces support creation of a color from QColor,
+     * so we should create the default backdrop color explicitly.
+     *
+     * @see KoColorSpace::transparentColor
+     */
+    static KoColor createTransparent(const KoColorSpace *cs);
+
 #ifndef NODEBUG
     /// use qDebug calls to print internal info
     void dump() const;

@@ -8,18 +8,22 @@
 #ifndef DLG_COLORSPACECONVERSION
 #define DLG_COLORSPACECONVERSION
 
+
 #include <QButtonGroup>
 
 #include <KoDialog.h>
 
 #include <KoID.h>
+#include <KoColorConversionTransformation.h>
 #include "kis_types.h"
+
+#include "kritaui_export.h"
 
 #include "ui_wdgconvertcolorspace.h"
 
 class KoColorSpace;
 
-class WdgConvertColorSpace : public QWidget, public Ui::WdgConvertColorSpace
+class KRITAUI_EXPORT WdgConvertColorSpace : public QWidget, public Ui::WdgConvertColorSpace
 {
     Q_OBJECT
 
@@ -32,7 +36,7 @@ public:
 /**
  * XXX
  */
-class DlgColorSpaceConversion: public KoDialog
+class KRITAUI_EXPORT DlgColorSpaceConversion : public KoDialog
 {
 
     Q_OBJECT
@@ -43,6 +47,10 @@ public:
     ~DlgColorSpaceConversion() override;
 
     void setInitialColorSpace(const KoColorSpace *cs, KisImageSP entireImage);
+
+    const KoColorSpace *colorSpace() const;
+    KoColorConversionTransformation::Intent conversionIntent() const;
+    KoColorConversionTransformation::ConversionFlags conversionFlags() const;
 
     WdgConvertColorSpace * m_page;
 

@@ -580,7 +580,7 @@ bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QStr
 {
     {
         const int pixelSize = device->colorSpace()->pixelSize();
-        KoColor color(Qt::transparent, device->colorSpace());
+        KoColor color = KoColor::createTransparent(device->colorSpace());
 
         if (m_store->open(location + ".defaultpixel")) {
             if (m_store->size() == pixelSize) {
@@ -725,7 +725,7 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
     // by default the selection is expected to be fully transparent
     {
         KisPixelSelectionSP pixelSelection = dstSelection->pixelSelection();
-        KoColor transparent(Qt::transparent, pixelSelection->colorSpace());
+        KoColor transparent = KoColor::createTransparent(pixelSelection->colorSpace());
         pixelSelection->setDefaultPixel(transparent);
     }
 

@@ -266,6 +266,16 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 
 void KisShapeLayerCanvas::slotStartAsyncRepaint()
 {
+    /**
+     * Don't try to start a regeneration stroke while image
+     * is locked. It may happen on loading, when all necessary
+     * conversions are not yet finished.
+     */
+    if (m_parentLayer->image()->locked()) {
+        m_asyncUpdateSignalCompressor.start();
+        return;
+    }
+
     if (!m_parentLayer->image()) return;
 
     QRect repaintRect;

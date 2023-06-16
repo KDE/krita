@@ -391,6 +391,12 @@ void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
     }
 }
 
+void KoColorSpace::transparentColor(quint8 *dst, quint32 nPixels) const
+{
+    memset(dst, 0, pixelSize() * nPixels);
+    setOpacity(dst, OPACITY_TRANSPARENT_U8, nPixels);
+}
+
 const KoColorConversionTransformation* KoColorSpace::toLabA16Converter() const
 {
     if (!d->transfoToLABA16) {

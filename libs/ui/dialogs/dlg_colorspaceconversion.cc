@@ -67,6 +67,9 @@ void DlgColorSpaceConversion::setInitialColorSpace(const KoColorSpace *cs, KisIm
     if (!cs) {
         return;
     }
+
+    ENTER_FUNCTION() << ppVar(cs->profile()->getEstimatedTRC()[0]==1.0);
+
     if (cs->profile()->getEstimatedTRC()[0]==1.0) {
     //this tries to automatically determine whether optimizations ought to be checked or not.
     //if the space you're converting from is linear TRC, uncheck.
@@ -77,6 +80,26 @@ void DlgColorSpaceConversion::setInitialColorSpace(const KoColorSpace *cs, KisIm
     m_page->colorSpaceSelector->setCurrentColorSpace(cs);
 
     m_image = entireImage;
+}
+
+const KoColorSpace *DlgColorSpaceConversion::colorSpace() const
+{
+    return m_page->colorSpaceSelector->currentColorSpace();
+}
+
+KoColorConversionTransformation::Intent DlgColorSpaceConversion::conversionIntent() const
+{
+    return static_cast<KoColorConversionTransformation::Intent>(m_intentButtonGroup.checkedId());
+}
+
+KoColorConversionTransformation::ConversionFlags DlgColorSpaceConversion::conversionFlags() const
+{
+    KoColorConversionTransformation::ConversionFlags flags = KoColorConversionTransformation::HighQuality;
+
+    if (m_page->chkBlackpointCompensation->isChecked()) flags |= KoColorConversionTransformation::BlackpointCompensation;
+    if (!m_page->chkAllowLCMSOptimization->isChecked()) flags |= KoColorConversionTransformation::NoOptimization;
+
+    return flags;
 }
 
 void DlgColorSpaceConversion::selectionChanged(bool valid)

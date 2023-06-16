@@ -153,6 +153,7 @@ struct KRITAPSD_EXPORT psd_layer_photo_filter {
 };
 
 #include <kis_psd_layer_style.h>
+#include <KoColorProfile.h>
 
 struct KRITAPSD_EXPORT psd_layer_solid_color {
     KoColor fill_color;
@@ -163,6 +164,16 @@ struct KRITAPSD_EXPORT psd_layer_solid_color {
         fill_color = color;
         if (fill_color.colorSpace()->colorModelId() == cs->colorModelId()) {
             fill_color.setProfile(cs->profile());
+        }
+
+        /**
+         * PSD files may be saved with a stripped profile that is not suitable for
+         * displaying, so we should convert such colors into some "universal" color
+         * space, so that we could actually manage it
+         */
+        if (fill_color.profile() && !fill_color.profile()->isSuitableForDisplay()) {
+            fill_color.convertTo(KoColorSpaceRegistry::instance()->
+                                 colorSpace(LABAColorModelID.id(), Float32BitsColorDepthID.id(), 0));
         }
     }
     QDomDocument getFillLayerConfig() {

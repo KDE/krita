@@ -86,6 +86,16 @@ void KisGeneratorLayer::setFilterWithoutUpdate(KisFilterConfigurationSP filterCo
 void KisGeneratorLayer::slotDelayedStaticUpdate()
 {
     /**
+     * Don't try to start a regeneration stroke while image
+     * is locked. It may happen on loading, when all necessary
+     * conversions are not yet finished.
+     */
+    if (image()->locked()) {
+        m_d->updateSignalCompressor.start();
+        return;
+    }
+
+    /**
      * The mask might have been deleted from the layers stack in the
      * meanwhile. Just ignore the updates in the case.
      */

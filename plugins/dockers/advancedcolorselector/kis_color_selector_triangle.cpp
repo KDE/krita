@@ -152,7 +152,7 @@ KoColor KisColorSelectorTriangle::colorAt(float x, float y) const
     int horizontalLineEnd = horizontalLineStart+horizontalLineLength;
 
     if(x<horizontalLineStart || x>horizontalLineEnd || y>triangleHeight)
-        return KoColor(Qt::transparent, colorSpace());
+        return KoColor::createTransparent(colorSpace());
 
     qreal relativeX = x-horizontalLineStart;
 

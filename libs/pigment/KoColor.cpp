@@ -660,6 +660,17 @@ void KoColor::clearMetadata()
     m_metadata.clear();
 }
 
+KoColor KoColor::createTransparent(const KoColorSpace *cs)
+{
+    KoColor result;
+
+    result.m_colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(cs);
+    result.m_size = cs->pixelSize();
+    cs->transparentColor(result.m_data, 1);
+
+    return result;
+}
+
 QDebug operator<<(QDebug dbg, const KoColor &color)
 {
     dbg.nospace() << "KoColor (" << color.colorSpace()->id();

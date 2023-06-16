@@ -622,10 +622,10 @@ void KisEncloseAndFillPainter::Private::selectAllRegionsExceptFilledWithTranspar
     using namespace KisEncloseAndFillPainterDetail;
     const int softness = 100 - q->opacitySpread();
     if (softness == 0) {
-        HardSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor(QColor(Qt::transparent), referenceDevice->colorSpace()), q->fillThreshold());
+        HardSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor::createTransparent(referenceDevice->colorSpace()), q->fillThreshold());
         selectAllRegionsExceptFilledWithSpecificColorGeneric(resultMask, resultMaskRect, enclosingMask, enclosingMaskRect, referenceDevice, policy);
     } else {
-        SoftSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor(QColor(Qt::transparent), referenceDevice->colorSpace()), q->fillThreshold(), softness);
+        SoftSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor::createTransparent(referenceDevice->colorSpace()), q->fillThreshold(), softness);
         selectAllRegionsExceptFilledWithSpecificColorGeneric(resultMask, resultMaskRect, enclosingMask, enclosingMaskRect, referenceDevice, policy);
     }
 }
@@ -702,10 +702,10 @@ void KisEncloseAndFillPainter::Private::selectRegionsSurroundedByTransparent(Kis
     using namespace KisEncloseAndFillPainterDetail;
     const int softness = 100 - q->opacitySpread();
     if (softness == 0) {
-        HardSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor(QColor(Qt::transparent), referenceDevice->colorSpace()), q->fillThreshold());
+        HardSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor::createTransparent(referenceDevice->colorSpace()), q->fillThreshold());
         selectRegionsSurroundedBySpecificColorGeneric(resultMask, resultMaskRect, enclosingMask, enclosingMaskRect, referenceDevice, policy);
     } else {
-        SoftSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor(QColor(Qt::transparent), referenceDevice->colorSpace()), q->fillThreshold(), softness);
+        SoftSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor::createTransparent(referenceDevice->colorSpace()), q->fillThreshold(), softness);
         selectRegionsSurroundedBySpecificColorGeneric(resultMask, resultMaskRect, enclosingMask, enclosingMaskRect, referenceDevice, policy);
     }
 }

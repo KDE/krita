@@ -697,7 +697,7 @@ void KisScanlineFill::fillSelectionUntilColorOrTransparent(KisPixelSelectionSP p
 void KisScanlineFill::clearNonZeroComponent()
 {
     const int pixelSize = m_d->device->pixelSize();
-    KoColor srcColor(Qt::transparent, m_d->device->colorSpace());
+    KoColor srcColor = KoColor::createTransparent(m_d->device->colorSpace());
 
     using namespace KisColorSelectionPolicies;
     

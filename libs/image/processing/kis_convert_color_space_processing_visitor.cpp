@@ -16,6 +16,7 @@
 #include "lazybrush/kis_colorize_mask.h"
 
 #include "kis_filter_mask.h"
+#include "kis_generator_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
@@ -45,6 +46,14 @@ void KisConvertColorSpaceProcessingVisitor::visitExternalLayer(KisExternalLayer 
     KoUpdater *updater = helper.updater();
     undoAdapter->addCommand(layer->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags));
     updater->setProgress(100);
+}
+
+void KisConvertColorSpaceProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter)
+{
+    using namespace KisDoSomethingCommandOps;
+    undoAdapter->addCommand(new KisDoSomethingCommand<NotifyColorSpaceChangedOp, KisGeneratorLayer*>(layer, false));
+    KisSimpleProcessingVisitor::visit(layer, undoAdapter);
+    undoAdapter->addCommand(new KisDoSomethingCommand<NotifyColorSpaceChangedOp, KisGeneratorLayer*>(layer, true));
 }
 
 void KisConvertColorSpaceProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter)

@@ -1085,9 +1085,8 @@ void KisPaintDevice::init(const KoColorSpace *colorSpace,
         defaultBounds = m_d->transitionalDefaultBounds;
     }
 
-    QScopedArrayPointer<quint8> defaultPixel(new quint8[colorSpace->pixelSize()]);
-    colorSpace->fromQColor(Qt::transparent, defaultPixel.data());
-    m_d->init(colorSpace, defaultPixel.data());
+    KoColor color = KoColor::createTransparent(colorSpace);
+    m_d->init(colorSpace, color.data());
 
     Q_ASSERT(m_d->colorSpace());
 

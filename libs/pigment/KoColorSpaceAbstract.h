@@ -189,7 +189,7 @@ public:
                          dstColorSpace->profile()->name()   == profile()->name();
         }
 
-        if (scaleOnly && dynamic_cast<const KoColorSpaceAbstract*>(dstColorSpace)) {
+        if (scaleOnly) {
             typedef typename _CSTrait::channels_type channels_type;
 
             switch(dstColorSpace->channels()[0]->channelValueType())

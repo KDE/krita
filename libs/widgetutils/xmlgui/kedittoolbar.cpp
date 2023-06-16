@@ -46,6 +46,7 @@
 
 #include <kis_icon_utils.h>
 #include "kis_action_registry.h"
+#include <KisKineticScroller.h>
 
 static const char separatorstring[] = I18N_NOOP("--- separator ---");
 
@@ -1019,6 +1020,15 @@ void KisKEditToolBarWidgetPrivate::setupLayout()
     QObject::connect(m_inactiveList, SIGNAL(dropped(ToolBarListWidget*,int,ToolBarItem*,bool)),
                      m_widget,       SLOT(slotDropped(ToolBarListWidget*,int,ToolBarItem*,bool)));
 
+    {
+        QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(m_inactiveList);
+        if (scroller) {
+            QObject::connect(scroller, &QScroller::stateChanged, m_widget, [&](QScroller::State state) {
+                KisKineticScroller::updateCursor(m_widget, state);
+            });
+        }
+    }
+
     KListWidgetSearchLine *inactiveListSearchLine = new KListWidgetSearchLine(m_widget, m_inactiveList);
     inactiveListSearchLine->setPlaceholderText(i18nc("Filter as in showing only matching items", "Filter"));
 
@@ -1037,6 +1047,14 @@ void KisKEditToolBarWidgetPrivate::setupLayout()
                      m_widget,     SLOT(slotRemoveButton()));
     QObject::connect(m_activeList, SIGNAL(dropped(ToolBarListWidget*,int,ToolBarItem*,bool)),
                      m_widget,     SLOT(slotDropped(ToolBarListWidget*,int,ToolBarItem*,bool)));
+    {
+        QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(m_activeList);
+        if (scroller) {
+            QObject::connect(scroller, &QScroller::stateChanged, m_widget, [&](QScroller::State state) {
+                KisKineticScroller::updateCursor(m_widget, state);
+            });
+        }
+    }
 
     KListWidgetSearchLine *activeListSearchLine = new KListWidgetSearchLine(m_widget, m_activeList);
     activeListSearchLine->setPlaceholderText(i18n("Filter"));

@@ -102,7 +102,7 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
         layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
     }
 
-    if (layer->paintDevice()) {
+    if (layer->paintDevice() && layer->paintDevice()->colorSpace()->colorModelId() != AlphaColorModelID) {
         layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
     }
 

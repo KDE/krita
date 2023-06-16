@@ -29,6 +29,7 @@ import org.libsdl.app.SDLAudioManager;
 public class MainActivity extends QtActivity {
 
     private boolean haveLibsLoaded = false;
+    private boolean serviceStarted = false;
     private final String TAG = "MainActivity";
 
     @Override
@@ -60,10 +61,15 @@ public class MainActivity extends QtActivity {
     public void onStart() {
         super.onStart();
 
-        // Keep the service started so in an unfortunate case where we're not allowed to start a
-        // foreground service, we can try to continue without it.
-        Intent docSaverServiceIntent = new Intent(this, DocumentSaverService.class);
-        startService(docSaverServiceIntent);
+        // unlike onCreate where we did this before, this method is called several times throughout the
+        // lifecycle of our app, but we intend to run this method only once (and in "Foreground").
+        if (!serviceStarted) {
+            // Keep the service started so in an unfortunate case where we're not allowed to start a
+            // foreground service, we can try to continue without it.
+            Intent docSaverServiceIntent = new Intent(this, DocumentSaverService.class);
+            startService(docSaverServiceIntent);
+            serviceStarted = true;
+        }
     }
 
     @Override

@@ -33,6 +33,7 @@
 #include <KisStorageFilterProxyModel.h>
 #include <kis_config.h>
 #include <KisResourceLocator.h>
+#include <KisKineticScroller.h>
 
 #include <KisMainWindow.h>
 #include <KisPart.h>
@@ -161,6 +162,12 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
 
     m_ui->listView->setModel(m_proxyModel);
     m_ui->listView->setItemDelegate(new ItemDelegate(this, m_proxyModel));
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(m_ui->listView);
+    if (scroller) {
+        connect(scroller, &QScroller::stateChanged, this, [&](QScroller::State state) {
+            KisKineticScroller::updateCursor(this, state);
+        });
+    }
 
     QItemSelectionModel* selectionModel = m_ui->listView->selectionModel();
     connect(selectionModel, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);

@@ -29,6 +29,7 @@
 #include <QUrl>
 
 
+#include <KisKineticScroller.h>
 #include <KoFileDialog.h>
 #include <KoIcon.h>
 #include "KisTemplateTree.h"
@@ -110,6 +111,12 @@ KisOpenPane::KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const Q
 
     QStyledItemDelegate* delegate = new QStyledItemDelegate(d->m_sectionList);
     d->m_sectionList->setItemDelegate(delegate);
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(d->m_sectionList);
+    if (scroller) {
+        connect(scroller, &QScroller::stateChanged, this, [&](QScroller::State state) {
+            KisKineticScroller::updateCursor(this, state);
+        });
+    }
 
     connect(d->m_sectionList, SIGNAL(itemSelectionChanged()),
             this, SLOT(updateSelectedWidget()));

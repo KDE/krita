@@ -54,6 +54,11 @@ public class MainActivity extends QtActivity {
         new ConfigsManager().handleAssets(this);
 
         DonationHelper.getInstance();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         // Keep the service started so in an unfortunate case where we're not allowed to start a
         // foreground service, we can try to continue without it.

@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-11 00:45+0000\n"
-"PO-Revision-Date: 2023-06-11 15:14+0100\n"
+"PO-Revision-Date: 2023-06-15 21:48+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -54619,7 +54619,7 @@ msgstr ""
 msgid ""
 "The names of the characters that this comic revolves around. Comma-separated."
 msgstr ""
-"La nomoj de la karakteroj, kiujn ĉi tiu bildstrio rondiras. Komo apartigita."
+"La nomoj de la signoj, kiujn ĉi tiu bildstrio rondiras. Komo apartigita."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:294
 msgid ""
@@ -54677,7 +54677,7 @@ msgstr "Ĝenro:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:329
 msgid "Characters:"
-msgstr "Karakteroj:"
+msgstr "Signoj:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:330
 msgid "Format:"
@@ -58339,7 +58339,7 @@ msgstr "Ŝanĝi la atributojn de la nuntempe elektitaj signoj."
 #, kde-format
 msgctxt "action"
 msgid "Special Character..."
-msgstr "Speciala karaktero..."
+msgstr "Speciala signo..."
 
 #. i18n: context: toolTip @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:58

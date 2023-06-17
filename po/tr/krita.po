@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-06-13 13:48+0300\n"
+"PO-Revision-Date: 2023-06-16 12:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -20257,7 +20257,7 @@ msgstr ""
 "\n"
 "Bu, sisteminizi aşırı yüklediğiniz anlamına gelebilir.\n"
 "100 kareden daha büyük bir klip düzenlemek istiyorsanız Kdenlive (https://"
-"kdenlive.org) gibi gerçek bir video düzenleyici kullanmayı düşünün."
+"kdenlive.org) gibi gerçek bir video düzenleyicisi kullanmayı düşünün."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:241
 #, kde-format
@@ -20344,7 +20344,7 @@ msgstr ""
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
 msgstr ""
-"Bunun yerine bir <a href=\"https://kdenlive.org\">video düzenleyici</a> "
+"Bunun yerine bir <a href=\"https://kdenlive.org\">video düzenleyicisi</a> "
 "kullanın!"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:519

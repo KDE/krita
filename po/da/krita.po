@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-11 00:45+0000\n"
+"POT-Creation-Date: 2023-06-17 00:45+0000\n"
 "PO-Revision-Date: 2020-08-01 13:09+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -17429,7 +17429,7 @@ msgctxt "The category of filters that do not fit in a category. Noun."
 msgid "Other"
 msgstr "Andet"
 
-#: libs/image/generator/kis_generator_layer.cpp:192
+#: libs/image/generator/kis_generator_layer.cpp:202
 #, kde-format
 msgid "Generator"
 msgstr "Generator"
@@ -17583,7 +17583,7 @@ msgid "Selection Mask"
 msgstr "Markeringsmaske:"
 
 #: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2551
-#: plugins/impex/psd/psd_loader.cpp:189
+#: plugins/impex/psd/psd_loader.cpp:195
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -18408,7 +18408,7 @@ msgstr "Transformér"
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
-#: plugins/impex/psd/psd_loader.cpp:379
+#: plugins/impex/psd/psd_loader.cpp:385
 #: plugins/impex/tiff/kis_tiff_import.cc:562
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
@@ -24734,15 +24734,15 @@ msgstr ""
 "farvemætning ofres for at beholde opfattet farve. Hvidpunktet ændres hvilket "
 "resulterer i neutrale grå farver. Beregnet til billeder."
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioPerceptual)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#. i18n: ectx: property (text), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:183
 #: libs/ui/forms/wdgcolorsettings.ui:274
+#: libs/ui/forms/wdgconvertcolorspace.ui:45
 #: libs/ui/forms/wdgimageproperties.ui:298
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:45
 #, kde-format
 msgid "Perceptual"
 msgstr "Perceptuel"
@@ -24759,7 +24759,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:110
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:66
+#: libs/ui/forms/wdgconvertcolorspace.ui:66
 #, kde-format
 msgid "Relative colorimetric"
 msgstr "Relativ kolorimetri"
@@ -24776,15 +24776,15 @@ msgstr ""
 "Hvidpunktet ændres hvilket resulterer i neutrale grå farver. Beregnet til "
 "forretningsgrafik (laver farverige diagrammer, grafer, stordiasbilleder, ...)"
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:193
 #: libs/ui/forms/wdgcolorsettings.ui:284
+#: libs/ui/forms/wdgconvertcolorspace.ui:89
 #: libs/ui/forms/wdgimageproperties.ui:308
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:89
 #, fuzzy, kde-format
 #| msgid "Saturation"
 msgctxt "ICC profile rendering intent"
@@ -24807,7 +24807,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:130
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:110
+#: libs/ui/forms/wdgconvertcolorspace.ui:110
 #, kde-format
 msgid "Absolute colorimetric"
 msgstr "Absolut kolorimetri"
@@ -24905,7 +24905,7 @@ msgstr "Brug sortpunktskompensation"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgcolorsettings.ui:116
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:133
+#: libs/ui/forms/wdgconvertcolorspace.ui:133
 #, kde-format
 msgid ""
 "Allow Little CMS optimizations (uncheck when using linear light RGB or XYZ)"
@@ -25099,6 +25099,144 @@ msgstr "Profil"
 #, kde-format
 msgid "Profile Properties"
 msgstr "Profilegenskaber"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
+#: libs/ui/forms/wdgconvertcolorspace.ui:18
+#, kde-format
+msgid "Colorspace Conversion"
+msgstr "Farverumskonvertering"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpIntent)
+#: libs/ui/forms/wdgconvertcolorspace.ui:30
+#, kde-format
+msgid "&Rendering Intent"
+msgstr "&Renderingshensigt"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
+#: libs/ui/forms/wdgconvertcolorspace.ui:36
+#, kde-format
+msgid "For images"
+msgstr "For billeder"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
+#: libs/ui/forms/wdgconvertcolorspace.ui:42
+#, kde-format
+msgid ""
+"Hue hopefully maintained (but not required),\n"
+"lightness and saturation sacrificed to maintain\n"
+"the perceived color. White point changed to\n"
+"result in neutral grays. Intended for images."
+msgstr ""
+"Farvetone bevares forhåbentlig (men ikke\n"
+"nødvendigtvis), lyshed og farvemætning ofres for\n"
+"at beholde opfattet farve. Hvidpunktet ændres hvilket\n"
+"resulterer i neutrale grå farver. Beregnet til billeder."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:63
+#, fuzzy, kde-format
+#| msgid ""
+#| "Within and outside gamut; same as Absolute\n"
+#| "Colorimetric. White point changed to result in\n"
+#| "neutral grays.\n"
+#| "\n"
+#| "If adequate table is present in profile,\n"
+#| "then, it is used. Else reverts to perceptual\n"
+#| "intent."
+msgid ""
+"Within and outside gamut; same as Absolute\n"
+"Colorimetric. White point changed to result in\n"
+"neutral grays.\n"
+"If adequate table is present in profile,\n"
+"then, it is used. Else reverts to perceptual\n"
+"intent."
+msgstr ""
+"Samme som absolut farvetilstand indenfor og\n"
+"udenfor farveområdet. Hvidpunktet ændres\n"
+"hvilket resulterer i neutrale grå farver.\n"
+"\n"
+"Hvis tilstrækkelige tabeller indgår i profilen,\n"
+"bruges den, ellers gås tilbagegås til perceptuel\n"
+"hensigt."
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:76
+#, kde-format
+msgid "Best for graphs and charts"
+msgstr "Bedst til grafer og diagrammer"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:86
+#, fuzzy, kde-format
+#| msgid ""
+#| "Hue and saturation maintained with lightness\n"
+#| "sacrificed to maintain saturation. White point\n"
+#| "changed to result in neutral grays. Intended for\n"
+#| "business graphics (make it colorful charts,\n"
+#| "graphs, overheads, ...)\n"
+#| "\n"
+#| "If adequate table is present in profile,\n"
+#| "then, it is used. Else reverts to perceptual\n"
+#| "intent."
+msgid ""
+"Hue and saturation maintained with lightness\n"
+"sacrificed to maintain saturation. White point\n"
+"changed to result in neutral grays. Intended for\n"
+"business graphics (make it colorful charts,\n"
+"graphs, overheads, ...)\n"
+"If adequate table is present in profile,\n"
+"then, it is used. Else reverts to perceptual\n"
+"intent."
+msgstr ""
+"Farvetone og mætning bevares mens lyshed\n"
+"ofres for at beholde mætningen. Hvidpunktet\n"
+"ændres hvilket resulterer i neutrale grå farver.\n"
+"Beregnet til forretningsgrafik (laver farverige\n"
+"diagram, grafer, stordiasbilleder, ...)\n"
+"\n"
+"Hvis tilstrækkelige tabeller indgår i profilen,\n"
+"bruges den, ellers gås tilbage til perceptuel\n"
+"hensigt."
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:99
+#, fuzzy, kde-format
+#| msgid "Best for spot colours"
+msgid "Best for spot colors"
+msgstr "Bedst for punktfarver"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:107
+#, kde-format
+msgid ""
+"Within the destination device gamut; hue,\n"
+"lightness and saturation are maintained. Outside\n"
+"the gamut; hue and lightness are maintained,\n"
+"saturation is sacrificed. White point for source\n"
+"and destination; unchanged. Intended for spot\n"
+"colors (Pantone, TruMatch, logo colors, ...)"
+msgstr ""
+"Indenfor måleenhedens farveområde bevares\n"
+"farvetone, lyshed og farvemætning. Udenfor\n"
+"området bevares farvetone og lyshed, mens\n"
+"farvemætning ofres. Hvidpunktet for kilde og\n"
+"mål er uforandret. Beregnet til punktfarver\n"
+"(Pantone, TruMatch, logotypefarver, ... )"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:123
+#, kde-format
+msgid "Use Blackpoint &Compensation"
+msgstr "Brug sortpunkts&kompensation"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
+#: libs/ui/forms/wdgconvertcolorspace.ui:130
+#, kde-format
+msgid ""
+"Krita tries to automatically check or uncheck this based on the information "
+"it can get from the profile you are converting from and the profile you are "
+"converting to."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
@@ -31014,46 +31152,30 @@ msgstr "Ukendt fejl."
 msgid "Image is busy."
 msgstr "Billeder"
 
-#: libs/ui/KisImportExportFilter.cpp:151
+#: libs/ui/KisImportExportFilter.cpp:161
 #, kde-format
 msgid ""
 "%1 does not exist after writing. Try saving again under a different name, in "
 "another location."
 msgstr ""
 
-#: libs/ui/KisImportExportFilter.cpp:155
+#: libs/ui/KisImportExportFilter.cpp:165
 #, fuzzy, kde-format
 msgid "%1 is not readable"
 msgstr "<filename>%1</filename> er ikke læsbar"
 
-#: libs/ui/KisImportExportFilter.cpp:159
+#: libs/ui/KisImportExportFilter.cpp:169
 #, kde-format
 msgid ""
 "%1 is smaller than 10 bytes, it must be corrupt. Try saving again under a "
 "different name, in another location."
 msgstr ""
 
-#: libs/ui/KisImportExportFilter.cpp:174
+#: libs/ui/KisImportExportFilter.cpp:184
 #, kde-format
 msgid ""
 "%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try "
 "saving again under a different name, in another location."
-msgstr ""
-
-#: libs/ui/KisImportExportFilter.cpp:238
-#, kde-format
-msgctxt "image conversion warning"
-msgid ""
-"%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The "
-"image will be converted."
-msgstr ""
-
-#: libs/ui/KisImportExportFilter.cpp:243
-#, kde-format
-msgctxt "image conversion warning"
-msgid ""
-"%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The "
-"layers will be converted or skipped."
 msgstr ""
 
 #: libs/ui/KisImportExportFilter.cpp:248
@@ -31061,7 +31183,7 @@ msgstr ""
 msgctxt "image conversion warning"
 msgid ""
 "%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The "
-"image will not be saved."
+"image will be converted."
 msgstr ""
 
 #: libs/ui/KisImportExportFilter.cpp:253
@@ -31069,41 +31191,57 @@ msgstr ""
 msgctxt "image conversion warning"
 msgid ""
 "%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The "
+"layers will be converted or skipped."
+msgstr ""
+
+#: libs/ui/KisImportExportFilter.cpp:258
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The "
+"image will not be saved."
+msgstr ""
+
+#: libs/ui/KisImportExportFilter.cpp:263
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The "
 "layers will be skipped."
 msgstr ""
 
-#: libs/ui/KisImportExportFilter.cpp:271
+#: libs/ui/KisImportExportFilter.cpp:281
 #, kde-format
 msgid ""
 "Could not open the saved file %1. Please try to save again in a different "
 "location."
 msgstr ""
 
-#: libs/ui/KisImportExportFilter.cpp:276
+#: libs/ui/KisImportExportFilter.cpp:286
 #, kde-format
 msgid ""
 "File %1 is missing in %2 and is broken. Please try to save again in a "
 "different location."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:295
+#: libs/ui/KisImportExportManager.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Åbn lyd"
 
-#: libs/ui/KisImportExportManager.cpp:389
+#: libs/ui/KisImportExportManager.cpp:421
 #, fuzzy, kde-format
 #| msgid "Opening Document"
 msgid "Opening document..."
 msgstr "Åbner dokumentet %1"
 
-#: libs/ui/KisImportExportManager.cpp:457
+#: libs/ui/KisImportExportManager.cpp:489
 #, fuzzy, kde-format
 msgid "Saving document..."
 msgstr "Gem dokument"
 
-#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:583
 #, fuzzy, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
@@ -31111,7 +31249,7 @@ msgstr ""
 "Dette billede indeholder vektorer, klonede eller genererede lag.\n"
 "Disse lag vil blive gemt som raster-lag."
 
-#: libs/ui/KisImportExportManager.cpp:554
+#: libs/ui/KisImportExportManager.cpp:586
 #, fuzzy, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -31121,7 +31259,7 @@ msgstr ""
 "Dette billede indeholder vektorer, klonede eller genererede lag.\n"
 "Disse lag vil blive gemt som raster-lag."
 
-#: libs/ui/KisImportExportManager.cpp:557
+#: libs/ui/KisImportExportManager.cpp:589
 #, fuzzy, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
@@ -31129,7 +31267,7 @@ msgstr ""
 "Dette billede indeholder vektorer, klonede eller genererede lag.\n"
 "Disse lag vil blive gemt som raster-lag."
 
-#: libs/ui/KisImportExportManager.cpp:560
+#: libs/ui/KisImportExportManager.cpp:592
 #, fuzzy, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -31139,38 +31277,38 @@ msgstr ""
 "Dette billede indeholder vektorer, klonede eller genererede lag.\n"
 "Disse lag vil blive gemt som raster-lag."
 
-#: libs/ui/KisImportExportManager.cpp:565
+#: libs/ui/KisImportExportManager.cpp:597
 #, fuzzy, kde-format
 #| msgid "Cannot export images in %1.\n"
 msgid "Error: cannot save this image as a %1."
 msgstr "Kan ikke eksportere billeder til %1.\n"
 
-#: libs/ui/KisImportExportManager.cpp:566
-#: libs/ui/KisImportExportManager.cpp:609
+#: libs/ui/KisImportExportManager.cpp:598
+#: libs/ui/KisImportExportManager.cpp:641
 #, fuzzy, kde-format
 #| msgid "Dimensions"
 msgid "Reasons:"
 msgstr "Dimensioner"
 
-#: libs/ui/KisImportExportManager.cpp:574
+#: libs/ui/KisImportExportManager.cpp:606
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "MathML importfejl"
 
-#: libs/ui/KisImportExportManager.cpp:591
+#: libs/ui/KisImportExportManager.cpp:623
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:603
+#: libs/ui/KisImportExportManager.cpp:635
 #, fuzzy, kde-format
 #| msgid "Cannot export images in %1.\n"
 msgid "You will lose information when saving this image as a %1."
 msgstr "Kan ikke eksportere billeder til %1.\n"
 
-#: libs/ui/KisImportExportManager.cpp:606
+#: libs/ui/KisImportExportManager.cpp:638
 #, fuzzy, kde-format
 #| msgid "Ruler assistant"
 msgid "Reason:"
@@ -31179,7 +31317,7 @@ msgstr "Linealassistent"
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/KisImportExportManager.cpp:624
+#: libs/ui/KisImportExportManager.cpp:656
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
@@ -31187,17 +31325,24 @@ msgstr "Linealassistent"
 msgid "Options"
 msgstr "Indstillinger"
 
-#: libs/ui/KisImportExportManager.cpp:632
+#: libs/ui/KisImportExportManager.cpp:664
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Resize"
 msgid "Resize"
 msgstr "Ændr størrelse"
 
-#: libs/ui/KisImportExportManager.cpp:638
+#: libs/ui/KisImportExportManager.cpp:670
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr ""
+
+#: libs/ui/KisImportExportUtils.cpp:48
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Image Color Space"
+msgid "Convert image color space on import"
+msgstr "Konvertér billedets farverum"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 #, fuzzy
@@ -41851,149 +41996,11 @@ msgstr "Fra&vælg"
 msgid "Convert All Layers From %1"
 msgstr "Konvertér alle lag fra "
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:95
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:94
 #, fuzzy, kde-format
 #| msgid "Convert Current Layer From"
 msgid "Convert Current Layer From %1"
 msgstr "Konvertér det aktuelle lag fra"
-
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:18
-#, kde-format
-msgid "Colorspace Conversion"
-msgstr "Farverumskonvertering"
-
-#. i18n: ectx: property (title), widget (QGroupBox, grpIntent)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:30
-#, kde-format
-msgid "&Rendering Intent"
-msgstr "&Renderingshensigt"
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:36
-#, kde-format
-msgid "For images"
-msgstr "For billeder"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:42
-#, kde-format
-msgid ""
-"Hue hopefully maintained (but not required),\n"
-"lightness and saturation sacrificed to maintain\n"
-"the perceived color. White point changed to\n"
-"result in neutral grays. Intended for images."
-msgstr ""
-"Farvetone bevares forhåbentlig (men ikke\n"
-"nødvendigtvis), lyshed og farvemætning ofres for\n"
-"at beholde opfattet farve. Hvidpunktet ændres hvilket\n"
-"resulterer i neutrale grå farver. Beregnet til billeder."
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:63
-#, fuzzy, kde-format
-#| msgid ""
-#| "Within and outside gamut; same as Absolute\n"
-#| "Colorimetric. White point changed to result in\n"
-#| "neutral grays.\n"
-#| "\n"
-#| "If adequate table is present in profile,\n"
-#| "then, it is used. Else reverts to perceptual\n"
-#| "intent."
-msgid ""
-"Within and outside gamut; same as Absolute\n"
-"Colorimetric. White point changed to result in\n"
-"neutral grays.\n"
-"If adequate table is present in profile,\n"
-"then, it is used. Else reverts to perceptual\n"
-"intent."
-msgstr ""
-"Samme som absolut farvetilstand indenfor og\n"
-"udenfor farveområdet. Hvidpunktet ændres\n"
-"hvilket resulterer i neutrale grå farver.\n"
-"\n"
-"Hvis tilstrækkelige tabeller indgår i profilen,\n"
-"bruges den, ellers gås tilbagegås til perceptuel\n"
-"hensigt."
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:76
-#, kde-format
-msgid "Best for graphs and charts"
-msgstr "Bedst til grafer og diagrammer"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:86
-#, fuzzy, kde-format
-#| msgid ""
-#| "Hue and saturation maintained with lightness\n"
-#| "sacrificed to maintain saturation. White point\n"
-#| "changed to result in neutral grays. Intended for\n"
-#| "business graphics (make it colorful charts,\n"
-#| "graphs, overheads, ...)\n"
-#| "\n"
-#| "If adequate table is present in profile,\n"
-#| "then, it is used. Else reverts to perceptual\n"
-#| "intent."
-msgid ""
-"Hue and saturation maintained with lightness\n"
-"sacrificed to maintain saturation. White point\n"
-"changed to result in neutral grays. Intended for\n"
-"business graphics (make it colorful charts,\n"
-"graphs, overheads, ...)\n"
-"If adequate table is present in profile,\n"
-"then, it is used. Else reverts to perceptual\n"
-"intent."
-msgstr ""
-"Farvetone og mætning bevares mens lyshed\n"
-"ofres for at beholde mætningen. Hvidpunktet\n"
-"ændres hvilket resulterer i neutrale grå farver.\n"
-"Beregnet til forretningsgrafik (laver farverige\n"
-"diagram, grafer, stordiasbilleder, ...)\n"
-"\n"
-"Hvis tilstrækkelige tabeller indgår i profilen,\n"
-"bruges den, ellers gås tilbage til perceptuel\n"
-"hensigt."
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:99
-#, fuzzy, kde-format
-#| msgid "Best for spot colours"
-msgid "Best for spot colors"
-msgstr "Bedst for punktfarver"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:107
-#, kde-format
-msgid ""
-"Within the destination device gamut; hue,\n"
-"lightness and saturation are maintained. Outside\n"
-"the gamut; hue and lightness are maintained,\n"
-"saturation is sacrificed. White point for source\n"
-"and destination; unchanged. Intended for spot\n"
-"colors (Pantone, TruMatch, logo colors, ...)"
-msgstr ""
-"Indenfor måleenhedens farveområde bevares\n"
-"farvetone, lyshed og farvemætning. Udenfor\n"
-"området bevares farvetone og lyshed, mens\n"
-"farvemætning ofres. Hvidpunktet for kilde og\n"
-"mål er uforandret. Beregnet til punktfarver\n"
-"(Pantone, TruMatch, logotypefarver, ... )"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:123
-#, kde-format
-msgid "Use Blackpoint &Compensation"
-msgstr "Brug sortpunkts&kompensation"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:130
-#, kde-format
-msgid ""
-"Krita tries to automatically check or uncheck this based on the information "
-"it can get from the profile you are converting from and the profile you are "
-"converting to."
-msgstr ""
 
 #. i18n: context: text @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #: plugins/extensions/dbexplorer/dbexplorer.action:7
@@ -50010,7 +50017,7 @@ msgid ""
 "from the image."
 msgstr ""
 
-#: plugins/impex/psd/psd_loader.cpp:152
+#: plugins/impex/psd/psd_loader.cpp:158
 #, kde-format
 msgid "Duotone Colormode Block"
 msgstr "Blok med duotone-farvetilstand"

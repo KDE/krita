@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-11 00:45+0000\n"
-"PO-Revision-Date: 2023-06-13 13:48+0300\n"
+"POT-Creation-Date: 2023-06-17 00:45+0000\n"
+"PO-Revision-Date: 2023-06-16 12:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16859,7 +16859,7 @@ msgctxt "The category of filters that do not fit in a category. Noun."
 msgid "Other"
 msgstr "Diğer"
 
-#: libs/image/generator/kis_generator_layer.cpp:192
+#: libs/image/generator/kis_generator_layer.cpp:202
 #, kde-format
 msgid "Generator"
 msgstr "Oluşturucu"
@@ -17009,7 +17009,7 @@ msgid "Selection Mask"
 msgstr "Seçim Maskesi"
 
 #: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2551
-#: plugins/impex/psd/psd_loader.cpp:189
+#: plugins/impex/psd/psd_loader.cpp:195
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
@@ -17779,7 +17779,7 @@ msgstr "Dönüşüm Maskesi"
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
-#: plugins/impex/psd/psd_loader.cpp:379
+#: plugins/impex/psd/psd_loader.cpp:385
 #: plugins/impex/tiff/kis_tiff_import.cc:562
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
@@ -20511,7 +20511,7 @@ msgstr ""
 "\n"
 "Bu, sisteminizi aşırı yüklediğiniz anlamına gelebilir.\n"
 "100 kareden daha büyük bir klip düzenlemek istiyorsanız Kdenlive (https://"
-"kdenlive.org) gibi gerçek bir video düzenleyici kullanmayı düşünün."
+"kdenlive.org) gibi gerçek bir video düzenleyicisi kullanmayı düşünün."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:236
 #, kde-format
@@ -20598,7 +20598,7 @@ msgstr ""
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
 msgstr ""
-"Bunun yerine bir <a href=\"https://kdenlive.org\">video düzenleyici</a> "
+"Bunun yerine bir <a href=\"https://kdenlive.org\">video düzenleyicisi</a> "
 "kullanın!"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:499
@@ -23965,15 +23965,15 @@ msgstr ""
 "açıklık ve doygunluk feda edilir. Beyaz nokta, nötr grilerle sonuçlanacak "
 "şekilde değiştirildi. Görseller için tasarlanmıştır."
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioPerceptual)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#. i18n: ectx: property (text), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:183
 #: libs/ui/forms/wdgcolorsettings.ui:274
+#: libs/ui/forms/wdgconvertcolorspace.ui:45
 #: libs/ui/forms/wdgimageproperties.ui:298
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:45
 #, kde-format
 msgid "Perceptual"
 msgstr "Algısal"
@@ -23990,7 +23990,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:110
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:66
+#: libs/ui/forms/wdgconvertcolorspace.ui:66
 #, kde-format
 msgid "Relative colorimetric"
 msgstr "Göreli renkölçer"
@@ -24007,15 +24007,15 @@ msgstr ""
 "Beyaz nokta, nötr grilerle sonuçlanacak şekilde değiştirildi. İş grafikleri "
 "için tasarlanmıştır (renkli çizelgeler, grafikler, genel giderler, ... yapın)"
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:193
 #: libs/ui/forms/wdgcolorsettings.ui:284
+#: libs/ui/forms/wdgconvertcolorspace.ui:89
 #: libs/ui/forms/wdgimageproperties.ui:308
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:89
 #, kde-format
 msgctxt "ICC profile rendering intent"
 msgid "Saturation"
@@ -24037,7 +24037,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:130
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:110
+#: libs/ui/forms/wdgconvertcolorspace.ui:110
 #, kde-format
 msgid "Absolute colorimetric"
 msgstr "Mutlak renkölçer"
@@ -24131,7 +24131,7 @@ msgstr "Siyah Nokta Karşılaması Kullan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgcolorsettings.ui:116
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:133
+#: libs/ui/forms/wdgconvertcolorspace.ui:133
 #, kde-format
 msgid ""
 "Allow Little CMS optimizations (uncheck when using linear light RGB or XYZ)"
@@ -24320,6 +24320,125 @@ msgstr "Profil"
 #, kde-format
 msgid "Profile Properties"
 msgstr "Profil Özellikleri"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
+#: libs/ui/forms/wdgconvertcolorspace.ui:18
+#, kde-format
+msgid "Colorspace Conversion"
+msgstr "Renk Uzayı Dönüştürme"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpIntent)
+#: libs/ui/forms/wdgconvertcolorspace.ui:30
+#, kde-format
+msgid "&Rendering Intent"
+msgstr "&Sunum Amacı"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
+#: libs/ui/forms/wdgconvertcolorspace.ui:36
+#, kde-format
+msgid "For images"
+msgstr "Görseller için"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
+#: libs/ui/forms/wdgconvertcolorspace.ui:42
+#, kde-format
+msgid ""
+"Hue hopefully maintained (but not required),\n"
+"lightness and saturation sacrificed to maintain\n"
+"the perceived color. White point changed to\n"
+"result in neutral grays. Intended for images."
+msgstr ""
+"Renk tonu korunur (gerekli değil),\n"
+"Açıklık ve doygunluk algılanan rengin korunması için\n"
+"feda edilir. Beyaz nokta, nötr grilerde sonuca değiştirilir.\n"
+"Görseller içindir."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:63
+#, kde-format
+msgid ""
+"Within and outside gamut; same as Absolute\n"
+"Colorimetric. White point changed to result in\n"
+"neutral grays.\n"
+"If adequate table is present in profile,\n"
+"then, it is used. Else reverts to perceptual\n"
+"intent."
+msgstr ""
+"Gam içinde ve dışında; Mutlak\n"
+"Renkölçer ile aynı. Beyaz nokta, nötr griye\n"
+"dönüşecek şekilde değişti.\n"
+"Eğer yeterli tablo profilde gösterilirse\n"
+"bu kullanılır. Diğer türlü algısal amaca\n"
+"dönüştürülür."
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:76
+#, kde-format
+msgid "Best for graphs and charts"
+msgstr "Grafikler ve çizelgeler için en iyisi"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:86
+#, kde-format
+msgid ""
+"Hue and saturation maintained with lightness\n"
+"sacrificed to maintain saturation. White point\n"
+"changed to result in neutral grays. Intended for\n"
+"business graphics (make it colorful charts,\n"
+"graphs, overheads, ...)\n"
+"If adequate table is present in profile,\n"
+"then, it is used. Else reverts to perceptual\n"
+"intent."
+msgstr ""
+"Doygunluğu korumak için açıklıktan feda\n"
+"edilen ton ve doygunluk korunur. Beyaz nokta,\n"
+"nötr grilerle sonuçlanacak biçimde değiştirildi.\n"
+"İş grafikleri için tasarlanmıştır (renkli\n"
+"çizelgeler, grafikler, genel giderler, ...).\n"
+"Profilde yeterli tablo varsa kullanılır.\n"
+"Diğer türlü, algısal amacına geri\n"
+"döner."
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:99
+#, kde-format
+msgid "Best for spot colors"
+msgstr "Spot renkler için en iyisi"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:107
+#, kde-format
+msgid ""
+"Within the destination device gamut; hue,\n"
+"lightness and saturation are maintained. Outside\n"
+"the gamut; hue and lightness are maintained,\n"
+"saturation is sacrificed. White point for source\n"
+"and destination; unchanged. Intended for spot\n"
+"colors (Pantone, TruMatch, logo colors, ...)"
+msgstr ""
+"Hedef araç gamının içinde; renk tonu,\n"
+"açıklık ve doygunluk geliştirildi. Gamın dışında;\n"
+"renk tonu ve açıklık geliştirildi,\n"
+"doygunluktan feda edildi. Kaynak ve hedef için\n"
+"beyaz nokta; değişmedi. Nokta renklere\n"
+"yöneliktir (Pantone, TruMatch, simge renkleri, ...)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:123
+#, kde-format
+msgid "Use Blackpoint &Compensation"
+msgstr "Siyah Nokta &Karşılaması Kullan"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
+#: libs/ui/forms/wdgconvertcolorspace.ui:130
+#, kde-format
+msgid ""
+"Krita tries to automatically check or uncheck this based on the information "
+"it can get from the profile you are converting from and the profile you are "
+"converting to."
+msgstr ""
+"Krita bunu dönüştürdüğünüz profile ya da profileden alabildiği bilgiye "
+"dayanarak işaretler ya da bundan işareti kaldırır."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
@@ -30181,7 +30300,7 @@ msgstr "Bilinmeyen hata."
 msgid "Image is busy."
 msgstr "Görsel meşgul."
 
-#: libs/ui/KisImportExportFilter.cpp:151
+#: libs/ui/KisImportExportFilter.cpp:161
 #, kde-format
 msgid ""
 "%1 does not exist after writing. Try saving again under a different name, in "
@@ -30190,12 +30309,12 @@ msgstr ""
 "%1, yazma sonrası bulunamadı. Başka bir adla, başka bir konuma kaydetmeyi "
 "deneyin."
 
-#: libs/ui/KisImportExportFilter.cpp:155
+#: libs/ui/KisImportExportFilter.cpp:165
 #, kde-format
 msgid "%1 is not readable"
 msgstr "%1, okunabilir değil"
 
-#: libs/ui/KisImportExportFilter.cpp:159
+#: libs/ui/KisImportExportFilter.cpp:169
 #, kde-format
 msgid ""
 "%1 is smaller than 10 bytes, it must be corrupt. Try saving again under a "
@@ -30204,7 +30323,7 @@ msgstr ""
 "%1 dosyası, 10 bayttan daha küçük; bozulmuş olmalı. Başka bir konuma, başka "
 "bir adla kaydetmeyi deneyin."
 
-#: libs/ui/KisImportExportFilter.cpp:174
+#: libs/ui/KisImportExportFilter.cpp:184
 #, kde-format
 msgid ""
 "%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try "
@@ -30213,7 +30332,7 @@ msgstr ""
 "%1 dosyasının ilk 1000 baytında yalnızca sıfır bayt var; bozulmuş olmalı. "
 "Başka bir konuma, başka bir adla kaydetmeyi deneyin."
 
-#: libs/ui/KisImportExportFilter.cpp:238
+#: libs/ui/KisImportExportFilter.cpp:248
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30223,7 +30342,7 @@ msgstr ""
 "%1, görselleri <b>%2</b> renk modeli ve <b>%3</b> derinliği ile "
 "kaydedemiyor. Görsel dönüştürülecek."
 
-#: libs/ui/KisImportExportFilter.cpp:243
+#: libs/ui/KisImportExportFilter.cpp:253
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30233,7 +30352,7 @@ msgstr ""
 "%1, katmanları <b>%2</b> renk modeli ve <b>%3</b> derinliği ile "
 "kaydedemiyor. Katmanlar dönüştürülecek veya atlanacak."
 
-#: libs/ui/KisImportExportFilter.cpp:248
+#: libs/ui/KisImportExportFilter.cpp:258
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30243,7 +30362,7 @@ msgstr ""
 "%1, görselleri <b>%2</b> modeli ve <b>%3</b> derinliği ile kaydedemiyor. "
 "Görsel kaydedilmeyecek."
 
-#: libs/ui/KisImportExportFilter.cpp:253
+#: libs/ui/KisImportExportFilter.cpp:263
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30253,7 +30372,7 @@ msgstr ""
 "%1, katmanları <b>%2</b> renk modeli ve <b>%3</b> derinliği ile "
 "kaydedemiyor. Katmanlar atlanacak."
 
-#: libs/ui/KisImportExportFilter.cpp:271
+#: libs/ui/KisImportExportFilter.cpp:281
 #, kde-format
 msgid ""
 "Could not open the saved file %1. Please try to save again in a different "
@@ -30262,7 +30381,7 @@ msgstr ""
 "Kaydedilen %1 dosyası açılamadı. Lütfen başka bir konuma yeniden kaydetmeyi "
 "deneyin."
 
-#: libs/ui/KisImportExportFilter.cpp:276
+#: libs/ui/KisImportExportFilter.cpp:286
 #, kde-format
 msgid ""
 "File %1 is missing in %2 and is broken. Please try to save again in a "
@@ -30271,29 +30390,29 @@ msgstr ""
 "%1 dosyası %2 içinde kayıp ve bozulmuş. Lütfen başka bir konuma yeniden "
 "kaydetmeyi deneyin."
 
-#: libs/ui/KisImportExportManager.cpp:295
+#: libs/ui/KisImportExportManager.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Sesi Aç"
 
-#: libs/ui/KisImportExportManager.cpp:389
+#: libs/ui/KisImportExportManager.cpp:421
 #, kde-format
 msgid "Opening document..."
 msgstr "Belge açılıyor..."
 
-#: libs/ui/KisImportExportManager.cpp:457
+#: libs/ui/KisImportExportManager.cpp:489
 #, kde-format
 msgid "Saving document..."
 msgstr "Belge kaydediliyor..."
 
-#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:583
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr "Görsel, <b>yardımcılar</b> içeriyor. Yardımcılar kaydedilmeyecek."
 
-#: libs/ui/KisImportExportManager.cpp:554
+#: libs/ui/KisImportExportManager.cpp:586
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30302,13 +30421,13 @@ msgid ""
 msgstr ""
 "Görsel, <b>başvuru görseller</b> içeriyor. Başvuru görseller kaydedilmeyecek."
 
-#: libs/ui/KisImportExportManager.cpp:557
+#: libs/ui/KisImportExportManager.cpp:589
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "Görsel, <b>kılavuzlar</b> içeriyor. Kılavuzlar kaydedilmeyecek."
 
-#: libs/ui/KisImportExportManager.cpp:560
+#: libs/ui/KisImportExportManager.cpp:592
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30318,36 +30437,36 @@ msgstr ""
 "Görsel, bir <b>özel ızgara yapılandırması</b> içeriyor. Yapılandırma "
 "kaydedilmeyecek."
 
-#: libs/ui/KisImportExportManager.cpp:565
+#: libs/ui/KisImportExportManager.cpp:597
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "Hata: Bu görsel, %1 olarak kaydedilemiyor."
 
-#: libs/ui/KisImportExportManager.cpp:566
-#: libs/ui/KisImportExportManager.cpp:609
+#: libs/ui/KisImportExportManager.cpp:598
+#: libs/ui/KisImportExportManager.cpp:641
 #, kde-format
 msgid "Reasons:"
 msgstr "Gerekçeler:"
 
-#: libs/ui/KisImportExportManager.cpp:574
+#: libs/ui/KisImportExportManager.cpp:606
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita: Dışa Aktarma Hatası"
 
-#: libs/ui/KisImportExportManager.cpp:591
+#: libs/ui/KisImportExportManager.cpp:623
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 "Uyarı: %1 olarak kaydetmek, görselinizden bilgi kaybına neden olacak.    "
 
-#: libs/ui/KisImportExportManager.cpp:603
+#: libs/ui/KisImportExportManager.cpp:635
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr "Bu görseli, %1 olarak kaydederken bilgi kaybedeceksiniz."
 
-#: libs/ui/KisImportExportManager.cpp:606
+#: libs/ui/KisImportExportManager.cpp:638
 #, kde-format
 msgid "Reason:"
 msgstr "Gerekçe:"
@@ -30355,7 +30474,7 @@ msgstr "Gerekçe:"
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/KisImportExportManager.cpp:624
+#: libs/ui/KisImportExportManager.cpp:656
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
@@ -30363,15 +30482,22 @@ msgstr "Gerekçe:"
 msgid "Options"
 msgstr "Seçenekler"
 
-#: libs/ui/KisImportExportManager.cpp:632
+#: libs/ui/KisImportExportManager.cpp:664
 #, kde-format
 msgid "Resize"
 msgstr "Yeniden Boyutlandır"
 
-#: libs/ui/KisImportExportManager.cpp:638
+#: libs/ui/KisImportExportManager.cpp:670
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Ayrıca, görselinizi Krita dosyası olarak kaydedin."
+
+#: libs/ui/KisImportExportUtils.cpp:48
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Image Color Space"
+msgid "Convert image color space on import"
+msgstr "Görsel Renk Uzayını Dönüştür"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 msgctxt "(qtundo-format)"
@@ -40926,129 +41052,10 @@ msgstr "&Seçimi Kaldır"
 msgid "Convert All Layers From %1"
 msgstr "Tüm Katmanları %1 Biçiminden Dönüştür"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:95
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:94
 #, kde-format
 msgid "Convert Current Layer From %1"
 msgstr "Geçerli Katmanı %1 Biçiminden Dönüştür"
-
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:18
-#, kde-format
-msgid "Colorspace Conversion"
-msgstr "Renk Uzayı Dönüştürme"
-
-#. i18n: ectx: property (title), widget (QGroupBox, grpIntent)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:30
-#, kde-format
-msgid "&Rendering Intent"
-msgstr "&Sunum Amacı"
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:36
-#, kde-format
-msgid "For images"
-msgstr "Görseller için"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:42
-#, kde-format
-msgid ""
-"Hue hopefully maintained (but not required),\n"
-"lightness and saturation sacrificed to maintain\n"
-"the perceived color. White point changed to\n"
-"result in neutral grays. Intended for images."
-msgstr ""
-"Renk tonu korunur (gerekli değil),\n"
-"Açıklık ve doygunluk algılanan rengin korunması için\n"
-"feda edilir. Beyaz nokta, nötr grilerde sonuca değiştirilir.\n"
-"Görseller içindir."
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:63
-#, kde-format
-msgid ""
-"Within and outside gamut; same as Absolute\n"
-"Colorimetric. White point changed to result in\n"
-"neutral grays.\n"
-"If adequate table is present in profile,\n"
-"then, it is used. Else reverts to perceptual\n"
-"intent."
-msgstr ""
-"Gam içinde ve dışında; Mutlak\n"
-"Renkölçer ile aynı. Beyaz nokta, nötr griye\n"
-"dönüşecek şekilde değişti.\n"
-"Eğer yeterli tablo profilde gösterilirse\n"
-"bu kullanılır. Diğer türlü algısal amaca\n"
-"dönüştürülür."
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:76
-#, kde-format
-msgid "Best for graphs and charts"
-msgstr "Grafikler ve çizelgeler için en iyisi"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:86
-#, kde-format
-msgid ""
-"Hue and saturation maintained with lightness\n"
-"sacrificed to maintain saturation. White point\n"
-"changed to result in neutral grays. Intended for\n"
-"business graphics (make it colorful charts,\n"
-"graphs, overheads, ...)\n"
-"If adequate table is present in profile,\n"
-"then, it is used. Else reverts to perceptual\n"
-"intent."
-msgstr ""
-"Doygunluğu korumak için açıklıktan feda\n"
-"edilen ton ve doygunluk korunur. Beyaz nokta,\n"
-"nötr grilerle sonuçlanacak biçimde değiştirildi.\n"
-"İş grafikleri için tasarlanmıştır (renkli\n"
-"çizelgeler, grafikler, genel giderler, ...).\n"
-"Profilde yeterli tablo varsa kullanılır.\n"
-"Diğer türlü, algısal amacına geri\n"
-"döner."
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:99
-#, kde-format
-msgid "Best for spot colors"
-msgstr "Spot renkler için en iyisi"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:107
-#, kde-format
-msgid ""
-"Within the destination device gamut; hue,\n"
-"lightness and saturation are maintained. Outside\n"
-"the gamut; hue and lightness are maintained,\n"
-"saturation is sacrificed. White point for source\n"
-"and destination; unchanged. Intended for spot\n"
-"colors (Pantone, TruMatch, logo colors, ...)"
-msgstr ""
-"Hedef araç gamının içinde; renk tonu,\n"
-"açıklık ve doygunluk geliştirildi. Gamın dışında;\n"
-"renk tonu ve açıklık geliştirildi,\n"
-"doygunluktan feda edildi. Kaynak ve hedef için\n"
-"beyaz nokta; değişmedi. Nokta renklere\n"
-"yöneliktir (Pantone, TruMatch, simge renkleri, ...)"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:123
-#, kde-format
-msgid "Use Blackpoint &Compensation"
-msgstr "Siyah Nokta &Karşılaması Kullan"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:130
-#, kde-format
-msgid ""
-"Krita tries to automatically check or uncheck this based on the information "
-"it can get from the profile you are converting from and the profile you are "
-"converting to."
-msgstr ""
-"Krita bunu dönüştürdüğünüz profile ya da profileden alabildiği bilgiye "
-"dayanarak işaretler ya da bundan işareti kaldırır."
 
 #. i18n: context: text @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #: plugins/extensions/dbexplorer/dbexplorer.action:7
@@ -48812,7 +48819,7 @@ msgstr ""
 "Görseliniz, görselden farklı renk modeline sahip bir veya birden fazla "
 "katman içeriyor."
 
-#: plugins/impex/psd/psd_loader.cpp:152
+#: plugins/impex/psd/psd_loader.cpp:158
 #, kde-format
 msgid "Duotone Colormode Block"
 msgstr "İki Tonlu Renk Kipi Bloku"

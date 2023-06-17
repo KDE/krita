@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-11 00:45+0000\n"
+"POT-Creation-Date: 2023-06-17 00:45+0000\n"
 "PO-Revision-Date: 2023-05-20 13:57+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -16824,7 +16824,7 @@ msgctxt "The category of filters that do not fit in a category. Noun."
 msgid "Other"
 msgstr "其他"
 
-#: libs/image/generator/kis_generator_layer.cpp:192
+#: libs/image/generator/kis_generator_layer.cpp:202
 #, kde-format
 msgid "Generator"
 msgstr "產生器"
@@ -16968,7 +16968,7 @@ msgid "Selection Mask"
 msgstr "選取區域遮罩"
 
 #: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2551
-#: plugins/impex/psd/psd_loader.cpp:189
+#: plugins/impex/psd/psd_loader.cpp:195
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
@@ -17730,7 +17730,7 @@ msgstr "變形遮罩"
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
-#: plugins/impex/psd/psd_loader.cpp:379
+#: plugins/impex/psd/psd_loader.cpp:385
 #: plugins/impex/tiff/kis_tiff_import.cc:562
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
@@ -23846,15 +23846,15 @@ msgstr ""
 "儘可能維持色相，為維持感知色彩而犧牲亮度和飽和度。白點將會匹配影像的中性灰"
 "色。適用於影像。"
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioPerceptual)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#. i18n: ectx: property (text), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:183
 #: libs/ui/forms/wdgcolorsettings.ui:274
+#: libs/ui/forms/wdgconvertcolorspace.ui:45
 #: libs/ui/forms/wdgimageproperties.ui:298
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:45
 #, kde-format
 msgid "Perceptual"
 msgstr "可感知模式"
@@ -23869,7 +23869,7 @@ msgstr "無論色域內外都與絕對比色模式一致。白點將會匹配影
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:110
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:66
+#: libs/ui/forms/wdgconvertcolorspace.ui:66
 #, kde-format
 msgid "Relative colorimetric"
 msgstr "相對比色模式"
@@ -23885,15 +23885,15 @@ msgstr ""
 "維持色相及飽和度，為維持飽和度而犧牲亮度。白點將會匹配影像的中性灰色。用於彩"
 "色表格、柱狀圖、報表等商業圖形。"
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:193
 #: libs/ui/forms/wdgcolorsettings.ui:284
+#: libs/ui/forms/wdgconvertcolorspace.ui:89
 #: libs/ui/forms/wdgimageproperties.ui:308
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:89
 #, kde-format
 msgctxt "ICC profile rendering intent"
 msgid "Saturation"
@@ -23913,7 +23913,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:130
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:110
+#: libs/ui/forms/wdgconvertcolorspace.ui:110
 #, kde-format
 msgid "Absolute colorimetric"
 msgstr "絕對比色模式"
@@ -24005,7 +24005,7 @@ msgstr "使用黑點補償"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgcolorsettings.ui:116
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:133
+#: libs/ui/forms/wdgconvertcolorspace.ui:133
 #, kde-format
 msgid ""
 "Allow Little CMS optimizations (uncheck when using linear light RGB or XYZ)"
@@ -24190,6 +24190,115 @@ msgstr "特性檔案"
 #, kde-format
 msgid "Profile Properties"
 msgstr "特性檔案屬性"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
+#: libs/ui/forms/wdgconvertcolorspace.ui:18
+#, kde-format
+msgid "Colorspace Conversion"
+msgstr "色彩空間轉換"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpIntent)
+#: libs/ui/forms/wdgconvertcolorspace.ui:30
+#, kde-format
+msgid "&Rendering Intent"
+msgstr "繪製意圖(&R)"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
+#: libs/ui/forms/wdgconvertcolorspace.ui:36
+#, kde-format
+msgid "For images"
+msgstr "用於影像"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
+#: libs/ui/forms/wdgconvertcolorspace.ui:42
+#, kde-format
+msgid ""
+"Hue hopefully maintained (but not required),\n"
+"lightness and saturation sacrificed to maintain\n"
+"the perceived color. White point changed to\n"
+"result in neutral grays. Intended for images."
+msgstr ""
+"儘可能維持色相，為維持感知色彩而犧牲亮度\n"
+"和飽和度。白點將會匹配影像的中性灰色。\n"
+"適用於影像。"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:63
+#, kde-format
+msgid ""
+"Within and outside gamut; same as Absolute\n"
+"Colorimetric. White point changed to result in\n"
+"neutral grays.\n"
+"If adequate table is present in profile,\n"
+"then, it is used. Else reverts to perceptual\n"
+"intent."
+msgstr ""
+"無論在色域內外的處理方式都與絕對比色模式\n"
+"保持一致。白點將轉成中性灰色。\n"
+"如果在特性檔案中檢測到適合的尋找表則使用\n"
+"此模式。否則將用回可感知模式。"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:76
+#, kde-format
+msgid "Best for graphs and charts"
+msgstr "最適合圖形和圖表"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:86
+#, kde-format
+msgid ""
+"Hue and saturation maintained with lightness\n"
+"sacrificed to maintain saturation. White point\n"
+"changed to result in neutral grays. Intended for\n"
+"business graphics (make it colorful charts,\n"
+"graphs, overheads, ...)\n"
+"If adequate table is present in profile,\n"
+"then, it is used. Else reverts to perceptual\n"
+"intent."
+msgstr ""
+"維持色相及飽和度，為維持飽和度而犧牲亮度。\n"
+"白點將會匹配影像的中性灰色。用於彩色表格、\n"
+"柱狀圖、報表等商業圖形。\n"
+"如果在特性檔案中檢測到適合的尋找表則使用\n"
+"此模式。否則將用回可感知模式。"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:99
+#, kde-format
+msgid "Best for spot colors"
+msgstr "最適合專色"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:107
+#, kde-format
+msgid ""
+"Within the destination device gamut; hue,\n"
+"lightness and saturation are maintained. Outside\n"
+"the gamut; hue and lightness are maintained,\n"
+"saturation is sacrificed. White point for source\n"
+"and destination; unchanged. Intended for spot\n"
+"colors (Pantone, TruMatch, logo colors, ...)"
+msgstr ""
+"在目標裝置色域內維持色相、亮度和對比度。\n"
+"在該色域外為維持色相和亮度而犧牲對比度。\n"
+"不變動來源和目標的白點。適用於專色，如\n"
+"潘通、TruMatch、標誌色等。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:123
+#, kde-format
+msgid "Use Blackpoint &Compensation"
+msgstr "使用黑點補償(&C)"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
+#: libs/ui/forms/wdgconvertcolorspace.ui:130
+#, kde-format
+msgid ""
+"Krita tries to automatically check or uncheck this based on the information "
+"it can get from the profile you are converting from and the profile you are "
+"converting to."
+msgstr "Krita 會根據來源和目標的特性檔案的資訊來自動勾選或取消此選項。"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
@@ -29980,19 +30089,19 @@ msgstr "未知錯誤。"
 msgid "Image is busy."
 msgstr "影像正被佔用。"
 
-#: libs/ui/KisImportExportFilter.cpp:151
+#: libs/ui/KisImportExportFilter.cpp:161
 #, kde-format
 msgid ""
 "%1 does not exist after writing. Try saving again under a different name, in "
 "another location."
 msgstr "%1 寫入後仍不存在。試試看在其他位置使用不同名稱重新儲存。"
 
-#: libs/ui/KisImportExportFilter.cpp:155
+#: libs/ui/KisImportExportFilter.cpp:165
 #, kde-format
 msgid "%1 is not readable"
 msgstr "%1 不可寫入"
 
-#: libs/ui/KisImportExportFilter.cpp:159
+#: libs/ui/KisImportExportFilter.cpp:169
 #, kde-format
 msgid ""
 "%1 is smaller than 10 bytes, it must be corrupt. Try saving again under a "
@@ -30000,7 +30109,7 @@ msgid ""
 msgstr ""
 "%1 小於 10 位元組，可能是損壞的。試試看在其他位置使用不同名稱重新儲存。"
 
-#: libs/ui/KisImportExportFilter.cpp:174
+#: libs/ui/KisImportExportFilter.cpp:184
 #, kde-format
 msgid ""
 "%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try "
@@ -30009,7 +30118,7 @@ msgstr ""
 "%1 的開頭 1000 位元組只有 0 位元組，可能是損壞的。試試看在其他位置使用不同名"
 "稱重新儲存。"
 
-#: libs/ui/KisImportExportFilter.cpp:238
+#: libs/ui/KisImportExportFilter.cpp:248
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30019,7 +30128,7 @@ msgstr ""
 "%1 無法使用色彩模型 <b>%2 </b> 和色彩深度 <b>%3 </b> 儲存影像。影像的色彩空間"
 "將被轉換。"
 
-#: libs/ui/KisImportExportFilter.cpp:243
+#: libs/ui/KisImportExportFilter.cpp:253
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30029,7 +30138,7 @@ msgstr ""
 "%1 無法使用色彩模型 <b>%2 </b> 和色彩深度 <b>%3 </b> 儲存圖層。這些圖層的色彩"
 "空間將被轉換或忽略。"
 
-#: libs/ui/KisImportExportFilter.cpp:248
+#: libs/ui/KisImportExportFilter.cpp:258
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30039,7 +30148,7 @@ msgstr ""
 "%1 無法使用色彩模型 <b>%2 </b> 和色彩深度 <b>%3 </b> 儲存影像。影像將不會被儲"
 "存。"
 
-#: libs/ui/KisImportExportFilter.cpp:253
+#: libs/ui/KisImportExportFilter.cpp:263
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30049,43 +30158,43 @@ msgstr ""
 "%1 無法使用色彩模型 <b>%2 </b> 和色彩深度 <b>%3 </b> 儲存圖層。這些圖層將被忽"
 "略。"
 
-#: libs/ui/KisImportExportFilter.cpp:271
+#: libs/ui/KisImportExportFilter.cpp:281
 #, kde-format
 msgid ""
 "Could not open the saved file %1. Please try to save again in a different "
 "location."
 msgstr "無法開啟儲存的 %1 檔案。請試試在其他位置重新儲存。"
 
-#: libs/ui/KisImportExportFilter.cpp:276
+#: libs/ui/KisImportExportFilter.cpp:286
 #, kde-format
 msgid ""
 "File %1 is missing in %2 and is broken. Please try to save again in a "
 "different location."
 msgstr "%1 不存在於 %2 且損壞。請試試在其他位置重新儲存。"
 
-#: libs/ui/KisImportExportManager.cpp:295
+#: libs/ui/KisImportExportManager.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "開啟音訊"
 
-#: libs/ui/KisImportExportManager.cpp:389
+#: libs/ui/KisImportExportManager.cpp:421
 #, kde-format
 msgid "Opening document..."
 msgstr "正在開啟檔案…"
 
-#: libs/ui/KisImportExportManager.cpp:457
+#: libs/ui/KisImportExportManager.cpp:489
 #, kde-format
 msgid "Saving document..."
 msgstr "正在儲存檔案…"
 
-#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:583
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr "此影像包含<b>輔助尺</b>。輔助尺將不被儲存。"
 
-#: libs/ui/KisImportExportManager.cpp:554
+#: libs/ui/KisImportExportManager.cpp:586
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30093,13 +30202,13 @@ msgid ""
 "saved."
 msgstr "此影像包含<b>參考圖</b>。參考圖將不被儲存。"
 
-#: libs/ui/KisImportExportManager.cpp:557
+#: libs/ui/KisImportExportManager.cpp:589
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "此影像包含<b> 參考線 </b>。參考線將不被儲存。"
 
-#: libs/ui/KisImportExportManager.cpp:560
+#: libs/ui/KisImportExportManager.cpp:592
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30107,35 +30216,35 @@ msgid ""
 "will not be saved."
 msgstr "此影像包含<b>自訂格線設定</b>。自訂格線設定將不被儲存。"
 
-#: libs/ui/KisImportExportManager.cpp:565
+#: libs/ui/KisImportExportManager.cpp:597
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "錯誤：無法將此影像儲存為 %1。"
 
-#: libs/ui/KisImportExportManager.cpp:566
-#: libs/ui/KisImportExportManager.cpp:609
+#: libs/ui/KisImportExportManager.cpp:598
+#: libs/ui/KisImportExportManager.cpp:641
 #, kde-format
 msgid "Reasons:"
 msgstr "原因："
 
-#: libs/ui/KisImportExportManager.cpp:574
+#: libs/ui/KisImportExportManager.cpp:606
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita：匯出錯誤"
 
-#: libs/ui/KisImportExportManager.cpp:591
+#: libs/ui/KisImportExportManager.cpp:623
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr "警告：儲存為 %1 將遺失影像中的資訊。    "
 
-#: libs/ui/KisImportExportManager.cpp:603
+#: libs/ui/KisImportExportManager.cpp:635
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr "將此影像儲存為 %1 時將遺失資訊。"
 
-#: libs/ui/KisImportExportManager.cpp:606
+#: libs/ui/KisImportExportManager.cpp:638
 #, kde-format
 msgid "Reason:"
 msgstr "原因："
@@ -30143,7 +30252,7 @@ msgstr "原因："
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/KisImportExportManager.cpp:624
+#: libs/ui/KisImportExportManager.cpp:656
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
@@ -30151,15 +30260,22 @@ msgstr "原因："
 msgid "Options"
 msgstr "選項"
 
-#: libs/ui/KisImportExportManager.cpp:632
+#: libs/ui/KisImportExportManager.cpp:664
 #, kde-format
 msgid "Resize"
 msgstr "調整大小"
 
-#: libs/ui/KisImportExportManager.cpp:638
+#: libs/ui/KisImportExportManager.cpp:670
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "請將影像另存為 Krita 格式檔案。"
+
+#: libs/ui/KisImportExportUtils.cpp:48
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Image Color Space"
+msgid "Convert image color space on import"
+msgstr "轉換影像色彩空間"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 msgctxt "(qtundo-format)"
@@ -40518,119 +40634,10 @@ msgstr "取消選取(&D)"
 msgid "Convert All Layers From %1"
 msgstr "轉換所有圖層空間，目前空間： %1"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:95
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:94
 #, kde-format
 msgid "Convert Current Layer From %1"
 msgstr "轉換目前圖層空間，目前空間： %1"
-
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:18
-#, kde-format
-msgid "Colorspace Conversion"
-msgstr "色彩空間轉換"
-
-#. i18n: ectx: property (title), widget (QGroupBox, grpIntent)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:30
-#, kde-format
-msgid "&Rendering Intent"
-msgstr "繪製意圖(&R)"
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:36
-#, kde-format
-msgid "For images"
-msgstr "用於影像"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:42
-#, kde-format
-msgid ""
-"Hue hopefully maintained (but not required),\n"
-"lightness and saturation sacrificed to maintain\n"
-"the perceived color. White point changed to\n"
-"result in neutral grays. Intended for images."
-msgstr ""
-"儘可能維持色相，為維持感知色彩而犧牲亮度\n"
-"和飽和度。白點將會匹配影像的中性灰色。\n"
-"適用於影像。"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:63
-#, kde-format
-msgid ""
-"Within and outside gamut; same as Absolute\n"
-"Colorimetric. White point changed to result in\n"
-"neutral grays.\n"
-"If adequate table is present in profile,\n"
-"then, it is used. Else reverts to perceptual\n"
-"intent."
-msgstr ""
-"無論在色域內外的處理方式都與絕對比色模式\n"
-"保持一致。白點將轉成中性灰色。\n"
-"如果在特性檔案中檢測到適合的尋找表則使用\n"
-"此模式。否則將用回可感知模式。"
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:76
-#, kde-format
-msgid "Best for graphs and charts"
-msgstr "最適合圖形和圖表"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:86
-#, kde-format
-msgid ""
-"Hue and saturation maintained with lightness\n"
-"sacrificed to maintain saturation. White point\n"
-"changed to result in neutral grays. Intended for\n"
-"business graphics (make it colorful charts,\n"
-"graphs, overheads, ...)\n"
-"If adequate table is present in profile,\n"
-"then, it is used. Else reverts to perceptual\n"
-"intent."
-msgstr ""
-"維持色相及飽和度，為維持飽和度而犧牲亮度。\n"
-"白點將會匹配影像的中性灰色。用於彩色表格、\n"
-"柱狀圖、報表等商業圖形。\n"
-"如果在特性檔案中檢測到適合的尋找表則使用\n"
-"此模式。否則將用回可感知模式。"
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:99
-#, kde-format
-msgid "Best for spot colors"
-msgstr "最適合專色"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:107
-#, kde-format
-msgid ""
-"Within the destination device gamut; hue,\n"
-"lightness and saturation are maintained. Outside\n"
-"the gamut; hue and lightness are maintained,\n"
-"saturation is sacrificed. White point for source\n"
-"and destination; unchanged. Intended for spot\n"
-"colors (Pantone, TruMatch, logo colors, ...)"
-msgstr ""
-"在目標裝置色域內維持色相、亮度和對比度。\n"
-"在該色域外為維持色相和亮度而犧牲對比度。\n"
-"不變動來源和目標的白點。適用於專色，如\n"
-"潘通、TruMatch、標誌色等。"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:123
-#, kde-format
-msgid "Use Blackpoint &Compensation"
-msgstr "使用黑點補償(&C)"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:130
-#, kde-format
-msgid ""
-"Krita tries to automatically check or uncheck this based on the information "
-"it can get from the profile you are converting from and the profile you are "
-"converting to."
-msgstr "Krita 會根據來源和目標的特性檔案的資訊來自動勾選或取消此選項。"
 
 #. i18n: context: text @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #: plugins/extensions/dbexplorer/dbexplorer.action:7
@@ -48305,7 +48312,7 @@ msgid ""
 "from the image."
 msgstr "此影像包含一個或多個與影像本身色彩模型不同的圖層。"
 
-#: plugins/impex/psd/psd_loader.cpp:152
+#: plugins/impex/psd/psd_loader.cpp:158
 #, kde-format
 msgid "Duotone Colormode Block"
 msgstr "雙色調色彩模式資料塊"

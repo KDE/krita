@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-11 00:45+0000\n"
+"POT-Creation-Date: 2023-06-17 00:45+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -17313,7 +17313,7 @@ msgctxt "The category of filters that do not fit in a category. Noun."
 msgid "Other"
 msgstr "इतर"
 
-#: libs/image/generator/kis_generator_layer.cpp:192
+#: libs/image/generator/kis_generator_layer.cpp:202
 #, kde-format
 msgid "Generator"
 msgstr "निर्माता"
@@ -17456,7 +17456,7 @@ msgid "Selection Mask"
 msgstr "निवड नाही"
 
 #: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2551
-#: plugins/impex/psd/psd_loader.cpp:189
+#: plugins/impex/psd/psd_loader.cpp:195
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -18288,7 +18288,7 @@ msgstr "रूपांतरित करा"
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
-#: plugins/impex/psd/psd_loader.cpp:379
+#: plugins/impex/psd/psd_loader.cpp:385
 #: plugins/impex/tiff/kis_tiff_import.cc:562
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
@@ -24593,15 +24593,15 @@ msgstr ""
 "स्पष्टता राखून ठेवली आहे ( उण आवश्यक नाही), हलकेपणा व गडदपणा अपेक्षित रंग टिकवण्यासाठी "
 "बदलले जातात पांढरा बिंदू इंटेंटेड प्रतिमांसाठी निष्क्रिय राखाडीत बदलला जातो."
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioPerceptual)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#. i18n: ectx: property (text), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:183
 #: libs/ui/forms/wdgcolorsettings.ui:274
+#: libs/ui/forms/wdgconvertcolorspace.ui:45
 #: libs/ui/forms/wdgimageproperties.ui:298
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:45
 #, kde-format
 msgid "Perceptual"
 msgstr "आकलनीय"
@@ -24616,7 +24616,7 @@ msgstr "समूहात व बाहेर कलरीमेट्रिक
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:110
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:66
+#: libs/ui/forms/wdgconvertcolorspace.ui:66
 #, kde-format
 msgid "Relative colorimetric"
 msgstr "सापेक्ष रंगावलक्षी"
@@ -24633,15 +24633,15 @@ msgstr ""
 "बिंदू  निष्क्रिय राखाडीत बदलला आहे तो व्यापारी चित्रासाठी अपेक्षित आहे.(यामुळे रंगीत "
 "कोष्टके, आलेख, ओव्हरहेडस् ...बनवता येतील "
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:193
 #: libs/ui/forms/wdgcolorsettings.ui:284
+#: libs/ui/forms/wdgconvertcolorspace.ui:89
 #: libs/ui/forms/wdgimageproperties.ui:308
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:89
 #, fuzzy, kde-format
 #| msgid "Saturation"
 msgctxt "ICC profile rendering intent"
@@ -24663,7 +24663,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:130
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:110
+#: libs/ui/forms/wdgconvertcolorspace.ui:110
 #, kde-format
 msgid "Absolute colorimetric"
 msgstr "शुध्द कलरीमेट्रिक"
@@ -24759,7 +24759,7 @@ msgstr "कृष्णबिंदू बदल वापरा"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgcolorsettings.ui:116
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:133
+#: libs/ui/forms/wdgconvertcolorspace.ui:133
 #, kde-format
 msgid ""
 "Allow Little CMS optimizations (uncheck when using linear light RGB or XYZ)"
@@ -24951,6 +24951,138 @@ msgstr "रूपरेषा :"
 #, fuzzy, kde-format
 msgid "Profile Properties"
 msgstr "गाळणी स्तराचे गुणधर्म"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
+#: libs/ui/forms/wdgconvertcolorspace.ui:18
+#, kde-format
+msgid "Colorspace Conversion"
+msgstr "रंगाच्या जागेचा बदल"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpIntent)
+#: libs/ui/forms/wdgconvertcolorspace.ui:30
+#, kde-format
+msgid "&Rendering Intent"
+msgstr "रेंडरिंग इंटेंट (&R)"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
+#: libs/ui/forms/wdgconvertcolorspace.ui:36
+#, kde-format
+msgid "For images"
+msgstr "प्रतिमांसाठी"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
+#: libs/ui/forms/wdgconvertcolorspace.ui:42
+#, kde-format
+msgid ""
+"Hue hopefully maintained (but not required),\n"
+"lightness and saturation sacrificed to maintain\n"
+"the perceived color. White point changed to\n"
+"result in neutral grays. Intended for images."
+msgstr ""
+"रंगाची शुध्दता राखली आहे (पण आवश्यक नाही),\n"
+"अपेक्षित रंग राखण्यासाठी\n"
+" हलकेपणा व गडद  अशी तडजोड केली आहे.\n"
+"प्रतिमांसाठी साधा राखाडी रंग लक्षित आहे."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:63
+#, fuzzy, kde-format
+#| msgid ""
+#| "Within and outside gamut; same as Absolute\n"
+#| "Colorimetric. White point changed to result in\n"
+#| "neutral grays.\n"
+#| "\n"
+#| "If adequate table is present in profile,\n"
+#| "then, it is used. Else reverts to perceptual\n"
+#| "intent."
+msgid ""
+"Within and outside gamut; same as Absolute\n"
+"Colorimetric. White point changed to result in\n"
+"neutral grays.\n"
+"If adequate table is present in profile,\n"
+"then, it is used. Else reverts to perceptual\n"
+"intent."
+msgstr ""
+"रंगकक्षेच्या आत व बाहेर, शुध्द असल्यासारखाच \n"
+"कलरीमेट्रिक. साध्या राखाडी रंगातील परिणामामुळे पांढरा बिंदू बदलला आहे.\n"
+"\n"
+"जर योग्य कोष्टक तयार असेल तर ते वापरले आहे. अन्यथा परत आकलनीय कडे बदल\n"
+"अपेक्षित."
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:76
+#, kde-format
+msgid "Best for graphs and charts"
+msgstr "कोष्टके व आकृत्यांसाठी उत्तम"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:86
+#, fuzzy, kde-format
+#| msgid ""
+#| "Hue and saturation maintained with lightness\n"
+#| "sacrificed to maintain saturation. White point\n"
+#| "changed to result in neutral grays. Intended for\n"
+#| "business graphics (make it colorful charts,\n"
+#| "graphs, overheads, ...)\n"
+#| "\n"
+#| "If adequate table is present in profile,\n"
+#| "then, it is used. Else reverts to perceptual\n"
+#| "intent."
+msgid ""
+"Hue and saturation maintained with lightness\n"
+"sacrificed to maintain saturation. White point\n"
+"changed to result in neutral grays. Intended for\n"
+"business graphics (make it colorful charts,\n"
+"graphs, overheads, ...)\n"
+"If adequate table is present in profile,\n"
+"then, it is used. Else reverts to perceptual\n"
+"intent."
+msgstr ""
+"रंगाची शुध्दता हलकेपणासाठी राखली आहे),\n"
+"गडदपणासाठी  अशी तडजोड केली आहे.\n"
+"पांढरा बिंदू सामान्य राखाडी रंगासाठी बदलला आहे.व्यावसायिक चिरत्रांसाठी अपेक्षित\"(रंगीत "
+"कोष्टके, आलेख, ओव्हरहेडस् बनवा\n"
+"\"नंतर त्याचा वापर केला आहे.जर योग्य कोष्टक तयार असेल तर ते वापरले आहे. अन्यथा परत "
+"आकलनीय कडे बदल\n"
+"अपेक्षित"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:99
+#, fuzzy, kde-format
+#| msgid "Best for spot colours"
+msgid "Best for spot colors"
+msgstr "जागेवरील रंगासाठी उत्तम"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:107
+#, kde-format
+msgid ""
+"Within the destination device gamut; hue,\n"
+"lightness and saturation are maintained. Outside\n"
+"the gamut; hue and lightness are maintained,\n"
+"saturation is sacrificed. White point for source\n"
+"and destination; unchanged. Intended for spot\n"
+"colors (Pantone, TruMatch, logo colors, ...)"
+msgstr ""
+"नियोजित साधनाच्या कक्षेतशुध्दता, हलकेपणा व गडदपणा कायम राखला आहे. \n"
+"कक्षेबाहेर शुध्दता व हलकेपणा राखला आहे\n"
+"गडदपणाशी तडजोड केली आहे. स्रोत व नियोजित बाबतीत पांढरा बिंदू अविचल आहे. जागेसाठी "
+"अपेक्षित रंगांसाठी (पॅनटोन, ट्रूमॅच, लोगो कलर्स,...)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:123
+#, kde-format
+msgid "Use Blackpoint &Compensation"
+msgstr "काळा बिंदू कम्पेन्सेशन वापरा (&C)"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
+#: libs/ui/forms/wdgconvertcolorspace.ui:130
+#, kde-format
+msgid ""
+"Krita tries to automatically check or uncheck this based on the information "
+"it can get from the profile you are converting from and the profile you are "
+"converting to."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
@@ -30782,46 +30914,30 @@ msgstr "अपरिचीत"
 msgid "Image is busy."
 msgstr "प्रतिमा"
 
-#: libs/ui/KisImportExportFilter.cpp:151
+#: libs/ui/KisImportExportFilter.cpp:161
 #, kde-format
 msgid ""
 "%1 does not exist after writing. Try saving again under a different name, in "
 "another location."
 msgstr ""
 
-#: libs/ui/KisImportExportFilter.cpp:155
+#: libs/ui/KisImportExportFilter.cpp:165
 #, fuzzy, kde-format
 msgid "%1 is not readable"
 msgstr "समूह संपादनास अयोग्य."
 
-#: libs/ui/KisImportExportFilter.cpp:159
+#: libs/ui/KisImportExportFilter.cpp:169
 #, kde-format
 msgid ""
 "%1 is smaller than 10 bytes, it must be corrupt. Try saving again under a "
 "different name, in another location."
 msgstr ""
 
-#: libs/ui/KisImportExportFilter.cpp:174
+#: libs/ui/KisImportExportFilter.cpp:184
 #, kde-format
 msgid ""
 "%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try "
 "saving again under a different name, in another location."
-msgstr ""
-
-#: libs/ui/KisImportExportFilter.cpp:238
-#, kde-format
-msgctxt "image conversion warning"
-msgid ""
-"%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The "
-"image will be converted."
-msgstr ""
-
-#: libs/ui/KisImportExportFilter.cpp:243
-#, kde-format
-msgctxt "image conversion warning"
-msgid ""
-"%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The "
-"layers will be converted or skipped."
 msgstr ""
 
 #: libs/ui/KisImportExportFilter.cpp:248
@@ -30829,7 +30945,7 @@ msgstr ""
 msgctxt "image conversion warning"
 msgid ""
 "%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The "
-"image will not be saved."
+"image will be converted."
 msgstr ""
 
 #: libs/ui/KisImportExportFilter.cpp:253
@@ -30837,46 +30953,62 @@ msgstr ""
 msgctxt "image conversion warning"
 msgid ""
 "%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The "
+"layers will be converted or skipped."
+msgstr ""
+
+#: libs/ui/KisImportExportFilter.cpp:258
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"%1 cannot save images with color model <b>%2</b> and depth <b>%3</b>. The "
+"image will not be saved."
+msgstr ""
+
+#: libs/ui/KisImportExportFilter.cpp:263
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"%1 cannot save layers with color model <b>%2</b> and depth <b>%3</b>. The "
 "layers will be skipped."
 msgstr ""
 
-#: libs/ui/KisImportExportFilter.cpp:271
+#: libs/ui/KisImportExportFilter.cpp:281
 #, kde-format
 msgid ""
 "Could not open the saved file %1. Please try to save again in a different "
 "location."
 msgstr ""
 
-#: libs/ui/KisImportExportFilter.cpp:276
+#: libs/ui/KisImportExportFilter.cpp:286
 #, kde-format
 msgid ""
 "File %1 is missing in %2 and is broken. Please try to save again in a "
 "different location."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:295
+#: libs/ui/KisImportExportManager.cpp:321
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "उघडा व संपादन करा..."
 
-#: libs/ui/KisImportExportManager.cpp:389
+#: libs/ui/KisImportExportManager.cpp:421
 #, fuzzy, kde-format
 msgid "Opening document..."
 msgstr "नवीन दस्तऐवजात उघडा"
 
-#: libs/ui/KisImportExportManager.cpp:457
+#: libs/ui/KisImportExportManager.cpp:489
 #, fuzzy, kde-format
 msgid "Saving document..."
 msgstr "दस्तऐवज साठवा"
 
-#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:583
 #, fuzzy, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr "हे स्तर रास्टर स्तर म्हणून साठवले जातील"
 
-#: libs/ui/KisImportExportManager.cpp:554
+#: libs/ui/KisImportExportManager.cpp:586
 #, fuzzy, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30884,13 +31016,13 @@ msgid ""
 "saved."
 msgstr "हे स्तर रास्टर स्तर म्हणून साठवले जातील"
 
-#: libs/ui/KisImportExportManager.cpp:557
+#: libs/ui/KisImportExportManager.cpp:589
 #, fuzzy, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "हे स्तर रास्टर स्तर म्हणून साठवले जातील"
 
-#: libs/ui/KisImportExportManager.cpp:560
+#: libs/ui/KisImportExportManager.cpp:592
 #, fuzzy, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30898,38 +31030,38 @@ msgid ""
 "will not be saved."
 msgstr "हे स्तर रास्टर स्तर म्हणून साठवले जातील"
 
-#: libs/ui/KisImportExportManager.cpp:565
+#: libs/ui/KisImportExportManager.cpp:597
 #, fuzzy, kde-format
 #| msgid "Cannot export images in %1.\n"
 msgid "Error: cannot save this image as a %1."
 msgstr "%1 मध्ये प्रतिमा निर्यात करता येत नाही.\n"
 
-#: libs/ui/KisImportExportManager.cpp:566
-#: libs/ui/KisImportExportManager.cpp:609
+#: libs/ui/KisImportExportManager.cpp:598
+#: libs/ui/KisImportExportManager.cpp:641
 #, fuzzy, kde-format
 #| msgid "Dimensions"
 msgid "Reasons:"
 msgstr "परिमाणे"
 
-#: libs/ui/KisImportExportManager.cpp:574
+#: libs/ui/KisImportExportManager.cpp:606
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "उभी किनार :"
 
-#: libs/ui/KisImportExportManager.cpp:591
+#: libs/ui/KisImportExportManager.cpp:623
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:603
+#: libs/ui/KisImportExportManager.cpp:635
 #, fuzzy, kde-format
 #| msgid "Cannot export images in %1.\n"
 msgid "You will lose information when saving this image as a %1."
 msgstr "%1 मध्ये प्रतिमा निर्यात करता येत नाही.\n"
 
-#: libs/ui/KisImportExportManager.cpp:606
+#: libs/ui/KisImportExportManager.cpp:638
 #, fuzzy, kde-format
 #| msgid "Ruler assistant"
 msgid "Reason:"
@@ -30938,7 +31070,7 @@ msgstr "मोजपट्टी सहायक"
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/KisImportExportManager.cpp:624
+#: libs/ui/KisImportExportManager.cpp:656
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
@@ -30946,17 +31078,22 @@ msgstr "मोजपट्टी सहायक"
 msgid "Options"
 msgstr "पर्याय"
 
-#: libs/ui/KisImportExportManager.cpp:632
+#: libs/ui/KisImportExportManager.cpp:664
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Resize"
 msgid "Resize"
 msgstr "आकार बदला"
 
-#: libs/ui/KisImportExportManager.cpp:638
+#: libs/ui/KisImportExportManager.cpp:670
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr ""
+
+#: libs/ui/KisImportExportUtils.cpp:48
+#, fuzzy, kde-format
+msgid "Convert image color space on import"
+msgstr "प्रतिमेच्या रंगाची जागा बदला"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 #, fuzzy
@@ -41488,143 +41625,11 @@ msgstr "निवड काढून टाका (&D)"
 msgid "Convert All Layers From %1"
 msgstr "पासूनचे सर्व स्तर बदला "
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:95
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:94
 #, fuzzy, kde-format
 #| msgid "Convert Current Layer From"
 msgid "Convert Current Layer From %1"
 msgstr "पासून वर्तमान स्तर बदला"
-
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:18
-#, kde-format
-msgid "Colorspace Conversion"
-msgstr "रंगाच्या जागेचा बदल"
-
-#. i18n: ectx: property (title), widget (QGroupBox, grpIntent)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:30
-#, kde-format
-msgid "&Rendering Intent"
-msgstr "रेंडरिंग इंटेंट (&R)"
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:36
-#, kde-format
-msgid "For images"
-msgstr "प्रतिमांसाठी"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:42
-#, kde-format
-msgid ""
-"Hue hopefully maintained (but not required),\n"
-"lightness and saturation sacrificed to maintain\n"
-"the perceived color. White point changed to\n"
-"result in neutral grays. Intended for images."
-msgstr ""
-"रंगाची शुध्दता राखली आहे (पण आवश्यक नाही),\n"
-"अपेक्षित रंग राखण्यासाठी\n"
-" हलकेपणा व गडद  अशी तडजोड केली आहे.\n"
-"प्रतिमांसाठी साधा राखाडी रंग लक्षित आहे."
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:63
-#, fuzzy, kde-format
-#| msgid ""
-#| "Within and outside gamut; same as Absolute\n"
-#| "Colorimetric. White point changed to result in\n"
-#| "neutral grays.\n"
-#| "\n"
-#| "If adequate table is present in profile,\n"
-#| "then, it is used. Else reverts to perceptual\n"
-#| "intent."
-msgid ""
-"Within and outside gamut; same as Absolute\n"
-"Colorimetric. White point changed to result in\n"
-"neutral grays.\n"
-"If adequate table is present in profile,\n"
-"then, it is used. Else reverts to perceptual\n"
-"intent."
-msgstr ""
-"रंगकक्षेच्या आत व बाहेर, शुध्द असल्यासारखाच \n"
-"कलरीमेट्रिक. साध्या राखाडी रंगातील परिणामामुळे पांढरा बिंदू बदलला आहे.\n"
-"\n"
-"जर योग्य कोष्टक तयार असेल तर ते वापरले आहे. अन्यथा परत आकलनीय कडे बदल\n"
-"अपेक्षित."
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:76
-#, kde-format
-msgid "Best for graphs and charts"
-msgstr "कोष्टके व आकृत्यांसाठी उत्तम"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:86
-#, fuzzy, kde-format
-#| msgid ""
-#| "Hue and saturation maintained with lightness\n"
-#| "sacrificed to maintain saturation. White point\n"
-#| "changed to result in neutral grays. Intended for\n"
-#| "business graphics (make it colorful charts,\n"
-#| "graphs, overheads, ...)\n"
-#| "\n"
-#| "If adequate table is present in profile,\n"
-#| "then, it is used. Else reverts to perceptual\n"
-#| "intent."
-msgid ""
-"Hue and saturation maintained with lightness\n"
-"sacrificed to maintain saturation. White point\n"
-"changed to result in neutral grays. Intended for\n"
-"business graphics (make it colorful charts,\n"
-"graphs, overheads, ...)\n"
-"If adequate table is present in profile,\n"
-"then, it is used. Else reverts to perceptual\n"
-"intent."
-msgstr ""
-"रंगाची शुध्दता हलकेपणासाठी राखली आहे),\n"
-"गडदपणासाठी  अशी तडजोड केली आहे.\n"
-"पांढरा बिंदू सामान्य राखाडी रंगासाठी बदलला आहे.व्यावसायिक चिरत्रांसाठी अपेक्षित\"(रंगीत "
-"कोष्टके, आलेख, ओव्हरहेडस् बनवा\n"
-"\"नंतर त्याचा वापर केला आहे.जर योग्य कोष्टक तयार असेल तर ते वापरले आहे. अन्यथा परत "
-"आकलनीय कडे बदल\n"
-"अपेक्षित"
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:99
-#, fuzzy, kde-format
-#| msgid "Best for spot colours"
-msgid "Best for spot colors"
-msgstr "जागेवरील रंगासाठी उत्तम"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:107
-#, kde-format
-msgid ""
-"Within the destination device gamut; hue,\n"
-"lightness and saturation are maintained. Outside\n"
-"the gamut; hue and lightness are maintained,\n"
-"saturation is sacrificed. White point for source\n"
-"and destination; unchanged. Intended for spot\n"
-"colors (Pantone, TruMatch, logo colors, ...)"
-msgstr ""
-"नियोजित साधनाच्या कक्षेतशुध्दता, हलकेपणा व गडदपणा कायम राखला आहे. \n"
-"कक्षेबाहेर शुध्दता व हलकेपणा राखला आहे\n"
-"गडदपणाशी तडजोड केली आहे. स्रोत व नियोजित बाबतीत पांढरा बिंदू अविचल आहे. जागेसाठी "
-"अपेक्षित रंगांसाठी (पॅनटोन, ट्रूमॅच, लोगो कलर्स,...)"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:123
-#, kde-format
-msgid "Use Blackpoint &Compensation"
-msgstr "काळा बिंदू कम्पेन्सेशन वापरा (&C)"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:130
-#, kde-format
-msgid ""
-"Krita tries to automatically check or uncheck this based on the information "
-"it can get from the profile you are converting from and the profile you are "
-"converting to."
-msgstr ""
 
 #. i18n: context: text @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #: plugins/extensions/dbexplorer/dbexplorer.action:7
@@ -49563,7 +49568,7 @@ msgid ""
 "from the image."
 msgstr ""
 
-#: plugins/impex/psd/psd_loader.cpp:152
+#: plugins/impex/psd/psd_loader.cpp:158
 #, kde-format
 msgid "Duotone Colormode Block"
 msgstr "ड्युओटोन कलरपद्धत ब्लॉक"

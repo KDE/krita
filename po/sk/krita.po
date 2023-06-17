@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-11 00:45+0000\n"
+"POT-Creation-Date: 2023-06-17 00:45+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -16890,7 +16890,7 @@ msgctxt "The category of filters that do not fit in a category. Noun."
 msgid "Other"
 msgstr "Iný"
 
-#: libs/image/generator/kis_generator_layer.cpp:192
+#: libs/image/generator/kis_generator_layer.cpp:202
 #, kde-format
 msgid "Generator"
 msgstr "Generátor"
@@ -17040,7 +17040,7 @@ msgid "Selection Mask"
 msgstr "Maska výberu"
 
 #: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2551
-#: plugins/impex/psd/psd_loader.cpp:189
+#: plugins/impex/psd/psd_loader.cpp:195
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
@@ -17809,7 +17809,7 @@ msgstr "Maska transformácie"
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
-#: plugins/impex/psd/psd_loader.cpp:379
+#: plugins/impex/psd/psd_loader.cpp:385
 #: plugins/impex/tiff/kis_tiff_import.cc:562
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
@@ -24024,15 +24024,15 @@ msgstr ""
 "na udržanie vnímanej farby. Biely bod zmenený na výsledok v neutrálnej "
 "šedej. Určené na obrázky."
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioPerceptual)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#. i18n: ectx: property (text), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:183
 #: libs/ui/forms/wdgcolorsettings.ui:274
+#: libs/ui/forms/wdgconvertcolorspace.ui:45
 #: libs/ui/forms/wdgimageproperties.ui:298
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:45
 #, kde-format
 msgid "Perceptual"
 msgstr "Vnemový"
@@ -24049,7 +24049,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:110
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:66
+#: libs/ui/forms/wdgconvertcolorspace.ui:66
 #, kde-format
 msgid "Relative colorimetric"
 msgstr "Relatívna kolorimetria"
@@ -24066,15 +24066,15 @@ msgstr ""
 "Biely bod sa zmenil na výsledky v neutrálnej šedej. Určené na obchodnú "
 "grafiku (farebné grafy, diagramy, titulky...)"
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:193
 #: libs/ui/forms/wdgcolorsettings.ui:284
+#: libs/ui/forms/wdgconvertcolorspace.ui:89
 #: libs/ui/forms/wdgimageproperties.ui:308
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:89
 #, kde-format
 msgctxt "ICC profile rendering intent"
 msgid "Saturation"
@@ -24096,7 +24096,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:130
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:110
+#: libs/ui/forms/wdgconvertcolorspace.ui:110
 #, kde-format
 msgid "Absolute colorimetric"
 msgstr "Absolútna kolorimetria"
@@ -24188,7 +24188,7 @@ msgstr "Použiť kompenzáciu čierneho bodu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgcolorsettings.ui:116
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:133
+#: libs/ui/forms/wdgconvertcolorspace.ui:133
 #, kde-format
 msgid ""
 "Allow Little CMS optimizations (uncheck when using linear light RGB or XYZ)"
@@ -24377,6 +24377,124 @@ msgstr "Profil"
 #, kde-format
 msgid "Profile Properties"
 msgstr "Vlastnosti profilu"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
+#: libs/ui/forms/wdgconvertcolorspace.ui:18
+#, kde-format
+msgid "Colorspace Conversion"
+msgstr "Konverzia farebného priestoru"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpIntent)
+#: libs/ui/forms/wdgconvertcolorspace.ui:30
+#, kde-format
+msgid "&Rendering Intent"
+msgstr "&Vykresľovací zámer"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
+#: libs/ui/forms/wdgconvertcolorspace.ui:36
+#, kde-format
+msgid "For images"
+msgstr "Na obrázky"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
+#: libs/ui/forms/wdgconvertcolorspace.ui:42
+#, kde-format
+msgid ""
+"Hue hopefully maintained (but not required),\n"
+"lightness and saturation sacrificed to maintain\n"
+"the perceived color. White point changed to\n"
+"result in neutral grays. Intended for images."
+msgstr ""
+"Odtieň nádejne udržiavaný (ale nie vyžadovaný),\n"
+"svetlosť a sýtosť uspokojená na udržanie\n"
+"vnímanej farby. Biely bod zmenený na\n"
+"výsledok v neutrálnej šedej. Určené na obrázky."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:63
+#, kde-format
+msgid ""
+"Within and outside gamut; same as Absolute\n"
+"Colorimetric. White point changed to result in\n"
+"neutral grays.\n"
+"If adequate table is present in profile,\n"
+"then, it is used. Else reverts to perceptual\n"
+"intent."
+msgstr ""
+"Vnútri a mimo škály; rovnako ako Absolútne\n"
+"kolorimetria. Biely bod zmenený na výsledok\n"
+"v neutrálnej šedej.\n"
+"Ak existuje v profile adekvátna tabuľka,\n"
+"použije sa. Inak sa prejde späť na vnemový\n"
+"zámer."
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:76
+#, kde-format
+msgid "Best for graphs and charts"
+msgstr "Najlepšie pre grafy a diagramy"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:86
+#, kde-format
+msgid ""
+"Hue and saturation maintained with lightness\n"
+"sacrificed to maintain saturation. White point\n"
+"changed to result in neutral grays. Intended for\n"
+"business graphics (make it colorful charts,\n"
+"graphs, overheads, ...)\n"
+"If adequate table is present in profile,\n"
+"then, it is used. Else reverts to perceptual\n"
+"intent."
+msgstr ""
+"Odtieň a sýtosť udržiavaná so svetlosťou\n"
+"nastavenou na udržanie sýtosti. Biely bod\n"
+"zmenený na výsledok v neutrálnej šedej.\n"
+"Určené na obchodnú grafiku (farebné grafy,\n"
+"diagramy, titulky...)\n"
+"Ak existuje v profile adekvátna tabuľka,\n"
+"použije sa. Inak prejde späť na vnemový\n"
+"zámer."
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:99
+#, kde-format
+msgid "Best for spot colors"
+msgstr "Najlepšie pre farby bodiek"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:107
+#, kde-format
+msgid ""
+"Within the destination device gamut; hue,\n"
+"lightness and saturation are maintained. Outside\n"
+"the gamut; hue and lightness are maintained,\n"
+"saturation is sacrificed. White point for source\n"
+"and destination; unchanged. Intended for spot\n"
+"colors (Pantone, TruMatch, logo colors, ...)"
+msgstr ""
+"V škále cieľového zariadenia; odtieň,\n"
+"svetlosť a sýtosť sa zachováva. Mimo mierky,\n"
+"odtieň a jasnosť sa zachováva, sýtosť sa obetuje.\n"
+"Biely bod pre zdroj a cieľ; nezmenený. Určené\n"
+"na farby bodiek (Pantone, TruMatch, farby loga...)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:123
+#, kde-format
+msgid "Use Blackpoint &Compensation"
+msgstr "Použiť kompenzáciu čierneho bodu"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
+#: libs/ui/forms/wdgconvertcolorspace.ui:130
+#, kde-format
+msgid ""
+"Krita tries to automatically check or uncheck this based on the information "
+"it can get from the profile you are converting from and the profile you are "
+"converting to."
+msgstr ""
+"Krita sa to snaží automaticky označiť alebo odznačiť podľa informácií, ktoré "
+"získa z profilu, z ktorého konvertujete a profilu, na ktorý konvertujete."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
@@ -30303,7 +30421,7 @@ msgstr "Neznáma chyba."
 msgid "Image is busy."
 msgstr "Obrázok je zaneprázdnený."
 
-#: libs/ui/KisImportExportFilter.cpp:151
+#: libs/ui/KisImportExportFilter.cpp:161
 #, kde-format
 msgid ""
 "%1 does not exist after writing. Try saving again under a different name, in "
@@ -30311,12 +30429,12 @@ msgid ""
 msgstr ""
 "%1 neexistuje po zápise. Skúste uložiť znova pod iným menom, na druhé miesto."
 
-#: libs/ui/KisImportExportFilter.cpp:155
+#: libs/ui/KisImportExportFilter.cpp:165
 #, kde-format
 msgid "%1 is not readable"
 msgstr "%1 nie čitateľné"
 
-#: libs/ui/KisImportExportFilter.cpp:159
+#: libs/ui/KisImportExportFilter.cpp:169
 #, kde-format
 msgid ""
 "%1 is smaller than 10 bytes, it must be corrupt. Try saving again under a "
@@ -30325,7 +30443,7 @@ msgstr ""
 "%1 je menší ako 10 bajtov, musí byť poškodený. Skúste uložiť znova pod iným "
 "menom, na druhé miesto."
 
-#: libs/ui/KisImportExportFilter.cpp:174
+#: libs/ui/KisImportExportFilter.cpp:184
 #, kde-format
 msgid ""
 "%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try "
@@ -30334,7 +30452,7 @@ msgstr ""
 "%1 má iba nulové bajty v prvých 1000 bajtoch, je to pravdepodobne poškodený. "
 "Skúste uložiť znova pod iným menom, na druhé miesto."
 
-#: libs/ui/KisImportExportFilter.cpp:238
+#: libs/ui/KisImportExportFilter.cpp:248
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30344,7 +30462,7 @@ msgstr ""
 "%1 nemôže uložiť obrázky s farebným modelom <b>%2</b> a hĺbkou <b>%3</b>. "
 "Obrázok sa skonvertuje."
 
-#: libs/ui/KisImportExportFilter.cpp:243
+#: libs/ui/KisImportExportFilter.cpp:253
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30354,7 +30472,7 @@ msgstr ""
 "%1 nemôže uložiť vrstvy s farebným modelom <b>%2</b> a hĺbkou <b>%3</b>. "
 "Vrstvy budú prevedené alebo preskočené."
 
-#: libs/ui/KisImportExportFilter.cpp:248
+#: libs/ui/KisImportExportFilter.cpp:258
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30364,7 +30482,7 @@ msgstr ""
 "%1 nemôže uložiť obrázky s farebným modelom <b>%2</b> a hĺbkou <b>%3</b>. "
 "Obrázok nebude uložený."
 
-#: libs/ui/KisImportExportFilter.cpp:253
+#: libs/ui/KisImportExportFilter.cpp:263
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30374,7 +30492,7 @@ msgstr ""
 "%1 nemôže uložiť vrstvy s farebným modelom <b>%2</b> a hĺbkou <b>%3</b>. "
 "Vrstvy budú preskočené."
 
-#: libs/ui/KisImportExportFilter.cpp:271
+#: libs/ui/KisImportExportFilter.cpp:281
 #, kde-format
 msgid ""
 "Could not open the saved file %1. Please try to save again in a different "
@@ -30383,7 +30501,7 @@ msgstr ""
 "Nebolo možné otvoriť uložený súbor %1. Prosím, skúste ho znova uložiť na iné "
 "miesto."
 
-#: libs/ui/KisImportExportFilter.cpp:276
+#: libs/ui/KisImportExportFilter.cpp:286
 #, kde-format
 msgid ""
 "File %1 is missing in %2 and is broken. Please try to save again in a "
@@ -30392,29 +30510,29 @@ msgstr ""
 "Súbor %1 chýba v %2 a je poškodený. Prosím, skúste ho znova uložiť na iné "
 "miesto."
 
-#: libs/ui/KisImportExportManager.cpp:295
+#: libs/ui/KisImportExportManager.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Otvoriť zvuk"
 
-#: libs/ui/KisImportExportManager.cpp:389
+#: libs/ui/KisImportExportManager.cpp:421
 #, kde-format
 msgid "Opening document..."
 msgstr "Otváranie dokumentu..."
 
-#: libs/ui/KisImportExportManager.cpp:457
+#: libs/ui/KisImportExportManager.cpp:489
 #, kde-format
 msgid "Saving document..."
 msgstr "Ukladanie dokumentu..."
 
-#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:583
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr "Obrázok obsahuje <b>asistentov</b>. Asistenti sa neuložia."
 
-#: libs/ui/KisImportExportManager.cpp:554
+#: libs/ui/KisImportExportManager.cpp:586
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30423,13 +30541,13 @@ msgid ""
 msgstr ""
 "Obrázok obsahuje <b>referenčné obrázky</b>. Referenčné obrázky nebudúuložené."
 
-#: libs/ui/KisImportExportManager.cpp:557
+#: libs/ui/KisImportExportManager.cpp:589
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "Obrázok obsahuje <b>vodiace čiary</b>. Vodiace čiary nebudú uložené."
 
-#: libs/ui/KisImportExportManager.cpp:560
+#: libs/ui/KisImportExportManager.cpp:592
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30439,36 +30557,36 @@ msgstr ""
 "Obrázok obsahuje <b>vlastnú konfiguráciu mriežky</b>. Konfigurácia nebude "
 "uložená."
 
-#: libs/ui/KisImportExportManager.cpp:565
+#: libs/ui/KisImportExportManager.cpp:597
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "CHYBA: nie je možné uložiť tento obrázok ako %1."
 
-#: libs/ui/KisImportExportManager.cpp:566
-#: libs/ui/KisImportExportManager.cpp:609
+#: libs/ui/KisImportExportManager.cpp:598
+#: libs/ui/KisImportExportManager.cpp:641
 #, kde-format
 msgid "Reasons:"
 msgstr "Dôvody:"
 
-#: libs/ui/KisImportExportManager.cpp:574
+#: libs/ui/KisImportExportManager.cpp:606
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita: Chyba exportu"
 
-#: libs/ui/KisImportExportManager.cpp:591
+#: libs/ui/KisImportExportManager.cpp:623
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 "Upozornenie: uložením ako %1 sa stratia informácie z vášho obrázka.    "
 
-#: libs/ui/KisImportExportManager.cpp:603
+#: libs/ui/KisImportExportManager.cpp:635
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr "Pri uložení tohto obrázka ako %1 stratíte informácie."
 
-#: libs/ui/KisImportExportManager.cpp:606
+#: libs/ui/KisImportExportManager.cpp:638
 #, kde-format
 msgid "Reason:"
 msgstr "Dôvod:"
@@ -30476,7 +30594,7 @@ msgstr "Dôvod:"
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/KisImportExportManager.cpp:624
+#: libs/ui/KisImportExportManager.cpp:656
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
@@ -30484,15 +30602,22 @@ msgstr "Dôvod:"
 msgid "Options"
 msgstr "Možnosti"
 
-#: libs/ui/KisImportExportManager.cpp:632
+#: libs/ui/KisImportExportManager.cpp:664
 #, kde-format
 msgid "Resize"
 msgstr "Zmeniť veľkosť"
 
-#: libs/ui/KisImportExportManager.cpp:638
+#: libs/ui/KisImportExportManager.cpp:670
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Uložte tiež svoj obrázok ako súbor Krita."
+
+#: libs/ui/KisImportExportUtils.cpp:48
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Image Color Space"
+msgid "Convert image color space on import"
+msgstr "Previesť farebný priestor obrázka"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 #, fuzzy
@@ -41171,128 +41296,10 @@ msgstr "Zrušiť výber"
 msgid "Convert All Layers From %1"
 msgstr "Previesť všetky vrstvy z %1"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:95
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:94
 #, kde-format
 msgid "Convert Current Layer From %1"
 msgstr "Previesť aktuálnu vrstvu z %1"
-
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:18
-#, kde-format
-msgid "Colorspace Conversion"
-msgstr "Konverzia farebného priestoru"
-
-#. i18n: ectx: property (title), widget (QGroupBox, grpIntent)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:30
-#, kde-format
-msgid "&Rendering Intent"
-msgstr "&Vykresľovací zámer"
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:36
-#, kde-format
-msgid "For images"
-msgstr "Na obrázky"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:42
-#, kde-format
-msgid ""
-"Hue hopefully maintained (but not required),\n"
-"lightness and saturation sacrificed to maintain\n"
-"the perceived color. White point changed to\n"
-"result in neutral grays. Intended for images."
-msgstr ""
-"Odtieň nádejne udržiavaný (ale nie vyžadovaný),\n"
-"svetlosť a sýtosť uspokojená na udržanie\n"
-"vnímanej farby. Biely bod zmenený na\n"
-"výsledok v neutrálnej šedej. Určené na obrázky."
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:63
-#, kde-format
-msgid ""
-"Within and outside gamut; same as Absolute\n"
-"Colorimetric. White point changed to result in\n"
-"neutral grays.\n"
-"If adequate table is present in profile,\n"
-"then, it is used. Else reverts to perceptual\n"
-"intent."
-msgstr ""
-"Vnútri a mimo škály; rovnako ako Absolútne\n"
-"kolorimetria. Biely bod zmenený na výsledok\n"
-"v neutrálnej šedej.\n"
-"Ak existuje v profile adekvátna tabuľka,\n"
-"použije sa. Inak sa prejde späť na vnemový\n"
-"zámer."
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:76
-#, kde-format
-msgid "Best for graphs and charts"
-msgstr "Najlepšie pre grafy a diagramy"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:86
-#, kde-format
-msgid ""
-"Hue and saturation maintained with lightness\n"
-"sacrificed to maintain saturation. White point\n"
-"changed to result in neutral grays. Intended for\n"
-"business graphics (make it colorful charts,\n"
-"graphs, overheads, ...)\n"
-"If adequate table is present in profile,\n"
-"then, it is used. Else reverts to perceptual\n"
-"intent."
-msgstr ""
-"Odtieň a sýtosť udržiavaná so svetlosťou\n"
-"nastavenou na udržanie sýtosti. Biely bod\n"
-"zmenený na výsledok v neutrálnej šedej.\n"
-"Určené na obchodnú grafiku (farebné grafy,\n"
-"diagramy, titulky...)\n"
-"Ak existuje v profile adekvátna tabuľka,\n"
-"použije sa. Inak prejde späť na vnemový\n"
-"zámer."
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:99
-#, kde-format
-msgid "Best for spot colors"
-msgstr "Najlepšie pre farby bodiek"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:107
-#, kde-format
-msgid ""
-"Within the destination device gamut; hue,\n"
-"lightness and saturation are maintained. Outside\n"
-"the gamut; hue and lightness are maintained,\n"
-"saturation is sacrificed. White point for source\n"
-"and destination; unchanged. Intended for spot\n"
-"colors (Pantone, TruMatch, logo colors, ...)"
-msgstr ""
-"V škále cieľového zariadenia; odtieň,\n"
-"svetlosť a sýtosť sa zachováva. Mimo mierky,\n"
-"odtieň a jasnosť sa zachováva, sýtosť sa obetuje.\n"
-"Biely bod pre zdroj a cieľ; nezmenený. Určené\n"
-"na farby bodiek (Pantone, TruMatch, farby loga...)"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:123
-#, kde-format
-msgid "Use Blackpoint &Compensation"
-msgstr "Použiť kompenzáciu čierneho bodu"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:130
-#, kde-format
-msgid ""
-"Krita tries to automatically check or uncheck this based on the information "
-"it can get from the profile you are converting from and the profile you are "
-"converting to."
-msgstr ""
-"Krita sa to snaží automaticky označiť alebo odznačiť podľa informácií, ktoré "
-"získa z profilu, z ktorého konvertujete a profilu, na ktorý konvertujete."
 
 #. i18n: context: text @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #: plugins/extensions/dbexplorer/dbexplorer.action:7
@@ -49049,7 +49056,7 @@ msgstr ""
 "Váš obrázok obsahuje jednu alebo viac vrstiev s farebným modelom, ktorý sa "
 "líši od obrázka."
 
-#: plugins/impex/psd/psd_loader.cpp:152
+#: plugins/impex/psd/psd_loader.cpp:158
 #, kde-format
 msgid "Duotone Colormode Block"
 msgstr "Blokovať dvojtónový farebný režim"

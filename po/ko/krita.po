@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-11 00:45+0000\n"
+"POT-Creation-Date: 2023-06-17 00:45+0000\n"
 "PO-Revision-Date: 2023-03-01 00:29+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17737,7 +17737,7 @@ msgctxt "The category of filters that do not fit in a category. Noun."
 msgid "Other"
 msgstr "기타"
 
-#: libs/image/generator/kis_generator_layer.cpp:192
+#: libs/image/generator/kis_generator_layer.cpp:202
 #, kde-format
 msgid "Generator"
 msgstr "생성기"
@@ -17886,7 +17886,7 @@ msgid "Selection Mask"
 msgstr "선택 마스크"
 
 #: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2551
-#: plugins/impex/psd/psd_loader.cpp:189
+#: plugins/impex/psd/psd_loader.cpp:195
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -18664,7 +18664,7 @@ msgstr "변형 마스크"
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
-#: plugins/impex/psd/psd_loader.cpp:379
+#: plugins/impex/psd/psd_loader.cpp:385
 #: plugins/impex/tiff/kis_tiff_import.cc:562
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
@@ -24907,15 +24907,15 @@ msgstr ""
 "(필수 사항은 아님). 백색 점이 중립 회색이 되도록 변경합니다. 이미지에 적합합"
 "니다."
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioPerceptual)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#. i18n: ectx: property (text), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:183
 #: libs/ui/forms/wdgcolorsettings.ui:274
+#: libs/ui/forms/wdgconvertcolorspace.ui:45
 #: libs/ui/forms/wdgimageproperties.ui:298
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:45
 #, kde-format
 msgid "Perceptual"
 msgstr "인식"
@@ -24931,7 +24931,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:110
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:66
+#: libs/ui/forms/wdgconvertcolorspace.ui:66
 #, kde-format
 msgid "Relative colorimetric"
 msgstr "상대 색도계"
@@ -24948,15 +24948,15 @@ msgstr ""
 "이 중립 회색으로 되도록 변경합니다. 업무용 그래픽(화려한 표나 그래프 등)에 적"
 "합합니다."
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:193
 #: libs/ui/forms/wdgcolorsettings.ui:284
+#: libs/ui/forms/wdgconvertcolorspace.ui:89
 #: libs/ui/forms/wdgimageproperties.ui:308
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:89
 #, kde-format
 msgctxt "ICC profile rendering intent"
 msgid "Saturation"
@@ -24977,7 +24977,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:130
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:110
+#: libs/ui/forms/wdgconvertcolorspace.ui:110
 #, kde-format
 msgid "Absolute colorimetric"
 msgstr "절대 색도계"
@@ -25070,7 +25070,7 @@ msgstr "검은색 포인트 보정 사용"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgcolorsettings.ui:116
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:133
+#: libs/ui/forms/wdgconvertcolorspace.ui:133
 #, kde-format
 msgid ""
 "Allow Little CMS optimizations (uncheck when using linear light RGB or XYZ)"
@@ -25262,6 +25262,123 @@ msgstr "프로필"
 #, kde-format
 msgid "Profile Properties"
 msgstr "프로필 속성"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
+#: libs/ui/forms/wdgconvertcolorspace.ui:18
+#, kde-format
+msgid "Colorspace Conversion"
+msgstr "색 공간 변환"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpIntent)
+#: libs/ui/forms/wdgconvertcolorspace.ui:30
+#, kde-format
+msgid "&Rendering Intent"
+msgstr "렌더링 목적(&R)"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
+#: libs/ui/forms/wdgconvertcolorspace.ui:36
+#, kde-format
+msgid "For images"
+msgstr "이미지의 경우"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
+#: libs/ui/forms/wdgconvertcolorspace.ui:42
+#, kde-format
+msgid ""
+"Hue hopefully maintained (but not required),\n"
+"lightness and saturation sacrificed to maintain\n"
+"the perceived color. White point changed to\n"
+"result in neutral grays. Intended for images."
+msgstr ""
+"인지하는 색상을 유지할 수 있도록 광도와 채도를\n"
+"희생합니다. 색조는 유지됩니다(필수 사항은 아님).\n"
+"백색 점이 중립 회색이 되도록 변경합니다.\n"
+"이미지에 적합합니다."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:63
+#, kde-format
+msgid ""
+"Within and outside gamut; same as Absolute\n"
+"Colorimetric. White point changed to result in\n"
+"neutral grays.\n"
+"If adequate table is present in profile,\n"
+"then, it is used. Else reverts to perceptual\n"
+"intent."
+msgstr ""
+"절대 색도계와 동일하게 색역 내외부\n"
+"색상을 취급합니다. 백색 점이 중립 회색이\n"
+"되도록 변경합니다.\n"
+"프로필에 적절한 테이블이 있으면 사용합니다.\n"
+"그렇지 않으면 인지적인 의도로\n"
+"되돌아갑니다."
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:76
+#, kde-format
+msgid "Best for graphs and charts"
+msgstr "그래프와 차트에 최적화"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:86
+#, kde-format
+msgid ""
+"Hue and saturation maintained with lightness\n"
+"sacrificed to maintain saturation. White point\n"
+"changed to result in neutral grays. Intended for\n"
+"business graphics (make it colorful charts,\n"
+"graphs, overheads, ...)\n"
+"If adequate table is present in profile,\n"
+"then, it is used. Else reverts to perceptual\n"
+"intent."
+msgstr ""
+"색조 및 채도를 유지할 수 있도록 광도를 희생합니다.\n"
+"색상은 유지됩니다. 백색 점이 중립 회색으로\n"
+"되도록 변경합니다. 업무용 그래픽(화려한 표나\n"
+"그래프 등)에 적합합니다.\n"
+"프로필에 적절한 테이블이 있으면 사용합니다.\n"
+"그렇지 않으면 인지적인 의도로\n"
+"되돌아갑니다."
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:99
+#, kde-format
+msgid "Best for spot colors"
+msgstr "별색에 최적"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
+#: libs/ui/forms/wdgconvertcolorspace.ui:107
+#, kde-format
+msgid ""
+"Within the destination device gamut; hue,\n"
+"lightness and saturation are maintained. Outside\n"
+"the gamut; hue and lightness are maintained,\n"
+"saturation is sacrificed. White point for source\n"
+"and destination; unchanged. Intended for spot\n"
+"colors (Pantone, TruMatch, logo colors, ...)"
+msgstr ""
+"대상 장치 색역 내에서는 색조, 광도 및 채도를\n"
+"유지합니다. 색역 밖에서는 색조와 광도를 유지하고\n"
+"채도를 희생합니다. 원본 및 대상의 백색 점은\n"
+"유지됩니다. 별색(Pantone, TruMatch, 로고 색상 등)에\n"
+"추천합니다"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
+#: libs/ui/forms/wdgconvertcolorspace.ui:123
+#, kde-format
+msgid "Use Blackpoint &Compensation"
+msgstr "검은색 포인트 보정 사용(&C)"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
+#: libs/ui/forms/wdgconvertcolorspace.ui:130
+#, kde-format
+msgid ""
+"Krita tries to automatically check or uncheck this based on the information "
+"it can get from the profile you are converting from and the profile you are "
+"converting to."
+msgstr ""
+"Krita는 변환하려는 프로필과 변환하려고 하는 프로필에서 얻을 수 있는 정보에 따"
+"라 이 옵션을 자동으로 선택하거나 해제합니다."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
@@ -31220,7 +31337,7 @@ msgstr "알 수 없는 오류입니다."
 msgid "Image is busy."
 msgstr "이미지 경계"
 
-#: libs/ui/KisImportExportFilter.cpp:151
+#: libs/ui/KisImportExportFilter.cpp:161
 #, kde-format
 msgid ""
 "%1 does not exist after writing. Try saving again under a different name, in "
@@ -31229,12 +31346,12 @@ msgstr ""
 "쓰기 작업 이후 %1이(가) 없습니다. 다른 위치에서 다른 이름으로 다시 저장해 보"
 "십시오."
 
-#: libs/ui/KisImportExportFilter.cpp:155
+#: libs/ui/KisImportExportFilter.cpp:165
 #, kde-format
 msgid "%1 is not readable"
 msgstr "%1에서 읽을 수 없음"
 
-#: libs/ui/KisImportExportFilter.cpp:159
+#: libs/ui/KisImportExportFilter.cpp:169
 #, kde-format
 msgid ""
 "%1 is smaller than 10 bytes, it must be corrupt. Try saving again under a "
@@ -31243,7 +31360,7 @@ msgstr ""
 "%1이(가) 10바이트보다 작습니다. 손상된 것 같습니다. 다른 위치에서 다른 이름으"
 "로 다시 저장해 보십시오."
 
-#: libs/ui/KisImportExportFilter.cpp:174
+#: libs/ui/KisImportExportFilter.cpp:184
 #, kde-format
 msgid ""
 "%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try "
@@ -31252,7 +31369,7 @@ msgstr ""
 "%1의 첫 1000바이트에 0만 있습니다. 손상되었을 수 있습니다. 다른 위치에서 다"
 "른 이름으로 다시 저장해 보십시오."
 
-#: libs/ui/KisImportExportFilter.cpp:238
+#: libs/ui/KisImportExportFilter.cpp:248
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -31262,7 +31379,7 @@ msgstr ""
 "%1에서 색 모델이 <b>%2</b>, 색상 농도가 <b>%3</b>인 이미지를 저장할 수 없습니"
 "다. 이미지를 변환합니다."
 
-#: libs/ui/KisImportExportFilter.cpp:243
+#: libs/ui/KisImportExportFilter.cpp:253
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -31272,7 +31389,7 @@ msgstr ""
 "%1에서 색 모델이 <b>%2</b>, 색 농도가 <b>%3</b>인 레이어를 저장할 수 없습니"
 "다. 레이어를 변환하거나 건너뜁니다."
 
-#: libs/ui/KisImportExportFilter.cpp:248
+#: libs/ui/KisImportExportFilter.cpp:258
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -31282,7 +31399,7 @@ msgstr ""
 "%1에서 색 모델이 <b>%2</b>, 색 농도가 <b>%3</b>인 이미지를 저장할 수 없습니"
 "다. 이미지를 저장하지 않습니다."
 
-#: libs/ui/KisImportExportFilter.cpp:253
+#: libs/ui/KisImportExportFilter.cpp:263
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -31292,44 +31409,44 @@ msgstr ""
 "%1에서 색 모델이 <b>%2</b>, 색 농도가 <b>%3</b>인 레이어를 저장할 수 없습니"
 "다. 레이어를 건너뜁니다."
 
-#: libs/ui/KisImportExportFilter.cpp:271
+#: libs/ui/KisImportExportFilter.cpp:281
 #, kde-format
 msgid ""
 "Could not open the saved file %1. Please try to save again in a different "
 "location."
 msgstr "저장된 파일 %1을(를) 열 수 없습니다. 다른 위치에 다시 저장하십시오."
 
-#: libs/ui/KisImportExportFilter.cpp:276
+#: libs/ui/KisImportExportFilter.cpp:286
 #, kde-format
 msgid ""
 "File %1 is missing in %2 and is broken. Please try to save again in a "
 "different location."
 msgstr "%1 파일이 %2에 없으며 깨졌습니다. 다른 위치에 다시 저장하십시오."
 
-#: libs/ui/KisImportExportManager.cpp:295
+#: libs/ui/KisImportExportManager.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "오디오 열기"
 
-#: libs/ui/KisImportExportManager.cpp:389
+#: libs/ui/KisImportExportManager.cpp:421
 #, kde-format
 msgid "Opening document..."
 msgstr "문서 여는 중..."
 
-#: libs/ui/KisImportExportManager.cpp:457
+#: libs/ui/KisImportExportManager.cpp:489
 #, kde-format
 msgid "Saving document..."
 msgstr "문서 저장하는 중..."
 
-#: libs/ui/KisImportExportManager.cpp:551
+#: libs/ui/KisImportExportManager.cpp:583
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr ""
 "이 이미지에는 <b>도우미</b>가 들어 있습니다. 도우미는 저장되지 않습니다."
 
-#: libs/ui/KisImportExportManager.cpp:554
+#: libs/ui/KisImportExportManager.cpp:586
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -31339,13 +31456,13 @@ msgstr ""
 "이 이미지에 <b>참조 이미지</b>가 들어 있습니다. 참조 이미지는 저장되지 않습니"
 "다."
 
-#: libs/ui/KisImportExportManager.cpp:557
+#: libs/ui/KisImportExportManager.cpp:589
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "이 이미지에 <b>안내선</b>이 들어 있습니다. 안내선은 저장되지 않습니다."
 
-#: libs/ui/KisImportExportManager.cpp:560
+#: libs/ui/KisImportExportManager.cpp:592
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -31355,35 +31472,35 @@ msgstr ""
 "이 이미지에 <b>사용자 정의 격자 설정</b>이 들어 있습니다. 설정은 저장되지 않"
 "습니다."
 
-#: libs/ui/KisImportExportManager.cpp:565
+#: libs/ui/KisImportExportManager.cpp:597
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "오류: 이 이미지를 %1(으)로 저장할 수 없습니다."
 
-#: libs/ui/KisImportExportManager.cpp:566
-#: libs/ui/KisImportExportManager.cpp:609
+#: libs/ui/KisImportExportManager.cpp:598
+#: libs/ui/KisImportExportManager.cpp:641
 #, kde-format
 msgid "Reasons:"
 msgstr "이유:"
 
-#: libs/ui/KisImportExportManager.cpp:574
+#: libs/ui/KisImportExportManager.cpp:606
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita: 내보내기 오류"
 
-#: libs/ui/KisImportExportManager.cpp:591
+#: libs/ui/KisImportExportManager.cpp:623
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr "경고: %1 형식으로 저장하면 이미지 정보가 손실됩니다. "
 
-#: libs/ui/KisImportExportManager.cpp:603
+#: libs/ui/KisImportExportManager.cpp:635
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr "%1 형식으로 이미지를 저장하면 정보가 손실됩니다."
 
-#: libs/ui/KisImportExportManager.cpp:606
+#: libs/ui/KisImportExportManager.cpp:638
 #, kde-format
 msgid "Reason:"
 msgstr "이유:"
@@ -31391,7 +31508,7 @@ msgstr "이유:"
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/KisImportExportManager.cpp:624
+#: libs/ui/KisImportExportManager.cpp:656
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
@@ -31399,15 +31516,22 @@ msgstr "이유:"
 msgid "Options"
 msgstr "옵션"
 
-#: libs/ui/KisImportExportManager.cpp:632
+#: libs/ui/KisImportExportManager.cpp:664
 #, kde-format
 msgid "Resize"
 msgstr "크기 조정"
 
-#: libs/ui/KisImportExportManager.cpp:638
+#: libs/ui/KisImportExportManager.cpp:670
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Krita 파일로도 이미지를 저장합니다."
+
+#: libs/ui/KisImportExportUtils.cpp:48
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Image Color Space"
+msgid "Convert image color space on import"
+msgstr "이미지 색 공간 변환"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 #, fuzzy
@@ -42108,127 +42232,10 @@ msgstr "선택 해제(&D)"
 msgid "Convert All Layers From %1"
 msgstr "모든 레이어를 %1에서 변환"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:95
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:94
 #, kde-format
 msgid "Convert Current Layer From %1"
 msgstr "현재 레이어를 %1에서 변환"
-
-#. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:18
-#, kde-format
-msgid "Colorspace Conversion"
-msgstr "색 공간 변환"
-
-#. i18n: ectx: property (title), widget (QGroupBox, grpIntent)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:30
-#, kde-format
-msgid "&Rendering Intent"
-msgstr "렌더링 목적(&R)"
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:36
-#, kde-format
-msgid "For images"
-msgstr "이미지의 경우"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:42
-#, kde-format
-msgid ""
-"Hue hopefully maintained (but not required),\n"
-"lightness and saturation sacrificed to maintain\n"
-"the perceived color. White point changed to\n"
-"result in neutral grays. Intended for images."
-msgstr ""
-"인지하는 색상을 유지할 수 있도록 광도와 채도를\n"
-"희생합니다. 색조는 유지됩니다(필수 사항은 아님).\n"
-"백색 점이 중립 회색이 되도록 변경합니다.\n"
-"이미지에 적합합니다."
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:63
-#, kde-format
-msgid ""
-"Within and outside gamut; same as Absolute\n"
-"Colorimetric. White point changed to result in\n"
-"neutral grays.\n"
-"If adequate table is present in profile,\n"
-"then, it is used. Else reverts to perceptual\n"
-"intent."
-msgstr ""
-"절대 색도계와 동일하게 색역 내외부\n"
-"색상을 취급합니다. 백색 점이 중립 회색이\n"
-"되도록 변경합니다.\n"
-"프로필에 적절한 테이블이 있으면 사용합니다.\n"
-"그렇지 않으면 인지적인 의도로\n"
-"되돌아갑니다."
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:76
-#, kde-format
-msgid "Best for graphs and charts"
-msgstr "그래프와 차트에 최적화"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:86
-#, kde-format
-msgid ""
-"Hue and saturation maintained with lightness\n"
-"sacrificed to maintain saturation. White point\n"
-"changed to result in neutral grays. Intended for\n"
-"business graphics (make it colorful charts,\n"
-"graphs, overheads, ...)\n"
-"If adequate table is present in profile,\n"
-"then, it is used. Else reverts to perceptual\n"
-"intent."
-msgstr ""
-"색조 및 채도를 유지할 수 있도록 광도를 희생합니다.\n"
-"색상은 유지됩니다. 백색 점이 중립 회색으로\n"
-"되도록 변경합니다. 업무용 그래픽(화려한 표나\n"
-"그래프 등)에 적합합니다.\n"
-"프로필에 적절한 테이블이 있으면 사용합니다.\n"
-"그렇지 않으면 인지적인 의도로\n"
-"되돌아갑니다."
-
-#. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:99
-#, kde-format
-msgid "Best for spot colors"
-msgstr "별색에 최적"
-
-#. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:107
-#, kde-format
-msgid ""
-"Within the destination device gamut; hue,\n"
-"lightness and saturation are maintained. Outside\n"
-"the gamut; hue and lightness are maintained,\n"
-"saturation is sacrificed. White point for source\n"
-"and destination; unchanged. Intended for spot\n"
-"colors (Pantone, TruMatch, logo colors, ...)"
-msgstr ""
-"대상 장치 색역 내에서는 색조, 광도 및 채도를\n"
-"유지합니다. 색역 밖에서는 색조와 광도를 유지하고\n"
-"채도를 희생합니다. 원본 및 대상의 백색 점은\n"
-"유지됩니다. 별색(Pantone, TruMatch, 로고 색상 등)에\n"
-"추천합니다"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:123
-#, kde-format
-msgid "Use Blackpoint &Compensation"
-msgstr "검은색 포인트 보정 사용(&C)"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
-#: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:130
-#, kde-format
-msgid ""
-"Krita tries to automatically check or uncheck this based on the information "
-"it can get from the profile you are converting from and the profile you are "
-"converting to."
-msgstr ""
-"Krita는 변환하려는 프로필과 변환하려고 하는 프로필에서 얻을 수 있는 정보에 따"
-"라 이 옵션을 자동으로 선택하거나 해제합니다."
 
 #. i18n: context: text @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #: plugins/extensions/dbexplorer/dbexplorer.action:7
@@ -50041,7 +50048,7 @@ msgid ""
 "from the image."
 msgstr "색 모델이 이미지 설정과 다른 레이어가 하나 이상 포함되어 있습니다."
 
-#: plugins/impex/psd/psd_loader.cpp:152
+#: plugins/impex/psd/psd_loader.cpp:158
 #, kde-format
 msgid "Duotone Colormode Block"
 msgstr "이중 톤 컬러 모드 블록"

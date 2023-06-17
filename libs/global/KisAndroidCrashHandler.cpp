@@ -6,11 +6,14 @@
 
 #include "KisAndroidCrashHandler.h"
 
+#include <KritaVersionWrapper.h>
+
 #include <QDateTime>
 #include <QMap>
 #include <QScopedPointer>
 #include <QStandardPaths>
 #include <QThread>
+
 #include <android/log.h>
 #include <array>
 #include <fcntl.h>
@@ -85,7 +88,7 @@ void dump_backtrace(siginfo_t *info, void *ucontext)
            << "Signal: " << info->si_signo << " (" << get_signal_name(info->si_signo) << ")"
            << " (Code: " << info->si_code << ")"
            << " Time: " << QDateTime::currentDateTimeUtc().toString().toStdString().c_str()
-           << "\n";
+           << " Version: " << KritaVersionWrapper::versionString(true).toStdString().c_str() << "\n";
     write(fd, header.str().c_str(), header.str().size());
 
     for (size_t i = 0; i < frames.size(); ++i) {

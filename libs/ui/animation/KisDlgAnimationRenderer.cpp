@@ -498,10 +498,8 @@ QString KisDlgAnimationRenderer::defaultVideoFileName(KisDocument *doc, const QS
     const QString docFileName = !doc->localFilePath().isEmpty() ? doc->localFilePath() : i18n("Untitled");
 
     if (!mimeType.isEmpty()) {
-        return
-            QString("%1.%2")
-                .arg(QFileInfo(docFileName).completeBaseName())
-                .arg(KisMimeDatabase::suffixesForMimeType(mimeType).first());
+        return QString("%1.%2").arg(QFileInfo(docFileName).completeBaseName(),
+                                    KisMimeDatabase::suffixesForMimeType(mimeType).first());
     } else {
         return docFileName;
     }

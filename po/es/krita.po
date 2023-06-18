@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-17 00:45+0000\n"
+"POT-Creation-Date: 2023-06-18 00:50+0000\n"
 "PO-Revision-Date: 2023-06-11 21:34+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -19416,9 +19416,9 @@ msgstr "Recursos locales"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:708
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:720
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20475,7 +20475,7 @@ msgstr ""
 msgid "Warning(s):"
 msgstr "Advertencia(s):"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20484,7 +20484,7 @@ msgstr ""
 "Parece que el FFmpeg que ha indicado está comprimido. Pruebe a extraer "
 "FFmpeg del archivo comprimido en primer lugar."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:708
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20493,7 +20493,7 @@ msgstr ""
 "Parece que el FFmpeg que ha indicado no es válido. Seleccione la ubicación "
 "correcta de un ejecutable de FFmpeg en su sistema."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:720
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Por favor, introduzca un nombre de archivo en el que renderizar."

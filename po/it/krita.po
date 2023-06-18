@@ -32,9 +32,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-17 00:45+0000\n"
-"PO-Revision-Date: 2023-06-11 08:20+0200\n"
-"Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
+"POT-Creation-Date: 2023-06-18 00:50+0000\n"
+"PO-Revision-Date: 2023-06-14 13:30+0200\n"
+"Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -17840,18 +17840,14 @@ msgid "Transparency Mask"
 msgstr "Maschera di trasparenza"
 
 #: libs/impex/LayerOpacityCheck.h:109
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Your image contains layers with a color model that is different from the "
-#| "image. The layers will be converted."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Your image contains layers with a partial opacity. The layers will be "
 "exported at full opacity."
 msgstr ""
-"L'immagine contiene livelli con un modello dei colori diverso dall'immagine. "
-"I livelli saranno convertiti."
+"L'immagine contiene livelli con opacità parziale. I livelli saranno "
+"esportati con opacità completa."
 
 #: libs/impex/MultiLayerCheck.h:24
 #, kde-format
@@ -17860,7 +17856,7 @@ msgid ""
 "The image has <b>more than one layer or a mask or an active selection</b>. "
 "Only the flattened image will be saved."
 msgstr ""
-"L'immagine contiene <b>più di un livello o una maschera o una seleziona "
+"L'immagine contiene <b>più di un livello o una maschera o una selezione "
 "attiva</b>. Sarà salvata solo l'immagine appiattita."
 
 #: libs/impex/MultiTransparencyMaskCheck.h:25
@@ -17882,7 +17878,7 @@ msgid ""
 "The image contains layers of unsupported type <b>%1</b>. Only the rendered "
 "result will be saved."
 msgstr ""
-"L'immagine contiene livelli di tipo <b>%1</b> non supportato. Sarà salvato "
+"L'immagine contiene livelli di tipo <b>%1</b>, non supportato. Sarà salvato "
 "solo il risultato con resa."
 
 #: libs/impex/PSDLayerStylesCheck.h:104
@@ -19407,9 +19403,9 @@ msgstr "Risorse locali"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:708
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:720
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20470,7 +20466,7 @@ msgstr ""
 msgid "Warning(s):"
 msgstr "Avvisi:"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20479,7 +20475,7 @@ msgstr ""
 "Il file FFmpeg che hai fornito sembra essere compresso. Prova prima a "
 "estrarre il file FFmpeg dall'archivio."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:708
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20488,7 +20484,7 @@ msgstr ""
 "Il file FFmpeg che hai fornito non sembra valido. Seleziona la posizione "
 "attuale di un eseguibile FFmpeg nel tuo sistema."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:720
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Inserisci un nome file su cui eseguire la resa."
@@ -24106,8 +24102,8 @@ msgstr ""
 "Nel gamut del dispositivo di destinazione; la tonalità, la chiarezza e la "
 "saturazione sono mantenute. Fuori dal gamut; la tonalità e la chiarezza sono "
 "mantenute, viene sacrificata la saturazione. Punto bianco per origine e "
-"destinazione; invariato. Intesa per i colori spot (Pantone, TruMatch, colori "
-"di loghi, ...)"
+"destinazione; invariato. Intesa per i colori a tinta piatta (Pantone, "
+"TruMatch, colori di loghi, ...)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:130
@@ -24477,7 +24473,7 @@ msgstr ""
 #: libs/ui/forms/wdgconvertcolorspace.ui:99
 #, kde-format
 msgid "Best for spot colors"
-msgstr "Migliore per i colori spot"
+msgstr "Migliore per i colori a tinta piatta"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgconvertcolorspace.ui:107
@@ -24495,7 +24491,7 @@ msgstr ""
 "dal gamut; la tonalità e la chiarezza sono mantenute,\n"
 "viene sacrificata la saturazione. I punti bianchi di\n"
 "origine e destinazione; invariati. Intesa per i colori\n"
-"spot (Pantone, TruMatch, colori di loghi, ...)"
+"a tinta piatta (Pantone, TruMatch, colori di loghi, ...)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
 #: libs/ui/forms/wdgconvertcolorspace.ui:123
@@ -30919,9 +30915,9 @@ msgid ""
 "A spot color is a color that the printer is able to print without mixing the "
 "paints it has available to it. The opposite is called a process color."
 msgstr ""
-"Un colore spot è un colore che la stampante è in grado di imprimere senza "
-"miscelare le vernici disponibili per esso. L'opposto viene chiamato colore a "
-"retinatura."
+"Un colore a tinta piatta è un colore che la stampante è in grado di "
+"imprimere senza miscelare le vernici disponibili per esso. L'opposto viene "
+"chiamato colore a retinatura."
 
 #: libs/ui/KisPaletteEditor.cpp:380 libs/ui/KisPaletteEditor.cpp:429
 #: libs/widgets/kis_palette_view.cpp:115
@@ -30946,7 +30942,7 @@ msgstr "Colore:"
 #: libs/widgets/kis_palette_view.cpp:118
 #, kde-format
 msgid "Spot color:"
-msgstr "Colore spot:"
+msgstr "Colore a tinta piatta:"
 
 #: libs/ui/KisPaletteEditor.cpp:428 libs/widgets/kis_palette_view.cpp:114
 #, kde-format
@@ -47435,6 +47431,8 @@ msgctxt "JPEG-XL errors"
 msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
+"Rilevata immagine JPEG-XL con canali di colori a tinta piatta, verrà "
+"importata l'immagine appiattita."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:632
 #: plugins/impex/jxl/JPEGXLImport.cpp:642
@@ -47452,12 +47450,14 @@ msgid ""
 "Detected multi layer JPEG-XL image with unsupported blending mode, importing "
 "flattened image."
 msgstr ""
+"Rilevata immagine JPEG-XL a più livelli con metodo di fusione non "
+"supportato, verrà importata l'immagine appiattita."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:823
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
-msgstr ""
+msgstr "Lunghezza del nome del livello JPEG-XL non valido"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:882
 #, kde-format
@@ -47870,24 +47870,21 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:233
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
-#| "need to restart Krita to enable or disable plugins.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
 "Animated exports are <span style=\" font-weight:600;\">always</span> "
 "flattened regardless of this setting.</p></body></html>"
 msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Nota:</span> devi "
-"riavviare Krita per attivare o disattivare le estensioni.</p></body></html>"
+"<html><head/><body><p><span style=\" font-weight:600;\">Nota:</span> le "
+"esportazioni animate vengono <span style=\" font-weight:600;\">sempre</span> "
+"appiattite a prescindere da questa impostazione.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:236
-#, fuzzy, kde-format
-#| msgid "Flatten the &image"
+#, kde-format
 msgid "Flatten the image"
-msgstr "Appiattisci l'&immagine"
+msgstr "Appiattisci l'immagine"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:253

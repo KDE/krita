@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-17 00:45+0000\n"
-"PO-Revision-Date: 2023-06-11 09:07+0300\n"
+"POT-Creation-Date: 2023-06-18 00:50+0000\n"
+"PO-Revision-Date: 2023-06-17 08:54+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -19585,9 +19585,9 @@ msgstr "Локальні ресурси"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:708
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:720
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20664,7 +20664,7 @@ msgstr ""
 msgid "Warning(s):"
 msgstr "Попередження:"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20673,7 +20673,7 @@ msgstr ""
 "Здається, вказаний вами файл FFmpeg стиснуто. Будь ласка, спочатку виконайте "
 "видобування ffmpeg з архіву."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:708
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20682,7 +20682,7 @@ msgstr ""
 "Вказане розташування FFmpeg є некоректним. Будь ласка, виберіть належне "
 "розташування виконуваного файла FFmpeg у вашій системі."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:720
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Будь ласка, введіть назву файла, до якого буде записано результат."
@@ -30914,11 +30914,9 @@ msgid "Also save your image as a Krita file."
 msgstr "Також збережіть зображення у форматі Krita."
 
 #: libs/ui/KisImportExportUtils.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
+#, kde-format
 msgid "Convert image color space on import"
-msgstr "Перетворити простір кольорів зображення"
+msgstr "Перетворити простір кольорів зображення при імпортуванні"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 msgctxt "(qtundo-format)"

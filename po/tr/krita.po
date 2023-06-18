@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-17 00:45+0000\n"
-"PO-Revision-Date: 2023-06-16 12:31+0300\n"
+"POT-Creation-Date: 2023-06-18 00:50+0000\n"
+"PO-Revision-Date: 2023-06-17 13:34+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19348,9 +19348,9 @@ msgstr "Yerel Özkaynaklar"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:708
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:720
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20409,7 +20409,7 @@ msgstr ""
 msgid "Warning(s):"
 msgstr "Uyarılar:"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
@@ -20418,7 +20418,7 @@ msgstr ""
 "Bize verdiğiniz FFmpeg ikilisi sıkıştırılmış gibi görünüyor. Lütfen önce "
 "FFmpeg'i arşivden çıkarmayı deneyin."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:708
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20427,7 +20427,7 @@ msgstr ""
 "Bize verdiğiniz FFmpeg geçersiz gibi görünüyor. Lütfen sisteminizdeki FFmpeg "
 "yürütülebilirinin doğru konumunu seçin."
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:720
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "Sunumun yapılacağı dosyanın adını girin."
@@ -30493,11 +30493,9 @@ msgid "Also save your image as a Krita file."
 msgstr "Ayrıca, görselinizi Krita dosyası olarak kaydedin."
 
 #: libs/ui/KisImportExportUtils.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
+#, kde-format
 msgid "Convert image color space on import"
-msgstr "Görsel Renk Uzayını Dönüştür"
+msgstr "İçe aktarırken görsel renk uzayını dönüştür"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 msgctxt "(qtundo-format)"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-17 00:45+0000\n"
-"PO-Revision-Date: 2023-05-22 14:00\n"
+"POT-Creation-Date: 2023-06-18 00:50+0000\n"
+"PO-Revision-Date: 2023-06-17 04:11\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -17730,16 +17730,12 @@ msgid "Transparency Mask"
 msgstr "透明度蒙版"
 
 #: libs/impex/LayerOpacityCheck.h:109
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Your image contains layers with a color model that is different from the "
-#| "image. The layers will be converted."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Your image contains layers with a partial opacity. The layers will be "
 "exported at full opacity."
-msgstr "此图像含有色彩模型与其不统一的图层。这些图层的色彩空间将被转换。"
+msgstr "此图像包含部分不透明的图层。这些图层将被导出为完全不透明的图层。"
 
 #: libs/impex/MultiLayerCheck.h:24
 #, kde-format
@@ -19287,9 +19283,9 @@ msgstr "本地资源"
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:708
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:720
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
@@ -20333,15 +20329,16 @@ msgstr "GIF 动画图像的每秒帧数不能超过 50，它将被降低到每�
 msgid "Warning(s):"
 msgstr "警告："
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:694
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:692
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
-"您给 Krita 提供的 FFmpeg 似乎是一个压缩包。请先将把该压缩包中的内容解压出来。"
+"您给 Krita 提供的 FFmpeg 似乎是一个压缩文件。请尝试将这个压缩文件的内容解压出"
+"来。"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:708
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:706
 #, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
@@ -20350,7 +20347,7 @@ msgstr ""
 "您给 Krita 提供的 FFmpeg 似乎无效。请选择 FFmpeg 可执行文件在本机中的正确位"
 "置。"
 
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:720
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:718
 #, kde-format
 msgid "Please enter a file name to render to."
 msgstr "请输入导出动画的目标文件名称。"
@@ -23435,9 +23432,9 @@ msgid ""
 "decoration: underline;\">enable news</a> from krita.org in various languages "
 "with the menu above"
 msgstr ""
-"点此<a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-decoration: "
-"underline;\">启用最新资讯</a>，即可显示 Krita 的最新官方新闻，自动检查新版软"
-"件。资讯内容的语言可从右上方菜单选择。"
+"<a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-decoration: "
+"underline;\">点击启用最新资讯功能</a>，即可在此显示 Krita 官方网站的新闻并在"
+"新版 Krita 推出时通知您。资讯的语言可从右上方菜单按钮中选择。"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:562
@@ -23530,9 +23527,7 @@ msgstr "清除"
 msgid ""
 "You don't seem to have any\n"
 "recently opened documents"
-msgstr ""
-"您尚未在本机\n"
-"打开过任何图像"
+msgstr "您尚未打开过任何图像"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1874
@@ -46744,7 +46739,7 @@ msgstr "写入作者档案信息"
 msgctxt "JPEG-XL errors"
 msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
-msgstr ""
+msgstr "检测到带有专色通道的 JPEG-XL 图像，将导入合并后的图像。"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:632
 #: plugins/impex/jxl/JPEGXLImport.cpp:642
@@ -46761,13 +46756,13 @@ msgctxt "JPEG-XL errors"
 msgid ""
 "Detected multi layer JPEG-XL image with unsupported blending mode, importing "
 "flattened image."
-msgstr ""
+msgstr "检测到带有不支持的混合模式的多图层 JPEG-XL 图像，将导入合并后的图像。"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:823
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
-msgstr ""
+msgstr "无效的 JPEG-XL 图层名称长度"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:882
 #, kde-format
@@ -47174,24 +47169,21 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:233
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
-#| "need to restart Krita to enable or disable plugins.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
 "Animated exports are <span style=\" font-weight:600;\">always</span> "
 "flattened regardless of this setting.</p></body></html>"
 msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\">注意：</span>启用或禁"
-"用插件后必须重启 Krita 才能生效。</p></body></html>"
+"<html><head/><body><p><span style=\" font-weight:600;\">请注意：</span>动态图"
+"像将<span style=\" font-weight:600;\">总是</span>导出为合并后的图像，不管此选"
+"项如何设置。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:236
-#, fuzzy, kde-format
-#| msgid "Flatten the &image"
+#, kde-format
 msgid "Flatten the image"
-msgstr "合并整个图像(&I)"
+msgstr "合并此图像"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:253
@@ -55225,7 +55217,7 @@ msgid ""
 "download link (http://example.com/plugin.zip)</li><li>Github repository "
 "(https://github.com/test/plugin)</li>"
 msgstr ""
-"<p><strong>输入下载 URL</strong></p><p>例如：<ul><li>ZIP 压缩包下载链接 "
+"<p><strong>输入下载 URL</strong></p><p>例如：<ul><li>ZIP 压缩文件下载链接 "
 "(http://example.com/plugin.zip)</li><li>Github 源代码仓库网址 (https://"
 "github.com/test/plugin)</li>"
 
@@ -59533,8 +59525,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid ""
-#~ "JPEG-XL image is animated, but cannot retrieve animation frame header."
-#~ msgstr "此 JPEG-XL 图像是动图，但无法获取动画帧数据头。"

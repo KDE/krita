@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-02-23 23:52+0100\n"
+"PO-Revision-Date: 2023-06-14 13:30+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -17590,7 +17590,7 @@ msgid ""
 "The image has <b>more than one layer or a mask or an active selection</b>. "
 "Only the flattened image will be saved."
 msgstr ""
-"L'immagine contiene <b>più di un livello o una maschera o una seleziona "
+"L'immagine contiene <b>più di un livello o una maschera o una selezione "
 "attiva</b>. Sarà salvata solo l'immagine appiattita."
 
 #: libs/impex/MultiTransparencyMaskCheck.h:25
@@ -17612,7 +17612,7 @@ msgid ""
 "The image contains layers of unsupported type <b>%1</b>. Only the rendered "
 "result will be saved."
 msgstr ""
-"L'immagine contiene livelli di tipo <b>%1</b> non supportato. Sarà salvato "
+"L'immagine contiene livelli di tipo <b>%1</b>, non supportato. Sarà salvato "
 "solo il risultato con resa."
 
 #: libs/impex/PSDLayerStylesCheck.h:104
@@ -23774,8 +23774,8 @@ msgstr ""
 "Nel gamut del dispositivo di destinazione; la tonalità, la chiarezza e la "
 "saturazione sono mantenute. Fuori dal gamut; la tonalità e la chiarezza sono "
 "mantenute, viene sacrificata la saturazione. Punto bianco per origine e "
-"destinazione; invariato. Intesa per i colori spot (Pantone, TruMatch, colori "
-"di loghi, ...)"
+"destinazione; invariato. Intesa per i colori a tinta piatta (Pantone, "
+"TruMatch, colori di loghi, ...)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:130
@@ -30296,9 +30296,9 @@ msgid ""
 "A spot color is a color that the printer is able to print without mixing the "
 "paints it has available to it. The opposite is called a process color."
 msgstr ""
-"Un colore spot è un colore che la stampante è in grado di imprimere senza "
-"miscelare le vernici disponibili per esso. L'opposto viene chiamato colore a "
-"retinatura."
+"Un colore a tinta piatta è un colore che la stampante è in grado di "
+"imprimere senza miscelare le vernici disponibili per esso. L'opposto viene "
+"chiamato colore a retinatura."
 
 #: libs/ui/KisPaletteEditor.cpp:373 libs/ui/KisPaletteEditor.cpp:422
 #: libs/widgets/kis_palette_view.cpp:116
@@ -30323,7 +30323,7 @@ msgstr "Colore:"
 #: libs/widgets/kis_palette_view.cpp:119
 #, kde-format
 msgid "Spot color:"
-msgstr "Colore spot:"
+msgstr "Colore a tinta piatta:"
 
 #: libs/ui/KisPaletteEditor.cpp:421 libs/widgets/kis_palette_view.cpp:115
 #, kde-format
@@ -40258,7 +40258,7 @@ msgstr ""
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:99
 #, kde-format
 msgid "Best for spot colors"
-msgstr "Migliore per i colori spot"
+msgstr "Migliore per i colori a tinta piatta"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:107
@@ -40276,7 +40276,7 @@ msgstr ""
 "dal gamut; la tonalità e la chiarezza sono mantenute,\n"
 "viene sacrificata la saturazione. I punti bianchi di\n"
 "origine e destinazione; invariati. Intesa per i colori\n"
-"spot (Pantone, TruMatch, colori di loghi, ...)"
+"a tinta piatta (Pantone, TruMatch, colori di loghi, ...)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
 #: plugins/extensions/colorspaceconversion/wdgconvertcolorspace.ui:123

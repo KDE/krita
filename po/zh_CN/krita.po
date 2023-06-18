@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-05-22 14:03\n"
+"PO-Revision-Date: 2023-06-17 04:13\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -20081,7 +20081,7 @@ msgstr "指定的 FFmpeg 的位置无效。请在系统中选择 FFmpeg 可执�
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:538
 #, kde-format
 msgid "Please extract ffmpeg from the archive first."
-msgstr "请先把 FFmpeg 从压缩包中解压出来。"
+msgstr "请先把 FFmpeg 程序从压缩文件中解压出来。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:545
 #, kde-format
@@ -20090,13 +20090,13 @@ msgid ""
 "('Windows Builds'), unpack it and then provide the path to the extracted "
 "ffmpeg file."
 msgstr ""
-"这是一个源代码压缩包。请点击网站的 Windows 按钮，下载名为“Windows builds”应用"
-"程序压缩包，再把路径指向解压后的 FFmpeg 文件。"
+"这个压缩文件包含的是源代码而不是可执行程序。请从 FFmpeg 网站的“Windows "
+"builds”栏目下载可执行程序的压缩文件，解压后再输入 ffmpeg 文件的路径。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:548
 #, kde-format
 msgid "This is a source code archive. Please install ffmpeg instead."
-msgstr "这是一个源代码压缩包。请改为安装 FFmpeg 应用软件包。"
+msgstr "这个压缩文件包含的是源代码而不是可执行程序。请改为安装 ffmpeg 软件包。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:568
 #, kde-format
@@ -23170,9 +23170,9 @@ msgid ""
 "decoration: underline;\">enable news</a> from krita.org in various languages "
 "with the menu above"
 msgstr ""
-"点此<a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-decoration: "
-"underline;\">启用最新资讯</a>，即可显示 Krita 的最新官方新闻，自动检查新版软"
-"件。资讯内容的语言可从右上方菜单选择。"
+"<a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-decoration: "
+"underline;\">点击启用最新资讯功能</a>，即可在此显示 Krita 官方网站的新闻并在"
+"新版 Krita 推出时通知您。资讯的语言可从右上方菜单按钮中选择。"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:562
@@ -23265,9 +23265,7 @@ msgstr "清除"
 msgid ""
 "You don't seem to have any\n"
 "recently opened documents"
-msgstr ""
-"您尚未在本机\n"
-"打开过任何图像"
+msgstr "您尚未打开过任何图像"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1874
@@ -54215,7 +54213,7 @@ msgid ""
 "download link (http://example.com/plugin.zip)</li><li>Github repository "
 "(https://github.com/test/plugin)</li>"
 msgstr ""
-"<p><strong>输入下载 URL</strong></p><p>例如：<ul><li>ZIP 压缩包下载链接 "
+"<p><strong>输入下载 URL</strong></p><p>例如：<ul><li>ZIP 压缩文件下载链接 "
 "(http://example.com/plugin.zip)</li><li>Github 源代码仓库网址 (https://"
 "github.com/test/plugin)</li>"
 

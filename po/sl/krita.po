@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-18 00:50+0000\n"
-"PO-Revision-Date: 2023-06-12 08:47+0200\n"
+"PO-Revision-Date: 2023-06-18 08:24+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -30495,11 +30495,9 @@ msgid "Also save your image as a Krita file."
 msgstr "Shrani sliko tudi kot datoteko Krita."
 
 #: libs/ui/KisImportExportUtils.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
+#, kde-format
 msgid "Convert image color space on import"
-msgstr "Pretvori barvni prostor slike"
+msgstr "Pretvori barvni prostor slike ob uvozu"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 msgctxt "(qtundo-format)"

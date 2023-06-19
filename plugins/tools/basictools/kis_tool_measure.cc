@@ -19,6 +19,7 @@
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 
+#include "kis_algebra_2d.h"
 #include "kis_image.h"
 #include "kis_cursor.h"
 #include "KoPointerEvent.h"
@@ -106,18 +107,14 @@ KisToolMeasure::~KisToolMeasure()
 QPointF KisToolMeasure::lockedAngle(QPointF pos)
 {
     const QPointF lineVector = pos - m_startPos;
-    qreal lineAngle = std::atan2(lineVector.y(), lineVector.x());
-
-    if (lineAngle < 0) {
-        lineAngle += 2 * M_PI;
-    }
+    qreal lineAngle = normalizeAngle(std::atan2(lineVector.y(), lineVector.x()));
 
     const qreal ANGLE_BETWEEN_CONSTRAINED_LINES = (2 * M_PI) / 24;
 
     const quint32 constrainedLineIndex = static_cast<quint32>((lineAngle / ANGLE_BETWEEN_CONSTRAINED_LINES) + 0.5);
     const qreal constrainedLineAngle = constrainedLineIndex * ANGLE_BETWEEN_CONSTRAINED_LINES;
 
-    const qreal lineLength = std::sqrt((lineVector.x() * lineVector.x()) + (lineVector.y() * lineVector.y()));
+    const qreal lineLength = KisAlgebra2D::norm(lineVector);
 
     const QPointF constrainedLineVector(lineLength * std::cos(constrainedLineAngle), lineLength * std::sin(constrainedLineAngle));
 

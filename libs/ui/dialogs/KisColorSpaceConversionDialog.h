@@ -1,12 +1,12 @@
     /*
- *  dlg_colorspaceconversion.h -- part of KimageShop^WKrayon^WKrita
+ *  KisColorSpaceConversionDialog.h -- part of KimageShop^WKrayon^WKrita
  *
  *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef DLG_COLORSPACECONVERSION
-#define DLG_COLORSPACECONVERSION
+#ifndef KISCOLORSPACECONVERSIONDIALOG_H
+#define KISCOLORSPACECONVERSIONDIALOG_H
 
 
 #include <QButtonGroup>
@@ -36,15 +36,15 @@ public:
 /**
  * XXX
  */
-class KRITAUI_EXPORT DlgColorSpaceConversion : public KoDialog
+class KRITAUI_EXPORT KisColorSpaceConversionDialog : public KoDialog
 {
 
     Q_OBJECT
 
 public:
 
-    DlgColorSpaceConversion(QWidget * parent = 0, const char* name = 0);
-    ~DlgColorSpaceConversion() override;
+    KisColorSpaceConversionDialog(QWidget * parent = 0, const char* name = 0);
+    ~KisColorSpaceConversionDialog() override;
 
     void setInitialColorSpace(const KoColorSpace *cs, KisImageSP entireImage);
 
@@ -65,4 +65,4 @@ private:
     KisImageSP m_image;
 };
 
-#endif // DLG_COLORSPACECONVERSION
+#endif // KISCOLORSPACECONVERSIONDIALOG_H

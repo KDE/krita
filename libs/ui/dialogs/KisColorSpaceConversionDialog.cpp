@@ -1,12 +1,12 @@
 /*
- *  dlg_colorspaceconversion.cc - part of KimageShop^WKrayon^WKrita
+ *  KisColorSpaceConversionDialog.cpp - part of KimageShop^WKrayon^WKrita
  *
  *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "dlg_colorspaceconversion.h"
+#include "KisColorSpaceConversionDialog.h"
 
 #include <QRadioButton>
 #include <QCheckBox>
@@ -27,7 +27,7 @@
 #include "kis_image.h"
 #include "kis_layer_utils.h"
 
-DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
+KisColorSpaceConversionDialog::KisColorSpaceConversionDialog(QWidget *  parent,
         const char * name)
         : KoDialog(parent)
 {
@@ -60,12 +60,12 @@ DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
 
 
 
-DlgColorSpaceConversion::~DlgColorSpaceConversion()
+KisColorSpaceConversionDialog::~KisColorSpaceConversionDialog()
 {
     delete m_page;
 }
 
-void DlgColorSpaceConversion::setInitialColorSpace(const KoColorSpace *cs, KisImageSP entireImage)
+void KisColorSpaceConversionDialog::setInitialColorSpace(const KoColorSpace *cs, KisImageSP entireImage)
 {
     if (!cs) {
         return;
@@ -83,17 +83,17 @@ void DlgColorSpaceConversion::setInitialColorSpace(const KoColorSpace *cs, KisIm
     m_image = entireImage;
 }
 
-const KoColorSpace *DlgColorSpaceConversion::colorSpace() const
+const KoColorSpace *KisColorSpaceConversionDialog::colorSpace() const
 {
     return m_page->colorSpaceSelector->currentColorSpace();
 }
 
-KoColorConversionTransformation::Intent DlgColorSpaceConversion::conversionIntent() const
+KoColorConversionTransformation::Intent KisColorSpaceConversionDialog::conversionIntent() const
 {
     return static_cast<KoColorConversionTransformation::Intent>(m_intentButtonGroup.checkedId());
 }
 
-KoColorConversionTransformation::ConversionFlags DlgColorSpaceConversion::conversionFlags() const
+KoColorConversionTransformation::ConversionFlags KisColorSpaceConversionDialog::conversionFlags() const
 {
     KoColorConversionTransformation::ConversionFlags flags = KoColorConversionTransformation::HighQuality;
 
@@ -103,7 +103,7 @@ KoColorConversionTransformation::ConversionFlags DlgColorSpaceConversion::conver
     return flags;
 }
 
-void DlgColorSpaceConversion::selectionChanged(bool valid)
+void KisColorSpaceConversionDialog::selectionChanged(bool valid)
 {
     //TODO: Figure out how to uncheck when moving TO a linear TRC.
     Q_UNUSED(valid);
@@ -112,12 +112,12 @@ void DlgColorSpaceConversion::selectionChanged(bool valid)
 
 // SLOTS
 
-void DlgColorSpaceConversion::okClicked()
+void KisColorSpaceConversionDialog::okClicked()
 {
     accept();
 }
 
-void DlgColorSpaceConversion::slotColorSpaceChanged(const KoColorSpace *cs)
+void KisColorSpaceConversionDialog::slotColorSpaceChanged(const KoColorSpace *cs)
 {
     if (m_image &&
         *m_image->profile() != *cs->profile() &&

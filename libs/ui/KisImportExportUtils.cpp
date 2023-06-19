@@ -11,7 +11,7 @@
 #include <KoColorProfile.h>
 #include "kis_image.h"
 #include "KisImportUserFeedbackInterface.h"
-#include "dialogs/dlg_colorspaceconversion.h"
+#include "dialogs/KisColorSpaceConversionDialog.h"
 
 namespace KritaUtils {
 
@@ -36,7 +36,7 @@ KisImportExportErrorCode workaroundUnsuitableImageColorSpace(KisImageSP image,
             KisImportUserFeedbackInterface::Result result =
                 feedbackInterface->askUser([&] (QWidget *parent) {
 
-                    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(parent, "ColorSpaceConversion");
+                    KisColorSpaceConversionDialog * dlgColorSpaceConversion = new KisColorSpaceConversionDialog(parent, "ColorSpaceConversion");
                     Q_CHECK_PTR(dlgColorSpaceConversion);
 
                     const KoColorSpace* fallbackColorSpace =

@@ -6,8 +6,6 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QRegularExpression>
-
 #include <KoColor.h>
 #include <filter/kis_filter_configuration.h>
 #include <KisGlobalResourcesInterface.h>
@@ -15,6 +13,7 @@
 #include <kis_generator_registry.h>
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
+#include <KisSpinBoxPluralHelper.h>
 #include <KoUnit.h>
 
 #include "KisScreentoneConfigWidget.h"
@@ -90,8 +89,18 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     m_ui.sliderShearY->setSingleStep(0.1);
     m_ui.sliderAlignToPixelGridX->setRange(1, 20);
     m_ui.sliderAlignToPixelGridY->setRange(1, 20);
-    setSliderAlignToPixelGridXText();
-    setSliderAlignToPixelGridYText();
+    KisSpinBoxPluralHelper::install(m_ui.sliderAlignToPixelGridX, [](int value) {
+        // i18n: This is meant to be used in a spinbox so keep the {n} in the text
+        //       and it will be substituted by the number. The text before will be
+        //       used as the prefix and the text after as the suffix
+        return i18ncp("Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone generator", "Every {n} cell horizontally", "Every {n} cells horizontally", value);
+    });
+    KisSpinBoxPluralHelper::install(m_ui.sliderAlignToPixelGridY, [](int value) {
+        // i18n: This is meant to be used in a spinbox so keep the {n} in the text
+        //       and it will be substituted by the number. The text before will be
+        //       used as the prefix and the text after as the suffix
+        return i18ncp("Vertical pixel grid alignment prefix/suffix for spinboxes in screentone generator", "Every {n} cell vertically", "Every {n} cells vertically", value);
+    });
     slot_buttonSizeModeResolutionBased_toggled(true);
 
     connect(m_ui.comboBoxPattern, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxPattern_currentIndexChanged(int)));
@@ -202,8 +211,8 @@ void KisScreentoneConfigWidget::setConfiguration(const KisPropertiesConfiguratio
         m_ui.checkBoxAlignToPixelGrid->setChecked(generatorConfig->alignToPixelGrid());
         m_ui.sliderAlignToPixelGridX->setValue(generatorConfig->alignToPixelGridX());
         m_ui.sliderAlignToPixelGridY->setValue(generatorConfig->alignToPixelGridY());
-        setSliderAlignToPixelGridXText();
-        setSliderAlignToPixelGridYText();
+        KisSpinBoxPluralHelper::update(m_ui.sliderAlignToPixelGridX);
+        KisSpinBoxPluralHelper::update(m_ui.sliderAlignToPixelGridY);
 
         if (generatorConfig->sizeMode() == KisScreentoneSizeMode_PixelBased) {
             m_ui.buttonSizeModePixelBased->setChecked(true);
@@ -351,38 +360,6 @@ int KisScreentoneConfigWidget::comboIndexToShape(int patternIndex, int shapeInde
         case 4: return KisScreentoneShapeType_SquareDots;
     }
     return -1;
-}
-
-void KisScreentoneConfigWidget::setSliderAlignToPixelGridXText()
-{
-    // i18n: This is meant to be used in a spinbox so keep the {n} in the text
-    //       and it will be substituted by the number. The text before will be
-    //       used as the prefix and the text arfet as the suffix
-    const QString txt = i18ncp("Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone generator", "Every {n} cell horizontally", "Every {n} cells horizontally", m_ui.sliderAlignToPixelGridX->value());
-    const QRegularExpressionMatch match = QRegularExpression("(.*){n}(.*)").match(txt);
-    if (match.hasMatch()) {
-        m_ui.sliderAlignToPixelGridX->setPrefix(match.captured(1));
-        m_ui.sliderAlignToPixelGridX->setSuffix(match.captured(2));
-    } else {
-        m_ui.sliderAlignToPixelGridX->setPrefix(QString());
-        m_ui.sliderAlignToPixelGridX->setSuffix(txt);
-    }
-}
-
-void KisScreentoneConfigWidget::setSliderAlignToPixelGridYText()
-{
-    // i18n: This is meant to be used in a spinbox so keep the {n} in the text
-    //       and it will be substituted by the number. The text before will be
-    //       used as the prefix and the text arfet as the suffix
-    const QString txt = i18ncp("Vertical pixel grid alignment prefix/suffix for spinboxes in screentone generator", "Every {n} cell vertically", "Every {n} cells vertically", m_ui.sliderAlignToPixelGridY->value());
-    const QRegularExpressionMatch match = QRegularExpression("(.*){n}(.*)").match(txt);
-    if (match.hasMatch()) {
-        m_ui.sliderAlignToPixelGridY->setPrefix(match.captured(1));
-        m_ui.sliderAlignToPixelGridY->setSuffix(match.captured(2));
-    } else {
-        m_ui.sliderAlignToPixelGridY->setPrefix(QString());
-        m_ui.sliderAlignToPixelGridY->setSuffix(txt);
-    }
 }
 
 void KisScreentoneConfigWidget::slot_comboBoxPattern_currentIndexChanged(int)
@@ -575,7 +552,6 @@ void KisScreentoneConfigWidget::slot_buttonConstrainSize_keepAspectRatioChanged(
 void KisScreentoneConfigWidget::slot_sliderAlignToPixelGridX_valueChanged(int value)
 {
     Q_UNUSED(value);
-    setSliderAlignToPixelGridXText();
     if (m_ui.checkBoxAlignToPixelGrid->isChecked()) {
         emit sigConfigurationItemChanged();
     }
@@ -584,7 +560,6 @@ void KisScreentoneConfigWidget::slot_sliderAlignToPixelGridX_valueChanged(int va
 void KisScreentoneConfigWidget::slot_sliderAlignToPixelGridY_valueChanged(int value)
 {
     Q_UNUSED(value);
-    setSliderAlignToPixelGridYText();
     if (m_ui.checkBoxAlignToPixelGrid->isChecked()) {
         emit sigConfigurationItemChanged();
     }

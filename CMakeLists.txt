@@ -990,18 +990,11 @@ endif()
 macro_bool_to_01(Mlt7_FOUND HAVE_MLT)
 configure_file(config-mlt.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-mlt.h)
 
-
-
-find_package(LibMyPaint)
+find_package(LibMyPaint 1.4.0)
 set_package_properties(LibMyPaint PROPERTIES
     DESCRIPTION "MyPaint brush engine API for C/C++"
     TYPE OPTIONAL
-    PURPOSE "Required for the mypaint brush engine")
-if(LibMyPaint_FOUND)
-    if(LibMyPaint_VERSION VERSION_LESS "1.4.0")
-        message(WARNING "Please update libmypaint to version above 1.4.0 as lower versions are known to crash")
-    endif()
-endif()
+    PURPOSE "Required for the MyPaint brush engine")
 macro_bool_to_01(LibMyPaint_FOUND HAVE_LIBMYPAINT)
 configure_file(config-mypaint.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-mypaint.h )
 

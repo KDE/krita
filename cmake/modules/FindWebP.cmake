@@ -69,7 +69,7 @@ This will define the following variables in your project:
 
 include(FindPackageHandleStandardArgs)
 
-set(PC_WEBP_CONFIG_DIR)
+set(PC_WEBP_CONFIG_DIR CACHE STRING "PkgConfig path for locating the package modules")
 foreach(_dir ${CMAKE_PREFIX_PATH})
     list(APPEND PC_WEBP_CONFIG_DIR ${_dir}/share/WebP/cmake)
 endforeach()

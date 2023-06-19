@@ -68,7 +68,7 @@ This will define the following variables in your project:
 
 include(FindPackageHandleStandardArgs)
 
-set(PKG_FFTW_CONFIG_DIR)
+set(PKG_FFTW_CONFIG_DIR CACHE STRING "PkgConfig path for locating the package modules")
 foreach(_dir ${CMAKE_PREFIX_PATH})
     list(APPEND PKG_FFTW_CONFIG_DIR ${_dir}/lib/cmake/fftw3)
 endforeach()

@@ -377,7 +377,6 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
 
     if (direction == Import) {
         KisMainWindow *kisMain = KisPart::instance()->currentMainwindow();
-        KIS_SAFE_ASSERT_RECOVER_NOOP(kisMain);
         filter->setImportUserFeedBackInterface(new SynchronousUserFeedbackInterface(kisMain, batchMode()));
     }
 

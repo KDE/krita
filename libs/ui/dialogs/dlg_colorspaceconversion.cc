@@ -38,6 +38,9 @@ DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
     Q_CHECK_PTR(m_page);
     m_page->setObjectName("colorspace_conversion");
 
+    // the warning label is hidden by default!
+    m_page->lblHeadlineWarning->setVisible(false);
+
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
@@ -67,8 +70,6 @@ void DlgColorSpaceConversion::setInitialColorSpace(const KoColorSpace *cs, KisIm
     if (!cs) {
         return;
     }
-
-    ENTER_FUNCTION() << ppVar(cs->profile()->getEstimatedTRC()[0]==1.0);
 
     if (cs->profile()->getEstimatedTRC()[0]==1.0) {
     //this tries to automatically determine whether optimizations ought to be checked or not.

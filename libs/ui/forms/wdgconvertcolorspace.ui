@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -11,13 +11,23 @@
     <x>0</x>
     <y>0</y>
     <width>487</width>
-    <height>244</height>
+    <height>270</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Colorspace Conversion</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="lblHeadlineWarning">
+     <property name="text">
+      <string notr="true">WARNING TEXT LABEL</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
    <item>
     <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true"/>
    </item>
@@ -30,7 +40,7 @@
       <string>&amp;Rendering Intent</string>
      </property>
      <layout class="QGridLayout">
-      <item column="0" row="0">
+      <item row="0" column="0">
        <widget class="QRadioButton" name="radioPerceptual">
         <property name="toolTip">
          <string>For images</string>
@@ -52,7 +62,7 @@ result in neutral grays. Intended for images.</string>
         </property>
        </widget>
       </item>
-      <item column="0" row="1">
+      <item row="1" column="0">
        <widget class="QRadioButton" name="radioRelativeColorimetric">
         <property name="whatsThis">
          <string>Within and outside gamut; same as Absolute
@@ -70,7 +80,7 @@ intent.</string>
         </property>
        </widget>
       </item>
-      <item column="0" row="2">
+      <item row="2" column="0">
        <widget class="QRadioButton" name="radioSaturation">
         <property name="toolTip">
          <string>Best for graphs and charts</string>
@@ -93,7 +103,7 @@ intent.</string>
         </property>
        </widget>
       </item>
-      <item column="0" row="3">
+      <item row="3" column="0">
        <widget class="QRadioButton" name="radioAbsoluteColorimetric">
         <property name="toolTip">
          <string>Best for spot colors</string>

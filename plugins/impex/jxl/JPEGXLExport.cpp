@@ -808,21 +808,20 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             return true;
         };
 
-        // Hardcoded a map function that translates from arbitrary quality value to JPEG-XL distance
+        // Using cjxl quality mapping that translates from arbitrary quality value to JPEG-XL distance
         const auto setDistance = [&](float v) {
-            // Using a gamma curve to map the quality -> distance a bit better
-            const float gamma = 5.1098039724597f; // Derived so that Q 90 equals distance 1.0 (roughly match libjxl)
-            const float y = std::pow(v / 100.0f, 1.0f / gamma) * 100.0f;
-            const float dist = cfg->getBool("lossless") ? 0.0f : ((y * (0.5f - 25.0f)) / 100.0f) + 25.0f;
-            dbgFile << "libjxl distance equivalent: " << dist;
-            return JxlEncoderSetFrameDistance(frameSettings, dist) == JXL_ENC_SUCCESS;
+            const float distance = v >= 30 ? 0.1 + (100 - v) * 0.09 : 53.0 / 3000.0 * v * v - 23.0 / 20.0 * v + 25.0;
+            dbgFile << "libjxl distance equivalent: " << distance;
+            return JxlEncoderSetFrameDistance(frameSettings, distance) == JXL_ENC_SUCCESS;
         };
 
-        // XXX: Workaround for a buggy modular mode on F32.
-        // Set to encoder default instead.
+        // XXX: Workaround for a buggy lossy F32.
         //
         // See: https://github.com/libjxl/libjxl/issues/2064
-        const int setModular = (cs->colorDepthId() == Float32BitsColorDepthID) ? -1 : cfg->getInt("modular", -1);
+        //
+        // Update: It's not the modular mode that caused the bug, but the progressive/responsive setting
+        // that didn't work well with F32. So let's disable it on F32 instead.
+        const int setResponsive = (cs->colorDepthId() == Float32BitsColorDepthID) ? 0 : cfg->getInt("responsive", -1);
 
         // XXX: Workaround for a buggy lossless patches. Set to disable instead.
         // TODO Kampidh: revisit this when upstream got fixed.
@@ -840,10 +839,10 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             || !setSetting(JXL_ENC_FRAME_SETTING_PATCHES, setPatches)
             || !setSetting(JXL_ENC_FRAME_SETTING_EPF, cfg->getInt("epf", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_GABORISH, cfg->getInt("gaborish", -1))
-            || !setSetting(JXL_ENC_FRAME_SETTING_MODULAR, setModular)
+            || !setSetting(JXL_ENC_FRAME_SETTING_MODULAR, cfg->getInt("modular", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_KEEP_INVISIBLE, cfg->getInt("keepInvisible", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_GROUP_ORDER, cfg->getInt("groupOrder", -1))
-            || !setSetting(JXL_ENC_FRAME_SETTING_RESPONSIVE, cfg->getInt("responsive", -1))
+            || !setSetting(JXL_ENC_FRAME_SETTING_RESPONSIVE, setResponsive)
             || !setSetting(JXL_ENC_FRAME_SETTING_PROGRESSIVE_AC, cfg->getInt("progressiveAC", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_QPROGRESSIVE_AC, cfg->getInt("qProgressiveAC", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_PROGRESSIVE_DC, cfg->getInt("progressiveDC", -1))

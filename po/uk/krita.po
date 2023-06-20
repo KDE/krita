@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-18 00:50+0000\n"
+"POT-Creation-Date: 2023-06-20 00:47+0000\n"
 "PO-Revision-Date: 2023-06-17 08:54+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -15960,7 +15960,7 @@ msgstr ""
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:362
+#: libs/flake/tools/KoPathTool.cpp:354
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr ""
@@ -16392,41 +16392,41 @@ msgstr ""
 "Перетворити відтинок\n"
 "перетворення відтинку"
 
-#: libs/flake/tools/KoPathTool.cpp:187
+#: libs/flake/tools/KoPathTool.cpp:170
 #, kde-format
 msgid "Edit Shape"
 msgstr "Змінити форму"
 
-#: libs/flake/tools/KoPathTool.cpp:660
+#: libs/flake/tools/KoPathTool.cpp:652
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Перетягніть, щоб пересунути засіб керування."
 
-#: libs/flake/tools/KoPathTool.cpp:714
+#: libs/flake/tools/KoPathTool.cpp:706
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Перетягніть, щоб пересунути точку. Клацніть з утримуванням натиснутою "
 "клавіші Shift, щоб змінити тип точки."
 
-#: libs/flake/tools/KoPathTool.cpp:716
+#: libs/flake/tools/KoPathTool.cpp:708
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Перетягніть, щоб пересунути контрольну точку."
 
-#: libs/flake/tools/KoPathTool.cpp:739
+#: libs/flake/tools/KoPathTool.cpp:731
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Перетягніть вказівником, щоб змінити криву безпосередньо. Двічі клацніть "
 "кнопкою миші, щоб додати нову точку контуру."
 
-#: libs/flake/tools/KoPathTool.cpp:747
+#: libs/flake/tools/KoPathTool.cpp:739
 #, kde-format
 msgid "Press B to break path at selected point."
 msgstr "Натисніть клавішу «B», щоб розбити контур у вибраній точці."
 
-#: libs/flake/tools/KoPathTool.cpp:749
+#: libs/flake/tools/KoPathTool.cpp:741
 #, kde-format
 msgid "Press B to break path at selected segments."
 msgstr "Натисніть клавішу «B», щоб розбити контур на вибраних відрізках."
@@ -16711,7 +16711,7 @@ msgstr "Розмір"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1348
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1351
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1415
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1446
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1455
 #: libs/ui/forms/wdgdisplaysettings.ui:336
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -16739,10 +16739,10 @@ msgstr "Розмір"
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:44
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:40
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:41
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:64
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:69
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:74
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:80
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:68
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:73
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:68
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:31
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:25
@@ -17024,7 +17024,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (вбудований)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:466
+#: libs/ui/dialogs/kis_dlg_preferences.cc:467
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -19598,7 +19598,7 @@ msgstr "Локальні ресурси"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
-#: libs/ui/dialogs/kis_dlg_preferences.cc:904
+#: libs/ui/dialogs/kis_dlg_preferences.cc:905
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:714
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
@@ -19637,11 +19637,11 @@ msgstr "Локальні ресурси"
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
 #: plugins/extensions/imagesplit/imagesplit.cpp:76
 #: plugins/extensions/qmic/QMic.cpp:54 plugins/extensions/qmic/QMic.cpp:79
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:186
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:218
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:293
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:193
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:198
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:225
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:300
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:305
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:295
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:374
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:381
@@ -19859,8 +19859,8 @@ msgstr "Метадані"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1778
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1782
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1787
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1791
 #: libs/ui/forms/wdgdisplaysettings.ui:165 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:326
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -20659,7 +20659,7 @@ msgstr ""
 "за секунду. Частоту кадрів буде зменшено до 50 кадрів за секунду."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:479
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1806
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgid "Warning(s):"
 msgstr "Попередження:"
@@ -21170,7 +21170,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
 #: libs/ui/animation/video_export_options_dialog.ui:473
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:668
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:141
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
@@ -21632,8 +21632,8 @@ msgstr "Основний дисплей:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2074
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2076
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2083
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2085
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -21733,8 +21733,8 @@ msgstr "Імпортування відеоанімації"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2044
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2046
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2053
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2055
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22719,10 +22719,10 @@ msgstr "Властивості шару"
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:54
 #: plugins/generators/pattern/wdgpatternoptions.ui:90
 #: plugins/generators/pattern/wdgpatternoptions.ui:116
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:43
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:45
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:48
 #: plugins/impex/jpeg/kis_jpeg_export.cc:217
 #: plugins/impex/jpeg/kis_jpeg_export.cc:219
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:635
@@ -22836,7 +22836,7 @@ msgid "Could not load layer style library %1."
 msgstr "Не вдалося завантажити бібліотеку стилів шарів %1."
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:367
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:237
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:244
 #, kde-format
 msgctxt "@title:window"
 msgid "Warning"
@@ -22876,10 +22876,10 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1419
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1422
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1425
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1361
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1365
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1369
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1451
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1370
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1374
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1378
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1460
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:45
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:52
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:123
@@ -22932,17 +22932,17 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "Виявлено декілька джерел для вставлення"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:207
+#: libs/ui/dialogs/kis_dlg_preferences.cc:208
 #, kde-format
 msgid "No Cursor"
 msgstr "Без курсора"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:208
+#: libs/ui/dialogs/kis_dlg_preferences.cc:209
 #, kde-format
 msgid "Tool Icon"
 msgstr "Піктограма інструмента"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:209
+#: libs/ui/dialogs/kis_dlg_preferences.cc:210
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -22951,126 +22951,126 @@ msgstr "Піктограма інструмента"
 msgid "Arrow"
 msgstr "Стрілка"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:210
+#: libs/ui/dialogs/kis_dlg_preferences.cc:211
 #, kde-format
 msgid "Small Circle"
 msgstr "Кружок"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:212
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
 msgstr "Схрещення"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:212
+#: libs/ui/dialogs/kis_dlg_preferences.cc:213
 #, kde-format
 msgid "Triangle Righthanded"
 msgstr "Трикутна стрілка праворуч"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:213
+#: libs/ui/dialogs/kis_dlg_preferences.cc:214
 #, kde-format
 msgid "Triangle Lefthanded"
 msgstr "Трикутна стрілка ліворуч"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:214
+#: libs/ui/dialogs/kis_dlg_preferences.cc:215
 #, kde-format
 msgid "Black Pixel"
 msgstr "Чорний піксель"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:216
 #, kde-format
 msgid "White Pixel"
 msgstr "Білий піксель"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "Без контуру"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:220
 #, kde-format
 msgid "Circle Outline"
 msgstr "Круговий контур"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:220
+#: libs/ui/dialogs/kis_dlg_preferences.cc:221
 #, kde-format
 msgid "Preview Outline"
 msgstr "Контур перегляду"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:221
+#: libs/ui/dialogs/kis_dlg_preferences.cc:222
 #, kde-format
 msgid "Tilt Outline"
 msgstr "Контур нахилу"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:245
+#: libs/ui/dialogs/kis_dlg_preferences.cc:246
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
 msgid "Eraser"
 msgstr "Гумка"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:322
+#: libs/ui/dialogs/kis_dlg_preferences.cc:323
 #, kde-format
 msgid "On Touch Drag"
 msgstr "Сенсорне перетягування"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:323
+#: libs/ui/dialogs/kis_dlg_preferences.cc:324
 #, kde-format
 msgid "On Click Drag"
 msgstr "Перетягування з клацанням"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:324
+#: libs/ui/dialogs/kis_dlg_preferences.cc:325
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr "Перетягування із затисканням середньої кнопки"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:361
+#: libs/ui/dialogs/kis_dlg_preferences.cc:362
 #, kde-format
 msgid "Open default window"
 msgstr "Відкрити типове вікно"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:362
+#: libs/ui/dialogs/kis_dlg_preferences.cc:363
 #, kde-format
 msgid "Load previous session"
 msgstr "Завантажити попередній сеанс"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:363
+#: libs/ui/dialogs/kis_dlg_preferences.cc:364
 #, kde-format
 msgid "Show session manager"
 msgstr "Показати керування сеансами"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:431
+#: libs/ui/dialogs/kis_dlg_preferences.cc:432
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "Для набуття внесеними змінами чинності Krita доведеться перезапустити."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:437
+#: libs/ui/dialogs/kis_dlg_preferences.cc:438
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 "Збереження місця, яке вибрано засобом вибору файлів, може уповільнити запуск!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:469
+#: libs/ui/dialogs/kis_dlg_preferences.cc:470
 #, kde-format
 msgid "Internal Storage"
 msgstr "Внутрішня пам'ять"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:471
+#: libs/ui/dialogs/kis_dlg_preferences.cc:472
 #, kde-format
 msgid "SD-Card"
 msgstr "SD-картка"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:509
+#: libs/ui/dialogs/kis_dlg_preferences.cc:510
 #, kde-format
 msgid "Choose Manually"
 msgstr "Вибрати вручну"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:574
+#: libs/ui/dialogs/kis_dlg_preferences.cc:575
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -23095,26 +23095,26 @@ msgstr ""
 "<br/>\n"
 "%2</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:892
+#: libs/ui/dialogs/kis_dlg_preferences.cc:893
 #, kde-format
 msgid "Select a Background Image"
 msgstr "Виберіть зображення тла"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:904
+#: libs/ui/dialogs/kis_dlg_preferences.cc:905
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 не є коректним файлом зображення."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:924
+#: libs/ui/dialogs/kis_dlg_preferences.cc:925
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>Попередження:</b> ця тека є непридатною до запису."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1026
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1135
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1027
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1136
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1217
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -23122,14 +23122,14 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "Екран %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1095
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1096
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "Встановлення профілів кольорів"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1305
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1306
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -23139,19 +23139,46 @@ msgstr ""
 "призвести до значних дефектів зображення, якщо використано інтерфейс WinTab "
 "планшета)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1307
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1308
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "Використовувати часові позначки драйвера планшета для швидкості пензля"
 
+#. i18n: This is meant to be used in a spinbox so keep the {n} in the text
+#. and it will be substituted by the number. The text before will be
+#. used as the prefix and the text after as the suffix
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1318
+#, fuzzy, kde-format
+#| msgid "Maximum brush size:"
+msgid "Maximum brush speed: {n} px/ms"
+msgid_plural "Maximum brush speed: {n} px/ms"
+msgstr[0] "Макс. розмір пензля:"
+msgstr[1] "Макс. розмір пензля:"
+msgstr[2] "Макс. розмір пензля:"
+msgstr[3] "Макс. розмір пензля:"
+
+#. i18n: This is meant to be used in a spinbox so keep the {n} in the text
+#. and it will be substituted by the number. The text before will be
+#. used as the prefix and the text after as the suffix
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1327
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Brush Smoothing: Disabled"
+msgid "Brush speed smoothing: {n} sample"
+msgid_plural "Brush speed smoothing: {n} samples"
+msgstr[0] "Згладжування пензля: вимкнено"
+msgstr[1] "Згладжування пензля: вимкнено"
+msgstr[2] "Згладжування пензля: вимкнено"
+msgstr[3] "Згладжування пензля: вимкнено"
+
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1415
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1424
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr " ГіБ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1436
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1445
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -23160,183 +23187,183 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " с"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1440
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1449
 #, kde-format
 msgid " fps"
 msgstr " кд/с"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1650
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1659
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1651
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1660
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Програмна обробка (дуже повільно)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1653
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1662
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 за допомогою ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1655
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1664
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1662
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1671
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Невідомий"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1682
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1691
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Авто (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1764
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1773
 #, kde-format
 msgid "Display Id: %1"
 msgstr "Ід. дисплея: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1765
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1774
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Назва дисплея: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1766
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1775
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "Мін. яскравість: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1767
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1776
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "Макс. яскравість: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1768
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1777
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "Макс. яскравість усього кадру: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1769
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1778
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Основний червоний: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1770
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1779
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Основний зелений: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1771
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1780
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Основний синій: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1772
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1781
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Точка білого: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1952
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1961
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 "<b>Попередження:</b> для поточного дисплея не передбачено підтримки показу "
 "зображення із високим динамічним діапазоном (HDR)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2037
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2046
 #, kde-format
 msgid "Configure Krita"
 msgstr "Налаштувати Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2054
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2063
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Клавіатурні скорочення"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2056
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2065
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Скорочення"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2066
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2075
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Параметри введення на полотні"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2067
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2076
 #, kde-format
 msgid "Canvas Input"
 msgstr "Введення на полотні"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2084
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2093
 #: plugins/dockers/logdocker/LogDockerDock.cpp:191
 #, kde-format
 msgid "Color Management"
 msgstr "Керування кольорами"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2086
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2095
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Колір"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2094
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2096
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2103
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2105
 #, kde-format
 msgid "Performance"
 msgstr "Швидкодія"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2104
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2113
 #, kde-format
 msgid "Tablet settings"
 msgstr "Параметри планшета"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2106
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2115
 #, kde-format
 msgid "Tablet"
 msgstr "Планшет"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2114
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2123
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Параметри лише полотна"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2116
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2125
 #, kde-format
 msgid "Canvas-only"
 msgstr "Лише полотно"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2124
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2126
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2133
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2135
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Контекстна палітра"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2134
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Автор"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2136
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2145
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Автор"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2152
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -24258,7 +24285,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
 #: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:183
 #: libs/ui/forms/wdgcolorsettings.ui:274
-#: libs/ui/forms/wdgconvertcolorspace.ui:45
+#: libs/ui/forms/wdgconvertcolorspace.ui:55
 #: libs/ui/forms/wdgimageproperties.ui:298
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
 #, kde-format
@@ -24277,7 +24304,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:110
-#: libs/ui/forms/wdgconvertcolorspace.ui:66
+#: libs/ui/forms/wdgconvertcolorspace.ui:76
 #, kde-format
 msgid "Relative colorimetric"
 msgstr "Відносний вимір кольору"
@@ -24300,7 +24327,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
 #: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:193
 #: libs/ui/forms/wdgcolorsettings.ui:284
-#: libs/ui/forms/wdgconvertcolorspace.ui:89
+#: libs/ui/forms/wdgconvertcolorspace.ui:99
 #: libs/ui/forms/wdgimageproperties.ui:308
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
 #, kde-format
@@ -24324,7 +24351,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:130
-#: libs/ui/forms/wdgconvertcolorspace.ui:110
+#: libs/ui/forms/wdgconvertcolorspace.ui:120
 #, kde-format
 msgid "Absolute colorimetric"
 msgstr "Абсолютний вимір кольору"
@@ -24418,7 +24445,7 @@ msgstr "Використовувати компенсацію точки чор�
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAllowLCMSOptimization)
 #: libs/ui/forms/wdgcolorsettings.ui:116
-#: libs/ui/forms/wdgconvertcolorspace.ui:133
+#: libs/ui/forms/wdgconvertcolorspace.ui:143
 #, kde-format
 msgid ""
 "Allow Little CMS optimizations (uncheck when using linear light RGB or XYZ)"
@@ -24617,19 +24644,19 @@ msgid "Colorspace Conversion"
 msgstr "Перетворення простору кольорів"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpIntent)
-#: libs/ui/forms/wdgconvertcolorspace.ui:30
+#: libs/ui/forms/wdgconvertcolorspace.ui:40
 #, kde-format
 msgid "&Rendering Intent"
 msgstr "Від&творення кольорів"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
-#: libs/ui/forms/wdgconvertcolorspace.ui:36
+#: libs/ui/forms/wdgconvertcolorspace.ui:46
 #, kde-format
 msgid "For images"
 msgstr "Для зображень"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioPerceptual)
-#: libs/ui/forms/wdgconvertcolorspace.ui:42
+#: libs/ui/forms/wdgconvertcolorspace.ui:52
 #, kde-format
 msgid ""
 "Hue hopefully maintained (but not required),\n"
@@ -24644,7 +24671,7 @@ msgstr ""
 "Призначено для картинок."
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
-#: libs/ui/forms/wdgconvertcolorspace.ui:63
+#: libs/ui/forms/wdgconvertcolorspace.ui:73
 #, kde-format
 msgid ""
 "Within and outside gamut; same as Absolute\n"
@@ -24662,13 +24689,13 @@ msgstr ""
 "буде можливість сприйняття."
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
-#: libs/ui/forms/wdgconvertcolorspace.ui:76
+#: libs/ui/forms/wdgconvertcolorspace.ui:86
 #, kde-format
 msgid "Best for graphs and charts"
 msgstr "Найкраще для графіків та діаграм"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
-#: libs/ui/forms/wdgconvertcolorspace.ui:86
+#: libs/ui/forms/wdgconvertcolorspace.ui:96
 #, kde-format
 msgid ""
 "Hue and saturation maintained with lightness\n"
@@ -24690,13 +24717,13 @@ msgstr ""
 "буде можливість сприйняття."
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
-#: libs/ui/forms/wdgconvertcolorspace.ui:99
+#: libs/ui/forms/wdgconvertcolorspace.ui:109
 #, kde-format
 msgid "Best for spot colors"
 msgstr "Найкраще для комбінації кольорів"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
-#: libs/ui/forms/wdgconvertcolorspace.ui:107
+#: libs/ui/forms/wdgconvertcolorspace.ui:117
 #, kde-format
 msgid ""
 "Within the destination device gamut; hue,\n"
@@ -24714,13 +24741,13 @@ msgstr ""
 "кольорів (Pantone, TruMatch, кольори логотипів, …)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
-#: libs/ui/forms/wdgconvertcolorspace.ui:123
+#: libs/ui/forms/wdgconvertcolorspace.ui:133
 #, kde-format
 msgid "Use Blackpoint &Compensation"
 msgstr "Використовувати &компенсацію точки чорного"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkAllowLCMSOptimization)
-#: libs/ui/forms/wdgconvertcolorspace.ui:130
+#: libs/ui/forms/wdgconvertcolorspace.ui:140
 #, kde-format
 msgid ""
 "Krita tries to automatically check or uncheck this based on the information "
@@ -29346,7 +29373,7 @@ msgstr ""
 msgid "New Filter Layer"
 msgstr "Новий шар фільтрування"
 
-#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:314
+#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:309
 #, kde-format
 msgid "Fill Layer"
 msgstr "Шар заповнення"
@@ -30368,28 +30395,28 @@ msgstr ""
 msgid "File(s) or URL(s) to open"
 msgstr "Відкрити файл(и) або URL(и)"
 
-#: libs/ui/KisAutoSaveRecoveryDialog.cpp:169
+#: libs/ui/KisAutoSaveRecoveryDialog.cpp:170
 #, kde-format
 msgctxt "@title:window"
 msgid "Recover Files"
 msgstr "Відновлення файлів"
 
-#: libs/ui/KisAutoSaveRecoveryDialog.cpp:171
+#: libs/ui/KisAutoSaveRecoveryDialog.cpp:172
 #, kde-format
 msgid "Discard All"
 msgstr "Відкинути усе"
 
-#: libs/ui/KisAutoSaveRecoveryDialog.cpp:176
+#: libs/ui/KisAutoSaveRecoveryDialog.cpp:177
 #, kde-format
 msgid "The following autosave file can be recovered:"
 msgstr "Дані можна відновити з вказаного нижче автоматично збереженого файла:"
 
-#: libs/ui/KisAutoSaveRecoveryDialog.cpp:179
+#: libs/ui/KisAutoSaveRecoveryDialog.cpp:180
 #, kde-format
 msgid "The following autosave files can be recovered:"
 msgstr "Дані можна відновити з вказаних нижче автоматично збережених файлів:"
 
-#: libs/ui/KisAutoSaveRecoveryDialog.cpp:226
+#: libs/ui/KisAutoSaveRecoveryDialog.cpp:234
 #, kde-format
 msgid ""
 "If you select Cancel, all recoverable files will be kept.\n"
@@ -30811,17 +30838,17 @@ msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Відкрити звукові дані"
 
-#: libs/ui/KisImportExportManager.cpp:421
+#: libs/ui/KisImportExportManager.cpp:420
 #, kde-format
 msgid "Opening document..."
 msgstr "Відкриваємо документ…"
 
-#: libs/ui/KisImportExportManager.cpp:489
+#: libs/ui/KisImportExportManager.cpp:488
 #, kde-format
 msgid "Saving document..."
 msgstr "Збереження документа…"
 
-#: libs/ui/KisImportExportManager.cpp:583
+#: libs/ui/KisImportExportManager.cpp:582
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
@@ -30829,7 +30856,7 @@ msgstr ""
 "У зображенні містяться <b>допоміжні лінії</b>. Дані допоміжних ліній не буде "
 "збережено."
 
-#: libs/ui/KisImportExportManager.cpp:586
+#: libs/ui/KisImportExportManager.cpp:585
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30839,14 +30866,14 @@ msgstr ""
 "У зображенні містяться <b>еталонні зображення</b>. Це еталонні зображення не "
 "буде збережено."
 
-#: libs/ui/KisImportExportManager.cpp:589
+#: libs/ui/KisImportExportManager.cpp:588
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr ""
 "У зображенні містяться <b>напрямні</b>. Дані напрямних не буде збережено."
 
-#: libs/ui/KisImportExportManager.cpp:592
+#: libs/ui/KisImportExportManager.cpp:591
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30856,24 +30883,24 @@ msgstr ""
 "У зображенні міститься <b>нетипове налаштування ґратки</b>. Це налаштування "
 "не буде збережено."
 
-#: libs/ui/KisImportExportManager.cpp:597
+#: libs/ui/KisImportExportManager.cpp:596
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "Помилка: збереження цього зображення як %1 неможливе."
 
-#: libs/ui/KisImportExportManager.cpp:598
-#: libs/ui/KisImportExportManager.cpp:641
+#: libs/ui/KisImportExportManager.cpp:597
+#: libs/ui/KisImportExportManager.cpp:640
 #, kde-format
 msgid "Reasons:"
 msgstr "Причини:"
 
-#: libs/ui/KisImportExportManager.cpp:606
+#: libs/ui/KisImportExportManager.cpp:605
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita: Помилка експортування"
 
-#: libs/ui/KisImportExportManager.cpp:623
+#: libs/ui/KisImportExportManager.cpp:622
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
@@ -30881,13 +30908,13 @@ msgstr ""
 "Попередження: збереження у форматі %1 призведе до втрати частини даних "
 "вашого зображення.    "
 
-#: libs/ui/KisImportExportManager.cpp:635
+#: libs/ui/KisImportExportManager.cpp:634
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr ""
 "Якщо ви збережете це зображення як %1, частину його даних буде втрачено."
 
-#: libs/ui/KisImportExportManager.cpp:638
+#: libs/ui/KisImportExportManager.cpp:637
 #, kde-format
 msgid "Reason:"
 msgstr "Причина:"
@@ -30895,7 +30922,7 @@ msgstr "Причина:"
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/KisImportExportManager.cpp:656
+#: libs/ui/KisImportExportManager.cpp:655
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
@@ -30903,12 +30930,12 @@ msgstr "Причина:"
 msgid "Options"
 msgstr "Налаштування"
 
-#: libs/ui/KisImportExportManager.cpp:664
+#: libs/ui/KisImportExportManager.cpp:663
 #, kde-format
 msgid "Resize"
 msgstr "Змінити розмір"
 
-#: libs/ui/KisImportExportManager.cpp:670
+#: libs/ui/KisImportExportManager.cpp:669
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Також збережіть зображення у форматі Krita."
@@ -30917,6 +30944,14 @@ msgstr "Також збережіть зображення у форматі Kri
 #, kde-format
 msgid "Convert image color space on import"
 msgstr "Перетворити простір кольорів зображення при імпортуванні"
+
+#: libs/ui/KisImportExportUtils.cpp:51
+#, kde-format
+msgctxt "the argument is the ICC profile name"
+msgid ""
+"The image has a profile attached that Krita cannot edit images in (\"%1\"), "
+"please select a space to convert to for editing: \n"
+msgstr ""
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 msgctxt "(qtundo-format)"
@@ -31036,8 +31071,8 @@ msgid "Layers/Masks"
 msgstr "Шари/Маски"
 
 #: libs/ui/KisMainWindow.cpp:1921
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:181
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:286
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:188
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:293
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "У вас немає увімкнених пакунків ресурсів."
@@ -31054,8 +31089,8 @@ msgstr ""
 "увімкніть пакунок, який містить набори пензлів.\n"
 
 #: libs/ui/KisMainWindow.cpp:1935
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:191
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:298
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:198
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:305
 #, kde-format
 msgid ""
 "\n"
@@ -31138,7 +31173,7 @@ msgctxt "A temporary action that actives a layer or mask"
 msgid "Activate %1"
 msgstr "Задіяти %1"
 
-#: libs/ui/KisOpenPane.cpp:170
+#: libs/ui/KisOpenPane.cpp:177
 #, kde-format
 msgid "Open Existing Document"
 msgstr "Відкрити наявний документ"
@@ -33079,8 +33114,8 @@ msgstr "Прозорий"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1532
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:50
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:38
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:41
 #: plugins/tools/basictools/kis_tool_fill.cc:534
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:44
@@ -35533,7 +35568,7 @@ msgstr "Розмивання:"
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/widgets/KoShadowConfigWidget.ui:88
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:443
-#: plugins/tools/basictools/kis_tool_measure.cc:46
+#: plugins/tools/basictools/kis_tool_measure.cc:47
 #, kde-format
 msgid "Distance:"
 msgstr "Відстань: "
@@ -36479,33 +36514,33 @@ msgstr "<h2>Вилучені скорочення</h2>"
 msgid "<h2>Accelerators added (just for your info)</h2>"
 msgstr "<h2>Додані скорочення (просто для інформації)</h2>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:50
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:51
 #, kde-format
 msgid "--- separator ---"
 msgstr "--- роздільник ---"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:356
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:357
 #, kde-format
 msgid "Change Text"
 msgstr "Змінити текст"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:366
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:367
 #, kde-format
 msgid "Icon te&xt:"
 msgstr "Те&кст піктограми:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:371
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:372
 #, kde-format
 msgid "&Hide text when toolbar shows text alongside icons"
 msgstr ""
 "При&ховати текст, якщо на панелі показано текстові мітки поряд з піктограмами"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:606
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:607
 #, kde-format
 msgid "Configure Toolbars"
 msgstr "Налаштувати пенали"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:668
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
 #, kde-format
 msgid ""
 "Do you really want to reset all toolbars of this application to their "
@@ -36514,12 +36549,12 @@ msgstr ""
 "Ви дійсно бажаєте повернути налаштування пеналів цієї програми до їхнього "
 "початкового стану? Зміни буде застосовано негайно."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:668
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
 #, kde-format
 msgid "Reset Toolbars"
 msgstr "Відновити пенали"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:993
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:994
 #, kde-format
 msgid "&Toolbar:"
 msgstr "&Пенал:"
@@ -36531,52 +36566,52 @@ msgstr "&Пенал:"
 #. del_toolbar->setPixmap(BarIcon("edit-delete", KisIconUtils::SizeSmall));
 #. del_toolbar->setEnabled(false); // disabled until implemented
 #. our list of inactive actions
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1008
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1009
 #, kde-format
 msgid "A&vailable actions:"
 msgstr "&Наявні дії:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1023
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1033
 #, kde-format
 msgctxt "Filter as in showing only matching items"
 msgid "Filter"
 msgstr "Фільтр"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1026
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1036
 #, kde-format
 msgid "Curr&ent actions:"
 msgstr "Пот&очні дії:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1042
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1060
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, kde-format
 msgid "Filter"
 msgstr "Фільтр"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1183
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1201
 #, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1203
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1221
 #, kde-format
 msgid ""
 "This element will be replaced with all the elements of an embedded component."
 msgstr ""
 "Цей елемент буде замінено усіма іншими елементами вмонтованого компонента."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1205
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1223
 #, kde-format
 msgid "<Merge>"
 msgstr "<Об'єднати>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1207
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
 #, kde-format
 msgid "<Merge %1>"
 msgstr "<Об'єднати %1>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1213
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1231
 #, kde-format
 msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
@@ -36585,13 +36620,13 @@ msgstr ""
 "Це динамічний список дій. Ви можете його пересувати, але якщо ви його "
 "вилучите, ви не зможете його додати знову."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1214
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1232
 #, kde-format
 msgid "ActionList: %1"
 msgstr "Список дій: %1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1313
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1334
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1331
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1352
 #, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
@@ -43408,18 +43443,18 @@ msgstr ""
 "Krita не вдалося запустити додаток gmic-qt. Не знайдено пов'язаної "
 "бібліотеки."
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:132
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:133
 #, kde-format
 msgid "Manage Resource Libraries"
 msgstr "Керування бібліотеками ресурсів"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:139
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:140
 #, kde-format
 msgctxt "In bundle manager; press button to import a resource library"
 msgid "Import"
 msgstr "Імпортувати"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:144
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:145
 #, kde-format
 msgctxt ""
 "In bundle manager; press button to deactivate the resource library(remove "
@@ -43427,14 +43462,14 @@ msgctxt ""
 msgid "Deactivate"
 msgstr "Вимкнути"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:148
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:149
 #, kde-format
 msgctxt "In bundle manager; press button to create a new bundle"
 msgid "Create Bundle"
 msgstr "Створити комплект"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:185
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:192
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:299
 #, kde-format
 msgid ""
 "\n"
@@ -43448,22 +43483,22 @@ msgstr ""
 "Якщо таких пакунків немає, будь ласка, імпортуйте пакунок, перш ніж "
 "продовжувати."
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:206
 #, kde-format
 msgid "Choose the resource library to import"
 msgstr "Виберіть бібліотеку ресурсів для імпортування"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:203
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:210
 #, kde-format
 msgid "Select the bundle"
 msgstr "Виберіть комплект"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:219
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:226
 #, kde-format
 msgid "Could not load bundle %1."
 msgstr "Не вдалося завантажити комплект %1."
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:238
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:245
 #, kde-format
 msgid ""
 "There is already a bundle with this name installed. Do you want to overwrite "
@@ -43471,7 +43506,7 @@ msgid ""
 msgstr ""
 "Пакунок із такою назвою вже встановлено. Хочете перезаписати його вміст?"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:340
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:347
 #, kde-format
 msgctxt ""
 "In bundle manager; press button to deactivate the bundle (remove resources "
@@ -43479,7 +43514,7 @@ msgctxt ""
 msgid "Deactivate"
 msgstr "Вимкнути"
 
-#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:344
+#: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:351
 #, kde-format
 msgctxt ""
 "In bundle manager; press button to activate the bundle (add resources from "
@@ -44439,7 +44474,7 @@ msgstr "Обертання:"
 #: plugins/paintops/hatching/wdghatchingoptions.ui:53
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:160
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:220
-#: plugins/tools/basictools/kis_tool_measure.cc:47
+#: plugins/tools/basictools/kis_tool_measure.cc:48
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:100
 #, kde-format
 msgid "Angle:"
@@ -46651,26 +46686,26 @@ msgstr "Обертання навколо X:"
 msgid "Y-Rotation:"
 msgstr "Обертання навколо Y:"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:55
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:73
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:85
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:54
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:62
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:72
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:84
 #, kde-format
 msgid "X: "
 msgstr "X: "
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:57
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:68
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:89
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:56
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:67
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:78
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:88
 #, kde-format
 msgid "Y: "
 msgstr "Y: "
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
-#. used as the prefix and the text arfet as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:361
+#. used as the prefix and the text after as the suffix
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:96
 #, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -46684,8 +46719,8 @@ msgstr[3] "Кожну {n} комірку горизонтально"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
-#. used as the prefix and the text arfet as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:377
+#. used as the prefix and the text after as the suffix
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:102
 #, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -46697,25 +46732,25 @@ msgstr[1] "Кожні {n} комірки вертикально"
 msgstr[2] "Кожні {n} комірок вертикально"
 msgstr[3] "Кожну {n} комірку вертикально"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:469
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:446
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
 msgstr " пікселів/дюйм"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:470
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:447
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
 msgstr " пікселів/см"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:473
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:450
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
 msgstr " ліній/дюйм"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:474
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:451
 #, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
@@ -47883,7 +47918,7 @@ msgstr ""
 msgid "Sign with Author Profile Data"
 msgstr "Підписати даними профілю автора"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:421
+#: plugins/impex/jxl/JPEGXLImport.cpp:426
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
@@ -47892,16 +47927,16 @@ msgstr ""
 "Виявлено зображення JPEG-XL із ділянками каналів кольорів, імпортуємо "
 "спрощене зображення."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:632
-#: plugins/impex/jxl/JPEGXLImport.cpp:642
-#: plugins/impex/jxl/JPEGXLImport.cpp:656
-#: plugins/impex/jxl/JPEGXLImport.cpp:666
+#: plugins/impex/jxl/JPEGXLImport.cpp:637
+#: plugins/impex/jxl/JPEGXLImport.cpp:647
+#: plugins/impex/jxl/JPEGXLImport.cpp:661
+#: plugins/impex/jxl/JPEGXLImport.cpp:671
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "Не вдалося прочитати профіль зображення."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:806
+#: plugins/impex/jxl/JPEGXLImport.cpp:811
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
@@ -47911,13 +47946,13 @@ msgstr ""
 "Виявлено зображення JPEG-XL із декількома шарами з непідтримуваним режимом "
 "злиття, імпортуємо спрощене зображення."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:823
+#: plugins/impex/jxl/JPEGXLImport.cpp:828
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr "Некоректна довжина назви шару JPEG-XL"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:882
+#: plugins/impex/jxl/JPEGXLImport.cpp:887
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."
@@ -57526,13 +57561,13 @@ msgstr ""
 msgid "Line Tool"
 msgstr "Інструмент «Пряма»"
 
-#: plugins/tools/basictools/kis_tool_measure.cc:76
+#: plugins/tools/basictools/kis_tool_measure.cc:77
 #, kde-format
 msgctxt "angle value in degrees"
 msgid "%1°"
 msgstr "%1°"
 
-#: plugins/tools/basictools/kis_tool_measure.cc:150
+#: plugins/tools/basictools/kis_tool_measure.cc:169
 #, kde-format
 msgctxt "%1=distance %2=unit of distance %3=angle in degrees"
 msgid ""
@@ -57542,7 +57577,7 @@ msgstr ""
 "%1 %2\n"
 "%3°"
 
-#: plugins/tools/basictools/kis_tool_measure.h:102
+#: plugins/tools/basictools/kis_tool_measure.h:104
 #, kde-format
 msgid "Measure Tool"
 msgstr "Інструмент «Вимірювання»"

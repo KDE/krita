@@ -7949,7 +7949,7 @@ msgstr "Atmosfera e calixe GPS"
 #, kde-format
 msgctxt "./krita/data/gradients/GPS-Light-Saber-_Use-FG-color_.ggr"
 msgid "GPS Light Saber (Use FG color)"
-msgstr "Sabre de luz clara GPS (empregando a cor FG)"
+msgstr "Sabre de luz clara GPS (usando a cor FG)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/gradients/GPS-Nature-browns-copy.ggr:2
@@ -8599,7 +8599,7 @@ msgstr "Baixar"
 #, kde-format
 msgctxt "action"
 msgid "Show Coordinates"
-msgstr "Mostrar as coordenadas"
+msgstr "Amosar as coordenadas"
 
 #. i18n: context: toolTip @ Action (movetool-show-coordinates), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/MoveTool.action:28
@@ -8607,7 +8607,7 @@ msgstr "Mostrar as coordenadas"
 msgctxt "action"
 msgid "Show absolute coordinates and offset while move action"
 msgstr ""
-"Mostrar as coordenadas absolutas e os desprazamentos durante a acción de "
+"Amosar as coordenadas absolutas e os desprazamentos durante a acción de "
 "mover."
 
 #. i18n: context: iconText @ Action (movetool-move-left), Actions (Path Tool), ActionCollection (Tools)
@@ -8966,7 +8966,7 @@ msgstr "Crear un paquete de recursos"
 #, kde-format
 msgctxt "action"
 msgid "Show File Toolbar"
-msgstr "Mostrar a barra de ferramentas de ficheiros"
+msgstr "Amosar a barra de ferramentas de ficheiros"
 
 #. i18n: context: text @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
@@ -8978,7 +8978,7 @@ msgstr "Mostrar a barra de ferramentas de ficheiros"
 #, kde-format
 msgctxt "action"
 msgid "Show color selector"
-msgstr "Mostrar o selector de cores"
+msgstr "Amosar o selector de cores"
 
 #. i18n: context: text @ Action (show_mypaint_shade_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_mypaint_shade_selector), Actions (General), ActionCollection (Krita)
@@ -8990,7 +8990,7 @@ msgstr "Mostrar o selector de cores"
 #, kde-format
 msgctxt "action"
 msgid "Show MyPaint shade selector"
-msgstr "Mostrar o selector de sombras de MyPaint"
+msgstr "Amosar o selector de sombras de MyPaint"
 
 #. i18n: context: text @ Action (show_minimal_shade_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_minimal_shade_selector), Actions (General), ActionCollection (Krita)
@@ -9002,7 +9002,7 @@ msgstr "Mostrar o selector de sombras de MyPaint"
 #, kde-format
 msgctxt "action"
 msgid "Show minimal shade selector"
-msgstr "Mostrar o selector de sombras mínimo"
+msgstr "Amosar o selector de sombras mínimo"
 
 #. i18n: context: text @ Action (show_color_history), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_history), Actions (General), ActionCollection (Krita)
@@ -9014,7 +9014,7 @@ msgstr "Mostrar o selector de sombras mínimo"
 #, kde-format
 msgctxt "action"
 msgid "Show color history"
-msgstr "Mostrar o historial de cores"
+msgstr "Amosar o historial de cores"
 
 #. i18n: context: text @ Action (show_common_colors), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_common_colors), Actions (General), ActionCollection (Krita)
@@ -9026,7 +9026,7 @@ msgstr "Mostrar o historial de cores"
 #, kde-format
 msgctxt "action"
 msgid "Show common colors"
-msgstr "Mostrar cores comúns"
+msgstr "Amosar cores comúns"
 
 #. i18n: context: text @ Action (show_tool_options), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_tool_options), Actions (General), ActionCollection (Krita)
@@ -9038,7 +9038,7 @@ msgstr "Mostrar cores comúns"
 #, kde-format
 msgctxt "action"
 msgid "Show Tool Options"
-msgstr "Mostrar as opcións da ferramenta"
+msgstr "Amosar as opcións da ferramenta"
 
 #. i18n: context: text @ Action (show_brush_editor), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_brush_editor), Actions (General), ActionCollection (Krita)
@@ -9050,7 +9050,7 @@ msgstr "Mostrar as opcións da ferramenta"
 #, kde-format
 msgctxt "action"
 msgid "Show Brush Editor"
-msgstr "Mostrar o editor de pinceis"
+msgstr "Amosar o editor de pinceis"
 
 #. i18n: context: text @ Action (show_brush_presets), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_brush_presets), Actions (General), ActionCollection (Krita)
@@ -9062,7 +9062,7 @@ msgstr "Mostrar o editor de pinceis"
 #, kde-format
 msgctxt "action"
 msgid "Show Brush Presets"
-msgstr "Mostrar as predefinicións de pinceis"
+msgstr "Amosar as predefinicións de pinceis"
 
 #. i18n: context: text @ Action (tablet_debugger), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (tablet_debugger), Actions (General), ActionCollection (Krita)
@@ -9100,7 +9100,7 @@ msgstr "Mostrar información do sistema para informes de fallo."
 #, kde-format
 msgctxt "action"
 msgid "Show system information for bug reports."
-msgstr "Mostrar información do sistema para informes de fallo."
+msgstr "Amosar información do sistema para informes de fallo."
 
 #. i18n: context: text @ Action (logcatdump), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (logcatdump), Actions (General), ActionCollection (Krita)
@@ -9584,7 +9584,7 @@ msgstr "Preservar a alfa"
 #, kde-format
 msgctxt "action"
 msgid "Use Pen Pressure"
-msgstr "Empregar presión de lapis"
+msgstr "Usar presión de lapis"
 
 #. i18n: context: text @ Action (hmirror_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (hmirror_action), Actions (Painting), ActionCollection (Krita)
@@ -10042,7 +10042,7 @@ msgstr "Converter nunha forma"
 #, kde-format
 msgctxt "action"
 msgid "&Show Global Selection Mask"
-msgstr "&Mostrar a máscara de selección global"
+msgstr "&Amosar a máscara de selección global"
 
 #. i18n: context: toolTip @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:883
@@ -14090,7 +14090,7 @@ msgstr "Gardar unha versión incremental"
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental &Backup"
-msgstr "Gardar unha copia de &seguranza incremental"
+msgstr "Gardar unha copia de &seguridade incremental"
 
 #. i18n: context: toolTip @ Action (save_incremental_backup), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (save_incremental_backup), Actions (File), ActionCollection (Menu)
@@ -14100,7 +14100,7 @@ msgstr "Gardar unha copia de &seguranza incremental"
 #, kde-format
 msgctxt "action"
 msgid "Save Incremental Backup"
-msgstr "Gardar unha copia de seguranza incremental"
+msgstr "Gardar unha copia de seguridade incremental"
 
 #. i18n: context: text @ Action (create_template), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:189
@@ -14684,14 +14684,14 @@ msgstr "Ver"
 #, kde-format
 msgctxt "action"
 msgid "&Show Canvas Only"
-msgstr "&Mostrar só o lenzo"
+msgstr "&Amosar só o lenzo"
 
 #. i18n: context: toolTip @ Action (view_show_canvas_only), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:618
 #, kde-format
 msgctxt "action"
 msgid "Show just the canvas or the whole window"
-msgstr "Mostrar só o lenzo ou toda a xanela"
+msgstr "Amosar só o lenzo ou toda a xanela"
 
 #. i18n: context: iconText @ Action (view_show_canvas_only), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:619
@@ -14740,7 +14740,7 @@ msgstr "Desprender o lenzo"
 #, kde-format
 msgctxt "action"
 msgid "Show the canvas on a separate window"
-msgstr "Mostrar o lenzo noutra xanela"
+msgstr "Amosar o lenzo noutra xanela"
 
 #. i18n: context: text @ Action (wrap_around_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:652
@@ -14953,7 +14953,7 @@ msgstr "Restaurar a rotación do lenzo"
 #, kde-format
 msgctxt "action"
 msgid "Show &Rulers"
-msgstr "Mostrar as &regras"
+msgstr "Amosar as &regras"
 
 #. i18n: context: whatsThis @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:799
@@ -14980,7 +14980,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Rulers"
-msgstr "Mostrar as regras"
+msgstr "Amosar as regras"
 
 #. i18n: context: text @ Action (rulers_track_mouse), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rulers_track_mouse), Actions (View), ActionCollection (Menu)
@@ -15012,14 +15012,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Show Guides"
-msgstr "Mostrar  as Guías"
+msgstr "Amosar  as Guías"
 
 #. i18n: context: toolTip @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:824
 #, kde-format
 msgctxt "action"
 msgid "Show or hide guides"
-msgstr "Mostrar ou agochar as guías"
+msgstr "Amosar ou agochar as guías"
 
 #. i18n: context: text @ Action (view_lock_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_lock_guides), Actions (View), ActionCollection (Menu)
@@ -15060,14 +15060,14 @@ msgstr "Axustar o cursor á posición das guías"
 #, kde-format
 msgctxt "action"
 msgid "Show Status &Bar"
-msgstr "Mostrar a &barra de estado"
+msgstr "Amosar a &barra de estado"
 
 #. i18n: context: toolTip @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:860
 #, kde-format
 msgctxt "action"
 msgid "Show or hide the status bar"
-msgstr "Mostrar ou agochar a barra do estado"
+msgstr "Amosar ou agochar a barra do estado"
 
 #. i18n: context: iconText @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:861
@@ -15089,14 +15089,14 @@ msgstr "Mostrar a &barra de estado"
 #, kde-format
 msgctxt "action"
 msgid "Show Pixel Grid"
-msgstr "Mostrar a grade de píxeles"
+msgstr "Amosar a grade de píxeles"
 
 #. i18n: context: text @ Action (view_grid), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:882
 #, kde-format
 msgctxt "action"
 msgid "Show &Grid"
-msgstr "Mostrar a &grade"
+msgstr "Amosar a &grade"
 
 #. i18n: context: toolTip @ Action (view_grid), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_grid), Actions (View), ActionCollection (Menu)
@@ -15106,7 +15106,7 @@ msgstr "Mostrar a &grade"
 #, kde-format
 msgctxt "action"
 msgid "Show Grid"
-msgstr "Mostrar a grade"
+msgstr "Amosar a grade"
 
 #. i18n: context: text @ Action (view_snap_to_grid), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_to_grid), Actions (View), ActionCollection (Menu)
@@ -15132,7 +15132,7 @@ msgstr "Axustar á grade"
 #, kde-format
 msgctxt "action"
 msgid "Show Snap Options Popup"
-msgstr "Mostrar a xanela emerxente de opcións de axuste"
+msgstr "Amosar a xanela emerxente de opcións de axuste"
 
 #. i18n: context: text @ Action (view_snap_orthogonal), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_orthogonal), Actions (View), ActionCollection (Menu)
@@ -15253,14 +15253,14 @@ msgstr "Mos&trar os asistentes de pintura"
 #, kde-format
 msgctxt "action"
 msgid "Show Painting Assistants"
-msgstr "Mostrar os asistentes de pintura"
+msgstr "Amosar os asistentes de pintura"
 
 #. i18n: context: text @ Action (view_toggle_assistant_previews), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1023
 #, kde-format
 msgctxt "action"
 msgid "Show &Assistant Previews"
-msgstr "Mostrar os &asistentes de vista previa"
+msgstr "Amosar os &asistentes de vista previa"
 
 #. i18n: context: toolTip @ Action (view_toggle_assistant_previews), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_assistant_previews), Actions (View), ActionCollection (Menu)
@@ -15270,14 +15270,14 @@ msgstr "Mostrar os &asistentes de vista previa"
 #, kde-format
 msgctxt "action"
 msgid "Show Assistant Previews"
-msgstr "Mostrar os asistentes de vista previa"
+msgstr "Amosar os asistentes de vista previa"
 
 #. i18n: context: text @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1036
 #, kde-format
 msgctxt "action"
 msgid "S&how Reference Images"
-msgstr "&Mostrar as imaxes de referencia"
+msgstr "&Amosar as imaxes de referencia"
 
 #. i18n: context: toolTip @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
@@ -15287,7 +15287,7 @@ msgstr "&Mostrar as imaxes de referencia"
 #, kde-format
 msgctxt "action"
 msgid "Show Reference Images"
-msgstr "Mostrar as imaxes de referencia"
+msgstr "Amosar as imaxes de referencia"
 
 #. i18n: context: text @ Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1050
@@ -15755,7 +15755,7 @@ msgstr "Selección suave"
 #, kde-format
 msgctxt "action"
 msgid "Dis&play Selection"
-msgstr "&Mostrar a selección"
+msgstr "&Amosar a selección"
 
 #. i18n: context: toolTip @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
@@ -15765,7 +15765,7 @@ msgstr "&Mostrar a selección"
 #, kde-format
 msgctxt "action"
 msgid "Display Selection"
-msgstr "Mostrar a selección"
+msgstr "Amosar a selección"
 
 #. i18n: context: text @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1381
@@ -16212,7 +16212,7 @@ msgstr "Cambiar o idioma da aplicación"
 #, kde-format
 msgctxt "action"
 msgid "&Show Dockers"
-msgstr "&Mostrar as docas"
+msgstr "&Amosar as docas"
 
 #. i18n: context: toolTip @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
@@ -16222,7 +16222,7 @@ msgstr "&Mostrar as docas"
 #, kde-format
 msgctxt "action"
 msgid "Show Dockers"
-msgstr "Mostrar as docas"
+msgstr "Amosar as docas"
 
 #. i18n: context: text @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1701
@@ -16891,7 +16891,7 @@ msgstr "Eliminar os puntos"
 #: libs/flake/commands/KoPathPointTypeCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Set point type"
-msgstr "Estabelecer o tipo de punto"
+msgstr "Definir o tipo de punto"
 
 #: libs/flake/commands/KoPathReverseCommand.cpp:38
 msgctxt "(qtundo-format)"
@@ -17018,7 +17018,7 @@ msgstr "Cambiar a circulación da forma"
 #: libs/flake/commands/KoShapeShadowCommand.cpp:82
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
-msgstr "Estabelecer a sombra"
+msgstr "Definir a sombra"
 
 #: libs/flake/commands/KoShapeShearCommand.cpp:38
 msgctxt "(qtundo-format)"
@@ -18151,7 +18151,7 @@ msgstr "Editar os trazos clave"
 #: libs/image/kis_layer_properties_icons.cpp:31
 #, kde-format
 msgid "Show Coloring"
-msgstr "Mostrar a coloración"
+msgstr "Amosar a coloración"
 
 #. i18n: ectx: property (text), widget (QPushButton, openFileLink)
 #: libs/image/kis_layer_properties_icons.cpp:32
@@ -21347,7 +21347,7 @@ msgstr "Xestor de filtros"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
-msgstr "<qt>Mostrar as opcións da caixa de etiquetas.</qt>"
+msgstr "<qt>Amosar as opcións da caixa de etiquetas.</qt>"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:63
 #: libs/resourcewidgets/TagActions.cpp:139
@@ -22539,7 +22539,7 @@ msgstr "Pantalla mestra:"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:598
 #, kde-format
 msgid "Display"
-msgstr "Mostrar"
+msgstr "Amosar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
@@ -23687,7 +23687,7 @@ msgstr "Propiedades da imaxe"
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:91
 #, kde-format
 msgid "Set color used for warning"
-msgstr "Estabelecer a cor que se usa para os avisos"
+msgstr "Definir a cor que se usa para os avisos"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:61
 #, kde-format
@@ -24087,7 +24087,7 @@ msgstr "Cargar a sesión anterior"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:337
 #, kde-format
 msgid "Show session manager"
-msgstr "Mostrar o xestor de sesións"
+msgstr "Amosar o xestor de sesións"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:409
 #, kde-format
@@ -24205,12 +24205,12 @@ msgstr "Automático (%1)"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1572
 #, kde-format
 msgid "Display Id: %1"
-msgstr "Identificador para mostrar: %1"
+msgstr "Identificador para amosar: %1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1573
 #, kde-format
 msgid "Display Name: %1 %2"
-msgstr "Nome para mostrar: %1 %2"
+msgstr "Nome para amosar: %1 %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1574
 #, kde-format
@@ -25652,13 +25652,13 @@ msgstr "Configuración de HDR"
 #: libs/ui/forms/wdgdisplaysettings.ui:252
 #, kde-format
 msgid "Current Display Format"
-msgstr "Formato para mostrar actual"
+msgstr "Formato para amosar actual"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/forms/wdgdisplaysettings.ui:259
 #, kde-format
 msgid "Display Format:"
-msgstr "Formato para mostrar:"
+msgstr "Formato para amosar:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRootSurfaceFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:266
@@ -25745,7 +25745,7 @@ msgstr "Grade de píxeles:"
 #: libs/ui/forms/wdgdisplaysettings.ui:595
 #, kde-format
 msgid "Start showing at:"
-msgstr "Comezar a mostrar en:"
+msgstr "Comezar a amosar en:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -26035,7 +26035,7 @@ msgstr "Mentres se pinta…"
 #: libs/ui/forms/wdggeneralsettings.ui:260
 #, kde-format
 msgid "Show outline"
-msgstr "Mostrar o contorno"
+msgstr "Amosar o contorno"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeBrushOutline)
 #. i18n: ectx: property (text), widget (QCheckBox, m_changeEraserBrushOutline)
@@ -26095,13 +26095,13 @@ msgstr "Xanela"
 #: libs/ui/forms/wdggeneralsettings.ui:345
 #, kde-format
 msgid "Don't show contents when moving sub-windows"
-msgstr "Non mostrar o contido ao mover subxanelas"
+msgstr "Non amosar o contido ao mover subxanelas"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkCanvasMessages)
 #: libs/ui/forms/wdggeneralsettings.ui:352
 #, kde-format
 msgid "Show on-canvas popup messages"
-msgstr "Mostrar mensaxe en xanelas emerxentes sobre o lenzo"
+msgstr "Amosar mensaxe en xanelas emerxentes sobre o lenzo"
 
 #. i18n: ectx: property (text), widget (QLabel, lblZoomMarginSize)
 #: libs/ui/forms/wdggeneralsettings.ui:361
@@ -26326,13 +26326,13 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:807
 #, kde-format
 msgid "Create a Backup File on Saving"
-msgstr "Crear un ficheiro de copia de seguranza ao gardar"
+msgstr "Crear un ficheiro de copia de seguridade ao gardar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: libs/ui/forms/wdggeneralsettings.ui:816
 #, kde-format
 msgid "Backup File Location"
-msgstr "Ruta do ficheiro de copia de seguranza"
+msgstr "Ruta do ficheiro de copia de seguridade"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
 #: libs/ui/forms/wdggeneralsettings.ui:824
@@ -26356,7 +26356,7 @@ msgstr "Ruta do ficheiro temporal"
 #: libs/ui/forms/wdggeneralsettings.ui:842
 #, kde-format
 msgid "Backup File Suffix:"
-msgstr "Sufixo do ficheiro de copia de seguranza:"
+msgstr "Sufixo do ficheiro de copia de seguridade:"
 
 #. i18n: ectx: property (text), widget (QLineEdit, txtBackupFileSuffix)
 #: libs/ui/forms/wdggeneralsettings.ui:849
@@ -26368,7 +26368,7 @@ msgstr "~"
 #: libs/ui/forms/wdggeneralsettings.ui:859
 #, kde-format
 msgid "Number of Backup Files Kept:"
-msgstr "Número de ficheiros de copia de seguranza que conservar:"
+msgstr "Número de ficheiros de copia de seguridade que conservar:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdggeneralsettings.ui:879
@@ -26455,7 +26455,7 @@ msgstr "Desfacer o tamaño da morea:"
 #: libs/ui/forms/wdggeneralsettings.ui:1099
 #, kde-format
 msgid "Show root layer"
-msgstr "Mostrar a capa base"
+msgstr "Amosar a capa base"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUsageLogging)
 #: libs/ui/forms/wdggeneralsettings.ui:1106
@@ -26833,12 +26833,12 @@ msgid ""
 "screen white while using <span style=\" font-style:italic;\">Absolute "
 "Colorimetric</span>?</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Estabelecer canto quere corrixir o estado de "
-"adaptación. Isto afectará a como a <span style=\" font-style:italic;"
-"\">Colorimétrica absoluta</span> cambia os brancos da imaxe. Noutras "
-"palabras, ata que punto quere que a xestión de cores corrixa a cor de papel "
-"como branco de pantalla usando <span style=\" font-style:italic;"
-"\">Colorimétrica absoluta</span>?</p></body></html>"
+"<html><head/><body><p>Definir canto quere corrixir o estado de adaptación. "
+"Isto afectará a como a <span style=\" font-style:italic;\">Colorimétrica "
+"absoluta</span> cambia os brancos da imaxe. Noutras palabras, ata que punto "
+"quere que a xestión de cores corrixa a cor de papel como branco de pantalla "
+"usando <span style=\" font-style:italic;\">Colorimétrica absoluta</span>?</"
+"p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, ckbBlackPointComp)
 #: libs/ui/forms/wdgimageproperties.ui:364
@@ -26852,7 +26852,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>A compensación de punto negro axusta a cor máis escura "
 "do dispositivo de orixe á cor máis escura do dispositivo de destino. A "
-"colorimétrica relativa sen compensación de punto negro mostrará a diferencia "
+"colorimétrica relativa sen compensación de punto negro amosará a diferencia "
 "entre os valores máis escuros. Con compensación por punto negro, o negro "
 "será negro.</p></body></html>"
 
@@ -27380,7 +27380,7 @@ msgstr "O espazo de traballo principal segue o foco"
 #: libs/ui/forms/wdgnewwindowlayout.ui:47
 #, kde-format
 msgid "Show active image in all windows"
-msgstr "Mostrar a imaxe activa en todas as xanelas"
+msgstr "Amosar a imaxe activa en todas as xanelas"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonCurrentLayer)
 #: libs/ui/forms/wdgnodequerypatheditor.ui:21
@@ -27732,8 +27732,8 @@ msgstr ""
 "de copias da imaxe e traballará nelas en paralelo. Cada copia requirirá máis "
 "RAM para o seu almacenamento (arredor do 20% do tamaño da imaxe), así que só "
 "debe aumentar este límite se ten RAM dabondo instalada.</p><p><br/></"
-"p><p><span style=\" font-weight:600;\">Valor recomendado:</span> estabeleza "
-"como «Número de clons» o número de núcleos <span style=\" text-decoration: "
+"p><p><span style=\" font-weight:600;\">Valor recomendado:</span> defina como "
+"«Número de clons» o número de núcleos <span style=\" text-decoration: "
 "underline;\">físicos</span> (sen contar fíos) da CPU.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -30513,7 +30513,7 @@ msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
 "to tag them and then select the tag here."
 msgstr ""
-"Non hai etiquetas dispoñíbeis para mostrar nesta xanela emerxente. Para "
+"Non hai etiquetas dispoñíbeis para amosar nesta xanela emerxente. Para "
 "engadir predefinicións, etiquéteas e seleccione a continuación a súa "
 "etiqueta aquí."
 
@@ -31021,7 +31021,7 @@ msgstr "Iniciar Krita no modo de só o lenzo."
 #: libs/ui/KisApplicationArguments.cpp:88
 #, kde-format
 msgid "Do not show the splash screen"
-msgstr "Non mostrar a pantalla de benvida"
+msgstr "Non amosar a pantalla de benvida"
 
 #: libs/ui/KisApplicationArguments.cpp:89
 #, kde-format
@@ -31636,7 +31636,7 @@ msgstr "Espa&zo de traballo"
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:314
 #, kde-format
 msgid "Show %1 Toolbar"
-msgstr "Mostrar a barra de ferramentas %1"
+msgstr "Amosar a barra de ferramentas %1"
 
 #: libs/ui/KisMainWindow.cpp:586
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:316
@@ -31963,7 +31963,7 @@ msgstr ""
 #: libs/ui/KisReferenceImage.cpp:113
 msgctxt "(qtundo-format)"
 msgid "Set saturation"
-msgstr "Estabelecer a saturación"
+msgstr "Definir a saturación"
 
 #: libs/ui/KisReferenceImage.cpp:175
 #, kde-format
@@ -32218,7 +32218,7 @@ msgstr "Non se puido gardar a versión incremental"
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
-msgstr "Non se puido gardar unha copia de seguranza incremental"
+msgstr "Non se puido gardar unha copia de seguridade incremental"
 
 #: libs/ui/KisViewManager.cpp:1279
 #, kde-format
@@ -32280,7 +32280,7 @@ msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
 "krita.org website"
 msgstr ""
-"Mostrar novas sobre Krita: isto require Internet para obter a información do "
+"Amosar novas sobre Krita: isto require Internet para obter a información do "
 "sitio web krita.org"
 
 #: libs/ui/KisWelcomePageWidget.cpp:151
@@ -32329,7 +32329,7 @@ msgstr "Gardado de último por"
 #: libs/ui/KoDocumentInfoDlg.cpp:170
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
-msgstr "Empregue ';' (Exemplo: Office; KDE, Calligra)"
+msgstr "Use ';' (Exemplo: Office; KDE, Calligra)"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:296
 #, kde-format
@@ -34651,7 +34651,7 @@ msgid ""
 msgstr ""
 "<p>Rec.2020 é o próximo substituto do espazo de cores sRGB, que xa vai "
 "vello. A xuño de 2015, poucos dispositivos de pantalla (practicamente "
-"ningún, e desde logo ningún barato) poden mostrar a totalidade de Rec.2020. "
+"ningún, e desde logo ningún barato) poden amosar a totalidade de Rec.2020. "
 "Porén, a tecnoloxía de pantallas está achegándose a Rec.2020, as películas "
 "xa se filman para Rec.2020, e existen varias cámaras compatíbeis con "
 "Rec.2020. E na sala escura dixital, Rec.2020 é máis axeitado como espazo de "
@@ -34682,7 +34682,7 @@ msgstr ""
 "web e segue sendo a mellor escolla para exportar imaxes para Internet.</p> "
 "<p> A gama de cores de sRGB era unha boa escolla para os CRT calibrados e de "
 "boa calidade. Pero sRGB non é unha boa escolla para moitos monitores LCD do "
-"mercado, que a miúdo non poden mostrar os azuis e maxentas máis saturados de "
+"mercado, que a miúdo non poden amosar os azuis e maxentas máis saturados de "
 "sRGB (as boas novas son que, a medida que progresa a tecnoloxía, os "
 "monitores do mercado inclúen gamas de cores máis amplas).</p> <p>As gamas de "
 "cores das impresoras poden superar facilmente a gama de cores de RGB en "
@@ -35076,7 +35076,7 @@ msgstr "Nivel de medio gris:"
 #, kde-format
 msgctxt "@title Which elements to display (e.g., thumbnails or details)"
 msgid "Display"
-msgstr "Mostrar"
+msgstr "Amosar"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:131
@@ -35102,12 +35102,12 @@ msgstr ""
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:98
 #, kde-format
 msgid "Toggle showing presets"
-msgstr "Conmutar mostrar as predefinicións"
+msgstr "Conmutar amosar as predefinicións"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:100
 #, kde-format
 msgid "Toggle showing scratchpad"
-msgstr "Conmutar mostrar o caderno de notas"
+msgstr "Conmutar amosar o caderno de notas"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:102
 #, kde-format
@@ -35841,7 +35841,7 @@ msgstr "Límite do xunte"
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:230
 #, kde-format
 msgid "Set line width of actual selection"
-msgstr "Estabelecer o ancho de liña da selección actual"
+msgstr "Definir o ancho de liña da selección actual"
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:241
@@ -36437,19 +36437,19 @@ msgstr "A&xuda"
 #: libs/widgetutils/config/kstandardaction_p.h:84
 #, kde-format
 msgid "Show &Menubar"
-msgstr "Mostrar a barra de &menú"
+msgstr "Amosar a barra de &menú"
 
 #: libs/widgetutils/config/kstandardaction.cpp:517
 #, kde-format
 msgid "Show Menubar<p>Shows the menubar again after it has been hidden</p>"
 msgstr ""
-"Mostrar barra de menú<p>Mostra de novo a barra de menú tras ser agochada</p>"
+"Amosar barra de menú<p>Mostra de novo a barra de menú tras ser agochada</p>"
 
 #: libs/widgetutils/config/kstandardaction.cpp:535
 #: libs/widgetutils/config/kstandardaction_p.h:86
 #, kde-format
 msgid "Show St&atusbar"
-msgstr "Mostrar a barra de &estado"
+msgstr "Amosar a barra de &estado"
 
 #: libs/widgetutils/config/kstandardaction.cpp:538
 #, kde-format
@@ -36457,7 +36457,7 @@ msgid ""
 "Show Statusbar<p>Shows the statusbar, which is the bar at the bottom of the "
 "window used for status information.</p>"
 msgstr ""
-"Mostrar a barra de estado<p>Mostra a barra de estado, que é a barra no fondo "
+"Amosar a barra de estado<p>Mostra a barra de estado, que é a barra no fondo "
 "da xanela onde se mostra información de estado.</p>"
 
 #. i18n: ectx: property (title), widget (QMenu, menu_New)
@@ -36822,22 +36822,22 @@ msgstr "Comprobar a ortografía do documento"
 #: libs/widgetutils/config/kstandardaction_p.h:84
 #, kde-format
 msgid "Show or hide menubar"
-msgstr "Mostrar ou agochar a barra de menú"
+msgstr "Amosar ou agochar a barra de menú"
 
 #: libs/widgetutils/config/kstandardaction_p.h:85
 #, kde-format
 msgid "Show &Toolbar"
-msgstr "Mostrar a barra de &ferramentas"
+msgstr "Amosar a barra de &ferramentas"
 
 #: libs/widgetutils/config/kstandardaction_p.h:85
 #, kde-format
 msgid "Show or hide toolbar"
-msgstr "Mostrar ou agochar a barra de ferramentas"
+msgstr "Amosar ou agochar a barra de ferramentas"
 
 #: libs/widgetutils/config/kstandardaction_p.h:86
 #, kde-format
 msgid "Show or hide statusbar"
-msgstr "Mostrar ou agochar a barra de estado"
+msgstr "Amosar ou agochar a barra de estado"
 
 #: libs/widgetutils/config/kstandardaction_p.h:87
 #, kde-format
@@ -37129,12 +37129,12 @@ msgstr ""
 "e.V. representa á comunidade KDE en asuntos legais e financeiros. Consulte "
 "<a href=\"%1\">%1</a> para obter información sobre KDE e.V.<br/><br/>KDE "
 "benefíciase de distintos tipos de achegas, incluída a financeira. A maior "
-"parte dos fondos recadados empréganse para devolver aos seus membros e a "
-"outros os gastos derivados da súa contribución a KDE. Outros fondos "
-"dedícanse á protección legal e á organización de congresos e reunións. <br /"
-"><br />Desexaríamos animalo a apoiar o noso esforzo cunha doazón económica, "
-"para o que pode empregar algúns dos xeitos descritos en <a href=\"%2\">%2</"
-"a>.<br/><br/>Moitas grazas por adiantado pola súa axuda.</html>"
+"parte dos fondos recadados úsanse para devolver aos seus membros e a outros "
+"os gastos derivados da súa contribución a KDE. Outros fondos dedícanse á "
+"protección legal e á organización de congresos e reunións. <br /><br /"
+">Desexaríamos animalo a apoiar o noso esforzo cunha doazón económica, para o "
+"que pode usar algúns dos xeitos descritos en <a href=\"%2\">%2</a>.<br/><br/"
+">Moitas grazas por adiantado pola súa axuda.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:128
 #, kde-format
@@ -37291,7 +37291,7 @@ msgstr "Te&xto da icona:"
 #, kde-format
 msgid "&Hide text when toolbar shows text alongside icons"
 msgstr ""
-"A&gochar o texto cando a barra de ferramentas mostre o texto a carón das "
+"A&gochar o texto cando a barra de ferramentas amose o texto a carón das "
 "iconas"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:606
@@ -37455,7 +37455,7 @@ msgid ""
 "Ctrl+V) shown in the right column."
 msgstr ""
 "Aquí pode ver unha lista dos atallos de teclado, é dicir, asociacións entre "
-"accións (p.ex. «Copiar»), mostradas na columna da esquerda, e as teclas ou "
+"accións (p.ex. «Copiar»), amosadas na columna da esquerda, e as teclas ou "
 "combinacións de teclas (p.ex. Ctrl+V), na columna da dereita."
 
 #. i18n: ectx: property (text), widget (QTreeWidget, list)
@@ -37766,7 +37766,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:menu"
 msgid "Show Text"
-msgstr "Mostrar o texto"
+msgstr "Amosar o texto"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:292
 #, kde-format
@@ -37873,7 +37873,7 @@ msgstr "%1"
 #: libs/widgetutils/xmlgui/ktoolbarhandler.cpp:92
 #, kde-format
 msgid "Toolbars Shown"
-msgstr "Barras de ferramentas mostradas"
+msgstr "Barras de ferramentas amosadas"
 
 #: libs/widgetutils/xmlgui/kxmlguibuilder.cpp:172
 #: libs/widgetutils/xmlgui/kxmlguibuilder.cpp:336
@@ -38504,7 +38504,7 @@ msgstr "Mínima"
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:83
 #, kde-format
 msgid "Do Not Show"
-msgstr "Non mostrar"
+msgstr "Non amosar"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisColorSelectorSettings)
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:141
@@ -38583,7 +38583,7 @@ msgstr "Selector de cores"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:70
 #, kde-format
 msgid "Show color selector"
-msgstr "Mostrar o selector de cores"
+msgstr "Amosar o selector de cores"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:96
@@ -38632,7 +38632,7 @@ msgid ""
 "Luminosity is crunched with. 1 makes the selector fully linear, 2.2 is a "
 "practical default value.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Isto estabelece o valor de gamma co que se esmaga a "
+"<html><head/><body><p>Isto define o valor de gamma co que se esmaga a "
 "luminosidade de HSY axustada a unha liña. 1 fai o selector completamente "
 "lineal. 2,2 é un valor predeterminado práctico.</p></body></html>"
 
@@ -38665,7 +38665,7 @@ msgstr "Cando cambia o tamaño da doca: "
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:405
 #, kde-format
 msgid "Show Zoom Selector UI: "
-msgstr "Mostrar a interface do selector de ampliación: "
+msgstr "Amosar a interface do selector de ampliación: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:418
@@ -38776,7 +38776,7 @@ msgstr "Historial de cores"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:740
 #, kde-format
 msgid "Show Color Histor&y"
-msgstr "Mostrar o h&istorial de cores"
+msgstr "Amosar o h&istorial de cores"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
@@ -38856,7 +38856,7 @@ msgstr "Cores da imaxe"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:955
 #, kde-format
 msgid "Show Colors from the ima&ge"
-msgstr "Mostrar as cores da ima&xe"
+msgstr "Amosar as cores da ima&xe"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, commonColorsAutoUpdate)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:964
@@ -38874,7 +38874,7 @@ msgstr "Actualizar despois de cada trazo"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1186
 #, kde-format
 msgid "HSV Sliders to Show"
-msgstr "Barras de HSV para mostrar"
+msgstr "Barras de HSV para amosar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, csl_hsvH)
 #. i18n: ectx: property (text), widget (QCheckBox, csl_hslH)
@@ -38922,7 +38922,7 @@ msgstr "Valor"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1216
 #, kde-format
 msgid "HSL Sliders to Show"
-msgstr "Barras de HSL para mostrar"
+msgstr "Barras de HSL para amosar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, csl_hslL)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1236
@@ -38937,7 +38937,7 @@ msgstr "Claridade"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1246
 #, kde-format
 msgid "HSI Sliders to Show"
-msgstr "Barras de HSI para mostrar"
+msgstr "Barras de HSI para amosar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, csl_hsiI)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1266
@@ -38954,7 +38954,7 @@ msgstr "Intensidade"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1276
 #, kde-format
 msgid "HSY' Sliders to Show"
-msgstr "Barras de HSY' para mostrar"
+msgstr "Barras de HSY' para amosar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, csl_hsyY)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1296
@@ -39190,7 +39190,7 @@ msgstr "Axustar a tanxente"
 #: plugins/dockers/animation/KisAnimCurvesView.cpp:925
 msgctxt "(qtundo-format)"
 msgid "Set interpolation mode"
-msgstr "Estabelecer o modo de interpolación"
+msgstr "Definir o modo de interpolación"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:315
 #, kde-format
@@ -39593,13 +39593,13 @@ msgstr "Aparencia do selector"
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:27
 #, kde-format
 msgid "Show background color indicator"
-msgstr "Mostrar un indicador da cor de fondo"
+msgstr "Amosar un indicador da cor de fondo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showValueScaleNumbers)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:34
 #, kde-format
 msgid "Show numbered value scale"
-msgstr "Mostrar unha escala de valores numerada"
+msgstr "Amosar unha escala de valores numerada"
 
 #. i18n: ectx: property (text), widget (QLabel, colorspaceLabel)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
@@ -39639,7 +39639,7 @@ msgstr "Forzar a &máscara de gama"
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:271
 #, kde-format
 msgid "&Just show the shapes"
-msgstr "&Só mostrar as formas"
+msgstr "&Só amosar as formas"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:283
@@ -39895,7 +39895,7 @@ msgstr "Isométrica (require OpenGL)"
 #: plugins/dockers/griddocker/grid_config_widget.ui:60
 #, kde-format
 msgid "Show grid"
-msgstr "Mostrar a grade."
+msgstr "Amosar a grade."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSnapToGrid)
 #: plugins/dockers/griddocker/grid_config_widget.ui:73
@@ -39993,7 +39993,7 @@ msgstr "Desprazamento da grade."
 #: plugins/dockers/griddocker/grid_config_widget.ui:546
 #, kde-format
 msgid "Show guides"
-msgstr "Mostrar as guías."
+msgstr "Amosar as guías."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSnapToGuides)
 #: plugins/dockers/griddocker/grid_config_widget.ui:553
@@ -40011,7 +40011,7 @@ msgstr "Bloquear as guías."
 #: plugins/dockers/griddocker/grid_config_widget.ui:567
 #, kde-format
 msgid "Show rulers"
-msgstr "Mostrar as regras"
+msgstr "Amosar as regras"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGuidesStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:584
@@ -40086,7 +40086,7 @@ msgstr "Capas"
 #: plugins/dockers/layerdocker/LayerBox.cpp:249
 #, kde-format
 msgid "&Show Global Selection Mask"
-msgstr "&Mostrar a máscara de selección global"
+msgstr "&Amosar a máscara de selección global"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:252
 #, kde-format
@@ -40380,7 +40380,7 @@ msgstr "Ningún"
 #: plugins/dockers/lut/wdglut.ui:36
 #, kde-format
 msgid "Use OpenColorIO"
-msgstr "Empregar OpenColorIO"
+msgstr "Usar OpenColorIO"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblDisplayDevice)
 #: plugins/dockers/lut/wdglut.ui:93
@@ -43573,7 +43573,7 @@ msgstr "Non se pode cargar a biblioteca de Python"
 #: plugins/extensions/pykrita/plugin/plugin.cpp:36
 #, kde-format
 msgid "Cannot set Python paths"
-msgstr "Non se poden estabelecer as rutas de Python"
+msgstr "Non se poden definir as rutas de Python"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:79
 #: plugins/extensions/pykrita/plugin/plugin.cpp:39
@@ -43597,10 +43597,9 @@ msgid ""
 "bar and in toolbars as required. A string to use KDE's image loading system, "
 "or a custom QPixmap or QIcon, or None."
 msgstr ""
-"A icona asociada con esta acción. Móstrase xunto con texto na barra de menú "
-"e as súas barras de ferramentas son necesarias. Unha cadea para usar o "
-"sistema de carga de imaxes de KDE, ou un QPixmap ou QIcon personalizado, ou "
-"None."
+"A icona asociada con esta acción. Amósase xunto con texto na barra de menú e "
+"as súas barras de ferramentas son necesarias. Unha cadea para usar o sistema "
+"de carga de imaxes de KDE, ou un QPixmap ou QIcon personalizado, ou None."
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, shortcut)
 #: plugins/extensions/pykrita/plugin/info.ui:41
@@ -49980,7 +49979,7 @@ msgid ""
 msgstr ""
 "<p>O formato de ficheiro «Portable Network Graphics», PNG, permite gardar as "
 "transparencias pois gárdaas na canle alfa.\n"
-"Pode desmarcar esta caixiña se non quere empregar transparencias e se quere "
+"Pode desmarcar esta caixiña se non quere usar transparencias e se quere "
 "facer que o ficheiro resultante sexa máis pequeno.<br>Recoméndase sempre "
 "gardar a canle alfa.</p>"
 
@@ -50005,7 +50004,7 @@ msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Os ficheiros PNG</"
 "span> teñen<span style=\" font-style:italic;\">dúas</span> opcións de garda "
 "da información <span style=\" font-weight:600;\">sRGB</span>: como etiqueta "
-"ou como perfil explícito. Para empregalo en páxinas web <span style=\" font-"
+"ou como perfil explícito. Para usalo en páxinas web <span style=\" font-"
 "style:italic;\">desactive</span> esta opción. Para intercambiar con outras "
 "aplicacións <span style=\" font-style:italic;\">active</span> esta opción.</"
 "p></body></html>"
@@ -50114,7 +50113,7 @@ msgid ""
 msgstr ""
 "<p>Se activa esta opción, todas as imaxes RAW descodificaranse cunha "
 "profundidade de 16 cores usando unha curva de gamma lineal. Para evitar "
-"mostrar unha imaxe escura no editor, recoméndase usar a xestión de cor neste "
+"amosar unha imaxe escura no editor, recoméndase usar a xestión de cor neste "
 "modo.</p> <p>Se desactiva esta opción, todos os ficheiros RAW "
 "descodificaranse con 8 bits de profundidade de cor cunha curva gama BT.709 e "
 "un punto branco no percentil 99. Este modo é máis rápido que a "
@@ -50313,7 +50312,7 @@ msgstr ""
 "strong='true'>AHD v2</emphasis>: usa unha interpolación AHD modificada, co "
 "método de diferencias de varianza da cor.</li> <li><emphasis "
 "strong='true'>AFD</emphasis>: usa unha interpolación de redución de mosaico "
-"filtrada e adaptábel, empregando o filtro mediano de cinco pasos do proxecto "
+"filtrada e adaptábel, usando o filtro mediano de cinco pasos do proxecto "
 "PerfectRaw.</li> <li><emphasis strong='true'>VCD</emphasis>: usa unha "
 "interpolación de diferenzas de variación da cor.</li> <li><emphasis "
 "strong='true'>VCD e AHD</emphasis>: usa unha mestura de redución de mosaico "
@@ -50868,11 +50867,11 @@ msgid ""
 msgstr ""
 "<title>Perfil da cámara</title><p>Escolla aquí o espazo de cor de entrada "
 "empregado para descodificar os datos RAW.</p><p><ul><li><emphasis "
-"strong='true'>Ningún</emphasis>: non se emprega ningún perfil de cor na "
+"strong='true'>Ningún</emphasis>: non se usa ningún perfil de cor na "
 "descodificación de RAW.</item><item><emphasis strong='true'>Integrado</"
-"emphasis>: emprega o perfil de cor integrado no ficheiro RAW, se existe.</"
-"li><li><emphasis strong='true'>Personalizado</emphasis>: emprega un perfil "
-"de espazo de cores personalizado.</li></ul></p>"
+"emphasis>: usa o perfil de cor integrado no ficheiro RAW, se existe.</"
+"li><li><emphasis strong='true'>Personalizado</emphasis>: usa un perfil de "
+"espazo de cores personalizado.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:695
 #, kde-format
@@ -50956,8 +50955,8 @@ msgstr ""
 "strong='true'>Pro-photo</emphasis>: este espazo de cores é un espazo RGB "
 "desenvolvido por Kodak, que ofrece unha gama especialmente ampla deseñada "
 "pensando no seu uso en fotografía.</li><li><emphasis "
-"strong='true'>Personalizado</emphasis>: emprega un perfil de espazo de cores "
-"de saída personalizado.</li></ul></p>"
+"strong='true'>Personalizado</emphasis>: usa un perfil de espazo de cores de "
+"saída personalizado.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:729
 #, fuzzy, kde-format
@@ -50984,8 +50983,8 @@ msgid ""
 "<title>Threshold</title><p>Set here the noise reduction threshold value to "
 "use.</p>"
 msgstr ""
-"<title>Límite</title><p>Estabeleza aquí o valor do límite de redución de "
-"ruído.</p>"
+"<title>Límite</title><p>Defina aquí o valor do límite de redución de ruído.</"
+"p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:961
 #, kde-format
@@ -52436,7 +52435,7 @@ msgstr "Usar o contador"
 #: plugins/paintops/deform/wdgdeformoptions.ui:187
 #, kde-format
 msgid "Use undeformed image"
-msgstr "Empregar a imaxe sen deformar"
+msgstr "Usar a imaxe sen deformar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shapeGroup)
 #: plugins/paintops/experiment/experiment_paintop_plugin.cpp:31
@@ -53425,7 +53424,7 @@ msgstr "Fíxate, o mesquiño bacharel pide vinganza"
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:171
 #, kde-format
 msgid "use only one letter at a time"
-msgstr "empregar só unha letra de cada vez"
+msgstr "usar só unha letra de cada vez"
 
 #. i18n: ectx: property (text), widget (QCheckBox, pipeModeChbox)
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:174
@@ -55719,7 +55718,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:229
 msgid "Set Margins from Active Selection"
-msgstr "Estabelecer as marxes a partir da selección activa"
+msgstr "Definir as marxes a partir da selección activa"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:236
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:207
@@ -56335,7 +56334,7 @@ msgid ""
 "inker, etc), email and homepage."
 msgstr ""
 "A seguinte é unha táboa dos autores que colaboraron neste cómic. Pode "
-"estabelecer o seu alcume, os seus nomes (primeiro, segundo e apelidos), rol "
+"definir o seu alcume, os seus nomes (primeiro, segundo e apelidos), rol "
 "(lapiseiro, finalizador de arte, etc.), correo electrónico e páxina web."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
@@ -56356,11 +56355,11 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:377
 msgid "Set Today"
-msgstr "Estabelecer hoxe"
+msgstr "Definir hoxe"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:378
 msgid "Sets the publish date to the current date."
-msgstr "Estabelece a data actual como data de publicación."
+msgstr "Define a data actual como data de publicación."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:383
 msgid ""
@@ -57333,7 +57332,7 @@ msgid ""
 "&gt;Settings menu entry. </p></body></html>"
 msgstr ""
 "<html><head/><body><p>Se marca isto o script activarase automaticamente en "
-"Krita. É dicir, mostrarase no menú de scripts ou na lista de docas. En caso "
+"Krita. É dicir, amosarase no menú de scripts ou na lista de docas. En caso "
 "contrario necesitará activar manualmente o script a través da entrada de "
 "menú «Krita → Configuración». </p></body></html>"
 
@@ -57375,7 +57374,7 @@ msgstr "Doca de paleta de Python"
 
 #: plugins/python/palette_docker/palette_docker.py:63
 msgid "Set"
-msgstr "Estabelecer"
+msgstr "Definir"
 
 #: plugins/python/palette_docker/palette_docker.py:72
 #, fuzzy
@@ -58401,12 +58400,12 @@ msgstr "Usar sensores"
 #: plugins/tools/basictools/kis_tool_line.cc:94
 #, kde-format
 msgid "Show Preview"
-msgstr "Mostrar a vista previa"
+msgstr "Amosar a vista previa"
 
 #: plugins/tools/basictools/kis_tool_line.cc:97
 #, kde-format
 msgid "Show Guideline"
-msgstr "Mostrar a liña de guía"
+msgstr "Amosar a liña de guía"
 
 #: plugins/tools/basictools/kis_tool_line.cc:372
 #, fuzzy, kde-format
@@ -58420,7 +58419,7 @@ msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
 "+Drag will force you to draw straight lines"
 msgstr ""
-"Alt+Arrastrar moverá a orixe da liña mostrada, mentres que Maiús+Arrastrar "
+"Alt+Arrastrar moverá a orixe da liña amosada, mentres que Maiús+Arrastrar "
 "obrigarao a debuxar liñas rectas "
 
 #: plugins/tools/basictools/kis_tool_line.h:106
@@ -58626,7 +58625,7 @@ msgstr ""
 #: plugins/tools/basictools/wdgcolorsampler.ui:82
 #, kde-format
 msgid "Sample All Visible Layers"
-msgstr "Mostrar todas as capas visíbeis"
+msgstr "Amosar todas as capas visíbeis"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:87
@@ -58647,7 +58646,7 @@ msgstr ""
 #: plugins/tools/basictools/wdgcolorsampler.ui:98
 #, kde-format
 msgid "Show colors as percentages"
-msgstr "Mostrar as cores como porcentaxes"
+msgstr "Amosar as cores como porcentaxes"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, listViewChannels)
 #: plugins/tools/basictools/wdgcolorsampler.ui:121
@@ -58857,7 +58856,7 @@ msgstr "&y:"
 #: plugins/tools/basictools/wdgmovetool.ui:307
 #, kde-format
 msgid "Show coordinates on canvas"
-msgstr "Mostrar as coordenadas no lenzo"
+msgstr "Amosar as coordenadas no lenzo"
 
 #. i18n: ectx: property (text), widget (QLabel, brushesLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:61
@@ -58889,7 +58888,7 @@ msgstr "Horizontal"
 #: plugins/tools/basictools/wdgmultihandtool.ui:116
 #, kde-format
 msgid "Show Origin"
-msgstr "Mostrar a orixe"
+msgstr "Amosar a orixe"
 
 #. i18n: ectx: property (text), widget (QCheckBox, verticalCheckbox)
 #: plugins/tools/basictools/wdgmultihandtool.ui:139
@@ -59261,7 +59260,7 @@ msgstr "Lugar no que gardar:"
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:56
 #, kde-format
 msgid "Add/Select an image to show options"
-msgstr "Engada ou seleccione unha imaxe para mostrar as opcións"
+msgstr "Engada ou seleccione unha imaxe para amosar as opcións"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
@@ -59291,7 +59290,7 @@ msgstr "&Seguir a ruta escollida"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:77
 #, kde-format
 msgid "Use tablet &pressure"
-msgstr "Empregar &presión da táboa"
+msgstr "Usar &presión da táboa"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:88
 #, kde-format
@@ -59301,7 +59300,7 @@ msgstr "Estreitamento:"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:97
 #, kde-format
 msgid "Use tablet &angle"
-msgstr "Empregar o á&ngulo da táboa"
+msgstr "Usar o á&ngulo da táboa"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:111
 #, kde-format
@@ -60514,7 +60513,7 @@ msgid ""
 "html>"
 msgstr ""
 "<html><head/><body><p>De que sistema de escritura deberían ser os tipos de "
-"letra que se mostren no selector de tipo de letra? Se non selecciona ningún "
+"letra que se amosen no selector de tipo de letra? Se non selecciona ningún "
 "sistema de escritura mostraranse todos os tipos de letra.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolCenter)
@@ -60983,7 +60982,7 @@ msgid ""
 "Activate for images with vast solid areas. Set the value to the width of the "
 "thinnest lines on the image"
 msgstr ""
-"Activar para imaxes con grandes zonas sólidas. Estabelecer o valor como o da "
+"Activar para imaxes con grandes zonas sólidas. Definir o valor como o da "
 "anchura das liñas máis finas na imaxe"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:117
@@ -61032,7 +61031,7 @@ msgstr "Editar os trazos clave"
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:46
 #, kde-format
 msgid "Show output"
-msgstr "Mostrar a saída"
+msgstr "Amosar a saída"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLimitToDevice)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:53

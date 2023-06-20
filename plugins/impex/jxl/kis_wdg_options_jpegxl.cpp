@@ -235,7 +235,7 @@ void KisWdgOptionsJPEGXL::setConfiguration(const KisPropertiesConfigurationSP cf
     modular->setCurrentIndex(modular->findData(cfg->getInt("modularSetVal", -1)));
     keepInvisible->setCurrentIndex(keepInvisible->findData(cfg->getInt("keepInvisible", -1)));
     groupOrder->setCurrentIndex(groupOrder->findData(cfg->getInt("groupOrder", -1)));
-    responsive->setCurrentIndex(responsive->findData(cfg->getInt("progressiveAC", -1)));
+    responsive->setCurrentIndex(responsive->findData(cfg->getInt("responsive", -1)));
     progressiveAC->setCurrentIndex(progressiveAC->findData(cfg->getInt("progressiveAC", -1)));
     qProgressiveAC->setCurrentIndex(qProgressiveAC->findData(cfg->getInt("qProgressiveAC", -1)));
     progressiveDC->setCurrentIndex(progressiveDC->findData(cfg->getInt("progressiveDC", -1)));

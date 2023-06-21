@@ -350,11 +350,18 @@ void KisHeifTest::testLoadHDR()
                 heif_image_pq->projection()->pixel(x, y, &heifColor);
                 avif_image_pq->projection()->pixel(x, y, &avifColor);
 
-                QVERIFY2(cs->difference(pngColor.data(), avifColor.data()) <1, QString("Avif PQ color doesn't match PNG color, (%1, %2) %3 %4")
+                // PNG file experiences alpha sampling to 16i-bits, so use differenceA for comparison
+                QVERIFY2(cs->differenceA(pngColor.data(), avifColor.data()) <1, QString("Avif PQ color doesn't match PNG color, (%1, %2) %3 %4")
                          .arg(x).arg(y).arg(pngColor.toXML()).arg(avifColor.toXML()).toLatin1());
 
-                QVERIFY2(cs->difference(pngColor.data(), heifColor.data()) <1, QString("Heif PQ color doesn't match PNG color, (%1, %2) %3 %4")
+                // PNG file experiences alpha sampling to 16i-bits, so use differenceA for comparison
+                QVERIFY2(cs->differenceA(pngColor.data(), heifColor.data()) <1, QString("Heif PQ color doesn't match PNG color, (%1, %2) %3 %4")
                          .arg(x).arg(y).arg(pngColor.toXML()).arg(heifColor.toXML()).toLatin1());
+
+                // compare HEIF and AVIF strictly
+                QVERIFY2(cs->difference(heifColor.data(), avifColor.data()) <1, QString("Heif PQ color doesn't match AVIF color, (%1, %2) %3 %4")
+                         .arg(x).arg(y).arg(heifColor.toXML()).arg(avifColor.toXML()).toLatin1());
+
 
                 heif_image_hlg->projection()->pixel(x, y, &heifColor);
                 avif_image_hlg->projection()->pixel(x, y, &avifColor);

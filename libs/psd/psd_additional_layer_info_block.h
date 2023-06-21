@@ -171,7 +171,7 @@ struct KRITAPSD_EXPORT psd_layer_solid_color {
          * displaying, so we should convert such colors into some "universal" color
          * space, so that we could actually manage it
          */
-        if (fill_color.profile() && !fill_color.profile()->isSuitableForDisplay()) {
+        if (fill_color.profile() && !fill_color.profile()->isSuitableForOutput()) {
             fill_color.convertTo(KoColorSpaceRegistry::instance()->
                                  colorSpace(LABAColorModelID.id(), Float32BitsColorDepthID.id(), 0));
         }

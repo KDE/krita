@@ -16,6 +16,7 @@ linux-build:
   tags:
     - Linux
   variables:
+    KDECI_BUILD_TYPE: Release
     KDECI_CC_CACHE: /mnt/caches/krita-appimage/
     KDECI_CACHE_PATH: /mnt/artifacts/krita-appimage/
     KDECI_GITLAB_SERVER: https://invent.kde.org/

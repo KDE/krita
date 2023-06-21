@@ -1,8 +1,10 @@
 # SPDX-FileCopyrightText: 2022 Nicolás Alvarez <nicolas.alvarez@gmail.com>
 # SPDX-License-Identifier: CC0-1.0
 
+PostInstallScripts:
+    krita-plugins: python3 build-tools/ci-scripts/build-plugins.py
+
 Options:
-    release-build: True
     use-ccache: True
     use-asan: False
     run-gcovr: False

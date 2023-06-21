@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-20 00:47+0000\n"
-"PO-Revision-Date: 2023-06-17 08:54+0300\n"
+"PO-Revision-Date: 2023-06-20 07:25+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -23148,28 +23148,25 @@ msgstr "Використовувати часові позначки драйв�
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1318
-#, fuzzy, kde-format
-#| msgid "Maximum brush size:"
+#, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
-msgstr[0] "Макс. розмір пензля:"
-msgstr[1] "Макс. розмір пензля:"
-msgstr[2] "Макс. розмір пензля:"
-msgstr[3] "Макс. розмір пензля:"
+msgstr[0] "Максимальна швидкість пензля: {n} пк/мс"
+msgstr[1] "Максимальна швидкість пензля: {n} пк/мс"
+msgstr[2] "Максимальна швидкість пензля: {n} пк/мс"
+msgstr[3] "Максимальна швидкість пензля: {n} пк/мс"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1327
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Brush Smoothing: Disabled"
+#, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
-msgstr[0] "Згладжування пензля: вимкнено"
-msgstr[1] "Згладжування пензля: вимкнено"
-msgstr[2] "Згладжування пензля: вимкнено"
-msgstr[3] "Згладжування пензля: вимкнено"
+msgstr[0] "Згладжування швидкості пензля: {n} семпл"
+msgstr[1] "Згладжування швидкості пензля: {n} семпли"
+msgstr[2] "Згладжування швидкості пензля: {n} семплів"
+msgstr[3] "Згладжування швидкості пензля: {n} семпл"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1424
@@ -30952,6 +30949,8 @@ msgid ""
 "The image has a profile attached that Krita cannot edit images in (\"%1\"), "
 "please select a space to convert to for editing: \n"
 msgstr ""
+"Для зображення долучено профіль, який Krita не може редагувати, у («%1»). "
+"Будь ласка, виберіть простір для перетворення з метою редагування: \n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 msgctxt "(qtundo-format)"

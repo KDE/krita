@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-20 00:47+0000\n"
-"PO-Revision-Date: 2023-06-17 10:29+0200\n"
+"PO-Revision-Date: 2023-06-20 09:54+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -22974,24 +22974,21 @@ msgstr "Tijdstempels van tablet voor penseelsnelheid gebruiken"
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1318
-#, fuzzy, kde-format
-#| msgid "Maximum brush size:"
+#, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
-msgstr[0] "Maximale penseelgrootte:"
-msgstr[1] "Maximale penseelgrootte:"
+msgstr[0] "Maximale penseelsnelheid: {n} px/ms"
+msgstr[1] "Maximale penseelsnelheid: {n} px/ms"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1327
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Brush Smoothing: Disabled"
+#, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
-msgstr[0] "Penseelstreek vloeiend maken: uitgeschakeld"
-msgstr[1] "Penseelstreek vloeiend maken: uitgeschakeld"
+msgstr[0] "Penseelsnelheid vloeiend maken: {n} sample"
+msgstr[1] "Penseelsnelheid vloeiend maken: {n} samples"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1424
@@ -30691,6 +30688,9 @@ msgid ""
 "The image has a profile attached that Krita cannot edit images in (\"%1\"), "
 "please select a space to convert to for editing: \n"
 msgstr ""
+"De afbeelding heeft een aangekoppeld profiel waarin Krita het niet in kan "
+"bewerken (\"%1\"), selecteer een ruimte om naar te converteren voor "
+"bewerking: \n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 msgctxt "(qtundo-format)"

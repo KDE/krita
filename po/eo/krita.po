@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-20 00:47+0000\n"
-"PO-Revision-Date: 2023-06-17 09:31+0100\n"
+"PO-Revision-Date: 2023-06-20 21:25+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -22889,24 +22889,21 @@ msgstr "Uzi tabuletpelilajn tempomarkojn por penikla rapideco"
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1318
-#, fuzzy, kde-format
-#| msgid "Maximum brush size:"
+#, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
-msgstr[0] "Maksimuma penikograndeco:"
-msgstr[1] "Maksimuma penikograndeco:"
+msgstr[0] "Maksimuma penikorapideco: {n} px/ms"
+msgstr[1] "Maksimuma penikorapideco: {n} px/ms:"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1327
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Brush Smoothing: Disabled"
+#, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
-msgstr[0] "Peniko Glatigado: Malŝaltita"
-msgstr[1] "Peniko Glatigado: Malŝaltita"
+msgstr[0] "Penikrapideca Glatigado: {n} specimeno"
+msgstr[1] "Penikrapideca Glatigado: {n} specimenoj"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1424
@@ -30540,6 +30537,8 @@ msgid ""
 "The image has a profile attached that Krita cannot edit images in (\"%1\"), "
 "please select a space to convert to for editing: \n"
 msgstr ""
+"La bildo havas alligitan profilon tian ke Krita ne povas redakti bildojn en "
+"(\"%1\"), bonvolu elektu spacon al kiu konverti por redaktado:: \n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 msgctxt "(qtundo-format)"

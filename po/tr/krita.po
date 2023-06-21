@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-20 00:47+0000\n"
-"PO-Revision-Date: 2023-06-17 13:34+0300\n"
+"PO-Revision-Date: 2023-06-20 15:01+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22867,24 +22867,21 @@ msgstr ""
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1318
-#, fuzzy, kde-format
-#| msgid "Maximum brush size:"
+#, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
-msgstr[0] "En büyük fırça boyutu:"
-msgstr[1] "En büyük fırça boyutu:"
+msgstr[0] "En yüksek fırça hızı: {n} pks/ms"
+msgstr[1] "En yüksek fırça hızı: {n} pks/ms"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1327
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Brush Smoothing: Disabled"
+#, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
-msgstr[0] "Fırça Yumuşatma: Kapalı"
-msgstr[1] "Fırça Yumuşatma: Kapalı"
+msgstr[0] "Fırça hızı pürüzsüzleştirme: {n} örnek"
+msgstr[1] "Fırça hızı pürüzsüzleştirme: {n} örnek"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1424
@@ -30527,6 +30524,8 @@ msgid ""
 "The image has a profile attached that Krita cannot edit images in (\"%1\"), "
 "please select a space to convert to for editing: \n"
 msgstr ""
+"Görsele, Krita'nın içinde görselleri düzenleyemediği bir profil ilişik (%1); "
+"düzenlemek için kendisine dönüştürülecek bir uzay seçin:\n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 msgctxt "(qtundo-format)"

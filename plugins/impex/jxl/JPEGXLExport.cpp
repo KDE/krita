@@ -975,10 +975,11 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             if (!flattenLayers) {
                 for (quint32 pos = 0; pos < image->root()->childCount(); pos++) {
                     KisNodeSP node = image->root()->at(pos);
-                    if (node && (node->inherits("KisGroupLayer") || node->childCount() > 0) && node->visible()) {
-                        dbgFile << "Flattening group layer" << node->name();
-                        KisGroupLayer *group = qobject_cast<KisGroupLayer *>(node.data());
-                        KisLayerUtils::flattenLayer(image, group);
+                    KisLayer *layer = qobject_cast<KisLayer *>(node.data());
+                    if (layer && (layer->inherits("KisGroupLayer") || layer->childCount() > 0 || layer->layerStyle())
+                        && layer->visible()) {
+                        dbgFile << "Flattening layer" << node->name();
+                        KisLayerUtils::flattenLayer(image, layer);
                     }
                 }
                 image->waitForDone();

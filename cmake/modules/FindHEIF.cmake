@@ -97,7 +97,7 @@ find_library(HEIF_LIBRARY
     HINTS ${HEIF_PKGCONF_LIBRARY_DIRS} ${HEIF_PKGCONF_LIBDIR}
 )
 
-if (NOT HEIF_VERSION)
+if (NOT HEIF_VERSION AND HEIF_FOUND)
     file(READ ${HEIF_INCLUDE_DIR}/libheif/heif_version.h _version_content)
 
     string(REGEX MATCH "#define LIBHEIF_VERSION[ \t]+\"(.+)\"" _version_match ${_version_content})

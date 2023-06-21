@@ -236,6 +236,10 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
 #if defined HAVE_X11
     qputenv("QT_QPA_PLATFORM", "xcb");
+#elif defined Q_OS_WIN
+    if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORM")) {
+        qputenv("QT_QPA_PLATFORM", "windows:altgr");
+    }
 #endif
 
     // Workaround a bug in QNetworkManager

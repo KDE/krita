@@ -437,6 +437,7 @@ void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
                                                   *m_savedTransformArgs,
                                                   m_rootNodes,
                                                   m_processedNodes,
+                                                  m_currentTime,
                                                   m_overriddenCommand);
 
     KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(command);
@@ -445,6 +446,8 @@ void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
 void TransformStrokeStrategy::initStrokeCallback()
 {
     KisStrokeStrategyUndoCommandBased::initStrokeCallback();
+
+    m_currentTime = KisTransformUtils::fetchCurrentImageTime(m_rootNodes);
 
     if (m_selection) {
         m_selection->setVisible(false);
@@ -486,6 +489,7 @@ void TransformStrokeStrategy::initStrokeCallback()
                                                                            m_rootNodes,
                                                                            m_processedNodes,
                                                                            undoFacade(),
+                                                                           m_currentTime,
                                                                            &lastCommandUndoJobs,
                                                                            &m_overriddenCommand)) {
         argsAreInitialized = true;

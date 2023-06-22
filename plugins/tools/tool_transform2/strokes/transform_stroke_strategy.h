@@ -133,6 +133,7 @@ private:
     boost::optional<ToolTransformArgs> m_savedTransformArgs;
     KisNodeList m_rootNodes;
     KisNodeList m_processedNodes;
+    int m_currentTime = -1;
     QList<KisSelectionSP> m_deactivatedSelections;
     QList<KisNodeSP> m_hiddenProjectionLeaves;
     QList<KisSelectionMaskSP> m_deactivatedOverlaySelectionMasks;

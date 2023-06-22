@@ -594,18 +594,20 @@ struct TransformExtraData : public KUndo2CommandExtraData
     ToolTransformArgs savedTransformArgs;
     KisNodeList rootNodes;
     KisNodeList transformedNodes;
+    int transformedTime = -1;
 
     KUndo2CommandExtraData* clone() const override {
         return new TransformExtraData(*this);
     }
 };
 
-void KisTransformUtils::postProcessToplevelCommand(KUndo2Command *command, const ToolTransformArgs &args, KisNodeList rootNodes, KisNodeList processedNodes, const KisSavedMacroCommand *overriddenCommand)
+void KisTransformUtils::postProcessToplevelCommand(KUndo2Command *command, const ToolTransformArgs &args, KisNodeList rootNodes, KisNodeList processedNodes, int currentTime, const KisSavedMacroCommand *overriddenCommand)
 {
     TransformExtraData *data = new TransformExtraData();
     data->savedTransformArgs = args;
     data->rootNodes = rootNodes;
     data->transformedNodes = processedNodes;
+    data->transformedTime = currentTime;
 
     command->setExtraData(data);
 
@@ -617,7 +619,7 @@ void KisTransformUtils::postProcessToplevelCommand(KUndo2Command *command, const
     }
 }
 
-bool KisTransformUtils::fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeList *rootNodes, KisNodeList *transformedNodes)
+bool KisTransformUtils::fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeList *rootNodes, KisNodeList *transformedNodes, int *oldTime)
 {
     const TransformExtraData *data = dynamic_cast<const TransformExtraData*>(command->extraData());
 
@@ -625,6 +627,7 @@ bool KisTransformUtils::fetchArgsFromCommand(const KUndo2Command *command, ToolT
         *args = data->savedTransformArgs;
         *rootNodes = data->rootNodes;
         *transformedNodes = data->transformedNodes;
+        *oldTime = data->transformedTime;
     }
 
     return bool(data);
@@ -647,6 +650,16 @@ KisNodeSP KisTransformUtils::tryOverrideRootToTransformMask(KisNodeSP root)
     }
 
     return root;
+}
+
+int KisTransformUtils::fetchCurrentImageTime(KisNodeList rootNodes)
+{
+    Q_FOREACH(KisNodeSP node, rootNodes) {
+        if (node && node->projection()) {
+            return node->projection()->defaultBounds()->currentTime();
+        }
+    }
+    return -1;
 }
 
 QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeList rootNodes, bool isExternalSourcePresent, KisSelectionSP selection)
@@ -715,25 +728,28 @@ bool KisTransformUtils::tryInitArgsFromNode(KisNodeList rootNodes, ToolTransform
 }
 
 bool KisTransformUtils::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *outArgs,
-                                                                    ToolTransformArgs::TransformMode mode,
-                                                                    KisNodeList currentNodes,
-                                                                    KisNodeList selectedNodes,
-                                                                    KisStrokeUndoFacade *undoFacade,
-                                                                    QVector<KisStrokeJobData *> *undoJobs,
-                                                                    const KisSavedMacroCommand **overriddenCommand)
+                                                       ToolTransformArgs::TransformMode mode,
+                                                       KisNodeList currentNodes,
+                                                       KisNodeList selectedNodes,
+                                                       KisStrokeUndoFacade *undoFacade,
+                                                       int currentTime,
+                                                       QVector<KisStrokeJobData *> *undoJobs,
+                                                       const KisSavedMacroCommand **overriddenCommand)
 {
     bool result = false;
 
     const KUndo2Command *lastCommand = undoFacade->lastExecutedCommand();
     KisNodeList oldRootNodes;
     KisNodeList oldTransformedNodes;
+    int oldTime = -1;
 
     ToolTransformArgs args;
 
     if (lastCommand &&
-        KisTransformUtils::fetchArgsFromCommand(lastCommand, &args, &oldRootNodes, &oldTransformedNodes) &&
+        KisTransformUtils::fetchArgsFromCommand(lastCommand, &args, &oldRootNodes, &oldTransformedNodes, &oldTime) &&
         args.mode() == mode &&
-        oldRootNodes == currentNodes) {
+        oldRootNodes == currentNodes &&
+        oldTime == currentTime) {
 
         if (KritaUtils::compareListsUnordered(oldTransformedNodes, selectedNodes)) {
             args.saveContinuedState();

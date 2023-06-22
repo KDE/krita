@@ -65,6 +65,7 @@ struct InplaceTransformStrokeStrategy::Private
     KisSelectionSP selection;
     KisPaintDeviceSP externalSource;
     KisNodeSP imageRoot;
+    int currentTime = -1; // NOTE: initialized asynchronously in initStrokeCallback!
     int previewLevelOfDetail = -1;
     bool forceLodMode = true;
 
@@ -271,6 +272,7 @@ void InplaceTransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *c
                                                   m_d->currentTransformArgs,
                                                   m_d->rootNodes,
                                                   m_d->processedNodes,
+                                                  m_d->currentTime,
                                                   m_d->overriddenCommand);
 
     KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(command);
@@ -281,6 +283,8 @@ void InplaceTransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *c
 void InplaceTransformStrokeStrategy::initStrokeCallback()
 {
     KisStrokeStrategyUndoCommandBased::initStrokeCallback();
+
+    m_d->currentTime = KisTransformUtils::fetchCurrentImageTime(m_d->rootNodes);
 
     QVector<KisStrokeJobData *> extraInitJobs;
 
@@ -329,6 +333,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
                                                               m_d->rootNodes,
                                                               m_d->processedNodes,
                                                               m_d->undoFacade,
+                                                              m_d->currentTime,
                                                               &lastCommandUndoJobs,
                                                               &m_d->overriddenCommand)) {
             argsAreInitialized = true;

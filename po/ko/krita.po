@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-20 00:47+0000\n"
+"POT-Creation-Date: 2023-06-22 00:46+0000\n"
 "PO-Revision-Date: 2023-03-01 00:29+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -16618,13 +16618,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "작업 공간"
 
-#: krita/main.cc:517
+#: krita/main.cc:521
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "치명적 오류"
 
-#: krita/main.cc:518
+#: krita/main.cc:522
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -16633,14 +16633,14 @@ msgstr ""
 "Krita에서는 Wayland 플랫폼을 지원하지 않습니다. Wayland에서 Krita를 실행하려"
 "면 XWayland를 사용하십시오. Krita를 종료합니다."
 
-#: krita/main.cc:628 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:632 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: 경고"
 
-#: krita/main.cc:629
+#: krita/main.cc:633
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16651,12 +16651,12 @@ msgstr ""
 "실행을 추천하지 않습니다. 버그를 보고하지 마십시오.\n"
 "지원하는 Windows 버전을 사용하십시오: Windows 7, 8, 8.1, 10."
 
-#: krita/main.cc:651 krita/main.cc:656
+#: krita/main.cc:655 krita/main.cc:660
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita 태블릿 지원"
 
-#: krita/main.cc:652
+#: krita/main.cc:656
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16666,7 +16666,7 @@ msgstr ""
 "WinTab 드라이버를 불러올 수 없으며 Windows 잉크 펜 장치를 찾을 수 없습니다. "
 "그래픽 태블릿이 있다면 드라이버 설치 상태를 확인하십시오."
 
-#: krita/main.cc:657
+#: krita/main.cc:661
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -20758,24 +20758,30 @@ msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
 msgstr "리소스 폴더"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:129
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:123
+#, fuzzy, kde-format
+#| msgid "Dynamics settings"
+msgid "Display settings"
+msgstr "다이나믹 설정"
+
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:130
 #, kde-format
 msgid "Storage Resources"
 msgstr "저장소 리소스"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:190
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
 msgstr "리소스 가져오기"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:195
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:196
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "리소스 삭제"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:333
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:334
 #: libs/ui/KisMainWindow.cpp:2571
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
@@ -20955,41 +20961,41 @@ msgstr ""
 "브러시 사전 설정이 없습니다. 브러시 사전 설정이 포함된 번들을 다시 활성화하십"
 "시오."
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:60
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
 #, kde-format
 msgid "Tag"
 msgstr "태그"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:74
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:86
 #, kde-format
 msgid "Tag options"
 msgstr "태그 옵션"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
 #, fuzzy, kde-format
 #| msgid "Rename tag"
 msgctxt "Dialog title"
 msgid "Can't rename the tag"
 msgstr "태그 이름 바꾸기"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:158
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:159
 #, kde-format
 msgctxt "Dialog title"
 msgid "Remove existing tag with that name?"
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:160
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:161
 #, kde-format
 msgctxt ""
 "Dialog message (the arguments are both somewhat user readable nouns or "
@@ -21002,7 +21008,7 @@ msgid ""
 "Tag's unique name: %2"
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:266
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
 #, fuzzy, kde-format
 #| msgid "Go to previous page"
@@ -21012,7 +21018,7 @@ msgctxt ""
 msgid "Restore previous tag"
 msgstr "이전 쪽으로 이동"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:268
 #, fuzzy, kde-format
 #| msgid "Add Existing Pages"
 msgctxt ""
@@ -21020,7 +21026,7 @@ msgctxt ""
 msgid "Use existing tag"
 msgstr "기존 쪽 추가"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:269
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
 #, fuzzy, kde-format
 #| msgid "Overwrite"
@@ -21028,7 +21034,7 @@ msgctxt "Dialog title"
 msgid "Overwrite tag?"
 msgstr "덮어쓰기"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
 #, fuzzy, kde-format
 #| msgid ""
@@ -21040,7 +21046,7 @@ msgstr ""
 "이름이 같은 프로필이 이미 존재합니다.\n"
 "덮어쓰시겠습니까?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
@@ -21057,7 +21063,7 @@ msgstr "텍스트 범위 변경"
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnCancelMaskEdit)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:273
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
@@ -21074,7 +21080,7 @@ msgstr "텍스트 범위 변경"
 msgid "Cancel"
 msgstr "취소"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
 #, fuzzy, kde-format
 #| msgid "Cannot create storage"
 msgctxt "Dialog title"
@@ -22131,68 +22137,93 @@ msgid "text"
 msgstr "텍스트"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:93
-#, kde-format
-msgctxt "paletegen status mode option name"
+#, fuzzy, kde-format
+#| msgctxt "paletegen status mode option name"
+#| msgid "Global/Full"
+msgctxt "palettegen status mode option name"
 msgid "Global/Full"
 msgstr "전역/전체"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:94
-#, kde-format
-msgctxt "paletegen status mode option name"
+#, fuzzy, kde-format
+#| msgid "Difference"
+msgctxt "palettegen status mode option name"
 msgid "Difference"
 msgstr "차이"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:95
-#, kde-format
-msgctxt "paletegen status mode option name"
+#, fuzzy, kde-format
+#| msgctxt "paletegen status mode option name"
+#| msgid "Per Single Frame"
+msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
 msgstr "개별 프레임마다"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:97
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "h264 tune option name, check simplescreenrecorder for standard "
+#| "translations"
+#| msgid "none"
+msgctxt "paletteuse dither option name"
 msgid "none"
 msgstr "없음"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "bayer"
+msgctxt "paletteuse dither option name"
 msgid "bayer"
 msgstr "바이어"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:99
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "floyd_steinberg"
+msgctxt "paletteuse dither option name"
 msgid "floyd_steinberg"
 msgstr "floyd_steinberg"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:100
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "heckbert"
+msgctxt "paletteuse dither option name"
 msgid "heckbert"
 msgstr "heckbert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:101
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "sierra2"
+msgctxt "paletteuse dither option name"
 msgid "sierra2"
 msgstr "sierra2"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:102
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "sierra2_4a"
+msgctxt "paletteuse dither option name"
 msgid "sierra2_4a"
 msgstr "sierra2_4a"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
-#, kde-format
-msgctxt "paleteuse diff mode option name"
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "h264 tune option name, check simplescreenrecorder for standard "
+#| "translations"
+#| msgid "none"
+msgctxt "paletteuse diff mode option name"
 msgid "none"
 msgstr "없음"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
-#, kde-format
-msgctxt "paleteuse diff mode option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse diff mode option name"
+#| msgid "rectangle"
+msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
 msgstr "사각형"
 
@@ -22642,12 +22673,10 @@ msgstr "높이:"
 msgid "Import Video Scale"
 msgstr "비디오 크기 조정 가져오기"
 
-#. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #. i18n: ectx: property (text), widget (QLabel, videoScaleFilterLabel)
 #. i18n: ectx: property (text), widget (QLabel, scaleFilterLabel)
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
-#: libs/ui/imagesize/wdg_layersize.ui:119
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:43
 #, kde-format
 msgctxt "Resize intepolation method list label"
@@ -25864,7 +25893,7 @@ msgstr "마지막으로 사용한 사전 설정 복원"
 msgid "Use last preset"
 msgstr "마지막 사전 설정 사용"
 
-#. i18n: ectx: property (text), widget (QPushButton, pushButtonEditPressets)
+#. i18n: ectx: property (text), widget (QPushButton, pushButtonEditPresets)
 #: libs/ui/forms/wdgfilterselector.ui:130
 #, kde-format
 msgid "Edit Presets"
@@ -26194,7 +26223,7 @@ msgstr "Ctrl/Alt 키로 선택 모드 전환"
 msgid "Enable Touch Painting"
 msgstr "터치 페인팅 활성화"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTranformToolAfterPaste)
+#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
 #: libs/ui/forms/wdggeneralsettings.ui:717
 #, kde-format
 msgid "Activate transform tool after pasting"
@@ -27416,7 +27445,7 @@ msgid "path"
 msgstr "경로"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:448
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:449
 #, kde-format
 msgid "Brush Editor"
 msgstr "브러시 편집기"
@@ -27430,8 +27459,8 @@ msgstr "현재 브러시 사전 설정"
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
 #: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
-#: libs/ui/widgets/kis_workspace_chooser.cpp:111
-#: libs/ui/widgets/kis_workspace_chooser.cpp:190
+#: libs/ui/widgets/kis_workspace_chooser.cpp:135
+#: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:164
@@ -28759,8 +28788,9 @@ msgstr "픽셀 크기"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPixelFilter)
 #: libs/ui/imagesize/wdg_imagesize.ui:81
-#, kde-format
-msgctxt "Resize intepolation method list label"
+#, fuzzy, kde-format
+#| msgid "&Filter:"
+msgctxt "Resize interpolation method list label"
 msgid "&Filter:"
 msgstr "필터(&F):"
 
@@ -28787,6 +28817,15 @@ msgstr "넓이(&T):"
 #, kde-format
 msgid "Adjust print size separately"
 msgstr "인쇄 크기를 별도로 조정"
+
+#. i18n: ectx: property (text), widget (QLabel, lblFilter)
+#: libs/ui/imagesize/wdg_layersize.ui:119
+#, fuzzy, kde-format
+#| msgctxt "Resize intepolation method list label"
+#| msgid "Filter:"
+msgctxt "Resize interpolation method list label"
+msgid "Filter:"
+msgstr "필터:"
 
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:58
 #, kde-format
@@ -30367,13 +30406,13 @@ msgstr "패턴 배율:"
 msgid "Choose workspace"
 msgstr "작업 공간 선택"
 
-#: libs/ui/kis_paintop_box.cc:358
+#: libs/ui/kis_paintop_box.cc:359
 #, kde-format
 msgid "Brush composite"
 msgstr "브러시 합성"
 
-#: libs/ui/kis_paintop_box.cc:1271 libs/ui/kis_paintop_box.cc:1293
-#: libs/ui/kis_paintop_box.cc:1307
+#: libs/ui/kis_paintop_box.cc:1272 libs/ui/kis_paintop_box.cc:1294
+#: libs/ui/kis_paintop_box.cc:1308
 #, kde-format
 msgid ""
 "%1\n"
@@ -30690,7 +30729,7 @@ msgstr "브러시 끝"
 msgid "Palettes"
 msgstr "팔레트"
 
-#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:79
+#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
@@ -30702,7 +30741,7 @@ msgstr "작업 공간"
 msgid "SVG symbol libraries"
 msgstr "SVG 심볼 라이브러리"
 
-#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:80
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "창 레이아웃"
@@ -35167,17 +35206,17 @@ msgstr "제목"
 msgid "No configuration options."
 msgstr "설정 옵션이 없습니다."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:114
+#: libs/ui/widgets/kis_workspace_chooser.cpp:132
 #, kde-format
 msgid "Insert name"
 msgstr "이름 입력"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:184
+#: libs/ui/widgets/kis_workspace_chooser.cpp:204
 #, kde-format
 msgid "File name already in use. Saving will overwrite the original Workspace."
 msgstr "파일 이름이 이미 있습니다. 저장하면 원래 작업 공간에 덮어씁니다."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:185
+#: libs/ui/widgets/kis_workspace_chooser.cpp:205
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
@@ -35185,23 +35224,23 @@ msgstr "파일 이름이 이미 있습니다. 저장하면 원래 작업 공간�
 msgid "Overwrite"
 msgstr "덮어쓰기"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:189
+#: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #, kde-format
 msgid "Save current workspace."
 msgstr "현재 작업 공간을 저장합니다."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:232
+#: libs/ui/widgets/kis_workspace_chooser.cpp:253
 #, kde-format
 msgid "Window Layout"
 msgstr "창 레이아웃"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:258
+#: libs/ui/widgets/kis_workspace_chooser.cpp:279
 #, kde-format
 msgid ""
 "File name already in use. Saving will overwrite the original window layout."
 msgstr "파일 이름이 이미 있습니다. 저장하면 원래 창 레이아웃에 덮어씁니다."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:261
+#: libs/ui/widgets/kis_workspace_chooser.cpp:282
 #, kde-format
 msgid "Save current window layout."
 msgstr "현재 창 레이아웃을 저장합니다."
@@ -35241,7 +35280,7 @@ msgstr ""
 #| msgctxt "action"
 #| msgid "Show color history"
 msgctxt ""
-"Percentage of the histogram to clip in the shadous side in auto levels"
+"Percentage of the histogram to clip in the shadows side in auto levels"
 msgid "Shadows clipping:"
 msgstr "색상 기록 보이기"
 
@@ -44943,7 +44982,6 @@ msgstr "조리개"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #. i18n: ectx: property (text), widget (QLabel, labelShape)
-#. i18n: ectx: property (text), widget (QLabel, labeShape)
 #: plugins/filters/blur/wdg_lens_blur.ui:33 plugins/filters/blur/wdgblur.ui:46
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:129
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:238
@@ -47487,8 +47525,10 @@ msgid "Sine Wave"
 msgstr "사인파"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:38
-#, kde-format
-msgctxt "Screentone Pattern - Trianular Wave Lines"
+#, fuzzy, kde-format
+#| msgctxt "Screentone Pattern - Trianular Wave Lines"
+#| msgid "Triangular Wave"
+msgctxt "Screentone Pattern - Triangular Wave Lines"
 msgid "Triangular Wave"
 msgstr "삼각파"
 
@@ -53148,7 +53188,7 @@ msgid "Build up"
 msgstr "덧칠"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
-#. i18n: ectx: property (text), item, widget (QComboBox, buidupModeComboBox)
+#. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:43
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2073
 #, kde-format
@@ -61291,7 +61331,7 @@ msgctxt "Amount of transformation"
 msgid "Amount:"
 msgstr "양:"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, buidupModeComboBox)
+#. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2068
 #, kde-format
 msgid "Build Up"
@@ -61577,6 +61617,22 @@ msgstr "확대/축소 도구"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "참조 이미지 도구"
+
+#~ msgctxt "paletegen status mode option name"
+#~ msgid "Difference"
+#~ msgstr "차이"
+
+#~ msgctxt "paleteuse dither option name"
+#~ msgid "none"
+#~ msgstr "없음"
+
+#~ msgctxt "paleteuse diff mode option name"
+#~ msgid "none"
+#~ msgstr "없음"
+
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "&Filter:"
+#~ msgstr "필터(&F):"
 
 #~ msgctxt "floating on-canvas message"
 #~ msgid ""
@@ -63147,9 +63203,6 @@ msgstr "참조 이미지 도구"
 
 #~ msgid "Arcus Tangent"
 #~ msgstr "역탄젠트"
-
-#~ msgid "Difference"
-#~ msgstr "차이"
 
 #~ msgid "Exclusion"
 #~ msgstr "제외"
@@ -71874,12 +71927,6 @@ msgstr "참조 이미지 도구"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "s"
 #~ msgstr "초"
-
-#, fuzzy
-#~| msgid "Dynamics settings"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Dynamics settings"
-#~ msgstr "다이나믹 설정"
 
 #, fuzzy
 #~| msgid "Fixed angle"

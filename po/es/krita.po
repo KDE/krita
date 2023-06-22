@@ -65,15 +65,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-20 00:47+0000\n"
-"PO-Revision-Date: 2023-06-11 21:34+0100\n"
+"POT-Creation-Date: 2023-06-22 00:46+0000\n"
+"PO-Revision-Date: 2023-06-21 01:11+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.04.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -15801,13 +15801,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Espacios de trabajo"
 
-#: krita/main.cc:517
+#: krita/main.cc:521
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Error fatal"
 
-#: krita/main.cc:518
+#: krita/main.cc:522
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15816,14 +15816,14 @@ msgstr ""
 "Krita no funciona en la plataforma Wayland. Use XWayland para ejecutar Krita "
 "en Wayland. Krita se cerrará ahora."
 
-#: krita/main.cc:628 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:632 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Advertencia"
 
-#: krita/main.cc:629
+#: krita/main.cc:633
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15834,12 +15834,12 @@ msgstr ""
 "Esto no está recomendado. Por favor, no informe de ningún error.\n"
 "Actualice a una versión de Windows compatible: Windows 7, 8, 8.1 o 10."
 
-#: krita/main.cc:651 krita/main.cc:656
+#: krita/main.cc:655 krita/main.cc:660
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Uso de tabletas en Krita"
 
-#: krita/main.cc:652
+#: krita/main.cc:656
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15850,7 +15850,7 @@ msgstr ""
 "dispositivos de lápiz Windows Ink. Si tiene una tableta de dibujo, asegúrese "
 "de que su controlador se ha instalado correctamente."
 
-#: krita/main.cc:657
+#: krita/main.cc:661
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -19927,24 +19927,31 @@ msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
 msgstr "carpeta de recursos"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:129
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:123
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Dynamics settings"
+msgid "Display settings"
+msgstr "Preferencias dinámicas"
+
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:130
 #, kde-format
 msgid "Storage Resources"
 msgstr "Recursos de almacenamiento"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:190
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
 msgstr "Importar recurso"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:195
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:196
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Borrar recurso"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:333
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:334
 #: libs/ui/KisMainWindow.cpp:2571
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
@@ -20116,40 +20123,40 @@ msgstr ""
 "\n"
 "No existen recursos disponibles de tipo %1. Active al menos un paquete."
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:60
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
 #, kde-format
 msgid "Tag"
 msgstr "Etiqueta"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:74
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:86
 #, kde-format
 msgid "Tag options"
 msgstr "Opciones de las etiquetas"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
 #, kde-format
 msgctxt "Dialog title"
 msgid "Can't rename the tag"
 msgstr "No se puede cambiar el nombre de la etiqueta"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
 msgstr "No puede usar este nombre para las etiquetas personalizadas."
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:158
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:159
 #, kde-format
 msgctxt "Dialog title"
 msgid "Remove existing tag with that name?"
 msgstr "¿Eliminar la etiqueta existente con este nombre?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:160
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:161
 #, kde-format
 msgctxt ""
 "Dialog message (the arguments are both somewhat user readable nouns or "
@@ -20166,7 +20173,7 @@ msgstr ""
 "Etiqueta a eliminar: %1\n"
 "Nombre único de la etiqueta: %2"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:266
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
 #, kde-format
 msgctxt ""
@@ -20175,28 +20182,28 @@ msgctxt ""
 msgid "Restore previous tag"
 msgstr "Restaurar la etiqueta anterior"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:268
 #, kde-format
 msgctxt ""
 "Option in a dialog to use existing tag with its old assigned resources"
 msgid "Use existing tag"
 msgstr "Usar etiqueta existente"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:269
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
 #, kde-format
 msgctxt "Dialog title"
 msgid "Overwrite tag?"
 msgstr "¿Sobrescribir etiqueta?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
 #, kde-format
 msgctxt "Question to the user in a dialog about creating a tag"
 msgid "A tag with this unique name already exists. Do you want to replace it?"
 msgstr "Ya existe una etiqueta con este nombre único. ¿Desea sustituirla?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
 #, kde-format
 msgctxt ""
@@ -20211,7 +20218,7 @@ msgstr "Sustituir (sobrescribir) la etiqueta"
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnCancelMaskEdit)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:273
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
@@ -20228,7 +20235,7 @@ msgstr "Sustituir (sobrescribir) la etiqueta"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
 #, kde-format
 msgctxt "Dialog title"
 msgid "Can't create the tag"
@@ -21266,68 +21273,93 @@ msgid "text"
 msgstr "texto"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:93
-#, kde-format
-msgctxt "paletegen status mode option name"
+#, fuzzy, kde-format
+#| msgctxt "paletegen status mode option name"
+#| msgid "Global/Full"
+msgctxt "palettegen status mode option name"
 msgid "Global/Full"
 msgstr "Global/completa"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:94
-#, kde-format
-msgctxt "paletegen status mode option name"
+#, fuzzy, kde-format
+#| msgid "Difference"
+msgctxt "palettegen status mode option name"
 msgid "Difference"
 msgstr "Diferencia"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:95
-#, kde-format
-msgctxt "paletegen status mode option name"
+#, fuzzy, kde-format
+#| msgctxt "paletegen status mode option name"
+#| msgid "Per Single Frame"
+msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
 msgstr "Por fotograma individual"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:97
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "h264 tune option name, check simplescreenrecorder for standard "
+#| "translations"
+#| msgid "none"
+msgctxt "paletteuse dither option name"
 msgid "none"
-msgstr "ninguna"
+msgstr "ninguno"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "bayer"
+msgctxt "paletteuse dither option name"
 msgid "bayer"
 msgstr "bayer"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:99
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "floyd_steinberg"
+msgctxt "paletteuse dither option name"
 msgid "floyd_steinberg"
 msgstr "floyd_steinberg"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:100
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "heckbert"
+msgctxt "paletteuse dither option name"
 msgid "heckbert"
 msgstr "heckbert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:101
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "sierra2"
+msgctxt "paletteuse dither option name"
 msgid "sierra2"
 msgstr "sierra2"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:102
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "sierra2_4a"
+msgctxt "paletteuse dither option name"
 msgid "sierra2_4a"
 msgstr "sierra2_4a"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
-#, kde-format
-msgctxt "paleteuse diff mode option name"
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "h264 tune option name, check simplescreenrecorder for standard "
+#| "translations"
+#| msgid "none"
+msgctxt "paletteuse diff mode option name"
 msgid "none"
-msgstr "ninguna"
+msgstr "ninguno"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
-#, kde-format
-msgctxt "paleteuse diff mode option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse diff mode option name"
+#| msgid "rectangle"
+msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
 msgstr "rectángulo"
 
@@ -21778,12 +21810,10 @@ msgstr "Altura:"
 msgid "Import Video Scale"
 msgstr "Importar escala del vídeo"
 
-#. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #. i18n: ectx: property (text), widget (QLabel, videoScaleFilterLabel)
 #. i18n: ectx: property (text), widget (QLabel, scaleFilterLabel)
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
-#: libs/ui/imagesize/wdg_layersize.ui:119
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:43
 #, kde-format
 msgctxt "Resize intepolation method list label"
@@ -22946,24 +22976,21 @@ msgstr ""
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1318
-#, fuzzy, kde-format
-#| msgid "Maximum brush size:"
+#, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
-msgstr[0] "Tamaño máximo del pincel:"
-msgstr[1] "Tamaño máximo del pincel:"
+msgstr[0] "Velocidad máxima del pincel: {n} px/ms"
+msgstr[1] "Velocidad máxima del pincel: {n} px/ms"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1327
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Brush Smoothing: Disabled"
+#, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
-msgstr[0] "Suavidad del pincel: desactivada"
-msgstr[1] "Suavidad del pincel: desactivada"
+msgstr[0] "Suavidad de la velocidad del pincel: {n} muestra"
+msgstr[1] "Suavidad de la velocidad del pincel: {n} muestras"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1424
@@ -25008,7 +25035,7 @@ msgstr "Restaurar el último ajuste predefinido usado"
 msgid "Use last preset"
 msgstr "Usar el último ajuste predefinido"
 
-#. i18n: ectx: property (text), widget (QPushButton, pushButtonEditPressets)
+#. i18n: ectx: property (text), widget (QPushButton, pushButtonEditPresets)
 #: libs/ui/forms/wdgfilterselector.ui:130
 #, kde-format
 msgid "Edit Presets"
@@ -25331,7 +25358,7 @@ msgstr "Cambiar los modificadores de selección Control/Alt"
 msgid "Enable Touch Painting"
 msgstr "Activar la pintura al tacto"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTranformToolAfterPaste)
+#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
 #: libs/ui/forms/wdggeneralsettings.ui:717
 #, kde-format
 msgid "Activate transform tool after pasting"
@@ -26548,7 +26575,7 @@ msgid "path"
 msgstr "ruta"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:448
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:449
 #, kde-format
 msgid "Brush Editor"
 msgstr "Editor de pincel"
@@ -26562,8 +26589,8 @@ msgstr "Valor predefinido del pincel actual"
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
 #: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
-#: libs/ui/widgets/kis_workspace_chooser.cpp:111
-#: libs/ui/widgets/kis_workspace_chooser.cpp:190
+#: libs/ui/widgets/kis_workspace_chooser.cpp:135
+#: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:164
@@ -27890,8 +27917,9 @@ msgstr "Dimensiones del píxel"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPixelFilter)
 #: libs/ui/imagesize/wdg_imagesize.ui:81
-#, kde-format
-msgctxt "Resize intepolation method list label"
+#, fuzzy, kde-format
+#| msgid "&Filter:"
+msgctxt "Resize interpolation method list label"
 msgid "&Filter:"
 msgstr "&Filtro:"
 
@@ -27918,6 +27946,15 @@ msgstr "Anc&ho:"
 #, kde-format
 msgid "Adjust print size separately"
 msgstr "Ajustar el tamaño de impresión por separado"
+
+#. i18n: ectx: property (text), widget (QLabel, lblFilter)
+#: libs/ui/imagesize/wdg_layersize.ui:119
+#, fuzzy, kde-format
+#| msgctxt "Resize intepolation method list label"
+#| msgid "Filter:"
+msgctxt "Resize interpolation method list label"
+msgid "Filter:"
+msgstr "Filtro:"
 
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:58
 #, kde-format
@@ -29473,13 +29510,13 @@ msgstr "Escala del patrón"
 msgid "Choose workspace"
 msgstr "Seleccionar espacio de trabajo"
 
-#: libs/ui/kis_paintop_box.cc:358
+#: libs/ui/kis_paintop_box.cc:359
 #, kde-format
 msgid "Brush composite"
 msgstr "Pincel de composición"
 
-#: libs/ui/kis_paintop_box.cc:1271 libs/ui/kis_paintop_box.cc:1293
-#: libs/ui/kis_paintop_box.cc:1307
+#: libs/ui/kis_paintop_box.cc:1272 libs/ui/kis_paintop_box.cc:1294
+#: libs/ui/kis_paintop_box.cc:1308
 #, kde-format
 msgid ""
 "%1\n"
@@ -29786,7 +29823,7 @@ msgstr "Puntas de pincel"
 msgid "Palettes"
 msgstr "Paletas"
 
-#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:79
+#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
@@ -29798,7 +29835,7 @@ msgstr "Espacios de trabajo"
 msgid "SVG symbol libraries"
 msgstr "Bibliotecas de símbolos SVG"
 
-#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:80
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "Distribuciones de ventanas"
@@ -30647,11 +30684,9 @@ msgid "Also save your image as a Krita file."
 msgstr "Guardar también la imagen como archivo de Krita."
 
 #: libs/ui/KisImportExportUtils.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
+#, kde-format
 msgid "Convert image color space on import"
-msgstr "Convertir el espacio de colores de la imagen"
+msgstr "Convertir el espacio de colores de la imagen al importar"
 
 #: libs/ui/KisImportExportUtils.cpp:51
 #, kde-format
@@ -30660,6 +30695,8 @@ msgid ""
 "The image has a profile attached that Krita cannot edit images in (\"%1\"), "
 "please select a space to convert to for editing: \n"
 msgstr ""
+"La imagen tiene un perfil adjunto en el que Krita no puede editar imágenes "
+"(«%1»). Seleccione un espacio al que convertir para poder editar:\n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 msgctxt "(qtundo-format)"
@@ -34288,19 +34325,19 @@ msgstr "Título"
 msgid "No configuration options."
 msgstr "Sin opciones de configuración."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:114
+#: libs/ui/widgets/kis_workspace_chooser.cpp:132
 #, kde-format
 msgid "Insert name"
 msgstr "Insertar un nombre"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:184
+#: libs/ui/widgets/kis_workspace_chooser.cpp:204
 #, kde-format
 msgid "File name already in use. Saving will overwrite the original Workspace."
 msgstr ""
 "El nombre de archivo ya está en uso. Si lo guarda se sobrescribirá el "
 "espacio de trabajo original."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:185
+#: libs/ui/widgets/kis_workspace_chooser.cpp:205
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
@@ -34308,17 +34345,17 @@ msgstr ""
 msgid "Overwrite"
 msgstr "Sobrescribir"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:189
+#: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #, kde-format
 msgid "Save current workspace."
 msgstr "Guardar el espacio de trabajo actual."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:232
+#: libs/ui/widgets/kis_workspace_chooser.cpp:253
 #, kde-format
 msgid "Window Layout"
 msgstr "Distribución de ventanas"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:258
+#: libs/ui/widgets/kis_workspace_chooser.cpp:279
 #, kde-format
 msgid ""
 "File name already in use. Saving will overwrite the original window layout."
@@ -34326,7 +34363,7 @@ msgstr ""
 "El nombre de archivo ya está en uso. Si lo guarda se sobrescribirá la "
 "disposición de ventanas original."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:261
+#: libs/ui/widgets/kis_workspace_chooser.cpp:282
 #, kde-format
 msgid "Save current window layout."
 msgstr "Guardar la disposición de ventanas actual."
@@ -34361,9 +34398,12 @@ msgstr "Ajustar el contraste por canal"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:83
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "Percentage of the histogram to clip in the shadous side in auto levels"
+#| msgid "Shadows clipping:"
 msgctxt ""
-"Percentage of the histogram to clip in the shadous side in auto levels"
+"Percentage of the histogram to clip in the shadows side in auto levels"
 msgid "Shadows clipping:"
 msgstr "Recorte de las sombras:"
 
@@ -43996,7 +44036,6 @@ msgstr "Iris"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #. i18n: ectx: property (text), widget (QLabel, labelShape)
-#. i18n: ectx: property (text), widget (QLabel, labeShape)
 #: plugins/filters/blur/wdg_lens_blur.ui:33 plugins/filters/blur/wdgblur.ui:46
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:129
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:238
@@ -46499,8 +46538,10 @@ msgid "Sine Wave"
 msgstr "Onda sinusoidal"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:38
-#, kde-format
-msgctxt "Screentone Pattern - Trianular Wave Lines"
+#, fuzzy, kde-format
+#| msgctxt "Screentone Pattern - Trianular Wave Lines"
+#| msgid "Triangular Wave"
+msgctxt "Screentone Pattern - Triangular Wave Lines"
 msgid "Triangular Wave"
 msgstr "Onda triangular"
 
@@ -52245,7 +52286,7 @@ msgid "Build up"
 msgstr "Acumulativo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
-#. i18n: ectx: property (text), item, widget (QComboBox, buidupModeComboBox)
+#. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:43
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2073
 #, kde-format
@@ -60365,7 +60406,7 @@ msgctxt "Amount of transformation"
 msgid "Amount:"
 msgstr "Cantidad:"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, buidupModeComboBox)
+#. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2068
 #, kde-format
 msgid "Build Up"
@@ -60652,6 +60693,22 @@ msgstr "Herramienta de ampliación"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Herramienta de imágenes de referencia"
+
+#~ msgctxt "paletegen status mode option name"
+#~ msgid "Difference"
+#~ msgstr "Diferencia"
+
+#~ msgctxt "paleteuse dither option name"
+#~ msgid "none"
+#~ msgstr "ninguna"
+
+#~ msgctxt "paleteuse diff mode option name"
+#~ msgid "none"
+#~ msgstr "ninguna"
+
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "&Filter:"
+#~ msgstr "&Filtro:"
 
 #~ msgctxt "JPEG-XL errors"
 #~ msgid ""
@@ -62198,9 +62255,6 @@ msgstr "Herramienta de imágenes de referencia"
 
 #~ msgid "Arcus Tangent"
 #~ msgstr "Arcotangente"
-
-#~ msgid "Difference"
-#~ msgstr "Diferencia"
 
 #~ msgid "Exclusion"
 #~ msgstr "Exclusión"
@@ -70224,10 +70278,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "s"
 #~ msgstr "s"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Dynamics settings"
-#~ msgstr "Preferencias dinámicas"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Fixed angle"

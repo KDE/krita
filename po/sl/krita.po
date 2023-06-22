@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-20 00:47+0000\n"
-"PO-Revision-Date: 2023-06-18 08:24+0200\n"
+"POT-Creation-Date: 2023-06-22 00:46+0000\n"
+"PO-Revision-Date: 2023-06-21 09:19+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -15741,13 +15741,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Delovne površine"
 
-#: krita/main.cc:517
+#: krita/main.cc:521
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Usodna napaka"
 
-#: krita/main.cc:518
+#: krita/main.cc:522
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15756,14 +15756,14 @@ msgstr ""
 "Krita ne podpira platforme Wayland. Uporabite XWayland za izvajanje Krite na "
 "Waylandu. Krita se bo zaprla."
 
-#: krita/main.cc:628 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:632 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: opozorilo"
 
-#: krita/main.cc:629
+#: krita/main.cc:633
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15775,12 +15775,12 @@ msgstr ""
 "Posodobite sistem na podprto različico sistema Windows: Windows 7, 8, 8.1 "
 "ali 10."
 
-#: krita/main.cc:651 krita/main.cc:656
+#: krita/main.cc:655 krita/main.cc:660
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Podpora Krita za grafične tablice"
 
-#: krita/main.cc:652
+#: krita/main.cc:656
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15791,7 +15791,7 @@ msgstr ""
 "Windows. Če imate grafično tablico, se prepričajte, da je gonilnik za "
 "grafično tablico pravilno nameščen."
 
-#: krita/main.cc:657
+#: krita/main.cc:661
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -19861,24 +19861,31 @@ msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
 msgstr "mapa z viri"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:129
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:123
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Display Selection"
+msgid "Display settings"
+msgstr "Pokaži izbor"
+
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:130
 #, kde-format
 msgid "Storage Resources"
 msgstr "Viri za shranjevanje"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:190
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
 msgstr "Uvozi vir"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:195
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:196
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Izbriši vir"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:333
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:334
 #: libs/ui/KisMainWindow.cpp:2571
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
@@ -20049,40 +20056,40 @@ msgstr ""
 "\n"
 "Virov vrste %1 ni na voljo. Omogočite vsaj en sveženj."
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:60
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
 #, kde-format
 msgid "Tag"
 msgstr "Značka"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:74
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:86
 #, kde-format
 msgid "Tag options"
 msgstr "Možnosti značk"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
 #, kde-format
 msgctxt "Dialog title"
 msgid "Can't rename the tag"
 msgstr "Ni mogoče preimenovati značke"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
 msgstr "Tega imena ne morete uporabiti za značke po meri."
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:158
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:159
 #, kde-format
 msgctxt "Dialog title"
 msgid "Remove existing tag with that name?"
 msgstr "Ali želite odstraniti obstoječo značko s tem imenom?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:160
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:161
 #, kde-format
 msgctxt ""
 "Dialog message (the arguments are both somewhat user readable nouns or "
@@ -20099,7 +20106,7 @@ msgstr ""
 "Oznaka, ki jo je treba odstraniti: %1\n"
 "Enolično ime oznake: %2"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:266
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
 #, kde-format
 msgctxt ""
@@ -20108,28 +20115,28 @@ msgctxt ""
 msgid "Restore previous tag"
 msgstr "Obnovi prejšnjo značko"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:268
 #, kde-format
 msgctxt ""
 "Option in a dialog to use existing tag with its old assigned resources"
 msgid "Use existing tag"
 msgstr "Uporabi obstoječo značko"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:269
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
 #, kde-format
 msgctxt "Dialog title"
 msgid "Overwrite tag?"
 msgstr "Ali želite prepisati značko?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
 #, kde-format
 msgctxt "Question to the user in a dialog about creating a tag"
 msgid "A tag with this unique name already exists. Do you want to replace it?"
 msgstr "Značka s tem enkratnim imenom že obstaja. Ali jo želite nadomestiti?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
 #, kde-format
 msgctxt ""
@@ -20144,7 +20151,7 @@ msgstr "Zamenjaj (prepiši) oznako"
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnCancelMaskEdit)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:273
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
@@ -20161,7 +20168,7 @@ msgstr "Zamenjaj (prepiši) oznako"
 msgid "Cancel"
 msgstr "Prekliči"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
 #, kde-format
 msgctxt "Dialog title"
 msgid "Can't create the tag"
@@ -21192,68 +21199,94 @@ msgid "text"
 msgstr "besedilo"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:93
-#, kde-format
-msgctxt "paletegen status mode option name"
+#, fuzzy, kde-format
+#| msgctxt "paletegen status mode option name"
+#| msgid "Global/Full"
+msgctxt "palettegen status mode option name"
 msgid "Global/Full"
 msgstr "Globalna/polna"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:94
-#, kde-format
-msgctxt "paletegen status mode option name"
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Difference"
+#| msgid "Difference"
+msgctxt "palettegen status mode option name"
 msgid "Difference"
 msgstr "Razlika"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:95
-#, kde-format
-msgctxt "paletegen status mode option name"
+#, fuzzy, kde-format
+#| msgctxt "paletegen status mode option name"
+#| msgid "Per Single Frame"
+msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
 msgstr "Na posamezno sličico"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:97
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "h264 tune option name, check simplescreenrecorder for standard "
+#| "translations"
+#| msgid "none"
+msgctxt "paletteuse dither option name"
 msgid "none"
 msgstr "brez"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "bayer"
+msgctxt "paletteuse dither option name"
 msgid "bayer"
 msgstr "bayer"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:99
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "floyd_steinberg"
+msgctxt "paletteuse dither option name"
 msgid "floyd_steinberg"
 msgstr "floyd_steinberg"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:100
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "heckbert"
+msgctxt "paletteuse dither option name"
 msgid "heckbert"
 msgstr "heckbert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:101
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "sierra2"
+msgctxt "paletteuse dither option name"
 msgid "sierra2"
 msgstr "sierra2"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:102
-#, kde-format
-msgctxt "paleteuse dither option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse dither option name"
+#| msgid "sierra2_4a"
+msgctxt "paletteuse dither option name"
 msgid "sierra2_4a"
 msgstr "sierra2_4a"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
-#, kde-format
-msgctxt "paleteuse diff mode option name"
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "h264 tune option name, check simplescreenrecorder for standard "
+#| "translations"
+#| msgid "none"
+msgctxt "paletteuse diff mode option name"
 msgid "none"
 msgstr "brez"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
-#, kde-format
-msgctxt "paleteuse diff mode option name"
+#, fuzzy, kde-format
+#| msgctxt "paleteuse diff mode option name"
+#| msgid "rectangle"
+msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
 msgstr "pravokotnik"
 
@@ -21704,12 +21737,10 @@ msgstr "Višina:"
 msgid "Import Video Scale"
 msgstr "Merilo uvoza videa"
 
-#. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #. i18n: ectx: property (text), widget (QLabel, videoScaleFilterLabel)
 #. i18n: ectx: property (text), widget (QLabel, scaleFilterLabel)
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
-#: libs/ui/imagesize/wdg_layersize.ui:119
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:43
 #, kde-format
 msgctxt "Resize intepolation method list label"
@@ -22863,28 +22894,25 @@ msgstr "Uporabi časovne žige gonilnika tablice za hitrost čopiča"
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1318
-#, fuzzy, kde-format
-#| msgid "Maximum brush size:"
+#, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
-msgstr[0] "Največja velikost čopiča:"
-msgstr[1] "Največja velikost čopiča:"
-msgstr[2] "Največja velikost čopiča:"
-msgstr[3] "Največja velikost čopiča:"
+msgstr[0] "Največja velikost čopiča: {n} sl.t./ms"
+msgstr[1] "Največja velikost čopiča: {n} sl.t./ms"
+msgstr[2] "Največja velikost čopiča: {n} sl.t./ms"
+msgstr[3] "Največja velikost čopiča: {n} sl.t./ms"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1327
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Brush Smoothing: Disabled"
+#, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
-msgstr[0] "Glajenje čopiča: onemogočeno"
-msgstr[1] "Glajenje čopiča: onemogočeno"
-msgstr[2] "Glajenje čopiča: onemogočeno"
-msgstr[3] "Glajenje čopiča: onemogočeno"
+msgstr[0] "Hitrost glajenja čopiča: {n} vzorcev"
+msgstr[1] "Hitrost glajenja čopiča: {n} vzorec"
+msgstr[2] "Hitrost glajenja čopiča: {n} vzorca"
+msgstr[3] "Hitrost glajenja čopiča: {n} vzorci"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1424
@@ -24909,7 +24937,7 @@ msgstr "Obnovi zadnjo uporabljeno prednastavitev"
 msgid "Use last preset"
 msgstr "Uporabi zadnjo prednastavitev"
 
-#. i18n: ectx: property (text), widget (QPushButton, pushButtonEditPressets)
+#. i18n: ectx: property (text), widget (QPushButton, pushButtonEditPresets)
 #: libs/ui/forms/wdgfilterselector.ui:130
 #, kde-format
 msgid "Edit Presets"
@@ -25229,7 +25257,7 @@ msgstr "Preklopi spremenilnika izbiranja krmilko/izmenjalko"
 msgid "Enable Touch Painting"
 msgstr "Omogoči slikanje na dotik"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTranformToolAfterPaste)
+#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
 #: libs/ui/forms/wdggeneralsettings.ui:717
 #, kde-format
 msgid "Activate transform tool after pasting"
@@ -26437,7 +26465,7 @@ msgid "path"
 msgstr "pot"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:448
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:449
 #, kde-format
 msgid "Brush Editor"
 msgstr "Urejevalnik čopičev"
@@ -26451,8 +26479,8 @@ msgstr "Trenutna prednastavitev čopiča"
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
 #: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
-#: libs/ui/widgets/kis_workspace_chooser.cpp:111
-#: libs/ui/widgets/kis_workspace_chooser.cpp:190
+#: libs/ui/widgets/kis_workspace_chooser.cpp:135
+#: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:164
@@ -27777,8 +27805,9 @@ msgstr "Mere slikovnih točk"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPixelFilter)
 #: libs/ui/imagesize/wdg_imagesize.ui:81
-#, kde-format
-msgctxt "Resize intepolation method list label"
+#, fuzzy, kde-format
+#| msgid "&Filter:"
+msgctxt "Resize interpolation method list label"
 msgid "&Filter:"
 msgstr "&Filter:"
 
@@ -27805,6 +27834,15 @@ msgstr "&Širina:"
 #, kde-format
 msgid "Adjust print size separately"
 msgstr "Prilagodi velikost tiskanja ločeno"
+
+#. i18n: ectx: property (text), widget (QLabel, lblFilter)
+#: libs/ui/imagesize/wdg_layersize.ui:119
+#, fuzzy, kde-format
+#| msgctxt "Resize intepolation method list label"
+#| msgid "Filter:"
+msgctxt "Resize interpolation method list label"
+msgid "Filter:"
+msgstr "Filter:"
 
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:58
 #, kde-format
@@ -29356,13 +29394,13 @@ msgstr "Lestvica vzorca:"
 msgid "Choose workspace"
 msgstr "Izberi delovni prostor"
 
-#: libs/ui/kis_paintop_box.cc:358
+#: libs/ui/kis_paintop_box.cc:359
 #, kde-format
 msgid "Brush composite"
 msgstr "Sestavljen čopič"
 
-#: libs/ui/kis_paintop_box.cc:1271 libs/ui/kis_paintop_box.cc:1293
-#: libs/ui/kis_paintop_box.cc:1307
+#: libs/ui/kis_paintop_box.cc:1272 libs/ui/kis_paintop_box.cc:1294
+#: libs/ui/kis_paintop_box.cc:1308
 #, kde-format
 msgid ""
 "%1\n"
@@ -29668,7 +29706,7 @@ msgstr "Konice čopiča"
 msgid "Palettes"
 msgstr "Palete"
 
-#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:79
+#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
@@ -29680,7 +29718,7 @@ msgstr "Delovni prostori"
 msgid "SVG symbol libraries"
 msgstr "Knjižnice simbolov SVG"
 
-#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:80
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "Postavitve oken"
@@ -30533,6 +30571,8 @@ msgid ""
 "The image has a profile attached that Krita cannot edit images in (\"%1\"), "
 "please select a space to convert to for editing: \n"
 msgstr ""
+"Slika ima pripet profil, da Krita ne more urejati slik v (»%1«), izberite "
+"prostor za pretvorbo za potrebe urejanja: \n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
 msgctxt "(qtundo-format)"
@@ -34136,19 +34176,19 @@ msgstr "Naslov"
 msgid "No configuration options."
 msgstr "Ni možnosti nastavitev."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:114
+#: libs/ui/widgets/kis_workspace_chooser.cpp:132
 #, kde-format
 msgid "Insert name"
 msgstr "Vstavite ime"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:184
+#: libs/ui/widgets/kis_workspace_chooser.cpp:204
 #, kde-format
 msgid "File name already in use. Saving will overwrite the original Workspace."
 msgstr ""
 "Ime datoteke je že v uporabi. Shranjevanje bo prepisalo izvirni delovni "
 "prostor."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:185
+#: libs/ui/widgets/kis_workspace_chooser.cpp:205
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
@@ -34156,17 +34196,17 @@ msgstr ""
 msgid "Overwrite"
 msgstr "Prepiši"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:189
+#: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #, kde-format
 msgid "Save current workspace."
 msgstr "Shrani trenutno delovno površino."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:232
+#: libs/ui/widgets/kis_workspace_chooser.cpp:253
 #, kde-format
 msgid "Window Layout"
 msgstr "Postavitev okna"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:258
+#: libs/ui/widgets/kis_workspace_chooser.cpp:279
 #, kde-format
 msgid ""
 "File name already in use. Saving will overwrite the original window layout."
@@ -34174,7 +34214,7 @@ msgstr ""
 "Ime datoteke je že v uporabi. Shranjevanje bo prepisalo prvotno postavitev "
 "okna."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:261
+#: libs/ui/widgets/kis_workspace_chooser.cpp:282
 #, kde-format
 msgid "Save current window layout."
 msgstr "Shrani trenutno postavitev okna."
@@ -34209,9 +34249,12 @@ msgstr "Prilagodi kontrast na kanal"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:83
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "Percentage of the histogram to clip in the shadous side in auto levels"
+#| msgid "Shadows clipping:"
 msgctxt ""
-"Percentage of the histogram to clip in the shadous side in auto levels"
+"Percentage of the histogram to clip in the shadows side in auto levels"
 msgid "Shadows clipping:"
 msgstr "Porezava senc:"
 
@@ -43825,7 +43868,6 @@ msgstr "Zaslonka"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #. i18n: ectx: property (text), widget (QLabel, labelShape)
-#. i18n: ectx: property (text), widget (QLabel, labeShape)
 #: plugins/filters/blur/wdg_lens_blur.ui:33 plugins/filters/blur/wdgblur.ui:46
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:129
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:238
@@ -46330,8 +46372,10 @@ msgid "Sine Wave"
 msgstr "Sinusna krivulja"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:38
-#, kde-format
-msgctxt "Screentone Pattern - Trianular Wave Lines"
+#, fuzzy, kde-format
+#| msgctxt "Screentone Pattern - Trianular Wave Lines"
+#| msgid "Triangular Wave"
+msgctxt "Screentone Pattern - Triangular Wave Lines"
 msgid "Triangular Wave"
 msgstr "Trikotna krivulja"
 
@@ -52013,7 +52057,7 @@ msgid "Build up"
 msgstr "Izgradnja navzgor"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
-#. i18n: ectx: property (text), item, widget (QComboBox, buidupModeComboBox)
+#. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:43
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2073
 #, kde-format
@@ -60061,7 +60105,7 @@ msgctxt "Amount of transformation"
 msgid "Amount:"
 msgstr "Količina:"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, buidupModeComboBox)
+#. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2068
 #, kde-format
 msgid "Build Up"
@@ -60347,3 +60391,19 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
+
+#~ msgctxt "paletegen status mode option name"
+#~ msgid "Difference"
+#~ msgstr "Razlika"
+
+#~ msgctxt "paleteuse dither option name"
+#~ msgid "none"
+#~ msgstr "brez"
+
+#~ msgctxt "paleteuse diff mode option name"
+#~ msgid "none"
+#~ msgstr "brez"
+
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "&Filter:"
+#~ msgstr "&Filter:"

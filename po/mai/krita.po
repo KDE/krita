@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-20 00:47+0000\n"
+"POT-Creation-Date: 2023-06-22 00:46+0000\n"
 "PO-Revision-Date: 2009-04-22 00:18+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -15905,27 +15905,27 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "रँग स्पेस"
 
-#: krita/main.cc:517
+#: krita/main.cc:521
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "उर्ध्वाधर"
 
-#: krita/main.cc:518
+#: krita/main.cc:522
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:628 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:632 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:681
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "चेतावनी!"
 
-#: krita/main.cc:629
+#: krita/main.cc:633
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15933,12 +15933,12 @@ msgid ""
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
 
-#: krita/main.cc:651 krita/main.cc:656
+#: krita/main.cc:655 krita/main.cc:660
 #, fuzzy, kde-format
 msgid "Krita Tablet Support"
 msgstr "पैलेट संपादित करू"
 
-#: krita/main.cc:652
+#: krita/main.cc:656
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15946,7 +15946,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:657
+#: krita/main.cc:661
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -20158,24 +20158,29 @@ msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
 msgstr "श्रोत"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:129
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:123
+#, fuzzy, kde-format
+msgid "Display settings"
+msgstr "जमावट"
+
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:130
 #, fuzzy, kde-format
 msgid "Storage Resources"
 msgstr "श्रोत"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:190
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:191
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
 msgstr "आंकड़ाकेँ आयात करू"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:195
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:196
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "मेटाबू"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:333
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:334
 #: libs/ui/KisMainWindow.cpp:2571
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format
@@ -20333,7 +20338,7 @@ msgid ""
 "bundle."
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:60
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
 #, fuzzy, kde-format
@@ -20341,33 +20346,33 @@ msgstr ""
 msgid "Tag"
 msgstr "लक्ष्यः"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:74
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:86
 #, fuzzy, kde-format
 msgid "Tag options"
 msgstr "विकल्प"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
 #, fuzzy, kde-format
 msgctxt "Dialog title"
 msgid "Can't rename the tag"
 msgstr "कोपी करू पृष्ठ"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:158
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:159
 #, kde-format
 msgctxt "Dialog title"
 msgid "Remove existing tag with that name?"
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:160
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:161
 #, kde-format
 msgctxt ""
 "Dialog message (the arguments are both somewhat user readable nouns or "
@@ -20380,7 +20385,7 @@ msgid ""
 "Tag's unique name: %2"
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:266
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
 #, fuzzy, kde-format
 msgctxt ""
@@ -20389,7 +20394,7 @@ msgctxt ""
 msgid "Restore previous tag"
 msgstr "परत घसकाबू"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:268
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt ""
@@ -20397,21 +20402,21 @@ msgctxt ""
 msgid "Use existing tag"
 msgstr "नइ परत"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:269
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
 #, fuzzy, kde-format
 msgctxt "Dialog title"
 msgid "Overwrite tag?"
 msgstr "पैलेट संपादित करू"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
 #, kde-format
 msgctxt "Question to the user in a dialog about creating a tag"
 msgid "A tag with this unique name already exists. Do you want to replace it?"
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
 #, fuzzy, kde-format
 msgctxt ""
@@ -20426,7 +20431,7 @@ msgstr "चित्र मापू"
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnCancelMaskEdit)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:273
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
@@ -20443,7 +20448,7 @@ msgstr "चित्र मापू"
 msgid "Cancel"
 msgstr "रद करू"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
 #, fuzzy, kde-format
 msgctxt "Dialog title"
 msgid "Can't create the tag"
@@ -21474,69 +21479,69 @@ msgstr "मोट"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:93
 #, kde-format
-msgctxt "paletegen status mode option name"
+msgctxt "palettegen status mode option name"
 msgid "Global/Full"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:94
 #, fuzzy, kde-format
-msgctxt "paletegen status mode option name"
+msgctxt "palettegen status mode option name"
 msgid "Difference"
 msgstr "वरीयतासभ"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:95
 #, fuzzy, kde-format
-msgctxt "paletegen status mode option name"
+msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
 msgstr "ऑफसेट"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:97
 #, kde-format
-msgctxt "paleteuse dither option name"
+msgctxt "paletteuse dither option name"
 msgid "none"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
 #, fuzzy, kde-format
 #| msgid "Layer"
-msgctxt "paleteuse dither option name"
+msgctxt "paletteuse dither option name"
 msgid "bayer"
 msgstr "स्तर"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:99
 #, kde-format
-msgctxt "paleteuse dither option name"
+msgctxt "paletteuse dither option name"
 msgid "floyd_steinberg"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:100
 #, kde-format
-msgctxt "paleteuse dither option name"
+msgctxt "paletteuse dither option name"
 msgid "heckbert"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:101
 #, kde-format
-msgctxt "paleteuse dither option name"
+msgctxt "paletteuse dither option name"
 msgid "sierra2"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:102
 #, kde-format
-msgctxt "paleteuse dither option name"
+msgctxt "paletteuse dither option name"
 msgid "sierra2_4a"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
 #, kde-format
-msgctxt "paleteuse diff mode option name"
+msgctxt "paletteuse diff mode option name"
 msgid "none"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
 #, fuzzy, kde-format
 #| msgid "Rectangle"
-msgctxt "paleteuse diff mode option name"
+msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
 msgstr "आयत"
 
@@ -21988,12 +21993,10 @@ msgstr "उँचाइ:"
 msgid "Import Video Scale"
 msgstr "आंकड़ाकेँ आयात करू"
 
-#. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #. i18n: ectx: property (text), widget (QLabel, videoScaleFilterLabel)
 #. i18n: ectx: property (text), widget (QLabel, scaleFilterLabel)
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
-#: libs/ui/imagesize/wdg_layersize.ui:119
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:43
 #, fuzzy, kde-format
 #| msgid "Filter:"
@@ -25066,7 +25069,7 @@ msgstr "पैलेट संपादित करू"
 msgid "Use last preset"
 msgstr "मूलभूत"
 
-#. i18n: ectx: property (text), widget (QPushButton, pushButtonEditPressets)
+#. i18n: ectx: property (text), widget (QPushButton, pushButtonEditPresets)
 #: libs/ui/forms/wdgfilterselector.ui:130
 #, fuzzy, kde-format
 msgid "Edit Presets"
@@ -25385,7 +25388,7 @@ msgstr ""
 msgid "Enable Touch Painting"
 msgstr "जमावट"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTranformToolAfterPaste)
+#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
 #: libs/ui/forms/wdggeneralsettings.ui:717
 #, kde-format
 msgid "Activate transform tool after pasting"
@@ -26547,7 +26550,7 @@ msgid "path"
 msgstr "पथ"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:448
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:449
 #, fuzzy, kde-format
 msgid "Brush Editor"
 msgstr "ब्रश"
@@ -26561,8 +26564,8 @@ msgstr "मूलभूत"
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
 #: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
-#: libs/ui/widgets/kis_workspace_chooser.cpp:111
-#: libs/ui/widgets/kis_workspace_chooser.cpp:190
+#: libs/ui/widgets/kis_workspace_chooser.cpp:135
+#: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:164
@@ -27820,7 +27823,7 @@ msgstr "आयाम"
 #: libs/ui/imagesize/wdg_imagesize.ui:81
 #, fuzzy, kde-format
 #| msgid "Filter:"
-msgctxt "Resize intepolation method list label"
+msgctxt "Resize interpolation method list label"
 msgid "&Filter:"
 msgstr "फिल्टर:"
 
@@ -27848,6 +27851,14 @@ msgstr ""
 #, kde-format
 msgid "Adjust print size separately"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lblFilter)
+#: libs/ui/imagesize/wdg_layersize.ui:119
+#, fuzzy, kde-format
+#| msgid "Filter:"
+msgctxt "Resize interpolation method list label"
+msgid "Filter:"
+msgstr "फिल्टर:"
 
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:58
 #, fuzzy, kde-format
@@ -29417,13 +29428,13 @@ msgstr "प्रारूप"
 msgid "Choose workspace"
 msgstr "रँग स्पेस"
 
-#: libs/ui/kis_paintop_box.cc:358
+#: libs/ui/kis_paintop_box.cc:359
 #, fuzzy, kde-format
 msgid "Brush composite"
 msgstr "ब्रश"
 
-#: libs/ui/kis_paintop_box.cc:1271 libs/ui/kis_paintop_box.cc:1293
-#: libs/ui/kis_paintop_box.cc:1307
+#: libs/ui/kis_paintop_box.cc:1272 libs/ui/kis_paintop_box.cc:1294
+#: libs/ui/kis_paintop_box.cc:1308
 #, fuzzy, kde-format
 msgid ""
 "%1\n"
@@ -29694,7 +29705,7 @@ msgstr "ब्रश"
 msgid "Palettes"
 msgstr "रंगपट्टिका"
 
-#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:79
+#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, fuzzy, kde-format
@@ -29706,7 +29717,7 @@ msgstr "रँग स्पेस"
 msgid "SVG symbol libraries"
 msgstr "नइ परत"
 
-#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:80
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, fuzzy, kde-format
 msgid "Window layouts"
 msgstr "क्रमहीन"
@@ -33848,17 +33859,17 @@ msgstr "शीर्षक:"
 msgid "No configuration options."
 msgstr "आँशिक"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:114
+#: libs/ui/widgets/kis_workspace_chooser.cpp:132
 #, fuzzy, kde-format
 msgid "Insert name"
 msgstr "अनुक्रमणिका जोडू"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:184
+#: libs/ui/widgets/kis_workspace_chooser.cpp:204
 #, kde-format
 msgid "File name already in use. Saving will overwrite the original Workspace."
 msgstr ""
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:185
+#: libs/ui/widgets/kis_workspace_chooser.cpp:205
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
@@ -33866,24 +33877,24 @@ msgstr ""
 msgid "Overwrite"
 msgstr "पैलेट संपादित करू"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:189
+#: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #, fuzzy, kde-format
 #| msgid "Incremental"
 msgid "Save current workspace."
 msgstr "संवर्द्धन"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:232
+#: libs/ui/widgets/kis_workspace_chooser.cpp:253
 #, fuzzy, kde-format
 msgid "Window Layout"
 msgstr "पृष्ठभूमि रँग"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:258
+#: libs/ui/widgets/kis_workspace_chooser.cpp:279
 #, kde-format
 msgid ""
 "File name already in use. Saving will overwrite the original window layout."
 msgstr ""
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:261
+#: libs/ui/widgets/kis_workspace_chooser.cpp:282
 #, fuzzy, kde-format
 msgid "Save current window layout."
 msgstr "क्रमहीन"
@@ -33920,7 +33931,7 @@ msgstr ""
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:83
 #, fuzzy, kde-format
 msgctxt ""
-"Percentage of the histogram to clip in the shadous side in auto levels"
+"Percentage of the histogram to clip in the shadows side in auto levels"
 msgid "Shadows clipping:"
 msgstr "चयन बढाउ"
 
@@ -43530,7 +43541,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #. i18n: ectx: property (text), widget (QLabel, labelShape)
-#. i18n: ectx: property (text), widget (QLabel, labeShape)
 #: plugins/filters/blur/wdg_lens_blur.ui:33 plugins/filters/blur/wdgblur.ui:46
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:129
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:238
@@ -46108,7 +46118,7 @@ msgstr "साइन"
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:38
 #, fuzzy, kde-format
 #| msgid "Triangle"
-msgctxt "Screentone Pattern - Trianular Wave Lines"
+msgctxt "Screentone Pattern - Triangular Wave Lines"
 msgid "Triangular Wave"
 msgstr "त्रिभुज"
 
@@ -51425,7 +51435,7 @@ msgid "Build up"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
-#. i18n: ectx: property (text), item, widget (QComboBox, buidupModeComboBox)
+#. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:43
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2073
 #, kde-format
@@ -59709,7 +59719,7 @@ msgctxt "Amount of transformation"
 msgid "Amount:"
 msgstr "मात्रा:"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, buidupModeComboBox)
+#. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2068
 #, kde-format
 msgid "Build Up"
@@ -59997,6 +60007,17 @@ msgstr "ज़ूम आउट"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "वरीयतासभ"
+
+#, fuzzy
+#~ msgctxt "paletegen status mode option name"
+#~ msgid "Difference"
+#~ msgstr "वरीयतासभ"
+
+#, fuzzy
+#~| msgid "Filter:"
+#~ msgctxt "Resize intepolation method list label"
+#~ msgid "&Filter:"
+#~ msgstr "फिल्टर:"
 
 #, fuzzy
 #~ msgid "Edit Audio:"
@@ -61109,10 +61130,6 @@ msgstr "वरीयतासभ"
 #, fuzzy
 #~ msgid "Arcus Tangent"
 #~ msgstr "विसंतृप्त"
-
-#, fuzzy
-#~ msgid "Difference"
-#~ msgstr "वरीयतासभ"
 
 #, fuzzy
 #~ msgid "Exclusion"
@@ -67368,11 +67385,6 @@ msgstr "वरीयतासभ"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Duration:"
 #~ msgstr "संतृप्ति:"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Dynamics settings"
-#~ msgstr "जमावट"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

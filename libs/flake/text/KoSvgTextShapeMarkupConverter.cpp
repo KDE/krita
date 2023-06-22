@@ -10,6 +10,12 @@
 #include "kis_assert.h"
 #include "kis_debug.h"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_TRUETYPE_TABLES_H
+
+#include <text/KoFontRegistry.h>
+
 #include <QBuffer>
 #include <QStringList>
 #include <QXmlStreamReader>
@@ -1001,9 +1007,18 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
                     .append(format.properties()[propertyId].toString());
             style.append(c);
             c.clear();
-            QFontMetricsF metrics(format.fontFamily());
-            qreal xRatio = metrics.xHeight() / format.properties()[propertyId].toDouble();
-            c.append("font-size-adjust").append(":").append(QString::number(xRatio));
+
+            QVector<int> lengths;
+            const std::vector<FT_FaceUP> faces =
+                KoFontRegistry::instance()->facesForCSSValues({format.fontFamily()}, lengths, {});
+            if (!faces.empty()) {
+                const FT_FaceUP &face = faces[0];
+                const TT_OS2 *const os2 = static_cast<TT_OS2 *>(FT_Get_Sfnt_Table(face.data(), ft_sfnt_os2));
+                if (os2 && os2->sxHeight) {
+                    const qreal xRatio = static_cast<qreal>(os2->sxHeight) / face->units_per_EM;
+                    c.append("font-size-adjust").append(":").append(QString::number(xRatio));
+                }
+            }
         }
         if (propertyId == QTextCharFormat::FontWeight) {
             // Convert from QFont::Weight range to SVG range,

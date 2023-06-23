@@ -492,6 +492,11 @@ bool KisTool::alternateActionSupportsHiResEvents(AlternateAction action) const
     return false;
 }
 
+bool KisTool::supportsPaintingAssistants() const
+{
+    return false;
+}
+
 void KisTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event);

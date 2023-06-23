@@ -164,6 +164,7 @@ public:
     virtual void endAlternateAction(KoPointerEvent *event, AlternateAction action);
     virtual void beginAlternateDoubleClickAction(KoPointerEvent *event, AlternateAction action);
     virtual bool alternateActionSupportsHiResEvents(AlternateAction action) const;
+    virtual bool supportsPaintingAssistants() const;
 
     void mousePressEvent(KoPointerEvent *event) override;
     void mouseDoubleClickEvent(KoPointerEvent *event) override;

@@ -450,3 +450,8 @@ QString KisToolLine::quickHelp() const
 {
     return i18n("Alt+Drag will move the origin of the currently displayed line around, Shift+Drag will force you to draw straight lines");
 }
+
+bool KisToolLine::supportsPaintingAssistants() const
+{
+    return true;
+}

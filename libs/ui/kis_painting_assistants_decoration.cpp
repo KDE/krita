@@ -21,6 +21,7 @@
 #include "kis_icon_utils.h"
 #include "KisViewManager.h"
 #include <KoCompositeOpRegistry.h>
+#include "kis_tool_proxy.h"
 
 #include <QPainter>
 #include <QPainterPath>
@@ -45,7 +46,6 @@ struct KisPaintingAssistantsDecoration::Private {
     KisPaintingAssistantSP selectedAssistant;
     bool aFirstStroke;
     bool m_isEditingAssistants = false;
-    bool m_outlineVisible = false;
     int m_handleSize; // size of editor handles on assistants
 
     // move, visibility, delete icons for each assistant. These only display while the assistant tool is active
@@ -334,15 +334,19 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
     }
 
     // the preview functionality for assistants. do not show while editing
-    if (d->m_isEditingAssistants) {
-        d->m_outlineVisible = false;
-    }
-    else {
-        d->m_outlineVisible = outlineVisibility();
-    }
+
+    KoToolProxy *proxy = view()->canvasBase()->toolProxy();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(proxy);
+    KisToolProxy *kritaProxy = dynamic_cast<KisToolProxy*>(proxy);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(kritaProxy);
+
+    const bool outlineVisible =
+        outlineVisibility() &&
+        !d->m_isEditingAssistants &&
+        kritaProxy->supportsPaintingAssistants();
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
-        assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), d->m_outlineVisible);
+        assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), outlineVisible);
 
         if (isEditingAssistants()) {
             drawHandles(assistant, gc, converter);

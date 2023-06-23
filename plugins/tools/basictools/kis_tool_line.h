@@ -53,6 +53,8 @@ public:
 
     QString quickHelp() const override;
 
+    bool supportsPaintingAssistants() const override;
+
 protected Q_SLOTS:
     void resetCursorStyle() override;
 

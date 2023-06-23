@@ -70,6 +70,8 @@ protected:
     KisPaintingInformationBuilder* paintingInformationBuilder() const;
     void resetHelper(KisToolFreehandHelper *helper);
 
+    bool supportsPaintingAssistants() const override;
+
 protected Q_SLOTS:
 
     void explicitUpdateOutline();

@@ -146,6 +146,11 @@ void KisToolFreehand::resetHelper(KisToolFreehandHelper *helper)
     m_helper = helper;
 }
 
+bool KisToolFreehand::supportsPaintingAssistants() const
+{
+    return true;
+}
+
 int KisToolFreehand::flags() const
 {
     return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET

@@ -52,6 +52,9 @@
             <property name="enabled">
              <bool>true</bool>
             </property>
+            <property name="toolTip">
+             <string>If this is not enabled, the image will be saved losslessly.</string>
+            </property>
             <property name="title">
              <string>Lossy encoding</string>
             </property>
@@ -230,7 +233,7 @@ Default is 0.</string>
        <item row="1" column="0">
         <widget class="QCheckBox" name="flattenLayers">
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Note:&lt;/span&gt; Animated exports are &lt;span style=&quot; font-weight:600;&quot;&gt;always&lt;/span&gt; flattened regardless of this setting.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If this is not enabled, the layers will be rasterized and saved. However, animated exports are always flattened regardless of this setting.&lt;/p&gt;&lt;p&gt;It is advised to leave this option checked for web delivery and general compatibility with other applications.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>Flatten the image</string>

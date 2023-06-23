@@ -810,7 +810,9 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
 
         // Using cjxl quality mapping that translates from arbitrary quality value to JPEG-XL distance
         const auto setDistance = [&](float v) {
-            const float distance = v >= 30 ? 0.1 + (100 - v) * 0.09 : 53.0 / 3000.0 * v * v - 23.0 / 20.0 * v + 25.0;
+            const float distance = cfg->getBool("lossless") ? 0.0
+                                   : v >= 30 ? 0.1 + (100 - v) * 0.09
+                                       : 53.0 / 3000.0 * v * v - 23.0 / 20.0 * v + 25.0;
             dbgFile << "libjxl distance equivalent: " << distance;
             return JxlEncoderSetFrameDistance(frameSettings, distance) == JXL_ENC_SUCCESS;
         };
@@ -821,14 +823,25 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         //
         // Update: It's not the modular mode that caused the bug, but the progressive/responsive setting
         // that didn't work well with F32. So let's disable it on F32 instead.
-        const int setResponsive = (cs->colorDepthId() == Float32BitsColorDepthID) ? 0 : cfg->getInt("responsive", -1);
+        const int setResponsive = [&]() -> int {
+            if (pixelFormat.data_type == JXL_TYPE_FLOAT && !cfg->getBool("lossless")) {
+                warnFile << "Using workaround for lossy 32-bit float, disabling progressive option";
+                return 0;
+            }
+            return cfg->getInt("responsive", -1);
+        }();
 
         // XXX: Workaround for a buggy lossless patches. Set to disable instead.
         // TODO Kampidh: revisit this when upstream got fixed.
         //
         // See: https://github.com/libjxl/libjxl/issues/2463
-        const int setPatches =
-            ((cfg->getInt("effort", 7) > 4) && !cfg->getBool("flattenLayers", true)) ? 0 : cfg->getInt("patches", -1);
+        const int setPatches = [&]() -> int {
+            if ((cfg->getInt("effort", 7) > 4) && !cfg->getBool("flattenLayers", true) && cfg->getBool("lossless")) {
+                warnFile << "Using workaround for lossless layer exports, disabling patches option on effort > 4";
+                return 0;
+            }
+            return cfg->getInt("patches", -1);
+        }();
 
         if (!setFrameLossless(cfg->getBool("lossless"))
             || !setSetting(JXL_ENC_FRAME_SETTING_EFFORT, cfg->getInt("effort", 7))

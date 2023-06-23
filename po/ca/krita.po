@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-22 00:46+0000\n"
-"PO-Revision-Date: 2023-06-21 09:33+0200\n"
+"POT-Creation-Date: 2023-06-23 00:45+0000\n"
+"PO-Revision-Date: 2023-06-22 09:45+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -12768,7 +12768,7 @@ msgstr "&Importa/exporta"
 msgid "Import"
 msgstr "Importa"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1237
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1242
 #, kde-format
 msgid "&Convert"
 msgstr "&Converteix"
@@ -12776,14 +12776,14 @@ msgstr "&Converteix"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1211
+#: plugins/dockers/layerdocker/LayerBox.cpp:1216
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Selecciona"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1217
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1222
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12804,7 +12804,7 @@ msgstr "Transforma &totes les capes"
 msgid "S&plit"
 msgstr "Di&videix"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1244
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1249
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Di&videix l'alfa"
@@ -16718,7 +16718,7 @@ msgstr " px"
 #: libs/image/kis_keyframe_channel.cpp:26 libs/image/kis_layer.cc:276
 #: libs/widgets/KoColorPopupAction.cpp:85
 #: plugins/dockers/layerdocker/LayerBox.cpp:207
-#: plugins/dockers/layerdocker/LayerBox.cpp:387
+#: plugins/dockers/layerdocker/LayerBox.cpp:392
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
@@ -19898,11 +19898,9 @@ msgid "resource folder"
 msgstr "carpeta de recursos"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:123
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Display Selection"
+#, kde-format
 msgid "Display settings"
-msgstr "Mostra la selecció"
+msgstr "Configuració de la pantalla"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:130
 #, kde-format
@@ -20241,24 +20239,24 @@ msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
 msgstr "<qt>Mostra les opcions del quadre d'etiquetes.</qt>"
 
-#: libs/resourcewidgets/KisTagToolButton.cpp:63
+#: libs/resourcewidgets/KisTagToolButton.cpp:67
 #: libs/resourcewidgets/TagActions.cpp:139
 #: libs/resourcewidgets/TagActions.cpp:158
 #, kde-format
 msgid "New tag"
 msgstr "Etiqueta nova"
 
-#: libs/resourcewidgets/KisTagToolButton.cpp:71
+#: libs/resourcewidgets/KisTagToolButton.cpp:75
 #, kde-format
 msgid "Rename tag"
 msgstr "Reanomena l'etiqueta"
 
-#: libs/resourcewidgets/KisTagToolButton.cpp:81
+#: libs/resourcewidgets/KisTagToolButton.cpp:85
 #, kde-format
 msgid "Delete this tag"
 msgstr "Suprimeix aquesta etiqueta"
 
-#: libs/resourcewidgets/KisTagToolButton.cpp:121
+#: libs/resourcewidgets/KisTagToolButton.cpp:125
 #, kde-format
 msgid "Undelete"
 msgstr "Desfés la supressió"
@@ -21245,96 +21243,70 @@ msgid "text"
 msgstr "Text"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "paletegen status mode option name"
-#| msgid "Global/Full"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Global/Full"
 msgstr "Global/Complet"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Difference"
-#| msgid "Difference"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Difference"
 msgstr "Diferència"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:95
-#, fuzzy, kde-format
-#| msgctxt "paletegen status mode option name"
-#| msgid "Per Single Frame"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
-msgstr "Per un únic fotograma"
+msgstr "Per un fotograma únic"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:97
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "none"
-msgstr "Cap"
+msgstr "cap"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "bayer"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "bayer"
-msgstr "Bayer"
+msgstr "bayer"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "floyd_steinberg"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "floyd_steinberg"
-msgstr "Floyd_steinberg"
+msgstr "floyd_steinberg"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:100
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "heckbert"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "heckbert"
-msgstr "Heckbert"
+msgstr "heckbert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:101
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "sierra2"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2"
-msgstr "Sierra2"
+msgstr "sierra2"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:102
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "sierra2_4a"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2_4a"
-msgstr "Sierra2_4a"
+msgstr "sierra2_4a"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "none"
-msgstr "Cap"
+msgstr "cap"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "paleteuse diff mode option name"
-#| msgid "rectangle"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
-msgstr "Rectangle"
+msgstr "rectangle"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:149
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:168
@@ -22512,7 +22484,7 @@ msgstr "Propietats de la capa"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:388
+#: plugins/dockers/layerdocker/LayerBox.cpp:393
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:47
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:51
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:54
@@ -27880,8 +27852,7 @@ msgstr "Dimensions del píxel"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPixelFilter)
 #: libs/ui/imagesize/wdg_imagesize.ui:81
-#, fuzzy, kde-format
-#| msgid "&Filter:"
+#, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "&Filter:"
 msgstr "&Filtre:"
@@ -27912,9 +27883,7 @@ msgstr "Ajusta la mida de la impressió per separat"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #: libs/ui/imagesize/wdg_layersize.ui:119
-#, fuzzy, kde-format
-#| msgctxt "Resize intepolation method list label"
-#| msgid "Filter:"
+#, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "Filter:"
 msgstr "Filtre:"
@@ -34344,10 +34313,7 @@ msgstr "Ajusta el contrast per canal"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:83
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Percentage of the histogram to clip in the shadous side in auto levels"
-#| msgid "Shadows clipping:"
+#, kde-format
 msgctxt ""
 "Percentage of the histogram to clip in the shadows side in auto levels"
 msgid "Shadows clipping:"
@@ -38828,24 +38794,24 @@ msgstr ""
 "Mostra la selecció global com a una màscara de selecció normal en "
 "l'acoblador de <b>Capes</b>"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:315
+#: plugins/dockers/layerdocker/LayerBox.cpp:320
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Mida de les miniatures"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:343
+#: plugins/dockers/layerdocker/LayerBox.cpp:348
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Sagnat de l'arbre"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:366
+#: plugins/dockers/layerdocker/LayerBox.cpp:371
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Estil d'informació de la barreja"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:368
+#: plugins/dockers/layerdocker/LayerBox.cpp:373
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -38859,43 +38825,43 @@ msgstr ""
 "Equilibrat: Mostra l'opacitat i el mode de barreja si canvien.\n"
 "Detallat: Mostra l'opacitat i el mode de barreja encara que no canviïn."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:373
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Cap"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:374
+#: plugins/dockers/layerdocker/LayerBox.cpp:379
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Senzill"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:375
+#: plugins/dockers/layerdocker/LayerBox.cpp:380
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Equilibrat"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:376
+#: plugins/dockers/layerdocker/LayerBox.cpp:381
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Detallat"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:389
+#: plugins/dockers/layerdocker/LayerBox.cpp:394
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Opacitat del text d'informació de la barreja"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:407
+#: plugins/dockers/layerdocker/LayerBox.cpp:412
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "Inclosa"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:409
+#: plugins/dockers/layerdocker/LayerBox.cpp:414
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -38907,35 +38873,35 @@ msgstr ""
 "Si està desactivada, mostra a sota els noms de les capes (si hi ha prou "
 "espai)."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:421
+#: plugins/dockers/layerdocker/LayerBox.cpp:426
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Casella de selecció per a seleccionar capes"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:422
+#: plugins/dockers/layerdocker/LayerBox.cpp:427
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Mostra una casella de selecció per a seleccionar/desseleccionar capes."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:989
+#: plugins/dockers/layerdocker/LayerBox.cpp:994
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Màscara de selecció ràpida"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1011
+#: plugins/dockers/layerdocker/LayerBox.cpp:1016
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Cancel·la la màscara de selecció ràpida"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1221
+#: plugins/dockers/layerdocker/LayerBox.cpp:1226
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "&Commuta els bloquejos i la visibilitat"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1228
-#: plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: plugins/dockers/layerdocker/LayerBox.cpp:1233
+#: plugins/dockers/layerdocker/LayerBox.cpp:1254
 #, kde-format
 msgid "&Add"
 msgstr "&Afegeix"
@@ -46482,9 +46448,7 @@ msgid "Sine Wave"
 msgstr "Ona sinusoidal"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "Screentone Pattern - Trianular Wave Lines"
-#| msgid "Triangular Wave"
+#, kde-format
 msgctxt "Screentone Pattern - Triangular Wave Lines"
 msgid "Triangular Wave"
 msgstr "Ona triangular"
@@ -60004,7 +59968,7 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Transforma una capa o una selecció"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:143
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:144
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Transform"

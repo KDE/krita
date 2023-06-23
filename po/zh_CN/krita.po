@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-22 00:46+0000\n"
+"POT-Creation-Date: 2023-06-23 00:45+0000\n"
 "PO-Revision-Date: 2023-06-17 04:11\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -12720,7 +12720,7 @@ msgstr "导入/导出(&I)"
 msgid "Import"
 msgstr "导入"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1237
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1242
 #, kde-format
 msgid "&Convert"
 msgstr "转换(&C)"
@@ -12728,14 +12728,14 @@ msgstr "转换(&C)"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1211
+#: plugins/dockers/layerdocker/LayerBox.cpp:1216
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "选择(&S)"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1217
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1222
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12756,7 +12756,7 @@ msgstr "变形 - 所有图层(&A)"
 msgid "S&plit"
 msgstr "拆分(&P)"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1244
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1249
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "透明度通道操作(&P)"
@@ -16642,7 +16642,7 @@ msgstr " 像素"
 #: libs/image/kis_keyframe_channel.cpp:26 libs/image/kis_layer.cc:276
 #: libs/widgets/KoColorPopupAction.cpp:85
 #: plugins/dockers/layerdocker/LayerBox.cpp:207
-#: plugins/dockers/layerdocker/LayerBox.cpp:387
+#: plugins/dockers/layerdocker/LayerBox.cpp:392
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
@@ -20130,24 +20130,24 @@ msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
 msgstr "<qt>显示标签盒选项。</qt>"
 
-#: libs/resourcewidgets/KisTagToolButton.cpp:63
+#: libs/resourcewidgets/KisTagToolButton.cpp:67
 #: libs/resourcewidgets/TagActions.cpp:139
 #: libs/resourcewidgets/TagActions.cpp:158
 #, kde-format
 msgid "New tag"
 msgstr "新建标签"
 
-#: libs/resourcewidgets/KisTagToolButton.cpp:71
+#: libs/resourcewidgets/KisTagToolButton.cpp:75
 #, kde-format
 msgid "Rename tag"
 msgstr "重命名标签"
 
-#: libs/resourcewidgets/KisTagToolButton.cpp:81
+#: libs/resourcewidgets/KisTagToolButton.cpp:85
 #, kde-format
 msgid "Delete this tag"
 msgstr "删除此标签"
 
-#: libs/resourcewidgets/KisTagToolButton.cpp:121
+#: libs/resourcewidgets/KisTagToolButton.cpp:125
 #, kde-format
 msgid "Undelete"
 msgstr "取消删除"
@@ -22365,7 +22365,7 @@ msgstr "图层属性"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:388
+#: plugins/dockers/layerdocker/LayerBox.cpp:393
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:47
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:51
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:54
@@ -38302,24 +38302,24 @@ msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr "把全局选区作为一个选区蒙版显示在<b>图层</b>面板"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:315
+#: plugins/dockers/layerdocker/LayerBox.cpp:320
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "缩略图大小"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:343
+#: plugins/dockers/layerdocker/LayerBox.cpp:348
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "树状缩进"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:366
+#: plugins/dockers/layerdocker/LayerBox.cpp:371
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "图层混合信息样式"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:368
+#: plugins/dockers/layerdocker/LayerBox.cpp:373
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -38333,43 +38333,43 @@ msgstr ""
 "平衡：不透明度、混合模式其中之一被更改后，同时显示两者。\n"
 "完整：不透明度、混合模式无论是否更改，总是显示。"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:373
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "无"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:374
+#: plugins/dockers/layerdocker/LayerBox.cpp:379
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "简洁"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:375
+#: plugins/dockers/layerdocker/LayerBox.cpp:380
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "平衡"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:376
+#: plugins/dockers/layerdocker/LayerBox.cpp:381
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "详细"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:389
+#: plugins/dockers/layerdocker/LayerBox.cpp:394
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "图层混合信息文字不透明度"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:407
+#: plugins/dockers/layerdocker/LayerBox.cpp:412
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "额外信息同行显示"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:409
+#: plugins/dockers/layerdocker/LayerBox.cpp:414
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -38379,35 +38379,35 @@ msgstr ""
 "勾选此项，图层混合信息将显示在图层名称右侧。\n"
 "不勾选时，图层混合信息将显示在图层名称下方 (当空间足够时)。"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:421
+#: plugins/dockers/layerdocker/LayerBox.cpp:426
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "显示图层选择复选框"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:422
+#: plugins/dockers/layerdocker/LayerBox.cpp:427
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "显示用于选择/取消选择图层的复选框。"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:989
+#: plugins/dockers/layerdocker/LayerBox.cpp:994
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "快速选区蒙版"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1011
+#: plugins/dockers/layerdocker/LayerBox.cpp:1016
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "取消快速选区蒙版"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1221
+#: plugins/dockers/layerdocker/LayerBox.cpp:1226
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "隐藏/锁定/透明度(&T)"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1228
-#: plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: plugins/dockers/layerdocker/LayerBox.cpp:1233
+#: plugins/dockers/layerdocker/LayerBox.cpp:1254
 #, kde-format
 msgid "&Add"
 msgstr "新建(&A)"
@@ -59000,7 +59000,7 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "变形工具：对图层或选区进行变形"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:143
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:144
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Transform"

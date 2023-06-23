@@ -184,7 +184,65 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
         //                 << d->concentricEllipseInPolygon.finalVertices[1] << d->concentricEllipseInPolygon.finalVertices[2];
         //ENTER_FUNCTION() << "Is transform identity? " << d->simpleConcentricEllipse.getTransform().isIdentity();
         //ENTER_FUNCTION() << "Transform:" << d->simpleConcentricEllipse.getTransform();
+
+        // 1000 points horizontal
+        // 500 vertical
+        int vertSkip = gc.viewport().height()/50;
+        int horiSkip = gc.viewport().width()/100;
+
+        ENTER_FUNCTION() << ppVar(vertSkip) << ppVar(horiSkip);
+
+        QPen redPen = QPen(Qt::red);
+        QPen bluePen = QPen(Qt::blue);
+        QPen pen;
+
+#if 0
+        gc.save();
+
+        int loops = 0;
+        QPointF p;
+        for (int i = vertSkip; i < gc.viewport().height()/2; i += vertSkip) {
+            for (int j = horiSkip; j < gc.viewport().width()/2; j+= horiSkip) {
+                loops++;
+                //if (loops > 10) break;
+                p = QPointF(gc.viewport().y() + j, gc.viewport().x() + i);
+                if (d->ellipseInPolygon.onTheCorrectSideOfHorizon(initialTransform.inverted().map(p))) {
+                    pen = bluePen;
+                } else {
+                    pen = redPen;
+                }
+                gc.setPen(pen);
+                gc.drawEllipse(p, 5, 5);
+                ENTER_FUNCTION() << "Painting on " << p;
+            }
+        }
+        p = mousePos;
+        if (d->ellipseInPolygon.onTheCorrectSideOfHorizon(initialTransform.inverted().map(p))) {
+            pen = bluePen;
+        } else {
+            pen = redPen;
+        }
+        gc.setPen(pen);
+        gc.drawEllipse(p, 5, 5);
+
+        gc.restore();
+#endif
     }
+
+    if (!d->cache.horizon.isNull()) {
+
+        QPainterPath path2 = QPainterPath();
+        QLineF horizonExtended = d->cache.horizon;
+        const QRect viewport = gc.viewport();
+
+        horizonExtended = initialTransform.map(horizonExtended);
+        KisAlgebra2D::cropLineToRect(horizonExtended, viewport, true, true);
+
+        path2.addPolygon(QVector<QPointF> {horizonExtended.p1(), horizonExtended.p2()});
+        gc.drawPath(path2);
+        //gc.restore();
+    }
+
 
     QPainterPath pathError;
     QPen pen10((qIsNaN(d->simpleConcentricEllipse.semiMajor()) || qIsInf(d->simpleConcentricEllipse.semiMajor()) || d->simpleConcentricEllipse.semiMajor() > 10000) ? Qt::darkBlue : Qt::darkMagenta);
@@ -210,7 +268,7 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
     // draw ellipse and axes
     if (isEllipseValid() && (assistantVisible || previewVisible || isEditing)) { // ensure that you only draw the ellipse if it's valid - otherwise it would just show some outdated one
 
-        if (!isEditing && d->isConcentric && d->concentricEllipseInPolygon.isValid()) {
+        if (false && !isEditing && d->isConcentric/* && d->concentricEllipseInPolygon.isValid()*/) {
 
             gc.save();
 
@@ -253,28 +311,18 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
             //QPen pen(QBrush(Qt::red), 3);
             //gc.save();
             //gc.setPen(pen);
+            path2 = QPainterPath();
+            QLineF horizonExtended = initialTransform.map(d->cache.horizon);
+            KisAlgebra2D::cropLineToRect(horizonExtended, updateRect.toRect(), true, true);
+            path2.addPolygon(QVector<QPointF> {horizonExtended.p1(), horizonExtended.p2()});
 
 
             paintConcentricEllipse(gc, updateRect, initialTransform);
+            gc.drawPath(path2);
             //gc.restore();
         }
         if (!isEditing && d->isConcentric) {
-            QPen pen2(QBrush(Qt::blue), 3);
-            gc.save();
-            gc.setPen(pen2);
-
-            //gc.setTransform(initialTransform);
-            gc.setTransform(QTransform());
-            gc.drawRect(kisGrowRect(updateRect, -85));
-
-            gc.restore();
-
-            QPen pen(QBrush(Qt::red), 3);
-            gc.save();
-            gc.setPen(pen);
-
             paintConcentricEllipse(gc, updateRect, initialTransform);
-            gc.restore();
         }
 
 
@@ -340,6 +388,7 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
 
         //gc.drawEllipse(QPointF(0.5, 0.5), d->concentricEllipseInPolygon.originalCircleRadius, d->concentricEllipseInPolygon.originalCircleRadius);
     }
+
 
 
     gc.setTransform(converter->documentToWidgetTransform());
@@ -478,18 +527,6 @@ void PerspectiveEllipseAssistant::paintConcentricEllipse(QPainter &gc, const QRe
     } else {
         d->concentricEllipseInPolygonMirrored.paintParametric(gc, updateRect, initialTransform);
     }
-
-    gc.save();
-
-    gc.setPen(QPen(Qt::blue));
-
-    if (!d->useMirroredPreview) {
-        d->concentricEllipseInPolygon.paintParametric(gc, updateRect, initialTransform);
-    } else {
-        d->concentricEllipseInPolygonMirrored.paintParametric(gc, updateRect, initialTransform);
-    }
-
-    gc.restore();
 }
 
 bool PerspectiveEllipseAssistant::isAssistantComplete() const

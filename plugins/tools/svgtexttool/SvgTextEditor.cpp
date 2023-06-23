@@ -481,7 +481,11 @@ void SvgTextEditor::checkFormat()
     {
         FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actionCollection()->action("svg_font_size"));
         KisSignalsBlocker b(fontSizeAction);
-        fontSizeAction->setFontSize(format.font().pointSize());
+        qreal pointSize = format.fontPointSize();
+        if (pointSize <= 0.0) {
+            pointSize = format.font().pointSizeF();
+        }
+        fontSizeAction->setFontSize(pointSize);
     }
 
 
@@ -866,8 +870,11 @@ void SvgTextEditor::increaseTextSize()
 {
     QTextCursor oldCursor = setTextSelection();
     QTextCharFormat format;
-    int pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pointSize();
-    if (pointSize<0) {
+    qreal pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().fontPointSize();
+    if (pointSize <= 0.0) {
+        pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pointSizeF();
+    }
+    if (pointSize <= 0.0) {
         pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pixelSize();
     }
     format.setFontPointSize(pointSize+1.0);
@@ -880,9 +887,15 @@ void SvgTextEditor::decreaseTextSize()
 {
     QTextCursor oldCursor = setTextSelection();
     QTextCharFormat format;
-    int pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pointSize();
-    if (pointSize<1) {
+    qreal pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().fontPointSize();
+    if (pointSize <= 0.0) {
+        pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pointSizeF();
+    }
+    if (pointSize <= 0.0) {
         pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pixelSize();
+    }
+    if (pointSize <= 1.0) {
+        return;
     }
     format.setFontPointSize(qMax(pointSize-1.0, 1.0));
     d->fontSize = format.fontPointSize();
@@ -1128,7 +1141,11 @@ void SvgTextEditor::setFont(const QString &fontName)
     QFont font;
     font.fromString(fontName);
     QTextCharFormat curFormat = m_textEditorWidget.richTextEdit->textCursor().charFormat();
-    font.setPointSize(curFormat.font().pointSize());
+    qreal pointSize = curFormat.fontPointSize();
+    if (pointSize <= 0.0) {
+        pointSize = curFormat.font().pointSizeF();
+    }
+    font.setPointSize(pointSize);
 
     QFontDatabase fontDatabase;
     const bool italic = fontDatabase.italic(font.family(), font.styleName());

@@ -2293,6 +2293,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.writeEntry<int>("mdi_viewmode", m_general->mdiMode());
         cfg.setMDIBackgroundColor(m_general->m_mdiColor->color().toXML());
         cfg.setMDIBackgroundImage(m_general->m_backgroundimage->text());
+        cfg.writeEntry<int>("mdi_rubberband", m_general->m_chkRubberBand->isChecked());
         cfg.setAutoSaveInterval(m_general->autoSaveInterval());
         cfg.writeEntry("autosavefileshidden", m_general->chkHideAutosaveFiles->isChecked());
 

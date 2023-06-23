@@ -1526,16 +1526,18 @@ bool EllipseInPolygon::onTheCorrectSideOfHorizon(QPointF point)
 {
     // point is the new potential start of the concentric ellipse
 
+    bool debug = false;
+
     int here = horizonLineSign(point);
-    ENTER_FUNCTION() << "Concentric point is: " << point << "and it's horizon side is: " << here;
+    if (debug) ENTER_FUNCTION() << "Concentric point is: " << point << "and it's horizon side is: " << here;
 
     int sum = 0;
     Q_FOREACH(QPointF p, originalPoints) {
         int pSign = horizonLineSign(p);
         sum += pSign;
-        ENTER_FUNCTION() << "Point on the ellipse is: " << p << "and it's horizon sign is: " << pSign;
+        if (debug) ENTER_FUNCTION() << "Point on the ellipse is: " << p << "and it's horizon sign is: " << pSign;
     }
-    ENTER_FUNCTION() << "----";
+    if (debug) ENTER_FUNCTION() << "----";
 
 
     if (here == 0) {
@@ -1746,6 +1748,7 @@ void EllipseInPolygon::paintParametric(QVector<double> formula, QPainter& gc, co
 
 int EllipseInPolygon::horizonLineSign(QPointF point)
 {
+    if (horizonFormula.length() < 3) return 0;
     qreal result = horizonFormula[0]*point.x() + horizonFormula[1]*point.y() + horizonFormula[2];
     return (result == 0 ? 0 : (result < 0 ? -1 : 1));
 }
@@ -1864,7 +1867,7 @@ QVector<double> EllipseInPolygon::getRotatedFormula(QVector<double> original, qr
     qreal e = original[4];
     qreal f = original[5];
 
-    qreal k = L;
+    qreal k = K;
     qreal l = unrotate ? -L : L;
 
     // this allows to calculate the formula for the rerotated ellipse

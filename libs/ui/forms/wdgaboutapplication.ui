@@ -32,7 +32,7 @@
      </widget>
      <widget class="QWidget" name="authorsTab">
       <attribute name="title">
-       <string>Authors</string>
+       <string comment="Heading for the list of Krita authors/developers">Authors</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>

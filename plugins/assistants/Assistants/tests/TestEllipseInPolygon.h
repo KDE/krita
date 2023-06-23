@@ -41,6 +41,7 @@ private Q_SLOTS:
     void testDifferentCodes();
 
     void testMirroredOrNot();
+    void testDiagonalHorizon();
 
 private:
     ConicFormula randomFormula(QRandomGenerator& random, ConicFormula::TYPE type);

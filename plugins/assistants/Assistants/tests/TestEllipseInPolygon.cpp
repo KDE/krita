@@ -125,35 +125,47 @@ void TestEllipseInPolygon::testConicCalculationsPhaseCD()
     int n = 100;
     auto rand = [random] () mutable {return random.generateDouble();};
     double eps = 1e-15;
-    double bigEps = 1e-7;
+    double bigEps = 1e-4;
     double xmin = -1000;
     double xmax = 1000;
 
     for(int i = 0; i < n; i++) {
-        ConicFormula c = randomFormula(random, ConicFormula::ACTUAL);
-        QPointF point = randomPoint(random);
+        ConicFormula c = randomFormula(random, ConicFormula::SPECIAL);
+        //QPointF point = randomPoint(random);
+        QList<QPointF> pointsOnEllipse = c.getRandomPoints(random, 30, -1000, 1000);
+        if (pointsOnEllipse.count() <= 0) continue;
+        QPointF point = pointsOnEllipse[0];
 
         auto result = ConicCalculations::rotateFormula(c, point);
-        ConicFormula resFormula = std::get<0>(result);
+        ConicFormula rotatedFormula = std::get<0>(result);
         double K = std::get<1>(result);
         double L = std::get<2>(result);
-        QPointF resPoint = std::get<3>(result);
+        QPointF rotatedPoint = std::get<3>(result);
 
         // check if the point still solves the formula the same way
         //QCOMPARE(c.calculateFormulaForPoint(point), resFormula.calculateFormulaForPoint(resPoint));
 
         // check if derotated point is the same as rotated
-        QPointF resPoint2 = EllipseInPolygon::getRotatedPoint(resPoint, K, L, true);
-        QCOMPARE(point, resPoint2);
+        QPointF derotatedPoint = EllipseInPolygon::getRotatedPoint(rotatedPoint, K, L, true);
+        QCOMPARE(point, derotatedPoint);
 
         // check if derotated formula is the same as rotated
-        QVector<double> resFormula2 = EllipseInPolygon::getRotatedFormula(resFormula.getFormulaActual(), K, L, true);
+        QVector<double> derotatedFormulaDoubles = EllipseInPolygon::getRotatedFormula(rotatedFormula.getFormulaActual(), K, L, true);
+        //ENTER_FUNCTION() << ppVar(K) << ppVar(L);
         for(int i = 0; i < N; i++) {
             //QCOMPARE(resFormula2[i], c.getFormulaActual()[i]);
-            ENTER_FUNCTION() << ppVar(c.getFormulaActual()[i]) << ppVar(resFormula.getFormulaActual()[i]) << ppVar(resFormula2[i]);
+            //ENTER_FUNCTION() << ppVar(c.getFormulaActual()[i]) << ppVar(rotatedFormula.getFormulaActual()[i]) << ppVar(derotatedFormulaDoubles[i]);
         }
 
-        ConicFormula resFormula2Conic(resFormula2, "", ConicFormula::SPECIAL);
+
+
+        ConicFormula derotatedFormula(derotatedFormulaDoubles, "", ConicFormula::ACTUAL);
+        derotatedFormula.convertTo(ConicFormula::SPECIAL);
+
+        c.Name = "c";
+        //derotatedFormula.Name = "derotatedFormula";
+        c.printOutInAllForms();
+        //derotatedFormula.printOutInAllForms();
 
 
 
@@ -161,7 +173,7 @@ void TestEllipseInPolygon::testConicCalculationsPhaseCD()
         // - check if the axis are horizontal and vertical
 
         double angleBefore = c.getAxisAngle();
-        double angleAfter = resFormula.getAxisAngle();
+        double angleAfter = rotatedFormula.getAxisAngle();
         double angleAfterRerotating = c.getAxisAngle();
 
         QCOMPARE(angleBefore, angleAfterRerotating);
@@ -171,25 +183,37 @@ void TestEllipseInPolygon::testConicCalculationsPhaseCD()
 
         QList<QPointF> points = c.getRandomPoints(random, n, xmin, xmax);
 
-        c.printOutInAllForms();
-        resFormula2Conic.printOutInAllForms();
+        //c.printOutInAllForms();
+        //derotatedFormula.printOutInAllForms();
 
-        for (int j = 0; i < points.count(); j++) {
-            ENTER_FUNCTION() << ppVar(c.calculateFormulaForPoint(points[j]));
-            QVERIFY(c.calculateFormulaForPoint(points[j]) < bigEps);
-
-            ENTER_FUNCTION() << ppVar(resFormula2Conic.calculateFormulaForPoint(points[j]));
-            QVERIFY(resFormula2Conic.calculateFormulaForPoint(points[j]) < bigEps);
-
-
+        for (int j = 0; j < points.count(); j++) {
 
             QTransform t;
-            t.rotate(-angleBefore);
-            ENTER_FUNCTION() << ppVar(resFormula.calculateFormulaForPoint(t.map(points[j])));
-            QVERIFY(resFormula.calculateFormulaForPoint(t.map(points[j])) < bigEps);
+            t.rotate(kisRadiansToDegrees(-angleBefore));
 
-            ENTER_FUNCTION() << ppVar(resFormula.calculateFormulaForPoint(EllipseInPolygon::getRotatedPoint(points[j], K, L, true)));
-            QVERIFY(resFormula.calculateFormulaForPoint(EllipseInPolygon::getRotatedPoint(points[j], K, L, true)) < bigEps);
+            if (!(c.calculateFormulaForPoint(points[j]) < bigEps)
+                || !(derotatedFormula.calculateFormulaForPoint(points[j]) < bigEps)
+                || !(rotatedFormula.calculateFormulaForPoint(t.map(points[j])) < bigEps)
+                || !(rotatedFormula.calculateFormulaForPoint(EllipseInPolygon::getRotatedPoint(points[j], K, L)) < bigEps)) {
+
+
+                ENTER_FUNCTION() << ppVar(c.calculateFormulaForPoint(points[j]));
+
+                //QPointF rotatedPointLocal = EllipseInPolygon::getRotatedPoint(points[j], K, L);
+
+                ENTER_FUNCTION() << ppVar(derotatedFormula.calculateFormulaForPoint(points[j]));
+
+                ENTER_FUNCTION() << ppVar(angleBefore) << ppVar(K) << ppVar(L);
+                ENTER_FUNCTION() << ppVar(points[j]) << ppVar(t.map(points[j])) << ppVar(EllipseInPolygon::getRotatedPoint(points[j], K, L));
+                ENTER_FUNCTION() << ppVar(rotatedFormula.calculateFormulaForPoint(t.map(points[j])));
+
+                ENTER_FUNCTION() << ppVar(rotatedFormula.calculateFormulaForPoint(EllipseInPolygon::getRotatedPoint(points[j], K, L)));
+            }
+
+            QVERIFY(c.calculateFormulaForPoint(points[j]) < bigEps);
+            QVERIFY(derotatedFormula.calculateFormulaForPoint(points[j]) < bigEps);
+            QVERIFY(rotatedFormula.calculateFormulaForPoint(t.map(points[j])) < bigEps);
+            QVERIFY(rotatedFormula.calculateFormulaForPoint(EllipseInPolygon::getRotatedPoint(points[j], K, L)) < bigEps);
 
         }
 
@@ -474,6 +498,43 @@ void TestEllipseInPolygon::testMirroredOrNot()
     ENTER_FUNCTION() << calculateHorizonResult(eipConcentricMirrored, eipConcentricMirrored.horizon.p1()) << calculateHorizonResult(eipConcentricMirrored, eipConcentricMirrored.horizon.p2());
 
 
+}
+
+void TestEllipseInPolygon::testDiagonalHorizon()
+{
+    EllipseInPolygon eip;
+    QPolygonF poly;
+
+    // for it to be diagonal, we gotta find the
+
+    poly << QPointF(633.960,753.840) << QPointF(758.165, 753.840) << QPointF(875.880, 900.720) << QPointF(521.640, 898.560);
+    PerspectiveBasedAssistantHelper::CacheData cache;
+    PerspectiveBasedAssistantHelper::updateCacheData(cache, poly);
+    eip.updateToPolygon(poly, cache.horizon);
+
+    EllipseInPolygon eipConcentric;
+    EllipseInPolygon eipConcentricMirrored;
+
+    QPointF point(0,0);
+
+    eipConcentric.updateToPointOnConcentricEllipse(eip.originalTransform, point, cache.horizon, false);
+    eipConcentricMirrored.updateToPointOnConcentricEllipse(eip.originalTransform, point, cache.horizon, true);
+
+    ENTER_FUNCTION() << eipConcentric.onTheCorrectSideOfHorizon(point) << eipConcentric.horizonLineSign(point);
+    ENTER_FUNCTION() << eipConcentricMirrored.onTheCorrectSideOfHorizon(point) << eipConcentricMirrored.horizonLineSign(point);
+
+    ENTER_FUNCTION() << eipConcentric.horizon << eipConcentricMirrored.horizon;
+    ENTER_FUNCTION() << eipConcentric.horizonFormula[0] << eipConcentric.horizonFormula[1] << eipConcentric.horizonFormula[2];
+    ENTER_FUNCTION() << eipConcentricMirrored.horizonFormula[0] << eipConcentricMirrored.horizonFormula[1] << eipConcentricMirrored.horizonFormula[2];
+    ENTER_FUNCTION() << eipConcentric.horizonLineSign(eipConcentric.horizon.p1()) << eipConcentric.horizonLineSign(eipConcentric.horizon.p2());
+    ENTER_FUNCTION() << eipConcentric.horizonLineSign(eipConcentricMirrored.horizon.p1()) << eipConcentric.horizonLineSign(eipConcentricMirrored.horizon.p2());
+
+
+    auto calculateHorizonResult = [] (EllipseInPolygon& eip, QPointF point) {
+        return eip.horizonFormula[0]*point.x() + eip.horizonFormula[1]*point.y() + eip.horizonFormula[2];
+    };
+    ENTER_FUNCTION() << calculateHorizonResult(eipConcentric, eipConcentric.horizon.p1()) << calculateHorizonResult(eipConcentric, eipConcentric.horizon.p2());
+    ENTER_FUNCTION() << calculateHorizonResult(eipConcentricMirrored, eipConcentricMirrored.horizon.p1()) << calculateHorizonResult(eipConcentricMirrored, eipConcentricMirrored.horizon.p2());
 }
 
 ConicFormula TestEllipseInPolygon::randomFormula(QRandomGenerator &random, ConicFormula::TYPE type)

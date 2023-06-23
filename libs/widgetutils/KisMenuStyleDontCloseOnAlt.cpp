@@ -5,8 +5,10 @@
  */
 #include "KisMenuStyleDontCloseOnAlt.h"
 
+#include <QStyleFactory>
+
 KisMenuStyleDontCloseOnAlt::KisMenuStyleDontCloseOnAlt(QStyle *baseStyle)
-    : QProxyStyle(baseStyle)
+    : QProxyStyle(QStyleFactory::create(baseStyle->objectName()))
 {
 }
 

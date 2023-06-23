@@ -758,19 +758,6 @@ void KisPaintDevice::Private::updateLodDataManager(KisDataManager *srcDataManage
     const int srcStepStride = srcStepSize * pixelSize;
     const int srcColumnStride = (srcStepSize - 1) * srcStepStride;
 
-    QScopedArrayPointer<qint16> weights(new qint16[srcCellSize]);
-
-    {
-        const qint16 averageWeight = qCeil(255.0 / srcCellSize);
-        const qint16 extraWeight = averageWeight * srcCellSize - 255;
-        KIS_ASSERT_RECOVER_NOOP(extraWeight == 1);
-
-        for (int i = 0; i < srcCellSize - 1; i++) {
-            weights[i] = averageWeight;
-        }
-        weights[srcCellSize - 1] = averageWeight - extraWeight;
-    }
-
     InternalSequentialConstIterator srcIntIt(StrategyPolicy(currentStrategy(), srcDataManager, srcOffset.x(), srcOffset.y()), srcRect);
     InternalSequentialIterator dstIntIt(StrategyPolicy(currentStrategy(), dstDataManager, dstOffset.x(), dstOffset.y()), dstRect);
 
@@ -801,7 +788,7 @@ void KisPaintDevice::Private::updateLodDataManager(KisDataManager *srcDataManage
 
             int colsRemaining = dstRect.width();
             while (colsRemaining > 0 && dstIntIt.nextPixel()) {
-                mixOp->mixColors(blendDataPtr, weights.data(), srcCellSize, dstIntIt.rawData());
+                mixOp->mixColors(blendDataPtr, srcCellSize, dstIntIt.rawData());
                 blendDataPtr += srcCellStride;
 
                 colsRemaining--;

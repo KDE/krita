@@ -894,7 +894,33 @@ QRect KisInvertSelectionFilter::changeRect(const QRect &rect, KisDefaultBoundsBa
 void KisInvertSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect& rect)
 {
     Q_UNUSED(rect);
-    pixelSelection->invert();
+
+    const QRect imageRect = pixelSelection->defaultBounds()->bounds();
+    const QRect selectionRect = pixelSelection->selectedExactRect();
+
+    /**
+     * A special treatment for the user-visible selection inversion:
+     *
+     * If the selection is fully contained inside the image, then
+     * just invert it pixel-by-pixel without changing the default
+     * pixel. It makes it selectedExactRect() work a little bit more
+     * expected for the user (see bug 457820).
+     *
+     * If the selection spreads outside the image bounds, then
+     * just invert it in a mathematical way adjusting the default
+     * pixel.
+     */
+
+    if (!imageRect.contains(selectionRect)) {
+        pixelSelection->invert();
+    } else {
+        KisSequentialIterator it(pixelSelection, imageRect);
+        while(it.nextPixel()) {
+            *(it.rawData()) = MAX_SELECTED - *(it.rawData());
+        }
+        pixelSelection->crop(imageRect);
+        pixelSelection->invalidateOutlineCache();
+    }
 }
 
 constexpr qint32 KisAntiAliasSelectionFilter::offsets[numSteps];

@@ -1451,7 +1451,7 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     connect(sliderThreadsLimit, SIGNAL(valueChanged(int)), SLOT(slotThreadsLimitChanged(int)));
     connect(sliderFrameClonesLimit, SIGNAL(valueChanged(int)), SLOT(slotFrameClonesLimitChanged(int)));
 
-    intCachedFramesSizeLimit->setRange(1, 10000);
+    intCachedFramesSizeLimit->setRange(256, 10000);
     intCachedFramesSizeLimit->setSuffix(i18n(" px"));
     intCachedFramesSizeLimit->setSingleStep(1);
     intCachedFramesSizeLimit->setPageStep(1000);

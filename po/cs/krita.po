@@ -49,7 +49,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-03-06 13:18+0100\n"
+"PO-Revision-Date: 2023-06-22 16:07+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -8264,7 +8264,7 @@ msgstr "Zobrazit záznam Androidu pro hlášení chyb."
 #, kde-format
 msgctxt "action"
 msgid "Show crash log for bug reports."
-msgstr "Zobrazit záznam pdu pro hlášení chyb."
+msgstr "Zobrazit záznam pádu pro hlášení chyb."
 
 #. i18n: context: text @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
@@ -42532,7 +42532,7 @@ msgstr ""
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:656
 #, kde-format
 msgid "Postprocessing"
-msgstr "Postprocessing"
+msgstr "Následné zpracování"
 
 #. i18n: ectx: property (text), widget (QLabel, hardnessLbl)
 #. i18n: ectx: property (text), widget (QLabel, labelHardness)
@@ -46507,7 +46507,7 @@ msgstr ""
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18
 #, kde-format
 msgid "WebP Options"
-msgstr "Možnosti Webp"
+msgstr "Možnosti WebP"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:45
@@ -48159,7 +48159,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/forms/wdgfilteroption.ui:47
 #, kde-format
 msgid "Smudge Mode"
-msgstr "Rozmazávací režim"
+msgstr "Režim rozmazávání"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:44
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:27
@@ -48328,7 +48328,7 @@ msgstr "Délka rozmazání"
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:36
 #, kde-format
 msgid "Smudge mode:"
-msgstr "Rozmazávací režim:"
+msgstr "Režim rozmazávání:"
 
 #: plugins/paintops/colorsmudge/kis_smudge_option_widget.cpp:37
 #, kde-format

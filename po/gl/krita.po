@@ -9153,7 +9153,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rename Composition..."
-msgstr "Cambiar o nome da composición…"
+msgstr "Renomear a composición…"
 
 #. i18n: context: toolTip @ Action (rename_composition), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rename_composition), Actions (General), ActionCollection (Krita)
@@ -9163,7 +9163,7 @@ msgstr "Cambiar o nome da composición…"
 #, kde-format
 msgctxt "action"
 msgid "Rename Composition"
-msgstr "Cambiar o nome da composición"
+msgstr "Renomear a composición"
 
 #. i18n: context: text @ Action (update_composition), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (update_composition), Actions (General), ActionCollection (Krita)
@@ -10052,7 +10052,7 @@ msgid ""
 "Shows global selection as a usual selection mask in <interface>Layers</"
 "interface> docker"
 msgstr ""
-"Mostra a selección global como unha máscara de selección na doca "
+"Amosa a selección global como unha máscara de selección na doca "
 "<interface>Capas</interface>."
 
 #. i18n: context: iconText @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
@@ -13560,7 +13560,7 @@ msgstr "Mover ao seguinte grupo"
 #, kde-format
 msgctxt "action"
 msgid "Rename current layer"
-msgstr "Cambiar o nome da capa actual"
+msgstr "Renomear a capa actual"
 
 #. i18n: context: text @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3428
@@ -17668,7 +17668,7 @@ msgstr "Volver a escoller"
 #: libs/image/commands/KisNodeRenameCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Node Rename"
-msgstr "Cambio de nome de nodo"
+msgstr "Renomeamento de nodo"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
 #: libs/image/kis_image.cc:829
@@ -21359,7 +21359,7 @@ msgstr "Nova etiqueta"
 #: libs/resourcewidgets/KisTagToolButton.cpp:71
 #, kde-format
 msgid "Rename tag"
-msgstr "Cambiar o nome da etiqueta"
+msgstr "Renomear a etiqueta"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:81
 #, kde-format
@@ -24676,7 +24676,7 @@ msgstr "Nome da sesión:"
 #: libs/ui/dialogs/KisSessionManagerDialog.cpp:92
 #, kde-format
 msgid "Rename session"
-msgstr "Cambiar o nome da sesión"
+msgstr "Renomear a sesión"
 
 #: libs/ui/dialogs/KisSessionManagerDialog.cpp:93
 #, kde-format
@@ -35117,7 +35117,7 @@ msgstr "Cargar de novo a predefinición de pincel"
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #, kde-format
 msgid "Rename the brush preset"
-msgstr "Cambiar o nome da predefinición de pincel"
+msgstr "Renomear a predefinición de pincel"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:185
 #, fuzzy, kde-format
@@ -39754,7 +39754,7 @@ msgstr "Seleccione un directorio"
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:418
 #, kde-format
 msgid "Rename Composition"
-msgstr "Cambiar o nome da composición"
+msgstr "Renomear a composición"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:419
 #, kde-format
@@ -40094,8 +40094,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
-"Mostra a selección global como unha máscara de selección na doca <b>Capas</"
-"b>."
+"Amosa a selección global como unha máscara de selección na doca <b>Capas</b>."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:315
 #, kde-format
@@ -43698,13 +43697,13 @@ msgstr "Seleccionar un complemento ou un módulo incluído"
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:18
 #, kde-format
 msgid "Script error"
-msgstr "Erro de script"
+msgstr "Erro de guión"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:29
 #, kde-format
 msgid "An exception occurred while running the script."
-msgstr "Produciuse unha excepción ao executar o script."
+msgstr "Produciuse unha excepción ao executar o guión."
 
 #. i18n: ectx: property (text), widget (QLabel, exceptionLabel)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:42
@@ -43716,7 +43715,7 @@ msgstr "Excepción"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:18
 #, kde-format
 msgid "Script Editor"
-msgstr "Editor de scripts"
+msgstr "Editor de guións"
 
 #. i18n: ectx: property (title), widget (QMenu, menuRun)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
@@ -43748,7 +43747,7 @@ msgstr "Ctrl+R"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:84
 #, kde-format
 msgid "Run script in &console"
-msgstr "Executar o script nunha &consola"
+msgstr "Executar o guión nunha &consola"
 
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:87
@@ -43790,7 +43789,7 @@ msgstr "G&ardar como"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:116
 #, kde-format
 msgid "Save the script"
-msgstr "Gardar o script"
+msgstr "Gardar o guión"
 
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:119
@@ -43808,7 +43807,7 @@ msgstr "&Abrir"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:127
 #, kde-format
 msgid "Open a script"
-msgstr "Abrir un script"
+msgstr "Abrir un guión"
 
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:130
@@ -43820,7 +43819,7 @@ msgstr "Ctrl+A"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:138
 #, kde-format
 msgid "Save the current script"
-msgstr "Gardar o script actual"
+msgstr "Gardar o guión actual"
 
 #. i18n: ectx: property (shortcut), widget (QPushButton, lCurveButton)
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
@@ -57244,13 +57243,13 @@ msgstr "Raio de filtro:"
 #: plugins/python/krita_script_starter/bbdkss.ui:40
 #, kde-format
 msgid "BBD's Krita Script Starter"
-msgstr "Iniciador de scripts de Krita de BBD"
+msgstr "Iniciador de guións de Krita de BBD"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/python/krita_script_starter/bbdkss.ui:54
 #, kde-format
 msgid "Name of Script:"
-msgstr "Nome do script:"
+msgstr "Nome do guión:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, e_name_of_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:67
@@ -57268,7 +57267,7 @@ msgstr ""
 #: plugins/python/krita_script_starter/bbdkss.ui:74
 #, kde-format
 msgid "Menu Entry for Script"
-msgstr "Entrada de menú para o script"
+msgstr "Entrada de menú para o guión"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, e_menu_entry)
 #: plugins/python/krita_script_starter/bbdkss.ui:81
@@ -57280,7 +57279,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>O que quere que apareza no menú «Ferramentas → "
 "Scripts». Se deixa isto en branco crearase unha entrada predeterminada "
-"baseada no nome do script. </p></body></html>"
+"baseada no nome do guión. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/python/krita_script_starter/bbdkss.ui:92
@@ -57308,7 +57307,7 @@ msgstr ""
 #: plugins/python/krita_script_starter/bbdkss.ui:112
 #, kde-format
 msgid "Type of script:"
-msgstr "Tipo de script:"
+msgstr "Tipo de guión:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rb_extension)
 #: plugins/python/krita_script_starter/bbdkss.ui:119
@@ -57331,22 +57330,22 @@ msgid ""
 "list. If not, you will need to manually enable the script through the Krita-"
 "&gt;Settings menu entry. </p></body></html>"
 msgstr ""
-"<html><head/><body><p>Se marca isto o script activarase automaticamente en "
-"Krita. É dicir, amosarase no menú de scripts ou na lista de docas. En caso "
-"contrario necesitará activar manualmente o script a través da entrada de "
-"menú «Krita → Configuración». </p></body></html>"
+"<html><head/><body><p>Se marca isto o guión activarase automaticamente en "
+"Krita. É dicir, amosarase no menú de guións ou na lista de docas. En caso "
+"contrario necesitará activar manualmente o guión a través da entrada de menú "
+"«Krita → Configuración». </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:155
 #, kde-format
 msgid "Enable Script"
-msgstr "Activar o script"
+msgstr "Activar o guión"
 
 #. i18n: ectx: property (text), widget (QPushButton, create_button)
 #: plugins/python/krita_script_starter/bbdkss.ui:190
 #, kde-format
 msgid "Create Script"
-msgstr "Crear un script"
+msgstr "Crear un guión"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:29
 msgid "Last Documents Docker"
@@ -57581,11 +57580,11 @@ msgstr "Doca de configuración rápida"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 msgid "Add Script"
-msgstr "Engadir un script"
+msgstr "Engadir un guión"
 
 #: plugins/python/scriptdocker/scriptdocker.py:24
 msgid "Script Docker"
-msgstr "Doca de scripts"
+msgstr "Doca de guións"
 
 #: plugins/python/scriptdocker/scriptdocker.py:41
 #, python-brace-format
@@ -57602,7 +57601,7 @@ msgstr "Depurador"
 #: plugins/python/scripter/scripter.py:20
 #: plugins/python/scripter/uicontroller.py:86
 msgid "Scripter"
-msgstr "Executor de scripts"
+msgstr "Executor de guións"
 
 #: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:31
 msgid "Do you want to save the current document?"
@@ -57713,7 +57712,7 @@ msgstr "Pasar por riba"
 
 #: plugins/python/scripter/uicontroller.py:165
 msgid "Error Running Script"
-msgstr "Erro ao executar o script"
+msgstr "Erro ao executar o guión"
 
 #: plugins/python/selectionsbagdocker/selectionsbagdocker.py:20
 msgid "Selections Bag"
@@ -57875,70 +57874,70 @@ msgstr "Dez scripts"
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 1"
-msgstr "Executar o script 1"
+msgstr "Executar o guión 1"
 
 #. i18n: context: text @ Action (execute_script_2), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:19
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 2"
-msgstr "Executar o script 2"
+msgstr "Executar o guión 2"
 
 #. i18n: context: text @ Action (execute_script_3), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:31
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 3"
-msgstr "Executar o script 3"
+msgstr "Executar o guión 3"
 
 #. i18n: context: text @ Action (execute_script_4), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:43
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 4"
-msgstr "Executar o script 4"
+msgstr "Executar o guión 4"
 
 #. i18n: context: text @ Action (execute_script_5), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:55
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 5"
-msgstr "Executar o script 5"
+msgstr "Executar o guión 5"
 
 #. i18n: context: text @ Action (execute_script_6), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:67
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 6"
-msgstr "Executar o script 6"
+msgstr "Executar o guión 6"
 
 #. i18n: context: text @ Action (execute_script_7), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:79
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 7"
-msgstr "Executar o script 7"
+msgstr "Executar o guión 7"
 
 #. i18n: context: text @ Action (execute_script_8), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:91
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 8"
-msgstr "Executar o script 8"
+msgstr "Executar o guión 8"
 
 #. i18n: context: text @ Action (execute_script_9), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:103
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 9"
-msgstr "Executar o script 9"
+msgstr "Executar o guión 9"
 
 #. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
 #, kde-format
 msgctxt "action"
 msgid "Execute Script 10"
-msgstr "Executar o script 10"
+msgstr "Executar o guión 10"
 
 #: plugins/python/tenscripts/tenscripts.py:26
 msgid "Ten Scripts"
@@ -57951,12 +57950,12 @@ msgstr "Asignar dez scripts a dez atallos."
 #: plugins/python/tenscripts/tenscripts.py:56
 #, python-brace-format
 msgid "Execute Script {num}"
-msgstr "Executar o script {num}"
+msgstr "Executar o guión {num}"
 
 #: plugins/python/tenscripts/tenscripts.py:84
 #, python-brace-format
 msgid "Script {0} executed"
-msgstr "Executouse o script {0}"
+msgstr "Executouse o guión {0}"
 
 #: plugins/python/tenscripts/uitenscripts.py:63
 msgid "Selected path"
@@ -57964,7 +57963,7 @@ msgstr "Ruta seleccionada"
 
 #: plugins/python/tenscripts/uitenscripts.py:64
 msgid "Select the script"
-msgstr "Seleccionar o script"
+msgstr "Seleccionar o guión"
 
 #: plugins/python/tenscripts/uitenscripts.py:88
 msgid "Python files (*.py)"
@@ -58639,7 +58638,7 @@ msgstr "Tomar mostras da capa actual"
 msgid ""
 "Displays per-channel color information below as percentages instead of bytes."
 msgstr ""
-"Mostra información de cores por canle embaixo como porcentaxes en vez de "
+"Amosa información de cores por canle embaixo como porcentaxes en vez de "
 "bytes."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbNormaliseValues)
@@ -60514,7 +60513,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>De que sistema de escritura deberían ser os tipos de "
 "letra que se amosen no selector de tipo de letra? Se non selecciona ningún "
-"sistema de escritura mostraranse todos os tipos de letra.</p></body></html>"
+"sistema de escritura amosaranse todos os tipos de letra.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolCenter)
 #: plugins/tools/tool_crop/kis_tool_crop.cc:116

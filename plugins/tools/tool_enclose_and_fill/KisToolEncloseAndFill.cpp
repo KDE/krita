@@ -715,7 +715,7 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
             SLOT(slot_sliderExpand_valueChanged(int)));
     connect(m_buttonStopGrowingAtDarkestPixel,
             SIGNAL(toggled(bool)),
-            SLOT(slot_buttonStopGrowingAtDarkestPixel_toogled(bool)));
+            SLOT(slot_buttonStopGrowingAtDarkestPixel_toggled(bool)));
     connect(m_sliderFeather,
             SIGNAL(valueChanged(int)),
             SLOT(slot_sliderFeather_valueChanged(int)));

@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-24 00:47+0000\n"
-"PO-Revision-Date: 2023-06-21 09:19+0200\n"
+"POT-Creation-Date: 2023-06-25 00:49+0000\n"
+"PO-Revision-Date: 2023-06-23 23:02+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -16264,23 +16264,23 @@ msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
 msgstr "<text>Besedilo ograde</text>"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:133
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:139
 #, kde-format
 msgid "More than one 'text' node found!"
 msgstr "Najdeno je več kot eno »besedilno« vozlišče!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:142
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:148
 #, kde-format
 msgid "Unknown node of type '%1' found!"
 msgstr "Najdeno neznano vozlišče vrste »%1«!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:148
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:154
 #, kde-format
 msgid "No 'text' node found!"
 msgstr "Nobenega »besedilnega« vozlišča ni mogoče najti!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:356
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:725
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:362
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:731
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "Neznana napaka pri pisanju besedilnega elementa SVG"
@@ -16567,7 +16567,7 @@ msgstr "privzeto"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1412
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1429
 #, kde-format
 msgid "Size"
 msgstr "Velikost"
@@ -19421,7 +19421,7 @@ msgstr "Krajevni viri"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:186
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:232
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1120
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1133
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -19862,11 +19862,9 @@ msgid "resource folder"
 msgstr "mapa z viri"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:123
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Display Selection"
+#, kde-format
 msgid "Display settings"
-msgstr "Pokaži izbor"
+msgstr "Nastavitve prikaza"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:130
 #, kde-format
@@ -21199,93 +21197,67 @@ msgid "text"
 msgstr "besedilo"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "paletegen status mode option name"
-#| msgid "Global/Full"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Global/Full"
 msgstr "Globalna/polna"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Difference"
-#| msgid "Difference"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Difference"
 msgstr "Razlika"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:95
-#, fuzzy, kde-format
-#| msgctxt "paletegen status mode option name"
-#| msgid "Per Single Frame"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
 msgstr "Na posamezno sličico"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:97
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "none"
 msgstr "brez"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "bayer"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "bayer"
 msgstr "bayer"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "floyd_steinberg"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "floyd_steinberg"
 msgstr "floyd_steinberg"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:100
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "heckbert"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "heckbert"
 msgstr "heckbert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:101
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "sierra2"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2"
 msgstr "sierra2"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:102
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "sierra2_4a"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2_4a"
 msgstr "sierra2_4a"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "none"
 msgstr "brez"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "paleteuse diff mode option name"
-#| msgid "rectangle"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
 msgstr "pravokotnik"
@@ -22521,7 +22493,7 @@ msgstr "Lastnosti plasti"
 #: plugins/tools/basictools/kis_tool_fill.cc:535
 #: plugins/tools/basictools/kis_tool_fill.cc:550
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:370
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1449
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1466
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:439
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:447
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:455
@@ -25739,7 +25711,7 @@ msgstr "Barva ospredja"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1428
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
 #, kde-format
 msgid "Background Color"
 msgstr "Barva ozadja"
@@ -27806,8 +27778,7 @@ msgstr "Mere slikovnih točk"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPixelFilter)
 #: libs/ui/imagesize/wdg_imagesize.ui:81
-#, fuzzy, kde-format
-#| msgid "&Filter:"
+#, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "&Filter:"
 msgstr "&Filter:"
@@ -27838,9 +27809,7 @@ msgstr "Prilagodi velikost tiskanja ločeno"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #: libs/ui/imagesize/wdg_layersize.ui:119
-#, fuzzy, kde-format
-#| msgctxt "Resize intepolation method list label"
-#| msgid "Filter:"
+#, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "Filter:"
 msgstr "Filter:"
@@ -34250,10 +34219,7 @@ msgstr "Prilagodi kontrast na kanal"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:83
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Percentage of the histogram to clip in the shadous side in auto levels"
-#| msgid "Shadows clipping:"
+#, kde-format
 msgctxt ""
 "Percentage of the histogram to clip in the shadows side in auto levels"
 msgid "Shadows clipping:"
@@ -46373,9 +46339,7 @@ msgid "Sine Wave"
 msgstr "Sinusna krivulja"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "Screentone Pattern - Trianular Wave Lines"
-#| msgid "Triangular Wave"
+#, kde-format
 msgctxt "Screentone Pattern - Triangular Wave Lines"
 msgid "Triangular Wave"
 msgstr "Trikotna krivulja"
@@ -58308,67 +58272,67 @@ msgstr "Orodje za besedilo"
 msgid "Conversion failed"
 msgstr "Pretvorba ni uspela"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:582
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:586
 #, kde-format
 msgid "Find Text"
 msgstr "Najdi besedilo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:585
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:628
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:589
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:632
 #, kde-format
 msgid "Find:"
 msgstr "Najdi:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:624
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:628
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Najdi in zamenjaj vse"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:630
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:634
 #, kde-format
 msgid "Replace:"
 msgstr "Zamenjaj z:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1120
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1133
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Besedilo ste spremenili. Ali želite zavreči spremembe?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1256
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1262
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1273
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1279
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Obogateno besedilo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1259
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1263
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1276
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1280
 #, kde-format
 msgid "SVG Source"
 msgstr "Vir SVG"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1403
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1420
 #, kde-format
 msgid "Font"
 msgstr "Pisava"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1420
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1437
 #, kde-format
 msgid "Text Color"
 msgstr "Barva besedila"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1435
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
 #, kde-format
 msgid "Sample a Color"
 msgstr "Vzorči barvo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1446
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1463
 #, kde-format
 msgid "Line height"
 msgstr "Višina vrstice"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1458
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1475
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"
@@ -60410,19 +60374,3 @@ msgstr "Orodje za referenčne slike"
 #~ "<html><head/><body><p><span style=\" font-weight:600;\">Opomba:</span> "
 #~ "animirani izvozi so <span style=\" font-weight:600;\">vedno</span> "
 #~ "sploščeni, ne glede na to nastavitev.</p></body></html>"
-
-#~ msgctxt "paletegen status mode option name"
-#~ msgid "Difference"
-#~ msgstr "Razlika"
-
-#~ msgctxt "paleteuse dither option name"
-#~ msgid "none"
-#~ msgstr "brez"
-
-#~ msgctxt "paleteuse diff mode option name"
-#~ msgid "none"
-#~ msgstr "brez"
-
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "&Filter:"

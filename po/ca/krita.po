@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-24 00:47+0000\n"
-"PO-Revision-Date: 2023-06-22 09:45+0200\n"
+"POT-Creation-Date: 2023-06-25 00:49+0000\n"
+"PO-Revision-Date: 2023-06-24 13:24+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -16291,23 +16291,23 @@ msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
 msgstr "<text>Text variable</text>"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:133
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:139
 #, kde-format
 msgid "More than one 'text' node found!"
 msgstr "S'ha trobat més d'un node «text»!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:142
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:148
 #, kde-format
 msgid "Unknown node of type '%1' found!"
 msgstr "S'ha trobat un node de tipus «%1» desconegut!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:148
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:154
 #, kde-format
 msgid "No 'text' node found!"
 msgstr "No s'ha trobat cap node «text»!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:356
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:725
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:362
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:731
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "Error desconegut en escriure l'element de text SVG"
@@ -16594,7 +16594,7 @@ msgstr "predeterminat"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1412
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1429
 #, kde-format
 msgid "Size"
 msgstr "Mida"
@@ -19455,7 +19455,7 @@ msgstr "Recursos locals"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:186
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:232
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1120
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1133
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22544,7 +22544,7 @@ msgstr "Propietats de la capa"
 #: plugins/tools/basictools/kis_tool_fill.cc:535
 #: plugins/tools/basictools/kis_tool_fill.cc:550
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:370
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1449
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1466
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:439
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:447
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:455
@@ -23956,8 +23956,7 @@ msgstr "Quant al"
 
 #. i18n: ectx: attribute (title), widget (QWidget, authorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:35
-#, fuzzy, kde-format
-#| msgid "Authors"
+#, kde-format
 msgctxt "Heading for the list of Krita authors/developers"
 msgid "Authors"
 msgstr "Autors"
@@ -25775,7 +25774,7 @@ msgstr "Color de primer pla"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1428
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
 #, kde-format
 msgid "Background Color"
 msgstr "Color de fons"
@@ -47750,10 +47749,9 @@ msgstr "Opcions de codificació"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "If this is not enabled, only the first frame will be saved."
+#, kde-format
 msgid "If this is not enabled, the image will be saved losslessly."
-msgstr "Si això no està activat, només es desarà el primer fotograma."
+msgstr "Si això no està activat, la imatge es desarà sense pèrdua."
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:59
@@ -47886,6 +47884,11 @@ msgid ""
 "setting.</p><p>It is advised to leave this option checked for web delivery "
 "and general compatibility with other applications.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Si no està activat, les capes es rasteritzaran i "
+"desaran. No obstant això, les exportacions d'animacions sempre s'aplanen "
+"independentment d'aquest paràmetre.</p><p>Es recomana deixar aquesta opció "
+"marcada per al lliurament per web i per compatibilitat general amb altres "
+"aplicacions.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:239
@@ -58482,67 +58485,67 @@ msgstr "Eina de text"
 msgid "Conversion failed"
 msgstr "Ha fallat la conversió"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:582
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:586
 #, kde-format
 msgid "Find Text"
 msgstr "Cerca el text"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:585
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:628
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:589
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:632
 #, kde-format
 msgid "Find:"
 msgstr "Cerca:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:624
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:628
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Cerca i substitueix-ho tot"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:630
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:634
 #, kde-format
 msgid "Replace:"
 msgstr "Substitueix:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1120
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1133
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Heu modificat el text. Descarto els canvis?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1256
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1262
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1273
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1279
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Text enriquit"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1259
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1263
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1276
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1280
 #, kde-format
 msgid "SVG Source"
 msgstr "Codi font de SVG"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1403
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1420
 #, kde-format
 msgid "Font"
 msgstr "Tipus de lletra"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1420
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1437
 #, kde-format
 msgid "Text Color"
 msgstr "Color del text"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1435
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
 #, kde-format
 msgid "Sample a Color"
 msgstr "Mostra un color"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1446
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1463
 #, kde-format
 msgid "Line height"
 msgstr "Alçada de la línia"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1458
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1475
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"

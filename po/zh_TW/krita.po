@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-24 00:47+0000\n"
-"PO-Revision-Date: 2023-06-23 09:23+0000\n"
+"POT-Creation-Date: 2023-06-25 00:49+0000\n"
+"PO-Revision-Date: 2023-06-24 07:42+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
 "krita/zh_Hant/>\n"
@@ -16225,23 +16225,23 @@ msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
 msgstr "<text>佔位文字</text>"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:133
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:139
 #, kde-format
 msgid "More than one 'text' node found!"
 msgstr "找到多個 \"文字\" 節點！"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:142
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:148
 #, kde-format
 msgid "Unknown node of type '%1' found!"
 msgstr "找到類型為「%1」的未知節點！"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:148
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:154
 #, kde-format
 msgid "No 'text' node found!"
 msgstr "找不到 \"文字\" 節點！"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:356
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:725
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:362
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:731
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "寫入 SVG 文字元素時發生未知錯誤"
@@ -16525,7 +16525,7 @@ msgstr "預設"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1412
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1429
 #, kde-format
 msgid "Size"
 msgstr "大小"
@@ -19357,7 +19357,7 @@ msgstr "本機資源"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:186
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:232
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1120
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1133
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22394,7 +22394,7 @@ msgstr "圖層屬性"
 #: plugins/tools/basictools/kis_tool_fill.cc:535
 #: plugins/tools/basictools/kis_tool_fill.cc:550
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:370
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1449
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1466
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:439
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:447
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:455
@@ -25551,7 +25551,7 @@ msgstr "前景色"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1428
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
 #, kde-format
 msgid "Background Color"
 msgstr "背景色"
@@ -47078,10 +47078,9 @@ msgstr "編碼選項"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "If this is not enabled, only the first frame will be saved."
+#, kde-format
 msgid "If this is not enabled, the image will be saved losslessly."
-msgstr "如不啟用此選項，則只會儲存首個影格。"
+msgstr "如不啟用此選項，則影像會以無損壓縮方式儲存。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:59
@@ -47211,6 +47210,9 @@ msgid ""
 "setting.</p><p>It is advised to leave this option checked for web delivery "
 "and general compatibility with other applications.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>如不啟用此選項，則各圖層會轉為點陣格式然後儲存。不過，"
+"匯出動畫時必定會將影像平整化而不受此選項影響。</p><p>建議啟用此選項以確保兼容"
+"網頁瀏覽器與其他一般應用程式。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:239
@@ -57499,67 +57501,67 @@ msgstr "文字工具"
 msgid "Conversion failed"
 msgstr "轉換失敗"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:582
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:586
 #, kde-format
 msgid "Find Text"
 msgstr "尋找文字"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:585
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:628
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:589
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:632
 #, kde-format
 msgid "Find:"
 msgstr "尋找："
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:624
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:628
 #, kde-format
 msgid "Find and Replace all"
 msgstr "尋找並取代全部"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:630
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:634
 #, kde-format
 msgid "Replace:"
 msgstr "取代："
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1120
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1133
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "文字已被修改。要放棄變更嗎？"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1256
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1262
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1273
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1279
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "富文字"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1259
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1263
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1276
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1280
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG 原始碼"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1403
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1420
 #, kde-format
 msgid "Font"
 msgstr "字型"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1420
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1437
 #, kde-format
 msgid "Text Color"
 msgstr "文字色彩"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1435
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
 #, kde-format
 msgid "Sample a Color"
 msgstr "取樣一種色彩"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1446
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1463
 #, kde-format
 msgid "Line height"
 msgstr "行高"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1458
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1475
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"

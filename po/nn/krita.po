@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-20 00:47+0000\n"
+"POT-Creation-Date: 2023-06-24 00:47+0000\n"
 "PO-Revision-Date: 2023-02-26 09:47+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -12776,7 +12776,7 @@ msgstr "&Importer/eksporter"
 msgid "Import"
 msgstr "Importer"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1237
+#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1242
 #, kde-format
 msgid "&Convert"
 msgstr "&Konverter"
@@ -12784,7 +12784,7 @@ msgstr "&Konverter"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1211
+#: plugins/dockers/layerdocker/LayerBox.cpp:1216
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
@@ -12792,7 +12792,7 @@ msgid "&Select"
 msgstr "&Merk"
 
 # Inneheld kommandoar for gruppering, så det er best med imperativ her (til trass for den offisielle konteksten).
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1217
+#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1222
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12813,7 +12813,7 @@ msgstr "Transformer &alle laga"
 msgid "S&plit"
 msgstr "&Del opp"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1244
+#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1249
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Del opp &alfa"
@@ -15774,13 +15774,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Arbeidsflate"
 
-#: krita/main.cc:517
+#: krita/main.cc:521
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Kritisk feil"
 
-#: krita/main.cc:518
+#: krita/main.cc:522
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15789,14 +15789,14 @@ msgstr ""
 "Krita støttar ikkje Wayland-plattforma. Bruk XWayland for å køyra Krita på "
 "Wayland. Krita vert no lukka."
 
-#: krita/main.cc:628 libs/ui/KisApplication.cpp:410
+#: krita/main.cc:632 libs/ui/KisApplication.cpp:410
 #: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: åtvaring"
 
-#: krita/main.cc:629
+#: krita/main.cc:633
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15807,12 +15807,12 @@ msgstr ""
 "Dette er ikkje tilrådd. Ikkje meld frå om eventuelle feil du opplever.\n"
 "Du bør oppdatera til ein versjon som er støtta: Windows 7, 8, 8.1 eller 10."
 
-#: krita/main.cc:651 krita/main.cc:656
+#: krita/main.cc:655 krita/main.cc:660
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Teikneplate-støtte i Krita"
 
-#: krita/main.cc:652
+#: krita/main.cc:656
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15823,7 +15823,7 @@ msgstr ""
 "penneeining. Viss du har ei teikneplate, sjå til at drivaren til teikneplata "
 "er rett installert."
 
-#: krita/main.cc:657
+#: krita/main.cc:661
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16719,7 +16719,7 @@ msgstr " pikslar"
 #: libs/image/kis_keyframe_channel.cpp:26 libs/image/kis_layer.cc:276
 #: libs/widgets/KoColorPopupAction.cpp:85
 #: plugins/dockers/layerdocker/LayerBox.cpp:207
-#: plugins/dockers/layerdocker/LayerBox.cpp:387
+#: plugins/dockers/layerdocker/LayerBox.cpp:392
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
@@ -17415,12 +17415,12 @@ msgctxt "(qtundo-format)"
 msgid "Invert Selection"
 msgstr "Omvend utval"
 
-#: libs/image/kis_selection_filters.cpp:904
+#: libs/image/kis_selection_filters.cpp:930
 msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
 msgstr "Kantutjamning på utval"
 
-#: libs/image/kis_selection_filters.cpp:1169
+#: libs/image/kis_selection_filters.cpp:1195
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
 msgstr ""
@@ -19665,7 +19665,7 @@ msgstr ""
 #: libs/ui/animation/VideoImportDialog.ui:149
 #: plugins/dockers/logdocker/LogDockerDock.cpp:187
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:262
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:857
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:860
 #: plugins/impex/webp/kis_wdg_options_webp.ui:791
 #, kde-format
 msgid "Metadata"
@@ -19840,9 +19840,9 @@ msgstr "Miniatyrbilete"
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:305
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:661
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:713
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:812
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:815
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:220
 #, kde-format
 msgid "All"
@@ -19910,24 +19910,29 @@ msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
 msgstr "ressursmappe"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:129
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:123
+#, kde-format
+msgid "Display settings"
+msgstr ""
+
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:130
 #, kde-format
 msgid "Storage Resources"
 msgstr "Lagringsressursar"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:190
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:191
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
 msgstr "Importer ressurs"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:195
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:196
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
 msgstr "Slett ressurs"
 
-#: libs/resourcewidgets/KisResourceItemChooser.cpp:333
+#: libs/resourcewidgets/KisResourceItemChooser.cpp:334
 #: libs/ui/KisMainWindow.cpp:2571
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
@@ -20100,40 +20105,40 @@ msgstr ""
 "Det finst ingen %1-ressursar tilgjengeleg. Du må ta minst éi ressurssamling "
 "i bruk."
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:60
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
 #, kde-format
 msgid "Tag"
 msgstr "Merkelapp"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:74
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:86
 #, kde-format
 msgid "Tag options"
 msgstr "Merkelapp-val"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
 #, kde-format
 msgctxt "Dialog title"
 msgid "Can't rename the tag"
 msgstr "Kan ikkje endra namn på merkelappen"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
 msgstr "Du kan ikkje bruka dette namnet på tilpassa merkelappar."
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:158
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:159
 #, kde-format
 msgctxt "Dialog title"
 msgid "Remove existing tag with that name?"
 msgstr "Vil du fjerna merkelappen som alt har dette namnet?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:160
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:161
 #, kde-format
 msgctxt ""
 "Dialog message (the arguments are both somewhat user readable nouns or "
@@ -20150,7 +20155,7 @@ msgstr ""
 "fjerna: %1\n"
 "Unikt merkelapp-namn: %2"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:266
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
 #, kde-format
 msgctxt ""
@@ -20159,21 +20164,21 @@ msgctxt ""
 msgid "Restore previous tag"
 msgstr "Gjenopprett førre merkelapp"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:268
 #, kde-format
 msgctxt ""
 "Option in a dialog to use existing tag with its old assigned resources"
 msgid "Use existing tag"
 msgstr "Bruk eksisterande merkelapp"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:269
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
 #, kde-format
 msgctxt "Dialog title"
 msgid "Overwrite tag?"
 msgstr "Vil du overskriva merkelappen?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
 #, kde-format
 msgctxt "Question to the user in a dialog about creating a tag"
@@ -20181,7 +20186,7 @@ msgid "A tag with this unique name already exists. Do you want to replace it?"
 msgstr ""
 "Det finst alt ein merkelapp med dette unike namnet. Vil du overskriva han?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
 #, kde-format
 msgctxt ""
@@ -20196,7 +20201,7 @@ msgstr "Erstatt (overskriv) merkelappen"
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnCancelMaskEdit)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:273
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
@@ -20213,7 +20218,7 @@ msgstr "Erstatt (overskriv) merkelappen"
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
 #, kde-format
 msgctxt "Dialog title"
 msgid "Can't create the tag"
@@ -20247,24 +20252,24 @@ msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
 msgstr "<qt>Vis merkelapp-val</qt>"
 
-#: libs/resourcewidgets/KisTagToolButton.cpp:63
+#: libs/resourcewidgets/KisTagToolButton.cpp:67
 #: libs/resourcewidgets/TagActions.cpp:139
 #: libs/resourcewidgets/TagActions.cpp:158
 #, kde-format
 msgid "New tag"
 msgstr "Ny merkelapp"
 
-#: libs/resourcewidgets/KisTagToolButton.cpp:71
+#: libs/resourcewidgets/KisTagToolButton.cpp:75
 #, kde-format
 msgid "Rename tag"
 msgstr "Endra namn på merkelapp"
 
-#: libs/resourcewidgets/KisTagToolButton.cpp:81
+#: libs/resourcewidgets/KisTagToolButton.cpp:85
 #, kde-format
 msgid "Delete this tag"
 msgstr "Slett merkelappen"
 
-#: libs/resourcewidgets/KisTagToolButton.cpp:121
+#: libs/resourcewidgets/KisTagToolButton.cpp:125
 #, kde-format
 msgid "Undelete"
 msgstr "Gjenopprett"
@@ -21239,69 +21244,69 @@ msgstr "tekst"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:93
 #, kde-format
-msgctxt "paletegen status mode option name"
+msgctxt "palettegen status mode option name"
 msgid "Global/Full"
-msgstr "Global/full"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:94
 #, kde-format
-msgctxt "paletegen status mode option name"
+msgctxt "palettegen status mode option name"
 msgid "Difference"
-msgstr "Differanse"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:95
 #, kde-format
-msgctxt "paletegen status mode option name"
+msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
-msgstr "Per einskildbilete"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:97
 #, kde-format
-msgctxt "paleteuse dither option name"
+msgctxt "paletteuse dither option name"
 msgid "none"
-msgstr "ingen"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
 #, kde-format
-msgctxt "paleteuse dither option name"
+msgctxt "paletteuse dither option name"
 msgid "bayer"
-msgstr "bayer"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:99
 #, kde-format
-msgctxt "paleteuse dither option name"
+msgctxt "paletteuse dither option name"
 msgid "floyd_steinberg"
-msgstr "floyd_steinberg"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:100
 #, kde-format
-msgctxt "paleteuse dither option name"
+msgctxt "paletteuse dither option name"
 msgid "heckbert"
-msgstr "heckbert"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:101
 #, kde-format
-msgctxt "paleteuse dither option name"
+msgctxt "paletteuse dither option name"
 msgid "sierra2"
-msgstr "sierra2"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:102
 #, kde-format
-msgctxt "paleteuse dither option name"
+msgctxt "paletteuse dither option name"
 msgid "sierra2_4a"
-msgstr "sierra2_4a"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
 #, kde-format
-msgctxt "paleteuse diff mode option name"
+msgctxt "paletteuse diff mode option name"
 msgid "none"
-msgstr "ingen"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
 #, kde-format
-msgctxt "paleteuse diff mode option name"
+msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
-msgstr "rektangel"
+msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:149
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:168
@@ -21478,7 +21483,7 @@ msgstr "Minste lysstyrke:"
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:300
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:317
 #: plugins/impex/heif/WdgHeifExport.ui:116
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:315
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:318
 #, kde-format
 msgid " cd/m²"
 msgstr " cd/m²"
@@ -21646,7 +21651,7 @@ msgstr "Lengd:"
 #. i18n: ectx: attribute (title), widget (QWidget, advanced)
 #: libs/ui/animation/VideoImportDialog.ui:512
 #: libs/ui/forms/wdgperformancesettings.ui:251
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:332
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:335
 #: plugins/impex/webp/kis_wdg_options_webp.ui:147
 #, kde-format
 msgid "Advanced"
@@ -21751,12 +21756,10 @@ msgstr "Høgd:"
 msgid "Import Video Scale"
 msgstr "Skalering for videoimportering"
 
-#. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #. i18n: ectx: property (text), widget (QLabel, videoScaleFilterLabel)
 #. i18n: ectx: property (text), widget (QLabel, scaleFilterLabel)
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
-#: libs/ui/imagesize/wdg_layersize.ui:119
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:43
 #, kde-format
 msgctxt "Resize intepolation method list label"
@@ -22362,7 +22365,7 @@ msgstr "Bruk HLG OOTF"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:176
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:225
 #: plugins/dockers/lut/wdglut.ui:270 plugins/impex/heif/WdgHeifExport.ui:89
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:288
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:291
 #, kde-format
 msgid "Gamma:"
 msgstr "Gamma:"
@@ -22385,7 +22388,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:57
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
 #: plugins/impex/heif/WdgHeifExport.ui:106
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:305
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:308
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:128
 #, kde-format
 msgid "Brightness:"
@@ -22487,7 +22490,7 @@ msgstr "Lageigenskapar"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:388
+#: plugins/dockers/layerdocker/LayerBox.cpp:393
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:47
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:51
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:54
@@ -22499,9 +22502,9 @@ msgstr "Lageigenskapar"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:48
 #: plugins/impex/jpeg/kis_jpeg_export.cc:217
 #: plugins/impex/jpeg/kis_jpeg_export.cc:219
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:635
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:687
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:834
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:638
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:837
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:277
 #: plugins/impex/webp/kis_wdg_options_webp.ui:82
 #: plugins/impex/webp/kis_wdg_options_webp.ui:305
@@ -23938,13 +23941,12 @@ msgstr "Oppløysing:"
 msgid "About"
 msgstr "Om"
 
-# Dei som har utvikla Krita.
 #. i18n: ectx: attribute (title), widget (QWidget, authorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:35
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:366
 #, kde-format
+msgctxt "Heading for the list of Krita authors/developers"
 msgid "Authors"
-msgstr "Opphavspersonar"
+msgstr "Utviklarar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
@@ -24955,7 +24957,7 @@ msgstr "Gå tilbake til det sist brukte ferdigoppsettet"
 msgid "Use last preset"
 msgstr "Bruk sist brukte ferdigoppsett"
 
-#. i18n: ectx: property (text), widget (QPushButton, pushButtonEditPressets)
+#. i18n: ectx: property (text), widget (QPushButton, pushButtonEditPresets)
 #: libs/ui/forms/wdgfilterselector.ui:130
 #, kde-format
 msgid "Edit Presets"
@@ -25279,7 +25281,7 @@ msgstr "Byt om på «Ctrl»- og «Alt»-valtastane"
 msgid "Enable Touch Painting"
 msgstr "Slå på teikning med fingertrykk"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTranformToolAfterPaste)
+#. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
 #: libs/ui/forms/wdggeneralsettings.ui:717
 #, kde-format
 msgid "Activate transform tool after pasting"
@@ -26486,7 +26488,7 @@ msgid "path"
 msgstr "adresse"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPaintOpSettings)
-#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:448
+#: libs/ui/forms/wdgpaintopsettings.ui:18 libs/ui/kis_paintop_box.cc:449
 #, kde-format
 msgid "Brush Editor"
 msgstr "Penselredigering"
@@ -26500,8 +26502,8 @@ msgstr "Gjeldande ferdigpensel"
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
 #: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1074
-#: libs/ui/widgets/kis_workspace_chooser.cpp:111
-#: libs/ui/widgets/kis_workspace_chooser.cpp:190
+#: libs/ui/widgets/kis_workspace_chooser.cpp:135
+#: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:164
@@ -27824,9 +27826,9 @@ msgstr "Pikseldimensjonar"
 #. i18n: ectx: property (text), widget (QLabel, lblPixelFilter)
 #: libs/ui/imagesize/wdg_imagesize.ui:81
 #, kde-format
-msgctxt "Resize intepolation method list label"
+msgctxt "Resize interpolation method list label"
 msgid "&Filter:"
-msgstr "&Filter:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupPrintSize)
 #: libs/ui/imagesize/wdg_imagesize.ui:158 libs/widgets/KoZoomWidget.cpp:121
@@ -27851,6 +27853,13 @@ msgstr "&Breidd:"
 #, kde-format
 msgid "Adjust print size separately"
 msgstr "Juster utskriftsstorleik for seg"
+
+#. i18n: ectx: property (text), widget (QLabel, lblFilter)
+#: libs/ui/imagesize/wdg_layersize.ui:119
+#, kde-format
+msgctxt "Resize interpolation method list label"
+msgid "Filter:"
+msgstr ""
 
 # «Shortcut» er her *anten* ein snøggtast, ein museknapp eller ei hjulrulling, og må derfor omsetjast til «snarveg», ikkje «snøggtast».
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:58
@@ -29410,13 +29419,13 @@ msgstr "Mønsterskalering:"
 msgid "Choose workspace"
 msgstr "Vel arbeidsflate"
 
-#: libs/ui/kis_paintop_box.cc:358
+#: libs/ui/kis_paintop_box.cc:359
 #, kde-format
 msgid "Brush composite"
 msgstr "Penselsamansetjing"
 
-#: libs/ui/kis_paintop_box.cc:1271 libs/ui/kis_paintop_box.cc:1293
-#: libs/ui/kis_paintop_box.cc:1307
+#: libs/ui/kis_paintop_box.cc:1272 libs/ui/kis_paintop_box.cc:1294
+#: libs/ui/kis_paintop_box.cc:1308
 #, kde-format
 msgid ""
 "%1\n"
@@ -29725,7 +29734,7 @@ msgstr "Penseltuppar"
 msgid "Palettes"
 msgstr "Palettar"
 
-#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:79
+#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
@@ -29737,7 +29746,7 @@ msgstr "Arbeidsflater"
 msgid "SVG symbol libraries"
 msgstr "SVG-symbolbibliotek"
 
-#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:80
+#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "Vindaugsutformingar"
@@ -31117,17 +31126,17 @@ msgstr "Bruk denne malen"
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Du kan ikkje dra og sleppa fargar på den valde lagtypen."
 
-#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool.cc:673
+#: libs/ui/KisView.cpp:767 libs/ui/tool/kis_tool.cc:678
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Laget er låst og usynleg."
 
-#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:675
+#: libs/ui/KisView.cpp:769 libs/ui/tool/kis_tool.cc:680
 #, kde-format
 msgid "Layer is locked."
 msgstr "Laget er låst."
 
-#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:677
+#: libs/ui/KisView.cpp:771 libs/ui/tool/kis_tool.cc:682
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Laget er usynleg."
@@ -31880,7 +31889,7 @@ msgstr "Laget slår &ut skuggeeffekten"
 #: libs/ui/layerstyles/wdgdropshadow.ui:50
 #: libs/ui/layerstyles/wdgInnerGlow.ui:279
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:75
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:65
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:68
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:236
 #: plugins/impex/webp/kis_wdg_options_webp.ui:71
 #, kde-format
@@ -32367,27 +32376,27 @@ msgstr "Utvalshandlingar"
 msgid "Transform"
 msgstr "Transformer"
 
-#: libs/ui/tool/kis_tool.cc:575
+#: libs/ui/tool/kis_tool.cc:580
 #, kde-format
 msgid "No options"
 msgstr "Ingen val"
 
-#: libs/ui/tool/kis_tool.cc:679
+#: libs/ui/tool/kis_tool.cc:684
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr "Laget kan berre teiknast på i lasurmodus."
 
-#: libs/ui/tool/kis_tool.cc:681
+#: libs/ui/tool/kis_tool.cc:686
 #, kde-format
 msgid "Group not editable."
 msgstr "Gruppa er ikkje redigerbar."
 
-#: libs/ui/tool/kis_tool.cc:696
+#: libs/ui/tool/kis_tool.cc:701
 #, kde-format
 msgid "Local selection is locked."
 msgstr "Lokalt utval er låst."
 
-#: libs/ui/tool/kis_tool_freehand.cc:207
+#: libs/ui/tool/kis_tool_freehand.cc:212
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -32396,7 +32405,7 @@ msgstr ""
 "Penselverktøyet kan ikkje brukast på dette laget. Vel eit teiknelag eller ei "
 "maske."
 
-#: libs/ui/tool/kis_tool_freehand.cc:212
+#: libs/ui/tool/kis_tool_freehand.cc:217
 #: libs/ui/tool/kis_tool_polyline_base.cpp:119
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:167
@@ -34183,18 +34192,18 @@ msgstr "Tittel"
 msgid "No configuration options."
 msgstr "Ingen oppsettsval."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:114
+#: libs/ui/widgets/kis_workspace_chooser.cpp:132
 #, kde-format
 msgid "Insert name"
 msgstr "Set inn namn"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:184
+#: libs/ui/widgets/kis_workspace_chooser.cpp:204
 #, kde-format
 msgid "File name already in use. Saving will overwrite the original Workspace."
 msgstr ""
 "Filnamnet finst frå før. Viss du lagrar, vil du overskriva arbeidsflata."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:185
+#: libs/ui/widgets/kis_workspace_chooser.cpp:205
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:144
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:162
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:137
@@ -34202,17 +34211,17 @@ msgstr ""
 msgid "Overwrite"
 msgstr "Skriv over"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:189
+#: libs/ui/widgets/kis_workspace_chooser.cpp:209
 #, kde-format
 msgid "Save current workspace."
 msgstr "Lagra gjeldande arbeidsflate."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:232
+#: libs/ui/widgets/kis_workspace_chooser.cpp:253
 #, kde-format
 msgid "Window Layout"
 msgstr "Vindaugsutforming"
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:258
+#: libs/ui/widgets/kis_workspace_chooser.cpp:279
 #, kde-format
 msgid ""
 "File name already in use. Saving will overwrite the original window layout."
@@ -34220,7 +34229,7 @@ msgstr ""
 "Filnamnet finst frå før. Viss du lagrar, vil du overskriva "
 "vindaugsutforminga."
 
-#: libs/ui/widgets/kis_workspace_chooser.cpp:261
+#: libs/ui/widgets/kis_workspace_chooser.cpp:282
 #, kde-format
 msgid "Save current window layout."
 msgstr "Lagra gjeldande vindaugsutforming."
@@ -34253,14 +34262,13 @@ msgctxt "Use different black and white points for each channel in auto levels"
 msgid "Adjust per channel contrast"
 msgstr "Juster kontrast per kanal"
 
-# Ordet «klipping» vert brukt i boka «Digital fotografi i praksis» og bør såleis vera gangbar norsk. Sjå forklaring eit par tekstar ned.
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:83
 #, kde-format
 msgctxt ""
-"Percentage of the histogram to clip in the shadous side in auto levels"
+"Percentage of the histogram to clip in the shadows side in auto levels"
 msgid "Shadows clipping:"
-msgstr "Klipping av skuggar:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:90
@@ -38726,24 +38734,24 @@ msgid ""
 msgstr ""
 "Vis det globale utvalet som ei vanleg utvalsmaske i <b>Lag</b>-dokkpanelet"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:315
+#: plugins/dockers/layerdocker/LayerBox.cpp:320
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Storleik på miniatyrbileta"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:343
+#: plugins/dockers/layerdocker/LayerBox.cpp:348
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Treinnrykk"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:366
+#: plugins/dockers/layerdocker/LayerBox.cpp:371
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:368
+#: plugins/dockers/layerdocker/LayerBox.cpp:373
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -38757,43 +38765,43 @@ msgstr ""
 "Balansert: Vis både tettleik og overgangsmodusar viss minst éin er endra.\n"
 "Detaljert: Vis alltid både tettleik og overgangsmodusar."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:373
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:374
+#: plugins/dockers/layerdocker/LayerBox.cpp:379
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:375
+#: plugins/dockers/layerdocker/LayerBox.cpp:380
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:376
+#: plugins/dockers/layerdocker/LayerBox.cpp:381
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:389
+#: plugins/dockers/layerdocker/LayerBox.cpp:394
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:407
+#: plugins/dockers/layerdocker/LayerBox.cpp:412
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "Vis på same linje"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:409
+#: plugins/dockers/layerdocker/LayerBox.cpp:414
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -38801,35 +38809,35 @@ msgid ""
 "If disabled, show below layer names (when enough space)."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:421
+#: plugins/dockers/layerdocker/LayerBox.cpp:426
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:422
+#: plugins/dockers/layerdocker/LayerBox.cpp:427
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:989
+#: plugins/dockers/layerdocker/LayerBox.cpp:994
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Kjapp utvalsmaske"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1011
+#: plugins/dockers/layerdocker/LayerBox.cpp:1016
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Avbryt kjapp utvalsmaske"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1221
+#: plugins/dockers/layerdocker/LayerBox.cpp:1226
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "&Låsar og synlegheit på/av"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1228
-#: plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: plugins/dockers/layerdocker/LayerBox.cpp:1233
+#: plugins/dockers/layerdocker/LayerBox.cpp:1254
 #, kde-format
 msgid "&Add"
 msgstr "&Legg til"
@@ -42326,7 +42334,7 @@ msgstr "Dublin Core"
 #. i18n: ectx: property (text), widget (QCheckBox, exif)
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:162
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:274
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:880
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:883
 #: plugins/impex/webp/kis_wdg_options_webp.ui:812
 #: plugins/metadata/exif/kis_exif_io.h:28
 #, kde-format
@@ -43862,7 +43870,6 @@ msgstr "Iris"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #. i18n: ectx: property (text), widget (QLabel, labelShape)
-#. i18n: ectx: property (text), widget (QLabel, labeShape)
 #: plugins/filters/blur/wdg_lens_blur.ui:33 plugins/filters/blur/wdgblur.ui:46
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:129
 #: plugins/filters/wavefilter/wdgwaveoptions.ui:238
@@ -46381,9 +46388,9 @@ msgstr "Sinusbølgje"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:38
 #, kde-format
-msgctxt "Screentone Pattern - Trianular Wave Lines"
+msgctxt "Screentone Pattern - Triangular Wave Lines"
 msgid "Triangular Wave"
-msgstr "Trekantbølgje"
+msgstr ""
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:39
 #, kde-format
@@ -46910,7 +46917,7 @@ msgstr "Kroma:"
 #. i18n: ectx: property (title), widget (QGroupBox, conversionSettings)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: plugins/impex/heif/WdgHeifExport.ui:57
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:247
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:250
 #, kde-format
 msgid "Conversion settings"
 msgstr "Innstillingar for formatomgjering"
@@ -46929,14 +46936,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, spaceLabel)
 #: plugins/impex/heif/WdgHeifExport.ui:79
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:266
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:269
 #, kde-format
 msgid "Space:"
 msgstr "Fargerom:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnGamma)
 #: plugins/impex/heif/WdgHeifExport.ui:96
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:295
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:298
 #, kde-format
 msgid ""
 "<html><head/><body><p>Display gamma. By default this is 1.2 for converting "
@@ -46947,7 +46954,7 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnNits)
 #: plugins/impex/heif/WdgHeifExport.ui:113
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:312
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:315
 #, kde-format
 msgid ""
 "<html><head/><body><p>The display brightness in nits. By default this is set "
@@ -46959,7 +46966,7 @@ msgstr ""
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (toolTip), widget (QGroupBox, chkHLGOOTF)
 #: plugins/impex/heif/WdgHeifExport.ui:129
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:276
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:279
 #, kde-format
 msgid ""
 "<html><head/><body><p>Hybrid Log Gamma needs an extra conversion step in "
@@ -46975,7 +46982,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (title), widget (QGroupBox, chkHLGOOTF)
 #: plugins/impex/heif/WdgHeifExport.ui:132
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:279
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:282
 #, kde-format
 msgid "Apply reverse Hybrid Log Gamma OOTF"
 msgstr "Bruk invers hybrid log-gamma-OOTF"
@@ -47280,7 +47287,7 @@ msgstr "Optimer"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:268
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:874
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:877
 #: plugins/impex/webp/kis_wdg_options_webp.ui:806
 #, kde-format
 msgid "Formats:"
@@ -47288,14 +47295,14 @@ msgstr "Format:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, iptc)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:284
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:887
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:890
 #, kde-format
 msgid "IPTC"
 msgstr "IPTC"
 
 #. i18n: ectx: property (text), widget (QCheckBox, xmp)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:294
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:894
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:897
 #: plugins/impex/webp/kis_wdg_options_webp.ui:819
 #: plugins/metadata/xmp/kis_xmp_io.h:26
 #, kde-format
@@ -47316,7 +47323,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, chkMetadata)
 #. i18n: ectx: property (text), widget (QCheckBox, chkMetaData)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:336
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:863
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:866
 #: plugins/impex/webp/kis_wdg_options_webp.ui:797
 #, kde-format
 msgid "Store Document Metadata"
@@ -47342,7 +47349,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuthor)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:358
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:918
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:921
 #, kde-format
 msgid "Sign with Author Profile Data"
 msgstr "Signer med forfattarprofil"
@@ -47436,10 +47443,10 @@ msgstr "8 × 8-nedsampling"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:100
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:108
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:128
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:460
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:654
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:706
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:822
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:463
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:657
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:709
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:825
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (encoder chooses)"
@@ -47665,14 +47672,20 @@ msgstr "Lagra som animert JPEG XL"
 msgid "Encoding options"
 msgstr "Kodingsval"
 
-#. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
+#. i18n: ectx: property (toolTip), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
+#, kde-format
+msgid "If this is not enabled, the image will be saved losslessly."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:59
 #, kde-format
 msgid "Lossy encoding"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblHighQual)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:74
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:77
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:24
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
 #, kde-format
@@ -47680,7 +47693,7 @@ msgid "High"
 msgstr "Høg"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, lossyQuality)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:88
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:91
 #, kde-format
 msgid ""
 "Set the lossy quality of JPEG-XL export.\n"
@@ -47688,7 +47701,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowQual)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:104
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:107
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:24
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
 #, kde-format
@@ -47696,7 +47709,7 @@ msgid "Low"
 msgstr "Låg"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, forceModular)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:115
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:118
 #, kde-format
 msgid ""
 "Use modular encoding instead of default VarDCT for lossy compression\n"
@@ -47705,34 +47718,34 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceModular)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:118
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:121
 #, kde-format
 msgid "Use modular mode"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:128
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131
 #: plugins/impex/webp/kis_wdg_options_webp.ui:95
 #, kde-format
 msgid "Tradeoff"
 msgstr "Avveging"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFaster)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:137
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:140
 #: plugins/impex/webp/kis_wdg_options_webp.ui:104
 #, kde-format
 msgid "Faster"
 msgstr "Raskare"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSlowerBetter)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:144
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:147
 #: plugins/impex/webp/kis_wdg_options_webp.ui:111
 #, kde-format
 msgid "Slower/Better"
 msgstr "Tregare/betre"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, effort)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:156
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:159
 #, kde-format
 msgid ""
 "Sets encoder effort/speed level without affecting decoding speed.\n"
@@ -47747,25 +47760,25 @@ msgstr ""
 "Standard: squirrel (7)."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:174
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:177
 #, kde-format
 msgid "Decoding speed"
 msgstr "Avkodingsfart"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSlowest)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:183
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:186
 #, kde-format
 msgid "Slowest/Best quality"
 msgstr "Tregast (best kvalitet)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSlowerBetter2)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:190
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:193
 #, kde-format
 msgid "Fastest/Slight quality loss"
 msgstr "Snøggast (litt kvalitetstap)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, decodingSpeed)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:202
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:205
 #, kde-format
 msgid ""
 "Sets the decoding speed tier for the provided options.\n"
@@ -47780,22 +47793,23 @@ msgstr ""
 "Standardverdi er 0."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, flattenLayers)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:233
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:236
 #, kde-format
 msgid ""
-"<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
-"Animated exports are <span style=\" font-weight:600;\">always</span> "
-"flattened regardless of this setting.</p></body></html>"
+"<html><head/><body><p>If this is not enabled, the layers will be rasterized "
+"and saved. However, animated exports are always flattened regardless of this "
+"setting.</p><p>It is advised to leave this option checked for web delivery "
+"and general compatibility with other applications.</p></body></html>"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:236
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:239
 #, kde-format
 msgid "Flatten the image"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:253
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:256
 #, kde-format
 msgid ""
 "Applications like Google Chrome expect HDR images to store their color "
@@ -47803,20 +47817,20 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:342
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:345
 #, kde-format
 msgid "Encoder parameters"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:348
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:351
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Color channel resampling"
 msgstr "Resampling av fargekanal"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, resampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:355
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:358
 #, kde-format
 msgid ""
 "Sets resampling option. If enabled, the image's color channels are "
@@ -47827,13 +47841,13 @@ msgstr ""
 "nedsampla før komprimering og oppsampla til opphavleg storleik av dekodaren."
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:362
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:365
 #, kde-format
 msgid "Alpha channel resampling"
 msgstr "Resampling av alfakanal"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, extraChannelResampling)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:369
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:372
 #, kde-format
 msgid ""
 "Sets resampling option. If enabled, the image's alpha channel is downsampled "
@@ -47843,14 +47857,14 @@ msgstr ""
 "nedsampla før komprimering og oppsampla til opphavleg storleik av dekodaren."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:376
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:379
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Photon noise"
 msgstr "Fotonstøy"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, photonNoise)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:391
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:394
 #, kde-format
 msgid ""
 "Adds noise to the image emulating photographic film noise, the higher the "
@@ -47865,45 +47879,45 @@ msgstr ""
 "Standardverdien er 0."
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:401
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:404
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Generate dots"
 msgstr "Generer prikkar"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, dots)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:408
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:411
 #, kde-format
 msgid "Enables or disables dots generation."
 msgstr "Slå på eller av generering av prikkar."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:415
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:418
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Generate patches"
 msgstr "Generer flekkar"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patches)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:422
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:425
 #, kde-format
 msgid "Enables or disables patches generation."
 msgstr "Slå på eller av generering av flekkar."
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:429
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:432
 #, kde-format
 msgid "Edge preserving filter"
 msgstr "Filter for kantbevaring"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMax)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:450
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:453
 #, kde-format
 msgid "Maximum strength"
 msgstr "Maksstyrke"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:467
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:470
 #, kde-format
 msgid ""
 "Edge preserving filter level, -1 to 3. Use -1 for the default (encoder "
@@ -47913,39 +47927,39 @@ msgstr ""
 "(kodaren vel sjølv) eller 0–3 for å velja filterstyrke."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:482
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:485
 #, kde-format
 msgid "Enables or disables the gaborish filter."
 msgstr "Slå på eller av gaborish-filter."
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:489
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:492
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
 msgstr "Gaborish-filter"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:496
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:499
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular encoding"
 msgstr "Modulær koding"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modular)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:503
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:506
 #, kde-format
 msgid "Enables modular encoding."
 msgstr "Slå på eller av modulær koding."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, keepInvisible)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:510
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:513
 #, kde-format
 msgid "Enables or disables preserving color of invisible pixels."
 msgstr "Ta vare på eller forkast fargen til usynlege pikslar."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, groupOrder)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:517
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:520
 #, kde-format
 msgid ""
 "Determines the order in which 256x256 regions are stored in the codestream "
@@ -47955,41 +47969,41 @@ msgstr ""
 "kodestraumen, for progressiv vising."
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:527
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:530
 #, kde-format
 msgid "Keep color of invisible pixels"
 msgstr "Ta vare på fargen til usynlege pikslar"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:534
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:537
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group order"
 msgstr "Gruppe­rekkjefølgje"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:541
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:544
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Chroma-from-luma"
 msgstr "Kroma frå luma"
 
 #. i18n: ectx: attribute (title), widget (QWidget, varDCTParameters)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:549
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:552
 #, kde-format
 msgid "VarDCT parameters"
 msgstr "VarDCT-parametrar"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:555
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:558
 #, kde-format
 msgid "Spectral progression"
 msgstr "Spektral progresjon"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveAC)
 #. i18n: ectx: property (toolTip), widget (QComboBox, qProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:562
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:579
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:565
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:582
 #, kde-format
 msgid ""
 "Set the progressive mode for the AC coefficients of VarDCT, using spectral "
@@ -48000,49 +48014,49 @@ msgstr ""
 
 # Er ikkje berre snakk om fargeredusering her, med kvantisering generelt.
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:572
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:575
 #, kde-format
 msgid "Quantization"
 msgstr "Kvantisering"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveDC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:586
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:589
 #, kde-format
 msgid "Low resolution DC"
 msgstr "DC med låg oppløysing"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveDC)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:593
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:596
 #, kde-format
 msgid "Set the progressive mode using lower-resolution DC images for VarDCT."
 msgstr "Fastset progressiv modus for VarDCT med DC-bilete i låg oppløysing."
 
 #. i18n: ectx: attribute (title), widget (QWidget, modularEncodingParameters)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:601
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:604
 #, kde-format
 msgid "Modular parameters"
 msgstr "Parametrar for modulær koding"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResponsive)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:607
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:610
 #, kde-format
 msgid "Progressive encoding"
 msgstr "Progressiv koding"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, responsive)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:614
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:617
 #, kde-format
 msgid "Enables or disables progressive encoding for modular mode."
 msgstr "Slå på eller av progressiv koding for modulærmodus."
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGlobalPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:621
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:624
 #, kde-format
 msgid "Global channel palette range"
 msgstr "Grense for global kanalpalett"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGlobalPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:632
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:635
 #, kde-format
 msgid ""
 "Use Global channel palette if the amount of colors is smaller than this "
@@ -48057,13 +48071,13 @@ msgstr ""
 "Brukt ved modulær koding."
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:673
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:676
 #, kde-format
 msgid "Local channel palette range"
 msgstr "Grense for lokal kanalpalett"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:684
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:687
 #, kde-format
 msgid ""
 "Use Local (per-group) channel palette if the amount of colors is smaller "
@@ -48078,13 +48092,13 @@ msgstr ""
 "Brukt ved modulær koding."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:725
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:728
 #, kde-format
 msgid "Use color palette for ... colors or less"
 msgstr "Bruk fargepalett for … eller færre fargar"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, paletteColors)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:739
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:742
 #, kde-format
 msgid ""
 "Use color palette if amount of colors is smaller than or equal to this "
@@ -48096,52 +48110,52 @@ msgstr ""
 "Brukt ved modulær koding."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:761
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:764
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Delta palette"
 msgstr "Delta-palett"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, lossyPalette)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:768
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:771
 #, kde-format
 msgid "Enables or disables delta palette. Used in modular mode."
 msgstr "Slå på/av bruk av deltapalett. Brukt ved modulær koding."
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:775
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:778
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group size"
 msgstr "Gruppestorleik"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modularGroupSize)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:782
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:785
 #, kde-format
 msgid "Group size for modular encoding."
 msgstr "Gruppestorleik for modulær koding."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modularPredictor)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:789
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:792
 #, kde-format
 msgid "Predictor for modular encoding."
 msgstr "Prediktor for modulærkoding."
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:796
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:799
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Predictor"
 msgstr "Prediktor"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularMATreeLearningPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:803
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:806
 #, kde-format
 msgid "Pixels for MA tree learning"
 msgstr "Pikslar for MA-trelæring"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, modularMATreeLearningPercent)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:831
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:834
 #, kde-format
 msgid ""
 "Fraction of pixels used to learn MA trees as a percentage.\n"
@@ -48154,7 +48168,7 @@ msgstr ""
 "Høgare verdiar brukar meir minne ved koding."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:904
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:907
 #, kde-format
 msgctxt "JPEG-XL metadata options"
 msgid "Filters:"
@@ -52036,7 +52050,7 @@ msgid "Build up"
 msgstr "Oppbygging"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
-#. i18n: ectx: property (text), item, widget (QComboBox, buidupModeComboBox)
+#. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:43
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2073
 #, kde-format
@@ -54838,6 +54852,11 @@ msgstr ""
 msgid "Role"
 msgstr "Rolle"
 
+# Dei som har utvikla Krita.
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:366
+msgid "Authors"
+msgstr "Opphavspersonar"
+
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
 msgid ""
 "The name of the company, group or person who is responsible for the final "
@@ -56898,7 +56917,7 @@ msgstr ""
 "«Alt» + dra vil flytta startpunktet til den viste linja, mens «Shift» + dra "
 "vil tvinga gjennom rette linjer."
 
-#: plugins/tools/basictools/kis_tool_line.h:113
+#: plugins/tools/basictools/kis_tool_line.h:115
 #, kde-format
 msgid "Line Tool"
 msgstr "Linjer"
@@ -59786,7 +59805,7 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Transformer eit lag eller utval"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:143
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:144
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:58
 msgctxt "(qtundo-format)"
 msgid "Transform"
@@ -60099,7 +60118,7 @@ msgctxt "Amount of transformation"
 msgid "Amount:"
 msgstr "Mengd:"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, buidupModeComboBox)
+#. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2068
 #, kde-format
 msgid "Build Up"

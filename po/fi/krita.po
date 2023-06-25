@@ -89,7 +89,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-04-20 12:33+0300\n"
+"PO-Revision-Date: 2023-06-06 19:55+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -98,7 +98,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2013-01-13 22:09:51+0000\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7319,11 +7319,11 @@ msgstr "Ruohikko"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/grass_patch.gih:1
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/grass_patch.gih"
 msgid "Grass Patch"
-msgstr "Alku"
+msgstr "Ruohopaikka"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/hearts.gih:1
@@ -16543,10 +16543,9 @@ msgid "Path options"
 msgstr "Läikkien asetukset"
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:549
-#, fuzzy, kde-format
-#| msgid "Use custom curve"
+#, kde-format
 msgid "Autosmooth curve"
-msgstr "Käytä omaa kaarta"
+msgstr "Pehmennä käyrä automaattisesti"
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:553
 #, fuzzy, kde-format
@@ -16963,7 +16962,7 @@ msgstr "tallennus HTML:ksi epäonnistui"
 #: libs/flake/html/HtmlWriter.cpp:84
 #, kde-format
 msgid "Cannot save %1 to html"
-msgstr ""
+msgstr "%1: ei voida tallentaa HTML:ksi"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:123
@@ -20413,6 +20412,8 @@ msgid ""
 "The resource database scheme has changed. Krita will backup your database "
 "and create a new database."
 msgstr ""
+"Resurssin tietokantamalli on muuttunut. Krita varmuuskopioi tietokannan ja "
+"luo uuden."
 
 #: libs/resources/KisResourceLocator.cpp:91
 #, fuzzy, kde-format
@@ -20423,7 +20424,7 @@ msgstr "Ei voitu luoda tiedostoa tallennettavaksi"
 #: libs/resources/KisResourceLocator.cpp:98
 #, kde-format
 msgid "2. The resource location at %1 is not writable."
-msgstr ""
+msgstr "2. Resurssin sijaintiin %1 ei voi kirjoittaa."
 
 #: libs/resources/KisResourceLocator.cpp:817
 #, fuzzy, kde-format
@@ -20441,7 +20442,7 @@ msgstr "Pakettia ei voitu poistaa mustalta listalta"
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
-msgstr ""
+msgstr "Krita on käynnistetty ensi kertaa. Valmistelu vie hetken."
 
 #: libs/resources/KisResourceLocator.cpp:980
 #, fuzzy, kde-format
@@ -20496,7 +20497,7 @@ msgstr ""
 #: libs/resources/KisResourceModel.cpp:127
 #, kde-format
 msgid "Storage ID"
-msgstr ""
+msgstr "Talletustunniste"
 
 #: libs/resources/KisResourceModel.cpp:129
 #: libs/resources/KisStorageModel.cpp:429
@@ -20559,7 +20560,7 @@ msgstr "Kuville"
 #: libs/resources/KisResourceModel.cpp:147
 #, kde-format
 msgid "md5sum"
-msgstr ""
+msgstr "MD5-summa"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
@@ -21116,13 +21117,13 @@ msgstr "Muuta tunnisteen nimeä"
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
-msgstr ""
+msgstr "Mukautettuihin luokituksiin ei voi käyttää tätä nimeä."
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:153
 #, kde-format
 msgctxt "Dialog title"
 msgid "Remove existing tag with that name?"
-msgstr ""
+msgstr "Poistetaanko saman niminen olemassa oleva luokitus?"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:155
 #, kde-format
@@ -21136,6 +21137,10 @@ msgid ""
 "Tag to be removed: %1\n"
 "Tag's unique name: %2"
 msgstr ""
+"Saman niminen luokitus on jo olemassa. Jotta nimen muuttamista voi jatkaa, "
+"olemassa oleva luokitus on poistettava. Haluatko jatkaa?\n"
+"Poistettava luokitus: %1\n"
+"Luokituksen ainutkertainen nimi: %2"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:261
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
@@ -21385,6 +21390,8 @@ msgid ""
 "%1 requires width and height to be even numbers.  Please resize or crop the "
 "image before exporting."
 msgstr ""
+"%1 vaatii, että leveys ja korkeus ovat parillisia lukuja. Muuta kuvan kokoa "
+"tai rajaa se ennen vientiä."
 
 #: libs/ui/animation/KisAnimationRender.cpp:47
 #: libs/ui/animation/KisAnimationRender.cpp:99
@@ -21656,13 +21663,14 @@ msgctxt "part of warning in video importer."
 msgid ""
 "WARNING, you are trying to import %1 frames, the maximum amount you can "
 "import is %2."
-msgstr ""
+msgstr "VAROITUS: yrität tuoda %1 kuvaa, mutta enin tuotava määrä on %2."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:513
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
 msgstr ""
+"Käytä mieluummin <a href=\"https://kdenlive.org/\">videomuokkainta</a>!"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:519
 #, kde-format
@@ -21670,14 +21678,14 @@ msgctxt "part of warning in video importer."
 msgid ""
 "You do not have enough memory to load this many frames, the computer will be "
 "overloaded."
-msgstr ""
+msgstr "Muisti ei riitä näin monen kuvan lataamiseen: tietokone ylikuormittuu."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:526
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "This will take over half the available memory, editing will be difficult."
-msgstr ""
+msgstr "Tämä vie puolet saatavilla olevasta muistista: muokkaus vaikeutuu."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:535
 #, fuzzy, kde-format
@@ -21717,7 +21725,7 @@ msgstr "Osoite on virheellinen"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:607
 #, kde-format
 msgid "No FFMpeg found!"
-msgstr ""
+msgstr "FFMpegiä ei löytynyt!"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:676
 #, fuzzy, kde-format
@@ -21747,7 +21755,7 @@ msgstr "FF&Mpeg"
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
-msgstr ""
+msgstr "Ladataan videotietoa… %1 kuvaa tutkittu."
 
 #: libs/ui/animation/KisVideoSaver.cpp:52
 #, fuzzy, kde-format
@@ -21759,7 +21767,7 @@ msgstr "Tiedostoa %1 ei löytynyt"
 #, kde-format
 msgctxt "Animation export dialog for palette exporting. arg1: file-suffix"
 msgid "Creating palette for %1 file format."
-msgstr ""
+msgstr "Luodaan palettia tiedostomuodolle %1."
 
 #: libs/ui/animation/KisVideoSaver.cpp:196
 #, kde-format
@@ -21767,7 +21775,7 @@ msgctxt ""
 "Animation export dialog for tracking ffmpeg progress. arg1: file-suffix, "
 "arg2: progress frame number, arg3: totalFrameCount."
 msgid "Creating desired %1 file: %2/%3 frames."
-msgstr ""
+msgstr "Luodaan haluttua %1-tiedostoa: %2/%3 kuvaa."
 
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH264)
 #. i18n: ectx: property (text), widget (QLabel, lblCRFH265)
@@ -21836,7 +21844,7 @@ msgstr "Vaihtoehtoinen:"
 #: libs/ui/animation/video_export_options_dialog.ui:168
 #, kde-format
 msgid "Bitrate (MBit/s)"
-msgstr ""
+msgstr "Bittinopeus (Mbit/s)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
@@ -21980,13 +21988,13 @@ msgstr "Alusta"
 msgctxt ""
 "theora codec name, check simplescreenrecorder for standard translations"
 msgid "Theora"
-msgstr ""
+msgstr "Theora"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:28
 #, kde-format
 msgctxt "VP9 codec name"
 msgid "VP9"
-msgstr ""
+msgstr "VP9"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:31
 #, kde-format
@@ -21998,13 +22006,13 @@ msgstr "GIF"
 #, kde-format
 msgctxt "APNG codec name"
 msgid "APNG"
-msgstr ""
+msgstr "APNG"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:37
 #, kde-format
 msgctxt "WEBP codec name"
 msgid "WEBP"
-msgstr ""
+msgstr "WebP"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:40
 #, fuzzy, kde-format
@@ -22349,27 +22357,25 @@ msgstr "Taso"
 #, kde-format
 msgctxt "paleteuse dither option name"
 msgid "floyd_steinberg"
-msgstr ""
+msgstr "floyd_steinberg"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Qbert"
+#, kde-format
 msgctxt "paleteuse dither option name"
 msgid "heckbert"
-msgstr "Qbert"
+msgstr "heckbert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:107
-#, fuzzy, kde-format
-#| msgid "Terra"
+#, kde-format
 msgctxt "paleteuse dither option name"
 msgid "sierra2"
-msgstr "Maa"
+msgstr "sierra2"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:108
 #, kde-format
 msgctxt "paleteuse dither option name"
 msgid "sierra2_4a"
-msgstr ""
+msgstr "sierra2_4a"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:110
 #, kde-format
@@ -22405,12 +22411,12 @@ msgstr "HDR-metatiedot ovat käytettävissä vain ”main10”-profiilissa"
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:26
 #, kde-format
 msgid "Rec. 2100 PQ"
-msgstr ""
+msgstr "Rec. 2100 PQ"
 
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:27
 #, kde-format
 msgid "DCI-P3 D65"
-msgstr ""
+msgstr "DCI-P3 D65"
 
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:28
 #: plugins/paintops/mypaint/MyPaintBrushOption.h:38
@@ -22516,7 +22522,7 @@ msgstr "Luminanssi:"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:207
 #, kde-format
 msgid " cd/m²"
-msgstr ""
+msgstr " cd/m²"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:252
@@ -22530,13 +22536,13 @@ msgstr "Luminanssi:"
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:293
 #, kde-format
 msgid "MaxCLL:"
-msgstr ""
+msgstr "MaxCLL:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:310
 #, kde-format
 msgid "MaxFALL:"
-msgstr ""
+msgstr "MaxFALL:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, VideoImportDialog)
 #: libs/ui/animation/VideoImportDialog.ui:24
@@ -22876,7 +22882,7 @@ msgstr "FF&Mpeg"
 #: libs/ui/animation/VideoImportDialog.ui:674
 #, kde-format
 msgid "FFProbe Path:"
-msgstr ""
+msgstr "FFProben sijainti:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimaterionRenderer)
 #: libs/ui/animation/wdg_animationrenderer.ui:24
@@ -22960,11 +22966,9 @@ msgstr "Kierto:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIncludeAudio)
 #: libs/ui/animation/wdg_animationrenderer.ui:309
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Open and edit"
+#, kde-format
 msgid "Include Audio"
-msgstr "Avaa ja muokkaa"
+msgstr "Sisällytä ääni"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #: libs/ui/animation/wdg_animationrenderer.ui:318
@@ -23570,7 +23574,7 @@ msgstr "<html><head/><body><p>Toiminnon kuvaus</p></body></html>"
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:67
 #, kde-format
 msgid "cd/m²"
-msgstr ""
+msgstr "cd/m²"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:45
 #, kde-format
@@ -24537,7 +24541,7 @@ msgstr "Tallenna sivellinasetus"
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:133
 #, kde-format
 msgid "Preset Icon Library"
-msgstr ""
+msgstr "Esiasetettu kuvakekirjasto"
 
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.cpp:32
 #, kde-format
@@ -29169,9 +29173,9 @@ msgid "Selects a layer under cursor position"
 msgstr "Muuta kohdistimen sijaintia napsauttamalla."
 
 #: libs/ui/input/kis_select_layer_action.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select Layer Mode"
-msgstr "Kiertotilan käyttö"
+msgstr "Valitse tasotila"
 
 #: libs/ui/input/kis_select_layer_action.cpp:41
 #, fuzzy, kde-format
@@ -29344,32 +29348,32 @@ msgstr "Kierrä sävyä"
 #: libs/ui/input/kis_shortcut_configuration.cpp:445
 #, kde-format
 msgid "Smart Zoom Gesture"
-msgstr ""
+msgstr "Älykäs lähennysele"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:448
 #, kde-format
 msgid "One Finger Tap"
-msgstr ""
+msgstr "Yhden sormen napautus"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:450
 #, kde-format
 msgid "Two Finger Tap"
-msgstr ""
+msgstr "Kahden sormen napautus"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:452
 #, kde-format
 msgid "Three Finger Tap"
-msgstr ""
+msgstr "Kolmen sormen napautus"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:454
 #, kde-format
 msgid "Four Finger Tap"
-msgstr ""
+msgstr "Neljän sormen napautus"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:456
 #, kde-format
 msgid "Five Finger Tap"
-msgstr ""
+msgstr "Viiden sormen napautus"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:458
 #, fuzzy, kde-format
@@ -29380,22 +29384,22 @@ msgstr "Napsautusveto"
 #: libs/ui/input/kis_shortcut_configuration.cpp:460
 #, kde-format
 msgid "Two Finger Drag"
-msgstr ""
+msgstr "Kahden sormen veto"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:462
 #, kde-format
 msgid "Three Finger Drag"
-msgstr ""
+msgstr "Kolmen sormen veto"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:464
 #, kde-format
 msgid "Four Finger Drag"
-msgstr ""
+msgstr "Neljän sormen veto"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:466
 #, kde-format
 msgid "Five Finger Drag"
-msgstr ""
+msgstr "Viiden sormen veto"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:469
 #, fuzzy, kde-format
@@ -29407,17 +29411,17 @@ msgstr "Ele"
 #: libs/ui/input/kis_tablet_debugger.cpp:97
 #, kde-format
 msgid "Tablet Event Logging Enabled"
-msgstr ""
+msgstr "Tablettitapahtumaloki käytössä"
 
 #: libs/ui/input/kis_tablet_debugger.cpp:98
 #, kde-format
 msgid "Tablet Event Logging Disabled"
-msgstr ""
+msgstr "Tablettitapahtumaloki ei käytössä"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tool Invocation"
-msgstr "Työkalun tiedot"
+msgstr "Työkalun kutsu"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:38
 #, kde-format
@@ -38492,10 +38496,9 @@ msgstr "Minimaalinen sävyvalitsin"
 
 #. i18n: ectx: property (text), widget (QRadioButton, minimalShadeSelectorAsColorPatches)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:604
-#, fuzzy, kde-format
-#| msgid "Color Patches"
+#, kde-format
 msgid "Colo&r Patches"
-msgstr "Väriläikät"
+msgstr "&Väripaikat"
 
 #. i18n: ectx: property (text), widget (QRadioButton, minimalShadeSelectorAsGradient)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:611
@@ -38518,9 +38521,9 @@ msgstr "Rivin korkeus:"
 
 #. i18n: ectx: property (text), widget (QLabel, patchesPerLineLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:690
-#, fuzzy, kde-format
+#, kde-format
 msgid "Patches Per Line: "
-msgstr "Läikkiä rivillä:"
+msgstr "Paikkoja rivillä: "
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_ColorHistory)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:734
@@ -38540,15 +38543,15 @@ msgstr "Näytä väri&historia"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:986
 #, kde-format
 msgid "Patch Options"
-msgstr "Läikkien asetukset"
+msgstr "Paikkojen valinnat"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:800
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1035
-#, fuzzy, kde-format
+#, kde-format
 msgid "Max Patches: "
-msgstr "Läikkiä enintään:"
+msgstr "Paikkoja enintään:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
@@ -39801,10 +39804,9 @@ msgid "Enable Cumulative Undo"
 msgstr "Käytä kasautuvaa kumoamista"
 
 #: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:30
-#, fuzzy, kde-format
-#| msgid "Start recording macro"
+#, kde-format
 msgid "Start merging time"
-msgstr "Käynnistä makron tallennus"
+msgstr "Aloita yhdistämisaika"
 
 #: plugins/dockers/historydocker/DlgConfigureHistoryDock.cpp:32
 #, kde-format
@@ -40695,7 +40697,7 @@ msgstr "Valmis!"
 #, kde-format
 msgctxt "Watch the video which is just created"
 msgid "Watch it!"
-msgstr ""
+msgstr "Katso se!"
 
 #. i18n: ectx: property (text), widget (QLabel, labelWritten)
 #: plugins/dockers/recorder/recorder_export.ui:940
@@ -40982,6 +40984,8 @@ msgid ""
 "⚠ Unsupported color space.\n"
 "Only \"RGB/Alpha 8-bit\" is supported."
 msgstr ""
+"⚠ Ei-tuettu väriavaruus.\n"
+"Vain ”RGB/alfa 8-bittinen\" on tuettu."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:103
 #, kde-format
@@ -41056,7 +41060,7 @@ msgstr "Kirjaa"
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
-msgstr ""
+msgstr "REC"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:205
 #, fuzzy, kde-format
@@ -41577,7 +41581,7 @@ msgstr "Poista tämä tunniste"
 #: plugins/dockers/throttle/ThrottlePlugin.h:23
 #, kde-format
 msgid "CPU Throttle"
-msgstr ""
+msgstr "Suoritinrajoitus"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:86
 #, fuzzy, kde-format
@@ -43201,13 +43205,13 @@ msgstr "Python-kirjastoa ei voi ladata"
 #: plugins/extensions/pykrita/plugin/plugin.cpp:36
 #, kde-format
 msgid "Cannot set Python paths"
-msgstr ""
+msgstr "Pythonin hakupolkuja ei voi asettaa"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:79
 #: plugins/extensions/pykrita/plugin/plugin.cpp:39
 #, kde-format
 msgid "Cannot load built-in pykrita module"
-msgstr ""
+msgstr "Sisään rakennettua pykrita-moduulia ei voi ladata"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:82
 #: plugins/extensions/pykrita/plugin/plugin.cpp:42
@@ -43335,7 +43339,7 @@ msgstr "Skriptivirhe"
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:29
 #, kde-format
 msgid "An exception occurred while running the script."
-msgstr ""
+msgstr "Skriptiä ajettaessa sattui poikkeus."
 
 #. i18n: ectx: property (text), widget (QLabel, exceptionLabel)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:42
@@ -43379,7 +43383,7 @@ msgstr "Ctrl+R"
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:84
 #, kde-format
 msgid "Run script in &console"
-msgstr ""
+msgstr "S&uorita skripti konsolissa"
 
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:87
@@ -43477,7 +43481,7 @@ msgstr ""
 #: plugins/extensions/pykrita/plugin/manager.ui:43
 #, kde-format
 msgid "Error: The Python engine could not be initialized"
-msgstr ""
+msgstr "Virhe: Python-moottoria ei voitu alustaa"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/pykrita/plugin/manager.ui:75
@@ -43549,7 +43553,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Internal engine failure"
-msgstr ""
+msgstr "Moottorin sisäinen virhe"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:369
 #, fuzzy, kde-format
@@ -45422,7 +45426,7 @@ msgstr "Edusta"
 #: plugins/filters/halftone/KisHalftoneConfigWidget.cpp:37
 #, kde-format
 msgid "Independent Channels"
-msgstr ""
+msgstr "Riippumattomat kanavat"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
@@ -45555,9 +45559,9 @@ msgstr "Värien määrä:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, indexingBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:170
-#, fuzzy, kde-format
+#, kde-format
 msgid "Indexing Factors"
-msgstr "Värit"
+msgstr "Indeksointitekijät"
 
 #. i18n: ectx: property (title), widget (QGroupBox, otherBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
@@ -45890,9 +45894,9 @@ msgstr "Säännöllinen"
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:112
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:213
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:286
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reflectivity:"
-msgstr "&Vallitseva valo"
+msgstr "Heijastavuus:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpecularShinyExp)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:138
@@ -45984,9 +45988,9 @@ msgstr ""
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:595
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:697
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:796
-#, fuzzy, kde-format
+#, kde-format
 msgid "Inclination:"
-msgstr "&Resoluutio:"
+msgstr "Kaltevuus:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lightSourceGroupBox2)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:526
@@ -46615,13 +46619,13 @@ msgstr "Osuus (%) korkeudesta"
 #, kde-format
 msgctxt "The position will be a percentage of the longest image side"
 msgid "Percent of the Longest Side"
-msgstr ""
+msgstr "Pisimmän sivun osuus"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:48
 #, kde-format
 msgctxt "The position will be a percentage of the shortest image side"
 msgid "Percent of the Shortest Side"
-msgstr ""
+msgstr "Lyhimmän sivun osuus"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:51
 #, kde-format
@@ -46918,7 +46922,7 @@ msgstr " kuvapistettä/cm"
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
-msgstr ""
+msgstr " viivaa tuumalla"
 
 # Konteksti on sisällysluettelon sisennys.
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:473
@@ -47148,12 +47152,12 @@ msgstr "Sinimuotoinen"
 #: plugins/generators/seexpr/generator.cpp:72
 #, kde-format
 msgid "&SeExpr..."
-msgstr ""
+msgstr "SeE&xpr…"
 
 #: plugins/generators/seexpr/generator.h:52
 #, kde-format
 msgid "SeExpr"
-msgstr ""
+msgstr "SeExpr"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:45
 #, kde-format
@@ -47187,7 +47191,7 @@ msgstr "Kuvan korkeus"
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:359
 #, kde-format
 msgid "Expected this script to output color, got '%1'"
-msgstr ""
+msgstr "Skriptin odotettiin tulostavan värin, saatiin ”%1”"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr_presets_save.cpp:68
 #, fuzzy, kde-format
@@ -47239,10 +47243,9 @@ msgstr "Esiasetuksen nimi:"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadRenderFromScriptButton)
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:126
-#, fuzzy, kde-format
-#| msgid "Thumbnails"
+#, kde-format
 msgid "&Render Script to Thumbnail"
-msgstr "Pienoiskuvat"
+msgstr "&Hahmonna skripti pienoiskuvaksi"
 
 #: plugins/generators/simplexnoise/simplexnoisegenerator.cpp:38
 #, fuzzy, kde-format
@@ -47427,11 +47430,10 @@ msgstr ""
 "näkyvää vaikutusta, mutta asia kannattaa pitää mielessä."
 
 #: plugins/impex/exr/exr_converter.cc:908
-#, fuzzy, kde-format
-#| msgid "This layer cannot be saved to EXR."
+#, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
-msgstr "Tätä tasoa ei voi tallentaa EXR:ksi"
+msgstr "EXR-kuvaa on muutettu"
 
 #: plugins/impex/exr/exr_converter.cc:1323
 #, kde-format
@@ -47485,7 +47487,7 @@ msgstr "Ei voitu lisätä tasoa kuvaan."
 #: plugins/impex/heif/HeifError.cpp:45
 #, kde-format
 msgid "Color profile was not found in the document."
-msgstr ""
+msgstr "Tiedostosta ei löytynyt väriprofiilia."
 
 #: plugins/impex/heif/HeifError.cpp:49
 #, kde-format
@@ -47513,7 +47515,7 @@ msgstr ""
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
-msgstr ""
+msgstr "Sekä kuvan kirkkaus että värikkyys ovat täydessä tarkkuudessa."
 
 #: plugins/impex/heif/HeifExport.cpp:628
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:180
@@ -47603,7 +47605,7 @@ msgstr ""
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
-msgstr ""
+msgstr "Ei muutoksia, rajaa"
 
 #: plugins/impex/heif/HeifExport.cpp:654
 #, kde-format
@@ -47612,6 +47614,8 @@ msgid ""
 "The image will be converted plainly to 12bit integer, and values that are "
 "out of bounds are clipped, the icc profile will be embedded."
 msgstr ""
+"Kuva muunnetaan yksinkertaisesti 12-bittiseksi kokonaisluvuksi, yli rajojen "
+"olevat arvot rajataan ja ICC-profiili upotetaan."
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossySettings)
 #: plugins/impex/heif/WdgHeifExport.ui:21
@@ -47700,7 +47704,7 @@ msgstr ""
 #: plugins/impex/heif/WdgHeifExport.ui:151
 #, kde-format
 msgid "&Lossless"
-msgstr ""
+msgstr "&Häviötön"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMonochromesRGB)
 #: plugins/impex/heif/WdgHeifExport.ui:161
@@ -47737,7 +47741,7 @@ msgstr "Virhe:"
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:105
 #, kde-format
 msgid "Input does not match file size"
-msgstr ""
+msgstr "Syöte ei vastaa tiedostokokoa"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:107
 #, kde-format
@@ -47758,12 +47762,12 @@ msgstr "Määritä korkeus"
 #, kde-format
 msgid "Too many possible combinations. Input a width or height and try again."
 msgstr ""
+"Liikaa mahdollisia yhdistelmiä. Anna leveys tai korkeus ja yritä uudelleen."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:195
-#, fuzzy, kde-format
-#| msgid "Width of image in pixels."
+#, kde-format
 msgid "Width exceeds available pixels."
-msgstr "Kuvan leveys kuvapisteinä."
+msgstr "Leveys ylittää käytettävissä olevat kuvapisteet."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:200
 #, kde-format
@@ -47771,12 +47775,13 @@ msgid ""
 "Unable to calculate an appropriate height. File does not contain enough "
 "pixels to form a rectangle."
 msgstr ""
+"Sopivaa korkeutta ei voitu laskea. Tiedostossa ei ole tarpeeksi kuvapisteitä "
+"nelikulmioksi."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:207
-#, fuzzy, kde-format
-#| msgid "Height of image in pixels."
+#, kde-format
 msgid "Height exceeds available pixels."
-msgstr "Kuvan korkeus kuvapisteinä."
+msgstr "Korkeus ylittää käytettävissä olevat kuvapisteet."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:212
 #, kde-format
@@ -47784,6 +47789,8 @@ msgid ""
 "Unable to calculate an appropriate width. File does not contain enough "
 "pixels to form a rectangle."
 msgstr ""
+"Sopivaa leveyttä ei voitu laskea. Tiedostossa ei ole tarpeeksi kuvapisteitä "
+"nelikulmioksi."
 
 #. i18n: ectx: property (text), widget (QLabel, fileSizeDescLabel)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:33
@@ -47834,6 +47841,8 @@ msgid ""
 "Guess width and height based on file size and bits per pixel. Only values "
 "set to 0 will be updated."
 msgstr ""
+"Arvaa leveys ja korkeus tiedostokoon ja kuvapisteiden bittisyyden "
+"perusteella. Vain 0:ksi asetetut arvot päivitetään."
 
 #. i18n: ectx: property (text), widget (QPushButton, guessButton)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:105
@@ -47904,10 +47913,9 @@ msgstr "Pakota muunnos sRGB:ksi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:88
-#, fuzzy, kde-format
-#| msgid "Transparent color: "
+#, kde-format
 msgid "Transparent pixel fill color:"
-msgstr "Läpinäkyvä väri:"
+msgstr "Läpikuultavan kuvapisteen täyttöväri:"
 
 #. i18n: ectx: property (toolTip), widget (KisColorButton, bnTransparencyFillColor)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:110
@@ -48056,49 +48064,48 @@ msgstr "Profiilia %1 ei voitu ladata."
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "JPEG-XL image is animated, but cannot retrieve animation frame header."
-msgstr ""
+msgstr "JPEG-XL on animoitu, mutta animaation kuvaotsaketta ei voida noutaa."
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:535
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."
-msgstr ""
+msgstr "Animaatio ilmoittaa kuvanopeudeksi yli 240 FPS."
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:32
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (only for low quality)"
-msgstr ""
+msgstr "Oletus (vain huonolle laadulle)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:33
-#, fuzzy, kde-format
-#| msgid "No Scaling"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "No downsampling"
-msgstr "Ei skaalausta"
+msgstr "Ei alaspäin näytteistystä"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:28
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:34
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
-msgstr ""
+msgstr "Alaspäin näytteistys 2 × 2"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:35
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
-msgstr ""
+msgstr "Alaspäin näytteistys 4 × 4"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
-msgstr ""
+msgstr "Alaspäin näytteistys 8 × 8"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
@@ -48160,13 +48167,13 @@ msgstr "Käytössä"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "VarDCT mode (e.g. for photographic images)"
-msgstr ""
+msgstr "VarDCT-tila (esim. valokuville)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:60
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular mode (e.g. for lossless images)"
-msgstr ""
+msgstr "Modulaarinen tila (esim. häviöttömille kuville)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:71
 #, fuzzy, kde-format
@@ -48186,19 +48193,19 @@ msgstr "Keskitetty"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
-msgstr ""
+msgstr "64 × 64 heikkotarkkuuksinen vaihe"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:97
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512x512 + 64x64 lower resolution passes"
-msgstr ""
+msgstr "512 × 512 + 64 × 64 heikkotarkkuuksista vaihetta"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:108
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "128"
-msgstr ""
+msgstr "128"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:109
 #, kde-format
@@ -48210,19 +48217,19 @@ msgstr "256"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512"
-msgstr ""
+msgstr "512"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:111
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "1024"
-msgstr ""
+msgstr "1024"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:116
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Zero"
-msgstr ""
+msgstr "Nolla"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:117
 #, kde-format
@@ -48332,18 +48339,20 @@ msgid ""
 "The image will be stored without conversion, the ICC profile will be "
 "converted to CICP or embedded if it was not possible."
 msgstr ""
+"Kuva tallennetaan muunnoksetta, ICC-profiili muunnetaan CICP:ksi tai "
+"upotetaan, ellei tämä ole mahdollista."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:37
 #, kde-format
 msgid "If this is not enabled, only the first frame will be saved."
-msgstr ""
+msgstr "Ellei tämä ole käytössä, vain ensimmäinen kuva tallennetaan."
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
 #, kde-format
 msgid "Save as animated JPEG-XL"
-msgstr ""
+msgstr "Tallennettu animoiduksi JPEG-XL:ksi"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:47
@@ -48363,7 +48372,7 @@ msgstr "Häviötön koodaus"
 #: plugins/impex/webp/dlg_webp_export.ui:92
 #, kde-format
 msgid "Tradeoff"
-msgstr ""
+msgstr "Tasapaino"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFaster)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:69
@@ -48377,7 +48386,7 @@ msgstr "Nopeampi"
 #: plugins/impex/webp/dlg_webp_export.ui:108
 #, kde-format
 msgid "Slower/Better"
-msgstr ""
+msgstr "Hitaampi/parempi"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, effort)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:88
@@ -48399,16 +48408,15 @@ msgstr "Tallennus"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSlowest)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:115
-#, fuzzy, kde-format
-#| msgid "Advanced Blending"
+#, kde-format
 msgid "Slowest/Best quality"
-msgstr "Laajennettu sekoitus"
+msgstr "Hitain/Paras laatu"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSlowerBetter2)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:122
 #, kde-format
 msgid "Fastest/Slight quality loss"
-msgstr ""
+msgstr "Nopein/Pieni laatuhävikki"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, decodingSpeed)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:134
@@ -48465,7 +48473,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Photon noise"
-msgstr ""
+msgstr "Photon-kohina"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, photonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:334
@@ -48477,6 +48485,11 @@ msgid ""
 "a lot of noise.\n"
 "The default value is 0."
 msgstr ""
+"Lisää kuvaan valokuvafilmin tapaista kohinaa: mitä suurempi luku, sitä "
+"rakeisemmaksi kuva muuttuu.\n"
+"Esimerkiksi arvo 100 aiheuttaa vähäistä kohinaa, arvo 3200 taas "
+"huomattavaa.\n"
+"Oletusarvo on 0."
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:344
@@ -48494,18 +48507,16 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:358
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Reverse paths"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Generate patches"
-msgstr "Käännä polut"
+msgstr "Luo paikkoja"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patches)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:365
 #, kde-format
 msgid "Enables or disables patches generation."
-msgstr ""
+msgstr "Ottaa käyttöön tai poistaa käytöstä paikkojen luonnin."
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:372
@@ -60306,10 +60317,9 @@ msgid "Polyline Tool. Shift-mouseclick ends the polyline."
 msgstr "Murtoviivatyökalu. Vaihto-napsautus päättää murtoviivan."
 
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:133
-#, fuzzy, kde-format
-#| msgid "Select a directory to save the bundle"
+#, kde-format
 msgid "Select a paint layer to use this tool"
-msgstr "Valitse tallennuskansio paketille"
+msgstr "Valitse maalaustaso käyttääksesi tätä työkalua"
 
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:172
 msgctxt "(qtundo-format)"
@@ -60323,18 +60333,15 @@ msgstr "Älykäs paikkaustyökalu"
 
 #. i18n: ectx: property (text), widget (QLabel, Fast)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:27
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste"
+#, kde-format
 msgid "low/fast"
-msgstr "Liitä"
+msgstr "pieni/nopea"
 
 #. i18n: ectx: property (text), widget (QLabel, Accurate)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:50
-#, fuzzy, kde-format
-#| msgid "Flower"
+#, kde-format
 msgid "high/slow"
-msgstr "Kukka"
+msgstr "suuri/hidas"
 
 #. i18n: ectx: property (text), widget (QLabel, Fast_2)
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:98
@@ -61041,12 +61048,10 @@ msgstr "&Väritä"
 #. i18n: context: iconText @ Action (KritaShape/KisToolSmartPatch), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:46 plugins/tools/tools.action:48
 #: plugins/tools/tools.action:49
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Path Tool"
+#, kde-format
 msgctxt "action"
 msgid "Smart Patch Tool"
-msgstr "Polkutyökalu"
+msgstr "Älykäs paikkaustyökalu"
 
 #. i18n: context: text @ Action (PanTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (PanTool), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -61056,12 +61061,10 @@ msgstr "Polkutyökalu"
 #. i18n: context: iconText @ Action (PanTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:55 plugins/tools/tools.action:57
 #: plugins/tools/tools.action:58
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Path Tool"
+#, kde-format
 msgctxt "action"
 msgid "Pan Tool"
-msgstr "Polkutyökalu"
+msgstr "Panorointityökalu"
 
 #. i18n: context: text @ Action (InteractionTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (InteractionTool), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -61071,16 +61074,14 @@ msgstr "Polkutyökalu"
 #. i18n: context: iconText @ Action (InteractionTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:64 plugins/tools/tools.action:66
 #: plugins/tools/tools.action:67
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Select Shapes Tool"
-msgstr "Valitse läpinäkymätön"
+msgstr "Kuvionvalintatyökalu"
 
 #. i18n: context: toolTip @ Action (KritaSelected/KisToolColorSampler), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:76
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select a color from the image or current layer"
+#, kde-format
 msgctxt "action"
 msgid "Sample a color from the image or current layer"
 msgstr "Valitse väri kuvasta tai nykyiseltä tasolta"

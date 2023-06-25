@@ -23399,7 +23399,7 @@ msgstr "<html><head/><body><h1 align=\"center\">Creado por</h1></p><p>"
 #, kde-format
 msgctxt "Heading for the list of Krita authors/developers"
 msgid "Authors"
-msgstr "Autores"
+msgstr "Autoría"
 
 #: libs/ui/dialogs/kis_about_application.cpp:71
 #, fuzzy, kde-format
@@ -56342,7 +56342,7 @@ msgstr "Rol"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:366
 msgid "Authors"
-msgstr "Autores"
+msgstr "Autoría"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
 msgid ""

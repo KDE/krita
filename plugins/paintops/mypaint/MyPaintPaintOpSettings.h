@@ -37,6 +37,8 @@ public:
     bool paintIncremental() override;
     void resetSettings(const QStringList &preserveProperties = QStringList()) override;
 
+    void onPropertyChanged() override;
+
 private:
     Q_DISABLE_COPY(KisMyPaintOpSettings)
 

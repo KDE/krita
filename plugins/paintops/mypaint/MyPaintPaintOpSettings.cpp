@@ -12,6 +12,9 @@
 
 struct KisMyPaintOpSettings::Private
 {
+    bool cachedProperties{false};
+    qreal paintOpSize;
+    qreal offsetValue;
 };
 
 
@@ -37,9 +40,7 @@ void KisMyPaintOpSettings::setPaintOpSize(qreal value)
 
 qreal KisMyPaintOpSettings::paintOpSize() const
 {
-    MyPaintRadiusLogarithmicData data;
-    data.read(this);
-    return 2 * exp(data.strengthValue);
+    return 2 * exp(m_d->paintOpSize);
 }
 
 void KisMyPaintOpSettings::setPaintOpOpacity(qreal value)
@@ -69,16 +70,33 @@ void KisMyPaintOpSettings::resetSettings(const QStringList &preserveProperties)
     KisOutlineGenerationPolicy<KisPaintOpSettings>::resetSettings(allKeys);
 }
 
+void KisMyPaintOpSettings::onPropertyChanged()
+{
+    m_d->cachedProperties = false;
+    KisOutlineGenerationPolicy::onPropertyChanged();
+}
+
 KisOptimizedBrushOutline KisMyPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     KisOptimizedBrushOutline path;
 
     if (mode.isVisible) {
         qreal finalScale = 1.0;
+        if (!m_d->cachedProperties) {
+            {
+                MyPaintOffsetByRandomData data;
+                data.read(this);
+                m_d->offsetValue = data.strengthValue;
+            }
+            {
+                MyPaintRadiusLogarithmicData data;
+                data.read(this);
+                m_d->paintOpSize = data.strengthValue;
+            }
+            m_d->cachedProperties = true;
+        }
 
-        MyPaintOffsetByRandomData data;
-        data.read(this);
-        const qreal offset = data.strengthValue;
+        const qreal offset = m_d->offsetValue;
 
         qreal radius = 0.5 * paintOpSize();
         radius = radius + 2 * radius * offset;

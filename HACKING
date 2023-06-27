@@ -1,6 +1,6 @@
 Since 1999, people have been hacking on Krita. Everyone brought their
 own coding style, their own code conventions, their own likes and
-dislikes. Me, (Boudewijn that is), I like indents of four spaces, and
+dislikes. Me, (Halla that is), I like indents of four spaces, and
 no scope prefixes for variables. However, in the interests of
 consistency, these are the rules new code should adhere to:
 
@@ -50,8 +50,6 @@ C++11 and C++14
       significantly)
 
     * Before using other new features, discuss on #krita so we can expand this list.
-
-    * Our minimum gcc version is 5.5.0, shipped with Ubuntu 16.04
 
 
 Indentation

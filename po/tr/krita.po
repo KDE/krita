@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-06-24 12:54+0300\n"
+"PO-Revision-Date: 2023-06-26 22:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -20499,7 +20499,7 @@ msgstr "HDR Kipi"
 #: libs/ui/animation/video_export_options_dialog.ui:136
 #, kde-format
 msgid "HDR Metadata..."
-msgstr "HDR Üstveri..."
+msgstr "HDR Üst Verisi..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/animation/video_export_options_dialog.ui:147
@@ -46071,8 +46071,8 @@ msgid ""
 "<html><head/><body><p>Store document metadata that is in the document "
 "information. This will override any layer metadata.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Belge bilgilerinde bulunan belge üstverilerini depola. "
-"Bu, herhangi bir katman üstverisini geçersiz kılar.</p></body></html>"
+"<html><head/><body><p>Belge bilgisinde bulunan belge üst verisini depolayın. "
+"Bu, herhangi bir katman üst verisini geçersiz kılar.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMetaData)
 #. i18n: ectx: property (title), widget (QGroupBox, chkMetadata)
@@ -46080,7 +46080,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:798
 #, kde-format
 msgid "Store Document Metadata"
-msgstr "Belge Üstverisini Depola"
+msgstr "Belge Üst Verisini Depola"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:343
@@ -47446,7 +47446,7 @@ msgstr ""
 #: plugins/impex/png/kis_wdg_options_png.ui:87
 #, kde-format
 msgid "Store Metadata"
-msgstr "Üstveriyi Depola"
+msgstr "Üst Veriyi Depola"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/impex/png/kis_wdg_options_png.ui:98
@@ -50211,13 +50211,13 @@ msgstr "Fırça Şekli"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:53
 #, kde-format
 msgid "1D"
-msgstr "1D"
+msgstr "1B"
 
 #. i18n: ectx: property (text), widget (QRadioButton, twoDimBrushBtn)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:63
 #, kde-format
 msgid "2D"
-msgstr "2D"
+msgstr "2B"
 
 #. i18n: ectx: property (title), widget (QGroupBox, brushGroup)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:101
@@ -53168,7 +53168,7 @@ msgstr "CBZ Dışa Aktar"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:273
 msgid "Metadata to Add"
-msgstr "Eklenecek Üstveri"
+msgstr "Eklenecek Üst Veri"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:277
 msgid "CBZ"
@@ -53389,7 +53389,7 @@ msgid ""
 "Saving out CoMet\n"
 "metadata file"
 msgstr ""
-"CoMet üstveri dosyası\n"
+"CoMet üst veri dosyası\n"
 "kaydediliyor"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:191
@@ -53397,7 +53397,7 @@ msgid ""
 "Saving out Comicrack\n"
 "metadata file"
 msgstr ""
-"Comicrack üstveri dosyası\n"
+"Comicrack üst veri dosyası\n"
 "kaydediliyor"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:207
@@ -53612,7 +53612,7 @@ msgstr "Çevirmen"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:245
 msgid "Comic Metadata"
-msgstr "Çizgi Roman Üstverisi"
+msgstr "Çizgi Roman Üst Verisi"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:257
 msgid "The proper title of the comic."
@@ -53830,7 +53830,7 @@ msgstr "Proje Ayarları"
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:263
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:122
 msgid "Meta Data"
-msgstr "Üstveri"
+msgstr "Üst Veri"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:281
 msgid "Add Page"
@@ -54394,7 +54394,7 @@ msgstr "Taşbaskıcı"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Metadata contact"
-msgstr "Üstveri iletişim"
+msgstr "Üst veri kişisi"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Owner"

@@ -376,7 +376,7 @@ QRect KisLayerStyleProjectionPlane::changeRect(const QRect &rect, KisLayer::Posi
     QRect layerChangeRect = sourcePlane->changeRect(rect, pos);
     QRect changeRect = layerChangeRect;
 
-    if (m_d->style->isEnabled()) {
+    if (m_d->style->isEnabled() && !layerChangeRect.isEmpty()) {
         Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->allStyles()) {
             changeRect |= plane->changeRect(layerChangeRect, KisLayer::N_ABOVE_FILTHY);
         }

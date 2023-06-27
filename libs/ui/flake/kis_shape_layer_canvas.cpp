@@ -266,17 +266,20 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 
 void KisShapeLayerCanvas::slotStartAsyncRepaint()
 {
+    KisImageSP parentImage = m_parentLayer->image();
+    if (!parentImage) {
+        return;
+    }
+
     /**
      * Don't try to start a regeneration stroke while image
      * is locked. It may happen on loading, when all necessary
      * conversions are not yet finished.
      */
-    if (m_parentLayer->image()->locked()) {
+    if (parentImage->locked()) {
         m_asyncUpdateSignalCompressor.start();
         return;
     }
-
-    if (!m_parentLayer->image()) return;
 
     QRect repaintRect;
     QRect uncroppedRepaintRect;
@@ -309,7 +312,7 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
         // Crop the update rect by the image bounds. We keep the cache consistent
         // by tracking the size of the image in slotImageSizeChanged()
         uncroppedRepaintRect = repaintRect;
-        repaintRect = repaintRect.intersected(m_parentLayer->image()->bounds());
+        repaintRect = repaintRect.intersected(parentImage->bounds());
     } else {
         const QRectF shapesBounds = KoShape::boundingRect(m_shapeManager->shapes());
         repaintRect |= kisGrowRect(viewConverter()->documentToView(shapesBounds).toAlignedRect(), 2);

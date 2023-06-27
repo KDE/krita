@@ -171,6 +171,10 @@ void KisTransformMask::slotDelayedStaticUpdate()
 
     KisImageSP image = parentLayer->image();
 
+    if (!image) {
+        return;
+    }
+
     /**
      * Don't try to start a regeneration stroke while image
      * is locked. It may happen on loading, when all necessary
@@ -181,9 +185,7 @@ void KisTransformMask::slotDelayedStaticUpdate()
         return;
     }
 
-    if (image) {
-        image->addSpontaneousJob(new KisRecalculateTransformMaskJob(this));
-    }
+    image->addSpontaneousJob(new KisRecalculateTransformMaskJob(this));
 }
 
 KisPaintDeviceSP KisTransformMask::buildPreviewDevice()

@@ -90,7 +90,7 @@ void KisGeneratorLayer::slotDelayedStaticUpdate()
      * is locked. It may happen on loading, when all necessary
      * conversions are not yet finished.
      */
-    if (image()->locked()) {
+    if (KisImageSP image = this->image(); image && image->locked()) {
         m_d->updateSignalCompressor.start();
         return;
     }

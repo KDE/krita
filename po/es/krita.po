@@ -66,7 +66,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-25 00:49+0000\n"
-"PO-Revision-Date: 2023-06-23 01:22+0100\n"
+"PO-Revision-Date: 2023-06-26 12:19+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -47806,10 +47806,9 @@ msgstr "Opciones de codificación"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "If this is not enabled, only the first frame will be saved."
+#, kde-format
 msgid "If this is not enabled, the image will be saved losslessly."
-msgstr "Si no está marcado, solo se guardará el primer fotograma."
+msgstr "Si no está marcado, la imagen se guardará sin pérdida."
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:59
@@ -47940,6 +47939,11 @@ msgid ""
 "setting.</p><p>It is advised to leave this option checked for web delivery "
 "and general compatibility with other applications.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Si esto no está marcado, las capas se generarán y se "
+"guardarán. No obstante, las exportaciones animadas se aplanarán siempre sin "
+"tener en cuenta esta preferencia.</p><p>Se recomienda dejar esta opción "
+"marcada para entregas web y para compatibilidad general con otras "
+"aplicaciones.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:239

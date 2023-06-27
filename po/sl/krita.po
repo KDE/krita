@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-25 00:49+0000\n"
-"PO-Revision-Date: 2023-06-23 23:02+0200\n"
+"PO-Revision-Date: 2023-06-26 06:41+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -23900,8 +23900,7 @@ msgstr "O programu"
 
 #. i18n: ectx: attribute (title), widget (QWidget, authorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:35
-#, fuzzy, kde-format
-#| msgid "Authors"
+#, kde-format
 msgctxt "Heading for the list of Krita authors/developers"
 msgid "Authors"
 msgstr "Avtorji"
@@ -47627,10 +47626,9 @@ msgstr "Možnosti kodiranja"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
-#, fuzzy, kde-format
-#| msgid "If this is not enabled, only the first frame will be saved."
+#, kde-format
 msgid "If this is not enabled, the image will be saved losslessly."
-msgstr "Če to ni omogočeno, bo shranjena le prva sličica."
+msgstr "Če ta možnost ni omogočena, bo slika shranjena brez izgub."
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:59
@@ -47760,6 +47758,11 @@ msgid ""
 "setting.</p><p>It is advised to leave this option checked for web delivery "
 "and general compatibility with other applications.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Če ta možnost ni omogočena, se plasti rasterizirajo in "
+"shranijo. Vendar so animirani izvozi vedno sploščeni ne glede na to "
+"nastavitev.</p><p>Priporočljivo je, da pustite to možnost potrjeno zaradi "
+"spletne dostave in splošne združljivosti z drugimi programi.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:239
@@ -60365,12 +60368,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
-#~ "Animated exports are <span style=\" font-weight:600;\">always</span> "
-#~ "flattened regardless of this setting.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Opomba:</span> "
-#~ "animirani izvozi so <span style=\" font-weight:600;\">vedno</span> "
-#~ "sploščeni, ne glede na to nastavitev.</p></body></html>"

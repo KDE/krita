@@ -52084,8 +52084,8 @@ msgid ""
 "<p>If disable, use a fixed white level and ignore the image histogram to "
 "adjust brightness.</p>"
 msgstr ""
-"<p>Se desactiva esta opción empregarase un nivel de branco fixo e ignorarase "
-"o histograma da imaxe á hora de axustar o brillo.</p>"
+"<p>Se desactiva esta opción usarase un nivel de branco fixo e ignorarase o "
+"histograma da imaxe á hora de axustar o brillo.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:551
 #, kde-format

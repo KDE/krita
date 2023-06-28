@@ -24243,16 +24243,13 @@ msgstr "テクスチャバッファを使用する"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLargePixmapCache)
 #: libs/ui/forms/wdgdisplaysettings.ui:139
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>This should be enabled if you see any artifacts while "
 "using assistants.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>ペンタブペンの傾きを用いて法線を決定します</p></body></"
-"html>"
+"<html><head/><body><p>補助線を使用している際に不自然なノイズが表示される場"
+"合、これを有効にしてください。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLargePixmapCache)
 #: libs/ui/forms/wdgdisplaysettings.ui:142
@@ -24688,10 +24685,9 @@ msgstr "消しゴムの輪郭形状:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/forms/wdggeneralsettings.ui:245
-#, fuzzy, kde-format
-#| msgid "While painting..."
+#, kde-format
 msgid "While painting with an eraser..."
-msgstr "描画中の動作..."
+msgstr "消しゴムを使って描画中..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_21)
 #: libs/ui/forms/wdggeneralsettings.ui:290
@@ -24726,10 +24722,9 @@ msgstr "キャンバス上にポップアップメッセージを表示"
 
 #. i18n: ectx: property (text), widget (QLabel, lblZoomMarginSize)
 #: libs/ui/forms/wdggeneralsettings.ui:361
-#, fuzzy, kde-format
-#| msgid "Zoom Selector Size: "
+#, kde-format
 msgid "Zoom Margin Size:"
-msgstr "ズーム選択のサイズ: "
+msgstr "ズームのマージンサイズ: "
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intZoomMarginSize)
 #: libs/ui/forms/wdggeneralsettings.ui:371
@@ -25232,6 +25227,8 @@ msgid ""
 "Note: This applies to drops in the Info window, the canvas, and paste "
 "actions."
 msgstr ""
+"注意：これは情報ウィンドウやキャンバスへのドラックアンドドロップ操作、それか"
+"ら貼り付け操作において適用されます。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/ui/forms/wdggeneralsettings.ui:1386

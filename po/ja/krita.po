@@ -24129,8 +24129,7 @@ msgstr "Krita について"
 
 #. i18n: ectx: attribute (title), widget (QWidget, authorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:35
-#, fuzzy, kde-format
-#| msgid "Authors"
+#, kde-format
 msgctxt "Heading for the list of Krita authors/developers"
 msgid "Authors"
 msgstr "作者"
@@ -24825,16 +24824,13 @@ msgstr "現在のレンダラ:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLargePixmapCache)
 #: libs/ui/forms/wdgdisplaysettings.ui:201
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>This should be enabled if you see any artifacts while "
 "using assistants.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>ペンタブペンの傾きを用いて法線を決定します</p></body></"
-"html>"
+"<html><head/><body><p>補助線を使用している際に不自然なノイズが表示される場"
+"合、これを有効にしてください。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLargePixmapCache)
 #: libs/ui/forms/wdgdisplaysettings.ui:204
@@ -25303,10 +25299,9 @@ msgstr "消しゴムの輪郭形状:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/forms/wdggeneralsettings.ui:232
-#, fuzzy, kde-format
-#| msgid "While painting..."
+#, kde-format
 msgid "While painting with an eraser..."
-msgstr "描画中の動作..."
+msgstr "消しゴムを使って描画中..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_21)
 #: libs/ui/forms/wdggeneralsettings.ui:267
@@ -25353,10 +25348,9 @@ msgstr "キャンバス上にポップアップメッセージを表示"
 
 #. i18n: ectx: property (text), widget (QLabel, lblZoomMarginSize)
 #: libs/ui/forms/wdggeneralsettings.ui:370
-#, fuzzy, kde-format
-#| msgid "Zoom Selector Size: "
+#, kde-format
 msgid "Zoom Margin Size:"
-msgstr "ズーム選択のサイズ: "
+msgstr "ズームのマージンサイズ: "
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intZoomMarginSize)
 #: libs/ui/forms/wdggeneralsettings.ui:380
@@ -25701,6 +25695,8 @@ msgid ""
 "Note: This applies to drops in the Info window, the canvas, and paste "
 "actions."
 msgstr ""
+"注意：これは情報ウィンドウやキャンバスへのドラックアンドドロップ操作、それか"
+"ら貼り付け操作において適用されます。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteContext)
 #: libs/ui/forms/wdggeneralsettings.ui:1070
@@ -60880,32 +60876,3 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
-
-#, fuzzy
-#~| msgid ""
-#~| "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
-#~| "need to restart Krita to enable or disable plugins.</p></body></html>"
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
-#~ "Animated exports are <span style=\" font-weight:600;\">always</span> "
-#~ "flattened regardless of this setting.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">注意: </span>プラ"
-#~ "グインを有効または無効にするには、Krita を再起動する必要があります。</p></"
-#~ "body></html>"
-
-#~ msgctxt "paletegen status mode option name"
-#~ msgid "Difference"
-#~ msgstr "Difference"
-
-#~ msgctxt "paleteuse dither option name"
-#~ msgid "none"
-#~ msgstr "none"
-
-#~ msgctxt "paleteuse diff mode option name"
-#~ msgid "none"
-#~ msgstr "none"
-
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "フィルタ(&F):"

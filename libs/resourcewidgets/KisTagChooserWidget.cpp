@@ -17,7 +17,6 @@
 #include <QToolButton>
 #include <QGridLayout>
 #include <QComboBox>
-#include <QAbstractItemView>
 #include <QMessageBox>
 
 #include <kconfig.h>
@@ -35,11 +34,11 @@
 class Q_DECL_HIDDEN KisTagChooserWidget::Private
 {
 public:
-    QString resourceType;
     QComboBox *comboBox;
     KisTagToolButton *tagToolButton;
     KisTagModel *model;
     KisTagSP cachedTag;
+    QString resourceType;
     QScopedPointer<KisTagModel> allTagsModel;
 };
 
@@ -49,13 +48,6 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QString resourceTyp
 {
     d->resourceType = resourceType;
 
-    /* Model */
-    d->model = model;
-    d->model->sort(KisAllTagsModel::Name);
-    connect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(cacheSelectedTag()));
-    connect(d->model, SIGNAL(modelReset()), this, SLOT(restoreTagFromCache()));
-
-    /* ComboBox */
     d->comboBox = new QComboBox(this);
     d->comboBox->setToolTip(i18n("Tag"));
     d->comboBox->setSizePolicy(QSizePolicy::Policy::Expanding , QSizePolicy::Policy::Fixed);
@@ -67,23 +59,28 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QString resourceTyp
     d->comboBox->setSizeAdjustPolicy(QComboBox::SizeAdjustPolicy::AdjustToMinimumContentsLengthWithIcon);
 
     d->comboBox->setInsertPolicy(QComboBox::InsertAlphabetically);
-    d->comboBox->setModel(d->model);
+    model->sort(KisAllTagsModel::Name);
+    d->comboBox->setModel(model);
 
-    connect(d->comboBox, SIGNAL(currentIndexChanged(int)),
-        this, SLOT(tagChanged(int)));
-
-    /* ComboBox */
+    d->model = model;
     d->allTagsModel.reset(new KisTagModel(resourceType));
     d->allTagsModel->setTagFilter(KisTagModel::ShowAllTags);
 
-    // Workaround for handling tag selection deselection when model resets.
-    // Occurs when model changes under the user e.g. +/- a resource storage.
-    connect(d->allTagsModel.data(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)),
-        this, SLOT(slotTagModelDataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
+    QGridLayout* comboLayout = new QGridLayout(this);
 
-    /* Tag Tool Button */
+    comboLayout->addWidget(d->comboBox, 0, 0);
+
     d->tagToolButton = new KisTagToolButton(this);
     d->tagToolButton->setToolTip(i18n("Tag options"));
+    comboLayout->addWidget(d->tagToolButton, 0, 1);
+
+    comboLayout->setSpacing(0);
+    comboLayout->setMargin(0);
+    comboLayout->setColumnStretch(0, 3);
+    this->setEnabled(true);
+
+    connect(d->comboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(tagChanged(int)));
 
     connect(d->tagToolButton, SIGNAL(popupMenuAboutToShow()),
             this, SLOT (tagToolContextMenuAboutToShow()));
@@ -100,12 +97,14 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QString resourceTyp
     connect(d->tagToolButton, SIGNAL(undeletionOfTagRequested(KisTagSP)),
             this, SLOT(tagToolUndeleteLastTag(KisTagSP)));
 
-    /* Layout */
-    QGridLayout* comboLayout = new QGridLayout(this);
-    comboLayout->setSpacing(0);
-    comboLayout->setMargin(0);
-    comboLayout->addWidget(d->comboBox, 0, 0);
-    comboLayout->addWidget(d->tagToolButton, 0, 1);
+
+    // Workaround for handling tag selection deselection when model resets.
+    // Occurs when model changes under the user e.g. +/- a resource storage.
+    connect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(cacheSelectedTag()));
+    connect(d->model, SIGNAL(modelReset()), this, SLOT(restoreTagFromCache()));
+    connect(d->allTagsModel.data(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)),
+            this, SLOT(slotTagModelDataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
+
 }
 
 KisTagChooserWidget::~KisTagChooserWidget()

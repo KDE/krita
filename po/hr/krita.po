@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-25 00:49+0000\n"
+"POT-Creation-Date: 2023-06-29 00:44+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -20120,40 +20120,40 @@ msgid ""
 "bundle."
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:60
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
 #, fuzzy, kde-format
 msgid "Tag"
 msgstr "Svijetlosmeđa"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:86
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:74
 #, fuzzy, kde-format
 msgid "Tag options"
 msgstr "Alfa"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
 #, fuzzy, kde-format
 msgctxt "Dialog title"
 msgid "Can't rename the tag"
 msgstr "Ukloni tekst"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:159
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:158
 #, kde-format
 msgctxt "Dialog title"
 msgid "Remove existing tag with that name?"
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:161
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:160
 #, kde-format
 msgctxt ""
 "Dialog message (the arguments are both somewhat user readable nouns or "
@@ -20166,7 +20166,7 @@ msgid ""
 "Tag's unique name: %2"
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:266
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
 #, fuzzy, kde-format
 msgctxt ""
@@ -20175,21 +20175,21 @@ msgctxt ""
 msgid "Restore previous tag"
 msgstr "preimenuj sloj"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:268
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
 #, fuzzy, kde-format
 msgctxt ""
 "Option in a dialog to use existing tag with its old assigned resources"
 msgid "Use existing tag"
 msgstr "/Dodaj Masku Sloja …"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:269
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
 #, fuzzy, kde-format
 msgctxt "Dialog title"
 msgid "Overwrite tag?"
 msgstr "Svojstva..."
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
 #, fuzzy, kde-format
 msgctxt "Question to the user in a dialog about creating a tag"
@@ -20198,7 +20198,7 @@ msgstr ""
 "Dokument sa ovim imenom već postoji\n"
 "Da li ga želite zamijeniti sa trenutnim ?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
 #, fuzzy, kde-format
 msgctxt ""
@@ -20213,7 +20213,7 @@ msgstr "Nova slika"
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnCancelMaskEdit)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:273
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
@@ -20230,7 +20230,7 @@ msgstr "Nova slika"
 msgid "Cancel"
 msgstr "Kanali"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
 #, fuzzy, kde-format
 msgctxt "Dialog title"
 msgid "Can't create the tag"

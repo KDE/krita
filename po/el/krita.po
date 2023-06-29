@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-25 00:49+0000\n"
+"POT-Creation-Date: 2023-06-29 00:44+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -20754,42 +20754,42 @@ msgid ""
 "bundle."
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:60
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
 #, fuzzy, kde-format
 msgid "Tag"
 msgstr "Ετικέτες"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:86
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:74
 #, fuzzy, kde-format
 #| msgid "No options"
 msgid "Tag options"
 msgstr "Χωρίς επιλογές"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
 #, fuzzy, kde-format
 #| msgid "Rename tag"
 msgctxt "Dialog title"
 msgid "Can't rename the tag"
 msgstr "Μετονομασία σελίδας"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:159
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:158
 #, kde-format
 msgctxt "Dialog title"
 msgid "Remove existing tag with that name?"
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:161
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:160
 #, kde-format
 msgctxt ""
 "Dialog message (the arguments are both somewhat user readable nouns or "
@@ -20802,7 +20802,7 @@ msgid ""
 "Tag's unique name: %2"
 msgstr ""
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:266
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
 #, fuzzy, kde-format
 msgctxt ""
@@ -20811,7 +20811,7 @@ msgctxt ""
 msgid "Restore previous tag"
 msgstr "Μετακίνηση στρώματος εντός ομάδας"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:268
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
 #, fuzzy, kde-format
 #| msgid "Add new paint layer"
 msgctxt ""
@@ -20819,7 +20819,7 @@ msgctxt ""
 msgid "Use existing tag"
 msgstr "Προσθήκη νέου στρώματος ζωγραφικής"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:269
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
 #, fuzzy, kde-format
 #| msgid "Overwrite Preset"
@@ -20827,7 +20827,7 @@ msgctxt "Dialog title"
 msgid "Overwrite tag?"
 msgstr "Αντικατάσταση προρυθμίσεων"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
 #, fuzzy, kde-format
 msgctxt "Question to the user in a dialog about creating a tag"
@@ -20836,7 +20836,7 @@ msgstr ""
 "Ένα προφίλ με αυτό το όνομα υπάρχει ήδη!\n"
 " Επιθυμείτε την αντικατάστασή του;"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
@@ -20853,7 +20853,7 @@ msgstr "Αντικατάσταση εύρους κειμένου"
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnCancelMaskEdit)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:273
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
@@ -20870,7 +20870,7 @@ msgstr "Αντικατάσταση εύρους κειμένου"
 msgid "Cancel"
 msgstr "Ακύρωση"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
 #, fuzzy, kde-format
 #| msgid "Cannot create storage"
 msgctxt "Dialog title"

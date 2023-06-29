@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-25 00:49+0000\n"
+"POT-Creation-Date: 2023-06-29 00:44+0000\n"
 "PO-Revision-Date: 2023-06-26 22:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -20054,40 +20054,40 @@ msgstr ""
 "%1 türünden bir özkaynak yok. Lütfen, en azından bir tane demeti "
 "etkinleştirin."
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:60
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
 #, kde-format
 msgid "Tag"
 msgstr "Etiket"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:86
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:74
 #, kde-format
 msgid "Tag options"
 msgstr "Etiket seçenekleri"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
 #, kde-format
 msgctxt "Dialog title"
 msgid "Can't rename the tag"
 msgstr "Etiket yeniden adlandırılamıyor"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
 msgstr "Özel etiketleriniz için bu adı kullanamazsınız."
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:159
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:158
 #, kde-format
 msgctxt "Dialog title"
 msgid "Remove existing tag with that name?"
 msgstr "Aynı adlı var olan etiket kaldırılsın mı?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:161
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:160
 #, kde-format
 msgctxt ""
 "Dialog message (the arguments are both somewhat user readable nouns or "
@@ -20105,7 +20105,7 @@ msgstr ""
 "Kaldırılacak etiket: %1\n"
 "Etiketin benzersiz adı: %2"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:266
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
 #, kde-format
 msgctxt ""
@@ -20114,21 +20114,21 @@ msgctxt ""
 msgid "Restore previous tag"
 msgstr "Önceki etiketi geri getir"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:268
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
 #, kde-format
 msgctxt ""
 "Option in a dialog to use existing tag with its old assigned resources"
 msgid "Use existing tag"
 msgstr "Var olan etiketi kullan"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:269
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
 #, kde-format
 msgctxt "Dialog title"
 msgid "Overwrite tag?"
 msgstr "Etiketin üzerine yazılsın mı?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
 #, kde-format
 msgctxt "Question to the user in a dialog about creating a tag"
@@ -20137,7 +20137,7 @@ msgstr ""
 "Bu benzersiz adla başka bir etiket halihazırda var. Değiştirmek istiyor "
 "musunuz?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
 #, kde-format
 msgctxt ""
@@ -20152,7 +20152,7 @@ msgstr "Etiketi değiştir (üzerine yaz)"
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnCancelMaskEdit)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:273
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
@@ -20169,7 +20169,7 @@ msgstr "Etiketi değiştir (üzerine yaz)"
 msgid "Cancel"
 msgstr "İptal"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
 #, kde-format
 msgctxt "Dialog title"
 msgid "Can't create the tag"

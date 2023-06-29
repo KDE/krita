@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-25 00:49+0000\n"
+"POT-Creation-Date: 2023-06-29 00:44+0000\n"
 "PO-Revision-Date: 2023-06-26 12:19+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -20121,40 +20121,40 @@ msgstr ""
 "\n"
 "No existen recursos disponibles de tipo %1. Active al menos un paquete."
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:60
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:52
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
 #, kde-format
 msgid "Tag"
 msgstr "Etiqueta"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:86
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:74
 #, kde-format
 msgid "Tag options"
 msgstr "Opciones de las etiquetas"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
 #, kde-format
 msgctxt "Dialog title"
 msgid "Can't rename the tag"
 msgstr "No se puede cambiar el nombre de la etiqueta"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:146
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:307
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:145
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:306
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
 msgstr "No puede usar este nombre para las etiquetas personalizadas."
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:159
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:158
 #, kde-format
 msgctxt "Dialog title"
 msgid "Remove existing tag with that name?"
 msgstr "¿Eliminar la etiqueta existente con este nombre?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:161
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:160
 #, kde-format
 msgctxt ""
 "Dialog message (the arguments are both somewhat user readable nouns or "
@@ -20171,7 +20171,7 @@ msgstr ""
 "Etiqueta a eliminar: %1\n"
 "Nombre único de la etiqueta: %2"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:266
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:112
 #, kde-format
 msgctxt ""
@@ -20180,28 +20180,28 @@ msgctxt ""
 msgid "Restore previous tag"
 msgstr "Restaurar la etiqueta anterior"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:268
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:267
 #, kde-format
 msgctxt ""
 "Option in a dialog to use existing tag with its old assigned resources"
 msgid "Use existing tag"
 msgstr "Usar etiqueta existente"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:269
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:109
 #, kde-format
 msgctxt "Dialog title"
 msgid "Overwrite tag?"
 msgstr "¿Sobrescribir etiqueta?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:270
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
 #, kde-format
 msgctxt "Question to the user in a dialog about creating a tag"
 msgid "A tag with this unique name already exists. Do you want to replace it?"
 msgstr "Ya existe una etiqueta con este nombre único. ¿Desea sustituirla?"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:271
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
 #, kde-format
 msgctxt ""
@@ -20216,7 +20216,7 @@ msgstr "Sustituir (sobrescribir) la etiqueta"
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnCancelMaskEdit)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:273
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:272
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
@@ -20233,7 +20233,7 @@ msgstr "Sustituir (sobrescribir) la etiqueta"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: libs/resourcewidgets/KisTagChooserWidget.cpp:279
+#: libs/resourcewidgets/KisTagChooserWidget.cpp:278
 #, kde-format
 msgctxt "Dialog title"
 msgid "Can't create the tag"

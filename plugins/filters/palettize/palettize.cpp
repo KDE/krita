@@ -196,13 +196,7 @@ KisFilterPalettize::KisFilterPalettize() : KisFilter(id(), FiltersCategoryMapId,
 
 KisFilterConfigurationSP KisFilterPalettize::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    return new KisFilterPalettizeConfiguration("palettize", 1, resourcesInterface);
-}
-
-
-KisFilterConfigurationSP KisFilterPalettize::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
-{
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = new KisFilterPalettizeConfiguration("palettize", 1, resourcesInterface);
 
     config->setProperty("palette", "Default");
     config->setProperty("colorspace", Colorspace::Lab);

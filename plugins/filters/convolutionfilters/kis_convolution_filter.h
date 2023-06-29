@@ -28,6 +28,11 @@ public:
     QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const override;
     QRect changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const override;
 
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override
+    {
+        return emptyFactoryConfiguration(resourcesInterface);
+    }
+
 protected:
     void setIgnoreAlpha(bool v);
 

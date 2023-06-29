@@ -39,7 +39,7 @@ public:
         return KoID("wave", i18n("Wave"));
     }
 
-    KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 public:
     QRect changedRect(const QRect& rect, const KisFilterConfigurationSP config = 0, int lod = 0) const override;
 

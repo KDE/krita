@@ -50,9 +50,9 @@ KisConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, c
     return new KisWdgUnsharp(parent);
 }
 
-KisFilterConfigurationSP KisUnsharpFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisUnsharpFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
     config->setProperty("halfSize", 1);
     config->setProperty("amount", 0.5);
     config->setProperty("threshold", 0);

@@ -19,12 +19,15 @@ public:
       MIDTONES,
       HIGHLIGHTS
     };
+
 public:
     KisFilterDodgeBurn(const QString& id, const QString& prefix, const QString& name );
-public:
+
 
     KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
+
 private:
     QString m_prefix;
 };

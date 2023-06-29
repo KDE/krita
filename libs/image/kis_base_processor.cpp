@@ -75,7 +75,7 @@ KisBaseProcessor::~KisBaseProcessor()
     delete d;
 }
 
-KisFilterConfigurationSP KisBaseProcessor::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisBaseProcessor::emptyFactoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
     return new KisFilterConfiguration(id(), 1, resourcesInterface);
 }

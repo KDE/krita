@@ -34,6 +34,12 @@ public:
     }
 
     bool needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const override;
+
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override
+    {
+        return emptyFactoryConfiguration(resourcesInterface);
+    }
+
 };
 
 #endif

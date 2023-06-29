@@ -109,9 +109,9 @@ void KisSimplexNoiseGenerator::generate(KisProcessingInformation dst, const QSiz
     open_simplex_noise_free(noise_context);
 }
 
-KisFilterConfigurationSP KisSimplexNoiseGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisSimplexNoiseGenerator::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
     config->setProperty("looping", false);
     config->setProperty("frequency", 25.0);
     uint seed = static_cast<uint>(rand());

@@ -40,6 +40,11 @@ public:
         Q_UNUSED(progressUpdater);
     }
 
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override
+    {
+        return emptyFactoryConfiguration(resourcesInterface);
+    }
+
 };
 
 void KisFilterTest::testCreation()

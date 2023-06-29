@@ -60,9 +60,9 @@ KisConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget*
     return new KisWdgFastColorTransfer(parent);
 }
 
-KisFilterConfigurationSP KisFilterFastColorTransfer::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisFilterFastColorTransfer::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
     config->setProperty("filename", "");
     return config;
 }

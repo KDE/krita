@@ -48,9 +48,9 @@ KisConfigWidget * KisGaussianHighPassFilter::createConfigurationWidget(QWidget* 
     return new KisWdgGaussianHighPass(parent);
 }
 
-KisFilterConfigurationSP KisGaussianHighPassFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisGaussianHighPassFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
     config->setProperty("blurAmount", 1);
     return config;
 }

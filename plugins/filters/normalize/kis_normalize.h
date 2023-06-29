@@ -23,8 +23,14 @@ class KisFilterNormalize : public KisColorTransformationFilter
 {
 public:
     KisFilterNormalize();
-public:
+
     KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
+
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override
+    {
+        return emptyFactoryConfiguration(resourcesInterface);
+    }
+
 };
 
 class KisNormalizeTransformation : public KoColorTransformation

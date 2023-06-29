@@ -33,8 +33,7 @@ public:
     QRect changedRect(const QRect &rect, const KisFilterConfigurationSP _config, int lod) const override;
     QRect neededRect(const QRect &rect, const KisFilterConfigurationSP _config, int lod) const override;
 
-protected:
-    KisFilterConfigurationSP  defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
+    KisFilterConfigurationSP  factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 };
 
 #endif

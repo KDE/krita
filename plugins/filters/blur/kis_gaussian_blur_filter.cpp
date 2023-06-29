@@ -42,9 +42,9 @@ KisConfigWidget * KisGaussianBlurFilter::createConfigurationWidget(QWidget* pare
     return new KisWdgGaussianBlur(usedForMasks, parent);
 }
 
-KisFilterConfigurationSP KisGaussianBlurFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisGaussianBlurFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
     config->setProperty("horizRadius", 5);
     config->setProperty("vertRadius", 5);
     config->setProperty("lockAspect", true);

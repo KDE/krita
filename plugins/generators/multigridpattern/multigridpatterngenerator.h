@@ -69,7 +69,7 @@ public:
         return KoID("multigrid", i18n("Multigrid"));
     }
     
-    KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 
     // XXX: Fix the generation to work with tiles

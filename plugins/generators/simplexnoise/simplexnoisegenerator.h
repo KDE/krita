@@ -40,7 +40,7 @@ public:
         return KoID("simplex_noise", i18n("Simplex Noise"));
     }
 
-    KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 
     uint seedFromString(const QString &string) const;

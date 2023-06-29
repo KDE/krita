@@ -33,10 +33,15 @@ public:
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
                      ) const override;
+
     static inline KoID id() {
         return KoID("autocontrast", i18n("Auto Contrast"));
     }
 
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override
+    {
+        return emptyFactoryConfiguration(resourcesInterface);
+    }
 };
 
 

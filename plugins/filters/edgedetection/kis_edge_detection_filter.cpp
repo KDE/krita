@@ -96,9 +96,9 @@ void KisEdgeDetectionFilter::processImpl(KisPaintDeviceSP device, const QRect &r
                                                config->getBool("transparency", false));
 }
 
-KisFilterConfigurationSP KisEdgeDetectionFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisEdgeDetectionFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
     config->setProperty("horizRadius", 1);
     config->setProperty("vertRadius", 1);
     config->setProperty("type", "prewitt");

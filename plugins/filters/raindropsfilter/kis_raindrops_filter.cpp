@@ -386,14 +386,14 @@ KisConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent,
     return w;
 }
 
-KisFilterConfigurationSP KisRainDropsFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisRainDropsFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
+
     config->setProperty("dropsize", 80);
     config->setProperty("number", 80);
     config->setProperty("fishEyes", 30);
     config->setProperty("seed", QTime::currentTime().msec());
-
 
     return config;
 }

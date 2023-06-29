@@ -171,11 +171,6 @@ void KisGradientMapFilter::processImpl(KisPaintDeviceSP device,
 
 KisFilterConfigurationSP KisGradientMapFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    return new KisGradientMapFilterConfiguration(resourcesInterface);
-}
-
-KisFilterConfigurationSP KisGradientMapFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
-{
     KisGradientMapFilterConfigurationSP config = new KisGradientMapFilterConfiguration(resourcesInterface);
     config->setDefaults();
     return config;

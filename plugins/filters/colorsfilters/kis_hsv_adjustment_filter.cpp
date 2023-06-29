@@ -287,9 +287,9 @@ KoColorTransformation *KisHSVAdjustmentFilter::createTransformation(const KoColo
     return cs->createColorTransformation("hsv_adjustment", params);
 }
 
-KisFilterConfigurationSP KisHSVAdjustmentFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisHSVAdjustmentFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
     config->setProperty("h", 0);
     config->setProperty("s", 0);
     config->setProperty("v", 0);

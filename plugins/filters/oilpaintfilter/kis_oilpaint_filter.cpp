@@ -63,7 +63,7 @@ void KisOilPaintFilter::processImpl(KisPaintDeviceSP device,
     OilPaint(device, device, applyRect, brushSize, smooth, progressUpdater);
 }
 
-// This method have been ported from Pieter Z. Voloshyn algorithm code.
+// This method has been ported from Pieter Z. Voloshyn algorithm code.
 
 /* Function to apply the OilPaint effect.
  *
@@ -209,9 +209,9 @@ KisConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, 
     return w;
 }
 
-KisFilterConfigurationSP KisOilPaintFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisOilPaintFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
     config->setProperty("brushSize", 1);
     config->setProperty("smooth", 30);
 

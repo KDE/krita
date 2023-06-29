@@ -118,12 +118,7 @@ PatternGenerator::PatternGenerator()
 
 KisFilterConfigurationSP PatternGenerator::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    return new PatternGeneratorConfiguration(id().id(), 1, resourcesInterface);
-}
-
-KisFilterConfigurationSP PatternGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
-{
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = new PatternGeneratorConfiguration(id().id(), 1, resourcesInterface);
 
     auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
 

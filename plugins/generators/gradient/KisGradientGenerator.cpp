@@ -58,11 +58,6 @@ void KisGradientGenerator::generate(KisProcessingInformation dst,
 
 KisFilterConfigurationSP KisGradientGenerator::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    return new KisGradientGeneratorConfiguration(resourcesInterface);
-}
-
-KisFilterConfigurationSP KisGradientGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
-{
     KisGradientGeneratorConfiguration *config = new KisGradientGeneratorConfiguration(resourcesInterface);
     config->setDefaults();
     return config;

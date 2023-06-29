@@ -28,8 +28,6 @@ public:
      * Create the color transformation that will be applied on the device.
      */
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const = 0;
-
-    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 };
 
 #endif

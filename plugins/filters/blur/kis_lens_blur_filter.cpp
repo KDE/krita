@@ -55,9 +55,9 @@ QSize KisLensBlurFilter::getKernelHalfSize(const KisFilterConfigurationSP config
     return QSize(w, h);
 }
 
-KisFilterConfigurationSP KisLensBlurFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisLensBlurFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
     config->setProperty("irisShape", "Pentagon (5)");
     config->setProperty("irisRadius", 5);
     config->setProperty("irisRotation", 0);

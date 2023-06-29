@@ -40,7 +40,7 @@ public:
         return KoID("colorbalance", i18n("Color Balance"));
 	}
 
-    KisFilterConfigurationSP  defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
+    KisFilterConfigurationSP  factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 
 };
 

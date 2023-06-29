@@ -55,9 +55,9 @@ KisMultigridPatternGenerator::KisMultigridPatternGenerator() : KisGenerator(id()
     setSupportsPainting(true);
 }
 
-KisFilterConfigurationSP KisMultigridPatternGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisMultigridPatternGenerator::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
 
     QLinearGradient gradient;
     gradient.setColorAt(0, Qt::green);

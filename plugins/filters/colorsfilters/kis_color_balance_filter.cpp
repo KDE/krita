@@ -46,9 +46,9 @@ KoColorTransformation * KisColorBalanceFilter::createTransformation(const KoColo
     return cs->createColorTransformation("ColorBalance" , params);
 }
 
-KisFilterConfigurationSP KisColorBalanceFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisColorBalanceFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
     config->setProperty("cyan_red_midtones", 0);
     config->setProperty("yellow_green_midtones", 0);
     config->setProperty("magenta_blue_midtones", 0);

@@ -40,9 +40,9 @@ KisConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* pare
     return new KisWdgColorToAlpha(parent);
 }
 
-KisFilterConfigurationSP KisFilterColorToAlpha::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisFilterColorToAlpha::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
     config->setProperty("targetcolor", QColor(255, 255, 255));
     config->setProperty("threshold", 100);
     return config;

@@ -361,13 +361,7 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
 
 KisFilterConfigurationSP KisScreentoneGenerator::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    return new KisScreentoneGeneratorConfiguration(resourcesInterface);
-}
-
-KisFilterConfigurationSP KisScreentoneGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
-{
-    KisScreentoneGeneratorConfigurationSP config = 
-        dynamic_cast<KisScreentoneGeneratorConfiguration*>(factoryConfiguration(resourcesInterface).data());
+    KisScreentoneGeneratorConfigurationSP config = new KisScreentoneGeneratorConfiguration(resourcesInterface);
     config->setDefaults();
     return config;
 }

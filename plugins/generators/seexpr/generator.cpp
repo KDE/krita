@@ -77,12 +77,7 @@ KisSeExprGenerator::KisSeExprGenerator()
 
 KisFilterConfigurationSP KisSeExprGenerator::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    return new KisSeExprGeneratorConfiguration(id().id(), 1, resourcesInterface);
-}
-
-KisFilterConfigurationSP KisSeExprGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
-{
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = new KisSeExprGeneratorConfiguration(id().id(), 1, resourcesInterface);
 
     QVariant v;
     v.setValue(QString("Disney_noisecolor2"));

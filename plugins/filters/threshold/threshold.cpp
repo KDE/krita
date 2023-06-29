@@ -92,9 +92,9 @@ void KisFilterThreshold::processImpl(KisPaintDeviceSP device,
 }
 
 
-KisFilterConfigurationSP KisFilterThreshold::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisFilterThreshold::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
     config->setProperty("threshold", 128);
     return config;
 }

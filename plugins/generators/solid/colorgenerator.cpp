@@ -47,9 +47,9 @@ KisColorGenerator::KisColorGenerator() : KisGenerator(id(), KoID("basic"), i18n(
     setSupportsPainting(true);
 }
 
-KisFilterConfigurationSP KisColorGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisColorGenerator::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    KisFilterConfigurationSP config = emptyFactoryConfiguration(resourcesInterface);
 
     QVariant v;
     v.setValue(KoColor());

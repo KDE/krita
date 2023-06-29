@@ -27,6 +27,11 @@ public:
         return KoID("maximize", i18n("Maximize Channel"));
     }
 
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override
+    {
+        return emptyFactoryConfiguration(resourcesInterface);
+    }
+
 };
 
 class KisFilterMin : public KisFilter
@@ -40,9 +45,17 @@ public:
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
                      ) const override;
+
     static inline KoID id() {
         return KoID("minimize", i18n("Minimize Channel"));
     }
+
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override
+    {
+        return emptyFactoryConfiguration(resourcesInterface);
+    }
+
+
 };
 
 #endif

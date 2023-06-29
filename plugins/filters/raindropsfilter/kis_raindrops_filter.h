@@ -23,13 +23,15 @@ public:
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater) const override;
+
     static inline KoID id() {
         return KoID("raindrops", i18n("Raindrops"));
     }
 
-    KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
-public:
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
+
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
+
 private:
     bool** CreateBoolArray(uint Columns, uint Rows) const;
     void   FreeBoolArray(bool** lpbArray, uint Columns) const;

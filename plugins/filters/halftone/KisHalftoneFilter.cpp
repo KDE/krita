@@ -625,10 +625,9 @@ void KisHalftoneFilter::processMask(KisPaintDeviceSP device,
     }
 }
 
-KisFilterConfigurationSP KisHalftoneFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP KisHalftoneFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisHalftoneFilterConfigurationSP filterConfig =
-        dynamic_cast<KisHalftoneFilterConfiguration*>(factoryConfiguration(resourcesInterface).data());
+    KisHalftoneFilterConfigurationSP filterConfig = new KisHalftoneFilterConfiguration(id().id(), 1, resourcesInterface);
         
     filterConfig->setMode(KisHalftoneFilterConfiguration::defaultMode());
 
@@ -696,11 +695,6 @@ KisFilterConfigurationSP KisHalftoneFilter::defaultConfiguration(KisResourcesInt
     }
     
     return filterConfig;
-}
-
-KisFilterConfigurationSP KisHalftoneFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
-{
-    return new KisHalftoneFilterConfiguration("halftone", 1, resourcesInterface);
 }
 
 KisConfigWidget *KisHalftoneFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool useForMasks) const

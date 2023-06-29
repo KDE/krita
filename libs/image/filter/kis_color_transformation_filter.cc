@@ -61,8 +61,3 @@ void KisColorTransformationFilter::processImpl(KisPaintDeviceSP device,
     }
 
 }
-
-KisFilterConfigurationSP  KisColorTransformationFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
-{
-    return new KisColorTransformationConfiguration(id(), 0, resourcesInterface);
-}

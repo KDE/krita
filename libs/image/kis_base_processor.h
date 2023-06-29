@@ -135,7 +135,7 @@ public:
 
     /// @return the default configuration object as defined by whoever wrote the plugin.
     /// This object must be filled in with fromXML after that.
-    virtual KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const;
+    virtual KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const = 0;
 
 protected:
 
@@ -149,6 +149,10 @@ protected:
      * Set the default shortcut for activation of this filter.
      */
     void setShortcut(const QKeySequence & shortcut);
+
+    /// returns and empty KisFilterConfiguration object.
+    KisFilterConfigurationSP emptyFactoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const;
+
 
 protected:
 

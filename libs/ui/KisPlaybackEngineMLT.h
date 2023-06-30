@@ -57,6 +57,7 @@ public Q_SLOTS:
 protected Q_SLOTS:
     virtual void setCanvas(KoCanvasBase* canvas) override;
     virtual void unsetCanvas() override;
+    void canvasDestroyed(QObject *canvas);
 
     /**
      * @brief throttledShowFrame

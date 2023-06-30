@@ -269,6 +269,10 @@ void KisPlaybackEngineMLT::seek(int frameIndex, SeekOptionFlags flags)
 
 void KisPlaybackEngineMLT::setupProducer(boost::optional<QFileInfo> file)
 {
+    if (!m_d->canvasProducers.contains(activeCanvas())) {
+        connect(activeCanvas(), SIGNAL(destroyed(QObject*)), this, SLOT(canvasDestroyed(QObject*)));
+    }
+
     //First, assign to "count" producer.
     m_d->canvasProducers[activeCanvas()] = QSharedPointer<Mlt::Producer>(new Mlt::Producer(*m_d->profile, "krita", "count"));
 
@@ -379,6 +383,22 @@ void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)
 
 void KisPlaybackEngineMLT::unsetCanvas() {
     setCanvas(nullptr);
+}
+
+void KisPlaybackEngineMLT::canvasDestroyed(QObject *canvas)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeCanvas() != canvas);
+
+    /**
+     * We cannot use QMap::remove here, because the `canvas` is already
+     * half-destroyed and we cannot up-cast to KisCanvas2 anymore
+     */
+    for (auto it = m_d->canvasProducers.begin(); it != m_d->canvasProducers.end(); ++it) {
+        if (it.key() == canvas) {
+            m_d->canvasProducers.erase(it);
+            break;
+        }
+    }
 }
 
 void KisPlaybackEngineMLT::throttledShowFrame(const int frame)

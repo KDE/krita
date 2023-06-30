@@ -118,7 +118,7 @@ if(OPENJPEG_FOUND)
     if (NOT OpenJPEG_LIBRARIES)
         set(OpenJPEG_LIBRARIES OpenJPEG::openjp2)
     endif()
-    set(OpenJPEG_INCLUDE_DIRS "${OPENJPEG_INCLUDE_DIR}")
+    set(OpenJPEG_INCLUDE_DIRS "${OPENJPEG_INCLUDE_DIRS}")
 
     find_package_handle_standard_args(OpenJPEG 
         FOUND_VAR OpenJPEG_FOUND

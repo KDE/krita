@@ -65,7 +65,7 @@ public:
      *
      * @return the default configuration of this widget
      */
-    virtual KisFilterConfigurationSP  defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const;
+    KisFilterConfigurationSP  defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const;
 
     /**
      * @return the bookmark manager for this processor

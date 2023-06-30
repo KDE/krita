@@ -117,9 +117,9 @@ find_package_handle_standard_args(LibMyPaint
 )
 
 if (LibMyPaint_FOUND)
-if (LibMyPaint_LIBRARY AND NOT TARGET MyPaint::mypaint)
-    add_library(MyPaint::mypaint UNKNOWN IMPORTED GLOBAL)
-    set_target_properties(MyPaint::mypaint PROPERTIES
+if (LibMyPaint_LIBRARY AND NOT TARGET LibMyPaint::mypaint)
+    add_library(LibMyPaint::mypaint UNKNOWN IMPORTED GLOBAL)
+    set_target_properties(LibMyPaint::mypaint PROPERTIES
         IMPORTED_LOCATION "${LibMyPaint_LIBRARY}"
         INTERFACE_COMPILE_OPTIONS "${MYPAINT_PKGCONF_CFLAGS_OTHER}"
         INTERFACE_INCLUDE_DIRECTORIES "${LibMyPaint_INCLUDE_DIR}"

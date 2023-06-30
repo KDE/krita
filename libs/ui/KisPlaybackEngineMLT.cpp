@@ -94,7 +94,8 @@ struct KisPlaybackEngineMLT::Private {
             const int SCRUB_AUDIO_WINDOW = profile->frame_rate_num() * SCRUB_AUDIO_SECONDS;
             for (int i = 0; i < SCRUB_AUDIO_WINDOW; i++ ) {
                 Mlt::Frame* f = activeProducer->get_frame(frame + i );
-                pushConsumer->push(f);
+                pushConsumer->push(*f);
+                delete f;
             }
 
             // It turns out that get_frame actually seeks to the frame too,

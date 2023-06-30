@@ -38,6 +38,8 @@ public:
      */
     bool hasAnimation() const;
 
+    void setAnimated(bool animated);
+
     /**
      * Returns currently active frame of the underlying image. Some strokes
      * can override this value and it will report a different value.
@@ -215,6 +217,12 @@ public Q_SLOTS:
     void setFramerate(int fps);
 
 Q_SIGNALS:
+    /**
+     * @brief emitted when the animation state of the image has changed.
+     * @param isAnimated the new state of the animation. (true: the image has now become animated. false: the image is no longer animated.)
+    */
+    void sigAnimationStateChanged(bool isAnimated);
+
     /**
      * @brief sigFrameReady notifies when an External frame has been regenerated and is available.
      * @param time -- frame index

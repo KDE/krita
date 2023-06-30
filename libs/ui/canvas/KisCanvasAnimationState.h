@@ -65,7 +65,8 @@ public:
     class KisFrameDisplayProxy *displayProxy();
 
 public Q_SLOTS:
-    void showFrame(int frame, bool finalize = false); // TODO: Remove in favor of getting displayProxy and calling on that?
+    void showFrame(int frame, bool finalize = false);
+    void handleAnimationStateChanged(bool isAnimated);
 
 Q_SIGNALS:
     void sigPlaybackStateChanged(PlaybackState state);

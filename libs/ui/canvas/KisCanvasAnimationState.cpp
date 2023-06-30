@@ -234,6 +234,7 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
 {
     setPlaybackState(STOPPED);
 
+    // Handle image-internal frame change case...
     connect(m_d->displayProxy.data(), SIGNAL(sigFrameChange()), this, SIGNAL(sigFrameChanged()));
 
     // Grow to new playback range when new frames added (configurable)...
@@ -252,6 +253,9 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioTracksChanged, this, &KisCanvasAnimationState::setupAudioTracks);
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioLevelChanged, this, &KisCanvasAnimationState::sigAudioLevelChanged);
     setupAudioTracks();
+
+    // Images aren't always animated, listen for changes in animation state...
+    connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigAnimationStateChanged, this, &KisCanvasAnimationState::handleAnimationStateChanged);
 }
 
 KisCanvasAnimationState::~KisCanvasAnimationState()
@@ -298,6 +302,13 @@ KisFrameDisplayProxy *KisCanvasAnimationState::displayProxy()
 void KisCanvasAnimationState::showFrame(int frame, bool finalize)
 {
     m_d->displayProxy->displayFrame(frame, finalize);
+}
+
+void KisCanvasAnimationState::handleAnimationStateChanged(bool isAnimated)
+{
+    if (isAnimated) {
+        KisPart::instance()->upgradeToPlaybackEngineMLT(m_d->canvas);
+    } 
 }
 
 void KisCanvasAnimationState::updateDropFramesMode()

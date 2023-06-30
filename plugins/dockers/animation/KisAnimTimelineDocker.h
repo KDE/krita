@@ -28,6 +28,7 @@ class KisSliderSpinBox;
 
 class KisCanvas2;
 class KisAction;
+class KisPlaybackEngine;
 
 
 /** @brief A customized titlebar for the Animation Timeline Docker that's
@@ -97,6 +98,7 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
     void setViewManager(KisViewManager *kisview) override;
+    void setPlaybackEngine(KisPlaybackEngine *playbackEngine);
 
 public Q_SLOTS:
     void setAutoKey(bool value);

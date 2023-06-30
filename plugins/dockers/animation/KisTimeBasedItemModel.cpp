@@ -328,7 +328,7 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
             SeekOptionFlags seekFlags = SeekOptionFlags(value.toInt());
             prioritizeCache(m_d->activeFrameIndex);
             if (!m_d->image->hasUpdatesRunning()) {
-                KisPart::instance()->playbackEngine()->seek(m_d->activeFrameIndex, seekFlags); // PROBLEM!
+                KisPart::instance()->playbackEngine()->seek(m_d->activeFrameIndex, seekFlags);
             }
             break;
         }

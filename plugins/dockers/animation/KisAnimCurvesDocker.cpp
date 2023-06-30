@@ -337,6 +337,10 @@ KisAnimCurvesDocker::KisAnimCurvesDocker()
     connect(m_d->curvesView, SIGNAL(activated(QModelIndex)), this, SLOT(slotActiveNodeUpdate(QModelIndex)));
     connect(m_d->curvesView, SIGNAL(activeDataChanged(QModelIndex)), this, SLOT(slotActiveNodeUpdate(QModelIndex)));
     connect(m_d->titlebar->sbValueRegister, SIGNAL(valueChanged(double)), this, SLOT(slotValueRegisterChanged(double)));
+
+    // Watch for KisPlaybackEngine changes and initialize current one..
+    connect(KisPart::instance(), &KisPart::playbackEngineChanged, this, &KisAnimCurvesDocker::setPlaybackEngine);
+    setPlaybackEngine(KisPart::instance()->playbackEngine());
 }
 
 KisAnimCurvesDocker::~KisAnimCurvesDocker()
@@ -413,15 +417,6 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
         }
 
         m_d->titlebar->transport->setPlaying(m_d->canvas->animationState()->playbackState() == PlaybackState::PLAYING);
-        connect(m_d->titlebar->transport, SIGNAL(skipBack()), KisPart::instance()->playbackEngine(), SLOT(previousKeyframe()));
-        connect(m_d->titlebar->transport, SIGNAL(back()), KisPart::instance()->playbackEngine(), SLOT(previousFrame()));
-        connect(m_d->titlebar->transport, SIGNAL(stop()), KisPart::instance()->playbackEngine(), SLOT(stop()));
-        connect(m_d->titlebar->transport, SIGNAL(playPause()), KisPart::instance()->playbackEngine(), SLOT(playPause()));
-        connect(m_d->titlebar->transport, SIGNAL(forward()), KisPart::instance()->playbackEngine(), SLOT(nextFrame()));
-        connect(m_d->titlebar->transport, SIGNAL(skipForward()), KisPart::instance()->playbackEngine(), SLOT(nextKeyframe()));
-
-        connect(m_d->titlebar->sbFrameRegister, SIGNAL(valueChanged(int)), KisPart::instance()->playbackEngine(), SLOT(seek(int)));
-        connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(int)), KisPart::instance()->playbackEngine(), SLOT(setPlaybackSpeedPercent(int)));
 
         connect(m_d->titlebar->sbFrameRate, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFramerate(int)));
         connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentRangeStartFrame(int)));
@@ -545,6 +540,22 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
         KisConfig config(true);
         action->setChecked(config.animationDropFrames());
     }
+}
+
+void KisAnimCurvesDocker::setPlaybackEngine(KisPlaybackEngine *playbackEngine)
+{
+    if (!playbackEngine) return;
+
+    // Connect transport controls..
+    connect(m_d->titlebar->transport, SIGNAL(skipBack()), playbackEngine, SLOT(previousKeyframe()));
+    connect(m_d->titlebar->transport, SIGNAL(back()), playbackEngine, SLOT(previousFrame()));
+    connect(m_d->titlebar->transport, SIGNAL(stop()), playbackEngine, SLOT(stop()));
+    connect(m_d->titlebar->transport, SIGNAL(playPause()), playbackEngine, SLOT(playPause()));
+    connect(m_d->titlebar->transport, SIGNAL(forward()), playbackEngine, SLOT(nextFrame()));
+    connect(m_d->titlebar->transport, SIGNAL(skipForward()), playbackEngine, SLOT(nextKeyframe()));
+
+    connect(m_d->titlebar->sbFrameRegister, SIGNAL(valueChanged(int)), playbackEngine, SLOT(seek(int)));
+    connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(int)), playbackEngine, SLOT(setPlaybackSpeedPercent(int)));
 }
 
 void KisAnimCurvesDocker::addKeyframeCommandToParent(const QString &channelIdentity, KUndo2Command* parentCMD)

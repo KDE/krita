@@ -94,19 +94,6 @@ public:
         , animationCachePopulator(_part)
         , playbackEngine(nullptr)
     {
-#ifdef HAVE_MLT
-        KisConfig cfg(true);
-        if (cfg.animationPlaybackBackend() > 0) {
-            dbgUI << "Playback backend selected: MLT";
-            playbackEngine.reset(new KisPlaybackEngineMLT);
-        } else {
-            dbgUI << "Playback backend selected: QT";
-            playbackEngine.reset(new KisPlaybackEngineQT);
-        }
-#else
-        dbgUI << "Krita built without MLT support. Using QT Playback backend.";
-        playbackEngine.reset(new KisPlaybackEngineQT);
-#endif
     }
 
     ~Private()
@@ -177,6 +164,9 @@ KisPart::KisPart()
     connect(&d->idleWatcher, SIGNAL(startedIdleMode()),
             KisMemoryStatisticsServer::instance(), SLOT(tryForceUpdateMemoryStatisticsWhileIdle()));
 
+    // We start by loading the simple QTimer-based anim playback engine first.
+    // To save RAM, the MLT-based engine will be loaded later, once the KisImage in question becomes animated.
+    setPlaybackEngine(new KisPlaybackEngineQT(this));
 
     d->animationCachePopulator.slotRequestRegeneration();
     KisBusyWaitBroker::instance()->setFeedbackCallback(&busyWaitWithFeedback);
@@ -695,6 +685,28 @@ bool KisPart::restoreSession(KisSessionResourceSP session)
 void KisPart::setCurrentSession(KisSessionResourceSP session)
 {
     d->currentSession = session;
+}
+
+void KisPart::upgradeToPlaybackEngineMLT(KoCanvasBase* canvas)
+{
+#ifdef HAVE_MLT
+
+    // TODO: This is a slightly hacky workaround to loading the MLT engine over itself,
+    // as the QT-based engine no longer supports audio. Is there a better way?
+    if (d->playbackEngine->supportsAudio()) {
+        return;
+    }
+
+    setPlaybackEngine(new KisPlaybackEngineMLT(this));
+    d->playbackEngine->setObservedCanvas(canvas);
+
+#endif //HAVE_MLT
+}
+
+void KisPart::setPlaybackEngine(KisPlaybackEngine *p_playbackEngine)
+{
+    d->playbackEngine.reset(p_playbackEngine);
+    emit playbackEngineChanged(p_playbackEngine);
 }
 
 #include "moc_KisPart.cpp"

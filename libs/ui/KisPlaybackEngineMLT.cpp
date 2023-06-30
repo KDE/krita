@@ -50,12 +50,12 @@ static void mltOnConsumerFrameShow(mlt_consumer c, void* p_self, mlt_frame p_fra
 
 struct KisPlaybackEngineMLT::Private {
 
-    Private( KisPlaybackEngineMLT* p_self )
+    Private(KisPlaybackEngineMLT* p_self)
         : m_self(p_self)
         , playbackSpeed(1.0)
         , mute(false)
     {
-        // Initialize Audio Libraries
+        // Initialize MLT...
         repository.reset(Mlt::Factory::init());
 
         profile.reset(new Mlt::Profile());
@@ -307,7 +307,7 @@ void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)
     if (activeCanvas()) {
         KisCanvasAnimationState* animationState = activeCanvas()->animationState();
 
-        // Disconnect old player, prepare for new one..
+        // Disconnect old canvas, prepare for new one..
         if (animationState) {
             this->disconnect(animationState);
             animationState->disconnect(this);
@@ -325,7 +325,7 @@ void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)
 
     KisPlaybackEngine::setCanvas(p_canvas);
 
-    // Connect new player..
+    // Connect new canvas..
     if (activeCanvas()) {
         KisCanvasAnimationState* animationState = activeCanvas()->animationState();
         KIS_ASSERT(animationState);

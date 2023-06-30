@@ -84,7 +84,9 @@ KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
         sbSpeed->setPrefix(i18nc("preview playback speed percentage prefix", "Speed: "));
         sbSpeed->setSuffix(" %");
         sbSpeed->setToolTip(i18n("Preview playback speed"));
-        sbSpeed->setEnabled(KisPart::instance()->playbackEngine()->supportsVariablePlaybackSpeed());
+
+        bool supportsVariablePlaybackSpeed = KisPart::instance()->playbackEngine() && KisPart::instance()->playbackEngine()->supportsVariablePlaybackSpeed();
+        sbSpeed->setEnabled(supportsVariablePlaybackSpeed);
 
         widgetAreaLayout->addWidget(sbSpeed);
     }
@@ -135,7 +137,9 @@ KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
             btnAudioMenu->setToolTip(i18n("Animation audio menu"));
             btnAudioMenu->setIconSize(QSize(22, 22));
             btnAudioMenu->setAutoRaise(true);
-            btnAudioMenu->setEnabled(KisPart::instance()->playbackEngine()->supportsAudio());
+
+            bool supportsAudio = KisPart::instance()->playbackEngine() && KisPart::instance()->playbackEngine()->supportsAudio();
+            btnAudioMenu->setEnabled(supportsAudio);
 
             QMenu *audioMenu = new QMenu(this);
 
@@ -303,15 +307,9 @@ KisAnimTimelineDocker::KisAnimTimelineDocker()
         }
     });
 
-    connect(m_d->titlebar->transport, SIGNAL(skipBack()), KisPart::instance()->playbackEngine(), SLOT(previousKeyframe()));
-    connect(m_d->titlebar->transport, SIGNAL(back()), KisPart::instance()->playbackEngine(), SLOT(previousFrame()));
-    connect(m_d->titlebar->transport, SIGNAL(stop()), KisPart::instance()->playbackEngine(), SLOT(stop()));
-    connect(m_d->titlebar->transport, SIGNAL(playPause()), KisPart::instance()->playbackEngine(), SLOT(playPause()));
-    connect(m_d->titlebar->transport, SIGNAL(forward()), KisPart::instance()->playbackEngine(), SLOT(nextFrame()));
-    connect(m_d->titlebar->transport, SIGNAL(skipForward()), KisPart::instance()->playbackEngine(), SLOT(nextKeyframe()));
-
-    connect(m_d->titlebar->frameRegister, SIGNAL(valueChanged(int)), KisPart::instance()->playbackEngine(), SLOT(seek(int)));
-    connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(int)), KisPart::instance()->playbackEngine(), SLOT(setPlaybackSpeedPercent(int)));
+    // Watch for KisPlaybackEngine changes and initialize current one..
+    connect(KisPart::instance(), &KisPart::playbackEngineChanged, this, &KisAnimTimelineDocker::setPlaybackEngine);
+    setPlaybackEngine(KisPart::instance()->playbackEngine());
 
     setEnabled(false);
 }
@@ -553,6 +551,12 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
     titleBar->btnRemoveKeyframe->setDefaultAction(action);
     titleBar->btnRemoveKeyframe->setIconSize(QSize(22, 22));
 
+    action = actionManager->createAction("auto_key");
+    m_d->titlebar->btnAutoKey->setDefaultAction(action);
+    m_d->titlebar->btnAutoKey->setIconSize(QSize(22, 22));
+    connect(action, SIGNAL(triggered(bool)), SLOT(setAutoKey(bool)));
+
+    // Connect playback-related actions..
     action = actionManager->createAction("toggle_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, [this](bool){
@@ -629,11 +633,6 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
        }
     });
 
-    action = actionManager->createAction("auto_key");
-    m_d->titlebar->btnAutoKey->setDefaultAction(action);
-    m_d->titlebar->btnAutoKey->setIconSize(QSize(22, 22));
-    connect(action, SIGNAL(triggered(bool)), SLOT(setAutoKey(bool)));
-
     {
         KisImageConfig config(true);
         action->setChecked(config.autoKeyEnabled());
@@ -659,6 +658,22 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
         KisConfig config(true);
         action->setChecked(config.animationDropFrames());
     }
+}
+
+void KisAnimTimelineDocker::setPlaybackEngine(KisPlaybackEngine *playbackEngine)
+{
+    if (!playbackEngine) return;
+
+    // Connect transport controls..
+    connect(m_d->titlebar->transport, SIGNAL(skipBack()), playbackEngine, SLOT(previousKeyframe()));
+    connect(m_d->titlebar->transport, SIGNAL(back()), playbackEngine, SLOT(previousFrame()));
+    connect(m_d->titlebar->transport, SIGNAL(stop()), playbackEngine, SLOT(stop()));
+    connect(m_d->titlebar->transport, SIGNAL(playPause()), playbackEngine, SLOT(playPause()));
+    connect(m_d->titlebar->transport, SIGNAL(forward()), playbackEngine, SLOT(nextFrame()));
+    connect(m_d->titlebar->transport, SIGNAL(skipForward()), playbackEngine, SLOT(nextKeyframe()));
+
+    connect(m_d->titlebar->frameRegister, SIGNAL(valueChanged(int)), playbackEngine, SLOT(seek(int)));
+    connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(int)), playbackEngine, SLOT(setPlaybackSpeedPercent(int)));
 }
 
 void KisAnimTimelineDocker::setAutoKey(bool value)

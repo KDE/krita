@@ -96,8 +96,8 @@ KisStopGradientEditor::KisStopGradientEditor(QWidget *parent)
     compactModeMiscOptionsButton->setArrowVisible(false);
     compactModeMiscOptionsButton->setAutoRaise(true);
     compactModeMiscOptionsButton->setIcon(KisIconUtils::loadIcon("view-choose"));
-    QMenu *compactModeMiscOptionsButtonMenu = new QMenu;
-    QAction *separator = new QAction;
+    QMenu *compactModeMiscOptionsButtonMenu = new QMenu(this);
+    QAction *separator = new QAction(this);
     separator->setSeparator(true);
     compactModeMiscOptionsButtonMenu->addAction(m_editStopAction);
     compactModeMiscOptionsButtonMenu->addAction(m_deleteStopAction);

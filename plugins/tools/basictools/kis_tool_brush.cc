@@ -58,8 +58,6 @@ KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
 {
     setObjectName("tool_brush");
 
-    createOptionWidget();
-
     connect(this, SIGNAL(smoothingTypeChanged()), this, SLOT(resetCursorStyle()));
 
     addSmoothingAction(KisSmoothingOptions::NO_SMOOTHING, "set_no_brush_smoothing");
@@ -349,11 +347,11 @@ QWidget * KisToolBrush::createOptionWidget()
                                  << i18nc("@item:inlistbox Brush Smoothing", "Weighted")
                                  << i18nc("@item:inlistbox Brush Smoothing", "Stabilizer"));
     connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
-    addOptionWidgetOption(m_cmbSmoothingType, new QLabel(i18n("Brush Smoothing:")));
+    addOptionWidgetOption(m_cmbSmoothingType, new QLabel(i18n("Brush Smoothing:"), optionsWidget));
 
     m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderSmoothnessDistance->setEnabled(true);
-    m_lblSmoothnessDistance = new QLabel();
+    m_lblSmoothnessDistance = new QLabel(optionsWidget);
     updateSmoothnessDistanceLabel();
 
     // make sure that initialization of the value happens **after** we
@@ -391,7 +389,7 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_sliderDelayDistance, SIGNAL(valueChanged(qreal)), SLOT(setDelayDistance(qreal)));
 
     addOptionWidgetOption(m_sliderDelayDistance, delayWidget);
-    addOptionWidgetOption(m_chkFinishStabilizedCurve, new QLabel(i18n("Finish line:")));
+    addOptionWidgetOption(m_chkFinishStabilizedCurve, new QLabel(i18n("Finish line:"), optionsWidget));
 
     m_sliderDelayDistance->setValue(smoothingOptions()->delayDistance());
     m_chkDelayDistance->setChecked(smoothingOptions()->useDelayDistance());
@@ -404,7 +402,7 @@ QWidget * KisToolBrush::createOptionWidget()
                                                  m_chkStabilizeSensors->sizeHint().height()));
     connect(m_chkStabilizeSensors, SIGNAL(toggled(bool)), this, SLOT(setStabilizeSensors(bool)));
     m_chkStabilizeSensors->setChecked(smoothingOptions()->stabilizeSensors());
-    addOptionWidgetOption(m_chkStabilizeSensors, new QLabel(i18n("Stabilize Sensors:")));
+    addOptionWidgetOption(m_chkStabilizeSensors, new QLabel(i18n("Stabilize Sensors:"), optionsWidget));
 
 
     m_sliderTailAggressiveness = new KisDoubleSliderSpinBox(optionsWidget);
@@ -413,14 +411,14 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderTailAggressiveness->setEnabled(true);
     connect(m_sliderTailAggressiveness, SIGNAL(valueChanged(qreal)), SLOT(slotSetTailAggressiveness(qreal)));
     m_sliderTailAggressiveness->setValue(smoothingOptions()->tailAggressiveness());
-    addOptionWidgetOption(m_sliderTailAggressiveness, new QLabel(i18n("Stroke Ending:")));
+    addOptionWidgetOption(m_sliderTailAggressiveness, new QLabel(i18n("Stroke Ending:"), optionsWidget));
 
     m_chkSmoothPressure = new QCheckBox(optionsWidget);
     m_chkSmoothPressure->setMinimumHeight(qMax(m_sliderSmoothnessDistance->sizeHint().height()-3,
                                                m_chkSmoothPressure->sizeHint().height()));
     m_chkSmoothPressure->setChecked(smoothingOptions()->smoothPressure());
     connect(m_chkSmoothPressure, SIGNAL(toggled(bool)), this, SLOT(setSmoothPressure(bool)));
-    addOptionWidgetOption(m_chkSmoothPressure, new QLabel(QString("%1:").arg(i18n("Smooth Pressure"))));
+    addOptionWidgetOption(m_chkSmoothPressure, new QLabel(QString("%1:").arg(i18n("Smooth Pressure")), optionsWidget));
 
     m_chkUseScalableDistance = new QCheckBox(optionsWidget);
     m_chkUseScalableDistance->setChecked(smoothingOptions()->useScalableDistance());
@@ -432,7 +430,7 @@ QWidget * KisToolBrush::createOptionWidget()
                                                "be visually constant whatever zoom "
                                                "level is chosen"));
     connect(m_chkUseScalableDistance, SIGNAL(toggled(bool)), this, SLOT(setUseScalableDistance(bool)));
-    addOptionWidgetOption(m_chkUseScalableDistance, new QLabel(QString("%1:").arg(i18n("Scalable Distance"))));
+    addOptionWidgetOption(m_chkUseScalableDistance, new QLabel(QString("%1:").arg(i18n("Scalable Distance")), optionsWidget));
 
 
     // add a line spacer so we know that the next set of options are for different settings
@@ -461,10 +459,10 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);
     connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
 
-    QLabel* magnetismLabel = new QLabel(i18n("Magnetism:"));
+    QLabel* magnetismLabel = new QLabel(i18n("Magnetism:"), optionsWidget);
     addOptionWidgetOption(m_sliderMagnetism, magnetismLabel);
 
-    QLabel* snapSingleLabel = new QLabel(i18n("Snap to Single Line"));
+    QLabel* snapSingleLabel = new QLabel(i18n("Snap to Single Line"), optionsWidget);
 
     m_chkOnlyOneAssistant = new QCheckBox(optionsWidget);
     m_chkOnlyOneAssistant->setToolTip(i18nc("@info:tooltip","Make it only snap to a single assistant line, prevents snapping mess while using the infinite assistants."));
@@ -472,7 +470,7 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkOnlyOneAssistant, SIGNAL(toggled(bool)), this, SLOT(setOnlyOneAssistantSnap(bool)));
     addOptionWidgetOption(m_chkOnlyOneAssistant, snapSingleLabel);
 
-    QLabel* snapEraserLabel = new QLabel(i18n("Snap Eraser"));
+    QLabel* snapEraserLabel = new QLabel(i18n("Snap Eraser"), optionsWidget);
 
     m_chkSnapEraser = new QCheckBox(optionsWidget);
     m_chkSnapEraser->setToolTip(i18nc("@info:tooltip","Enable snapping when using erasers"));

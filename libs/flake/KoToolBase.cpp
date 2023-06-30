@@ -47,7 +47,6 @@ KoToolBase::KoToolBase(KoToolBasePrivate &dd)
 
 KoToolBase::~KoToolBase()
 {
-    qDeleteAll(d_ptr->optionWidgets);
     delete d_ptr;
 }
 

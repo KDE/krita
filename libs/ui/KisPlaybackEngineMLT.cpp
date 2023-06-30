@@ -56,7 +56,7 @@ struct KisPlaybackEngineMLT::Private {
         , mute(false)
     {
         // Initialize Audio Libraries
-        Mlt::Factory::init();
+        repository.reset(Mlt::Factory::init());
 
         profile.reset(new Mlt::Profile());
         profile->set_frame_rate(24, 1);
@@ -80,6 +80,7 @@ struct KisPlaybackEngineMLT::Private {
 
     ~Private() {
         cleanupConsumers();
+        repository.reset();
         Mlt::Factory::close();
     }
 
@@ -108,7 +109,7 @@ struct KisPlaybackEngineMLT::Private {
     void initializeConsumers() {
         pushConsumer.reset(new Mlt::PushConsumer(*profile, "sdl2_audio"));
         pullConsumer.reset(new Mlt::Consumer(*profile, "sdl2_audio"));
-        pullConsumer->listen("consumer-frame-show", m_self, (mlt_listener)mltOnConsumerFrameShow);
+        pullConsumerConnection.reset(pullConsumer->listen("consumer-frame-show", m_self, (mlt_listener)mltOnConsumerFrameShow));
     }
 
     void cleanupConsumers() {
@@ -144,10 +145,12 @@ private:
     KisPlaybackEngineMLT* m_self;
 
 public:
+    QScopedPointer<Mlt::Repository> repository;
     QScopedPointer<Mlt::Profile> profile;
 
     //MLT PUSH CONSUMER
     QScopedPointer<Mlt::Consumer> pullConsumer;
+    QScopedPointer<Mlt::Event> pullConsumerConnection;
 
     //MLT PULL CONSUMER
     QScopedPointer<Mlt::PushConsumer> pushConsumer;

@@ -61,7 +61,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-29 00:44+0000\n"
+"POT-Creation-Date: 2023-07-01 00:45+0000\n"
 "PO-Revision-Date: 2023-06-24 12:13+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -16321,25 +16321,25 @@ msgstr ""
 "document opslaat, dan zal het tekstobject naar Krita 5 formaat worden "
 "geconverteerd die niet compatibel is met Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3704
+#: libs/flake/text/KoSvgTextShape.cpp:3721
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3706
-#: libs/flake/text/KoSvgTextShape.cpp:3714
+#: libs/flake/text/KoSvgTextShape.cpp:3723
+#: libs/flake/text/KoSvgTextShape.cpp:3731
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG-tekstvorm"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3712
+#: libs/flake/text/KoSvgTextShape.cpp:3729
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3726
-#: libs/flake/text/KoSvgTextShape.cpp:3741
+#: libs/flake/text/KoSvgTextShape.cpp:3743
+#: libs/flake/text/KoSvgTextShape.cpp:3758
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16743,7 +16743,7 @@ msgstr "Grootte"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:390
+#: plugins/tools/basictools/kis_tool_brush.cc:388
 #: plugins/tools/basictools/kis_tool_fill.cc:565
 #: plugins/tools/basictools/kis_tool_fill.cc:576
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
@@ -56650,83 +56650,83 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "Penseelstreek uit de vrije hand"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:179
+#: plugins/tools/basictools/kis_tool_brush.cc:177
 #, kde-format
 msgid "Sample count:"
 msgstr "Aantal samples:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:190
+#: plugins/tools/basictools/kis_tool_brush.cc:188
 #, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
 msgstr "Afstand:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:347
+#: plugins/tools/basictools/kis_tool_brush.cc:345
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "Geen"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:348
+#: plugins/tools/basictools/kis_tool_brush.cc:346
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "Basis"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:349
+#: plugins/tools/basictools/kis_tool_brush.cc:347
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "Gewogen"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:350
+#: plugins/tools/basictools/kis_tool_brush.cc:348
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "Stabilisator"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:352
+#: plugins/tools/basictools/kis_tool_brush.cc:350
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "Penseelstreek vloeiend maken:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:378
+#: plugins/tools/basictools/kis_tool_brush.cc:376
 #, kde-format
 msgid "Delay:"
 msgstr "Vertraging:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:383
+#: plugins/tools/basictools/kis_tool_brush.cc:381
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "De penseelstreek vertragen om de lijn vloeiender te maken"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:387
+#: plugins/tools/basictools/kis_tool_brush.cc:385
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "Straal waar het penseel is geblokkeerd"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:394
+#: plugins/tools/basictools/kis_tool_brush.cc:392
 #, kde-format
 msgid "Finish line:"
 msgstr "Einde van de lijn:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:407
+#: plugins/tools/basictools/kis_tool_brush.cc:405
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "Sensors stabiliseren:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:416
+#: plugins/tools/basictools/kis_tool_brush.cc:414
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "Einde van streek:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:423
+#: plugins/tools/basictools/kis_tool_brush.cc:421
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "Zachte druk"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:430
+#: plugins/tools/basictools/kis_tool_brush.cc:428
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -56736,38 +56736,38 @@ msgstr ""
 "Schaalbare afstand houdt rekening met zoomniveau en maakt de afstand visueel "
 "constant wat oook het gekozen zoomniveau is"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:435
+#: plugins/tools/basictools/kis_tool_brush.cc:433
 #, kde-format
 msgid "Scalable Distance"
 msgstr "Schaalbare afstand"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:451
+#: plugins/tools/basictools/kis_tool_brush.cc:449
 #: plugins/tools/basictools/kis_tool_line.cc:101
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Vastklikken op assistenten"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:453
+#: plugins/tools/basictools/kis_tool_brush.cc:451
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "U dient assistenten toe te voegen om dit hulpmiddel te laten werken."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:458
+#: plugins/tools/basictools/kis_tool_brush.cc:456
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "Assistent magnetisme:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:464
+#: plugins/tools/basictools/kis_tool_brush.cc:462
 #, kde-format
 msgid "Magnetism:"
 msgstr "Magnetisme:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:467
+#: plugins/tools/basictools/kis_tool_brush.cc:465
 #, kde-format
 msgid "Snap to Single Line"
 msgstr "Vastklikken op een enkele lijn"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:470
+#: plugins/tools/basictools/kis_tool_brush.cc:468
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -56777,13 +56777,13 @@ msgstr ""
 "Maak dat het alleen op een enkele assistentlijn vastklikt, voorkomt een "
 "rommeltje met vastklikken bij gebruik van de oneindige assistenten."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:475
+#: plugins/tools/basictools/kis_tool_brush.cc:473
 #: plugins/tools/basictools/kis_tool_line.cc:104
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Gum voor vastklikken"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:478
+#: plugins/tools/basictools/kis_tool_brush.cc:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"

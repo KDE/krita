@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-29 00:44+0000\n"
+"POT-Creation-Date: 2023-07-01 00:45+0000\n"
 "PO-Revision-Date: 2023-06-06 00:31-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -16423,25 +16423,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3704
+#: libs/flake/text/KoSvgTextShape.cpp:3721
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "テキスト"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3706
-#: libs/flake/text/KoSvgTextShape.cpp:3714
+#: libs/flake/text/KoSvgTextShape.cpp:3723
+#: libs/flake/text/KoSvgTextShape.cpp:3731
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG テキストシェイプ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3712
+#: libs/flake/text/KoSvgTextShape.cpp:3729
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG テキスト"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3726
-#: libs/flake/text/KoSvgTextShape.cpp:3741
+#: libs/flake/text/KoSvgTextShape.cpp:3743
+#: libs/flake/text/KoSvgTextShape.cpp:3758
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16846,7 +16846,7 @@ msgstr "サイズ"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:390
+#: plugins/tools/basictools/kis_tool_brush.cc:388
 #: plugins/tools/basictools/kis_tool_fill.cc:565
 #: plugins/tools/basictools/kis_tool_fill.cc:576
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
@@ -56849,12 +56849,12 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "フリーハンドブラシ描線"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:179
+#: plugins/tools/basictools/kis_tool_brush.cc:177
 #, kde-format
 msgid "Sample count:"
 msgstr "サンプル数:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:190
+#: plugins/tools/basictools/kis_tool_brush.cc:188
 #, fuzzy, kde-format
 #| msgid "Distance:"
 msgctxt ""
@@ -56862,71 +56862,71 @@ msgctxt ""
 msgid "Distance:"
 msgstr "距離:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:347
+#: plugins/tools/basictools/kis_tool_brush.cc:345
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "なし"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:348
+#: plugins/tools/basictools/kis_tool_brush.cc:346
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "基本"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:349
+#: plugins/tools/basictools/kis_tool_brush.cc:347
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "重み付け"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:350
+#: plugins/tools/basictools/kis_tool_brush.cc:348
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "スタビライザー"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:352
+#: plugins/tools/basictools/kis_tool_brush.cc:350
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "手ブレ補正:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:378
+#: plugins/tools/basictools/kis_tool_brush.cc:376
 #, kde-format
 msgid "Delay:"
 msgstr "遅延:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:383
+#: plugins/tools/basictools/kis_tool_brush.cc:381
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "ブラシの描線を遅延させて線をより滑らかにします"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:387
+#: plugins/tools/basictools/kis_tool_brush.cc:385
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "ブラシがブロックされる半径"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:394
+#: plugins/tools/basictools/kis_tool_brush.cc:392
 #, kde-format
 msgid "Finish line:"
 msgstr "最後まで描画:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:407
+#: plugins/tools/basictools/kis_tool_brush.cc:405
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "各センサーからの数値を安定化する:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:416
+#: plugins/tools/basictools/kis_tool_brush.cc:414
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "はらいの長さ:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:423
+#: plugins/tools/basictools/kis_tool_brush.cc:421
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "筆圧の変化を滑らかにする"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:430
+#: plugins/tools/basictools/kis_tool_brush.cc:428
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -56936,41 +56936,41 @@ msgstr ""
 "「表示倍率に合わせる」はキャンバスの表示倍率を計算に入れ、どのズームレベルを"
 "選択していても、ディスプレイ上では同じ距離になるようにするものです"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:435
+#: plugins/tools/basictools/kis_tool_brush.cc:433
 #, kde-format
 msgid "Scalable Distance"
 msgstr "表示倍率に合わせる"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
-#: plugins/tools/basictools/kis_tool_brush.cc:451
+#: plugins/tools/basictools/kis_tool_brush.cc:449
 #: plugins/tools/basictools/kis_tool_line.cc:101
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "補助線にスナップ"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
-#: plugins/tools/basictools/kis_tool_brush.cc:453
+#: plugins/tools/basictools/kis_tool_brush.cc:451
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "このツールを使用するには補助線を追加する必要があります。"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
-#: plugins/tools/basictools/kis_tool_brush.cc:458
+#: plugins/tools/basictools/kis_tool_brush.cc:456
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "補助線への引き寄せ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:464
+#: plugins/tools/basictools/kis_tool_brush.cc:462
 #, kde-format
 msgid "Magnetism:"
 msgstr "描線が引き寄せられる割合:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:467
+#: plugins/tools/basictools/kis_tool_brush.cc:465
 #, kde-format
 msgid "Snap to Single Line"
 msgstr "一つの補助線にスナップ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:470
+#: plugins/tools/basictools/kis_tool_brush.cc:468
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -56984,13 +56984,13 @@ msgstr ""
 "一つの補助線にのみスナップさせ、無限直線定規を使っている際にめちゃくちゃにス"
 "ナップする現象を防止します"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:475
+#: plugins/tools/basictools/kis_tool_brush.cc:473
 #: plugins/tools/basictools/kis_tool_line.cc:104
 #, kde-format
 msgid "Snap Eraser"
 msgstr "消しゴムにスナップ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:478
+#: plugins/tools/basictools/kis_tool_brush.cc:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"

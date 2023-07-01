@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-29 00:44+0000\n"
+"POT-Creation-Date: 2023-07-01 00:45+0000\n"
 "PO-Revision-Date: 2017-05-16 06:47-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <kde-l10n-he@kde.org>\n"
@@ -16269,25 +16269,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3704
+#: libs/flake/text/KoSvgTextShape.cpp:3721
 #, fuzzy, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "תבניות"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3706
-#: libs/flake/text/KoSvgTextShape.cpp:3714
+#: libs/flake/text/KoSvgTextShape.cpp:3723
+#: libs/flake/text/KoSvgTextShape.cpp:3731
 #, fuzzy, kde-format
 msgid "SVG Text Shape"
 msgstr "חדות:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3712
+#: libs/flake/text/KoSvgTextShape.cpp:3729
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "תבניות"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3726
-#: libs/flake/text/KoSvgTextShape.cpp:3741
+#: libs/flake/text/KoSvgTextShape.cpp:3743
+#: libs/flake/text/KoSvgTextShape.cpp:3758
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16689,7 +16689,7 @@ msgstr "מקושר"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:390
+#: plugins/tools/basictools/kis_tool_brush.cc:388
 #: plugins/tools/basictools/kis_tool_fill.cc:565
 #: plugins/tools/basictools/kis_tool_fill.cc:576
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
@@ -55223,84 +55223,84 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "בחירה"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:179
+#: plugins/tools/basictools/kis_tool_brush.cc:177
 #, fuzzy, kde-format
 msgid "Sample count:"
 msgstr "שכבה חדשה"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:190
+#: plugins/tools/basictools/kis_tool_brush.cc:188
 #, fuzzy, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
 msgstr "רוחב:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:347
+#: plugins/tools/basictools/kis_tool_brush.cc:345
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "ללא"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:348
+#: plugins/tools/basictools/kis_tool_brush.cc:346
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "אטימות"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:349
+#: plugins/tools/basictools/kis_tool_brush.cc:347
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "גובה:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:350
+#: plugins/tools/basictools/kis_tool_brush.cc:348
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "גוו&ני אפור"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:352
+#: plugins/tools/basictools/kis_tool_brush.cc:350
 #, fuzzy, kde-format
 msgid "Brush Smoothing:"
 msgstr "הגדרות"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:378
+#: plugins/tools/basictools/kis_tool_brush.cc:376
 #, fuzzy, kde-format
 msgid "Delay:"
 msgstr "חזרה:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:383
+#: plugins/tools/basictools/kis_tool_brush.cc:381
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:387
+#: plugins/tools/basictools/kis_tool_brush.cc:385
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:394
+#: plugins/tools/basictools/kis_tool_brush.cc:392
 #, fuzzy, kde-format
 msgid "Finish line:"
 msgstr "כלי מ&צולע"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:407
+#: plugins/tools/basictools/kis_tool_brush.cc:405
 #, fuzzy, kde-format
 msgid "Stabilize Sensors:"
 msgstr "גוו&ני אפור"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:416
+#: plugins/tools/basictools/kis_tool_brush.cc:414
 #, fuzzy, kde-format
 msgid "Stroke Ending:"
 msgstr "ניווט"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:423
+#: plugins/tools/basictools/kis_tool_brush.cc:421
 #, fuzzy, kde-format
 msgid "Smooth Pressure"
 msgstr "עובי קו:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:430
+#: plugins/tools/basictools/kis_tool_brush.cc:428
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -55308,38 +55308,38 @@ msgid ""
 "visually constant whatever zoom level is chosen"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:435
+#: plugins/tools/basictools/kis_tool_brush.cc:433
 #, fuzzy, kde-format
 msgid "Scalable Distance"
 msgstr "רוחב:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:451
+#: plugins/tools/basictools/kis_tool_brush.cc:449
 #: plugins/tools/basictools/kis_tool_line.cc:101
 #, fuzzy, kde-format
 msgid "Snap to Assistants"
 msgstr "אליפסה"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:453
+#: plugins/tools/basictools/kis_tool_brush.cc:451
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:458
+#: plugins/tools/basictools/kis_tool_brush.cc:456
 #, fuzzy, kde-format
 msgid "Assistant Magnetism"
 msgstr "אטימות"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:464
+#: plugins/tools/basictools/kis_tool_brush.cc:462
 #, fuzzy, kde-format
 msgid "Magnetism:"
 msgstr "אטימות"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:467
+#: plugins/tools/basictools/kis_tool_brush.cc:465
 #, fuzzy, kde-format
 msgid "Snap to Single Line"
 msgstr "תמונה חדשה"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:470
+#: plugins/tools/basictools/kis_tool_brush.cc:468
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -55347,13 +55347,13 @@ msgid ""
 "using the infinite assistants."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:475
+#: plugins/tools/basictools/kis_tool_brush.cc:473
 #: plugins/tools/basictools/kis_tool_line.cc:104
 #, fuzzy, kde-format
 msgid "Snap Eraser"
 msgstr "מחיקה"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:478
+#: plugins/tools/basictools/kis_tool_brush.cc:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"

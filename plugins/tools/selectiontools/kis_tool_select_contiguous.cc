@@ -144,6 +144,12 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
         m_previousTime = currentTime;
     }
 
+    if (sampleLayersMode() != SampleColorLabeledLayers) {
+        // Reset this so that the device from color labeled layers gets
+        // regenerated when that mode is selected again
+        m_referenceNodeList.reset();
+    }
+
     KisPixelSelectionSP selection =
         new KisPixelSelection(new KisSelectionDefaultBounds(dev));
 

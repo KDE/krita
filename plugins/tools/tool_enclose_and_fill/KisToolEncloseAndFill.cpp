@@ -300,6 +300,12 @@ void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSele
         m_previousTime = currentTime;
     }
 
+    if (m_reference != ColorLabeledLayers) {
+        // Reset this so that the device from color labeled layers gets
+        // regenerated when that mode is selected again
+        m_referenceNodeList.reset();
+    }
+
     QTransform transform;
     transform.rotate(m_patternRotation);
     const qreal normalizedScale = m_patternScale * 0.01;

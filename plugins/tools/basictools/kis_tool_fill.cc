@@ -307,6 +307,9 @@ void KisToolFill::beginFilling(const QPoint &seedPoint)
             // Here the reference device is already ready, so we obtain the
             // reference color directly
             *referenceColor = referencePaintDevice->pixel(seedPoint);
+            // Reset this so that the device from color labeled layers gets
+            // regenerated when that mode is selected again
+            m_referenceNodeList.reset();
         }
 
         m_referencePaintDevice = referencePaintDevice;

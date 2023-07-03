@@ -187,6 +187,9 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         } else {
             areaToCheck = sourceDevice->exactBounds();
         }
+        // Reset this so that the device from color labeled layers gets
+        // regenerated when that mode is selected again
+        m_referenceNodeList.reset();
     }
 
 

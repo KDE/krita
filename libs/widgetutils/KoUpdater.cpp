@@ -106,6 +106,7 @@ KoDummyUpdaterHolder::KoDummyUpdaterHolder()
 
 KoDummyUpdaterHolder::~KoDummyUpdaterHolder()
 {
+    d->deleteLater();
 }
 
 KoUpdater *KoDummyUpdaterHolder::updater()

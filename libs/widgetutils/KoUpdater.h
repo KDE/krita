@@ -121,7 +121,8 @@ public:
     KoUpdater *updater();
 
 private:
-    QScopedPointer<KoUpdaterPrivate> d;
+    Q_DISABLE_COPY_MOVE(KoDummyUpdaterHolder)
+    KoUpdaterPrivate *d;
 };
 
 #endif

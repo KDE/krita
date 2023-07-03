@@ -19,13 +19,13 @@
 # Ambalam <tamilpc@ambalam.com>, 2004.
 # root <root@localhost.localdomain>, 2004.
 # தங்கமணி அருண்<thangam.arunx@gmail.com>, 2008.
-# Kishore G <kishore96@gmail.com>, 2021.
+# Kishore G <kishore96@gmail.com>, 2021, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2021-01-18 19:24+0530\n"
+"PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.12.1\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -7362,10 +7362,10 @@ msgstr ""
 #: krita/data/actions/InteractionTool.action:56
 #: krita/data/actions/InteractionTool.action:58
 #: krita/data/actions/InteractionTool.action:63
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Vertically Center"
-msgstr "மேல்கீழ் மங்கல்:"
+msgstr "நெடுக்காக மையப்படுத்து"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
@@ -7407,10 +7407,10 @@ msgstr "தொகுதி:"
 #: plugins/tools/svgtexttool/SvgTextTool.action:76
 #: plugins/tools/svgtexttool/SvgTextTool.action:78
 #: plugins/tools/svgtexttool/SvgTextTool.action:83
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Align Left"
-msgstr "இடதுபுற நிறம்:"
+msgstr "இடப்புறமாக சீரமை"
 
 #. i18n: context: iconText @ Action (object_align_vertical_top), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_vertical_top), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7421,10 +7421,10 @@ msgstr "இடதுபுற நிறம்:"
 #: krita/data/actions/InteractionTool.action:86
 #: krita/data/actions/InteractionTool.action:88
 #: krita/data/actions/InteractionTool.action:93
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Align Top"
-msgstr "பெரிதாக்கும் &கருவி"
+msgstr "மேற்புறமாக சீரமை"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_center), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_center), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7435,10 +7435,10 @@ msgstr "பெரிதாக்கும் &கருவி"
 #: krita/data/actions/InteractionTool.action:96
 #: krita/data/actions/InteractionTool.action:98
 #: krita/data/actions/InteractionTool.action:103
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Horizontally Center"
-msgstr "இடவல நீக்கம்:"
+msgstr "கிடைமட்டமாக மையப்படுத்து"
 
 #. i18n: context: iconText @ Action (object_order_lower), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_lower), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7467,10 +7467,10 @@ msgstr "%1 கீழ்"
 #: krita/data/actions/InteractionTool.action:116
 #: krita/data/actions/InteractionTool.action:118
 #: krita/data/actions/InteractionTool.action:123
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Align Bottom"
-msgstr "பெரிதாக்கும் &கருவி"
+msgstr "கீழாக சீரமை"
 
 #. i18n: context: text @ Action (object_distribute_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:127

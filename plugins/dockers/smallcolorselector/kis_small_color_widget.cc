@@ -41,7 +41,7 @@ struct KisSmallColorWidget::Private {
     KisSignalCompressor *resizeUpdateCompressor;
     KisSignalCompressor *valueSliderUpdateCompressor;
     KisSignalCompressor *colorChangedSignalCompressor;
-    KisSignalCompressorWithParam<int> *dynamicRangeCompressor;
+    QScopedPointer<KisSignalCompressorWithParam<int>> dynamicRangeCompressor;
     int huePreferredHeight = 32;
     KisSliderSpinBox *dynamicRange = 0;
     qreal currentRelativeDynamicRange = 1.0;
@@ -112,7 +112,7 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
         using namespace std::placeholders;
         std::function<void (qreal)> callback(
                     std::bind(&KisSmallColorWidget::updateDynamicRange, this, _1));
-        d->dynamicRangeCompressor = new KisSignalCompressorWithParam<int>(50, callback);
+        d->dynamicRangeCompressor.reset(new KisSignalCompressorWithParam<int>(50, callback));
 
     }
 

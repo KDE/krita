@@ -38,6 +38,7 @@
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
 
+#include <KisCursorOverrideLock.h>
 #include "KisDocument.h"
 #include "kis_clipboard.h"
 #include "kis_import_catcher.h"
@@ -115,11 +116,10 @@ void KisImageFromClipboardWidget::createClipboardPreview()
         enableImageCreation(QImage());
     }
 
-    QApplication::setOverrideCursor(Qt::BusyCursor);
+    KisCursorOverrideLock cursorLock(Qt::BusyCursor);
+
     QImage qimage = QApplication::clipboard()->image();
     enableImageCreation(qimage);
-
-    QApplication::restoreOverrideCursor();
 }
 
 void KisImageFromClipboardWidget::enableImageCreation(const QImage &qimage)

@@ -15,6 +15,7 @@
 
 #include <kdcraw.h>
 
+#include <KisCursorOverrideLock.h>
 #include <KisDocument.h>
 #include <KisExiv2IODevice.h>
 #include <KisImportExportErrorCode.h>
@@ -101,7 +102,8 @@ KisRawImport::convert(KisDocument *document, QIODevice * /*io*/, KisPropertiesCo
     }
 
     if (r == QDialog::Accepted) {
-        QApplication::setOverrideCursor(Qt::WaitCursor);
+        KisCursorOverrideLock cursorLock(Qt::WaitCursor);
+
         // Do the decoding
         QByteArray imageData;
         RawDecodingSettings settings = rawDecodingSettings();
@@ -112,8 +114,6 @@ KisRawImport::convert(KisDocument *document, QIODevice * /*io*/, KisPropertiesCo
         MyKDcraw dcraw(updater());
         if (!dcraw.decodeRAWImage(filename(), settings, imageData, width, height, rgbmax))
             return ImportExportCodes::FileFormatIncorrect;
-
-        QApplication::restoreOverrideCursor();
 
         const KoColorProfile *profile = nullptr;
 
@@ -297,13 +297,11 @@ KisRawImport::convert(KisDocument *document, QIODevice * /*io*/, KisPropertiesCo
             }
         }
 
-        QApplication::restoreOverrideCursor();
         document->setCurrentImage(image);
         updater()->setProgress(updater()->maximum());
         return ImportExportCodes::OK;
     }
 
-    QApplication::restoreOverrideCursor();
     return ImportExportCodes::Cancelled;
 }
 

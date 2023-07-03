@@ -31,6 +31,7 @@
 #include <kis_iterator_ng.h>
 #include <kis_random_accessor_ng.h>
 #include <kis_config.h>
+#include <kis_cursor_override_hijacker.h>
 
 #include "kis_wdg_options_heightmap.h"
 #include "kis_heightmap_utils.h"
@@ -82,7 +83,7 @@ KisImportExportErrorCode KisHeightMapImport::convert(KisDocument *document, QIOD
     QDataStream::ByteOrder bo = QDataStream::LittleEndian;
 
     if (!batchMode()) {
-        QApplication::restoreOverrideCursor();
+        KisCursorOverrideHijacker cursorHijacker;
 
         KoDialog* kdb = new KoDialog(qApp->activeWindow());
         kdb->setWindowTitle(i18n("Heightmap Import Options"));

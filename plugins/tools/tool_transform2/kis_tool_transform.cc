@@ -34,6 +34,7 @@
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoCompositeOp.h>
+#include <KisCursorOverrideLock.h>
 
 #include <kis_global.h>
 #include <canvas/kis_canvas2.h>
@@ -1187,9 +1188,8 @@ void KisToolTransform::slotUiChangedConfig(bool needsPreviewRecalculation)
 
 void KisToolTransform::slotApplyTransform()
 {
-    QApplication::setOverrideCursor(KisCursor::waitCursor());
+    KisCursorOverrideLock cursorLock(KisCursor::waitCursor());
     endStroke();
-    QApplication::restoreOverrideCursor();
 }
 
 void KisToolTransform::slotResetTransform(ToolTransformArgs::TransformMode mode)

@@ -31,6 +31,7 @@
 #include <kis_image.h>
 #include "QClipboard"
 #include "kis_action.h"
+#include <KisCursorOverrideLock.h>
 
 #include "ToolReferenceImagesWidget.h"
 #include "KisReferenceImageCollection.h"
@@ -190,7 +191,7 @@ void ToolReferenceImages::loadReferenceImages()
 
 void ToolReferenceImages::saveReferenceImages()
 {
-    QApplication::setOverrideCursor(Qt::BusyCursor);
+    KisCursorOverrideLock cursorLock(Qt::BusyCursor);
 
     auto layer = m_layer.toStrongRef();
     if (!layer || layer->shapeCount() == 0) return;
@@ -217,7 +218,6 @@ void ToolReferenceImages::saveReferenceImages()
 
     QFile file(filename);
     if (!file.open(QIODevice::WriteOnly)) {
-        QApplication::restoreOverrideCursor();
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not open '%1' for saving.", filename));
         return;
     }
@@ -225,8 +225,6 @@ void ToolReferenceImages::saveReferenceImages()
     KisReferenceImageCollection collection(layer->referenceImages());
     bool ok = collection.save(&file);
     file.close();
-
-    QApplication::restoreOverrideCursor();
 
     if (!ok) {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Failed to save reference images."));

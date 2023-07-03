@@ -124,6 +124,7 @@
 #include <KisMirrorAxisConfig.h>
 #include <KisDecorationsWrapperLayer.h>
 #include "kis_simple_stroke_strategy.h"
+#include <KisCursorOverrideLock.h>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but QUrl didn't like it,
@@ -2513,7 +2514,7 @@ bool KisDocument::newImage(const QString& name,
 
     if (!cs) return false;
 
-    QApplication::setOverrideCursor(Qt::BusyCursor);
+    KisCursorOverrideLock cursorLock(Qt::BusyCursor);
 
     image = new KisImage(createUndoStore(), width, height, cs, name);
 
@@ -2591,8 +2592,6 @@ bool KisDocument::newImage(const QString& name,
                  QString::number(imageResolution * 72.0), image->colorSpace()->colorModelId().name(),
                  image->colorSpace()->colorDepthId().name(), image->colorSpace()->profile()->name(),
                  QString::number(numberOfLayers)));
-
-    QApplication::restoreOverrideCursor();
 
     return true;
 }

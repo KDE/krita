@@ -34,6 +34,7 @@
 #include <kis_config.h>
 #include <KisResourceLocator.h>
 #include <KisKineticScroller.h>
+#include <KisCursorOverrideLock.h>
 
 #include <KisMainWindow.h>
 #include <KisPart.h>
@@ -209,22 +210,21 @@ void DlgBundleManager::addBundle()
                 {"application/x-krita-bundle", "image/x-adobe-brushlibrary", "application/x-photoshop-style-library"});
     dlg.setCaption(i18n("Select the bundle"));
 
-    qApp->setOverrideCursor(Qt::BusyCursor);
-
     Q_FOREACH(const QString &filename, dlg.filenames()) {
         if (!filename.isEmpty()) {
+            KisCursorOverrideLock cursorLock(Qt::BusyCursor);
+
             // 0. Validate bundle
             {
                 KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(filename);
                 KIS_ASSERT(!storage.isNull());
 
                 if (!storage->valid()) {
-                    qApp->restoreOverrideCursor();
+                    cursorLock.unlock();
                     qWarning() << "Attempted to import an invalid bundle!" << filename;
                     QMessageBox::warning(this,
                                          i18nc("@title:window", "Krita"),
                                          i18n("Could not load bundle %1.", filename));
-                    qApp->setOverrideCursor(Qt::BusyCursor);
                     continue;
                 }
             }
@@ -238,18 +238,18 @@ void DlgBundleManager::addBundle()
 
             QFileInfo newFileInfo(newLocation);
             if (newFileInfo.exists()) {
-                qApp->restoreOverrideCursor();
+                cursorLock.unlock();
                 if (QMessageBox::warning(
                             this,
                             i18nc("@title:window", "Warning"),
                             i18n("There is already a bundle with this name installed. Do you want to overwrite it?"),
                             QMessageBox::Ok | QMessageBox::Cancel)
                         == QMessageBox::Cancel) {
-                    qApp->setOverrideCursor(Qt::BusyCursor);
                     continue;
                 } else {
                     QFile::remove(newLocation);
                 }
+                cursorLock.lock();
             }
             QFile::copy(filename, newLocation);
 
@@ -260,7 +260,6 @@ void DlgBundleManager::addBundle()
                 qWarning() << "Could not add bundle to the storages" << newLocation;
             }
         }
-        qApp->restoreOverrideCursor();
     }
 }
 

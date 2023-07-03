@@ -39,6 +39,7 @@
 
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
+#include <KisCursorOverrideLock.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(LayerSplitFactory, "kritalayersplit.json", registerPlugin<LayerSplit>();)
 
@@ -101,7 +102,7 @@ void LayerSplit::slotLayerSplit()
 
         int fuzziness = dlg.fuzziness();
 
-        QApplication::setOverrideCursor(Qt::WaitCursor);
+        KisCursorOverrideLock cursorLock(Qt::WaitCursor);
 
         QPointer<KoUpdater> updater;
         if( modeToLayer){
@@ -172,7 +173,6 @@ void LayerSplit::slotLayerSplit()
             }
 
             if (updater->interrupted()) {
-                QApplication::restoreOverrideCursor();
                 return;
             }
 
@@ -237,8 +237,6 @@ void LayerSplit::slotLayerSplit()
 
         undo->endMacro();
    }
-
-    QApplication::restoreOverrideCursor();
 }
 
 #include "layersplit.moc"

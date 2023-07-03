@@ -35,6 +35,7 @@
 #include <brushengine/kis_paintop_registry.h>
 #include <kis_command_utils.h>
 #include <kis_selection_filters.h>
+#include <KisCursorOverrideLock.h>
 
 #include "kis_algebra_2d.h"
 
@@ -489,7 +490,7 @@ void KisToolSelectMagnetic::finishSelectionAction()
     if (m_points.count() > 2 &&
         !helper.tryDeselectCurrentSelection(boundingViewRect, selectionAction()))
     {
-        QApplication::setOverrideCursor(KisCursor::waitCursor());
+        KisCursorOverrideLock cursorLock(KisCursor::waitCursor());
 
         const SelectionMode mode =
             helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
@@ -575,7 +576,6 @@ void KisToolSelectMagnetic::finishSelectionAction()
             path->normalize();
             helper.addSelectionShape(path, selectionAction());
         }
-        QApplication::restoreOverrideCursor();
     }
 
     resetVariables();

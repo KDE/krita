@@ -42,6 +42,7 @@
 #include "kis_iterator_ng.h"
 #include "kis_selection_tool_helper.h"
 #include <kis_slider_spin_box.h>
+#include <KisCursorOverrideLock.h>
 
 DlgColorRange::DlgColorRange(KisViewManager *viewManager, QWidget *parent)
     : KoDialog(parent)
@@ -150,7 +151,7 @@ void DlgColorRange::slotSelectClicked()
 
     if (rc.isEmpty()) return;
 
-    QApplication::setOverrideCursor(KisCursor::waitCursor());
+    KisCursorOverrideLock cursorLock(KisCursor::waitCursor());
 
     qint32 x, y, w, h;
     rc.getRect(&x, &y, &w, &h);
@@ -248,7 +249,6 @@ void DlgColorRange::slotSelectClicked()
 
     m_page->bnDeselect->setEnabled(true);
     m_selectionCommandsAdded++;
-    QApplication::restoreOverrideCursor();
 }
 
 void DlgColorRange::slotDeselectClicked()

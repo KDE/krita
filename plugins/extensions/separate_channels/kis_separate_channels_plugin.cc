@@ -27,6 +27,7 @@
 #include <kis_node_manager.h>
 #include <widgets/kis_progress_widget.h>
 #include <kis_action.h>
+#include <KisCursorOverrideLock.h>
 
 #include "kis_channel_separator.h"
 #include "dlg_separate.h"
@@ -68,7 +69,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
 
     if (dlgSeparate->exec() == QDialog::Accepted) {
 
-        QApplication::setOverrideCursor(Qt::BusyCursor);
+        KisCursorOverrideLock cursorLock(Qt::BusyCursor);
 
         KisChannelSeparator separator(viewManager());
         separator.separate(viewManager()->createUnthreadedUpdater(i18n("Separate Image")),
@@ -77,7 +78,6 @@ void KisSeparateChannelsPlugin::slotSeparate()
                            dlgSeparate->getDownscale(),
                            dlgSeparate->getToColor(),
                            dlgSeparate->getActivateCurrentChannel());
-        QApplication::restoreOverrideCursor();
     }
 
     delete dlgSeparate;

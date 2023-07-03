@@ -78,6 +78,7 @@
 #include "kis_layer_properties_icons.h"
 #include "kis_node_view_color_scheme.h"
 #include "KisMirrorAxisConfig.h"
+#include <kis_cursor_override_hijacker.h>
 
 /*
   Color model id comparison through the ages:
@@ -663,7 +664,8 @@ void KisKraLoader::backCompat_loadAudio(const QDomElement& elem, KisImageSP imag
         QFileInfo info(fileName);
 
         if (!info.exists()) {
-            qApp->setOverrideCursor(Qt::ArrowCursor);
+            KisCursorOverrideHijacker cursorHijacker;
+
             QString msg = i18nc(
                         "@info",
                         "Audio channel file \"%1\" doesn't exist!\n\n"
@@ -676,8 +678,6 @@ void KisKraLoader::backCompat_loadAudio(const QDomElement& elem, KisImageSP imag
             if (result == QMessageBox::Yes) {
                 info.setFile(KisImportExportManager::askForAudioFileName(info.absolutePath(), 0));
             }
-
-            qApp->restoreOverrideCursor();
         }
 
         if (info.exists()) {
@@ -1096,8 +1096,8 @@ KisNodeSP KisKraLoader::loadFileLayer(const QDomElement& element, KisImageSP ima
     QString fullPath = filename;
 #endif
     if (!QFileInfo(fullPath).exists()) {
+        KisCursorOverrideHijacker cursorHijacker;
 
-        qApp->setOverrideCursor(Qt::ArrowCursor);
         QString msg = i18nc(
                     "@info",
                     "The file associated to a file layer with the name \"%1\" is not found.\n\n"
@@ -1121,8 +1121,6 @@ KisNodeSP KisKraLoader::loadFileLayer(const QDomElement& element, KisImageSP ima
                 filename = d.relativeFilePath(url);
             }
         }
-
-        qApp->restoreOverrideCursor();
     }
 
     KisLayer *layer = new KisFileLayer(image, basePath, filename, (KisFileLayer::ScalingMethod)scalingMethod, scalingFilter, name, opacity, fallbackColorSpace);

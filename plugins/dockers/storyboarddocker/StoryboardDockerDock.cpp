@@ -40,6 +40,7 @@
 #include <kis_image_animation_interface.h>
 #include <kis_time_span.h>
 #include <kis_global.h>
+#include <KisCursorOverrideLock.h>
 
 #include "ui_wdgstoryboarddock.h"
 #include "ui_wdgcommentmenu.h"
@@ -385,7 +386,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 
     if (dlg.exec() == QDialog::Accepted) {
         dlg.hide();
-        QApplication::setOverrideCursor(Qt::WaitCursor);
+        KisCursorOverrideLock cursorLock(Qt::WaitCursor);
 
         ExportPage layoutPage;
         QPrinter printer(QPrinter::HighResolution);
@@ -425,7 +426,6 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 
         if (!firstIndex.isValid() || !lastIndex.isValid()) {
             QMessageBox::warning((QWidget*)(&dlg), i18nc("@title:window", "Krita"), i18n("Please enter correct range. There are no panels in the range of frames provided."));
-            QApplication::restoreOverrideCursor();
             return;
         }
 
@@ -435,7 +435,6 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         int numBoards = lastItemRow - firstItemRow + 1;
         if (numBoards <= 0) {
             QMessageBox::warning((QWidget*)(&dlg), i18nc("@title:window", "Krita"), i18n("Please enter correct range. There are no panels in the range of frames provided."));
-            QApplication::restoreOverrideCursor();
             return;
         }
 
@@ -645,8 +644,6 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         }
         painter.end();
     }
-
-    QApplication::restoreOverrideCursor();
 }
 
 void StoryboardDockerDock::slotLockClicked(bool isLocked){

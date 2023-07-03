@@ -31,7 +31,6 @@ KisTIFFOptionsWidget::KisTIFFOptionsWidget(QWidget *parent)
     activated(0);
     connect(kComboBoxCompressionType, SIGNAL(activated(int)), this, SLOT(activated(int)));
     connect(flatten, SIGNAL(toggled(bool)), this, SLOT(flattenToggled(bool)));
-    QApplication::restoreOverrideCursor();
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 
     // See KisTIFFOptions::fromProperties

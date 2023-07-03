@@ -26,6 +26,7 @@
 #include "kis_datamanager.h"
 
 #include "KoColorSpaceRegistry.h"
+#include <KisCursorOverrideLock.h>
 
 #include "kis_tool_smart_patch_options_widget.h"
 #include "libs/image/kis_paint_device_debug_utils.h"
@@ -155,7 +156,7 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     KisToolPaint::endPrimaryAction(event);
     setMode(KisTool::HOVER_MODE);
 
-    QApplication::setOverrideCursor(KisCursor::waitCursor());
+    KisCursorOverrideLock cursorLock(KisCursor::waitCursor());
 
     int accuracy = 50; //default accuracy - middle value
     int patchRadius = 4; //default radius, which works well for most cases tested
@@ -181,7 +182,6 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     applicator.end();
     image()->waitForDone();
 
-    QApplication::restoreOverrideCursor();
     m_d->maskDev->clear();
 }
 

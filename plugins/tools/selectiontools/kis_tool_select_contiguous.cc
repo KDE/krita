@@ -48,6 +48,7 @@
 #include "kis_processing_applicator.h"
 #include <processing/fill_processing_visitor.h>
 #include <kis_image_animation_interface.h>
+#include <KisCursorOverrideLock.h>
 
 #include "kis_command_utils.h"
 
@@ -99,7 +100,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 
     beginSelectInteraction();
 
-    QApplication::setOverrideCursor(KisCursor::waitCursor());
+    KisCursorOverrideLock cursorLock(KisCursor::waitCursor());
 
     // -------------------------------
 
@@ -166,7 +167,6 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_SAFE_ASSERT_RECOVER(kisCanvas) {
         applicator.cancel();
-        QApplication::restoreOverrideCursor();
         return;
     };
 
@@ -234,7 +234,6 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     helper.selectPixelSelection(applicator, selection, selectionAction());
 
     applicator.end();
-    QApplication::restoreOverrideCursor();
 
 }
 

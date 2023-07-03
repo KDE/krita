@@ -17,6 +17,7 @@
 #include <ksharedconfig.h>
 
 #include <KoColorSpace.h>
+#include <KisCursorOverrideLock.h>
 
 #include "kis_canvas2.h"
 #include "kis_command_utils.h"
@@ -122,15 +123,12 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     QPointF pos = convertToPixelCoord(event);
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    KIS_SAFE_ASSERT_RECOVER(kisCanvas) {
-        QApplication::restoreOverrideCursor();
-        return;
-    };
+    KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
 
     
     beginSelectInteraction();
 
-    QApplication::setOverrideCursor(KisCursor::waitCursor());
+    KisCursorOverrideLock cursorLock(KisCursor::waitCursor());
 
     KisProcessingApplicator applicator(currentImage(),
                                        currentNode(),
@@ -432,8 +430,6 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     helper.selectPixelSelection(applicator, tmpSel, selectionAction());
 
     applicator.end();
-    QApplication::restoreOverrideCursor();
-
 }
 
 void KisToolSelectSimilar::endPrimaryAction(KoPointerEvent *event)

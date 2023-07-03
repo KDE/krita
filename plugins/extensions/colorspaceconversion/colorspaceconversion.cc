@@ -9,7 +9,6 @@
 #include "colorspaceconversion.h"
 
 #include <QApplication>
-#include <QCursor>
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
@@ -21,7 +20,6 @@
 #include <kis_transaction.h>
 #include <kis_annotation.h>
 #include <kis_config.h>
-#include <kis_cursor.h>
 #include <kis_global.h>
 #include <kis_image.h>
 #include <kis_node_manager.h>
@@ -70,11 +68,9 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
 
         const KoColorSpace * cs = dlgColorSpaceConversion->colorSpace();
         if (cs) {
-            QApplication::setOverrideCursor(KisCursor::waitCursor());
             image->convertImageColorSpace(cs,
                                           dlgColorSpaceConversion->conversionIntent(),
                                           dlgColorSpaceConversion->conversionFlags());
-            QApplication::restoreOverrideCursor();
         }
     }
     delete dlgColorSpaceConversion;

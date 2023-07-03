@@ -41,6 +41,7 @@ set(kritaglobal_LIB_SRCS
     KisFilteredRollingMean.cpp
     KisBackup.cpp
     KisSampleRectIterator.cpp
+    KisCursorOverrideLock.cpp
 )
 
 if(WIN32)

@@ -66,6 +66,7 @@
 #include "KisTranslateLayerNamesVisitor.h"
 #include "kis_color_manager.h"
 
+#include <KisCursorOverrideLock.h>
 #include "kis_action.h"
 #include "kis_action_registry.h"
 #include "KisSessionResource.h"
@@ -322,9 +323,11 @@ KisView *KisPart::createView(KisDocument *document,
     grp.writeEntry("CreatingCanvas", true);
     grp.sync();
 
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    KisView *view = new KisView(document,  viewManager, parent);
-    QApplication::restoreOverrideCursor();
+    KisView *view = nullptr;
+    {
+        KisCursorOverrideLock cursorLock(Qt::WaitCursor);
+        view = new KisView(document,  viewManager, parent);
+    }
 
     // Record successful canvas creation
     grp.writeEntry("CreatingCanvas", false);
@@ -563,7 +566,8 @@ void KisPart::updateShortcuts()
 
 void KisPart::openTemplate(const QUrl &url)
 {
-    qApp->setOverrideCursor(Qt::BusyCursor);
+    KisCursorOverrideLock cursorLock(Qt::BusyCursor);
+
     KisDocument *document = createDocument();
 
     bool ok = document->loadNativeFormat(url.toLocalFile());
@@ -598,8 +602,6 @@ void KisPart::openTemplate(const QUrl &url)
 
     KisMainWindow *mw = currentMainwindow();
     mw->addViewAndNotifyLoadingCompleted(document);
-
-    qApp->restoreOverrideCursor();
 }
 
 void KisPart::addRecentURLToAllMainWindows(QUrl url, QUrl oldUrl)

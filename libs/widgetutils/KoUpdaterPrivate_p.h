@@ -8,10 +8,12 @@
 #ifndef KO_UPDATERPRIVATE__P_H
 #define KO_UPDATERPRIVATE__P_H
 
-#include "KoProgressUpdater.h"
-
+#include <QObject>
+#include <QPointer>
 #include <QTime>
 #include <QVector>
+
+class KoUpdater;
 
 /**
  * KoUpdaterPrivate is the gui-thread side of KoUpdater. Communication
@@ -31,7 +33,7 @@ class KoUpdaterPrivate : public QObject
 
 public:
 
-    KoUpdaterPrivate(KoProgressUpdater *parent, int weight, const QString& name, bool isPersistent = false);
+    KoUpdaterPrivate(int weight, const QString& name, bool isPersistent = false);
 
     /// when deleting an updater, make sure the accompanying thread is
     /// interrupted, too.
@@ -72,6 +74,9 @@ Q_SIGNALS:
     /// Emitted whenever the progress changed
     void sigUpdated();
 
+    /// Emitted whenever the operation is cancelled by the downstream updater
+    void sigCancelled();
+
 private:
     int m_progress; // always in percent
     int m_weight;
@@ -80,7 +85,6 @@ private:
     QString m_subTaskName;
     bool m_hasValidRange;
     bool m_isPersistent;
-    KoProgressUpdater *m_parent;
     QPointer<KoUpdater> m_connectedUpdater;
 };
 

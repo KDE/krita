@@ -126,13 +126,14 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
         start();
     }
 
-    KoUpdaterPrivate *p = new KoUpdaterPrivate(this, weight, name, isPersistent);
+    KoUpdaterPrivate *p = new KoUpdaterPrivate(weight, name, isPersistent);
 
     {
         QMutexLocker l(&d->mutex);
         d->subtasks.append(p);
     }
     connect(p, SIGNAL(sigUpdated()), SLOT(update()));
+    connect(p, SIGNAL(sigCancelled()), SLOT(cancel()));
 
     QPointer<KoUpdater> updater = p->connectedUpdater();
 

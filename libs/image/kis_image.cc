@@ -1667,7 +1667,8 @@ QImage KisImage::convertToQImage(const QSize& scaledImageSize, const KoColorProf
         return convertToQImage(size(), profile).scaled(scaledImageSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    QPointer<KoUpdater> updater = new KoDummyUpdater();
+    KoDummyUpdaterHolder updaterHolder;
+    QPointer<KoUpdater> updater = updaterHolder.updater();
 
     KisTransformWorker worker(dev, scaleX, scaleY, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, updater, KisFilterStrategyRegistry::instance()->value("Bicubic"));
     worker.run();

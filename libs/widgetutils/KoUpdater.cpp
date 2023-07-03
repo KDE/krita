@@ -99,7 +99,16 @@ void KoUpdater::setInterrupted(bool value)
     m_interrupted.storeRelease(value);
 }
 
-KoDummyUpdater::KoDummyUpdater()
-    : KoUpdater(new KoUpdaterPrivate(0, 0, "dummy"))
+KoDummyUpdaterHolder::KoDummyUpdaterHolder()
+    : d(new KoUpdaterPrivate(0, "dummy"))
 {
+}
+
+KoDummyUpdaterHolder::~KoDummyUpdaterHolder()
+{
+}
+
+KoUpdater *KoDummyUpdaterHolder::updater()
+{
+    return d->connectedUpdater();
 }

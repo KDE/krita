@@ -1790,9 +1790,9 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDeviceOversampled(qint32 w, qint
                                  thumbnailOversampledSize.width(), thumbnailOversampledSize.height(), outputRect);
 
     if (oversample != 1. && oversampleAdjusted != 1.) {
-        KoDummyUpdater updater;
+        KoDummyUpdaterHolder updaterHolder;
         KisTransformWorker worker(thumbnail, 1 / oversampleAdjusted, 1 / oversampleAdjusted, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                  &updater, KisFilterStrategyRegistry::instance()->value("Bilinear"));
+                                  updaterHolder.updater(), KisFilterStrategyRegistry::instance()->value("Bilinear"));
         worker.run();
     }
     return thumbnail;

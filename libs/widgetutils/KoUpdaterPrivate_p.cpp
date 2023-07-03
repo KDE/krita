@@ -5,10 +5,11 @@
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
+
 #include "KoUpdaterPrivate_p.h"
 #include <KoUpdater.h>
 
-KoUpdaterPrivate::KoUpdaterPrivate(KoProgressUpdater *parent, int weight, const QString &name, bool isPersistent)
+KoUpdaterPrivate::KoUpdaterPrivate(int weight, const QString &name, bool isPersistent)
     : QObject(0)
     , m_progress(0)
     , m_weight(weight)
@@ -17,7 +18,6 @@ KoUpdaterPrivate::KoUpdaterPrivate(KoProgressUpdater *parent, int weight, const 
     , m_subTaskName(name)
     , m_hasValidRange(true)
     , m_isPersistent(isPersistent)
-    , m_parent(parent)
     , m_connectedUpdater(new KoUpdater(this))
 {
 }
@@ -70,7 +70,7 @@ bool KoUpdaterPrivate::isCompleted() const
 
 void KoUpdaterPrivate::cancel()
 {
-    m_parent->cancel();
+    emit sigCancelled();
 }
 
 void KoUpdaterPrivate::setInterrupted(bool value)

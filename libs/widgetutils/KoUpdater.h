@@ -111,11 +111,17 @@ private:
     int  m_progressPercent;
 };
 
-/// An updater that does nothing
-class KRITAWIDGETUTILS_EXPORT KoDummyUpdater : public KoUpdater
+/// A holder for an updater that does nothing
+class KRITAWIDGETUTILS_EXPORT KoDummyUpdaterHolder
 {
 public:
-    KoDummyUpdater();
+    KoDummyUpdaterHolder();
+    ~KoDummyUpdaterHolder();
+
+    KoUpdater *updater();
+
+private:
+    QScopedPointer<KoUpdaterPrivate> d;
 };
 
 #endif

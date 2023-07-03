@@ -308,13 +308,13 @@ public:
         ImageData newImage(newW, newH, cs->pixelSize());
         ImageData newMask(newW, newH, 1);
 
-        KoDummyUpdater updater;
+        KoDummyUpdaterHolder updaterHolder;
         KisTransformWorker worker(imageDev, 1. / 2., 1. / 2., 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                  &updater, KisFilterStrategyRegistry::instance()->value("Bicubic"));
+                                  updaterHolder.updater(), KisFilterStrategyRegistry::instance()->value("Bicubic"));
         worker.run();
 
         KisTransformWorker workerMask(maskDev, 1. / 2., 1. / 2., 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                      &updater, KisFilterStrategyRegistry::instance()->value("Bicubic"));
+                                      updaterHolder.updater(), KisFilterStrategyRegistry::instance()->value("Bicubic"));
         workerMask.run();
 
         imageDev->readBytes(newImage.data(), 0, 0, newW, newH);

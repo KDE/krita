@@ -81,6 +81,50 @@ void addJobUniquelyConcurrent(QVector<Job*> &jobs, int lod, Func func) {
     jobs.append(data);
 }
 
+
+template <typename Func, typename Job>
+void addJobSequentialNoCancel(QVector<Job*> &jobs, Func func) {
+    Job* data = new KisRunnableStrokeJobData(func, KisStrokeJobData::SEQUENTIAL);
+    data->setCancellable(false);
+    jobs.append(data);
+}
+
+template <typename Func, typename Job>
+void addJobSequentialExclusiveNoCancel(QVector<Job*> &jobs, Func func) {
+    Job* data = new KisRunnableStrokeJobData(func, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+    data->setCancellable(false);
+    jobs.append(data);
+}
+
+
+template <typename Func, typename Job>
+void addJobConcurrentNoCancel(QVector<Job*> &jobs, Func func) {
+    Job* data = new KisRunnableStrokeJobData(func, KisStrokeJobData::CONCURRENT);
+    data->setCancellable(false);
+    jobs.append(data);
+}
+
+template <typename Func, typename Job>
+void addJobBarrierNoCancel(QVector<Job*> &jobs, Func func) {
+    Job* data = new KisRunnableStrokeJobData(func, KisStrokeJobData::BARRIER);
+    data->setCancellable(false);
+    jobs.append(data);
+}
+
+template <typename Func, typename Job>
+void addJobBarrierExclusiveNoCancel(QVector<Job*> &jobs, Func func) {
+    Job* data = new KisRunnableStrokeJobData(func, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
+    data->setCancellable(false);
+    jobs.append(data);
+}
+
+template <typename Func, typename Job>
+void addJobUniquelyConcurrentNoCancel(QVector<Job*> &jobs, Func func) {
+    Job* data = new KisRunnableStrokeJobData(func, KisStrokeJobData::UNIQUELY_CONCURRENT);
+    data->setCancellable(false);
+    jobs.append(data);
+}
+
 }
 
 #endif // KISRUNNABLESTROKEJOBUTILS_H

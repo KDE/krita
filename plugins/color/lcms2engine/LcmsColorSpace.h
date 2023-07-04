@@ -110,8 +110,8 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
             int index = 0;
 
             if (cmsAlphaTransform) {
-                qreal *alpha = new qreal[nPixels];
-                qreal *dstalpha = new qreal[nPixels];
+                float *alpha = new float[nPixels];
+                float *dstalpha = new float[nPixels];
 
                 while (index < nPixels) {
                     alpha[index] = m_colorSpace->opacityF(src);
@@ -119,7 +119,7 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
                     index++;
                 }
 
-                cmsDoTransform(cmsAlphaTransform, const_cast<qreal *>(alpha), static_cast<qreal *>(dstalpha), nPixels);
+                cmsDoTransform(cmsAlphaTransform, const_cast<float *>(alpha), static_cast<float *>(dstalpha), nPixels);
                 for (int i = 0; i < numPixels; i++) {
                     m_colorSpace->setOpacity(dst, dstalpha[i], 1);
                     dst += pixelSize;
@@ -358,7 +358,7 @@ public:
                                                 KoColorConversionTransformation::adjustmentRenderingIntent(),
                                                 KoColorConversionTransformation::adjustmentConversionFlags());
 
-        adj->cmsAlphaTransform  = cmsCreateTransform(adj->profiles[1], TYPE_GRAY_DBL, 0, TYPE_GRAY_DBL,
+        adj->cmsAlphaTransform  = cmsCreateTransform(adj->profiles[1], TYPE_GRAY_FLT, 0, TYPE_GRAY_FLT,
                                   KoColorConversionTransformation::adjustmentRenderingIntent(),
                                   KoColorConversionTransformation::adjustmentConversionFlags());
 

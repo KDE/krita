@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-06-17 04:13\n"
+"PO-Revision-Date: 2023-07-03 11:40\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -20891,7 +20891,7 @@ msgstr "全局/全部"
 #, kde-format
 msgctxt "paletegen status mode option name"
 msgid "Difference"
-msgstr "差异"
+msgstr "差值"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:101
 #, kde-format
@@ -20903,7 +20903,7 @@ msgstr "每帧"
 #, kde-format
 msgctxt "paleteuse dither option name"
 msgid "none"
-msgstr "无"
+msgstr "none"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
 #, kde-format
@@ -20939,7 +20939,7 @@ msgstr "sierra2_4a"
 #, kde-format
 msgctxt "paleteuse diff mode option name"
 msgid "none"
-msgstr "无"
+msgstr "none"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:111
 #, kde-format
@@ -27037,7 +27037,7 @@ msgstr "像素尺寸"
 #, kde-format
 msgctxt "Resize intepolation method list label"
 msgid "&Filter:"
-msgstr "平滑方式(&F)："
+msgstr "平滑算法(&F)："
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupPrintSize)
 #: libs/ui/imagesize/wdg_imagesize.ui:158 libs/widgets/KoZoomWidget.cpp:121
@@ -36212,10 +36212,10 @@ msgid ""
 "Saturation, in turn, goes from the most saturated color to white, gray or "
 "black."
 msgstr ""
-"HSV 模型的亮度数值叫做“明度 (Value)”，和 HSB 模型/亮度 (Brightness) 完全相"
-"同。它的明度数值范围为：0 (黑色)，100 (白色/全饱和色)；它的饱和度数值范围为："
-"0 (白色/灰色/黑色)，100 (全饱和色)。HSV 模型的明度/饱和度概念最容易理解，它也"
-"是调整颜色数值时最常用的一种色彩模型。"
+"HSV 模型的亮度数值叫做“明度 (Value)”，它和 HSB 模型的亮度 (Brightness) 完全等"
+"价。它的明度数值范围为：0 (黑色)，100 (纯白、全饱和色)；它的饱和度数值范围"
+"为：0 (纯白、纯灰、纯黑)，100 (全饱和色)。HSV 模型的明度、饱和度概念最容易理"
+"解，它也是调整颜色数值时最常用的一种色彩模型。"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:314
 #, kde-format
@@ -36224,14 +36224,15 @@ msgid ""
 "saturated color."
 msgstr ""
 "HSL 模型的亮度 (Lightness) 数值范围为：0 (黑色)，100 (白色)。它的饱和度数值范"
-"围为：0 (亮度为 0/100 的颜色)，100 (亮度为 50 的颜色，含中间灰/全饱和色)。"
+"围为：0 (亮度为 0 或者 100 的颜色)，100 (亮度为 50 的颜色，如中间灰、全饱和"
+"色)。"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:317
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
 msgstr ""
 "HSI 模型的亮度数值叫做“强度 (Intensity)”，但习惯上也叫做亮度，其性质与 HSL 模"
-"型的亮度相近。在 HSI 模型下某种颜色的强度数值为它 R/G/B 各分量数值的总和，因"
+"型的亮度相近。HSI 模型中的某种颜色的强度数值为其 R、G、B 各分量数值的总和，因"
 "此黄色 (1,1,0) 被视为比蓝色 (0,0,1) 更亮。"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:320
@@ -36240,11 +36241,11 @@ msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
 "values are set to 'rec 709'."
 msgstr ""
-"HSY' 模型的亮度数值叫做“光度” (Luma, Y')，但习惯上也叫做明度，其性质与 HSL/"
-"HSI 模型的亮度相近。HSY' 模型通过实际测量颜色反射的光量来决定光度，本拾色器为"
-"此提供了一组可调整的明度系数。HSY' 模型最符合人眼对亮度/色调变化的感知，常见"
-"于电影行业，它也是 Krita 许多混合模式的内部色彩模型。本拾色器的明度系数默认值"
-"按照 Rec. 709 规范设定。"
+"HSY'模型的亮度数值叫做“光度” (Luma, Y')，但习惯上也叫做明度，其性质与 HSL/"
+"HSI 模型的亮度相近。HSY'模型通过实际测量颜色反射的光量来决定光度，本拾色器为"
+"此提供了一组可调整的明度系数。HSY'模型最符合人眼对亮度/色调变化的感知，常见于"
+"电影行业，它也是 Krita 许多混合模式的内部色彩模型。本拾色器的明度系数默认值按"
+"照 Rec. 709 规范设定。"
 
 #: plugins/dockers/advancedcolorselector/kis_common_colors.cpp:35
 #, kde-format
@@ -52264,7 +52265,7 @@ msgstr "笔画方向/笔身倾角混合"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:274
 #, kde-format
 msgid "Elevation Sensitivity"
-msgstr "笔身倾角敏感度"
+msgstr "笔身倾角灵敏度"
 
 #. i18n: ectx: property (text), widget (QLabel, L_mix)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:291

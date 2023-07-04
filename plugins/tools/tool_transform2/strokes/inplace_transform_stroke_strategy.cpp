@@ -399,8 +399,11 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
                         KUndo2CommandSP undo(new KUndo2Command);
                         const int activeKeyframe = device->keyframeChannel()->activeKeyframeTime();
                         const int targetKeyframe = node->image()->animationInterface()->currentTime();
-                        device->keyframeChannel()->copyKeyframe(activeKeyframe, targetKeyframe, undo.data());
-                        runAndSaveCommand(undo, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+
+                        if (activeKeyframe != targetKeyframe) {
+                            device->keyframeChannel()->copyKeyframe(activeKeyframe, targetKeyframe, undo.data());
+                            runAndSaveCommand(undo, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+                        }
                     }
                 }
             }
@@ -527,8 +530,10 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
     KritaUtils::addJobBarrier(extraInitJobs, [this]() {
         if (m_d->previewLevelOfDetail > 0) {
             QVector<KisStrokeJobData*> lodSyncJobs;
+
             KisSyncLodCacheStrokeStrategy::createJobsData(lodSyncJobs,
                                                           m_d->imageRoot,
+                                                          m_d->updatesFacade,
                                                           m_d->previewLevelOfDetail,
                                                           m_d->devicesCacheHash.values() +
                                                           m_d->transformMaskCacheHash.values());

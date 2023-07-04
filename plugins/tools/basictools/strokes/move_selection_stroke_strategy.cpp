@@ -67,8 +67,11 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
                 KUndo2CommandSP undo(new KUndo2Command);
                 const int activeKeyframe = device->keyframeChannel()->activeKeyframeTime();
                 const int targetKeyframe = m_paintLayer->image()->animationInterface()->currentTime();
-                device->keyframeChannel()->copyKeyframe(activeKeyframe, targetKeyframe, undo.data());
-                runAndSaveCommand(undo, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+
+                if (activeKeyframe != targetKeyframe) {
+                    device->keyframeChannel()->copyKeyframe(activeKeyframe, targetKeyframe, undo.data());
+                    runAndSaveCommand(undo, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+                }
             }
         });
     }

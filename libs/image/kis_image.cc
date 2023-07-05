@@ -1673,8 +1673,6 @@ QImage KisImage::convertToQImage(const QSize& scaledImageSize, const KoColorProf
     KisTransformWorker worker(dev, scaleX, scaleY, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, updater, KisFilterStrategyRegistry::instance()->value("Bicubic"));
     worker.run();
 
-    delete updater;
-
     return dev->convertToQImage(profile);
 }
 void KisImage::notifyLayersChanged()

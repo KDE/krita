@@ -40,7 +40,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.2\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -16258,6 +16258,7 @@ msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgid_plural "Create %1 shapes"
 msgstr[0] "ایجاد شکل"
+msgstr[1] ""
 
 #: libs/flake/commands/KoShapeDeleteCommand.cpp:43
 #, fuzzy
@@ -16271,6 +16272,7 @@ msgctxt "(qtundo-format)"
 msgid "Delete shape"
 msgid_plural "Delete shapes"
 msgstr[0] "حذف شکل"
+msgstr[1] ""
 
 #: libs/flake/commands/KoShapeDistributeCommand.cpp:117
 #, fuzzy
@@ -23143,6 +23145,7 @@ msgstr ""
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
 msgstr[0] "اندازه قلم‌مو"
+msgstr[1] ""
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -23152,6 +23155,7 @@ msgstr[0] "اندازه قلم‌مو"
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "تنظیمات"
+msgstr[1] ""
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1424
@@ -28529,6 +28533,7 @@ msgctxt ""
 msgid "%1 Button"
 msgid_plural "%1 Buttons"
 msgstr[0] "فشار"
+msgstr[1] ""
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:370
 #, kde-format
@@ -29212,6 +29217,7 @@ msgctxt "floating message in layer manager"
 msgid "Layer is locked"
 msgid_plural "Layers are locked"
 msgstr[0] "اندازه لایه"
+msgstr[1] ""
 
 #: libs/ui/kis_layer_manager.cc:863
 #, fuzzy, kde-format
@@ -31370,30 +31376,35 @@ msgstr ""
 msgid "%1 week"
 msgid_plural "%1 weeks"
 msgstr[0] ""
+msgstr[1] ""
 
 #: libs/ui/KoDocumentInfoDlg.cpp:297 libs/ui/KoDocumentInfoDlg.cpp:299
 #, kde-format
 msgid "%1 day"
 msgid_plural "%1 days"
 msgstr[0] ""
+msgstr[1] ""
 
 #: libs/ui/KoDocumentInfoDlg.cpp:300 libs/ui/KoDocumentInfoDlg.cpp:302
 #, kde-format
 msgid "%1 hour"
 msgid_plural "%1 hours"
 msgstr[0] ""
+msgstr[1] ""
 
 #: libs/ui/KoDocumentInfoDlg.cpp:303 libs/ui/KoDocumentInfoDlg.cpp:305
 #, kde-format
 msgid "%1 minute"
 msgid_plural "%1 minutes"
 msgstr[0] ""
+msgstr[1] ""
 
 #: libs/ui/KoDocumentInfoDlg.cpp:306 libs/ui/KoDocumentInfoDlg.cpp:308
 #, fuzzy, kde-format
 msgid "%1 second"
 msgid_plural "%1 seconds"
 msgstr[0] "ثانیه"
+msgstr[1] ""
 
 #: libs/ui/KoDocumentInfoDlg.cpp:314
 #, kde-format
@@ -36116,6 +36127,7 @@ msgctxt "%1 is the number of conflicts"
 msgid "Shortcut Conflict"
 msgid_plural "Shortcut Conflicts"
 msgstr[0] "فاصله: "
+msgstr[1] ""
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:171
 #, fuzzy, kde-format
@@ -36134,6 +36146,7 @@ msgid_plural ""
 "Do you want to assign an empty shortcut to these actions?\n"
 "%3"
 msgstr[0] ""
+msgstr[1] ""
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:186
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:542
@@ -37644,6 +37657,7 @@ msgctxt "(qtundo-format)"
 msgid "Adjust Keyframe"
 msgid_plural "Adjust %1 Keyframes"
 msgstr[0] "نام لایه:"
+msgstr[1] ""
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
@@ -37724,6 +37738,7 @@ msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
 msgstr[0] "نام لایه:"
+msgstr[1] ""
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
@@ -37732,6 +37747,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert frame"
 msgid_plural "Insert %1 frames"
 msgstr[0] "نام لایه:"
+msgstr[1] ""
 
 #: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:188
 #, fuzzy, kde-format
@@ -37847,6 +37863,7 @@ msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
 msgstr[0] "نام لایه:"
+msgstr[1] ""
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:304
 #, fuzzy, kde-format
@@ -37854,6 +37871,7 @@ msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
 msgid_plural "Move %1 Keyframes"
 msgstr[0] "نام لایه:"
+msgstr[1] ""
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:308
 #, fuzzy, kde-format
@@ -37861,6 +37879,7 @@ msgctxt "(qtundo-format) Copy one or several keyframes"
 msgid "Copy Keyframe"
 msgid_plural "Copy %1 Keyframes"
 msgstr[0] "نام لایه:"
+msgstr[1] ""
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:381
 #, fuzzy, kde-format
@@ -37868,6 +37887,7 @@ msgctxt "(qtundo-format)"
 msgid "Clone Keyframe"
 msgid_plural "Clone %1 Keyframes"
 msgstr[0] "نام لایه:"
+msgstr[1] ""
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:412
 #, fuzzy
@@ -37930,6 +37950,7 @@ msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
 msgid_plural "Remove %1 frames and shift"
 msgstr[0] "حذف لایه"
+msgstr[1] ""
 
 #: plugins/dockers/animation/KisTimeBasedItemModel.cpp:452
 #, fuzzy
@@ -44639,6 +44660,7 @@ msgctxt "suffix for a spinbox"
 msgid " color"
 msgid_plural " colors"
 msgstr[0] "رنگها"
+msgstr[1] ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:33
@@ -45993,6 +46015,7 @@ msgctxt ""
 msgid "Every {n} cell horizontally"
 msgid_plural "Every {n} cells horizontally"
 msgstr[0] "Sobel افقی"
+msgstr[1] ""
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -46006,6 +46029,7 @@ msgctxt ""
 msgid "Every {n} cell vertically"
 msgid_plural "Every {n} cells vertically"
 msgstr[0] "Sobel عمودی"
+msgstr[1] ""
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:446
 #, fuzzy, kde-format

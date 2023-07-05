@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-04 00:46+0000\n"
-"PO-Revision-Date: 2023-06-26 22:31+0300\n"
+"PO-Revision-Date: 2023-07-05 00:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -27124,7 +27124,7 @@ msgstr "Palet Boyutu:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:82
 #, kde-format
 msgid "Color Selector:"
-msgstr "Renk Seçici:"
+msgstr "Renk Seçicisi:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:90
@@ -28873,7 +28873,7 @@ msgstr "&Boyama Araçları"
 #: libs/ui/kis_control_frame.cpp:118
 #, kde-format
 msgid "&Open Foreground color selector"
-msgstr "Ö&n alan renk seçiciyi aç"
+msgstr "Ö&n alan renk seçicisini aç"
 
 #: libs/ui/kis_control_frame.cpp:123
 #, kde-format
@@ -37197,7 +37197,7 @@ msgstr "Tüm renk geçmişini temizle"
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:43
 #, kde-format
 msgid "Advanced Color Selector"
-msgstr "Gelişmiş Renk Seçici"
+msgstr "Gelişmiş Renk Seçicisi"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:44
 #, kde-format
@@ -37254,7 +37254,7 @@ msgstr "Gösterme"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:24
 #, kde-format
 msgid "Color Selector Settings"
-msgstr "Renk Seçici Ayarları"
+msgstr "Renk Seçicisi Ayarları"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:268
 #, kde-format
@@ -37319,13 +37319,13 @@ msgstr "Rıhtımcı:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:36
 #, kde-format
 msgid "Color Selector"
-msgstr "Renk Seçici"
+msgstr "Renk Seçicisi"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkShowColorSelector)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:72
 #, kde-format
 msgid "Show color selector"
-msgstr "Renk seçiciyi göster"
+msgstr "Renk seçicisini göster"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:97
@@ -37386,7 +37386,7 @@ msgstr "Seçici arka planı için özel renk kullan."
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:233
 #, kde-format
 msgid "Color Selector Uses Different Color Space than Ima&ge"
-msgstr "Renk Seçici Görüntüden Farklı Renk Uzayı Kulla&nır"
+msgstr "Renk Seçicisi Görselden Farklı Renk Uzayı Kulla&nır"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_general)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:259
@@ -38236,7 +38236,7 @@ msgstr "&Yalnızca şekilleri göster"
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:283
 #, kde-format
 msgid "Default Selector Steps Settings"
-msgstr "Renk Seçici Adımları Ayarları"
+msgstr "Renk Seçicisi Adımları Ayarları"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, labelDefHueSteps)
 #. i18n: ectx: property (toolTip), widget (QLabel, labelHueSteps)
@@ -39070,7 +39070,7 @@ msgstr "Renk İşletkesi:"
 #: plugins/dockers/lut/wdglut.ui:310
 #, kde-format
 msgid "Internal"
-msgstr "Dahili"
+msgstr "İç"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_colorManagement)
 #: plugins/dockers/lut/wdglut.ui:315
@@ -39947,7 +39947,7 @@ msgstr ""
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
 #, kde-format
 msgid "Small Color Selector"
-msgstr "Küçük Renk Seçici"
+msgstr "Küçük Renk Seçicisi"
 
 #: plugins/dockers/snapshotdocker/KisSnapshotModel.cpp:178
 #, kde-format
@@ -40665,14 +40665,14 @@ msgstr "Önizleme:"
 #, kde-format
 msgctxt "action"
 msgid "WG Color Selector Actions"
-msgstr "WG Renk Seçici Eylemleri"
+msgstr "WG Renk Seçicisi Eylemleri"
 
 #. i18n: context: text @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:7
 #, kde-format
 msgctxt "action"
 msgid "Show wide-gamut color selector"
-msgstr "Geniş gam renk seçiciyi göster"
+msgstr "Geniş gam renk seçicisini göster"
 
 #. i18n: context: text @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:17
@@ -40822,7 +40822,7 @@ msgstr "Seçili rengin tonunu saat yönünün tersine kaydır"
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
 #, kde-format
 msgid "Wide Gamut Color Selector"
-msgstr "Geniş Gam Renk Seçici"
+msgstr "Geniş Gam Renk Seçicisi"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
 #, kde-format
@@ -40833,7 +40833,7 @@ msgstr "Yapılandır..."
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
 #, kde-format
 msgid "Wide Gamut Color Selector Settings"
-msgstr "Geniş Gam Renk Seçici Ayarları"
+msgstr "Geniş Gam Renk Seçicisi Ayarları"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:35
 #, kde-format
@@ -57077,7 +57077,7 @@ msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
 "foreground or not."
 msgstr ""
-"<nobr>Renk seçicinin örnekleyicinin ön planı güncellenip</nobr> "
+"<nobr>Renk seçicisi örnekleyicisinin ön planı güncellenip</nobr> "
 "güncellemeyeceğini denetler."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
@@ -60312,35 +60312,3 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
-
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
-#~ "Animated exports are <span style=\" font-weight:600;\">always</span> "
-#~ "flattened regardless of this setting.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Not:</span> "
-#~ "Canlandırılmış dışa aktarmalar, bu ayardan bağımsız olarak <span style=\" "
-#~ "font-weight:600;\">her zaman</span> düzleştirilir.</p></body></html>"
-
-#~ msgctxt "paletegen status mode option name"
-#~ msgid "Difference"
-#~ msgstr "Fark"
-
-#~ msgctxt "paleteuse dither option name"
-#~ msgid "none"
-#~ msgstr "yok"
-
-#~ msgctxt "paleteuse diff mode option name"
-#~ msgid "none"
-#~ msgstr "hiçbiri"
-
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "S&üz:"
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid ""
-#~ "JPEG-XL image is animated, but cannot retrieve animation frame header."
-#~ msgstr ""
-#~ "JPEG-XL görseli canlandırılmış; ancak canlandırma kare üstbilgisini "
-#~ "alamıyor."

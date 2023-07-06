@@ -18,6 +18,8 @@
 #include <QtGlobal>
 #include <utility>
 
+#include <optional>
+
 #include <KoResourcePaths.h>
 #include <kis_debug.h>
 
@@ -181,7 +183,6 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
     }();
 
     FcResult result = FcResultNoMatch;
-    FcChar8 *fileValue = nullptr;
     FcCharSetUP charSet;
     FcFontSetUP fontSet = [&]() -> FcFontSetUP {
         const FcChar32 hash = FcPatternHash(p.data());
@@ -198,22 +199,40 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         }
     }();
 
-    QStringList fontFileNames;
+    struct FontEntry {
+        QString fileName;
+        int fontIndex;
+
+        static std::optional<FontEntry> get(const FcPattern *p) {
+            FcChar8 *fileValue{};
+            if (FcPatternGetString(p, FC_FILE, 0, &fileValue) != FcResultMatch) {
+                debugFlake << "Failed to get font file for" << p;
+                return {};
+            }
+            const QString fontFileName = QString::fromUtf8(reinterpret_cast<char *>(fileValue));
+
+            int indexValue{};
+            if (FcPatternGetInteger(p, FC_INDEX, 0, &indexValue) != FcResultMatch) {
+                debugFlake << "Failed to get font index for" << p << "(file:" << fontFileName << ")";
+                return {};
+            }
+
+            return {{fontFileName, indexValue}};
+        }
+    };
+
+    QVector<FontEntry> fonts;
     lengths.clear();
 
     if (text.isEmpty()) {
         for (int j = 0; j < fontSet->nfont; j++) {
-            QString fontFileName;
-            if (FcPatternGetString(fontSet->fonts[j], FC_FILE, 0, &fileValue) == FcResultMatch) {
-                fontFileName = QString(reinterpret_cast<char *>(fileValue));
-                fontFileNames.append(fontFileName);
+            if (std::optional<FontEntry> font = FontEntry::get(fontSet->fonts[j])) {
+                fonts.append(std::move(*font));
                 lengths.append(0);
                 break;
             }
         }
     } else {
-        QString fontFileName;
-        FcChar8 *fileValue = nullptr;
         FcCharSet *set = nullptr;
         QVector<int> familyValues(text.size());
         QVector<int> fallbackMatchValues(text.size());
@@ -295,25 +314,26 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         int length = 0;
         int startIndex = 0;
         int lastIndex = familyValues.at(0);
-        if (FcPatternGetString(fontSet->fonts[lastIndex], FC_FILE, 0, &fileValue) == FcResultMatch) {
-            fontFileName = QString(reinterpret_cast<char *>(fileValue));
+        FontEntry font{};
+        if (std::optional<FontEntry> f = FontEntry::get(fontSet->fonts[lastIndex])) {
+            font = std::move(*f);
         }
         for (int i = 0; i < familyValues.size(); i++) {
             if (lastIndex != familyValues.at(i)) {
                 lengths.append(text.mid(startIndex, length).size());
-                fontFileNames.append(fontFileName);
+                fonts.append(font);
                 startIndex = i;
                 length = 0;
                 lastIndex = familyValues.at(i);
-                if (FcPatternGetString(fontSet->fonts[lastIndex], FC_FILE, 0, &fileValue) == FcResultMatch) {
-                    fontFileName = QString(reinterpret_cast<char *>(fileValue));
+                if (std::optional<FontEntry> f = FontEntry::get(fontSet->fonts[lastIndex])) {
+                    font = std::move(*f);
                 }
             }
             length += 1;
         }
         if (length > 0) {
             lengths.append(text.mid(startIndex, length).size());
-            fontFileNames.append(fontFileName);
+            fonts.append(font);
         }
     }
 
@@ -334,14 +354,15 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
     }
 
     for (int i = 0; i < lengths.size(); i++) {
-        const QString fontCacheEntry = fontFileNames.at(i) + modifications;
+        const FontEntry &font = fonts.at(i);
+        const QString fontCacheEntry = font.fileName + "#" + QString::number(font.fontIndex) + modifications;
         auto entry = d->typeFaces().find(fontCacheEntry);
         if (entry != d->typeFaces().end()) {
             faces.emplace_back(entry.value());
         } else {
             FT_Face f = nullptr;
-            QByteArray utfData = fontFileNames.at(i).toUtf8();
-            if (FT_New_Face(d->library().data(), utfData.data(), 0, &f) == 0) {
+            QByteArray utfData = font.fileName.toUtf8();
+            if (FT_New_Face(d->library().data(), utfData.data(), font.fontIndex, &f) == 0) {
                 FT_FaceUP face(f);
                 configureFaces({face}, size, fontSizeAdjust, xRes, yRes, axisSettings);
                 faces.emplace_back(face);

@@ -136,6 +136,8 @@ QString KisUsageLogger::basicSystemInfo()
     systemInfo.append("\n  Product Model: ").append(manufacturer + " " + model);
 #elif defined(Q_OS_LINUX)
     systemInfo.append("\n  Desktop: ").append(qgetenv("XDG_CURRENT_DESKTOP"));
+
+    systemInfo.append("\n  Appimage build: ").append(qEnvironmentVariableIsSet("APPIMAGE") ? "Yes" : "No");
 #endif
     systemInfo.append("\n\n");
 

@@ -689,6 +689,8 @@ void KisPart::setCurrentSession(KisSessionResourceSP session)
 
 void KisPart::upgradeToPlaybackEngineMLT(KoCanvasBase* canvas)
 {
+    ENTER_FUNCTION();
+
 #ifdef HAVE_MLT
 
     // TODO: This is a slightly hacky workaround to loading the MLT engine over itself,

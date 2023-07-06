@@ -253,9 +253,6 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioTracksChanged, this, &KisCanvasAnimationState::setupAudioTracks);
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioLevelChanged, this, &KisCanvasAnimationState::sigAudioLevelChanged);
     setupAudioTracks();
-
-    // Images aren't always animated, listen for changes in animation state...
-    connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigAnimationStateChanged, this, &KisCanvasAnimationState::handleAnimationStateChanged);
 }
 
 KisCanvasAnimationState::~KisCanvasAnimationState()
@@ -306,9 +303,7 @@ void KisCanvasAnimationState::showFrame(int frame, bool finalize)
 
 void KisCanvasAnimationState::handleAnimationStateChanged(bool isAnimated)
 {
-    if (isAnimated) {
-        KisPart::instance()->upgradeToPlaybackEngineMLT(m_d->canvas);
-    } 
+    return;
 }
 
 void KisCanvasAnimationState::updateDropFramesMode()
@@ -343,6 +338,9 @@ void KisCanvasAnimationState::setupAudioTracks()
             QFileInfo toLoad = files.first();
             KIS_SAFE_ASSERT_RECOVER_RETURN(toLoad.exists());
             m_d->media.reset(new QFileInfo(toLoad));
+
+            // Once media is attached we upgrade to the MLT-based playbackEngine...
+            KisPart::instance()->upgradeToPlaybackEngineMLT(m_d->canvas);
         }
 
         emit sigPlaybackMediaChanged();

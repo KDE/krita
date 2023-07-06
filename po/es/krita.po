@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-04 00:46+0000\n"
+"POT-Creation-Date: 2023-07-06 00:54+0000\n"
 "PO-Revision-Date: 2023-06-26 12:19+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -17168,7 +17168,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Asignar perfil"
 
-#: libs/image/kis_image.cc:2490
+#: libs/image/kis_image.cc:2488
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Recortar las selecciones"

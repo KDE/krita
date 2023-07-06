@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-04 00:46+0000\n"
+"POT-Creation-Date: 2023-07-06 00:54+0000\n"
 "PO-Revision-Date: 2023-07-03 11:38\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17057,7 +17057,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "色彩特性文件指定"
 
-#: libs/image/kis_image.cc:2490
+#: libs/image/kis_image.cc:2488
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "裁剪选区"

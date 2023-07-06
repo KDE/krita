@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-04 00:46+0000\n"
+"POT-Creation-Date: 2023-07-06 00:54+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -17197,7 +17197,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "คุณสมบัติเลเยอร์..."
 
-#: libs/image/kis_image.cc:2490
+#: libs/image/kis_image.cc:2488
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"

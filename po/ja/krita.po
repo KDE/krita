@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-04 00:46+0000\n"
+"POT-Creation-Date: 2023-07-06 00:54+0000\n"
 "PO-Revision-Date: 2023-06-06 00:31-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -17299,7 +17299,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "プロファイルを適用"
 
-#: libs/image/kis_image.cc:2490
+#: libs/image/kis_image.cc:2488
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "選択範囲を切り取り"

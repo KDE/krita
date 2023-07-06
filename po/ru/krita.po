@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-04 00:46+0000\n"
+"POT-Creation-Date: 2023-07-06 00:54+0000\n"
 "PO-Revision-Date: 2023-03-12 19:06+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -17381,7 +17381,7 @@ msgstr ""
 "Назначение профиля\n"
 "назначение профиля"
 
-#: libs/image/kis_image.cc:2490
+#: libs/image/kis_image.cc:2488
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr ""

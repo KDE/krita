@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-04 00:46+0000\n"
+"POT-Creation-Date: 2023-07-06 00:54+0000\n"
 "PO-Revision-Date: 2023-06-23 04:57+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -17042,7 +17042,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "პროფილის მინიჭება"
 
-#: libs/image/kis_image.cc:2490
+#: libs/image/kis_image.cc:2488
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "მონიშნულების ამოჭრა"

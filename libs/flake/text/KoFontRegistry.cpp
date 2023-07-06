@@ -140,8 +140,6 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &fami
                                                          int slant,
                                                          const QString &language)
 {
-    Q_UNUSED(size)
-    Q_UNUSED(language)
     // FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, FC_WIDTH,
     // FC_WEIGHT, FC_SLANT, nullptr);
     FcPatternUP p(FcPatternCreate());

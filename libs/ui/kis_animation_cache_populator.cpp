@@ -49,17 +49,8 @@ struct KisAnimationCachePopulator::Private
     static const int IDLE_CHECK_INTERVAL = 500;
     static const int BETWEEN_FRAMES_INTERVAL = 10;
 
-    int requestedFrame;
-    KisAnimationFrameCacheSP requestCache;
-    KisOpenGLUpdateInfoSP requestInfo;
-    KisSignalAutoConnectionsStore imageRequestConnections;
-
-    QFutureWatcher<void> infoConversionWatcher;
-
     KisAsyncAnimationCacheRenderer regenerator;
     bool calculateAnimationCacheInBackground = true;
-
-
 
     enum State {
         NotWaitingForAnything,
@@ -74,7 +65,6 @@ struct KisAnimationCachePopulator::Private
           part(_part),
           idleCounter(0),
           priorityFrames(),
-          requestedFrame(-1),
           state(WaitingForIdle)
     {
         timer.setSingleShot(true);

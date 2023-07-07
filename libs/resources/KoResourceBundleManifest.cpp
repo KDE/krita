@@ -64,63 +64,58 @@ bool KoResourceBundleManifest::load(QIODevice *device)
     int errorLine;
     int errorColumn;
     if (!manifestDocument.setContent(device, true, &errorMessage, &errorLine, &errorColumn)) {
+        warnKrita << "Error parsing manifest" << errorMessage
+                  << "line" << errorLine
+                  << "column" << errorColumn;
         return false;
     }
 
-    if (!errorMessage.isEmpty()) {
-        warnKrita << "Error parsing manifest" << errorMessage << "line" << errorLine << "column" << errorColumn;
+    QDomElement root = manifestDocument.documentElement();
+    if (root.localName() != "manifest" || root.namespaceURI() != KoXmlNS::manifest) {
         return false;
     }
 
-    // First find the manifest:manifest node.
-    QDomNode n = manifestDocument.firstChild();
-    for (; !n.isNull(); n = n.nextSibling()) {
-        if (!n.isElement()) {
-            continue;
-        }
-        if (n.toElement().localName() == "manifest" && n.toElement().namespaceURI() == KoXmlNS::manifest) {
-            break;
+    QDomElement e = root.firstChildElement("file-entry");
+    for (; !e.isNull(); e = e.nextSiblingElement("file-entry")) {
+        if (!parseFileEntry(e)) {
+            warnKrita << "Skipping invalid manifest entry"
+                      << "line" << e.lineNumber();
         }
     }
 
-    if (n.isNull()) {
-        // "Could not find manifest:manifest";
+    return true;
+}
+
+bool KoResourceBundleManifest::parseFileEntry(const QDomElement &e)
+{
+    if (e.localName() != "file-entry" || e.namespaceURI() != KoXmlNS::manifest) {
         return false;
     }
 
-    // Now loop through the children of the manifest:manifest and
-    // store all the manifest:file-entry elements.
-    const QDomElement  manifestElement = n.toElement();
-    for (n = manifestElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
+    QString fullPath  = e.attributeNS(KoXmlNS::manifest, "full-path");
+    QString mediaType = e.attributeNS(KoXmlNS::manifest, "media-type");
+    QString md5sum    = e.attributeNS(KoXmlNS::manifest, "md5sum");
+    QString version   = e.attributeNS(KoXmlNS::manifest, "version");
 
-        if (!n.isElement())
-            continue;
+    if (fullPath == "/" && mediaType == "application/x-krita-resourcebundle") {
+        // The manifest always contains an entry for the bundle root.
+        // This is not a resource, so skip it without indicating failure.
+        return true;
+    } else if (fullPath.isNull() || mediaType.isNull() || md5sum.isNull()) {
+        return false;
+    }
 
-        QDomElement el = n.toElement();
-        if (!(el.localName() == "file-entry" && el.namespaceURI() == KoXmlNS::manifest))
-            continue;
-
-        QString fullPath  = el.attributeNS(KoXmlNS::manifest, "full-path", QString());
-        QString mediaType = el.attributeNS(KoXmlNS::manifest, "media-type", QString());
-        QString md5sum = el.attributeNS(KoXmlNS::manifest, "md5sum", QString());
-        QString version   = el.attributeNS(KoXmlNS::manifest, "version", QString());
-
-        QStringList tagList;
-        QDomNode tagNode = n.firstChildElement().firstChildElement();
-        while (!tagNode.isNull()) {
-            if (tagNode.firstChild().isText()) {
-                tagList.append(tagNode.firstChild().toText().data());
-            }
-            tagNode = tagNode.nextSibling();
-        }
-
-        // Only if fullPath is valid, should we store this entry.
-        // If not, we don't bother to find out exactly what is wrong, we just skip it.
-        if (!fullPath.isNull() && !mediaType.isEmpty() && !md5sum.isEmpty()) {
-            addResource(mediaType, fullPath, tagList, QByteArray::fromHex(md5sum.toLatin1()), -1);
+    QStringList tagList;
+    QDomElement t = e.firstChildElement("tags")
+                     .firstChildElement("tag");
+    for (; !t.isNull(); t = t.nextSiblingElement("tag")) {
+        QString tag = t.text();
+        if (!tag.isNull()) {
+            tagList.append(tag);
         }
     }
 
+    addResource(mediaType, fullPath, tagList, QByteArray::fromHex(md5sum.toLatin1()), -1);
     return true;
 }
 

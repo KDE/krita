@@ -180,6 +180,8 @@ void KisFrameCacheStore::saveFrame(int frameId, KisOpenGLUpdateInfoSP info, cons
         tile.rect = (*it)->realPatchRect();
         tile.data = std::move((*it)->takePixelData());
 
+        KIS_SAFE_ASSERT_RECOVER(tile.data.data()) { continue; }
+
         frame.frameTiles.push_back(std::move(tile));
     }
 

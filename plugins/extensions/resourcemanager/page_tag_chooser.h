@@ -6,13 +6,6 @@
 #include "KisTagSelectionWidget.h"
 #include <KisTag.h>
 
-// class KisActionManager;
-// class KisTagModel;
-// class KisTagFilterResourceProxyModel;
-// class KisTag;
-// class KisWdgTagSelectionControllerBundleTags;
-
-
 namespace Ui {
 class PageTagChooser;
 }
@@ -35,16 +28,12 @@ private Q_SLOTS:
 
     void addSelected(KisTagSP tagSP);
     void removeSelected(KisTagSP tagSP);
-    void resourceTypeSelected(int idx);
 
 private:
     Ui::PageTagChooser *m_ui;
     KoResourceBundleSP m_bundle;
 
     QList<int> m_selectedTagIds;
-/*
-    QScopedPointer<KisWdgTagSelectionControllerBundleTags> m_tagsController;
-    KisTagSelectionWidget* m_wdgResourcesTags;*/
 };
 
 #endif // PAGE_TAG_CHOOSER_H

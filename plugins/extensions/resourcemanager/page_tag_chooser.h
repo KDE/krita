@@ -3,6 +3,14 @@
 
 #include <QWizardPage>
 #include <KoResourceBundle.h>
+#include "KisTagSelectionWidget.h"
+#include <KisTag.h>
+
+// class KisActionManager;
+// class KisTagModel;
+// class KisTagFilterResourceProxyModel;
+// class KisTag;
+// class KisWdgTagSelectionControllerBundleTags;
 
 
 namespace Ui {
@@ -25,8 +33,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void addSelected();
-    void removeSelected();
+    void addSelected(KisTagSP tagSP);
+    void removeSelected(KisTagSP tagSP);
     void resourceTypeSelected(int idx);
 
 private:
@@ -34,6 +42,9 @@ private:
     KoResourceBundleSP m_bundle;
 
     QList<int> m_selectedTagIds;
+/*
+    QScopedPointer<KisWdgTagSelectionControllerBundleTags> m_tagsController;
+    KisTagSelectionWidget* m_wdgResourcesTags;*/
 };
 
 #endif // PAGE_TAG_CHOOSER_H

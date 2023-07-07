@@ -1,5 +1,4 @@
-#include "kisresourceitemviwer.h"
-#include "ui_kisresourceitemviwer.h"
+#include "KisResourceItemViwer.h"
 
 #include "ResourceListViewModes.h"
 #include "KisPopupButton.h"
@@ -9,12 +8,9 @@
 
 KisResourceItemViwer::KisResourceItemViwer(Viewer type, QWidget *parent) :
     KisPopupButton(parent),
-    m_ui(new Ui::KisResourceItemViwer),
     m_mode(ListViewMode::IconGrid),
     m_type(type)
 {
-    m_ui->setupUi(this);
-
     QMenu* viewModeMenu = new QMenu(this);
     KisConfig cfg(true);
 
@@ -61,7 +57,6 @@ KisResourceItemViwer::KisResourceItemViwer(Viewer type, QWidget *parent) :
 
 KisResourceItemViwer::~KisResourceItemViwer()
 {
-    delete m_ui;
 }
 
 void KisResourceItemViwer::slotViewThumbnail()

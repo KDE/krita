@@ -30,7 +30,7 @@
 #include <KoIcon.h>
 #include "ResourceListViewModes.h"
 #include <kis_config.h>
-#include "kisresourceitemviwer.h"
+#include "KisResourceItemViwer.h"
 
 
 WdgResourcePreview::WdgResourcePreview(WidgetType type, QWidget *parent) :

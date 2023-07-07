@@ -9,10 +9,6 @@
 
 enum class Viewer {TableAvailable, ResourceManager, TableSelected};
 
-namespace Ui {
-class KisResourceItemViwer;
-}
-
 class KisResourceItemViwer : public KisPopupButton
 {
     Q_OBJECT
@@ -32,7 +28,6 @@ Q_SIGNALS:
     void onViewDetails();
 
 private:
-    Ui::KisResourceItemViwer *m_ui;
 
     ListViewMode m_mode;
     Viewer m_type;

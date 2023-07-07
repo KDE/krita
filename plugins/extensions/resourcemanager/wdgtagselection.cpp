@@ -219,6 +219,8 @@ void KisWdgTagSelectionControllerBundleTags::slotRemoveTag(KoID custom)
             updateView();
         }
     }
+    
+    emit tagRemoved(custom);
 }
 
 void KisWdgTagSelectionControllerBundleTags::slotAddTag(KoID custom)
@@ -230,6 +232,8 @@ void KisWdgTagSelectionControllerBundleTags::slotAddTag(KoID custom)
         m_selectedTagsByResourceType[m_resourceType].append(custom);
         updateView();
     }
+
+    emit tagAdded(custom);
 }
 
 void KisWdgTagSelectionControllerBundleTags::updateView()

@@ -1,7 +1,7 @@
 #include "page_resource_chooser.h"
 #include "ui_pageresourcechooser.h"
 #include "wdg_resource_preview.h"
-#include "kisresourceitemviwer.h"
+#include "KisResourceItemViwer.h"
 #include <kis_config.h>
 #include "KisResourceItemListView.h"
 #include "dlg_create_bundle.h"
@@ -115,39 +115,60 @@ void PageResourceChooser::slotResourcesSelectionChanged(QModelIndex selected)
 
 void PageResourceChooser::slotresourceTypeSelected(int idx)
 {
-    QString resourceType = m_wdgResourcePreview->getCurrentResourceType();
-    m_resourceItemWidget->clear();
-    QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
+    if (!m_bundle) {
+        QString resourceType = m_wdgResourcePreview->getCurrentResourceType();
+        m_resourceItemWidget->clear();
+        QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
 
-    KisResourceModel model(standarizedResourceType);
-    for (int i = 0; i < model.rowCount(); i++) {
-        QModelIndex idx = model.index(i, 0);
-        QString filename = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
-        int id = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+        KisResourceModel model(standarizedResourceType);
+        for (int i = 0; i < model.rowCount(); i++) {
+            QModelIndex idx = model.index(i, 0);
+            QString filename = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
+            int id = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
 
-        if (resourceType == ResourceType::Gradients) {
-            if (filename == "Foreground to Transparent" || filename == "Foreground to Background") {
-                continue;
+            if (resourceType == ResourceType::Gradients) {
+                if (filename == "Foreground to Transparent" || filename == "Foreground to Background") {
+                    continue;
+                }
+            }
+
+            QImage image = (model.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail)).value<QImage>();
+            QString name = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+
+            Qt::AspectRatioMode scalingAspectRatioMode = Qt::IgnoreAspectRatio;
+            if (image.height() == 1) { // affects mostly gradients, which are very long but only 1px tall
+                scalingAspectRatioMode = Qt::IgnoreAspectRatio;
+            }
+            QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image, scalingAspectRatioMode), name);
+            item->setData(Qt::UserRole, id);
+
+            if (m_selectedResourcesIds.contains(id)) {
+                m_resourceItemWidget->addItem(item);
             }
         }
-
-        QImage image = (model.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail)).value<QImage>();
-        QString name = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-
-        Qt::AspectRatioMode scalingAspectRatioMode = Qt::IgnoreAspectRatio;
-        if (image.height() == 1) { // affects mostly gradients, which are very long but only 1px tall
-            scalingAspectRatioMode = Qt::IgnoreAspectRatio;
-        }
-        QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image, scalingAspectRatioMode), name);
-        item->setData(Qt::UserRole, id);
-
-        if (m_selectedResourcesIds.contains(id)) {
-            m_resourceItemWidget->addItem(item);
-        }
+    } else {
+        m_resourceItemWidget->clear();
+//         m_bundleStorage = new KisBundleStorage(m_bundle->filename());
+//
+//
+//         QSharedPointer<KisResourceStorage::ResourceIterator> iter = m_bundleStorage->resources(m_wdgResourcePreview->getCurrentResourceType());
+//         while (iter->hasNext()) {
+//             iter->next();
+//
+//             QImage image = iter->resource()->image();
+//             QString name = iter->resource()->name();
+//
+//             Qt::AspectRatioMode scalingAspectRatioMode = Qt::IgnoreAspectRatio;
+//             if (image.height() == 1) { // affects mostly gradients, which are very long but only 1px tall
+//                 scalingAspectRatioMode = Qt::IgnoreAspectRatio;
+//             }
+//             QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image, scalingAspectRatioMode), name);
+//             //item->setData(Qt::UserRole, id);
+//             m_resourceItemWidget->addItem(item);
+//         }
     }
 
     m_resourceItemWidget->sortItems();
-
 }
 
 void PageResourceChooser::slotRemoveSelected(bool)

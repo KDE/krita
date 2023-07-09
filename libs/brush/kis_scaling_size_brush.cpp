@@ -25,12 +25,12 @@ KisScalingSizeBrush::KisScalingSizeBrush(const KisScalingSizeBrush &rhs)
 
 qreal KisScalingSizeBrush::userEffectiveSize() const
 {
-    return this->width() * this->scale();
+    return qMax(this->width(), this->height()) * this->scale();
 }
 
 void KisScalingSizeBrush::setUserEffectiveSize(qreal value)
 {
-    this->setScale(value / this->width());
+    this->setScale(value / qMax(this->width(), this->height()));
 }
 
 

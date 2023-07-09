@@ -80,6 +80,7 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
     if (fi.exists()) {
         QString mimeType = KisMimeDatabase::mimeTypeForFile(path);
         if (mimeType == KisDocument::nativeFormatMimeType()
+               || mimeType == "application/x-krita-archive"
                || mimeType == "image/openraster") {
 
             QScopedPointer<KoStore> store(KoStore::createStore(path, KoStore::Read));

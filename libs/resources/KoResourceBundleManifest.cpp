@@ -205,21 +205,18 @@ QStringList KoResourceBundleManifest::tags() const
 
 QList<KoResourceBundleManifest::ResourceReference> KoResourceBundleManifest::files(const QString &type) const
 {
-    // If no type is specified we return all the resources
-    if(type.isEmpty()) {
-        QList<ResourceReference> resources;
-        QList<QMap<QString, ResourceReference> >::iterator i;
-        QList<QMap<QString, ResourceReference> > values = m_resources.values();
-        for(i = values.begin(); i != values.end(); ++i) {
-            resources.append(i->values());
-        }
+    QList<ResourceReference> resources;
 
-        return resources;
+    if (type.isEmpty()) {
+        // If no type is specified we return all the resources.
+        Q_FOREACH (const QString &type, m_resources.keys()) {
+            resources += m_resources[type].values();
+        }
+    } else if (m_resources.contains(type)) {
+        resources = m_resources[type].values();
     }
-    else if (!m_resources.contains(type)) {
-        return QList<KoResourceBundleManifest::ResourceReference>();
-    }
-    return m_resources[type].values();
+
+    return resources;
 }
 
 void KoResourceBundleManifest::removeFile(QString fileName)

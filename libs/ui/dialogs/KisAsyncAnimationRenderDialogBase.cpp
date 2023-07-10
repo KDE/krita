@@ -14,9 +14,12 @@
 #include <QTime>
 #include <QList>
 #include <QtMath>
+#include <kis_async_action_feedback.h>
 
 #include <klocalizedstring.h>
 
+#include <KisLockFrameGenerationLock.h>
+#include <KisBlockBackgroundFrameGenerationLock.h>
 #include "KisViewManager.h"
 #include "KisAsyncAnimationRendererBase.h"
 #include "kis_time_span.h"
@@ -120,6 +123,8 @@ KisAsyncAnimationRenderDialogBase::~KisAsyncAnimationRenderDialogBase()
 KisAsyncAnimationRenderDialogBase::Result
 KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
 {
+    KisBlockBackgroundFrameGenerationLock populatorBlock(m_d->image->animationInterface());
+
     {
         /**
          * Since this method can be called from the places where no
@@ -142,6 +147,14 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
         if (!imageIsIdle) {
             return RenderCancelled;
         }
+    }
+
+
+    if (!m_d->isBatchMode) {
+        QWidget *parentWidget = viewManager ? viewManager->mainWindowAsQWidget() : 0;
+        KisLockFrameGenerationLockAdapter adapter(m_d->image->animationInterface());
+        KisAsyncActionFeedback feedback(i18n("Wait for existing frame generation process to complete..."), parentWidget);
+        feedback.waitForMutex(adapter);
     }
 
     m_d->stillDirtyFrames = calcDirtyFrames();
@@ -298,8 +311,11 @@ void KisAsyncAnimationRenderDialogBase::tryInitiateFrameRegeneration()
             if (!pair.renderer->isActive()) {
                 const int currentDirtyFrame = m_d->stillDirtyFrames.takeFirst();
 
+                KisLockFrameGenerationLock lock(pair.image->animationInterface());
+
                 initializeRendererForFrame(pair.renderer.get(), pair.image, currentDirtyFrame);
-                pair.renderer->startFrameRegeneration(pair.image, currentDirtyFrame, m_d->regionOfInterest);
+                pair.renderer->startFrameRegeneration(pair.image, currentDirtyFrame, m_d->regionOfInterest,
+                                                      KisAsyncAnimationRendererBase::None, std::move(lock));
                 hadWorkOnPreviousCycle = true;
                 m_d->framesInProgress.append(currentDirtyFrame);
                 break;

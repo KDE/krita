@@ -51,7 +51,7 @@ KisAsyncAnimationRendererBase::~KisAsyncAnimationRendererBase()
 
 }
 
-void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int frame, const KisRegion &regionOfInterest, Flags flags)
+void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int frame, const KisRegion &regionOfInterest, Flags flags, KisLockFrameGenerationLock &&frameGenerationLock)
 {
     KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == this->thread());
 
@@ -74,12 +74,12 @@ void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int
                 Qt::AutoConnection);
 
     m_d->regenerationTimeout.start();
-    animation->requestFrameRegeneration(m_d->requestedFrame, m_d->requestedRegion, flags & Cancellable);
+    animation->requestFrameRegeneration(m_d->requestedFrame, m_d->requestedRegion, flags & Cancellable, std::move(frameGenerationLock));
 }
 
-void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int frame, Flags flags)
+void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int frame, Flags flags, KisLockFrameGenerationLock &&frameGenerationLock)
 {
-    startFrameRegeneration(image, frame, KisRegion(), flags);
+    startFrameRegeneration(image, frame, KisRegion(), flags, std::move(frameGenerationLock));
 }
 
 bool KisAsyncAnimationRendererBase::isActive() const

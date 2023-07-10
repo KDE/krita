@@ -2609,7 +2609,7 @@ void KisDocument::waitForSavingToComplete()
 {
     if (isSaving()) {
         KisAsyncActionFeedback f(i18nc("progress dialog message when the user closes the document that is being saved", "Waiting for saving to complete..."), 0);
-        f.waitForMutex(&d->savingMutex);
+        f.waitForMutex(d->savingMutex);
     }
 }
 

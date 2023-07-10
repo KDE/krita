@@ -17,6 +17,7 @@
 #include "kis_raster_keyframe_channel.h"
 #include "kis_time_span.h"
 
+#include <KisLockFrameGenerationLock.h>
 #include "kis_post_execution_undo_adapter.h"
 #include "commands_new/kis_switch_current_time_command.h"
 #include "kis_layer_utils.h"
@@ -67,6 +68,9 @@ struct KisImageAnimationInterface::Private
     int exportInitialFrameNumber;
 
     KisSwitchTimeStrokeStrategy::SharedTokenWSP switchToken;
+
+    QAtomicInt backgroundFrameGenerationBlocked;
+    QMutex frameGenerationLock;
 
     inline int currentTime() const {
         return m_currentTime;
@@ -308,13 +312,14 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, SwitchTimeA
     emit sigUiTimeChanged(frameId);
 }
 
-void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion, bool isCancellable)
+void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion, bool isCancellable, KisLockFrameGenerationLock &&lock)
 {
     KisStrokeStrategy *strategy =
         new KisRegenerateFrameStrokeStrategy(frameId,
                                              dirtyRegion,
                                              isCancellable,
-                                             this);
+                                             this,
+                                             std::move(lock));
 
     QList<KisStrokeJobData*> jobs = KisRegenerateFrameStrokeStrategy::createJobsData(m_d->image);
 
@@ -472,4 +477,34 @@ int KisImageAnimationInterface::totalLength()
     lastKey  = std::max(lastKey, m_d->currentUITime());
 
     return lastKey + 1;
+}
+
+void KisImageAnimationInterface::blockBackgroundFrameGeneration()
+{
+    m_d->backgroundFrameGenerationBlocked.ref();
+}
+
+void KisImageAnimationInterface::unblockBackgroundFrameGeneration()
+{
+    m_d->backgroundFrameGenerationBlocked.deref();
+}
+
+bool KisImageAnimationInterface::backgroundFrameGenerationBlocked() const
+{
+    return m_d->backgroundFrameGenerationBlocked.loadAcquire();
+}
+
+bool KisImageAnimationInterface::tryLockFrameGeneration()
+{
+    return m_d->frameGenerationLock.tryLock();
+}
+
+void KisImageAnimationInterface::lockFrameGeneration()
+{
+    m_d->frameGenerationLock.lock();
+}
+
+void KisImageAnimationInterface::unlockFrameGeneration()
+{
+    m_d->frameGenerationLock.unlock();
 }

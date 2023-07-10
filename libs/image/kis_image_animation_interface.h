@@ -18,6 +18,7 @@ class KisTimeSpan;
 class KisKeyframeChannel;
 class KoColor;
 class KisRegion;
+class KisLockFrameGenerationLock;
 
 namespace KisLayerUtils {
     struct SwitchFrameCommand;
@@ -79,8 +80,11 @@ public:
      *    with Qt::DirectConnection and fetch the result from
      *    frameProjection().  After the signal handler is exited, the
      *    data will no longer be available.
+     *
+     * 3) The passed lock will be released when the stroke is finished
+     *    execution (and the strategy is destroyed)
      */
-    void requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion, bool isCancellable);
+    void requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion, bool isCancellable, KisLockFrameGenerationLock &&lock);
 
     void notifyNodeChanged(const KisNode *node, const QRect &rect, bool recursive);
     void notifyNodeChanged(const KisNode *node, const QVector<QRect> &rects, bool recursive);
@@ -129,6 +133,66 @@ public:
 
     int totalLength();
 
+    /**
+     * Blocks background processes like frame cache populator from starting the
+     * generation process, hence giving priority to the interactive frame
+     * generation methods.
+     *
+     * This method is **not** blocking, it just forbids further
+     * actions. If there is any backround action is running, it
+     * continues to run. Use lockFrameGeneration() to wait
+     * for completion of such actions.
+     *
+     * \see KisBlockBackgroundFrameGenerationLock for RAII wrapper
+     */
+    void blockBackgroundFrameGeneration();
+
+    /**
+     * Unblocks background generation process.
+     *
+     * \see blockBackgroundFrameGeneration()
+     */
+    void unblockBackgroundFrameGeneration();
+
+    /**
+     * Reports if background generation process is blocked
+     *
+     * \see blockBackgroundFrameGeneration()
+     */
+    bool backgroundFrameGenerationBlocked() const;
+
+    /**
+     * Acquire an exclusive lock for the frame generation process
+     * initiated by requestFrameRegeneration().
+     *
+     * It is impossible to execute multiple background frame
+     * generation processes on a single image, because the
+     * image returns the result using global signals. Hence
+     * the initiator of the generation should acquire the lock
+     * first and pass it to requestFrameRegeneration(). The lock
+     * will be automatically released when the frame generation
+     * process is ended and all the signals are emitted.
+     *
+     * Calling to lockFrameGeneration() may block until the
+     * currently executing frame generation process is running.
+     *
+     * \see KisLockFrameGenerationLock for RAII wrapper
+     */
+    void lockFrameGeneration();
+
+    /**
+     * Release frame generation lock
+     *
+     * \see lockFrameGeneration()
+     */
+    void unlockFrameGeneration();
+
+    /**
+     * Try to acquire frame generation lock
+     *
+     * \see lockFrameGeneration()
+     */
+    bool tryLockFrameGeneration();
 
     enum SwitchTimeAsyncOption {
         STAO_NONE = 0,

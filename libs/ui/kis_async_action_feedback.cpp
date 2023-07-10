@@ -65,9 +65,9 @@ void KisAsyncActionFeedback::runVoidAction(std::function<void()> func)
     watcher.waitForFinished();
 }
 
-void KisAsyncActionFeedback::waitForMutex(QMutex *mutex)
+void KisAsyncActionFeedback::waitForMutexLikeImpl(std::unique_ptr<MutexLikeBase> &&mutex)
 {
-    while (!mutex->tryLock()) {
+    while (!mutex->try_lock()) {
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     }
 

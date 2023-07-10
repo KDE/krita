@@ -344,6 +344,8 @@ set(kritaimage_LIB_SRCS
    KisBezierTransformMesh.cpp
 
    KisEncloseAndFillPainter.cpp
+   KisBlockBackgroundFrameGenerationLock.cpp
+   KisLockFrameGenerationLock.cpp
 )
 
 set(einspline_SRCS

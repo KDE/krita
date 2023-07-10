@@ -5,7 +5,8 @@
 
 #include <kritaglobal_export.h>
 #include <QCursor>
-#include <mutex>
+#include <KisAdaptedLock.h>
+
 
 class KRITAGLOBAL_EXPORT KisCursorOverrideLockAdapter
 {
@@ -20,18 +21,6 @@ private:
     QCursor m_cursor;
 };
 
-struct KisCursorOverrideLock
-    : private KisCursorOverrideLockAdapter,
-      public std::unique_lock<KisCursorOverrideLockAdapter>
-{
-    KisCursorOverrideLock(const QCursor &cursor)
-        : KisCursorOverrideLockAdapter(cursor)
-        , std::unique_lock<KisCursorOverrideLockAdapter>(
-              static_cast<KisCursorOverrideLockAdapter&>(*this))
-    {}
-
-    using std::unique_lock<KisCursorOverrideLockAdapter>::lock;
-    using std::unique_lock<KisCursorOverrideLockAdapter>::unlock;
-};
+KIS_DECLARE_ADAPTED_LOCK(KisCursorOverrideLock, KisCursorOverrideLockAdapter)
 
 #endif // KISCURSOROVERRIDELOCK_H

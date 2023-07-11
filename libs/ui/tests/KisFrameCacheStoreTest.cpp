@@ -15,6 +15,7 @@
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
+#include "KisLockFrameGenerationLock.h"
 
 // TODO: conversion options into a separate file!
 #include "kis_update_info.h"
@@ -166,8 +167,9 @@ void KisFrameCacheStoreTest::test()
     KisPaintLayerSP layer1 = p.layer;
     layer1->paintDevice()->fill(QRect(100,100,300,300), fillColor);
 
+    KisLockFrameGenerationLock lock(p.image->animationInterface());
     TestFramesRenderer renderer;
-    renderer.startFrameRegeneration(p.image, 10);
+    renderer.startFrameRegeneration(p.image, 10, TestFramesRenderer::None, std::move(lock));
 
 
     p.image->waitForDone();

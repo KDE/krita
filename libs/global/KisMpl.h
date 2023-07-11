@@ -409,6 +409,28 @@ inline auto mem_greater_equal(MemType (Class::*ptr)() const) {
     return detail::mem_compare<std::greater_equal<>, Class, MemType, decltype(ptr)>{ptr};
 }
 
+/**
+ * A simple wrapper class that executes a passed lambda
+ * on destruction. It might be used for cleaning-up resources,
+ * which are not a part of normal RAII relationships.
+ */
+template <typename F>
+struct finally {
+    finally(F &&f)
+        : m_f(std::forward<F>(f))
+    {
+    }
+
+    finally(const finally &) = delete;
+    finally(finally &&) = delete;
+
+    ~finally() {
+        m_f();
+    }
+private:
+    F m_f;
+};
+
 
 } // namespace kismpl
 

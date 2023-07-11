@@ -9,6 +9,7 @@
 #include <QTimer>
 #include <QThread>
 
+#include "KisMpl.h"
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 #include "kis_signal_auto_connection.h"
@@ -129,10 +130,17 @@ void KisAsyncAnimationRendererBase::notifyFrameCompleted(int frame)
     // the processing was cancelled
     if (m_d->isCancelled) return;
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedImage);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedFrame == frame);
+    {
+        // clean state right after the assert checks
+        auto cleanup = kismpl::finally([&] () {
+            clearFrameRegenerationState(false);
+        });
 
-    clearFrameRegenerationState(false);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedImage);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedFrame == frame);
+    }
+
+
     emit sigFrameCompleted(frame);
 }
 
@@ -144,10 +152,16 @@ void KisAsyncAnimationRendererBase::notifyFrameCancelled(int frame, CancelReason
     // the processing was cancelled
     if (m_d->isCancelled) return;
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedImage);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedFrame == frame);
+    {
+        // clean state right after the assert checks
+        auto cleanup = kismpl::finally([&] () {
+            clearFrameRegenerationState(true);
+        });
 
-    clearFrameRegenerationState(true);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedImage);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedFrame == frame);
+    }
+
     emit sigFrameCancelled(frame, cancelReason);
 }
 

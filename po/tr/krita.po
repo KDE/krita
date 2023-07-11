@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-06 00:54+0000\n"
-"PO-Revision-Date: 2023-07-05 13:42+0300\n"
+"PO-Revision-Date: 2023-07-11 00:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16938,7 +16938,7 @@ msgid ""
 "Replicate pixels in the image. Preserves all the original detail, but can "
 "produce jagged effects."
 msgstr ""
-"Görüntüdeki pikselleri yineler. Tüm özgün ayrıntıları korur; ancak daha "
+"Görseldeki pikselleri yineler. Tüm özgün ayrıntıları korur; ancak daha "
 "keskin efektler üretebilir."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSmoothingType)
@@ -16957,7 +16957,7 @@ msgid ""
 "medium quality results when the image is scaled from half to two times the "
 "original size."
 msgstr ""
-"Çevreleyen piksellerin renk değerlerini ortalayarak pikseller ekler. Görüntü "
+"Çevreleyen piksellerin renk değerlerini ortalayarak pikseller ekler. Görsel "
 "yarısından itibaren iki kez özgün boyutuna ölçekli olduğunda orta kalitede "
 "sonuçlar üretir."
 
@@ -17723,7 +17723,7 @@ msgid ""
 "millisecond</b>. The format cannot represent this, and the frame duration "
 "will be rounded to the nearest millisecond."
 msgstr ""
-"Görüntü, <b>milisaniyenin</b> kesirleri türünden bir kare süresiyle "
+"Görsel, <b>milisaniyenin</b> kesirleri türünden bir kare süresiyle "
 "canlandırılır. Biçim bunu temsil edemez ve kare süresi en yakın milisaniyeye "
 "yuvarlanır."
 
@@ -17825,8 +17825,8 @@ msgid ""
 "The image contains layers of unsupported type <b>%1</b>. Only the rendered "
 "result will be saved."
 msgstr ""
-"Görüntü desteklenmeyen <b>%1</b>  türünün katmanlarını içermekte. Yalnızca "
-"oluşturulan sonuçlar kaydedilecek."
+"Görsel, desteklenmeyen <b>%1</b> türünün katmanlarını içermekte. Yalnızca "
+"sunulan sonuçlar kaydedilecek."
 
 #: libs/impex/PSDLayerStylesCheck.h:104
 #, kde-format
@@ -17834,7 +17834,7 @@ msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>layer styles</b>. The layer styles will not be saved."
 msgstr ""
-"Görüntü <b>katman biçemleri</b> içerir. Katman biçemleri kaydedilmeyecek."
+"Görsel, <b>katman biçemleri</b> içeriyor. Katman biçemleri kaydedilmeyecek."
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -17843,8 +17843,8 @@ msgid ""
 "The image is not tagged as <b>non-linear gamma sRGB</b>. The image will be "
 "converted to sRGB."
 msgstr ""
-"Görüntü <b>doğrusal olmayan gama sRGB</b> olarak etiketlenmedi. Görüntü "
-"sRGB'ye dönüştürülecek."
+"Görsel, <b>doğrusal olmayan gama sRGB</b> olarak etiketlenmedi. sRGB'ye "
+"dönüştürülecek."
 
 #: libs/koplugin/KisMimeDatabase.cpp:169
 #, kde-format
@@ -21075,7 +21075,7 @@ msgstr "tane"
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "stillimage"
-msgstr "sabitgörüntü"
+msgstr "sabit görsel"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:65
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:73
@@ -21403,19 +21403,19 @@ msgstr "y"
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:70
 #, kde-format
 msgid "Red Primary:"
-msgstr "Kırmızı Öncelik:"
+msgstr "Kırmızı Ana Renk:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:107
 #, kde-format
 msgid "Green Primary:"
-msgstr "Yeşil Öncelik:"
+msgstr "Yeşil Ana Renk:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:144
 #, kde-format
 msgid "Blue Primary:"
-msgstr "Mavi Öncelik:"
+msgstr "Mavi Ana Renk:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #. i18n: ectx: property (text), widget (QLabel, lblWhitepoint)
@@ -22236,7 +22236,7 @@ msgstr "Kapat, kaydetme"
 #: libs/ui/dialogs/kis_delayed_save_dialog.ui:31
 #, kde-format
 msgid "Waiting for image operation to complete..."
-msgstr "Görüntü işleminin bitmesi bekleniyor..."
+msgstr "Görsel işleminin bitmesi bekleniyor..."
 
 #: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:68
 #, kde-format
@@ -22971,17 +22971,17 @@ msgstr "En Yüksek Tam Renk Parlaklığı: %1"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1778
 #, kde-format
 msgid "Red Primary: %1, %2"
-msgstr "Kırmızı Öncelik: %1, %2"
+msgstr "Kırmızı Ana Renk: %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1779
 #, kde-format
 msgid "Green Primary: %1, %2"
-msgstr "Yeşil Öncelik: %1, %2"
+msgstr "Yeşil Ana Renk: %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1780
 #, kde-format
 msgid "Blue Primary: %1, %2"
-msgstr "Mavi Öncelik: %1, %2"
+msgstr "Mavi Ana Renk: %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1781
 #, kde-format
@@ -24828,7 +24828,7 @@ msgstr "Ölçekleme Yok"
 #: libs/ui/forms/wdgdlgfilelayer.ui:128
 #, kde-format
 msgid "Scale to Image Size"
-msgstr "Görüntü Boyutuna Ölçekle"
+msgstr "Görsel Boyutuna Ölçekle"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioScalePPI)
 #: libs/ui/forms/wdgdlgfilelayer.ui:135
@@ -28113,7 +28113,7 @@ msgid ""
 "The <i>Change Primary Setting</i> action changes a tool's \"Primary Setting"
 "\", for example the brush size for the brush tool."
 msgstr ""
-"<i>Ana Ayarı Değiştir</i> eylemi, bir aracın \"Ana Ayarı\"'nı değiştirir; "
+"<i>Ana Ayarı Değiştir</i> eylemi, bir aracın \"Ana Ayarı\"nı değiştirir; "
 "örneğin fırça aracı için fırçanın boyutunu."
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:25
@@ -30795,7 +30795,7 @@ msgstr "Palet İçe Aktar"
 #: libs/ui/KisPaletteEditor.cpp:151
 #, kde-format
 msgid "Do you want to store this palette in your current image?"
-msgstr "Bu paleti geçerli görüntü içinde depolamak istiyor musunuz?"
+msgstr "Bu paleti geçerli görsel içinde depolamak istiyor musunuz?"
 
 #: libs/ui/KisPaletteEditor.cpp:225 libs/ui/KisPaletteEditor.cpp:282
 #, kde-format
@@ -32268,7 +32268,7 @@ msgstr ""
 #: libs/ui/opengl/kis_opengl_image_textures.cpp:844
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
-msgstr "OpenColorIO devre dışı bırakıldı: görüntü renk uzayı desteklenmiyor"
+msgstr "OpenColorIO devre dışı bırakıldı: Görsel renk uzayı desteklenmiyor"
 
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:332
 #, kde-format
@@ -33101,9 +33101,9 @@ msgstr ""
 "denge arasındaki farkı kodlamaya çalışır. Bu, renk düzeltme için kullanışlı "
 "kılar, ancak harmanlama kiplerindeki renk matematiklerinin büyük çoğunluğu "
 "burada beklendiği gibi <b>çalışmaz</b>.<br/>Benzer şekilde Krita, LAB'de "
-"HDR'yi desteklemez; bu, LAB'e dönüştürülen HDR görüntülerinin renk bilgisini "
+"HDR'yi desteklemez; bu, LAB'e dönüştürülen HDR görsellerin renk bilgisini "
 "kaybettiği anlamına gelir. Bu renk aralığı boyama için değil, dışa aktarma "
-"için de <b>önerilmez</b>, ancak en iyisi sonradan işleme yapmak için bir "
+"için de <b>önerilmez</b>; ancak en iyisi sonradan işleme yapmak için bir "
 "alan olarak kullanılır. TRC, L * TRC olarak kabul edilir."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:442
@@ -33154,11 +33154,11 @@ msgstr ""
 "<b>16 bit tamsayı</b>: Ayrıca 'derin renk' olarak da bilinir. 16 bit, "
 "doğrusal bir TRC, geniş renk alanı veya daha hassas renk uyumu gerektiren "
 "durumlarda düzenleme yapmak için idealdir. Bu, aynı özelliklerin herhangi "
-"bir 8 bit görüntüsünden RAM ve sabit sürücüde iki kat daha fazla alan alır "
-"ve bazı aygıtlar için daha fazla işlem gücü alır. Dosyanın RAM kullanımını "
+"bir 8 bit görselden RAM ve sabit sürücüde iki kat daha fazla alan alır ve "
+"bazı aygıtlar için daha fazla işlem gücü alır. Dosyanın RAM kullanımını "
 "dikkatli bir şekilde izlemenizi veya aksi takdirde bilgisayarınız yavaşlarsa "
-"8 bit kullanmanızı öneririz. 16 bit / kanaldan 8 bit / kanala dönüştürürken "
-"dönüşüm optimizasyonunu devre dışı bırakmaya dikkat edin."
+"8 bit kullanmanızı öneririz. 16 bit/kanaldan 8 bit/kanala dönüştürürken "
+"dönüşüm eniyilemesini devre dışı bırakmaya dikkat edin."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:468
 #, kde-format
@@ -33175,13 +33175,13 @@ msgid ""
 "bit if your computer slows down."
 msgstr ""
 "<b>16 bit kayan noktalı sayı</b>: \"Yarım Kayan Nokta\" olarak da bilinir ve "
-"VFX endüstri görüntülerinde standarttır. 16 bit kayan noktalı, doğrusal Ton "
+"VFX endüstrisi görsellerinde standarttır. 16 bit kayan noktalı, doğrusal Ton "
 "Yanıt Eğrisi, geniş renk alanı veya daha hassas renk karışımına gereksinim "
-"duyduğunuzda görüntüleri düzenlemek için idealdir. Kayan nokta olması, "
-"Sahnede Tavsiye Edilen (HDR) görüntüler için mutlak bir gerekliliktir. Bu, "
-"aynı özelliklerin herhangi bir 8 bit görüntüsünden RAM ve sabit sürücüde iki "
-"kat daha fazla alan alır ve bazı aygıtlar için daha fazla işlem gücü alır. "
-"Dosyanın RAM kullanımını dikkatli bir şekilde izlemenizi veya aksi takdirde "
+"duyduğunuzda görselleri düzenlemek için idealdir. Kayan nokta olması, Yüksek "
+"Devingen Erimli (HDR) görseller için mutlak bir gerekliliktir. Bu, aynı "
+"özelliklerin herhangi bir 8 bit görselden RAM ve sabit sürücüde iki kat daha "
+"fazla alan alır ve bazı aygıtlar için daha fazla işlem gücü alır. Dosyanın "
+"RAM kullanımını dikkatli bir şekilde izlemenizi veya aksi takdirde "
 "bilgisayarınız yavaşlarsa 8 bit kullanmanızı öneririz."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:477
@@ -33199,10 +33199,10 @@ msgid ""
 msgstr ""
 "<b>32 bit ondalıklı sayı</b>: Ayrıca 'Tam kayan nokta' olarak da bilinir. 32 "
 "bit float, doğrusal bir TRC, geniş renk alanı veya daha hassas renk "
-"karışımına gereksinim duyduğunuzda görüntüleri düzenlemek için idealdir. "
-"Kayan nokta olması, Sahne Tavsiye Edilen (HDR) görüntüler için mutlak bir "
-"gerekliliktir. Bu, aynı özelliklerin herhangi bir 8 bitlik görüntüsünden RAM "
-"ve sabit sürücüde dört kat daha fazla alan alır ve bazı aygıtlar için daha "
+"karışımına gereksinim duyduğunuzda görselleri düzenlemek için idealdir. "
+"Kayan nokta olması, Yüksek Devingen Erimli (HDR) görseller için mutlak bir "
+"gerekliliktir. Bu, aynı özelliklerin herhangi bir 8 bitlik görselden RAM ve "
+"sabit sürücüde dört kat daha fazla alan alır ve bazı aygıtlar için daha "
 "fazla işlem gücü kullanır. Dosyanın RAM kullanımını dikkatli bir şekilde "
 "izlemenizi veya aksi takdirde bilgisayarınız yavaşlarsa 8 bit kullanmanızı "
 "öneririz."
@@ -33224,10 +33224,10 @@ msgid ""
 msgstr ""
 "<b>64 bit kayan noktalı sayı</b>: 64 bit kayan noktalı sayı, elimizde olan "
 "teknolojide olabildiği ölçüde kesindir ve bu derinlik çoğu zaman yazılım "
-"için bir girdi olarak üretilen veya kullanılan görüntüler için kullanılır. "
-"Kayan nokta olması,  Sahne Tavsiye Edilen (HDR) görüntüler için mutlak bir "
-"gerekliliktir. Bu, aynı özelliklerin herhangi bir 8 bitlik görüntüsünden RAM "
-"ve sabit sürücüde sekiz kat daha fazla alan alır ve bazı aygıtlar için daha "
+"için bir girdi olarak üretilen veya kullanılan görseller için kullanılır. "
+"Kayan nokta olması, Yüksek Devingen Erimli (HDR) görseller için mutlak bir "
+"gerekliliktir. Bu, aynı özelliklerin herhangi bir 8 bitlik görselden RAM ve "
+"sabit sürücüde sekiz kat daha fazla alan alır ve bazı aygıtlar için daha "
 "fazla işlem gücü gerektirir. Dosyanın RAM kullanımını dikkatli bir şekilde "
 "izlemenizi veya aksi takdirde bilgisayarınız yavaşlarsa 8 bit kullanmanızı "
 "öneririz."
@@ -33376,8 +33376,8 @@ msgstr ""
 "<p>ACES ve AllColorsRGB renk alanlarından daha yüksek bir sanal renk "
 "yüzdesine sahip olsa da, olası tüm görünür renkleri dahil etmek için "
 "matematiksel açıdan açık bir yoldur çünkü IdentityRGB çalışma alanı profil "
-"paketinde bulunur. IdentityRGB çalışma alanındaki görüntüleri neden "
-"gerçekten düzenlemeyi istediğinizi bilemiyorum.</p>"
+"paketinde bulunur. IdentityRGB çalışma alanındaki görselleri neden gerçekten "
+"düzenlemeyi isteyeceğinizi bilemiyorum.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:586
 #, kde-format
@@ -33538,7 +33538,7 @@ msgid ""
 msgstr ""
 "<p>'-labl.icc' ile biten profillerin algısal olarak tek biçimli TRC'leri "
 "var. Algısal olarak tekdüze RGB üzerinde birkaç düzenleme işlemi "
-"yapılmalıdır. Yüksek bit derinlikli görüntüleri düzenlemek için V4 "
+"yapılmalıdır. Yüksek bit derinlikli görselleri düzenlemek için V4 "
 "sürümlerini kullandığınızdan emin olun.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:658
@@ -33565,9 +33565,9 @@ msgid ""
 "And of course you cannot use the linear gamma versions of these profiles for "
 "8-bit editing.</p>"
 msgstr ""
-"<p>8 bitlik görüntüleri düzenlerken, küçük bir renk gamı ve yaklaşık veya "
+"<p>8 bitlik görselleri düzenlerken, küçük bir renk gamı ve yaklaşık veya "
 "tamamen algısal olarak üniform TRC olan bir profil kullanmalısınız. Profil "
-"paketinde verilen profillerden yalnızca 8-bit düzenleme için sRGB ve "
+"paketinde verilen profillerden yalnızca 8 bit düzenleme için sRGB ve "
 "AdobeRGB1998 (ClayRGB) renk alanları yeterince küçük. AdobeRGB1998 renk "
 "alanıyla bile, posterizasyona neden olmamak için dikkatli olmanız gerekir. "
 "Ve tabii ki 8 bit düzenleme için bu profillerin doğrusal gama sürümlerini "
@@ -33592,7 +33592,7 @@ msgid ""
 "<p>Use V2 profiles for exporting finished images to be uploaded to the web "
 "or for use with imaging software that cannot read V4 profiles.</p>"
 msgstr ""
-"<p>Web'e yüklenecek bitmiş görüntüleri dışa aktarmak veya V4 profillerini "
+"<p>Web'e yüklenecek bitmiş görselleri dışa aktarmak veya V4 profillerini "
 "okuyamayan görüntüleme yazılımı ile kullanmak için V2 profillerini kullanın."
 "</p>"
 
@@ -58910,7 +58910,7 @@ msgstr "Kırpma Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Crop the image to an area"
-msgstr "Görüntüyü bir alana kes"
+msgstr "Görseli bir alana kes"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, boolCenter)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:66
@@ -59645,7 +59645,7 @@ msgstr "Geçerli deformasyon aracının ters yönü"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move: drag the image along the brush stroke"
-msgstr "Taşı: fırça vuruşu boyunca görüntüyü sürükle"
+msgstr "Taşı: Fırça vuruşu boyunca görseli sürükle"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:273
 #, kde-format

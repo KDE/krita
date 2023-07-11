@@ -878,7 +878,7 @@ void KoSvgTextShape::relayout() const
 
                     if (!lineHeight.isNormal) {
                         if (lineHeight.isNumber) {
-                            leading = (ascender-descender)*lineHeight.value;
+                            leading = (fontSize*scaleToPixel*ftFontUnit)*lineHeight.value;
                             leading -= (ascender-descender);
                         } else {
                             QPointF val = ftTF.inverted().map(QPointF(lineHeight.value, lineHeight.value));

@@ -1591,6 +1591,24 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
     QPointF lineTop;
     QPointF lineBottom;
     QPointF correctionOffset;
+
+    if (currentLine.chunks.isEmpty()) {
+        return QPointF();
+    } else if (currentLine.chunks.size() == 1 && currentLine.actualLineTop == 0 &&
+               currentLine.actualLineBottom == 0){
+        /**
+         * When the line is empty, but caused by a hardbreak, we will need to use that hardbreak
+         * to space the line. This can only be done at this point as it would otherwise need to use
+         * visible characters.
+         */
+        QVector<int> chunkIndices = currentLine.chunks[0].chunkIndices;
+        if (chunkIndices.size() > 0) {
+            CharacterResult cr = result[chunkIndices.first()];
+            currentLine.actualLineTop = qMax(fabs(cr.ascent-cr.halfLeading), currentLine.actualLineTop);
+            currentLine.actualLineBottom = qMax(fabs(cr.descent+cr.halfLeading), currentLine.actualLineBottom);
+        }
+    }
+
     qreal expectedLineTop = qMax(currentLine.expectedLineTop, currentLine.actualLineTop);
     if (writingMode == KoSvgText::HorizontalTB) {
         lineTop = QPointF(0, currentLine.actualLineTop);

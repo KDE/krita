@@ -1546,7 +1546,7 @@ void addWordToLine(QVector<CharacterResult> &result,
     Q_FOREACH (const int j, wordIndices) {
         CharacterResult cr = result.at(j);
         if (currentChunk.boundingBox.isEmpty() && j == wordIndices.first()) {
-            if (result.at(j).lineStart == Collapse) {
+            if (result.at(j).lineStart == Collapse && cr.breakType != HardBreak) {
                 result[j].addressable = false;
                 result[j].hidden = true;
                 continue;

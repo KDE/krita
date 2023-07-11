@@ -19,6 +19,7 @@
 #include "kis_signal_compressor_with_param.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_time_span.h"
+#include "KisLockFrameGenerationLock.h"
 
 
 void checkFrame(KisImageAnimationInterface *i, KisImageSP image, int frameId, bool externalFrameActive, const QRect &rc)
@@ -89,9 +90,10 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
 
     // check external frame (frame 0)
     {
+        KisLockFrameGenerationLock lock(p.image->animationInterface());
         SignalToFunctionProxy proxy1(std::bind(checkFrame, i, p.image, 0, true, rc1 | rc2));
         connect(i, SIGNAL(sigFrameReady(int)), &proxy1, SLOT(start()), Qt::DirectConnection);
-        i->requestFrameRegeneration(0, KisRegion(refRect), false);
+        i->requestFrameRegeneration(0, KisRegion(refRect), false, std::move(lock));
         QTest::qWait(200);
     }
 
@@ -112,9 +114,10 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
 
     // check external frame (frame 10)
     {
+        KisLockFrameGenerationLock lock(p.image->animationInterface());
         SignalToFunctionProxy proxy2(std::bind(checkFrame, i, p.image, 10, true, rc3 | rc4));
         connect(i, SIGNAL(sigFrameReady(int)), &proxy2, SLOT(start()), Qt::DirectConnection);
-        i->requestFrameRegeneration(10, KisRegion(refRect), false);
+        i->requestFrameRegeneration(10, KisRegion(refRect), false, std::move(lock));
         QTest::qWait(200);
     }
 
@@ -200,7 +203,12 @@ void KisImageAnimationInterfaceTest::testAnimationCompositionBug()
 
     m_image = p.image;
     connect(p.image->animationInterface(), SIGNAL(sigFrameReady(int)), this, SLOT(slotFrameDone()), Qt::DirectConnection);
-    p.image->animationInterface()->requestFrameRegeneration(5, rect, false);
+
+    {
+        KisLockFrameGenerationLock lock(p.image->animationInterface());
+        p.image->animationInterface()->requestFrameRegeneration(5, rect, false, std::move(lock));
+    }
+
     QTest::qWait(200);
 
     KisPaintDeviceSP tmpDevice = new KisPaintDevice(p.image->colorSpace());

@@ -31,6 +31,9 @@ KoClipMaskPainter::KoClipMaskPainter(QPainter *painter, const QRectF &globalClip
     m_d->globalPainter = painter;
     m_d->alignedGlobalClipRect = globalClipRect.toAlignedRect();
 
+    if (!m_d->alignedGlobalClipRect.isValid()) {
+        m_d->alignedGlobalClipRect = QRect();
+    }
     m_d->shapeImage = QImage(m_d->alignedGlobalClipRect.size(), QImage::Format_ARGB32);
     m_d->maskImage = QImage(m_d->alignedGlobalClipRect.size(), QImage::Format_ARGB32);
 

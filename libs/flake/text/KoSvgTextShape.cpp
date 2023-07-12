@@ -343,7 +343,7 @@ public:
     void paintPaths(QPainter &painter,
                     const QPainterPath &outlineRect,
                     const KoShape *rootShape,
-                    QVector<CharacterResult> &result,
+                    const QVector<CharacterResult> &result,
                     QPainterPath &chunk,
                     int &currentIndex);
     QList<KoShape *> collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex);
@@ -3416,7 +3416,7 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape, QVector<Ch
 void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                                          const QPainterPath &rootOutline,
                                          const KoShape *rootShape,
-                                         QVector<CharacterResult> &result,
+                                         const QVector<CharacterResult> &result,
                                          QPainterPath &chunk,
                                          int &currentIndex)
 {
@@ -3450,159 +3450,164 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
 
     if (chunkShape->isTextNode()) {
         const int j = currentIndex + chunkShape->layoutInterface()->numChars(true);
-        KoClipMaskPainter fillPainter(&painter, painter.transform().mapRect(chunkShape->outlineRect()));
-        if (chunkShape->background()) {
-            chunkShape->background()->paint(*fillPainter.shapePainter(), rootOutline);
-            fillPainter.maskPainter()->fillPath(rootOutline, Qt::black);
-            if (textRendering != OptimizeSpeed) {
-                fillPainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
-                fillPainter.maskPainter()->setRenderHint(QPainter::SmoothPixmapTransform, true);
-            } else {
-                fillPainter.maskPainter()->setRenderHint(QPainter::Antialiasing, false);
-                fillPainter.maskPainter()->setRenderHint(QPainter::SmoothPixmapTransform, false);
-            }
-        }
-        QPainterPath textDecorationsRest;
-        textDecorationsRest.setFillRule(Qt::WindingFill);
 
-        for (int i = currentIndex; i < j; i++) {
-            if (result.at(i).addressable && !result.at(i).hidden) {
-                const QTransform tf = result.at(i).finalTransform();
+        const QRect shapeGlobalClipRect = painter.transform().mapRect(chunkShape->outlineRect()).toAlignedRect();
 
-                /**
-                 * Make sure the character touches the painter's clip rect,
-                 * otherwise we can just skip it
-                 */
-                const QRectF boundingRect = tf.mapRect(result.at(i).boundingBox);
-                const QRectF clipRect = painter.clipBoundingRect();
-                if (boundingRect.isEmpty() ||
-                    (!clipRect.contains(boundingRect) &&
-                     !clipRect.intersects(boundingRect))) continue;
-
-                /* Debug
-                painter.save();
-                painter.setBrush(Qt::transparent);
-                QPen pen (QColor(0, 0, 0, 50));
-                pen.setWidthF(72./xRes);
-                painter.setPen(pen);
-                painter.drawPolygon(tf.map(result.at(i).path.boundingRect()));
-                QColor penColor = result.at(i).anchored_chunk?
-                                         result.at(i).isHanging? Qt::red:
-                Qt::magenta: result.at(i).lineEnd==NoChange? Qt::cyan:
-                Qt::yellow; pen.setColor(penColor);
-                pen.setWidthF(72./xRes);
-                painter.setPen(pen);
-                painter.drawPolygon(tf.map(result.at(i).boundingBox));
-                if (result.at(i).breakType == SoftBreak){
-                    painter.setPen(Qt::blue);
-                    painter.drawPoint(tf.mapRect(result.at(i).boundingBox).center());
+        if (shapeGlobalClipRect.isValid()) {
+            KoClipMaskPainter fillPainter(&painter, shapeGlobalClipRect);
+            if (chunkShape->background()) {
+                chunkShape->background()->paint(*fillPainter.shapePainter(), rootOutline);
+                fillPainter.maskPainter()->fillPath(rootOutline, Qt::black);
+                if (textRendering != OptimizeSpeed) {
+                    fillPainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
+                    fillPainter.maskPainter()->setRenderHint(QPainter::SmoothPixmapTransform, true);
+                } else {
+                    fillPainter.maskPainter()->setRenderHint(QPainter::Antialiasing, false);
+                    fillPainter.maskPainter()->setRenderHint(QPainter::SmoothPixmapTransform, false);
                 }
-                if (result.at(i).breakType == HardBreak){
+            }
+            QPainterPath textDecorationsRest;
+            textDecorationsRest.setFillRule(Qt::WindingFill);
+
+            for (int i = currentIndex; i < j; i++) {
+                if (result.at(i).addressable && !result.at(i).hidden) {
+                    const QTransform tf = result.at(i).finalTransform();
+
+                    /**
+                     * Make sure the character touches the painter's clip rect,
+                     * otherwise we can just skip it
+                     */
+                    const QRectF boundingRect = tf.mapRect(result.at(i).boundingBox);
+                    const QRectF clipRect = painter.clipBoundingRect();
+                    if (boundingRect.isEmpty() ||
+                        (!clipRect.contains(boundingRect) &&
+                         !clipRect.intersects(boundingRect))) continue;
+
+                    /* Debug
+                    painter.save();
+                    painter.setBrush(Qt::transparent);
+                    QPen pen (QColor(0, 0, 0, 50));
+                    pen.setWidthF(72./xRes);
+                    painter.setPen(pen);
+                    painter.drawPolygon(tf.map(result.at(i).path.boundingRect()));
+                    QColor penColor = result.at(i).anchored_chunk?
+                                             result.at(i).isHanging? Qt::red:
+                    Qt::magenta: result.at(i).lineEnd==NoChange? Qt::cyan:
+                    Qt::yellow; pen.setColor(penColor);
+                    pen.setWidthF(72./xRes);
+                    painter.setPen(pen);
+                    painter.drawPolygon(tf.map(result.at(i).boundingBox));
+                    if (result.at(i).breakType == SoftBreak){
+                        painter.setPen(Qt::blue);
+                        painter.drawPoint(tf.mapRect(result.at(i).boundingBox).center());
+                    }
+                    if (result.at(i).breakType == HardBreak){
+                        painter.setPen(Qt::red);
+                        painter.drawPoint(tf.mapRect(result.at(i).boundingBox).center());
+                    }
                     painter.setPen(Qt::red);
-                    painter.drawPoint(tf.mapRect(result.at(i).boundingBox).center());
-                }
-                painter.setPen(Qt::red);
-                painter.drawPoint(result.at(i).finalPosition);
-                painter.restore();
-                //*/
-                /**
-                 * There's an annoying problem here that officially speaking
-                 * the chunks need to be unified into one single path before
-                 * drawing, so there's no weirdness with the stroke, but
-                 * QPainterPath's union function will frequently lead to
-                 * reduced quality of the paths because of 'numerical
-                 * instability'.
-                 */
+                    painter.drawPoint(result.at(i).finalPosition);
+                    painter.restore();
+                    //*/
+                    /**
+                     * There's an annoying problem here that officially speaking
+                     * the chunks need to be unified into one single path before
+                     * drawing, so there's no weirdness with the stroke, but
+                     * QPainterPath's union function will frequently lead to
+                     * reduced quality of the paths because of 'numerical
+                     * instability'.
+                     */
 
-                QPainterPath p = tf.map(result.at(i).path);
-                // if (chunk.intersects(p)) {
-                //     chunk |= tf.map(result.at(i).path);
-                // } else {
-                if (!result.at(i).colorLayers.empty()) {
-                    for (int c = 0; c < result.at(i).colorLayers.size(); c++) {
-                        QBrush color = result.at(i).colorLayerColors.at(c);
-                        bool replace = result.at(i).replaceWithForeGroundColor.at(c);
-                        // In theory we can use the pattern or gradient as well
-                        // for ColorV0 fonts, but ColorV1 fonts can have
-                        // gradients, so I am hesitant.
-                        KoColorBackground *b = dynamic_cast<KoColorBackground *>(chunkShape->background().data());
-                        if (b && replace) {
-                            color = b->brush();
+                    QPainterPath p = tf.map(result.at(i).path);
+                    // if (chunk.intersects(p)) {
+                    //     chunk |= tf.map(result.at(i).path);
+                    // } else {
+                    if (!result.at(i).colorLayers.empty()) {
+                        for (int c = 0; c < result.at(i).colorLayers.size(); c++) {
+                            QBrush color = result.at(i).colorLayerColors.at(c);
+                            bool replace = result.at(i).replaceWithForeGroundColor.at(c);
+                            // In theory we can use the pattern or gradient as well
+                            // for ColorV0 fonts, but ColorV1 fonts can have
+                            // gradients, so I am hesitant.
+                            KoColorBackground *b = dynamic_cast<KoColorBackground *>(chunkShape->background().data());
+                            if (b && replace) {
+                                color = b->brush();
+                            }
+                            painter.fillPath(tf.map(result.at(i).colorLayers.at(c)), color);
                         }
-                        painter.fillPath(tf.map(result.at(i).colorLayers.at(c)), color);
-                    }
-                } else {
-                    chunk.addPath(p);
-                }
-                //}
-                if (p.isEmpty() && !result.at(i).image.isNull()) {
-                    if (result.at(i).image.isGrayscale() || result.at(i).image.format() == QImage::Format_Mono) {
-                        fillPainter.maskPainter()->save();
-                        fillPainter.maskPainter()->translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
-                        fillPainter.maskPainter()->rotate(qRadiansToDegrees(result.at(i).rotate));
-                        fillPainter.maskPainter()->setCompositionMode(QPainter::CompositionMode_Plus);
-                        fillPainter.maskPainter()->drawImage(result.at(i).boundingBox, result.at(i).image);
-                        fillPainter.maskPainter()->restore();
                     } else {
-                        painter.save();
-                        painter.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
-                        painter.rotate(qRadiansToDegrees(result.at(i).rotate));
-                        painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
-                        painter.drawImage(result.at(i).boundingBox, result.at(i).image);
-                        painter.restore();
+                        chunk.addPath(p);
+                    }
+                    //}
+                    if (p.isEmpty() && !result.at(i).image.isNull()) {
+                        if (result.at(i).image.isGrayscale() || result.at(i).image.format() == QImage::Format_Mono) {
+                            fillPainter.maskPainter()->save();
+                            fillPainter.maskPainter()->translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
+                            fillPainter.maskPainter()->rotate(qRadiansToDegrees(result.at(i).rotate));
+                            fillPainter.maskPainter()->setCompositionMode(QPainter::CompositionMode_Plus);
+                            fillPainter.maskPainter()->drawImage(result.at(i).boundingBox, result.at(i).image);
+                            fillPainter.maskPainter()->restore();
+                        } else {
+                            painter.save();
+                            painter.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
+                            painter.rotate(qRadiansToDegrees(result.at(i).rotate));
+                            painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+                            painter.drawImage(result.at(i).boundingBox, result.at(i).image);
+                            painter.restore();
+                        }
                     }
                 }
             }
-        }
-        if (chunkShape->background()) {
-            chunk.setFillRule(Qt::WindingFill);
-            fillPainter.maskPainter()->fillPath(chunk, Qt::white);
-        }
-        if (!textDecorationsRest.isEmpty()) {
-            fillPainter.maskPainter()->fillPath(textDecorationsRest.simplified(), Qt::white);
-        }
-        fillPainter.renderOnGlobalPainter();
-        KoShapeStrokeSP maskStroke;
-        if (chunkShape->stroke()) {
-            KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(chunkShape->stroke());
+            if (chunkShape->background()) {
+                chunk.setFillRule(Qt::WindingFill);
+                fillPainter.maskPainter()->fillPath(chunk, Qt::white);
+            }
+            if (!textDecorationsRest.isEmpty()) {
+                fillPainter.maskPainter()->fillPath(textDecorationsRest.simplified(), Qt::white);
+            }
+            fillPainter.renderOnGlobalPainter();
 
-            if (stroke) {
-                if (stroke->lineBrush().gradient()) {
-                    KoClipMaskPainter strokePainter(&painter, painter.transform().mapRect(chunkShape->outlineRect()));
-                    strokePainter.shapePainter()->fillRect(rootOutline.boundingRect(), stroke->lineBrush());
-                    maskStroke = KoShapeStrokeSP(new KoShapeStroke(*stroke.data()));
-                    maskStroke->setColor(Qt::white);
-                    maskStroke->setLineBrush(Qt::white);
-                    strokePainter.maskPainter()->fillPath(rootOutline, Qt::black);
-                    if (textRendering != OptimizeSpeed) {
-                        strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
+            KoShapeStrokeSP maskStroke;
+            if (chunkShape->stroke()) {
+                KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(chunkShape->stroke());
+
+                if (stroke) {
+                    if (stroke->lineBrush().gradient()) {
+                        KoClipMaskPainter strokePainter(&painter, shapeGlobalClipRect);
+                        strokePainter.shapePainter()->fillRect(rootOutline.boundingRect(), stroke->lineBrush());
+                        maskStroke = KoShapeStrokeSP(new KoShapeStroke(*stroke.data()));
+                        maskStroke->setColor(Qt::white);
+                        maskStroke->setLineBrush(Qt::white);
+                        strokePainter.maskPainter()->fillPath(rootOutline, Qt::black);
+                        if (textRendering != OptimizeSpeed) {
+                            strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
+                        } else {
+                            strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, false);
+                        }
+                        {
+                            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(chunk));
+                            maskStroke->paint(shape.data(), *strokePainter.maskPainter());
+                        }
+                        if (!textDecorationsRest.isEmpty()) {
+                            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorationsRest));
+                            maskStroke->paint(shape.data(), *strokePainter.maskPainter());
+                        }
+                        strokePainter.renderOnGlobalPainter();
                     } else {
-                        strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, false);
-                    }
-                    {
-                        QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(chunk));
-                        maskStroke->paint(shape.data(), *strokePainter.maskPainter());
-                    }
-                    if (!textDecorationsRest.isEmpty()) {
-                        QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorationsRest));
-                        maskStroke->paint(shape.data(), *strokePainter.maskPainter());
-                    }
-                    strokePainter.renderOnGlobalPainter();
-                } else {
-                    {
-                        QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(chunk));
-                        stroke->paint(shape.data(), painter);
-                    }
-                    if (!textDecorationsRest.isEmpty()) {
-                        QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorationsRest));
-                        stroke->paint(shape.data(), painter);
+                        {
+                            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(chunk));
+                            stroke->paint(shape.data(), painter);
+                        }
+                        if (!textDecorationsRest.isEmpty()) {
+                            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorationsRest));
+                            stroke->paint(shape.data(), painter);
+                        }
                     }
                 }
             }
         }
         chunk = QPainterPath();
         currentIndex = j;
-
     } else {
         Q_FOREACH (KoShape *child, chunkShape->shapes()) {
             /**

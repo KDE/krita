@@ -33,7 +33,7 @@
 #include "kis_node_manager.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_undo_adapter.h"
-#include <kis_image_barrier_locker.h>
+#include <kis_image_barrier_lock_adapter.h>
 #include "kis_selection_mask.h"
 #include "kis_layer_utils.h"
 
@@ -90,7 +90,7 @@ void LayerSplit::slotLayerSplit()
 
         if (!node) return;
 
-        KisImageBarrierLocker locker(image);
+        KisImageBarrierLock lock(image);
 
         KisPaintDeviceSP projection = node->projection();
         if (!projection) return;

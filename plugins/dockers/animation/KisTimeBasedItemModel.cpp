@@ -20,7 +20,7 @@
 #include "kis_keyframe_channel.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_processing_applicator.h"
-#include "KisImageBarrierLockerWithFeedback.h"
+#include "kis_image_barrier_lock_adapter.h""
 #include "commands_new/kis_switch_current_time_command.h"
 #include "kis_command_utils.h"
 #include "KisPart.h"
@@ -347,7 +347,7 @@ bool KisTimeBasedItemModel::removeFrames(const QModelIndexList &indexes)
     KisAnimUtils::FrameItemList frameItems;
 
     {
-        KisImageBarrierLockerWithFeedback locker(m_d->image);
+        KisImageBarrierLock locker(m_d->image);
 
         Q_FOREACH (const QModelIndex &index, indexes) {
             int time = index.column();
@@ -422,7 +422,7 @@ bool KisTimeBasedItemModel::removeFramesAndOffset(QModelIndexList indicesToRemov
     KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Remove frame and shift", "Remove %1 frames and shift", indicesToRemove.size()));
 
     {
-        KisImageBarrierLockerWithFeedback locker(m_d->image);
+        KisImageBarrierLock locker(m_d->image);
 
         Q_FOREACH (const QModelIndex &index, indicesToRemove) {
             QModelIndexList indicesToOffset;
@@ -452,7 +452,7 @@ bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
     QScopedPointer<KUndo2Command> parentCommand(new KUndo2Command(kundo2_i18n("Mirror Frames")));
 
     {
-        KisImageBarrierLockerWithFeedback locker(m_d->image);
+        KisImageBarrierLock locker(m_d->image);
 
         QMap<int, QModelIndexList> rowsList;
 

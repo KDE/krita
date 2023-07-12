@@ -546,7 +546,7 @@ public:
         : m_locked(false)
         , m_image(image)
         , m_savingLock(savingMutex)
-        , m_imageLock(image, true)
+        , m_imageLock(image)
 
     {
         /**
@@ -584,7 +584,7 @@ private:
     bool m_locked;
     KisImageSP m_image;
     StdLockableWrapper<QMutex> m_savingLock;
-    KisImageBarrierLockAdapter m_imageLock;
+    KisImageReadOnlyBarrierLockAdapter m_imageLock;
 };
 
 KisDocument::KisDocument(bool addStorage)

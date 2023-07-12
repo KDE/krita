@@ -23,7 +23,6 @@
 #include "kis_raster_keyframe_channel.h"
 #include "KisStoryboardThumbnailRenderScheduler.h"
 #include "KisAddRemoveStoryboardCommand.h"
-#include "KisImageBarrierLockerWithFeedback.h"
 #include "kis_processing_applicator.h"
 
 #include "kis_config.h"

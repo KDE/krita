@@ -28,7 +28,7 @@
 #include <QFileInfo>
 #include <QThread>
 #include "kis_signal_compressor_with_param.h"
-#include "kis_image_barrier_locker.h"
+#include "kis_image_barrier_lock_adapter.h"
 #include "kis_layer_utils.h"
 #include "KisDecoratedNodeInterface.h"
 #include "kis_keyframe_channel.h"
@@ -145,7 +145,7 @@ public:
             dlg.setRegionOfInterest(regionOfInterest);
             dlg.regenerateRange(canvas->viewManager());
         } else {
-            KisImageBarrierLocker locker(canvas->image());
+            KisImageBarrierLock lock(canvas->image());
             KisLayerUtils::recursiveApplyNodes(canvas->image()->root(), [this](KisNodeSP node){
                 KisDecoratedNodeInterface* decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(node.data());
                 if (decoratedNode && decoratedNode->decorationsVisible()) {
@@ -180,7 +180,7 @@ public:
             if (m_canvas->frameCache()) {
                 m_canvas->setRenderingLimit(QRect());
             } else {
-                KisImageBarrierLocker locker(m_canvas->image());
+                KisImageBarrierLock lock(m_canvas->image());
                 Q_FOREACH(KisNodeWSP disabledNode, m_disabledDecoratedNodes) {
                     KisDecoratedNodeInterface* decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(disabledNode.data());
                     if (decoratedNode) {

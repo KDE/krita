@@ -17,7 +17,7 @@ namespace KritaUtils {
 
 KisImportExportErrorCode workaroundUnsuitableImageColorSpace(KisImageSP image,
                                                              KisImportUserFeedbackInterface *feedbackInterface,
-                                                             std::unique_lock<KisImageBarrierLockAdapter> &locker)
+                                                             KisImageBarrierLock &lock)
 {
     const KoColorSpace *replacementColorSpace = 0;
     KoColorConversionTransformation::Intent replacementColorSpaceIntent = KoColorConversionTransformation::internalRenderingIntent();
@@ -87,7 +87,7 @@ KisImportExportErrorCode workaroundUnsuitableImageColorSpace(KisImageSP image,
         image->convertImageColorSpace(replacementColorSpace,
                                         replacementColorSpaceIntent,
                                         replacementColorSpaceConversionFlags);
-        locker.unlock();
+        lock.unlock();
         image->waitForDone();
     }
 

@@ -17,7 +17,7 @@
 #include "commands/kis_selection_commands.h"
 #include "strokes/move_stroke_strategy.h"
 #include "kis_paint_layer.h"
-#include "kis_image_barrier_locker.h"
+#include "kis_image_barrier_lock_adapter.h"
 #include "kis_paint_device_frames_interface.h"
 #include "kis_paint_device_debug_utils.h"
 
@@ -53,7 +53,7 @@ void MoveSelectionStrokeTest::test()
     KisPaintDeviceSP device = currentNode->paintDevice();
 
     {
-        KisImageBarrierLocker locker(image);
+        KisImageBarrierLock lock(image);
 
         device->fill(QRect(0,0,400,400),     KoColor(Qt::red, image->colorSpace()));
         device->fill(QRect(400,0,400,400),   KoColor(Qt::green, image->colorSpace()));

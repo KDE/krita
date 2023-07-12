@@ -47,7 +47,7 @@
 #include "KisDocument.h"
 #include "KisViewManager.h"
 #include "kis_processing_applicator.h"
-#include <KisImageBarrierLockerWithFeedback.h>
+#include <kis_image_barrier_lock_adapter.h>
 #include "kis_node_uuid_info.h"
 #include "KisMainWindow.h"
 
@@ -777,7 +777,7 @@ bool KisAnimTimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt:
             }
         }
 
-        KisImageBarrierLockerWithFeedback locker(m_d->image);
+        KisImageBarrierLock lock(m_d->image);
 
         if (cloneFrames) {
             cmd = KisAnimUtils::createCloneKeyframesCommand(frameMoves, nullptr);
@@ -922,7 +922,7 @@ bool KisAnimTimelineFramesModel::insertFrames(int dstColumn, const QList<int> &d
     KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Insert frame", "Insert %1 frames", count));
 
     {
-        KisImageBarrierLockerWithFeedback locker(m_d->image);
+        KisImageBarrierLock locker(m_d->image);
 
         QModelIndexList indexes;
 
@@ -970,7 +970,7 @@ bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selecte
     QScopedPointer<KUndo2Command> parentCommand(new KUndo2Command(kundo2_i18np("Insert frame", "Insert %1 frames", count)));
 
     {
-        KisImageBarrierLockerWithFeedback locker(m_d->image);
+        KisImageBarrierLock locker(m_d->image);
 
         QSet<TimelineSelectionEntry> uniqueKeyframesInSelection;
 

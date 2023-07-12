@@ -66,7 +66,7 @@ struct ExportFileJob {
 KisImportExportErrorCode KRITAUI_EXPORT
 workaroundUnsuitableImageColorSpace(KisImageSP image,
                                     KisImportUserFeedbackInterface *feedbackInterface,
-                                    std::unique_lock<KisImageBarrierLockAdapter> &locker);
+                                    KisImageBarrierLock &lock);
 
 }
 

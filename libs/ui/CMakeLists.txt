@@ -122,7 +122,6 @@ set(kritaui_LIB_SRCS
     kis_splash_screen.cpp
     kis_filter_manager.cc
     kis_filters_model.cc
-    KisImageBarrierLockerWithFeedback.cpp
     kis_image_manager.cc
     kis_image_view_converter.cpp
     kis_import_catcher.cc

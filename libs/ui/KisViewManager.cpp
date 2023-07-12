@@ -84,7 +84,6 @@
 #include "kis_filter_manager.h"
 #include "kis_group_layer.h"
 #include <kis_image.h>
-#include <kis_image_barrier_locker.h>
 #include "kis_image_manager.h"
 #include <kis_layer.h>
 #include "kis_mainwindow_observer.h"
@@ -124,6 +123,7 @@
 #include "imagesize/imagesize.h"
 #include <KoToolDocker.h>
 #include <KisIdleTasksManager.h>
+#include <kis_image_barrier_lock_adapter.h>
 
 #include "kis_filter_configuration.h"
 
@@ -909,7 +909,7 @@ void KisViewManager::slotCreateCopy()
 
     KisDocument *doc = 0;
     {
-        KisImageBarrierLocker l(srcDoc->image());
+        KisImageReadOnlyBarrierLock l(srcDoc->image());
         doc = srcDoc->clone(true);
     }
     KIS_SAFE_ASSERT_RECOVER_RETURN(doc);

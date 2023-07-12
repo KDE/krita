@@ -70,7 +70,6 @@
 #include <KoResourceServer.h>
 #include <KisResourceServerProvider.h>
 #include <KoResourceServerProvider.h>
-#include "kis_image_barrier_locker.h"
 #include "opengl/kis_opengl.h"
 #include "kis_spin_box_unit_manager.h"
 #include "kis_document_aware_spin_box_unit_manager.h"

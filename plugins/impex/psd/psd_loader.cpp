@@ -41,7 +41,6 @@
 #include "psd_layer_section.h"
 #include "psd_resource_block.h"
 #include "psd_image_data.h"
-#include "kis_image_barrier_locker.h"
 #include "KisEmbeddedResourceStorageProxy.h"
 #include "kis_image_barrier_lock_adapter.h"
 #include "KisImportUserFeedbackInterface.h"
@@ -132,8 +131,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
     m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, name);
     Q_CHECK_PTR(m_image);
 
-    KisImageBarrierLockAdapter adapter(m_image);
-    std::unique_lock locker(adapter);
+    KisImageBarrierLock lock(m_image);
 
     // set the correct resolution
     if (resourceSection.resources.contains(PSDImageResourceSection::RESN_INFO)) {
@@ -438,7 +436,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
         }
     }
 
-    return KritaUtils::workaroundUnsuitableImageColorSpace(m_image, m_feedbackInterface, locker);
+    return KritaUtils::workaroundUnsuitableImageColorSpace(m_image, m_feedbackInterface, lock);
 }
 
 KisImportExportErrorCode PSDLoader::buildImage(QIODevice &io)

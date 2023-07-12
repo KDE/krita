@@ -40,7 +40,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_prescaled_projection.h"
 #include "kis_image.h"
-#include "kis_image_barrier_locker.h"
+#include "kis_image_barrier_lock_adapter.h"
 #include "kis_undo_adapter.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
@@ -1236,7 +1236,7 @@ void KisCanvas2::slotConfigChanged()
 void KisCanvas2::refetchDataFromImage()
 {
     KisImageSP image = this->image();
-    KisImageBarrierLocker l(image);
+    KisImageReadOnlyBarrierLock l(image);
     startUpdateInPatches(image->bounds());
 }
 
@@ -1248,7 +1248,7 @@ void KisCanvas2::setDisplayProfile(const KoColorProfile *monitorProfile)
 
     {
         KisImageSP image = this->image();
-        KisImageBarrierLocker l(image);
+        KisImageReadOnlyBarrierLock l(image);
         m_d->canvasWidget->setDisplayColorConverter(&m_d->displayColorConverter);
     }
 

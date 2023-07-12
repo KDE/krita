@@ -31,7 +31,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
-#include "kis_image_barrier_locker.h"
+#include "kis_image_barrier_lock_adapter.h"
 #include "kis_fill_painter.h"
 #include "kis_transaction.h"
 #include "kis_iterator_ng.h"
@@ -287,7 +287,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
     if (!makeSharpClip && (haveShapesSelected || currentToolHasSelection)) {
         // XXX: "Add saving of XML data for Cut/Copy of shapes"
 
-        KisImageBarrierLocker locker(image);
+        KisImageBarrierLock lock(image);
         if (willCut) {
             view->canvasBase()->toolProxy()->cut();
         } else {

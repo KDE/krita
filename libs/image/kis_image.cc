@@ -52,8 +52,6 @@
 #include "kis_keyframe_channel.h"
 #include "kis_stroke_strategy.h"
 #include "kis_simple_stroke_strategy.h"
-#include "kis_image_barrier_locker.h"
-
 
 #include "kis_undo_stores.h"
 #include "kis_legacy_undo_adapter.h"

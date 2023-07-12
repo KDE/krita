@@ -660,7 +660,7 @@ void KisSelectionManager::slotStrokeSelection()
 
 }
 
-#include "kis_image_barrier_lock_adapter.h"
+#include "KisImageBarrierLock.h"
 #include "kis_selection_tool_helper.h"
 
 void KisSelectionManager::selectOpaqueOnNode(KisNodeSP node, SelectionAction action)

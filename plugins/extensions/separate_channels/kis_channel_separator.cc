@@ -46,7 +46,7 @@
 #include <kis_node_manager.h>
 #include <kis_node_commands_adapter.h>
 #include <KisMimeDatabase.h>
-#include "kis_image_barrier_lock_adapter.h"
+#include "KisImageBarrierLock.h"
 
 KisChannelSeparator::KisChannelSeparator(KisViewManager * view)
     : m_viewManager(view)

@@ -40,7 +40,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_prescaled_projection.h"
 #include "kis_image.h"
-#include "kis_image_barrier_lock_adapter.h"
+#include "KisImageBarrierLock.h"
 #include "kis_undo_adapter.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"

@@ -13,7 +13,7 @@
 #include <kis_algebra_2d.h>
 #include <kis_debug.h>
 #include <kis_image.h>
-#include <kis_image_barrier_lock_adapter.h>
+#include <KisImageBarrierLock.h>
 #include <kis_processing_applicator.h>
 #include <kis_selection.h>
 #include <kundo2magicstring.h>

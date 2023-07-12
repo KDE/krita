@@ -27,7 +27,7 @@
 #include "kis_dummies_facade_base.h"
 #include "kis_node_dummies_graph.h"
 #include "KisImportExportManager.h"
-#include "kis_image_barrier_lock_adapter.h"
+#include "KisImageBarrierLock.h"
 
 #include <KoProperties.h>
 #include <KoStore.h>

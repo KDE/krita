@@ -42,7 +42,7 @@
 #include "psd_resource_block.h"
 #include "psd_image_data.h"
 #include "KisEmbeddedResourceStorageProxy.h"
-#include "kis_image_barrier_lock_adapter.h"
+#include "KisImageBarrierLock.h"
 #include "KisImportUserFeedbackInterface.h"
 
 

@@ -123,7 +123,7 @@
 #include "imagesize/imagesize.h"
 #include <KoToolDocker.h>
 #include <KisIdleTasksManager.h>
-#include <kis_image_barrier_lock_adapter.h>
+#include <KisImageBarrierLock.h>
 
 #include "kis_filter_configuration.h"
 

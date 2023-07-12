@@ -14,7 +14,7 @@
 
 #include <kritaui_export.h>
 #include "KisImportExportErrorCode.h"
-#include <kis_image_barrier_lock_adapter.h>
+#include <KisImageBarrierLock.h>
 
 class KisImportUserFeedbackInterface;
 

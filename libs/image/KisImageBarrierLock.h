@@ -4,8 +4,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef __KIS_IMAGE_BARRIER_LOCK_ADAPTER_H
-#define __KIS_IMAGE_BARRIER_LOCK_ADAPTER_H
+#ifndef __KIS_IMAGE_BARRIER_LOCK_H
+#define __KIS_IMAGE_BARRIER_LOCK_H
 
 #include <kis_types.h>
 #include <KisAdaptedLock.h>
@@ -47,4 +47,4 @@ KIS_DECLARE_ADAPTED_LOCK(KisImageReadOnlyBarrierLock, KisImageReadOnlyBarrierLoc
 KIS_DECLARE_ADAPTED_LOCK(KisImageBarrierLockRaw, KisImageBarrierLockAdapterRaw)
 KIS_DECLARE_ADAPTED_LOCK(KisImageReadOnlyBarrierLockRaw, KisImageReadOnlyBarrierLockAdapterRaw)
 
-#endif /* __KIS_IMAGE_BARRIER_LOCK_ADAPTER_H */
+#endif /* __KIS_IMAGE_BARRIER_LOCK_H */

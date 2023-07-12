@@ -28,7 +28,7 @@
 #include <QFileInfo>
 #include <QThread>
 #include "kis_signal_compressor_with_param.h"
-#include "kis_image_barrier_lock_adapter.h"
+#include "KisImageBarrierLock.h"
 #include "kis_layer_utils.h"
 #include "KisDecoratedNodeInterface.h"
 #include "kis_keyframe_channel.h"

@@ -111,7 +111,7 @@
 #include "KisView.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
-#include "kis_image_barrier_lock_adapter.h"
+#include "KisImageBarrierLock.h"
 #include "KisReferenceImagesLayer.h"
 #include "dialogs/KisRecoverNamedAutosaveDialog.h"
 

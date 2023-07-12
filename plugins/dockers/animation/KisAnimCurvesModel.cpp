@@ -17,7 +17,7 @@
 #include "KisAnimUtils.h"
 #include "kis_processing_applicator.h"
 #include "kis_command_utils.h"
-#include "kis_image_barrier_lock_adapter.h"
+#include "KisImageBarrierLock.h"
 
 struct KisAnimationCurve::Private
 {

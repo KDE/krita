@@ -33,7 +33,7 @@
 #include <kis_selection.h>
 #include <KoProperties.h>
 #include "kis_iterator_ng.h"
-#include "kis_image_barrier_lock_adapter.h"
+#include "KisImageBarrierLock.h"
 #include <KisResourceUserOperations.h>
 
 #include <kstandardguiitem.h>

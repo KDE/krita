@@ -1242,8 +1242,7 @@ void KisMainWindow::slotSaveCompleted()
 
 bool KisMainWindow::hackIsSaving() const
 {
-    StdLockableWrapper<QMutex> wrapper(&d->savingEntryMutex);
-    std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
+    std::unique_lock<QMutex> l(d->savingEntryMutex, std::try_to_lock);
     return !l.owns_lock();
 }
 
@@ -1304,8 +1303,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
      * double-entry is quite possible to achieve. Here we try to lock
      * the mutex, and if it is failed, just cancel saving.
      */
-    StdLockableWrapper<QMutex> wrapper(&d->savingEntryMutex);
-    std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
+    std::unique_lock<QMutex> l(d->savingEntryMutex, std::try_to_lock);
     if (!l.owns_lock()) return false;
 
     // no busy wait for saving because it is dangerous!

@@ -298,34 +298,6 @@ inline QRect kisTrimTop( int height, QRect& toTakeFrom)
 }
 
 #include "kis_pointer_utils.h"
-
-/**
- * A special wrapper object that converts Qt-style mutexes and locks
- * into an object that supports Std's (and Boost's) "Lockable"
- * concept. Basically, it converts tryLock() into try_lock() to comply
- * with the syntax.
- */
-
-template <class T>
-struct StdLockableWrapper {
-    StdLockableWrapper(T *lock) : m_lock(lock) {}
-
-    void lock() {
-        m_lock->lock();
-    }
-
-    bool try_lock() {
-        return m_lock->tryLock();
-    }
-
-    void unlock() {
-        m_lock->unlock();
-    }
-
-private:
-    T *m_lock;
-};
-
 #include <type_traits>
 
 // Makes compilers happy because Linux and macOS differ on how they define

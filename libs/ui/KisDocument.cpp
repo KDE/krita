@@ -558,21 +558,21 @@ public:
          * Since we are trying to lock multiple objects, so we should
          * do it in a safe manner.
          */
-        m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
+        m_locked = std::try_lock(m_imageLock, *m_savingLock) < 0;
 
         if (!m_locked) {
             m_image->requestStrokeEnd();
             QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
             // one more try...
-            m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
+            m_locked = std::try_lock(m_imageLock, *m_savingLock) < 0;
         }
     }
 
     ~StrippedSafeSavingLocker() {
         if (m_locked) {
             m_imageLock.unlock();
-            m_savingLock.unlock();
+            m_savingLock->unlock();
         }
     }
 
@@ -581,9 +581,11 @@ public:
     }
 
 private:
+    Q_DISABLE_COPY_MOVE(StrippedSafeSavingLocker)
+
     bool m_locked;
     KisImageSP m_image;
-    StdLockableWrapper<QMutex> m_savingLock;
+    QMutex *m_savingLock;
     KisImageReadOnlyBarrierLockAdapter m_imageLock;
 };
 

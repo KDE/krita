@@ -59,6 +59,8 @@ KisFrameDisplayProxy::KisFrameDisplayProxy(KisCanvas2* canvas, QObject *parent)
 
        emit sigFrameRefreshSkipped();
     });
+
+    m_d->displayedFrame = m_d->canvas->image()->animationInterface()->currentUITime();
 }
 
 KisFrameDisplayProxy::~KisFrameDisplayProxy()

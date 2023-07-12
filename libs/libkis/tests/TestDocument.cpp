@@ -275,6 +275,7 @@ void TestDocument::testCreateColorizeMask()
     node->addChildNode(mask,0);
 
     qApp->processEvents();
+    d.waitForDone();
 
     ManagedColor col1("RGBA","U8","");
     ManagedColor col2("RGBA","U8","");
@@ -333,6 +334,8 @@ void TestDocument::testCreateColorizeMask()
 
     mask->removeKeyStroke(&col2);
     qApp->processEvents();
+    d.waitForDone();
+
     checkColors = mask->keyStrokesColors();
 
     QVERIFY(checkColors.size() == 1);

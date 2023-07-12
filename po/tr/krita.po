@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-06 00:54+0000\n"
-"PO-Revision-Date: 2023-07-11 00:38+0300\n"
+"POT-Creation-Date: 2023-07-12 00:45+0000\n"
+"PO-Revision-Date: 2023-07-11 11:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17325,7 +17325,7 @@ msgstr "İşleniyor"
 msgid "Unnamed"
 msgstr "Adsız"
 
-#: libs/image/kis_regenerate_frame_stroke_strategy.cpp:98
+#: libs/image/kis_regenerate_frame_stroke_strategy.cpp:102
 msgctxt "(qtundo-format)"
 msgid "Render Animation"
 msgstr "Canlandırmayı Sun"
@@ -20153,7 +20153,7 @@ msgstr "Etiketi değiştir (üzerine yaz)"
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:272
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:167
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:43
@@ -23138,7 +23138,13 @@ msgstr ""
 "\n"
 "Sunum iptal edildi."
 
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:332
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
+#, fuzzy, kde-format
+#| msgid "Waiting for image operation to complete..."
+msgid "Wait for existing frame generation process to complete..."
+msgstr "Görsel işleminin bitmesi bekleniyor..."
+
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
 msgid ""
 "\n"
@@ -23153,7 +23159,7 @@ msgstr ""
 "Aynı anda kaydedilebilecek kare sayısı %1 olarak sınırlandırılmış\n"
 "\n"
 
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:336
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:352
 #, kde-format
 msgid ""
 "%1\n"
@@ -35888,19 +35894,17 @@ msgid ""
 "described at <a href=\"%2\">%2</a>.<br /><br />Thank you very much in "
 "advance for your support.</html>"
 msgstr ""
-"<html>KDE yazılımı ücretsizdir ve her zaman ücretsiz kalacaktır, ama "
-"oluşturmak bedava değildir.<br /><br />KDE topluluğunun geliştirmesini "
-"desteklemek için kar amacı gütmeyen yasal olarak Almanya'da kurulan KDE e. "
-"V. organizasyonu şekillendirildi. KDE e. V. KDE topluluğunun yasal ve "
-"finansal konularını temsil eder. KDE e.V. hakkında daha fazla bilgi için <a "
-"href=\"%1\">%1</a> bağlantısına bakınız.<br /><br />KDE bir çok türde "
-"yardımdan finansal yardımda dahil fayda sağlar. Fonları, üyelere ve "
-"diğerlerine katkıda bulunurken harcadıkları masrafları ödemek için "
-"kullanırız. Yasal destek ve konferanslar ve toplantılar düzenlemek için daha "
-"fazla para kullanılır. <br /> <br /><a href=\"%2\">%2 </a> adresinde "
-"açıklanan yöntemlerden birini kullanarak çabalarımızı maddi bir bağışla "
-"desteklemenizi öneririz.<br /><br />Desteğiniz için şimdiden çok teşekkürler."
-"</html>"
+"<html>KDE yazılımları ücretsizdir ve her zaman ücretsiz kalacaktır; ancak "
+"onları yapmak bedava değildir.<br /><br />KDE topluluğu, kar amacı gütmeyen "
+"bir organizasyon olan KDE e.V'i  Almanya'da kurmuştur. KDE e.V, KDE "
+"topluluğunu finansal ve hukuki konularda temsil etmektedir. KDE e.V hakkında "
+"bilgi almak için <a href=\"%1\">%1</a> adresini ziyaret edin. <br /><br /"
+">KDE Takımı'nın  her zaman finansal desteğe gereksinimi vardır. Yapılan "
+"bağışlar; yasal destek, KDE geliştiricilerinin KDE'ye yaptıkları desteğin "
+"sürekliliğini sağlamak ve toplantıların/konferansların organizasyonu için "
+"harcanır. <br /><br />Sizin de <a href=\"%2\">%2</a> adresinde anlatılan "
+"biçimde KDE'ye yardımlarınızı bekliyoruz.<br /><br />Desteğiniz için "
+"şimdiden teşekkürler.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:128
 #, kde-format

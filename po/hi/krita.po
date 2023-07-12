@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-06 00:54+0000\n"
+"POT-Creation-Date: 2023-07-12 00:45+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -17377,7 +17377,7 @@ msgstr "प्रसंस्करण"
 msgid "Unnamed"
 msgstr "बेनाम"
 
-#: libs/image/kis_regenerate_frame_stroke_strategy.cpp:98
+#: libs/image/kis_regenerate_frame_stroke_strategy.cpp:102
 msgctxt "(qtundo-format)"
 msgid "Render Animation"
 msgstr "एनिमेशन रेंडर करें"
@@ -20183,7 +20183,7 @@ msgstr "टैग बदलें (मिटाकर लिखें)"
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:272
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:167
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:43
@@ -23130,7 +23130,13 @@ msgstr ""
 "\n"
 "रेंडरिंग रद्द।"
 
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:332
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
+#, fuzzy, kde-format
+#| msgid "Waiting for image operation to complete..."
+msgid "Wait for existing frame generation process to complete..."
+msgstr "छवि संचालन पूर्ण होने की प्रतीक्षा की जा रही है... "
+
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
 msgid ""
 "\n"
@@ -23145,7 +23151,7 @@ msgstr ""
 "एक साथ सहेजे गए फ़्रेमों की संख्या %1 तक सीमित है\n"
 "\n"
 
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:336
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:352
 #, kde-format
 msgid ""
 "%1\n"

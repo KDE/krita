@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-06 00:54+0000\n"
+"POT-Creation-Date: 2023-07-12 00:45+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -17513,7 +17513,7 @@ msgstr "Bosim"
 msgid "Unnamed"
 msgstr "Nomsiz"
 
-#: libs/image/kis_regenerate_frame_stroke_strategy.cpp:98
+#: libs/image/kis_regenerate_frame_stroke_strategy.cpp:102
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Render Animation"
@@ -20341,7 +20341,7 @@ msgstr "Matnni almashtirish"
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:272
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:167
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:43
@@ -23243,7 +23243,12 @@ msgid ""
 "Rendering cancelled."
 msgstr ""
 
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:332
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
+#, fuzzy, kde-format
+msgid "Wait for existing frame generation process to complete..."
+msgstr "TAsvir tiklash filtrini qoʻllash..."
+
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
 msgid ""
 "\n"
@@ -23253,7 +23258,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:336
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:352
 #, kde-format
 msgid ""
 "%1\n"

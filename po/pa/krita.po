@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-06 00:54+0000\n"
+"POT-Creation-Date: 2023-07-12 00:45+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -18729,7 +18729,7 @@ msgstr "ਸਥਿਤੀ"
 msgid "Unnamed"
 msgstr "ਨਾਂ"
 
-#: libs/image/kis_regenerate_frame_stroke_strategy.cpp:98
+#: libs/image/kis_regenerate_frame_stroke_strategy.cpp:102
 #, fuzzy
 #| msgid "Position"
 msgctxt "(qtundo-format)"
@@ -21830,7 +21830,7 @@ msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:272
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:167
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:43
@@ -24951,7 +24951,12 @@ msgid ""
 "Rendering cancelled."
 msgstr ""
 
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:332
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
+#, kde-format
+msgid "Wait for existing frame generation process to complete..."
+msgstr ""
+
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
 msgid ""
 "\n"
@@ -24961,7 +24966,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:336
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:352
 #, kde-format
 msgid ""
 "%1\n"

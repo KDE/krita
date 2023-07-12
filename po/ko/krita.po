@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-06 00:54+0000\n"
+"POT-Creation-Date: 2023-07-12 00:45+0000\n"
 "PO-Revision-Date: 2023-03-01 00:29+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -18203,7 +18203,7 @@ msgstr "처리"
 msgid "Unnamed"
 msgstr "이름 없음"
 
-#: libs/image/kis_regenerate_frame_stroke_strategy.cpp:98
+#: libs/image/kis_regenerate_frame_stroke_strategy.cpp:102
 msgctxt "(qtundo-format)"
 msgid "Render Animation"
 msgstr "애니메이션 렌더"
@@ -21064,7 +21064,7 @@ msgstr "텍스트 범위 변경"
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancel)
 #. i18n: ectx: property (text), widget (QPushButton, buttonCancelExport)
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:272
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:154
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:167
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:60
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:43
@@ -24108,7 +24108,13 @@ msgstr ""
 "\n"
 "렌더링이 취소되었습니다."
 
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:332
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
+#, fuzzy, kde-format
+#| msgid "Waiting for image operation to complete..."
+msgid "Wait for existing frame generation process to complete..."
+msgstr "이미지 연산 완료를 기다리는 중..."
+
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
 msgid ""
 "\n"
@@ -24123,7 +24129,7 @@ msgstr ""
 "최대 동시 저장 프레임 수를 %1개로 제한합니다\n"
 "\n"
 
-#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:336
+#: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:352
 #, kde-format
 msgid ""
 "%1\n"

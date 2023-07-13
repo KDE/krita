@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-12 00:45+0000\n"
-"PO-Revision-Date: 2023-07-11 11:00+0300\n"
+"POT-Creation-Date: 2023-07-13 00:45+0000\n"
+"PO-Revision-Date: 2023-07-12 11:47+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15750,8 +15750,8 @@ msgstr ""
 "Krita, Wayland platformunu desteklemiyor. Krita'yi Wayland üzerinde "
 "çalıştırmak için XWayland kullanın. Krita şimdi kapanacak."
 
-#: krita/main.cc:632 libs/ui/KisApplication.cpp:410
-#: libs/ui/KisApplication.cpp:681
+#: krita/main.cc:632 libs/ui/KisApplication.cpp:409
+#: libs/ui/KisApplication.cpp:680
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -16232,25 +16232,25 @@ msgstr ""
 "metin nesnesi Krita 5 biçimine dönüştürülür ve Krita 4.x ile uyumlu olmaktan "
 "çıkar."
 
-#: libs/flake/text/KoSvgTextShape.cpp:3721
+#: libs/flake/text/KoSvgTextShape.cpp:3726
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3723
-#: libs/flake/text/KoSvgTextShape.cpp:3731
+#: libs/flake/text/KoSvgTextShape.cpp:3728
+#: libs/flake/text/KoSvgTextShape.cpp:3736
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Metin Şekli"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3729
+#: libs/flake/text/KoSvgTextShape.cpp:3734
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3743
-#: libs/flake/text/KoSvgTextShape.cpp:3758
+#: libs/flake/text/KoSvgTextShape.cpp:3748
+#: libs/flake/text/KoSvgTextShape.cpp:3763
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16778,7 +16778,7 @@ msgid "Node Rename"
 msgstr "Düğümü Yeniden Adlandır"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:855
+#: libs/image/kis_image.cc:853
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Görseli Yeniden Boyutlandır"
@@ -16997,115 +16997,115 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr "Geçiş"
 
-#: libs/image/kis_image.cc:384
+#: libs/image/kis_image.cc:382
 #, kde-format
 msgid "Imported Image"
 msgstr "İçe Aktarılmış Görsel"
 
-#: libs/image/kis_image.cc:691 libs/image/kis_layer_utils.cpp:1872
+#: libs/image/kis_image.cc:689 libs/image/kis_layer_utils.cpp:1872
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
 msgstr "Seçim Maskesi"
 
-#: libs/image/kis_image.cc:751 libs/ui/KisDocument.cpp:2552
-#: plugins/impex/psd/psd_loader.cpp:195
+#: libs/image/kis_image.cc:749 libs/ui/KisDocument.cpp:2554
+#: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Arka Plan"
 
-#: libs/image/kis_image.cc:755 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:753 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "Boya Katmanı"
 
-#: libs/image/kis_image.cc:854
+#: libs/image/kis_image.cc:852
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Görseli Kırp"
 
-#: libs/image/kis_image.cc:950
+#: libs/image/kis_image.cc:948
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Katmanı Kırp"
 
-#: libs/image/kis_image.cc:951
+#: libs/image/kis_image.cc:949
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Maskeyi Kırp"
 
-#: libs/image/kis_image.cc:988
+#: libs/image/kis_image.cc:986
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Görseli Ölçekle"
 
-#: libs/image/kis_image.cc:989
+#: libs/image/kis_image.cc:987
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Görsel Çözünürlüğünü Değiştir"
 
-#: libs/image/kis_image.cc:1036
+#: libs/image/kis_image.cc:1034
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "Katmanı Ölçekle"
 
-#: libs/image/kis_image.cc:1161
+#: libs/image/kis_image.cc:1159
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Görseli Döndür"
 
-#: libs/image/kis_image.cc:1167
+#: libs/image/kis_image.cc:1165
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Maskeyi Döndür"
 
-#: libs/image/kis_image.cc:1169
+#: libs/image/kis_image.cc:1167
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "Katmanı Döndür"
 
-#: libs/image/kis_image.cc:1250
+#: libs/image/kis_image.cc:1248
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Maskeyi Kırk"
 
-#: libs/image/kis_image.cc:1253
+#: libs/image/kis_image.cc:1251
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "Katmanı Kırk"
 
-#: libs/image/kis_image.cc:1260
+#: libs/image/kis_image.cc:1258
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Görseli Kırk"
 
-#: libs/image/kis_image.cc:1278
+#: libs/image/kis_image.cc:1276
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Katman Renk Uzayını Dönüştür"
 
-#: libs/image/kis_image.cc:1329
+#: libs/image/kis_image.cc:1327
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Görsel Renk Uzayı Dönüştür"
 
-#: libs/image/kis_image.cc:1330
+#: libs/image/kis_image.cc:1328
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Yansıma Renk Uzayını Dönüştür"
 
-#: libs/image/kis_image.cc:1388
+#: libs/image/kis_image.cc:1386
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Katmana Profil Ata"
 
-#: libs/image/kis_image.cc:1429
+#: libs/image/kis_image.cc:1427
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profil Ata"
 
-#: libs/image/kis_image.cc:2488
+#: libs/image/kis_image.cc:2486
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Seçimleri Kırp"
@@ -17318,8 +17318,8 @@ msgid "Processing"
 msgstr "İşleniyor"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1422
-#: libs/ui/KisMainWindow.cpp:1702 libs/ui/KisMainWindow.cpp:1715
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1420
+#: libs/ui/KisMainWindow.cpp:1700 libs/ui/KisMainWindow.cpp:1713
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -17779,7 +17779,7 @@ msgstr "Dönüşüm Maskesi"
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
 #: libs/ui/kis_node_manager.cpp:1294
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
-#: plugins/impex/psd/psd_loader.cpp:385
+#: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:562
 #: plugins/impex/xcf/kis_xcf_import.cpp:274
 #, kde-format
@@ -18062,8 +18062,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "CSV Belgesi"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2066
-#: libs/ui/KisMainWindow.cpp:2149
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2064
+#: libs/ui/KisMainWindow.cpp:2147
 #, kde-format
 msgid "Import frames"
 msgstr "Kareler içe aktar"
@@ -19366,19 +19366,19 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
-#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:980
-#: libs/ui/KisApplication.cpp:983 libs/ui/KisApplication.cpp:999
-#: libs/ui/KisApplication.cpp:1031 libs/ui/KisApplication.cpp:1045
-#: libs/ui/KisApplication.cpp:1073 libs/ui/KisDocument.cpp:944
-#: libs/ui/KisDocument.cpp:951 libs/ui/KisDocument.cpp:971
-#: libs/ui/KisDocument.cpp:1879 libs/ui/KisDocument.cpp:1923
-#: libs/ui/KisDocument.cpp:1929 libs/ui/KisDocument.cpp:1942
-#: libs/ui/KisDocument.cpp:1946 libs/ui/KisMainWindow.cpp:979
+#: libs/ui/kis_node_manager.cpp:1281 libs/ui/KisApplication.cpp:979
+#: libs/ui/KisApplication.cpp:982 libs/ui/KisApplication.cpp:998
+#: libs/ui/KisApplication.cpp:1030 libs/ui/KisApplication.cpp:1044
+#: libs/ui/KisApplication.cpp:1072 libs/ui/KisDocument.cpp:946
+#: libs/ui/KisDocument.cpp:953 libs/ui/KisDocument.cpp:973
+#: libs/ui/KisDocument.cpp:1881 libs/ui/KisDocument.cpp:1925
+#: libs/ui/KisDocument.cpp:1931 libs/ui/KisDocument.cpp:1944
+#: libs/ui/KisDocument.cpp:1948 libs/ui/KisMainWindow.cpp:979
 #: libs/ui/KisMainWindow.cpp:1095 libs/ui/KisMainWindow.cpp:1221
-#: libs/ui/KisMainWindow.cpp:1320 libs/ui/KisMainWindow.cpp:1926
-#: libs/ui/KisMainWindow.cpp:1935 libs/ui/KisMainWindow.cpp:2074
-#: libs/ui/KisMainWindow.cpp:2135 libs/ui/KisMainWindow.cpp:2156
-#: libs/ui/KisMainWindow.cpp:2771 libs/ui/KisPart.cpp:588
+#: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1924
+#: libs/ui/KisMainWindow.cpp:1933 libs/ui/KisMainWindow.cpp:2072
+#: libs/ui/KisMainWindow.cpp:2133 libs/ui/KisMainWindow.cpp:2154
+#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:588
 #: libs/ui/KisPart.cpp:591 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
 #: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
@@ -19880,7 +19880,7 @@ msgid "Delete resource"
 msgstr "Özkaynağı sil"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:334
-#: libs/ui/KisMainWindow.cpp:2571
+#: libs/ui/KisMainWindow.cpp:2569
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20344,7 +20344,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Canlandırma kareleri sunulamadı! Çıktı dosyaları eksik."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2176
+#: libs/ui/KisMainWindow.cpp:2174
 #, kde-format
 msgid "Render Animation"
 msgstr "Canlandırmayı Sun"
@@ -22236,7 +22236,7 @@ msgstr "Kapat, kaydetme"
 #: libs/ui/dialogs/kis_delayed_save_dialog.ui:31
 #, kde-format
 msgid "Waiting for image operation to complete..."
-msgstr "Görsel işleminin bitmesi bekleniyor..."
+msgstr "Görsel işleminin tamamlanması bekleniyor..."
 
 #: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:68
 #, kde-format
@@ -22534,7 +22534,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Yeni biçem adını gir"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2582
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2580
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -23139,10 +23139,9 @@ msgstr ""
 "Sunum iptal edildi."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgid "Wait for existing frame generation process to complete..."
-msgstr "Görsel işleminin bitmesi bekleniyor..."
+msgstr "Var olan kare üretme sürecinin tamamlanması bekleniyor..."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
@@ -27411,7 +27410,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:352
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:351
 #, kde-format
 msgid "Sessions"
 msgstr "Oturumlar"
@@ -28886,7 +28885,7 @@ msgstr "Ö&n alan renk seçicisini aç"
 msgid "&Open Background color selector"
 msgstr "&Arka plan renk seçicisini aç"
 
-#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:348
+#: libs/ui/kis_control_frame.cpp:185 libs/ui/KisApplication.cpp:347
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:242
@@ -28899,8 +28898,8 @@ msgstr "Desenler"
 msgid "Custom Pattern"
 msgstr "Özel Desen"
 
-#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:333
-#: libs/ui/KisApplication.cpp:334
+#: libs/ui/kis_control_frame.cpp:237 libs/ui/KisApplication.cpp:332
+#: libs/ui/KisApplication.cpp:333
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:245
 #, kde-format
@@ -29039,7 +29038,7 @@ msgstr "Dosya katmana dönüştür"
 msgid "New Filter Layer"
 msgstr "Yeni Süzgeç Katman"
 
-#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:309
+#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:320
 #, kde-format
 msgid "Fill Layer"
 msgstr "Katmanı Doldur"
@@ -29655,61 +29654,61 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "Yakınlaştır: %​%1"
 
-#: libs/ui/KisApplication.cpp:325
+#: libs/ui/KisApplication.cpp:324
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, kde-format
 msgid "Brush presets"
 msgstr "Fırça önayarları"
 
-#: libs/ui/KisApplication.cpp:328 libs/ui/KisApplication.cpp:329
-#: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
+#: libs/ui/KisApplication.cpp:327 libs/ui/KisApplication.cpp:328
+#: libs/ui/KisApplication.cpp:329 libs/ui/KisApplication.cpp:330
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:240
 #, kde-format
 msgid "Brush tips"
 msgstr "Fırça uçları"
 
-#: libs/ui/KisApplication.cpp:336
+#: libs/ui/KisApplication.cpp:335
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:243
 #, kde-format
 msgid "Palettes"
 msgstr "Paletler"
 
-#: libs/ui/KisApplication.cpp:349 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:348 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:241
 #, kde-format
 msgid "Workspaces"
 msgstr "Çalışma alanları"
 
-#: libs/ui/KisApplication.cpp:350
+#: libs/ui/KisApplication.cpp:349
 #, kde-format
 msgid "SVG symbol libraries"
 msgstr "SVG sembol kitaplıkları"
 
-#: libs/ui/KisApplication.cpp:351 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:350 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, kde-format
 msgid "Window layouts"
 msgstr "Pencere düzenleri"
 
-#: libs/ui/KisApplication.cpp:353
+#: libs/ui/KisApplication.cpp:352
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:246
 #, kde-format
 msgid "Gamut masks"
 msgstr "Gam maskeleri"
 
-#: libs/ui/KisApplication.cpp:355
+#: libs/ui/KisApplication.cpp:354
 #, kde-format
 msgid "SeExpr Scripts"
 msgstr "SeExpr Betikleri"
 
-#: libs/ui/KisApplication.cpp:360
+#: libs/ui/KisApplication.cpp:359
 #, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Katman biçemleri"
 
-#: libs/ui/KisApplication.cpp:373
+#: libs/ui/KisApplication.cpp:372
 #, kde-format
 msgid ""
 "%1\n"
@@ -29720,13 +29719,13 @@ msgstr ""
 "\n"
 "Krita şimdi çıkacak."
 
-#: libs/ui/KisApplication.cpp:373 libs/ui/KisApplication.cpp:379
+#: libs/ui/KisApplication.cpp:372 libs/ui/KisApplication.cpp:378
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: Onulmaz hata"
 
-#: libs/ui/KisApplication.cpp:379
+#: libs/ui/KisApplication.cpp:378
 #, kde-format
 msgid ""
 "\n"
@@ -29737,7 +29736,7 @@ msgstr ""
 "\n"
 "Krita şimdi çıkacak."
 
-#: libs/ui/KisApplication.cpp:411
+#: libs/ui/KisApplication.cpp:410
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -29748,65 +29747,65 @@ msgstr ""
 "Bu, önerilmez.\n"
 "Lütfen x64 yapısını indirip kurun."
 
-#: libs/ui/KisApplication.cpp:428
+#: libs/ui/KisApplication.cpp:427
 #, kde-format
 msgid "Initializing Globals..."
 msgstr "Global ayarlar ilklendiriliyor..."
 
-#: libs/ui/KisApplication.cpp:459
+#: libs/ui/KisApplication.cpp:458
 #, kde-format
 msgid "Adding resource types..."
 msgstr "Özkaynak türleri ekleniyor..."
 
-#: libs/ui/KisApplication.cpp:463
+#: libs/ui/KisApplication.cpp:462
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Eklentiler yükleniyor..."
 
-#: libs/ui/KisApplication.cpp:469
+#: libs/ui/KisApplication.cpp:468
 #, kde-format
 msgid "Loading resources..."
 msgstr "Özkaynaklar yükleniyor..."
 
-#: libs/ui/KisApplication.cpp:478
+#: libs/ui/KisApplication.cpp:477
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Ana pencere yükleniyor..."
 
-#: libs/ui/KisApplication.cpp:510
+#: libs/ui/KisApplication.cpp:509
 #, kde-format
 msgid "Launching..."
 msgstr "Başlatılıyor..."
 
-#: libs/ui/KisApplication.cpp:579
+#: libs/ui/KisApplication.cpp:578
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Mime türü bulunamadı. -mimetype seçeneğini kullanmayı deneyin"
 
-#: libs/ui/KisApplication.cpp:635
+#: libs/ui/KisApplication.cpp:634
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Canlandırma kareleri sunulamadı!"
 
-#: libs/ui/KisApplication.cpp:662 libs/ui/KisApplication.cpp:852
+#: libs/ui/KisApplication.cpp:661 libs/ui/KisApplication.cpp:851
 #, kde-format
 msgid "File layer"
 msgstr "Dosya katman"
 
-#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:675
-#: libs/ui/KisApplication.cpp:846 libs/ui/KisApplication.cpp:860
-#: libs/ui/KisApplication.cpp:865
+#: libs/ui/KisApplication.cpp:669 libs/ui/KisApplication.cpp:674
+#: libs/ui/KisApplication.cpp:845 libs/ui/KisApplication.cpp:859
+#: libs/ui/KisApplication.cpp:864
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita:Uyarı"
 
-#: libs/ui/KisApplication.cpp:671 libs/ui/KisApplication.cpp:861
+#: libs/ui/KisApplication.cpp:670 libs/ui/KisApplication.cpp:860
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "%1, bir dosya katman olarak eklenemiyor: Dosya yok."
 
-#: libs/ui/KisApplication.cpp:676
+#: libs/ui/KisApplication.cpp:675
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29827,7 +29826,7 @@ msgstr ""
 "olan bir belgeye eklemek istiyorsanız ayarlarda \"Krita'nın yalnızca bir "
 "örneğine izin ver\" onay kutusunu imleyin (Ayarlar -> Genel -> Pencere)."
 
-#: libs/ui/KisApplication.cpp:682
+#: libs/ui/KisApplication.cpp:681
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29838,32 +29837,32 @@ msgstr ""
 "--new-image seçeneğini kullanarak yeni bir belge oluşturabilir veya var olan "
 "bir dosyayı açabilirsiniz."
 
-#: libs/ui/KisApplication.cpp:847
+#: libs/ui/KisApplication.cpp:846
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "%1 dosyası açılamadı"
 
-#: libs/ui/KisApplication.cpp:866
+#: libs/ui/KisApplication.cpp:865
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Dosya katman eklenemiyor: Açık belge yok."
 
-#: libs/ui/KisApplication.cpp:981
+#: libs/ui/KisApplication.cpp:980
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Şunun için bir şablon bulunamadı: %1"
 
-#: libs/ui/KisApplication.cpp:984
+#: libs/ui/KisApplication.cpp:983
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Şunun için pek çok şablon bulundu: %1"
 
-#: libs/ui/KisApplication.cpp:1000
+#: libs/ui/KisApplication.cpp:999
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "%1 şablonu yüklenemedi."
 
-#: libs/ui/KisApplication.cpp:1032
+#: libs/ui/KisApplication.cpp:1031
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29878,7 +29877,7 @@ msgstr ""
 "\n"
 "Değişikliklerin etkin olması için Krita'yı yeniden başlatın."
 
-#: libs/ui/KisApplication.cpp:1046
+#: libs/ui/KisApplication.cpp:1045
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29889,7 +29888,7 @@ msgstr ""
 "\n"
 "Dosyayı başka bir programın kullanmadığından emin olun ve yeniden deneyin."
 
-#: libs/ui/KisApplication.cpp:1074
+#: libs/ui/KisApplication.cpp:1073
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Ayar dosyasını temizlemek istiyor musunuz?"
@@ -30032,34 +30031,34 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Belgeyi Klonla"
 
-#: libs/ui/KisDocument.cpp:720
+#: libs/ui/KisDocument.cpp:722
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "%1 yazılamadı. Lütfen başka bir adla kaydedin."
 
-#: libs/ui/KisDocument.cpp:758
+#: libs/ui/KisDocument.cpp:760
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Bir yedek dosyası oluşturulamadı"
 
-#: libs/ui/KisDocument.cpp:775
+#: libs/ui/KisDocument.cpp:777
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Numaralandırılmış bir yedek dosyası oluşturulamadı"
 
-#: libs/ui/KisDocument.cpp:797
+#: libs/ui/KisDocument.cpp:799
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Belge Dışa Aktarılıyor..."
 
-#: libs/ui/KisDocument.cpp:798
+#: libs/ui/KisDocument.cpp:800
 #, kde-format
 msgid "Saving Document..."
 msgstr "Belge Kaydediliyor..."
 
-#: libs/ui/KisDocument.cpp:808
+#: libs/ui/KisDocument.cpp:810
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30068,18 +30067,18 @@ msgstr ""
 "%1 kaydedilmeye başlanamadı. Geçerli kaydetme işlemi bitinceye değin "
 "bekleyin."
 
-#: libs/ui/KisDocument.cpp:937
+#: libs/ui/KisDocument.cpp:939
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "%1 dosyası kaydedilirken hata: %2"
 
-#: libs/ui/KisDocument.cpp:945 libs/ui/KisDocument.cpp:952
+#: libs/ui/KisDocument.cpp:947 libs/ui/KisDocument.cpp:954
 #, kde-format
 msgid "Could not save %1."
 msgstr "%1 kaydedilemedi."
 
-#: libs/ui/KisDocument.cpp:974
+#: libs/ui/KisDocument.cpp:976
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30087,45 +30086,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 kaydedildi; ancak tamamlanmamış"
 
-#: libs/ui/KisDocument.cpp:980
+#: libs/ui/KisDocument.cpp:982
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "Kaydetme sırasında sorunlarla karşılaşıldı."
 
-#: libs/ui/KisDocument.cpp:997
+#: libs/ui/KisDocument.cpp:999
 #, kde-format
 msgid "Finished saving %1"
 msgstr "%1 kaydedildi"
 
-#: libs/ui/KisDocument.cpp:1400
+#: libs/ui/KisDocument.cpp:1402
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Otomatik kaydediliyor... %1"
 
-#: libs/ui/KisDocument.cpp:1408
+#: libs/ui/KisDocument.cpp:1410
 #, kde-format
 msgid "Autosaving..."
 msgstr "Otomatik kaydediliyor..."
 
-#: libs/ui/KisDocument.cpp:1414
+#: libs/ui/KisDocument.cpp:1416
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Otomatik kaydetme ertelendi: Belge meşgul..."
 
-#: libs/ui/KisDocument.cpp:1557
+#: libs/ui/KisDocument.cpp:1559
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "%1 otomatik kaydederken hata: %2"
 
-#: libs/ui/KisDocument.cpp:1571
+#: libs/ui/KisDocument.cpp:1573
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "%1 otomatik kaydedildi"
 
-#: libs/ui/KisDocument.cpp:1813
+#: libs/ui/KisDocument.cpp:1815
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30134,43 +30133,43 @@ msgstr ""
 "Hatalı Oluşturulmuş Yol\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1879
+#: libs/ui/KisDocument.cpp:1881
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "%1 dosyası yok."
 
-#: libs/ui/KisDocument.cpp:1908
+#: libs/ui/KisDocument.cpp:1910
 #, kde-format
 msgid "Opening document"
 msgstr "Belge açılıyor"
 
-#: libs/ui/KisDocument.cpp:1924 libs/ui/KisDocument.cpp:1930
+#: libs/ui/KisDocument.cpp:1926 libs/ui/KisDocument.cpp:1932
 #, kde-format
 msgid "Could not open %1."
 msgstr "%1 açılamadı."
 
-#: libs/ui/KisDocument.cpp:1943 libs/ui/KisDocument.cpp:1947
+#: libs/ui/KisDocument.cpp:1945 libs/ui/KisDocument.cpp:1949
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "%1 açılırken sorunlarla karşılaşıldı."
 
-#: libs/ui/KisDocument.cpp:2078
+#: libs/ui/KisDocument.cpp:2080
 #, kde-format
 msgid "Not Saved"
 msgstr "Kaydedilmemiş"
 
-#: libs/ui/KisDocument.cpp:2559
+#: libs/ui/KisDocument.cpp:2561
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Arka Plan Dolgusu"
 
-#: libs/ui/KisDocument.cpp:2611
+#: libs/ui/KisDocument.cpp:2613
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
 msgid "Waiting for saving to complete..."
-msgstr "Kaydetmenin bitmesi bekleniyor..."
+msgstr "Kaydetmenin tamamlanması bekleniyor..."
 
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
@@ -30615,7 +30614,7 @@ msgstr "%1 dosyası yok."
 msgid "Open Images"
 msgstr "Görseller Aç"
 
-#: libs/ui/KisMainWindow.cpp:1321
+#: libs/ui/KisMainWindow.cpp:1319
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30628,45 +30627,45 @@ msgstr ""
 "\n"
 "Lütfen özgün dosyanın geçersiz kılınmadığı bir yer seçin!"
 
-#: libs/ui/KisMainWindow.cpp:1377
+#: libs/ui/KisMainWindow.cpp:1375
 #, kde-format
 msgid "Exporting"
 msgstr "Dışa Aktarılıyor"
 
-#: libs/ui/KisMainWindow.cpp:1377
+#: libs/ui/KisMainWindow.cpp:1375
 #, kde-format
 msgid "Saving As"
 msgstr "Farklı Kaydediliyor"
 
-#: libs/ui/KisMainWindow.cpp:1681
+#: libs/ui/KisMainWindow.cpp:1679
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Yeni belge oluştur"
 
-#: libs/ui/KisMainWindow.cpp:1705
+#: libs/ui/KisMainWindow.cpp:1703
 #, kde-format
 msgid "Custom Document"
 msgstr "Özel Belge"
 
-#: libs/ui/KisMainWindow.cpp:1717
+#: libs/ui/KisMainWindow.cpp:1715
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Panodan Oluştur"
 
-#: libs/ui/KisMainWindow.cpp:1895
+#: libs/ui/KisMainWindow.cpp:1893
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Katmanlar/Maskeler"
 
-#: libs/ui/KisMainWindow.cpp:1921
+#: libs/ui/KisMainWindow.cpp:1919
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Hiçbir özkaynak demeti etkinleştirilmemiş."
 
-#: libs/ui/KisMainWindow.cpp:1925
+#: libs/ui/KisMainWindow.cpp:1923
 #, kde-format
 msgid ""
 "\n"
@@ -30677,7 +30676,7 @@ msgstr ""
 "Kullanılabilir fırça önayarı yok. Sürdürmeden önce lütfen önayar içeren bir "
 "demeti etkinleştirin.\n"
 
-#: libs/ui/KisMainWindow.cpp:1935
+#: libs/ui/KisMainWindow.cpp:1933
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -30688,7 +30687,7 @@ msgstr ""
 "\n"
 "Yalnızca yerel özkaynaklar kullanılabiliyor."
 
-#: libs/ui/KisMainWindow.cpp:2074 libs/ui/KisMainWindow.cpp:2156
+#: libs/ui/KisMainWindow.cpp:2072 libs/ui/KisMainWindow.cpp:2154
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30697,59 +30696,59 @@ msgstr ""
 "Canlandırma içe aktarma bitirilemedi:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2135
+#: libs/ui/KisMainWindow.cpp:2133
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Yeni belge oluşturulamadı. Canlandırma içe aktarma iptal edildi."
 
-#: libs/ui/KisMainWindow.cpp:2562
+#: libs/ui/KisMainWindow.cpp:2560
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Çalışma Alanı İçe Aktar..."
 
-#: libs/ui/KisMainWindow.cpp:2577
+#: libs/ui/KisMainWindow.cpp:2575
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Yeni Çalışma Alanı..."
 
-#: libs/ui/KisMainWindow.cpp:2581
+#: libs/ui/KisMainWindow.cpp:2579
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Yeni Çalışma Alanı..."
 
-#: libs/ui/KisMainWindow.cpp:2625
+#: libs/ui/KisMainWindow.cpp:2623
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2628
+#: libs/ui/KisMainWindow.cpp:2626
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2794
+#: libs/ui/KisMainWindow.cpp:2792
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr "Krita LittleCMS renk yönetimi eklentisi yüklü değil. Krita kapanacak."
 
-#: libs/ui/KisMainWindow.cpp:2810
+#: libs/ui/KisMainWindow.cpp:2808
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Kurulum hatası"
 
-#: libs/ui/KisMainWindow.cpp:2919
+#: libs/ui/KisMainWindow.cpp:2917
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temalar"
 
-#: libs/ui/KisMainWindow.cpp:2977
+#: libs/ui/KisMainWindow.cpp:2975
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Genişleyen Boşluk"
@@ -40147,7 +40146,7 @@ msgid ""
 "provided."
 msgstr "Lütfen doğru erimi girin. Sağlanan kare eriminde hiçbir panel yok."
 
-#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1263
+#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1262
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "
@@ -48868,7 +48867,7 @@ msgstr ""
 "Görseliniz, görselden farklı renk modeline sahip bir veya birden fazla "
 "katman içeriyor."
 
-#: plugins/impex/psd/psd_loader.cpp:158
+#: plugins/impex/psd/psd_loader.cpp:156
 #, kde-format
 msgid "Duotone Colormode Block"
 msgstr "İki Tonlu Renk Kipi Bloku"

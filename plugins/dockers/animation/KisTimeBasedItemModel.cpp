@@ -171,7 +171,9 @@ void KisTimeBasedItemModel::setAnimationPlayer(KisCanvasAnimationState *player)
 
         const int frame = player ? player->displayProxy()->activeFrame() : m_d->image->animationInterface()->currentUITime();
         setHeaderData(frame, Qt::Horizontal, true, ActiveFrameRole);
-        setHeaderData(frame, Qt::Horizontal, QVariant(int(SEEK_FINALIZE | SEEK_PUSH_AUDIO)), ScrubToRole);
+
+        // only prioritize the cache, no seek operation to prevent audio from playing
+        setHeaderData(frame, Qt::Horizontal, QVariant(int(SEEK_NONE)), ScrubToRole);
     }
 }
 

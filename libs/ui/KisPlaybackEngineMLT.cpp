@@ -188,16 +188,6 @@ public:
         if (requireFullRestart) {
             m_d->cleanupConsumers();
         }
-
-        if (!m_d->activeCanvas())
-            return;
-
-        QSharedPointer<Mlt::Producer> activeProducer = m_d->activeProducer();
-        KisCanvasAnimationState* animationState = m_d->activeCanvas()->animationState();
-        KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
-        if (activeProducer) {
-            activeProducer->seek(animationState->displayProxy()->activeFrame());
-        }
     }
 
     ~StopAndResume() {
@@ -226,12 +216,6 @@ public:
                 m_d->activeProducer()->set("speed", m_d->playbackSpeed);
                 const int shouldLimit = m_d->activePlaybackMode() == PLAYBACK_PUSH ? 0 : 1;
                 m_d->activeProducer()->set("limit_enabled", shouldLimit);
-            }
-
-            if (m_d->canvasProducers.contains(m_d->activeCanvas())) {
-                if ( animationState->displayProxy()->activeFrame() >= 0) {
-                    m_d->canvasProducers[m_d->activeCanvas()]->seek(animationState->displayProxy()->activeFrame());
-                }
             }
         }
     }

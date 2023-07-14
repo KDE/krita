@@ -484,7 +484,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     setCentralWidget(d->widgetStack);
     d->widgetStack->setCurrentIndex(0);
 
-    connect(d->widgetStack, &QStackedWidget::currentChanged, this, &KisMainWindow::setMainWindowLayoutForMode);
+    connect(d->widgetStack, &QStackedWidget::currentChanged, this, &KisMainWindow::setMainWindowLayoutForCurrentMainWidget);
 
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
     connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
@@ -1617,13 +1617,13 @@ void KisMainWindow::showEvent(QShowEvent *event)
 {
     // we're here because, we need to make sure everything (dockers, toolbars etc) is loaded and ready before
     // we can hide it.
-    setMainWindowLayoutForMode(0);
+    setMainWindowLayoutForCurrentMainWidget(0);
     return KXmlGuiWindow::showEvent(event);
 }
 
-void KisMainWindow::setMainWindowLayoutForMode(int mode)
+void KisMainWindow::setMainWindowLayoutForCurrentMainWidget(int widgetIndex)
 {
-    if (mode == 0) {
+    if (widgetIndex == 0) {
         // save the state of the window which existed up-to now (this is before we stop auto-saving).
         saveMainWindowSettings(d->windowStateConfig);
         // This makes sure we don't save window state when we're in welcome page mode, because all the dockers
@@ -1635,10 +1635,13 @@ void KisMainWindow::setMainWindowLayoutForMode(int mode)
             statusBar()->hide();
         }
         QList<QToolBar *> toolbars = findChildren<QToolBar *>();
-        for (auto *toolbar : toolbars) {
-            toolbar->hide();
+        for (QToolBar *toolbar : toolbars) {
+            if (toolbar->objectName() == "BrushesAndStuff" || toolbar->objectName() == "editToolBar") {
+                toolbar->hide();
+            }
         }
-    } else {
+    }
+    else {
         setAutoSaveSettings(d->windowStateConfig, false);
     }
 
@@ -1646,7 +1649,7 @@ void KisMainWindow::setMainWindowLayoutForMode(int mode)
     actions.append(toolBarMenuAction()->menu()->actions());
     for (QAction *action : actions) {
         if (action) {
-            action->setEnabled(mode);
+            action->setEnabled(widgetIndex);
         }
     }
 }

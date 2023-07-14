@@ -411,7 +411,8 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     <Action name="file_new"/>
     <Action name="file_open"/>
     <Action name="file_save"/>
-    <Separator/>
+  </ToolBar>
+  <ToolBar name="editToolBar" fullWidth="false" noMerge="1">
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
   </ToolBar>

@@ -111,6 +111,7 @@ public:
 private Q_SLOTS:
     void slotNewFileClicked();
     void slotOpenFileClicked();
+    void slotBannerClicked();
 
     void recentDocumentClicked(QModelIndex index);
     void slotRecentDocContextMenuRequest(const QPoint &pos);

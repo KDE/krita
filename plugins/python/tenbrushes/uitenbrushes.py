@@ -85,10 +85,12 @@ class UITenBrushes(object):
             button.clicked.connect(button.selectPreset)
             button.presetChooser = self.presetChooser
 
-            action = self.tenbrushes.actions[index]
+            action = Application.action("activate_preset_" + item)
 
-            if action and action.preset and action.preset in allPresets:
-                p = allPresets[action.preset]
+            preset = self.tenbrushes.selectedPresets[index] if index < len(self.tenbrushes.selectedPresets) else None
+
+            if action and preset and preset in allPresets:
+                p = allPresets[preset]
                 button.preset = p.name()
                 button.setIcon(QIcon(QPixmap.fromImage(p.image())))
 

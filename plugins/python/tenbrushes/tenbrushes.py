@@ -10,9 +10,9 @@ class TenBrushesExtension(krita.Extension):
     def __init__(self, parent):
         super(TenBrushesExtension, self).__init__(parent)
 
-        self.actions = []
         self.buttons = []
         self.selectedPresets = []
+        self.actionToIndex = {}
         # Indicates whether we want to activate the previous-selected brush
         # on the second press of the shortcut
         self.activatePrev = True
@@ -35,7 +35,20 @@ class TenBrushesExtension(krita.Extension):
         self.uitenbrushes.initialize(self)
 
     def readSettings(self):
+        allPresets = Application.resources("preset")
+
         self.selectedPresets = Application.readSetting("", "tenbrushes", "").split(',')
+
+        # in Krita 4.x we used to replace spaces in preset names with
+        # underscores, which has changed in Krita 5.x. Here we just
+        # try hard to load the legacy preset
+
+        for index, preset in enumerate(self.selectedPresets):
+            for name in [preset, preset.replace('_', ' ')]:
+                if name in allPresets:
+                    if name != preset:
+                        self.selectedPresets[index] = name
+                    break
 
         setting = Application.readSetting("", "tenbrushesActivatePrev2ndPress", "True")
         # we should not get anything other than 'True' and 'False'
@@ -49,7 +62,6 @@ class TenBrushesExtension(krita.Extension):
         presets = []
 
         for index, button in enumerate(self.buttons):
-            self.actions[index].preset = button.preset
             presets.append(button.preset)
 
         Application.writeSetting("", "tenbrushes", ','.join(map(str, presets)))
@@ -67,39 +79,29 @@ class TenBrushesExtension(krita.Extension):
                 "activate_preset_" + item,
                 str(i18n("Activate Brush Preset {num}")).format(num=item), "")
             action.triggered.connect(self.activatePreset)
-
-            action.preset = None
-
-            # in Krita 4.x we used to replace spaces in preset names with
-            # underscores, which has changed in Krita 5.x. Here we just
-            # try hard to load the legacy preset
-
-            if index < len(self.selectedPresets):
-                presetName = self.selectedPresets[index]
-
-                for name in [presetName, presetName.replace('_', ' ')]:
-                    if name in allPresets:
-                        action.preset = name
-                        break
-
-            self.actions.append(action)
+            self.actionToIndex[action.objectName()] = index;
 
     def activatePreset(self):
         allPresets = Application.resources("preset")
         window = Application.activeWindow()
+
+        presetIndex = self.actionToIndex[self.sender().objectName()]
+        preset = self.selectedPresets[presetIndex] if len(self.selectedPresets) > presetIndex else None
+
         if (window and len(window.views()) > 0
-                and self.sender().preset in allPresets):
+                and preset
+                and preset in allPresets):
             currentPreset = window.views()[0].currentBrushPreset()
 
             if self.autoBrush:
                 Krita.instance().action('KritaShape/KisToolBrush').trigger()
 
             if (self.activatePrev
-                    and self.sender().preset == currentPreset.name()):
+                    and preset == currentPreset.name()):
                 window.views()[0].activateResource(self.oldPreset)
             else:
                 self.oldPreset = window.views()[0].currentBrushPreset()
-                window.views()[0].activateResource(allPresets[self.sender().preset])
+                window.views()[0].activateResource(allPresets[preset])
 
         preset = window.views()[0].currentBrushPreset()
         window.activeView().showFloatingMessage(str(i18n("{}\nselected")).format(preset.name()),

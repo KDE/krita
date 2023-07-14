@@ -92,6 +92,8 @@ set(kritawidgetutils_LIB_SRCS
 
     katecommandbar.cpp
     commandmodel.cpp
+
+    KisClickableLabel.cpp
 )
 
 if (HAVE_DBUS)

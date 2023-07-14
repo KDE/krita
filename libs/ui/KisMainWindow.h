@@ -482,7 +482,7 @@ private:
 
     void customizeTabBar();
 
-    void setMainWindowLayoutForMode(int mode);
+    void setMainWindowLayoutForCurrentMainWidget(int widgetIndex);
 
 private:
 

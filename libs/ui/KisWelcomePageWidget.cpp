@@ -126,10 +126,11 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     recentDocumentsListView->viewport()->setAutoFillBackground(false);
     recentDocumentsListView->setSpacing(2);
     recentDocumentsListView->installEventFilter(this);
+    recentDocumentsListView->setViewMode(QListView::IconMode);
 
-    recentItemDelegate.reset(new RecentItemDelegate(this));
-    recentItemDelegate->setItemHeight(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH);
-    recentDocumentsListView->setItemDelegate(recentItemDelegate.data());
+//    recentItemDelegate.reset(new RecentItemDelegate(this));
+//    recentItemDelegate->setItemHeight(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH);
+//    recentDocumentsListView->setItemDelegate(recentItemDelegate.data());
     recentDocumentsListView->setIconSize(QSize(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH, KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH));
     recentDocumentsListView->setVerticalScrollMode(QListView::ScrollPerPixel);
     recentDocumentsListView->verticalScrollBar()->setSingleStep(50);
@@ -169,7 +170,6 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #endif
 
 #ifdef Q_OS_ANDROID
-    dragImageHereLabel->hide();
     newFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     openFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
@@ -290,8 +290,7 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         newsWidget->setAnalyticsTracking("?" + analyticsString);
 
         KisRecentDocumentsModelWrapper *recentFilesModel = KisRecentDocumentsModelWrapper::instance();
-        connect(recentFilesModel, SIGNAL(sigModelIsUpToDate()),
-                this, SLOT(slotRecentFilesModelIsUpToDate()));
+        connect(recentFilesModel, SIGNAL(sigModelIsUpToDate()), this, SLOT(slotRecentFilesModelIsUpToDate()));
         recentDocumentsListView->setModel(&recentFilesModel->model());
         slotRecentFilesModelIsUpToDate();
     }
@@ -342,10 +341,6 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     newFileLink->setStyleSheet(blendedStyle);
     openFileLink->setStyleSheet(blendedStyle);
 
-    // giving the drag area messaging a dotted border
-    QString dottedBorderStyle = QString("border: 2px dotted ").append(blendedColor.name()).append("; color:").append(blendedColor.name()).append( ";");
-    dragImageHereLabel->setStyleSheet(dottedBorderStyle);
-
     // make drop area QFrame have a dotted line
     dropFrameBorder->setObjectName("dropAreaIndicator");
     QString dropFrameStyle = QString("QFrame#dropAreaIndicator { border: 4px dotted ").append(blendedColor.name()).append("}");
@@ -372,6 +367,9 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     sourceCodeIcon->setIcon(linkIcon);
 
     kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")));
+
+    lblBanner->setPixmap(QPixmap(QStringLiteral(":/default_banner.png")));
+    connect(lblBanner, SIGNAL(clicked()), this, SLOT(slotBannerClicked()));
 
     // HTML links seem to be a bit more stubborn with theme changes... setting inline styles to help with color change
     userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita-artists.org\">")
@@ -674,6 +672,11 @@ void KisWelcomePageWidget::slotNewFileClicked()
 void KisWelcomePageWidget::slotOpenFileClicked()
 {
     m_mainWindow->slotFileOpen();
+}
+
+void KisWelcomePageWidget::slotBannerClicked()
+{
+    QDesktopServices::openUrl(QUrl("https://krita.org/en/support-us/donations"));
 }
 
 void KisWelcomePageWidget::slotRecentFilesModelIsUpToDate()

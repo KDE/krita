@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-13 00:45+0000\n"
+"POT-Creation-Date: 2023-07-14 00:44+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -33859,12 +33859,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:653
+#: libs/ui/opengl/kis_opengl.cpp:654
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "Inteli graafikadraiveri puhul on teatatud probleemidest OpenGL-iga"
 
-#: libs/ui/opengl/kis_opengl.cpp:655
+#: libs/ui/opengl/kis_opengl.cpp:656
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -33875,14 +33875,14 @@ msgstr ""
 "mistõttu vaikimisi on kasutusel ANGLE. Sa võid küll käsitsi lülituda OpenGL-"
 "i peale, aga me ei saa garanteerida, et see töötab korralikult."
 
-#: libs/ui/opengl/kis_opengl.cpp:1069
+#: libs/ui/opengl/kis_opengl.cpp:1070
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1071
+#: libs/ui/opengl/kis_opengl.cpp:1072
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "Saadaolevad renderdajad ei toeta eelistatud väljundvormingut"

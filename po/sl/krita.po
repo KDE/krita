@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-13 00:45+0000\n"
+"POT-Creation-Date: 2023-07-14 00:44+0000\n"
 "PO-Revision-Date: 2023-06-26 06:41+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -32256,13 +32256,13 @@ msgstr ""
 "Medpomnilniki tekstur so zaradi težav z zmogljivostjo izrecno onemogočeni na "
 "upodobljevalniku ANGLE."
 
-#: libs/ui/opengl/kis_opengl.cpp:653
+#: libs/ui/opengl/kis_opengl.cpp:654
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Znano je, da ima grafični gonilnik Intel, ki ga uporabljate, težave z OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:655
+#: libs/ui/opengl/kis_opengl.cpp:656
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32273,7 +32273,7 @@ msgstr ""
 "uporabljen ANGLE. Lahko ročno preklopite na OpenGL, vendar pravilno "
 "delovanje ni zagotovljeno."
 
-#: libs/ui/opengl/kis_opengl.cpp:1069
+#: libs/ui/opengl/kis_opengl.cpp:1070
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32282,7 +32282,7 @@ msgstr ""
 "Želeni upodabljalnik ne podpira zahtevane oblike površine. Izbran je bil "
 "drug upodabljalnik."
 
-#: libs/ui/opengl/kis_opengl.cpp:1071
+#: libs/ui/opengl/kis_opengl.cpp:1072
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "Razpoložljivi upodobljevalniki ne podpirajo želene oblike izhoda"

@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-13 00:45+0000\n"
+"POT-Creation-Date: 2023-07-14 00:44+0000\n"
 "PO-Revision-Date: 2023-06-25 15:34+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
@@ -32542,14 +32542,14 @@ msgstr ""
 "Les tampons de texture sont explicitement désactivés dans le moteur de rendu "
 "« ANGLE » en raison de problèmes de performance."
 
-#: libs/ui/opengl/kis_opengl.cpp:653
+#: libs/ui/opengl/kis_opengl.cpp:654
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Le pilote graphique pour Intel en cours d'utilisation est connu pour avoir "
 "certains problèmes avec « OpenGL »."
 
-#: libs/ui/opengl/kis_opengl.cpp:655
+#: libs/ui/opengl/kis_opengl.cpp:656
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32561,7 +32561,7 @@ msgstr ""
 "manuellement basculer vers « OpenGL » mais il n'y a aucune garantie que cela "
 "fonctionne correctement."
 
-#: libs/ui/opengl/kis_opengl.cpp:1069
+#: libs/ui/opengl/kis_opengl.cpp:1070
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32570,7 +32570,7 @@ msgstr ""
 "Le moteur de rendu préféré ne prend pas en charge le format demandé de "
 "surface. Un autre moteur d rendu a été choisi."
 
-#: libs/ui/opengl/kis_opengl.cpp:1071
+#: libs/ui/opengl/kis_opengl.cpp:1072
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""

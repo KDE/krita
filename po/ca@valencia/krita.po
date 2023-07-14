@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-13 00:45+0000\n"
+"POT-Creation-Date: 2023-07-14 00:44+0000\n"
 "PO-Revision-Date: 2023-06-24 13:24+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -32342,12 +32342,12 @@ msgstr ""
 "Les memòries intermèdies de textures estan desactivades explícitament en el "
 "renderitzador ANGLE per problemes de rendiment."
 
-#: libs/ui/opengl/kis_opengl.cpp:653
+#: libs/ui/opengl/kis_opengl.cpp:654
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "El controlador gràfic d'Intel emprat té problemes coneguts amb OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:655
+#: libs/ui/opengl/kis_opengl.cpp:656
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32358,7 +32358,7 @@ msgstr ""
 "que s'utilitzarà ANGLE de manera predeterminada. Manualment podreu canviar a "
 "OpenGL, però no es garantix que funcione adequadament."
 
-#: libs/ui/opengl/kis_opengl.cpp:1069
+#: libs/ui/opengl/kis_opengl.cpp:1070
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32367,7 +32367,7 @@ msgstr ""
 "El renderitzador preferit no permet el format de superfície requerit. S'ha "
 "seleccionat un altre renderitzador."
 
-#: libs/ui/opengl/kis_opengl.cpp:1071
+#: libs/ui/opengl/kis_opengl.cpp:1072
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-13 00:45+0000\n"
-"PO-Revision-Date: 2023-06-23 04:57+0200\n"
+"POT-Creation-Date: 2023-07-14 00:44+0000\n"
+"PO-Revision-Date: 2023-07-13 06:44+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -14160,7 +14160,7 @@ msgstr "მენიუს &ზოლის ჩვენება"
 #, kde-format
 msgctxt "action"
 msgid "Show or hide the status bar"
-msgstr ""
+msgstr "სტატუსის ზოლის დამალვა/ჩვენება"
 
 #. i18n: context: iconText @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:957
@@ -22897,13 +22897,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "progress dialog message when the user closes the document that is being "
-#| "saved"
-#| msgid "Waiting for saving to complete..."
+#, kde-format
 msgid "Wait for existing frame generation process to complete..."
-msgstr "შენახვის დასრულების მოლოდინი..."
+msgstr "არსებული კადრის გენერაციის დასრულების მოლოდინი..."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
@@ -31577,12 +31573,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:653
+#: libs/ui/opengl/kis_opengl.cpp:654
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:655
+#: libs/ui/opengl/kis_opengl.cpp:656
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -31590,14 +31586,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1069
+#: libs/ui/opengl/kis_opengl.cpp:1070
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1071
+#: libs/ui/opengl/kis_opengl.cpp:1072
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -40824,28 +40820,28 @@ msgstr "არცერთი"
 #, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "Low gain up"
-msgstr ""
+msgstr "მცირე გაძლიერება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editGainControl)
 #: plugins/extensions/metadataeditor/editors/exif.ui:556
 #, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "High gain up"
-msgstr ""
+msgstr "ძლიერი გაძლიერება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editGainControl)
 #: plugins/extensions/metadataeditor/editors/exif.ui:561
 #, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "Low gain down"
-msgstr ""
+msgstr "მცირე შესუსტება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editGainControl)
 #: plugins/extensions/metadataeditor/editors/exif.ui:566
 #, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "High gain down"
-msgstr ""
+msgstr "ძლიერი შესუსტება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: plugins/extensions/metadataeditor/editors/exif.ui:574
@@ -46314,7 +46310,7 @@ msgstr "გრადაცია"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Weighted"
-msgstr ""
+msgstr "აწონილია"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:116
 #, kde-format
@@ -54672,7 +54668,7 @@ msgstr "საწყისი"
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
-msgstr ""
+msgstr "აწონილია"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:348
 #, kde-format
@@ -57308,7 +57304,7 @@ msgstr ""
 #, kde-format
 msgctxt "The pattern 'scale' spinbox prefix in enclose and fill tool options"
 msgid "Scale: "
-msgstr ""
+msgstr "მასშტაბი: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:457
 #, kde-format
@@ -57677,7 +57673,7 @@ msgstr "მოკეცვა"
 #, kde-format
 msgctxt "Liquify Transform Tab Label"
 msgid "Liquify"
-msgstr ""
+msgstr "გათხევადება"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:126
 #, kde-format

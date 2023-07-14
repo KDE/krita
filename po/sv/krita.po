@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-13 00:45+0000\n"
+"POT-Creation-Date: 2023-07-14 00:44+0000\n"
 "PO-Revision-Date: 2022-10-01 11:35+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -32425,12 +32425,12 @@ msgstr ""
 "Strukturbuffrar är explicit inaktiverade med ANGLE återgivning på grund av "
 "prestandaproblem."
 
-#: libs/ui/opengl/kis_opengl.cpp:653
+#: libs/ui/opengl/kis_opengl.cpp:654
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "Intels grafikdrivrutin som används har kända problem med OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:655
+#: libs/ui/opengl/kis_opengl.cpp:656
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32441,7 +32441,7 @@ msgstr ""
 "istället. Du kan byta manuellt till OpenGL, men det finns inga garantier att "
 "att det fungerar riktigt."
 
-#: libs/ui/opengl/kis_opengl.cpp:1069
+#: libs/ui/opengl/kis_opengl.cpp:1070
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32450,7 +32450,7 @@ msgstr ""
 "Föredragen återgivning stöder inte begärt ytformat. En annan återgivning har "
 "valts."
 
-#: libs/ui/opengl/kis_opengl.cpp:1071
+#: libs/ui/opengl/kis_opengl.cpp:1072
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "Föredraget utmatningsformat stöds inte av tillgängliga återgivningar."

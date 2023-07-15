@@ -1,14 +1,15 @@
 #include "wdgtagpreview.h"
 #include "ui_wdgtagpreview.h"
+#include "KisTagLabel.h"
 
 #include "KisTagSelectionWidget.h"
 #include "KoID.h"
-#include "KisTagLabel.h"
 #include <wdgtagselection.h>
 #include <KisTag.h>
 #include <KisTagModelProvider.h>
 #include <KisWrappableHBoxLayout.h>
 #include <KisTagSelectionWidget.h>
+
 
 WdgTagPreview::WdgTagPreview(QString resourceType, QWidget *parent) :
     QWidget(parent),
@@ -36,7 +37,7 @@ WdgTagPreview::WdgTagPreview(QString resourceType, QWidget *parent) :
         QModelIndex idx = model->index(i, 0);
         QString name  = model->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
         if (name == "All" || name == "All Untagged") continue;
-        TagLabel *label = new TagLabel(name);
+        KisTagLabel *label = new KisTagLabel(name);
         m_layout->addWidget(label);
         }
 }
@@ -52,7 +53,7 @@ void WdgTagPreview::onTagAdded(KoID custom)
     KisTagSP tagSP = model->tagForUrl(custom.id());
 
         for (int i = m_layout->count() - 1; i >= 0; --i) {
-        TagLabel *label = qobject_cast<TagLabel*>(m_layout->itemAt(i)->widget());
+        KisTagLabel *label = qobject_cast<KisTagLabel*>(m_layout->itemAt(i)->widget());
         if (label && label->getText() == tagSP->name()) {
             m_layout->removeWidget(label);
             delete label;
@@ -66,7 +67,7 @@ void WdgTagPreview::onTagRemoved(KoID custom)
     KisTagModel* model = new KisTagModel(m_resourceType);
     KisTagSP tagSP = model->tagForUrl(custom.id());
 
-    TagLabel *label = new TagLabel(tagSP->name());
+    KisTagLabel *label = new KisTagLabel(tagSP->name());
     m_layout->addWidget(label);
 
     emit tagsRemoved(tagSP);

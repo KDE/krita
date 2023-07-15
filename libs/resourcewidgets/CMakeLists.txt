@@ -9,6 +9,7 @@ set(kritaresourcewidgets_LIB_SRCS
     KisResourceItemView.cpp
     KisResourceThumbnailPainter.cpp
     KisTagChooserWidget.cpp
+    KisTagLabel.cpp
     KisTagFilterWidget.cpp
     KisTagToolButton.cpp
     KisResourceTaggingManager.cpp

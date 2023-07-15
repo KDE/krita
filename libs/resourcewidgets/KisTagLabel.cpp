@@ -6,7 +6,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 
-TagLabel::TagLabel(QString string, QWidget *parent) :
+KisTagLabel::KisTagLabel(QString string, QWidget *parent) :
     QWidget(parent)
 {
     m_string = string;
@@ -23,11 +23,11 @@ TagLabel::TagLabel(QString string, QWidget *parent) :
     setLayout(layout);
 }
 
-TagLabel::~TagLabel()
+KisTagLabel::~KisTagLabel()
 {
 }
 
-void TagLabel::paintEvent(QPaintEvent *event)
+void KisTagLabel::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
 
@@ -43,7 +43,7 @@ void TagLabel::paintEvent(QPaintEvent *event)
     painter.fillPath(path, qApp->palette().light());
 }
 
-QString TagLabel::getText()
+QString KisTagLabel::getText()
 {
     return m_string;
 }

@@ -17,11 +17,10 @@ WdgSide::WdgSide(QWidget *parent) :
     QCoreApplication* coreApp = QCoreApplication::instance();
     QApplication* app = qobject_cast<QApplication*>(coreApp);
     QPalette appPalette = app->palette();
-    QColor brightTextColor = appPalette.color(QPalette::Highlight);
+    QColor brightColor = appPalette.color(QPalette::Highlight);
     QString styleSheet = QString("QToolButton { background-color: %1; color: %2; }")
-                        .arg(brightTextColor.name())
-                        .arg(brightTextColor.lightnessF() < 0.5 ? "#FFFFFF" : "#000000");
-
+                        .arg(brightColor.name())
+                        .arg(brightColor.lightnessF() < 0.5 ? "#FFFFFF" : "#000000");
 
     m_ui->btnChooseRes->setIcon(KisIconUtils::loadIcon("document-edit"));
     m_ui->btnChooseRes->setIconSize(QSize(28, 28));
@@ -40,7 +39,6 @@ WdgSide::WdgSide(QWidget *parent) :
     m_ui->btnSaveLocation->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
     m_ui->btnChooseRes->setStyleSheet(styleSheet);
-
 }
 
 void WdgSide::focusLabel(int id)
@@ -48,15 +46,15 @@ void WdgSide::focusLabel(int id)
     QCoreApplication* coreApp = QCoreApplication::instance();
     QApplication* app = qobject_cast<QApplication*>(coreApp);
     QPalette appPalette = app->palette();
-    QColor brightTextColor = appPalette.color(QPalette::Highlight);
+    QColor brightColor = appPalette.color(QPalette::Midlight);
     QString styleSheetHighlight = QString("QToolButton { background-color: %1; color: %2; }")
-                        .arg(brightTextColor.name())
-                        .arg(brightTextColor.lightnessF() < 0.5 ? "#FFFFFF" : "#000000");
+                        .arg(brightColor.name())
+                        .arg(brightColor.lightnessF() < 0.5 ? "#FFFFFF" : "#000000");
 
-    QColor normalTextColor = appPalette.color(QPalette::Base);
+    QColor normalColor = appPalette.color(QPalette::Base);
     QString styleSheetNormal = QString("QToolButton { background-color: %1; color: %2; }")
-                        .arg(normalTextColor.name())
-                        .arg(normalTextColor.lightnessF() < 0.5 ? "#FFFFFF" : "#000000");
+                        .arg(normalColor.name())
+                        .arg(normalColor.lightnessF() < 0.5 ? "#FFFFFF" : "#000000");
 
 
     switch(id) {

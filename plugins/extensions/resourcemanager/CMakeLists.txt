@@ -15,7 +15,6 @@ set(kritaresourcemanager_SOURCES
     wdg_resource_preview.cpp
     KisResourceItemViwer.cpp
     wdgtagpreview.cpp
-    KisTagLabel.cpp
 )
 
 ki18n_wrap_ui(kritaresourcemanager_SOURCES

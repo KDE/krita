@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-14 00:44+0000\n"
+"POT-Creation-Date: 2023-07-15 00:44+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -16916,7 +16916,7 @@ msgstr "Nurgatõmbe aktiveerimine:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
 #: libs/basicflakes/tools/KoPencilTool.cpp:297
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:105
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, kde-format
 msgid "Precision:"
 msgstr "Täpsus:"
@@ -36077,7 +36077,7 @@ msgstr "Väärtuse režiim"
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
 #: libs/ui/widgets/KisDitherWidget.ui:119
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:92
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
 #, kde-format
 msgid "Auto"
@@ -39929,7 +39929,7 @@ msgstr "Eelmised kaadrid"
 msgid "Next frames"
 msgstr "Järgmised kaadrid"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:422
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -39937,7 +39937,7 @@ msgid_plural "Remove %1 frames and shift"
 msgstr[0] ""
 msgstr[1] ""
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:452
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
 msgstr "Kaadrite peegeldamine"
@@ -58630,12 +58630,12 @@ msgstr "Kümme pintslit"
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr "Kümnele valmispintslile kümne kiirklahvi omistamine."
 
-#: plugins/python/tenbrushes/tenbrushes.py:68
+#: plugins/python/tenbrushes/tenbrushes.py:81
 #, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "Aktiveeri valmispintsel {num}"
 
-#: plugins/python/tenbrushes/tenbrushes.py:105
+#: plugins/python/tenbrushes/tenbrushes.py:108
 #, fuzzy
 #| msgid ""
 #| "%1\n"
@@ -58754,33 +58754,33 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "Käivita skript 10"
 
-#: plugins/python/tenscripts/tenscripts.py:26
+#: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"
 msgstr "Kümme skripti"
 
-#: plugins/python/tenscripts/tenscripts.py:27
+#: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
 msgstr "Kümnele skriptile kümne kiirklahvi omistamine."
 
-#: plugins/python/tenscripts/tenscripts.py:56
+#: plugins/python/tenscripts/tenscripts.py:53
 #, python-brace-format
 msgid "Execute Script {num}"
 msgstr "Käivita skript {num}"
 
-#: plugins/python/tenscripts/tenscripts.py:84
+#: plugins/python/tenscripts/tenscripts.py:79
 #, python-brace-format
 msgid "Script {0} executed"
 msgstr "Käivitati skript {0}"
 
-#: plugins/python/tenscripts/uitenscripts.py:63
+#: plugins/python/tenscripts/uitenscripts.py:65
 msgid "Selected path"
 msgstr "Valitud asukoht"
 
-#: plugins/python/tenscripts/uitenscripts.py:64
+#: plugins/python/tenscripts/uitenscripts.py:66
 msgid "Select the script"
 msgstr "Skripti valimine"
 
-#: plugins/python/tenscripts/uitenscripts.py:88
+#: plugins/python/tenscripts/uitenscripts.py:90
 msgid "Python files (*.py)"
 msgstr "Pythoni failid (*.py)"
 
@@ -59907,33 +59907,6 @@ msgstr "Geomeetria"
 msgid "Fill"
 msgstr "Täitmine"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:98
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
-msgctxt "(qtundo-format)"
-msgid "Rotate"
-msgstr "Pööra"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:133
-msgctxt "(qtundo-format)"
-msgid "Shear X"
-msgstr "X kallutamine"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:168
-msgctxt "(qtundo-format)"
-msgid "Shear Y"
-msgstr "Y kallutamine"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:208
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:242
-msgctxt "(qtundo-format)"
-msgid "Scale"
-msgstr "Skaleeri"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:271
-msgctxt "(qtundo-format)"
-msgid "Reset Transformations"
-msgstr "Lähtesta muudatused"
-
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
 #, kde-format
 msgid "Press Shift to hold x- or y-position."
@@ -59948,6 +59921,11 @@ msgstr "Vajuta CTRL suuruse muutmiseks keskpunktist."
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr "Vajuta ALT pööramiseks 45 kraadi kaupa."
+
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
+msgctxt "(qtundo-format)"
+msgid "Rotate"
+msgstr "Pööra"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 msgctxt "(qtundo-format)"
@@ -62848,6 +62826,22 @@ msgstr "Suurendustööriist"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Kõrvutuspiltide tööriist"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "X kallutamine"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "Y kallutamine"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "Skaleeri"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "Lähtesta muudatused"
 
 #, fuzzy
 #~| msgid ""

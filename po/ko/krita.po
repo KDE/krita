@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-14 00:44+0000\n"
+"POT-Creation-Date: 2023-07-15 00:44+0000\n"
 "PO-Revision-Date: 2023-03-01 00:29+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -16694,7 +16694,7 @@ msgstr "각도 스냅 활성화:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
 #: libs/basicflakes/tools/KoPencilTool.cpp:297
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:105
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, kde-format
 msgid "Precision:"
 msgstr "정밀도:"
@@ -35420,7 +35420,7 @@ msgstr "회전 모드"
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
 #: libs/ui/widgets/KisDitherWidget.ui:119
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:92
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
 #, kde-format
 msgid "Auto"
@@ -39184,14 +39184,14 @@ msgstr "이전 프레임"
 msgid "Next frames"
 msgstr "다음 프레임"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:422
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
 msgid_plural "Remove %1 frames and shift"
 msgstr[0] "%1 프레임 삭제 및 이동"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:452
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
 msgstr "프레임 반전"
@@ -57427,12 +57427,12 @@ msgstr "브러시 10개"
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr "브러시 사전 설정 10개를 단축키 10개에 할당합니다."
 
-#: plugins/python/tenbrushes/tenbrushes.py:68
+#: plugins/python/tenbrushes/tenbrushes.py:81
 #, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "브러시 사전 설정 {num} 활성화"
 
-#: plugins/python/tenbrushes/tenbrushes.py:105
+#: plugins/python/tenbrushes/tenbrushes.py:108
 msgid ""
 "{}\n"
 "selected"
@@ -57543,33 +57543,33 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "스크립트 10 실행"
 
-#: plugins/python/tenscripts/tenscripts.py:26
+#: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"
 msgstr "스크립트 10개"
 
-#: plugins/python/tenscripts/tenscripts.py:27
+#: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
 msgstr "단축키 10개에 스크립트 10개를 할당합니다."
 
-#: plugins/python/tenscripts/tenscripts.py:56
+#: plugins/python/tenscripts/tenscripts.py:53
 #, python-brace-format
 msgid "Execute Script {num}"
 msgstr "스크립트 {num} 실행"
 
-#: plugins/python/tenscripts/tenscripts.py:84
+#: plugins/python/tenscripts/tenscripts.py:79
 #, python-brace-format
 msgid "Script {0} executed"
 msgstr "스크립트 {0} 실행됨"
 
-#: plugins/python/tenscripts/uitenscripts.py:63
+#: plugins/python/tenscripts/uitenscripts.py:65
 msgid "Selected path"
 msgstr "선택한 경로"
 
-#: plugins/python/tenscripts/uitenscripts.py:64
+#: plugins/python/tenscripts/uitenscripts.py:66
 msgid "Select the script"
 msgstr "스크립트 선택"
 
-#: plugins/python/tenscripts/uitenscripts.py:88
+#: plugins/python/tenscripts/uitenscripts.py:90
 msgid "Python files (*.py)"
 msgstr "Python 파일 (*.py)"
 
@@ -58717,33 +58717,6 @@ msgstr "기하학"
 msgid "Fill"
 msgstr "채우기"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:98
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
-msgctxt "(qtundo-format)"
-msgid "Rotate"
-msgstr "회전"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:133
-msgctxt "(qtundo-format)"
-msgid "Shear X"
-msgstr "X 기울이기"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:168
-msgctxt "(qtundo-format)"
-msgid "Shear Y"
-msgstr "Y 기울이기"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:208
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:242
-msgctxt "(qtundo-format)"
-msgid "Scale"
-msgstr "크기 조정"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:271
-msgctxt "(qtundo-format)"
-msgid "Reset Transformations"
-msgstr "변형 초기화"
-
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
 #, kde-format
 msgid "Press Shift to hold x- or y-position."
@@ -58758,6 +58731,11 @@ msgstr "Ctrl 키를 누르면 중앙을 기준으로 크기를 변경합니다."
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr "Alt 키를 누르면 회전할 때 45도 단위로 고정합니다."
+
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
+msgctxt "(qtundo-format)"
+msgid "Rotate"
+msgstr "회전"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 msgctxt "(qtundo-format)"
@@ -61628,6 +61606,22 @@ msgstr "확대/축소 도구"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "참조 이미지 도구"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "X 기울이기"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "Y 기울이기"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "크기 조정"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "변형 초기화"
 
 #, fuzzy
 #~| msgid ""

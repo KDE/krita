@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-14 00:44+0000\n"
+"POT-Creation-Date: 2023-07-15 00:44+0000\n"
 "PO-Revision-Date: 2023-07-13 00:28+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -16135,7 +16135,7 @@ msgstr "Activar o ajuste do ângulo"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
 #: libs/basicflakes/tools/KoPencilTool.cpp:297
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:105
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, kde-format
 msgid "Precision:"
 msgstr "Precisão:"
@@ -34737,7 +34737,7 @@ msgstr "Modo do Valor"
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
 #: libs/ui/widgets/KisDitherWidget.ui:119
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:92
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
 #, kde-format
 msgid "Auto"
@@ -38524,7 +38524,7 @@ msgstr "Imagens anteriores"
 msgid "Next frames"
 msgstr "Imagens seguintes"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:422
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -38532,7 +38532,7 @@ msgid_plural "Remove %1 frames and shift"
 msgstr[0] "Remover a imagem e desviar"
 msgstr[1] "Remover as %1 imagens e desviar"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:452
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
 msgstr "Espelhar as Imagens"
@@ -56707,12 +56707,12 @@ msgstr "Dez Pincéis"
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr "Atribui dez predefinições de pincéis a dez atalhos."
 
-#: plugins/python/tenbrushes/tenbrushes.py:68
+#: plugins/python/tenbrushes/tenbrushes.py:81
 #, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "Activar a Predefinição de Pincel {num}"
 
-#: plugins/python/tenbrushes/tenbrushes.py:105
+#: plugins/python/tenbrushes/tenbrushes.py:108
 msgid ""
 "{}\n"
 "selected"
@@ -56826,33 +56826,33 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "Executar o Programa 10"
 
-#: plugins/python/tenscripts/tenscripts.py:26
+#: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"
 msgstr "Dez Programas"
 
-#: plugins/python/tenscripts/tenscripts.py:27
+#: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
 msgstr "Atribui dez programas a dez atalhos."
 
-#: plugins/python/tenscripts/tenscripts.py:56
+#: plugins/python/tenscripts/tenscripts.py:53
 #, python-brace-format
 msgid "Execute Script {num}"
 msgstr "Executar o Programa {num}"
 
-#: plugins/python/tenscripts/tenscripts.py:84
+#: plugins/python/tenscripts/tenscripts.py:79
 #, python-brace-format
 msgid "Script {0} executed"
 msgstr "Foi executado o programa {0}"
 
-#: plugins/python/tenscripts/uitenscripts.py:63
+#: plugins/python/tenscripts/uitenscripts.py:65
 msgid "Selected path"
 msgstr "Localização seleccionada"
 
-#: plugins/python/tenscripts/uitenscripts.py:64
+#: plugins/python/tenscripts/uitenscripts.py:66
 msgid "Select the script"
 msgstr "Seleccionar o programa"
 
-#: plugins/python/tenscripts/uitenscripts.py:88
+#: plugins/python/tenscripts/uitenscripts.py:90
 msgid "Python files (*.py)"
 msgstr "Ficheiros em Python (*.py)"
 
@@ -57979,33 +57979,6 @@ msgstr "Geometria"
 msgid "Fill"
 msgstr "Preencher"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:98
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
-msgctxt "(qtundo-format)"
-msgid "Rotate"
-msgstr "Rodar"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:133
-msgctxt "(qtundo-format)"
-msgid "Shear X"
-msgstr "Inclinar em X"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:168
-msgctxt "(qtundo-format)"
-msgid "Shear Y"
-msgstr "Inclinar em Y"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:208
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:242
-msgctxt "(qtundo-format)"
-msgid "Scale"
-msgstr "Escalar"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:271
-msgctxt "(qtundo-format)"
-msgid "Reset Transformations"
-msgstr "Limpar as transformações"
-
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
 #, kde-format
 msgid "Press Shift to hold x- or y-position."
@@ -58020,6 +57993,11 @@ msgstr "Carregue em CTRL para dimensionar a partir do centro."
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr "Carregue em ALT para rodar em passos de 45 graus."
+
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
+msgctxt "(qtundo-format)"
+msgid "Rotate"
+msgstr "Rodar"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 msgctxt "(qtundo-format)"
@@ -60854,3 +60832,19 @@ msgstr "Ferramenta de Ampliação"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta de Imagens de Referência"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "Inclinar em X"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "Inclinar em Y"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "Escalar"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "Limpar as transformações"

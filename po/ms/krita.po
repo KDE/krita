@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-14 00:44+0000\n"
+"POT-Creation-Date: 2023-07-15 00:44+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -15930,7 +15930,7 @@ msgstr "Lapisan Teralih"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
 #: libs/basicflakes/tools/KoPencilTool.cpp:297
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:105
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, fuzzy, kde-format
 msgid "Precision:"
 msgstr "Arah:"
@@ -33992,7 +33992,7 @@ msgstr "Berkeluk"
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
 #: libs/ui/widgets/KisDitherWidget.ui:119
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:92
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
 #, fuzzy, kde-format
 msgid "Auto"
@@ -37698,7 +37698,7 @@ msgstr "Penapis"
 msgid "Next frames"
 msgstr "Alih Keluar Lapisan"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:422
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -37706,7 +37706,7 @@ msgid_plural "Remove %1 frames and shift"
 msgstr[0] "Alih Keluar Lapisan"
 msgstr[1] "Alih Keluar Lapisan"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:452
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
@@ -55567,12 +55567,12 @@ msgstr "Berus"
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenbrushes/tenbrushes.py:68
+#: plugins/python/tenbrushes/tenbrushes.py:81
 #, fuzzy, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "Ciri Lapisan"
 
-#: plugins/python/tenbrushes/tenbrushes.py:105
+#: plugins/python/tenbrushes/tenbrushes.py:108
 #, fuzzy
 msgid ""
 "{}\n"
@@ -55679,36 +55679,36 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "Cipta Dokumen"
 
-#: plugins/python/tenscripts/tenscripts.py:26
+#: plugins/python/tenscripts/tenscripts.py:27
 #, fuzzy
 msgid "Ten Scripts"
 msgstr "&Skrip"
 
-#: plugins/python/tenscripts/tenscripts.py:27
+#: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenscripts/tenscripts.py:56
+#: plugins/python/tenscripts/tenscripts.py:53
 #, fuzzy, python-brace-format
 msgid "Execute Script {num}"
 msgstr "Cipta Dokumen"
 
-#: plugins/python/tenscripts/tenscripts.py:84
+#: plugins/python/tenscripts/tenscripts.py:79
 #, fuzzy, python-brace-format
 msgid "Script {0} executed"
 msgstr "&Skrip"
 
-#: plugins/python/tenscripts/uitenscripts.py:63
+#: plugins/python/tenscripts/uitenscripts.py:65
 #, fuzzy
 msgid "Selected path"
 msgstr "Pemilihan"
 
-#: plugins/python/tenscripts/uitenscripts.py:64
+#: plugins/python/tenscripts/uitenscripts.py:66
 #, fuzzy
 msgid "Select the script"
 msgstr "Kemaskini warna semasa"
 
-#: plugins/python/tenscripts/uitenscripts.py:88
+#: plugins/python/tenscripts/uitenscripts.py:90
 #, fuzzy
 msgid "Python files (*.py)"
 msgstr "Segiempat Sama Kecil"
@@ -56799,40 +56799,6 @@ msgstr "Geometri"
 msgid "Fill"
 msgstr "Isian"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:98
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Rotate"
-msgstr "Putar"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:133
-#, fuzzy
-#| msgid "Shear angle X:"
-msgctxt "(qtundo-format)"
-msgid "Shear X"
-msgstr "Ricik sudut X:"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:168
-#, fuzzy
-#| msgid "Shear angle Y:"
-msgctxt "(qtundo-format)"
-msgid "Shear Y"
-msgstr "Ricik sudut Y:"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:208
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:242
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Scale"
-msgstr "Skala"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:271
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Reset Transformations"
-msgstr "Alat ubah"
-
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
 #, kde-format
 msgid "Press Shift to hold x- or y-position."
@@ -56847,6 +56813,12 @@ msgstr ""
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr ""
+
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rotate"
+msgstr "Putar"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 #, fuzzy
@@ -59668,6 +59640,28 @@ msgstr "Alat zum "
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ungu Lembut Gangguan"
+
+#, fuzzy
+#~| msgid "Shear angle X:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "Ricik sudut X:"
+
+#, fuzzy
+#~| msgid "Shear angle Y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "Ricik sudut Y:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "Skala"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "Alat ubah"
 
 #, fuzzy
 #~ msgctxt "paletegen status mode option name"

@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-14 00:44+0000\n"
+"POT-Creation-Date: 2023-07-15 00:44+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -16026,7 +16026,7 @@ msgstr "सक्रिय परत"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
 #: libs/basicflakes/tools/KoPencilTool.cpp:297
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:105
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, fuzzy, kde-format
 msgid "Precision:"
 msgstr "संतृप्ति:"
@@ -34240,7 +34240,7 @@ msgstr "नोड घुमाव"
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
 #: libs/ui/widgets/KisDitherWidget.ui:119
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:92
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
 #, kde-format
 msgid "Auto"
@@ -37978,7 +37978,7 @@ msgstr "ब्रुस छानव"
 msgid "Next frames"
 msgstr "परत मेटाव"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:422
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -37986,7 +37986,7 @@ msgid_plural "Remove %1 frames and shift"
 msgstr[0] "परत मेटाव"
 msgstr[1] "परत मेटाव"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:452
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
@@ -56235,12 +56235,12 @@ msgstr "ब्रुस"
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenbrushes/tenbrushes.py:68
+#: plugins/python/tenbrushes/tenbrushes.py:81
 #, fuzzy, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "प्रीसेट:"
 
-#: plugins/python/tenbrushes/tenbrushes.py:105
+#: plugins/python/tenbrushes/tenbrushes.py:108
 #, fuzzy
 msgid ""
 "{}\n"
@@ -56358,40 +56358,40 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "चीज बनाव"
 
-#: plugins/python/tenscripts/tenscripts.py:26
+#: plugins/python/tenscripts/tenscripts.py:27
 #, fuzzy
 #| msgid "Subscript"
 msgid "Ten Scripts"
 msgstr "सब्स्क्रिप्ट"
 
-#: plugins/python/tenscripts/tenscripts.py:27
+#: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenscripts/tenscripts.py:56
+#: plugins/python/tenscripts/tenscripts.py:53
 #, fuzzy, python-brace-format
 #| msgid "Create object"
 msgid "Execute Script {num}"
 msgstr "चीज बनाव"
 
-#: plugins/python/tenscripts/tenscripts.py:84
+#: plugins/python/tenscripts/tenscripts.py:79
 #, fuzzy, python-brace-format
 #| msgid "Subscript"
 msgid "Script {0} executed"
 msgstr "सब्स्क्रिप्ट"
 
-#: plugins/python/tenscripts/uitenscripts.py:63
+#: plugins/python/tenscripts/uitenscripts.py:65
 #, fuzzy
 msgid "Selected path"
 msgstr "चयन मोड:"
 
-#: plugins/python/tenscripts/uitenscripts.py:64
+#: plugins/python/tenscripts/uitenscripts.py:66
 #, fuzzy
 #| msgid "&Add to current selection"
 msgid "Select the script"
 msgstr "अभी हाल के चयन मं जोड़व (&A)"
 
-#: plugins/python/tenscripts/uitenscripts.py:88
+#: plugins/python/tenscripts/uitenscripts.py:90
 #, fuzzy
 #| msgid "Small Tiles"
 msgid "Python files (*.py)"
@@ -57500,38 +57500,6 @@ msgstr "ज्योमेट्रिक्स"
 msgid "Fill"
 msgstr "भरव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:98
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Rotate"
-msgstr "घुमाव (&R)"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:133
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Shear X"
-msgstr "कतरें X:"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:168
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Shear Y"
-msgstr "कतरें Y:"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:208
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:242
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Scale"
-msgstr "स्केल (&S)"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:271
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Reset Transformations"
-msgstr "पर्सपेक्टिव ट्रांसफारम"
-
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
 #, kde-format
 msgid "Press Shift to hold x- or y-position."
@@ -57546,6 +57514,12 @@ msgstr ""
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr ""
+
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rotate"
+msgstr "घुमाव (&R)"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 #, fuzzy
@@ -60417,6 +60391,26 @@ msgstr "सब्बो जूम करव"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "संदर्भ फोटू:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "कतरें X:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "कतरें Y:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "स्केल (&S)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "पर्सपेक्टिव ट्रांसफारम"
 
 #, fuzzy
 #~ msgctxt "paletegen status mode option name"

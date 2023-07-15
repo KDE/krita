@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-14 00:44+0000\n"
+"POT-Creation-Date: 2023-07-15 00:44+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -16284,7 +16284,7 @@ msgstr "Ενεργοποίηση ευθύγραμμης σχεδίασης:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
 #: libs/basicflakes/tools/KoPencilTool.cpp:297
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:105
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, kde-format
 msgid "Precision:"
 msgstr "Ακρίβεια:"
@@ -34936,7 +34936,7 @@ msgstr "Περιστροφή κόμβου"
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
 #: libs/ui/widgets/KisDitherWidget.ui:119
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:92
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
 #, kde-format
 msgid "Auto"
@@ -38733,7 +38733,7 @@ msgstr "Αγαπημένες προρυθμίσεις"
 msgid "Next frames"
 msgstr "Αφαίρεση στρώματος"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:422
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -38741,7 +38741,7 @@ msgid_plural "Remove %1 frames and shift"
 msgstr[0] "Αφαίρεση στρώματος"
 msgstr[1] "Αφαίρεση στρώματος"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:452
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
@@ -57406,12 +57406,12 @@ msgstr "Πινέλο"
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenbrushes/tenbrushes.py:68
+#: plugins/python/tenbrushes/tenbrushes.py:81
 #, fuzzy, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "Προρυθμίσεις πινέλου"
 
-#: plugins/python/tenbrushes/tenbrushes.py:105
+#: plugins/python/tenbrushes/tenbrushes.py:108
 #, fuzzy
 msgid ""
 "{}\n"
@@ -57529,40 +57529,40 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "Δημιουργία αντικειμένου"
 
-#: plugins/python/tenscripts/tenscripts.py:26
+#: plugins/python/tenscripts/tenscripts.py:27
 #, fuzzy
 #| msgid "Subscript"
 msgid "Ten Scripts"
 msgstr "Δείκτης"
 
-#: plugins/python/tenscripts/tenscripts.py:27
+#: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenscripts/tenscripts.py:56
+#: plugins/python/tenscripts/tenscripts.py:53
 #, fuzzy, python-brace-format
 #| msgid "Create object"
 msgid "Execute Script {num}"
 msgstr "Δημιουργία αντικειμένου"
 
-#: plugins/python/tenscripts/tenscripts.py:84
+#: plugins/python/tenscripts/tenscripts.py:79
 #, fuzzy, python-brace-format
 #| msgid "Subscript"
 msgid "Script {0} executed"
 msgstr "Δείκτης"
 
-#: plugins/python/tenscripts/uitenscripts.py:63
+#: plugins/python/tenscripts/uitenscripts.py:65
 #, fuzzy
 msgid "Selected path"
 msgstr "Επιλογή αδιαφανούς"
 
-#: plugins/python/tenscripts/uitenscripts.py:64
+#: plugins/python/tenscripts/uitenscripts.py:66
 #, fuzzy
 #| msgid "Delete the current action"
 msgid "Select the script"
 msgstr "Διαγραφή της τρέχουσας ενέργειας"
 
-#: plugins/python/tenscripts/uitenscripts.py:88
+#: plugins/python/tenscripts/uitenscripts.py:90
 #, fuzzy
 #| msgid "Small Tiles"
 msgid "Python files (*.py)"
@@ -58706,33 +58706,6 @@ msgstr "Γεωμετρία"
 msgid "Fill"
 msgstr "Γέμισμα"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:98
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
-msgctxt "(qtundo-format)"
-msgid "Rotate"
-msgstr "Περιστροφή"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:133
-msgctxt "(qtundo-format)"
-msgid "Shear X"
-msgstr "Διάτμηση Χ"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:168
-msgctxt "(qtundo-format)"
-msgid "Shear Y"
-msgstr "Διάτμηση Υ"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:208
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:242
-msgctxt "(qtundo-format)"
-msgid "Scale"
-msgstr "Κλιμάκωση"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:271
-msgctxt "(qtundo-format)"
-msgid "Reset Transformations"
-msgstr "Μηδενισμός μετασχηματισμών"
-
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
 #, fuzzy, kde-format
 #| msgid "Press ALT to hold x- or y-position."
@@ -58748,6 +58721,11 @@ msgstr "Πιέστε CTRL για την αλλαγή μεγέθους από τ�
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr "Πιέστε ALT για την περιστροφή με βήματα 45 μοιρών."
+
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
+msgctxt "(qtundo-format)"
+msgid "Rotate"
+msgstr "Περιστροφή"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 msgctxt "(qtundo-format)"
@@ -61665,6 +61643,22 @@ msgstr "Εστίαση όλων"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Εικόνες αναφοράς"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "Διάτμηση Χ"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "Διάτμηση Υ"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "Κλιμάκωση"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "Μηδενισμός μετασχηματισμών"
 
 #, fuzzy
 #~ msgid ""

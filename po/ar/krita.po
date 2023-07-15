@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-14 00:44+0000\n"
+"POT-Creation-Date: 2023-07-15 00:44+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -16454,7 +16454,7 @@ msgstr "فعّل الجذب الزّاويّ"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
 #: libs/basicflakes/tools/KoPencilTool.cpp:297
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:105
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, kde-format
 msgid "Precision:"
 msgstr "الدّقّة:"
@@ -35174,7 +35174,7 @@ msgstr "وضع التّدوير"
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
 #: libs/ui/widgets/KisDitherWidget.ui:119
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:92
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
 #, kde-format
 msgid "Auto"
@@ -39074,7 +39074,7 @@ msgstr "الإطارات السّابقة"
 msgid "Next frames"
 msgstr "الإطارات التّالي"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:422
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
 #, fuzzy, kde-format
 #| msgid "Remove Frames"
 msgctxt "(qtundo-format)"
@@ -39087,7 +39087,7 @@ msgstr[3] "أزل الإطارات"
 msgstr[4] "أزل الإطارات"
 msgstr[5] "أزل الإطارات"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:452
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
 #, fuzzy
 #| msgid "Drop Frames"
 msgctxt "(qtundo-format)"
@@ -57660,14 +57660,14 @@ msgstr "عشرُ فُرش"
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenbrushes/tenbrushes.py:68
+#: plugins/python/tenbrushes/tenbrushes.py:81
 #, fuzzy, python-brace-format
 #| msgctxt "action"
 #| msgid "Activate Brush Preset 1"
 msgid "Activate Brush Preset {num}"
 msgstr "فعّل الفرشاة مسبقة الضّبط 1"
 
-#: plugins/python/tenbrushes/tenbrushes.py:105
+#: plugins/python/tenbrushes/tenbrushes.py:108
 #, fuzzy
 #| msgid "Selected"
 msgid ""
@@ -57775,39 +57775,39 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "نفّذ السّكربت 10"
 
-#: plugins/python/tenscripts/tenscripts.py:26
+#: plugins/python/tenscripts/tenscripts.py:27
 msgid "Ten Scripts"
 msgstr "عشرُ سكربتات"
 
-#: plugins/python/tenscripts/tenscripts.py:27
+#: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenscripts/tenscripts.py:56
+#: plugins/python/tenscripts/tenscripts.py:53
 #, fuzzy, python-brace-format
 #| msgctxt "action"
 #| msgid "Execute Script 1"
 msgid "Execute Script {num}"
 msgstr "نفّذ السّكربت 1"
 
-#: plugins/python/tenscripts/tenscripts.py:84
+#: plugins/python/tenscripts/tenscripts.py:79
 #, python-brace-format
 msgid "Script {0} executed"
 msgstr "نفذ سكربت {0}"
 
-#: plugins/python/tenscripts/uitenscripts.py:63
+#: plugins/python/tenscripts/uitenscripts.py:65
 #, fuzzy
 #| msgid "Selected"
 msgid "Selected path"
 msgstr "المحدّد"
 
-#: plugins/python/tenscripts/uitenscripts.py:64
+#: plugins/python/tenscripts/uitenscripts.py:66
 #, fuzzy
 #| msgid "Save the script"
 msgid "Select the script"
 msgstr "احفظ السّكربت"
 
-#: plugins/python/tenscripts/uitenscripts.py:88
+#: plugins/python/tenscripts/uitenscripts.py:90
 msgid "Python files (*.py)"
 msgstr ""
 
@@ -58928,33 +58928,6 @@ msgstr "الهندسة"
 msgid "Fill"
 msgstr "الملء"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:98
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
-msgctxt "(qtundo-format)"
-msgid "Rotate"
-msgstr "التّدوير"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:133
-msgctxt "(qtundo-format)"
-msgid "Shear X"
-msgstr "قطع س"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:168
-msgctxt "(qtundo-format)"
-msgid "Shear Y"
-msgstr "قطع ص"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:208
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:242
-msgctxt "(qtundo-format)"
-msgid "Scale"
-msgstr "التّحجيم"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:271
-msgctxt "(qtundo-format)"
-msgid "Reset Transformations"
-msgstr "تصفير التّحويلات"
-
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
 #, fuzzy, kde-format
 msgid "Press Shift to hold x- or y-position."
@@ -58969,6 +58942,11 @@ msgstr "اضغط CTRL لتغيير المقاس من المنتصف."
 #, fuzzy, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr "اضغط ALT للتّدوير كلّ 45 درجة."
+
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
+msgctxt "(qtundo-format)"
+msgid "Rotate"
+msgstr "التّدوير"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 msgctxt "(qtundo-format)"
@@ -61927,6 +61905,22 @@ msgstr "أداة العدسة"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "الصّور المرجع"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "قطع س"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "قطع ص"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "التّحجيم"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "تصفير التّحويلات"
 
 #, fuzzy
 #~| msgid ""

@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-14 00:44+0000\n"
+"POT-Creation-Date: 2023-07-15 00:44+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -16081,7 +16081,7 @@ msgstr "Sraith Ghníomhach"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
 #: libs/basicflakes/tools/KoPencilTool.cpp:297
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:105
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, fuzzy, kde-format
 msgid "Precision:"
 msgstr "Treo:"
@@ -34414,7 +34414,7 @@ msgstr "Rothlaigh Nód"
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
 #: libs/ui/widgets/KisDitherWidget.ui:119
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:92
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
 #, kde-format
 msgid "Auto"
@@ -38202,7 +38202,7 @@ msgstr "Cuir Réamhshocruithe in Eagar"
 msgid "Next frames"
 msgstr "Bain Sraith"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:422
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
@@ -38213,7 +38213,7 @@ msgstr[2] "Bain Sraith"
 msgstr[3] "Bain Sraith"
 msgstr[4] "Bain Sraith"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:452
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
@@ -56549,12 +56549,12 @@ msgstr "Scuab"
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenbrushes/tenbrushes.py:68
+#: plugins/python/tenbrushes/tenbrushes.py:81
 #, fuzzy, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "Réamhshocruithe"
 
-#: plugins/python/tenbrushes/tenbrushes.py:105
+#: plugins/python/tenbrushes/tenbrushes.py:108
 #, fuzzy
 msgid ""
 "{}\n"
@@ -56672,39 +56672,39 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "Rith Comhad Scripte..."
 
-#: plugins/python/tenscripts/tenscripts.py:26
+#: plugins/python/tenscripts/tenscripts.py:27
 #, fuzzy
 #| msgid "Subscript"
 msgid "Ten Scripts"
 msgstr "Foscript"
 
-#: plugins/python/tenscripts/tenscripts.py:27
+#: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenscripts/tenscripts.py:56
+#: plugins/python/tenscripts/tenscripts.py:53
 #, fuzzy, python-brace-format
 #| msgid "Execute Script File..."
 msgid "Execute Script {num}"
 msgstr "Rith Comhad Scripte..."
 
-#: plugins/python/tenscripts/tenscripts.py:84
+#: plugins/python/tenscripts/tenscripts.py:79
 #, fuzzy, python-brace-format
 #| msgid "Subscript"
 msgid "Script {0} executed"
 msgstr "Foscript"
 
-#: plugins/python/tenscripts/uitenscripts.py:63
+#: plugins/python/tenscripts/uitenscripts.py:65
 #, fuzzy
 msgid "Selected path"
 msgstr "Mód Roghnaithe"
 
-#: plugins/python/tenscripts/uitenscripts.py:64
+#: plugins/python/tenscripts/uitenscripts.py:66
 #, fuzzy
 msgid "Select the script"
 msgstr "Scrios an gníomh reatha"
 
-#: plugins/python/tenscripts/uitenscripts.py:88
+#: plugins/python/tenscripts/uitenscripts.py:90
 #, fuzzy
 #| msgid "Small Tiles"
 msgid "Python files (*.py)"
@@ -57821,39 +57821,6 @@ msgstr "Céimseata"
 msgid "Fill"
 msgstr "Líon"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:98
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Rotate"
-msgstr "Rothlaigh"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:133
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Shear X"
-msgstr "Fiar"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:168
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Shear Y"
-msgstr "Fiar"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:208
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:242
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Scale"
-msgstr "Scála"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:271
-#, fuzzy
-#| msgid "Apply Transformation"
-msgctxt "(qtundo-format)"
-msgid "Reset Transformations"
-msgstr "Cuir Trasfhoirmiú i bhFeidhm"
-
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
 #, kde-format
 msgid "Press Shift to hold x- or y-position."
@@ -57868,6 +57835,12 @@ msgstr ""
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr ""
+
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rotate"
+msgstr "Rothlaigh"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 #, fuzzy
@@ -60744,6 +60717,27 @@ msgstr "Uirlis Súmála"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Athainmnigh Íomhá"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "Fiar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "Fiar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "Scála"
+
+#, fuzzy
+#~| msgid "Apply Transformation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "Cuir Trasfhoirmiú i bhFeidhm"
 
 #, fuzzy
 #~ msgctxt "paletegen status mode option name"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-14 00:44+0000\n"
+"POT-Creation-Date: 2023-07-15 00:44+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -16018,7 +16018,7 @@ msgstr "ស្រទាប់​សកម្ម"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
 #: libs/basicflakes/tools/KoPencilTool.cpp:297
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:105
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, fuzzy, kde-format
 msgid "Precision:"
 msgstr "ថិរវេលា ៖"
@@ -34198,7 +34198,7 @@ msgstr "បង្វិល​ថ្នាំង"
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
 #: libs/ui/widgets/KisDitherWidget.ui:119
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:92
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
 #, kde-format
 msgid "Auto"
@@ -37914,14 +37914,14 @@ msgstr "ជក់​សំណព្វ"
 msgid "Next frames"
 msgstr "យក​ស្រទាប់​ចេញ"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:422
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Remove frame and shift"
 msgid_plural "Remove %1 frames and shift"
 msgstr[0] "យក​ស្រទាប់​ចេញ"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:452
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Frames"
@@ -56177,12 +56177,12 @@ msgstr "ជក់"
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenbrushes/tenbrushes.py:68
+#: plugins/python/tenbrushes/tenbrushes.py:81
 #, fuzzy, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "ទំហំ​ជក់"
 
-#: plugins/python/tenbrushes/tenbrushes.py:105
+#: plugins/python/tenbrushes/tenbrushes.py:108
 #, fuzzy
 msgid ""
 "{}\n"
@@ -56289,37 +56289,37 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "បង្កើត"
 
-#: plugins/python/tenscripts/tenscripts.py:26
+#: plugins/python/tenscripts/tenscripts.py:27
 #, fuzzy
 msgid "Ten Scripts"
 msgstr "ពិពណ៌នា ៖"
 
-#: plugins/python/tenscripts/tenscripts.py:27
+#: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenscripts/tenscripts.py:56
+#: plugins/python/tenscripts/tenscripts.py:53
 #, fuzzy, python-brace-format
 msgid "Execute Script {num}"
 msgstr "បង្កើត"
 
-#: plugins/python/tenscripts/tenscripts.py:84
+#: plugins/python/tenscripts/tenscripts.py:79
 #, fuzzy, python-brace-format
 msgid "Script {0} executed"
 msgstr "ពិពណ៌នា ៖"
 
-#: plugins/python/tenscripts/uitenscripts.py:63
+#: plugins/python/tenscripts/uitenscripts.py:65
 #, fuzzy
 msgid "Selected path"
 msgstr "ជ្រើស​ស្រអាប់"
 
-#: plugins/python/tenscripts/uitenscripts.py:64
+#: plugins/python/tenscripts/uitenscripts.py:66
 #, fuzzy
 #| msgid "Delete the current action"
 msgid "Select the script"
 msgstr "លុប​សកម្មភាព​​បច្ចុប្បន្ន"
 
-#: plugins/python/tenscripts/uitenscripts.py:88
+#: plugins/python/tenscripts/uitenscripts.py:90
 #, fuzzy
 #| msgid "Small Tiles"
 msgid "Python files (*.py)"
@@ -57448,38 +57448,6 @@ msgstr "ជម្រើស​ធរណីមាត្រ"
 msgid "Fill"
 msgstr "បំពេញ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:98
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Rotate"
-msgstr "បង្វិល"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:133
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Shear X"
-msgstr "កាត់ X ៖"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:168
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Shear Y"
-msgstr "កាត់ Y ៖"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:208
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:242
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Scale"
-msgstr "​មាត្រដ្ឋាន"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:271
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Reset Transformations"
-msgstr "កំណត់​ការ​ប្លែង​ផ្ទាំង​​គំនូរឡើងវិញ​"
-
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
 #, kde-format
 msgid "Press Shift to hold x- or y-position."
@@ -57494,6 +57462,12 @@ msgstr ""
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr ""
+
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rotate"
+msgstr "បង្វិល"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 #, fuzzy
@@ -60359,6 +60333,26 @@ msgstr "ពណ៌​ទៅ​អាល់ហ្វា"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "រូបភាព​យោង ៖"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "កាត់ X ៖"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "កាត់ Y ៖"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "​មាត្រដ្ឋាន"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "កំណត់​ការ​ប្លែង​ផ្ទាំង​​គំនូរឡើងវិញ​"
 
 #, fuzzy
 #~ msgctxt "paletegen status mode option name"

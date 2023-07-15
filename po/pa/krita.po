@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-14 00:44+0000\n"
+"POT-Creation-Date: 2023-07-15 00:44+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -16980,7 +16980,7 @@ msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
 #: libs/basicflakes/tools/KoPencilTool.cpp:297
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:105
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Precision:"
@@ -36616,7 +36616,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 #. i18n: ectx: property (text), widget (QCheckBox, autoPrecisionCheckBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoMidPoint)
 #: libs/ui/widgets/KisDitherWidget.ui:119
-#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:92
+#: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:72
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
 #, kde-format
 msgid "Auto"
@@ -40694,7 +40694,7 @@ msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 msgid "Next frames"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:422
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:424
 #, fuzzy, kde-format
 #| msgid "Remove point"
 msgctxt "(qtundo-format)"
@@ -40703,7 +40703,7 @@ msgid_plural "Remove %1 frames and shift"
 msgstr[0] "ਬਿੰਦੂ ਹਟਾਓ"
 msgstr[1] "ਬਿੰਦੂ ਹਟਾਓ"
 
-#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:452
+#: plugins/dockers/animation/KisTimeBasedItemModel.cpp:454
 #, fuzzy
 #| msgid "Copy Page"
 msgctxt "(qtundo-format)"
@@ -60339,13 +60339,13 @@ msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenbrushes/tenbrushes.py:68
+#: plugins/python/tenbrushes/tenbrushes.py:81
 #, fuzzy, python-brace-format
 #| msgid "Import Slideshow"
 msgid "Activate Brush Preset {num}"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
-#: plugins/python/tenbrushes/tenbrushes.py:105
+#: plugins/python/tenbrushes/tenbrushes.py:108
 #, fuzzy
 #| msgid "Change Connection"
 msgid ""
@@ -60464,41 +60464,41 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "ਆਬਜੈਕਟ ਬਣਾਓ"
 
-#: plugins/python/tenscripts/tenscripts.py:26
+#: plugins/python/tenscripts/tenscripts.py:27
 #, fuzzy
 #| msgid "Script"
 msgid "Ten Scripts"
 msgstr "ਸਕ੍ਰਿਪਟ"
 
-#: plugins/python/tenscripts/tenscripts.py:27
+#: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenscripts/tenscripts.py:56
+#: plugins/python/tenscripts/tenscripts.py:53
 #, fuzzy, python-brace-format
 #| msgid "Create object"
 msgid "Execute Script {num}"
 msgstr "ਆਬਜੈਕਟ ਬਣਾਓ"
 
-#: plugins/python/tenscripts/tenscripts.py:84
+#: plugins/python/tenscripts/tenscripts.py:79
 #, fuzzy, python-brace-format
 #| msgid "Script"
 msgid "Script {0} executed"
 msgstr "ਸਕ੍ਰਿਪਟ"
 
-#: plugins/python/tenscripts/uitenscripts.py:63
+#: plugins/python/tenscripts/uitenscripts.py:65
 #, fuzzy
 #| msgid "Insert Page"
 msgid "Selected path"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/python/tenscripts/uitenscripts.py:64
+#: plugins/python/tenscripts/uitenscripts.py:66
 #, fuzzy
 #| msgid "Delete the current page"
 msgid "Select the script"
 msgstr "ਮੌਜੂਦਾ ਸਫ਼ਾ ਹਟਾਓ"
 
-#: plugins/python/tenscripts/uitenscripts.py:88
+#: plugins/python/tenscripts/uitenscripts.py:90
 msgid "Python files (*.py)"
 msgstr ""
 
@@ -61724,43 +61724,6 @@ msgstr "ਟੂਲ ਚੋਣਾਂ"
 msgid "Fill"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:98
-#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
-#, fuzzy
-#| msgid "Position"
-msgctxt "(qtundo-format)"
-msgid "Rotate"
-msgstr "ਸਥਿਤੀ"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:133
-#, fuzzy
-#| msgid "Show master shapes"
-msgctxt "(qtundo-format)"
-msgid "Shear X"
-msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:168
-#, fuzzy
-#| msgid "Show master shapes"
-msgctxt "(qtundo-format)"
-msgid "Shear Y"
-msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:208
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:242
-#, fuzzy
-#| msgid "Master Page"
-msgctxt "(qtundo-format)"
-msgid "Scale"
-msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
-
-#: plugins/tools/defaulttool/defaulttool/DefaultToolTransformWidget.cpp:271
-#, fuzzy
-#| msgid "Delete shapes"
-msgctxt "(qtundo-format)"
-msgid "Reset Transformations"
-msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
-
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
 #, kde-format
 msgid "Press Shift to hold x- or y-position."
@@ -61775,6 +61738,13 @@ msgstr ""
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
 msgstr ""
+
+#: plugins/tools/defaulttool/defaulttool/ShapeRotateStrategy.cpp:103
+#, fuzzy
+#| msgid "Position"
+msgctxt "(qtundo-format)"
+msgid "Rotate"
+msgstr "ਸਥਿਤੀ"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 #, fuzzy
@@ -64863,6 +64833,30 @@ msgstr "ਜ਼ੂਮ"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "ਤਬਦੀਲ"
+
+#, fuzzy
+#~| msgid "Show master shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear X"
+#~ msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
+
+#, fuzzy
+#~| msgid "Show master shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shear Y"
+#~ msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
+
+#, fuzzy
+#~| msgid "Master Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scale"
+#~ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
+
+#, fuzzy
+#~| msgid "Delete shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reset Transformations"
+#~ msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
 #, fuzzy
 #~| msgid "Configure"

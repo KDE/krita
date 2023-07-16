@@ -14,6 +14,8 @@
 #include <QTextDocument>
 #include <QTextCharFormat>
 
+#include <optional>
+
 class QRectF;
 class KoSvgTextShape;
 
@@ -100,9 +102,12 @@ public:
      * @param format the textCharFormat of the current text.
      * @param blockFormat the block format of the current text.
      * @param mostCommon the most common format to compare the format to.
+     * @param includeLineHeight whether the style should include `line-height`.
      * @return a string that can be written into a style element.
      */
-    QString style(QTextCharFormat format, QTextBlockFormat blockFormat, QTextCharFormat mostCommon = QTextCharFormat());
+    QString style(QTextCharFormat format, QTextBlockFormat blockFormat, QTextCharFormat mostCommon = QTextCharFormat(), bool includeLineHeight = false);
+
+    struct ExtraStyles;
 
     /**
      * @brief stylesFromString
@@ -112,9 +117,10 @@ public:
      * @param styles a style string split at ";"
      * @param currentCharFormat the current charformat to compare against.
      * @param currentBlockFormat the current blockformat to compare against.
+     * @param[out] extraStyles other styles.
      * @return A QVector with at 0 a QTextCharFormat and at 1 a QBlockCharFormat.
      */
-    static QVector<QTextFormat> stylesFromString(QStringList styles, QTextCharFormat currentCharFormat, QTextBlockFormat currentBlockFormat);
+    static QVector<QTextFormat> stylesFromString(QStringList styles, QTextCharFormat currentCharFormat, QTextBlockFormat currentBlockFormat, ExtraStyles &extraStyles);
     /**
      * @brief formatDifference
      * A class to get the difference between two text-char formats.
@@ -127,6 +133,73 @@ public:
 private:
     struct Private;
     const QScopedPointer<Private> d;
+
+public:
+    /*
+     * Members for dealing with special document-level properties not supported
+     * by Qt: We abuse QTextFormat a bit to store our special properties in the
+     * top-level root QTextFrame of the QTextDocument.
+     */
+
+    /**
+     * The wrapping mode for the conversion between QTextDocument and SVG.
+     */
+    enum class WrappingMode {
+        /**
+         * Use the legacy conversion with line breaks performed by setting `dy`
+         * on `<tspan>` with offsets calculated from `QTextLayout`.
+         */
+        QtLegacy = 0,
+        /**
+         * Use `white-space: pre` and output hard line-breaks in the SVG.
+         */
+        WhiteSpacePre,
+        /**
+         * Use `white-space: pre-wrap` and output hard line-breaks in the SVG.
+         * `inline-size` is also set to enable automatic wrapping.
+         */
+        WhiteSpacePreWrap,
+    };
+
+    static constexpr QTextFormat::Property WrappingModeProperty =
+        static_cast<QTextFormat::Property>(QTextFormat::UserProperty + 56784);
+    static constexpr QTextFormat::Property InlineSizeProperty =
+        static_cast<QTextFormat::Property>(WrappingModeProperty + 1);
+
+    /**
+     * @brief Get the Wrapping Mode from the frameFormat of the rootFrame of a
+     * QTextDocument
+     * 
+     * @param frameFormat
+     * @return WrappingMode if set, or the default value WrappingMode::QtLegacy
+     */
+    static WrappingMode getWrappingMode(const QTextFrameFormat &frameFormat);
+    /**
+     * @brief Set the Wrapping Mode on a frame format to be applied to the
+     * rootFrame of a QTextDocument
+     * 
+     * @param frameFormat pointer to the franeFormat to be modified
+     * @param wrappingMode
+     */
+    static void setWrappingMode(QTextFrameFormat *frameFormat, WrappingMode wrappingMode);
+
+    /**
+     * @brief Get the inline-size from the frameFormat of the rootFrame of a
+     * QTextDocument
+     * 
+     * @param frameFormat
+     * @return std::optional<double> the inline-size if set, or std::nullopt
+     */
+    static std::optional<double> getInlineSize(const QTextFrameFormat &frameFormat);
+    /**
+     * @brief Set or unset the inline-size on a frameFormat to be applied to
+     * the rootFrame of a QTextDocument
+     * 
+     * @param frameFormat pointer to the frameFormat to be modified
+     * @param inlineSize the inline-size; pass a negative value to unset the
+     * property
+     */
+    static void setInlineSize(QTextFrameFormat *frameFormat, double inlineSize);
 };
 
 #endif // KOSVGTEXTSHAPEMARKUPCONVERTER_H

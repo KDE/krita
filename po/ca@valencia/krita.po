@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-15 00:44+0000\n"
-"PO-Revision-Date: 2023-06-24 13:24+0200\n"
+"PO-Revision-Date: 2023-07-12 07:54+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -23192,10 +23192,9 @@ msgstr ""
 "S'ha cancel·lat la renderització."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgid "Wait for existing frame generation process to complete..."
-msgstr "S'està esperant que l'operació damunt de la imatge es complete..."
+msgstr "Espereu que es complete el procés de generació de fotogrames..."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
@@ -36026,7 +36025,7 @@ msgid ""
 "advance for your support.</html>"
 msgstr ""
 "<html>KDE és i sempre serà disponible sense càrrecs, però la seua creació no "
-"és debades.<br /><br />Per a donar suport al desenvolupament la comunitat "
+"és debades.<br /><br />Per a donar suport al desenvolupament, la comunitat "
 "KDE va formar la KDE e.V., una organització sense ànim de lucre, fundada "
 "legalment a Alemanya. La KDE e.V. representa la comunitat KDE en qüestions "
 "legals i financeres. Consulteu a <a href=\"%1\">%1</a> la informació quant a "
@@ -60569,19 +60568,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "Inclina X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "Inclina Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "Escala"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "Reinicia les transformacions"

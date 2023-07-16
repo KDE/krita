@@ -262,5 +262,35 @@
       <isCheckable>true</isCheckable>
       <text>Kerning</text>
     </Action>
-    </Actions>
+    <Action name="svg_text_wrapping_legacy">
+      <iconText>Legacy Hard Wrap</iconText>
+      <shortcut></shortcut>
+      <toolTip>Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines are explicitly positioned, but the line height may be slightly inaccurate.</toolTip>
+      <icon></icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>true</isCheckable>
+      <text>Legacy Hard Wrap</text>
+    </Action>
+    <Action name="svg_text_wrapping_css_pre">
+      <iconText>SVG Hard Wrap</iconText>
+      <shortcut></shortcut>
+      <toolTip>Use SVG's CSS `white-space: pre` hard-wrapping mode.</toolTip>
+      <icon></icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>true</isCheckable>
+      <text>SVG Hard Wrap</text>
+    </Action>
+    <Action name="svg_text_wrapping_css_pre_wrap">
+      <iconText>SVG Auto Wrap with Fixed Width</iconText>
+      <shortcut></shortcut>
+      <toolTip>Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` defining the text width.</toolTip>
+      <icon></icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>true</isCheckable>
+      <text>SVG Auto Wrap with Fixed Width</text>
+    </Action>
+  </Actions>
 </ActionCollection>

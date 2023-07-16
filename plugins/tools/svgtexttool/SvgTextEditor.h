@@ -57,6 +57,7 @@ private Q_SLOTS:
      * in rich text, check the current format, and toggle the given buttons.
      */
     void checkFormat();
+    void checkDocumentFormat();
 
     void slotFixUpEmptyTextBlock();
 
@@ -110,6 +111,10 @@ private Q_SLOTS:
     void setFontSize(qreal size);
     void setBaseline(KoSvgText::BaselineShiftMode baseline);
     void setKerning(bool enable);
+
+    void setWrappingLegacy();
+    void setWrappingPre();
+    void setWrappingPreWrap();
 
     void setSettings();
     void slotToolbarToggled(bool);

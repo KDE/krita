@@ -30,6 +30,12 @@ KisLevelsCurve::KisLevelsCurve(qreal inputBlackPoint, qreal inputWhitePoint, qre
     , m_mustRecomputeU16Transfer(true)
     , m_mustRecomputeFTransfer(true)
 {}
+
+KisLevelsCurve::KisLevelsCurve(const QString &text)
+    : KisLevelsCurve()
+{
+    fromString(text);
+}
                 
 bool KisLevelsCurve::operator==(const KisLevelsCurve& rhs) const
 {
@@ -212,9 +218,17 @@ QString KisLevelsCurve::toString() const
 
 void KisLevelsCurve::fromString(const QString &text, bool *ok)
 {
+    KIS_SAFE_ASSERT_RECOVER(!text.isEmpty()) {
+        resetAll();
+        if (ok) {
+            *ok = false;
+        }
+        return;
+    }
+    
     const QStringList data = text.split(';');
-
-    if (data.size() != 5) {
+    KIS_SAFE_ASSERT_RECOVER(data.size() == 5) {
+        resetAll();
         if (ok) {
             *ok = false;
         }
@@ -226,7 +240,8 @@ void KisLevelsCurve::fromString(const QString &text, bool *ok)
     for (int i = 0; i < 5; ++i) {
         ok_ = false;
         values[i] = KisDomUtils::toDouble(data.at(i), &ok_);
-        if (!ok_) {
+        KIS_SAFE_ASSERT_RECOVER(ok_) {
+            resetAll();
             if (ok) {
                 *ok = false;
             }

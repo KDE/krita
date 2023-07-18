@@ -483,6 +483,7 @@ private:
     void customizeTabBar();
 
     void setMainWindowLayoutForCurrentMainWidget(int widgetIndex);
+    void adjustLayoutForWelcomePage();
 
 private:
 

@@ -1617,7 +1617,7 @@ void KisMainWindow::showEvent(QShowEvent *event)
 {
     // we're here because, we need to make sure everything (dockers, toolbars etc) is loaded and ready before
     // we can hide it.
-    setMainWindowLayoutForCurrentMainWidget(0);
+    adjustLayoutForWelcomePage();
     return KXmlGuiWindow::showEvent(event);
 }
 
@@ -1626,20 +1626,7 @@ void KisMainWindow::setMainWindowLayoutForCurrentMainWidget(int widgetIndex)
     if (widgetIndex == 0) {
         // save the state of the window which existed up-to now (this is before we stop auto-saving).
         saveMainWindowSettings(d->windowStateConfig);
-        // This makes sure we don't save window state when we're in welcome page mode, because all the dockers
-        // etc are hidden while the user is here.
-        resetAutoSaveSettings();
-
-        toggleDockersVisibility(false);
-        if (statusBar()) {
-            statusBar()->hide();
-        }
-        QList<QToolBar *> toolbars = findChildren<QToolBar *>();
-        for (QToolBar *toolbar : toolbars) {
-            if (toolbar->objectName() == "BrushesAndStuff" || toolbar->objectName() == "editToolBar") {
-                toolbar->hide();
-            }
-        }
+        adjustLayoutForWelcomePage();
     }
     else {
         setAutoSaveSettings(d->windowStateConfig, false);
@@ -1650,6 +1637,24 @@ void KisMainWindow::setMainWindowLayoutForCurrentMainWidget(int widgetIndex)
     for (QAction *action : actions) {
         if (action) {
             action->setEnabled(widgetIndex);
+        }
+    }
+}
+
+void KisMainWindow::adjustLayoutForWelcomePage()
+{
+    // This makes sure we don't save window state when we're in welcome page mode, because all the dockers
+    // etc are hidden while the user is here.
+    resetAutoSaveSettings();
+
+    toggleDockersVisibility(false);
+    if (statusBar()) {
+        statusBar()->hide();
+    }
+    QList<QToolBar *> toolbars = findChildren<QToolBar *>();
+    for (QToolBar *toolbar : toolbars) {
+        if (toolbar->objectName() == "BrushesAndStuff" || toolbar->objectName() == "editToolBar") {
+            toolbar->hide();
         }
     }
 }

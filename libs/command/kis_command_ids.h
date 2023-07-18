@@ -33,7 +33,8 @@ enum CommandId {
     NodePropertyListCommandId,
     ChangeStoryboardChild,
     ChangeTransformMaskCommand,
-    ChangeProjectionColorCommand
+    ChangeProjectionColorCommand,
+    SvgInlineSizeChangeCommand,
 };
 
 }

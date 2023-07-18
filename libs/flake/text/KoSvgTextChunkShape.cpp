@@ -562,7 +562,7 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
         parent ? parent->textProperties() : KoSvgTextProperties::defaultProperties();
 
     // XXX: we don't save fill, stroke, text length, length adjust or spacing and glyphs.
-    KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties);
+    KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties, isRootTextNode());
 
     if (isRootTextNode()) {
         context.shapeWriter().startElement("body", false);
@@ -744,7 +744,7 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
     KoSvgTextProperties parentProperties =
         parent ? parent->textProperties() : KoSvgTextProperties::defaultProperties();
 
-    KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties);
+    KoSvgTextProperties ownProperties = textProperties().ownProperties(parentProperties, isRootTextNode());
 
     ownProperties = adjustPropertiesForFontSizeWorkaround(ownProperties);
 

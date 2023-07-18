@@ -173,6 +173,8 @@ void TestSvgText::testTextPropertiesDifference()
     props.setProperty(KoSvgTextProperties::TextOrientationId, OrientationSideWays);
     props.setProperty(KoSvgTextProperties::LetterSpacingId, fromAutoValue(AutoValue(20)));
     props.setProperty(KoSvgTextProperties::WordSpacingId, fromAutoValue(AutoValue(30)));
+    props.setProperty(KoSvgTextProperties::FontSizeId,
+                      KoSvgTextProperties::defaultProperties().property(KoSvgTextProperties::FontSizeId));
 
     KoSvgTextProperties newProps = props;
 
@@ -187,6 +189,9 @@ void TestSvgText::testTextPropertiesDifference()
     QVERIFY(!diff.hasProperty(KoSvgTextProperties::WritingModeId));
     QVERIFY(!diff.hasProperty(KoSvgTextProperties::DirectionId));
 
+    KoSvgTextProperties diff2 = newProps.ownProperties(props, true);
+
+    QVERIFY(diff2.hasProperty(KoSvgTextProperties::FontSizeId));
 
 }
 

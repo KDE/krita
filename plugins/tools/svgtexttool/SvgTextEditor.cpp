@@ -416,8 +416,10 @@ void SvgTextEditor::switchTextEditorTab(bool convertData)
     KoSvgTextShape shape;
     KoSvgTextShapeMarkupConverter converter(&shape);
 
+    bool wasModified = false;
     if (m_currentEditor) {
         disconnect(m_currentEditor->document(), SIGNAL(modificationChanged(bool)), this, SLOT(setModified(bool)));
+        wasModified = m_currentEditor->document()->isModified();
     }
 
     // do not switch to the same tab again, otherwise we're losing current changes
@@ -457,6 +459,7 @@ void SvgTextEditor::switchTextEditorTab(bool convertData)
         m_currentEditor = m_textEditorWidget.svgTextEdit;
     }
 
+    m_currentEditor->document()->setModified(wasModified);
     connect(m_currentEditor->document(), SIGNAL(modificationChanged(bool)), SLOT(setModified(bool)));
 }
 

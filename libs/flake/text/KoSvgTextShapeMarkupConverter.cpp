@@ -498,6 +498,27 @@ qreal calcLineWidth(const QTextBlock &block)
     return fixFromQtDpi(lineLayout.boundingRect().width());
 }
 
+/**
+ * Mind blowing part: QTextEdit uses a hi-end algorithm for auto-estimation for the text
+ * directionality, so the user expects his text being saved to SVG with the same
+ * directionality. Just emulate behavior of direction="auto", which is not supported by
+ * SVG 1.1
+ *
+ * BUG: 392064
+ */
+static bool guessIsRightToLeft(QStringView text) {
+    // Is this just a worse version of QString::isRightToLeft??
+    for (int i = 0; i < text.size(); i++) {
+        const QChar ch = text[i];
+        if (ch.direction() == QChar::DirR || ch.direction() == QChar::DirAL) {
+            return true;
+        } else if (ch.direction() == QChar::DirL) {
+            return false;
+        }
+    }
+    return false;
+}
+
 bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *doc, QString *svgText)
 {
     QBuffer svgBuffer;
@@ -609,26 +630,21 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
         const QString text = block.text();
 
-        /**
-         * Mind blowing part: QTextEdit uses a hi-end algorithm for auto-estimation for the text
-         * directionality, so the user expects his text being saved to SVG with the same
-         * directionality. Just emulate behavior of direction="auto", which is not supported by
-         * SVG 1.1
-         *
-         * BUG: 392064
-         */
-
-        bool isRightToLeft = false;
-        for (int i = 0; i < text.size(); i++) {
-            const QChar ch = text[i];
-            if (ch.direction() == QChar::DirR || ch.direction() == QChar::DirAL) {
-                isRightToLeft = true;
-                break;
-            } else if (ch.direction() == QChar::DirL) {
-                break;
-            }
+        bool isRightToLeft;
+        switch (block.textDirection()) {
+        case Qt::LeftToRight:
+            isRightToLeft = false;
+            break;
+        case Qt::RightToLeft:
+            isRightToLeft = true;
+            break;
+        case Qt::LayoutDirectionAuto:
+        default:
+            // QTextBlock::textDirection() is not supposed to return these,
+            // but just in case...
+            isRightToLeft = guessIsRightToLeft(text);;
+            break;
         }
-
 
         if (isRightToLeft) {
             svgWriter.writeAttribute("direction", "rtl");

@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-15 00:44+0000\n"
+"POT-Creation-Date: 2023-07-19 00:47+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -17664,7 +17664,7 @@ msgstr "vaikimisi"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1429
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1432
 #, kde-format
 msgid "Size"
 msgstr "Suurus"
@@ -20710,7 +20710,7 @@ msgstr "Kohalikud ressurssid"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1133
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1136
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -23910,7 +23910,7 @@ msgstr "Kihi omadused"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1466
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1469
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -27206,7 +27206,7 @@ msgstr "Esiplaani värv"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1448
 #, kde-format
 msgid "Background Color"
 msgstr "Taustavärv"
@@ -41726,22 +41726,14 @@ msgstr "Salvestamine"
 msgid "Export..."
 msgstr "&Ekspordi..."
 
-#. i18n: ectx: property (text), widget (QLabel, labelUnsupportedColorSpace)
-#: plugins/dockers/recorder/recorderdocker.ui:370
-#, kde-format
-msgid ""
-"⚠ Unsupported color space.\n"
-"Only \"RGB/Alpha 8-bit\" is supported."
-msgstr ""
-
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:110
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:109
 #, fuzzy, kde-format
 #| msgid "Quality:"
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "Kvaliteet:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:111
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:110
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -41750,14 +41742,14 @@ msgid ""
 "Values lower than 50 are not recommended due to high artifacts."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:119
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:118
 #, fuzzy, kde-format
 #| msgid "Compression:"
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "Tihendus:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:120
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:119
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -41767,14 +41759,14 @@ msgid ""
 "Values above 3 are not recommended due to high performance impact."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:153
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:152
 #, fuzzy, kde-format
 #| msgid "Original"
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "Originaal"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:154
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:153
 #, fuzzy, kde-format
 #| msgid "CD Half"
 msgctxt ""
@@ -41783,7 +41775,7 @@ msgctxt ""
 msgid "Half"
 msgstr "CD-poolik"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:155
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:154
 #, fuzzy, kde-format
 #| msgid "Stuart"
 msgctxt ""
@@ -41792,68 +41784,68 @@ msgctxt ""
 msgid "Quarter"
 msgstr "Stuart"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:188
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:179
 #, fuzzy, kde-format
 #| msgid "Stop"
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "Peata"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:189
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:180
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "Salvestamine"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:213
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:204
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:214
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:205
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Reorder shapes"
 msgid "Recorder is active"
 msgstr "Korralda kujundid ümber"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:214
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:205
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Reorder shapes"
 msgid "Recorder is paused"
 msgstr "Korralda kujundid ümber"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:227
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:218
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Salvestamine"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:403
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:392
 #, fuzzy, kde-format
 #| msgid "Select a Folder"
 msgid "Select a Directory for Recordings"
 msgstr "Kataloogi valimine"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:483
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:472
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Salvestamine"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:484
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:473
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
 "check free disk space and start the recorder again."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:489
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:478
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -60678,68 +60670,68 @@ msgstr "Tekstitööriist"
 msgid "Conversion failed"
 msgstr "Teisendamine nurjus"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:586
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:589
 #, kde-format
 msgid "Find Text"
 msgstr "Teksti otsimine"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:589
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:632
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:592
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:635
 #, kde-format
 msgid "Find:"
 msgstr "Otsitav:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:628
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:631
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Otsimine ja kõigi asendamine"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:634
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:637
 #, kde-format
 msgid "Replace:"
 msgstr "Asendus:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1133
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1136
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Oled teksti muutnud. Kas hüljata muutused?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1273
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1279
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1276
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1282
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Vormindatud tekst"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1276
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1280
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1279
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1283
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG allikas"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1420
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1423
 #, kde-format
 msgid "Font"
 msgstr "Font"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1437
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1440
 #, kde-format
 msgid "Text Color"
 msgstr "Teksti värv"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1455
 #, fuzzy, kde-format
 #| msgid "Select a Color"
 msgid "Sample a Color"
 msgstr "Värvi valimine"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1463
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1466
 #, kde-format
 msgid "Line height"
 msgstr "Rea kõrgus"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1475
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"

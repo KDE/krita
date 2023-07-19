@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-15 00:44+0000\n"
+"POT-Creation-Date: 2023-07-19 00:47+0000\n"
 "PO-Revision-Date: 2023-03-12 19:06+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -16767,7 +16767,7 @@ msgstr "по умолчанию"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1429
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1432
 #, kde-format
 msgid "Size"
 msgstr "Размер"
@@ -19755,7 +19755,7 @@ msgstr "Локальные источники"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1133
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1136
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22930,7 +22930,7 @@ msgstr "Свойства слоя"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1466
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1469
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -26195,7 +26195,7 @@ msgstr "Цвет переднего плана"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1448
 #, kde-format
 msgid "Background Color"
 msgstr "Цвет фона"
@@ -40654,23 +40654,13 @@ msgstr "Запись"
 msgid "Export..."
 msgstr "Экспортировать..."
 
-#. i18n: ectx: property (text), widget (QLabel, labelUnsupportedColorSpace)
-#: plugins/dockers/recorder/recorderdocker.ui:370
-#, kde-format
-msgid ""
-"⚠ Unsupported color space.\n"
-"Only \"RGB/Alpha 8-bit\" is supported."
-msgstr ""
-"⚠ Неподдерживаемое цветовое пространство.\n"
-"Поддерживается только «RGB/Alpha 8-bit»."
-
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:110
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:109
 #, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "Качество:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:111
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:110
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -40682,13 +40672,13 @@ msgstr ""
 "качества. Не влияет на процессор.\n"
 "Значения ниже 50 не рекомендуются из-за большого количества артефактов."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:119
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:118
 #, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "Сжатие:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:120
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:119
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -40704,13 +40694,13 @@ msgstr ""
 "Значения выше 3 не рекомендуются из-за высокого влияния на "
 "производительность."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:153
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:152
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "Оригинал"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:154
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:153
 #, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -40718,7 +40708,7 @@ msgctxt ""
 msgid "Half"
 msgstr "Половина"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:155
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:154
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -40726,53 +40716,53 @@ msgctxt ""
 msgid "Quarter"
 msgstr "Четверть"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:188
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:179
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "Остановить"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:189
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:180
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "Запись"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:213
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:204
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr "REC"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:214
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:205
 #, kde-format
 msgid "Recorder is active"
 msgstr "Запись активна"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:214
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:205
 #, kde-format
 msgid "Recorder is paused"
 msgstr "Запись приостановлена"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:227
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:218
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Запись"
 
 # BUGME: remove ellispsis --aspotashev
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:403
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:392
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Выберите каталог для записей"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:483
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:472
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Запись"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:484
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:473
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -40781,7 +40771,7 @@ msgstr ""
 "Запись была остановлена из-за сбоя во время записи кадра. Проверьте "
 "свободное место на диске и снова запустите запись."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:489
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:478
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -59298,67 +59288,67 @@ msgstr "Текст"
 msgid "Conversion failed"
 msgstr "Ошибка преобразования"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:586
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:589
 #, kde-format
 msgid "Find Text"
 msgstr "Найти текст"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:589
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:632
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:592
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:635
 #, kde-format
 msgid "Find:"
 msgstr "Искать:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:628
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:631
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Найти и заменить все"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:634
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:637
 #, kde-format
 msgid "Replace:"
 msgstr "Заменить на:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1133
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1136
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Текст был изменён. Отклонить изменения?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1273
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1279
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1276
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1282
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Текст с форматированием"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1276
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1280
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1279
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1283
 #, kde-format
 msgid "SVG Source"
 msgstr "Источник SVG"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1420
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1423
 #, kde-format
 msgid "Font"
 msgstr "Шрифт"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1437
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1440
 #, kde-format
 msgid "Text Color"
 msgstr "Цвет текста"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1455
 #, kde-format
 msgid "Sample a Color"
 msgstr "Взять образец цвета"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1463
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1466
 #, kde-format
 msgid "Line height"
 msgstr "Высота строки"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1475
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"
@@ -61409,6 +61399,13 @@ msgstr "Изменение масштаба"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Эталонные изображения"
+
+#~ msgid ""
+#~ "⚠ Unsupported color space.\n"
+#~ "Only \"RGB/Alpha 8-bit\" is supported."
+#~ msgstr ""
+#~ "⚠ Неподдерживаемое цветовое пространство.\n"
+#~ "Поддерживается только «RGB/Alpha 8-bit»."
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Shear X"

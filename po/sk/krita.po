@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-15 00:44+0000\n"
+"POT-Creation-Date: 2023-07-19 00:47+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -16591,7 +16591,7 @@ msgstr "predvolené"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1429
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1432
 #, kde-format
 msgid "Size"
 msgstr "Veľkosť"
@@ -19451,7 +19451,7 @@ msgstr "Lokálne zdroje"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1133
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1136
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22591,7 +22591,7 @@ msgstr "Vlastnosti vrstvy"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1466
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1469
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -25828,7 +25828,7 @@ msgstr "Farba popredia"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1448
 #, kde-format
 msgid "Background Color"
 msgstr "Farba pozadia"
@@ -40031,23 +40031,13 @@ msgstr "Nahrať"
 msgid "Export..."
 msgstr "Export..."
 
-#. i18n: ectx: property (text), widget (QLabel, labelUnsupportedColorSpace)
-#: plugins/dockers/recorder/recorderdocker.ui:370
-#, kde-format
-msgid ""
-"⚠ Unsupported color space.\n"
-"Only \"RGB/Alpha 8-bit\" is supported."
-msgstr ""
-"⚠ Nepodporovaný farebný priestor.\n"
-"Iba \"RGB/Alfa 8-bit\" je podporovaný."
-
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:110
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:109
 #, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "Kvalita:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:111
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:110
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -40059,13 +40049,13 @@ msgstr ""
 "CPU.\n"
 "Hodnoty nižšie ako 50 sa neodporúčajú kvôli vysokému výskytu artefaktov."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:119
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:118
 #, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "Kompresia:"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:120
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:119
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -40080,13 +40070,13 @@ msgstr ""
 "disku..\n"
 "Hodnoty nad 3 sa neodporúčajú z dôvodu vysokého vplyvu na výkon."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:153
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:152
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "Originál"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:154
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:153
 #, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -40094,7 +40084,7 @@ msgctxt ""
 msgid "Half"
 msgstr "Polovičný"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:155
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:154
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -40102,52 +40092,52 @@ msgctxt ""
 msgid "Quarter"
 msgstr "Štvrtina"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:188
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:179
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "Zastaviť"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:189
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:180
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "Nahrať"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:213
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:204
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr "REC"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:214
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:205
 #, kde-format
 msgid "Recorder is active"
 msgstr "Záznamník je aktívny"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:214
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:205
 #, kde-format
 msgid "Recorder is paused"
 msgstr "Záznamník je pozastavený"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:227
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:218
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "Záznamník"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:403
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:392
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Vybrať adresár pre nahrávky"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:483
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:472
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Záznamník"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:484
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:473
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -40156,7 +40146,7 @@ msgstr ""
 "Záznamník bol zastavený z dôvodu zlyhania pri zápise snímky. Prosím, "
 "skontrolujte voľné miesto na disku a znovu spustite záznamník."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:489
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:478
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -58481,67 +58471,67 @@ msgstr "Textový nástroj"
 msgid "Conversion failed"
 msgstr "Konverzia zlyhala"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:586
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:589
 #, kde-format
 msgid "Find Text"
 msgstr "Nájsť text"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:589
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:632
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:592
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:635
 #, kde-format
 msgid "Find:"
 msgstr "Nájsť:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:628
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:631
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Nájsť a nahradiť všetko"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:634
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:637
 #, kde-format
 msgid "Replace:"
 msgstr "Nahradiť:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1133
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1136
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Zmenili ste text. Zahodiť zmeny?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1273
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1279
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1276
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1282
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Formátovaný text"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1276
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1280
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1279
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1283
 #, kde-format
 msgid "SVG Source"
 msgstr "Zdroj SVG"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1420
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1423
 #, kde-format
 msgid "Font"
 msgstr "Písmo"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1437
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1440
 #, kde-format
 msgid "Text Color"
 msgstr "Farba textu"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1455
 #, kde-format
 msgid "Sample a Color"
 msgstr "Vzorkovať farbu"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1463
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1466
 #, kde-format
 msgid "Line height"
 msgstr "Výška riadka"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1475
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"
@@ -60574,6 +60564,13 @@ msgstr "Nástroj priblíženia"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Nástroj referenčných obrázkov"
+
+#~ msgid ""
+#~ "⚠ Unsupported color space.\n"
+#~ "Only \"RGB/Alpha 8-bit\" is supported."
+#~ msgstr ""
+#~ "⚠ Nepodporovaný farebný priestor.\n"
+#~ "Iba \"RGB/Alfa 8-bit\" je podporovaný."
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Shear X"

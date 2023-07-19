@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-15 00:44+0000\n"
-"PO-Revision-Date: 2023-07-03 11:38\n"
+"POT-Creation-Date: 2023-07-19 00:47+0000\n"
+"PO-Revision-Date: 2023-07-18 11:10\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -16518,7 +16518,7 @@ msgstr "默认"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1429
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1432
 #, kde-format
 msgid "Size"
 msgstr "大小"
@@ -19352,7 +19352,7 @@ msgstr "本地资源"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1133
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1136
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22397,7 +22397,7 @@ msgstr "图层属性"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1466
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1469
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -23030,10 +23030,9 @@ msgstr ""
 "动画处理已取消。"
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgid "Wait for existing frame generation process to complete..."
-msgstr "等待图像操作完成..."
+msgstr "等待已有的帧生成任务完成..."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
@@ -25555,7 +25554,7 @@ msgstr "前景色"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1445
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1448
 #, kde-format
 msgid "Background Color"
 msgstr "背景色"
@@ -39415,23 +39414,13 @@ msgstr "开始录制"
 msgid "Export..."
 msgstr "导出视频..."
 
-#. i18n: ectx: property (text), widget (QLabel, labelUnsupportedColorSpace)
-#: plugins/dockers/recorder/recorderdocker.ui:370
-#, kde-format
-msgid ""
-"⚠ Unsupported color space.\n"
-"Only \"RGB/Alpha 8-bit\" is supported."
-msgstr ""
-"⚠ 色彩空间不支持。\n"
-"只支持“RGB/透明度 8 位”色彩空间。"
-
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:110
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:109
 #, kde-format
 msgctxt "Title for label. JPEG Quality level"
 msgid "Quality:"
 msgstr "画质："
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:111
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:110
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -39442,13 +39431,13 @@ msgstr ""
 "数值越高，品质越好，文件越大。不影响 CPU 使用率。\n"
 "不建议设为 50 以下，否则画质将明显劣化。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:119
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:118
 #, kde-format
 msgctxt "Title for label. PNG Compression level"
 msgid "Compression:"
 msgstr "压缩："
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:120
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:119
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -39461,13 +39450,13 @@ msgstr ""
 "不建议设为 0，否则将占用大量存储空间。\n"
 "不建议高于 3，否则将严重影响程序性能。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:153
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:152
 #, kde-format
 msgctxt "Use original resolution for the frames when recording the canvas"
 msgid "Original"
 msgstr "原始"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:154
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:153
 #, kde-format
 msgctxt ""
 "Use the resolution two times smaller than the original resolution for the "
@@ -39475,7 +39464,7 @@ msgctxt ""
 msgid "Half"
 msgstr "减半"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:155
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:154
 #, kde-format
 msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
@@ -39483,52 +39472,52 @@ msgctxt ""
 msgid "Quarter"
 msgstr "四分之一"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:188
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:179
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
 msgstr "停止录制"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:189
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:180
 #, kde-format
 msgctxt "Start recording the canvas"
 msgid "Record"
 msgstr "开始录制"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:213
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:204
 #, kde-format
 msgctxt "Recording symbol"
 msgid "REC"
 msgstr "正在录像"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:214
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:205
 #, kde-format
 msgid "Recorder is active"
 msgstr "录像工具正在截图"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:214
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:205
 #, kde-format
 msgid "Recorder is paused"
 msgstr "录像工具正在待机"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:227
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:218
 #, kde-format
 msgctxt "Title of the docker"
 msgid "Recorder"
 msgstr "录像工具"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:403
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:392
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "选择录像数据保存位置"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:483
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:472
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "录像工具"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:484
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:473
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -39537,7 +39526,7 @@ msgstr ""
 "由于无法写入帧，录像工具已停止录制。请检查并确保存储设备有足够的可用空间，然"
 "后重新开始录制。"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:489
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:478
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -57485,67 +57474,67 @@ msgstr "文字工具"
 msgid "Conversion failed"
 msgstr "转换失败"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:586
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:589
 #, kde-format
 msgid "Find Text"
 msgstr "查找文字"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:589
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:632
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:592
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:635
 #, kde-format
 msgid "Find:"
 msgstr "查找："
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:628
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:631
 #, kde-format
 msgid "Find and Replace all"
 msgstr "查找并替换全部"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:634
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:637
 #, kde-format
 msgid "Replace:"
 msgstr "替换："
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1133
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1136
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "文字已被修改。您想要放弃更改吗？"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1273
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1279
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1276
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1282
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "可视编辑器"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1276
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1280
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1279
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1283
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG 源代码"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1420
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1423
 #, kde-format
 msgid "Font"
 msgstr "字体"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1437
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1440
 #, kde-format
 msgid "Text Color"
 msgstr "文字颜色"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1455
 #, kde-format
 msgid "Sample a Color"
 msgstr "拾取颜色"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1463
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1466
 #, kde-format
 msgid "Line height"
 msgstr "行高"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1475
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"
@@ -59557,18 +59546,9 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
 
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "斜切 X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "斜切 Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "缩放"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "重置变形"
+#~ msgid ""
+#~ "⚠ Unsupported color space.\n"
+#~ "Only \"RGB/Alpha 8-bit\" is supported."
+#~ msgstr ""
+#~ "⚠ 色彩空间不支持。\n"
+#~ "只支持“RGB/透明度 8 位”色彩空间。"

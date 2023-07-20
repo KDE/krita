@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-19 00:47+0000\n"
+"POT-Creation-Date: 2023-07-20 00:46+0000\n"
 "PO-Revision-Date: 2022-07-08 04:45+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Toki Pona <http://weblate.blackquill.cc/projects/ante-toki-pi-"
@@ -16229,7 +16229,7 @@ msgid "No 'text' node found!"
 msgstr ""
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:362
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:731
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:747
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr ""

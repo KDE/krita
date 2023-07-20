@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-19 00:47+0000\n"
+"POT-Creation-Date: 2023-07-20 00:46+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -16328,7 +16328,7 @@ msgid "No 'text' node found!"
 msgstr "कोई 'पाठ' का नोड मिला नही!"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:362
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:731
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:747
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "SVG टेक्स्ट एलिमेंट लिखने में अज्ञात त्रुटि"

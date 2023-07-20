@@ -73,7 +73,7 @@ private Q_SLOTS:
      * to select settings that new texts will be created with.
      * @return a string containing the defs.
      */
-    QString generateDefs();
+    QString generateDefs(const QString &extraProperties = QString());
 
     /**
      * @brief storeDefaults

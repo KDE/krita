@@ -300,7 +300,7 @@ void SvgTextTool::slotTextEditorClosed()
     KoToolManager::instance()->switchToolRequested("InteractionTool");
 }
 
-QString SvgTextTool::generateDefs()
+QString SvgTextTool::generateDefs(const QString &extraProperties)
 {
     QString font = m_defFont->currentFont().family();
     QString size = QString::number(QFontDatabase::standardSizes().at(m_defPointSize->currentIndex() > -1 ? m_defPointSize->currentIndex() : 0));
@@ -316,7 +316,7 @@ QString SvgTextTool::generateDefs()
     QString fontColor = canvas()->resourceManager()->foregroundColor().toQColor().name();
     QString letterSpacing = QString::number(m_defLetterSpacing->value());
 
-    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4; letter-spacing:%5;\n  }\n </style>\n</defs>").arg(font, size, fontColor, textAnchor, letterSpacing);
+    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4; letter-spacing:%5;%6\n  }\n </style>\n</defs>").arg(font, size, fontColor, textAnchor, letterSpacing, extraProperties);
 }
 
 void SvgTextTool::storeDefaults()
@@ -498,9 +498,13 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
             event->accept();
             return;
         }
+        QString extraProperties;
+        if (event->modifiers().testFlag(Qt::ControlModifier)) {
+            extraProperties = QLatin1String("inline-size:%1;").arg(QString::number(rectangle.width()));
+        }
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoSvgTextShapeID");
         KoProperties *params = new KoProperties();//Fill these with "svgText", "defs" and "shapeRect"
-        params->setProperty("defs", QVariant(generateDefs()));
+        params->setProperty("defs", QVariant(generateDefs(extraProperties)));
         if (m_dragging == DragMode::Create) {
             m_dragEnd = event->point;
             m_dragging = DragMode::None;

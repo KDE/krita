@@ -35213,7 +35213,7 @@ msgstr "%1"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:33
 #, kde-format
 msgid "About KDE"
-msgstr "A proposio de KDE"
+msgstr "A proposito de KDE"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:36
 #, kde-format

@@ -234,8 +234,7 @@ KisOptimizedBrushOutline KisToolPaint::tryFixBrushOutline(const KisOptimizedBrus
 {
     KisConfig cfg(true);
 
-    bool useSeparateEraserCursor = cfg.separateEraserCursor() &&
-            canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
+    bool useSeparateEraserCursor = cfg.separateEraserCursor() && isEraser();
 
     const OutlineStyle currentOutlineStyle = !useSeparateEraserCursor ? cfg.newOutlineStyle() : cfg.eraserOutlineStyle();
     if (currentOutlineStyle == OUTLINE_NONE) return originalOutline;
@@ -594,8 +593,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
         KisConfig cfg(true);
         KisPaintOpSettings::OutlineMode outlineMode;
 
-        bool useSeparateEraserCursor = cfg.separateEraserCursor() &&
-                canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
+        bool useSeparateEraserCursor = cfg.separateEraserCursor() && isEraser();
 
         const OutlineStyle currentOutlineStyle = !useSeparateEraserCursor ? cfg.newOutlineStyle() : cfg.eraserOutlineStyle();
         const auto outlineStyleIsVisible = [&]() {
@@ -685,6 +683,10 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 
     m_oldOutlineRect = outlineDocRect;
     m_oldColorPreviewUpdateRect = colorPreviewDocUpdateRect;
+}
+
+bool KisToolPaint::isEraser() const {
+    return canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
 }
 
 KisOptimizedBrushOutline KisToolPaint::getOutlinePath(const QPointF &documentPos,

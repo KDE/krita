@@ -84,6 +84,8 @@ protected:
     bool isOutlineVisible() const;
     void setOutlineVisible(bool visible);
 
+    bool isEraser() const;
+
     /// Add the tool-specific layout to the default option widget layout.
     void addOptionWidgetLayout(QLayout *layout);
 

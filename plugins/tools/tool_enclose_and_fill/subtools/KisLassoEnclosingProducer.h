@@ -34,6 +34,9 @@ Q_SIGNALS:
 
 private:
     bool m_hasUserInteractionRunning {false};
+
+protected Q_SLOTS:
+    void resetCursorStyle() override;
 };
 
 #endif

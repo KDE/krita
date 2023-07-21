@@ -97,8 +97,7 @@ void KisToolFreehand::resetCursorStyle()
 {
     KisConfig cfg(true);
 
-    bool useSeparateEraserCursor = cfg.separateEraserCursor() &&
-            canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
+    bool useSeparateEraserCursor = cfg.separateEraserCursor() && isEraser();
 
     switch (useSeparateEraserCursor ? cfg.eraserCursorStyle() : cfg.newCursorStyle()) {
     case CURSOR_STYLE_NO_CURSOR:

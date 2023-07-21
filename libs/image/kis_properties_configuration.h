@@ -143,7 +143,7 @@ public:
      */
     KoColor getColor(const QString& name, const KoColor& color = KoColor()) const;
 
-    QMap<QString, QVariant> getProperties() const;
+    virtual QMap<QString, QVariant> getProperties() const;
 
     /// Clear the map of properties
     void clearProperties();

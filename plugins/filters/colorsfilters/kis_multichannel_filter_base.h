@@ -68,15 +68,33 @@ public:
 
     virtual bool compareTo(const KisPropertiesConfiguration* rhs) const override;
 
+    bool hasProperty(const QString& name) const override;
+    void setProperty(const QString& name, const QVariant& value) override;
+    bool getProperty(const QString& name, QVariant & value) const override;
+    QVariant getProperty(const QString& name) const override;
+    QMap<QString, QVariant> getProperties() const override;
+
 protected:
     int m_channelCount {0};
     QList<KisCubicCurve> m_curves;
     QVector<QVector<quint16>> m_transfers;
 
     void init();
+    void updateTransfer(int index);
     void updateTransfers();
 
     virtual KisCubicCurve getDefaultCurve() = 0;
+
+    /**
+     * @brief Takes a curve property name with format "curve#", where # is the
+     *        index of the channel and puts the index on the "curveIndex"
+     *        parameter
+     * @param name A string with format "curve#"
+     * @param curveIndex An int where the decoded channel index is stored
+     * @return true if "name" had a valid format
+     * @return false if "name" had an invalid format
+     */
+    bool curveIndexFromCurvePropertyName(const QString& name, int& curveIndex) const;
 };
 
 class WdgPerChannel : public QWidget, public Ui::WdgPerChannel

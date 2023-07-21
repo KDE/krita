@@ -315,7 +315,7 @@ void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
 
     KisPaintDeviceSP clipdev = KisClipboard::instance()->clipFromKritaLayers(image->bounds(),
                                                                             image->colorSpace()).data();
-    KisPaintDeviceSP clip = new KisPaintDevice(*clipdev);
+    KisPaintDeviceSP clip = clipdev ? new KisPaintDevice(*clipdev) : nullptr;
 
     if (!clip->exactBounds().contains(image->bounds()) &&
                            !clip->exactBounds().intersects(image->bounds()))

@@ -321,18 +321,24 @@ KisPaintDeviceSP KisClipboard::clipFromKritaLayers(const QRect &imageBounds,
 
     KisNodeList nodes = mimedata->nodes();
 
-    KisImageSP tempImage = new KisImage(nullptr,
-                                        imageBounds.width(),
-                                        imageBounds.height(),
-                                        cs,
-                                        "ClipImage");
-    for (KisNodeSP node : nodes) {
-        tempImage->addNode(node, tempImage->root());
-    }
-    tempImage->refreshGraphAsync();
-    tempImage->waitForDone();
+    if (nodes.size() > 1) {
+        KisImageSP tempImage = new KisImage(nullptr,
+                                            imageBounds.width(),
+                                            imageBounds.height(),
+                                            cs,
+                                            "ClipImage");
+        for (KisNodeSP node : nodes) {
+            tempImage->addNode(node, tempImage->root());
+        }
+        tempImage->refreshGraphAsync();
+        tempImage->waitForDone();
 
-    return tempImage->projection();
+        return tempImage->projection();
+    } else if (!nodes.isEmpty()) {
+        return nodes.first()->projection();
+    }
+
+    return nullptr;
 }
 
 QPair<bool, KisClipboard::PasteFormatBehaviour>

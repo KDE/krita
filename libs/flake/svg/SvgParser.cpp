@@ -1741,7 +1741,7 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
             rootTextShape = mergeIntoShape;
         } else {
             rootTextShape = new KoSvgTextShape();
-            const QString useRichText = e.attribute("krita:useRichText", "true");
+            const QString useRichText = e.attribute("krita:useRichText", "false");
             rootTextShape->setRichTextPreferred(useRichText != "false");
         }
     }

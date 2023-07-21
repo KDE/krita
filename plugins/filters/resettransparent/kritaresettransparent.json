@@ -1,0 +1,9 @@
+{
+    "Id": "Reset Transparent Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritaresettransparent",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

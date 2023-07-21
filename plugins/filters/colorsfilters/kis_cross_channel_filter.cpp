@@ -223,6 +223,7 @@ void KisCrossChannelConfigWidget::slotDriverChannelSelected(int index)
     m_driverChannels[m_activeVChannel] = channel;
 
     updateChannelControls();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 // KisCrossChannelFilter

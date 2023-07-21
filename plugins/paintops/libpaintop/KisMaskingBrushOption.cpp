@@ -92,6 +92,7 @@ public:
                       .map(&detail::warningLabelText)},
           m_maskingBrushCursor(m_maskingData[&MaskingBrushData::brush])
     {
+        lager::watch(m_commonBrushSizeData, std::bind(&MaskingBrushModel::updatePreserveMode, this));
         lager::watch(m_maskingBrushCursor, std::bind(&MaskingBrushModel::updatePreserveMode, this));
         lager::watch(m_masterBrushSize, std::bind(&MaskingBrushModel::updatePreserveMode, this));
     }

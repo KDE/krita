@@ -120,6 +120,7 @@ struct CharacterResult {
     qreal halfLeading;
     qreal ascent;
     qreal descent;
+    QFont::Style fontStyle = QFont::StyleNormal;
 
     KoSvgText::TextAnchor anchor = KoSvgText::AnchorStart;
     KoSvgText::Direction direction = KoSvgText::DirectionLeftToRight;
@@ -902,6 +903,7 @@ void KoSvgTextShape::relayout() const
                         }
                     }
                     result[j].halfLeading = leading*0.5;
+                    result[j].fontStyle = style;
                 }
 
                 start += length;
@@ -962,14 +964,35 @@ void KoSvgTextShape::relayout() const
 
         debugFlake << "glyph" << i << "cluster" << cluster << currentGlyph.index << text.at(cluster).unicode();
 
-        QTransform glyphTf;
+        /// The matrix for Italic (oblique) synthesis of outline glyphs.
+        QTransform glyphObliqueTf;
+        /// The combined offset * italic * ftTf transform for outline glyphs.
+        QTransform outlineGlyphTf;
 
         if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
-            QPainterPath glyph = d->convertFromFreeTypeOutline(currentGlyph.ftface->glyph);
+            outlineGlyphTf = QTransform::fromTranslate(currentGlyph.x_offset, currentGlyph.y_offset);
 
-            glyph.translate(currentGlyph.x_offset, currentGlyph.y_offset);
-            glyph = glyphTf.map(glyph);
-            glyph = ftTF.map(glyph);
+            // Check whether we need to synthesize italic by shearing the glyph:
+            if (charResult.fontStyle != QFont::StyleNormal
+                && !(currentGlyph.ftface->style_flags & FT_STYLE_FLAG_ITALIC)) {
+                // CSS Fonts Module Level 4, 2.4. Font style: the font-style property:
+                // For `oblique`, "lack of an <angle> represents 14deg".
+                constexpr double SLANT_14DEG = 0.24932800284318069162403993780486;
+                if (isHorizontal) {
+                    glyphObliqueTf.shear(SLANT_14DEG, 0);
+                } else {
+                    // For vertical mode, CSSWG says:
+                    // - Skew around the centre
+                    // - Right-side down and left-side up
+                    // https://github.com/w3c/csswg-drafts/issues/2869
+                    glyphObliqueTf.shear(0, -SLANT_14DEG);
+                }
+                outlineGlyphTf *= glyphObliqueTf;
+            }
+            outlineGlyphTf *= ftTF;
+
+            QPainterPath glyph = d->convertFromFreeTypeOutline(currentGlyph.ftface->glyph);
+            glyph = outlineGlyphTf.map(glyph);
 
             if (!charResult.path.isEmpty()) {
                 // this is for glyph clusters, unicode combining marks are always
@@ -982,10 +1005,36 @@ void KoSvgTextShape::relayout() const
             }
         } else if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_BITMAP) {
             // TODO: Handle glyph clusters better...
-            charResult.image =
-                d->convertFromFreeTypeBitmap(currentGlyph.ftface->glyph)
-                    .transformed(glyphTf,
-                                d->textRendering == OptimizeSpeed ? Qt::FastTransformation : Qt::SmoothTransformation);
+            charResult.image = d->convertFromFreeTypeBitmap(currentGlyph.ftface->glyph);
+
+            // Check whether we need to synthesize italic by shearing the glyph:
+            if (charResult.fontStyle != QFont::StyleNormal
+                && !(currentGlyph.ftface->style_flags & FT_STYLE_FLAG_ITALIC)) {
+                // Since we are dealing with a bitmap glyph, we'll just use a nice
+                // round floating point number.
+                constexpr double SLANT_BITMAP = 0.25;
+                QTransform bitmapTf;
+                QPoint shearAt;
+                if (isHorizontal) {
+                    bitmapTf.shear(-SLANT_BITMAP, 0);
+                    shearAt = QPoint(0, currentGlyph.ftface->glyph->bitmap_top);
+                } else {
+                    bitmapTf.shear(0, SLANT_BITMAP);
+                    shearAt = QPoint(charResult.image.width() / 2, 0);
+                }
+                // We need to shear around the baseline, hence the translation.
+                bitmapTf = QTransform::fromTranslate(-shearAt.x(), -shearAt.y()) * bitmapTf
+                    * QTransform::fromTranslate(shearAt.x(), shearAt.y());
+                charResult.image = std::move(charResult.image).transformed(
+                    bitmapTf,
+                    d->textRendering == OptimizeSpeed ? Qt::FastTransformation : Qt::SmoothTransformation);
+
+                // This does the same as `QImage::trueMatrix` to get the image
+                // offset after transforming.
+                const QPoint offset = bitmapTf.mapRect(QRectF({0, 0}, charResult.image.size())).toAlignedRect().topLeft();
+                currentGlyph.ftface->glyph->bitmap_left += offset.x();
+                currentGlyph.ftface->glyph->bitmap_top -= offset.y();
+            }
         } else {
             warnFlake << "Unsupported glyph format" << glyphFormatToStr(currentGlyph.ftface->glyph->format);
         }
@@ -1021,8 +1070,8 @@ void KoSvgTextShape::relayout() const
                 FT_Load_Glyph(currentGlyph.ftface, layerGlyphIndex, faceLoadFlags);
                 if (currentGlyph.ftface->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
                     QPainterPath p = d->convertFromFreeTypeOutline(currentGlyph.ftface->glyph);
-                    p.translate(currentGlyph.x_offset, currentGlyph.y_offset);
-                    charResult.colorLayers.append(ftTF.map(p));
+                    p = outlineGlyphTf.map(p);
+                    charResult.colorLayers.append(p);
                     charResult.colorLayerColors.append(layerColor);
                     charResult.replaceWithForeGroundColor.append(isForeGroundColor);
                 } else {
@@ -1075,11 +1124,11 @@ void KoSvgTextShape::relayout() const
                           charResult.descent,
                           ftTF.inverted().map(charResult.advance).x(),
                           (charResult.ascent - charResult.descent));
-            bbox = glyphTf.mapRect(bbox);
+            bbox = glyphObliqueTf.mapRect(bbox);
         } else {
             hb_font_t_up font(hb_ft_font_create_referenced(currentGlyph.ftface));
             bbox = QRectF(charResult.descent, 0, charResult.ascent - charResult.descent, ftTF.inverted().map(charResult.advance).y());
-            bbox = glyphTf.mapRect(bbox);
+            bbox = glyphObliqueTf.mapRect(bbox);
         }
         charResult.boundingBox = ftTF.mapRect(bbox);
         charResult.halfLeading = ftTF.map(QPointF(charResult.halfLeading, charResult.halfLeading)).x();

@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:46+0000\n"
+"POT-Creation-Date: 2023-07-22 00:47+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -19536,7 +19536,7 @@ msgstr "Avots:"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:905
-#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:714
+#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
@@ -28698,7 +28698,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Mainīt filtru"
 
-#: libs/ui/kis_clipboard.cc:715 libs/ui/KisView.cpp:690
+#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:690
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -43376,7 +43376,7 @@ msgstr "Krāsa Transferts."
 msgid "Color Balance"
 msgstr "Krāsu diapazons"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:230
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:231
 #, fuzzy, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "Krāsa Pielāgošana."
@@ -51191,7 +51191,7 @@ msgid "Auto Spacing"
 msgstr "Platināšana:"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:209
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:210
 #, fuzzy, kde-format
 msgid "Brush Tip"
 msgstr "Ota"
@@ -51629,7 +51629,7 @@ msgid ""
 "value has been cropped to %2 pixels."
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:178
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:179
 #, fuzzy, kde-format
 msgid "Blending Mode:"
 msgstr "Saplūšanas režīms"

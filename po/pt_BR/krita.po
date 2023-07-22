@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:46+0000\n"
+"POT-Creation-Date: 2023-07-22 00:47+0000\n"
 "PO-Revision-Date: 2023-02-14 11:07-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -19392,7 +19392,7 @@ msgstr "Recursos locais"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:905
-#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:714
+#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
@@ -29016,7 +29016,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Alterar arquivo de camada"
 
-#: libs/ui/kis_clipboard.cc:715 libs/ui/KisView.cpp:690
+#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:690
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -44352,7 +44352,7 @@ msgstr "Balanceamento de &cor..."
 msgid "Color Balance"
 msgstr "Balanceamento de cor"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:230
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:231
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "&Ajustes de curvas entre canais"
@@ -52670,7 +52670,7 @@ msgid "Auto Spacing"
 msgstr "Espaçamento automático"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:209
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:210
 #, kde-format
 msgid "Brush Tip"
 msgstr "Ponta do pincel"
@@ -53147,7 +53147,7 @@ msgstr ""
 "AVISO: o tamanho dependente do pincel mascarado ficou muito grande (%1 "
 "pixels). Seu valor foi cortado para %2 pixels."
 
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:178
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:179
 #, kde-format
 msgid "Blending Mode:"
 msgstr "Modo de Mistura:"

@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:46+0000\n"
+"POT-Creation-Date: 2023-07-22 00:47+0000\n"
 "PO-Revision-Date: 2023-07-12 06:49+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -19389,7 +19389,7 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:905
-#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:714
+#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:969 libs/ui/kis_node_manager.cpp:1218
@@ -28845,7 +28845,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Ŝanĝi Dosiertavolon"
 
-#: libs/ui/kis_clipboard.cc:715 libs/ui/KisView.cpp:690
+#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:690
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -43938,7 +43938,7 @@ msgstr "Kolora Ekvilibro..."
 msgid "Color Balance"
 msgstr "Kolora Ekvilibro"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:230
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:231
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "&Transkanalaj alĝustigkurboj..."
@@ -52133,7 +52133,7 @@ msgid "Auto Spacing"
 msgstr "Aŭtomata interspaco"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:209
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:210
 #, kde-format
 msgid "Brush Tip"
 msgstr "Peniko Konsileto"
@@ -52606,7 +52606,7 @@ msgstr ""
 "AVERTO: Dependa grandeco de la maskita peniko kreskis tro granda (%1 "
 "pikseloj). Ĝia valoro estas tranĉita al %2 pikseloj."
 
-#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:178
+#: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:179
 #, kde-format
 msgid "Blending Mode:"
 msgstr "Miksa Reĝimo:"

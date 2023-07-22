@@ -285,6 +285,7 @@ void KisMultiChannelFilterConfiguration::setProperty(const QString& name, const 
     KIS_SAFE_ASSERT_RECOVER_RETURN(value.canConvert<QString>());
     m_curves[curveIndex] = KisCubicCurve(value.toString());
     updateTransfer(curveIndex);
+    invalidateColorTransformationCache();
 }
 
 bool KisMultiChannelFilterConfiguration::getProperty(const QString& name, QVariant& value) const

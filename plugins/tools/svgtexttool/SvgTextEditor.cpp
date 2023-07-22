@@ -319,6 +319,18 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
             toolbarList.append(act);
         }
     }
+
+    {
+        // Make the text color action a simple drop-down button and not the
+        // split button/drop-down combo.
+        QAction *const color = actionCollection()->action("svg_format_textcolor");
+        Q_FOREACH(KisToolBar *const toolBar, toolBars()) {
+            if (QToolButton *const btn = qobject_cast<QToolButton *>(toolBar->widgetForAction(color))) {
+                btn->setPopupMode(QToolButton::InstantPopup);
+            }
+        }
+    }
+
     plugActionList("toolbarlist", toolbarList);
     connect(m_textEditorWidget.textTab, SIGNAL(currentChanged(int)), this, SLOT(switchTextEditorTab()));
     switchTextEditorTab();

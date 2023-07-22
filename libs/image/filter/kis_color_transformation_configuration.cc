@@ -17,7 +17,14 @@ struct Q_DECL_HIDDEN KisColorTransformationConfiguration::Private {
 
     ~Private()
     {
+        destroyCache();
+    }
+
+    void destroyCache()
+    {
+        QMutexLocker locker(&mutex);
         qDeleteAll(colorTransformation);
+        colorTransformation.clear();
     }
 
     // XXX: Threadlocal storage!!!
@@ -47,15 +54,31 @@ KisFilterConfigurationSP KisColorTransformationConfiguration::clone() const
     return new KisColorTransformationConfiguration(*this);
 }
 
+/**
+ * Invalidate the cache by default when setProperty is called. This forces
+ * regenerating the color transforms also when a property of this object
+ * changes, not only when the object is copied
+ */
+void KisColorTransformationConfiguration::setProperty(const QString &name, const QVariant &value)
+{
+    KisFilterConfiguration::setProperty(name, value);
+    invalidateColorTransformationCache();
+}
+
 KoColorTransformation* KisColorTransformationConfiguration::colorTransformation(const KoColorSpace *cs, const KisColorTransformationFilter *filter) const
 {
     QMutexLocker locker(&d->mutex);
     KoColorTransformation *transformation = d->colorTransformation.value(QThread::currentThread(), 0);
     if (!transformation) {
-        KisFilterConfigurationSP config(const_cast<KisColorTransformationConfiguration*>(this));
+        KisFilterConfigurationSP config(clone().data());
         transformation = filter->createTransformation(cs, config);
         d->colorTransformation.insert(QThread::currentThread(), transformation);
     }
     locker.unlock();
     return transformation;
+}
+
+void KisColorTransformationConfiguration::invalidateColorTransformationCache()
+{
+    d->destroyCache();
 }

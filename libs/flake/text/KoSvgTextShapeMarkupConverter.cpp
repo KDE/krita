@@ -817,6 +817,7 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
 
     qreal currBlockAbsoluteLineOffset = 0.0;
     int prevBlockCursorPosition = -1;
+    Qt::Alignment prevBlockAlignment = Qt::AlignLeft;
     qreal prevLineDescent = 0.0;
     qreal prevLineAscent = 0.0;
     // work around uninitialized memory warning, therefore, no boost::none
@@ -843,7 +844,7 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
                 const QXmlStreamAttributes elementAttributes = svgReader.attributes();
                 parseTextAttributes(elementAttributes, newCharFormat, newBlockFormat);
 
-                // mnemonic for a newline is (dy != 0 && x == 0)
+                // mnemonic for a newline is (dy != 0 && (x == prevX || alignmentChanged))
 
                 // work around uninitialized memory warning, therefore, no
                 // boost::none
@@ -858,12 +859,21 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
                     blockAbsoluteXOffset = fixToQtDpi(KisDomUtils::toDouble(xString));
                 }
 
+                // Get current text alignment: If current block has alignment,
+                // use it. Otherwise, try to inherit from parent block.
+                Qt::Alignment thisBlockAlignment = Qt::AlignLeft;
+                if (newBlockFormat.hasProperty(QTextBlockFormat::BlockAlignment)) {
+                    thisBlockAlignment = newBlockFormat.alignment();
+                } else if (!formatStack.empty()) {
+                    thisBlockAlignment = formatStack.top().blockFormat.alignment();
+                }
 
-                if (previousBlockAbsoluteXOffset &&
-                    blockAbsoluteXOffset &&
-                    qFuzzyCompare(*previousBlockAbsoluteXOffset, *blockAbsoluteXOffset) &&
-                    svgReader.name() != "text" &&
-                    elementAttributes.hasAttribute("dy")) {
+                const auto isSameXOffset = [&]() {
+                    return previousBlockAbsoluteXOffset && blockAbsoluteXOffset
+                        && qFuzzyCompare(*previousBlockAbsoluteXOffset, *blockAbsoluteXOffset);
+                };
+                if ((isSameXOffset() || thisBlockAlignment != prevBlockAlignment) && svgReader.name() != "text"
+                    && elementAttributes.hasAttribute("dy")) {
 
                     QString dyString = elementAttributes.value("dy").toString();
                     if (dyString.contains("pt")) {
@@ -879,6 +889,7 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
                 if (elementAttributes.hasAttribute("x")) {
                     previousBlockAbsoluteXOffset = blockAbsoluteXOffset;
                 }
+                prevBlockAlignment = thisBlockAlignment;
             }
 
             //hack
@@ -920,7 +931,11 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
                 KIS_SAFE_ASSERT_RECOVER(!formatStack.isEmpty()) { break; }
 
                 cursor.setCharFormat(formatStack.top().charFormat);
-                cursor.setBlockFormat(formatStack.top().blockFormat);
+                // For legacy wrapping mode, don't reset block format here
+                // because this will break the block formats of the current
+                // (last) block. The latest block format will be applied when
+                // creating a new block.
+                //cursor.setBlockFormat(formatStack.top().blockFormat);
             }
             break;
         }

@@ -526,13 +526,15 @@ void SvgTextEditor::checkFormat()
     }
 
     {
-        QDoubleSpinBox *spnLineHeight = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget());
+        QDoubleSpinBox *spnLineHeight = qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget()->findChild<QDoubleSpinBox *>();
         KisSignalsBlocker b(spnLineHeight);
 
         if (blockFormat.lineHeightType() == QTextBlockFormat::SingleHeight) {
-            spnLineHeight->setValue(100.0);
+            spnLineHeight->setValue(-1.0);
+            spnLineHeight->setSingleStep(101.0);
         } else if(blockFormat.lineHeightType() == QTextBlockFormat::ProportionalHeight) {
             spnLineHeight->setValue(double(blockFormat.lineHeight()));
+            spnLineHeight->setSingleStep(10.0);
         }
     }
 
@@ -921,9 +923,16 @@ void SvgTextEditor::decreaseTextSize()
 
 void SvgTextEditor::setLineHeight(double lineHeightPercentage)
 {
+    QDoubleSpinBox *spnLineHeight = qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget()->findChild<QDoubleSpinBox *>();
     QTextCursor oldCursor = setTextSelection();
     QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
-    format.setLineHeight(lineHeightPercentage, QTextBlockFormat::ProportionalHeight);
+    if (lineHeightPercentage < 0.0) {
+        format.setLineHeight(1.0, QTextBlockFormat::SingleHeight);
+        spnLineHeight->setSingleStep(101.0);
+    } else {
+        format.setLineHeight(lineHeightPercentage, QTextBlockFormat::ProportionalHeight);
+        spnLineHeight->setSingleStep(10.0);
+    }
     m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
     m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
 }
@@ -1475,13 +1484,35 @@ void SvgTextEditor::createActions()
     actionRegistry->propertizeAction("svg_sample_color", colorSamplerAction);
 
     QWidgetAction *lineHeight = new QWidgetAction(this);
+    QWidget *lineHeightWdg = new QWidget();
+    QHBoxLayout *lineHeightLayout = new QHBoxLayout(lineHeightWdg);
+    lineHeightLayout->setSpacing(0);
     QDoubleSpinBox *spnLineHeight = new QDoubleSpinBox();
     spnLineHeight->setToolTip(i18n("Line height"));
-    spnLineHeight->setRange(0.0, 1000.0);
+    spnLineHeight->setRange(-1.0, 1000.0);
     spnLineHeight->setSingleStep(10.0);
     spnLineHeight->setSuffix(i18n("%"));
+    spnLineHeight->setSpecialValueText(i18nc("Default line height for text", "Normal"));
     connect(spnLineHeight, SIGNAL(valueChanged(double)), SLOT(setLineHeight(double)));
-    lineHeight->setDefaultWidget(spnLineHeight);
+    lineHeightLayout->addWidget(spnLineHeight);
+    {
+        QToolButton *btn = new QToolButton();
+        btn->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+        btn->setArrowType(Qt::DownArrow);
+        btn->setPopupMode(QToolButton::InstantPopup);
+        QMenu *lineHeightMenu = new QMenu(this);
+        QAction *actionNormal = lineHeightMenu->addAction(i18nc("Default line height for text", "Normal"));
+        connect(actionNormal, &QAction::triggered, spnLineHeight, [spnLineHeight]() {
+            spnLineHeight->setValue(-1.0);
+        });
+        QAction *action100 = lineHeightMenu->addAction(i18nc("line height for text", "100%"));
+        connect(action100, &QAction::triggered, spnLineHeight, [spnLineHeight]() {
+            spnLineHeight->setValue(100.0);
+        });
+        btn->setMenu(lineHeightMenu);
+        lineHeightLayout->addWidget(btn);
+    }
+    lineHeight->setDefaultWidget(lineHeightWdg);
     actionCollection()->addAction("svg_line_height", lineHeight);
     m_richTextActions << lineHeight;
     actionRegistry->propertizeAction("svg_line_height", lineHeight);

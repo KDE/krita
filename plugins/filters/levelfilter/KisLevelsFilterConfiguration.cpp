@@ -13,7 +13,7 @@
 #include "KisLevelsFilterConfiguration.h"
 
 KisLevelsFilterConfiguration::KisLevelsFilterConfiguration(int channelCount, qint32 version, KisResourcesInterfaceSP resourcesInterface)
-    : KisFilterConfiguration(defaultName(), version, resourcesInterface)
+    : KisColorTransformationConfiguration(defaultName(), version, resourcesInterface)
 {
     setChannelCount(channelCount);
     setDefaults();
@@ -25,7 +25,7 @@ KisLevelsFilterConfiguration::KisLevelsFilterConfiguration(int channelCount, Kis
 {}
 
 KisLevelsFilterConfiguration::KisLevelsFilterConfiguration(const KisLevelsFilterConfiguration &rhs)
-    : KisFilterConfiguration(rhs)
+    : KisColorTransformationConfiguration(rhs)
     , m_transfers(rhs.m_transfers)
     , m_lightnessTransfer(rhs.m_lightnessTransfer)
 {}
@@ -144,7 +144,7 @@ void KisLevelsFilterConfiguration::setLightessLevelsCurveFromLegacyValues()
     const double inputGamma = getDouble("gammavalue", 1.0);
     const double outputBlackPoint = static_cast<double>(getInt("outblackvalue", 0)) / 255.0;
     const double outputWhitePoint = static_cast<double>(getInt("outwhitevalue", 255)) / 255.0;
-    KisFilterConfiguration::setProperty(
+    KisColorTransformationConfiguration::setProperty(
         "lightness",
         KisLevelsCurve(inputBlackPoint, inputWhitePoint, inputGamma, outputBlackPoint, outputWhitePoint).toString()
     );
@@ -163,11 +163,11 @@ void KisLevelsFilterConfiguration::setLightessLevelsCurveFromLegacyValues()
 void KisLevelsFilterConfiguration::setLegacyValuesFromLightnessLevelsCurve()
 {
     KisLevelsCurve lightnessLevelsCurve_ = lightnessLevelsCurve();
-    KisFilterConfiguration::setProperty("blackvalue", static_cast<int>(qRound(lightnessLevelsCurve_.inputBlackPoint() * 255.0)));
-    KisFilterConfiguration::setProperty("whitevalue", static_cast<int>(qRound(lightnessLevelsCurve_.inputWhitePoint() * 255.0)));
-    KisFilterConfiguration::setProperty("gammavalue", lightnessLevelsCurve_.inputGamma());
-    KisFilterConfiguration::setProperty("outblackvalue", static_cast<int>(qRound(lightnessLevelsCurve_.outputBlackPoint() * 255.0)));
-    KisFilterConfiguration::setProperty("outwhitevalue", static_cast<int>(qRound(lightnessLevelsCurve_.outputWhitePoint() * 255.0)));
+    KisColorTransformationConfiguration::setProperty("blackvalue", static_cast<int>(qRound(lightnessLevelsCurve_.inputBlackPoint() * 255.0)));
+    KisColorTransformationConfiguration::setProperty("whitevalue", static_cast<int>(qRound(lightnessLevelsCurve_.inputWhitePoint() * 255.0)));
+    KisColorTransformationConfiguration::setProperty("gammavalue", lightnessLevelsCurve_.inputGamma());
+    KisColorTransformationConfiguration::setProperty("outblackvalue", static_cast<int>(qRound(lightnessLevelsCurve_.outputBlackPoint() * 255.0)));
+    KisColorTransformationConfiguration::setProperty("outwhitevalue", static_cast<int>(qRound(lightnessLevelsCurve_.outputWhitePoint() * 255.0)));
 }
 
 /**
@@ -181,7 +181,7 @@ void KisLevelsFilterConfiguration::setLegacyValuesFromLightnessLevelsCurve()
  */
 void KisLevelsFilterConfiguration::setProperty(const QString &name, const QVariant &value)
 {
-    KisFilterConfiguration::setProperty(name, value);
+    KisColorTransformationConfiguration::setProperty(name, value);
 
     if (name == "lightness") {
         setLegacyValuesFromLightnessLevelsCurve();

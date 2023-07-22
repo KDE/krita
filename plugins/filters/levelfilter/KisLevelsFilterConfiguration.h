@@ -9,11 +9,11 @@
 #ifndef KIS_LEVELS_FILTER_CONFIGURATION_H
 #define KIS_LEVELS_FILTER_CONFIGURATION_H
 
-#include <filter/kis_filter_configuration.h>
+#include <filter/kis_color_transformation_configuration.h>
 #include <kis_paint_device.h>
 #include <KisLevelsCurve.h>
 
-class KisLevelsFilterConfiguration : public KisFilterConfiguration
+class KisLevelsFilterConfiguration : public KisColorTransformationConfiguration
 {
 public:
     KisLevelsFilterConfiguration(int channelCount, qint32 version, KisResourcesInterfaceSP resourcesInterface);

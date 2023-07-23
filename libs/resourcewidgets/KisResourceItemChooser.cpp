@@ -286,6 +286,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     showViewModeBtn(false);
     showTaggingBar(false);
     showImportExportBtns(true);
+    applyVerticalLayout();
 }
 
 KisResourceItemChooser::~KisResourceItemChooser()
@@ -688,7 +689,6 @@ void KisResourceItemChooser::resizeEvent(QResizeEvent *event)
 void KisResourceItemChooser::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
-    changeLayoutBasedOnSize();
     updateView();
 }
 
@@ -737,9 +737,8 @@ void KisResourceItemChooser::applyVerticalLayout()
 
 void KisResourceItemChooser::changeLayoutBasedOnSize()
 {
-    // Default Vertical Layout
     if (d->isResponsive == false) {
-        applyVerticalLayout();
+        return;
     }
     // Responsive Layout
     else {

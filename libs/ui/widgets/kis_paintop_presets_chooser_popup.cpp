@@ -151,3 +151,8 @@ void KisPaintOpPresetsChooserPopup::updateViewSettings()
 {
    m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
 }
+
+void KisPaintOpPresetsChooserPopup::setResponsiveness(bool value)
+{
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setResponsiveness(value);
+}

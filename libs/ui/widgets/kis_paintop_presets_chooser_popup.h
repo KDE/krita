@@ -23,6 +23,7 @@ public:
     ~KisPaintOpPresetsChooserPopup() override;
     
     void updateViewSettings();
+    void setResponsiveness(bool value);
 public Q_SLOTS:
     void canvasResourceChanged(KisPaintOpPresetSP  preset);
     void slotThemeChanged();

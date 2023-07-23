@@ -191,7 +191,6 @@ KisPresetChooser::KisPresetChooser(QWidget *parent)
     m_delegate = new KisPresetDelegate(this);
     m_chooser->setItemDelegate(m_delegate);
     m_chooser->setSynced(true);
-    m_chooser->setResponsiveness(true);
     m_chooser->showImportExportBtns(false);
     layout->addWidget(m_chooser);
 

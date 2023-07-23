@@ -219,4 +219,5 @@ void KisResourceItemListView::resizeEvent(QResizeEvent *event)
         setItemSize(m_d->requestedItemSize);
     }
     }
+    scrollTo(currentIndex(), QAbstractItemView::PositionAtCenter);
 }

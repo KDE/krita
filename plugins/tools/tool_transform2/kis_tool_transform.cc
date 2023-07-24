@@ -936,6 +936,9 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
 
     m_strokeId = image()->startStroke(strategy);
 
+    if (!m_currentlyUsingOverlayPreviewStyle) {
+        m_asyncUpdateHelper.initUpdateStreamLowLevel(image().data(), m_strokeId);
+    }
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty(true));
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty(false));
@@ -992,7 +995,7 @@ void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties t
     m_transaction.setCurrentConfigLocation(&m_currentArgs);
 
     if (!m_currentlyUsingOverlayPreviewStyle) {
-        m_asyncUpdateHelper.startUpdateStream(image().data(), m_strokeId);
+        m_asyncUpdateHelper.startUpdateStreamLowLevel();
     }
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty(true));

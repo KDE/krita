@@ -20,11 +20,24 @@ KisAsynchronousStrokeUpdateHelper::~KisAsynchronousStrokeUpdateHelper()
 
 }
 
-void KisAsynchronousStrokeUpdateHelper::startUpdateStream(KisStrokesFacade *strokesFacade, KisStrokeId strokeId)
+void KisAsynchronousStrokeUpdateHelper::initUpdateStreamLowLevel(KisStrokesFacade *strokesFacade, KisStrokeId strokeId)
 {
     m_strokesFacade = strokesFacade;
     m_strokeId = strokeId;
+}
+
+void KisAsynchronousStrokeUpdateHelper::startUpdateStreamLowLevel()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_strokesFacade);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_strokeId);
+
     m_updateThresholdTimer.start();
+}
+
+void KisAsynchronousStrokeUpdateHelper::startUpdateStream(KisStrokesFacade *strokesFacade, KisStrokeId strokeId)
+{
+    initUpdateStreamLowLevel(strokesFacade, strokeId);
+    startUpdateStreamLowLevel();
 }
 
 void KisAsynchronousStrokeUpdateHelper::endUpdateStream()

@@ -83,6 +83,8 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
 
     m_blendingOptions = new BlendingOptions(this);
     wdgLayerStyles.stylesStack->addWidget(m_blendingOptions);
+    // currently unimplemented, hide for now
+    wdgLayerStyles.lstStyleSelector->item(1)->setHidden(true);
 
     m_dropShadow = new DropShadow(DropShadow::DropShadowMode, this);
     wdgLayerStyles.stylesStack->addWidget(m_dropShadow);
@@ -135,8 +137,8 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     connect(m_stroke, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
     KisConfig cfg(true);
-    wdgLayerStyles.stylesStack->setCurrentIndex(cfg.readEntry("KisDlgLayerStyle::current", 1));
-    wdgLayerStyles.lstStyleSelector->setCurrentRow(cfg.readEntry("KisDlgLayerStyle::current", 1));
+    wdgLayerStyles.stylesStack->setCurrentIndex(cfg.readEntry("KisDlgLayerStyle::current", 0));
+    wdgLayerStyles.lstStyleSelector->setCurrentRow(cfg.readEntry("KisDlgLayerStyle::current", 0));
 
     connect(wdgLayerStyles.lstStyleSelector,
             SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),

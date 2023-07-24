@@ -1026,22 +1026,14 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
         int propertyId = format.properties().keys().at(i);
 
         if (propertyId == QTextCharFormat::FontFamily) {
-            c.append("font-family").append(":")
-                    .append(format.properties()[propertyId].toString());
-        }
-        if (propertyId == QTextCharFormat::FontPointSize ||
-            propertyId == QTextCharFormat::FontPixelSize) {
-
-            // in Krita we unify point size and pixel size of the font
-
-            c.append("font-size").append(":")
-                    .append(format.properties()[propertyId].toString());
+            const QString fontFamily = format.properties()[propertyId].toString();
+            c.append("font-family").append(":").append(fontFamily);
             style.append(c);
             c.clear();
 
             QVector<int> lengths;
             const std::vector<FT_FaceUP> faces =
-                KoFontRegistry::instance()->facesForCSSValues({format.fontFamily()}, lengths, {});
+                KoFontRegistry::instance()->facesForCSSValues({fontFamily}, lengths, {});
             if (!faces.empty()) {
                 const FT_FaceUP &face = faces[0];
                 const TT_OS2 *const os2 = static_cast<TT_OS2 *>(FT_Get_Sfnt_Table(face.data(), ft_sfnt_os2));
@@ -1050,6 +1042,14 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
                     c.append("font-size-adjust").append(":").append(QString::number(xRatio));
                 }
             }
+        }
+        if (propertyId == QTextCharFormat::FontPointSize ||
+            propertyId == QTextCharFormat::FontPixelSize) {
+
+            // in Krita we unify point size and pixel size of the font
+
+            c.append("font-size").append(":")
+                    .append(format.properties()[propertyId].toString());
         }
         if (propertyId == QTextCharFormat::FontWeight) {
             // Convert from QFont::Weight range to SVG range,

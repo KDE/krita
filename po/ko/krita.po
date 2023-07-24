@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-03-01 00:29+0100\n"
+"PO-Revision-Date: 2023-07-23 21:04+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -13955,7 +13955,7 @@ msgstr "끝내기(&Q)"
 #, kde-format
 msgctxt "action"
 msgid "Quit application"
-msgstr "프로그램 끝내기"
+msgstr "앱 끝내기"
 
 #. i18n: context: iconText @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:252
@@ -15935,7 +15935,7 @@ msgstr "리소스 관리"
 #, kde-format
 msgctxt "action"
 msgid "Switch Application &Language..."
-msgstr "프로그램 언어 변경(&L)..."
+msgstr "앱 언어 변경(&L)..."
 
 #. i18n: context: toolTip @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
@@ -15945,7 +15945,7 @@ msgstr "프로그램 언어 변경(&L)..."
 #, kde-format
 msgctxt "action"
 msgid "Switch Application Language"
-msgstr "프로그램 언어 변경"
+msgstr "앱 언어 변경"
 
 #. i18n: context: text @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1689
@@ -20314,7 +20314,7 @@ msgstr "사전 설치됨"
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #, kde-format
 msgid "Thumbnail"
-msgstr "축소판"
+msgstr "섬네일"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDelete)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllAssistantsButton)
@@ -21057,8 +21057,8 @@ msgid ""
 "('Windows Builds'), unpack it and then provide the path to the extracted "
 "ffmpeg file."
 msgstr ""
-"이 파일은 소스 코드 압축 파일입니다. 프로그램 압축 파일('Windows Builds')을 "
-"다운로드한 후 압축을 푼 다음 압축을 푼 ffmpeg 파일의 위치를 지정하십시오."
+"이 파일은 소스 코드 압축 파일입니다. 앱 압축 파일('Windows Builds')을 다운로"
+"드한 후 압축을 푼 다음 압축을 푼 ffmpeg 파일의 위치를 지정하십시오."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:548
 #, kde-format
@@ -24133,7 +24133,7 @@ msgstr "매트릭스 위젯"
 #: libs/ui/forms/KisDetailsPaneBase.ui:156
 #, kde-format
 msgid "Always use this template at application start up"
-msgstr "프로그램을 시작할 때 항상 이 서식 사용"
+msgstr "앱을 시작할 때 항상 이 서식 사용"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
 #: libs/ui/forms/KisDetailsPaneBase.ui:159
@@ -24669,7 +24669,7 @@ msgstr "새로운 이미지에 기본 색 모델 사용"
 #: libs/ui/forms/wdggeneralsettings.ui:1312
 #, kde-format
 msgid "When Pasting Into Krita From Other Applications"
-msgstr "다른 프로그램에서 Krita로 붙여넣을 때"
+msgstr "다른 앱에서 Krita로 붙여넣을 때"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioPasteWeb)
 #: libs/ui/forms/wdgcolorsettings.ui:75
@@ -24681,7 +24681,7 @@ msgstr "sRGB로 가정(웹에서 이미지를 볼 수 있어야 하는 경우)"
 #: libs/ui/forms/wdgcolorsettings.ui:82
 #, kde-format
 msgid "Assume &monitor profile (like you see it in other applications)"
-msgstr "모니터 프로필로 가정(다른 프로그램에서 볼 경우)(&M)"
+msgstr "모니터 프로필로 가정(다른 앱에서 볼 경우)(&M)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioPasteAsk)
 #: libs/ui/forms/wdgcolorsettings.ui:89
@@ -26757,7 +26757,7 @@ msgstr "이름:"
 #: libs/ui/forms/wdgnewwindowlayout.ui:40
 #, kde-format
 msgid "Primary workspace follows focus"
-msgstr "초점 변경 시 주 작업 공간 변경"
+msgstr "포커스 변경 시 주 작업 공간 변경"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkActiveInAllWindows)
 #: libs/ui/forms/wdgnewwindowlayout.ui:47
@@ -27639,13 +27639,13 @@ msgstr "이 영역에 칠하기"
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:112
 #, kde-format
 msgid "Load Existing Thumbnail"
-msgstr "기존 축소판 불러오기"
+msgstr "기존 섬네일 불러오기"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadScratchPadThumbnailButton)
 #: libs/ui/forms/wdgsavebrushpreset.ui:150
 #, kde-format
 msgid "Load Scratchpad Thumbnail"
-msgstr "스크래치패드 축소판 불러오기"
+msgstr "스크래치패드 섬네일 불러오기"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadImageIntoThumbnailButton)
 #: libs/ui/forms/wdgsavebrushpreset.ui:157
@@ -27667,7 +27667,7 @@ msgstr "아이콘 라이브러리에서 불러오기"
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:133
 #, kde-format
 msgid "Clear Thumbnail"
-msgstr "축소판 지우기"
+msgstr "섬네일 지우기"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, stopLeftLabel)
@@ -34175,7 +34175,7 @@ msgstr "디스플레이"
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:168
 #, kde-format
 msgid "Thumbnails"
-msgstr "축소판"
+msgstr "섬네일"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:55
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:136
@@ -35604,7 +35604,7 @@ msgstr "끝내기(&Q)"
 #: libs/widgetutils/config/kstandardaction_p.h:39
 #, kde-format
 msgid "Quit application"
-msgstr "프로그램 끝내기"
+msgstr "앱 끝내기"
 
 #: libs/widgetutils/config/kstandardaction_p.h:41
 #, kde-format
@@ -35946,7 +35946,7 @@ msgstr "버그 보고(&R)..."
 #: libs/widgetutils/config/kstandardaction_p.h:103
 #, kde-format
 msgid "Switch Application &Language..."
-msgstr "프로그램 언어 변경(&L)..."
+msgstr "앱 언어 변경(&L)..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:104
 #, kde-format
@@ -36102,11 +36102,11 @@ msgid ""
 msgstr ""
 "<html><b>KDE</b>는 <a href=\"%1\">자유 소프트웨어</a>를 개발하려고 모인 소프"
 "트웨어 개발자, 예술가, 집필가, 번역가 및 기타 인원의 모임입니다. KDE 커뮤니티"
-"에서는 KDE 프레임워크, 작업 공간 및 프로그램의 일원으로 다양한 프로그램을 개"
-"발했습니다.<br /><br />어떠한 단일 집단도 KDE에 누가 들어가는가, KDE에서 무엇"
-"을 개발하는가를 통제하지 않습니다. KDE에는 이 글을 읽는 여러분과 같은 누구나 "
-"참여하고 기여할 수 있습니다.<br /><br /> <a href=\"%2\">%2</a>을 방문하셔서 "
-"KDE 커뮤니티와 소프트웨어에 대해 알아 보십시오.</html>"
+"에서는 KDE 프레임워크, 작업 공간 및 앱의 일원으로 다양한 앱을 개발했습니다."
+"<br /><br />어떠한 단일 집단도 KDE에 누가 들어가는가, KDE에서 무엇을 개발하는"
+"가를 통제하지 않습니다. KDE에는 이 글을 읽는 여러분과 같은 누구나 참여하고 기"
+"여할 수 있습니다.<br /><br /> <a href=\"%2\">%2</a>을 방문하셔서 KDE 커뮤니티"
+"와 소프트웨어에 대해 알아 보십시오.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:69
 #, kde-format
@@ -36203,13 +36203,13 @@ msgid ""
 "The application for which you wish to submit a bug report - if incorrect, "
 "please use the Report Bug menu item of the correct application"
 msgstr ""
-"버그 보고서와 관련된 프로그램입니다. 프로그램 이름을 정확히 기입하지 못할 경"
-"우 문제가 되는 프로그램의 버그 보내기 메뉴 항목을 사용하여 주십시오"
+"버그 보고서와 관련된 앱입니다. 앱 이름을 정확히 기입하지 못할 경우 문제가 되"
+"는 앱의 버그 보내기 메뉴 항목을 사용하여 주십시오"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:118
 #, kde-format
 msgid "Application: "
-msgstr "프로그램: "
+msgstr "앱: "
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:132
 #, kde-format
@@ -36217,8 +36217,8 @@ msgid ""
 "The version of this application - please make sure that no newer version is "
 "available before sending a bug report"
 msgstr ""
-"이 프로그램의 버전 번호입니다. 이 버그 보고서를 보내기 전에 새 버전의 프로그"
-"램이 없는지 확인하여 주십시오."
+"이 앱의 버전 번호입니다. 이 버그 보고서를 보내기 전에 새 버전의 앱이 없는지 "
+"확인하여 주십시오."
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:133
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
@@ -36328,8 +36328,8 @@ msgid ""
 "Do you really want to reset all toolbars of this application to their "
 "default? The changes will be applied immediately."
 msgstr ""
-"이 프로그램의 도구 모음 설정을 기본값으로 초기화하시겠습니까? 변경 사항은 즉"
-"시 적용됩니다."
+"이 앱의 도구 모음 설정을 기본값으로 초기화하시겠습니까? 변경 사항은 즉시 적용"
+"됩니다."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:668
 #, kde-format
@@ -36598,7 +36598,7 @@ msgstr ""
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:536
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
-msgstr "표준 프로그램 단축키와 충돌"
+msgstr "표준 앱 단축키와 충돌"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:537
 #, kde-format
@@ -36607,8 +36607,7 @@ msgid ""
 "some applications use.\n"
 "Do you really want to use it as a global shortcut as well?"
 msgstr ""
-"'%1' 키 조합은 많은 프로그램이 사용하는 \"%2\" 표준 동작에 할당되어 있습니"
-"다.\n"
+"'%1' 키 조합은 많은 앱이 사용하는 \"%2\" 표준 동작에 할당되어 있습니다.\n"
 "그래도 전역 단축키로 사용하시겠습니까?"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:585
@@ -36713,12 +36712,12 @@ msgstr "단축키 가져오기"
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:136
 #, kde-format
 msgid "Switch Application Language"
-msgstr "프로그램 언어 변경"
+msgstr "앱 언어 변경"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:140
 #, kde-format
 msgid "Please choose the language which should be used for this application:"
-msgstr "이 프로그램에서 사용할 언어를 선택하십시오:"
+msgstr "이 앱에서 사용할 언어를 선택하십시오:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
 #, kde-format
@@ -36738,16 +36737,14 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window:"
 msgid "Application Language Changed"
-msgstr "프로그램 언어 변경됨"
+msgstr "앱 언어 변경됨"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:264
 #, kde-format
 msgid ""
 "The language for this application has been changed. The change will take "
 "effect the next time the application is started."
-msgstr ""
-"이 프로그램의 언어가 변경되었습니다. 다음 번에 프로그램을 시작할 때 적용됩니"
-"다."
+msgstr "이 앱의 언어가 변경되었습니다. 다음 번에 앱을 시작할 때 적용됩니다."
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
 #, kde-format
@@ -36764,7 +36761,7 @@ msgstr "주 언어:"
 msgid ""
 "This is the main application language which will be used first, before any "
 "other languages."
-msgstr "프로그램에서 다른 언어보다 이 언어를 먼저 사용합니다."
+msgstr "앱에서 다른 언어보다 이 언어를 먼저 사용합니다."
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:414
 #, kde-format
@@ -39043,7 +39040,7 @@ msgstr "전역 선택을 <b>레이어</b> 도커에서 일반적인 선택 마�
 #: plugins/dockers/layerdocker/LayerBox.cpp:315
 #, kde-format
 msgid "Thumbnail Size"
-msgstr "축소판 크기"
+msgstr "섬네일 크기"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:343
 #, fuzzy, kde-format
@@ -40525,7 +40522,7 @@ msgstr "모두"
 #, kde-format
 msgctxt "list view fields visibility"
 msgid "Thumbnails Only"
-msgstr "축소판만"
+msgstr "섬네일만"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnCommentsView)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:84
@@ -46270,7 +46267,7 @@ msgstr "사전 설정 이름:"
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:126
 #, kde-format
 msgid "&Render Script to Thumbnail"
-msgstr "스크립트를 축소판으로 렌더(&R)"
+msgstr "스크립트를 섬네일으로 렌더(&R)"
 
 #: plugins/generators/simplexnoise/simplexnoisegenerator.cpp:38
 #, kde-format
@@ -46483,7 +46480,7 @@ msgid ""
 "otherwise other applications might not be able to read your file correctly."
 msgstr ""
 "이 옵션은 모든 레이어를 병합합니다. 이 옵션을 선택하는 것이 좋습니다. 그렇지 "
-"않으면 다른 프로그램에서 제대로 파일을 불러오지 못할 수 있습니다."
+"않으면 다른 앱에서 제대로 파일을 불러오지 못할 수 있습니다."
 
 #. i18n: ectx: property (text), widget (QCheckBox, flatten)
 #. i18n: ectx: property (text), widget (QCheckBox, chkFlatten)
@@ -48577,8 +48574,8 @@ msgstr ""
 "<span style=\" font-style:italic;\">sRGB</span> 정보를 저장하는 데 <span "
 "style=\" font-weight:600;\">두 가지</span>옵션이 있습니다: 태그 또는 명시적 "
 "프로필. 웹사이트에 사용하는 경우 이 옵션을<span style=\" font-style:italic;"
-"\">해제</span>해야 합니다. 다른 프로그램과의 호환성을 유지하려면 이 옵션을"
-"<span style=\" font-style:italic;\">사용</span>해야 합니다.</p></body></html>"
+"\">해제</span>해야 합니다. 다른 앱과의 호환성을 유지하려면 이 옵션을<span "
+"style=\" font-style:italic;\">사용</span>해야 합니다.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSRGB)
 #: plugins/impex/png/kis_wdg_options_png.ui:197

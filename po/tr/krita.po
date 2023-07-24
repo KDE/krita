@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-07-12 11:47+0300\n"
+"PO-Revision-Date: 2023-07-22 12:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -41067,7 +41067,7 @@ msgstr "Yatay"
 #, kde-format
 msgctxt "EXIF: misc - scene capture type (Photos of people)"
 msgid "Portrait"
-msgstr "Dikey"
+msgstr "Portre"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSceneCaptureType)
 #: plugins/extensions/metadataeditor/editors/exif.ui:833
@@ -48804,7 +48804,7 @@ msgstr "Öntanımlı"
 #, kde-format
 msgctxt "WebP presets"
 msgid "Portrait"
-msgstr "Dikey"
+msgstr "Portre"
 
 #: plugins/impex/webp/dlg_webp_export.cpp:35
 #, kde-format
@@ -48834,7 +48834,7 @@ msgstr "Metin"
 #, kde-format
 msgctxt "WebP filters"
 msgid "Simple"
-msgstr "Yalın"
+msgstr "Basit"
 
 #: plugins/impex/webp/dlg_webp_export.cpp:41
 #, kde-format
@@ -49044,7 +49044,7 @@ msgid ""
 "0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or "
 "Auto Adjust Filter is enabled."
 msgstr ""
-"0 = Yalın, 1 = Güçlü. Yalnızca Süzgeç Gücü 0'dan büyükse veya Otomatik "
+"0 = Basit, 1 = Güçlü. Yalnızca Süzgeç Gücü 0'dan büyükse veya Otomatik "
 "Ayarlama Süzgeci etkinleştirilmişse kullanılır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterType)
@@ -49135,14 +49135,14 @@ msgstr ""
 #: plugins/impex/webp/dlg_webp_export.ui:532
 #, kde-format
 msgid "Show Compressed"
-msgstr "Sıkıştırılmışı Göster"
+msgstr "Sıkıştırılmış Göster"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreprocessing)
 #: plugins/impex/webp/dlg_webp_export.ui:549
 #, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Preprocessing Filter"
-msgstr "Süzgeç Önden İşleniyor"
+msgstr "Önden İşleme Süzgeci"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPartitions)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, partitions)
@@ -49249,7 +49249,7 @@ msgstr "Bellek Kullanımını Azalt"
 #, kde-format
 msgid "Near lossless encoding: 0 = max loss, 100 = off. Default is 100."
 msgstr ""
-"Neredeyse kayıpsız kodlama: 0 = en çok kayıp, 100 = kapalı. Öntanımlı "
+"Kayıpsıza yakın kodlama: 0 = en çok kayıp, 100 = kapalı. Öntanımlı "
 "100'dür."
 
 #. i18n: ectx: property (text), widget (QLabel, lblNearLossless)
@@ -59731,3 +59731,4 @@ msgstr "Başvuru Görseller Aracı"
 #~ msgctxt "Region selection method in enclose and fill tool"
 #~ msgid "All, excluding transparency"
 #~ msgstr "Saydamlık dışında tümü"
+

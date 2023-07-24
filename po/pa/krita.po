@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-22 00:47+0000\n"
+"POT-Creation-Date: 2023-07-24 07:29+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -17488,28 +17488,28 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3726
+#: libs/flake/text/KoSvgTextShape.cpp:3744
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3728
-#: libs/flake/text/KoSvgTextShape.cpp:3736
+#: libs/flake/text/KoSvgTextShape.cpp:3746
+#: libs/flake/text/KoSvgTextShape.cpp:3754
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgid "SVG Text Shape"
 msgstr "ਸ਼ਕਲ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3734
+#: libs/flake/text/KoSvgTextShape.cpp:3752
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgid "SVG Text"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3748
-#: libs/flake/text/KoSvgTextShape.cpp:3763
+#: libs/flake/text/KoSvgTextShape.cpp:3766
+#: libs/flake/text/KoSvgTextShape.cpp:3781
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17838,7 +17838,7 @@ msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1432
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1444
 #, kde-format
 msgid "Size"
 msgstr "ਸਾਈਜ਼"
@@ -21001,7 +21001,7 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:374
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:381
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:413
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:352
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:131
@@ -21009,7 +21009,7 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1136
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, fuzzy, kde-format
 #| msgid "Configure"
@@ -24267,7 +24267,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ ਬਦਲੋ"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1469
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1481
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -27603,7 +27603,7 @@ msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1448
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1460
 #, kde-format
 msgid "Background Color"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
@@ -47208,7 +47208,7 @@ msgstr "ਡੌਕੂਮੈਂਟ"
 msgid "HSV/HSL Adjustment"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:352
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
@@ -62562,81 +62562,81 @@ msgstr "ਪੈਰਾਮੀਟਰ ਬਦਲੋ"
 msgid "Text Tool"
 msgstr "ਸਥਿਤੀ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:372
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:384
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Conversion failed"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:589
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:601
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgid "Find Text"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:592
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:635
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:604
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:647
 #, kde-format
 msgid "Find:"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:631
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:643
 #, kde-format
 msgid "Find and Replace all"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:637
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgid "Replace:"
 msgstr "ਤਬਦੀਲ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1136
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1276
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1282
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1288
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1294
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgid "Rich text"
 msgstr "ਟੂਲ ਚੋਣਾਂ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1279
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1283
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1291
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgid "SVG Source"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1423
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1435
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgid "Font"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1440
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgid "Text Color"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1455
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1467
 #, fuzzy, kde-format
 #| msgid "D&elete"
 msgid "Sample a Color"
 msgstr "ਹਟਾਓ(&e)"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1466
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
 #, fuzzy, kde-format
 #| msgid "Line Weight"
 msgid "Line height"
 msgstr "ਰੇਖਾ ਭਾਰ"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1490
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, fuzzy, kde-format
 #| msgid "Line Weight"

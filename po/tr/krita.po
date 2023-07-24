@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-22 00:47+0000\n"
-"PO-Revision-Date: 2023-07-14 00:30+0300\n"
+"POT-Creation-Date: 2023-07-24 07:29+0000\n"
+"PO-Revision-Date: 2023-07-22 12:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16232,25 +16232,25 @@ msgstr ""
 "metin nesnesi Krita 5 biçimine dönüştürülür ve Krita 4.x ile uyumlu olmaktan "
 "çıkar."
 
-#: libs/flake/text/KoSvgTextShape.cpp:3726
+#: libs/flake/text/KoSvgTextShape.cpp:3744
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3728
-#: libs/flake/text/KoSvgTextShape.cpp:3736
+#: libs/flake/text/KoSvgTextShape.cpp:3746
+#: libs/flake/text/KoSvgTextShape.cpp:3754
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG Metin Şekli"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3734
+#: libs/flake/text/KoSvgTextShape.cpp:3752
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Metin"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3748
-#: libs/flake/text/KoSvgTextShape.cpp:3763
+#: libs/flake/text/KoSvgTextShape.cpp:3766
+#: libs/flake/text/KoSvgTextShape.cpp:3781
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16560,7 +16560,7 @@ msgstr "öntanımlı"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1432
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1444
 #, kde-format
 msgid "Size"
 msgstr "Boyut"
@@ -19409,7 +19409,7 @@ msgstr "Yerel Özkaynaklar"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:374
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:381
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:413
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:352
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:131
@@ -19417,7 +19417,7 @@ msgstr "Yerel Özkaynaklar"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1136
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22497,7 +22497,7 @@ msgstr "Katman Özellikleri"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1469
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1481
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -25717,7 +25717,7 @@ msgstr "Ön Plan Rengi"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1448
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1460
 #, kde-format
 msgid "Background Color"
 msgstr "Arka Plan Rengi"
@@ -38684,7 +38684,7 @@ msgid ""
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
 "Hiçbiri: Bir şey gösterme.\n"
-"Yalın: Değiştirilmiş matlıkları veya harmanlama kiplerini göster.\n"
+"Basit Değiştirilmiş matlıkları veya harmanlama kiplerini göster.\n"
 "Dengeli: Değiştirilmişlerse hem matlık hem harmanlama kipini göster.\n"
 "Ayrıntılı: Değiştirilmemişse bile hem matlık hem harmanlama kipini göster."
 
@@ -42149,7 +42149,7 @@ msgstr "Yatay"
 #, kde-format
 msgctxt "EXIF: misc - scene capture type (Photos of people)"
 msgid "Portrait"
-msgstr "Dikey"
+msgstr "Portre"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSceneCaptureType)
 #: plugins/extensions/metadataeditor/editors/exif.ui:833
@@ -44008,7 +44008,7 @@ msgstr "&HSV Ayarlamaları..."
 msgid "HSV/HSL Adjustment"
 msgstr "HSV/HSL Ayarlaması"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:352
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
@@ -50048,7 +50048,7 @@ msgstr "Öntanımlı"
 #, kde-format
 msgctxt "WebP presets"
 msgid "Portrait"
-msgstr "Dikey"
+msgstr "Portre"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:35
 #, kde-format
@@ -50078,7 +50078,7 @@ msgstr "Metin"
 #, kde-format
 msgctxt "WebP filters"
 msgid "Simple"
-msgstr "Yalın"
+msgstr "Basit"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:41
 #, kde-format
@@ -50269,7 +50269,7 @@ msgid ""
 "0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or "
 "Auto Adjust Filter is enabled."
 msgstr ""
-"0 = Yalın, 1 = Güçlü. Yalnızca Süzgeç Gücü 0'dan büyükse veya Otomatik "
+"0 = Basit, 1 = Güçlü. Yalnızca Süzgeç Gücü 0'dan büyükse veya Otomatik "
 "Ayarlama Süzgeci etkinleştirilmişse kullanılır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterType)
@@ -50378,14 +50378,14 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:517
 #, kde-format
 msgid "Show Compressed"
-msgstr "Sıkıştırılmışı Göster"
+msgstr "Sıkıştırılmış Göster"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreprocessing)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:534
 #, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Preprocessing Filter"
-msgstr "Süzgeç Önden İşleniyor"
+msgstr "Önden İşleme Süzgeci"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPartitions)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, partitions)
@@ -50492,8 +50492,7 @@ msgstr "Bellek Kullanımını Azalt"
 #, kde-format
 msgid "Near lossless encoding: 0 = max loss, 100 = off. Default is 100."
 msgstr ""
-"Neredeyse kayıpsız kodlama: 0 = en çok kayıp, 100 = kapalı. Öntanımlı "
-"100'dür."
+"Kayıpsıza yakın kodlama: 0 = en çok kayıp, 100 = kapalı. Öntanımlı 100'dür."
 
 #. i18n: ectx: property (text), widget (QLabel, lblNearLossless)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:674
@@ -58184,72 +58183,72 @@ msgstr "SVG Metni Değiştir Aracı"
 msgid "Text Tool"
 msgstr "Metin Aracı"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:372
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:384
 #, kde-format
 msgid "Conversion failed"
 msgstr "Dönüşüm başarısız"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:589
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:601
 #, kde-format
 msgid "Find Text"
 msgstr "Metin Bul"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:592
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:635
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:604
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:647
 #, kde-format
 msgid "Find:"
 msgstr "Bul:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:631
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:643
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Tümünü Bul ve Değiştir"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:637
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
 #, kde-format
 msgid "Replace:"
 msgstr "Değiştir:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1136
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Metin üzerinde değişiklik yaptınız. Değişikliklerden vazgeçilsin mi?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1276
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1282
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1288
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1294
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Zengin Metin"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1279
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1283
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1291
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG Kaynağı"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1423
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1435
 #, kde-format
 msgid "Font"
 msgstr "Yazıtipi"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1440
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
 #, kde-format
 msgid "Text Color"
 msgstr "Metin Rengi"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1455
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1467
 #, kde-format
 msgid "Sample a Color"
 msgstr "Renk Örnekle"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1466
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
 #, kde-format
 msgid "Line height"
 msgstr "Çizgi yüksekliği"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1490
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"

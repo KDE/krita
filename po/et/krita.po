@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-22 00:47+0000\n"
+"POT-Creation-Date: 2023-07-24 07:29+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -17337,26 +17337,26 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3726
+#: libs/flake/text/KoSvgTextShape.cpp:3744
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3728
-#: libs/flake/text/KoSvgTextShape.cpp:3736
+#: libs/flake/text/KoSvgTextShape.cpp:3746
+#: libs/flake/text/KoSvgTextShape.cpp:3754
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG tekstikujund"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3734
+#: libs/flake/text/KoSvgTextShape.cpp:3752
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3748
-#: libs/flake/text/KoSvgTextShape.cpp:3763
+#: libs/flake/text/KoSvgTextShape.cpp:3766
+#: libs/flake/text/KoSvgTextShape.cpp:3781
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17664,7 +17664,7 @@ msgstr "vaikimisi"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1432
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1444
 #, kde-format
 msgid "Size"
 msgstr "Suurus"
@@ -20702,7 +20702,7 @@ msgstr "Kohalikud ressurssid"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:374
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:381
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:413
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:352
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:131
@@ -20710,7 +20710,7 @@ msgstr "Kohalikud ressurssid"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1136
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -23910,7 +23910,7 @@ msgstr "Kihi omadused"
 #: plugins/tools/basictools/kis_tool_fill.cc:538
 #: plugins/tools/basictools/kis_tool_fill.cc:553
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1469
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1481
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
@@ -27206,7 +27206,7 @@ msgstr "Esiplaani värv"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1448
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1460
 #, kde-format
 msgid "Background Color"
 msgstr "Taustavärv"
@@ -46198,7 +46198,7 @@ msgstr "&HSV kohandamine..."
 msgid "HSV/HSL Adjustment"
 msgstr "HSV/HSL kohandamine"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:352
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
@@ -60665,73 +60665,73 @@ msgstr "SvgTextTooli muutmine"
 msgid "Text Tool"
 msgstr "Tekstitööriist"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:372
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:384
 #, kde-format
 msgid "Conversion failed"
 msgstr "Teisendamine nurjus"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:589
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:601
 #, kde-format
 msgid "Find Text"
 msgstr "Teksti otsimine"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:592
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:635
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:604
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:647
 #, kde-format
 msgid "Find:"
 msgstr "Otsitav:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:631
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:643
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Otsimine ja kõigi asendamine"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:637
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:649
 #, kde-format
 msgid "Replace:"
 msgstr "Asendus:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1136
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1148
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Oled teksti muutnud. Kas hüljata muutused?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1276
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1282
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1288
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1294
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Vormindatud tekst"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1279
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1283
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1291
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1295
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG allikas"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1423
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1435
 #, kde-format
 msgid "Font"
 msgstr "Font"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1440
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1452
 #, kde-format
 msgid "Text Color"
 msgstr "Teksti värv"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1455
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1467
 #, fuzzy, kde-format
 #| msgid "Select a Color"
 msgid "Sample a Color"
 msgstr "Värvi valimine"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1466
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
 #, kde-format
 msgid "Line height"
 msgstr "Rea kõrgus"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1478
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1490
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:206
 #, kde-format
 msgid "Letter Spacing"

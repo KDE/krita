@@ -1046,7 +1046,7 @@ void KoSvgTextShape::relayout() const
             QPointF topLeft((currentGlyph.ftface->glyph->bitmap_left * 64),
                             (currentGlyph.ftface->glyph->bitmap_top * 64));
             topLeft = glyphTf.map(topLeft);
-            QPointF bottomRight(topLeft.x() + (charResult.image.height() * 64), topLeft.y() - (charResult.image.height() * 64));
+            QPointF bottomRight(topLeft.x() + (charResult.image.width() * 64), topLeft.y() - (charResult.image.height() * 64));
             bbox = QRectF(topLeft, bottomRight);
             if (isHorizontal) {
                 bbox.setWidth(ftTF.inverted().map(charResult.advance).x());

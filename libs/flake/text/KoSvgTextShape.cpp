@@ -579,6 +579,13 @@ void KoSvgTextShape::relayout() const
         // outline.
 
         loadFlags |= FT_LOAD_NO_HINTING;
+
+        if (d->textRendering == GeometricPrecision) {
+            // Disable embedded bitmaps because they _do not_ follow geometric
+            // precision, but is focused on legibility.
+            // This does not affect bitmap-only fonts.
+            loadFlags |= FT_LOAD_NO_BITMAP;
+        }
     } else {
         // When using hinting, sometimes the bounding box does not encompass the
         // drawn glyphs properly.

@@ -150,10 +150,10 @@ bool SvgUtil::parseViewBox(const QDomElement &e,
 
     QStringList points = viewBoxStr.replace(',', ' ').simplified().split(' ');
     if (points.count() == 4) {
-        viewBoxRect.setX(SvgUtil::fromUserSpace(points[0].toFloat()));
-        viewBoxRect.setY(SvgUtil::fromUserSpace(points[1].toFloat()));
-        viewBoxRect.setWidth(SvgUtil::fromUserSpace(points[2].toFloat()));
-        viewBoxRect.setHeight(SvgUtil::fromUserSpace(points[3].toFloat()));
+        viewBoxRect.setX(SvgUtil::fromUserSpace(points[0].toDouble()));
+        viewBoxRect.setY(SvgUtil::fromUserSpace(points[1].toDouble()));
+        viewBoxRect.setWidth(SvgUtil::fromUserSpace(points[2].toDouble()));
+        viewBoxRect.setHeight(SvgUtil::fromUserSpace(points[3].toDouble()));
 
         result = true;
     } else {
@@ -162,11 +162,19 @@ bool SvgUtil::parseViewBox(const QDomElement &e,
 
     if (!result) return false;
 
+    qreal scaleX = 1;
+    if (!qFuzzyCompare(elementBounds.width(), viewBoxRect.width())) {
+        scaleX = elementBounds.width() / viewBoxRect.width();
+    }
+    qreal scaleY = 1;
+    if (!qFuzzyCompare(elementBounds.height(), viewBoxRect.height())) {
+        scaleY = elementBounds.height() / viewBoxRect.height();
+    }
+
     QTransform viewBoxTransform =
         QTransform::fromTranslate(-viewBoxRect.x(), -viewBoxRect.y()) *
-        QTransform::fromScale(elementBounds.width() / viewBoxRect.width(),
-                                  elementBounds.height() / viewBoxRect.height()) *
-            QTransform::fromTranslate(elementBounds.x(), elementBounds.y());
+        QTransform::fromScale(scaleX, scaleY) *
+        QTransform::fromTranslate(elementBounds.x(), elementBounds.y());
 
     const QString aspectString = e.attribute("preserveAspectRatio");
     // give initial value if value not defined

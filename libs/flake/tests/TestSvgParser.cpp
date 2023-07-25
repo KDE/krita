@@ -176,6 +176,35 @@ void TestSvgParser::testScalingViewport()
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(8,18));
 }
 
+void TestSvgParser::testScalingViewportNoScale()
+{
+    const QString data =
+            "<svg width=\"10.1px\" height=\"20.2px\" viewBox=\"60 70 10.1 20.2\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<rect id=\"testRect\" x=\"64\" y=\"74\" width=\"12\" height=\"32\""
+            "    fill=\"none\" stroke=\"none\" stroke-width=\"10\"/>"
+
+            "</svg>";
+
+    SvgTester t (data);
+    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.run();
+
+    KoShape *shape = t.findShape("testRect");
+    QVERIFY(shape);
+
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromTranslate(4, 4));
+    // Verify that the scale factors are exactly 1.0
+    QVERIFY(shape->absoluteTransformation().m11() == 1.0);
+    QVERIFY(shape->absoluteTransformation().m22() == 1.0);
+    QCOMPARE(shape->outlineRect(), QRectF(0,0,12,32));
+    QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(4,4));
+    QCOMPARE(shape->absolutePosition(KoFlake::TopRight), QPointF(16,4));
+    QCOMPARE(shape->absolutePosition(KoFlake::BottomLeft), QPointF(4,36));
+    QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(16,36));
+}
+
 void TestSvgParser::testScalingViewportKeepMeet1()
 {
     const QString data =

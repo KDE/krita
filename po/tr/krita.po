@@ -49249,8 +49249,7 @@ msgstr "Bellek Kullanımını Azalt"
 #, kde-format
 msgid "Near lossless encoding: 0 = max loss, 100 = off. Default is 100."
 msgstr ""
-"Kayıpsıza yakın kodlama: 0 = en çok kayıp, 100 = kapalı. Öntanımlı "
-"100'dür."
+"Kayıpsıza yakın kodlama: 0 = en çok kayıp, 100 = kapalı. Öntanımlı 100'dür."
 
 #. i18n: ectx: property (text), widget (QLabel, lblNearLossless)
 #: plugins/impex/webp/dlg_webp_export.ui:689
@@ -59731,4 +59730,3 @@ msgstr "Başvuru Görseller Aracı"
 #~ msgctxt "Region selection method in enclose and fill tool"
 #~ msgid "All, excluding transparency"
 #~ msgstr "Saydamlık dışında tümü"
-

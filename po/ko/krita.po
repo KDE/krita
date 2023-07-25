@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-21 02:49+0000\n"
-"PO-Revision-Date: 2023-07-23 21:04+0200\n"
+"PO-Revision-Date: 2023-07-24 21:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -30460,7 +30460,7 @@ msgstr ""
 #: libs/ui/KisDocument.cpp:1841
 #, kde-format
 msgid "File %1 does not exist."
-msgstr "파일 %1이(가) 없습니다."
+msgstr "%1 파일이 없습니다."
 
 #: libs/ui/KisDocument.cpp:1870
 #, kde-format

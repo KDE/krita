@@ -10,6 +10,8 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QProgressDialog>
 
 #include <klocalizedstring.h>
@@ -103,6 +105,31 @@ bool KisRemoteFileFetcher::fetchFile(const QUrl &remote, QIODevice *io)
     io->close();
 
     return true;
+}
+
+QByteArray KisRemoteFileFetcher::fetchFile(const QUrl &remote)
+{
+    QByteArray ba;
+    QEventLoop loop;
+
+    QNetworkAccessManager manager(nullptr);
+    connect(&manager, &QNetworkAccessManager::finished, &loop, &QEventLoop::quit);
+
+    QNetworkRequest *request = new QNetworkRequest(remote);
+    request->setRawHeader("User-Agent", QString("Krita-%1").arg(qApp->applicationVersion()).toUtf8());
+
+    QNetworkReply *reply = manager.get(*request);
+
+    loop.exec();
+
+    if (reply->error() != QNetworkReply::NoError) {
+        ba = reply->readAll();
+    }
+
+    reply->setParent(nullptr);
+
+    return ba;
+
 }
 
 void KisRemoteFileFetcher::error(QNetworkReply::NetworkError error)

@@ -14,12 +14,18 @@
 #include <QImage>
 #include <QMessageBox>
 #include <QTemporaryFile>
+#include <QByteArray>
+#include <QBuffer>
+#include <QNetworkAccessManager>
+#include <QEventLoop>
+#include <QDomDocument>
 
 #include "KisRemoteFileFetcher.h"
 #include "kactioncollection.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include <KisMimeDatabase.h>
+#include <KisApplication.h>
 
 #include "KConfigGroup"
 #include "KSharedConfig"
@@ -113,6 +119,8 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 {
     setupUi(this);
 
+    setupBanner();
+
     // URLs that go to web browser...
     devBuildIcon->setIcon(KisIconUtils::loadIcon("warning"));
     devBuildLabel->setVisible(false);
@@ -128,9 +136,9 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     recentDocumentsListView->installEventFilter(this);
     recentDocumentsListView->setViewMode(QListView::IconMode);
 
-//    recentItemDelegate.reset(new RecentItemDelegate(this));
-//    recentItemDelegate->setItemHeight(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH);
-//    recentDocumentsListView->setItemDelegate(recentItemDelegate.data());
+//    m_recentItemDelegate.reset(new RecentItemDelegate(this));
+//    m_recentItemDelegate->setItemHeight(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH);
+//    recentDocumentsListView->setItemDelegate(m_recentItemDelegate.data());
     recentDocumentsListView->setIconSize(QSize(KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH, KisRecentDocumentsModelWrapper::ICON_SIZE_LENGTH));
     recentDocumentsListView->setVerticalScrollMode(QListView::ScrollPerPixel);
     recentDocumentsListView->verticalScrollBar()->setSingleStep(50);
@@ -205,7 +213,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
     // configure the News area
     KisConfig cfg(true);
-    m_checkUpdates = cfg.readEntry<bool>("FetchNews", false);
+    m_networkIsAllowed = cfg.readEntry<bool>("FetchNews", false);
 
 
 #ifdef ENABLE_UPDATERS
@@ -243,7 +251,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 		connect(m_versionUpdater.data(), SIGNAL(sigUpdateCheckStateChange(KisUpdaterStatus)),
 				this, SLOT(slotSetUpdateStatus(const KisUpdaterStatus&)));
 
-		if (m_checkUpdates) { // only if the user wants them
+        if (m_networkIsAllowed) { // only if the user wants them
 			m_versionUpdater->checkForUpdate();
 		}
 	}
@@ -251,9 +259,9 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #endif // ENABLE_UPDATERS
 
 
-    showNewsAction->setChecked(m_checkUpdates);
-    newsWidget->setVisible(m_checkUpdates);
-    versionNotificationLabel->setEnabled(m_checkUpdates);
+    showNewsAction->setChecked(m_networkIsAllowed);
+    newsWidget->setVisible(m_networkIsAllowed);
+    versionNotificationLabel->setEnabled(m_networkIsAllowed);
 
     // Drop area..
     setAcceptDrops(true);
@@ -368,20 +376,21 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
     kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")));
 
-    lblBanner->setPixmap(QPixmap(QStringLiteral(":/default_banner.png")));
+    lblBanner->setPixmap(QPixmap::fromImage(m_bannerImage));
     connect(lblBanner, SIGNAL(clicked()), this, SLOT(slotBannerClicked()));
+    lblBanner->setVisible(m_showBanner);
 
     // HTML links seem to be a bit more stubborn with theme changes... setting inline styles to help with color change
     userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita-artists.org\">")
                                .append(i18n("User Community")).append("</a>"));
 
-    gettingStartedLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org/en/user_manual/getting_started.html\">")
+    gettingStartedLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org/user_manual/getting_started.html\">")
                                 .append(i18n("Getting Started")).append("</a>"));
 
     manualLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org\">")
                         .append(i18n("User Manual")).append("</a>"));
 
-    supportKritaLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita.org/en/support-us/donations?" + analyticsString + "donations" + "\">")
+    supportKritaLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita.org/support-us/donations?" + analyticsString + "donations" + "\">")
                               .append(i18n("Support Krita")).append("</a>"));
 
     kritaWebsiteLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://www.krita.org?" + analyticsString + "marketing-site" + "\">")
@@ -618,7 +627,7 @@ void KisWelcomePageWidget::showDevVersionHighlight()
     if (isDevelopmentBuild()) {
         QString devBuildLabelText = QString("<a style=\"color: " +
                                            blendedColor.name() +
-                                           " \" href=\"https://docs.krita.org/en/untranslatable_pages/triaging_bugs.html?"
+                                           " \" href=\"https://docs.krita.org/untranslatable_pages/triaging_bugs.html?"
                                            + analyticsString + "dev-build" + "\">")
                                   .append(i18n("DEV BUILD")).append("</a>");
 
@@ -676,7 +685,7 @@ void KisWelcomePageWidget::slotOpenFileClicked()
 
 void KisWelcomePageWidget::slotBannerClicked()
 {
-    QDesktopServices::openUrl(QUrl("https://krita.org/en/support-us/donations"));
+    QDesktopServices::openUrl(QUrl(m_bannerUrl));
 }
 
 void KisWelcomePageWidget::slotRecentFilesModelIsUpToDate()
@@ -699,9 +708,9 @@ void KisWelcomePageWidget::slotToggleUpdateChecks(bool state)
 		return;
 	}
 
-	m_checkUpdates = state;
+    m_networkIsAllowed = state;
 
-    if (m_checkUpdates) {
+    if (m_networkIsAllowed) {
         m_versionUpdater->checkForUpdate();
     }
 
@@ -713,7 +722,7 @@ void KisWelcomePageWidget::slotRunVersionUpdate()
 		return;
 	}
 
-	if (m_checkUpdates) {
+    if (m_networkIsAllowed) {
 		m_versionUpdater->doUpdate();
 	}
 }
@@ -736,7 +745,7 @@ void KisWelcomePageWidget::updateVersionUpdaterFrame()
     bnVersionUpdate->setVisible(false);
     bnErrorDetails->setVisible(false);
 
-    if (!m_checkUpdates || m_versionUpdater.isNull()) {
+    if (!m_networkIsAllowed || m_versionUpdater.isNull()) {
         return;
     }
 
@@ -808,4 +817,55 @@ QFont KisWelcomePageWidget::largerFont()
     QFont larger = font();
     larger.setPointSizeF(larger.pointSizeF() * 1.1f);
     return larger;
+}
+
+void KisWelcomePageWidget::setupBanner()
+{
+    m_bannerUrl = "https://krita.org/support-us/donations";
+    m_bannerImage = QImage(QStringLiteral(":/default_banner.png"));
+    KisApplication *kisApp = static_cast<KisApplication*>(qApp);
+    m_showBanner = !kisApp->isStoreApplication();
+
+//    if (m_networkIsAllowed) {
+//        QByteArray ba = KisRemoteFileFetcher::fetchFile("https://download.kde.org/stable/krita/banner/banner.xml");
+//        QImage overrideBanner;
+//        QString overrideUrl;
+//        bool overrideStore;
+
+//        if (!ba.isEmpty()) {
+//            QDomDocument doc();
+//            if (doc.setContent(ba)) {
+//                QDomNode n = doc.documentElement().firstChild();
+//                while (!n) {
+//                    QDomElement e = n.toElement();
+//                    if (!e.isNull()) {
+//                        if (e.tagName() == "image") {
+//                            QString bannerName = e.text();
+//                            if (!bannerName.isEmpty()) {
+//                                // XXX: get the locale so we can get localized banners
+//                                ba = KisRemoteFileFetcher::fetchFile(QString("https://download.kde.org/stable/krita/banner/").append(bannerName));
+//                                if (!ba.isEmpty()) {
+//                                    QBuffer buf(&ba);
+//                                    overrideBanner = QImage::load(&buf, QFileInfo(bannerName).suffix());
+//                                }
+//                            }
+//                        }
+//                        else if (e.tagName() == "start") {
+
+//                        }
+//                        else if (e.tagName() = "end") {
+
+//                        }
+//                        else if (e.tagName() == "override_store") {
+
+//                        }
+//                    }
+//                    else if (e.tagName() == "url") {
+
+//                        }
+//                    n = n.nextSibling();
+//                }
+//            }
+//        }
+//    }
 }

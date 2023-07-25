@@ -200,6 +200,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotMoveShapes(const QPointF &diff);
     void slotTransformShapes(const QTransform &transform);
+    void slotImageResolutionChanged();
 
 private:
     QList<KoShape*> shapesToBeTransformed();

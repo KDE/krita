@@ -385,31 +385,19 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
     }
 }
 
-void KoSvgTextShape::paintComponent(QPainter &painter) const
+void KoSvgTextShape::setResolution(qreal xRes, qreal yRes)
 {
-    // if (d->textRendering == OptimizeLegibility) {
-    /**
-     * HACK ALERT:
-     *
-     * For hinting and bitmaps, we need to get the hinting metrics from
-     * freetype, but those need the DPI. We can't get the DPI normally, however,
-     * neither rotate and shear change the length of a line, and it may not be
-     * that bad if freetype receives a scaled value for the DPI.
-     */
-    int xRes = qRound(painter.transform().map(QLineF(QPointF(), QPointF(72, 0))).length());
-    int yRes = qRound(painter.transform().map(QLineF(QPointF(), QPointF(0, 72))).length());
-    if (xRes != d->xRes || yRes != d->yRes) {
-        d->xRes = xRes;
-        d->yRes = yRes;
+    int roundedX = qRound(xRes);
+    int roundedY = qRound(yRes);
+    if (roundedX != d->xRes || roundedY != d->yRes) {
+        d->xRes = roundedX;
+        d->yRes = roundedY;
         relayout();
     }
-    /*} else {
-        if (72 != d->xRes || 72 != d->yRes) {
-            d->xRes = 72;
-            d->yRes = 72;
-            relayout();
-        }
-    }*/
+}
+
+void KoSvgTextShape::paintComponent(QPainter &painter) const
+{
     painter.save();
     if (d->textRendering == OptimizeSpeed) {
         painter.setRenderHint(QPainter::Antialiasing, false);

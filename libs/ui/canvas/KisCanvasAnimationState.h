@@ -66,7 +66,6 @@ public:
 
 public Q_SLOTS:
     void showFrame(int frame, bool finalize = false);
-    void handleAnimationStateChanged(bool isAnimated);
 
 Q_SIGNALS:
     void sigPlaybackStateChanged(PlaybackState state);

@@ -132,15 +132,6 @@ KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
         layout->addWidget(btnOnionSkinsMenu);
 
         {   // Audio menu..
-            btnAudioMenu = new QToolButton(this);
-            btnAudioMenu->setIcon(KisIconUtils::loadIcon("audio-none"));
-            btnAudioMenu->setToolTip(i18n("Animation audio menu"));
-            btnAudioMenu->setIconSize(QSize(22, 22));
-            btnAudioMenu->setAutoRaise(true);
-
-            bool supportsAudio = KisPart::instance()->playbackEngine() && KisPart::instance()->playbackEngine()->supportsAudio();
-            btnAudioMenu->setEnabled(supportsAudio);
-
             QMenu *audioMenu = new QMenu(this);
 
             strImportAudio = QString(i18nc("@item:inmenu Load audio file into Krita from disk.", "Import Audio..."));
@@ -171,9 +162,15 @@ KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
             audioMenu->addAction(volumeAction);
             audioMenu->addAction(muteAudioAction);
 
+            btnAudioMenu = new QToolButton(this);
+            btnAudioMenu->setIcon(KisIconUtils::loadIcon("audio-none"));
+            btnAudioMenu->setToolTip(i18n("Animation audio menu"));
+            btnAudioMenu->setIconSize(QSize(22, 22));
+            btnAudioMenu->setAutoRaise(true);
+
             btnAudioMenu->setPopupMode(QToolButton::InstantPopup);
             btnAudioMenu->setMenu(audioMenu);
-            btnAudioMenu->setEnabled(false); // To be enabled on canvas load...
+            btnAudioMenu->setEnabled(false); // To be enabled on set canvas...
 
             layout->addWidget(btnAudioMenu);
         }

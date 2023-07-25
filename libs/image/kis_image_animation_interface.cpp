@@ -67,8 +67,6 @@ struct KisImageAnimationInterface::Private
     QString exportSequenceBaseName;
     int exportInitialFrameNumber;
 
-    bool isAnimated = false;
-
     KisSwitchTimeStrokeStrategy::SharedTokenWSP switchToken;
 
     QAtomicInt backgroundFrameGenerationBlocked;
@@ -123,15 +121,15 @@ KisImageAnimationInterface::~KisImageAnimationInterface()
 
 bool KisImageAnimationInterface::hasAnimation() const
 {
-    return m_d->isAnimated;
-}
+    bool hasAnimation = false;
 
-void KisImageAnimationInterface::setAnimated(bool value)
-{
-    if (m_d->isAnimated != value) {
-        m_d->isAnimated = value;
-        emit sigAnimationStateChanged(m_d->isAnimated);
-    }
+    KisLayerUtils::recursiveApplyNodes(
+        m_d->image->root(),
+        [&hasAnimation](KisNodeSP node) {
+            hasAnimation |= node->isAnimated();
+        });
+
+    return hasAnimation;
 }
 
 int KisImageAnimationInterface::currentTime() const

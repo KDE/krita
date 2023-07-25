@@ -301,11 +301,6 @@ void KisCanvasAnimationState::showFrame(int frame, bool finalize)
     m_d->displayProxy->displayFrame(frame, finalize);
 }
 
-void KisCanvasAnimationState::handleAnimationStateChanged(bool isAnimated)
-{
-    return;
-}
-
 void KisCanvasAnimationState::updateDropFramesMode()
 {
     KisConfig cfg(true);

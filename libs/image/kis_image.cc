@@ -2402,10 +2402,6 @@ void KisImage::keyframeChannelHasBeenAdded(KisNode *node, KisKeyframeChannel *ch
 {
     Q_UNUSED(node);
 
-    if (!m_d->animationInterface->hasAnimation()) {
-        m_d->animationInterface->setAnimated(true);
-    }
-
     channel->connect(channel, SIGNAL(sigAddedKeyframe(const KisKeyframeChannel*, int)), m_d->animationInterface, SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)), Qt::UniqueConnection);
     channel->connect(channel, SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)), m_d->animationInterface, SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int)), Qt::UniqueConnection);
 }

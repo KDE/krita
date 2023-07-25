@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-24 07:29+0000\n"
+"POT-Creation-Date: 2023-07-25 00:43+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -16721,7 +16721,7 @@ msgstr "توزيع الأشكال"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1238
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1230
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "تجميع الأشكال"
@@ -16822,7 +16822,7 @@ msgid "Unclip Shapes"
 msgstr "توحيد الأشكال"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1266
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1258
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "فك تجميع الأشكال"
@@ -33334,7 +33334,7 @@ msgstr "قناع تحديد"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1834
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1826
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
 #, kde-format
 msgid "Transform"
@@ -58792,66 +58792,66 @@ msgstr ""
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr "تعمل هذه الأداة مع الطّبقات المتّجهيّة فقط. قد تريد استخدام أداة التّحريك."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1292
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "تدوير الكائن 90° مع عقارب السّاعة"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1296
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "تدوير الكائن 90° عكس عقارب السّاعة"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "تدوير الكائن 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "عكس الكائن أفقيًّا"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1316
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "عكس الكائن رأسيًّا"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1320
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "تصفير تحويلات الكائن"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1394
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1386
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "توحيد الأشكال"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1408
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1400
 #, fuzzy
 #| msgid "Intersection"
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "التّقاطعات"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1418
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1410
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "طرح الأشكال"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1463
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1455
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "تقسيم الأشكال"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1831
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1823
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Clear Vector Selection"
 msgid "Vector Shape Actions"
 msgstr "مسح التّحديد المتّجهيّ"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1850
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1842
 #, fuzzy, kde-format
 #| msgid "Loading Paint Operations..."
 msgid "Logical Operations"
@@ -61112,14 +61112,14 @@ msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:983
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1022
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1009
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

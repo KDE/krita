@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-24 07:29+0000\n"
-"PO-Revision-Date: 2023-07-22 12:26+0300\n"
+"POT-Creation-Date: 2023-07-25 00:43+0000\n"
+"PO-Revision-Date: 2023-07-24 19:02+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16065,7 +16065,7 @@ msgstr "Şekilleri dağıt"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1238
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1230
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Şekilleri grupla"
@@ -16154,7 +16154,7 @@ msgid "Unclip Shapes"
 msgstr "Şekilleri Kırpmayı Geri Al"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1266
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1258
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Şekillerin gruplamasını kaldır"
@@ -17093,7 +17093,7 @@ msgstr "Görsel Renk Uzayı Dönüştür"
 #: libs/image/kis_image.cc:1328
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
-msgstr "Yansıma Renk Uzayını Dönüştür"
+msgstr "Projeksiyon Renk Uzayını Dönüştür"
 
 #: libs/image/kis_image.cc:1386
 msgctxt "(qtundo-format)"
@@ -17269,7 +17269,7 @@ msgstr "Kopyası"
 #: libs/image/kis_layer_utils.cpp:1675
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
-msgstr "Gösterim rengini değiştir"
+msgstr "Projeksiyon rengini değiştir"
 
 #: libs/image/kis_layer_utils.cpp:1835
 msgctxt "(qtundo-format)"
@@ -29571,7 +29571,7 @@ msgid ""
 msgstr ""
 "Görsel boyutu:\t %1\n"
 "  - katman:\t %2\n"
-"  - gösterim:\t %3\n"
+"  - projeksiyonlar:\t %3\n"
 "  - anında önizleme:\t %4\n"
 
 #: libs/ui/kis_statusbar.cc:288
@@ -32307,7 +32307,7 @@ msgstr "Seçim Eylemleri"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1834
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1826
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
 #, kde-format
 msgid "Transform"
@@ -57305,62 +57305,62 @@ msgstr ""
 "Bu araç yalnızca vektör katmanlarında çalışır. Büyük olasılıkla taşıma "
 "aracını istiyorsunuz."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1292
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Nesneyi 90° Saat Yönünde Döndür"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1296
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Nesneyi 90° Saat Yönünün Tersine Döndür"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Nesneyi 180° Döndür"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Nesneyi Yatay Olarak Yansıt"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1316
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Nesneyi Dikey Olarak Yansıt"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1320
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Nesne Dönüşümlerini Sıfırla"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1394
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1386
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Şekilleri Birleştir"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1408
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1400
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Şekilleri Kesiştir"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1418
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1410
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Şekilleri Çıkar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1463
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1455
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Şekilleri Böl"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1831
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1823
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Vektör Şekli Eylemleri"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1850
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1842
 #, kde-format
 msgid "Logical Operations"
 msgstr "Mantıksal İşlemler"
@@ -59517,14 +59517,14 @@ msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Dönüşüm maskeleri düzenlenirken seçimler kullanılmaz "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:983
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1022
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Boş kayman dönüştürülemez "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1009
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

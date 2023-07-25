@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-24 07:29+0000\n"
+"POT-Creation-Date: 2023-07-25 00:43+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -16301,7 +16301,7 @@ msgstr "आकार वितरित करव"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1238
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1230
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
@@ -16407,7 +16407,7 @@ msgid "Unclip Shapes"
 msgstr "दीर्घवक्र आकार"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1266
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1258
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
@@ -32407,7 +32407,7 @@ msgstr "चयन डेकोरेसन"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1834
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1826
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
 #, fuzzy, kde-format
 msgid "Transform"
@@ -57355,76 +57355,76 @@ msgstr "फोटू के आकार ल अभी हाल के पर�
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1292
 #, fuzzy
 #| msgid "Rotate Image"
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "फोटू घुमाव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1296
 #, fuzzy
 #| msgid "Rotate Image"
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "फोटू घुमाव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "परत ल घुमाव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "मास्क ल आड़े मं प्रतिबिम्ब बनाव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1316
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "मास्क ल खड़े मं प्रतिबिम्ब बनाव"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1320
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "पर्सपेक्टिव ट्रांसफारम"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1394
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1386
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "दीर्घवक्र आकार"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1408
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1400
 #, fuzzy
 #| msgid "Intersect"
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "प्रतिक्छेदन"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1418
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1410
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "स्मीयरी ब्रस"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1463
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1455
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "सर्पिल आकार"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1831
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1823
 #, fuzzy, kde-format
 #| msgid "Vector Selection"
 msgid "Vector Shape Actions"
 msgstr "सदिस चयन"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1850
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1842
 #, fuzzy, kde-format
 msgid "Logical Operations"
 msgstr "बूलिए आपरेसन"
@@ -59614,14 +59614,14 @@ msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:983
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1022
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "रूपांतरन"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1009
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

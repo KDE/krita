@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-24 07:29+0000\n"
+"POT-Creation-Date: 2023-07-25 00:43+0000\n"
 "PO-Revision-Date: 2023-07-23 12:28\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16028,7 +16028,7 @@ msgstr "分布形状"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1238
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1230
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "编组形状"
@@ -16117,7 +16117,7 @@ msgid "Unclip Shapes"
 msgstr "取消剪贴形状"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1266
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1258
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "取消编组形状"
@@ -32049,7 +32049,7 @@ msgstr "选区操作"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1834
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1826
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
 #, kde-format
 msgid "Transform"
@@ -56601,62 +56601,62 @@ msgstr "点击并拖拽以调整选区大小。中键点击以设定高亮显示
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr "此工具只适用于矢量图层。要移动颜料图层，请使用移动工具。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1292
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "顺时针旋转对象90°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1296
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "逆时针旋转对象90°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1300
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "旋转对象180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1304
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "水平翻转对象"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1316
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1308
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "垂直翻转对象"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1320
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1312
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "重置对象变形"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1394
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1386
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "形状并集"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1408
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1400
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "形状交集"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1418
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1410
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "形状差集"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1463
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1455
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "形状拆分"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1831
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1823
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "矢量形状操作"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1850
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1842
 #, kde-format
 msgid "Logical Operations"
 msgstr "布尔逻辑操作"
@@ -58785,14 +58785,14 @@ msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "编辑变形蒙版时，选区不被使用"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:983
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1022
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "无法对空图层进行变形操作"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1009
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

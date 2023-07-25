@@ -807,6 +807,11 @@ void KisApplication::processPostponedSynchronizationEvents()
     }
 }
 
+bool KisApplication::isStoreApplication()
+{
+    return false;
+}
+
 void KisApplication::executeRemoteArguments(QByteArray message, KisMainWindow *mainWindow)
 {
     KisApplicationArguments args = KisApplicationArguments::deserialize(message);

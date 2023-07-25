@@ -104,6 +104,8 @@ public:
 
     QMap<QString, QString> shapeTypeSpecificStyles(SvgSavingContext &context) const override;
 
+    void setResolution(qreal xRes, qreal yRes) override;
+
 protected:
     /**
      * Show if the shape is a root of the text hierarchy. Always true for

@@ -1334,3 +1334,7 @@ QList<KoShape *> KoShape::linearizeSubtreeSorted(const QList<KoShape *> &shapes)
 
     return result;
 }
+
+void KoShape::setResolution(qreal /*xRes*/, qreal /*yRes*/)
+{
+}

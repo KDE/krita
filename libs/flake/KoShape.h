@@ -1020,6 +1020,15 @@ public:
      */
     void setHyperLink(const QString &hyperLink);
 
+    /**
+     * Update the image resolution in pixels per inch. Shapes should override
+     * this if they need to know the image resolution.
+     *
+     * @param xRes
+     * @param yRes
+     */
+    virtual void setResolution(qreal xRes, qreal yRes);
+
 public:
 
     struct KRITAFLAKE_EXPORT ShapeChangeListener {

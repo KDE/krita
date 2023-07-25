@@ -402,8 +402,7 @@ bool KisOpenGL::needsFenceWorkaround()
 bool KisOpenGL::needsPixmapCacheWorkaround()
 {
     initialize();
-    if( openGLCheckResult && openGLCheckResult->vendorString().toUpper().contains("NVIDIA") ) return true;
-    return KisOpenGL::hasOpenGLES();
+    return openGLCheckResult->vendorString().toUpper().contains("NVIDIA") || KisOpenGL::hasOpenGLES();
 }
 
 void KisOpenGL::testingInitializeDefaultSurfaceFormat()
@@ -1105,5 +1104,5 @@ void KisOpenGL::setDefaultSurfaceConfig(const KisOpenGL::RendererConfig &config)
 
 bool KisOpenGL::hasOpenGL()
 {
-    return openGLCheckResult && openGLCheckResult->isSupportedVersion();
+    return openGLCheckResult->isSupportedVersion();
 }

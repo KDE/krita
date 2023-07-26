@@ -211,7 +211,7 @@ void KisLayerThumbnailCache::clear()
 void KisLayerThumbnailCache::slotThumbnailGenerated(KisNodeSP node, int seqNo, int maxSize, const QImage &thumb)
 {
     if (node->image() != m_d->image) {
-        qWarning() << "KisLayerThumbnailCache::slotThumbnailGenerated: node does not belong to the attached image anymore!" << ppVar(node) << ppVar(m_d->image);
+        //qWarning() << "KisLayerThumbnailCache::slotThumbnailGenerated: node does not belong to the attached image anymore!" << ppVar(node) << ppVar(m_d->image);
         return;
     }
 

@@ -139,7 +139,12 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     m_eraseAction = m_viewManager->actionManager()->createAction("erase_action");
     m_eraseModeButton->setDefaultAction(m_eraseAction);
 
-    m_eraserPresetAction = m_viewManager->actionManager()->createAction("eraser_preset_action");
+    // toggling eraser preset
+    m_eraserTogglePresetAction = m_viewManager->actionManager()->createAction("eraser_preset_action");
+
+    // explicitly select eraser or brush preset
+    m_eraserSelectPresetAction = m_viewManager->actionManager()->createAction("eraser_select_preset_action");
+    m_brushSelectPresetAction = m_viewManager->actionManager()->createAction("brush_select_preset_action");
 
     m_reloadButton = new QToolButton(this);
     m_reloadButton->setFixedSize(buttonsize, buttonsize);
@@ -488,7 +493,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(KisNodeSP))    , SLOT(slotNodeChanged(KisNodeSP)));
     connect(m_cmbCompositeOp     , SIGNAL(currentIndexChanged(int))           , SLOT(slotSetCompositeMode(int)));
     connect(m_eraseAction          , SIGNAL(toggled(bool))                    , SLOT(slotToggleEraseMode(bool)));
-    connect(m_eraserPresetAction , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraserPreset(bool)));
+    connect(m_eraserTogglePresetAction , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraserPreset(bool)));
+
+    connect(m_eraserSelectPresetAction , SIGNAL(triggered())                    , SLOT(slotSelectEraserPreset()));
+    connect(m_brushSelectPresetAction , SIGNAL(triggered())                    , SLOT(slotSelectBrushPreset()));
+
     connect(alphaLockAction      , SIGNAL(toggled(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
 
     m_disablePressureAction = m_viewManager->actionManager()->createAction("disable_pressure");
@@ -537,6 +546,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     connect(&m_optionWidgetUpdateCompressor, SIGNAL(timeout()), this, SLOT(slotUpdateOptionsWidgetPopup()));
 
     slotInputDeviceChanged(KoToolManager::instance()->currentInputDevice());
+
+    m_brushSelectPresetAction->setChecked(true);
 
     findDefaultPresets();
 }
@@ -888,7 +899,9 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 
     //qDebug() << "slotInputDeviceChanged()" << inputDevice.device() << inputDevice.uniqueTabletId();
 
-    m_eraserPresetAction->setChecked(inputDevice.pointer() == QTabletEvent::Eraser);
+    m_eraserTogglePresetAction->setChecked(inputDevice.pointer() == QTabletEvent::Eraser);
+    m_eraserSelectPresetAction->setChecked(inputDevice.pointer() == QTabletEvent::Eraser);
+    m_brushSelectPresetAction->setChecked(inputDevice.pointer() == QTabletEvent::Pen);
 
     m_currTabletToolID = TabletToolID(inputDevice);
 
@@ -934,6 +947,32 @@ void KisPaintopBox::slotToggleEraserPreset(bool usingEraser)
     const KoInputDevice inputDevice(dev, ptr, id);
     slotInputDeviceChanged(inputDevice);
 }
+
+void KisPaintopBox::slotSelectEraserPreset()
+{
+    // automatically select freehand brush tool for these select actions
+    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
+
+    QTabletEvent::TabletDevice dev = QTabletEvent::NoDevice;
+    QTabletEvent::PointerType ptr = QTabletEvent::Eraser;
+    qint64 id = -1;
+    const KoInputDevice inputDevice(dev, ptr, id);
+    slotInputDeviceChanged(inputDevice);
+}
+
+
+void KisPaintopBox::slotSelectBrushPreset()
+{
+    // automatically select freehand brush tool for these select actions
+    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
+
+    QTabletEvent::TabletDevice dev = QTabletEvent::NoDevice;
+    QTabletEvent::PointerType ptr = QTabletEvent::Pen;
+    qint64 id = -1;
+    const KoInputDevice inputDevice(dev, ptr, id);
+    slotInputDeviceChanged(inputDevice);
+}
+
 
 void KisPaintopBox::slotCreatePresetFromScratch(QString paintop)
 {

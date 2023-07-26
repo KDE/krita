@@ -533,6 +533,30 @@
       <isCheckable>true</isCheckable>
       <statusTip/>
     </Action>
+    <Action name="eraser_select_preset_action">
+      <icon>draw-eraser</icon>
+      <text>Select eraser preset</text>
+      <whatsThis/>
+      <toolTip>Select eraser preset, along with the freehand brush tool</toolTip>
+      <iconText>Select eraser preset</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="brush_select_preset_action">
+      <icon>krita_tool_freehand</icon>
+      <text>Select brush preset</text>
+      <whatsThis/>
+      <toolTip>Select brush preset, along with the freehand brush tool</toolTip>
+      <iconText>Select brush preset</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip/>
+    </Action>
     <Action name="reload_preset_action">
       <icon>reload-preset</icon>
       <text>Reload Original Preset</text>

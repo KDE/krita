@@ -59,13 +59,6 @@ task copyLibs(type: Copy) {
     rename ('^krita(.*).so$', 'lib_krita$1.so')
 }
 
-task copyFonts(type: Copy) {
-    def etcDir = "../i/"
-    from "$etcDir/etc"
-    into 'assets/etc/'
-    include '**'
-}
-
 /*
  * androiddeployqt doesn't fully copy the directories. Hidden directories
  * to be specific. That's why we copy manually and then delete the partial
@@ -82,13 +75,6 @@ task copyLocaleFiles(type: Copy) {
     from "$libsDir/share/locale"
     from "$libsDir/translations"
     into 'assets/locale/'
-    include '**'
-}
-
-task copyExtraMltFiles(type: Copy) {
-    def libsDir = "../i/"
-    from "$libsDir/share/mlt-7"
-    into 'assets/mlt'
     include '**'
 }
 
@@ -125,13 +111,7 @@ android {
             renderscript.srcDirs = ['src']
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs', 'lib']
-        }
-        nightly {
-            manifest.srcFile 'flavors/next/AndroidManifest.xml'
-        }
-        debug {
-            manifest.srcFile 'flavors/debug/AndroidManifest.xml'
-        }
+       }
     }
 
     buildTypes {
@@ -140,14 +120,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-rules.pro'
         }
-        nightly {
-            initWith release
-            applicationIdSuffix ".next"
-        }
-        debug {
-            applicationIdSuffix ".debug"
-        }
     }
+
 
     // This is needed because, gradle by default ignores hidden assets.
     aaptOptions {
@@ -161,7 +135,7 @@ android {
     project.ext.constant = 5
 
     def versionMajor    = 5
-    def versionMinor    = 0
+    def versionMinor    = 2
 
     /**
      * This version does **not** correspond to the patch version
@@ -169,13 +143,13 @@ android {
      * (including alpha and beta) release of versionMajor.versionMinor
      * branch
      */
-    def versionRelease  = 0
+    def versionRelease  = 20
 
     defaultConfig {
         targetSdkVersion 31
         minSdkVersion 23
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
-        versionName "5.2.0-prealpha"
+        versionName "5.2.0-beta1"
         archivesBaseName = System.getenv('KRITA_BUILD_APPBUNDLE') ? "krita-$versionName" : "krita-$abi-$versionName"
     }
 
@@ -183,15 +157,12 @@ android {
     configure.onlyIf { isPackagingAPK() }
     configure.finalizedBy(writeConfig)
     configure.finalizedBy(copyLibs)
-    configure.finalizedBy(copyFonts)
     configure.finalizedBy(copyAssets)
     configure.finalizedBy(copyLocaleFiles)
-    configure.finalizedBy(copyExtraMltFiles)
     configure.finalizedBy(removeDuplicateAssets)
 }
 
 dependencies {
     implementation 'com.android.billingclient:billing:5.0.0'
     implementation 'androidx.annotation:annotation:1.4.0'
-    implementation files('../i/jar/SDL2Android.jar')
 }

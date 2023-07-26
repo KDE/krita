@@ -44,7 +44,10 @@
 
 #include "kis_tiff_psd_layer_record.h"
 #include "kis_tiff_psd_resource_record.h"
-#endif
+
+#include <KisImportUserFeedbackInterface.h>
+#include <QMessageBox>
+#endif /* TIFF_HAS_PSD_TAGS */
 
 #ifdef HAVE_JPEG_TURBO
 #include <turbojpeg.h>
@@ -331,7 +334,7 @@ auto make_unique_with_deleter(T *data, Deleter d)
 }
 
 #ifdef TIFF_HAS_PSD_TAGS
-KisImportExportErrorCode KisTIFFImport::readImageFromPsd(
+KisImportExportErrorCode KisTIFFImport::readImageFromPsdRecords(
     KisDocument *m_doc,
     const KisTiffPsdLayerRecord &photoshopLayerRecord,
     KisTiffPsdResourceRecord &photoshopImageResourceRecord,
@@ -546,6 +549,7 @@ KisImportExportErrorCode KisTIFFImport::readImageFromPsd(
                         << layerRecord->layerName << layerRecord->error;
                 return ImportExportCodes::FileFormatIncorrect;
             }
+
             if (!groupStack.isEmpty()) {
                 psdImage->addNode(layer, groupStack.top());
             } else {
@@ -1499,6 +1503,114 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
     return ImportExportCodes::OK;
 }
 
+KisImportExportErrorCode KisTIFFImport::readImageFromPsd(KisDocument *m_doc, TIFF *image, KisTiffBasicInfo &basicInfo)
+{
+#ifdef TIFF_HAS_PSD_TAGS
+  // Attempt to parse Photoshop metadata
+    // if it succeeds, divert and load as PSD
+
+    if (!m_photoshopBlockParsed) {
+        QBuffer photoshopLayerData;
+
+        KisTiffPsdLayerRecord photoshopLayerRecord(TIFFIsBigEndian(image),
+                                                   basicInfo.width,
+                                                   basicInfo.height,
+                                                   basicInfo.depth,
+                                                   basicInfo.nbchannels,
+                                                   basicInfo.color_type);
+
+        KisTiffPsdResourceRecord photoshopImageResourceRecord;
+
+        {
+            // Determine if we have Photoshop metadata
+            uint32_t length{0};
+            uint8_t *data{nullptr};
+
+            if (TIFFGetField(image, TIFFTAG_IMAGESOURCEDATA, &length, &data)
+                == 1) {
+                dbgFile << "There are Photoshop layers, processing them now. "
+                           "Section size: "
+                        << length;
+
+                QByteArray buf(reinterpret_cast<char *>(data),
+                               static_cast<int>(length));
+                photoshopLayerData.setData(buf);
+                photoshopLayerData.open(QIODevice::ReadOnly);
+
+                if (!photoshopLayerRecord.read(photoshopLayerData)) {
+                    dbgFile << "TIFF: failed reading Photoshop layer metadata: "
+                            << photoshopLayerRecord.record()->error;
+                }
+            }
+        }
+
+        {
+            // Determine if we have Photoshop metadata
+            uint32_t length{0};
+            uint8_t *data{nullptr};
+
+            if (TIFFGetField(image, TIFFTAG_PHOTOSHOP, &length, &data) == 1
+                && data != nullptr) {
+                dbgFile << "There is Photoshop metadata, processing it now. "
+                           "Section size: "
+                        << length;
+
+                QByteArray photoshopImageResourceData(
+                    reinterpret_cast<char *>(data),
+                    static_cast<int>(length));
+
+                QBuffer buf(&photoshopImageResourceData);
+                buf.open(QIODevice::ReadOnly);
+
+                if (!photoshopImageResourceRecord.read(buf)) {
+                    dbgFile << "TIFF: failed reading Photoshop image metadata: "
+                            << photoshopImageResourceRecord.error;
+                }
+            }
+        }
+
+
+        if (importUserFeedBackInterface()) {
+
+            bool usePsd = true;
+            importUserFeedBackInterface()->askUser([&] (QWidget *parent) {
+                usePsd = QMessageBox::question(parent, i18nc("@title:window", "TIFF image with PSD data"),
+                                      i18nc("the choice for the user on loading a TIFF file",
+                                            "The TIFF image contains valid PSD data embedded. "
+                                            "Would you like to use PSD data instead of normal TIFF data?"))
+                    == QMessageBox::Yes;
+
+                return true;
+            });
+
+            if (!usePsd) {
+                return ImportExportCodes::Cancelled;
+            }
+        }
+
+        if (photoshopLayerRecord.valid()
+            && photoshopImageResourceRecord.valid()) {
+            KisImportExportErrorCode result =
+                readImageFromPsdRecords(m_doc,
+                                        photoshopLayerRecord,
+                                        photoshopImageResourceRecord,
+                                        photoshopLayerData,
+                                        basicInfo);
+
+            if (!result.isOk()) {
+                dbgFile << "Photoshop import failed";
+            }
+            return result;
+        }
+    }
+
+    return ImportExportCodes::FormatFeaturesUnsupported;
+
+#else
+    return ImportExportCodes::FormatFeaturesUnsupported;
+#endif
+}
+
 KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
                                                           TIFF *image)
 {
@@ -1692,90 +1804,12 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
                     KoColorConversionTransformation::internalConversionFlags());
     }
 
-#ifdef TIFF_HAS_PSD_TAGS
-    // Attempt to parse Photoshop metadata
-    // if it succeeds, divert and load as PSD
-
-    if (!m_photoshopBlockParsed) {
-        QBuffer photoshopLayerData;
-
-        KisTiffPsdLayerRecord photoshopLayerRecord(TIFFIsBigEndian(image),
-                                                   basicInfo.width,
-                                                   basicInfo.height,
-                                                   basicInfo.depth,
-                                                   basicInfo.nbchannels,
-                                                   basicInfo.color_type);
-
-        KisTiffPsdResourceRecord photoshopImageResourceRecord;
-
-        {
-            // Determine if we have Photoshop metadata
-            uint32_t length{0};
-            uint8_t *data{nullptr};
-
-            if (TIFFGetField(image, TIFFTAG_IMAGESOURCEDATA, &length, &data)
-                == 1) {
-                dbgFile << "There are Photoshop layers, processing them now. "
-                           "Section size: "
-                        << length;
-
-                QByteArray buf(reinterpret_cast<char *>(data),
-                               static_cast<int>(length));
-                photoshopLayerData.setData(buf);
-                photoshopLayerData.open(QIODevice::ReadOnly);
-
-                if (!photoshopLayerRecord.read(photoshopLayerData)) {
-                    dbgFile << "TIFF: failed reading Photoshop layer metadata: "
-                            << photoshopLayerRecord.record()->error;
-                }
-            }
-        }
-
-        {
-            // Determine if we have Photoshop metadata
-            uint32_t length{0};
-            uint8_t *data{nullptr};
-
-            if (TIFFGetField(image, TIFFTAG_PHOTOSHOP, &length, &data) == 1
-                && data != nullptr) {
-                dbgFile << "There is Photoshop metadata, processing it now. "
-                           "Section size: "
-                        << length;
-
-                QByteArray photoshopImageResourceData(
-                    reinterpret_cast<char *>(data),
-                    static_cast<int>(length));
-
-                QBuffer buf(&photoshopImageResourceData);
-                buf.open(QIODevice::ReadOnly);
-
-                if (!photoshopImageResourceRecord.read(buf)) {
-                    dbgFile << "TIFF: failed reading Photoshop image metadata: "
-                            << photoshopImageResourceRecord.error;
-                }
-            }
-        }
-
-        if (photoshopLayerRecord.valid()
-            && photoshopImageResourceRecord.valid()) {
-            KisImportExportErrorCode result =
-                readImageFromPsd(m_doc,
-                                 photoshopLayerRecord,
-                                 photoshopImageResourceRecord,
-                                 photoshopLayerData,
-                                 basicInfo);
-
-            if (result.isOk()) {
-                return result;
-            } else {
-                dbgFile << "Photoshop import failed, falling back to TIFF "
-                           "image data";
-            }
-        }
+    KisImportExportErrorCode result = readImageFromPsd(m_doc, image, basicInfo);
+    if (!result.isOk()) {
+        result = readImageFromTiff(m_doc, image, basicInfo);
     }
-#endif
 
-    return readImageFromTiff(m_doc, image, basicInfo);
+    return result;
 }
 
 KisImportExportErrorCode

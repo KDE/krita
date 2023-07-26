@@ -1151,16 +1151,7 @@ if (HarfBuzz_FOUND)
     list(APPEND ANDROID_EXTRA_LIBS ${HarfBuzz_LIBRARIES})
 endif()
 
-##
-## Check for raqm
-##
-find_package(Raqm 0.10.0 REQUIRED)
-set_package_properties(Raqm PROPERTIES
-    DESCRIPTION "Raqm is a small library that encapsulates the logic for complex text layout and provides a convenient API."
-    URL "https://github.com/HOST-Oman/libraqm"
-    TYPE REQUIRED
-    PURPOSE "Needed for rendering text vector shapes."
-)
+# Note: We now build a patched raqm from source with Krita.
 
 ##
 ## Check for fontconfig
@@ -1181,6 +1172,12 @@ set_package_properties(libunibreak PROPERTIES
     TYPE REQUIRED
     PURPOSE "Needed for rendering text vector shapes."
 )
+
+##
+## Build vendored libraries
+##
+add_subdirectory(3rdparty_vendor)
+
 
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
     find_package(KF5I18n CONFIG REQUIRED)

@@ -15,6 +15,7 @@
 
 #ifdef Q_OS_MACOS
 #include "osx.h"
+#include "KisMacosEntitlements.h"
 #endif
 
 #include <QStandardPaths>

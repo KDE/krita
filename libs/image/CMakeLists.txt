@@ -390,6 +390,10 @@ endif()
 
 target_link_libraries(kritaimage PRIVATE ${FFTW3_LIBRARIES})
 
+if(APPLE)
+    target_link_libraries(kritaimage PRIVATE kritamacosutils)
+endif()
+
 target_link_libraries(kritaimage PUBLIC kritamultiarch)
 
 if (NOT GSL_FOUND)

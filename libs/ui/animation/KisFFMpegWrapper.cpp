@@ -401,6 +401,9 @@ QJsonObject KisFFMpegWrapper::findProcessPath(const QString &processName, const 
         proposedPaths << customLocation + '/' + processName;
     }
 
+#ifdef Q_OS_MACOS
+    proposedPaths << QCoreApplication::applicationDirPath() + '/' + processName;
+#endif
     proposedPaths << KoResourcePaths::getApplicationRoot()
                    + '/' + "bin" + '/' + processName;
 
@@ -440,16 +443,19 @@ QJsonObject KisFFMpegWrapper::findProcessPath(const QString &processName, const 
     return resultJsonObj;
 }
 
-QJsonObject KisFFMpegWrapper::findProcessInfo(const QString &processName, const QString &processPath, bool includeProcessInfo)
+QJsonObject KisFFMpegWrapper::findProcessInfo(const QString &processName, const QString &rawProcessPath, bool includeProcessInfo)
 {
 
-    QJsonObject ffmpegInfo {{"path", processPath},
+    QJsonObject ffmpegInfo {{"path", rawProcessPath},
                             {"enabled",false},
                             {"version", "0"},
                             {"encoder",QJsonValue::Object},
                             {"decoder",QJsonValue::Object}};
                             
-    if (!QFile::exists(processPath)) return ffmpegInfo;
+    if (!QFile::exists(rawProcessPath)) return ffmpegInfo;
+
+    const QString processPath = QFileInfo(rawProcessPath).absoluteFilePath();
+    ffmpegInfo["path"] = processPath;
     
     dbgFile << "Found process at:" << processPath;    
     QString processVersion = KisFFMpegWrapper::runProcessAndReturn(processPath, QStringList() << "-version", FFMPEG_TIMEOUT);

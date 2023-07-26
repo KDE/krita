@@ -126,6 +126,10 @@ endif ()
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
     set(KRITA_WIDGET_UTILS_EXTRA_LIBS ${KRITA_WIDGET_UTILS_EXTRA_LIBS} ${FOUNDATION_LIBRARY})
+    target_include_directories(kritawidgetutils PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../macosutils>
+    )
+    target_link_libraries(kritawidgetutils PRIVATE kritamacosutils)
 endif ()
 
 target_link_libraries(kritawidgetutils

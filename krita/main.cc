@@ -74,6 +74,12 @@
 #endif
 #include <QLibrary>
 #endif
+
+#ifdef Q_OS_MACOS
+#include "libs/macosutils/KisMacosEntitlements.h"
+#include "libs/macosutils/KisMacosSystemProber.h"
+#endif
+
 #if defined HAVE_KCRASH
 #include <kcrash.h>
 #elif defined USE_DRMINGW
@@ -602,6 +608,14 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
             }
         }
     }
+#ifdef Q_OS_MACOS
+    // HACK: Sandboxed macOS cannot use QSharedMemory on Qt<6
+    else if (KisMacosEntitlements().sandbox()) {
+        if(iskritaRunningActivate()) {
+            return 0;
+        }
+    }
+#endif
 
     if (!runningInKDE) {
         // Icons in menus are ugly and distracting

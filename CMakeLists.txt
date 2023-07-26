@@ -64,6 +64,7 @@ if (POLICY CMP0071)
 endif()
 
 if (APPLE)
+    add_subdirectory(packaging/macos)
     set(MACOSX_RPATH TRUE)
     set(APPLE_SUPPRESS_X11_WARNING TRUE)
     set(KDE_SKIP_RPATH_SETTINGS TRUE)

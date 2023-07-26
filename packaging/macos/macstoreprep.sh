@@ -19,10 +19,37 @@ if [[ -z $BUILDROOT ]]; then
     exit 1
 fi
 
-BUILDROOT="${BUILDROOT%/}"
+#recieves a path without filename
+get_absolute_path() {
+    local origLoc="$(pwd)"
+
+    local filename="${1}"
+    local location="${filename}"
+
+    if [[ -e "${filename}" && ! -d "${filename}" ]]; then
+        location="$(dirname "${filename}")"
+    fi
+
+    local absolute="$(cd "${location}"; pwd)"
+    cd "${origLoc}"
+
+    echo ${absolute}
+}
+
+# make sure BUILDROOT is always an absolute path
+BUILDROOT=$(get_absolute_path "${BUILDROOT}")
 
 KRITADMG_WDIR="${BUILDROOT}/kritadmg_store"
 KRITADMG_MOUNT="kritadmg"
+if [[ -z "${KIS_SRC_DIR}" ]]; then
+    KIS_SRC_DIR=${BUILDROOT}/krita
+fi
+if [[ -z "${KIS_BUILD_DIR}" ]]; then
+    KIS_BUILD_DIR=${BUILDROOT}/kisbuild
+fi
+KIS_ENTITLEMENTS_DIR="${KIS_BUILD_DIR}/packaging/macos/"
+
+KIS_BUNDLE_ID="org.kde.krita"
 
 # print status messages
 print_msg() {
@@ -61,29 +88,58 @@ findEntitlementsFile() {
     fi
 
     local fileName="macStore-entitlements.plist"
+    local subEntitlementsFile="sandboxdev_sub-entitlements.plist"
+
     if [[ -f "${DIR_CURRENT}/${fileName}" ]]; then
         KIS_ENTITLEMENTS="${DIR_CURRENT}/${fileName}"
-    elif [[ -f "${SCRIPT_SOURCE_DIR}/${fileName}" ]]; then
-        KIS_ENTITLEMENTS="${SCRIPT_SOURCE_DIR}/${fileName}"
+        KIS_SUB_ENTITLEMENTS="${DIR_CURRENT}/${subEntitlementsFile}"
+    elif [[ -f "${KIS_ENTITLEMENTS_DIR}/${fileName}" ]]; then
+        KIS_ENTITLEMENTS="${KIS_ENTITLEMENTS_DIR}/${fileName}"
+        KIS_SUB_ENTITLEMENTS="${KIS_ENTITLEMENTS_DIR}/${subEntitlementsFile}"
     fi
 }
 
+# calls /usr/libexec/PlistBuddy with basic args
+# $1 file.plist to modify
+# $2 -c command
+# $3 plist key to modify
+# $4 plist value for key
+plistbuddy() {
+    local plistbuddy="/usr/libexec/PlistBuddy"
+    local filename="${1}"
+    local cmd="${2}"
+    local key="${3}"
+    local value="${4}"
+    
+    ${plistbuddy} "${filename}" -c "${cmd}:${key} ${value}"
+}
 
 modifyInfoPlistContents() {
-    local LAST_LOC=$(pwd)
-    cd "${KRITADMG_WDIR}/krita.app/Contents"
-    if [[ -n "${KIS_VERSION}" ]]; then
-        sed -i '' -e "s:$(./MacOS/krita --version 2> /dev/null | awk '{print $2}'):${KIS_VERSION}:" Info.plist
-    fi
-    sed -i '' -e 's/org.krita/org.kde.krita/g' Info.plist
-    sed -i '' -e "s/org.krita.quicklook/org.kde.krita.quicklook/g" Library/QuickLook/kritaquicklook.qlgenerator/Contents/Info.plist
-    sed -i '' -e "s/org.krita.spotlight/org.kde.krita.spotlight/g" Library/Spotlight/kritaspotlight.mdimporter/Contents/Info.plist
-    cd  "${LAST_LOC}"
+    local plistbuddy="/usr/libexec/PlistBuddy"
+    local PLIST_LOC="${KRITADMG_WDIR}/krita.app/Contents"
+    
+    plistbuddy "${PLIST_LOC}/Info.plist" Set CFBundleIdentifier ${KIS_BUNDLE_ID}
+    plistbuddy "${PLIST_LOC}/Info.plist" Set CFBundleVersion ${KIS_BUILD_VERSION}
+    plistbuddy "${PLIST_LOC}/Info.plist" Set CFBundleShortVersionString ${KIS_VERSION}
+    plistbuddy "${PLIST_LOC}/Info.plist" CFBundleLongVersionString ${KIS_VERSION}
+
+    plistbuddy "${PLIST_LOC}/Library/QuickLook/kritaquicklook.qlgenerator/Contents/Info.plist" CFBundleIdentifier ${KIS_BUNDLE_ID}.quicklook
+    plistbuddy "${PLIST_LOC}/Library/Spotlight/kritaspotlight.mdimporter/Contents/Info.plist" CFBundleIdentifier ${KIS_BUNDLE_ID}.spotlight
 }
 
 
+clean_dmg() {
+    cd "${KRITADMG_WDIR}/krita.app/Contents/MacOS"
+    rm krita_version
+    rm kritarunner
+}
+
 batch_codesign() {
-    xargs -P$(sysctl -n hw.logicalcpu) -I FILE codesign --options runtime --timestamp -f -s "${CODE_SIGNATURE}" --entitlements "${KIS_ENTITLEMENTS}" FILE
+    local entitlements="${1}"
+    if [[ -z "${1}" ]]; then
+        entitlements="${KIS_ENTITLEMENTS}"
+    fi
+    xargs -P4 -I FILE codesign --options runtime --timestamp -f -s "${CODE_SIGNATURE}" --entitlements "${entitlements}" FILE
 }
 # Code sign must be done as recommended by apple "sign code inside out in individual stages"
 signBundle() {
@@ -117,6 +173,8 @@ signBundle() {
     cd ${KRITADMG_WDIR}/krita.app/Contents/Resources
     find . -perm +111 -type f | batch_codesign
 
+    printf "${KRITADMG_WDIR}/krita.app/Contents/MacOS/ffmpeg" | batch_codesign "${KIS_SUB_ENTITLEMENTS}"
+    printf "${KRITADMG_WDIR}/krita.app/Contents/MacOS/ffprobe" | batch_codesign "${KIS_SUB_ENTITLEMENTS}"
     #Finally sign krita and krita.app
     printf "${KRITADMG_WDIR}/krita.app/Contents/MacOS/krita" | batch_codesign
     printf "${KRITADMG_WDIR}/krita.app" | batch_codesign
@@ -146,25 +204,26 @@ print_usage () {
     printf "USAGE:
   macstoreprep.sh -f=<krita.dmg> [-s=<identity>] [-notarize-ac=<apple-account>]
 
-    -v \t\t\t app version (when the app needs to be resubmited this changes
-    \t\t\t krita --version with the string given [M.m.p]
+    -bv \t\t bundle version: mac store needs to identify each submission as unique. for this
+        \t\t we do not bump the krita version but the bundle version. The format is [M.m.p] and
+        \t\t is totally independent from krita release version.
 
     -s \t\t\t Sign Identity for 3rd party application
 
-    -sins \t\t\t Sign Identity for 3rd party Dev installer
+    -sins \t\t Sign Identity for 3rd party Dev installer
 
     -notarize-ac \t Apple account name for notarization purposes
-\t\t\t script will attempt to get password from keychain, if fails provide one with
-\t\t\t the -notarize-pass option: To add a password run
+        \t\t script will attempt to get password from keychain, if fails provide one with
+        \t\t the -notarize-pass option: To add a password run
 
-\t\t\t   security add-generic-password -a \"AC_USERNAME\" -w <secret_password> -s \"AC_PASSWORD\"
+        \t\t security add-generic-password -a \"AC_USERNAME\" -w <secret_password> -s \"AC_PASSWORD\"
 
     -notarize-pass \t If given, the Apple account password. Otherwise an attempt will be macdeployqt_exists
-\t\t\t to get the password from keychain using the account given in <notarize-ac> option.
+        \t\t to get the password from keychain using the account given in <notarize-ac> option.
 
     -asc-provider \t some AppleIds might need this option pass the <shortname>
 
-\t\t\t macstoreprep needs an input dmg
+    -f \t\t\t input dmg
 "
 }
 
@@ -192,8 +251,12 @@ cd "${DIR_CURRENT}"
 # -- Parse input args
 for arg in "${@}"; do
     # If string starts with -sign
-    if [[ ${arg} = -v=* ]]; then
-        KIS_VERSION="${arg#*=}"
+#    if [[ ${arg} = -v=* ]]; then
+#        KIS_VERSION="${arg#*=}"
+#    fi
+
+    if [[ ${arg} = -bv=* ]]; then
+        KIS_BUILD_VERSION="${arg#*=}"
     fi
 
     if [[ ${arg} = -s=* ]]; then
@@ -234,6 +297,11 @@ if [[ -n "${CODE_SIGNATURE}" ]]; then
     print_msg "Code will be signed with %s" "${CODE_SIGNATURE}"
 fi
 
+if [[ -z "${KIS_BUILD_VERSION}" ]]; then
+    print_error "option -bv is not set!"
+    echo "run with --help for assistance"
+    exit
+fi
 
 # mount dmg
 
@@ -242,11 +310,18 @@ if [[ ! -d "${KRITADMG_WDIR}" ]]; then
 fi
 
 cd "${KRITADMG_WDIR}"
+echo "cleaning last run..."
+rm -rf "${KRITADMG_WDIR}/krita.app"
+
 echo "mounting ${INPUT_DMG} ..."
 hdiutil attach "${INPUT_DMG}" -mountpoint "${KRITADMG_MOUNT}"
-rsync -prul --delete "${KRITADMG_MOUNT}/krita.app/" "krita.app"
+rsync -prult --delete "${KRITADMG_MOUNT}/krita.app/" "krita.app"
 
 hdiutil detach "${KRITADMG_MOUNT}"
+
+# clean krita version string (app store format does not allow dashes
+KIS_VERSION="$(${KRITADMG_WDIR}/krita.app/Contents/MacOS/krita_version 2> /dev/null | awk '{print $1}')"
+KIS_VERSION=${KIS_VERSION%%-*}
 
 # replace signature
 findEntitlementsFile
@@ -258,6 +333,8 @@ else
 fi
 
 modifyInfoPlistContents
+
+clean_dmg
 
 # Code sign krita.app if signature given
 if [[ -n "${CODE_SIGNATURE}" ]]; then
@@ -271,10 +348,16 @@ if [[ -n "${CODE_SIGNATURE}" ]]; then
     echo "preparing pkg"
 fi
 
+if [[ -z ${APPLE_TEAMID} ]]; then
+    APPLE_TEAMID="<team_identifier>"
+fi
+
+KRITA_DMG_BASENAME="$(basename ${INPUT_STR})"
+KRITA_PKG_NAME="${KRITA_DMG_BASENAME%.*}.pkg"
 # productbuild --component ${KIS_APPLOC}/krita.app  /Applications krita5_submit.pkg --sign \"3rd Party Mac Developer Installer: ...\" 
 if [[ -n "${SIGN_DEV_INSTALL}" ]]; then
     echo "creating krita5_submit.pkg ..."
-    productbuild --component "${KRITADMG_WDIR}/krita.app"  "/Applications" "${KRITADMG_WDIR}/krita5_submit.pkg" --sign "${SIGN_DEV_INSTALL}"
+    productbuild --component "${KRITADMG_WDIR}/krita.app"  "/Applications" "${KRITADMG_WDIR}/${KRITA_PKG_NAME}" --sign "${SIGN_DEV_INSTALL}"
 fi
 
 echo "done"
@@ -282,6 +365,9 @@ echo "done"
 print_msg "
 Use altool to submit the Pkg:
 
-     \t xcrun altool --upload-package krita5_submit.pkg --bundle-id <bundle-id> -t macos -u <appstore-username> --password <pass> [--asc-provider <teamid>] --bundle-version <version> --bundle-short-version-string <version> --apple-id <app-id_fromStore>
+    \t xcrun altool --upload-package "${KRITADMG_WDIR}/${KRITA_PKG_NAME}" --bundle-id ${KIS_BUNDLE_ID} -t macos -u "${NOTARIZE_ACC}" --password <pass> [--asc-provider "${APPLE_TEAMID}"] --bundle-version ${KIS_BUILD_VERSION} --bundle-short-version-string ${KIS_VERSION} --apple-id <app-id_fromStore>
+
+To get <app-id_fromStore> from store go to: https://appstoreconnect.apple.com/apps ,select the app you wish to upload to,
+click on App information on the left side, and search for 'Apple ID' field.
 
 \n"

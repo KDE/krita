@@ -761,7 +761,10 @@ KisImportExportErrorCode KisImportExportManager::doExport(const QString &locatio
 //                    and without using QSaveFile the issue can still occur
 //                    when QFile::copy fails because Dropbox/Google/OneDrive
 //                    locks the target file.
-#ifndef Q_OS_WIN
+// 02-24-2022 update: Added macOS since QSaveFile does not work on sandboxed krita
+//                    It can work if user gives access to the container dir, but
+//                    we cannot guarantee the user gave us permission.
+#if !(defined(Q_OS_WIN) || defined(Q_OS_MACOS))
 #define USE_QSAVEFILE
 #endif
 

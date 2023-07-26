@@ -220,7 +220,13 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
     // Initialize FFmpeg location... (!)
     KisConfig cfg(false);
-    const QString cfgFFmpegPath = cfg.ffmpegLocation();
+    QString cfgFFmpegPath = cfg.ffmpegLocation();
+#ifdef Q_OS_MACOS
+    if (cfgFFmpegPath.isEmpty()) {
+        QJsonObject ffmpegInfo =  KisFFMpegWrapper::findFFMpeg(cfgFFmpegPath);
+        cfgFFmpegPath = (ffmpegInfo["enabled"].toBool()) ? ffmpegInfo["path"].toString() : "";
+    }
+#endif
     const QString likelyFFmpegPath = [&]() {
         if (!cfgFFmpegPath.isEmpty()) {
             return cfgFFmpegPath;

@@ -106,6 +106,8 @@ export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 export MACOSX_DEPLOYMENT_TARGET=10.13
 export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13
 
+KRITA_VERSION="$(${KIS_INSTALL_DIR}/bin/krita_version -v)"
+
 
 print_usage () {
     printf "USAGE:
@@ -597,6 +599,15 @@ krita_deploy () {
     rsync -prul ${KIS_INSTALL_DIR}/lib/kritaplugins/* ${KRITA_DMG_PLUGIN_DIR}
 
     rsync -prul ${KIS_INSTALL_DIR}/lib/mlt ${KRITA_DMG_PLUGIN_DIR}
+    
+    echo "Adding ffmpeg to bundle"
+    cd ${KRITA_DMG}/krita.app/Contents/MacOS
+    cp ${KIS_INSTALL_DIR}/bin/ffmpeg .
+    cp ${KIS_INSTALL_DIR}/bin/ffprobe .
+    for bin in ffmpeg ffprobe; do
+        cp ${KIS_INSTALL_DIR}/bin/${bin}
+        install_name_tool -add_rpath @executable_path/../Frameworks/ ${bin}
+    done
 
     # rsync -prul {KIS_INSTALL_DIR}/lib/libkrita* Frameworks/
 
@@ -612,8 +623,8 @@ krita_deploy () {
         -verbose=0 \
         -executable=${KRITA_DMG}/krita.app/Contents/MacOS/krita \
         -libpath=${KIS_INSTALL_DIR}/lib \
-        -qmldir=${KIS_INSTALL_DIR}/qml
-        # -appstore-compliant
+        -qmldir=${KIS_INSTALL_DIR}/qml \
+        -appstore-compliant
         # -extra-plugins=${KIS_INSTALL_DIR}/lib/kritaplugins \
         # -extra-plugins=${KIS_INSTALL_DIR}/lib/plugins \
         # -extra-plugins=${KIS_INSTALL_DIR}/plugins
@@ -671,7 +682,11 @@ krita_deploy () {
 
 # helper to define function only once
 batch_codesign() {
-    xargs -P4 -I FILE codesign --options runtime --timestamp -f -s "${CODE_SIGNATURE}" --entitlements "${KIS_SRC_DIR}/packaging/macos/entitlements.plist" FILE
+    local entitlements="${1}"
+    if [[ -z "${1}" ]]; then
+        entitlements="${KIS_BUILD_DIR}/packaging/macos/entitlements.plist"
+    fi
+    xargs -P4 -I FILE codesign --options runtime --timestamp -f -s "${CODE_SIGNATURE}" --entitlements "${entitlements}" FILE
 }
 # Code sign must be done as recommended by apple "sign code inside out in individual stages"
 signBundle() {
@@ -705,6 +720,9 @@ signBundle() {
     cd ${KRITA_DMG}/krita.app/Contents/Resources
     find . -perm +111 -type f | batch_codesign
 
+    printf "${KRITA_DMG}/krita.app/Contents/MacOS/ffmpeg" | batch_codesign
+    printf "${KRITA_DMG}/krita.app/Contents/MacOS/ffprobe" | batch_codesign
+    
     printf "${KRITA_DMG}/krita.app/Contents/MacOS/kritarunner" | batch_codesign
     printf "${KRITA_DMG}/krita.app/Contents/MacOS/krita_version" | batch_codesign
 
@@ -801,8 +819,7 @@ createDMG () {
 
     if [[ -z "${DMG_NAME}" ]]; then
         # Add git version number
-        GIT_SHA=$(grep "#define KRITA_GIT_SHA1_STRING" ${KIS_BUILD_DIR}/libs/version/kritagitversion.h | awk '{gsub(/"/, "", $3); printf $3}')
-        DMG_NAME="krita-nightly_${GIT_SHA}.dmg"
+        DMG_NAME="krita-${KRITA_VERSION// /_}.dmg"
     else
         DMG_NAME="${DMG_NAME}.dmg"
     fi

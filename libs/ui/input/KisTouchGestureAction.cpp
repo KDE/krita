@@ -23,6 +23,15 @@ KisTouchGestureAction::KisTouchGestureAction()
     shortcuts.insert(i18n("Toggle Canvas Only Mode"), ToggleCanvasOnlyShortcut);
     shortcuts.insert(i18n("Toggle Eraser"), ToggleEraserMode);
     shortcuts.insert(i18n("Reset Display"), ResetDisplay);
+    shortcuts.insert(i18n("Toggle Previous Brush Preset"), PreviousPresetShortcut);
+    shortcuts.insert(i18n("Color Sampler"), ColorSampler);
+    shortcuts.insert(i18n("Deselect"), Deselect);
+    shortcuts.insert(i18n("Activate Next Layer"), NextLayer);
+    shortcuts.insert(i18n("Activate Previous Layer"), PreviousLayer);
+    shortcuts.insert(i18n("Activate Freehand Brush Tool"), FreehandBrush);
+    shortcuts.insert(i18n("Freehand Selection Tool"), KisToolSelectContiguous);
+    shortcuts.insert(i18n("Activate Move Tool"), KisToolMove);
+    shortcuts.insert(i18n("Activate Transform Tool"), KisToolTransform);
     setShortcutIndexes(shortcuts);
 }
 
@@ -65,8 +74,71 @@ void KisTouchGestureAction::end(QEvent *event)
         }
         break;
     }
-    case ResetDisplay: {
+     case ResetDisplay: {
         QAction *action = actionCollection->action("reset_display");
+        if (action) {
+            action->trigger();
+        }
+        break;
+    }
+    case PreviousPresetShortcut: {
+        QAction *action = actionCollection->action("previous_preset");
+        if (action) {
+            action->trigger();
+        }
+        break;
+    }
+    case ColorSampler: {
+        QAction *action = actionCollection->action("KisToolColorSampler");
+        if (action) {
+            action->trigger();
+        }
+        break;
+    }
+    case Deselect: {
+        QAction *action = actionCollection->action("deselect");
+        if (action) {
+            action->trigger();
+        }
+        break;
+    }
+    case NextLayer: {
+        QAction *action = actionCollection->action("activateNextLayer");
+        if (action) {
+            action->trigger();
+        }
+        break;
+    }
+    case PreviousLayer: {
+        QAction *action = actionCollection->action("activatePreviousLayer");
+        if (action) {
+            action->trigger();
+        }
+        break;
+    }
+    case FreehandBrush: {
+        QAction *action = actionCollection->action("FreehandBrush");
+        if (action) {
+            action->trigger();
+        }
+        break;
+    }
+    case KisToolSelectContiguous: {
+        QAction *action = actionCollection->action("KisToolSelectContiguous");
+        if (action) {
+            action->trigger();
+        }
+        break;
+    }
+    case KisToolMove: {
+        QAction *action = actionCollection->action("KisToolMove");
+        if (action) {
+            action->trigger();
+        }
+        break;
+    }
+    case KisToolTransform: {
+        QAction *action = actionCollection->action("KisToolTransform");
         if (action) {
             action->trigger();
         }

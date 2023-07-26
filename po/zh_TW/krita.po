@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-25 00:43+0000\n"
-"PO-Revision-Date: 2023-07-21 14:46+0000\n"
+"POT-Creation-Date: 2023-07-26 00:44+0000\n"
+"PO-Revision-Date: 2023-07-24 10:52+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
 "krita/zh_Hant/>\n"
@@ -16201,25 +16201,25 @@ msgstr ""
 "文件內含有由 Krita 4.x 建立的向量文字。當您儲存文件時，這些文字物件將會被轉換"
 "為 Krita 5 格式而不再兼容 Krita 4.x 版本"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3744
+#: libs/flake/text/KoSvgTextShape.cpp:3751
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3746
-#: libs/flake/text/KoSvgTextShape.cpp:3754
+#: libs/flake/text/KoSvgTextShape.cpp:3753
+#: libs/flake/text/KoSvgTextShape.cpp:3761
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文字形狀"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3752
+#: libs/flake/text/KoSvgTextShape.cpp:3759
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3766
-#: libs/flake/text/KoSvgTextShape.cpp:3781
+#: libs/flake/text/KoSvgTextShape.cpp:3773
+#: libs/flake/text/KoSvgTextShape.cpp:3788
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17064,7 +17064,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "指定特性檔案"
 
-#: libs/image/kis_image.cc:2486
+#: libs/image/kis_image.cc:2487
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "裁切選取區域"
@@ -19318,8 +19318,8 @@ msgstr "本機資源"
 #: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1924
 #: libs/ui/KisMainWindow.cpp:1933 libs/ui/KisMainWindow.cpp:2072
 #: libs/ui/KisMainWindow.cpp:2133 libs/ui/KisMainWindow.cpp:2154
-#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:588
-#: libs/ui/KisPart.cpp:591 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:578
+#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
 #: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
@@ -22331,7 +22331,7 @@ msgstr "圖層屬性"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -30649,7 +30649,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "建立群組 %1"
 
-#: libs/ui/KisPart.cpp:588
+#: libs/ui/KisPart.cpp:578
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -30658,7 +30658,7 @@ msgstr ""
 "無法用範本%1\n"
 "建立檔案"
 
-#: libs/ui/KisPart.cpp:591
+#: libs/ui/KisPart.cpp:581
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -31990,12 +31990,12 @@ msgid ""
 "issues."
 msgstr "使用 ANGLE 繪製器時，紋理緩衝區因效能問題而會被強制停用。"
 
-#: libs/ui/opengl/kis_opengl.cpp:654
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "目前使用的 Intel 核芯顯示卡驅動程式對 OpenGL 的支援存有已知的問題。"
 
-#: libs/ui/opengl/kis_opengl.cpp:656
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32005,14 +32005,14 @@ msgstr ""
 "Intel 核芯顯示卡的驅動程式在 OpenGL 支援方面常常存在各種問題，因此預設將使用 "
 "ANGLE 繪製器。您可以手動切換成 OpenGL 模式，但是無法保證正常作業。"
 
-#: libs/ui/opengl/kis_opengl.cpp:1070
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr "首選繪製器不支援請求的表面格式。已選用另一個繪製器。"
 
-#: libs/ui/opengl/kis_opengl.cpp:1072
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "可用繪製器不支援首選輸出格式"
@@ -37308,7 +37308,7 @@ msgid "Val:"
 msgstr "值："
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, kde-format
 msgid "Onion skins menu"
 msgstr "洋蔥皮選單"
@@ -37319,25 +37319,25 @@ msgid "Audio menu"
 msgstr "音訊選單"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, kde-format
 msgid "Animation settings menu"
 msgstr "動畫設定選單"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, kde-format
 msgid "Clip Start: "
 msgstr "剪輯開始："
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr "剪輯結束："
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, kde-format
 msgid "Frame Rate: "
 msgstr "影格速率："
@@ -37362,37 +37362,37 @@ msgstr "重設通道"
 msgid "Reset All Channels"
 msgstr "重設全部通道"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr "保持固定值，不使用插值。"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
 #, kde-format
 msgid "Linear interpolation."
 msgstr "線性插值"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
 #, kde-format
 msgid "Bezier curve interpolation."
 msgstr "貝茲曲線插值"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
 #, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "銳利切點插值。"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
 #, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "平滑切點插值。"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr "縮放檢視到適合通道範圍"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
 #, kde-format
 msgid "Zoom view to fit curve."
 msgstr "縮放檢視到適合曲線"
@@ -37432,66 +37432,66 @@ msgid_plural "Adjust %1 Keyframes"
 msgstr[0] "調整 %1 個關鍵影格"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
 #, kde-format
 msgid "Animation Timeline"
 msgstr "動畫時間軸"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, kde-format
-msgid "Animation audio menu"
-msgstr "動畫音訊選單"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
 #, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "匯入音訊…"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "移除音訊"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "靜音"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "音量："
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#, kde-format
+msgid "Animation audio menu"
+msgstr "動畫音訊選單"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
 msgid "AutoKey Blank"
 msgstr "自動關鍵影格：空白"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
 #, kde-format
 msgid "AutoKey Duplicate"
 msgstr "自動關鍵影格：複製"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "啟用以保持播放時間"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "有效 FPS：%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "真實 FPS：%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "拋棄的影格：%1%"
@@ -38239,7 +38239,7 @@ msgstr "色階分佈圖"
 #: plugins/dockers/historydocker/HistoryDock.cpp:23
 #, kde-format
 msgid "Undo History"
-msgstr "歷史記錄"
+msgstr "復原歷史記錄"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:160
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
@@ -59545,601 +59545,3 @@ msgstr "縮放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "參考圖工具"
-
-#~ msgid ""
-#~ "⚠ Unsupported color space.\n"
-#~ "Only \"RGB/Alpha 8-bit\" is supported."
-#~ msgstr ""
-#~ "⚠ 不支援的色彩空間。\n"
-#~ "只支援「RGB/Alpha (8 位元)」。"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear X"
-#~ msgstr "切變 X"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shear Y"
-#~ msgstr "切變 Y"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale"
-#~ msgstr "縮放"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Reset Transformations"
-#~ msgstr "重設變形"
-
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> "
-#~ "Animated exports are <span style=\" font-weight:600;\">always</span> "
-#~ "flattened regardless of this setting.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">註：</span>匯出動"
-#~ "畫時將忽略此選項，影像<span style=\" font-weight:600;\">必定</span>會被平"
-#~ "整化。</p></body></html>"
-
-#~ msgctxt "paletegen status mode option name"
-#~ msgid "Difference"
-#~ msgstr "差別"
-
-#~ msgctxt "paleteuse dither option name"
-#~ msgid "none"
-#~ msgstr "none"
-
-#~ msgctxt "paleteuse diff mode option name"
-#~ msgid "none"
-#~ msgstr "none"
-
-#~ msgctxt "Resize intepolation method list label"
-#~ msgid "&Filter:"
-#~ msgstr "縮放過濾(&F)："
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid ""
-#~ "JPEG-XL image is animated, but cannot retrieve animation frame header."
-#~ msgstr "JPEG-XL 影像為動畫，但未能讀取動畫影格標頭資料。"
-
-#~ msgctxt "floating on-canvas message"
-#~ msgid ""
-#~ "Cannot open audio: \"%1\"\n"
-#~ "Error: %2"
-#~ msgstr ""
-#~ "無法開啟音訊：「%1」\n"
-#~ "錯誤：%2"
-
-#~ msgid "Edit Audio:"
-#~ msgstr "編輯音訊："
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Audio playback is not supported in this build!"
-#~ msgstr "此 Krita 編譯版本不支援音訊播放！"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Open audio..."
-#~ msgstr "開啟音訊…"
-
-#~ msgctxt "@item:inmenu"
-#~ msgid "Change audio (%1)..."
-#~ msgstr "變更音訊 (%1)…"
-
-#~ msgid "Choose a video file"
-#~ msgstr "選擇影片檔案"
-
-#~ msgid ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">WARNING: </span><span style="
-#~ "\" font-size:16pt; font-weight:400; color:#ff692e;\">This video contains "
-#~ "more than 100 frames. Loading too many frames can overload your computer. "
-#~ "Use a</span><span style=\" font-size:16pt; font-weight:400; color:#ff1500;"
-#~ "\"> </span><a href=\"https://kdenlive.org\"><span style=\" font-"
-#~ "size:16pt; font-weight:400; text-decoration: underline; color:#2980b9;"
-#~ "\">video editor </span></a><span style=\" font-size:16pt; font-"
-#~ "weight:400; color:#ff692e;\">instead!</span></p></body></html>"
-#~ msgstr ""
-#~ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#~ "REC-html40/strict.dtd\">\n"
-#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
-#~ "\"utf-8\" /><style type=\"text/css\">\n"
-#~ "p, li { white-space: pre-wrap; }\n"
-#~ "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#~ "font-weight:500; font-style:normal;\">\n"
-#~ "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-#~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#~ "size:16pt; font-weight:600; color:#ff692e;\">警告：</span><span style=\" "
-#~ "font-size:16pt; font-weight:400; color:#ff692e;\">此影片含多於 100 個影"
-#~ "格。載入過多影格可能會令系統超出負荷。請使用一套</span><span style=\" "
-#~ "font-size:16pt; font-weight:400; color:#ff1500;\"></span><a href="
-#~ "\"https://kdenlive.org\"><span style=\" font-size:16pt; font-weight:400; "
-#~ "text-decoration: underline; color:#2980b9;\">影片編輯軟體</span></a><span "
-#~ "style=\" font-size:16pt; font-weight:400; color:#ff692e;\">作為替代方案"
-#~ "吧！</span></p></body></html>"
-
-#~ msgid "FFMpeg"
-#~ msgstr "FFmpeg"
-
-#~ msgid "Export:"
-#~ msgstr "匯出："
-
-#~ msgid "Image Se&quence"
-#~ msgstr "影像序列(&Q)"
-
-#~ msgid "&Video"
-#~ msgstr "影片(&V)"
-
-#~ msgid "Video Options"
-#~ msgstr "影片選項"
-
-#~ msgid "FF&Mpeg: "
-#~ msgstr "FF&mpeg："
-
-#~ msgid "Video Location:"
-#~ msgstr "影片位置："
-
-#~ msgid "FFMpeg Version: None"
-#~ msgstr "FFmpeg 版本：無"
-
-#~ msgid ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#~ "FFMpeg must be at least version 4.2+ for gif transparency to work</p></"
-#~ "body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p><span style=\" font-weight:600;\">警告：</"
-#~ "span>FFmpeg 版本必須為 4.2 或以上才能支援 GIF 透明度</p></body></html>"
-
-#~ msgid "Image Sequence Options"
-#~ msgstr "影像序列選項"
-
-#, fuzzy
-#~| msgctxt "suffix for \"seconds\""
-#~| msgid " sec"
-#~ msgid " sec"
-#~ msgstr " 秒"
-
-#~ msgid "Select Layer Mode"
-#~ msgstr "選取圖層模式"
-
-#~ msgid "Select Multiple Layer Mode"
-#~ msgstr "選取多個圖層模式"
-
-#~ msgid "Start merging time"
-#~ msgstr "合併起始時間"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "The amount of time after a merged stroke before merging again"
-#~ msgstr "每一組筆畫被合併為一組前必須經過的最小時間"
-
-#~ msgid "Group time"
-#~ msgstr "合併間隔時間"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The amount of time every stroke should be apart from its previous stroke "
-#~ "to be classified in one group"
-#~ msgstr "前後兩筆被合併為同一組的最大間隔時間"
-
-#~ msgid "Split Strokes"
-#~ msgstr "每組筆畫數目"
-
-#~ msgid "Color Rate"
-#~ msgstr "色彩量"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Displacement Option"
-#~ msgstr "位移選項"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Total Random"
-#~ msgstr "來源 -> 筆畫隨機"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern"
-#~ msgstr "來源 -> 圖案"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "Source -> Pattern Locked"
-#~ msgstr "來源 -> 筆尖鎖定圖案"
-
-#~ msgid "0 px"
-#~ msgstr "0 px"
-
-#~ msgid "0 s"
-#~ msgstr "0 s"
-
-#~ msgid "1000"
-#~ msgstr "1000"
-
-#~ msgid "30 px"
-#~ msgstr "30 px"
-
-#~ msgid "3 s"
-#~ msgstr "3 s"
-
-#~ msgid "%1 s"
-#~ msgstr "%1 s"
-
-#~ msgctxt "option name"
-#~ msgid "Filter"
-#~ msgstr "濾鏡"
-
-#~ msgctxt "PaintOp instant preview limitation"
-#~ msgid "\"%1\" does not support scaled preview (non-linear filter)"
-#~ msgstr "「%1」不支援縮放預覽 (非線性過濾)"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Luminosity value of the brush that will not change the painting color. "
-#~ "All brush pixels darker than neutral point will paint with darker color, "
-#~ "pixels lighter than neutral point — lighter."
-#~ msgstr ""
-#~ "不影刷色彩的筆尖光度數值。所有比中性點暗的像素將繪出較暗的色彩，而比中性點"
-#~ "亮的像素則將繪出較亮的色彩。"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Brightness correction for the brush"
-#~ msgstr "校正筆刷亮度"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Contrast correction for the brush"
-#~ msgstr "校正比刷的對比度"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush tip does not have color channels. The brush will work "
-#~ "in \"Mask\" mode."
-#~ msgstr "選取的筆尖沒有色彩通道。筆刷將以「遮罩」模式運作。"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "The selected brush engine does not support \"Color\" or \"Lightness\" "
-#~ "modes. The brush will work in \"Mask\" mode."
-#~ msgstr ""
-#~ "所選的筆刷引擎不支援「色彩」或「亮度」模式。筆刷將會以「遮罩」模式運作。"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid ""
-#~ "Brush average: %1\n"
-#~ "Adjusted average: %2"
-#~ msgstr ""
-#~ "筆刷平均：%1\n"
-#~ "調整後平均：%2"
-
-#~ msgid "Mirrored"
-#~ msgstr "鏡像"
-
-#~ msgid "Not mirrored"
-#~ msgstr "非鏡像"
-
-#~ msgid "Align the brush preview outline to the pixel grid"
-#~ msgstr "將筆刷預覧對齊到像素格線"
-
-#~ msgid " s"
-#~ msgstr " s"
-
-#~ msgid ""
-#~ "<b>Krita can't find FFmpeg!</b><br>             <i>Krita depends on "
-#~ "another free program called FFmpeg to turn frame-by-frame animations into "
-#~ "video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</"
-#~ "i><br><br>            To learn more about setting up Krita for rendering "
-#~ "animations, <a href=\"https://docs.krita.org/en/reference_manual/"
-#~ "render_animation.html#setting-up-krita-for-exporting-animations\">please "
-#~ "visit this section of our User Manual.</a>"
-#~ msgstr ""
-#~ "<b>Krita 找不到 FFmpeg！</b><br><i>Krita 依靠另一個名為 FFmpeg 的自由軟"
-#~ "體，以將影格動畫轉換為影片檔案。(<a href=\"https://www.ffmpeg.org\">www."
-#~ "ffmpeg.org</a>)</i><br><br>如要進一步了解如何設定 Krita 來繪製動畫，<a "
-#~ "href=\"https://docs.krita.org/en/reference_manual/render_animation."
-#~ "html#setting-up-krita-for-exporting-animations\">請造訪使用者手冊。</a>"
-
-#~ msgid "Please extract ffmpeg from the archive first."
-#~ msgstr "請先從壓縮檔中解壓縮 FFmpeg。"
-
-#~ msgid ""
-#~ "This is a source code archive. Please download the application archive "
-#~ "('Windows Builds'), unpack it and then provide the path to the extracted "
-#~ "ffmpeg file."
-#~ msgstr ""
-#~ "此為原始碼封裝。請下載應用程式壓縮檔 ('Windows 組建')，將其壓縮檔後提供已"
-#~ "解壓縮的 FFmpeg 檔案的路徑。"
-
-#~ msgid "This is a source code archive. Please install ffmpeg instead."
-#~ msgstr "此為原始碼封裝。請改為安裝 FFmpeg。"
-
-#~ msgid "HDR Warning.................................."
-#~ msgstr "HDR 警告.................................."
-
-#~ msgid ""
-#~ "<b>Note: Krita will need to be restarted for changes to take effect</b>"
-#~ msgstr "<b>提示：變更下述設定後必須重新啟動程式才能生效</b>"
-
-#~ msgid "Unexpected error. Please contact developers."
-#~ msgstr "意外錯誤。請聯絡開發人員。"
-
-#~ msgctxt "Fetching remote image"
-#~ msgid "Do you want to download the image at %1?"
-#~ msgstr "要下載位於「%1」的影像嗎？"
-
-#~ msgid "Colu&mns:"
-#~ msgstr "列數(&M)："
-
-#~ msgid "&Rows:"
-#~ msgstr "行數(&R)："
-
-#~ msgid "HSV Sliders to Show"
-#~ msgstr "要顯示的 HSV 滑動條"
-
-#~ msgid "HSL Sliders to Show"
-#~ msgstr "要顯示的 HSL 滑動條"
-
-#~ msgid "HSI Sliders to Show"
-#~ msgstr "要顯示的 HSI 滑動條"
-
-#~ msgid "HSY' Sliders to Show"
-#~ msgstr "要顯示的 HSY' 滑動條"
-
-#~ msgctxt "action"
-#~ msgid "&Painter's Tools"
-#~ msgstr "繪畫工具(&P)"
-
-#~ msgctxt "action"
-#~ msgid "Painter's Tools"
-#~ msgstr "繪畫工具"
-
-#~ msgctxt "action"
-#~ msgid "Brush composite"
-#~ msgstr "筆刷分量"
-
-#~ msgid "&Description:"
-#~ msgstr "描述(&D)："
-
-#~ msgid ""
-#~ "Could not save %1.\n"
-#~ "Reason: %2"
-#~ msgstr ""
-#~ "無法儲存 %1。\n"
-#~ "原因：%2"
-
-#~ msgid ""
-#~ "Could not open %2.\n"
-#~ "Reason: %1"
-#~ msgstr ""
-#~ "無法開啟 %2。\n"
-#~ "原因：%1"
-
-#~ msgid "&Canvas"
-#~ msgstr "畫布(&C)"
-
-#~ msgctxt "action"
-#~ msgid "&Reset Zoom"
-#~ msgstr "重設縮放(&R)"
-
-#~ msgctxt "action"
-#~ msgid "Reset Zoom"
-#~ msgstr "重設縮放"
-
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page"
-#~ msgstr "縮放至適合頁面大小"
-
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Width"
-#~ msgstr "縮放至適合寬度"
-
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Width"
-#~ msgstr "縮放至適合頁寬"
-
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Height"
-#~ msgstr "縮放至適合高度"
-
-#~ msgctxt "action"
-#~ msgid "Zoom Fit to Page Height"
-#~ msgstr "縮放至適合頁高"
-
-#~ msgid "Duplicate current profile"
-#~ msgstr "複製目前設定"
-
-#~ msgid "Reset Zoom to 100%"
-#~ msgstr "重設縮放為 100%"
-
-#~ msgid "Fit Page"
-#~ msgstr "適合頁面大小"
-
-#~ msgctxt "@item:inmenu Layers Docker settings, combobox"
-#~ msgid "Subtitle Style"
-#~ msgstr "副標題樣式"
-
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "None"
-#~ msgstr "無"
-
-#~ msgctxt "@item:inlistbox Layer Docker subtitle style"
-#~ msgid "Simple"
-#~ msgstr "簡單"
-
-#~ msgctxt "JPEG-XL errors"
-#~ msgid "JPEG-XL encoded profile not implemented"
-#~ msgstr "未支援 JPEG-XL 內嵌碥碼的色彩特性"
-
-#~ msgid "Grid Settings"
-#~ msgstr "格線設定"
-
-#~ msgid "Enable Smooth Zooming"
-#~ msgstr "啟用平滑縮放"
-
-#~ msgid ""
-#~ "Grow (positive values) or shrink (negative values) the selection by the "
-#~ "set amount"
-#~ msgstr "按數值擴張或收縮選取區域 (正數為擴張，負數為收縮)"
-
-#~ msgid "Make the selection using the active layer"
-#~ msgstr "以使用中圖層製成選取區域"
-
-#~ msgid "Make the selection using a merged copy of all layers"
-#~ msgstr "以全部圖層合併的影像製成選取區域"
-
-#~ msgid ""
-#~ "Make the selection using a merged copy of the selected color-labeled "
-#~ "layers"
-#~ msgstr "按所選色彩標籤的圖層合併的影像製成選取區域"
-
-#~ msgid "The added duration for showing the last frame."
-#~ msgstr "保持顯示最後一個影格的額外時長。"
-
-#~ msgid "Current selection"
-#~ msgstr "目前選取區域"
-
-#~ msgid "Contiguous region obtained from the layers"
-#~ msgstr "從圖層檢取連續區域"
-
-#~ msgid "All the regions similar to the pixel you clicked on"
-#~ msgstr "所有與所點選像素相似的區域"
-
-#~ msgid "Select pixels similar to the one you clicked on"
-#~ msgstr "選取與所點選像素相似的像素"
-
-#~ msgid ""
-#~ "Set how far the region should extend from the selected pixel in terms of "
-#~ "color similarity"
-#~ msgstr "設定區域根據色彩相似度從所選像素擴張的程度"
-
-#~ msgid ""
-#~ "Set how far the fully opaque portion of the region should extend.\n"
-#~ "0% will make opaque only the pixels that are exactly equal to the "
-#~ "selected pixel.\n"
-#~ "100% will make opaque all the pixels in the region up to its boundary."
-#~ msgstr ""
-#~ "設定區域中完全不透明的範圍的擴張程度。\n"
-#~ "0% 表示只有與所選像素完全相同數值的像素才會填上不透明色。\n"
-#~ "100% 表示一直到區域邊界的所有像素均會填上不透明色。"
-
-#~ msgid ""
-#~ "Grow (positive values) or shrink (negative values) the region by the set "
-#~ "amount"
-#~ msgstr "按數值擴張或收縮區域 (正數為擴張，負數為收縮)"
-
-#~ msgid ""
-#~ "Obtain the region using a merged copy of the selected color-labeled layers"
-#~ msgstr "按所選色彩標籤的圖層合併的影像檢取區域"
-
-#~ msgctxt "The 'what to fill' section label in fill tool options"
-#~ msgid "What to fill"
-#~ msgstr "填充區域"
-
-#~ msgctxt "The 'fill with' section label in fill tool options"
-#~ msgid "Fill with"
-#~ msgstr "填充內容"
-
-#~ msgctxt "The 'region extent' section label in fill tool options"
-#~ msgid "Region extent"
-#~ msgstr "區域範圍"
-
-#~ msgctxt "The 'multiple fill' section label in fill tool options"
-#~ msgid "Multiple fill"
-#~ msgstr "多重填充"
-
-#~ msgid ""
-#~ "Set how far the selection should extend from the selected pixel in terms "
-#~ "of color similarity"
-#~ msgstr "設定選取區域根據色彩相似度從所選像素擴張的程度"
-
-#~ msgid ""
-#~ "Set how far the fully opaque portion of the selection should extend.\n"
-#~ "0% will make the selection opaque only where the pixels are exactly equal "
-#~ "to the selected pixel.\n"
-#~ "100% will make all the selection opaque up to its boundary."
-#~ msgstr ""
-#~ "設定選取區域中完全不透明的範圍的擴張程度。\n"
-#~ "0% 表示只有與所選像素完全相同數值的像素才會作完全不透明選取。\n"
-#~ "100% 表示一直到區域邊界的所有像素均會作完全不透明選取。"
-
-#~ msgid "Set how far the selection should extend in terms of color similarity"
-#~ msgstr "設定選取區域根據色彩相似度擴張的程度"
-
-#~ msgid "Check this option to fill all the regions except the selected ones"
-#~ msgstr "核取此選項以填充除已選取區域外的所有區域"
-
-#~ msgctxt "The 'what to fill' section label in enclose and fill tool options"
-#~ msgid "What to fill"
-#~ msgstr "填充區域"
-
-#~ msgctxt "The 'fill with' section label in enclose and fill tool options"
-#~ msgid "Fill with"
-#~ msgstr "填充內容"
-
-#~ msgctxt "The 'region extent' section label in enclose and fill tool options"
-#~ msgid "Region extent"
-#~ msgstr "區域範圍"
-
-#~ msgctxt "Region selection method in enclose and fill tool"
-#~ msgid "All regions"
-#~ msgstr "所有區域"
-
-#~ msgctxt "Region selection method in enclose and fill tool"
-#~ msgid "All regions except the transparent ones"
-#~ msgstr "除透明以外的所有區域"
-
-#~ msgctxt "Region selection method in enclose and fill tool"
-#~ msgid "All regions except those of a specific color or transparent"
-#~ msgstr "除特定色彩或透明以外的所有區域"
-
-#~ msgid "Lossless compression"
-#~ msgstr "無損壓縮"
-
-#~ msgid "Information"
-#~ msgstr "資訊"
-
-#~ msgid "Flip vertically"
-#~ msgstr "垂直翻轉"
-
-#~ msgid "Bypass filtering"
-#~ msgstr "跳過過濾"
-
-#~ msgid "Use faster pointwise upsampling"
-#~ msgstr "使用較快的逐點式上升採樣"
-
-#~ msgid "Use multithreaded decoding"
-#~ msgstr "使用多執行緒解碼"
-
-#~ msgid "Color planes: "
-#~ msgstr "色彩通道平面："
-
-#~ msgid "Alpha plane: "
-#~ msgstr "Alpha 通道平面："
-
-#~ msgid "Cache Location:"
-#~ msgstr "快取位置："
-
-#~ msgctxt "@item:inmenu Layers Docker settings, checkbox"
-#~ msgid "Display Subtitles"
-#~ msgstr "顯示副標題"
-
-#~ msgctxt "@item:tooltip"
-#~ msgid "Layer opacity and blending mode"
-#~ msgstr "圖層不透明度及混色模式"
-
-#~ msgctxt "@item:inmenu Layers Docker settings, checkbox"
-#~ msgid "Inline Subtitles"
-#~ msgstr "行內副標題"
-
-#~ msgid "Cannot sample a color as no layer is active."
-#~ msgstr "無法取樣色彩，因為沒有使用中的圖層。"
-
-#~ msgid "Cannot sample a color as the active layer is not visible."
-#~ msgstr "無法取樣色彩，因為使用中圖層不可見。"
-
-#~ msgctxt ""
-#~ "The 'include surrounding regions' checkbox in enclose and fill tool"
-#~ msgid "Include surrounding regions"
-#~ msgstr "包含週邊區域"
-
-#~ msgid "Check this option to also fill the surrounding regions"
-#~ msgstr "核取此選項以填充週邊區域"

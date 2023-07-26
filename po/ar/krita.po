@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-25 00:43+0000\n"
+"POT-Creation-Date: 2023-07-26 00:44+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -16900,25 +16900,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3744
+#: libs/flake/text/KoSvgTextShape.cpp:3751
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "نص"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3746
-#: libs/flake/text/KoSvgTextShape.cpp:3754
+#: libs/flake/text/KoSvgTextShape.cpp:3753
+#: libs/flake/text/KoSvgTextShape.cpp:3761
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "شكل SVG نصّيّ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3752
+#: libs/flake/text/KoSvgTextShape.cpp:3759
 #, kde-format
 msgid "SVG Text"
 msgstr "‏SVG نصّيّ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3766
-#: libs/flake/text/KoSvgTextShape.cpp:3781
+#: libs/flake/text/KoSvgTextShape.cpp:3773
+#: libs/flake/text/KoSvgTextShape.cpp:3788
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17782,7 +17782,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "تعيين خصائص"
 
-#: libs/image/kis_image.cc:2486
+#: libs/image/kis_image.cc:2487
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "اقتصاص التّحديدات"
@@ -20148,8 +20148,8 @@ msgstr "يحمّل حزم الموارد..."
 #: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1924
 #: libs/ui/KisMainWindow.cpp:1933 libs/ui/KisMainWindow.cpp:2072
 #: libs/ui/KisMainWindow.cpp:2133 libs/ui/KisMainWindow.cpp:2154
-#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:588
-#: libs/ui/KisPart.cpp:591 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:578
+#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
 #: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
@@ -23304,7 +23304,7 @@ msgstr "خصائص الطّبقة"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -31908,7 +31908,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "مجموعة جديدة %1"
 
-#: libs/ui/KisPart.cpp:588
+#: libs/ui/KisPart.cpp:578
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -31917,7 +31917,7 @@ msgstr ""
 "تعذّر إنشاء مستند من القالب\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:591
+#: libs/ui/KisPart.cpp:581
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -33273,12 +33273,12 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:654
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "مشغّل رسوميّات «إنتل» المستخدم معروف عنه بمواجهته مشاكل مع «أوبن‌جي‌إل.»"
 
-#: libs/ui/opengl/kis_opengl.cpp:656
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -33286,14 +33286,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1070
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1072
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -38608,7 +38608,7 @@ msgid "Val:"
 msgstr "قيم:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, fuzzy, kde-format
 #| msgid "Constrain proportions"
 msgid "Onion skins menu"
@@ -38620,26 +38620,26 @@ msgid "Audio menu"
 msgstr "قائمة الصوت"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, fuzzy, kde-format
 #| msgid "Animation"
 msgid "Animation settings menu"
 msgstr "الحركة"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, kde-format
 msgid "Clip Start: "
 msgstr "بداية القصاصة: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr "نهاية القصاصة: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, kde-format
 msgid "Frame Rate: "
 msgstr "معدل أطر: "
@@ -38664,43 +38664,43 @@ msgstr "أعد ضبط القناة"
 msgid "Reset All Channels"
 msgstr "أعد ضبط كل القنوات"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
 #, kde-format
 msgid "Linear interpolation."
 msgstr "استيفاء خطي."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Insert Citation"
 msgid "Bezier curve interpolation."
 msgstr "أدرِج اقتباسًا"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Insert Citation"
 msgid "Sharp interpolation tangents."
 msgstr "أدرِج اقتباسًا"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Insert Citation"
 msgid "Smooth interpolation tangents."
 msgstr "أدرِج اقتباسًا"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
 #, fuzzy, kde-format
 #| msgid "Zoom to fit"
 msgid "Zoom view to fit curve."
@@ -38750,33 +38750,27 @@ msgstr[4] "ضبط ال‍ %1 إطارات المفتاحيّة"
 msgstr[5] "ضبط ال‍ %1 إطارات المفتاحيّة"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Show in Timeline"
 msgid "Animation Timeline"
 msgstr "اعرض في الخطّ الزّمنيّ"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animation"
-msgid "Animation audio menu"
-msgstr "الحركة"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
 #, fuzzy, kde-format
 #| msgid "Import Bundles..."
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "استورد حزم..."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "أزل الصّوت"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu"
 #| msgid "Mute"
@@ -38784,7 +38778,7 @@ msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "اكتم"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu, slider"
 #| msgid "Volume:"
@@ -38792,33 +38786,39 @@ msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "المستوى:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#, fuzzy, kde-format
+#| msgid "Animation"
+msgid "Animation audio menu"
+msgstr "الحركة"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
 #, fuzzy, kde-format
 #| msgid "Duplicate"
 msgid "AutoKey Duplicate"
 msgstr "كرّر"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "إطار/ثا الفعليّ:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "إطار/ثا الحقيقيّ:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "الإطارات المُسقطة:\t%1٪"

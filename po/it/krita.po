@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-25 00:43+0000\n"
-"PO-Revision-Date: 2023-06-24 13:02+0200\n"
+"POT-Creation-Date: 2023-07-26 00:44+0000\n"
+"PO-Revision-Date: 2023-07-18 21:30+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.04.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16283,25 +16283,25 @@ msgstr ""
 "il documento l'oggetto di testo sarà convertito nel formato di Krita 5 che "
 "diverrà incompatibile con Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3744
+#: libs/flake/text/KoSvgTextShape.cpp:3751
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Testo"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3746
-#: libs/flake/text/KoSvgTextShape.cpp:3754
+#: libs/flake/text/KoSvgTextShape.cpp:3753
+#: libs/flake/text/KoSvgTextShape.cpp:3761
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma di testo SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3752
+#: libs/flake/text/KoSvgTextShape.cpp:3759
 #, kde-format
 msgid "SVG Text"
 msgstr "Testo SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3766
-#: libs/flake/text/KoSvgTextShape.cpp:3781
+#: libs/flake/text/KoSvgTextShape.cpp:3773
+#: libs/flake/text/KoSvgTextShape.cpp:3788
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17156,7 +17156,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Assegna profilo"
 
-#: libs/image/kis_image.cc:2486
+#: libs/image/kis_image.cc:2487
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Ritaglia le selezioni"
@@ -19433,8 +19433,8 @@ msgstr "Risorse locali"
 #: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1924
 #: libs/ui/KisMainWindow.cpp:1933 libs/ui/KisMainWindow.cpp:2072
 #: libs/ui/KisMainWindow.cpp:2133 libs/ui/KisMainWindow.cpp:2154
-#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:588
-#: libs/ui/KisPart.cpp:591 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:578
+#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
 #: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
@@ -22498,7 +22498,7 @@ msgstr "Proprietà del livello"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -23204,10 +23204,11 @@ msgstr ""
 "Resa annullata."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgid "Wait for existing frame generation process to complete..."
-msgstr "In attesa del completamento dell'operazione sull'immagine..."
+msgstr ""
+"In attesa di completamento del processo di generazione del fotogramma "
+"esistente..."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
@@ -31000,7 +31001,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Nuovo gruppo %1"
 
-#: libs/ui/KisPart.cpp:588
+#: libs/ui/KisPart.cpp:578
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -31009,7 +31010,7 @@ msgstr ""
 "Impossibile creare il documento dal modello\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:591
+#: libs/ui/KisPart.cpp:581
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -32364,12 +32365,12 @@ msgstr ""
 "I buffer delle trame sono volontariamente disabilitati nel motore di resa "
 "ANGLE a causa di problemi di prestazione."
 
-#: libs/ui/opengl/kis_opengl.cpp:654
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "Il driver grafico Intel in uso è noto per avere problemi con OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:656
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32380,7 +32381,7 @@ msgstr ""
 "usato ANGLE come impostazione predefinita. Puoi passare manualmente a OpenGL "
 "ma non si garantisce che funzioni correttamente."
 
-#: libs/ui/opengl/kis_opengl.cpp:1070
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32389,7 +32390,7 @@ msgstr ""
 "La resa preferita non supporta il formato di superficie richiesto. È stata "
 "selezionata un'altra resa."
 
-#: libs/ui/opengl/kis_opengl.cpp:1072
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "Le rese disponibili non supportano il formato di output preferito"
@@ -37879,7 +37880,7 @@ msgid "Val:"
 msgstr "Val:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, kde-format
 msgid "Onion skins menu"
 msgstr "Menu bucce di cipolla"
@@ -37890,25 +37891,25 @@ msgid "Audio menu"
 msgstr "Menu audio"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, kde-format
 msgid "Animation settings menu"
 msgstr "Menu impostazioni animazione"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, kde-format
 msgid "Clip Start: "
 msgstr "Inizio clip: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr "Fine clip: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, kde-format
 msgid "Frame Rate: "
 msgstr "Velocità fotogrammi: "
@@ -37933,37 +37934,37 @@ msgstr "Reimposta il canale"
 msgid "Reset All Channels"
 msgstr "Reimposta tutti i canali"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr "Mantieni un valore costante. Nessuna interpolazione."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
 #, kde-format
 msgid "Linear interpolation."
 msgstr "Interpolazione lineare"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
 #, kde-format
 msgid "Bezier curve interpolation."
 msgstr "Interpolazione curva di Bézier"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
 #, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "Tangenti di interpolazione accentuata"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
 #, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "Tangenti di interpolazione smussata"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr "Adatta la vista all'intervallo dei canali"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
 #, kde-format
 msgid "Zoom view to fit curve."
 msgstr "Adatta la vista alla curva"
@@ -38004,66 +38005,66 @@ msgstr[0] "Regola fotogramma chiave"
 msgstr[1] "Regola %1 fotogrammi chiave"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
 #, kde-format
 msgid "Animation Timeline"
 msgstr "Linea temporale dell'animazione"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, kde-format
-msgid "Animation audio menu"
-msgstr "Menu audio animazione"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
 #, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Importa audio..."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Rimuovi audio"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Silenzia"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Volume: "
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#, kde-format
+msgid "Animation audio menu"
+msgstr "Menu audio animazione"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
 msgid "AutoKey Blank"
 msgstr "Chiave automatica - spazio vuoto"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
 #, kde-format
 msgid "AutoKey Duplicate"
 msgstr "Chiave automatica - duplicato"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Attiva per mantenere il tempo di riproduzione."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "FPS effettivo:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "FPS reale:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Fotogrammi tralasciati:\t%1%"

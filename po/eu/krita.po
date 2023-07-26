@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-25 00:43+0000\n"
+"POT-Creation-Date: 2023-07-26 00:44+0000\n"
 "PO-Revision-Date: 2023-02-10 21:36+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -16479,25 +16479,25 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:3744
+#: libs/flake/text/KoSvgTextShape.cpp:3751
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Testua"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3746
-#: libs/flake/text/KoSvgTextShape.cpp:3754
+#: libs/flake/text/KoSvgTextShape.cpp:3753
+#: libs/flake/text/KoSvgTextShape.cpp:3761
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG testu forma"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3752
+#: libs/flake/text/KoSvgTextShape.cpp:3759
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG testua"
 
-#: libs/flake/text/KoSvgTextShape.cpp:3766
-#: libs/flake/text/KoSvgTextShape.cpp:3781
+#: libs/flake/text/KoSvgTextShape.cpp:3773
+#: libs/flake/text/KoSvgTextShape.cpp:3788
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17352,7 +17352,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Esleitu profila"
 
-#: libs/image/kis_image.cc:2486
+#: libs/image/kis_image.cc:2487
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Moztu hautapenak"
@@ -19636,8 +19636,8 @@ msgstr "Baliabide lokalak"
 #: libs/ui/KisMainWindow.cpp:1318 libs/ui/KisMainWindow.cpp:1924
 #: libs/ui/KisMainWindow.cpp:1933 libs/ui/KisMainWindow.cpp:2072
 #: libs/ui/KisMainWindow.cpp:2133 libs/ui/KisMainWindow.cpp:2154
-#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:588
-#: libs/ui/KisPart.cpp:591 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisMainWindow.cpp:2769 libs/ui/KisPart.cpp:578
+#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:36 libs/ui/KisRemoteFileFetcher.cpp:60
 #: libs/ui/KisRemoteFileFetcher.cpp:90 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:689
@@ -22751,7 +22751,7 @@ msgstr "Geruzaren propietateak"
 #: libs/ui/widgets/kis_custom_image_widget.cc:98
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:16
 #: libs/widgets/kis_color_input.cpp:148 libs/widgets/kis_color_input.cpp:191
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:47
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
 #: plugins/dockers/layerdocker/LayerBox.cpp:393
@@ -31282,7 +31282,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Talde berria %1"
 
-#: libs/ui/KisPart.cpp:588
+#: libs/ui/KisPart.cpp:578
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -31291,7 +31291,7 @@ msgstr ""
 "Ezin izan da txantiloitik dokumentua sortu\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:591
+#: libs/ui/KisPart.cpp:581
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -32637,14 +32637,14 @@ msgid ""
 "issues."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:654
+#: libs/ui/opengl/kis_opengl.cpp:653
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Erabiltzen ari den Intel grafikoen gidariak OpenGL-rekin arazoak dituela "
 "ezaguna da."
 
-#: libs/ui/opengl/kis_opengl.cpp:656
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -32655,7 +32655,7 @@ msgstr ""
 "ANGLE erabiliko du era lehenetsian. Eskuz OpenGL-ra aldatzeko aukera izango "
 "duzu, baina, ez dago ondo ibiliko den bermerik."
 
-#: libs/ui/opengl/kis_opengl.cpp:1070
+#: libs/ui/opengl/kis_opengl.cpp:1069
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32664,7 +32664,7 @@ msgstr ""
 "Hobetsitako errendatzaileak ez du onartzen eskatutako gainazal-formatua. "
 "Beste errendatzaile bat hautatu du."
 
-#: libs/ui/opengl/kis_opengl.cpp:1072
+#: libs/ui/opengl/kis_opengl.cpp:1071
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -38006,7 +38006,7 @@ msgid "Val:"
 msgstr "Bal:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:165
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:127
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:129
 #, kde-format
 msgid "Onion skins menu"
 msgstr "Tipula-paperen menua"
@@ -38017,25 +38017,25 @@ msgid "Audio menu"
 msgstr "Audio menua"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:181
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:180
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:181
 #, kde-format
 msgid "Animation settings menu"
 msgstr "Animazio ezarpenen menua"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:193
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:192
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:193
 #, kde-format
 msgid "Clip Start: "
 msgstr "Kliparen hasiera: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:197
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
 #, kde-format
 msgid "Clip End: "
 msgstr "Kliparen amaiera: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:202
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:202
 #, kde-format
 msgid "Frame Rate: "
 msgstr "Fotograma-emaria:"
@@ -38060,37 +38060,37 @@ msgstr "Berrezarri kanala"
 msgid "Reset All Channels"
 msgstr "Berrezarri kanal guztiak"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:486
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:481
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr "Mantendu balio konstantea. Interpolaziorik gabe."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:493
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:488
 #, kde-format
 msgid "Linear interpolation."
 msgstr "Interpolazio lineala."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:500
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:495
 #, kde-format
 msgid "Bezier curve interpolation."
 msgstr "Bezier kurbaren interpolazioa."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:507
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:502
 #, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "Interpolazio ukitzaile zorrotzak."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:514
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:509
 #, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "Interpolazio ukitzaile leunak."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:521
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:516
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr "Ikuspegiari zoom kanal barrutira egokitzeko."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:528
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:523
 #, kde-format
 msgid "Zoom view to fit curve."
 msgstr "Ikuspegiaren zooma kurbara egokitzeko."
@@ -38131,31 +38131,25 @@ msgstr[0] "Doitu gako-fotograma"
 msgstr[1] "Doitu %1 gako-fotograma"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:54
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:289
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:290
 #, kde-format
 msgid "Animation Timeline"
 msgstr "Animazioaren denbora-lerroa"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:135
-#, fuzzy, kde-format
-#| msgid "Animation settings menu"
-msgid "Animation audio menu"
-msgstr "Animazio ezarpenen menua"
-
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:137
 #, fuzzy, kde-format
 #| msgid "Import Bundles..."
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Inportatu fardelak..."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:139
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Kendu audioa"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu"
 #| msgid "Mute"
@@ -38163,39 +38157,45 @@ msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Isilarazi"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:152
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:147
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
 msgstr "Zutabea:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:209
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:167
+#, fuzzy, kde-format
+#| msgid "Animation settings menu"
+msgid "Animation audio menu"
+msgstr "Animazio ezarpenen menua"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:210
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:212
 #, fuzzy, kde-format
 #| msgid "Duplicate"
 msgid "AutoKey Duplicate"
 msgstr "Bikoiztu"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:509
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Gaitu atzera-jotzeko denbora mantentzea."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:522
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:517
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Egiazko FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:523
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:518
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "FPS erreala:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:519
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Baztertutako fotogramak:\t%%1"

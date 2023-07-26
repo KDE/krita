@@ -1617,7 +1617,9 @@ void KisMainWindow::showEvent(QShowEvent *event)
 {
     // we're here because, we need to make sure everything (dockers, toolbars etc) is loaded and ready before
     // we can hide it.
-    adjustLayoutForWelcomePage();
+    if (!event->spontaneous()) {
+        adjustLayoutForWelcomePage();
+    }
     return KXmlGuiWindow::showEvent(event);
 }
 

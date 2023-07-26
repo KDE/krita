@@ -63,7 +63,7 @@ class TenBrushesExtension(krita.Extension):
 
         for index, button in enumerate(self.buttons):
             presets.append(button.preset)
-            self.selectedPresets[index] = button.preset
+            self.selectedPresets.insert(index, button.preset)
 
         Application.writeSetting("", "tenbrushes", ','.join(map(str, presets)))
         Application.writeSetting("", "tenbrushesActivatePrev2ndPress",

@@ -178,37 +178,37 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #endif
 
 #ifdef Q_OS_ANDROID
-    newFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    openFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+//    newFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+//    openFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    donationLink = new QPushButton(dropFrameBorder);
-    donationLink->setFlat(true);
-    QFont f = font();
-    f.setPointSize(15);
-    f.setUnderline(true);
-    donationLink->setFont(f);
-    donationLink->setStyleSheet("padding-left: 5px; padding-right: 5px;");
+//    donationLink = new QPushButton(dropFrameBorder);
+//    donationLink->setFlat(true);
+//    QFont f = font();
+//    f.setPointSize(15);
+//    f.setUnderline(true);
+//    donationLink->setFont(f);
+//    donationLink->setStyleSheet("padding-left: 5px; padding-right: 5px;");
 
-    connect(donationLink, SIGNAL(clicked(bool)), this, SLOT(slotStartDonationFlow()));
+//    connect(donationLink, SIGNAL(clicked(bool)), this, SLOT(slotStartDonationFlow()));
 
-    horizontalSpacer_19->changeSize(10, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    horizontalSpacer_20->changeSize(10, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+//    horizontalSpacer_19->changeSize(10, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+//    horizontalSpacer_20->changeSize(10, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    horizontalLayout_9->addWidget(donationLink);
+//    horizontalLayout_9->addWidget(donationLink);
 
-    donationBannerImage = new QLabel(dropFrameBorder);
-    QString bannerPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "share/krita/donation/banner.png");
-    donationBannerImage->setPixmap(QPixmap(bannerPath));
+//    donationBannerImage = new QLabel(dropFrameBorder);
+//    QString bannerPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "share/krita/donation/banner.png");
+//    donationBannerImage->setPixmap(QPixmap(bannerPath));
 
-    verticalLayout->addWidget(donationBannerImage);
+//    verticalLayout->addWidget(donationBannerImage);
 
-    donationLink->show();
-    donationBannerImage->hide();
+//    donationLink->show();
+//    donationBannerImage->hide();
 
-    // this will asynchronously lead to donationSuccessful (i.e if it *is* successful) which will hide the
-    // link and enable the donation banner.
-    QAndroidJniObject::callStaticMethod<void>("org/krita/android/DonationHelper", "checkBadgePurchased",
-                                              "()V");
+//    // this will asynchronously lead to donationSuccessful (i.e if it *is* successful) which will hide the
+//    // link and enable the donation banner.
+//    QAndroidJniObject::callStaticMethod<void>("org/krita/android/DonationHelper", "checkBadgePurchased",
+//                                              "()V");
 #endif
 
     // configure the News area

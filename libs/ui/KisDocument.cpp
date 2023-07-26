@@ -137,6 +137,10 @@
 
 #include <unistd.h>
 
+#ifdef Q_OS_MACOS
+#include "KisMacosSecurityBookmarkManager.h"
+#endif
+
 using namespace std;
 
 namespace {
@@ -597,6 +601,13 @@ KisDocument::KisDocument(bool addStorage)
     connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setObjectName(newObjectName());
 
+#ifdef Q_OS_MACOS
+    KisMacosSecurityBookmarkManager *bookmarkmngr = KisMacosSecurityBookmarkManager::instance();
+    if (bookmarkmngr->isSandboxed()) {
+        connect(this, SIGNAL(sigSavingFinished(const QString&)), bookmarkmngr, SLOT(slotCreateBookmark(const QString&)));
+    }
+#endif
+
 
     if (addStorage) {
         d->linkedResourcesStorageID = QUuid::createUuid().toString();
@@ -741,6 +752,18 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
             // We deal with URIs, there may or may not be a "directory"
             backupDir = KisAutoSaveRecoveryDialog::autoSaveLocation();
             QDir().mkpath(backupDir);
+#endif
+
+#ifdef Q_OS_MACOS
+            KisMacosSecurityBookmarkManager *bookmarkmngr = KisMacosSecurityBookmarkManager::instance();
+            if (bookmarkmngr->isSandboxed()) {
+                // If the user does not have directory permission force backup
+                // files to be inside Container tmp
+                QUrl fileUrl = QUrl::fromLocalFile(job.filePath);
+                if( !bookmarkmngr->parentDirHasPermissions(fileUrl.path()) ) {
+                    backupDir = QDir::tempPath();
+                }
+            }
 #endif
 
             // Do nothing: the empty string is user file location

@@ -34,6 +34,10 @@
 #include <QtAndroidExtras/QtAndroid>
 #endif
 
+#ifdef Q_OS_MACOS
+#include "KisMacosEntitlements.h"
+#endif
+
 #include <clocale>
 
 Q_GLOBAL_STATIC(KisUsageLogger, s_instance)
@@ -109,6 +113,10 @@ QString KisUsageLogger::basicSystemInfo()
     }
 #endif
     systemInfo.append("\n Hidpi: ").append(QCoreApplication::testAttribute(Qt::AA_EnableHighDpiScaling) ? "true" : "false");
+#ifdef Q_OS_MACOS
+    KisMacosEntitlements entitlements;
+    systemInfo.append("\n Sandbox: ").append((entitlements.sandbox()) ? "true" : "false");
+#endif
     systemInfo.append("\n\n");
 
     systemInfo.append("Qt\n");

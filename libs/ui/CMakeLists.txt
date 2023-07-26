@@ -716,8 +716,14 @@ if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
 endif()
 
 if(APPLE)
-    target_link_libraries(kritaui PRIVATE ${FOUNDATION_LIBRARY})
-    target_link_libraries(kritaui PRIVATE ${APPKIT_LIBRARY})
+    target_link_libraries(kritaui
+        PUBLIC
+        kritamacosutils
+
+        PRIVATE
+        ${FOUNDATION_LIBRARY}
+        ${APPKIT_LIBRARY}
+    )
 endif ()
 
 if(OpenEXR_FOUND)

@@ -48,6 +48,8 @@ if [[ -z "${KIS_BUILD_DIR}" ]]; then
     KIS_BUILD_DIR=${BUILDROOT}/kisbuild
 fi
 KIS_ENTITLEMENTS_DIR="${KIS_BUILD_DIR}/packaging/macos/"
+# we look for the provisioning file in the script the directory was called
+KIS_PROVISION="$(get_absolute_path ".")/embedded.provisionprofile"
 
 KIS_BUNDLE_ID="org.kde.krita"
 
@@ -318,6 +320,9 @@ hdiutil attach "${INPUT_DMG}" -mountpoint "${KRITADMG_MOUNT}"
 rsync -prult --delete "${KRITADMG_MOUNT}/krita.app/" "krita.app"
 
 hdiutil detach "${KRITADMG_MOUNT}"
+
+# attach provisioning profile
+cp "${KIS_PROVISION}" "${KRITADMG_WDIR}/krita.app/Contents/"
 
 # clean krita version string (app store format does not allow dashes
 KIS_VERSION="$(${KRITADMG_WDIR}/krita.app/Contents/MacOS/krita_version 2> /dev/null | awk '{print $1}')"

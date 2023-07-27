@@ -577,15 +577,12 @@ void KoSvgTextShape::relayout() const
         // without load_no_hinting, the advance and offset will be rounded
         // to nearest pixel, which we don't want as we're using the vector
         // outline.
-
         loadFlags |= FT_LOAD_NO_HINTING;
 
-        if (d->textRendering == GeometricPrecision) {
-            // Disable embedded bitmaps because they _do not_ follow geometric
-            // precision, but is focused on legibility.
-            // This does not affect bitmap-only fonts.
-            loadFlags |= FT_LOAD_NO_BITMAP;
-        }
+        // Disable embedded bitmaps because they _do not_ follow geometric
+        // precision, but is focused on legibility.
+        // This does not affect bitmap-only fonts.
+        loadFlags |= FT_LOAD_NO_BITMAP;
     } else {
         // When using hinting, sometimes the bounding box does not encompass the
         // drawn glyphs properly.

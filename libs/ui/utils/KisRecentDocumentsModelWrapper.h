@@ -27,7 +27,7 @@ class KisRecentDocumentsModelWrapper : public QObject
 {
     Q_OBJECT
 public:
-    static constexpr const int ICON_SIZE_LENGTH = 128;
+    static constexpr const int ICON_SIZE_LENGTH = 200;
 
     static KisRecentDocumentsModelWrapper *instance();
 

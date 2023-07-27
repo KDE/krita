@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=Tag
 Name=Digital
-Name[ar]=رقمية
 Name[bg]=Дигитален
 Name[bs]=Digitalni
 Name[ca]=Digital
@@ -11,7 +10,6 @@ Name[da]=Digital
 Name[de]=Digital
 Name[el]=Ψηφιακό
 Name[en_GB]=Digital
-Name[eo]=Cifereca
 Name[es]=Digital
 Name[et]=Digitaal
 Name[eu]=Digitala
@@ -50,7 +48,6 @@ Comment[ca@valencia]=Pinzells predefinits amb un aspecte i comportament digital.
 Comment[de]=Pinselvoreinstellungen mit einem digitalen Erscheinungsbild
 Comment[el]=Προεπιλογές πινέλου με ψηφιακό αποτύπωμα εμφάνισης και συμπεριφοράς.
 Comment[en_GB]=Brush presets with a digital look and feel.
-Comment[eo]=Penikaj antaŭdifinoj kun cifereca aspekto kaj sento.
 Comment[es]=Valores predefinidos de pincel con aspecto digital.
 Comment[eu]=Pintzelen aurrezarpenak itxura eta izaera digital batekin.
 Comment[fi]=Digitaalisen oloiset sivellinesiasetukset
